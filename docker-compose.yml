@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  di-auth-account-management-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - 3000:3000
+    environment:
+      - ENVIRONMENT="development"
+      - API_BASE_URL="https://rkmnti7z55.execute-api.eu-west-2.amazonaws.com/test"
+      - SESSION_EXPIRY="1800000"
+      - SESSION_SECRET="secret"
+    restart: on-failure
+    networks:
+      - di-net
+
+networks:
+  di-net:

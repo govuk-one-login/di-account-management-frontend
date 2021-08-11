@@ -1,0 +1,100 @@
+{% extends "govuk/template.njk" %}
+{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{% block head %}
+    <!--[if !IE 8]><!-->
+    <link href="/public/style.css" rel="stylesheet">
+    <!--<![endif]-->
+
+    {# For Internet Explorer 8, you need to compile specific stylesheet #}
+    {# see https://frontend.design-system.service.gov.uk/supporting-ie8/#support-internet-explorer-8 #}
+    <!--[if IE 8]>
+    <link href="/govuk-frontend/all-ie8.css" rel="stylesheet">
+    <![endif]-->
+
+    {# For older browsers to allow them to recognise HTML5 elements such as `<header>` #}
+    <!--[if lt IE 9]>
+    <script src="/html5-shiv/html5shiv.js"></script>
+    <![endif]-->
+
+{% endblock %}
+
+{% block pageTitle %}
+    {% if error or errors %}
+        {{ 'general.errorTitlePrefix' | translate }}
+        -
+    {% endif %}
+    {% if pageTitleName %}
+        {{ pageTitleName }}
+        -
+    {% endif %}
+    {{ 'general.serviceNameTitle' | translate }}
+{% endblock %}
+
+{% block bodyStart %}
+    {% include 'common/layout/banner.njk' %}
+{% endblock %}
+
+{% block header %}
+    {{ govukHeader({
+        homepageUrl: "#",
+        serviceUrl: "#"
+    }) }}
+{% endblock %}
+
+{% block main %}
+    <div class="govuk-width-container {{ containerClasses }}">
+        {{ govukPhaseBanner({
+            tag: {
+                text: 'general.phaseBanner.tag' | translate
+            },
+            html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+        }) }}
+        {% block beforeContent %}{% endblock %}
+        <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content"
+              role="main"{% if mainLang %} lang="{{ mainLang }}"{% endif %}>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <div class="govuk-width-container">
+        <div class="feedback-footer">
+            <h2 class="gem-c-heading govuk-heading-m   govuk-!-margin-bottom-4">Help improve GOV.UK accounts</h2>
+            <p class="govuk-body govuk-!-margin-bottom-0">
+                We’re trialling GOV.UK accounts.
+                <a href="/feedback" class="govuk-link">Give feedback</a>
+                on your experience so we can make them better.
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ govukFooter({
+        meta: {
+            items: [
+                {
+                    href: "/accessibility-statement",
+                    text: 'general.footer.accessibilityStatement.linkText' | translate
+                },
+                {
+                    href: "/cookies",
+                    text: 'general.footer.cookies.linkText' | translate
+                },
+                {
+                    href: "/terms-and-conditions",
+                    text: 'general.footer.terms.linkText' | translate
+                },
+                {
+                    href: "/privacy-statement",
+                    text: 'general.footer.privacy.linkText' | translate
+                }
+            ]
+        }
+    }) }}
+{% endblock %}
+
+{% block bodyEnd %}
+    <script type="text/javascript" src="/public/scripts/cookies.js"></script>
+    <script type="text/javascript" src="/public/scripts/application.js"></script>
+{% endblock %}

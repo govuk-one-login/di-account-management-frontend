@@ -1,0 +1,108 @@
+{
+  "general": {
+    "provider": "GOV.UK",
+    "pageTitle": "GOV.UK Sign in",
+    "serviceName": "Sign in to or create your GOV.UK Account",
+    "serviceNameTitle": "GOV.UK Account",
+    "errorTitlePrefix": "Error",
+    "back": "Back",
+    "warning": "Warning",
+    "errorSummaryTitle": "There is a problem",
+    "phaseBanner": {
+      "tag": "beta",
+      "content": "This is a new service – your {{-openLink}}feedback{{-closeLink}} will help us to improve it. // {{ target  }} //"
+    },
+    "yes": "Yes",
+    "no": "No",
+    "footer": {},
+    "cookie": {
+      "cookieBanner": {
+        "title": "Cookies on GOV.UK Account",
+        "heading": "Cookies on GOV.UK Account",
+        "paragraph1": "We use some essential cookies to make this service work.",
+        "paragraph2": "We’d also like to use analytics cookies so we can understand how you use the service and make improvements.",
+        "buttonAcceptText": "Accept analytics cookies",
+        "buttonRejectText": "Reject analytics cookies",
+        "linkViewCookiesText": "View cookies",
+        "cookieBannerHideLink": "Hide this message",
+        "cookeBannerAccept": {
+          "paragraph1": "You’ve accepted additional cookies. You can ",
+          "paragraph2": " at any time."
+        },
+        "cookeBannerReject": {
+          "paragraph1": "You’ve rejected additional cookies. You can ",
+          "paragraph2": " at any time."
+        },
+        "changeCookiePreferencesLink": "change your cookie settings"
+      },
+      "cookieText": "GOV.UK uses cookies to make the site simpler.",
+      "cookieLink": "#",
+      "cookieLinkText": "Find out more about cookies"
+    },
+    "language": {
+      "english": "English",
+      "welsh": "Cymraeg (Welsh)"
+    },
+    "continue": {
+      "label": "Continue"
+    },
+    "footer": {
+      "accessibilityStatement": {
+        "pageTitle": "Accessibility statement",
+        "linkText": "Accessibility statement"
+      },
+      "cookies": {
+        "pageTitle": "Cookie Policy",
+        "linkText": "Cookies"
+      },
+      "terms": {
+        "pageTitle": "Terms and conditions",
+        "linkText": "Terms and conditions"
+      },
+      "privacy": {
+        "pageTitle": "Privacy notice",
+        "linkText": "Privacy notice"
+      }
+    }
+  },
+  "error": {
+    "error404": {
+      "title": "Page not found",
+      "header": "Page not found"
+    },
+    "error500": {
+      "title": "Sorry, there is a problem with this service",
+      "header": "Sorry, there is a problem with this service"
+    },
+    "timeoutError": {
+      "title": "Session timed out",
+      "header": "Session timed out",
+      "content": {
+        "paragraph1": "Your session has timed out due to inactivity.",
+        "paragraph2": "add another line here"
+      }
+    }
+  },
+  "pages": {
+    "manageYourAccount": {
+      "title": "Sign in to or create your GOV.UK Account",
+      "header": "Manage your account",
+      "menuItemList": {
+        "manageYourAccount": "Manage your account",
+        "securityAndPrivacy": "Security and privacy",
+        "yourAccount": "Your account"
+      },
+      "summaryList": {
+        "email": "Email address",
+        "password": "Password",
+        "phoneNumber": "Phone number",
+        "changeAction": "Change"
+      },
+      "deleteAccount":{
+      "heading": "Delete your account",
+      "link": "Delete this GOV.UK account",
+      "info": "You can delete this account and all the information stored in it."
+      }
+    }
+  }
+}

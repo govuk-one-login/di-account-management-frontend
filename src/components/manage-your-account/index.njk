@@ -1,0 +1,78 @@
+{% extends "common/layout/base-menu.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set pageTitleName = 'pages.manageYourAccount.title' | translate %}
+
+{% block menuItem %}
+    <li class="accounts-menu__item accounts-menu__item--current">
+        <a class="accounts-menu__link govuk-link govuk-link--no-visited-state accounts-menu__link-active"
+           aria-current="page" href="/">
+            {{ 'pages.manageYourAccount.menuItemList.manageYourAccount' | translate }}
+        </a>
+    </li>
+{% endblock %}
+
+{% block mainContent %}
+    <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ 'pages.manageYourAccount.header' | translate }}</h1>
+    <h2 class="govuk-heading-m">Account details</h2>
+    {{ govukSummaryList({
+        classes:"accounts-summary-list",
+        rows: [
+            {
+                key: {
+                text: 'pages.manageYourAccount.summaryList.email' | translate
+            },
+                value: {
+                text: email
+            },
+                actions: {
+                items: [
+                    {
+                        href: "#",
+                        text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
+                        visuallyHiddenText: 'pages.manageYourAccount.summaryList.email' | translate
+                    }
+                ]
+            }
+            },
+            {
+                key: {
+                text: 'pages.manageYourAccount.summaryList.password' | translate
+            },
+                value: {
+                text: "••••••••••••••••"
+            },
+                actions: {
+                items: [
+                    {
+                        href: "#",
+                        text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
+                        visuallyHiddenText: 'pages.manageYourAccount.summaryList.password' | translate
+                    }
+                ]
+            }
+            },
+            {
+                key: {
+                text: 'pages.manageYourAccount.summaryList.phoneNumber' | translate
+            },
+                value: {
+                text: phoneNumber
+            },
+                actions: {
+                items: [
+                    {
+                        href: "#",
+                        text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
+                        visuallyHiddenText: 'pages.manageYourAccount.summaryList.phoneNumber' | translate
+                    }
+                ]
+            }
+            }
+        ]
+    }) }}
+    <h3 class="govuk-heading-m">{{ 'pages.manageYourAccount.deleteAccount.heading' | translate }}</h3>
+    <p class="govuk-body">{{ 'pages.manageYourAccount.deleteAccount.info' | translate }}</p>
+    <a href="#" class="govuk-link" id="warning-link">{{ 'pages.manageYourAccount.deleteAccount.link' | translate }}</a>
+{% endblock %}
+

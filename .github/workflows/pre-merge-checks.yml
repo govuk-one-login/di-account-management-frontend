@@ -1,0 +1,33 @@
+name: Pre-merge checks
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - synchronize
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 15.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+      - name: Install dependencies
+        run: yarn install
+      - name: Build app
+        run: yarn build
+      - name: Run unit tests
+        run: yarn test:unit
+      - name: Run integration tests
+        run: yarn test:integration
+      - name: Run lint
+        run: yarn lint
+    env:
+      ENVIRONMENT: development
+      API_BASE_URL: http://localhost:6000/api
+      SESSION_SECRET: secret
+      SESSION_EXPIRY: 1800000
