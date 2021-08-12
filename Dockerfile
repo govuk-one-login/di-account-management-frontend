@@ -1,4 +1,4 @@
-FROM node:15.14.0-alpine
+FROM node:16.6.1-alpine
 
 ENV NODE_ENV "development"
 ENV PORT 3000
