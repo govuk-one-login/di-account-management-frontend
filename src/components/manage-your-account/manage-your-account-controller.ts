@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { PATH_NAMES } from "../../app.constants";
 
 export function manageYourAccountGet(req: Request, res: Response): void {
   const data = {
