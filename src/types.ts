@@ -1,11 +1,12 @@
 import { ValidationChain } from "express-validator";
-
-export interface UserSession {
-  email?: string;
-  phoneNumber?: string;
-}
-
 import express, { NextFunction, Request, Response } from "express";
+
+export interface OIDCConfig {
+  idp_url: string;
+  callback_url: string;
+  client_id: string;
+  scopes: string;
+}
 
 export type ExpressRouteFunc = (
   req: Request,

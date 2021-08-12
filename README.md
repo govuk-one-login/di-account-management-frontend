@@ -21,13 +21,16 @@ Create a copy of the .env.sample file and rename it .env and fill in below value
 ```
 ENVIRONMENT=development
 API_BASE_URL=
-SESSION_EXPIRY=300000
-SESSION_SECRET=123456
+SESSION_EXPIRY=30000
+SESSION_SECRET=secret
+OIDC_CLIENT_ID=
+ISSUER_BASE_URL=
+OIDC_CLIENT_SCOPES=
 ```
 
 You can find the `API_BASE_URL` in [Concourse](https://cd.gds-reliability.engineering/teams/verify/pipelines/di-authentication-deployment) under the outputs within the deloy-lambda job.
 
-Run the `startup.sh` script.
+Run the `docker compose up` command.
 
 To find out if the application has started, open a console window on the docker container and view the logs. If the server has started successfully you will see this message `Server listening on port 5000`.
 
@@ -47,7 +50,7 @@ docker exec -it di-auth-account-management-frontend-dev /bin/sh
 
 ### Restarting the app
 
-You can restart the app by re-running the `startup.sh` script.
+You can restart the app by re-running the `docker compose down` and then `docker compose up`.
 
 ## Other useful yarn commands
 

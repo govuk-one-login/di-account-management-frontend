@@ -1,8 +1,9 @@
 export const PATH_NAMES = {
-  MANAGE_YOUR_ACCOUNT: "/manage-your-account", ACCESSIBILITY_STATEMENT: "undefined",
+  MANAGE_YOUR_ACCOUNT: "/manage-your-account",
+  ACCESSIBILITY_STATEMENT: "undefined",
   PRIVACY_POLICY: "undefined",
-  TERMS_AND_CONDITIONS: "undefined"
-
+  TERMS_AND_CONDITIONS: "undefined",
+  AUTH_CALLBACK: "/auth/callback",
 };
 
 export const HTTP_STATUS_CODES = {

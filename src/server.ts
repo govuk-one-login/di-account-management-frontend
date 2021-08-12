@@ -3,9 +3,11 @@ import { createApp } from "./app";
 import { logger } from "./utils/logger";
 
 const app = createApp();
-const port: number | string = process.env.PORT || 5000;
+const port: number | string = process.env.PORT || 6001;
 
 const server = http.createServer(app);
+
+server.setTimeout(300000);
 
 server
   .listen(port, () => {

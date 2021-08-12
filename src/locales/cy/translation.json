@@ -98,7 +98,7 @@
         "phoneNumber": "Phone number",
         "changeAction": "Change"
       },
-      "deleteAccount":{
+      "deleteAccount": {
         "heading": "Delete your account",
         "link": "Delete this GOV.UK account",
         "info": "You can delete this account and all the information stored in it."
