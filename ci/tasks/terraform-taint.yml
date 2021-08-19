@@ -1,0 +1,35 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: hashicorp/terraform
+    tag: 1.0.4
+    username: ((docker-hub-username))
+    password: ((docker-hub-password))
+params:
+  DEPLOYER_ROLE_ARN: ((deployer-role-arn-non-prod))
+  DEPLOY_ENVIRONMENT: build
+inputs:
+  - name: api-release
+outputs:
+  - name: terraform-outputs
+run:
+  path: /bin/sh
+  args:
+    - -euc
+    - |
+      mkdir src
+      tar xfz api-release/source.tar.gz --strip-components=1 -C src/
+      cd "src/ci/terraform/aws"
+      terraform init -input=false \
+        -backend-config "role_arn=${DEPLOYER_ROLE_ARN}" \
+        -backend-config "bucket=digital-identity-dev-tfstate" \
+        -backend-config "key=acct-mgmt-${DEPLOY_ENVIRONMENT}-terraform.tfstate" \
+        -backend-config "encrypt=true" \
+        -backend-config "region=eu-west-2"
+
+        terraform taint -allow-missing aws_iam_access_key.account_management_app_access_keys
+        terraform taint -allow-missing aws_kms_key.account_management_jwt_key
+        terraform taint -allow-missing random_string.account_management_client_id
+
+        echo "All sensitive resources marked as needing re-creation, ** now manually run the 'deploy-account-management-${DEPLOY_ENVIRONMENT}' job **."
