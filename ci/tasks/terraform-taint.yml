@@ -10,7 +10,7 @@ params:
   DEPLOYER_ROLE_ARN: ((deployer-role-arn-non-prod))
   DEPLOY_ENVIRONMENT: build
 inputs:
-  - name: api-release
+  - name: account-management-src
 outputs:
   - name: terraform-outputs
 run:
@@ -18,9 +18,7 @@ run:
   args:
     - -euc
     - |
-      mkdir src
-      tar xfz api-release/source.tar.gz --strip-components=1 -C src/
-      cd "src/ci/terraform/aws"
+      cd "account-management-src/ci/terraform/"
       terraform init -input=false \
         -backend-config "role_arn=${DEPLOYER_ROLE_ARN}" \
         -backend-config "bucket=digital-identity-dev-tfstate" \
