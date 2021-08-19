@@ -121,3 +121,9 @@ logs*.json
 
 keys/
 .vscode/
+
+# Terraform related files
+ci/terraform/.terraform
+*.tfstate
+*.tfstate.backup
+ci/terraform/*.plan
