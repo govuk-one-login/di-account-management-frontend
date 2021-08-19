@@ -3,7 +3,7 @@ data "cloudfoundry_org" "org" {
 }
 
 data "cloudfoundry_space" "space" {
-  name = var.cf_space_name
+  name = var.environment
   org  = data.cloudfoundry_org.org.id
 }
 

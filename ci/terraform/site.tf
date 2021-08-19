@@ -26,6 +26,13 @@ provider "aws" {
   assume_role {
     role_arn = var.deployer_role_arn
   }
+
+  default_tags {
+    tags = {
+      Environment = var.environment
+      Application = "account-management"
+    }
+  }
 }
 
 provider "cloudfoundry" {

@@ -13,3 +13,6 @@ applications:
       SESSION_SECRET: ((session_secret))      
     routes:
       - route: ((route_name))
+    services:
+      - ((environment_name))-account-management-kms-provider
+      - ((environment_name))-account-management-idp-provider
