@@ -36,4 +36,4 @@ run:
         -var "cf_org_name=${CF_ORG_NAME}" \
         -var-file ${DEPLOY_ENVIRONMENT}.tfvars
 
-      terraform output --json > ../../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json
+      terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json
