@@ -18,8 +18,8 @@ variable "cf_org_name" {
   description = "target org"
 }
 
-variable "cf_space_name" {
-  description = "target space"
+variable "environment" {
+  description = "the name of the environment being deployed (e.g. sandpit, build), this also matches the PaaS space name"
 }
 
 variable "cf_domain" {

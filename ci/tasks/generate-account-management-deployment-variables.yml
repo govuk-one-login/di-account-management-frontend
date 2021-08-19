@@ -54,10 +54,5 @@ run:
       session_expiry: ${SESSION_EXPIRY}
       session_secret: ${SESSION_SECRET}
       route_name: ${AM_URL}
-      AWS_ACCESS_KEY_ID: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.AWS_ACCESS_KEY_ID')
-      AWS_SECRET_ACCESS_KEY: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.AWS_SECRET_ACCESS_KEY')
-      KMS_KEY_ID: ${KEY_ID}
-      AWS_REGION: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.AWS_REGION')
-      client_id: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.client_id')
-      client_name: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.client_name')
+      environment_name: ${ENVIRONMENT_NAME}
       EOF
