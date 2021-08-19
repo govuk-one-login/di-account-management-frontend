@@ -1,0 +1,63 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: governmentpaas/awscli
+    tag: "469ceea7a619b0abdd6cb27efd4d3bd5e9be3ddb"  # pragma: allowlist secret
+    username: ((docker-hub-username))
+    password: ((docker-hub-password))
+inputs:
+  - name: domain-terraform-outputs
+  - name: environment-terraform-outputs
+outputs:
+  - name: di-account-management-deploy-variables
+params:
+  SESSION_EXPIRY: ((build-session-expiry))
+  SESSION_SECRET: ((build-session-secret))
+  ENVIRONMENT_NAME: build
+  DEPLOYER_ROLE_ARN: ((deployer-role-arn-non-prod))
+run:
+  path: /bin/sh
+  args:
+    - -c
+    - |
+      set -eu
+      export AWS_REGION=eu-west-2
+      STS_TOKEN=$(aws sts assume-role --role-arn="${DEPLOYER_ROLE_ARN}" --role-session-name="concourse-get-keys")
+
+      export AWS_ACCESS_KEY_ID="$(echo ${STS_TOKEN} | jq -r .Credentials.AccessKeyId)"
+      export AWS_SECRET_ACCESS_KEY="$(echo ${STS_TOKEN} | jq -r .Credentials.SecretAccessKey)"
+      export AWS_SESSION_TOKEN="$(echo ${STS_TOKEN} | jq -r .Credentials.SessionToken)"
+
+      KEY_ID=$(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.KMS_KEY_ID')
+
+      echo "Getting public key for KMS key ${KEY_ID}"
+      PUBLIC_KEY=$(aws kms get-public-key --key-id "${KEY_ID}" --region eu-west-2 | jq -r .PublicKey)
+
+      echo "Public Key:"
+      echo "${PUBLIC_KEY}"
+
+      CLIENT_ID=$(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.client_id')
+      echo "Updating Client Registry for client = ${CLIENT_ID}"
+
+      aws dynamodb update-item --table-name "${ENVIRONMENT_NAME}-client-registry" --key "$(jq -nc '{ ClientID: { S: $client_id }}' --arg client_id "${CLIENT_ID}")" \
+        --update-expression "SET PublicKey = :pk" \
+        --expression-attribute-values "$(jq -nc '{ ":pk": { S: $public_key }}' --arg public_key "${PUBLIC_KEY}")"\
+        --return-values NONE  --region eu-west-2
+
+      echo "Generating vars file..."
+      API_URL="https://$(jq -r .${ENVIRONMENT_NAME}_api_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
+      AM_URL="$(jq -r .${ENVIRONMENT_NAME}_account_management_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
+
+      cat <<EOF > di-account-management-deploy-variables/vars.yml
+      api_base_url: ${API_URL}
+      session_expiry: ${SESSION_EXPIRY}
+      session_secret: ${SESSION_SECRET}
+      route_name: ${AM_URL}
+      AWS_ACCESS_KEY_ID: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.AWS_ACCESS_KEY_ID')
+      AWS_SECRET_ACCESS_KEY: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.AWS_SECRET_ACCESS_KEY')
+      KMS_KEY_ID: ${KEY_ID}
+      AWS_REGION: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.AWS_REGION')
+      client_id: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.client_id')
+      client_name: $(cat environment-terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json | jq -r '.account_management_client_details.value.client_name')
+      EOF
