@@ -13,7 +13,7 @@ params:
   CF_PASSWORD: ((cf-password))
   CF_ORG_NAME: ((cf-org-name))
 inputs:
-  - name: account-managment-release
+  - name: account-management-src
 outputs:
   - name: terraform-outputs
 run:
@@ -21,9 +21,7 @@ run:
   args:
     - -euc
     - |
-      mkdir src
-      tar xfz account-managment-release/source.tar.gz --strip-components=1 -C src/
-      cd "src/ci/terraform/"
+      cd "account-management-src/ci/terraform/"
       terraform init -input=false \
         -backend-config "role_arn=${DEPLOYER_ROLE_ARN}" \
         -backend-config "bucket=digital-identity-dev-tfstate" \
@@ -33,7 +31,6 @@ run:
 
       terraform apply -auto-approve \
         -var "deployer_role_arn=${DEPLOYER_ROLE_ARN}" \
-        -var "cf_space=${DEPLOY_ENVIRONMENT}" \
         -var "cf_username=${CF_USERNAME}" \
         -var "cf_password=${CF_PASSWORD}" \
         -var "cf_org_name=${CF_ORG_NAME}" \
