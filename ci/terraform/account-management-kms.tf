@@ -39,7 +39,7 @@ resource "aws_iam_user" "account_management_app" {
 
 resource "aws_iam_user_policy_attachment" "account_management_app_kms_policy" {
   policy_arn = aws_iam_policy.account_management_jwt_lambda_kms_policy.arn
-  user       = aws_iam_user.account_management_app.arn
+  user       = aws_iam_user.account_management_app.name
 }
 
 resource "aws_iam_access_key" "account_management_app_access_keys" {
