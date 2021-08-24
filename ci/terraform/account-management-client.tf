@@ -1,3 +1,11 @@
+locals {
+  scopes = [
+    "openid",
+    "phone",
+    "email",
+  ]
+}
+
 resource "random_string" "account_management_client_id" {
   lower   = true
   upper   = true
@@ -40,16 +48,10 @@ resource "aws_dynamodb_table_item" "account_management_client" {
       ]
     }
     Scopes = {
-      L = [
+      L = [for scope in local.scopes:
         {
-          S = "openid"
-        },
-        {
-          S = "phone"
-        },
-        {
-          S = "email"
-        },
+          S = scope
+        }
       ]
     }
     PublicKey = {
