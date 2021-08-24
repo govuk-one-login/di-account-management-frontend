@@ -9,5 +9,8 @@
   },
   "events": {
     "restart": "yarn run copy-assets"
-  }
+  },
+  "args": [
+    "--inspect=6001"
+  ]
 }

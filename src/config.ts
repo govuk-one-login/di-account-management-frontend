@@ -6,6 +6,22 @@ export function getApiBaseUrl(): string {
   return process.env.API_BASE_URL;
 }
 
+export function getOIDCApiDiscoveryUrl(): string {
+  return process.env.ISSUER_BASE_URL;
+}
+
+export function getLocalStackBaseUrl(): string {
+  return "http://host.docker.internal:4566";
+}
+
+export function getOIDCClientId(): string {
+  return process.env.OIDC_CLIENT_ID;
+}
+
+export function getOIDCClientScopes(): string {
+  return process.env.OIDC_CLIENT_SCOPES;
+}
+
 export function getNodeEnv(): string {
   return process.env.NODE_ENV || "development";
 }

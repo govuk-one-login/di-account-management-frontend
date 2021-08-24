@@ -1,20 +1,36 @@
 version: '3.8'
 
 services:
+  localstack:
+    image: localstack/localstack:0.12.15
+    ports:
+      - 4566:4566
+    environment:
+    - SERVICES=kms
+    - HOSTNAME_EXTERNAL=localhost
+    - DEFAULT_REGION=eu-west-2
+    - DEBUG=1
+    volumes:
+      - ./seed.yaml:/init/seed.yaml
+
+  redis:
+    image: redis:6.0.5-alpine
+    ports:
+      - 6379:6379
+
   di-auth-account-management-frontend:
     build:
-      context: .
       dockerfile: Dockerfile
     ports:
-    - 3000:3000
+    - 6001:6001
+    volumes:
+      - ./:/app
     environment:
       - ENVIRONMENT="development"
-      - API_BASE_URL="https://rkmnti7z55.execute-api.eu-west-2.amazonaws.com/test"
-      - SESSION_EXPIRY="1800000"
-      - SESSION_SECRET="secret"
+      - API_BASE_URL=
+      - SESSION_EXPIRY=1800000
+      - SESSION_SECRET=secret
+      - OIDC_CLIENT_ID=
+      - ISSUER_BASE_URL=
+      - OIDC_CLIENT_SCOPES=openid phone email
     restart: on-failure
-    networks:
-      - di-net
-
-networks:
-  di-net:

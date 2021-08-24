@@ -1,16 +1,12 @@
 FROM node:15.14.0-alpine
 
 ENV NODE_ENV "development"
-ENV PORT 3000
+ENV PORT 6001
 
-USER node
-WORKDIR /home/node/app
-COPY --chown=node:node . .
-
-RUN yarn install
-RUN yarn build
+VOLUME ["/app"]
+WORKDIR /app
 
 EXPOSE $PORT
 
-CMD ["yarn", "start"]
+CMD yarn install && yarn copy-assets && yarn dev
 

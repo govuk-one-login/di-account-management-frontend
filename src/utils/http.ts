@@ -9,25 +9,6 @@ const headers: Readonly<Record<string, string | boolean>> = {
   "X-Requested-With": "XMLHttpRequest",
 };
 
-export function getBaseRequestConfig(sessionId: string): AxiosRequestConfig {
-  return {
-    headers: {
-      "Session-Id": sessionId,
-    },
-    proxy: false,
-  };
-}
-
-export function getBaseRequestConfigWithClientSession(sessionId: string, clientSessionId: string): AxiosRequestConfig {
-  return {
-    headers: {
-      "Session-Id": sessionId,
-      "Client-Session-Id": clientSessionId,
-    },
-    proxy: false,
-  };
-}
-
 export class Http {
   private instance: AxiosInstance;
 
@@ -51,7 +32,7 @@ export class Http {
   private static injectCustomHeaders(
     config: AxiosRequestConfig
   ): AxiosRequestConfig {
-    //TODO basic auth for api
+    //TODO bearer token
     return config;
   }
 

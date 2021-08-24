@@ -37,10 +37,27 @@
 {% endblock %}
 
 {% block header %}
-    {{ govukHeader({
-        homepageUrl: "#",
-        serviceUrl: "#"
-    }) }}
+ {% if isAuth %}
+
+     {{ govukHeader({
+                homepageUrl: "#",
+                serviceUrl: "#",
+                navigationClasses:"text-right",
+                navigation: [
+                    {
+                      href: "/sign-out",
+                      text: "Sign Out"
+                    }
+                  ]
+            }) }}
+  {% else %}
+  {{ govukHeader({
+           homepageUrl: "#",
+           serviceUrl: "#",
+           navigationClasses:"text-right"
+       }) }}
+  {% endif %}
+
 {% endblock %}
 
 {% block main %}
