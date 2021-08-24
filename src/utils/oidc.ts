@@ -14,5 +14,6 @@ export async function getOIDCClient(config: OIDCConfig): Promise<Client> {
     response_types: ["code"],
     token_endpoint_auth_method: "none", //allows for a custom client_assertion
     id_token_signed_response_alg: "ES256",
+    scopes: config.scopes
   });
 }

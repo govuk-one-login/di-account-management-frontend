@@ -22,6 +22,7 @@ export function getOIDCConfig(): OIDCConfig {
   ) as OIDCConfig;
 
   config.callback_url = callBackUrl;
+  config.scopes = (config.scopes as string[]).join(" ");
 
   return config;
 }

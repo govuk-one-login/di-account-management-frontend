@@ -5,7 +5,7 @@ export interface OIDCConfig {
   idp_url: string;
   callback_url: string;
   client_id: string;
-  scopes: string;
+  scopes: string | string[];
 }
 
 export type ExpressRouteFunc = (
