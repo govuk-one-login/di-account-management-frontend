@@ -6,6 +6,7 @@ resource "cloudfoundry_user_provided_service" "kms" {
     AWS_ACCESS_KEY_ID     = aws_iam_access_key.account_management_app_access_keys.id
     AWS_SECRET_ACCESS_KEY = aws_iam_access_key.account_management_app_access_keys.secret
     AWS_REGION            = var.aws_region
+    AWS_ROLE_ARN          = aws_iam_role.account_management_app_role.arn
     KMS_KEY_ID            = aws_kms_key.account_management_jwt_key.id
     KMS_KEY_ALIAS         = aws_kms_alias.account_management_jwt_alias.name
   }
