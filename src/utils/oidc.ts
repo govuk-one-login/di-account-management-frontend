@@ -1,11 +1,12 @@
 import { Issuer, Client, custom } from "openid-client";
 import { OIDCConfig } from "../types";
+import pMemoize = require('p-memoize');
 
 custom.setHttpOptionsDefaults({
   timeout: 20000,
 });
 
-export async function getOIDCClient(config: OIDCConfig): Promise<Client> {
+async function getOIDCClient(config: OIDCConfig): Promise<Client> {
   const issuer = await Issuer.discover(config.idp_url);
 
   return new issuer.Client({
@@ -17,3 +18,8 @@ export async function getOIDCClient(config: OIDCConfig): Promise<Client> {
     scopes: config.scopes
   });
 }
+
+const cached= pMemoize(getOIDCClient, {maxAge : 43200000});
+
+export {cached as getOIDCClient}
+
