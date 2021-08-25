@@ -19,8 +19,7 @@ services:
       - 6379:6379
 
   di-auth-account-management-frontend:
-    build:
-      dockerfile: Dockerfile
+    build: .
     ports:
     - 6001:6001
     volumes:
