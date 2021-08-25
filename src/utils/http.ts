@@ -9,6 +9,15 @@ const headers: Readonly<Record<string, string | boolean>> = {
   "X-Requested-With": "XMLHttpRequest",
 };
 
+export function getBaseRequestConfig(token: string): AxiosRequestConfig {
+  return {
+    headers: {
+      Token: token,
+    },
+    proxy: false,
+  };
+}
+
 export class Http {
   private instance: AxiosInstance;
 
