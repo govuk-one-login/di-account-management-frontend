@@ -1,17 +1,10 @@
-import express, { NextFunction, Router, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { getOIDCClient } from "../utils/oidc";
-import { OIDCConfig } from "../types";
-import { asyncHandler } from "../utils/async";
+import { ExpressRouteFunc, OIDCConfig } from "../types";
 
-export function authMiddleware(config: OIDCConfig) : Router {
-  const router: Router = express.Router();
-
-  router.use(asyncHandler(get));
-
-  async function get(req: Request, res: Response, next: NextFunction) {
+export function authMiddleware(config: OIDCConfig): ExpressRouteFunc {
+  return async function (req: Request, res: Response, next: NextFunction) {
     req.oidc = await getOIDCClient(config);
     next();
-  }
-
-  return router;
+  };
 }

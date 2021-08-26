@@ -12,8 +12,8 @@ export function getOIDCConfig(): OIDCConfig {
     return {
       client_id: getOIDCClientId(),
       idp_url: getOIDCApiDiscoveryUrl(),
-      scopes:  getOIDCClientScopes(),
-      callback_url:  callBackUrl,
+      scopes: getOIDCClientScopes(),
+      callback_url: callBackUrl,
     } as OIDCConfig;
   }
 

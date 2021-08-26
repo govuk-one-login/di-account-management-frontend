@@ -3,7 +3,7 @@ import PinoHttp from "pino-http";
 import { getLogLevel } from "../config";
 
 const logger = pino({
-  name: "di-auth",
+  name: "di-auth-account-management",
   level: getLogLevel(),
   serializers: {
     req: (req) => ({

@@ -39,6 +39,7 @@ export function oidcAuthCallbackGet(
       email: userInfoResponse.email,
       phone: redactPhoneNumber(userInfoResponse.phone_number),
       idToken: tokenResponse.id_token,
+      isAuthenticated: true,
     };
 
     res.locals.isAuth = true;
