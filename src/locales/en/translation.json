@@ -120,6 +120,24 @@
         "link": "Delete this GOV.UK account",
         "info": "You can delete this account and all the information stored in it."
       }
+    },
+    "enterPassword": {
+      "title": "Enter your password",
+      "header": "Enter your password",
+      "changeEmailParagraph1": "We need to make sure it's you before you can change your email address.",
+      "password": {
+        "label": "Enter your password",
+        "validationError": {
+          "required": "Enter your password",
+          "incorrectPassword": "Enter the correct password"
+        }
+      },
+      "forgottenPassword": {
+        "text": "I've forgotten my password"
+      },
+      "dontWantTo": {
+        "changeEmailLinkText": "I don't want to change my email address"
+      }
     }
   }
 }

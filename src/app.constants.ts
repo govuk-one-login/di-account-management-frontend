@@ -1,9 +1,15 @@
 export const PATH_NAMES = {
   MANAGE_YOUR_ACCOUNT: "/manage-your-account",
+  ENTER_PASSWORD: "/enter-password",
+  ENTER_NEW_EMAIL: "/enter-new-email",
   ACCESSIBILITY_STATEMENT: "undefined",
   PRIVACY_POLICY: "undefined",
   TERMS_AND_CONDITIONS: "undefined",
   AUTH_CALLBACK: "/auth/callback",
+};
+
+export const API_ENDPOINTS = {
+  CHECK_USER_PASSWORD: "/check-user-password",
 };
 
 export const HTTP_STATUS_CODES = {
