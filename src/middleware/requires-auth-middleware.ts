@@ -5,7 +5,8 @@ export function requiresAuthMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  const requiresLogin = !req.session.user || req.session.user.isAuthenticated == false;
+  const requiresLogin =
+    !req.session.user || req.session.user.isAuthenticated == false;
 
   if (requiresLogin) {
     return res.redirect("/");
