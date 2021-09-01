@@ -1,6 +1,6 @@
 export interface EnterNewEmailServiceInterface {
   updateEmail: (
-    token: string,
+    accessToken: string,
     email: string,
     newEmail: string
   ) => Promise<void>;

@@ -12,11 +12,11 @@ export function enterNewEmailPost(
   service: EnterNewEmailServiceInterface = enterNewEmailService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const token = req.session.user.idToken;
+    const accessToken = req.session.user.accessToken;
     const currentEmail = req.session.user.email;
     const newEmail = req.body.email;
 
-    service.updateEmail(token, currentEmail, newEmail);
+    service.updateEmail(accessToken, currentEmail, newEmail);
 
     return res.redirect(PATH_NAMES.EMAIL_UPDATED_CONFIRMATION);
   };
