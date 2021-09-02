@@ -2,6 +2,7 @@ export const PATH_NAMES = {
   MANAGE_YOUR_ACCOUNT: "/manage-your-account",
   ENTER_PASSWORD: "/enter-password",
   ENTER_NEW_EMAIL: "/enter-new-email",
+  EMAIL_UPDATED_CONFIRMATION: "/email-updated-confirmation",
   ACCESSIBILITY_STATEMENT: "undefined",
   PRIVACY_POLICY: "undefined",
   TERMS_AND_CONDITIONS: "undefined",
@@ -10,6 +11,7 @@ export const PATH_NAMES = {
 
 export const API_ENDPOINTS = {
   CHECK_USER_PASSWORD: "/check-user-password",
+  UPDATE_EMAIL: "/update-email",
 };
 
 export const HTTP_STATUS_CODES = {

@@ -14,7 +14,6 @@
     },
     "yes": "Yes",
     "no": "No",
-    "footer": {},
     "cookie": {
       "cookieBanner": {
         "title": "Cookies on GOV.UK Account",
@@ -134,6 +133,21 @@
       },
       "forgottenPassword": {
         "text": "I've forgotten my password"
+      },
+      "dontWantTo": {
+        "changeEmailLinkText": "I don't want to change my email address"
+      }
+    },
+    "enterNewEmail": {
+      "title": "Enter your new email address",
+      "header": "Enter your new email address",
+      "email": {
+        "label": "Email address",
+        "validationError": {
+          "required": "Enter your email address",
+          "length": "Email address must be 256 characters or fewer",
+          "email": "Enter an email address in the correct format, like name@example.com"
+        }
       },
       "dontWantTo": {
         "changeEmailLinkText": "I don't want to change my email address"
