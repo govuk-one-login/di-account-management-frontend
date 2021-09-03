@@ -1,21 +1,22 @@
 import { getBaseRequestConfig, Http, http } from "../../utils/http";
-import { API_ENDPOINTS } from "../../app.constants";
-import { EnterNewEmailServiceInterface } from "./types";
+import { API_ENDPOINTS, UPDATE_INFO_TYPE } from "../../app.constants";
+import { EnterNewEmailServiceInterface, UpdateInfo } from "./types";
 
 export function enterNewEmailService(
   axios: Http = http
 ): EnterNewEmailServiceInterface {
   const updateEmail = async function (
-    token: string,
-    currentEmail: string,
-    newEmail: string
+    accessToken: string,
+    existingEmail: string,
+    replacementEmail: string
   ): Promise<void> {
-    const config = getBaseRequestConfig(token);
-    await axios.client.post<void>(
-      API_ENDPOINTS.UPDATE_EMAIL,
+    const config = getBaseRequestConfig(accessToken);
+    await axios.client.post<UpdateInfo>(
+      API_ENDPOINTS.UPDATE_INFO,
       {
-        currentEmail: currentEmail,
-        newEmail: newEmail,
+        updateInfoType: UPDATE_INFO_TYPE.EMAIL,
+        existingProfileAttribute: existingEmail,
+        replacementProfileAttribute: replacementEmail,
       },
       config
     );
