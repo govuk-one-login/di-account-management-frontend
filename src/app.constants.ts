@@ -11,8 +11,12 @@ export const PATH_NAMES = {
 
 export const API_ENDPOINTS = {
   AUTHENTICATE: "/authenticate",
-  UPDATE_EMAIL: "/update-email",
+  UPDATE_INFO: "/update-info",
 };
+
+export const UPDATE_INFO_TYPE = {
+  EMAIL: "EMAIL",
+}
 
 export const HTTP_STATUS_CODES = {
   NOT_FOUND: 404,
