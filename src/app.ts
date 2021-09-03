@@ -31,6 +31,7 @@ import { getSessionCookieOptions, getSessionStore } from "./config/session";
 import { getOIDCConfig } from "./config/oidc";
 import { enterPasswordRouter } from "./components/enter-password/enter-password-routes";
 import { enterNewEmailRouter } from "./components/enter-new-email/enter-new-email-routes";
+import { updateConfirmationRouter } from "./components/update-confirmation/update-confirmation-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -44,6 +45,7 @@ function registerRoutes(app: express.Application) {
   app.use(logoutRouter);
   app.use(enterPasswordRouter);
   app.use(enterNewEmailRouter);
+  app.use(updateConfirmationRouter);
 }
 
 function createApp(): express.Application {
