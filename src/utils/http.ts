@@ -12,7 +12,7 @@ const headers: Readonly<Record<string, string | boolean>> = {
 export function getBaseRequestConfig(token: string): AxiosRequestConfig {
   return {
     headers: {
-      Token: token,
+      'Authorization': 'Bearer ' + token
     },
     proxy: false,
   };

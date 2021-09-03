@@ -20,16 +20,14 @@ export function enterPasswordPost(
   service: EnterPasswordServiceInterface = enterPasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const email = "";
-    const id = "";
-    const userPassword = await service.checkUserPassword(
-      id,
+    const email = req.session.user.email;
+    const accessToken = req.session.user.accessToken;
+    const authenticated = await service.authenticated(
+      accessToken,
       email,
       req.body["password"]
     );
-
-    if (userPassword.isValidPassword) {
-      // TODO: this page does not exist
+    if (authenticated) {
       return res.redirect(PATH_NAMES.ENTER_NEW_EMAIL);
     }
     renderValidationError(
