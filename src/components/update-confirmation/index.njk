@@ -1,0 +1,18 @@
+{% extends "common/layout/base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% set pageTitleName = pageTitle %}
+{% block content %}
+
+{{ govukPanel({
+    titleText: panelText
+}) }}
+
+<p class="govuk-body">{{summaryText}}</p>
+
+{{ govukButton({
+    "text": button_text|default('general.backToAccountButtonText' | translate, true),
+    "href": "/manage-your-account"
+}) }}
+
+{% endblock %}

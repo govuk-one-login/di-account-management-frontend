@@ -14,6 +14,7 @@
     },
     "yes": "Yes",
     "no": "No",
+    "backToAccountButtonText": "Back to your account",
     "cookie": {
       "cookieBanner": {
         "title": "Cookies on GOV.UK Account",
@@ -152,6 +153,11 @@
       "dontWantTo": {
         "changeEmailLinkText": "I don't want to change my email address"
       }
+    },
+    "updateEmailConfirmation": {
+      "title": "You have changed your email address",
+      "panelText": "You have changed your email address",
+      "summaryText": "Your email address has been changed to: "
     }
   }
 }
