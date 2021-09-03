@@ -10,7 +10,7 @@ export const PATH_NAMES = {
 };
 
 export const API_ENDPOINTS = {
-  CHECK_USER_PASSWORD: "/check-user-password",
+  AUTHENTICATE: "/authenticate",
   UPDATE_EMAIL: "/update-email",
 };
 

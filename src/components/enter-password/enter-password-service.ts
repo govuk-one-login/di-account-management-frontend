@@ -1,29 +1,34 @@
 import { getBaseRequestConfig, Http, http } from "../../utils/http";
-import { EnterPasswordServiceInterface, UserPassword } from "./types";
-import { API_ENDPOINTS } from "../../app.constants";
+import { EnterPasswordServiceInterface } from "./types";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 
 export function enterPasswordService(
   axios: Http = http
 ): EnterPasswordServiceInterface {
-  const checkUserPassword = async function (
+  const authenticated = async function (
     token: string,
     emailAddress: string,
     password: string
-  ): Promise<UserPassword> {
+  ): Promise<boolean> {
     const config = getBaseRequestConfig(token);
-
-    // TODO: this API does not exist
-    const { data } = await axios.client.post<UserPassword>(
-      API_ENDPOINTS.CHECK_USER_PASSWORD,
+    config.validateStatus = function (status: any) {
+      return (
+        status === HTTP_STATUS_CODES.OK ||
+        status === HTTP_STATUS_CODES.FORBIDDEN ||
+        status === HTTP_STATUS_CODES.UNAUTHORIZED
+      );
+    };
+    const { status } = await axios.client.post<void>(
+      API_ENDPOINTS.AUTHENTICATE,
       {
         email: emailAddress,
         password: password,
       },
       config
     );
-    return data;
+    return status === HTTP_STATUS_CODES.OK;
   };
   return {
-    checkUserPassword,
+    authenticated,
   };
 }
