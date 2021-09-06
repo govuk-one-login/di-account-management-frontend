@@ -68,7 +68,7 @@
     "jsdom": "^16.6.0",
     "jose": "^2.0.5",
     "nunjucks": "^3.2.3",
-    "libphonenumber-js": "^1.9.23",
+    "libphonenumber-js": "^1.9.26",
     "p-memoize": "^4.0.1",
     "prettier": "^2.3.2",
     "pino": "^6.12.0",
