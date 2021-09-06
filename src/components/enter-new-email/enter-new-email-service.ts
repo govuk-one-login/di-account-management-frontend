@@ -1,9 +1,9 @@
-import { getBaseRequestConfig, Http, http } from "../../utils/http";
+import { amHttp, getBaseRequestConfig, Http } from "../../utils/http";
 import { API_ENDPOINTS, UPDATE_INFO_TYPE } from "../../app.constants";
 import { EnterNewEmailServiceInterface, UpdateInfo } from "./types";
 
 export function enterNewEmailService(
-  axios: Http = http
+  axios: Http = amHttp
 ): EnterNewEmailServiceInterface {
   const updateEmail = async function (
     accessToken: string,

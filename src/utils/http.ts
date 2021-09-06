@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from "axios";
-import { getApiBaseUrl } from "../config";
+import { getAccountManagementApiUrl, getApiBaseUrl } from "../config";
 import { logger } from "./logger";
 
 const headers: Readonly<Record<string, string | boolean>> = {
@@ -20,6 +20,11 @@ export function getBaseRequestConfig(token: string): AxiosRequestConfig {
 
 export class Http {
   private instance: AxiosInstance;
+  private readonly baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
 
   get client(): AxiosInstance {
     return this.instance || this.initHttp();
@@ -47,7 +52,7 @@ export class Http {
 
   private initHttp() {
     const http = axios.create({
-      baseURL: getApiBaseUrl(),
+      baseURL: this.baseUrl,
       headers: headers,
     });
 
@@ -64,4 +69,5 @@ export class Http {
     return http;
   }
 }
-export const http = new Http();
+export const http = new Http(getApiBaseUrl());
+export const amHttp = new Http(getAccountManagementApiUrl());

@@ -33,3 +33,7 @@ export function getSessionExpiry(): number {
 export function getSessionSecret(): string {
   return process.env.SESSION_SECRET;
 }
+
+export function getAccountManagementApiUrl(): string {
+  return process.env.AM_API_BASE_URL
+}
