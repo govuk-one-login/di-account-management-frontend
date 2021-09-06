@@ -1,9 +1,9 @@
-import { getBaseRequestConfig, Http, http } from "../../utils/http";
+import { amHttp, getBaseRequestConfig, Http } from "../../utils/http";
 import { EnterPasswordServiceInterface } from "./types";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 
 export function enterPasswordService(
-  axios: Http = http
+  axios: Http = amHttp
 ): EnterPasswordServiceInterface {
   const authenticated = async function (
     token: string,
