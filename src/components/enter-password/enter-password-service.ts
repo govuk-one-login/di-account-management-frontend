@@ -1,4 +1,4 @@
-import { amHttp, getBaseRequestConfig, Http, http } from "../../utils/http";
+import { amHttp, getBaseRequestConfig, Http } from "../../utils/http";
 import { EnterPasswordServiceInterface } from "./types";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 
