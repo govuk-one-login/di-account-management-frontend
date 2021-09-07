@@ -23,7 +23,7 @@ run:
       echo "Generating vars file..."
       API_URL="https://$(jq -r .${ENVIRONMENT_NAME}_api_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
       AM_URL="$(jq -r .${ENVIRONMENT_NAME}_account_management_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
-      AM_API_URL="$(jq -r .${ENVIRONMENT_NAME}_account_management_api_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
+      AM_API_URL="https://$(jq -r .${ENVIRONMENT_NAME}_account_management_api_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
 
       cat <<EOF > di-account-management-deploy-variables/vars.yml
       api_base_url: ${API_URL}
