@@ -7,11 +7,14 @@ export const PATH_NAMES = {
   PRIVACY_POLICY: "undefined",
   TERMS_AND_CONDITIONS: "undefined",
   AUTH_CALLBACK: "/auth/callback",
+  DELETE_ACCOUNT: "/delete-account"
 };
 
 export const API_ENDPOINTS = {
   AUTHENTICATE: "/authenticate",
   UPDATE_INFO: "/update-info",
+  CHECK_USER_PASSWORD: "/check-user-password",
+  DELETE_ACCOUNT: "/delete-account"
 };
 
 export const UPDATE_INFO_TYPE = {
