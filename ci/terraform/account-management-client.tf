@@ -55,7 +55,7 @@ resource "aws_dynamodb_table_item" "account_management_client" {
       ]
     }
     PublicKey = {
-      S = "paste me manually until Terraform provider bug is fixed"
+      S = data.aws_kms_public_key.account_management_jwt_key.public_key
     }
     ServiceType = {
       S = "MANDATORY"
