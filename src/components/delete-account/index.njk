@@ -1,0 +1,41 @@
+{% extends "common/layout/base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% set pageTitleName = 'pages.deleteAccount.title' | translate %}
+{% block content %}
+
+{% include "common/errors/errorSummary.njk" %}
+
+<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.deleteAccount.header' | translate}}</h1>
+
+<br>
+
+{{ govukWarningText({
+  text: 'pages.deleteAccount.header' | translate
+}) }}
+
+<p class="govuk-body">{{'pages.deleteAccount.paragraph' | translate}}</p>
+
+<form action="/delete-account" method="post" novalidate>
+
+<input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+
+{{ govukButton({
+  text: 'pages.deleteAccount.deleteAccount' | translate,
+  classes: "govuk-button--warning",
+  "type": "Submit",
+  "preventDoubleClick": true
+}) }}
+
+</form>
+
+<br>
+
+<a href="/manage-your-account" class="govuk-link">
+    {{'pages.deleteAccount.doNotDeleteAccount' | translate}}
+</a>
+
+{% endblock %}

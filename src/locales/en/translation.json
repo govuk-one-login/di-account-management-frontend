@@ -158,6 +158,19 @@
       "title": "You have changed your email address",
       "panelText": "You have changed your email address",
       "summaryText": "Your email address has been changed to: "
+    },
+    "deleteAccount": {
+      "title": "Remove account",
+      "header": "Are you sure you want to delete your account?",
+      "paragraph": "Deleting your GOV.UK account won't delete other government accounts you may have, such as Government Gateway or your Universal Credit account.",
+      "deleteAccount": "Delete account",
+      "doNotDeleteAccount": "I do not want to delete my account"
+    },
+    "deleteAccountConfirmed": {
+      "title": "Account removed",
+      "header": "You have deleted your GOV.UK account",
+      "paragraph": "If you need to use a GOV.UK account in future, you'll need to create one.",
+      "backHome": "Back to GOV.UK home"
     }
   }
 }
