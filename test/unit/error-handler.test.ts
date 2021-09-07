@@ -4,6 +4,7 @@ import { sinon } from "../utils/test-utils";
 import { NextFunction, Request, Response } from "express";
 import { pageNotFoundHandler } from "../../src/handlers/page-not-found-handler";
 import { serverErrorHandler } from "../../src/handlers/internal-server-error-handler";
+import { PATH_DATA } from "../../src/app.constants";
 
 describe("Error handlers", () => {
   let sandbox: sinon.SinonSandbox;
@@ -15,8 +16,9 @@ describe("Error handlers", () => {
     sandbox = sinon.createSandbox();
     req = { app: { locals: {} } } as Partial<Request>;
     res = {
-      render: sandbox.spy(),
-      status: sandbox.spy(),
+      render: sandbox.fake(),
+      status: sandbox.fake(),
+      redirect: sandbox.fake(),
     } as Partial<Response>;
     next = sandbox.fake();
   });
@@ -60,8 +62,8 @@ describe("Error handlers", () => {
 
       serverErrorHandler(err, req as Request, res as Response, next);
 
-      expect(res.render).to.have.been.calledOnceWith(
-        "common/errors/session-expired.njk"
+      expect(res.redirect).to.have.been.calledOnceWith(
+        PATH_DATA.SESSION_EXPIRED.url
       );
     });
   });

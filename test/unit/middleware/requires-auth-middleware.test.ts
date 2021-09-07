@@ -2,14 +2,18 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction } from "express";
 import { sinon } from "../../utils/test-utils";
-import {requiresAuthMiddleware} from "../../../src/middleware/requires-auth-middleware";
+import { requiresAuthMiddleware } from "../../../src/middleware/requires-auth-middleware";
 
 describe("Requires auth middleware", () => {
   it("should redirect to start if user not authenticated", () => {
-    const req: any = { session: { user: {
-      email:"test@test.com",
+    const req: any = {
+      session: {
+        user: {
+          email: "test@test.com",
           isAuthenticated: false,
-        }} };
+        },
+      },
+    };
 
     const res: any = { locals: {}, redirect: sinon.fake() };
     const nextFunction: NextFunction = sinon.fake();
@@ -32,10 +36,14 @@ describe("Requires auth middleware", () => {
   });
 
   it("should call next user session is valid", () => {
-    const req: any = { session: { user: {
-          email:"test@test.com",
+    const req: any = {
+      session: {
+        user: {
+          email: "test@test.com",
           isAuthenticated: true,
-        }} };
+        },
+      },
+    };
     const res: any = { locals: {}, redirect: sinon.fake() };
     const nextFunction: NextFunction = sinon.fake();
 

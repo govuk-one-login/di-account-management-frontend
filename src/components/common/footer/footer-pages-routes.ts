@@ -1,4 +1,4 @@
-import { PATH_NAMES } from "../../../app.constants";
+import { PATH_DATA } from "../../../app.constants";
 import {
   accessibilityStatementGet,
   privacyStatementGet,
@@ -9,8 +9,8 @@ import * as express from "express";
 
 const router = express.Router();
 
-router.get(PATH_NAMES.ACCESSIBILITY_STATEMENT, accessibilityStatementGet);
-router.get(PATH_NAMES.PRIVACY_POLICY, privacyStatementGet);
-router.get(PATH_NAMES.TERMS_AND_CONDITIONS, termsConditionsGet);
+router.get(PATH_DATA.ACCESSIBILITY_STATEMENT.url, accessibilityStatementGet);
+router.get(PATH_DATA.PRIVACY_POLICY.url, privacyStatementGet);
+router.get(PATH_DATA.TERMS_AND_CONDITIONS.url, termsConditionsGet);
 
 export { router as footerRouter };

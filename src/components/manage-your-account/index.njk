@@ -29,7 +29,7 @@
                 actions: {
                 items: [
                     {
-                        href: "/enter-password",
+                        href: "/enter-password?type=changeEmail",
                         text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
                         visuallyHiddenText: 'pages.manageYourAccount.summaryList.email' | translate
                     }
@@ -46,7 +46,7 @@
                 actions: {
                 items: [
                     {
-                        href: "#",
+                        href: "/enter-password?type=changePassword",
                         text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
                         visuallyHiddenText: 'pages.manageYourAccount.summaryList.password' | translate
                     }
@@ -63,7 +63,7 @@
                 actions: {
                 items: [
                     {
-                        href: "#",
+                        href: "/enter-password?type=changePhoneNumber",
                         text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
                         visuallyHiddenText: 'pages.manageYourAccount.summaryList.phoneNumber' | translate
                     }
@@ -74,6 +74,18 @@
     }) }}
     <h3 class="govuk-heading-m">{{ 'pages.manageYourAccount.deleteAccount.heading' | translate }}</h3>
     <p class="govuk-body">{{ 'pages.manageYourAccount.deleteAccount.info' | translate }}</p>
-    <a href="#" class="govuk-link" id="warning-link">{{ 'pages.manageYourAccount.deleteAccount.link' | translate }}</a>
+    <a href="/enter-password?type=deleteAccount" class="govuk-link govuk-body" id="warning-link">{{ 'pages.manageYourAccount.deleteAccount.link' | translate }}</a>
 {% endblock %}
 
+{% block feedback %}
+<div class="govuk-width-container">
+        <div class="feedback-footer">
+            <h2 class="gem-c-heading govuk-heading-m govuk-!-margin-bottom-4">Help improve GOV.UK accounts</h2>
+            <p class="govuk-body govuk-!-margin-bottom-0">
+                We’re trialling GOV.UK accounts.
+                <a href="/feedback" class="govuk-link">Give feedback</a>
+                on your experience so we can make them better.
+            </p>
+        </div>
+    </div>
+ {% endblock %}

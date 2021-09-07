@@ -9,7 +9,7 @@ import {
   enterPasswordPost,
 } from "../enter-password-controller";
 import { EnterPasswordServiceInterface } from "../types";
-import { HTTP_STATUS_CODES, PATH_NAMES } from "../../../app.constants";
+import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -21,9 +21,19 @@ describe("enter password controller", () => {
 
     req = {
       body: {},
-      session: { user: {} },
+      session: {
+        user: {
+          state: {
+            changePassword: {},
+            changePhoneNumber: {},
+            changeEmail: {},
+            deleteAccount: {},
+          },
+        },
+      },
       t: sandbox.fake(),
       i18n: { language: "" },
+      query: {},
     };
     res = {
       render: sandbox.fake(),
@@ -37,16 +47,26 @@ describe("enter password controller", () => {
     sandbox.restore();
   });
 
-  describe("enterEmailGet", () => {
-    it("should render enter email view", () => {
+  describe("enterPasswordGet", () => {
+    it("should render enter password view with query param", () => {
+      req.query.type = "changePassword";
+
       enterPasswordGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("enter-password/index.njk");
     });
+
+    it("should redirect to manage your account when no with query param", () => {
+      enterPasswordGet(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(
+        PATH_DATA.MANAGE_YOUR_ACCOUNT.url
+      );
+    });
   });
 
   describe("enterPasswordPost", () => {
-    it("should redirect to enter-new-email when the password is correct", async () => {
+    it("should redirect to change-email when the password is correct", async () => {
       const fakeService: EnterPasswordServiceInterface = {
         authenticated: sandbox.fake.returns(true),
       };
@@ -54,12 +74,15 @@ describe("enter password controller", () => {
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
+        state: { changeEmail: {} },
       };
+
       req.body["password"] = "password";
+      req.body["requestType"] = "changeEmail";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_NAMES.ENTER_NEW_EMAIL);
+      expect(res.redirect).to.have.calledWith(PATH_DATA.CHANGE_EMAIL.url);
     });
 
     it("should bad request when user credentials are incorrect", async () => {
@@ -71,24 +94,14 @@ describe("enter password controller", () => {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
       };
+
       req.body["password"] = "password";
+      req.body["requestType"] = "changeEmail";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
       expect(res.render).to.have.been.called;
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
-    });
-
-    it("should throw error when API call throws error", async () => {
-      const error = new Error("Internal server error");
-      const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.throws(error),
-      };
-
-      await expect(
-        enterPasswordPost(fakeService)(req as Request, res as Response)
-      ).to.be.rejectedWith(Error, "Internal server error");
-      expect(fakeService.authenticated).to.have.been.calledOnce;
     });
   });
 });

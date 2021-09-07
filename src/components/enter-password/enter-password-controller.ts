@@ -2,49 +2,60 @@ import { Request, Response } from "express";
 import { EnterPasswordServiceInterface } from "./types";
 import { enterPasswordService } from "./enter-password-service";
 import { ExpressRouteFunc } from "../../types";
-import { PATH_NAMES } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants";
 import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
+import { getInitialState, getNextState } from "../../utils/state-machine";
 
-const ENTER_PASSWORD_TEMPLATE = "enter-password/index.njk";
-const ENTER_PASSWORD_VALIDATION_KEY =
-  "pages.enterPassword.password.validationError.incorrectPassword";
+const TEMPLATE = "enter-password/index.njk";
+
+const REDIRECT_PATHS: { [key: string]: string } = {
+  changeEmail: PATH_DATA.CHANGE_EMAIL.url,
+  changePassword: PATH_DATA.CHANGE_PASSWORD.url,
+  changePhoneNumber: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+  deleteAccount: PATH_DATA.DELETE_ACCOUNT.url,
+};
 
 export function enterPasswordGet(req: Request, res: Response): void {
-  res.render("enter-password/index.njk");
+  const requestType = req.query.type as string;
+
+  if (!requestType) {
+    return res.redirect(PATH_DATA.MANAGE_YOUR_ACCOUNT.url);
+  }
+
+  req.session.user.state[requestType] = getInitialState();
+
+  res.render(`enter-password/index.njk`, { requestType });
 }
 
 export function enterPasswordPost(
   service: EnterPasswordServiceInterface = enterPasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const email = req.session.user.email;
-    const accessToken = req.session.user.accessToken;
-    const authenticated = await service.authenticated(
+    const { email, accessToken } = req.session.user;
+    const requestType = req.body.requestType;
+    const isAuthenticated = await service.authenticated(
       accessToken,
       email,
       req.body["password"]
     );
-    if (authenticated) {
-      return res.redirect(PATH_NAMES.ENTER_NEW_EMAIL);
-    }
-    renderValidationError(
-      req,
-      res,
-      ENTER_PASSWORD_TEMPLATE,
-      ENTER_PASSWORD_VALIDATION_KEY
-    );
-  };
-}
 
-function renderValidationError(
-  req: Request,
-  res: Response,
-  fromTemplateName: string,
-  validationMessageKey: string
-) {
-  const error = formatValidationError("password", req.t(validationMessageKey));
-  renderBadRequest(res, req, fromTemplateName, error);
+    if (isAuthenticated) {
+      req.session.user.state[requestType] = getNextState(
+        req.session.user.state[requestType].value,
+        "AUTHENTICATED"
+      );
+
+      return res.redirect(REDIRECT_PATHS[requestType]);
+    }
+
+    const error = formatValidationError(
+      "password",
+      req.t("pages.enterPassword.password.validationError.incorrectPassword")
+    );
+
+    renderBadRequest(res, req, TEMPLATE, error);
+  };
 }

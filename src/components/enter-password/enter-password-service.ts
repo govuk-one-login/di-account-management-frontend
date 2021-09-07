@@ -1,9 +1,9 @@
-import { amHttp, getBaseRequestConfig, Http } from "../../utils/http";
+import { getBaseRequestConfig, http, Http } from "../../utils/http";
 import { EnterPasswordServiceInterface } from "./types";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 
 export function enterPasswordService(
-  axios: Http = amHttp
+  axios: Http = http
 ): EnterPasswordServiceInterface {
   const authenticated = async function (
     token: string,
@@ -11,13 +11,11 @@ export function enterPasswordService(
     password: string
   ): Promise<boolean> {
     const config = getBaseRequestConfig(token);
-    config.validateStatus = function (status: any) {
-      return (
-        status === HTTP_STATUS_CODES.OK ||
-        status === HTTP_STATUS_CODES.FORBIDDEN ||
-        status === HTTP_STATUS_CODES.UNAUTHORIZED
-      );
-    };
+    config.validateStatus = (status: number) =>
+      status === HTTP_STATUS_CODES.OK ||
+      status === HTTP_STATUS_CODES.FORBIDDEN ||
+      status === HTTP_STATUS_CODES.UNAUTHORIZED;
+
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.AUTHENTICATE,
       {

@@ -2,7 +2,8 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import {
   containsNumbersOrSpacesOnly,
-  containsUKMobileNumber, lengthInRangeWithoutSpaces,
+  containsUKMobileNumber,
+  lengthInRangeWithoutSpaces,
 } from "../../../src/utils/phone-number";
 
 describe("phone-number", () => {
@@ -104,9 +105,9 @@ describe("phone-number", () => {
     });
 
     it("should return true with numbers and spaces in range", () => {
-      expect(lengthInRangeWithoutSpaces(" 123 45 678 901 ", 11, 11)).to.equal(true);
+      expect(lengthInRangeWithoutSpaces(" 123 45 678 901 ", 11, 11)).to.equal(
+        true
+      );
     });
   });
-
-
 });

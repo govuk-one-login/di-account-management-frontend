@@ -30,9 +30,15 @@ import { logoutRouter } from "./components/logout/logout-routes";
 import { getSessionCookieOptions, getSessionStore } from "./config/session";
 import { getOIDCConfig } from "./config/oidc";
 import { enterPasswordRouter } from "./components/enter-password/enter-password-routes";
-import { enterNewEmailRouter } from "./components/enter-new-email/enter-new-email-routes";
+import { changeEmailRouter } from "./components/change-email/change-email-routes";
 import { updateConfirmationRouter } from "./components/update-confirmation/update-confirmation-routes";
+import { changePasswordRouter } from "./components/change-password/change-password-routes";
+import { checkYourEmailRouter } from "./components/check-your-email/check-your-email-routes";
+import { changePhoneNumberRouter } from "./components/change-phone-number/change-phone-number-routes";
 import { deleteAccountRouter } from "./components/delete-account/delete-account-routes";
+import { checkYourPhoneRouter } from "./components/check-your-phone/check-your-phone-routes";
+import { noCacheMiddleware } from "./middleware/no-cache-middleware";
+import { sessionExpiredRouter } from "./components/session-expired/session-expired-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -45,9 +51,14 @@ function registerRoutes(app: express.Application) {
   app.use(startRouter);
   app.use(logoutRouter);
   app.use(enterPasswordRouter);
-  app.use(enterNewEmailRouter);
+  app.use(changeEmailRouter);
   app.use(updateConfirmationRouter);
+  app.use(changePasswordRouter);
+  app.use(checkYourEmailRouter);
+  app.use(changePhoneNumberRouter);
   app.use(deleteAccountRouter);
+  app.use(checkYourPhoneRouter);
+  app.use(sessionExpiredRouter);
 }
 
 function createApp(): express.Application {
@@ -69,6 +80,8 @@ function createApp(): express.Application {
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 
+  app.use(noCacheMiddleware);
+
   i18next
     .use(Backend)
     .use(i18nextMiddleware.LanguageDetector)
@@ -83,7 +96,7 @@ function createApp(): express.Application {
 
   app.use(
     session({
-      name: "aps",
+      name: "am",
       store: getSessionStore(),
       saveUninitialized: false,
       secret: getSessionSecret(),

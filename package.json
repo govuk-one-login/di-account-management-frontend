@@ -2,11 +2,11 @@
   "name": "di-auth-account-management",
   "version": "1.0.0",
   "description": "",
+  "author": "",
+  "license": "ISC",
   "engines": {
     "node": "15.14.0"
   },
-  "author": "",
-  "license": "ISC",
   "scripts": {
     "build-ts": "tsc",
     "build": "yarn build-sass && yarn build-ts && yarn minfiy-build-js && yarn copy-assets",
@@ -18,14 +18,14 @@
     "depcheck": "depcheck",
     "lint": "eslint . --ext .ts,.js",
     "minfiy-build-js": "uglifyjs src/assets/javascript/application.js -o src/assets/javascript/application.js -c -m && uglifyjs src/assets/javascript/cookies.js -o src/assets/javascript/cookies.js -c -m",
-    "pretty": "prettier --write \"src/**/*.{ts,json}\"",
+    "pretty": "prettier --write \"*/**/*.{ts,json}\"",
     "start": "node dist/server.js",
     "test:audit": "yarn audit",
     "test:integration": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"src/**/*-integration.test.ts\"",
     "test:unit": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config --exclude \"src/**/*-integration.test.ts\"  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test:coverage": "nyc report",
-    "watch-node": "nodemon -r dotenv/config dist/server.js | pino-pretty",
+    "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9229 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --watch src/assets/scss/application.scss dist/public/style.css"
   },
@@ -75,7 +75,8 @@
     "pino-http": "^5.6.0",
     "redis": "^3.1.2",
     "openid-client": "^4.7.4",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "xstate": "^4.23.4"
   },
   "devDependencies": {
     "@types/chai": "^4.2.21",
@@ -106,6 +107,7 @@
     "cheerio": "^1.0.0-rc.10",
     "copyfiles": "^2.4.1",
     "concurrently": "^6.2.0",
+    "decache": "^4.6.0",
     "dotenv": "^10.0.0",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",

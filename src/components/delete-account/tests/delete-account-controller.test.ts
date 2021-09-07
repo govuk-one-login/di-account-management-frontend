@@ -9,6 +9,7 @@ import {
   deleteAccountPost,
 } from "../delete-account-controller";
 import { DeleteAccountServiceInterface } from "../types";
+import { PATH_DATA } from "../../../app.constants";
 
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -18,7 +19,7 @@ describe("delete account controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = { body: {}, session: { user: {} } };
+    req = { body: {}, session: { user: { state: { deleteAccount: {} } } } };
     res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
   });
 
@@ -27,7 +28,7 @@ describe("delete account controller", () => {
   });
 
   describe("deleteAccountGet", () => {
-    it("should render delete account index", () => {
+    it("should render delete account page", () => {
       deleteAccountGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("delete-account/index.njk");
@@ -35,20 +36,20 @@ describe("delete account controller", () => {
   });
 
   describe("deleteAccountPost", () => {
-    it("should render confirmed index", async () => {
+    it("should redirect to deletion confirmed page", async () => {
       const fakeService: DeleteAccountServiceInterface = {
         deleteAccount: sandbox.fake(),
       };
 
-      req.session.user = {
-        email: "test@test.com",
-        accessToken: "te565653"
-      };
+      req.session.user.email = "test@test.com";
+      req.session.user.accessToken = "accessToken";
 
       await deleteAccountPost(fakeService)(req as Request, res as Response);
 
       expect(fakeService.deleteAccount).to.have.been.calledOnce;
-      expect(res.render).to.have.calledWith("delete-account/confirmed.njk");
+      expect(res.redirect).to.have.been.calledWith(
+        PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url
+      );
     });
   });
 });

@@ -1,19 +1,27 @@
-import {PATH_NAMES} from "../../app.constants";
+import { PATH_DATA } from "../../app.constants";
 
 import * as express from "express";
-import {deleteAccountGet, deleteAccountPost} from "./delete-account-controller";
-import {asyncHandler} from "../../utils/async";
+import {
+  deleteAccountGet,
+  deleteAccountPost,
+} from "./delete-account-controller";
+import { asyncHandler } from "../../utils/async";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 
 const router = express.Router();
 
 router.get(
-    PATH_NAMES.DELETE_ACCOUNT,
-    deleteAccountGet
+  PATH_DATA.DELETE_ACCOUNT.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  deleteAccountGet
 );
 
 router.post(
-    PATH_NAMES.DELETE_ACCOUNT,
-    asyncHandler(deleteAccountPost())
+  PATH_DATA.DELETE_ACCOUNT.url,
+  requiresAuthMiddleware,
+  asyncHandler(deleteAccountPost())
 );
 
-export {router as deleteAccountRouter};
+export { router as deleteAccountRouter };

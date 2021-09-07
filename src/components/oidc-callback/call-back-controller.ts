@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
-import { redactPhoneNumber } from "../../utils/strings";
-import { PATH_NAMES } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants";
 import { callbackService } from "./call-back-service";
 import { ExpressRouteFunc } from "../../types";
 import { CallbackServiceInterface } from "./types";
@@ -16,7 +15,6 @@ export function oidcAuthCallbackGet(
       req.oidc.issuer.metadata.token_endpoint
     );
 
-    req.log.debug(clientAssertion);
     const tokenResponse: TokenSet = await req.oidc.callback(
       req.oidc.metadata.redirect_uris[0],
       queryParams,
@@ -37,14 +35,13 @@ export function oidcAuthCallbackGet(
 
     req.session.user = {
       email: userInfoResponse.email,
-      phone: redactPhoneNumber(userInfoResponse.phone_number),
+      phoneNumber: userInfoResponse.phone_number,
       idToken: tokenResponse.id_token,
       accessToken: tokenResponse.access_token,
       isAuthenticated: true,
+      state: {},
     };
 
-    res.locals.isAuth = true;
-
-    res.redirect(PATH_NAMES.MANAGE_YOUR_ACCOUNT);
+    return res.redirect(PATH_DATA.MANAGE_YOUR_ACCOUNT.url);
   };
 }

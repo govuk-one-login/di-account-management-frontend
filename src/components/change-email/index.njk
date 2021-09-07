@@ -1,23 +1,23 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set pageTitleName = 'pages.enterNewEmail.title' | translate %}
+{% set pageTitleName = 'pages.changeEmail.title' | translate %}
 
-{% block content %}
+{% block pageContent %}
 
 {% include "common/errors/errorSummary.njk" %}
 
-<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.enterNewEmail.header' | translate}}</h1>
+<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.changeEmail.header' | translate}}</h1>
 
-<form action="/enter-new-email" method="post" novalidate>
+<form action="/change-email" method="post" novalidate>
 
 <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
 
 {{ govukInput({
     label: {
-        text: 'pages.enterNewEmail.email.label' | translate
+        text: 'pages.changeEmail.email.label' | translate
     },
     id: "email",
     name: "email",
@@ -34,7 +34,7 @@
 }) }}
 
 <p class="govuk-body">
-    <a href="/manage-your-account" class="govuk-link" rel="noreferrer noopener">{{'pages.enterNewEmail.dontWantTo.changeEmailLinkText' | translate }}</a>
+    <a href="/manage-your-account" class="govuk-link" rel="noreferrer noopener">{{'pages.changeEmail.dontWantTo.changeEmailLinkText' | translate }}</a>
 </p>
 
 </form>
