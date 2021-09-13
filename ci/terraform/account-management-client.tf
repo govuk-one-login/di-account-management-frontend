@@ -3,6 +3,7 @@ locals {
     "openid",
     "phone",
     "email",
+    "am"
   ]
 }
 
