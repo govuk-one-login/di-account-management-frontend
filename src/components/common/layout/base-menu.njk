@@ -6,14 +6,14 @@
             <nav aria-label="Account management">
                 <ul class="accounts-menu">
                     <li class="accounts-menu__item ">
-                        <a class="accounts-menu__link govuk-link govuk-link--no-visited-state" href="https://www.integration.publishing.service.gov.uk/sign-in">
-                            Your account
+                        <a class="accounts-menu__link govuk-link govuk-link--no-visited-state" href="{{yourAccountUrl}}">
+                            {{ 'pages.manageYourAccount.menuItemList.yourAccount' | translate }}
                         </a>
                     </li>
                     {% block menuItem %}{% endblock %}
                     <li class="accounts-menu__item ">
                         <a class="accounts-menu__link govuk-link govuk-link--no-visited-state" href="/#">
-                            Security and privacy
+                            {{ 'pages.manageYourAccount.menuItemList.securityAndPrivacy' | translate }}
                         </a>
                     </li>
                 </ul>
@@ -24,3 +24,4 @@
         </div>
     </div>
 {% endblock %}
+

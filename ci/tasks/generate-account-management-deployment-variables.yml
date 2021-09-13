@@ -8,6 +8,7 @@ image_resource:
     password: ((docker-hub-password))
 inputs:
   - name: domain-terraform-outputs
+  - name: terraform-outputs
 outputs:
   - name: di-account-management-deploy-variables
 params:
@@ -24,6 +25,7 @@ run:
       API_URL="https://$(jq -r .${ENVIRONMENT_NAME}_api_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
       AM_URL="$(jq -r .${ENVIRONMENT_NAME}_account_management_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
       AM_API_URL="https://$(jq -r .${ENVIRONMENT_NAME}_account_management_api_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
+      AM_YOUR_ACCOUNT_URL="$(jq -r .account_management_your_account_url.value < terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json)"
 
       cat <<EOF > di-account-management-deploy-variables/vars.yml
       api_base_url: ${API_URL}
@@ -32,4 +34,5 @@ run:
       session_secret: ${SESSION_SECRET}
       route_name: ${AM_URL}
       environment_name: ${ENVIRONMENT_NAME}
+      am_your_account_url: ${AM_YOUR_ACCOUNT_URL}
       EOF

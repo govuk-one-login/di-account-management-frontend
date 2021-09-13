@@ -105,6 +105,7 @@
     "manageYourAccount": {
       "title": "Sign in to or create your GOV.UK Account",
       "header": "Manage your account",
+      "accountDetails": "Account details",
       "menuItemList": {
         "manageYourAccount": "Manage your account",
         "securityAndPrivacy": "Security and privacy",

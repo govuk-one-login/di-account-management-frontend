@@ -31,6 +31,7 @@ services:
       - SESSION_EXPIRY=1800000
       - SESSION_SECRET=secret
       - OIDC_CLIENT_ID=
+      - AM_YOUR_ACCOUNT_URL=
       - AM_API_BASE_URL=
       - OIDC_CLIENT_SCOPES=
     restart: on-failure

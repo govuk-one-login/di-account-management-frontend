@@ -11,7 +11,8 @@ applications:
       API_BASE_URL: ((api_base_url))
       AM_API_BASE_URL: ((am_api_base_url))
       SESSION_EXPIRY: ((session_expiry))
-      SESSION_SECRET: ((session_secret))      
+      SESSION_SECRET: ((session_secret))
+      AM_YOUR_ACCOUNT_URL: ((am_your_account_url))
     routes:
       - route: ((route_name))
     services:
