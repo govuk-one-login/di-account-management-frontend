@@ -6,3 +6,7 @@ output "account_management_client_details" {
   }
   sensitive = true
 }
+
+output "account_management_your_account_url" {
+  value = "${var.your_account_url}"
+}

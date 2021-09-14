@@ -31,3 +31,7 @@ variable "redis_service_plan" {
   description = "The PaaS service plan (instance size) to use for Redis. For a full list of options, run 'cf marketplace -e redis'"
 }
 
+variable "your_account_url" {
+  type = string
+  description = "the url to the GOV.UK Account - Your Account homepage"
+}
