@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Start containers
+        run:  docker-compose -f "docker-compose.test.yml" up -d --build
       - name: Use Node.js 15.x
         uses: actions/setup-node@v1
         with:
@@ -20,12 +22,18 @@ jobs:
         run: yarn install
       - name: Build app
         run: yarn build
+#      - name: Run lint
+#        run: yarn lint
       - name: Run unit tests
         run: yarn test:unit
-      - name: Run lint
-        run: yarn lint
+      - name: Run integration tests
+        run: yarn test:integration
     env:
       ENVIRONMENT: development
-      API_BASE_URL: http://localhost:6000/api
+      API_BASE_URL: http://localhost:6000
       SESSION_SECRET: secret
       SESSION_EXPIRY: 1800000
+      AM_API_BASE_URL: http://localhost:5000
+      OIDC_CLIENT_ID: test-client
+      OIDC_CLIENT_SCOPES: openid
+      LOCAL_REDIS_HOST: localhost

@@ -1,7 +1,8 @@
 import redis, { ClientOpts } from "redis";
 import connect_redis, { RedisStore } from "connect-redis";
-import session from "express-session";
+import session, { CookieOptions } from "express-session";
 import CF_CONFIG from "./cf";
+import { getLocalRedsHost } from "../config";
 const RedisStore = connect_redis(session);
 
 export interface RedisConfigCf {
@@ -14,21 +15,21 @@ export interface RedisConfigCf {
 
 export function getSessionStore(): RedisStore {
   let config: ClientOpts;
-  if (CF_CONFIG.isLocal) {
+  // if (CF_CONFIG.isLocal) {
     config = {
-      host: "redis",
+      host: getLocalRedsHost(),
     };
-  } else {
-    const redisConfig = CF_CONFIG.getServiceCreds(
-      /-redis$/gims
-    ) as RedisConfigCf;
-    config = {
-      host: redisConfig.host,
-      port: parseInt(redisConfig.port),
-      password: redisConfig.password,
-      tls: true,
-    };
-  }
+  // } else {
+  //   const redisConfig = CF_CONFIG.getServiceCreds(
+  //     /-redis$/gims
+  //   ) as RedisConfigCf;
+  //   config = {
+  //     host: redisConfig.host,
+  //     port: parseInt(redisConfig.port),
+  //     password: redisConfig.password,
+  //     tls: true,
+  //   };
+  // }
 
   return new RedisStore({
     client: redis.createClient(config),
@@ -37,13 +38,13 @@ export function getSessionStore(): RedisStore {
 
 export function getSessionCookieOptions(
   isProdEnv: boolean,
-  expiry: number,
-  secret: string
-): any {
+  expiry: number
+): CookieOptions {
   return {
-    name: "aps",
-    secret: secret,
     maxAge: expiry,
     secure: isProdEnv,
+    httpOnly: true,
+    signed: isProdEnv,
+    sameSite: isProdEnv,
   };
 }

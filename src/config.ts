@@ -14,6 +14,10 @@ export function getLocalStackBaseUrl(): string {
   return "http://host.docker.internal:4566";
 }
 
+export function getLocalRedsHost(): string {
+  return process.env.LOCAL_REDIS_HOST || "redis";
+}
+
 export function getOIDCClientId(): string {
   return process.env.OIDC_CLIENT_ID;
 }
