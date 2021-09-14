@@ -1,17 +1,24 @@
 import * as express from "express";
-import { PATH_NAMES } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants";
 import {
-  enterPasswordGet,
   enterPasswordPost,
+  enterPasswordGet,
 } from "./enter-password-controller";
 import { asyncHandler } from "../../utils/async";
 import { validateEnterPasswordRequest } from "./enter-password-validation";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 
 const router = express.Router();
 
-router.get(PATH_NAMES.ENTER_PASSWORD, enterPasswordGet);
+router.get(
+  PATH_DATA.ENTER_PASSWORD.url,
+  requiresAuthMiddleware,
+  enterPasswordGet
+);
+
 router.post(
-  PATH_NAMES.ENTER_PASSWORD,
+  PATH_DATA.ENTER_PASSWORD.url,
+  requiresAuthMiddleware,
   validateEnterPasswordRequest(),
   asyncHandler(enterPasswordPost())
 );

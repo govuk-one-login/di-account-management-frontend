@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { HTTP_STATUS_CODES } from "../app.constants";
+import { HTTP_STATUS_CODES, PATH_DATA } from "../app.constants";
 
 export function serverErrorHandler(
   err: any,
@@ -11,8 +11,11 @@ export function serverErrorHandler(
     return next(err);
   }
 
-  if (res.statusCode == HTTP_STATUS_CODES.UNAUTHORIZED) {
-    return res.render("common/errors/session-expired.njk");
+  if (
+    res.statusCode === HTTP_STATUS_CODES.UNAUTHORIZED ||
+    res.statusCode == HTTP_STATUS_CODES.FORBIDDEN
+  ) {
+    return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
   }
 
   res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);

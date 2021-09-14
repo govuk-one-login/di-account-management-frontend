@@ -1,24 +1,91 @@
-export const PATH_NAMES = {
-  MANAGE_YOUR_ACCOUNT: "/manage-your-account",
-  ENTER_PASSWORD: "/enter-password",
-  ENTER_NEW_EMAIL: "/enter-new-email",
-  EMAIL_UPDATED_CONFIRMATION: "/email-updated-confirmation",
-  ACCESSIBILITY_STATEMENT: "undefined",
-  PRIVACY_POLICY: "undefined",
-  TERMS_AND_CONDITIONS: "undefined",
-  AUTH_CALLBACK: "/auth/callback",
-  DELETE_ACCOUNT: "/delete-account"
+import { UserJourney } from "./utils/state-machine";
+
+export const PATH_DATA: {
+  [key: string]: { url: string; event?: string; type?: UserJourney };
+} = {
+  MANAGE_YOUR_ACCOUNT: { url: "/manage-your-account" },
+  ENTER_PASSWORD: { url: "/enter-password" },
+  CHANGE_EMAIL: {
+    url: "/change-email",
+    event: "VERIFY_CODE_SENT",
+    type: UserJourney.ChangeEmail,
+  },
+  CHECK_YOUR_EMAIL: {
+    url: "/check-your-email",
+    event: "VALUE_UPDATED",
+    type: UserJourney.ChangeEmail,
+  },
+  REQUEST_NEW_CODE_EMAIL: {
+    url: "/request-new-email-code",
+    event: "RESEND_CODE",
+    type: UserJourney.ChangeEmail,
+  },
+  EMAIL_UPDATED_CONFIRMATION: {
+    url: "/email-updated-confirmation",
+    event: "CONFIRMATION",
+    type: UserJourney.ChangeEmail,
+  },
+  CHANGE_PASSWORD: {
+    url: "/change-password",
+    event: "VALUE_UPDATED",
+    type: UserJourney.ChangePassword,
+  },
+  PASSWORD_UPDATED_CONFIRMATION: {
+    url: "/password-updated-confirmation",
+    event: "CONFIRMATION",
+    type: UserJourney.ChangePassword,
+  },
+  CHANGE_PHONE_NUMBER: {
+    url: "/change-phone-number",
+    event: "VERIFY_CODE_SENT",
+    type: UserJourney.ChangePhoneNumber,
+  },
+  CHECK_YOUR_PHONE: {
+    url: "/check-your-phone",
+    event: "VALUE_UPDATED",
+    type: UserJourney.ChangePhoneNumber,
+  },
+  REQUEST_NEW_CODE_OTP: {
+    url: "/request-new-opt-code",
+    event: "RESEND_CODE",
+    type: UserJourney.ChangePhoneNumber,
+  },
+  PHONE_NUMBER_UPDATED_CONFIRMATION: {
+    url: "/phone-number-updated-confirmation",
+    event: "CONFIRMATION",
+    type: UserJourney.ChangePhoneNumber,
+  },
+  DELETE_ACCOUNT: {
+    url: "/delete-account",
+    event: "VALUE_UPDATED",
+    type: UserJourney.DeleteAccount,
+  },
+  ACCOUNT_DELETED_CONFIRMATION: {
+    url: "/account-deleted-confirmation",
+    event: "CONFIRMATION",
+    type: UserJourney.DeleteAccount,
+  },
+  ACCESSIBILITY_STATEMENT: { url: "undefined" },
+  PRIVACY_POLICY: { url: "undefined" },
+  TERMS_AND_CONDITIONS: { url: "undefined" },
+  AUTH_CALLBACK: { url: "/auth/callback" },
+  SESSION_EXPIRED: { url: "/session-expired" },
+  SIGN_OUT: { url: "/sign-out" },
+  START: { url: "/" },
 };
 
 export const API_ENDPOINTS = {
   AUTHENTICATE: "/authenticate",
-  UPDATE_INFO: "/update-info",
-  CHECK_USER_PASSWORD: "/check-user-password",
-  DELETE_ACCOUNT: "/delete-account"
+  DELETE_ACCOUNT: "/delete-account",
+  SEND_NOTIFICATION: "/send-otp-notification",
+  UPDATE_PASSWORD: "/update-password",
+  UPDATE_EMAIL: "/update-email",
+  UPDATE_PHONE_NUMBER: "/update-phone-number",
 };
 
-export const UPDATE_INFO_TYPE = {
-  EMAIL: "EMAIL",
+export enum NOTIFICATION_TYPE {
+  VERIFY_EMAIL = "VERIFY_EMAIL",
+  VERIFY_PHONE_NUMBER = "VERIFY_PHONE_NUMBER",
 }
 
 export const HTTP_STATUS_CODES = {

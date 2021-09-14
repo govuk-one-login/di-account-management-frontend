@@ -16,7 +16,7 @@ export function i18nextConfigurationOptions(
     detection: {
       lookupCookie: "lng",
       lookupQuerystring: "lng",
-      order: ["querystring", "cookie"],
+      order: ["querystring", "header", "cookie"],
       caches: ["cookie"],
       ignoreCase: true,
       cookieSecure: true,

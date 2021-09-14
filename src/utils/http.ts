@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from "axios";
-import { getAccountManagementApiUrl, getApiBaseUrl } from "../config";
+import { getApiBaseUrl } from "../config";
 import { logger } from "./logger";
 
 const headers: Readonly<Record<string, string | boolean>> = {
@@ -12,7 +12,7 @@ const headers: Readonly<Record<string, string | boolean>> = {
 export function getBaseRequestConfig(token: string): AxiosRequestConfig {
   return {
     headers: {
-      'Authorization': 'Bearer ' + token
+      Authorization: "Bearer " + token,
     },
     proxy: false,
   };
@@ -32,7 +32,7 @@ export class Http {
 
   private static handleError(error: AxiosError) {
     const { response } = error;
-    const { data } = response;
+    const data = response.data;
 
     if (data) {
       logger.error(error.message, { error: JSON.stringify(data) });
@@ -43,22 +43,11 @@ export class Http {
     return Promise.reject(error);
   }
 
-  private static injectCustomHeaders(
-    config: AxiosRequestConfig
-  ): AxiosRequestConfig {
-    //TODO bearer token
-    return config;
-  }
-
   private initHttp() {
     const http = axios.create({
       baseURL: this.baseUrl,
       headers: headers,
     });
-
-    http.interceptors.request.use(Http.injectCustomHeaders, (error) =>
-      Promise.reject(error)
-    );
 
     http.interceptors.response.use(
       (response) => response,
@@ -69,5 +58,5 @@ export class Http {
     return http;
   }
 }
+
 export const http = new Http(getApiBaseUrl());
-export const amHttp = new Http(getAccountManagementApiUrl());

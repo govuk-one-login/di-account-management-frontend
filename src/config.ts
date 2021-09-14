@@ -3,11 +3,11 @@ export function getLogLevel(): string {
 }
 
 export function getApiBaseUrl(): string {
-  return process.env.API_BASE_URL;
+  return process.env.AM_API_BASE_URL;
 }
 
 export function getOIDCApiDiscoveryUrl(): string {
-  return process.env.ISSUER_BASE_URL;
+  return process.env.API_BASE_URL;
 }
 
 export function getLocalStackBaseUrl(): string {
@@ -32,8 +32,4 @@ export function getSessionExpiry(): number {
 
 export function getSessionSecret(): string {
   return process.env.SESSION_SECRET;
-}
-
-export function getAccountManagementApiUrl(): string {
-  return process.env.AM_API_BASE_URL
 }

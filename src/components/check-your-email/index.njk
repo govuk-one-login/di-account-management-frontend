@@ -1,0 +1,60 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitleName = 'pages.checkYourEmail.title' | translate %}
+
+{% block pageContent %}
+
+{% include "common/errors/errorSummary.njk" %}
+
+<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.checkYourEmail.header' | translate}}</h1>
+
+{{ govukInsetText({
+    html: 'pages.checkYourEmail.text' | translate + '<span class="govuk-body govuk-!-font-weight-bold">' + email + '</span>'
+  }) }}
+
+<p class="govuk-body">{{'pages.checkYourEmail.info.paragraph1' | translate}}</p>
+<p class="govuk-body">{{'pages.checkYourEmail.info.paragraph2' | translate}}</p>
+<p class="govuk-body">{{'pages.checkYourEmail.info.paragraph3' | translate }}</p>
+
+<form action="/check-your-email" method="post" novalidate>
+
+<input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+<input type="hidden" name="email" value="{{email}}"/>
+{{ govukInput({
+    label: {
+        text: 'pages.checkYourEmail.code.label' | translate
+    },
+    classes:"govuk-input--width-5",
+    id: "code",
+    name: "code",
+    value: code,
+    errorMessage: {
+        text: errors['code'].text
+    } if (errors['code'])})
+}}
+
+
+
+{{ govukButton({
+    "text": button_text|default("Continue", true),
+    "type": "Submit",
+    "preventDoubleClick": true
+}) }}
+
+</form>
+<p class="govuk-body">
+<a href="/request-new-email-code" class="govuk-link govuk-body" rel="noreferrer noopener">{{'pages.checkYourEmail.info.requestNewCodeLink' | translate }}</a> {{'pages.checkYourEmail.info.requestNewCodeParagraph' | translate }}
+</p>
+
+  <ul class="govuk-list govuk-list--bullet">
+      <li>{{ 'pages.checkYourEmail.info.requestNewCodeReason1' | translate}}</li>
+      <li>{{ 'pages.checkYourEmail.info.requestNewCodeReason2' | translate}}</li>
+     </ul>
+{% endblock %}
+
+

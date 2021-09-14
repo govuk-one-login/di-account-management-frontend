@@ -1,0 +1,40 @@
+import { expect } from "chai";
+import { describe } from "mocha";
+
+import { sinon } from "../../../../test/utils/test-utils";
+import { Request, Response } from "express";
+import { sessionExpiredGet } from "../session-expired-controller";
+
+describe("session expired controller", () => {
+  let sandbox: sinon.SinonSandbox;
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    req = {
+      body: {},
+      session: { user: sinon.fake() },
+      oidc: { authorizationUrl: sandbox.fake(), metadata: {} },
+    };
+    res = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(),
+      locals: {},
+      status: sandbox.fake(),
+    };
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  describe("sessionExpiredGet", () => {
+    it("should return session expired page", () => {
+      sessionExpiredGet(req as Request, res as Response);
+
+      expect(res.render).to.have.been.calledWith("session-expired/index.njk");
+      expect(res.status).to.have.be.calledWith(401);
+    });
+  });
+});

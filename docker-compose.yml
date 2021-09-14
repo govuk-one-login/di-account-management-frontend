@@ -22,6 +22,7 @@ services:
     build: .
     ports:
     - 6001:6001
+    - 9229:9229
     volumes:
       - ./:/app
     environment:
@@ -30,6 +31,6 @@ services:
       - SESSION_EXPIRY=1800000
       - SESSION_SECRET=secret
       - OIDC_CLIENT_ID=
-      - ISSUER_BASE_URL=
-      - OIDC_CLIENT_SCOPES=openid phone email
+      - AM_API_BASE_URL=
+      - OIDC_CLIENT_SCOPES=
     restart: on-failure

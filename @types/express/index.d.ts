@@ -1,7 +1,5 @@
-
-
 declare namespace Express {
-  import {Client} from "openid-client";
+  import { Client } from "openid-client";
   interface Request {
     i18n?: {
       language?: string;
@@ -10,5 +8,6 @@ declare namespace Express {
     csrfToken?: () => string;
     session: any;
     oidc?: Client;
+    log?: any;
   }
 }

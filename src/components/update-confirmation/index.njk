@@ -1,18 +1,28 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% set pageTitleName = pageTitle %}
-{% block content %}
+
+{% block pageContent %}
 
 {{ govukPanel({
     titleText: panelText
 }) }}
 
+{% if summaryText %}
 <p class="govuk-body">{{summaryText}}</p>
+{% endif %}
 
+{% if showGovUKButton %}
+{{ govukButton({
+    "text": button_text|default('general.backToGovUKButtonText' | translate, true),
+    "href": "https://gov.uk"
+}) }}
+{% else %}
 {{ govukButton({
     "text": button_text|default('general.backToAccountButtonText' | translate, true),
     "href": "/manage-your-account"
 }) }}
+{% endif %}
 
 {% endblock %}

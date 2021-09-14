@@ -25,8 +25,8 @@ describe("logout controller", () => {
   });
 
   describe("logoutGet", () => {
-    it("should call redirect to end session url", () => {
-      req.session.user.idToken = "";
+    it("should redirect to end session url", () => {
+      req.session.user.idToken = "id-token";
       req.session.destroy = sandbox.fake();
 
       logoutGet(req as Request, res as Response);
