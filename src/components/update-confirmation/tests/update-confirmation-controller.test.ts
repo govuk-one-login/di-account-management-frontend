@@ -59,7 +59,6 @@ describe("update confirmation controller", () => {
     it("should render delete confirmation page", () => {
       deleteAccountConfirmationGet(req as Request, res as Response);
 
-      expect(req.session.destroy).to.have.been.calledOnce;
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
   });

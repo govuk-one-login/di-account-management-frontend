@@ -13,7 +13,9 @@ export function changePasswordPost(
   service: ChangePasswordServiceInterface = changePasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { accessToken, email } = req.session.user;
+    const { email } = req.session.user;
+    const { accessToken } = req.session.user.tokens;
+
     const newPassword = req.body.password as string;
 
     await service.updatePassword(accessToken, email, newPassword);

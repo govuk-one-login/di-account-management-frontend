@@ -3,7 +3,7 @@ applications:
   - name: di-authentication-account-management-frontend
     path: di-authentication-account-management-frontend.zip
     command: yarn run start
-    memory: 512M
+    memory: 1G
     buildpacks:
       - nodejs_buildpack
     env:

@@ -5,6 +5,7 @@ import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
+import { JWT } from "jose";
 
 describe("Integration:: change email", () => {
   let sandbox: sinon.SinonSandbox;
@@ -31,7 +32,14 @@ describe("Integration:: change email", () => {
               events: ["VALUE_UPDATED", "VERIFY_CODE_SENT"],
             },
           },
-          accessToken: "token",
+          tokens: {
+            accessToken: JWT.sign(
+              { sub: "12345", exp: "1758477938" },
+              "secret"
+            ),
+            idToken: "Idtoken",
+            refreshToken: "token",
+          },
         };
         next();
       });

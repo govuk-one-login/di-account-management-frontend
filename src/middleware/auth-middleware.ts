@@ -3,7 +3,11 @@ import { getOIDCClient } from "../utils/oidc";
 import { ExpressRouteFunc, OIDCConfig } from "../types";
 
 export function authMiddleware(config: OIDCConfig): ExpressRouteFunc {
-  return async function (req: Request, res: Response, next: NextFunction) {
+  return async function authMiddleware(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     req.oidc = await getOIDCClient(config);
     next();
   };

@@ -21,17 +21,17 @@ services:
   di-auth-account-management-frontend:
     build: .
     ports:
-    - 6001:6001
-    - 9229:9229
+      - 6001:6001
+      - 9230:9230
     volumes:
       - ./:/app
     environment:
+      - AM_YOUR_ACCOUNT_URL=some url
       - ENVIRONMENT="development"
       - API_BASE_URL=
       - SESSION_EXPIRY=1800000
       - SESSION_SECRET=secret
       - OIDC_CLIENT_ID=
-      - AM_YOUR_ACCOUNT_URL=
       - AM_API_BASE_URL=
       - OIDC_CLIENT_SCOPES=
     restart: on-failure

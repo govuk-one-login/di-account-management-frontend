@@ -8,6 +8,7 @@ import {
 import { asyncHandler } from "../../utils/async";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.get(
 router.post(
   PATH_DATA.DELETE_ACCOUNT.url,
   requiresAuthMiddleware,
+  refreshTokenMiddleware(),
   asyncHandler(deleteAccountPost())
 );
 

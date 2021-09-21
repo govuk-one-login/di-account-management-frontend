@@ -23,7 +23,8 @@ export function checkYourPhonePost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const code = req.body["code"];
-    const { accessToken, email, newPhoneNumber } = req.session.user;
+    const { email, newPhoneNumber } = req.session.user;
+    const { accessToken } = req.session.user.tokens;
 
     const phoneNumberUpdated = await service.updatePhoneNumber(
       accessToken,

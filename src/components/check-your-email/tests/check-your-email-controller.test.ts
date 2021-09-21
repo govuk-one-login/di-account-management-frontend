@@ -50,6 +50,7 @@ describe("check your email controller", () => {
         updateEmail: sandbox.fake.returns(true),
       };
 
+      req.session.user.tokens = { accessToken: "token" };
       req.body.code = "123456";
 
       await checkYourEmailPost(fakeService)(req as Request, res as Response);
@@ -64,6 +65,8 @@ describe("check your email controller", () => {
       const fakeService: CheckYourEmailServiceInterface = {
         updateEmail: sandbox.fake.returns(false),
       };
+
+      req.session.user.tokens = { accessToken: "token" };
       req.t = sandbox.fake.returns("translated string");
       req.body.code = "678988";
       res.locals.sessionId = "123456-djjad";

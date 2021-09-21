@@ -41,6 +41,7 @@ describe("change password controller", () => {
         updatePassword: sandbox.fake(),
       };
 
+      req.session.user.tokens = { accessToken: "token" };
       req.body.password = "Password1";
 
       await changePasswordPost(fakeService)(req as Request, res as Response);

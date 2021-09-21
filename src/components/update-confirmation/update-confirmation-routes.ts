@@ -32,8 +32,6 @@ router.get(
 );
 router.get(
   PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
-  requiresAuthMiddleware,
-  validateStateMiddleware,
   deleteAccountConfirmationGet
 );
 

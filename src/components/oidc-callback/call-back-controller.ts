@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
 import { PATH_DATA } from "../../app.constants";
-import { callbackService } from "./call-back-service";
 import { ExpressRouteFunc } from "../../types";
-import { CallbackServiceInterface } from "./types";
+import { ClientAssertionServiceInterface } from "../../utils/types";
+import { clientAssertionGenerator } from "../../utils/oidc";
 
 export function oidcAuthCallbackGet(
-  service: CallbackServiceInterface = callbackService()
+  service: ClientAssertionServiceInterface = clientAssertionGenerator()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
@@ -36,8 +36,11 @@ export function oidcAuthCallbackGet(
     req.session.user = {
       email: userInfoResponse.email,
       phoneNumber: userInfoResponse.phone_number,
-      idToken: tokenResponse.id_token,
-      accessToken: tokenResponse.access_token,
+      tokens: {
+        idToken: tokenResponse.id_token,
+        accessToken: tokenResponse.access_token,
+        refreshToken: tokenResponse.refresh_token,
+      },
       isAuthenticated: true,
       state: {},
     };

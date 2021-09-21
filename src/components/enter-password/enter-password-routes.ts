@@ -7,6 +7,7 @@ import {
 import { asyncHandler } from "../../utils/async";
 import { validateEnterPasswordRequest } from "./enter-password-validation";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 
 const router = express.Router();
 
@@ -20,6 +21,7 @@ router.post(
   PATH_DATA.ENTER_PASSWORD.url,
   requiresAuthMiddleware,
   validateEnterPasswordRequest(),
+  refreshTokenMiddleware(),
   asyncHandler(enterPasswordPost())
 );
 
