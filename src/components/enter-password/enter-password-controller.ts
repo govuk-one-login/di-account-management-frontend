@@ -34,7 +34,9 @@ export function enterPasswordPost(
   service: EnterPasswordServiceInterface = enterPasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { email, accessToken } = req.session.user;
+    const { email } = req.session.user;
+    const { accessToken } = req.session.user.tokens;
+
     const requestType = req.body.requestType;
     const isAuthenticated = await service.authenticated(
       accessToken,

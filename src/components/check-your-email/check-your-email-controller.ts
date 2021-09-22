@@ -22,7 +22,8 @@ export function checkYourEmailPost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const code = req.body["code"];
-    const { accessToken, email, newEmailAddress } = req.session.user;
+    const { email, newEmailAddress } = req.session.user;
+    const { accessToken } = req.session.user.tokens;
 
     const emailUpdated = await service.updateEmail(
       accessToken,

@@ -3,7 +3,8 @@ locals {
     "openid",
     "phone",
     "email",
-    "am"
+    "am",
+    "offline_access"
   ]
 }
 
@@ -39,7 +40,11 @@ resource "aws_dynamodb_table_item" "account_management_client" {
       L = []
     }
     PostLogoutRedirectUrls = {
-      L = []
+      L = [
+        {
+          S = "https://account-management.${var.cf_domain}/account-deleted-confirmation"
+        }
+      ]
     }
     RedirectUrls = {
       L = [

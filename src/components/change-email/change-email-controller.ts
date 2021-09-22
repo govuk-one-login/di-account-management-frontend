@@ -27,7 +27,9 @@ export function changeEmailPost(
   service: ChangeEmailServiceInterface = changeEmailService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { accessToken, email } = req.session.user;
+    const { email } = req.session.user;
+    const { accessToken } = req.session.user.tokens;
+
     const newEmailAddress = req.body.email;
 
     if (email.toLowerCase() === newEmailAddress.toLowerCase()) {

@@ -9,6 +9,7 @@ import {
   requestNewOTPCodeGet,
 } from "./check-your-phone-controller";
 import { validateCheckYourPhoneRequest } from "./check-your-phone-validation";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.post(
   PATH_DATA.CHECK_YOUR_PHONE.url,
   requiresAuthMiddleware,
   validateCheckYourPhoneRequest(),
+  refreshTokenMiddleware(),
   asyncHandler(checkYourPhonePost())
 );
 

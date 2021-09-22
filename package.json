@@ -32,7 +32,7 @@
   "mocha": {
     "diff": true,
     "extension": ["js","ts"],
-    "timeout": 20000,
+    "timeout": 6000,
     "recursive": true,
     "require": ["ts-node/register"],
     "exit": true

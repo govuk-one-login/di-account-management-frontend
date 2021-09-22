@@ -44,8 +44,6 @@ export function deleteAccountConfirmationGet(
   req: Request,
   res: Response
 ): void {
-  req.session.destroy();
-
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.deleteAccountConfirmation.title"),
     panelText: req.t("pages.deleteAccountConfirmation.panelText"),

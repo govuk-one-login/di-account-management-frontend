@@ -19,7 +19,9 @@ export function changePhoneNumberPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { accessToken, email, phoneNumber } = req.session.user;
+    const { email, phoneNumber } = req.session.user;
+    const { accessToken } = req.session.user.tokens;
+
     const newPhoneNumber = req.body.phoneNumber;
 
     if (phoneNumber === newPhoneNumber) {

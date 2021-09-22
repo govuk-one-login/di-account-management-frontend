@@ -51,6 +51,7 @@ describe("change phone number controller", () => {
         sendPhoneVerificationNotification: sandbox.fake(),
       };
 
+      req.session.user.tokens = { accessToken: "token" };
       req.body.phoneNumber = "12345678991";
 
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
@@ -65,6 +66,7 @@ describe("change phone number controller", () => {
         sendPhoneVerificationNotification: sandbox.fake(),
       };
 
+      req.session.user.tokens = { accessToken: "token" };
       req.body.phoneNumber = "12345678991";
       req.session.user.phoneNumber = "12345678991";
 

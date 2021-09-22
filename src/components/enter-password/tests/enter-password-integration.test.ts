@@ -5,6 +5,7 @@ import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
+import { JWT } from "jose";
 
 describe("Integration::enter password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -39,7 +40,14 @@ describe("Integration::enter password", () => {
             },
             deleteAccount: { value: "AUTHENTICATE", events: ["AUTHENTICATED"] },
           },
-          accessToken: "token",
+          tokens: {
+            accessToken: JWT.sign(
+              { sub: "12345", exp: "1758477938" },
+              "secret"
+            ),
+            idToken: "Idtoken",
+            refreshToken: "token",
+          },
         };
         next();
       });
@@ -167,7 +175,7 @@ describe("Integration::enter password", () => {
       .expect(302, done);
   });
 
-  it("should redirect to delet account when authenticated", (done) => {
+  it("should redirect to delete account when authenticated", (done) => {
     nock(baseApi).post("/authenticate").once().reply(200);
 
     request(app)

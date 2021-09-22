@@ -11,3 +11,10 @@ export interface AwsConfig {
   KMS_KEY_ALIAS: string;
   KMS_KEY_ID: string;
 }
+
+export interface ClientAssertionServiceInterface {
+  generateAssertionJwt: (
+    clientId: string,
+    tokenEndpointUri: string
+  ) => Promise<string>;
+}

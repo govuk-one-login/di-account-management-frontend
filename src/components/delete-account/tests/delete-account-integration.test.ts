@@ -5,6 +5,8 @@ import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
+import { JWT } from "jose";
+import CF_CONFIG from "../../../config/cf";
 
 describe("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;
@@ -12,6 +14,7 @@ describe("Integration:: delete account", () => {
   let cookies: string;
   let app: any;
   let baseApi: string;
+  const idToken = "Idtoken";
 
   before(() => {
     decache("../../../app");
@@ -31,7 +34,14 @@ describe("Integration:: delete account", () => {
               events: ["VALUE_UPDATED", "VERIFY_CODE_SENT"],
             },
           },
-          accessToken: "token",
+          tokens: {
+            accessToken: JWT.sign(
+              { sub: "12345", exp: "1758477938" },
+              "secret"
+            ),
+            idToken: idToken,
+            refreshToken: "token",
+          },
         };
         next();
       });
@@ -68,8 +78,10 @@ describe("Integration:: delete account", () => {
       .expect(500, done);
   });
 
-  it("should redirect to delete account confirmation page", (done) => {
+  it("should redirect to end session endpoint", (done) => {
     nock(baseApi).post(PATH_DATA.DELETE_ACCOUNT.url).once().reply(200, {});
+
+    const opApi = process.env.API_BASE_URL;
 
     request(app)
       .post(PATH_DATA.DELETE_ACCOUNT.url)
@@ -78,7 +90,12 @@ describe("Integration:: delete account", () => {
       .send({
         _csrf: token,
       })
-      .expect("Location", PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url)
+      .expect(
+        "Location",
+        `${opApi}/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${encodeURIComponent(
+          CF_CONFIG.url + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url
+        )}`
+      )
       .expect(302, done);
   });
 });

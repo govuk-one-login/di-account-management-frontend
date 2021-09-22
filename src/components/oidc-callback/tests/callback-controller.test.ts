@@ -4,8 +4,8 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { oidcAuthCallbackGet } from "../call-back-controller";
-import { CallbackServiceInterface } from "../types";
 import { PATH_DATA } from "../../../app.constants";
+import { ClientAssertionServiceInterface } from "../../../utils/types";
 
 describe("callback controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -44,7 +44,7 @@ describe("callback controller", () => {
 
   describe("oidcAuthCallbackGet", () => {
     it("should redirect to /manage-your-account", async () => {
-      const fakeService: CallbackServiceInterface = {
+      const fakeService: ClientAssertionServiceInterface = {
         generateAssertionJwt: sandbox.fake.returns("testassert"),
       };
 

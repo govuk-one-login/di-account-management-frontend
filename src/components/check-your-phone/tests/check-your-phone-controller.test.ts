@@ -49,6 +49,7 @@ describe("check your phone controller", () => {
         updatePhoneNumber: sandbox.fake.returns(true),
       };
 
+      req.session.user.tokens = { accessToken: "token" };
       req.body.code = "123456";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
@@ -63,6 +64,8 @@ describe("check your phone controller", () => {
       const fakeService: CheckYourPhoneServiceInterface = {
         updatePhoneNumber: sandbox.fake.returns(false),
       };
+
+      req.session.user.tokens = { accessToken: "token" };
       req.t = sandbox.fake.returns("translated string");
       req.body.code = "678988";
       res.locals.sessionId = "123456-djjad";

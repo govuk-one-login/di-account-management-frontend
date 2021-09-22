@@ -41,7 +41,7 @@ export function getSessionCookieOptions(
   secret: string
 ): any {
   return {
-    name: "aps",
+    name: "ams",
     secret: secret,
     maxAge: expiry,
     secure: isProdEnv,

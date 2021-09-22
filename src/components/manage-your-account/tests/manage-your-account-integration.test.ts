@@ -20,7 +20,11 @@ describe("Integration:: manage your account", () => {
           phoneNumber: "07839490040",
           isAuthenticated: true,
           state: {},
-          accessToken: "token",
+          tokens: {
+            accessToken: "token",
+            idToken: "Idtoken",
+            refreshToken: "token",
+          },
         };
         next();
       });

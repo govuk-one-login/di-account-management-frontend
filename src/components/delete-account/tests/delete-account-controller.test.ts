@@ -9,7 +9,6 @@ import {
   deleteAccountPost,
 } from "../delete-account-controller";
 import { DeleteAccountServiceInterface } from "../types";
-import { PATH_DATA } from "../../../app.constants";
 
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -19,7 +18,13 @@ describe("delete account controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = { body: {}, session: { user: { state: { deleteAccount: {} } } } };
+    req = {
+      body: {},
+      session: {
+        user: { state: { deleteAccount: {} } },
+        destroy: sandbox.fake(),
+      },
+    };
     res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
   });
 
@@ -42,14 +47,17 @@ describe("delete account controller", () => {
       };
 
       req.session.user.email = "test@test.com";
-      req.session.user.accessToken = "accessToken";
+      req.session.user.tokens = { accessToken: "token" };
+      req.oidc = {
+        endSessionUrl: sandbox.fake.returns("logout-url"),
+      };
 
       await deleteAccountPost(fakeService)(req as Request, res as Response);
 
       expect(fakeService.deleteAccount).to.have.been.calledOnce;
-      expect(res.redirect).to.have.been.calledWith(
-        PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url
-      );
+      expect(req.session.destroy).to.have.been.calledOnce;
+      expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledWith("logout-url");
     });
   });
 });

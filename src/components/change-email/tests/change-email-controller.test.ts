@@ -40,7 +40,7 @@ describe("change email controller", () => {
 
       req.body.email = "test@test.com";
       req.session.user = {
-        accessToken: "token",
+        tokens: { accessToken: "token" },
         email: "test@dl.com",
         state: { changeEmail: getInitialState() },
       };
