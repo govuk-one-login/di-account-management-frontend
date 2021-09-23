@@ -28,4 +28,4 @@ jobs:
       ENVIRONMENT: development
       API_BASE_URL: http://localhost:6000/api
       SESSION_SECRET: secret
-      SESSION_EXPIRY: 1800000
+      SESSION_EXPIRY: 3600000
