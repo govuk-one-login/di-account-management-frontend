@@ -29,7 +29,7 @@ services:
       - AM_YOUR_ACCOUNT_URL=some url
       - ENVIRONMENT="development"
       - API_BASE_URL=
-      - SESSION_EXPIRY=1800000
+      - SESSION_EXPIRY=3600000
       - SESSION_SECRET=secret
       - OIDC_CLIENT_ID=
       - AM_API_BASE_URL=
