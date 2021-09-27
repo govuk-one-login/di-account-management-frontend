@@ -1,4 +1,4 @@
-import { getBaseRequestConfig, Http, http } from "../../utils/http";
+import { getRequestConfig, Http, http } from "../../utils/http";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { CheckYourPhoneServiceInterface } from "./types";
 
@@ -11,11 +11,6 @@ export function checkYourPhoneService(
     phoneNumber: string,
     otp: string
   ): Promise<boolean> {
-    const config = getBaseRequestConfig(accessToken);
-    config.validateStatus = (status: number) =>
-      status === HTTP_STATUS_CODES.OK ||
-      status === HTTP_STATUS_CODES.BAD_REQUEST;
-
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.UPDATE_PHONE_NUMBER,
       {
@@ -23,10 +18,13 @@ export function checkYourPhoneService(
         otp,
         phoneNumber,
       },
-      config
+      getRequestConfig(accessToken, [
+        HTTP_STATUS_CODES.NO_CONTENT,
+        HTTP_STATUS_CODES.BAD_REQUEST,
+      ])
     );
 
-    return status === HTTP_STATUS_CODES.OK;
+    return status === HTTP_STATUS_CODES.NO_CONTENT;
   };
 
   return {

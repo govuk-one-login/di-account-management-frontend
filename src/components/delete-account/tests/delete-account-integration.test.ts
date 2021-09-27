@@ -79,7 +79,7 @@ describe("Integration:: delete account", () => {
   });
 
   it("should redirect to end session endpoint", (done) => {
-    nock(baseApi).post(PATH_DATA.DELETE_ACCOUNT.url).once().reply(200, {});
+    nock(baseApi).post(PATH_DATA.DELETE_ACCOUNT.url).once().reply(204, {});
 
     const opApi = process.env.API_BASE_URL;
 

@@ -26,14 +26,14 @@ export function checkYourPhonePost(
     const { email, newPhoneNumber } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    const phoneNumberUpdated = await service.updatePhoneNumber(
+    const isPhoneNumberUpdated = await service.updatePhoneNumber(
       accessToken,
       email,
       newPhoneNumber,
       code
     );
 
-    if (phoneNumberUpdated) {
+    if (isPhoneNumberUpdated) {
       req.session.user.phoneNumber = newPhoneNumber;
       delete req.session.user.newPhoneNumber;
 
@@ -60,5 +60,5 @@ export function requestNewOTPCodeGet(req: Request, res: Response): void {
     "RESEND_CODE"
   );
 
-  res.redirect(PATH_DATA.CHANGE_PHONE_NUMBER.url);
+  return res.redirect(PATH_DATA.CHANGE_PHONE_NUMBER.url);
 }

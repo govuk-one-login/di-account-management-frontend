@@ -153,7 +153,7 @@ describe("Integration:: change email", () => {
   });
 
   it("should redirect to /check-your-email when valid email", (done) => {
-    nock(baseApi).post("/send-otp-notification").once().reply(200, {});
+    nock(baseApi).post("/send-otp-notification").once().reply(204, {});
 
     request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)

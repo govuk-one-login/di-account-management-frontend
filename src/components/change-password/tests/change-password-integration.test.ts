@@ -157,7 +157,7 @@ describe("Integration:: change password", () => {
   });
 
   it("should redirect to enter phone number when valid password entered", (done) => {
-    nock(baseApi).post("/update-password").once().reply(200, {});
+    nock(baseApi).post("/update-password").once().reply(204, {});
 
     request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
