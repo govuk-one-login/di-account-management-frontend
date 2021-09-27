@@ -26,6 +26,10 @@ export function getNodeEnv(): string {
   return process.env.NODE_ENV || "development";
 }
 
+export function getGtmId(): string {
+  return process.env.GTM_ID;
+}
+
 export function getSessionExpiry(): number {
   return Number(process.env.SESSION_EXPIRY);
 }
