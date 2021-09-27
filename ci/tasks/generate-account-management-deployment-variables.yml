@@ -14,6 +14,7 @@ outputs:
 params:
   SESSION_EXPIRY: ((build-session-expiry))
   SESSION_SECRET: ((build-session-secret))
+  GTM_ID: ((build-gtm-id))
   ENVIRONMENT_NAME: build
 run:
   path: /bin/sh
@@ -35,4 +36,5 @@ run:
       route_name: ${AM_URL}
       environment_name: ${ENVIRONMENT_NAME}
       am_your_account_url: ${AM_YOUR_ACCOUNT_URL}
+      gtm_id: ${GTM_ID}
       EOF

@@ -39,6 +39,7 @@ import { deleteAccountRouter } from "./components/delete-account/delete-account-
 import { checkYourPhoneRouter } from "./components/check-your-phone/check-your-phone-routes";
 import { noCacheMiddleware } from "./middleware/no-cache-middleware";
 import { sessionExpiredRouter } from "./components/session-expired/session-expired-routes";
+import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -80,6 +81,7 @@ function createApp(): express.Application {
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 
+  app.use(setLocalVarsMiddleware);
   app.use(noCacheMiddleware);
 
   i18next
