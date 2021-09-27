@@ -1,4 +1,4 @@
-import { getBaseRequestConfig, Http, http } from "../../utils/http";
+import { getRequestConfig, Http, http } from "../../utils/http";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { CheckYourEmailServiceInterface } from "./types";
 import { AxiosResponse } from "axios";
@@ -12,11 +12,6 @@ export function checkYourEmailService(
     replacementEmailAddress: string,
     code: string
   ): Promise<boolean> {
-    const config = getBaseRequestConfig(accessToken);
-    config.validateStatus = (status: number) =>
-      status === HTTP_STATUS_CODES.OK ||
-      status === HTTP_STATUS_CODES.BAD_REQUEST;
-
     const { status }: AxiosResponse = await axios.client.post(
       API_ENDPOINTS.UPDATE_EMAIL,
       {
@@ -24,10 +19,13 @@ export function checkYourEmailService(
         replacementEmailAddress,
         otp: code,
       },
-      config
+      getRequestConfig(accessToken, [
+        HTTP_STATUS_CODES.NO_CONTENT,
+        HTTP_STATUS_CODES.BAD_REQUEST,
+      ])
     );
 
-    return status === HTTP_STATUS_CODES.OK;
+    return status === HTTP_STATUS_CODES.NO_CONTENT;
   };
 
   return {

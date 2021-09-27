@@ -25,14 +25,14 @@ export function checkYourEmailPost(
     const { email, newEmailAddress } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    const emailUpdated = await service.updateEmail(
+    const isEmailUpdated = await service.updateEmail(
       accessToken,
       email,
       newEmailAddress,
       code
     );
 
-    if (emailUpdated) {
+    if (isEmailUpdated) {
       req.session.user.email = newEmailAddress;
       delete req.session.user.newEmailAddress;
 
@@ -59,5 +59,5 @@ export function requestNewCodeGet(req: Request, res: Response): void {
     "RESEND_CODE"
   );
 
-  res.redirect(PATH_DATA.CHANGE_EMAIL.url);
+  return res.redirect(PATH_DATA.CHANGE_EMAIL.url);
 }

@@ -9,13 +9,24 @@ const headers: Readonly<Record<string, string | boolean>> = {
   "X-Requested-With": "XMLHttpRequest",
 };
 
-export function getBaseRequestConfig(token: string): AxiosRequestConfig {
-  return {
+export function getRequestConfig(
+  token: string,
+  validationStatues?: number[]
+): AxiosRequestConfig {
+  const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
     proxy: false,
   };
+  
+  if (validationStatues) {
+    config.validateStatus = function (status: number) {
+      return validationStatues.includes(status);
+    };
+  }
+
+  return config;
 }
 
 export class Http {

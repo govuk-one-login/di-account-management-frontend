@@ -170,7 +170,7 @@ describe("Integration:: change phone number", () => {
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number entered", (done) => {
-    nock(baseApi).post("/send-otp-notification").once().reply(200, {});
+    nock(baseApi).post("/send-otp-notification").once().reply(204, {});
 
     request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)

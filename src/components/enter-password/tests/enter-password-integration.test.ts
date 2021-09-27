@@ -128,7 +128,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should redirect to change email when authenticated", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(200);
+    nock(baseApi).post("/authenticate").once().reply(204);
 
     request(app)
       .post(ENDPOINT)
@@ -144,7 +144,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should redirect to change password when authenticated", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(200);
+    nock(baseApi).post("/authenticate").once().reply(204);
 
     request(app)
       .post(ENDPOINT)
@@ -160,7 +160,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should redirect to change phone number when authenticated", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(200);
+    nock(baseApi).post("/authenticate").once().reply(204);
 
     request(app)
       .post(ENDPOINT)
@@ -176,7 +176,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should redirect to delete account when authenticated", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(200);
+    nock(baseApi).post("/authenticate").once().reply(204);
 
     request(app)
       .post(ENDPOINT)

@@ -150,7 +150,7 @@ describe("Integration:: check your phone", () => {
   });
 
   it("should redirect to /create-password when valid code entered", (done) => {
-    nock(baseApi).post("/update-phone-number").once().reply(200, {});
+    nock(baseApi).post("/update-phone-number").once().reply(204, {});
 
     request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)

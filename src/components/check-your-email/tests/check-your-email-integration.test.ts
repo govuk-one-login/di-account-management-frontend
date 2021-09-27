@@ -150,7 +150,7 @@ describe("Integration:: check your email", () => {
   });
 
   it("should redirect to /email-updated-confirmation when valid code entered", (done) => {
-    nock(baseApi).post("/update-email").once().reply(200, {});
+    nock(baseApi).post("/update-email").once().reply(204, {});
 
     request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
