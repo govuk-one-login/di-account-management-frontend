@@ -17,7 +17,7 @@ export function deleteAccountPost(
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    await service.deleteAccount(accessToken, email);
+    await service.deleteAccount(accessToken, email, req.ip);
 
     req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,
