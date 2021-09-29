@@ -8,7 +8,8 @@ export function changePasswordService(
   const updatePassword = async function (
     accessToken: string,
     email: string,
-    newPassword: string
+    newPassword: string,
+    sourceIp: string
   ): Promise<void> {
     await axios.client.post<void>(
       API_ENDPOINTS.UPDATE_PASSWORD,
@@ -16,7 +17,7 @@ export function changePasswordService(
         email,
         newPassword,
       },
-      getRequestConfig(accessToken)
+      getRequestConfig(accessToken, [], sourceIp)
     );
   };
 

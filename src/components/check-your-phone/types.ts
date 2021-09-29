@@ -3,6 +3,7 @@ export interface CheckYourPhoneServiceInterface {
     accessToken: string,
     email: string,
     phoneNumber: string,
-    otp: string
+    otp: string,
+    sourceIp: string
   ) => Promise<boolean>;
 }

@@ -38,7 +38,8 @@ export function changePhoneNumberPost(
     await service.sendPhoneVerificationNotification(
       accessToken,
       email,
-      newPhoneNumber
+      newPhoneNumber,
+      req.ip
     );
 
     req.session.user.newPhoneNumber = newPhoneNumber;

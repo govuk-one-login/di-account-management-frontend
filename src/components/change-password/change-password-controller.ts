@@ -18,7 +18,7 @@ export function changePasswordPost(
 
     const newPassword = req.body.password as string;
 
-    await service.updatePassword(accessToken, email, newPassword);
+    await service.updatePassword(accessToken, email, newPassword, req.ip);
 
     req.session.user.state.changePassword = getNextState(
       req.session.user.state.changePassword.value,

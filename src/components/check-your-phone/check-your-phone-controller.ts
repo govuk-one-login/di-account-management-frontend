@@ -30,7 +30,8 @@ export function checkYourPhonePost(
       accessToken,
       email,
       newPhoneNumber,
-      code
+      code,
+      req.ip
     );
 
     if (isPhoneNumberUpdated) {
