@@ -2,6 +2,7 @@ export interface ChangeEmailServiceInterface {
   sendCodeVerificationNotification: (
     accessToken: string,
     email: string,
-    notificationType: string
+    notificationType: string,
+    sourceIp: string
   ) => Promise<boolean>;
 }

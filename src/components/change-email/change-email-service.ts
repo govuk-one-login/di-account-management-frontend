@@ -11,7 +11,8 @@ export function changeEmailService(
 ): ChangeEmailServiceInterface {
   const sendCodeVerificationNotification = async function (
     accessToken: string,
-    email: string
+    email: string,
+    sourceIp: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.SEND_NOTIFICATION,
@@ -22,7 +23,7 @@ export function changeEmailService(
       getRequestConfig(accessToken, [
         HTTP_STATUS_CODES.NO_CONTENT,
         HTTP_STATUS_CODES.BAD_REQUEST,
-      ])
+      ], sourceIp)
     );
 
     return status === HTTP_STATUS_CODES.NO_CONTENT;
