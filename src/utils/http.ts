@@ -11,7 +11,8 @@ const headers: Readonly<Record<string, string | boolean>> = {
 
 export function getRequestConfig(
   token: string,
-  validationStatues?: number[]
+  validationStatues?: number[],
+  sourceIp?: string
 ): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
     headers: {
@@ -24,6 +25,10 @@ export function getRequestConfig(
     config.validateStatus = function (status: number) {
       return validationStatues.includes(status);
     };
+  }
+
+  if (sourceIp) {
+    config.headers["X-Forwarded-For"] = sourceIp
   }
 
   return config;
