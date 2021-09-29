@@ -41,7 +41,8 @@ export function enterPasswordPost(
     const isAuthenticated = await service.authenticated(
       accessToken,
       email,
-      req.body["password"]
+      req.body["password"],
+      req.ip
     );
 
     if (isAuthenticated) {
