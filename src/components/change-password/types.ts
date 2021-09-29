@@ -2,6 +2,7 @@ export interface ChangePasswordServiceInterface {
   updatePassword: (
     accessToken: string,
     email: string,
-    newPassword: string
+    newPassword: string,
+    sourceIp: string
   ) => Promise<void>;
 }
