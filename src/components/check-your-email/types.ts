@@ -3,6 +3,7 @@ export interface CheckYourEmailServiceInterface {
     accessToken: string,
     existingEmailAddress: string,
     replacementEmailAddress: string,
-    code: string
+    code: string,
+    sourceIp: string
   ) => Promise<boolean>;
 }

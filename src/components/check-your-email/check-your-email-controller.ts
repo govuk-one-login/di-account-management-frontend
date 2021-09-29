@@ -29,7 +29,8 @@ export function checkYourEmailPost(
       accessToken,
       email,
       newEmailAddress,
-      code
+      code,
+      req.ip
     );
 
     if (isEmailUpdated) {
