@@ -8,7 +8,8 @@ export function changePhoneNumberService(
   const sendPhoneVerificationNotification = async function (
     accessToken: string,
     email: string,
-    phoneNumber: string
+    phoneNumber: string,
+    sourceIp: string
   ): Promise<void> {
     await axios.client.post<void>(
       API_ENDPOINTS.SEND_NOTIFICATION,
@@ -17,7 +18,7 @@ export function changePhoneNumberService(
         phoneNumber,
         notificationType: NOTIFICATION_TYPE.VERIFY_PHONE_NUMBER,
       },
-      getRequestConfig(accessToken)
+      getRequestConfig(accessToken, [], sourceIp)
     );
   };
 
