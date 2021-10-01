@@ -18,7 +18,7 @@ export function changePhoneNumberService(
         phoneNumber,
         notificationType: NOTIFICATION_TYPE.VERIFY_PHONE_NUMBER,
       },
-      getRequestConfig(accessToken, [], sourceIp)
+      getRequestConfig(accessToken, null, sourceIp)
     );
   };
 

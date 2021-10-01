@@ -4,7 +4,7 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { JWT } from "jose";
 
 describe("Integration:: change phone number", () => {
@@ -170,7 +170,7 @@ describe("Integration:: change phone number", () => {
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number entered", (done) => {
-    nock(baseApi).post("/send-otp-notification").once().reply(204, {});
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
 
     request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
@@ -185,7 +185,7 @@ describe("Integration:: change phone number", () => {
   });
 
   it("should return internal server error if send-otp-notification API call fails", (done) => {
-    nock(baseApi).post("/send-otp-notification").once().reply(500, {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(500, {
       sessionState: "done",
     });
 

@@ -8,7 +8,7 @@ import base64url from "base64url";
 import random = generators.random;
 
 custom.setHttpOptionsDefaults({
-  timeout: 20000,
+  timeout: 10000,
 });
 
 async function getOIDCClient(config: OIDCConfig): Promise<Client> {

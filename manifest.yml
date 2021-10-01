@@ -3,7 +3,7 @@ applications:
   - name: di-authentication-account-management-frontend
     path: di-authentication-account-management-frontend.zip
     command: yarn run start
-    memory: 1G
+    memory: 2G
     buildpacks:
       - nodejs_buildpack
     env:
@@ -14,6 +14,7 @@ applications:
       SESSION_SECRET: ((session_secret))
       AM_YOUR_ACCOUNT_URL: ((am_your_account_url))
       GTM_ID: ((gtm_id))
+      PUBLISHING_API_URL: ((publishing_api_url))
     routes:
       - route: ((route_name))
     services:

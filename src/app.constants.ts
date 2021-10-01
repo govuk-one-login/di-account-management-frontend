@@ -81,6 +81,7 @@ export const API_ENDPOINTS = {
   UPDATE_PASSWORD: "/update-password",
   UPDATE_EMAIL: "/update-email",
   UPDATE_PHONE_NUMBER: "/update-phone-number",
+  ALPHA_GOV_ACCOUNT: "/api/oidc-users/",
 };
 
 export enum NOTIFICATION_TYPE {

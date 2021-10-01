@@ -8,6 +8,8 @@ import {
 import { checkYourEmailService } from "./check-your-email-service";
 import { CheckYourEmailServiceInterface } from "./types";
 import { getNextState } from "../../utils/state-machine";
+import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
+import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
 
@@ -18,11 +20,13 @@ export function checkYourEmailGet(req: Request, res: Response): void {
 }
 
 export function checkYourEmailPost(
-  service: CheckYourEmailServiceInterface = checkYourEmailService()
+  service: CheckYourEmailServiceInterface = checkYourEmailService(),
+  publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const code = req.body["code"];
-    const { email, newEmailAddress } = req.session.user;
+    const { email, newEmailAddress, subjectId, legacySubjectId } =
+      req.session.user;
     const { accessToken } = req.session.user.tokens;
 
     const isEmailUpdated = await service.updateEmail(
@@ -34,6 +38,18 @@ export function checkYourEmailPost(
     );
 
     if (isEmailUpdated) {
+      await publishingService
+        .notifyEmailChanged({
+          subjectId: subjectId,
+          newEmail: newEmailAddress,
+          legacySubjectId: legacySubjectId,
+        })
+        .catch((err) => {
+          req.log.error(
+            `Unable to send change email notification for:${subjectId}. Error:${err.toJSON()}`
+          );
+        });
+
       req.session.user.email = newEmailAddress;
       delete req.session.user.newEmailAddress;
 

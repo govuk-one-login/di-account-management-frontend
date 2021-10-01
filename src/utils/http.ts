@@ -20,7 +20,7 @@ export function getRequestConfig(
     },
     proxy: false,
   };
-  
+
   if (validationStatues) {
     config.validateStatus = function (status: number) {
       return validationStatues.includes(status);
@@ -28,7 +28,7 @@ export function getRequestConfig(
   }
 
   if (sourceIp) {
-    config.headers["X-Forwarded-For"] = sourceIp
+    config.headers["X-Forwarded-For"] = sourceIp;
   }
 
   return config;

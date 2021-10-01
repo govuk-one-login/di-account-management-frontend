@@ -17,11 +17,15 @@ export function enterPasswordService(
         email: emailAddress,
         password: password,
       },
-      getRequestConfig(token, [
-        HTTP_STATUS_CODES.NO_CONTENT,
-        HTTP_STATUS_CODES.FORBIDDEN,
-        HTTP_STATUS_CODES.UNAUTHORIZED,
-      ], sourceIp)
+      getRequestConfig(
+        token,
+        [
+          HTTP_STATUS_CODES.NO_CONTENT,
+          HTTP_STATUS_CODES.FORBIDDEN,
+          HTTP_STATUS_CODES.UNAUTHORIZED,
+        ],
+        sourceIp
+      )
     );
     return status === HTTP_STATUS_CODES.NO_CONTENT;
   };

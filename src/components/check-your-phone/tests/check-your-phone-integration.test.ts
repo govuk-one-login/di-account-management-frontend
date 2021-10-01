@@ -4,7 +4,7 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { JWT } from "jose";
 
 describe("Integration:: check your phone", () => {
@@ -43,6 +43,11 @@ describe("Integration:: check your phone", () => {
         };
         next();
       });
+
+    const oidc = require("../../../utils/oidc");
+    sandbox.stub(oidc, "getOIDCClient").returns(() => {
+      return;
+    });
 
     app = require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
@@ -150,7 +155,7 @@ describe("Integration:: check your phone", () => {
   });
 
   it("should redirect to /create-password when valid code entered", (done) => {
-    nock(baseApi).post("/update-phone-number").once().reply(204, {});
+    nock(baseApi).post(API_ENDPOINTS.UPDATE_PHONE_NUMBER).once().reply(204);
 
     request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
@@ -165,7 +170,7 @@ describe("Integration:: check your phone", () => {
   });
 
   it("should return validation error when incorrect code entered", (done) => {
-    nock(baseApi).post("/update-phone-number").once().reply(400, {});
+    nock(baseApi).post(API_ENDPOINTS.UPDATE_PHONE_NUMBER).once().reply(400, {});
 
     request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)

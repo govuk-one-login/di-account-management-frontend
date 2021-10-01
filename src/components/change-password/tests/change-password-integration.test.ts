@@ -4,7 +4,7 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { JWT } from "jose";
 
 describe("Integration:: change password", () => {
@@ -43,6 +43,11 @@ describe("Integration:: change password", () => {
         };
         next();
       });
+
+    const oidc = require("../../../utils/oidc");
+    sandbox.stub(oidc, "getOIDCClient").returns(() => {
+      return;
+    });
 
     app = require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
@@ -157,7 +162,7 @@ describe("Integration:: change password", () => {
   });
 
   it("should redirect to enter phone number when valid password entered", (done) => {
-    nock(baseApi).post("/update-password").once().reply(204, {});
+    nock(baseApi).post(API_ENDPOINTS.UPDATE_PASSWORD).once().reply(204);
 
     request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)

@@ -4,7 +4,7 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { JWT } from "jose";
 
 describe("Integration:: check your email", () => {
@@ -13,6 +13,8 @@ describe("Integration:: check your email", () => {
   let cookies: string;
   let app: any;
   let baseApi: string;
+  let govUkPublishingBaseApi: string;
+  const TEST_SUBJECT_ID = "jkduasd";
 
   before(() => {
     decache("../../../app");
@@ -26,6 +28,7 @@ describe("Integration:: check your email", () => {
           email: "test@test.com",
           phoneNumber: "07839490040",
           isAuthenticated: true,
+          subjectId: TEST_SUBJECT_ID,
           state: {
             changeEmail: {
               value: "VERIFY_CODE",
@@ -44,8 +47,14 @@ describe("Integration:: check your email", () => {
         next();
       });
 
+    const oidc = require("../../../utils/oidc");
+    sandbox.stub(oidc, "getOIDCClient").returns(() => {
+      return;
+    });
+
     app = require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
+    govUkPublishingBaseApi = process.env.GOV_PUBLISHING_API_BASE_URL;
 
     request(app)
       .get(PATH_DATA.CHECK_YOUR_EMAIL.url)
@@ -150,7 +159,11 @@ describe("Integration:: check your email", () => {
   });
 
   it("should redirect to /email-updated-confirmation when valid code entered", (done) => {
-    nock(baseApi).post("/update-email").once().reply(204, {});
+    nock(baseApi).post(API_ENDPOINTS.UPDATE_EMAIL).once().reply(204);
+    nock(govUkPublishingBaseApi)
+      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
+      .once()
+      .reply(200);
 
     request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
@@ -165,7 +178,7 @@ describe("Integration:: check your email", () => {
   });
 
   it("should return validation error when incorrect code entered", (done) => {
-    nock(baseApi).post("/update-email").once().reply(400, {});
+    nock(baseApi).post(API_ENDPOINTS.UPDATE_EMAIL).once().reply(400, {});
 
     request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)

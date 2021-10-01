@@ -5,19 +5,32 @@ import { deleteAccountService } from "./delete-account-service";
 import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import CF_CONFIG from "../../config/cf";
+import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
+import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk");
 }
 
 export function deleteAccountPost(
-  service: DeleteAccountServiceInterface = deleteAccountService()
+  service: DeleteAccountServiceInterface = deleteAccountService(),
+  publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { email } = req.session.user;
+    const { email, subjectId, legacySubjectId } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
     await service.deleteAccount(accessToken, email, req.ip);
+    await publishingService
+      .notifyAccountDeleted({
+        subjectId,
+        legacySubjectId,
+      })
+      .catch((err) => {
+        req.log.error(
+          `Unable to send delete account notification for:${subjectId}. Error:${err.toJson()}`
+        );
+      });
 
     req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,

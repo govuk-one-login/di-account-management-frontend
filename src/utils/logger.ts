@@ -26,7 +26,7 @@ const logger = pino({
 const loggerMiddleware = PinoHttp({
   logger,
   autoLogging: false,
-  wrapSerializers:false,
+  wrapSerializers: false,
 });
 
 export { logger, loggerMiddleware };

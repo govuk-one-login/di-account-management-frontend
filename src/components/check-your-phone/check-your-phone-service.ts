@@ -19,10 +19,11 @@ export function checkYourPhoneService(
         otp,
         phoneNumber,
       },
-      getRequestConfig(accessToken, [
-        HTTP_STATUS_CODES.NO_CONTENT,
-        HTTP_STATUS_CODES.BAD_REQUEST,
-      ], sourceIp)
+      getRequestConfig(
+        accessToken,
+        [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
+        sourceIp
+      )
     );
 
     return status === HTTP_STATUS_CODES.NO_CONTENT;
