@@ -17,7 +17,7 @@ export function changePasswordService(
         email,
         newPassword,
       },
-      getRequestConfig(accessToken, [], sourceIp)
+      getRequestConfig(accessToken, null, sourceIp)
     );
   };
 

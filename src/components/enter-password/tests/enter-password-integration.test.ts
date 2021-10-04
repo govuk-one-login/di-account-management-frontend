@@ -4,7 +4,7 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { JWT } from "jose";
 
 describe("Integration::enter password", () => {
@@ -51,6 +51,11 @@ describe("Integration::enter password", () => {
         };
         next();
       });
+
+    const oidc = require("../../../utils/oidc");
+    sandbox.stub(oidc, "getOIDCClient").returns(() => {
+      return;
+    });
 
     app = require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
@@ -106,7 +111,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should return validation error when password is incorrect", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(401);
+    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(401);
 
     request(app)
       .post(ENDPOINT)
@@ -128,7 +133,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should redirect to change email when authenticated", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(204);
+    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(204);
 
     request(app)
       .post(ENDPOINT)
@@ -144,7 +149,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should redirect to change password when authenticated", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(204);
+    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(204);
 
     request(app)
       .post(ENDPOINT)
@@ -160,7 +165,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should redirect to change phone number when authenticated", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(204);
+    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(204);
 
     request(app)
       .post(ENDPOINT)
@@ -176,7 +181,7 @@ describe("Integration::enter password", () => {
   });
 
   it("should redirect to delete account when authenticated", (done) => {
-    nock(baseApi).post("/authenticate").once().reply(204);
+    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(204);
 
     request(app)
       .post(ENDPOINT)

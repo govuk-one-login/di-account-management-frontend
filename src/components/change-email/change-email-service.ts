@@ -20,10 +20,11 @@ export function changeEmailService(
         email: email,
         notificationType: NOTIFICATION_TYPE.VERIFY_EMAIL,
       },
-      getRequestConfig(accessToken, [
-        HTTP_STATUS_CODES.NO_CONTENT,
-        HTTP_STATUS_CODES.BAD_REQUEST,
-      ], sourceIp)
+      getRequestConfig(
+        accessToken,
+        [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
+        sourceIp
+      )
     );
 
     return status === HTTP_STATUS_CODES.NO_CONTENT;

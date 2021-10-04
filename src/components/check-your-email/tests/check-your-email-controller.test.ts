@@ -10,6 +10,7 @@ import {
   checkYourEmailPost,
 } from "../check-your-email-controller";
 import { CheckYourEmailServiceInterface } from "../types";
+import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
 
 describe("check your email controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -50,12 +51,21 @@ describe("check your email controller", () => {
         updateEmail: sandbox.fake.returns(true),
       };
 
+      const fakePublishingService: GovUkPublishingServiceInterface = {
+        notifyAccountDeleted: sandbox.fake(),
+        notifyEmailChanged: sandbox.fake.returns(Promise.resolve()),
+      };
+
       req.session.user.tokens = { accessToken: "token" };
       req.body.code = "123456";
 
-      await checkYourEmailPost(fakeService)(req as Request, res as Response);
+      await checkYourEmailPost(fakeService, fakePublishingService)(
+        req as Request,
+        res as Response
+      );
 
       expect(fakeService.updateEmail).to.have.been.calledOnce;
+      expect(fakePublishingService.notifyEmailChanged).to.have.been.calledOnce;
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url
       );

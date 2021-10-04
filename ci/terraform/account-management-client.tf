@@ -4,7 +4,8 @@ locals {
     "phone",
     "email",
     "am",
-    "offline_access"
+    "offline_access",
+    "govuk-account"
   ]
 }
 

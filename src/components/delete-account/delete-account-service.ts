@@ -16,7 +16,7 @@ export function deleteAccountService(
       {
         email: email,
       },
-      getRequestConfig(token, [], sourceIp)
+      getRequestConfig(token, null, sourceIp)
     );
   };
 

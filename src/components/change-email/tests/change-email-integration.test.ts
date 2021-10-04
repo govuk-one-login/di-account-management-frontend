@@ -4,7 +4,7 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { JWT } from "jose";
 
 describe("Integration:: change email", () => {
@@ -13,8 +13,9 @@ describe("Integration:: change email", () => {
   let cookies: string;
   let app: any;
   let baseApi: string;
+  const TEST_SUBJECT_ID = "jkduasd";
 
-  before(() => {
+  before((done) => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
@@ -25,6 +26,7 @@ describe("Integration:: change email", () => {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
+          subjectId: TEST_SUBJECT_ID,
           isAuthenticated: true,
           state: {
             changeEmail: {
@@ -44,16 +46,22 @@ describe("Integration:: change email", () => {
         next();
       });
 
+    const oidc = require("../../../utils/oidc");
+    sandbox.stub(oidc, "getOIDCClient").returns(() => {
+      return;
+    });
+
     app = require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     request(app)
       .get(PATH_DATA.CHANGE_EMAIL.url)
-      .end((err, res) => {
+      .expect((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];
-      });
+      })
+      .expect(200, done);
   });
 
   beforeEach(() => {
@@ -134,7 +142,7 @@ describe("Integration:: change email", () => {
   });
 
   it("should return validation error when same email used by another user", (done) => {
-    nock(baseApi).post("/send-otp-notification").once().reply(400, {});
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(400, {});
     request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
@@ -153,7 +161,7 @@ describe("Integration:: change email", () => {
   });
 
   it("should redirect to /check-your-email when valid email", (done) => {
-    nock(baseApi).post("/send-otp-notification").once().reply(204, {});
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
 
     request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)

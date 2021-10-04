@@ -9,6 +9,7 @@ import {
   deleteAccountPost,
 } from "../delete-account-controller";
 import { DeleteAccountServiceInterface } from "../types";
+import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
 
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -46,15 +47,25 @@ describe("delete account controller", () => {
         deleteAccount: sandbox.fake(),
       };
 
+      const fakePublishingService: GovUkPublishingServiceInterface = {
+        notifyAccountDeleted: sandbox.fake.returns(Promise.resolve()),
+        notifyEmailChanged: sandbox.fake(),
+      };
+
       req.session.user.email = "test@test.com";
       req.session.user.tokens = { accessToken: "token" };
       req.oidc = {
         endSessionUrl: sandbox.fake.returns("logout-url"),
       };
 
-      await deleteAccountPost(fakeService)(req as Request, res as Response);
+      await deleteAccountPost(fakeService, fakePublishingService)(
+        req as Request,
+        res as Response
+      );
 
       expect(fakeService.deleteAccount).to.have.been.calledOnce;
+      expect(fakePublishingService.notifyAccountDeleted).to.have.been
+        .calledOnce;
       expect(req.session.destroy).to.have.been.calledOnce;
       expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
       expect(res.redirect).to.have.been.calledWith("logout-url");

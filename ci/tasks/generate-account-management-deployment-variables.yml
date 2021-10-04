@@ -15,6 +15,7 @@ params:
   SESSION_EXPIRY: ((build-session-expiry))
   SESSION_SECRET: ((build-session-secret))
   GTM_ID: ((build-gtm-id))
+  PUBLISHING_API_URL: ((build-gov-accounts-api-url))
   ENVIRONMENT_NAME: build
 run:
   path: /bin/sh
@@ -37,4 +38,5 @@ run:
       environment_name: ${ENVIRONMENT_NAME}
       am_your_account_url: ${AM_YOUR_ACCOUNT_URL}
       gtm_id: ${GTM_ID}
+      publishing_api_url: ${PUBLISHING_API_URL}
       EOF

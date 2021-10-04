@@ -41,3 +41,11 @@ export function getSessionSecret(): string {
 export function getYourAccountUrl(): string {
   return process.env.AM_YOUR_ACCOUNT_URL;
 }
+
+export function getGovPublishingBaseAPIUrl(): string {
+  return process.env.GOV_PUBLISHING_API_BASE_URL;
+}
+
+export function getGovPublishingBaseAPIToken(): string {
+  return process.env.GOV_PUBLISHING_API_TOKEN;
+}

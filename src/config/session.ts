@@ -16,7 +16,7 @@ export function getSessionStore(): RedisStore {
   let config: ClientOpts;
   if (CF_CONFIG.isLocal) {
     config = {
-      host: "redis",
+      host: "localhost",
     };
   } else {
     const redisConfig = CF_CONFIG.getServiceCreds(

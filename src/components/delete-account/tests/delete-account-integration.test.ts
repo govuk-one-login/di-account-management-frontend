@@ -4,7 +4,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { JWT } from "jose";
 import CF_CONFIG from "../../../config/cf";
 
@@ -14,7 +14,9 @@ describe("Integration:: delete account", () => {
   let cookies: string;
   let app: any;
   let baseApi: string;
+  let govUkPublishingBaseApi: string;
   const idToken = "Idtoken";
+  const TEST_SUBJECT_ID = "sub";
 
   before(() => {
     decache("../../../app");
@@ -27,6 +29,7 @@ describe("Integration:: delete account", () => {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
+          subjectId: TEST_SUBJECT_ID,
           isAuthenticated: true,
           state: {
             deleteAccount: {
@@ -46,8 +49,20 @@ describe("Integration:: delete account", () => {
         next();
       });
 
+    const oidc = require("../../../utils/oidc");
+    sandbox.stub(oidc, "getOIDCClient").returns({
+      endSessionUrl: function (params: any = {}) {
+        return `${process.env.API_BASE_URL}/logout?id_token_hint=${
+          params.id_token_hint
+        }&post_logout_redirect_uri=${encodeURIComponent(
+          params.post_logout_redirect_uri
+        )}`;
+      },
+    });
+
     app = require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
+    govUkPublishingBaseApi = process.env.GOV_PUBLISHING_API_BASE_URL;
 
     request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
@@ -79,7 +94,11 @@ describe("Integration:: delete account", () => {
   });
 
   it("should redirect to end session endpoint", (done) => {
-    nock(baseApi).post(PATH_DATA.DELETE_ACCOUNT.url).once().reply(204, {});
+    nock(baseApi).post(API_ENDPOINTS.DELETE_ACCOUNT).once().reply(204);
+    nock(govUkPublishingBaseApi)
+      .delete(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
+      .once()
+      .reply(204);
 
     const opApi = process.env.API_BASE_URL;
 
