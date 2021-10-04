@@ -14,7 +14,8 @@ applications:
       SESSION_SECRET: ((session_secret))
       AM_YOUR_ACCOUNT_URL: ((am_your_account_url))
       GTM_ID: ((gtm_id))
-      PUBLISHING_API_URL: ((publishing_api_url))
+      GOV_ACCOUNTS_PUBLISHING_API_URL: ((publishing_api_url))
+      GOV_ACCOUNTS_PUBLISHING_API_TOKEN: ((publishing_api_token))
     routes:
       - route: ((route_name))
     services:
