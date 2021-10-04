@@ -2952,10 +2952,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js@^1.9.23:
-  version "1.9.23"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.23.tgz#e28babdaaaf7e09fbaf23a1c714166fa63001ea3"
-  integrity sha512-+qWSwPyJWSV9ukb7Iu21WpWEP7irFWR1ojoYykL2itAfXKj9FjsTjS6PPZoPUOZk+1kxliHjwsilqA1TNeOhuQ==
+libphonenumber-js@^1.9.35:
+  version "1.9.35"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.35.tgz#5680ec925a3e40526e9a1ed8b65c03f98840bbbb"
+  integrity sha512-6ok1JD4GcU7owpbp07WJZlxoGdlY538OCgN9fmOlWwCzqPNLzra7tvaFz7NJP8Hcmp1lkm97wNZ2hICN9uGylg==
 
 lines-and-columns@^1.1.6:
   version "1.1.6"
