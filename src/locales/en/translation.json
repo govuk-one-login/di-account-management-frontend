@@ -2,15 +2,15 @@
   "general": {
     "provider": "GOV.UK",
     "pageTitle": "GOV.UK Sign in",
-    "serviceName": "Sign in to or create your GOV.UK Account",
-    "serviceNameTitle": "GOV.UK Account",
+    "serviceName": "Sign in to or create your GOV.UK account",
+    "serviceNameTitle": "GOV.UK account",
     "errorTitlePrefix": "Error",
     "back": "Back",
     "warning": "Warning",
     "errorSummaryTitle": "There is a problem",
     "phaseBanner": {
       "tag": "beta",
-      "content": "This is a new service – your {{-openLink}}feedback{{-closeLink}} will help us to improve it. // {{ target  }} //"
+      "text": "We’re trialling GOV.UK accounts - your <a  href=\"/feedback\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">feedback</a> will help us improve them."
     },
     "yes": "Yes",
     "no": "No",
@@ -18,8 +18,8 @@
     "backToGovUKButtonText": "Back to GOV.UK home",
     "cookie": {
       "cookieBanner": {
-        "title": "Cookies on GOV.UK Account",
-        "heading": "Cookies on GOV.UK Account",
+        "title": "Cookies on GOV.UK account",
+        "heading": "Cookies on GOV.UK account",
         "paragraph1": "We use some essential cookies to make this service work.",
         "paragraph2": "We’d also like to use analytics cookies so we can understand how you use the service and make improvements.",
         "buttonAcceptText": "Accept analytics cookies",
@@ -103,7 +103,7 @@
   },
   "pages": {
     "manageYourAccount": {
-      "title": "Sign in to or create your GOV.UK Account",
+      "title": "Sign in to or create your GOV.UK account",
       "header": "Manage your account",
       "accountDetails": "Account details",
       "menuItemList": {
@@ -120,19 +120,24 @@
       "deleteAccount": {
         "heading": "Delete your account",
         "link": "Delete this GOV.UK account",
-        "info": "You can delete this account and all the information stored in it."
+        "info": "You can permanently delete this account and all the information stored in it."
+      },
+      "feedback": {
+        "heading": "Help improve GOV.UK accounts",
+        "link": "Give feedback",
+        "text": "on your experience so we can make GOV.UK accounts better."
       }
     },
     "enterPassword": {
       "title": "Enter your password",
       "changeEmail": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can change your email address.",
-        "backLink": "I don't want to change my email address"
+        "paragraph": "We need to make sure it’s you before you can change your email address.",
+        "backLink": "I do not want to change my email address"
       },
       "changePassword": {
         "header": "Enter your current password",
-        "paragraph": "We need to make sure it’s you.",
+        "paragraph": "We need to make sure it’s you before you can change your password.",
         "backLink": "I do not want to change my password"
       },
       "changePhoneNumber": {
@@ -167,13 +172,13 @@
         }
       },
       "dontWantTo": {
-        "changeEmailLinkText": "I don't want to change my email address"
+        "changeEmailLinkText": "I do not want to change my email address"
       }
     },
     "updateEmailConfirmation": {
       "title": "You have changed your email address",
       "panelText": "You have changed your email address",
-      "summaryText": "Your email address has been changed to: [email]"
+      "summaryText": "Your email address has been changed to [email]"
     },
     "updatePasswordConfirmation": {
       "title": "You have changed your password",
@@ -185,16 +190,16 @@
       "summaryText": "Your phone number has been changed to [mobile]."
     },
     "deleteAccountConfirmation": {
-      "title": "You have deleted your GOV.UK Account",
-      "panelText": "You have deleted your GOV.UK Account",
-      "summaryText": "If you need to use a GOV.UK account in future, you’ll need to create a new one."
+      "title": "You have deleted your GOV.UK account",
+      "panelText": "You have deleted your GOV.UK account",
+      "summaryText": "If you need to use a GOV.UK account in future, you will need to create a new one."
     },
     "changePassword": {
       "title": "Enter your new password",
       "header": "Enter your new password",
       "password": {
         "label": "Enter a new password",
-        "hint": "It must be at least 8 characters long and must include at least one number.",
+        "hint": "It must be at least 8 characters long and must include at least one number",
         "validationError": {
           "required": "Enter your password",
           "minLength": "Your password must be at least 8 characters long and must include a number",
@@ -225,7 +230,7 @@
         "paragraph3": "The code will expire after  15 minutes.",
         "requestNewCodeLink": "Request a new code",
         "requestNewCodeParagraph": " if:",
-        "requestNewCodeReason1": "the code isn’t working or you didn’t receive one",
+        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
         "requestNewCodeReason2": "you want to use a different email address"
       },
       "code": {
@@ -242,12 +247,12 @@
     "checkYourPhone": {
       "title": "Check your phone",
       "header": "Check your phone",
-      "text": "We sent a code to: [mobile].",
+      "text": "We sent a code to [mobile].",
       "info": {
         "paragraph": "It might take a few minutes to arrive. The code will expire after  15 minutes.",
         "requestNewCodeLink": "Request a new code",
         "requestNewCodeParagraph": " if:",
-        "requestNewCodeReason1": "the code isn’t working or you didn’t receive one",
+        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
         "requestNewCodeReason2": "you want to use a different phone number"
       },
       "code": {
@@ -264,7 +269,8 @@
     "deleteAccount": {
       "title": "Remove account",
       "header": "Are you sure you want to delete your account?",
-      "paragraph": "Deleting your GOV.UK account won't delete other government accounts you may have, such as Government Gateway or your Universal Credit account.",
+      "warningText": "Your account will be permanently deleted. You won’t be able to get it back.",
+      "paragraph": "Deleting your GOV.UK account won’t delete any other government accounts you have, such as Government Gateway or your Universal Credit account.",
       "deleteAccount": "Delete account",
       "doNotDeleteAccount": "I do not want to delete my account"
     },

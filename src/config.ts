@@ -43,9 +43,9 @@ export function getYourAccountUrl(): string {
 }
 
 export function getGovPublishingBaseAPIUrl(): string {
-  return process.env.GOV_PUBLISHING_API_BASE_URL;
+  return process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
 }
 
 export function getGovPublishingBaseAPIToken(): string {
-  return process.env.GOV_PUBLISHING_API_TOKEN;
+  return process.env.GOV_ACCOUNTS_PUBLISHING_API_TOKEN;
 }

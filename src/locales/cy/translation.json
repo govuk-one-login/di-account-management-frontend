@@ -2,23 +2,24 @@
   "general": {
     "provider": "GOV.UK",
     "pageTitle": "GOV.UK Sign in",
-    "serviceName": "Sign in to or create your GOV.UK Account",
-    "serviceNameTitle": "GOV.UK Account",
+    "serviceName": "Sign in to or create your GOV.UK account",
+    "serviceNameTitle": "GOV.UK account",
     "errorTitlePrefix": "Error",
     "back": "Back",
     "warning": "Warning",
     "errorSummaryTitle": "There is a problem",
     "phaseBanner": {
       "tag": "beta",
-      "content": "This is a new service – your {{-openLink}}feedback{{-closeLink}} will help us to improve it. // {{ target  }} //"
+      "text": "We’re trialling GOV.UK accounts - your <a  href=\"/feedback\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">feedback</a> will help us improve them."
     },
     "yes": "Yes",
     "no": "No",
-    "footer": {},
+    "backToAccountButtonText": "Back to your account",
+    "backToGovUKButtonText": "Back to GOV.UK home",
     "cookie": {
       "cookieBanner": {
-        "title": "Cookies on GOV.UK Account",
-        "heading": "Cookies on GOV.UK Account",
+        "title": "Cookies on GOV.UK account",
+        "heading": "Cookies on GOV.UK account",
         "paragraph1": "We use some essential cookies to make this service work.",
         "paragraph2": "We’d also like to use analytics cookies so we can understand how you use the service and make improvements.",
         "buttonAcceptText": "Accept analytics cookies",
@@ -68,25 +69,43 @@
   "error": {
     "error404": {
       "title": "Page not found",
-      "header": "Page not found"
+      "header": "Page not found",
+      "content": {
+        "paragraph1": "If you typed the web address, check it is correct.",
+        "paragraph2": "If you pasted the web address, check you copied the entire address.",
+        "paragraph3Start": "Go back to ",
+        "yourAccountLink": "#",
+        "yourAccountLinkText": "your account",
+        "paragraph3Middle": " or to the ",
+        "govUKHomepageLink": "https://www.gov.uk/",
+        "govUKHomepageLinkText": "GOV.UK homepage."
+      }
     },
     "error500": {
-      "title": "Sorry, there is a problem with this service",
-      "header": "Sorry, there is a problem with this service"
+      "title": "Sorry, there is a problem with the service",
+      "header": "Sorry, there is a problem with the service",
+      "content": {
+        "paragraph1": "Try again later."
+      }
     },
     "timeoutError": {
-      "title": "Session timed out",
-      "header": "Session timed out",
+      "title": "You have been signed out",
+      "header": "You have been signed out",
       "content": {
-        "paragraph1": "Your session has timed out due to inactivity.",
-        "paragraph2": "add another line here"
+        "paragraph1": "You’ve been signed out because you did not use your account for 60 minutes or more.",
+        "paragraph2": "This is to keep your account and your information secure.",
+        "signInButtonText": "Sign in",
+        "signInButtonHRef": "#",
+        "govUKHomepageLink": "https://www.gov.uk/",
+        "govUKHomepageLinkText": "Go to the GOV.UK homepage"
       }
     }
   },
   "pages": {
     "manageYourAccount": {
-      "title": "Sign in to or create your GOV.UK Account",
+      "title": "Sign in to or create your GOV.UK account",
       "header": "Manage your account",
+      "accountDetails": "Account details",
       "menuItemList": {
         "manageYourAccount": "Manage your account",
         "securityAndPrivacy": "Security and privacy",
@@ -101,7 +120,177 @@
       "deleteAccount": {
         "heading": "Delete your account",
         "link": "Delete this GOV.UK account",
-        "info": "You can delete this account and all the information stored in it."
+        "info": "You can permanently delete this account and all the information stored in it."
+      },
+      "feedback": {
+        "heading": "Help improve GOV.UK accounts",
+        "link": "Give feedback",
+        "text": "on your experience so we can make GOV.UK accounts better."
+      }
+    },
+    "enterPassword": {
+      "title": "Enter your password",
+      "changeEmail": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can change your email address.",
+        "backLink": "I do not want to change my email address"
+      },
+      "changePassword": {
+        "header": "Enter your current password",
+        "paragraph": "We need to make sure it’s you before you can change your password.",
+        "backLink": "I do not want to change my password"
+      },
+      "changePhoneNumber": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can change your phone number.",
+        "backLink": "I do not want to change my phone number"
+      },
+      "deleteAccount": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can delete your account.",
+        "backLink": "I do not want to delete my account"
+      },
+      "password": {
+        "label": "Enter your password",
+        "validationError": {
+          "required": "Enter your password",
+          "incorrectPassword": "Enter the correct password"
+        }
+      }
+    },
+    "changeEmail": {
+      "title": "Enter your new email address",
+      "header": "Enter your new email address",
+      "email": {
+        "label": "Email address",
+        "validationError": {
+          "required": "Enter your email address",
+          "length": "Email address must be 256 characters or fewer",
+          "email": "Enter an email address in the correct format, like name@example.com",
+          "alreadyInUse": "That email address already has a GOV.UK account. Enter a different email address.",
+          "sameEmail": "Your account is already using that email address. Enter a different email address."
+        }
+      },
+      "dontWantTo": {
+        "changeEmailLinkText": "I do not want to change my email address"
+      }
+    },
+    "updateEmailConfirmation": {
+      "title": "You have changed your email address",
+      "panelText": "You have changed your email address",
+      "summaryText": "Your email address has been changed to [email]"
+    },
+    "updatePasswordConfirmation": {
+      "title": "You have changed your password",
+      "panelText": "You have changed your password"
+    },
+    "updatePhoneNumberConfirmation": {
+      "title": "You have changed your phone number",
+      "panelText": "You have changed your phone number",
+      "summaryText": "Your phone number has been changed to [mobile]."
+    },
+    "deleteAccountConfirmation": {
+      "title": "You have deleted your GOV.UK account",
+      "panelText": "You have deleted your GOV.UK account",
+      "summaryText": "If you need to use a GOV.UK account in future, you will need to create a new one."
+    },
+    "changePassword": {
+      "title": "Enter your new password",
+      "header": "Enter your new password",
+      "password": {
+        "label": "Enter a new password",
+        "hint": "It must be at least 8 characters long and must include at least one number",
+        "validationError": {
+          "required": "Enter your password",
+          "minLength": "Your password must be at least 8 characters long and must include a number",
+          "maxLength": "Your password must be less than 256 characters",
+          "alphaNumeric": "Your password must be at least 8 characters long and must include a number"
+        }
+      },
+      "confirmPassword": {
+        "label": "Re-type new password",
+        "validationError": {
+          "required": "Re-type your password",
+          "matches": "Enter the same password in both fields"
+        }
+      },
+      "securePasswordDetails": {
+        "summary": "How to create a secure password",
+        "text": "A good way to create a secure and memorable password is to use 3 random words. You can use numbers, symbols and spaces."
+      },
+      "backLink": "I do not want to change my password"
+    },
+    "checkYourEmail": {
+      "title": "Check your email",
+      "header": "Check your email",
+      "text": "We have sent an email to: ",
+      "info": {
+        "paragraph1": "The email contains a 6 digit security code.",
+        "paragraph2": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder.",
+        "paragraph3": "The code will expire after  15 minutes.",
+        "requestNewCodeLink": "Request a new code",
+        "requestNewCodeParagraph": " if:",
+        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
+        "requestNewCodeReason2": "you want to use a different email address"
+      },
+      "code": {
+        "label": "Enter the 6 digit security code",
+        "validationError": {
+          "required": "Enter the security code",
+          "maxLength": "Enter the security code using only 6 digits",
+          "minLength": "Enter the security code using only 6 digits",
+          "invalidFormat": "Enter the security code using only 6 digits",
+          "invalidCode": "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
+        }
+      }
+    },
+    "checkYourPhone": {
+      "title": "Check your phone",
+      "header": "Check your phone",
+      "text": "We sent a code to [mobile].",
+      "info": {
+        "paragraph": "It might take a few minutes to arrive. The code will expire after  15 minutes.",
+        "requestNewCodeLink": "Request a new code",
+        "requestNewCodeParagraph": " if:",
+        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
+        "requestNewCodeReason2": "you want to use a different phone number"
+      },
+      "code": {
+        "label": "Enter the 6 digit security code",
+        "validationError": {
+          "required": "Enter the security code",
+          "maxLength": "Enter the security code using only 6 digits",
+          "minLength": "Enter the security code using only 6 digits",
+          "invalidFormat": "Enter the security code using only 6 digits",
+          "invalidCode": "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
+        }
+      }
+    },
+    "deleteAccount": {
+      "title": "Remove account",
+      "header": "Are you sure you want to delete your account?",
+      "warningText": "Your account will be permanently deleted. You won’t be able to get it back.",
+      "paragraph": "Deleting your GOV.UK account won’t delete any other government accounts you have, such as Government Gateway or your Universal Credit account.",
+      "deleteAccount": "Delete account",
+      "doNotDeleteAccount": "I do not want to delete my account"
+    },
+    "changePhoneNumber": {
+      "title": "Enter your new phone number",
+      "header": "Enter your new phone number",
+      "info": {
+        "paragraph1": "We will send a 6 digit security code to the number you give us.",
+        "paragraph2": "You must use a UK mobile phone number.",
+        "backLink": "I do not want to change my phone number"
+      },
+      "phoneNumber": {
+        "label": "UK phone number",
+        "validationError": {
+          "required": "Enter a UK phone number",
+          "international": "Enter a UK phone number",
+          "length": "Enter a UK phone number, like 07700 900000",
+          "numeric": "Enter a UK Phone number using numbers only",
+          "samePhoneNumber": "Your account is already using that phone number. Enter a different phone number."
+        }
       }
     }
   }

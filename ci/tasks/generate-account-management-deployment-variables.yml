@@ -16,6 +16,7 @@ params:
   SESSION_SECRET: ((build-session-secret))
   GTM_ID: ((build-gtm-id))
   PUBLISHING_API_URL: ((build-gov-accounts-api-url))
+  PUBLISHING_API_URL_TOKEN: ((build-gov-accounts-api-token))
   ENVIRONMENT_NAME: build
 run:
   path: /bin/sh
@@ -39,4 +40,5 @@ run:
       am_your_account_url: ${AM_YOUR_ACCOUNT_URL}
       gtm_id: ${GTM_ID}
       publishing_api_url: ${PUBLISHING_API_URL}
+      publishing_api_token: ${PUBLISHING_API_URL_TOKEN}
       EOF

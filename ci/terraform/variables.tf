@@ -33,5 +33,5 @@ variable "redis_service_plan" {
 
 variable "your_account_url" {
   type = string
-  description = "the url to the GOV.UK Account - Your Account homepage"
+  description = "the url to the GOV.UK account - Your Account homepage"
 }

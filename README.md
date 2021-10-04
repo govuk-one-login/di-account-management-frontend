@@ -21,11 +21,13 @@ Create a copy of the .env.sample file and rename it .env and fill in below value
 ```
 ENVIRONMENT=development
 API_BASE_URL=
-SESSION_EXPIRY=30000
-SESSION_SECRET=secret
+SESSION_EXPIRY=
+SESSION_SECRET=
 OIDC_CLIENT_ID=
 AM_API_BASE_URL=
 OIDC_CLIENT_SCOPES=
+GOV_ACCOUNTS_PUBLISHING_API_URL=
+GOV_ACCOUNTS_PUBLISHING_API_TOKEN=
 ```
 
 You can find the `API_BASE_URL` in [Concourse](https://cd.gds-reliability.engineering/teams/verify/pipelines/di-authentication-deployment) under the outputs within the deloy-lambda job.
