@@ -18,6 +18,7 @@ params:
   PUBLISHING_API_URL: ((build-gov-accounts-api-url))
   PUBLISHING_API_URL_TOKEN: ((build-gov-accounts-api-token))
   ENVIRONMENT_NAME: build
+  APP_INSTANCES: 1
 run:
   path: /bin/sh
   args:
@@ -41,4 +42,5 @@ run:
       gtm_id: ${GTM_ID}
       publishing_api_url: ${PUBLISHING_API_URL}
       publishing_api_token: ${PUBLISHING_API_URL_TOKEN}
+      app_instances: ${APP_INSTANCES}
       EOF
