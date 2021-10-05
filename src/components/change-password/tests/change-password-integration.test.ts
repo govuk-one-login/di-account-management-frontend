@@ -98,7 +98,7 @@ describe("Integration:: change password", () => {
         const $ = cheerio.load(res.text);
         expect($("#password-error").text()).to.contains("Enter your password");
         expect($("#confirm-password-error").text()).to.contains(
-          "Re-type your password"
+          "Re-type your new password"
         );
       })
       .expect(400, done);
