@@ -1,11 +1,12 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% set pageTitleName = 'pages.deleteAccount.title' | translate %}
-{% block content %}
+
+{% block pageContent%}
 
 {% include "common/errors/errorSummary.njk" %}
 
@@ -14,7 +15,7 @@
 <br>
 
 {{ govukWarningText({
-  text: 'pages.deleteAccount.header' | translate
+  text: 'pages.deleteAccount.warningText' | translate
 }) }}
 
 <p class="govuk-body">{{'pages.deleteAccount.paragraph' | translate}}</p>

@@ -62,7 +62,7 @@ describe("Integration:: delete account", () => {
 
     app = require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
-    govUkPublishingBaseApi = process.env.GOV_PUBLISHING_API_BASE_URL;
+    govUkPublishingBaseApi = process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
 
     request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
