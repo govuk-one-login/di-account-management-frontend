@@ -12,6 +12,7 @@ export async function startGet(req: Request, res: Response): Promise<void> {
     state: req.session.state,
     nonce: req.session.nonce,
     redirect_uri: req.oidc.metadata.redirect_uris[0],
+    cookie_consent: req.query.cookie_consent
   });
 
   res.redirect(authUrl);
