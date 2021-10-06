@@ -47,6 +47,20 @@ export function oidcAuthCallbackGet(
       state: {},
     };
 
-    return res.redirect(PATH_DATA.MANAGE_YOUR_ACCOUNT.url);
+    return res.redirect(
+      appendQueryParam(
+        "cookie_consent",
+        req.query.cookie_consent as string,
+        PATH_DATA.MANAGE_YOUR_ACCOUNT.url
+      )
+    );
   };
+}
+
+function appendQueryParam(param: string, value: string, url: string) {
+  if (!param || !value) {
+    return url;
+  }
+
+  return `${url}?${param}=${value}`;
 }

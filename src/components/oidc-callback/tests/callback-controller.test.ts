@@ -17,6 +17,7 @@ describe("callback controller", () => {
 
     req = {
       body: {},
+      query:{},
       session: { user: {}, destroy: sandbox.fake() },
       t: sandbox.fake(),
       oidc: {
@@ -52,6 +53,20 @@ describe("callback controller", () => {
 
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.MANAGE_YOUR_ACCOUNT.url
+      );
+    });
+
+    it("should redirect to /manage-your-account with cookie consent query param", async () => {
+      req.query.cookie_consent = "accept";
+
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake.returns("testassert"),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(
+        PATH_DATA.MANAGE_YOUR_ACCOUNT.url + "?cookie_consent=accept"
       );
     });
   });
