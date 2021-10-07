@@ -201,7 +201,7 @@
         "label": "Enter a new password",
         "hint": "It must be at least 8 characters long and must include at least one number",
         "validationError": {
-          "required": "Enter your password",
+          "required": "Enter your new password",
           "minLength": "Your password must be at least 8 characters long and must include a number",
           "maxLength": "Your password must be less than 256 characters",
           "alphaNumeric": "Your password must be at least 8 characters long and must include a number"
