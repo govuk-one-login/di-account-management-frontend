@@ -49,3 +49,7 @@ export function getGovPublishingBaseAPIUrl(): string {
 export function getGovPublishingBaseAPIToken(): string {
   return process.env.GOV_ACCOUNTS_PUBLISHING_API_TOKEN;
 }
+
+export function getRedisHost(): string {
+  return process.env.REDIS_HOST ?? "redis";
+}
