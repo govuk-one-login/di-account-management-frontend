@@ -27,7 +27,7 @@ variable "cf_domain" {
 
 variable "redis_service_plan" {
   type        = string
-  default     = "tiny-5.x"
+  default     = "tiny-5_x"
   description = "The PaaS service plan (instance size) to use for Redis. For a full list of options, run 'cf marketplace -e redis'"
 }
 
