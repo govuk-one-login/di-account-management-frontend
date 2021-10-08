@@ -46,7 +46,7 @@ export function checkYourEmailPost(
         })
         .catch((err) => {
           req.log.error(
-            `Unable to send change email notification for:${subjectId}. Error:${err.toJSON()}`
+            `Unable to send change email notification for:${subjectId}. Error:${err}`
           );
         });
 

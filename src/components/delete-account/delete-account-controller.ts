@@ -28,7 +28,7 @@ export function deleteAccountPost(
       })
       .catch((err) => {
         req.log.error(
-          `Unable to send delete account notification for:${subjectId}. Error:${err.toJSON()}`
+          `Unable to send delete account notification for:${subjectId}. Error:${err}`
         );
       });
 
