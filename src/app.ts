@@ -103,7 +103,7 @@ function createApp(): express.Application {
       saveUninitialized: false,
       secret: getSessionSecret(),
       resave: false,
-      unset:"destroy",
+      unset: "destroy",
       cookie: getSessionCookieOptions(
         isProduction,
         getSessionExpiry(),

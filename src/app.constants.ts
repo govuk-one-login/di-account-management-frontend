@@ -89,6 +89,11 @@ export enum NOTIFICATION_TYPE {
   VERIFY_PHONE_NUMBER = "VERIFY_PHONE_NUMBER",
 }
 
+export const VECTORS_OF_TRUST = {
+  MEDIUM: "Cl.Cm",
+  LOW: "Cl",
+};
+
 export const HTTP_STATUS_CODES = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
