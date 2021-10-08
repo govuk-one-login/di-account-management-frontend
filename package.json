@@ -4,6 +4,9 @@
   "description": "",
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "14.17.0"
+  },
   "scripts": {
     "build-ts": "tsc",
     "build": "yarn build-sass && yarn build-ts && yarn minfiy-build-js && yarn copy-assets",
