@@ -14,7 +14,7 @@ describe("start controller", () => {
     sandbox = sinon.createSandbox();
     req = {
       body: {},
-      query:{},
+      query: {},
       session: { user: sinon.fake() },
       oidc: { authorizationUrl: sandbox.fake(), metadata: {} },
     };

@@ -1,4 +1,4 @@
-FROM node:15.14.0-alpine
+FROM node:14.17.0-alpine
 
 ENV NODE_ENV "development"
 ENV PORT 6001

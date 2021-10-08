@@ -4,7 +4,7 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { oidcAuthCallbackGet } from "../call-back-controller";
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants";
 import { ClientAssertionServiceInterface } from "../../../utils/types";
 
 describe("callback controller", () => {
@@ -17,14 +17,17 @@ describe("callback controller", () => {
 
     req = {
       body: {},
-      query:{},
+      query: {},
       session: { user: {}, destroy: sandbox.fake() },
       t: sandbox.fake(),
       oidc: {
         callbackParams: sandbox.fake(),
         callback: sandbox.fake.returns({
           accessToken: "accessToken",
-          idToken: "idToken",
+          idToken: "idtoken",
+          claims: () => {
+            return { vot: VECTORS_OF_TRUST.MEDIUM };
+          },
         }),
         userinfo: sandbox.fake.returns({
           email: "ad@ad.com",
@@ -68,6 +71,23 @@ describe("callback controller", () => {
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.MANAGE_YOUR_ACCOUNT.url + "?cookie_consent=accept"
       );
+    });
+
+    it("should redirect to /start when not medium level auth", async () => {
+      req.oidc.callback = sandbox.fake.returns({
+        accessToken: "accessToken",
+        idToken: "idtoken",
+        claims: () => {
+          return { vot: VECTORS_OF_TRUST.LOW };
+        },
+      });
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake.returns("testassert"),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(PATH_DATA.START.url);
     });
   });
 });

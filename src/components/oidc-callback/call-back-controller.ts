@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
@@ -27,6 +27,12 @@ export function oidcAuthCallbackGet(
         },
       }
     );
+
+    const vot = tokenResponse.claims().vot;
+
+    if (vot !== VECTORS_OF_TRUST.MEDIUM) {
+      return res.redirect(PATH_DATA.START.url);
+    }
 
     const userInfoResponse = await req.oidc.userinfo<UserinfoResponse>(
       tokenResponse.access_token,
