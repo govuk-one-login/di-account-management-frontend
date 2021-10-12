@@ -6,10 +6,10 @@ services:
     ports:
       - 4566:4566
     environment:
-    - SERVICES=kms
-    - HOSTNAME_EXTERNAL=localhost
-    - DEFAULT_REGION=eu-west-2
-    - DEBUG=1
+      - SERVICES=kms
+      - HOSTNAME_EXTERNAL=localhost
+      - DEFAULT_REGION=eu-west-2
+      - DEBUG=1
     volumes:
       - ./seed.yaml:/init/seed.yaml
 
