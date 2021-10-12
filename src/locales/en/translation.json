@@ -73,12 +73,8 @@
       "content": {
         "paragraph1": "If you typed the web address, check it is correct.",
         "paragraph2": "If you pasted the web address, check you copied the entire address.",
-        "paragraph3Start": "Go back to ",
-        "yourAccountLink": "#",
-        "yourAccountLinkText": "your account",
-        "paragraph3Middle": " or to the ",
-        "govUKHomepageLink": "https://www.gov.uk/",
-        "govUKHomepageLinkText": "GOV.UK homepage."
+        "govUKHomepageButtonHref": "https://www.gov.uk/",
+        "govUKHomepageButtonText": "Go to the GOV.UK homepage"
       }
     },
     "error500": {
@@ -94,8 +90,7 @@
       "content": {
         "paragraph1": "You’ve been signed out because you did not use your account for 60 minutes or more.",
         "paragraph2": "This is to keep your account and your information secure.",
-        "signInButtonText": "Sign in",
-        "signInButtonHRef": "#",
+        "signInButtonText": "Sign in to your account",
         "govUKHomepageLink": "https://www.gov.uk/",
         "govUKHomepageLinkText": "Go to the GOV.UK homepage"
       }

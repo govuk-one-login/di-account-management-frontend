@@ -38,26 +38,24 @@
 
 {% block header %}
  {% if hideSignOutLink %}
-{{ govukHeader({
+    {{ govukHeader({
            homepageUrl: "#",
            serviceUrl: "#",
-           navigationClasses:"text-right"
+           serviceName: 'general.serviceNameTitle' | translate
        }) }}
 
   {% else %}
-
-
        {{ govukHeader({
-                       homepageUrl: "#",
-                       serviceUrl: "#",
-                       navigationClasses:"text-right",
-                       navigation: [
-                           {
-                             href: "/sign-out",
-                             text: "Sign Out"
-                           }
-                         ]
-                   }) }}
+           homepageUrl: "#",
+           serviceUrl: "#",
+           serviceName: 'general.serviceNameTitle' | translate,
+           navigation: [
+               {
+                 href: "/sign-out",
+                 text: "Sign Out"
+               }
+             ]
+       }) }}
   {% endif %}
 
 {% endblock %}
@@ -116,4 +114,5 @@
   <script type="text/javascript"  src="/public/scripts/application.js"></script>
   <script type="text/javascript" nonce='{{scriptNonce}}'>window.GOVSignIn.appInit("{{gtmId}}")</script>
 {% endblock %}
+
 
