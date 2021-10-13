@@ -84,12 +84,10 @@ export function oidcAuthCallbackGet(
       state: {},
     };
 
-    if(req.query.cookie_consent){
+    if (req.query.cookie_consent) {
       setPreferencesCookie(req.query.cookie_consent as string, res);
     }
 
-    return res.redirect(
-        PATH_DATA.MANAGE_YOUR_ACCOUNT.url
-    );
+    return res.redirect(PATH_DATA.MANAGE_YOUR_ACCOUNT.url);
   };
 }

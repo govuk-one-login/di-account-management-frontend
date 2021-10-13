@@ -265,8 +265,8 @@
     "deleteAccount": {
       "title": "Are you sure you want to delete your account?",
       "header": "Are you sure you want to delete your account?",
-      "warningText": "Your account will be permanently deleted. You won’t be able to get it back.",
-      "paragraph": "Deleting your GOV.UK account won’t delete any other government accounts you have, such as Government Gateway or your Universal Credit account.",
+      "warningText": "Your account will be permanently deleted. You will not be able to get it back.",
+      "paragraph": "Deleting your GOV.UK account will not delete any other government accounts you have, such as Government Gateway or your Universal Credit account.",
       "deleteAccount": "Delete account",
       "doNotDeleteAccount": "I do not want to delete my account"
     },
