@@ -39,7 +39,7 @@ describe("callback controller", () => {
         },
       },
     };
-    res = { render: sandbox.fake(), redirect: sandbox.fake() };
+    res = { render: sandbox.fake(), redirect: sandbox.fake(), cookie: sandbox.fake() };
   });
 
   afterEach(() => {
@@ -59,7 +59,7 @@ describe("callback controller", () => {
       );
     });
 
-    it("should redirect to /manage-your-account with cookie consent query param", async () => {
+    it("should redirect to /manage-your-account and set cookie when consent query param present", async () => {
       req.query.cookie_consent = "accept";
 
       const fakeService: ClientAssertionServiceInterface = {
@@ -68,8 +68,9 @@ describe("callback controller", () => {
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
+      expect(res.cookie).to.have.calledOnce;
       expect(res.redirect).to.have.calledWith(
-        PATH_DATA.MANAGE_YOUR_ACCOUNT.url + "?cookie_consent=accept"
+        PATH_DATA.MANAGE_YOUR_ACCOUNT.url
       );
     });
 

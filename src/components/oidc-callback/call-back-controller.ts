@@ -5,6 +5,37 @@ import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
 
+const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
+
+export const COOKIE_CONSENT = {
+  ACCEPT: "accept",
+  REJECT: "reject",
+  NOT_ENGAGED: "not-engaged",
+};
+
+function setPreferencesCookie(cookieConsent: string, res: Response) {
+  if ([COOKIE_CONSENT.ACCEPT, COOKIE_CONSENT.REJECT].includes(cookieConsent)) {
+    const yearFromNow = new Date();
+    yearFromNow.setFullYear(yearFromNow.getFullYear() + 1);
+
+    res.cookie(
+      COOKIES_PREFERENCES_SET,
+      JSON.stringify({ analytics: cookieConsent === COOKIE_CONSENT.ACCEPT }),
+      {
+        expires: yearFromNow,
+        secure: true,
+      }
+    );
+  } else {
+    const expiredDate = new Date();
+    expiredDate.setFullYear(expiredDate.getFullYear() - 1);
+    res.cookie(COOKIES_PREFERENCES_SET, "", {
+      expires: expiredDate,
+      secure: true,
+    });
+  }
+}
+
 export function oidcAuthCallbackGet(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()
 ): ExpressRouteFunc {
@@ -53,20 +84,12 @@ export function oidcAuthCallbackGet(
       state: {},
     };
 
+    if(req.query.cookie_consent){
+      setPreferencesCookie(req.query.cookie_consent as string, res);
+    }
+
     return res.redirect(
-      appendQueryParam(
-        "cookie_consent",
-        req.query.cookie_consent as string,
         PATH_DATA.MANAGE_YOUR_ACCOUNT.url
-      )
     );
   };
-}
-
-function appendQueryParam(param: string, value: string, url: string) {
-  if (!param || !value) {
-    return url;
-  }
-
-  return `${url}?${param}=${value}`;
 }
