@@ -3,8 +3,6 @@
   function appInit(trackingId) {
     var cookies = window.GOVSignIn.Cookies(trackingId);
 
-    cookies.processCookieConsentFlag();
-
     if (cookies.hasConsentForAnalytics()) {
       cookies.initAnalytics();
     }
