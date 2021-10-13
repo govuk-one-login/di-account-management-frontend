@@ -39,7 +39,11 @@ describe("callback controller", () => {
         },
       },
     };
-    res = { render: sandbox.fake(), redirect: sandbox.fake(), cookie: sandbox.fake() };
+    res = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(),
+      cookie: sandbox.fake(),
+    };
   });
 
   afterEach(() => {
