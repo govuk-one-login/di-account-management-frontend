@@ -98,7 +98,7 @@
   },
   "pages": {
     "manageYourAccount": {
-      "title": "Sign in to or create your GOV.UK account",
+      "title": "Manage your account",
       "header": "Manage your account",
       "accountDetails": "Account details",
       "menuItemList": {
@@ -131,6 +131,7 @@
         "backLink": "I do not want to change my email address"
       },
       "changePassword": {
+        "title": "Enter your current password",
         "header": "Enter your current password",
         "paragraph": "We need to make sure it’s you before you can change your password.",
         "backLink": "I do not want to change my password"
@@ -262,7 +263,7 @@
       }
     },
     "deleteAccount": {
-      "title": "Remove account",
+      "title": "Are you sure you want to delete your account?",
       "header": "Are you sure you want to delete your account?",
       "warningText": "Your account will be permanently deleted. You won’t be able to get it back.",
       "paragraph": "Deleting your GOV.UK account won’t delete any other government accounts you have, such as Government Gateway or your Universal Credit account.",
