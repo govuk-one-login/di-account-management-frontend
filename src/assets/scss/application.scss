@@ -77,6 +77,11 @@ $_current-indicator-width: 4px;
 }
 
 #warning-link{
-  color:#D4351C ;
+  color:#D4351C;
 }
+
+#warning-link:focus{
+  color: #0b0c0c;
+}
+
 
