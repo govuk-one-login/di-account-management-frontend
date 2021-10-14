@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from "axios";
 import { getApiBaseUrl } from "../config";
-import { logger } from "./logger";
+import { ApiError } from "./errors";
 
 const headers: Readonly<Record<string, string | boolean>> = {
   Accept: "application/json",
@@ -47,16 +47,19 @@ export class Http {
   }
 
   private static handleError(error: AxiosError) {
-    const { response } = error;
-    const data = response.data;
+    let apiError;
 
-    if (data) {
-      logger.error(error.message, { error: JSON.stringify(data) });
+    if (error.response && error.response.data) {
+      apiError = new ApiError(
+        error.message,
+        error.response.status,
+        error.response.data
+      );
     } else {
-      logger.error(error.message);
+      apiError = new ApiError(error.message);
     }
 
-    return Promise.reject(error);
+    return Promise.reject(apiError);
   }
 
   private initHttp() {
