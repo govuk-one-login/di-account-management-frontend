@@ -9,8 +9,8 @@ export function authMiddleware(config: OIDCConfig): ExpressRouteFunc {
     res: Response,
     next: NextFunction
   ) {
-    req.oidc = await getOIDCClient(config).catch((err:any) =>{
-        throw new ApiError(err.message);
+    req.oidc = await getOIDCClient(config).catch((err: any) => {
+      throw new ApiError(err.message);
     });
     next();
   };
