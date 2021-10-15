@@ -18,7 +18,7 @@ const logger = pino({
         id: res.id,
         method: res.method,
         url: res.url,
-        status:res.status
+        status: res.status,
       };
     },
   },

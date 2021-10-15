@@ -37,6 +37,14 @@ export function validateChangePasswordRequest(): ValidationChainFunc {
           );
         }
         return true;
+      })
+      .custom((value, { req }) => {
+        if (value !== req.body["confirm-password"]) {
+          throw new Error(
+            req.t("pages.changePassword.password.validationError.required")
+          );
+        }
+        return true;
       }),
     body("confirm-password")
       .notEmpty()
