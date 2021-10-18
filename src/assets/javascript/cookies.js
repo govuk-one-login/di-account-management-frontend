@@ -145,6 +145,12 @@ var cookies = function (trackingId) {
           "customPixels",
         ],
       },
+      {
+        'department': {
+          'programmeteam': 'di',
+          'productteam': 'sso'
+        }
+      }
     ];
 
     function gtag(obj) {
@@ -152,6 +158,52 @@ var cookies = function (trackingId) {
     }
 
     gtag({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+
+    function addSessionJourneyToDataLayer(url) {
+      const sessionJourney = getJourneyMapping(url);
+
+      if (sessionJourney) {
+        window.dataLayer.push(sessionJourney)
+      }
+    }
+
+    const url = window.location.search.includes("type")
+        ? window.location.pathname + window.location.search
+        : window.location.pathname
+
+    addSessionJourneyToDataLayer(url);
+  }
+
+  function generateJourneySession(type, status) {
+    return {
+      sessionjourney: {
+        journey: 'account management',
+        type: type,
+        status: status
+      }
+    }
+  }
+
+  function getJourneyMapping(url) {
+
+    const JOURNEY_DATA_LAYER_PATHS = {
+      "/enter-password?type=changeEmail": generateJourneySession('change email', 'start'),
+      "/change-email": generateJourneySession('change email', 'middle'),
+      "/check-your-email": generateJourneySession('change email', 'middle'),
+      "/email-updated-confirmation": generateJourneySession('change email', 'end'),
+      "/enter-password?type=changePhoneNumber": generateJourneySession('change phone number', 'start'),
+      "/change-phone-number": generateJourneySession('change phone number', 'middle'),
+      "/check-your-phone": generateJourneySession('change phone number', 'middle'),
+      "/phone-number-updated-confirmation": generateJourneySession('change phone number', 'end'),
+      "/enter-password?type=changePassword": generateJourneySession('change password', 'start'),
+      "/change-password": generateJourneySession('change password', 'middle'),
+      "/password-updated-confirmation": generateJourneySession('change password', 'end'),
+      "/enter-password?type=deleteAccount": generateJourneySession('delete account', 'start'),
+      "/delete-account": generateJourneySession('delete account', 'middle'),
+      "/account-deleted-confirmation": generateJourneySession('delete account', 'end')
+    };
+
+    return JOURNEY_DATA_LAYER_PATHS[url];
   }
 
   function getCookie(name) {
