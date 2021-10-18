@@ -187,6 +187,11 @@ var cookies = function (trackingId) {
   function getJourneyMapping(url) {
 
     const JOURNEY_DATA_LAYER_PATHS = {
+      "/manage-your-account": {
+        sessionjourney: {
+          journey: 'account management'
+        }
+      },
       "/enter-password?type=changeEmail": generateJourneySession('change email', 'start'),
       "/change-email": generateJourneySession('change email', 'middle'),
       "/check-your-email": generateJourneySession('change email', 'middle'),
