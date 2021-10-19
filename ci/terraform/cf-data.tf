@@ -6,7 +6,3 @@ data "cloudfoundry_space" "space" {
   name = var.environment
   org  = data.cloudfoundry_org.org.id
 }
-
-data "cloudfoundry_domain" "cloudapps" {
-  name = var.cf_domain
-}

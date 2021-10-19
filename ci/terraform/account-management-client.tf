@@ -14,12 +14,12 @@ resource "random_string" "account_management_client_id" {
   upper   = true
   special = false
   number  = true
-  length = 32
+  length  = 32
 }
 
 data "aws_kms_public_key" "account_management_jwt_key" {
   depends_on = [aws_kms_key.account_management_jwt_key]
-  key_id = aws_kms_key.account_management_jwt_key.arn
+  key_id     = aws_kms_key.account_management_jwt_key.arn
 }
 
 data "aws_dynamodb_table" "client_registry_table" {
@@ -30,7 +30,7 @@ resource "aws_dynamodb_table_item" "account_management_client" {
   table_name = data.aws_dynamodb_table.client_registry_table.name
   hash_key   = data.aws_dynamodb_table.client_registry_table.hash_key
 
-  item     = jsonencode({
+  item = jsonencode({
     ClientID = {
       S = random_string.account_management_client_id.result
     }
@@ -40,8 +40,8 @@ resource "aws_dynamodb_table_item" "account_management_client" {
     Contacts = {
       L = []
     }
-    SubjectType: {
-      "S": "public"
+    SubjectType : {
+      "S" : "public"
     }
     PostLogoutRedirectUrls = {
       L = [
@@ -58,7 +58,7 @@ resource "aws_dynamodb_table_item" "account_management_client" {
       ]
     }
     Scopes = {
-      L = [for scope in local.scopes:
+      L = [for scope in local.scopes :
         {
           S = scope
         }
