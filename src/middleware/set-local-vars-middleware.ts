@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getGtmId } from "../config";
+import { getAnalyticsCookieDomain, getAuthFrontEndUrl, getGtmId } from "../config";
 import { generateNonce } from "../utils/strings";
 
 export function setLocalVarsMiddleware(
@@ -9,5 +9,7 @@ export function setLocalVarsMiddleware(
 ): void {
   res.locals.gtmId = getGtmId();
   res.locals.scriptNonce = generateNonce();
+  res.locals.authFrontEndUrl = getAuthFrontEndUrl();
+  res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   next();
 }

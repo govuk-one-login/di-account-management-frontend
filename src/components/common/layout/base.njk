@@ -89,19 +89,23 @@
         meta: {
             items: [
                 {
-                    href: "/accessibility-statement",
+                    href: authFrontEndUrl + "/accessibility-statement",
+                    attributes: { target: "_blank"},
                     text: 'general.footer.accessibilityStatement.linkText' | translate
                 },
                 {
-                    href: "/cookies",
+                    href: authFrontEndUrl + "/cookies",
+                    attributes: { target: "_blank"},
                     text: 'general.footer.cookies.linkText' | translate
                 },
                 {
-                    href: "/terms-and-conditions",
+                    href: authFrontEndUrl + "/terms-and-conditions",
+                    attributes: { target: "_blank"},
                     text: 'general.footer.terms.linkText' | translate
                 },
                 {
-                    href: "/privacy-statement",
+                    href: authFrontEndUrl + "/privacy-statement",
+                    attributes: { target: "_blank"},
                     text: 'general.footer.privacy.linkText' | translate
                 }
             ]
@@ -112,7 +116,7 @@
 {% block bodyEnd %}
   <script type="text/javascript" src="/public/scripts/cookies.js"></script>
   <script type="text/javascript"  src="/public/scripts/application.js"></script>
-  <script type="text/javascript" nonce='{{scriptNonce}}'>window.GOVSignIn.appInit("{{gtmId}}")</script>
+  <script type="text/javascript" nonce='{{scriptNonce}}'>window.GOVSignIn.appInit("{{gtmId}}", "{{ analyticsCookieDomain }}")</script>
 {% endblock %}
 
 

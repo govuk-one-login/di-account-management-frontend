@@ -1,6 +1,6 @@
 "use strict";
 
-var cookies = function (trackingId) {
+var cookies = function (trackingId, analyticsCookieDomain) {
   var COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
   var cookiesAccepted = document.querySelector("#cookies-accepted");
@@ -239,7 +239,7 @@ var cookies = function (trackingId) {
         cookieString +
         "; expires=" +
         date.toGMTString() +
-        "; path=/;";
+        "; path=/;" + " domain="+analyticsCookieDomain + ";";
     }
 
     if (document.location.protocol === "https:") {
