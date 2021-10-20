@@ -39,15 +39,13 @@
 {% block header %}
  {% if hideSignOutLink %}
     {{ govukHeader({
-           homepageUrl: "#",
-           serviceUrl: "#",
+           homepageUrl: 'general.header.homepageHref' | translate,
            serviceName: 'general.serviceNameTitle' | translate
        }) }}
 
   {% else %}
        {{ govukHeader({
-           homepageUrl: "#",
-           serviceUrl: "#",
+           homepageUrl: 'general.header.homepageHref' | translate,
            serviceName: 'general.serviceNameTitle' | translate,
            navigation: [
                {
