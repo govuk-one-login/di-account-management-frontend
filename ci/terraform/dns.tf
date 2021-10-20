@@ -1,5 +1,5 @@
 data "terraform_remote_state" "dns" {
-  count   = var.service_domain == null ? 1 : 0
+  count   = var.account_management_fqdn == null && var.oidc_api_fqdn == null ? 1 : 0
   backend = "s3"
   config = {
     bucket   = var.dns_state_bucket
@@ -10,5 +10,6 @@ data "terraform_remote_state" "dns" {
 }
 
 locals {
-  service_domain = var.service_domain == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_service_domain", "") : var.service_domain
+  account_management_fqdn = var.account_management_fqdn == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_account_management_url", "") : var.account_management_fqdn
+  oidc_api_fqdn           = var.oidc_api_fqdn == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_api_url", "") : var.oidc_api_fqdn
 }

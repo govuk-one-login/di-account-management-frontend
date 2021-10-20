@@ -18,7 +18,7 @@ resource "cloudfoundry_user_provided_service" "idp" {
   credentials_json = jsonencode({
     client_id   = random_string.account_management_client_id.result
     client_name = "${var.environment}-account-managment"
-    idp_url     = "https://api.${local.service_domain}"
+    idp_url     = "https://${local.oidc_api_fqdn}"
     scopes      = local.scopes
   })
 }

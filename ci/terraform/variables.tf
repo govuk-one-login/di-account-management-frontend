@@ -34,7 +34,11 @@ variable "environment" {
   description = "the name of the environment being deployed (e.g. sandpit, build), this also matches the PaaS space name"
 }
 
-variable "service_domain" {
+variable "account_management_fqdn" {
+  default = null
+}
+
+variable "oidc_api_fqdn" {
   default = null
 }
 

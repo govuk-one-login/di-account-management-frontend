@@ -46,14 +46,14 @@ resource "aws_dynamodb_table_item" "account_management_client" {
     PostLogoutRedirectUrls = {
       L = [
         {
-          S = "https://account-management.${local.service_domain}/account-deleted-confirmation"
+          S = "https://${local.account_management_fqdn}/account-deleted-confirmation"
         }
       ]
     }
     RedirectUrls = {
       L = [
         {
-          S = "https://account-management.${local.service_domain}/auth/callback"
+          S = "https://${local.account_management_fqdn}/auth/callback"
         }
       ]
     }
