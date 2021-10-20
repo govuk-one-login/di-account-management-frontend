@@ -8,6 +8,9 @@ image_resource:
     password: ((docker-hub-password))    
 params:
   DEPLOYER_ROLE_ARN: ((deployer-role-arn-non-prod))
+  DNS_DEPLOYER_ROLE_ARN: ((deployer-role-arn-production))
+  DNS_STATE_BUCKET: ((dns-state-bucket))
+  DNS_STATE_KEY: ((dns-state-key))
   STATE_BUCKET: digital-identity-dev-tfstate
   DEPLOY_ENVIRONMENT: build
   CF_USERNAME: ((cf-username))
@@ -35,6 +38,9 @@ run:
         -var "cf_username=${CF_USERNAME}" \
         -var "cf_password=${CF_PASSWORD}" \
         -var "cf_org_name=${CF_ORG_NAME}" \
+        -var "dns_state_bucket=${DNS_STATE_BUCKET}" \
+        -var "dns_state_key=${DNS_STATE_KEY}" \
+        -var "dns_state_role=${DNS_DEPLOYER_ROLE_ARN}" \
         -var-file ${DEPLOY_ENVIRONMENT}.tfvars
 
       terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json

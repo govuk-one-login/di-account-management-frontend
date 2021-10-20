@@ -18,11 +18,28 @@ variable "cf_org_name" {
   description = "target org"
 }
 
+variable "dns_state_bucket" {
+  default = ""
+}
+
+variable "dns_state_key" {
+  default = ""
+}
+
+variable "dns_state_role" {
+  default = ""
+}
+
 variable "environment" {
   description = "the name of the environment being deployed (e.g. sandpit, build), this also matches the PaaS space name"
 }
 
-variable "cf_domain" {
+variable "account_management_fqdn" {
+  default = null
+}
+
+variable "oidc_api_fqdn" {
+  default = null
 }
 
 variable "redis_service_plan" {
