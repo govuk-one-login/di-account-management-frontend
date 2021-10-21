@@ -2,6 +2,7 @@
   "use strict";
   function appInit(trackingId) {
     var cookies = window.GOVSignIn.Cookies(trackingId);
+    var navbar = window.GOVSignIn.Navbar();
 
     if (cookies.hasConsentForAnalytics()) {
       cookies.initAnalytics();
@@ -12,6 +13,8 @@
     } else {
       cookies.cookieBannerInit();
     }
+
+    navbar.navbarInit();
   }
   w.GOVSignIn.appInit = appInit;
 })(window);
