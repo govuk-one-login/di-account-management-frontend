@@ -1,8 +1,9 @@
 (function (w) {
   "use strict";
   function appInit(trackingId) {
+    // window.GOVUKFrontend.initAll()
     var cookies = window.GOVSignIn.Cookies(trackingId);
-    var navbar = window.GOVSignIn.Navbar();
+    // var navbar = window.GOVSignIn.Navbar();
 
     if (cookies.hasConsentForAnalytics()) {
       cookies.initAnalytics();
@@ -14,7 +15,7 @@
       cookies.cookieBannerInit();
     }
 
-    navbar.navbarInit();
+    // navbar.navbarInit();
   }
   w.GOVSignIn.appInit = appInit;
 })(window);

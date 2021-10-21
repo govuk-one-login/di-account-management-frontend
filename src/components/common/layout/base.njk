@@ -17,7 +17,6 @@
     <!--[if lt IE 9]>
     <script src="/html5-shiv/html5shiv.js"></script>
     <![endif]-->
-
 {% endblock %}
 
 {% block pageTitle %}
@@ -108,8 +107,10 @@
 {% endblock %}
 
 {% block bodyEnd %}
+  <script src="/govuk/all.js"></script>
+
   <script type="text/javascript" src="/public/scripts/cookies.js"></script>
-  <script type="text/javascript" src="/public/scripts/navbar.js"></script>
+{#  <script type="text/javascript" src="/public/scripts/navbar.js"></script>#}
   <script type="text/javascript"  src="/public/scripts/application.js"></script>
   <script type="text/javascript" nonce='{{scriptNonce}}'>window.GOVSignIn.appInit("{{gtmId}}")</script>
 {% endblock %}

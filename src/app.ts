@@ -78,6 +78,11 @@ function createApp(): express.Application {
     express.static(path.resolve("node_modules/govuk-frontend/govuk/assets"))
   );
 
+  app.use(
+      "/govuk",
+      express.static(path.resolve("node_modules/govuk-frontend/govuk"))
+  );
+
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 

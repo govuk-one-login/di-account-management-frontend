@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get(
   PATH_DATA.MANAGE_YOUR_ACCOUNT.url,
-  requiresAuthMiddleware,
+  // requiresAuthMiddleware,
   manageYourAccountGet
 );
 
