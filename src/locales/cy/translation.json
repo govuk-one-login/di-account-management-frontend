@@ -51,6 +51,9 @@
     "continue": {
       "label": "Continue"
     },
+    "header": {
+      "homepageHref": "https://www.gov.uk/"
+    },
     "footer": {
       "accessibilityStatement": {
         "pageTitle": "Accessibility statement",
