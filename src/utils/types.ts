@@ -18,3 +18,8 @@ export interface ClientAssertionServiceInterface {
     tokenEndpointUri: string
   ) => Promise<string>;
 }
+
+export interface Error {
+  text: string;
+  href: string;
+}
