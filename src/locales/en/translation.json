@@ -12,10 +12,6 @@
       "tag": "beta",
       "text": "We’re trialling GOV.UK accounts - your <a  href=\"https://www.account.publishing.service.gov.uk/feedback\" class=\"govuk-link\" rel=\"noreferrer noopener\">feedback</a> will help us improve them."
     },
-    "header":{
-      "accountLink": "Account",
-      "signOutLink": "Sign-out"
-    },
     "yes": "Yes",
     "no": "No",
     "backToAccountButtonText": "Back to your account",
@@ -52,7 +48,9 @@
       "label": "Continue"
     },
     "header": {
-      "homepageHref": "https://www.gov.uk/"
+      "homepageHref": "https://www.gov.uk/",
+      "accountLink": "Account",
+      "signOutLink": "Sign-out"
     },
     "footer": {
       "accessibilityStatement": {
