@@ -128,3 +128,6 @@ ci/terraform/.terraform
 *.tfstate
 *.tfstate.backup
 ci/terraform/*.plan
+
+//this gets added by the design system
+src/assets/javascript/all.js
