@@ -40,19 +40,22 @@
  {% if hideSignOutLink %}
     {{ govukHeader({
            homepageUrl: "#",
-           serviceUrl: "#",
-           serviceName: 'general.serviceNameTitle' | translate
+           serviceUrl: "#"
        }) }}
 
   {% else %}
        {{ govukHeader({
            homepageUrl: "#",
            serviceUrl: "#",
-           serviceName: 'general.serviceNameTitle' | translate,
+           navigationClasses: "govuk-header__navigation--end",
            navigation: [
                {
-                 href: "/sign-out",
-                 text: "Sign Out"
+                 href: govAccountsUrl,
+                 text: 'general.header.accountLink' | translate
+               },
+               {
+                   href: "/sign-out",
+                   text: 'general.header.signOutLink' | translate
                }
              ]
        }) }}

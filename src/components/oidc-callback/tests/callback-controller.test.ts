@@ -43,6 +43,7 @@ describe("callback controller", () => {
       render: sandbox.fake(),
       redirect: sandbox.fake(),
       cookie: sandbox.fake(),
+      locals:{}
     };
   });
 

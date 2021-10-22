@@ -3,7 +3,7 @@ import {
   getAnalyticsCookieDomain,
   getAuthFrontEndUrl,
   getCookiesAndFeedbackLink,
-  getGtmId,
+  getGtmId, getYourAccountUrl,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 
@@ -17,5 +17,6 @@ export function setLocalVarsMiddleware(
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.cookiesAndFeedbackUrl = getCookiesAndFeedbackLink();
+  res.locals.govAccountsUrl = getYourAccountUrl();
   next();
 }
