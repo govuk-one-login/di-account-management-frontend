@@ -39,14 +39,12 @@
 {% block header %}
  {% if hideSignOutLink %}
     {{ govukHeader({
-           homepageUrl: "#",
-           serviceUrl: "#"
+           homepageUrl: "https://gov.uk"
        }) }}
 
   {% else %}
        {{ govukHeader({
-           homepageUrl: "#",
-           serviceUrl: "#",
+           homepageUrl: "https://gov.uk",
            navigationClasses: "govuk-header__navigation--end",
            navigation: [
                {
