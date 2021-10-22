@@ -19,6 +19,7 @@ applications:
       GOV_ACCOUNTS_PUBLISHING_API_TOKEN: ((publishing_api_token))
       AUTH_FRONTEND_URL: ((auth_frontend_url))
       ANALYTICS_COOKIE_DOMAIN: ((analytics_cookie_domain))
+      COOKIES_AND_FEEDBACK_URL: ((cookies_and_feedback_url))
     routes:
       - route: ((route_name))
     services:

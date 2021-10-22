@@ -61,3 +61,7 @@ export function getAuthFrontEndUrl(): string {
 export function getAnalyticsCookieDomain(): string {
   return process.env.ANALYTICS_COOKIE_DOMAIN ?? "localhost";
 }
+
+export function getCookiesAndFeedbackLink(): string {
+  return process.env.COOKIES_AND_FEEDBACK_URL;
+}

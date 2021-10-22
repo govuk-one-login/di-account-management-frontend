@@ -71,18 +71,10 @@
             }
         ]
     }) }}
+    <h3 class="govuk-heading-m">{{ 'pages.manageYourAccount.cookiesAndFeedback.heading' | translate }}</h3>
+    <p><a href="{{ cookiesAndFeedbackUrl }}" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.cookiesAndFeedback.link' | translate }}</a></p>
+
     <h3 class="govuk-heading-m">{{ 'pages.manageYourAccount.deleteAccount.heading' | translate }}</h3>
     <p class="govuk-body">{{ 'pages.manageYourAccount.deleteAccount.info' | translate }}</p>
     <a href="/enter-password?type=deleteAccount" class="govuk-link govuk-body" id="warning-link">{{ 'pages.manageYourAccount.deleteAccount.link' | translate }}</a>
 {% endblock %}
-
-{% block feedback %}
-<div class="govuk-width-container">
-        <div class="feedback-footer">
-            <h2 class="gem-c-heading govuk-heading-m govuk-!-margin-bottom-4">{{ 'pages.manageYourAccount.feedback.heading' | translate }}</h2>
-            <p class="govuk-body govuk-!-margin-bottom-0">
-                <a href="https://www.account.publishing.service.gov.uk/feedback" class="govuk-link">{{ 'pages.manageYourAccount.feedback.link' | translate }}</a> {{ 'pages.manageYourAccount.feedback.text' | translate }}
-            </p>
-        </div>
-    </div>
- {% endblock %}

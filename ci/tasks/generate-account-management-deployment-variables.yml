@@ -17,6 +17,7 @@ params:
   GTM_ID: ((build-gtm-id))
   PUBLISHING_API_URL: ((build-gov-accounts-api-url))
   PUBLISHING_API_URL_TOKEN: ((build-gov-accounts-api-token))
+  COOKIES_AND_FEEDBACK_URL: ((build-cookies-and-feedback-url))
   ENVIRONMENT_NAME: build
   APP_INSTANCES: 1
 run:
@@ -48,4 +49,5 @@ run:
       app_instances: ${APP_INSTANCES}
       auth_frontend_url: ${AUTH_FRONTEND_URL}
       analytics_cookie_domain: ${ANALYTICS_COOKIE_DOMAIN}
+      cookies_and_feedback_url: ${COOKIES_AND_FEEDBACK_URL}
       EOF
