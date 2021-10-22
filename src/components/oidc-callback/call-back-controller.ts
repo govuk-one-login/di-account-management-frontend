@@ -16,19 +16,20 @@ export const COOKIE_CONSENT = {
 function setPreferencesCookie(cookieConsent: string, res: Response) {
   let cookieValue = "";
   let cookieExpires = new Date();
-  
+
   if ([COOKIE_CONSENT.ACCEPT, COOKIE_CONSENT.REJECT].includes(cookieConsent)) {
     cookieExpires.setFullYear(cookieExpires.getFullYear() + 1);
-    cookieValue = JSON.stringify({ analytics: cookieConsent === COOKIE_CONSENT.ACCEPT })
-  }
-  else{
+    cookieValue = JSON.stringify({
+      analytics: cookieConsent === COOKIE_CONSENT.ACCEPT,
+    });
+  } else {
     cookieExpires.setFullYear(cookieExpires.getFullYear() - 1);
   }
 
   res.cookie(COOKIES_PREFERENCES_SET, cookieValue, {
     expires: cookieExpires,
     secure: true,
-    domain: res.locals.analyticsCookieDomain
+    domain: res.locals.analyticsCookieDomain,
   });
 }
 

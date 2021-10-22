@@ -7,11 +7,7 @@
       cookies.initAnalytics();
     }
 
-    if (cookies.isOnCookiesPage()) {
-      cookies.cookiesPageInit();
-    } else {
-      cookies.cookieBannerInit();
-    }
+    cookies.cookieBannerInit();
   }
   w.GOVSignIn.appInit = appInit;
 })(window);

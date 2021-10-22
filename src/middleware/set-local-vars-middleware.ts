@@ -1,5 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { getAnalyticsCookieDomain, getAuthFrontEndUrl, getCookiesAndFeedbackLink, getGtmId } from "../config";
+import {
+  getAnalyticsCookieDomain,
+  getAuthFrontEndUrl,
+  getCookiesAndFeedbackLink,
+  getGtmId,
+} from "../config";
 import { generateNonce } from "../utils/strings";
 
 export function setLocalVarsMiddleware(
