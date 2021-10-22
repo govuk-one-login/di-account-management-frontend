@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { getYourAccountUrl } from "../../config";
 import { redactPhoneNumber } from "../../utils/strings";
 
 export function manageYourAccountGet(req: Request, res: Response): void {

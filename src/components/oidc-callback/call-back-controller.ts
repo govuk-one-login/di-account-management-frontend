@@ -15,7 +15,7 @@ export const COOKIE_CONSENT = {
 
 function setPreferencesCookie(cookieConsent: string, res: Response) {
   let cookieValue = "";
-  let cookieExpires = new Date();
+  const cookieExpires = new Date();
 
   if ([COOKIE_CONSENT.ACCEPT, COOKIE_CONSENT.REJECT].includes(cookieConsent)) {
     cookieExpires.setFullYear(cookieExpires.getFullYear() + 1);

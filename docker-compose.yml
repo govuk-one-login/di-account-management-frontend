@@ -34,4 +34,8 @@ services:
       - OIDC_CLIENT_ID=
       - AM_API_BASE_URL=
       - OIDC_CLIENT_SCOPES=
+      - AUTH_FRONTEND_URL=
+      - ANALYTICS_COOKIE_DOMAIN=
+      - COOKIES_AND_FEEDBACK_URL=
+      - GTM_ID=
     restart: on-failure
