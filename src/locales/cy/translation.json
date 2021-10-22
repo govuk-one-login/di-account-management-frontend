@@ -12,6 +12,10 @@
       "tag": "beta",
       "text": "We’re trialling GOV.UK accounts - your <a  href=\"https://www.account.publishing.service.gov.uk/feedback\" class=\"govuk-link\" rel=\"noreferrer noopener\">feedback</a> will help us improve them."
     },
+    "header":{
+      "accountLink": "Account",
+      "signOutLink": "Sign-out"
+    },
     "yes": "Yes",
     "no": "No",
     "backToAccountButtonText": "Back to your account",
@@ -119,6 +123,10 @@
         "heading": "Delete your account",
         "link": "Delete this GOV.UK account",
         "info": "You can permanently delete this account and all the information stored in it."
+      },
+      "cookiesAndFeedback": {
+        "heading": "Cookies and feedback settings",
+        "link": "Change your cookie and feedback settings"
       },
       "feedback": {
         "heading": "Help improve GOV.UK accounts",
@@ -271,6 +279,7 @@
       "warningText": "Your account will be permanently deleted. You will not be able to get it back.",
       "paragraph": "Deleting your GOV.UK account will not delete any other government accounts you have, such as Government Gateway or your Universal Credit account.",
       "deleteAccount": "Delete account",
+
       "doNotDeleteAccount": "I do not want to delete my account"
     },
     "changePhoneNumber": {

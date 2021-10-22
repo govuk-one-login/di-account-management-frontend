@@ -17,6 +17,7 @@ params:
   GTM_ID: ((build-gtm-id))
   PUBLISHING_API_URL: ((build-gov-accounts-api-url))
   PUBLISHING_API_URL_TOKEN: ((build-gov-accounts-api-token))
+  COOKIES_AND_FEEDBACK_URL: ((build-cookies-and-feedback-url))
   ENVIRONMENT_NAME: build
   APP_INSTANCES: 1
 run:
@@ -27,6 +28,7 @@ run:
       set -eu
       echo "Generating vars file..."
       API_URL="https://$(jq -r .${ENVIRONMENT_NAME}_api_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
+      AUTH_FRONTEND_URL="$(jq -r .${ENVIRONMENT_NAME}_frontend_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
       AM_URL="$(jq -r .${ENVIRONMENT_NAME}_account_management_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
       AM_API_URL="https://$(jq -r .${ENVIRONMENT_NAME}_account_management_api_url.value < domain-terraform-outputs/domain-terraform-outputs.json)"
       AM_YOUR_ACCOUNT_URL="$(jq -r .account_management_your_account_url.value < terraform-outputs/${ENVIRONMENT_NAME}-terraform-outputs.json)"
@@ -45,4 +47,7 @@ run:
       publishing_api_url: ${PUBLISHING_API_URL}
       publishing_api_token: ${PUBLISHING_API_URL_TOKEN}
       app_instances: ${APP_INSTANCES}
+      auth_frontend_url: ${AUTH_FRONTEND_URL}
+      analytics_cookie_domain: ${ANALYTICS_COOKIE_DOMAIN}
+      cookies_and_feedback_url: ${COOKIES_AND_FEEDBACK_URL}
       EOF

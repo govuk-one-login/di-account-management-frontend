@@ -39,18 +39,21 @@
 {% block header %}
  {% if hideSignOutLink %}
     {{ govukHeader({
-           homepageUrl: 'general.header.homepageHref' | translate,
-           serviceName: 'general.serviceNameTitle' | translate
+           homepageUrl: "https://gov.uk"
        }) }}
 
   {% else %}
        {{ govukHeader({
-           homepageUrl: 'general.header.homepageHref' | translate,
-           serviceName: 'general.serviceNameTitle' | translate,
+           homepageUrl: "https://gov.uk",
+           navigationClasses: "govuk-header__navigation--end",
            navigation: [
                {
-                 href: "/sign-out",
-                 text: "Sign Out"
+                 href: govAccountsUrl,
+                 text: 'general.header.accountLink' | translate
+               },
+               {
+                   href: "/sign-out",
+                   text: 'general.header.signOutLink' | translate
                }
              ]
        }) }}
@@ -87,19 +90,23 @@
         meta: {
             items: [
                 {
-                    href: "/accessibility-statement",
+                    href: authFrontEndUrl + "/accessibility-statement",
+                    attributes: { target: "_blank"},
                     text: 'general.footer.accessibilityStatement.linkText' | translate
                 },
                 {
-                    href: "/cookies",
+                    href: "https://www.gov.uk/help/cookies",
+                    attributes: { target: "_blank"},
                     text: 'general.footer.cookies.linkText' | translate
                 },
                 {
-                    href: "/terms-and-conditions",
+                    href: authFrontEndUrl + "/terms-and-conditions",
+                    attributes: { target: "_blank"},
                     text: 'general.footer.terms.linkText' | translate
                 },
                 {
-                    href: "/privacy-statement",
+                    href: authFrontEndUrl + "/privacy-statement",
+                    attributes: { target: "_blank"},
                     text: 'general.footer.privacy.linkText' | translate
                 }
             ]
@@ -110,7 +117,7 @@
 {% block bodyEnd %}
   <script type="text/javascript" src="/public/scripts/cookies.js"></script>
   <script type="text/javascript"  src="/public/scripts/application.js"></script>
-  <script type="text/javascript" nonce='{{scriptNonce}}'>window.GOVSignIn.appInit("{{gtmId}}")</script>
+  <script type="text/javascript" nonce='{{scriptNonce}}'>window.GOVSignIn.appInit("{{gtmId}}", "{{ analyticsCookieDomain }}")</script>
 {% endblock %}
 
 

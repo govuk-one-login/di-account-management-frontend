@@ -53,3 +53,15 @@ export function getGovPublishingBaseAPIToken(): string {
 export function getRedisHost(): string {
   return process.env.REDIS_HOST ?? "redis";
 }
+
+export function getAuthFrontEndUrl(): string {
+  return process.env.AUTH_FRONTEND_URL;
+}
+
+export function getAnalyticsCookieDomain(): string {
+  return process.env.ANALYTICS_COOKIE_DOMAIN ?? "localhost";
+}
+
+export function getCookiesAndFeedbackLink(): string {
+  return process.env.COOKIES_AND_FEEDBACK_URL;
+}
