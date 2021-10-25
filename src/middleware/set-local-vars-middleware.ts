@@ -3,7 +3,8 @@ import {
   getAnalyticsCookieDomain,
   getAuthFrontEndUrl,
   getCookiesAndFeedbackLink,
-  getGtmId, getYourAccountUrl,
+  getGtmId,
+  getYourAccountUrl,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 
