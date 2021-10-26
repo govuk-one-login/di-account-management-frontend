@@ -50,17 +50,22 @@ describe("Integration:: delete account", () => {
       });
 
     const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").returns({
-      endSessionUrl: function (params: any = {}) {
-        return `${process.env.API_BASE_URL}/logout?id_token_hint=${
-          params.id_token_hint
-        }&post_logout_redirect_uri=${encodeURIComponent(
-          params.post_logout_redirect_uri
-        )}`;
-      },
+    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+      return new Promise((resolve) => {
+        resolve({
+          endSessionUrl: function (params: any = {}) {
+            return `${process.env.API_BASE_URL}/logout?id_token_hint=${
+              params.id_token_hint
+            }&post_logout_redirect_uri=${encodeURIComponent(
+              params.post_logout_redirect_uri
+            )}`;
+          },
+        });
+      });
     });
 
     app = require("../../../app").createApp();
+
     baseApi = process.env.AM_API_BASE_URL;
     govUkPublishingBaseApi = process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
 

@@ -44,8 +44,8 @@ jobs:
         run: yarn build
       - name: Run unit tests
         run: yarn test:unit
-#      - name: Run integration tests
-#        run: yarn test:integration
+      - name: Run integration tests
+        run: yarn test:integration
       - name: Run lint
         run: yarn lint
     env:

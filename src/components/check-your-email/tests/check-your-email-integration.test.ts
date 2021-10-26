@@ -48,8 +48,10 @@ describe("Integration:: check your email", () => {
       });
 
     const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").returns(() => {
-      return;
+    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+      return new Promise((resolve) => {
+        resolve({});
+      });
     });
 
     app = require("../../../app").createApp();
