@@ -28,7 +28,11 @@ const cached = pMemoize(getOIDCClient, { maxAge: 43200000 });
 
 function isTokenExpired(token: string): boolean {
   const decodedToken: any = JWT.decode(token);
-  return (decodedToken.exp as number) < Date.now() / 1000;
+
+  const next60Seconds = new Date();
+  next60Seconds.setSeconds(60)
+
+  return (decodedToken.exp as number) < next60Seconds.getTime() / 1000;
 }
 
 function clientAssertionGenerator(
