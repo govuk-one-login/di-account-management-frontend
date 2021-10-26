@@ -44,6 +44,13 @@ describe("Integration:: change phone number", () => {
         next();
       });
 
+    const oidc = require("../../../utils/oidc");
+    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+      return new Promise((resolve) => {
+        resolve({});
+      });
+    });
+
     app = require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
