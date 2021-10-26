@@ -26,3 +26,4 @@ applications:
       - ((environment_name))-account-management-kms-provider
       - ((environment_name))-account-management-idp-provider
       - ((environment_name))-redis
+      - ((environment_name))-splunk
