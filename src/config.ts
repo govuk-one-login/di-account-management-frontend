@@ -55,7 +55,7 @@ export function getRedisHost(): string {
 }
 
 export function getAuthFrontEndUrl(): string {
-  return process.env.AUTH_FRONTEND_URL;
+  return "https://" + process.env.AUTH_FRONTEND_URL;
 }
 
 export function getAnalyticsCookieDomain(): string {
