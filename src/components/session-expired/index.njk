@@ -1,6 +1,6 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
+{% set hideSignOutLink = hideSignoutLink %}
 {% set pageTitleName = 'error.timeoutError.title' | translate %}
 
 {% block content %}
