@@ -30,7 +30,7 @@ function isTokenExpired(token: string): boolean {
   const decodedToken: any = JWT.decode(token);
 
   const next60Seconds = new Date();
-  next60Seconds.setSeconds(60)
+  next60Seconds.setSeconds(60);
 
   return (decodedToken.exp as number) < next60Seconds.getTime() / 1000;
 }
