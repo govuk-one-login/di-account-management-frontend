@@ -2736,6 +2736,11 @@ jose@^2.0.5:
   dependencies:
     "@panva/asn1.js" "^1.0.0"
 
+jose@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.1.2.tgz#04ed5173b0388a7c264c24eeb9810b31fe54bd77"
+  integrity sha512-1X2Lfm7myqavybkbgUyao/ocdCA9LPq0J60Miguasy7szHjViMkGadJ6Kx9WyWClgyTYQ7JPBGQ/fXuzqeZyTQ==
+
 joycon@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/joycon/-/joycon-3.0.1.tgz#9074c9b08ccf37a6726ff74a18485f85efcaddaf"
