@@ -1,11 +1,11 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosError, AxiosRequestHeaders } from "axios";
 import { getApiBaseUrl } from "../config";
 import { ApiError } from "./errors";
 
-const headers: Readonly<Record<string, string | boolean>> = {
+const headers: AxiosRequestHeaders = {
   Accept: "application/json",
   "Content-Type": "application/json; charset=utf-8",
-  "Access-Control-Allow-Credentials": true,
+  "Access-Control-Allow-Credentials": "true",
   "X-Requested-With": "XMLHttpRequest",
 };
 

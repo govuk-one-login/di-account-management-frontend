@@ -30,7 +30,9 @@ const loggerMiddleware = PinoHttp({
   autoLogging: {
     ignorePaths: [
       "/public/scripts/cookies.js",
+      "/public/scripts/all.js",
       "/public/style.css",
+      "/public/style.css.map",
       "/public/scripts/application.js",
       "/assets/images/govuk-crest-2x.png",
       "/assets/fonts/bold-b542beb274-v2.woff2",
