@@ -24,7 +24,7 @@
     "test:integration": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"src/**/*-integration.test.ts\"",
     "test:unit": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config --exclude \"src/**/*-integration.test.ts\"  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
-    "test:coverage": "nyc report",
+    "test:coverage": "nyc report --reporter=lcov --reporter=text",
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9229 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --watch src/assets/scss/application.scss dist/public/style.css"
@@ -62,7 +62,7 @@
     "express-validator": "^6.12.1",
     "govuk-frontend": "^3.13.0",
     "helmet": "4.6.0",
-    "i18next": "^21.4.0",
+    "i18next": "^21.4.1",
     "i18next-fs-backend": "^1.1.1",
     "i18next-http-middleware": "^3.1.4",
     "jsdom": "^18.0.1",
