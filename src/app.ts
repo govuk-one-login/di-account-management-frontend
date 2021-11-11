@@ -81,7 +81,6 @@ function createApp(): express.Application {
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 
-  app.use(setLocalVarsMiddleware);
   app.use(noCacheMiddleware);
 
   i18next
@@ -120,6 +119,8 @@ function createApp(): express.Application {
   app.post("*", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
   app.use(setHtmlLangMiddleware);
+
+  app.use(setLocalVarsMiddleware);
 
   registerRoutes(app);
 
