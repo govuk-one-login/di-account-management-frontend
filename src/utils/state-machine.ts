@@ -8,7 +8,6 @@ enum UserJourney {
 }
 
 type AccountManagementEvent =
-  | "AUTHENTICATED"
   | "VALUE_UPDATED"
   | "VERIFY_CODE_SENT"
   | "AUTHENTICATED"
