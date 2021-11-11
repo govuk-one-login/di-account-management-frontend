@@ -1,4 +1,9 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosError, AxiosRequestHeaders } from "axios";
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosError,
+  AxiosRequestHeaders,
+} from "axios";
 import { getApiBaseUrl } from "../config";
 import { ApiError } from "./errors";
 

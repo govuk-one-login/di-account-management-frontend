@@ -7,6 +7,7 @@ import {
   getYourAccountUrl,
 } from "../config";
 import { generateNonce } from "../utils/strings";
+import * as querystring from "querystring";
 
 export function setLocalVarsMiddleware(
   req: Request,
@@ -18,6 +19,17 @@ export function setLocalVarsMiddleware(
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.cookiesAndFeedbackUrl = getCookiesAndFeedbackLink();
-  res.locals.govAccountsUrl = getYourAccountUrl();
+  res.locals.govAccountsUrl = formatYourAccountUrl(req, getYourAccountUrl());
   next();
+}
+
+function formatYourAccountUrl(req: Request, accountUrl: string) {
+  const cookieConsent = req.cookies.cookies_preferences_set;
+  if (cookieConsent) {
+    const parsedCookie = JSON.parse(cookieConsent);
+    return parsedCookie.gaId
+      ? accountUrl + "?" + querystring.stringify({ _ga: parsedCookie.gaId })
+      : accountUrl;
+  }
+  return accountUrl;
 }

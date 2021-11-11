@@ -4,6 +4,7 @@ import { PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
+import * as querystring from "querystring";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
@@ -13,20 +14,29 @@ export const COOKIE_CONSENT = {
   NOT_ENGAGED: "not-engaged",
 };
 
-function setPreferencesCookie(cookieConsent: string, res: Response) {
-  let cookieValue = "";
+function setPreferencesCookie(
+  cookieConsent: string,
+  res: Response,
+  gaId: string
+) {
+  let cookieValue: any = {};
   const cookieExpires = new Date();
 
   if ([COOKIE_CONSENT.ACCEPT, COOKIE_CONSENT.REJECT].includes(cookieConsent)) {
     cookieExpires.setFullYear(cookieExpires.getFullYear() + 1);
-    cookieValue = JSON.stringify({
+
+    cookieValue = {
       analytics: cookieConsent === COOKIE_CONSENT.ACCEPT,
-    });
+    };
+
+    if (cookieConsent === COOKIE_CONSENT.ACCEPT && gaId) {
+      cookieValue.gaId = gaId;
+    }
   } else {
     cookieExpires.setFullYear(cookieExpires.getFullYear() - 1);
   }
 
-  res.cookie(COOKIES_PREFERENCES_SET, cookieValue, {
+  res.cookie(COOKIES_PREFERENCES_SET, JSON.stringify(cookieValue), {
     expires: cookieExpires,
     secure: true,
     domain: res.locals.analyticsCookieDomain,
@@ -42,6 +52,8 @@ export function oidcAuthCallbackGet(
       req.oidc.metadata.client_id,
       req.oidc.issuer.metadata.token_endpoint
     );
+    const gaIdParam = req.query._ga as string;
+    let redirectUri = PATH_DATA.MANAGE_YOUR_ACCOUNT.url;
 
     const tokenResponse: TokenSet = await req.oidc.callback(
       req.oidc.metadata.redirect_uris[0],
@@ -82,9 +94,14 @@ export function oidcAuthCallbackGet(
     };
 
     if (req.query.cookie_consent) {
-      setPreferencesCookie(req.query.cookie_consent as string, res);
+      setPreferencesCookie(req.query.cookie_consent as string, res, gaIdParam);
+
+      if(gaIdParam && req.query.cookie_consent === COOKIE_CONSENT.ACCEPT){
+        redirectUri = redirectUri + "?" +  querystring.stringify({_ga : gaIdParam});
+      }
+
     }
 
-    return res.redirect(PATH_DATA.MANAGE_YOUR_ACCOUNT.url);
+    return res.redirect(redirectUri);
   };
 }

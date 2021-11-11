@@ -15,6 +15,7 @@ export async function startGet(req: Request, res: Response): Promise<void> {
     redirect_uri: req.oidc.metadata.redirect_uris[0],
     cookie_consent: req.query.cookie_consent,
     vtr: JSON.stringify([VECTORS_OF_TRUST.MEDIUM]),
+    _ga: req.query._ga,
   });
 
   res.redirect(authUrl);

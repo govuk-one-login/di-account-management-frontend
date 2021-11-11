@@ -79,6 +79,22 @@ describe("callback controller", () => {
       );
     });
 
+    it("should redirect to /manage-your-account and have _ga as query param when cookie consent accepted", async () => {
+      req.query.cookie_consent = "accept";
+      req.query._ga = "2.172053219.3232.1636392870-444224.1635165988";
+
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake.returns("testassert"),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(res.cookie).to.have.calledOnce;
+      expect(res.redirect).to.have.calledWith(
+        PATH_DATA.MANAGE_YOUR_ACCOUNT.url + "?_ga=2.172053219.3232.1636392870-444224.1635165988"
+      );
+    });
+
     it("should redirect to /start when not medium level auth", async () => {
       req.oidc.callback = sandbox.fake.returns({
         accessToken: "accessToken",
