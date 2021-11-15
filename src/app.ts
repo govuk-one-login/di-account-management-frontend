@@ -72,6 +72,8 @@ function createApp(): express.Application {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
+  app.use(cookieParser());
+
   app.use(
     "/assets",
     express.static(path.resolve("node_modules/govuk-frontend/govuk/assets"))
@@ -79,7 +81,7 @@ function createApp(): express.Application {
 
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
-
+  app.use(setLocalVarsMiddleware);
   app.use(noCacheMiddleware);
 
   i18next
@@ -111,15 +113,11 @@ function createApp(): express.Application {
   );
 
   app.use(authMiddleware(getOIDCConfig()));
-
-  app.use(cookieParser());
   app.use(csurf({ cookie: getCSRFCookieOptions(isProduction) }));
 
   app.post("*", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
   app.use(setHtmlLangMiddleware);
-
-  app.use(setLocalVarsMiddleware);
 
   registerRoutes(app);
 
