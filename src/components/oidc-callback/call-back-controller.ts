@@ -96,10 +96,10 @@ export function oidcAuthCallbackGet(
     if (req.query.cookie_consent) {
       setPreferencesCookie(req.query.cookie_consent as string, res, gaIdParam);
 
-      if(gaIdParam && req.query.cookie_consent === COOKIE_CONSENT.ACCEPT){
-        redirectUri = redirectUri + "?" +  querystring.stringify({_ga : gaIdParam});
+      if (gaIdParam && req.query.cookie_consent === COOKIE_CONSENT.ACCEPT) {
+        redirectUri =
+          redirectUri + "?" + querystring.stringify({ _ga: gaIdParam });
       }
-
     }
 
     return res.redirect(redirectUri);

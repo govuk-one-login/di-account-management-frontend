@@ -91,7 +91,8 @@ describe("callback controller", () => {
 
       expect(res.cookie).to.have.calledOnce;
       expect(res.redirect).to.have.calledWith(
-        PATH_DATA.MANAGE_YOUR_ACCOUNT.url + "?_ga=2.172053219.3232.1636392870-444224.1635165988"
+        PATH_DATA.MANAGE_YOUR_ACCOUNT.url +
+          "?_ga=2.172053219.3232.1636392870-444224.1635165988"
       );
     });
 

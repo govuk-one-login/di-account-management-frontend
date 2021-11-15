@@ -4,11 +4,7 @@ import { ExpressRouteFunc, OIDCConfig } from "../types";
 import { ApiError } from "../utils/errors";
 
 export function authMiddleware(config: OIDCConfig): ExpressRouteFunc {
-  return async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     req.oidc = await getOIDCClient(config).catch((err: any) => {
       throw new ApiError(err.message);
     });
