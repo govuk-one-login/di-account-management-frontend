@@ -2,6 +2,7 @@ import { body } from "express-validator";
 import { containsNumber } from "../../utils/strings";
 import { validateBodyMiddleware } from "../../middleware/form-validation-middleware";
 import { ValidationChainFunc } from "../../types";
+import { isCommonPassword } from "../../utils/password-validation";
 
 export function validateChangePasswordRequest(): ValidationChainFunc {
   return [
@@ -29,6 +30,16 @@ export function validateChangePasswordRequest(): ValidationChainFunc {
             value,
           }
         );
+      })
+      .custom((value, { req }) => {
+        if (isCommonPassword(value)) {
+          throw new Error(
+            req.t(
+              "pages.changePassword.password.validationError.commonPassword"
+            )
+          );
+        }
+        return true;
       })
       .custom((value, { req }) => {
         if (!containsNumber(value)) {
