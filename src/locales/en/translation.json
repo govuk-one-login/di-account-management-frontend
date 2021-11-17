@@ -210,6 +210,7 @@
           "minLength": "Your password must be at least 8 characters long and must include a number",
           "maxLength": "Your password must be less than 256 characters",
           "commonPassword": "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers.",
+          "samePassword": "Your account is already using that password. Enter a different password",
           "alphaNumeric": "Your password must be at least 8 characters long and must include a number"
         }
       },

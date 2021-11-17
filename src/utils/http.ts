@@ -2,9 +2,12 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosError,
+  AxiosResponse,
   AxiosRequestHeaders,
 } from "axios";
+import { ApiResponseResult } from "../utils/types";
 import { getApiBaseUrl } from "../config";
+import { HTTP_STATUS_CODES } from "../app.constants";
 import { ApiError } from "./errors";
 
 const headers: AxiosRequestHeaders = {
@@ -13,6 +16,17 @@ const headers: AxiosRequestHeaders = {
   "Access-Control-Allow-Credentials": "true",
   "X-Requested-With": "XMLHttpRequest",
 };
+
+export function createApiResponse(
+  response: AxiosResponse,
+  status: number[] = [HTTP_STATUS_CODES.OK, HTTP_STATUS_CODES.NO_CONTENT]
+): ApiResponseResult {
+  return {
+    success: status.includes(response.status),
+    code: response.data.code,
+    message: response.data.message,
+  };
+}
 
 export function getRequestConfig(
   token: string,

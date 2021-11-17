@@ -117,6 +117,10 @@ export const ERROR_MESSAGES = {
   PAGE_NOT_FOUND: "Request page not found",
 };
 
+export const ERROR_CODES = {
+  NEW_PASSWORD_SAME_AS_EXISTING: 1024,
+};
+
 export const ENVIRONMENT_NAME = {
   PROD: "production",
   DEV: "development",
