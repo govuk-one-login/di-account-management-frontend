@@ -38,7 +38,7 @@ describe("change password controller", () => {
   describe("changePasswordPost", () => {
     it("should redirect to /password-updated-confirmation page", async () => {
       const fakeService: ChangePasswordServiceInterface = {
-        updatePassword: sandbox.fake(),
+        updatePassword: sandbox.fake.returns({ success: true }),
       };
 
       req.session.user.tokens = { accessToken: "token" };

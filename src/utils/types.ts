@@ -19,6 +19,19 @@ export interface ClientAssertionServiceInterface {
   ) => Promise<string>;
 }
 
+export interface ApiResponse {
+  code?: number;
+  message?: string;
+  email?: string;
+  data: any;
+}
+
+export interface ApiResponseResult {
+  success: boolean;
+  code?: number;
+  message?: string;
+}
+
 export interface Error {
   text: string;
   href: string;
