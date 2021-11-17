@@ -208,6 +208,30 @@ describe("Integration:: change password", () => {
       .expect(400, done);
   });
 
+  it("should throw error when 400 is returned from API", (done) => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_PASSWORD)
+      .once()
+      .reply(400, { code: 1000 });
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PASSWORD.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        password: "p@ssw0rd-123",
+        "confirm-password": "p@ssw0rd-123",
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($(".govuk-heading-l").text()).to.contains(
+          "Sorry, there is a problem with the service"
+        );
+      })
+      .expect(500, done);
+  });
+
   it("should redirect to enter phone number when valid password entered", (done) => {
     nock(baseApi).post(API_ENDPOINTS.UPDATE_PASSWORD).once().reply(204);
 

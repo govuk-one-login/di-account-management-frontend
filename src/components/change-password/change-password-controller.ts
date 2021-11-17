@@ -5,9 +5,10 @@ import { ChangePasswordServiceInterface } from "./types";
 import { changePasswordService } from "./change-password-service";
 import { getNextState } from "../../utils/state-machine";
 import {
-  formatValidationError,
   renderBadRequest,
+  formatValidationError,
 } from "../../utils/validation";
+import { BadRequestError } from "../../utils/errors";
 
 const changePasswordTemplate = "change-password/index.njk";
 
@@ -46,7 +47,7 @@ export function changePasswordPost(
       );
       return renderBadRequest(res, req, changePasswordTemplate, error);
     } else {
-      return res.render("common/errors/500.njk");
+      throw new BadRequestError(response.message, response.code);
     }
   };
 }
