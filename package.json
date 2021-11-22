@@ -90,7 +90,7 @@
     "@types/express-session": "^1.17.4",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/i18next-fs-backend": "^1.0.1",
-    "@types/node": "^16.7.13",
+    "@types/node": "^16.11.9",
     "@types/nunjucks": "^3.1.5",
     "@types/mocha": "^9.0.0",
     "@types/pino": "^6.3.11",
