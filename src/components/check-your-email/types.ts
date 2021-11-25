@@ -4,6 +4,7 @@ export interface CheckYourEmailServiceInterface {
     existingEmailAddress: string,
     replacementEmailAddress: string,
     code: string,
-    sourceIp: string
+    sourceIp: string,
+    persistentSessionId: string
   ) => Promise<boolean>;
 }

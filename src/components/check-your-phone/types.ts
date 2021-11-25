@@ -4,6 +4,7 @@ export interface CheckYourPhoneServiceInterface {
     email: string,
     phoneNumber: string,
     otp: string,
-    sourceIp: string
+    sourceIp: string,
+    persistentSessionId: string
   ) => Promise<boolean>;
 }

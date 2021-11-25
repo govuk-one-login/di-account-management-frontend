@@ -9,7 +9,8 @@ export function enterPasswordService(
     token: string,
     emailAddress: string,
     password: string,
-    sourceIp: string
+    sourceIp: string,
+    persistentSessionId: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.AUTHENTICATE,
@@ -24,7 +25,8 @@ export function enterPasswordService(
           HTTP_STATUS_CODES.FORBIDDEN,
           HTTP_STATUS_CODES.UNAUTHORIZED,
         ],
-        sourceIp
+        sourceIp,
+        persistentSessionId
       )
     );
     return status === HTTP_STATUS_CODES.NO_CONTENT;

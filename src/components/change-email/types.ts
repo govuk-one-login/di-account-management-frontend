@@ -3,6 +3,7 @@ export interface ChangeEmailServiceInterface {
     accessToken: string,
     email: string,
     notificationType: string,
-    sourceIp: string
+    sourceIp: string,
+    persistentSessionId: string
   ) => Promise<boolean>;
 }

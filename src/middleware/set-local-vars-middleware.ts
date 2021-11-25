@@ -8,6 +8,7 @@ import {
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import * as querystring from "querystring";
+import xss from "xss";
 
 export function setLocalVarsMiddleware(
   req: Request,
@@ -20,6 +21,11 @@ export function setLocalVarsMiddleware(
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.cookiesAndFeedbackUrl = getCookiesAndFeedbackLink();
   res.locals.govAccountsUrl = formatYourAccountUrl(req, getYourAccountUrl());
+  if (req.cookies && req.cookies["di-persistent-session-id"]) {
+    res.locals.persistentSessionId = xss(
+      req.cookies["di-persistent-session-id"]
+    );
+  }
   next();
 }
 

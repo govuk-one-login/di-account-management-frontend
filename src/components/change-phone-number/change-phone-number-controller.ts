@@ -39,7 +39,8 @@ export function changePhoneNumberPost(
       accessToken,
       email,
       newPhoneNumber,
-      req.ip
+      req.ip,
+      res.locals.persistentSessionId
     );
 
     req.session.user.newPhoneNumber = newPhoneNumber;

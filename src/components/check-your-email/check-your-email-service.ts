@@ -11,7 +11,8 @@ export function checkYourEmailService(
     existingEmailAddress: string,
     replacementEmailAddress: string,
     code: string,
-    sourceIp: string
+    sourceIp: string,
+    persistentSessionId: string
   ): Promise<boolean> {
     const { status }: AxiosResponse = await axios.client.post(
       API_ENDPOINTS.UPDATE_EMAIL,
@@ -23,7 +24,8 @@ export function checkYourEmailService(
       getRequestConfig(
         accessToken,
         [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
-        sourceIp
+        sourceIp,
+        persistentSessionId
       )
     );
 

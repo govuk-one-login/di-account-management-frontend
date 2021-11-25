@@ -31,7 +31,8 @@ export function checkYourPhonePost(
       email,
       newPhoneNumber,
       code,
-      req.ip
+      req.ip,
+      res.locals.persistentSessionId
     );
 
     if (isPhoneNumberUpdated) {

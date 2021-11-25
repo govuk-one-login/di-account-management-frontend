@@ -9,14 +9,15 @@ export function deleteAccountService(
   const deleteAccount = async function (
     token: string,
     email: string,
-    sourceIp: string
+    sourceIp: string,
+    persistentSessionId: string
   ): Promise<void> {
     await axios.client.post<void>(
       API_ENDPOINTS.DELETE_ACCOUNT,
       {
         email: email,
       },
-      getRequestConfig(token, null, sourceIp)
+      getRequestConfig(token, null, sourceIp, persistentSessionId)
     );
   };
 

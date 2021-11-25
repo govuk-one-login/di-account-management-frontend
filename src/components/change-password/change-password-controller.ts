@@ -24,12 +24,12 @@ export function changePasswordPost(
     const { accessToken } = req.session.user.tokens;
 
     const newPassword = req.body.password as string;
-
     const response = await service.updatePassword(
       accessToken,
       email,
       newPassword,
-      req.ip
+      req.ip,
+      res.locals.persistentSessionId
     );
 
     if (response.success) {

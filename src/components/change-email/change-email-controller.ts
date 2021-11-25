@@ -40,7 +40,8 @@ export function changeEmailPost(
       accessToken,
       newEmailAddress,
       NOTIFICATION_TYPE.VERIFY_EMAIL,
-      req.ip
+      req.ip,
+      res.locals.persistentSessionId
     );
 
     if (emailSent) {
