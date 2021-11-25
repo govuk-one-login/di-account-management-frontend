@@ -42,7 +42,8 @@ export function enterPasswordPost(
       accessToken,
       email,
       req.body["password"],
-      req.ip
+      req.ip,
+      res.locals.persistentSessionId
     );
 
     if (isAuthenticated) {

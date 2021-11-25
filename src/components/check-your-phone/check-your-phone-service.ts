@@ -10,7 +10,8 @@ export function checkYourPhoneService(
     email: string,
     phoneNumber: string,
     otp: string,
-    sourceIp: string
+    sourceIp: string,
+    persistentSessionId: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.UPDATE_PHONE_NUMBER,
@@ -22,7 +23,8 @@ export function checkYourPhoneService(
       getRequestConfig(
         accessToken,
         [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
-        sourceIp
+        sourceIp,
+        persistentSessionId
       )
     );
 

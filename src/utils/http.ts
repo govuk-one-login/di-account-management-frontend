@@ -31,7 +31,8 @@ export function createApiResponse(
 export function getRequestConfig(
   token: string,
   validationStatues?: number[],
-  sourceIp?: string
+  sourceIp?: string,
+  persistentSessionId?: string
 ): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
     headers: {
@@ -48,6 +49,10 @@ export function getRequestConfig(
 
   if (sourceIp) {
     config.headers["X-Forwarded-For"] = sourceIp;
+  }
+
+  if (persistentSessionId) {
+    config.headers["di-persistent-session-id"] = persistentSessionId;
   }
 
   return config;

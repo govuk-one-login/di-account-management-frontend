@@ -20,7 +20,12 @@ export function deleteAccountPost(
     const { email, subjectId, legacySubjectId } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    await service.deleteAccount(accessToken, email, req.ip);
+    await service.deleteAccount(
+      accessToken,
+      email,
+      req.ip,
+      res.locals.persistentSessionId
+    );
     await publishingService
       .notifyAccountDeleted({
         subjectId,

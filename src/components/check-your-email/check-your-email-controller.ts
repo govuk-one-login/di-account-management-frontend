@@ -34,7 +34,8 @@ export function checkYourEmailPost(
       email,
       newEmailAddress,
       code,
-      req.ip
+      req.ip,
+      res.locals.persistentSessionId
     );
 
     if (isEmailUpdated) {

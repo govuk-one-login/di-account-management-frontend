@@ -3,6 +3,7 @@ export interface EnterPasswordServiceInterface {
     token: string,
     email: string,
     password: string,
-    sourceIp: string
+    sourceIp: string,
+    persistentSessionId: string
   ) => Promise<boolean>;
 }
