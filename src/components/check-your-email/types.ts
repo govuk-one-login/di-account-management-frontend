@@ -5,6 +5,7 @@ export interface CheckYourEmailServiceInterface {
     replacementEmailAddress: string,
     code: string,
     sourceIp: string,
+    sessionId: string,
     persistentSessionId: string
   ) => Promise<boolean>;
 }

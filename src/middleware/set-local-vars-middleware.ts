@@ -21,6 +21,11 @@ export function setLocalVarsMiddleware(
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.cookiesAndFeedbackUrl = getCookiesAndFeedbackLink();
   res.locals.govAccountsUrl = formatYourAccountUrl(req, getYourAccountUrl());
+  if (req.cookies && req.cookies.gs) {
+    const ids = xss(req.cookies["gs"]).split(".");
+    res.locals.sessionId = ids[0];
+    res.locals.clientSessionId = ids[1];
+  }
   if (req.cookies && req.cookies["di-persistent-session-id"]) {
     res.locals.persistentSessionId = xss(
       req.cookies["di-persistent-session-id"]

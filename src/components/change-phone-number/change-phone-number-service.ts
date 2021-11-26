@@ -10,6 +10,7 @@ export function changePhoneNumberService(
     email: string,
     phoneNumber: string,
     sourceIp: string,
+    sessionId: string,
     persistentSessionId: string
   ): Promise<void> {
     await axios.client.post<void>(
@@ -19,7 +20,13 @@ export function changePhoneNumberService(
         phoneNumber,
         notificationType: NOTIFICATION_TYPE.VERIFY_PHONE_NUMBER,
       },
-      getRequestConfig(accessToken, null, sourceIp, persistentSessionId)
+      getRequestConfig(
+        accessToken,
+        null,
+        sourceIp,
+        sessionId,
+        persistentSessionId
+      )
     );
   };
 

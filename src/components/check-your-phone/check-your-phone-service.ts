@@ -11,6 +11,7 @@ export function checkYourPhoneService(
     phoneNumber: string,
     otp: string,
     sourceIp: string,
+    sessionId: string,
     persistentSessionId: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
@@ -24,6 +25,7 @@ export function checkYourPhoneService(
         accessToken,
         [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
         sourceIp,
+        sessionId,
         persistentSessionId
       )
     );

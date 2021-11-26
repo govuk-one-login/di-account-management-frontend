@@ -29,6 +29,7 @@ export function changePasswordPost(
       email,
       newPassword,
       req.ip,
+      res.locals.sessionId,
       res.locals.persistentSessionId
     );
 

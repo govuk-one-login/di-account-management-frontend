@@ -16,6 +16,7 @@ export function changePasswordService(
     email: string,
     newPassword: string,
     sourceIp: string,
+    sessionId: string,
     persistentSessionId: string
   ): Promise<ApiResponseResult> {
     const response = await axios.client.post<ApiResponse>(
@@ -28,6 +29,7 @@ export function changePasswordService(
         accessToken,
         [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
         sourceIp,
+        sessionId,
         persistentSessionId
       )
     );

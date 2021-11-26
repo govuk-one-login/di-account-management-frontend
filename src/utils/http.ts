@@ -32,7 +32,8 @@ export function getRequestConfig(
   token: string,
   validationStatues?: number[],
   sourceIp?: string,
-  persistentSessionId?: string
+  persistentSessionId?: string,
+  sessionId?: string
 ): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
     headers: {
@@ -53,6 +54,10 @@ export function getRequestConfig(
 
   if (persistentSessionId) {
     config.headers["di-persistent-session-id"] = persistentSessionId;
+  }
+
+  if (sessionId) {
+    config.headers["Session-Id"] = sessionId;
   }
 
   return config;
