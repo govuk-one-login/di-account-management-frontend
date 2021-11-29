@@ -4,6 +4,7 @@ export interface ChangeEmailServiceInterface {
     email: string,
     notificationType: string,
     sourceIp: string,
+    sessionId: string,
     persistentSessionId: string
   ) => Promise<boolean>;
 }

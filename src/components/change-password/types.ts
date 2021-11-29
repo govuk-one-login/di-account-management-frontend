@@ -6,6 +6,7 @@ export interface ChangePasswordServiceInterface {
     email: string,
     newPassword: string,
     sourceIp: string,
+    sessionId: string,
     persistentSessionId: string
   ) => Promise<ApiResponseResult>;
 }

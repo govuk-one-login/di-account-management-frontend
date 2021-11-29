@@ -40,6 +40,7 @@ export function changePhoneNumberPost(
       email,
       newPhoneNumber,
       req.ip,
+      res.locals.sessionId,
       res.locals.persistentSessionId
     );
 

@@ -24,6 +24,7 @@ export function deleteAccountPost(
       accessToken,
       email,
       req.ip,
+      res.locals.sessionId,
       res.locals.persistentSessionId
     );
     await publishingService

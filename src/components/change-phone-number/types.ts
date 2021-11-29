@@ -4,6 +4,7 @@ export interface ChangePhoneNumberServiceInterface {
     email: string,
     phoneNumber: string,
     sourceIp: string,
+    sessionId: string,
     persistentSessionId: string
   ) => Promise<void>;
 }

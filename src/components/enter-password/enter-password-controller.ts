@@ -43,6 +43,7 @@ export function enterPasswordPost(
       email,
       req.body["password"],
       req.ip,
+      res.locals.sessionId,
       res.locals.persistentSessionId
     );
 

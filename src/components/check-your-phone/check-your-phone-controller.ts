@@ -32,6 +32,7 @@ export function checkYourPhonePost(
       newPhoneNumber,
       code,
       req.ip,
+      res.locals.sessionId,
       res.locals.persistentSessionId
     );
 

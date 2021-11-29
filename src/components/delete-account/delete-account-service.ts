@@ -10,6 +10,7 @@ export function deleteAccountService(
     token: string,
     email: string,
     sourceIp: string,
+    sessionId: string,
     persistentSessionId: string
   ): Promise<void> {
     await axios.client.post<void>(
@@ -17,7 +18,7 @@ export function deleteAccountService(
       {
         email: email,
       },
-      getRequestConfig(token, null, sourceIp, persistentSessionId)
+      getRequestConfig(token, null, sourceIp, sessionId, persistentSessionId)
     );
   };
 

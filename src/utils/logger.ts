@@ -11,18 +11,32 @@ const logger = pino({
         id: req.id,
         method: req.method,
         url: req.url,
+        from: getRefererFrom(req.headers.referer),
       };
     },
     res: (res) => {
       return {
-        id: res.id,
-        method: res.method,
-        url: res.url,
-        status: res.status,
+        status: res.statusCode,
+        sessionId: res.locals.sessionId,
+        clientSessionId: res.locals.clientSessionId,
+        persistentSessionId: res.locals.persistentSessionId,
       };
     },
   },
 });
+
+export function getRefererFrom(referer: string): string {
+  if (referer) {
+    try {
+      const refererUrl = new URL(referer);
+      return refererUrl.pathname + refererUrl.search;
+    } catch (error) {
+      return undefined;
+    }
+  } else {
+    return undefined;
+  }
+}
 
 const loggerMiddleware = PinoHttp({
   logger,

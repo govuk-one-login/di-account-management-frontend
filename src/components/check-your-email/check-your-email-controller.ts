@@ -35,6 +35,7 @@ export function checkYourEmailPost(
       newEmailAddress,
       code,
       req.ip,
+      res.locals.sessionId,
       res.locals.persistentSessionId
     );
 
