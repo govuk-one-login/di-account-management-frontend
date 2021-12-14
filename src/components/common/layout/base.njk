@@ -63,15 +63,12 @@
 {% endblock %}
 
 {% block main %}
-
-
-
     <div class="govuk-width-container {{ containerClasses }}">
         {{ govukPhaseBanner({
             tag: {
                 text: 'general.phaseBanner.tag' | translate
             },
-            html: 'general.phaseBanner.text' | translate
+            html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us?supportType=PUBLIC")
         }) }}
         {% if backLink %}
             <a href="{{backLink}}" class="govuk-back-link">{{'general.back' | translate}}</a>
@@ -121,5 +118,3 @@
   <script type="text/javascript"  src="/public/scripts/all.js"></script>
   <script type="text/javascript" nonce='{{scriptNonce}}'>window.GOVSignIn.appInit("{{gtmId}}", "{{ analyticsCookieDomain }}")</script>
 {% endblock %}
-
-
