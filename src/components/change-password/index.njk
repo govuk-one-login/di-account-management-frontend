@@ -1,5 +1,5 @@
 {% extends "common/layout/base-page.njk" %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "common/show-password/macro.njk" import govukInputWithShowPassword %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
@@ -16,34 +16,9 @@
 
 <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
 
-{{ govukInput({
-    label: {
-        text: 'pages.changePassword.password.label' | translate
-    },
-    hint: {
-      text: 'pages.changePassword.password.hint' | translate
-    },
-    id: "password",
-    name: "password",
-    type: "password",
-    spellcheck: false,
-    errorMessage: {
-        text: errors['password'].text
-    } if (errors['password'])})
-}}
+    {{ govukInputWithShowPassword('pages.changePassword.password.label'  | translate, "password", errors, 'pages.changePassword.password.hint' | translate) }}
+    {{ govukInputWithShowPassword('pages.changePassword.confirmPassword.label' | translate, "confirm-password", errors) }}
 
-{{ govukInput({
-    label: {
-        text: 'pages.changePassword.confirmPassword.label' | translate
-    },
-    id: "confirm-password",
-    name: "confirm-password",
-    type: "password",
-    spellcheck: false,
-    errorMessage: {
-        text: errors['confirm-password'].text
-    } if (errors['confirm-password'])})
-}}
 {{ govukDetails({
   summaryText: 'pages.changePassword.securePasswordDetails.summary' | translate,
   text: 'pages.changePassword.securePasswordDetails.text' | translate
@@ -59,5 +34,9 @@
 
 <a href="/manage-your-account" class="govuk-link govuk-body" rel="noreferrer noopener">{{'pages.changePassword.backLink' | translate }}</a>
 
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="/public/scripts/showPassword.js"></script>
 {% endblock %}
 
