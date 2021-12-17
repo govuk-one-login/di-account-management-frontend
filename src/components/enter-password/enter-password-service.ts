@@ -27,8 +27,8 @@ export function enterPasswordService(
           HTTP_STATUS_CODES.UNAUTHORIZED,
         ],
         sourceIp,
-        sessionId,
-        persistentSessionId
+        persistentSessionId,
+        sessionId
       )
     );
     return status === HTTP_STATUS_CODES.NO_CONTENT;
