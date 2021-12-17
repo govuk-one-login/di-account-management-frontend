@@ -24,8 +24,8 @@ export function changePhoneNumberService(
         accessToken,
         null,
         sourceIp,
-        sessionId,
-        persistentSessionId
+        persistentSessionId,
+        sessionId
       )
     );
   };

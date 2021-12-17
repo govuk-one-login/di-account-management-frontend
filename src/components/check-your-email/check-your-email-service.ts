@@ -26,8 +26,8 @@ export function checkYourEmailService(
         accessToken,
         [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
         sourceIp,
-        sessionId,
-        persistentSessionId
+        persistentSessionId,
+        sessionId
       )
     );
 
