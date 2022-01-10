@@ -2,7 +2,12 @@ import redis, { ClientOpts } from "redis";
 import connect_redis, { RedisStore } from "connect-redis";
 import session from "express-session";
 import CF_CONFIG from "./cf";
-import { getRedisHost } from "../config";
+import {
+  getRedisHost,
+  getRedisPassword,
+  getRedisPort,
+  isFargate,
+} from "../config";
 const RedisStore = connect_redis(session);
 
 export interface RedisConfigCf {
@@ -15,7 +20,13 @@ export interface RedisConfigCf {
 
 export function getSessionStore(): RedisStore {
   let config: ClientOpts;
-  if (CF_CONFIG.isLocal) {
+  if (isFargate()) {
+    config = {
+      host: getRedisHost(),
+      port: getRedisPort(),
+      password: getRedisPassword(),
+    };
+  } else if (CF_CONFIG.isLocal) {
     config = {
       host: getRedisHost(),
     };

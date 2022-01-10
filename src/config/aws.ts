@@ -1,6 +1,11 @@
 import AWS from "aws-sdk";
 import CF_CONFIG from "./cf";
-import { getLocalStackBaseUrl } from "../config";
+import {
+  getAwsRegion,
+  getKmsKeyId,
+  getLocalStackBaseUrl,
+  isFargate,
+} from "../config";
 
 //refer to seed.yaml
 const LOCAL_KEY_ID = "ff275b92-0def-4dfc-b0f6-87c96b26c6c7";
@@ -31,8 +36,15 @@ function getLocalStackConfig() {
 }
 
 export function getKMSConfig(): KmsConfig {
+  if (isFargate()) {
+    return {
+      awsConfig: {
+        region: getAwsRegion(),
+      },
+      kmsKeyId: getKmsKeyId(),
+    };
+  }
   const config = getLocalStackConfig();
-
   if (CF_CONFIG.isLocal) {
     return config;
   }

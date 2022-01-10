@@ -4,9 +4,9 @@ import { DeleteAccountServiceInterface } from "./types";
 import { deleteAccountService } from "./delete-account-service";
 import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
-import CF_CONFIG from "../../config/cf";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
+import { getBaseUrl } from "../../config";
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk");
@@ -46,7 +46,7 @@ export function deleteAccountPost(
     const logoutUrl = req.oidc.endSessionUrl({
       id_token_hint: req.session.user.tokens.idToken,
       post_logout_redirect_uri:
-        CF_CONFIG.url + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
+        getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
     });
 
     req.session.destroy();
