@@ -2,7 +2,7 @@ import redis, { ClientOpts } from "redis";
 import connect_redis, { RedisStore } from "connect-redis";
 import session from "express-session";
 import CF_CONFIG from "./cf";
-import { getRedisHost } from "../config";
+import { getRedisHost, getRedisPassword, getRedisPort } from "../config";
 const RedisStore = connect_redis(session);
 
 export interface RedisConfigCf {
@@ -18,6 +18,8 @@ export function getSessionStore(): RedisStore {
   if (CF_CONFIG.isLocal) {
     config = {
       host: getRedisHost(),
+      port: getRedisPort(),
+      password: getRedisPassword(),
     };
   } else {
     const redisConfig = CF_CONFIG.getServiceCreds(

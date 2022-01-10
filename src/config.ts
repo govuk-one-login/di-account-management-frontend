@@ -54,6 +54,14 @@ export function getRedisHost(): string {
   return process.env.REDIS_HOST ?? "redis";
 }
 
+export function getRedisPort(): number {
+  return Number(process.env.REDIS_PORT) ?? 6379;
+}
+
+export function getRedisPassword(): string {
+  return process.env.REDIS_PASSWORD;
+}
+
 export function getAuthFrontEndUrl(): string {
   return "https://" + process.env.AUTH_FRONTEND_URL;
 }
