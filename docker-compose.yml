@@ -19,7 +19,9 @@ services:
       - 6379:6379
 
   di-auth-account-management-frontend:
-    build: .
+    build:
+      context: .
+      dockerfile: local.Dockerfile
     ports:
       - 6001:6001
       - 9240:9230
