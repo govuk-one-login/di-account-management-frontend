@@ -1,14 +1,16 @@
 import { OIDCConfig } from "../types";
 import CF_CONFIG from "./cf";
 import {
+  getBaseUrl,
   getOIDCApiDiscoveryUrl,
   getOIDCClientId,
   getOIDCClientScopes,
+  isFargate,
 } from "../config";
 
 export function getOIDCConfig(): OIDCConfig {
-  const callBackUrl = CF_CONFIG.url + "/auth/callback";
-  if (CF_CONFIG.isLocal) {
+  const callBackUrl = getBaseUrl() + "/auth/callback";
+  if (CF_CONFIG.isLocal || isFargate()) {
     return {
       client_id: getOIDCClientId(),
       idp_url: getOIDCApiDiscoveryUrl(),
