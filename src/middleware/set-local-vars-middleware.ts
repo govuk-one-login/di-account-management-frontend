@@ -7,7 +7,6 @@ import {
   getYourAccountUrl,
 } from "../config";
 import { generateNonce } from "../utils/strings";
-import * as querystring from "querystring";
 import xss from "xss";
 
 export function setLocalVarsMiddleware(
@@ -20,7 +19,8 @@ export function setLocalVarsMiddleware(
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.cookiesAndFeedbackUrl = getCookiesAndFeedbackLink();
-  res.locals.govAccountsUrl = formatYourAccountUrl(req, getYourAccountUrl());
+  res.locals.govAccountsUrl = getYourAccountUrl();
+
   if (req.cookies && req.cookies.gs) {
     const ids = xss(req.cookies["gs"]).split(".");
     res.locals.sessionId = ids[0];
@@ -32,15 +32,4 @@ export function setLocalVarsMiddleware(
     );
   }
   next();
-}
-
-function formatYourAccountUrl(req: Request, accountUrl: string) {
-  const cookieConsent = req.cookies.cookies_preferences_set;
-  if (cookieConsent) {
-    const parsedCookie = JSON.parse(cookieConsent);
-    return parsedCookie.gaId
-      ? accountUrl + "?" + querystring.stringify({ _ga: parsedCookie.gaId })
-      : accountUrl;
-  }
-  return accountUrl;
 }

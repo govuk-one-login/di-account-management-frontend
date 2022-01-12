@@ -52,7 +52,7 @@ export function oidcAuthCallbackGet(
       req.oidc.metadata.client_id,
       req.oidc.issuer.metadata.token_endpoint
     );
-    const gaIdParam = req.query._ga as string;
+    const crossDomainGaIdParam = req.query._ga as string;
     let redirectUri = PATH_DATA.MANAGE_YOUR_ACCOUNT.url;
 
     const tokenResponse: TokenSet = await req.oidc.callback(
@@ -94,11 +94,20 @@ export function oidcAuthCallbackGet(
     };
 
     if (req.query.cookie_consent) {
-      setPreferencesCookie(req.query.cookie_consent as string, res, gaIdParam);
+      setPreferencesCookie(
+        req.query.cookie_consent as string,
+        res,
+        crossDomainGaIdParam
+      );
 
-      if (gaIdParam && req.query.cookie_consent === COOKIE_CONSENT.ACCEPT) {
+      if (
+        crossDomainGaIdParam &&
+        req.query.cookie_consent === COOKIE_CONSENT.ACCEPT
+      ) {
         redirectUri =
-          redirectUri + "?" + querystring.stringify({ _ga: gaIdParam });
+          redirectUri +
+          "?" +
+          querystring.stringify({ _ga: crossDomainGaIdParam });
       }
     }
 
