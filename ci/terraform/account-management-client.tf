@@ -75,6 +75,9 @@ resource "aws_dynamodb_table_item" "account_management_client" {
     },
     CookieConsentShared = {
       N = "1"
+    },
+    ConsentRequired = {
+      N = "0"
     }
   })
 }
