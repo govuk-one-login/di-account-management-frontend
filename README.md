@@ -22,7 +22,7 @@ The client created by the pipeline is not currently usable by a local account ma
 1. Copy an existing client in the database, or [register a new one](https://auth-tech-docs.london.cloudapps.digital/manage-your-service-s-configuration/#register-your-service-to-use-gov-uk-sign-in).
 1. In the database update the following values:
     - SubjectType = public
-    - IsInternalService = 1
+    - ConsentRequired = 0
     - RedirectUrls = ["http://localhost:6001/auth/callback"]
     - Scopes = ["openid", "phone", "email", "am", "offline_access", "govuk-account"]
 1. Copy and paste the public key from step 1.
