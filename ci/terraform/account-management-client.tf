@@ -70,9 +70,6 @@ resource "aws_dynamodb_table_item" "account_management_client" {
     ServiceType = {
       S = "MANDATORY"
     }
-    IsInternalService = {
-      N = "1"
-    },
     CookieConsentShared = {
       N = "1"
     },
