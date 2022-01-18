@@ -2,12 +2,15 @@ import request from "supertest";
 import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { PATH_DATA } from "../../../app.constants";
+import decache from "decache";
 
 describe("Integration::healthcheck", () => {
   let sandbox: sinon.SinonSandbox;
   let app: any;
 
   before(() => {
+    decache("../../../app");
+    decache("../../../middleware/requires-auth-middleware");
     sandbox = sinon.createSandbox();
     app = require("../../../app").createApp();
   });
