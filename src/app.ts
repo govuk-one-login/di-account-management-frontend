@@ -60,7 +60,6 @@ function registerRoutes(app: express.Application) {
   app.use(deleteAccountRouter);
   app.use(checkYourPhoneRouter);
   app.use(sessionExpiredRouter);
-  app.use(healthcheckRouter);
 }
 
 function createApp(): express.Application {
@@ -114,6 +113,7 @@ function createApp(): express.Application {
     })
   );
 
+  app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
   app.use(csurf({ cookie: getCSRFCookieOptions(isProduction) }));
 
