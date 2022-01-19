@@ -10,6 +10,7 @@
   "scripts": {
     "build-ts": "tsc",
     "build": "yarn build-sass && yarn build-ts && yarn minfiy-build-js && yarn copy-assets",
+    "build-production": "yarn build-sass && yarn minfiy-build-js && yarn copy-assets",
     "build-sass": "rm -rf dist/public/style.css && sass --no-source-map src/assets/scss/application.scss dist/public/style.css --style compressed",
     "clean": "rm -rf dist node_modules logs.json",
     "copy-assets": "mkdir -p dist && copyfiles -u 1 src/**/*.njk dist/ src/locales/**/** dist/ src/config/*.txt dist/ && copyfiles -u 3 src/assets/javascript/*.js dist/public/scripts -e **/all.js && cp node_modules/govuk-frontend/govuk/all.js dist/public/scripts",
@@ -60,6 +61,7 @@
     "cfenv": "^1.2.4",
     "connect-redis": "^6.0.0",
     "cookie-parser": "^1.4.5",
+    "copyfiles": "^2.4.1",
     "csurf": "^1.11.0",
     "dompurify": "^2.3.0",
     "express": "^4.17.1",
@@ -80,6 +82,8 @@
     "pino-http": "^6.5.0",
     "prettier": "^2.3.2",
     "redis": "^3.1.2",
+    "sass": "^1.43.4",
+    "uglify-js": "^3.14.3",
     "uuid": "^8.3.2",
     "xss": "^1.0.10",
     "xstate": "^4.26.1"
