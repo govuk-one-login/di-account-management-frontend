@@ -69,6 +69,7 @@ export const PATH_DATA: {
   SESSION_EXPIRED: { url: "/session-expired" },
   SIGN_OUT: { url: "/sign-out" },
   START: { url: "/" },
+  HEALTHCHECK: { url: "/healthcheck" },
 };
 
 export const API_ENDPOINTS = {

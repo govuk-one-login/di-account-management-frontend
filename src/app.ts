@@ -39,6 +39,7 @@ import { checkYourPhoneRouter } from "./components/check-your-phone/check-your-p
 import { noCacheMiddleware } from "./middleware/no-cache-middleware";
 import { sessionExpiredRouter } from "./components/session-expired/session-expired-routes";
 import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
+import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -112,6 +113,7 @@ function createApp(): express.Application {
     })
   );
 
+  app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
   app.use(csurf({ cookie: getCSRFCookieOptions(isProduction) }));
 
