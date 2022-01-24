@@ -15,7 +15,7 @@ describe("Integration:: change email", () => {
   let baseApi: string;
   const TEST_SUBJECT_ID = "jkduasd";
 
-  before((done) => {
+  before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
@@ -53,17 +53,16 @@ describe("Integration:: change email", () => {
       });
     });
 
-    app = require("../../../app").createApp();
+    app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     request(app)
       .get(PATH_DATA.CHANGE_EMAIL.url)
-      .expect((res) => {
+      .end((err, res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];
-      })
-      .expect(200, done);
+      });
   });
 
   beforeEach(() => {

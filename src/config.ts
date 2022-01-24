@@ -1,8 +1,6 @@
 import CF_CONFIG from "./config/cf";
-
-const AWS = require("aws-sdk");
-
-const SSM = new AWS.SSM();
+import ssm from "./utils/ssm";
+import { RedisConfig } from "./types";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -68,8 +66,27 @@ export function getRedisPort(): number {
   return Number(process.env.REDIS_PORT) ?? 6379;
 }
 
-export function getRedisPassword(): any {
-  return getParameter(getAppEnv() + "-redis-password");
+export async function getRedisConfig(appEnv: string): Promise<RedisConfig> {
+  const hostKey = `${appEnv}-${process.env.REDIS_KEY}-redis-master-host`;
+  const portKey = `${appEnv}-${process.env.REDIS_KEY}-redis-master-port`;
+  const passwordKey = `${appEnv}-${process.env.REDIS_KEY}-redis-master-password`;
+
+  const params = {
+    Names: [hostKey, portKey, passwordKey],
+    WithDecryption: true,
+  };
+
+  const result = await ssm.getParameters(params).promise();
+
+  if (result.InvalidParameters && result.InvalidParameters.length > 0) {
+    throw Error("Invalid SSM config values for redis");
+  }
+
+  return {
+    password: result.Parameters[passwordKey].Value,
+    host: result.Parameters[hostKey].Value,
+    port: result.Parameters[portKey].Value,
+  };
 }
 
 export function getAuthFrontEndUrl(): string {
@@ -85,12 +102,12 @@ export function getCookiesAndFeedbackLink(): string {
 }
 
 export function isFargate(): boolean {
-  return false;
+  return process.env.FARGATE === "1";
 }
 
 export function getBaseUrl(): string {
   if (isFargate()) {
-    return "?";
+    return "https://" + process.env.BASE_URL;
   } else {
     return CF_CONFIG.url;
   }
@@ -103,12 +120,3 @@ export function getAwsRegion(): string {
 export function getKmsKeyId(): string {
   return process.env.KMS_KEY_ID;
 }
-
-const getParameter = async (parameterName: string) => {
-  const result = await SSM.getParameter({
-    Name: `${parameterName}`,
-    WithDecryption: true,
-  }).promise();
-
-  return result.Parameter.Value;
-};

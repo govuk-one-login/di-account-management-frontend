@@ -16,7 +16,7 @@ describe("Integration::enter password", () => {
 
   const ENDPOINT = PATH_DATA.ENTER_PASSWORD.url;
 
-  before(() => {
+  before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
@@ -59,7 +59,7 @@ describe("Integration::enter password", () => {
       });
     });
 
-    app = require("../../../app").createApp();
+    app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     request(app)

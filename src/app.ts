@@ -13,7 +13,13 @@ import session from "express-session";
 import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
-import { getNodeEnv, getSessionExpiry, getSessionSecret } from "./config";
+import {
+  getNodeEnv,
+  getRedisConfig,
+  getSessionExpiry,
+  getSessionSecret,
+  isFargate,
+} from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
@@ -46,23 +52,7 @@ const APP_VIEWS = [
   path.resolve("node_modules/govuk-frontend/"),
 ];
 
-function registerRoutes(app: express.Application) {
-  app.use(manageYourAccountRouter);
-  app.use(oidcAuthCallbackRouter);
-  app.use(startRouter);
-  app.use(logoutRouter);
-  app.use(enterPasswordRouter);
-  app.use(changeEmailRouter);
-  app.use(updateConfirmationRouter);
-  app.use(changePasswordRouter);
-  app.use(checkYourEmailRouter);
-  app.use(changePhoneNumberRouter);
-  app.use(deleteAccountRouter);
-  app.use(checkYourPhoneRouter);
-  app.use(sessionExpiredRouter);
-}
-
-function createApp(): express.Application {
+async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
   const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
 
@@ -97,10 +87,15 @@ function createApp(): express.Application {
   app.use(i18nextMiddleware.handle(i18next));
   app.use(helmet(helmetConfiguration));
 
+  const redisConfig =
+    isProduction && isFargate()
+      ? await getRedisConfig(getNodeEnv())
+      : undefined;
+
   app.use(
     session({
       name: "am",
-      store: getSessionStore(),
+      store: getSessionStore(redisConfig),
       saveUninitialized: false,
       secret: getSessionSecret(),
       resave: false,
@@ -121,7 +116,19 @@ function createApp(): express.Application {
   app.use(csrfMiddleware);
   app.use(setHtmlLangMiddleware);
 
-  registerRoutes(app);
+  app.use(manageYourAccountRouter);
+  app.use(oidcAuthCallbackRouter);
+  app.use(startRouter);
+  app.use(logoutRouter);
+  app.use(enterPasswordRouter);
+  app.use(changeEmailRouter);
+  app.use(updateConfirmationRouter);
+  app.use(changePasswordRouter);
+  app.use(checkYourEmailRouter);
+  app.use(changePhoneNumberRouter);
+  app.use(deleteAccountRouter);
+  app.use(checkYourPhoneRouter);
+  app.use(sessionExpiredRouter);
 
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
