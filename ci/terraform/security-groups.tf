@@ -6,6 +6,8 @@ resource "aws_security_group" "am_frontend_redis_security_group" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = local.default_tags
 }
 
 resource "aws_security_group_rule" "allow_incoming_am_frontend_redis_from_private_subnet" {
@@ -26,6 +28,8 @@ resource "aws_security_group" "allow_access_to_am_frontend_redis" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = local.default_tags
 }
 
 resource "aws_security_group_rule" "allow_connection_to_am_frontend_redis" {

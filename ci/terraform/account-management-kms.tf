@@ -3,6 +3,8 @@ resource "aws_kms_key" "account_management_jwt_key" {
   deletion_window_in_days  = 30
   key_usage                = "SIGN_VERIFY"
   customer_master_key_spec = "RSA_2048"
+
+  tags = local.default_tags
 }
 
 resource "aws_kms_alias" "account_management_jwt_alias" {
@@ -31,10 +33,14 @@ resource "aws_iam_policy" "account_management_jwt_lambda_kms_policy" {
   description = "IAM policy for managing KMS connection for account management application"
 
   policy = data.aws_iam_policy_document.account_management_jwt_kms_policy_document.json
+
+  tags = local.default_tags
 }
 
 resource "aws_iam_user" "account_management_app" {
   name = "${var.environment}-account-management-application"
+
+  tags = local.default_tags
 }
 
 resource "aws_iam_user_policy_attachment" "account_management_app_kms_policy" {
@@ -66,6 +72,8 @@ data "aws_iam_policy_document" "account_management_app_role_assume_policy" {
 
 resource "aws_iam_role" "account_management_app_role" {
   assume_role_policy = data.aws_iam_policy_document.account_management_app_role_assume_policy.json
+
+  tags = local.default_tags
 }
 
 resource "aws_iam_role_policy_attachment" "account_management_app_kms" {
