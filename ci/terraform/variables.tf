@@ -52,3 +52,10 @@ variable "your_account_url" {
   type        = string
   description = "the url to the GOV.UK account - Your Account homepage"
 }
+
+variable "common_state_bucket" {
+}
+
+variable "redis_node_size" {
+  default = "cache.t2.small"
+}
