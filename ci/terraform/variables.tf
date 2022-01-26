@@ -56,3 +56,6 @@ variable "your_account_url" {
 variable "common_state_bucket" {
 }
 
+variable "redis_node_size" {
+  default = "cache.t2.small"
+}
