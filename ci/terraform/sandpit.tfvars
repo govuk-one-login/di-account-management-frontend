@@ -3,3 +3,4 @@ account_management_fqdn = "account-management.sandpit.auth.ida.digital.cabinet-o
 oidc_api_fqdn           = "api.sandpit.auth.ida.digital.cabinet-office.gov.uk"
 environment             = "sandpit"
 your_account_url        = "https://www.gov.uk/account/home"
+common_state_bucket     = "digital-identity-dev-tfstate"
