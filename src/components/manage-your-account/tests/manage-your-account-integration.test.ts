@@ -7,7 +7,7 @@ import decache from "decache";
 describe("Integration:: manage your account", () => {
   let sandbox: sinon.SinonSandbox;
   let app: any;
-  before(() => {
+  before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
@@ -36,7 +36,7 @@ describe("Integration:: manage your account", () => {
       });
     });
 
-    app = require("../../../app").createApp();
+    app = await require("../../../app").createApp();
   });
 
   beforeEach(() => {

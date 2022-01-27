@@ -2,42 +2,33 @@ import redis, { ClientOpts } from "redis";
 import connect_redis, { RedisStore } from "connect-redis";
 import session from "express-session";
 import CF_CONFIG from "./cf";
-import {
-  getRedisHost,
-  getRedisPassword,
-  getRedisPort,
-  isFargate,
-} from "../config";
+import { getRedisHost, getRedisPort, isFargate } from "../config";
+import { RedisConfig } from "../types";
 const RedisStore = connect_redis(session);
 
-export interface RedisConfigCf {
-  host: string;
-  name: string;
-  port: string;
-  password: string;
-  uri: string;
-}
-
-export function getSessionStore(): RedisStore {
+export function getSessionStore(redisConfig: RedisConfig): RedisStore {
   let config: ClientOpts;
+
   if (isFargate()) {
-    config = {
-      host: getRedisHost(),
-      port: getRedisPort(),
-      password: getRedisPassword(),
-    };
-  } else if (CF_CONFIG.isLocal) {
-    config = {
-      host: getRedisHost(),
-    };
-  } else {
-    const redisConfig = CF_CONFIG.getServiceCreds(
-      /-redis$/gims
-    ) as RedisConfigCf;
     config = {
       host: redisConfig.host,
       port: parseInt(redisConfig.port),
       password: redisConfig.password,
+      tls: true,
+    };
+  } else if (CF_CONFIG.isLocal) {
+    config = {
+      host: getRedisHost(),
+      port: getRedisPort(),
+    };
+  } else {
+    const redisConfigCf = CF_CONFIG.getServiceCreds(
+      /-redis$/gims
+    ) as RedisConfig;
+    config = {
+      host: redisConfigCf.host,
+      port: parseInt(redisConfigCf.port),
+      password: redisConfigCf.password,
       tls: true,
     };
   }

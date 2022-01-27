@@ -16,7 +16,7 @@ describe("Integration:: check your email", () => {
   let govUkPublishingBaseApi: string;
   const TEST_SUBJECT_ID = "jkduasd";
 
-  before(() => {
+  before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
@@ -54,7 +54,7 @@ describe("Integration:: check your email", () => {
       });
     });
 
-    app = require("../../../app").createApp();
+    app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
     govUkPublishingBaseApi = process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
 

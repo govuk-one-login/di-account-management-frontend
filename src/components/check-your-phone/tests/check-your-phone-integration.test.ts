@@ -14,7 +14,7 @@ describe("Integration:: check your phone", () => {
   let app: any;
   let baseApi: string;
 
-  before(() => {
+  before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
@@ -51,7 +51,7 @@ describe("Integration:: check your phone", () => {
       });
     });
 
-    app = require("../../../app").createApp();
+    app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     request(app)
