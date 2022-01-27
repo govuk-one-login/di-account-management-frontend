@@ -1,6 +1,7 @@
 import CF_CONFIG from "./config/cf";
 import ssm from "./utils/ssm";
 import { RedisConfig } from "./types";
+import { Parameter } from "aws-sdk/clients/ssm";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -68,8 +69,8 @@ export function getRedisPort(): number {
 
 export async function getRedisConfig(appEnv: string): Promise<RedisConfig> {
   const hostKey = `${appEnv}-${process.env.REDIS_KEY}-redis-master-host`;
-  const portKey = `${appEnv}-${process.env.REDIS_KEY}-redis-master-port`;
-  const passwordKey = `${appEnv}-${process.env.REDIS_KEY}-redis-master-password`;
+  const portKey = `${appEnv}-${process.env.REDIS_KEY}-redis-port`;
+  const passwordKey = `${appEnv}-${process.env.REDIS_KEY}-redis-password`;
 
   const params = {
     Names: [hostKey, portKey, passwordKey],
@@ -83,9 +84,9 @@ export async function getRedisConfig(appEnv: string): Promise<RedisConfig> {
   }
 
   return {
-    password: result.Parameters[passwordKey].Value,
-    host: result.Parameters[hostKey].Value,
-    port: result.Parameters[portKey].Value,
+    password: result.Parameters.find((p: Parameter) => p.Name === passwordKey).Value,
+    host: result.Parameters.find((p: Parameter) => p.Name === hostKey).Value,
+    port: result.Parameters.find((p: Parameter) => p.Name === portKey).Value,
   };
 }
 
