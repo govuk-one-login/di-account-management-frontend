@@ -14,6 +14,7 @@ import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
+  getAppEnv,
   getNodeEnv,
   getRedisConfig,
   getSessionExpiry,
@@ -89,7 +90,7 @@ async function createApp(): Promise<express.Application> {
 
   const redisConfig =
     isProduction && isFargate()
-      ? await getRedisConfig(getNodeEnv())
+      ? await getRedisConfig(getAppEnv())
       : undefined;
 
   app.use(
