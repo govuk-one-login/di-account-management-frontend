@@ -1,17 +1,14 @@
-
 resource "aws_lb" "account_management_alb" {
-  count              = var.environment == "sandpit" ? 1 : 0
   name               = "${var.environment}-account-management-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.account_management_alb_sg[0].id]
-  subnets            = var.account_management_alb_subnets
+  security_groups    = [aws_security_group.account_management_alb_sg.id]
+  subnets            = local.public_subnet_ids
 
   enable_deletion_protection = false
 }
 
 resource "aws_alb_target_group" "account_management_alb_target_group" {
-  count       = var.environment == "sandpit" ? 1 : 0
   name        = "${var.environment}-am-alb-tg"
   port        = 80
   protocol    = "HTTP"
@@ -30,8 +27,7 @@ resource "aws_alb_target_group" "account_management_alb_target_group" {
 }
 
 resource "aws_alb_listener" "account_management_alb_listener_https" {
-  count             = var.environment == "sandpit" ? 1 : 0
-  load_balancer_arn = aws_lb.account_management_alb[0].id
+  load_balancer_arn = aws_lb.account_management_alb.id
   port              = 443
   protocol          = "HTTPS"
 
@@ -39,7 +35,7 @@ resource "aws_alb_listener" "account_management_alb_listener_https" {
   certificate_arn = aws_acm_certificate.account_management_fg_certificate.arn
 
   default_action {
-    target_group_arn = aws_alb_target_group.account_management_alb_target_group[0].id
+    target_group_arn = aws_alb_target_group.account_management_alb_target_group.id
     type             = "forward"
   }
 }

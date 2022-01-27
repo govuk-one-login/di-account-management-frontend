@@ -42,6 +42,14 @@ variable "oidc_api_fqdn" {
   default = null
 }
 
+variable "account_management_api_fqdn" {
+  default = null
+}
+variable "frontend_fqdn" {
+  default = null
+}
+
+
 variable "service_domain" {
   default = null
 }
@@ -54,14 +62,6 @@ variable "redis_service_plan" {
   type        = string
   default     = "tiny-5_x"
   description = "The PaaS service plan (instance size) to use for Redis. For a full list of options, run 'cf marketplace -e redis'"
-}
-
-variable "redis_host" {
-  type = string
-}
-
-variable "redis_replica_host" {
-  type = string
 }
 
 variable "redis_key" {
@@ -122,39 +122,7 @@ variable "account_management_app_port" {
   type = number
 }
 
-variable "app_env" {
-  type = string
-}
-
-variable "fargate" {
-  type = string
-}
-
-variable "api_base_url" {
-  type = string
-}
-
-variable "oidc_client_scopes" {
-  type = string
-}
-
-variable "oidc_client_id" {
-  type = string
-}
-
-variable "am_api_base_url" {
-  type = string
-}
-
-variable "kms_key_id" {
-  type = string
-}
-
 variable "session_expiry" {
-  type = string
-}
-
-variable "session_secret" {
   type = string
 }
 
@@ -167,14 +135,6 @@ variable "gov_accounts_publishing_api_url" {
 }
 
 variable "gov_account_publishing_api_token" {
-  type = string
-}
-
-variable "auth_frontend_url" {
-  type = string
-}
-
-variable "analytics_cookie_domain" {
   type = string
 }
 

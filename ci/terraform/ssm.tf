@@ -1,5 +1,5 @@
 locals {
-  redis_key = "account-management-fg"
+  redis_key = "account-management-frontend"
 }
 
 data "aws_iam_policy_document" "key_policy" {
@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "key_policy" {
 }
 
 resource "aws_kms_key" "parameter_store_key" {
-  description             = "KMS key for account management parameter store"
+  description             = "KMS key for account management frontend parameter store"
   deletion_window_in_days = 30
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.key_policy.json
@@ -35,7 +35,7 @@ resource "aws_kms_key" "parameter_store_key" {
 }
 
 resource "aws_kms_alias" "parameter_store_key_alias" {
-  name          = "alias/${var.environment}-acct-mgmt-fg-parameter-store-encryption-key"
+  name          = "alias/${var.environment}-acct-mgmt-frontend-parameter-store-encryption-key"
   target_key_id = aws_kms_key.parameter_store_key.id
 }
 
@@ -43,14 +43,14 @@ resource "aws_ssm_parameter" "redis_master_host" {
   name   = "${var.environment}-${local.redis_key}-redis-master-host"
   type   = "SecureString"
   key_id = aws_kms_alias.parameter_store_key_alias.id
-  value  = var.redis_host
+  value  = aws_elasticache_replication_group.account_management_sessions_store.primary_endpoint_address
 }
 
 resource "aws_ssm_parameter" "redis_replica_host" {
   name   = "${var.environment}-${local.redis_key}-redis-replica-host"
   type   = "SecureString"
   key_id = aws_kms_alias.parameter_store_key_alias.id
-  value  = var.redis_replica_host
+  value  = aws_elasticache_replication_group.account_management_sessions_store.reader_endpoint_address
 }
 
 resource "aws_ssm_parameter" "redis_tls" {
@@ -71,7 +71,7 @@ resource "aws_ssm_parameter" "redis_port" {
   name   = "${var.environment}-${local.redis_key}-redis-port"
   type   = "SecureString"
   key_id = aws_kms_alias.parameter_store_key_alias.id
-  value  = 6379
+  value  = aws_elasticache_replication_group.account_management_sessions_store.port
 }
 
 data "aws_iam_policy_document" "redis_parameter_policy" {

@@ -1,6 +1,5 @@
 
 resource "aws_security_group" "account_management_alb_sg" {
-  count  = var.environment == "sandpit" ? 1 : 0
   name   = "${var.environment}-account-management-alb-security-group"
   vpc_id = var.account_management_vpc_id
 
@@ -29,7 +28,6 @@ resource "aws_security_group" "account_management_alb_sg" {
 }
 
 resource "aws_security_group" "account_management_ecs_tasks_sg" {
-  count  = var.environment == "sandpit" ? 1 : 0
   name   = "${var.environment}-account-management-ecs-tasks-security-group"
   vpc_id = var.account_management_vpc_id
 
@@ -38,7 +36,7 @@ resource "aws_security_group" "account_management_ecs_tasks_sg" {
     protocol        = "tcp"
     from_port       = var.account_management_app_port
     to_port         = var.account_management_app_port
-    security_groups = [aws_security_group.account_management_alb_sg[0].id]
+    security_groups = [aws_security_group.account_management_alb_sg.id]
   }
 
   egress {

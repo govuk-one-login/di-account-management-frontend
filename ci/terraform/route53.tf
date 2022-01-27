@@ -7,8 +7,8 @@ resource "aws_route53_record" "account_management_fg" {
 
   alias {
     evaluate_target_health = false
-    name                   = aws_lb.account_management_alb[0].dns_name
-    zone_id                = aws_lb.account_management_alb[0].zone_id
+    name                   = aws_lb.account_management_alb.dns_name
+    zone_id                = aws_lb.account_management_alb.zone_id
   }
 }
 
