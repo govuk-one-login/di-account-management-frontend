@@ -18,15 +18,14 @@ resource "aws_ecs_service" "account_management_ecs_service" {
       aws_security_group.allow_access_to_am_frontend_redis.id,
     ]
     subnets          = local.private_subnet_ids
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   load_balancer {
     target_group_arn = aws_alb_target_group.account_management_alb_target_group.arn
-    container_name   = "${var.environment}-account-management-ecs-task-definition-container"
+    container_name   = "account-management-application"
     container_port   = var.account_management_app_port
   }
-
 }
 
 resource "aws_ecs_task_definition" "account_management_task_definition" {
@@ -39,7 +38,7 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
   memory                   = 2048
   container_definitions = jsonencode([
     {
-      name      = "${var.environment}-account-management-ecs-task-definition-container"
+      name      = "account-management-application"
       image     = "${var.account_management_image_uri}:${var.account_management_image_tag}@${var.account_management_image_digest}"
       essential = true
       logConfiguration = {
