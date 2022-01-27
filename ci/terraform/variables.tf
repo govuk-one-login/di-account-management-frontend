@@ -123,3 +123,18 @@ variable "gov_account_publishing_api_token" {
 variable "cookies_and_feedback_url" {
   type = string
 }
+
+variable "cloudwatch_log_retention" {
+  default = 1
+  type    = number
+}
+
+variable "logging_endpoint_arn" {
+  default = ""
+}
+
+variable "logging_endpoint_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether the service should ship its Lambda logs to the `logging_endpoint_arn`"
+}

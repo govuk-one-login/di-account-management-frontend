@@ -45,9 +45,9 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = "${var.environment}-account-management-ecs-log-group"
+          awslogs-group         = aws_cloudwatch_log_group.ecs_account_management_task_log.name
           awslogs-region        = var.aws_region
-          awslogs-stream-prefix = "${var.environment}-account-management-ecs-log-stream"
+          awslogs-stream-prefix = var.environment
         }
       }
       portMappings = [
@@ -135,10 +135,4 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
         },
       ]
   }])
-}
-
-resource "aws_cloudwatch_log_group" "account_management-ecs-log-group" {
-  name = "${var.environment}-account-management-ecs-log-group"
-
-  retention_in_days = 1
 }
