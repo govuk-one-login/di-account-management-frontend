@@ -85,31 +85,12 @@ variable "account_management_image_uri" {
   type = string
 }
 
-variable "account_management_ecs_cluster_id" {
-  type = string
+variable "account_management_image_tag" {
+  type    = string
+  default = "latest"
 }
 
-variable "account_management_ecs_security_groups" {
-  type = list(string)
-}
-
-variable "account_management_ecs_subnets" {
-  type = list(string)
-}
-
-variable "account_management_alb_security_groups" {
-  type = list(string)
-}
-
-variable "account_management_alb_subnets" {
-  type = list(string)
-}
-
-variable "account_management_alb_tls_cert" {
-  type = string
-}
-
-variable "account_management_vpc_id" {
+variable "account_management_image_digest" {
   type = string
 }
 
@@ -119,7 +100,8 @@ variable "account_management_ecs_desired_count" {
 }
 
 variable "account_management_app_port" {
-  type = number
+  type    = number
+  default = 6001
 }
 
 variable "session_expiry" {

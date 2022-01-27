@@ -1,7 +1,6 @@
-
 resource "aws_security_group" "account_management_alb_sg" {
   name   = "${var.environment}-account-management-alb-security-group"
-  vpc_id = var.account_management_vpc_id
+  vpc_id = local.vpc_id
 
   ingress {
     description = "http"
@@ -29,8 +28,7 @@ resource "aws_security_group" "account_management_alb_sg" {
 
 resource "aws_security_group" "account_management_ecs_tasks_sg" {
   name   = "${var.environment}-account-management-ecs-tasks-security-group"
-  vpc_id = var.account_management_vpc_id
-
+  vpc_id = local.vpc_id
 
   ingress {
     protocol        = "tcp"

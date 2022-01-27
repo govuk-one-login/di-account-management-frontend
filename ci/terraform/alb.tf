@@ -12,7 +12,7 @@ resource "aws_alb_target_group" "account_management_alb_target_group" {
   name        = "${var.environment}-am-alb-tg"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = var.account_management_vpc_id
+  vpc_id      = local.vpc_id
   target_type = "ip"
 
   health_check {
@@ -38,4 +38,8 @@ resource "aws_alb_listener" "account_management_alb_listener_https" {
     target_group_arn = aws_alb_target_group.account_management_alb_target_group.id
     type             = "forward"
   }
+
+  depends_on = [
+    aws_acm_certificate_validation.account_management_fg_acm_certificate_validation
+  ]
 }

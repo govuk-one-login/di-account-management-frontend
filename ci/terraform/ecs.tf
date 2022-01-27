@@ -2,16 +2,22 @@ resource "random_string" "session_secret" {
   length = 32
   special = false
 }
+
 resource "aws_ecs_service" "account_management_ecs_service" {
   name            = "${var.environment}-account-management-ecs-service"
-  cluster         = var.account_management_ecs_cluster_id
+  cluster         = local.cluster_id
   task_definition = aws_ecs_task_definition.account_management_task_definition.arn
   desired_count   = var.account_management_ecs_desired_count
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = concat(var.account_management_ecs_security_groups, [aws_security_group.account_management_ecs_tasks_sg.id])
-    subnets          = var.account_management_ecs_subnets
+    security_groups  = [
+      local.allow_egress_security_group_id,
+      local.allow_aws_service_access_security_group_id,
+      aws_security_group.account_management_ecs_tasks_sg.id,
+      aws_security_group.allow_access_to_am_frontend_redis.id,
+    ]
+    subnets          = local.private_subnet_ids
     assign_public_ip = true
   }
 
@@ -34,13 +40,13 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
   container_definitions = jsonencode([
     {
       name      = "${var.environment}-account-management-ecs-task-definition-container"
-      image     = "${var.account_management_image_uri}"
+      image     = "${var.account_management_image_uri}:${var.account_management_image_tag}@${var.account_management_image_digest}"
       essential = true
       logConfiguration = {
         logDriver = "awslogs"
         options = {
           awslogs-group         = "${var.environment}-account-management-ecs-log-group"
-          awslogs-region        = "${var.aws_region}"
+          awslogs-region        = var.aws_region
           awslogs-stream-prefix = "${var.environment}-account-management-ecs-log-stream"
         }
       }
