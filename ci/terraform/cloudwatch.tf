@@ -10,9 +10,9 @@ data "aws_iam_policy_document" "cloudwatch" {
       type = "AWS"
       identifiers = [
         format(
-        "arn:%s:iam::%s:root",
-        data.aws_partition.current.partition,
-        data.aws_caller_identity.current.account_id
+          "arn:%s:iam::%s:root",
+          data.aws_partition.current.partition,
+          data.aws_caller_identity.current.account_id
         )
       ]
     }
@@ -30,8 +30,8 @@ data "aws_iam_policy_document" "cloudwatch" {
       type = "Service"
       identifiers = [
         format(
-        "logs.%s.amazonaws.com",
-        var.aws_region
+          "logs.%s.amazonaws.com",
+          var.aws_region
         )
       ]
     }

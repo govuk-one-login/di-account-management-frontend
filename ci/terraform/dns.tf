@@ -1,5 +1,5 @@
 data "terraform_remote_state" "dns" {
-  count   = var.account_management_fqdn == null && var.oidc_api_fqdn == null ? 1 : 0
+  count = var.account_management_fqdn == null && var.oidc_api_fqdn == null ? 1 : 0
 
   backend = "s3"
   config = {

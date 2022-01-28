@@ -1,6 +1,4 @@
-
 resource "aws_route53_record" "account_management_fg" {
-
   name    = "acc-mgmt-fg.${local.service_domain}"
   type    = "A"
   zone_id = local.zone_id
@@ -13,7 +11,6 @@ resource "aws_route53_record" "account_management_fg" {
 }
 
 resource "aws_acm_certificate" "account_management_fg_certificate" {
-
   domain_name       = aws_route53_record.account_management_fg.name
   validation_method = "DNS"
 
@@ -36,12 +33,9 @@ resource "aws_route53_record" "account_management_fg_certificate_validation" {
   ttl             = 60
   type            = each.value.type
   zone_id         = local.zone_id
-
 }
 
 resource "aws_acm_certificate_validation" "account_management_fg_acm_certificate_validation" {
-
   certificate_arn         = aws_acm_certificate.account_management_fg_certificate.arn
   validation_record_fqdns = [for record in aws_route53_record.account_management_fg_certificate_validation : record.fqdn]
-
 }

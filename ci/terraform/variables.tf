@@ -135,6 +135,6 @@ variable "logging_endpoint_enabled" {
 }
 
 variable "deploy_listener" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
 }

@@ -1,5 +1,5 @@
 resource "random_string" "session_secret" {
-  length = 32
+  length  = 32
   special = false
 }
 
@@ -11,7 +11,7 @@ resource "aws_ecs_service" "account_management_ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = [
+    security_groups = [
       local.allow_egress_security_group_id,
       local.allow_aws_service_access_security_group_id,
       aws_security_group.account_management_ecs_tasks_sg.id,
@@ -136,6 +136,6 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
         },
       ]
   }])
-  
+
   tags = local.default_tags
 }
