@@ -59,6 +59,6 @@ run:
         -var "cookies_and_feedback_url=${COOKIES_AND_FEEDBACK_URL}" \
         -var "logging_endpoint_arn=${LOGGING_ENDPOINT_ARN}" \
         -var "logging_endpoint_enabled=${LOGGING_ENDPOINT_ENABLED}" \      
-        -var-file ${DEPLOY_ENVIRONMENT}.tfvars \
+        -var-file ${DEPLOY_ENVIRONMENT}.tfvars 
       
       terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json
