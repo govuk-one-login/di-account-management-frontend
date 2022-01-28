@@ -64,11 +64,6 @@ variable "redis_service_plan" {
   description = "The PaaS service plan (instance size) to use for Redis. For a full list of options, run 'cf marketplace -e redis'"
 }
 
-variable "redis_key" {
-  type        = string
-  description = "Key used to identity which SSM variables to read for Redis connection and authorisation"
-}
-
 variable "your_account_url" {
   type        = string
   description = "the url to the GOV.UK account - Your Account homepage"

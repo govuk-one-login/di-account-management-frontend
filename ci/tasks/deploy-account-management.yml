@@ -16,6 +16,16 @@ params:
   CF_USERNAME: ((cf-username))
   CF_PASSWORD: ((cf-password))
   CF_ORG_NAME: ((cf-org-name))
+  APP_INSTANCES: 1
+  GTM_ID: ((build-gtm-id))
+  PUBLISHING_API_URL: ((build-gov-accounts-api-url))
+  PUBLISHING_API_URL_TOKEN: ((build-gov-accounts-api-token))
+  SESSION_EXPIRY: ((build-session-expiry))
+  COOKIES_AND_FEEDBACK_URL: ((build-cookies-and-feedback-url))
+  LOGGING_ENDPOINT_ARN: "arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prod"
+  LOGGING_ENDPOINT_ENABLED: "true"
+  DEPLOY_LISTENER: "true"
+
 inputs:
   - name: account-management-src
 outputs:
@@ -41,6 +51,14 @@ run:
         -var "dns_state_bucket=${DNS_STATE_BUCKET}" \
         -var "dns_state_key=${DNS_STATE_KEY}" \
         -var "dns_state_role=${DNS_DEPLOYER_ROLE_ARN}" \
-        -var-file ${DEPLOY_ENVIRONMENT}.tfvars
-
+        -var "account_management_ecs_desired_count=${APP_INSTANCES}" \
+        -var "session_expiry=${SESSION_EXPIRY}" \
+        -var "gtm_id=${GTM_ID}" \
+        -var "gov_accounts_publishing_api_url=${PUBLISHING_API_URL}" \
+        -var "gov_account_publishing_api_token=${PUBLISHING_API_URL_TOKEN}" \
+        -var "cookies_and_feedback_url=${COOKIES_AND_FEEDBACK_URL}" \
+        -var "logging_endpoint_arn=${LOGGING_ENDPOINT_ARN}" \
+        -var "logging_endpoint_enabled=${LOGGING_ENDPOINT_ENABLED}" \      
+        -var-file ${DEPLOY_ENVIRONMENT}.tfvars \
+      
       terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json
