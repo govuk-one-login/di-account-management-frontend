@@ -1,5 +1,5 @@
 resource "aws_lb" "account_management_alb" {
-  name               = "${var.environment}-account-management-alb"
+  name               = "${var.environment}-acct-mgmt"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.account_management_alb_sg.id]
@@ -11,7 +11,7 @@ resource "aws_lb" "account_management_alb" {
 }
 
 resource "aws_alb_target_group" "account_management_alb_target_group" {
-  name        = "${var.environment}-am-alb-tg"
+  name        = "${var.environment}-acct-mgmt-target"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = local.vpc_id
