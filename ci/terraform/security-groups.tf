@@ -49,6 +49,8 @@ resource "aws_security_group" "account_management_alb_sg" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = local.default_tags
 }
 
 resource "aws_security_group_rule" "allow_alb_http_ingress_from_anywhere" {
@@ -91,6 +93,8 @@ resource "aws_security_group" "account_management_ecs_tasks_sg" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = local.default_tags
 }
 
 resource "aws_security_group_rule" "allow_ecs_task_ingress_from_alb" {

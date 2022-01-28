@@ -6,6 +6,8 @@ resource "aws_lb" "account_management_alb" {
   subnets            = local.public_subnet_ids
 
   enable_deletion_protection = false
+
+  tags = local.default_tags
 }
 
 resource "aws_alb_target_group" "account_management_alb_target_group" {
@@ -24,6 +26,8 @@ resource "aws_alb_target_group" "account_management_alb_target_group" {
     path                = "/healthcheck"
     unhealthy_threshold = "2"
   }
+
+  tags = local.default_tags
 }
 
 resource "aws_alb_listener" "account_management_alb_listener_https" {
@@ -44,4 +48,6 @@ resource "aws_alb_listener" "account_management_alb_listener_https" {
   depends_on = [
     aws_acm_certificate_validation.account_management_fg_acm_certificate_validation
   ]
+
+  tags = local.default_tags
 }

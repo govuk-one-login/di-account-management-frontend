@@ -26,6 +26,8 @@ resource "aws_ecs_service" "account_management_ecs_service" {
     container_name   = "account-management-application"
     container_port   = var.account_management_app_port
   }
+
+  tags = local.default_tags
 }
 
 resource "aws_ecs_task_definition" "account_management_task_definition" {
@@ -134,4 +136,6 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
         },
       ]
   }])
+  
+  tags = local.default_tags
 }

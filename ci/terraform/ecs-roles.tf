@@ -13,6 +13,8 @@ data "aws_iam_policy_document" "account_management_ecs_task_execution_policy_doc
 resource "aws_iam_role" "account_management_ecs_task_execution_role" {
   name               = "${var.environment}-account-management-ecs-task-execution-role"
   assume_role_policy = data.aws_iam_policy_document.account_management_ecs_task_execution_policy_document.json
+
+  tags = local.default_tags
 }
 
 resource "aws_iam_role_policy_attachment" "account_management_ecs_task_execution_role_policy_attachment" {
@@ -35,6 +37,8 @@ data "aws_iam_policy_document" "account_management_ecs_task_policy_document" {
 resource "aws_iam_role" "account_management_ecs_task_role" {
   name               = "${var.environment}-account-management-ecs-task-role"
   assume_role_policy = data.aws_iam_policy_document.account_management_ecs_task_policy_document.json
+
+  tags = local.default_tags
 }
 
 resource "aws_iam_role_policy_attachment" "account_management_ecs_task_role_ssm_policy_attachment" {
