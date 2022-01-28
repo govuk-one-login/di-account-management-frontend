@@ -1,5 +1,6 @@
 data "terraform_remote_state" "dns" {
-  count   = var.account_management_fqdn == null && var.oidc_api_fqdn == null ? 1 : 0
+  count = var.account_management_fqdn == null && var.oidc_api_fqdn == null ? 1 : 0
+
   backend = "s3"
   config = {
     bucket   = var.dns_state_bucket
@@ -10,6 +11,10 @@ data "terraform_remote_state" "dns" {
 }
 
 locals {
-  account_management_fqdn = var.account_management_fqdn == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_account_management_url", "") : var.account_management_fqdn
-  oidc_api_fqdn           = var.oidc_api_fqdn == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_api_url", "") : var.oidc_api_fqdn
+  account_management_api_fqdn = var.account_management_api_fqdn == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_account_management_api_url", "") : var.account_management_api_fqdn
+  account_management_fqdn     = var.account_management_fqdn == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_account_management_url", "") : var.account_management_fqdn
+  frontend_fqdn               = var.frontend_fqdn == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_frontend_url", "") : var.frontend_fqdn
+  oidc_api_fqdn               = var.oidc_api_fqdn == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_api_url", "") : var.oidc_api_fqdn
+  service_domain              = var.service_domain == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_service_domain", "") : var.service_domain
+  zone_id                     = var.zone_id == null ? lookup(data.terraform_remote_state.dns[0].outputs, "${var.environment}_zone_id", "") : var.zone_id
 }

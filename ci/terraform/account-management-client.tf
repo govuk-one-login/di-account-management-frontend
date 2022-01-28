@@ -47,6 +47,9 @@ resource "aws_dynamodb_table_item" "account_management_client" {
       L = [
         {
           S = "https://${local.account_management_fqdn}/account-deleted-confirmation"
+        },
+        {
+          S = "https://${aws_route53_record.account_management_fg.fqdn}/account-deleted-confirmation"
         }
       ]
     }
@@ -54,6 +57,9 @@ resource "aws_dynamodb_table_item" "account_management_client" {
       L = [
         {
           S = "https://${local.account_management_fqdn}/auth/callback"
+        },
+        {
+          S = "https://${aws_route53_record.account_management_fg.fqdn}/auth/callback"
         }
       ]
     }
