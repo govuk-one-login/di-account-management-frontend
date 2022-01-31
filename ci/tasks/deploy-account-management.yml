@@ -28,6 +28,7 @@ params:
 
 inputs:
   - name: account-management-src
+  - name: account-management-image
 outputs:
   - name: terraform-outputs
 run:
@@ -35,6 +36,10 @@ run:
   args:
     - -euc
     - |
+      export ACCOUNT_MANAGEMENT_IMAGE_URI=$(cat account-management-image/repository)
+      export ACCOUNT_MANAGEMENT_IMAGE_TAG=$(cat account-management-image/tag)
+      export ACCOUNT_MANAGEMENT_IMAGE_DIGEST=$(cat account-management-image/digest)
+           
       cd "account-management-src/ci/terraform/"
       terraform init -input=false \
         -backend-config "role_arn=${DEPLOYER_ROLE_ARN}" \
@@ -59,6 +64,9 @@ run:
         -var "cookies_and_feedback_url=${COOKIES_AND_FEEDBACK_URL}" \
         -var "logging_endpoint_arn=${LOGGING_ENDPOINT_ARN}" \
         -var "logging_endpoint_enabled=${LOGGING_ENDPOINT_ENABLED}" \
-        -var-file ${DEPLOY_ENVIRONMENT}.tfvars 
+        -var "account_management_image_uri=${ACCOUNT_MANAGEMENT_IMAGE_URI}" \
+        -var "account_management_image_digest=${ACCOUNT_MANAGEMENT_IMAGE_DIGEST}" \
+        -var "account_management_image_tag=${ACCOUNT_MANAGEMENT_IMAGE_TAG}" \
+        -var-file ${DEPLOY_ENVIRONMENT}.tfvars \
       
       terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json

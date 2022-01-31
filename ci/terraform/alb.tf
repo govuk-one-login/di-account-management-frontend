@@ -31,8 +31,6 @@ resource "aws_alb_target_group" "account_management_alb_target_group" {
 }
 
 resource "aws_alb_listener" "account_management_alb_listener_https" {
-  count = var.deploy_listener ? 1 : 0
-
   load_balancer_arn = aws_lb.account_management_alb.id
   port              = 443
   protocol          = "HTTPS"
