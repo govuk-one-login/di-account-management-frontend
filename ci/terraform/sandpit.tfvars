@@ -15,4 +15,4 @@ gtm_id                           = ""
 gov_accounts_publishing_api_url  = ""
 gov_account_publishing_api_token = ""
 cookies_and_feedback_url         = ""
-deploy_listener                  = true
+public_access                  = true
