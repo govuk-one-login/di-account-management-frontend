@@ -138,3 +138,11 @@ variable "public_access" {
   type    = bool
   default = false
 }
+
+variable "deployment_min_healthy_percent" {
+  default = 50
+}
+
+variable "deployment_max_percent" {
+  default = 100
+}
