@@ -1,10 +1,15 @@
+locals {
+  service_name   = "${var.environment}-frontend-ecs-service"
+  container_name = "frontend-application"
+}
+
 resource "random_string" "session_secret" {
   length  = 32
   special = false
 }
 
 resource "aws_ecs_service" "account_management_ecs_service" {
-  name            = "${var.environment}-account-management-ecs-service"
+  name            = local.service_name
   cluster         = local.cluster_id
   task_definition = aws_ecs_task_definition.account_management_task_definition.arn
   desired_count   = var.account_management_ecs_desired_count
@@ -26,7 +31,7 @@ resource "aws_ecs_service" "account_management_ecs_service" {
 
   load_balancer {
     target_group_arn = aws_alb_target_group.account_management_alb_target_group.arn
-    container_name   = "account-management-application"
+    container_name   = local.container_name
     container_port   = var.account_management_app_port
   }
 
@@ -43,7 +48,7 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
   memory                   = 2048
   container_definitions = jsonencode([
     {
-      name      = "account-management-application"
+      name      = local.container_name
       image     = "${var.account_management_image_uri}:${var.account_management_image_tag}@${var.account_management_image_digest}"
       essential = true
       logConfiguration = {
@@ -51,7 +56,7 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
         options = {
           awslogs-group         = aws_cloudwatch_log_group.ecs_account_management_task_log.name
           awslogs-region        = var.aws_region
-          awslogs-stream-prefix = var.environment
+          awslogs-stream-prefix = local.service_name
         }
       }
       portMappings = [
