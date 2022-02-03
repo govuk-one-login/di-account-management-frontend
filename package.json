@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "aws-sdk": "2.1040.0",
-    "axios": "^0.24.0",
+    "axios": "^0.25.0",
     "base64url": "3.0.1",
     "body-parser": "^1.19.0",
     "cfenv": "^1.2.4",
