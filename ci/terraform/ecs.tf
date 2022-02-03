@@ -1,6 +1,6 @@
 locals {
-  service_name   = "${var.environment}-frontend-ecs-service"
-  container_name = "frontend-application"
+  service_name   = "${var.environment}-account-management-ecs-service"
+  container_name = "account-management-application"
 }
 
 resource "random_string" "session_secret" {
