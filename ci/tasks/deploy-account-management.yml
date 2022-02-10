@@ -16,7 +16,7 @@ params:
   CF_USERNAME: ((cf-username))
   CF_PASSWORD: ((cf-password))
   CF_ORG_NAME: ((cf-org-name))
-  APP_INSTANCES: 1
+  APP_INSTANCES: 3
   GTM_ID: ((build-gtm-id))
   PUBLISHING_API_URL: ((build-gov-accounts-api-url))
   PUBLISHING_API_URL_TOKEN: ((build-gov-accounts-api-token))
