@@ -69,3 +69,21 @@ resource "aws_alb_listener_rule" "account_management_alb_listener_https_robots" 
     }
   }
 }
+
+resource "aws_alb_listener" "account_managment_alb_listener_http" {
+  load_balancer_arn = aws_lb.account_management_alb.id
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+
+  tags = local.default_tags
+}
