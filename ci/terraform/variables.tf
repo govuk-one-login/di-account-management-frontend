@@ -146,3 +146,14 @@ variable "deployment_min_healthy_percent" {
 variable "deployment_max_percent" {
   default = 150
 }
+
+variable "paas_frontend_cdn_route_destination" {
+  type        = string
+  description = "The Cloudfront instance to forward all PaaS requests to"
+}
+
+variable "wellknown_cloudfront_hosted_zone_id" {
+  default     = "Z2FDTNDATAQYW2"
+  description = "This is the well know hosted zone ID for all cloudfront destinations"
+  type        = string
+}
