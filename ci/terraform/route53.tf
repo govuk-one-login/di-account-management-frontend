@@ -5,8 +5,8 @@ resource "aws_route53_record" "account_management" {
 
   alias {
     evaluate_target_health = false
-    name                   = var.paas_frontend_cdn_route_destination
-    zone_id                = var.wellknown_cloudfront_hosted_zone_id
+    name                   = aws_lb.account_management_alb.dns_name
+    zone_id                = aws_lb.account_management_alb.zone_id
   }
 }
 
