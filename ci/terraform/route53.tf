@@ -23,7 +23,7 @@ resource "aws_route53_record" "account_management_fg" {
 }
 
 resource "aws_acm_certificate" "account_management_fg_certificate" {
-  domain_name       = aws_route53_record.account_management_fg.name
+  domain_name       = aws_route53_record.account_management.name
   validation_method = "DNS"
 
   tags = local.default_tags
