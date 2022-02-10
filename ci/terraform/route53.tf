@@ -1,3 +1,15 @@
+resource "aws_route53_record" "account_management" {
+  name    = local.account_management_fqdn
+  type    = "A"
+  zone_id = local.zone_id
+
+  alias {
+    evaluate_target_health = false
+    name                   = var.paas_frontend_cdn_route_destination
+    zone_id                = var.wellknown_cloudfront_hosted_zone_id
+  }
+}
+
 resource "aws_route53_record" "account_management_fg" {
   name    = "acc-mgmt-fg.${local.service_domain}"
   type    = "A"

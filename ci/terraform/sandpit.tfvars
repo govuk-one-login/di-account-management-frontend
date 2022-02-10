@@ -1,7 +1,7 @@
 cf_org_name                      = "gds-digital-identity-authentication"
 account_management_fqdn          = "account-management.sandpit.auth.ida.digital.cabinet-office.gov.uk"
 oidc_api_fqdn                    = "api.sandpit.auth.ida.digital.cabinet-office.gov.uk"
-frontend_fqdn                    = "front.sandpit.auth.ida.digital.cabinet-office.gov.uk"
+frontend_fqdn                    = "signin-fg.sandpit.auth.ida.digital.cabinet-office.gov.uk"
 account_management_api_fqdn      = "acct-mgmt-api.sandpit.auth.ida.digital.cabinet-office.gov.uk"
 service_domain                   = "sandpit.auth.ida.digital.cabinet-office.gov.uk"
 zone_id                          = "Z050645231Q0HZAX6FT5W"
