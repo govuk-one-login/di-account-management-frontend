@@ -88,7 +88,7 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
         },
         {
           name  = "BASE_URL"
-          value = aws_route53_record.account_management_fg.name
+          value = aws_route53_record.account_management.name
         },
         {
           name  = "OIDC_CLIENT_ID"
