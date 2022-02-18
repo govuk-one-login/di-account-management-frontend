@@ -18,8 +18,8 @@ Before you can run the frontend app against the backend you will need a usable c
 
 The client created by the pipeline is not currently usable by a local account management application as the private key is not available and it does not redirect to local clients.  To run account management locally you will need to configure another client.
 
-1. [Generate a key pair](https://auth-tech-docs.london.cloudapps.digital/generate-a-key/#generate-a-key-pair)
-1. Copy an existing client in the database, or [register a new one](https://auth-tech-docs.london.cloudapps.digital/manage-your-service-s-configuration/#register-your-service-to-use-gov-uk-sign-in).
+1. [Generate a key pair](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/generate-a-key/)
+1. Copy an existing client in the database, or [register a new one](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/manage-your-service-s-configuration/#manage-your-service-s-configuration-with-gov-uk-sign-in).
 1. In the database update the following values:
     - SubjectType = public
     - ConsentRequired = 0
