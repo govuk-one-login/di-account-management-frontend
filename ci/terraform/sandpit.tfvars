@@ -1,4 +1,3 @@
-cf_org_name                         = "gds-digital-identity-authentication"
 account_management_fqdn             = "sandpit.auth.ida.digital.cabinet-office.gov.uk"
 oidc_api_fqdn                       = "api.sandpit.auth.ida.digital.cabinet-office.gov.uk"
 frontend_fqdn                       = "signin.sandpit.auth.ida.digital.cabinet-office.gov.uk"

@@ -13,9 +13,6 @@ params:
   DNS_STATE_KEY: ((dns-state-key))
   STATE_BUCKET: digital-identity-dev-tfstate
   DEPLOY_ENVIRONMENT: build
-  CF_USERNAME: ((cf-username))
-  CF_PASSWORD: ((cf-password))
-  CF_ORG_NAME: ((cf-org-name))
   GTM_ID: ((build-gtm-id))
   PUBLISHING_API_URL: ((build-gov-accounts-api-url))
   PUBLISHING_API_URL_TOKEN: ((build-gov-accounts-api-token))
@@ -49,9 +46,6 @@ run:
 
       terraform apply -auto-approve \
         -var "deployer_role_arn=${DEPLOYER_ROLE_ARN}" \
-        -var "cf_username=${CF_USERNAME}" \
-        -var "cf_password=${CF_PASSWORD}" \
-        -var "cf_org_name=${CF_ORG_NAME}" \
         -var "dns_state_bucket=${DNS_STATE_BUCKET}" \
         -var "dns_state_key=${DNS_STATE_KEY}" \
         -var "dns_state_role=${DNS_DEPLOYER_ROLE_ARN}" \
