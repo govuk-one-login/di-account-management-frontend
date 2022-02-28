@@ -1,10 +1,9 @@
 import AWS from "aws-sdk";
-import CF_CONFIG from "./cf";
 import {
+  getAppEnv,
   getAwsRegion,
   getKmsKeyId,
   getLocalStackBaseUrl,
-  isFargate,
 } from "../config";
 
 //refer to seed.yaml
@@ -36,28 +35,14 @@ function getLocalStackConfig() {
 }
 
 export function getKMSConfig(): KmsConfig {
-  if (isFargate()) {
-    return {
-      awsConfig: {
-        region: getAwsRegion(),
-      },
-      kmsKeyId: getKmsKeyId(),
-    };
-  }
-  const config = getLocalStackConfig();
-  if (CF_CONFIG.isLocal) {
-    return config;
+  if (getAppEnv() === "local") {
+    return getLocalStackConfig();
   }
 
-  const awsCredentials = CF_CONFIG.getServiceCreds(
-    /-account-management-kms-provider$/gims
-  ) as AWSCredentials;
-
-  delete config.awsConfig.endpoint;
-  config.awsConfig.region = awsCredentials.AWS_REGION;
-  config.awsConfig.accessKeyId = awsCredentials.AWS_ACCESS_KEY_ID;
-  config.awsConfig.secretAccessKey = awsCredentials.AWS_SECRET_ACCESS_KEY;
-  config.kmsKeyId = awsCredentials.KMS_KEY_ID;
-
-  return config;
+  return {
+    awsConfig: {
+      region: getAwsRegion(),
+    },
+    kmsKeyId: getKmsKeyId(),
+  };
 }

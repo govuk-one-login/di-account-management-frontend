@@ -1,4 +1,3 @@
-import CF_CONFIG from "./config/cf";
 import ssm from "./utils/ssm";
 import { RedisConfig } from "./types";
 import { Parameter } from "aws-sdk/clients/ssm";
@@ -84,9 +83,13 @@ export async function getRedisConfig(appEnv: string): Promise<RedisConfig> {
   }
 
   return {
-    password: result.Parameters.find((p: Parameter) => p.Name === passwordKey).Value,
+    password: result.Parameters.find((p: Parameter) => p.Name === passwordKey)
+      .Value,
     host: result.Parameters.find((p: Parameter) => p.Name === hostKey).Value,
-    port: result.Parameters.find((p: Parameter) => p.Name === portKey).Value,
+    port: Number(
+      result.Parameters.find((p: Parameter) => p.Name === portKey).Value
+    ),
+    isLocal: false,
   };
 }
 
@@ -102,16 +105,8 @@ export function getCookiesAndFeedbackLink(): string {
   return process.env.COOKIES_AND_FEEDBACK_URL;
 }
 
-export function isFargate(): boolean {
-  return process.env.FARGATE === "1";
-}
-
 export function getBaseUrl(): string {
-  if (isFargate()) {
-    return "https://" + process.env.BASE_URL;
-  } else {
-    return CF_CONFIG.url;
-  }
+  return "https://" + process.env.BASE_URL;
 }
 
 export function getAwsRegion(): string {
