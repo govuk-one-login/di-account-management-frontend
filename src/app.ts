@@ -17,9 +17,10 @@ import {
   getAppEnv,
   getNodeEnv,
   getRedisConfig,
+  getRedisHost,
+  getRedisPort,
   getSessionExpiry,
   getSessionSecret,
-  isFargate,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 
@@ -88,10 +89,9 @@ async function createApp(): Promise<express.Application> {
   app.use(i18nextMiddleware.handle(i18next));
   app.use(helmet(helmetConfiguration));
 
-  const redisConfig =
-    isProduction && isFargate()
-      ? await getRedisConfig(getAppEnv())
-      : undefined;
+  const redisConfig = isProduction
+    ? await getRedisConfig(getAppEnv())
+    : { host: getRedisHost(), port: getRedisPort(), isLocal: true };
 
   app.use(
     session({

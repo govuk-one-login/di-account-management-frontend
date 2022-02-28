@@ -6,7 +6,6 @@ import * as cheerio from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { JWT } from "jose";
-import CF_CONFIG from "../../../config/cf";
 
 describe("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;
@@ -117,7 +116,7 @@ describe("Integration:: delete account", () => {
       .expect(
         "Location",
         `${opApi}/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${encodeURIComponent(
-          CF_CONFIG.url + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url
+          "https://undefined" + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url
         )}`
       )
       .expect(302, done);
