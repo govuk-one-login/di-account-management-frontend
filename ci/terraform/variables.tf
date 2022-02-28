@@ -6,18 +6,6 @@ variable "deployer_role_arn" {
   default = null
 }
 
-variable "cf_username" {
-  description = "deployer username"
-}
-
-variable "cf_password" {
-  description = "deployer password org"
-}
-
-variable "cf_org_name" {
-  description = "target org"
-}
-
 variable "dns_state_bucket" {
   default = ""
 }
