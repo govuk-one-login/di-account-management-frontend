@@ -116,7 +116,7 @@ describe("Integration:: delete account", () => {
       .expect(
         "Location",
         `${opApi}/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${encodeURIComponent(
-          "https://undefined" + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url
+          "http://localhost:6000" + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url
         )}`
       )
       .expect(302, done);

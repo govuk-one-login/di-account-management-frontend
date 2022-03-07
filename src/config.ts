@@ -94,7 +94,7 @@ export async function getRedisConfig(appEnv: string): Promise<RedisConfig> {
 }
 
 export function getAuthFrontEndUrl(): string {
-  return "https://" + process.env.AUTH_FRONTEND_URL;
+  return getProtocol() + process.env.AUTH_FRONTEND_URL;
 }
 
 export function getAnalyticsCookieDomain(): string {
@@ -106,7 +106,9 @@ export function getCookiesAndFeedbackLink(): string {
 }
 
 export function getBaseUrl(): string {
-  return "https://" + process.env.BASE_URL;
+  const baseUrl = process.env.BASE_URL ?? "localhost:6000";
+  return getProtocol() + baseUrl;
+
 }
 
 export function getAwsRegion(): string {
@@ -115,4 +117,8 @@ export function getAwsRegion(): string {
 
 export function getKmsKeyId(): string {
   return process.env.KMS_KEY_ID;
+}
+
+function getProtocol(): string {
+  return getAppEnv() !== "local" ? "https://" : "http://"
 }
