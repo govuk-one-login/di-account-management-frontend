@@ -279,7 +279,6 @@
       "warningText": "Your account will be permanently deleted. You will not be able to get it back.",
       "paragraph": "Deleting your GOV.UK account will not delete any other government accounts you have, such as Government Gateway or your Universal Credit account.",
       "deleteAccount": "Delete account",
-
       "doNotDeleteAccount": "I do not want to delete my account"
     },
     "changePhoneNumber": {
@@ -308,6 +307,7 @@
           "plusNumericOnly": "Enter a phone number using only numbers or the + symbol",
           "internationalFormat": "Enter a phone number in the correct format"
         }
+      }
     }
   }
 }

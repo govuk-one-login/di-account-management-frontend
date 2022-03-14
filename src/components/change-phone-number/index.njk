@@ -2,6 +2,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% set pageTitleName = 'pages.changePhoneNumber.title' | translate %}
 {% block content %}
@@ -31,6 +32,39 @@
   } if (errors['phoneNumber'])})
   }}
 
+   {% set internationalNumberHtml %}
+    {{ govukInput({
+      id: "internationalPhoneNumber",
+      name: "internationalPhoneNumber",
+      type: "tel",
+      autocomplete: "tel",
+      classes: "govuk-!-width-two-thirds",
+      label: {
+        text: 'pages.changePhoneNumber.internationalPhoneNumber.label' | translate
+      },
+      hint: {
+        text: 'pages.changePhoneNumber.internationalPhoneNumber.hint' | translate
+      },
+      errorMessage: {
+      text: errors['internationalPhoneNumber'].text
+      } if (errors['internationalPhoneNumber'])
+    }) }}
+    {% endset -%}
+
+    {{ govukCheckboxes({
+      items: [
+        {
+          value: "true",
+          id: "hasInternationalPhoneNumber",
+          name: "hasInternationalPhoneNumber",
+          text: 'pages.changePhoneNumber.internationalPhoneNumber.checkBoxLabel' | translate,
+          conditional: {
+            html: internationalNumberHtml
+          },
+          checked: hasInternationalPhoneNumber === 'true'
+        }
+      ]
+    }) }}
 
   {{ govukButton({
   "text": button_text|default('general.continue.label' | translate, true),

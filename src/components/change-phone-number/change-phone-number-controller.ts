@@ -8,6 +8,7 @@ import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
+import { prependInternationalPrefix } from "../../utils/phone-number";
 
 const TEMPLATE_NAME = "change-phone-number/index.njk";
 
@@ -21,9 +22,16 @@ export function changePhoneNumberPost(
   return async function (req: Request, res: Response) {
     const { email, phoneNumber } = req.session.user;
     const { accessToken } = req.session.user.tokens;
+    const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
+    let newPhoneNumber;
 
-    const newPhoneNumber = req.body.phoneNumber;
-
+    if (hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true") {
+      newPhoneNumber = prependInternationalPrefix(
+        req.body.internationalPhoneNumber
+      );
+    } else {
+      newPhoneNumber = req.body.phoneNumber;
+    }
     if (phoneNumber === newPhoneNumber) {
       const error = formatValidationError(
         "phoneNumber",

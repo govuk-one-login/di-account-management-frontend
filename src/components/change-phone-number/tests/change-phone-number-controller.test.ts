@@ -76,5 +76,21 @@ describe("change phone number controller", () => {
         .called;
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
+    it("should redirect to /phone-number-updated-confirmation when success with valid international number", async () => {
+      const fakeService: ChangePhoneNumberServiceInterface = {
+        sendPhoneVerificationNotification: sinon.fake(),
+      };
+
+      res.locals.sessionId = "123456-djjad";
+      req.session.user.tokens = { accessToken: "token" };
+      req.body.phoneNumber = "+33645453322";
+      req.session.user.email = "test@test.com";
+
+      await changePhoneNumberPost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.sendPhoneVerificationNotification).to.have.been
+        .calledOnce;
+      expect(res.redirect).to.have.calledWith(PATH_DATA.CHECK_YOUR_PHONE.url);
+    });
   });
 });
