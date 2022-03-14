@@ -28,7 +28,7 @@ export function changePhoneNumberPost(
       const error = formatValidationError(
         "phoneNumber",
         req.t(
-          "pages.changePhoneNumber.phoneNumber.validationError.samePhoneNumber"
+          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
         )
       );
 

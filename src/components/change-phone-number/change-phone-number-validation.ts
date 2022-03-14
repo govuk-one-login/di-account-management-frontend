@@ -14,14 +14,16 @@ export function validateChangePhoneNumberRequest(): ValidationChainFunc {
       .trim()
       .withMessage((value, { req }) => {
         return req.t(
-          "pages.changePhoneNumber.phoneNumber.validationError.required",
+          "pages.changePhoneNumber.ukPhoneNumber.validationError.required",
           { value }
         );
       })
       .custom((value, { req }) => {
         if (!containsNumbersOrSpacesOnly(value)) {
           throw new Error(
-            req.t("pages.changePhoneNumber.phoneNumber.validationError.numeric")
+            req.t(
+              "pages.changePhoneNumber.ukPhoneNumber.validationError.numeric"
+            )
           );
         }
         return true;
@@ -29,7 +31,9 @@ export function validateChangePhoneNumberRequest(): ValidationChainFunc {
       .custom((value, { req }) => {
         if (!lengthInRangeWithoutSpaces(value, 10, 11)) {
           throw new Error(
-            req.t("pages.changePhoneNumber.phoneNumber.validationError.length")
+            req.t(
+              "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
+            )
           );
         }
         return true;
@@ -38,7 +42,7 @@ export function validateChangePhoneNumberRequest(): ValidationChainFunc {
         if (!containsUKMobileNumber(value)) {
           throw new Error(
             req.t(
-              "pages.changePhoneNumber.phoneNumber.validationError.international"
+              "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
             )
           );
         }
