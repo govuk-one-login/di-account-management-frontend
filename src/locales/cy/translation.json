@@ -298,7 +298,16 @@
           "numeric": "Enter a UK Phone number using numbers only",
           "samePhoneNumber": "Your account is already using that phone number. Enter a different phone number."
         }
-      }
+      },
+      "internationalPhoneNumber": {
+        "checkBoxLabel": "I have an international mobile number",
+        "label": "International mobile number",
+        "hint": "Include the country code, for example +3537777666555",
+        "validationError": {
+          "required": "Enter a phone number",
+          "plusNumericOnly": "Enter a phone number using only numbers or the + symbol",
+          "internationalFormat": "Enter a phone number in the correct format"
+        }
     }
   }
 }
