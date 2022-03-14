@@ -21,6 +21,7 @@ params:
   LOGGING_ENDPOINT_ARN: "arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prod"
   LOGGING_ENDPOINT_ENABLED: "true"
   DEPLOY_LISTENER: "true"
+  SUPPORT_INTERNATIONAL_NUMBERS: "0"
 
 inputs:
   - name: account-management-src
@@ -59,6 +60,7 @@ run:
         -var "account_management_image_uri=${ACCOUNT_MANAGEMENT_IMAGE_URI}" \
         -var "account_management_image_digest=${ACCOUNT_MANAGEMENT_IMAGE_DIGEST}" \
         -var "account_management_image_tag=${ACCOUNT_MANAGEMENT_IMAGE_TAG}" \
+        -var "support_international_numbers=${SUPPORT_INTERNATIONAL_NUMBERS}" \
         -var-file ${DEPLOY_ENVIRONMENT}.tfvars \
       
       terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json

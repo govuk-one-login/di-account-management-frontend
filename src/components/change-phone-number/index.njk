@@ -15,6 +15,7 @@
 <form action="/change-phone-number" method="post" novalidate>
 
   <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+  <input type="hidden" name="supportInternationalNumbers" value="{{supportInternationalNumbers}}" />
 
   <p class="govuk-body">{{'pages.changePhoneNumber.info.paragraph1' | translate}}</p>
 

@@ -28,7 +28,11 @@ export function changePhoneNumberPost(
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
     let newPhoneNumber;
 
-    if (hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true" && supportInternationalNumbers()) {
+    if (
+      hasInternationalPhoneNumber &&
+      hasInternationalPhoneNumber === "true" &&
+      supportInternationalNumbers()
+    ) {
       newPhoneNumber = prependInternationalPrefix(
         req.body.internationalPhoneNumber
       );

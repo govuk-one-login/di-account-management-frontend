@@ -110,6 +110,10 @@ variable "logging_endpoint_arn" {
   default = ""
 }
 
+variable "support_international_numbers" {
+  type = string
+}
+
 variable "logging_endpoint_enabled" {
   type        = bool
   default     = false
