@@ -4,6 +4,7 @@ import { ExpressRouteFunc } from "../../types";
 import { ChangePhoneNumberServiceInterface } from "./types";
 import { changePhoneNumberService } from "./change-phone-number-service";
 import { getNextState } from "../../utils/state-machine";
+import { supportInternationalNumbers } from "../../config";
 import {
   formatValidationError,
   renderBadRequest,
@@ -13,7 +14,9 @@ import { prependInternationalPrefix } from "../../utils/phone-number";
 const TEMPLATE_NAME = "change-phone-number/index.njk";
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
-  res.render("change-phone-number/index.njk");
+  res.render("change-phone-number/index.njk", {
+    supportInternationalNumbers: supportInternationalNumbers(),
+  });
 }
 
 export function changePhoneNumberPost(
@@ -25,7 +28,7 @@ export function changePhoneNumberPost(
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
     let newPhoneNumber;
 
-    if (hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true") {
+    if (hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true" && supportInternationalNumbers()) {
       newPhoneNumber = prependInternationalPrefix(
         req.body.internationalPhoneNumber
       );

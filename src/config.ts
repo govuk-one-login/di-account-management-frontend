@@ -118,6 +118,10 @@ export function getKmsKeyId(): string {
   return process.env.KMS_KEY_ID;
 }
 
+export function supportInternationalNumbers(): boolean {
+  return process.env.SUPPORT_INTERNATIONAL_NUMBERS === "1";
+}
+
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";
 }

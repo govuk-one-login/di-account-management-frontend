@@ -52,44 +52,44 @@ export function validateChangePhoneNumberRequest(): ValidationChainFunc {
         return true;
       }),
     body("internationalPhoneNumber")
-        .if(body("hasInternationalPhoneNumber").notEmpty().equals("true"))
-        .notEmpty()
-        .withMessage((value, { req }) => {
-          return req.t(
-              "pages.changePhoneNumber.internationalPhoneNumber.validationError.required",
-              { value }
+      .if(body("hasInternationalPhoneNumber").notEmpty().equals("true"))
+      .notEmpty()
+      .withMessage((value, { req }) => {
+        return req.t(
+          "pages.changePhoneNumber.internationalPhoneNumber.validationError.required",
+          { value }
+        );
+      })
+      .custom((value, { req }) => {
+        if (!containsLeadingPlusNumbersOrSpacesOnly(value)) {
+          throw new Error(
+            req.t(
+              "pages.changePhoneNumber.internationalPhoneNumber.validationError.plusNumericOnly"
+            )
           );
-        })
-        .custom((value, { req }) => {
-          if (!containsLeadingPlusNumbersOrSpacesOnly(value)) {
-            throw new Error(
-                req.t(
-                    "pages.changePhoneNumber.internationalPhoneNumber.validationError.plusNumericOnly"
-                )
-            );
-          }
-          return true;
-        })
-        .custom((value, { req }) => {
-          if (!lengthInRangeWithoutSpaces(value, 5, 16)) {
-            throw new Error(
-                req.t(
-                    "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-                )
-            );
-          }
-          return true;
-        })
-        .custom((value, { req }) => {
-          if (!containsInternationalMobileNumber(value)) {
-            throw new Error(
-                req.t(
-                    "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-                )
-            );
-          }
-          return true;
-        }),
+        }
+        return true;
+      })
+      .custom((value, { req }) => {
+        if (!lengthInRangeWithoutSpaces(value, 5, 16)) {
+          throw new Error(
+            req.t(
+              "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+            )
+          );
+        }
+        return true;
+      })
+      .custom((value, { req }) => {
+        if (!containsInternationalMobileNumber(value)) {
+          throw new Error(
+            req.t(
+              "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+            )
+          );
+        }
+        return true;
+      }),
     validateBodyMiddleware("change-phone-number/index.njk"),
   ];
 }
