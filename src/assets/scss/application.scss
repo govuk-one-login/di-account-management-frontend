@@ -154,4 +154,8 @@ $_current-indicator-width: 4px;
   }
 }
 
+.govuk-input--disabled {
+  background-color: govuk-colour("light-grey", $legacy: "grey-3");
+}
+
 

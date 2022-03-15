@@ -123,6 +123,10 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
           value = var.gov_account_publishing_api_token
         },
         {
+          name  = "SUPPORT_INTERNATIONAL_NUMBERS"
+          value = var.support_international_numbers
+        },
+        {
           name  = "AUTH_FRONTEND_URL"
           value = local.frontend_fqdn
         },

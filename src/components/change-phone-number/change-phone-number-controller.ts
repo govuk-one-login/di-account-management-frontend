@@ -4,15 +4,19 @@ import { ExpressRouteFunc } from "../../types";
 import { ChangePhoneNumberServiceInterface } from "./types";
 import { changePhoneNumberService } from "./change-phone-number-service";
 import { getNextState } from "../../utils/state-machine";
+import { supportInternationalNumbers } from "../../config";
 import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
+import { prependInternationalPrefix } from "../../utils/phone-number";
 
 const TEMPLATE_NAME = "change-phone-number/index.njk";
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
-  res.render("change-phone-number/index.njk");
+  res.render("change-phone-number/index.njk", {
+    supportInternationalNumbers: supportInternationalNumbers(),
+  });
 }
 
 export function changePhoneNumberPost(
@@ -21,14 +25,25 @@ export function changePhoneNumberPost(
   return async function (req: Request, res: Response) {
     const { email, phoneNumber } = req.session.user;
     const { accessToken } = req.session.user.tokens;
+    const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
+    let newPhoneNumber;
 
-    const newPhoneNumber = req.body.phoneNumber;
-
+    if (
+      hasInternationalPhoneNumber &&
+      hasInternationalPhoneNumber === "true" &&
+      supportInternationalNumbers()
+    ) {
+      newPhoneNumber = prependInternationalPrefix(
+        req.body.internationalPhoneNumber
+      );
+    } else {
+      newPhoneNumber = req.body.phoneNumber;
+    }
     if (phoneNumber === newPhoneNumber) {
       const error = formatValidationError(
         "phoneNumber",
         req.t(
-          "pages.changePhoneNumber.phoneNumber.validationError.samePhoneNumber"
+          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
         )
       );
 

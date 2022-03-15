@@ -4,7 +4,11 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import {
+  API_ENDPOINTS,
+  HTTP_STATUS_CODES,
+  PATH_DATA,
+} from "../../../app.constants";
 import { JWT } from "jose";
 
 describe("Integration:: change phone number", () => {
@@ -86,7 +90,7 @@ describe("Integration:: change phone number", () => {
       .expect(500, done);
   });
 
-  it("should return validation error when phone number not entered", (done) => {
+  it("should return validation error when uk phone number not entered", (done) => {
     request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -104,7 +108,7 @@ describe("Integration:: change phone number", () => {
       .expect(400, done);
   });
 
-  it("should return validation error when phone number entered is not valid", (done) => {
+  it("should return validation error when uk phone number entered is not valid", (done) => {
     request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -122,7 +126,7 @@ describe("Integration:: change phone number", () => {
       .expect(400, done);
   });
 
-  it("should return validation error when phone number entered contains text", (done) => {
+  it("should return validation error when uk phone number entered contains text", (done) => {
     request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -140,7 +144,7 @@ describe("Integration:: change phone number", () => {
       .expect(400, done);
   });
 
-  it("should return validation error when phone number entered less than 12 characters", (done) => {
+  it("should return validation error when uk phone number entered less than 12 characters", (done) => {
     request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -158,7 +162,7 @@ describe("Integration:: change phone number", () => {
       .expect(400, done);
   });
 
-  it("should return validation error when phone number entered greater than 12 characters", (done) => {
+  it("should return validation error when uk phone number entered greater than 12 characters", (done) => {
     request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -186,6 +190,131 @@ describe("Integration:: change phone number", () => {
       .send({
         _csrf: token,
         phoneNumber: "07738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should return validation error when international phone number not entered", (done) => {
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        hasInternationalPhoneNumber: true,
+        internationalPhoneNumber: "",
+        supportInternationalNumbers: true,
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#internationalPhoneNumber-error").text()).to.contains(
+          "Enter a phone number"
+        );
+        expect($("#phoneNumber-error").text()).to.contains("");
+      })
+      .expect(400, done);
+  });
+
+  it("should return validation error when international phone number entered is not valid", (done) => {
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        hasInternationalPhoneNumber: true,
+        internationalPhoneNumber: "123456789",
+        supportInternationalNumbers: true,
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#internationalPhoneNumber-error").text()).to.contains(
+          "Enter a phone number in the correct format"
+        );
+        expect($("#phoneNumber-error").text()).to.contains("");
+      })
+      .expect(400, done);
+  });
+
+  it("should return validation error when international phone number entered contains text", (done) => {
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        hasInternationalPhoneNumber: true,
+        internationalPhoneNumber: "123456789dd",
+        supportInternationalNumbers: true,
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#internationalPhoneNumber-error").text()).to.contains(
+          "Enter a phone number using only numbers or the + symbol"
+        );
+        expect($("#phoneNumber-error").text()).to.contains("");
+      })
+      .expect(400, done);
+  });
+
+  it("should return validation error when international phone number entered less than 8 characters", (done) => {
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        hasInternationalPhoneNumber: true,
+        internationalPhoneNumber: "1234567",
+        supportInternationalNumbers: true,
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#internationalPhoneNumber-error").text()).to.contains(
+          "Enter a phone number in the correct format"
+        );
+        expect($("#phoneNumber-error").text()).to.contains("");
+      })
+      .expect(400, done);
+  });
+
+  it("should return validation error when international phone number entered greater than 16 characters", (done) => {
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        hasInternationalPhoneNumber: true,
+        internationalPhoneNumber: "12345678901234567",
+        supportInternationalNumbers: true,
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#internationalPhoneNumber-error").text()).to.contains(
+          "Enter a phone number in the correct format"
+        );
+        expect($("#phoneNumber-error").text()).to.contains("");
+      })
+      .expect(400, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid international phone number entered", (done) => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.SEND_NOTIFICATION)
+      .once()
+      .reply(HTTP_STATUS_CODES.NO_CONTENT);
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        hasInternationalPhoneNumber: true,
+        internationalPhoneNumber: "+33645453322",
+        supportInternationalNumbers: true,
       })
       .expect("Location", "/check-your-phone")
       .expect(302, done);

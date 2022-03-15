@@ -279,18 +279,16 @@
       "warningText": "Your account will be permanently deleted. You will not be able to get it back.",
       "paragraph": "Deleting your GOV.UK account will not delete any other government accounts you have, such as Government Gateway or your Universal Credit account.",
       "deleteAccount": "Delete account",
-
       "doNotDeleteAccount": "I do not want to delete my account"
     },
     "changePhoneNumber": {
-      "title": "Enter your new phone number",
-      "header": "Enter your new phone number",
+      "title": "Enter your new mobile phone number",
+      "header": "Enter your new mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
-        "paragraph2": "You must use a UK mobile phone number.",
         "backLink": "I do not want to change my phone number"
       },
-      "phoneNumber": {
+      "ukPhoneNumber": {
         "label": "UK phone number",
         "validationError": {
           "required": "Enter a UK phone number",
@@ -298,6 +296,16 @@
           "length": "Enter a UK phone number, like 07700 900000",
           "numeric": "Enter a UK Phone number using numbers only",
           "samePhoneNumber": "Your account is already using that phone number. Enter a different phone number."
+        }
+      },
+      "internationalPhoneNumber": {
+        "checkBoxLabel": "I have an international mobile number",
+        "label": "International mobile number",
+        "hint": "Include the country code, for example +3537777666555",
+        "validationError": {
+          "required": "Enter a phone number",
+          "plusNumericOnly": "Enter a phone number using only numbers or the + symbol",
+          "internationalFormat": "Enter a phone number in the correct format"
         }
       }
     }
