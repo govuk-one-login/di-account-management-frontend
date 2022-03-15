@@ -15,7 +15,7 @@ const TEMPLATE_NAME = "change-phone-number/index.njk";
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
   res.render("change-phone-number/index.njk", {
-    supportInternationalNumbers: supportInternationalNumbers(),
+    supportInternationalNumbers: supportInternationalNumbers() ? true : null,
   });
 }
 
