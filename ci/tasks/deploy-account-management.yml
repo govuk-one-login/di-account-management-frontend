@@ -22,6 +22,7 @@ params:
   LOGGING_ENDPOINT_ENABLED: "true"
   DEPLOY_LISTENER: "true"
   SUPPORT_INTERNATIONAL_NUMBERS: "0"
+  INCOMING_TRAFFIC_CIDR_BLOCKS: '["0.0.0.0/0"]'
 
 inputs:
   - name: account-management-src
@@ -61,6 +62,7 @@ run:
         -var "account_management_image_digest=${ACCOUNT_MANAGEMENT_IMAGE_DIGEST}" \
         -var "account_management_image_tag=${ACCOUNT_MANAGEMENT_IMAGE_TAG}" \
         -var "support_international_numbers=${SUPPORT_INTERNATIONAL_NUMBERS}" \
+        -var "incoming_traffic_cidr_blocks=${INCOMING_TRAFFIC_CIDR_BLOCKS}" \
         -var-file ${DEPLOY_ENVIRONMENT}.tfvars \
       
       terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json

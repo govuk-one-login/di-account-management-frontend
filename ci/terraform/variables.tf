@@ -133,3 +133,9 @@ variable "wellknown_cloudfront_hosted_zone_id" {
   description = "This is the well know hosted zone ID for all cloudfront destinations"
   type        = string
 }
+
+variable "incoming_traffic_cidr_blocks" {
+  default     = ["0.0.0.0/0"]
+  type        = list(string)
+  description = "The list of CIDR blocks allowed to send requests to the ALB"
+}
