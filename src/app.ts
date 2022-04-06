@@ -48,6 +48,7 @@ import { noCacheMiddleware } from "./middleware/no-cache-middleware";
 import { sessionExpiredRouter } from "./components/session-expired/session-expired-routes";
 import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
 import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
+import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -130,6 +131,7 @@ async function createApp(): Promise<express.Application> {
   app.use(deleteAccountRouter);
   app.use(checkYourPhoneRouter);
   app.use(sessionExpiredRouter);
+  app.use(globalLogoutRouter);
 
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);

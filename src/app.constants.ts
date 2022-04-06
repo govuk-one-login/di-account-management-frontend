@@ -70,6 +70,7 @@ export const PATH_DATA: {
   SIGN_OUT: { url: "/sign-out" },
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },
+  GLOBAL_LOGOUT: { url: "/global-logout" },
 };
 
 export const API_ENDPOINTS = {
