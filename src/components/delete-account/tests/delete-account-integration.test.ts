@@ -5,7 +5,7 @@ import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
-import { JWT } from "jose";
+import { UnsecuredJWT } from "jose";
 
 describe("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;
@@ -37,11 +37,14 @@ describe("Integration:: delete account", () => {
             },
           },
           tokens: {
-            accessToken: JWT.sign(
-              { sub: "12345", exp: "1758477938" },
-              "secret"
-            ),
-            idToken: idToken,
+            accessToken: new UnsecuredJWT({})
+              .setIssuedAt()
+              .setSubject("12345")
+              .setIssuer("urn:example:issuer")
+              .setAudience("urn:example:audience")
+              .setExpirationTime("2h")
+              .encode(),
+            idToken: "Idtoken",
             refreshToken: "token",
           },
         };

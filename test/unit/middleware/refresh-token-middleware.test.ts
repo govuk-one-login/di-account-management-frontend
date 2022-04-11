@@ -3,10 +3,18 @@ import { describe } from "mocha";
 import { NextFunction } from "express";
 import { sinon } from "../../utils/test-utils";
 import { refreshTokenMiddleware } from "../../../src/middleware/refresh-token-middleware";
-import { JWT } from "jose";
+import { UnsecuredJWT } from "jose";
 import { ClientAssertionServiceInterface } from "../../../src/utils/types";
 import { ClientMetadata, Issuer } from "openid-client";
 
+function createAccessToken(expiry = 1600711538) {
+  return new UnsecuredJWT({ exp: expiry })
+    .setIssuedAt()
+    .setSubject("12345")
+    .setIssuer("urn:example:issuer")
+    .setAudience("urn:example:audience")
+    .encode();
+}
 describe("Refresh token middleware", () => {
   it("should call next when token not expired", async () => {
     const req: any = {
@@ -14,10 +22,7 @@ describe("Refresh token middleware", () => {
         user: {
           email: "test@test.com",
           tokens: {
-            accessToken: JWT.sign(
-              { sub: "12345", exp: "1758477938" },
-              "secret"
-            ),
+            accessToken: createAccessToken(1758477938),
           },
         },
       },
@@ -42,10 +47,7 @@ describe("Refresh token middleware", () => {
         user: {
           email: "test@test.com",
           tokens: {
-            accessToken: JWT.sign(
-              { sub: "12345", exp: "1600711538" },
-              "secret"
-            ),
+            accessToken: createAccessToken(),
             refreshToken: "refresh",
           },
         },
