@@ -5,29 +5,35 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
 import { globalLogoutPost } from "../global-logout-controller";
+import { FlattenedJWSInput, GetKeyFunction, JWSHeaderParameters, KeyLike } from "jose/dist/types/types";
+import { GenerateKeyPairResult } from "jose";
 
-describe("global logout controller", () => {
+const jose = require('jose')
+
+describe("global logout controller",  () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  let issuerJWKS: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
+  let keySet: GenerateKeyPairResult;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     sandbox = sinon.createSandbox();
 
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
       return new Promise((resolve) => {
         resolve({
-          endSessionUrl: function (params: any = {}) {
-            return `${process.env.API_BASE_URL}/logout?id_token_hint=${
-              params.id_token_hint
-            }&post_logout_redirect_uri=${encodeURIComponent(
-              params.post_logout_redirect_uri
-            )}`;
-          },
         });
       });
     });
+
+    keySet = await jose.generateKeyPair('ES256');
+
+    issuerJWKS = await jose.createLocalJWKSet({
+      keys: [
+        await jose.exportJWK(keySet.publicKey)
+      ]});
 
     res = {
       status: sandbox.stub().returnsThis(),
@@ -35,7 +41,7 @@ describe("global logout controller", () => {
     };
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     sandbox.restore();
   });
 
@@ -61,5 +67,95 @@ describe("global logout controller", () => {
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
+
+    it("should return 401 if logout_token is present but invalid", async () => {
+      const logout_token = {
+        "jti": "",
+        "sid": "",
+        "events": {
+          "http://schemas.openid.net/event/backchannel-logout": {}
+        }
+      };
+
+      const logout_jwt = new jose.UnsecuredJWT(logout_token)
+        .setIssuedAt()
+        .setSubject("12345")
+        .setIssuer("urn:example:issuer")
+        .setAudience("urn:example:audience")
+        .encode();
+
+      req = {
+        body: {
+          logout_token: logout_jwt,
+        },
+        log: { error: sandbox.fake() },
+        issuerJWKS: issuerJWKS,
+      };
+      await globalLogoutPost(req as Request, res as Response)
+
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(req.log.error).to.have.been.called;
+    });
+
+    it("should return 401 if no logout_token signed by wrong key", async () => {
+      const badKeys = await jose.generateKeyPair('ES256');
+      const logout_token = {
+        "jti": "a-token-id",
+        "sid": "a-session-id",
+        "events": {
+          "http://schemas.openid.net/event/backchannel-logout": {}
+        }
+      };
+
+      const logout_jwt = await new jose.SignJWT(logout_token)
+        .setIssuedAt()
+        .setSubject("12345")
+        .setIssuer("urn:example:issuer")
+        .setAudience("urn:example:audience")
+        .setProtectedHeader({ alg: 'ES256' })
+        .sign(badKeys.privateKey);
+
+      req = {
+        body: {
+          logout_token: logout_jwt
+        },
+        log: { error: sandbox.fake() },
+        issuerJWKS: issuerJWKS,
+      };
+      await globalLogoutPost(req as Request, res as Response)
+
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(req.log.error).to.have.been.called;
+    });
+
+    it("should return 200 if logout_token is present and valid", async () => {
+      const logout_token = {
+        "jti": "a-token-id",
+        "sid": "a-session-id",
+        "events": {
+          "http://schemas.openid.net/event/backchannel-logout": {}
+        }
+      };
+
+      const logout_jwt = await new jose.SignJWT(logout_token)
+        .setIssuedAt()
+        .setSubject("12345")
+        .setIssuer("urn:example:issuer")
+        .setAudience("urn:example:audience")
+        .setProtectedHeader({ alg: 'ES256' })
+        .sign(keySet.privateKey);
+
+      req = {
+        body: {
+          logout_token: logout_jwt,
+        },
+        log: { error: sandbox.fake() },
+        issuerJWKS: issuerJWKS,
+      };
+      await globalLogoutPost(req as Request, res as Response)
+
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
+    });
+
   });
 });

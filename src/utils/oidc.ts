@@ -5,14 +5,20 @@ import { ClientAssertionServiceInterface, KmsService } from "./types";
 import { kmsService } from "./kms";
 import base64url from "base64url";
 import random = generators.random;
-import { decodeJwt } from "jose";
+import { decodeJwt, createRemoteJWKSet } from "jose";
 
 custom.setHttpOptionsDefaults({
   timeout: 10000,
 });
 
+async function getIssuer(discoveryUri: string) {
+  return await Issuer.discover(discoveryUri);
+}
+
+const cachedIssuer = pMemoize(getIssuer, { maxAge: 43200000 });
+
 async function getOIDCClient(config: OIDCConfig): Promise<Client> {
-  const issuer = await Issuer.discover(config.idp_url);
+  const issuer = await cachedIssuer(config.idp_url);
 
   return new issuer.Client({
     client_id: config.client_id,
@@ -24,7 +30,15 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
   });
 }
 
+async function getJWKS(config: OIDCConfig) {
+  const issuer = await cachedIssuer(config.idp_url);
+
+  return createRemoteJWKSet(new URL(issuer.metadata.jwks_uri));
+}
+
 const cached = pMemoize(getOIDCClient, { maxAge: 43200000 });
+
+const cachedJwks = pMemoize(getJWKS, { maxAge: 43200000 });
 
 function isTokenExpired(token: string): boolean {
   const decodedToken = decodeJwt(token);
@@ -84,4 +98,4 @@ function clientAssertionGenerator(
   };
 }
 
-export { cached as getOIDCClient, isTokenExpired, clientAssertionGenerator };
+export { cached as getOIDCClient, cachedJwks as getJWKS, isTokenExpired, clientAssertionGenerator };
