@@ -1,11 +1,11 @@
 import { Issuer, Client, custom, generators } from "openid-client";
 import { OIDCConfig } from "../types";
 import pMemoize = require("p-memoize");
-import { JWT } from "jose";
 import { ClientAssertionServiceInterface, KmsService } from "./types";
 import { kmsService } from "./kms";
 import base64url from "base64url";
 import random = generators.random;
+import { decodeJwt } from "jose";
 
 custom.setHttpOptionsDefaults({
   timeout: 10000,
@@ -27,7 +27,7 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
 const cached = pMemoize(getOIDCClient, { maxAge: 43200000 });
 
 function isTokenExpired(token: string): boolean {
-  const decodedToken: any = JWT.decode(token);
+  const decodedToken = decodeJwt(token);
 
   const next60Seconds = new Date();
   next60Seconds.setSeconds(60);
