@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { HTTP_STATUS_CODES } from "../../app.constants";
-import { LogoutToken } from "./types";
+import { GlobalLogoutServiceInterface, LogoutToken } from "./types";
+import { getLogoutTokenMaxAge, getTokenValidationClockSkew } from "../../config";
+import { ExpressRouteFunc } from "../../types";
+import { globalLogoutService } from "./global-logout-service";
 const jose = require('jose')
 
 const backChannelLogoutEvent = "http://schemas.openid.net/event/backchannel-logout";
@@ -48,12 +51,17 @@ const validateLogoutTokenClaims = (token: LogoutToken, req: Request): boolean =>
   return true;
 }
 
-export async function globalLogoutPost(req: Request, res: Response): Promise<void> {
-  const token = await verifyLogoutToken(req);
+export function globalLogoutPost(
+  service: GlobalLogoutServiceInterface = globalLogoutService()
+): ExpressRouteFunc {
+  return async (req: Request, res: Response) => {
+    const token = await verifyLogoutToken(req);
 
-  if (token && validateLogoutTokenClaims(token, req)) {
-    res.status(HTTP_STATUS_CODES.OK);
-    return;
+    if (token && validateLogoutTokenClaims(token, req)) {
+      await service.clearSessionForSubject(token.sub);
+      res.status(HTTP_STATUS_CODES.OK);
+      return;
+    }
+    res.status(HTTP_STATUS_CODES.UNAUTHORIZED);
   }
-  res.status(HTTP_STATUS_CODES.UNAUTHORIZED);
 }

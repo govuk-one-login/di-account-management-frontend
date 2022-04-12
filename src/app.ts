@@ -112,6 +112,7 @@ async function createApp(): Promise<express.Application> {
 
   app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
+  app.use(globalLogoutRouter);
   app.use(csurf({ cookie: getCSRFCookieOptions(isProduction) }));
 
   app.post("*", sanitizeRequestMiddleware);
@@ -131,7 +132,6 @@ async function createApp(): Promise<express.Application> {
   app.use(deleteAccountRouter);
   app.use(checkYourPhoneRouter);
   app.use(sessionExpiredRouter);
-  app.use(globalLogoutRouter);
 
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);

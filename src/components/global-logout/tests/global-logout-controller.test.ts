@@ -5,9 +5,9 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
 import { globalLogoutPost } from "../global-logout-controller";
-import { FlattenedJWSInput, GetKeyFunction, JWSHeaderParameters, KeyLike } from "jose/dist/types/types";
+import { FlattenedJWSInput, GetKeyFunction, JWSHeaderParameters } from "jose/dist/types/types";
 import { GenerateKeyPairResult } from "jose";
-import { LogoutToken } from "../types";
+import { GlobalLogoutServiceInterface, LogoutToken } from "../types";
 
 const jose = require('jose')
 
@@ -17,6 +17,7 @@ describe("global logout controller",  () => {
   let res: Partial<Response>;
   let issuerJWKS: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
   let keySet: GenerateKeyPairResult;
+  let fakeService: GlobalLogoutServiceInterface;
 
   const validIssuer = "urn:example:issuer";
   const validAudience = "urn:example:audience";
@@ -80,6 +81,10 @@ describe("global logout controller",  () => {
       status: sandbox.stub().returnsThis(),
       send: sandbox.fake(),
     };
+
+    fakeService = {
+      clearSessionForSubject: sandbox.fake(),
+    };
   });
 
   afterEach(async () => {
@@ -91,7 +96,7 @@ describe("global logout controller",  () => {
       req = {
         body: {},
       };
-      await globalLogoutPost(req as Request, res as Response);
+      await globalLogoutPost(fakeService)(req as Request, res as Response);
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
     });
@@ -103,7 +108,7 @@ describe("global logout controller",  () => {
         },
         log: { error: sandbox.fake() }
       };
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -119,7 +124,7 @@ describe("global logout controller",  () => {
 
       req = validRequest(logoutJwt);
 
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -138,7 +143,7 @@ describe("global logout controller",  () => {
 
       req = validRequest(logoutJwt);
 
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -155,7 +160,7 @@ describe("global logout controller",  () => {
 
       req = validRequest(logoutJwt);
 
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -171,7 +176,7 @@ describe("global logout controller",  () => {
         .sign(keySet.privateKey);
 
       req = validRequest(logoutJwt);
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -187,7 +192,7 @@ describe("global logout controller",  () => {
         .sign(keySet.privateKey);
 
       req = validRequest(logoutJwt);
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -202,7 +207,7 @@ describe("global logout controller",  () => {
         .sign(keySet.privateKey);
 
       req = validRequest(logoutJwt);
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -210,7 +215,7 @@ describe("global logout controller",  () => {
 
     it("should return 401 if logout_token is blank", async () => {
       req = validRequest(await generateValidToken(validLogoutToken, " "));
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -227,7 +232,7 @@ describe("global logout controller",  () => {
 
       req = validRequest(await generateValidToken(invalidLogoutToken));
 
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -241,7 +246,7 @@ describe("global logout controller",  () => {
 
       req = validRequest(await generateValidToken(invalidLogoutToken));
 
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -258,7 +263,7 @@ describe("global logout controller",  () => {
 
       req = validRequest(await generateValidToken(invalidLogoutToken));
 
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -276,7 +281,7 @@ describe("global logout controller",  () => {
       };
 
       req = validRequest(await generateValidToken(invalidLogoutToken));
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
@@ -285,7 +290,7 @@ describe("global logout controller",  () => {
     it("should return 200 if logout_token is present and valid", async () => {
       req = validRequest(await generateValidToken(validLogoutToken));
 
-      await globalLogoutPost(req as Request, res as Response)
+      await globalLogoutPost(fakeService)(req as Request, res as Response)
 
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
     });
