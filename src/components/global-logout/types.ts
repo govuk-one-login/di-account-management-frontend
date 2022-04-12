@@ -1,9 +1,9 @@
 export interface LogoutToken {
-    "iss": string,
-    "sub": string,
-    "aud": string,
-    "iat": number,
-    "jti": string,
-    "sid": string,
-    "events": Map<string, any>
+    iss: string,
+    sub?: string,
+    aud: string,
+    iat: number,
+    jti: string,
+    sid?: string,
+    events?: any
 }
