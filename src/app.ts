@@ -34,7 +34,11 @@ import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
 import { authMiddleware } from "./middleware/auth-middleware";
 import { logoutRouter } from "./components/logout/logout-routes";
-import { getSessionCookieOptions, getSessionStore } from "./config/session";
+import {
+  getRedisClient,
+  getSessionCookieOptions,
+  getSessionStore,
+} from "./config/session";
 import { getOIDCConfig } from "./config/oidc";
 import { enterPasswordRouter } from "./components/enter-password/enter-password-routes";
 import { changeEmailRouter } from "./components/change-email/change-email-routes";
@@ -49,6 +53,8 @@ import { sessionExpiredRouter } from "./components/session-expired/session-expir
 import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
 import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
+import { subjectSessionIndex } from "./utils/subject-session-index";
+import { subjectSessionIndexMiddleware } from "./middleware/subject-session-index-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -94,10 +100,11 @@ async function createApp(): Promise<express.Application> {
     ? await getRedisConfig(getAppEnv())
     : { host: getRedisHost(), port: getRedisPort(), isLocal: true };
 
+  const redisClient = getRedisClient(redisConfig);
   app.use(
     session({
       name: "am",
-      store: getSessionStore(redisConfig),
+      store: getSessionStore(redisClient),
       saveUninitialized: false,
       secret: getSessionSecret(),
       resave: false,
@@ -109,6 +116,9 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
+
+  const subjectSessionIndexService = subjectSessionIndex(redisClient);
+  app.use(subjectSessionIndexMiddleware(subjectSessionIndexService));
 
   app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
