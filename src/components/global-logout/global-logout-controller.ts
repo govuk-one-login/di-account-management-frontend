@@ -70,9 +70,9 @@ export function globalLogoutPost(
 
     if (token && validateLogoutTokenClaims(token, req)) {
       await service.clearSessionForSubject(token.sub);
-      res.status(HTTP_STATUS_CODES.OK);
+      res.send(HTTP_STATUS_CODES.OK);
       return;
     }
-    res.status(HTTP_STATUS_CODES.UNAUTHORIZED);
+    res.send(HTTP_STATUS_CODES.UNAUTHORIZED);
   };
 }
