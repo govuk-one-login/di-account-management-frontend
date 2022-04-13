@@ -57,6 +57,9 @@ resource "aws_dynamodb_table_item" "account_management_client" {
         },
       ]
     }
+    BackChannelLogoutUri = {
+      S = "https://${local.account_management_fqdn}/global-logout"
+    }
     Scopes = {
       L = [for scope in local.scopes :
         {
