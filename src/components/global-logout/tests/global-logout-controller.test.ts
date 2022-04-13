@@ -100,9 +100,7 @@ describe("global logout controller", () => {
       };
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
     });
 
     it("should return 401 if logout_token not a valid JWT", async () => {
@@ -114,9 +112,7 @@ describe("global logout controller", () => {
       };
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -132,9 +128,7 @@ describe("global logout controller", () => {
 
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -153,9 +147,7 @@ describe("global logout controller", () => {
 
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -172,9 +164,7 @@ describe("global logout controller", () => {
 
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -190,9 +180,7 @@ describe("global logout controller", () => {
       req = validRequest(logoutJwt);
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -208,9 +196,7 @@ describe("global logout controller", () => {
       req = validRequest(logoutJwt);
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -225,9 +211,7 @@ describe("global logout controller", () => {
       req = validRequest(logoutJwt);
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -235,9 +219,7 @@ describe("global logout controller", () => {
       req = validRequest(await generateValidToken(validLogoutToken, " "));
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -254,9 +236,7 @@ describe("global logout controller", () => {
 
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -270,9 +250,7 @@ describe("global logout controller", () => {
 
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -289,9 +267,7 @@ describe("global logout controller", () => {
 
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -309,9 +285,7 @@ describe("global logout controller", () => {
       req = validRequest(await generateValidToken(invalidLogoutToken));
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(
-        HTTP_STATUS_CODES.UNAUTHORIZED
-      );
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
     });
 
@@ -320,7 +294,7 @@ describe("global logout controller", () => {
 
       await globalLogoutPost(fakeService)(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
+      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
     });
   });
 });
