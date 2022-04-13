@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getJWKS, getOIDCClient } from "../utils/oidc";
-import { ExpressRouteFunc, OIDCConfig } from "../types";
-import { ApiError } from "../utils/errors";
+import { ExpressRouteFunc } from "../types";
 import { SubjectSessionIndexService } from "../utils/types";
 
 export function subjectSessionIndexMiddleware(

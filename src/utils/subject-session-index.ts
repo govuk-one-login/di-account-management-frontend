@@ -8,14 +8,14 @@ export function subjectSessionIndex(
   const addSession = (subjectId: string, sessionId: string): void => {
     const now = new Date().getTime();
     purgeOld(subjectId, now);
-    redisClient.ZADD(`subject:${subjectId}`, now, sessionId);
+    redisClient.ZADD(subjectIdKey(subjectId), now, sessionId);
   };
 
   const getSessions = (subjectId: string): string[] => {
     const now = new Date().getTime();
     purgeOld(subjectId, now);
     let sessions: string[] = [];
-    redisClient.ZRANGE(subjectId, 0, now, (err, reply) => {
+    redisClient.ZRANGE(subjectIdKey(subjectId), 0, now, (err, reply) => {
       if (err) {
         throw err;
       }
@@ -28,11 +28,19 @@ export function subjectSessionIndex(
   const removeSession = (subjectId: string, sessionId: string): void => {
     const now = new Date().getTime();
     purgeOld(subjectId, now);
-    redisClient.ZREM(`subject:${subjectId}`, sessionId);
+    redisClient.ZREM(subjectIdKey(subjectId), sessionId);
   };
 
   const purgeOld = (subjectId: string, now: number) => {
-    redisClient.ZREMRANGEBYSCORE(subjectId, 0, now - getSessionExpiry());
+    redisClient.ZREMRANGEBYSCORE(
+      subjectIdKey(subjectId),
+      0,
+      now - getSessionExpiry()
+    );
+  };
+
+  const subjectIdKey = (subjectId: string): string => {
+    return `subject:${subjectId}`;
   };
 
   return {

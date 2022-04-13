@@ -5,6 +5,6 @@ import { asyncHandler } from "../../utils/async";
 
 const router = express.Router();
 
-router.post(PATH_DATA.GLOBAL_LOGOUT.url, asyncHandler(globalLogoutPost()));
+router.post(PATH_DATA.GLOBAL_LOGOUT.url, asyncHandler(globalLogoutPost));
 
 export { router as globalLogoutRouter };

@@ -101,10 +101,11 @@ async function createApp(): Promise<express.Application> {
     : { host: getRedisHost(), port: getRedisPort(), isLocal: true };
 
   const redisClient = getRedisClient(redisConfig);
+  const sessionStore = getSessionStore(redisClient);
   app.use(
     session({
       name: "am",
-      store: getSessionStore(redisClient),
+      store: sessionStore,
       saveUninitialized: false,
       secret: getSessionSecret(),
       resave: false,
@@ -119,6 +120,9 @@ async function createApp(): Promise<express.Application> {
 
   const subjectSessionIndexService = subjectSessionIndex(redisClient);
   app.use(subjectSessionIndexMiddleware(subjectSessionIndexService));
+
+  app.locals.sessionStore = sessionStore;
+  app.locals.subjectSessionIndexService = subjectSessionIndexService;
 
   app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
