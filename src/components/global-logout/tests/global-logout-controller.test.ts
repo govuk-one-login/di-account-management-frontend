@@ -53,10 +53,7 @@ describe("global logout controller", () => {
     };
   };
 
-  const generateValidToken = async (
-    token: any,
-    subjectId: string = "123456"
-  ) => {
+  const generateValidToken = async (token: any, subjectId = "123456") => {
     return await new jose.SignJWT(token)
       .setIssuedAt()
       .setSubject(subjectId)

@@ -1,10 +1,11 @@
 import { GlobalLogoutServiceInterface } from "./types";
-import { RedisStore } from "connect-redis";
 
 export function globalLogoutService(): GlobalLogoutServiceInterface {
   const clearSessionForSubject = async function (
     subjectId: string
-  ): Promise<void> {};
+  ): Promise<void> {
+    `Logout request received for ${subjectId}`;
+  };
 
   return {
     clearSessionForSubject,
