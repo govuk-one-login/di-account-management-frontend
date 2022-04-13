@@ -62,6 +62,12 @@ describe("Integration::enter password", () => {
       });
     });
 
+    sandbox.stub(oidc, "getJWKS").callsFake(() => {
+      return new Promise((resolve) => {
+        resolve({});
+      });
+    });
+
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 

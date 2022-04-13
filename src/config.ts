@@ -106,7 +106,7 @@ export function getCookiesAndFeedbackLink(): string {
 }
 
 export function getBaseUrl(): string {
-  const baseUrl = process.env.BASE_URL ?? "localhost:6001";
+  const baseUrl = process.env.BASE_URL ?? "localhost:6000";
   return getProtocol() + baseUrl;
 }
 
