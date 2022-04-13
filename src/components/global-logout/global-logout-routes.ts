@@ -1,7 +1,6 @@
 import * as express from "express";
 import { globalLogoutPost } from "./global-logout-controller";
 import { PATH_DATA } from "../../app.constants";
-import { authMiddleware } from "../../middleware/auth-middleware";
 import { asyncHandler } from "../../utils/async";
 
 const router = express.Router();

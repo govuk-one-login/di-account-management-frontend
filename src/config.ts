@@ -123,14 +123,13 @@ export function supportInternationalNumbers(): boolean {
 }
 
 export function getLogoutTokenMaxAge(): number {
-  return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120
+  return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
 }
 
 export function getTokenValidationClockSkew(): number {
-  return Number(process.env.TOKEN_CLOCK_SKEW) || 10
+  return Number(process.env.TOKEN_CLOCK_SKEW) || 10;
 }
 
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";
 }
-

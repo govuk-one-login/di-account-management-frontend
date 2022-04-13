@@ -98,4 +98,9 @@ function clientAssertionGenerator(
   };
 }
 
-export { cached as getOIDCClient, cachedJwks as getJWKS, isTokenExpired, clientAssertionGenerator };
+export {
+  cached as getOIDCClient,
+  cachedJwks as getJWKS,
+  isTokenExpired,
+  clientAssertionGenerator,
+};
