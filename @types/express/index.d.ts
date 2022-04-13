@@ -8,6 +8,7 @@ declare namespace Express {
     csrfToken?: () => string;
     session: any;
     oidc?: Client;
+    issuerJWKS?: any;
     log?: any;
   }
 }

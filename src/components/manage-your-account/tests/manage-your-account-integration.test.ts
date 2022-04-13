@@ -36,6 +36,12 @@ describe("Integration:: manage your account", () => {
       });
     });
 
+    sandbox.stub(oidc, "getJWKS").callsFake(() => {
+      return new Promise((resolve) => {
+        resolve({});
+      });
+    });
+
     app = await require("../../../app").createApp();
   });
 

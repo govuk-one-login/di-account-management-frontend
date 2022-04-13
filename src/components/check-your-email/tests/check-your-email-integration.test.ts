@@ -57,6 +57,12 @@ describe("Integration:: check your email", () => {
       });
     });
 
+    sandbox.stub(oidc, "getJWKS").callsFake(() => {
+      return new Promise((resolve) => {
+        resolve({});
+      });
+    });
+
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
     govUkPublishingBaseApi = process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;

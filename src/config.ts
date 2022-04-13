@@ -122,6 +122,14 @@ export function supportInternationalNumbers(): boolean {
   return process.env.SUPPORT_INTERNATIONAL_NUMBERS === "1";
 }
 
+export function getLogoutTokenMaxAge(): number {
+  return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
+}
+
+export function getTokenValidationClockSkew(): number {
+  return Number(process.env.TOKEN_CLOCK_SKEW) || 10;
+}
+
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";
 }
