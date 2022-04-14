@@ -7,7 +7,3 @@ export interface LogoutToken {
   sid?: string;
   events?: any;
 }
-
-export interface GlobalLogoutServiceInterface {
-  clearSessionForSubject: (subjectId: string) => Promise<void>;
-}

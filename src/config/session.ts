@@ -1,11 +1,11 @@
-import redis, { ClientOpts } from "redis";
+import redis, { ClientOpts, RedisClient } from "redis";
 import connect_redis, { RedisStore } from "connect-redis";
 import session from "express-session";
 import { getRedisHost, getRedisPort } from "../config";
 import { RedisConfig } from "../types";
 const RedisStore = connect_redis(session);
 
-export function getSessionStore(redisConfig: RedisConfig): RedisStore {
+export function getRedisClient(redisConfig: RedisConfig): RedisClient {
   let config: ClientOpts;
 
   if (redisConfig.isLocal) {
@@ -22,8 +22,12 @@ export function getSessionStore(redisConfig: RedisConfig): RedisStore {
     };
   }
 
+  return redis.createClient(config);
+}
+
+export function getSessionStore(redisClient: RedisClient): RedisStore {
   return new RedisStore({
-    client: redis.createClient(config),
+    client: redisClient,
   });
 }
 
