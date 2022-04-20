@@ -78,6 +78,9 @@ resource "aws_dynamodb_table_item" "account_management_client" {
     },
     ConsentRequired = {
       N = "0"
+    },
+    ClientType = {
+      S = "web"
     }
   })
 }
