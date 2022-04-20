@@ -71,7 +71,7 @@
     "i18next-http-middleware": "^3.1.4",
     "jose": "^4.6.0",
     "jsdom": "^18.1.1",
-    "libphonenumber-js": "^1.9.41",
+    "libphonenumber-js": "^1.9.51",
     "nunjucks": "^3.2.3",
     "openid-client": "^5.1.4",
     "p-memoize": "^4.0.1",
