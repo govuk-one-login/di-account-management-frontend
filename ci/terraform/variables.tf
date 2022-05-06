@@ -73,7 +73,7 @@ variable "account_management_image_digest" {
 
 variable "account_management_ecs_desired_count" {
   type    = number
-  default = 3
+  default = 2
 }
 
 variable "account_management_app_port" {
