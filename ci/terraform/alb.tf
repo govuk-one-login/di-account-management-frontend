@@ -11,11 +11,12 @@ resource "aws_lb" "account_management_alb" {
 }
 
 resource "aws_alb_target_group" "account_management_alb_target_group" {
-  name        = "${var.environment}-acct-mgmt-target"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = local.vpc_id
-  target_type = "ip"
+  name                 = "${var.environment}-acct-mgmt-target"
+  port                 = 80
+  protocol             = "HTTP"
+  vpc_id               = local.vpc_id
+  target_type          = "ip"
+  deregistration_delay = var.deregistration_delay
 
   health_check {
     healthy_threshold   = "3"
