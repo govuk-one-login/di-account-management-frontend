@@ -25,8 +25,9 @@ resource "aws_ecs_service" "account_management_ecs_service" {
       aws_security_group.account_management_ecs_tasks_sg.id,
       aws_security_group.allow_access_to_am_frontend_redis.id,
     ]
-    subnets          = local.private_subnet_ids
-    assign_public_ip = false
+    subnets                           = local.private_subnet_ids
+    assign_public_ip                  = false
+    health_check_grace_period_seconds = var.health_check_grace_period_seconds
   }
 
   load_balancer {
