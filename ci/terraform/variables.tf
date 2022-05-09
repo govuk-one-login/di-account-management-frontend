@@ -128,6 +128,10 @@ variable "deployment_max_percent" {
   default = 150
 }
 
+variable "deregistration_delay" {
+  default = 300
+}
+
 variable "wellknown_cloudfront_hosted_zone_id" {
   default     = "Z2FDTNDATAQYW2"
   description = "This is the well know hosted zone ID for all cloudfront destinations"

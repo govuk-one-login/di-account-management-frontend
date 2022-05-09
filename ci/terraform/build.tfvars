@@ -1,3 +1,4 @@
-environment         = "build"
-your_account_url    = ""
-common_state_bucket = "digital-identity-dev-tfstate"
+environment          = "build"
+your_account_url     = ""
+common_state_bucket  = "digital-identity-dev-tfstate"
+deregistration_delay = 30
