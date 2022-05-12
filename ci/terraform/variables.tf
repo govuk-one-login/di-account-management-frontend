@@ -76,6 +76,40 @@ variable "account_management_ecs_desired_count" {
   default = 2
 }
 
+variable "account_management_task_definition_cpu" {
+  type    = number
+  default = 1024
+}
+
+variable "account_management_task_definition_memory" {
+  type    = number
+  default = 2048
+}
+
+variable "account_management_auto_scaling_enabled" {
+  default = false
+}
+
+variable "account_management_auto_scaling_min_count" {
+  type    = number
+  default = 2
+}
+
+variable "account_management_auto_scaling_max_count" {
+  type    = number
+  default = 4
+}
+
+variable "account_management_auto_scaling_policy_memory_target" {
+  type    = number
+  default = 75
+}
+
+variable "account_management_auto_scaling_policy_cpu_target" {
+  type    = number
+  default = 65
+}
+
 variable "account_management_app_port" {
   type    = number
   default = 6001
