@@ -82,5 +82,8 @@ resource "aws_dynamodb_table_item" "account_management_client" {
     ClientType = {
       S = "web"
     }
+    IdentityVerificationSupported = {
+      N = "0"
+    }
   })
 }
