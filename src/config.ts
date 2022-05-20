@@ -101,10 +101,6 @@ export function getAnalyticsCookieDomain(): string {
   return process.env.ANALYTICS_COOKIE_DOMAIN ?? "localhost";
 }
 
-export function getCookiesAndFeedbackLink(): string {
-  return process.env.COOKIES_AND_FEEDBACK_URL;
-}
-
 export function getBaseUrl(): string {
   const baseUrl = process.env.BASE_URL ?? "localhost:6000";
   return getProtocol() + baseUrl;
