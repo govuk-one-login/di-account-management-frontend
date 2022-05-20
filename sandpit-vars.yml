@@ -11,4 +11,3 @@ publishing_api_url: https://account-api.integration.publishing.service.gov.uk/
 publishing_api_token: ""
 app_instances: 1
 auth_frontend_url: front.sandpit.auth.ida.digital.cabinet-office.gov.uk
-cookies_and_feedback_url: https://account-management.sandpit.auth.ida.digital.cabinet-office.gov.uk/

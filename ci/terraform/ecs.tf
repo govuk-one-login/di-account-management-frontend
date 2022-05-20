@@ -136,10 +136,6 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
           value = local.service_domain
         },
         {
-          name  = "COOKIES_AND_FEEDBACK_URL"
-          value = var.cookies_and_feedback_url
-        },
-        {
           name  = "REDIS_KEY"
           value = local.redis_key
         },

@@ -13,7 +13,6 @@ session_expiry                            = 1800000
 gtm_id                                    = ""
 gov_accounts_publishing_api_url           = ""
 gov_account_publishing_api_token          = ""
-cookies_and_feedback_url                  = ""
 support_international_numbers             = 0
 account_management_task_definition_cpu    = 256
 account_management_task_definition_memory = 512

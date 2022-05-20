@@ -17,7 +17,6 @@ params:
   PUBLISHING_API_URL: ((build-gov-accounts-api-url))
   PUBLISHING_API_URL_TOKEN: ((build-gov-accounts-api-token))
   SESSION_EXPIRY: ((build-session-expiry))
-  COOKIES_AND_FEEDBACK_URL: ((build-cookies-and-feedback-url))
   LOGGING_ENDPOINT_ARN: "arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prod"
   LOGGING_ENDPOINT_ENABLED: "true"
   DEPLOY_LISTENER: "true"
@@ -55,7 +54,6 @@ run:
         -var "gtm_id=${GTM_ID}" \
         -var "gov_accounts_publishing_api_url=${PUBLISHING_API_URL}" \
         -var "gov_account_publishing_api_token=${PUBLISHING_API_URL_TOKEN}" \
-        -var "cookies_and_feedback_url=${COOKIES_AND_FEEDBACK_URL}" \
         -var "logging_endpoint_arn=${LOGGING_ENDPOINT_ARN}" \
         -var "logging_endpoint_enabled=${LOGGING_ENDPOINT_ENABLED}" \
         -var "account_management_image_uri=${ACCOUNT_MANAGEMENT_IMAGE_URI}" \
