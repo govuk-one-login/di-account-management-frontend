@@ -122,10 +122,6 @@
         "link": "Delete this GOV.UK account",
         "info": "You can permanently delete this account and all the information stored in it."
       },
-      "cookiesAndFeedback": {
-        "heading": "Cookies and feedback settings",
-        "link": "Change your cookie and feedback settings"
-      },
       "feedback": {
         "heading": "Help improve GOV.UK accounts",
         "link": "Give feedback",

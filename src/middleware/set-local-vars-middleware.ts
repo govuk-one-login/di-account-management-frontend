@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import {
   getAnalyticsCookieDomain,
   getAuthFrontEndUrl,
-  getCookiesAndFeedbackLink,
   getGtmId,
   getYourAccountUrl,
 } from "../config";
@@ -18,7 +17,6 @@ export function setLocalVarsMiddleware(
   res.locals.scriptNonce = generateNonce();
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
-  res.locals.cookiesAndFeedbackUrl = getCookiesAndFeedbackLink();
   res.locals.govAccountsUrl = getYourAccountUrl();
 
   if (req.cookies && req.cookies.gs) {

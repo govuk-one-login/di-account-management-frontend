@@ -131,10 +131,6 @@ variable "gov_account_publishing_api_token" {
   type = string
 }
 
-variable "cookies_and_feedback_url" {
-  type = string
-}
-
 variable "cloudwatch_log_retention" {
   default = 1
   type    = number
