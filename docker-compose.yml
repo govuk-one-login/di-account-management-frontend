@@ -25,6 +25,7 @@ services:
     ports:
       - 6001:6001
       - 9240:9230
+      - 9229:9229
     volumes:
       - ./:/app
     environment:
