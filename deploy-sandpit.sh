@@ -37,7 +37,7 @@ while [[ $# -gt 0 ]]; do
       BUILD=1
       ;;
     -t|--terraform)
-      OIDC=1
+      TERRAFORM=1
       ;;
     --destroy)
       TERRAFORM_OPTS="-destroy"
@@ -57,16 +57,18 @@ echo "Generating temporary ECR credentials..."
 gds aws di-tools-dev -- aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin "${REPO_URL}"
 
 if [[ $BUILD == "1" ]]; then
+  pushd "${DIR}" > /dev/null
   echo "Building image..."
   docker buildx build --platform=linux/amd64 -t "${REPO_NAME}" .
   echo "Tagging image..."
-  docker tag frontend-image-repository:latest "${REPO_URL}:${IMAGE_TAG}"
+  docker tag "${REPO_NAME}:latest" "${REPO_URL}:${IMAGE_TAG}"
 
   echo "Pushing image..."
   docker push "${REPO_URL}:${IMAGE_TAG}"
   IMAGE_DIGEST="$(docker inspect "${REPO_URL}:${IMAGE_TAG}" | jq -r '.[0].RepoDigests[0] | split("@") | .[1]')"
   echo "Digest = ${IMAGE_DIGEST}"
   echo "Complete"
+  popd > /dev/null
 else
   docker pull "${REPO_URL}:${IMAGE_TAG}"
   IMAGE_DIGEST="$(docker inspect "${REPO_URL}:${IMAGE_TAG}" | jq -r '.[0].RepoDigests[0] | split("@") | .[1]')"
@@ -82,11 +84,13 @@ if [[ $TERRAFORM == "1" ]]; then
   rm -rf .terraform/
   terraform init -backend-config=sandpit.hcl
   terraform apply ${TERRAFORM_OPTS} -var-file sandpit.tfvars -var "account_management_image_uri=${REPO_URL}" -var "account_management_image_digest=${IMAGE_DIGEST}"
+  popd > /dev/null
 
-  echo -n "Waiting for ECS deployment to complete ... "
-  aws ecs wait services-stable --services "sandpit-account-management-ecs-service" --cluster "sandpit-app-cluster"
-  echo "done!"
+  if [[ $TERRAFORM_OPTS != "-destroy" ]]; then
+    echo -n "Waiting for ECS deployment to complete ... "
+    aws ecs wait services-stable --services "sandpit-account-management-ecs-service" --cluster "sandpit-app-cluster"
+    echo "done!"
+  fi
 fi
 
 echo "Deployment complete!"
-popd > /dev/null
