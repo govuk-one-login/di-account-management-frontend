@@ -200,14 +200,13 @@
       "header": "Enter your new password",
       "password": {
         "label": "Enter a new password",
-        "hint": "It must be at least 8 characters long and must include at least one number",
+        "hint": "Your password must be at least 8 characters long and must include letters and numbers",
         "validationError": {
           "required": "Enter your new password",
-          "minLength": "Your password must be at least 8 characters long and must include a number",
           "maxLength": "Your password must be less than 256 characters",
           "commonPassword": "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers.",
           "samePassword": "Your account is already using that password. Enter a different password",
-          "alphaNumeric": "Your password must be at least 8 characters long and must include a number"
+          "alphaNumeric": "Your password must be at least 8 characters long and must include letters and numbers"
         }
       },
       "confirmPassword": {
