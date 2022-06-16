@@ -1,6 +1,5 @@
 import { body } from "express-validator";
 import {
-  containsLettersOnly,
   containsNumber,
   containsNumbersOnly,
 } from "../../utils/strings";
@@ -30,8 +29,7 @@ export function validateChangePasswordRequest(): ValidationChainFunc {
         if (
           !containsNumber(value) ||
           containsNumbersOnly(value) ||
-          value.length < 8 ||
-          containsLettersOnly(value)
+          value.length < 8
         ) {
           throw new Error(
             req.t("pages.changePassword.password.validationError.alphaNumeric")
