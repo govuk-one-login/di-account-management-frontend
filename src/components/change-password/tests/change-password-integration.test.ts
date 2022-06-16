@@ -143,13 +143,32 @@ describe("Integration:: change password", () => {
       .set("Cookie", cookies)
       .send({
         _csrf: token,
-        password: "dad",
-        "confirm-password": "",
+        password: "address",
+        "confirm-password": "address",
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#password-error").text()).to.contains(
-          "Your password must be at least 8 characters long and must include a number"
+          "Your password must be at least 8 characters long and must include letters and numbers"
+        );
+      })
+      .expect(400, done);
+  });
+
+  it("should return validation error when password is all numeric", (done) => {
+    request(app)
+      .post(PATH_DATA.CHANGE_PASSWORD.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        password: "123456789",
+        "confirm-password": "123456789",
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#password-error").text()).to.contains(
+          "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
       .expect(400, done);
@@ -168,13 +187,13 @@ describe("Integration:: change password", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#password-error").text()).to.contains(
-          "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers."
+          "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers"
         );
       })
       .expect(400, done);
   });
 
-  it("should return validation error when password not valid", (done) => {
+  it("should return validation error when password is all letters", (done) => {
     request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
@@ -187,7 +206,7 @@ describe("Integration:: change password", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#password-error").text()).to.contains(
-          "Your password must be at least 8 characters long and must include a number"
+          "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
       .expect(400, done);
@@ -250,8 +269,8 @@ describe("Integration:: change password", () => {
       .set("Cookie", cookies)
       .send({
         _csrf: token,
-        password: "testpassword1",
-        "confirm-password": "testpassword1",
+        password: "action-1",
+        "confirm-password": "action-1",
       })
       .expect("Location", PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url)
       .expect(302, done);
