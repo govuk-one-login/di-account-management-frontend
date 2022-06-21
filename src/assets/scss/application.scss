@@ -1,6 +1,6 @@
 @import "../../../node_modules/govuk-frontend/govuk/all";
 
-.feedback-footer {
+.information-box {
   margin-bottom: govuk-spacing(4);
   padding: govuk-spacing(3);
   background: govuk-colour("light-grey");
@@ -12,7 +12,7 @@
 }
 
 .accounts-summary-list {
-  margin-bottom: govuk-spacing(9);
+  margin-bottom: govuk-spacing(7);
 
   .govuk-summary-list {
     border-top: 1px solid $govuk-border-colour;
@@ -35,15 +35,6 @@
     }
   }
 }
-
-#warning-link{
-  color:#D4351C;
-}
-
-#warning-link:focus{
-  color: #0b0c0c;
-}
-
 
 .govuk-show-password__input-wrapper {
   display: table; // IE fallback
