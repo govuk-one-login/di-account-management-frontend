@@ -106,11 +106,6 @@
       "title": "Manage your account",
       "header": "Manage your account",
       "accountDetails": "Account details",
-      "menuItemList": {
-        "manageYourAccount": "Manage your account",
-        "securityAndPrivacy": "Security and privacy",
-        "yourAccount": "Your account"
-      },
       "summaryList": {
         "email": "Email address",
         "password": "Password",

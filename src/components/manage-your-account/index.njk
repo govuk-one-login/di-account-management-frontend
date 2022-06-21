@@ -1,16 +1,7 @@
-{% extends "common/layout/base-menu.njk" %}
+{% extends "common/layout/base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set pageTitleName = 'pages.manageYourAccount.title' | translate %}
-
-{% block menuItem %}
-    <li class="accounts-menu__item accounts-menu__item--current">
-        <a class="accounts-menu__link govuk-link govuk-link--no-visited-state accounts-menu__link-active"
-           aria-current="page" href="/">
-            {{ 'pages.manageYourAccount.menuItemList.manageYourAccount' | translate }}
-        </a>
-    </li>
-{% endblock %}
 
 {% block mainContent %}
     <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ 'pages.manageYourAccount.header' | translate }}</h1>
