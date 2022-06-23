@@ -7,6 +7,7 @@
   "scripts": {
     "build-ts": "tsc",
     "build": "yarn build-sass && yarn build-ts && yarn minfiy-build-js && yarn copy-assets",
+    "build-dev": "yarn build-sass && yarn build-ts && yarn copy-assets",
     "build-sass": "rm -rf dist/public/style.css && sass --no-source-map src/assets/scss/application.scss dist/public/style.css --style compressed",
     "clean": "rm -rf dist node_modules logs.json",
     "clean-modules": "rm -rf node_modules",
@@ -23,7 +24,7 @@
     "test:unit": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config --exclude \"src/**/*-integration.test.ts\"  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test:coverage": "nyc report --reporter=lcov --reporter=text",
-    "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9229 dist/server.js | pino-pretty",
+    "watch-node": "node-dev -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js --respawn | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --watch src/assets/scss/application.scss dist/public/style.css"
   },
@@ -116,7 +117,7 @@
     "husky": "^7.0.4",
     "mocha": "^9.2.0",
     "nock": "^13.2.1",
-    "nodemon": "^2.0.12",
+    "node-dev": "7.4.3",
     "nyc": "^15.1.0",
     "pino-pretty": "^7.1.0",
     "sass": "^1.43.4",
