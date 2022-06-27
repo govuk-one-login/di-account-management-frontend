@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ChangePhoneNumberServiceInterface } from "./types";
 import { changePhoneNumberService } from "./change-phone-number-service";
@@ -10,6 +10,7 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { prependInternationalPrefix } from "../../utils/phone-number";
+import { BadRequestError } from "../../utils/errors";
 
 const TEMPLATE_NAME = "change-phone-number/index.njk";
 
@@ -23,7 +24,7 @@ export function changePhoneNumberPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { email, phoneNumber } = req.session.user;
+    const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
     let newPhoneNumber;
@@ -39,18 +40,8 @@ export function changePhoneNumberPost(
     } else {
       newPhoneNumber = req.body.phoneNumber;
     }
-    if (phoneNumber === newPhoneNumber) {
-      const error = formatValidationError(
-        "phoneNumber",
-        req.t(
-          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
-        )
-      );
 
-      return renderBadRequest(res, req, TEMPLATE_NAME, error);
-    }
-
-    await service.sendPhoneVerificationNotification(
+    const response = await service.sendPhoneVerificationNotification(
       accessToken,
       email,
       newPhoneNumber,
@@ -59,13 +50,27 @@ export function changePhoneNumberPost(
       res.locals.persistentSessionId
     );
 
-    req.session.user.newPhoneNumber = newPhoneNumber;
+    if (response.success) {
+      req.session.user.newPhoneNumber = newPhoneNumber;
 
-    req.session.user.state.changePhoneNumber = getNextState(
-      req.session.user.state.changePhoneNumber.value,
-      "VERIFY_CODE_SENT"
-    );
+      req.session.user.state.changePhoneNumber = getNextState(
+        req.session.user.state.changePhoneNumber.value,
+        "VERIFY_CODE_SENT"
+      );
 
-    res.redirect(PATH_DATA.CHECK_YOUR_PHONE.url);
+      return res.redirect(PATH_DATA.CHECK_YOUR_PHONE.url);
+    }
+
+    if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
+      const error = formatValidationError(
+        "phoneNumber",
+        req.t(
+          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
+        )
+      );
+      return renderBadRequest(res, req, TEMPLATE_NAME, error);
+    } else {
+      throw new BadRequestError(response.message, response.code);
+    }
   };
 }

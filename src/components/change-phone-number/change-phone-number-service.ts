@@ -1,6 +1,16 @@
-import { getRequestConfig, Http, http } from "../../utils/http";
-import { API_ENDPOINTS, NOTIFICATION_TYPE } from "../../app.constants";
+import {
+  createApiResponse,
+  getRequestConfig,
+  Http,
+  http,
+} from "../../utils/http";
+import {
+  API_ENDPOINTS,
+  HTTP_STATUS_CODES,
+  NOTIFICATION_TYPE,
+} from "../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "./types";
+import { ApiResponse, ApiResponseResult } from "../../utils/types";
 
 export function changePhoneNumberService(
   axios: Http = http
@@ -12,8 +22,8 @@ export function changePhoneNumberService(
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string
-  ): Promise<void> {
-    await axios.client.post<void>(
+  ): Promise<ApiResponseResult> {
+    const response = await axios.client.post<ApiResponse>(
       API_ENDPOINTS.SEND_NOTIFICATION,
       {
         email,
@@ -22,15 +32,16 @@ export function changePhoneNumberService(
       },
       getRequestConfig(
         accessToken,
-        null,
+        [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
         sourceIp,
         persistentSessionId,
         sessionId
       )
     );
+    return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
   };
 
   return {
-    sendPhoneVerificationNotification: sendPhoneVerificationNotification,
+    sendPhoneVerificationNotification,
   };
 }

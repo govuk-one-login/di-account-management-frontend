@@ -5,7 +5,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 
 import { ChangePhoneNumberServiceInterface } from "../types";
-import { PATH_DATA } from "../../../app.constants";
+import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import {
   changePhoneNumberGet,
   changePhoneNumberPost,
@@ -48,7 +48,9 @@ describe("change phone number controller", () => {
   describe("changePhoneNumberPost", () => {
     it("should redirect to /phone-number-updated-confirmation page", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake(),
+        sendPhoneVerificationNotification: sandbox.fake.returns({
+          success: true,
+        }),
       };
 
       req.session.user.tokens = { accessToken: "token" };
@@ -63,22 +65,25 @@ describe("change phone number controller", () => {
 
     it("should return validation error when same number", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake(),
+        sendPhoneVerificationNotification: sandbox.fake.returns({
+          success: false,
+          code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
+        }),
       };
 
       req.session.user.tokens = { accessToken: "token" };
       req.body.phoneNumber = "12345678991";
-      req.session.user.phoneNumber = "12345678991";
 
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.sendPhoneVerificationNotification).to.have.not.been
-        .called;
+      expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
     it("should redirect to /phone-number-updated-confirmation when success with valid international number", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sinon.fake(),
+        sendPhoneVerificationNotification: sandbox.fake.returns({
+          success: true,
+        }),
       };
 
       res.locals.sessionId = "123456-djjad";

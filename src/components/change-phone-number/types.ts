@@ -1,3 +1,5 @@
+import { ApiResponseResult } from "../../utils/types";
+
 export interface ChangePhoneNumberServiceInterface {
   sendPhoneVerificationNotification: (
     accessToken: string,
@@ -6,5 +8,5 @@ export interface ChangePhoneNumberServiceInterface {
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string
-  ) => Promise<void>;
+  ) => Promise<ApiResponseResult>;
 }
