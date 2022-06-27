@@ -1,8 +1,5 @@
 import { body } from "express-validator";
-import {
-  containsNumber,
-  containsNumbersOnly,
-} from "../../utils/strings";
+import { containsNumber, containsNumbersOnly } from "../../utils/strings";
 import { validateBodyMiddleware } from "../../middleware/form-validation-middleware";
 import { ValidationChainFunc } from "../../types";
 import { isCommonPassword } from "../../utils/password-validation";
