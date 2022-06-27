@@ -28,7 +28,10 @@ describe("manage you account controller", () => {
       };
       manageYourAccountGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("manage-your-account/index.njk");
+      expect(res.render).to.have.calledWith("manage-your-account/index.njk", {
+        email: "test@test.com",
+        phoneNumber: "*******7898",
+      });
     });
   });
 });
