@@ -1,11 +1,9 @@
 import { isValidPhoneNumber } from "libphonenumber-js/mobile";
 
 export function containsUKMobileNumber(value: string): boolean {
-  return isValidPhoneNumber(value, "GB");
-}
-
-export function containsNumbersOrSpacesOnly(value: string): boolean {
-  return value ? /^[\d\s]+$/.test(value) : false;
+  return (
+    isValidPhoneNumber(value, "GB") && /^([+?44]{2}|[07]{2}).*$/.test(value)
+  );
 }
 
 export function containsInternationalMobileNumber(value: string): boolean {
