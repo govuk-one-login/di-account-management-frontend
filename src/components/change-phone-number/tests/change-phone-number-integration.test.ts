@@ -147,7 +147,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#phoneNumber-error").text()).to.contains(
-          "Enter a UK Phone number using numbers only"
+          "Enter a UK mobile phone number using only numbers or the + symbol"
         );
       })
       .expect(400, done);
@@ -199,6 +199,66 @@ describe("Integration:: change phone number", () => {
       .send({
         _csrf: token,
         phoneNumber: "07738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "+447738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number prefixed with 447 is entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "447738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number prefixed with 440 is entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "4407738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number prefixed with +440 is entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "+4407738394991",
       })
       .expect("Location", "/check-your-phone")
       .expect(302, done);

@@ -292,7 +292,7 @@
           "required": "Enter a UK phone number",
           "international": "Enter a UK phone number",
           "length": "Enter a UK phone number, like 07700 900000",
-          "numeric": "Enter a UK Phone number using numbers only",
+          "plusNumericOnly": "Enter a UK mobile phone number using only numbers or the + symbol",
           "samePhoneNumber": "Your account is already using that phone number. Enter a different phone number."
         }
       },
