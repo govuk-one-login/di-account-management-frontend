@@ -49,7 +49,7 @@
     },
     "header": {
       "homepageHref": "https://www.gov.uk/",
-      "accountLink": "Account",
+      "accountLink": "Your GOV.UK account",
       "signOutLink": "Sign out"
     },
     "footer": {
@@ -103,29 +103,31 @@
   },
   "pages": {
     "manageYourAccount": {
-      "title": "Manage your account",
-      "header": "Manage your account",
-      "accountDetails": "Account details",
-      "menuItemList": {
-        "manageYourAccount": "Manage your account",
-        "securityAndPrivacy": "Security and privacy",
-        "yourAccount": "Your account"
-      },
+      "title": "Your GOV.UK account",
+      "header": "Your GOV.UK account",
+      "signedInStatus": "You’re signed in as",
+      "accountDetails": "Your sign in details",
       "summaryList": {
         "email": "Email address",
         "password": "Password",
         "phoneNumber": "Phone number",
         "changeAction": "Change"
       },
-      "deleteAccount": {
-        "heading": "Delete your account",
-        "link": "Delete this GOV.UK account",
-        "info": "You can permanently delete this account and all the information stored in it."
+      "manageEmailSubscriptions": {
+        "heading": "GOV.UK email subscriptions",
+        "link": "Manage your GOV.UK email subscriptions",
+        "info": "See and manage the emails you get about updates to pages on GOV.UK."
       },
-      "feedback": {
-        "heading": "Help improve GOV.UK accounts",
-        "link": "Give feedback",
-        "text": "on your experience so we can make GOV.UK accounts better."
+      "deleteAccount": {
+        "heading": "Delete your GOV.UK account",
+        "link": "Delete your GOV.UK account",
+        "info": "This will permanently delete your GOV.UK account. You’ll no longer be able to sign in to the services you’ve used with your account."
+      },
+      "aboutAccounts": {
+        "heading": "About GOV.UK accounts",
+        "paragraph1": "GOV.UK accounts are new. At the moment you can only use your GOV.UK account with a few services.",
+        "paragraph2": "GOV.UK accounts are currently separate from other government accounts (for example Government Gateway or Universal Credit).",
+        "paragraph3": "In the future, you’ll be able to use your GOV.UK account to sign in to most services on GOV.UK."
       }
     },
     "enterPassword": {
