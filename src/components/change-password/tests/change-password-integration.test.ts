@@ -2,7 +2,7 @@ import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
-import * as cheerio from "cheerio";
+import { load } from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
@@ -66,7 +66,7 @@ describe("Integration:: change password", () => {
     request(app)
       .get(PATH_DATA.CHANGE_PASSWORD.url)
       .end((err, res) => {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];
       });
@@ -106,7 +106,7 @@ describe("Integration:: change password", () => {
         "confirm-password": "",
       })
       .expect(function (res) {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         expect($("#password-error").text()).to.contains(
           "Enter your new password"
         );
@@ -128,7 +128,7 @@ describe("Integration:: change password", () => {
         "confirm-password": "sdnnsad99d",
       })
       .expect(function (res) {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         expect($("#confirm-password-error").text()).to.contains(
           "Enter the same password in both fields"
         );
@@ -147,7 +147,7 @@ describe("Integration:: change password", () => {
         "confirm-password": "address",
       })
       .expect(function (res) {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         expect($("#password-error").text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
@@ -166,7 +166,7 @@ describe("Integration:: change password", () => {
         "confirm-password": "123456789",
       })
       .expect(function (res) {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         expect($("#password-error").text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
@@ -175,6 +175,11 @@ describe("Integration:: change password", () => {
   });
 
   it("should return validation error when password is amongst most common passwords", (done) => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_PASSWORD)
+      .once()
+      .reply(400, { code: 1040 });
+
     request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
@@ -185,7 +190,7 @@ describe("Integration:: change password", () => {
         "confirm-password": "password123",
       })
       .expect(function (res) {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         expect($("#password-error").text()).to.contains(
           "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers"
         );
@@ -204,7 +209,7 @@ describe("Integration:: change password", () => {
         "confirm-password": "testpassword",
       })
       .expect(function (res) {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         expect($("#password-error").text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
@@ -228,7 +233,7 @@ describe("Integration:: change password", () => {
         "confirm-password": "p@ssw0rd-123",
       })
       .expect(function (res) {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         expect($("#password-error").text()).to.contains(
           "Your account is already using that password. Enter a different password"
         );
@@ -252,7 +257,7 @@ describe("Integration:: change password", () => {
         "confirm-password": "p@ssw0rd-123",
       })
       .expect(function (res) {
-        const $ = cheerio.load(res.text);
+        const $ = load(res.text);
         expect($(".govuk-heading-l").text()).to.contains(
           "Sorry, there is a problem with the service"
         );
