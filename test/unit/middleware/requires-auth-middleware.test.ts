@@ -5,17 +5,10 @@ import { sinon } from "../../utils/test-utils";
 import { requiresAuthMiddleware } from "../../../src/middleware/requires-auth-middleware";
 import { PATH_DATA } from "../../../src/app.constants";
 
-const MOCK_END_SESSION_URL = "mock end session url";
-
 describe("Requires auth middleware", () => {
   it("should redirect to signed out page if user logged out", () => {
     const req: any = {
       session: {},
-      oidc: {
-        endSessionUrl: function () {
-          return MOCK_END_SESSION_URL;
-        },
-      },
       cookies: {
         lo: "true",
       },
@@ -26,7 +19,7 @@ describe("Requires auth middleware", () => {
 
     requiresAuthMiddleware(req, res, nextFunction);
 
-    expect(res.redirect).to.have.been.calledWith(MOCK_END_SESSION_URL);
+    expect(res.redirect).to.have.been.calledWith(PATH_DATA.USER_SIGNED_OUT.url);
     expect(nextFunction).to.have.not.been.called;
   });
 

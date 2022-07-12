@@ -67,6 +67,7 @@ export const PATH_DATA: {
   },
   AUTH_CALLBACK: { url: "/auth/callback" },
   SESSION_EXPIRED: { url: "/session-expired" },
+  USER_SIGNED_OUT: { url: "/signed-out" },
   SIGN_OUT: { url: "/sign-out" },
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },

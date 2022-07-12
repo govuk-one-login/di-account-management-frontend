@@ -32,7 +32,7 @@ describe("logout controller", () => {
   });
 
   describe("logoutGet", () => {
-    it.only("should redirect to end session url and set cookie", () => {
+    it("should redirect to end session url and set cookie", () => {
       req.session.user.tokens = {
         idToken: "id-token",
       };
