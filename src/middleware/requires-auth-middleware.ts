@@ -7,7 +7,7 @@ export function requiresAuthMiddleware(
   next: NextFunction
 ): void {
   const isAuthenticated = req.session.user?.isAuthenticated;
-  const isLoggedOut = req.cookies.lo;
+  const isLoggedOut = req.cookies?.lo;
 
   if (!isAuthenticated && isLoggedOut == "true") {
     return res.redirect(req.oidc.endSessionUrl());
