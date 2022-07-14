@@ -308,6 +308,15 @@
           "internationalFormat": "Enter a phone number in the correct format"
         }
       }
+    },
+    "signedOut": {
+      "title": "You have signed out",
+      "header": "You have signed out",
+      "paragraph1": "To go back, ",
+      "signInLinkText": "sign in to your GOV.UK account",
+      "paragraph2": "Or ",
+      "govukLinkText": "go to the GOV.UK homepage",
+      "govukLinkHref": "https://www.gov.uk/"
     }
   }
 }

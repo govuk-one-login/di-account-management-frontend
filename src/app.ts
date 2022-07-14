@@ -50,6 +50,7 @@ import { deleteAccountRouter } from "./components/delete-account/delete-account-
 import { checkYourPhoneRouter } from "./components/check-your-phone/check-your-phone-routes";
 import { noCacheMiddleware } from "./middleware/no-cache-middleware";
 import { sessionExpiredRouter } from "./components/session-expired/session-expired-routes";
+import { signedOutRouter } from "./components/signed-out/signed-out-routes";
 import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
 import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
@@ -146,6 +147,7 @@ async function createApp(): Promise<express.Application> {
   app.use(deleteAccountRouter);
   app.use(checkYourPhoneRouter);
   app.use(sessionExpiredRouter);
+  app.use(signedOutRouter);
 
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);

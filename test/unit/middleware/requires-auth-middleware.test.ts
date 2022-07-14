@@ -3,9 +3,27 @@ import { describe } from "mocha";
 import { NextFunction } from "express";
 import { sinon } from "../../utils/test-utils";
 import { requiresAuthMiddleware } from "../../../src/middleware/requires-auth-middleware";
+import { PATH_DATA } from "../../../src/app.constants";
 
 describe("Requires auth middleware", () => {
-  it("should redirect to start if user not authenticated", () => {
+  it("should redirect to signed out page if user logged out", () => {
+    const req: any = {
+      session: {},
+      cookies: {
+        lo: "true",
+      },
+    };
+
+    const res: any = { locals: {}, redirect: sinon.fake() };
+    const nextFunction: NextFunction = sinon.fake();
+
+    requiresAuthMiddleware(req, res, nextFunction);
+
+    expect(res.redirect).to.have.been.calledWith(PATH_DATA.USER_SIGNED_OUT.url);
+    expect(nextFunction).to.have.not.been.called;
+  });
+
+  it("should redirect to session expired page if user not authenticated", () => {
     const req: any = {
       session: {
         user: {
@@ -20,18 +38,18 @@ describe("Requires auth middleware", () => {
 
     requiresAuthMiddleware(req, res, nextFunction);
 
-    expect(res.redirect).to.have.been.calledOnce;
+    expect(res.redirect).to.have.been.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     expect(nextFunction).to.have.not.been.called;
   });
 
-  it("should redirect to start if no user session", () => {
+  it("should redirect to session expired page if no user session", () => {
     const req: any = { session: {} };
     const res: any = { locals: {}, redirect: sinon.fake() };
     const nextFunction: NextFunction = sinon.fake();
 
     requiresAuthMiddleware(req, res, nextFunction);
 
-    expect(res.redirect).to.have.been.calledOnce;
+    expect(res.redirect).to.have.been.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     expect(nextFunction).to.have.not.been.called;
   });
 
@@ -44,11 +62,44 @@ describe("Requires auth middleware", () => {
         },
       },
     };
-    const res: any = { locals: {}, redirect: sinon.fake() };
+    const res: any = {
+      locals: {},
+      redirect: sinon.fake(),
+      cookie: sinon.fake(),
+    };
     const nextFunction: NextFunction = sinon.fake();
 
     requiresAuthMiddleware(req, res, nextFunction);
 
     expect(nextFunction).to.have.been.calledOnce;
+  });
+
+  it("should call next and reset lo cookie to false if user is authenticated", () => {
+    const req: any = {
+      session: {
+        user: {
+          email: "test@test.com",
+          isAuthenticated: true,
+        },
+        cookies: {
+          lo: "true",
+        },
+      },
+    };
+
+    const res: any = {
+      locals: {},
+      redirect: sinon.fake(),
+      mockCookies: {},
+      cookie: function (name: string, value: string) {
+        this.mockCookies[name] = value;
+      },
+    };
+    const nextFunction: NextFunction = sinon.fake();
+
+    requiresAuthMiddleware(req, res, nextFunction);
+
+    expect(nextFunction).to.have.been.calledOnce;
+    expect(res.mockCookies.lo).to.equal("false");
   });
 });
