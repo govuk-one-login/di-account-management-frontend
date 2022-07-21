@@ -6,10 +6,12 @@ import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
-import { getBaseUrl } from "../../config";
+import { getBaseUrl, getManageGovukEmailsUrl } from "../../config";
 
 export function deleteAccountGet(req: Request, res: Response): void {
-  res.render("delete-account/index.njk");
+  res.render("delete-account/index.njk", {
+    manageEmailsLink: getManageGovukEmailsUrl()
+  });
 }
 
 export function deleteAccountPost(

@@ -126,6 +126,10 @@ export function getTokenValidationClockSkew(): number {
   return Number(process.env.TOKEN_CLOCK_SKEW) || 10;
 }
 
+export function getManageGovukEmailsUrl(): string {
+  return "https://www.gov.uk/email/manage";
+}
+
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";
 }

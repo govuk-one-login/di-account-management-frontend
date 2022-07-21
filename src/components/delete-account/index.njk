@@ -1,24 +1,34 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.deleteAccount.title' | translate %}
 
 {% block pageContent%}
 
 {% include "common/errors/errorSummary.njk" %}
 
-<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.deleteAccount.header' | translate}}</h1>
+<h1 class="govuk-heading-l govuk-!-margin-top-0">{{'pages.deleteAccount.header' | translate}}</h1>
 
-<br>
+<p class="govuk-body">{{'pages.deleteAccount.paragraph1' | translate}}</p>
 
-{{ govukWarningText({
-  text: 'pages.deleteAccount.warningText' | translate
+<ul class="govuk-list govuk-list--bullet">
+  <li>{{ 'pages.deleteAccount.listItem1' | translate }}</li>
+  <li>{{ 'pages.deleteAccount.listItem2'
+    | translate
+    | replace("[emailManagementLink]", manageEmailsLink)
+    | safe
+  }}</li>
+  <li>{{ 'pages.deleteAccount.listItem3' | translate }}</li>
+</ul>
+<p class="govuk-body">{{ 'pages.deleteAccount.paragraph2' | translate }}</p>
+<p class="govuk-body">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
+
+{{ govukDetails({
+  summaryText: 'pages.deleteAccount.details.summaryText' | translate,
+  html: 'pages.deleteAccount.details.text' | translate
 }) }}
-
-<p class="govuk-body">{{'pages.deleteAccount.paragraph' | translate}}</p>
 
 <form action="/delete-account" method="post" novalidate>
 
@@ -33,11 +43,8 @@
 
 </form>
 
-<br>
-
 <a href="/manage-your-account" class="govuk-link govuk-body">
-    {{'pages.deleteAccount.doNotDeleteAccount' | translate}}
+    {{ 'pages.deleteAccount.doNotDeleteAccount' | translate }}
 </a>
 
 {% endblock %}
-
