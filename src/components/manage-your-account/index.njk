@@ -2,7 +2,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% set pageTitleName = 'pages.manageYourAccount.title' | translate %}
 
-{% set govukSummaryListArgs = 
+{% set govukSummaryListArgs =
 {
     classes:"accounts-summary-list",
     rows: [
@@ -76,7 +76,7 @@
 
             <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.manageEmailSubscriptions.heading' | translate }}</h2>
             <p class="govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.info' | translate }}</p>
-            <a href="https://www.gov.uk/email/manage" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.link' | translate }}</a>
+            <a href="{{ manageEmailsLink }}" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.link' | translate }}</a>
             <hr class="govuk-section-break govuk-section-break--m">
             <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.deleteAccount.heading' | translate }}</h2>
             <p class="govuk-body">{{ 'pages.manageYourAccount.deleteAccount.info' | translate }}</p>
