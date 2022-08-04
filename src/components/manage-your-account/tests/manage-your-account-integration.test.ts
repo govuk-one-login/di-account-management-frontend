@@ -10,6 +10,7 @@ const TEST_USER_PHONE_NUMBER = "07839490040";
 const DEFAULT_USER_SESSION = {
   email: TEST_USER_EMAIL,
   phoneNumber: TEST_USER_PHONE_NUMBER,
+  isPhoneNumberVerified: true,
   isAuthenticated: true,
   state: {},
   tokens: {
@@ -43,10 +44,15 @@ describe("Integration:: manage your account", () => {
   });
 
   it("should not attempt to display phone number when none is known", async () => {
-    const { phoneNumber, ...nonPhoneSessionProperties } = DEFAULT_USER_SESSION; // eslint-disable-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isPhoneNumberVerified, ...nonIsPhoneVerifiedSessionProperties } =
+      DEFAULT_USER_SESSION;
 
     const app = await appWithMiddlewareSetup({
-      customUserSession: nonPhoneSessionProperties,
+      customUserSession: {
+        ...nonIsPhoneVerifiedSessionProperties,
+        isPhoneNumberVerified: false,
+      },
     });
 
     await request(app)

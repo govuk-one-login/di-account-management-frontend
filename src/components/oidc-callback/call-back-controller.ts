@@ -82,6 +82,7 @@ export function oidcAuthCallbackGet(
     req.session.user = {
       email: userInfoResponse.email,
       phoneNumber: userInfoResponse.phone_number,
+      isPhoneNumberVerified: userInfoResponse.phone_number_verified,
       subjectId: userInfoResponse.sub,
       legacySubjectId: userInfoResponse.legacy_subject_id,
       tokens: {
