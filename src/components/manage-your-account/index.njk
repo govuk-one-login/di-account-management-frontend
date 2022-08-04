@@ -42,7 +42,7 @@
             }
 ]} %}
 
-{% if phoneNumber %}
+{% if isPhoneNumberVerified %}
     {% set govukSummaryListArgs = (govukSummaryListArgs.rows.push(            {
                 key: {
                     text: 'pages.manageYourAccount.summaryList.phoneNumber' | translate
