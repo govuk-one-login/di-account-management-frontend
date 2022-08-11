@@ -8,7 +8,7 @@ import {
   checkYourPhonePost,
 } from "../check-your-phone-controller";
 import { CheckYourPhoneServiceInterface } from "../types";
-import { PATH_DATA } from "../../../app.constants";
+import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 
 describe("check your phone controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -46,7 +46,8 @@ describe("check your phone controller", () => {
   describe("checkYourPhonePost", () => {
     it("should redirect to /phone-number-updated-confirmation when valid code entered", async () => {
       const fakeService: CheckYourPhoneServiceInterface = {
-        updatePhoneNumber: sandbox.fake.returns(true),
+        updatePhoneNumber: sandbox.fake.returns({success: true,
+        }),
       };
 
       req.session.user.tokens = { accessToken: "token" };
@@ -62,7 +63,11 @@ describe("check your phone controller", () => {
 
     it("should return error when invalid code entered", async () => {
       const fakeService: CheckYourPhoneServiceInterface = {
-        updatePhoneNumber: sandbox.fake.returns(false),
+        updatePhoneNumber: sandbox.fake.returns({
+          code: ERROR_CODES.INVALID_MFA_OTP_CODE,
+          message: "",
+          success: false,
+        }),
       };
 
       req.session.user.tokens = { accessToken: "token" };
@@ -74,6 +79,28 @@ describe("check your phone controller", () => {
 
       expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
       expect(res.render).to.have.been.calledWith("check-your-phone/index.njk");
+    });
+
+    it("should redirect to security code invalid when invalid code entered too many times", async () => {
+      const fakeService: CheckYourPhoneServiceInterface = {
+        updatePhoneNumber: sinon.fake.returns({
+            code: ERROR_CODES.INVALID_MFA_CODE_TOO_MANY_TIMES,
+            message: "",
+          success: false,
+        }),
+      };
+
+      req.session.user.tokens = { accessToken: "token" };
+      req.t = sinon.fake.returns("translated string");
+      req.body.code = "678988";
+      res.locals.sessionId = "123456-djjad";
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledWith(
+        `${PATH_DATA.SECURITY_CODE_INVALID.url}?actionType=otpMaxRetries`
+      );
     });
   });
 });

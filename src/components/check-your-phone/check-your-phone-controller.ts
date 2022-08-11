@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA } from "../../app.constants";
+import {ERROR_CODES, getErrorPathByCode, PATH_DATA} from "../../app.constants";
 import { CheckYourPhoneServiceInterface } from "./types";
 import { getNextState } from "../../utils/state-machine";
 import { checkYourPhoneService } from "./check-your-phone-service";
@@ -9,6 +9,7 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { redactPhoneNumber } from "../../utils/strings";
+import {BadRequestError} from "../../utils/errors";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -26,7 +27,7 @@ export function checkYourPhonePost(
     const { email, newPhoneNumber } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    const isPhoneNumberUpdated = await service.updatePhoneNumber(
+    const response = await service.updatePhoneNumber(
       accessToken,
       email,
       newPhoneNumber,
@@ -36,7 +37,7 @@ export function checkYourPhonePost(
       res.locals.persistentSessionId
     );
 
-    if (isPhoneNumberUpdated) {
+    if (response.success) {
       req.session.user.phoneNumber = newPhoneNumber;
       delete req.session.user.newPhoneNumber;
 
@@ -47,13 +48,22 @@ export function checkYourPhonePost(
 
       return res.redirect(PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url);
     }
+    if (response.code === ERROR_CODES.INVALID_OTP_CODE || response.code === ERROR_CODES.INVALID_MFA_OTP_CODE) {
+      const error = formatValidationError(
+          "code",
+          req.t("pages.checkYourPhone.code.validationError.invalidCode")
+      );
 
-    const error = formatValidationError(
-      "code",
-      req.t("pages.checkYourPhone.code.validationError.invalidCode")
-    );
+      return renderBadRequest(res, req, TEMPLATE_NAME, error);
+    }
 
-    renderBadRequest(res, req, TEMPLATE_NAME, error);
+    const path = getErrorPathByCode(response.code);
+
+    if (path) {
+      return res.redirect(path);
+    }
+
+    throw new BadRequestError(response.message, response.code);
   };
 }
 
