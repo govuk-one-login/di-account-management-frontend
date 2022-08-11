@@ -1,5 +1,7 @@
 import { UserJourney } from "./utils/state-machine";
 
+const SECURITY_CODE_ERROR = "actionType";
+
 export const PATH_DATA: {
   [key: string]: { url: string; event?: string; type?: UserJourney };
 } = {
@@ -71,6 +73,9 @@ export const PATH_DATA: {
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
+  SECURITY_CODE_REQUEST_EXCEEDED: { url : "/security-code-requested-too-many-times" },
+  SECURITY_CODE_WAIT: { url : "/security-code-invalid-request" },
+  SECURITY_CODE_INVALID: { url : "/security-code-invalid" },
 };
 
 export const API_ENDPOINTS = {
@@ -122,9 +127,64 @@ export const ERROR_MESSAGES = {
 export const ERROR_CODES = {
   NEW_PASSWORD_SAME_AS_EXISTING: 1024,
   NEW_PHONE_NUMBER_SAME_AS_EXISTING: 1044,
+  VERIFY_PHONE_NUMBER_MAX_CODES_SENT: 1032,
+  VERIFY_PHONE_NUMBER_CODE_REQUEST_BLOCKED: 1030,
+  ENTERED_INVALID_VERIFY_PHONE_NUMBER_CODE_MAX_TIMES: 1034,
+  INVALID_OTP_CODE: 1020,
 };
 
 export const ENVIRONMENT_NAME = {
   PROD: "production",
   DEV: "development",
 };
+
+export enum SecurityCodeErrorType {
+  OtpMaxCodesSent = "otpMaxCodesSent",
+  OtpBlocked = "otpBlocked",
+  OtpMaxRetries = "otpMaxRetries",
+}
+
+export const ERROR_CODE_MAPPING: { [p: string]: string } = {
+  [ERROR_CODES.VERIFY_PHONE_NUMBER_MAX_CODES_SENT]: pathWithQueryParam(
+      PATH_DATA["SECURITY_CODE_REQUEST_EXCEEDED"].url,
+      SECURITY_CODE_ERROR,
+      SecurityCodeErrorType.OtpMaxCodesSent
+  ),
+  [ERROR_CODES.VERIFY_PHONE_NUMBER_CODE_REQUEST_BLOCKED]: pathWithQueryParam(
+      PATH_DATA["SECURITY_CODE_WAIT"].url,
+      SECURITY_CODE_ERROR,
+      SecurityCodeErrorType.OtpBlocked
+  ),
+  [ERROR_CODES.ENTERED_INVALID_VERIFY_PHONE_NUMBER_CODE_MAX_TIMES]:
+      pathWithQueryParam(
+          PATH_DATA["SECURITY_CODE_INVALID"].url,
+          SECURITY_CODE_ERROR,
+          SecurityCodeErrorType.OtpMaxRetries
+      ),
+};
+
+function pathWithQueryParam(
+    path: string,
+    queryParam?: string,
+    value?: string | SecurityCodeErrorType
+) {
+  if (queryParam && value) {
+    const queryParams = new URLSearchParams({
+      [queryParam]: value,
+    }).toString();
+
+    return path + "?" + queryParams;
+  }
+
+  return path;
+}
+
+export function getErrorPathByCode(errorCode: number): string | undefined {
+  const nextPath = ERROR_CODE_MAPPING[errorCode.toString()];
+
+  if (!nextPath) {
+    return undefined;
+  }
+
+  return nextPath;
+}

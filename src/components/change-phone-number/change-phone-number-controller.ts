@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ERROR_CODES, PATH_DATA } from "../../app.constants";
+import {ERROR_CODES, getErrorPathByCode, PATH_DATA} from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ChangePhoneNumberServiceInterface } from "./types";
 import { changePhoneNumberService } from "./change-phone-number-service";
@@ -69,8 +69,16 @@ export function changePhoneNumberPost(
         )
       );
       return renderBadRequest(res, req, TEMPLATE_NAME, error);
-    } else {
-      throw new BadRequestError(response.message, response.code);
     }
+
+    if (!response.success) {
+      const path = getErrorPathByCode(response.code);
+
+      if (path) {
+        return res.redirect(path);
+      }
+    }
+
+    throw new BadRequestError(response.message, response.code);
   };
 }

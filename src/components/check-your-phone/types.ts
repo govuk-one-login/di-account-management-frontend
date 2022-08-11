@@ -1,3 +1,5 @@
+import {ApiResponseResult} from "../../utils/types";
+
 export interface CheckYourPhoneServiceInterface {
   updatePhoneNumber: (
     accessToken: string,
@@ -7,5 +9,5 @@ export interface CheckYourPhoneServiceInterface {
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string
-  ) => Promise<boolean>;
+  ) => Promise<ApiResponseResult>;
 }
