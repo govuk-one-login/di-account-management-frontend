@@ -1,0 +1,15 @@
+{% extends "common/layout/base.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% set pageTitleName = 'pages.securityCodeRequestsExceededExpired.title' | translate %}
+{% block content %}
+
+    <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.securityCodeRequestsExceededExpired.header' | translate }}</h1>
+
+    <p class="govuk-body">{{'pages.securityCodeRequestsExceededExpired.info.paragraph1' | translate}}</p>
+    <p class="govuk-body">
+        {{'pages.securityCodeRequestsExceededExpired.info.paragraph2Start' | translate}}
+        <a class="govuk-link" rel="noreferrer" href="{{ newCodeLink }}">{{'pages.securityCodeRequestsExceededExpired.info.link' | translate}}</a>
+        {{'pages.securityCodeRequestsExceededExpired.info.paragraph2End' | translate}}
+    </p>
+
+{% endblock %}
