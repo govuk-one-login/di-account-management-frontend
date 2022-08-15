@@ -19,6 +19,7 @@ services:
       - 6379:6379
 
   di-auth-account-management-frontend:
+    container_name: di-auth-account-management-frontend-dev
     build:
       context: .
       dockerfile: local.Dockerfile
