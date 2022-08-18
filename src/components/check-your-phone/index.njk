@@ -9,19 +9,19 @@
 
 {% block pageContent %}
 
-{% include "common/errors/errorSummary.njk" %}
+    {% include "common/errors/errorSummary.njk" %}
 
-<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.checkYourPhone.header' | translate}}</h1>
+    <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.checkYourPhone.header' | translate}}</h1>
 
-<p class="govuk-body">{{'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber )}}</p>
+    <p class="govuk-body">{{'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber )}}</p>
 
-<p class="govuk-body">{{'pages.checkYourPhone.info.paragraph' | translate}}</p>
+    <p class="govuk-body">{{'pages.checkYourPhone.info.paragraph' | translate}}</p>
 
-<form action="/check-your-phone" method="post" novalidate>
+    <form action="/check-your-phone" method="post" novalidate="novalidate">
 
-<input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-<input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
-{{ govukInput({
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+        <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
+        {{ govukInput({
     label: {
         text: 'pages.checkYourPhone.code.label' | translate
     },
@@ -29,24 +29,28 @@
     id: "code",
     name: "code",
     value: code,
+    inputmode: "numeric",
+    pattern: "[0-9]*",
+    spellcheck: false,
     errorMessage: {
         text: errors['code'].text
     } if (errors['code'])})
 }}
 
-{{ govukButton({
+        {{ govukButton({
     "text": button_text|default("Continue", true),
     "type": "Submit",
     "preventDoubleClick": true
 }) }}
 
-</form>
-<p class="govuk-body">
-<a href="/request-new-opt-code" class="govuk-link govuk-body" rel="noreferrer noopener">{{'pages.checkYourPhone.info.requestNewCodeLink' | translate }}</a> {{'pages.checkYourPhone.info.requestNewCodeParagraph' | translate }}
-</p>
+    </form>
+    <p class="govuk-body">
+        <a href="/request-new-opt-code" class="govuk-link govuk-body" rel="noreferrer noopener">{{'pages.checkYourPhone.info.requestNewCodeLink' | translate }}</a>
+        {{'pages.checkYourPhone.info.requestNewCodeParagraph' | translate }}
+    </p>
 
-  <ul class="govuk-list govuk-list--bullet">
-      <li>{{ 'pages.checkYourPhone.info.requestNewCodeReason1' | translate}}</li>
-      <li>{{ 'pages.checkYourPhone.info.requestNewCodeReason2' | translate}}</li>
-     </ul>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>{{ 'pages.checkYourPhone.info.requestNewCodeReason1' | translate}}</li>
+        <li>{{ 'pages.checkYourPhone.info.requestNewCodeReason2' | translate}}</li>
+    </ul>
 {% endblock %}
