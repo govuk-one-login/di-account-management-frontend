@@ -46,7 +46,8 @@ describe("check your phone controller", () => {
   describe("checkYourPhonePost", () => {
     it("should redirect to /phone-number-updated-confirmation when valid code entered", async () => {
       const fakeService: CheckYourPhoneServiceInterface = {
-        updatePhoneNumber: sandbox.fake.returns(true),
+        updatePhoneNumber: sandbox.fake.returns({success: true,
+        }),
       };
 
       req.session.user.tokens = { accessToken: "token" };
@@ -62,7 +63,11 @@ describe("check your phone controller", () => {
 
     it("should return error when invalid code entered", async () => {
       const fakeService: CheckYourPhoneServiceInterface = {
-        updatePhoneNumber: sandbox.fake.returns(false),
+        updatePhoneNumber: sandbox.fake.returns({
+          code: ERROR_CODES.INVALID_MFA_OTP_CODE,
+          message: "",
+          success: false,
+        }),
       };
 
       req.session.user.tokens = { accessToken: "token" };
@@ -76,18 +81,16 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.been.calledWith("check-your-phone/index.njk");
     });
 
-    it("should redirect to security code invalid when invalid code entered more too many retries", async () => {
-
+    it("should redirect to security code invalid when invalid code entered too many times", async () => {
       const fakeService: CheckYourPhoneServiceInterface = {
         updatePhoneNumber: sinon.fake.returns({
-          data: {
             code: ERROR_CODES.INVALID_MFA_CODE_TOO_MANY_TIMES,
             message: "",
-          },
           success: false,
         }),
       };
 
+      req.session.user.tokens = { accessToken: "token" };
       req.t = sinon.fake.returns("translated string");
       req.body.code = "678988";
       res.locals.sessionId = "123456-djjad";
@@ -96,7 +99,7 @@ describe("check your phone controller", () => {
 
       expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
       expect(res.redirect).to.have.been.calledWith(
-        `${PATH_DATA.SECURITY_CODE_INVALID}?actionType=otpMaxRetries`
+        `${PATH_DATA.SECURITY_CODE_INVALID.url}?actionType=otpMaxRetries`
       );
     });
   });

@@ -54,7 +54,7 @@ export function checkYourPhonePost(
           req.t("pages.checkYourPhone.code.validationError.invalidCode")
       );
 
-      renderBadRequest(res, req, TEMPLATE_NAME, error);
+      return renderBadRequest(res, req, TEMPLATE_NAME, error);
     }
 
     const path = getErrorPathByCode(response.code);

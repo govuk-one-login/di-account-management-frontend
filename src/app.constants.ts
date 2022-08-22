@@ -167,7 +167,7 @@ function pathWithQueryParam(
 }
 
 export function getErrorPathByCode(errorCode: number): string | undefined {
-  const nextPath = ERROR_CODE_MAPPING[errorCode.toString()];
+  const nextPath = ERROR_CODE_MAPPING[errorCode];
 
   if (!nextPath) {
     return undefined;
