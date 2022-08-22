@@ -8,7 +8,7 @@ import {
   checkYourPhonePost,
 } from "../check-your-phone-controller";
 import { CheckYourPhoneServiceInterface } from "../types";
-import { PATH_DATA } from "../../../app.constants";
+import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 
 describe("check your phone controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -74,6 +74,30 @@ describe("check your phone controller", () => {
 
       expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
       expect(res.render).to.have.been.calledWith("check-your-phone/index.njk");
+    });
+
+    it("should redirect to security code invalid when invalid code entered more too many retries", async () => {
+
+      const fakeService: CheckYourPhoneServiceInterface = {
+        updatePhoneNumber: sinon.fake.returns({
+          data: {
+            code: ERROR_CODES.INVALID_MFA_CODE_TOO_MANY_TIMES,
+            message: "",
+          },
+          success: false,
+        }),
+      };
+
+      req.t = sinon.fake.returns("translated string");
+      req.body.code = "678988";
+      res.locals.sessionId = "123456-djjad";
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
+      expect(res.redirect).to.have.been.calledWith(
+        `${PATH_DATA.SECURITY_CODE_INVALID}?actionType=otpMaxRetries`
+      );
     });
   });
 });

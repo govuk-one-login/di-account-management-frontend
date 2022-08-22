@@ -73,8 +73,6 @@ export const PATH_DATA: {
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
-  SECURITY_CODE_REQUEST_EXCEEDED: { url : "/security-code-requested-too-many-times" },
-  SECURITY_CODE_WAIT: { url : "/security-code-invalid-request" },
   SECURITY_CODE_INVALID: { url : "/security-code-invalid" },
 };
 
@@ -127,10 +125,9 @@ export const ERROR_MESSAGES = {
 export const ERROR_CODES = {
   NEW_PASSWORD_SAME_AS_EXISTING: 1024,
   NEW_PHONE_NUMBER_SAME_AS_EXISTING: 1044,
-  VERIFY_PHONE_NUMBER_MAX_CODES_SENT: 1032,
-  VERIFY_PHONE_NUMBER_CODE_REQUEST_BLOCKED: 1030,
-  ENTERED_INVALID_VERIFY_PHONE_NUMBER_CODE_MAX_TIMES: 1034,
   INVALID_OTP_CODE: 1020,
+  INVALID_MFA_CODE_TOO_MANY_TIMES: 1027,
+  INVALID_MFA_OTP_CODE: 1035,
 };
 
 export const ENVIRONMENT_NAME = {
@@ -145,17 +142,7 @@ export enum SecurityCodeErrorType {
 }
 
 export const ERROR_CODE_MAPPING: { [p: string]: string } = {
-  [ERROR_CODES.VERIFY_PHONE_NUMBER_MAX_CODES_SENT]: pathWithQueryParam(
-      PATH_DATA["SECURITY_CODE_REQUEST_EXCEEDED"].url,
-      SECURITY_CODE_ERROR,
-      SecurityCodeErrorType.OtpMaxCodesSent
-  ),
-  [ERROR_CODES.VERIFY_PHONE_NUMBER_CODE_REQUEST_BLOCKED]: pathWithQueryParam(
-      PATH_DATA["SECURITY_CODE_WAIT"].url,
-      SECURITY_CODE_ERROR,
-      SecurityCodeErrorType.OtpBlocked
-  ),
-  [ERROR_CODES.ENTERED_INVALID_VERIFY_PHONE_NUMBER_CODE_MAX_TIMES]:
+  [ERROR_CODES.INVALID_MFA_CODE_TOO_MANY_TIMES]:
       pathWithQueryParam(
           PATH_DATA["SECURITY_CODE_INVALID"].url,
           SECURITY_CODE_ERROR,

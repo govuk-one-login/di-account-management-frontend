@@ -48,7 +48,7 @@ export function checkYourPhonePost(
 
       return res.redirect(PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url);
     }
-    if (response.code === ERROR_CODES.INVALID_OTP_CODE) {
+    if (response.code === ERROR_CODES.INVALID_OTP_CODE || response.code === ERROR_CODES.INVALID_MFA_OTP_CODE) {
       const error = formatValidationError(
           "code",
           req.t("pages.checkYourPhone.code.validationError.invalidCode")
