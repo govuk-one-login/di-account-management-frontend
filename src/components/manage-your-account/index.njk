@@ -1,18 +1,11 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
 {% set pageTitleName = 'pages.manageYourAccount.title' | translate %}
 
-{% block content %}
-<div class="govuk-grid-row" id="your-account">
-  <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
-    <h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ 'pages.manageYourAccount.header' | translate }}</h1>
-    <p class="govuk-body">{{ 'pages.manageYourAccount.signedInStatus' | translate }} <strong>{{ email }}</strong></p>
-    <hr class="govuk-section-break govuk-section-break--m">
-    <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.accountDetails' | translate }}</h2>
-    {{ govukSummaryList({
-        classes:"accounts-summary-list",
-        rows: [
+{% set govukSummaryListArgs =
+{
+    classes:"accounts-summary-list",
+    rows: [
             {
                 key: {
                     text: 'pages.manageYourAccount.summaryList.email' | translate
@@ -46,8 +39,11 @@
                         }
                     ]
                 }
-            },
-            {
+            }
+]} %}
+
+{% if isPhoneNumberVerified %}
+    {% set govukSummaryListArgs = (govukSummaryListArgs.rows.push(            {
                 key: {
                     text: 'pages.manageYourAccount.summaryList.phoneNumber' | translate
                 },
@@ -63,24 +59,35 @@
                         }
                     ]
                 }
-            }
-        ]
-    }) }}
+            }), govukSummaryListArgs) %}
+{% endif %}
 
-    <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.manageEmailSubscriptions.heading' | translate }}</h2>
-    <p class="govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.info' | translate }}</p>
-    <a href="https://www.gov.uk/email/manage" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.link' | translate }}</a>
-    <hr class="govuk-section-break govuk-section-break--m">
-    <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.deleteAccount.heading' | translate }}</h2>
-    <p class="govuk-body">{{ 'pages.manageYourAccount.deleteAccount.info' | translate }}</p>
-    <a href="/enter-password?type=deleteAccount" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.deleteAccount.link' | translate }}</a>
-    <hr class="govuk-section-break govuk-section-break--m">
-    <div class="information-box">
-      <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.aboutAccounts.heading' | translate }}</h2>
-      <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph1' | translate }}</p>
-      <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph2' | translate }}</p>
-      <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph3' | translate }}</p>
+{% block content %}
+    <div class="govuk-grid-row" id="your-account">
+        <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
+            <h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ 'pages.manageYourAccount.header' | translate }}</h1>
+            <p class="govuk-body">{{ 'pages.manageYourAccount.signedInStatus' | translate }}
+                <strong>{{ email }}</strong>
+            </p>
+            <hr class="govuk-section-break govuk-section-break--m">
+            <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.accountDetails' | translate }}</h2>
+
+            {{ govukSummaryList(govukSummaryListArgs) }}
+
+            <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.manageEmailSubscriptions.heading' | translate }}</h2>
+            <p class="govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.info' | translate }}</p>
+            <a href="{{ manageEmailsLink }}" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.link' | translate }}</a>
+            <hr class="govuk-section-break govuk-section-break--m">
+            <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.deleteAccount.heading' | translate }}</h2>
+            <p class="govuk-body">{{ 'pages.manageYourAccount.deleteAccount.info' | translate }}</p>
+            <a href="/enter-password?type=deleteAccount" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.deleteAccount.link' | translate }}</a>
+            <hr class="govuk-section-break govuk-section-break--m">
+            <div class="information-box">
+                <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.aboutAccounts.heading' | translate }}</h2>
+                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph1' | translate }}</p>
+                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph2' | translate }}</p>
+                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph3' | translate }}</p>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 {% endblock %}

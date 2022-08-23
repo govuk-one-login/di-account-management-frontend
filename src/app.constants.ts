@@ -69,6 +69,7 @@ export const PATH_DATA: {
   },
   AUTH_CALLBACK: { url: "/auth/callback" },
   SESSION_EXPIRED: { url: "/session-expired" },
+  USER_SIGNED_OUT: { url: "/signed-out" },
   SIGN_OUT: { url: "/sign-out" },
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },
@@ -124,6 +125,7 @@ export const ERROR_MESSAGES = {
 
 export const ERROR_CODES = {
   NEW_PASSWORD_SAME_AS_EXISTING: 1024,
+  PASSWORD_IS_COMMON: 1040,
   NEW_PHONE_NUMBER_SAME_AS_EXISTING: 1044,
   INVALID_OTP_CODE: 1020,
   INVALID_MFA_CODE_TOO_MANY_TIMES: 1027,

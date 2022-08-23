@@ -47,6 +47,13 @@ export function changePasswordPost(
         req.t("pages.changePassword.password.validationError.samePassword")
       );
       return renderBadRequest(res, req, changePasswordTemplate, error);
+    }
+    if (response.code === ERROR_CODES.PASSWORD_IS_COMMON) {
+      const error = formatValidationError(
+        "password",
+        req.t("pages.changePassword.password.validationError.commonPassword")
+      );
+      return renderBadRequest(res, req, changePasswordTemplate, error);
     } else {
       throw new BadRequestError(response.message, response.code);
     }
