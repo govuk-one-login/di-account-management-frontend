@@ -210,7 +210,7 @@ describe("Integration:: check your phone", () => {
     });
 
     request(app)
-      .post(PATH_DATA.CHECK_YOUR_PHONE)
+      .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
       .set("Cookie", cookies)
       .send({
@@ -219,7 +219,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(
         "Location",
-        `${PATH_DATA.SECURITY_CODE_INVALID}?actionType=${SecurityCodeErrorType.OtpMaxRetries}`
+        `${PATH_DATA.SECURITY_CODE_INVALID.url}?actionType=${SecurityCodeErrorType.OtpMaxRetries}`
       )
       .expect(302, done);
   });
