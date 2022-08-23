@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.get(
-    PATH_DATA.SECURITY_CODE_INVALID,
+    PATH_DATA.SECURITY_CODE_INVALID.url,
     requiresAuthMiddleware,
     securityCodeInvalidGet
 );
