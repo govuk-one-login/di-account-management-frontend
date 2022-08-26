@@ -1,340 +1,330 @@
 {
   "general": {
     "provider": "GOV.UK",
-    "pageTitle": "GOV.UK Sign in",
-    "serviceName": "Sign in to or create your GOV.UK account",
-    "serviceNameTitle": "GOV.UK account",
-    "errorTitlePrefix": "Error",
-    "back": "Back",
-    "warning": "Warning",
-    "errorSummaryTitle": "There is a problem",
+    "pageTitle": "Mewngofnodi i GOV.UK",
+    "serviceName": "Mewngofnodwch i neu greu eich cyfrif GOV.UK",
+    "serviceNameTitle": "Cyfrif GOV.UK",
+    "errorTitlePrefix": "Gwall",
+    "back": "Yn ôl",
+    "warning": "Rhybudd",
+    "errorSummaryTitle": "Mae problem",
     "phaseBanner": {
       "tag": "beta",
-      "text": "This is a new service – your <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">feedback (opens in new tab)</a> will help us to improve it."
+      "text": "Mae hwn yn wasanaeth newydd – bydd eich <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">adborth (agor mewn tab newydd)</a> yn ein helpu i'w wella."
     },
     "yes": "Yes",
-    "no": "No",
-    "backToAccountButtonText": "Back to your account",
-    "backToGovUKButtonText": "Back to GOV.UK home",
+    "no": "Na",
+    "backToAccountButtonText": "Yn ôl i'ch cyfrif",
+    "backToGovUKButtonText": "Yn ôl i hafan GOV.UK",
     "cookie": {
       "cookieBanner": {
-        "title": "Cookies on GOV.UK account",
-        "heading": "Cookies on GOV.UK account",
-        "paragraph1": "We use some essential cookies to make this service work.",
-        "paragraph2": "We’d also like to use analytics cookies so we can understand how you use the service and make improvements.",
-        "buttonAcceptText": "Accept analytics cookies",
-        "buttonRejectText": "Reject analytics cookies",
-        "linkViewCookiesText": "View cookies",
-        "cookieBannerHideLink": "Hide this message",
+        "title": "Cwcis ar gyfrif GOV.UK",
+        "heading": "Cwcis ar gyfrif GOV.UK",
+        "paragraph1": "Rydym yn defnyddio rhai cwcis hanfodol i wneud i'r gwasanaeth hwn weithio.",
+        "paragraph2": "Hoffem hefyd ddefnyddio cwcis dadansoddi er mwyn i ni allu deall sut rydych yn defnyddio'r gwasanaeth a gwneud gwelliannau.",
+        "buttonAcceptText": "Derbyn cwcis dadansoddi",
+        "buttonRejectText": "Gwrthod cwcis dadansoddi",
+        "linkViewCookiesText": "Gweld cwcis",
+        "cookieBannerHideLink": "Cuddio'r neges yma",
         "cookeBannerAccept": {
-          "paragraph1": "You’ve accepted additional cookies. You can ",
-          "paragraph2": " at any time."
+          "paragraph1": "Rydych wedi derbyn cwcis ychwanegol. Gallwch ",
+          "paragraph2": " unrhyw bryd."
         },
         "cookeBannerReject": {
-          "paragraph1": "You’ve rejected additional cookies. You can ",
-          "paragraph2": " at any time."
+          "paragraph1": "Rydych wedi gwrthod cwcis ychwanegol. Gallwch ",
+          "paragraph2": " unrhyw bryd."
         },
-        "changeCookiePreferencesLink": "change your cookie settings"
+        "changeCookiePreferencesLink": "newid eich gosodiadau cwcis"
       },
-      "cookieText": "GOV.UK uses cookies to make the site simpler.",
+      "cookieText": "Mae GOV.UK yn defnyddio cwcis i wneud y safle'n symlach.",
       "cookieLink": "#",
-      "cookieLinkText": "Find out more about cookies"
+      "cookieLinkText": "Darganfyddwch fwy am gwcis"
     },
     "language": {
-      "english": "English",
-      "welsh": "Cymraeg (Welsh)"
+      "english": "Saesneg",
+      "welsh": "Cymraeg"
     },
     "continue": {
-      "label": "Continue"
+      "label": "Parhau"
     },
     "header": {
       "homepageHref": "https://www.gov.uk/",
-      "accountLink": "Your GOV.UK account",
-      "signOutLink": "Sign out"
+      "accountLink": "Eich cyfrif GOV.UK",
+      "signOutLink": "Allgofnodi"
     },
     "footer": {
       "accessibilityStatement": {
-        "pageTitle": "Accessibility statement",
-        "linkText": "Accessibility statement"
+        "pageTitle": "Datganiad hygyrchedd",
+        "linkText": "Datganiad hygyrchedd"
       },
       "cookies": {
-        "pageTitle": "Cookie Policy",
-        "linkText": "Cookies"
+        "pageTitle": "Polisi Cwcis",
+        "linkText": "Cwcis"
       },
       "terms": {
-        "pageTitle": "Terms and conditions",
-        "linkText": "Terms and conditions"
+        "pageTitle": "Telerau ac amodau",
+        "linkText": "Telerau ac amodau"
       },
       "privacy": {
-        "pageTitle": "Privacy notice",
-        "linkText": "Privacy notice"
+        "pageTitle": "Hysbysiad preifatrwydd",
+        "linkText": "Hysbysiad preifatrwydd"
       }
     }
   },
   "error": {
     "error404": {
-      "title": "Page not found",
-      "header": "Page not found",
+      "title": "Tudalen heb ei darganfod",
+      "header": "Tudalen heb ei darganfod",
       "content": {
-        "paragraph1": "If you typed the web address, check it is correct.",
-        "paragraph2": "If you pasted the web address, check you copied the entire address.",
+        "paragraph1": "Os ydych wedi teipio'r cyfeiriad gwe, edrychwch i weld ei fod yn gywir.",
+        "paragraph2": "Os ydych wedi gludo'r cyfeiriad gwe, edrychwch i weld eich bod wedi copïo'r cyfeiriad cyfan.",
         "govUKHomepageButtonHref": "https://www.gov.uk/",
-        "govUKHomepageButtonText": "Go to the GOV.UK homepage"
+        "govUKHomepageButtonText": "Ewch i hafan GOV.UK"
       }
     },
     "error500": {
-      "title": "Sorry, there is a problem with the service",
-      "header": "Sorry, there is a problem with the service",
+      "title": "Mae'n ddrwg gennym, mae problem gyda'r gwasanaeth",
+      "header": "Mae'n ddrwg gennym, mae problem gyda'r gwasanaeth",
       "content": {
-        "paragraph1": "Try again later."
+        "paragraph1": "Rhowch gynnig arall yn nes ymlaen."
       }
     },
     "timeoutError": {
-      "title": "You have been signed out",
-      "header": "You have been signed out",
+      "title": "Rydych wedi cael eich allgofnodi",
+      "header": "Rydych wedi cael eich allgofnodi",
       "content": {
-        "paragraph1": "You’ve been signed out because you did not use your account for more than 2 hours.",
-        "paragraph2": "This is to keep your account and your information secure.",
-        "signInButtonText": "Sign in to your account",
+        "paragraph1": "Rydych wedi cael eich allgofnodi oherwydd nad oeddech wedi defnyddio eich cyfrif am fwy na 2 awr.",
+        "paragraph2": "Mae hyn er mwyn cadw eich cyfrif a'ch gwybodaeth yn ddiogel.",
+        "signInButtonText": "Mewngofnodi i'ch cyfrif",
         "govUKHomepageLink": "https://www.gov.uk/",
-        "govUKHomepageLinkText": "Go to the GOV.UK homepage"
+        "govUKHomepageLinkText": "Ewch i hafan GOV.UK"
       }
     }
   },
   "pages": {
     "manageYourAccount": {
-      "title": "Your GOV.UK account",
-      "header": "Your GOV.UK account",
-      "signedInStatus": "You’re signed in as",
-      "accountDetails": "Your sign in details",
+      "title": "Eich cyfrif GOV.UK",
+      "header": "Eich cyfrif GOV.UK",
+      "signedInStatus": "Rydych wedi mewngofnodi fel",
+      "accountDetails": "Eich manylion mewngofnodi",
       "summaryList": {
-        "email": "Email address",
-        "password": "Password",
-        "phoneNumber": "Phone number",
-        "changeAction": "Change"
+        "email": "Cyfeiriad e-bost",
+        "password": "Cyfrinair",
+        "phoneNumber": "Rhif ffôn",
+        "changeAction": "Newid"
       },
       "manageEmailSubscriptions": {
-        "heading": "GOV.UK email subscriptions",
-        "link": "Manage your GOV.UK email subscriptions",
-        "info": "See and manage the emails you get about updates to pages on GOV.UK."
+        "heading": "Tanysgrifiadau e-bost GOV.UK",
+        "link": "Rheoli eich tanysgrifiadau e-bost GOV.UK",
+        "info": "Gweld a rheoli'r e-byst rydych yn eu cael am ddiweddariadau i dudalennau ar GOV.UK."
       },
       "deleteAccount": {
-        "heading": "Delete your GOV.UK account",
-        "link": "Delete your GOV.UK account",
-        "info": "This will permanently delete your GOV.UK account. You’ll no longer be able to sign in to the services you’ve used with your account."
+        "heading": "Dileu eich cyfrif GOV.UK",
+        "link": "Dileu eich cyfrif GOV.UK",
+        "info": "Bydd hyn yn dileu eich cyfrif GOV.UK yn barhaol. Ni fyddwch bellach yn gallu mewngofnodi i'r gwasanaethau rydych wedi'u defnyddio gyda'ch cyfrif."
       },
       "aboutAccounts": {
-        "heading": "About GOV.UK accounts",
-        "paragraph1": "GOV.UK accounts are new. At the moment you can only use your GOV.UK account with a few services.",
-        "paragraph2": "GOV.UK accounts are currently separate from other government accounts (for example Government Gateway or Universal Credit).",
-        "paragraph3": "In the future, you’ll be able to use your GOV.UK account to sign in to most services on GOV.UK."
+        "heading": "Am gyfrifon GOV.UK",
+        "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gydag ychydig o wasanaethau.",
+        "paragraph2": "Ar hyn o bryd mae cyfrifon GOV.UK ar wahân i gyfrifon eraill y llywodraeth (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
+        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i fewngofnodi i'r rhan fwyaf o wasanaethau ar GOV.UK."
       }
     },
     "enterPassword": {
-      "title": "Enter your password",
+      "title": "Rhowch eich cyfrinair",
       "changeEmail": {
-        "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can change your email address.",
-        "backLink": "I do not want to change my email address"
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch newid eich cyfeiriad e-bost.",
+        "backLink": "Nid wyf eisiau newid fy nghyfeiriad e-bost"
       },
       "changePassword": {
-        "title": "Enter your current password",
-        "header": "Enter your current password",
-        "paragraph": "We need to make sure it’s you before you can change your password.",
-        "backLink": "I do not want to change my password"
+        "title": "Rhowch eich cyfrinair presennol",
+        "header": "Rhowch eich cyfrinair presennol",
+        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch newid eich cyfrinair.",
+        "backLink": "Nid wyf eisiau newid fy nghyfrinair"
       },
       "changePhoneNumber": {
-        "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can change your phone number.",
-        "backLink": "I do not want to change my phone number"
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch newid eich rhif ffôn.",
+        "backLink": "Nid wyf eisiau newid fy rhif ffôn"
       },
       "deleteAccount": {
-        "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can delete your account.",
-        "backLink": "I do not want to delete my account"
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch ddileu eich cyfrif.",
+        "backLink": "Nid wyf eisiau dileu fy nghyfrif"
       },
       "password": {
-        "label": "Enter your password",
+        "label": "Rhowch eich cyfrinair",
         "validationError": {
-          "required": "Enter your password",
-          "incorrectPassword": "Enter the correct password"
+          "required": "Rhowch eich cyfrinair",
+          "incorrectPassword": "Rhowch y cyfrinair cywir"
         }
       }
     },
     "changeEmail": {
-      "title": "Enter your new email address",
-      "header": "Enter your new email address",
+      "title": "Rhowch eich cyfeiriad e-bost newydd",
+      "header": "Rhowch eich cyfeiriad e-bost newydd",
       "email": {
-        "label": "Email address",
+        "label": "Cyfeiriad e-bost",
         "validationError": {
-          "required": "Enter your email address",
-          "length": "Email address must be 256 characters or fewer",
-          "email": "Enter an email address in the correct format, like name@example.com",
-          "alreadyInUse": "That email address already has a GOV.UK account. Enter a different email address.",
-          "sameEmail": "Your account is already using that email address. Enter a different email address."
+          "required": "Rhowch eich cyfeiriad e-bost",
+          "length": "Rhaid i gyfeiriad e-bost fod yn 256 nod neu lai",
+          "email": "Rhowch gyfeiriad e-bost yn y ffurf cywir, fel name@example.com",
+          "alreadyInUse": "Mae gan y cyfeiriad e-bost hwnnw gyfrif GOV.UK yn barod. Rhowch gyfeiriad e-bost gwahanol.",
+          "sameEmail": "Mae eich cyfrif eisoes yn defnyddio'r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol."
         }
       },
       "dontWantTo": {
-        "changeEmailLinkText": "I do not want to change my email address"
+        "changeEmailLinkText": "Nid wyf eisiau newid fy nghyfeiriad e-bost"
       }
     },
     "updateEmailConfirmation": {
-      "title": "You have changed your email address",
-      "panelText": "You have changed your email address",
-      "summaryText": "Your email address has been changed to [email]"
+      "title": "Rydych wedi newid eich cyfeiriad e-bost",
+      "panelText": "Rydych wedi newid eich cyfeiriad e-bost",
+      "summaryText": "Mae eich cyfeiriad e-bost wedi cael ei newid i [email]"
     },
     "updatePasswordConfirmation": {
-      "title": "You have changed your password",
-      "panelText": "You have changed your password"
+      "title": "Rydych wedi newid eich cyfrinair",
+      "panelText": "Rydych wedi newid eich cyfrinair"
     },
     "updatePhoneNumberConfirmation": {
-      "title": "You have changed your phone number",
-      "panelText": "You have changed your phone number",
-      "summaryText": "Your phone number has been changed to [mobile]."
+      "title": "Rydych wedi newid eich rhif ffôn",
+      "panelText": "Rydych wedi newid eich rhif ffôn",
+      "summaryText": "Mae eich rhif ffôn wedi cael ei newid i [mobile]."
     },
     "deleteAccountConfirmation": {
-      "title": "You have deleted your GOV.UK account",
-      "panelText": "You have deleted your GOV.UK account",
-      "summaryText": "If you need to use a GOV.UK account in future, you will need to create a new one."
+      "title": "Rydych wedi dileu eich cyfrif GOV.UK",
+      "panelText": "Rydych wedi dileu eich cyfrif GOV.UK",
+      "summaryText": "Os byddwch angen defnyddio cyfrif GOV.UK yn y dyfodol, bydd angen i chi greu un newydd."
     },
     "changePassword": {
-      "title": "Enter your new password",
-      "header": "Enter your new password",
+      "title": "Rhowch eich cyfrinair newydd",
+      "header": "Rhowch eich cyfrinair newydd",
       "password": {
-        "label": "Enter a new password",
-        "paragraph1": "Your password must:",
-        "bulletPoint1": "be at least 8 characters long",
-        "bulletPoint2": "include letters and numbers",
-        "paragraph2": "Do not use a very common password, such as ‘password’ or a sequence of numbers.",
+        "label": "Rhowch gyfrinair newydd",
+        "paragraph1": "Mae'n rhaid i'ch cyfrinair:",
+        "bulletPoint1": "fod yn o leiaf 8 nod o hyd",
+        "bulletPoint2": "cynnwys llythrennau a rhifau",
+        "paragraph2": "Peidiwch defnyddio cyfrinair cyffredin iawn, fel 'password' neu ddilyniant o rifau.",
         "validationError": {
-          "required": "Enter your new password",
-          "maxLength": "Your password must be less than 256 characters",
-          "commonPassword": "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers.",
-          "samePassword": "Your account is already using that password. Enter a different password",
-          "alphaNumeric": "Your password must be at least 8 characters long and must include letters and numbers"
+          "required": "Rhowch eich cyfrinair newydd",
+          "maxLength": "Mae'n rhaid i'ch cyfrinair fod yn llai na 256 nod",
+          "commonPassword": "Rhowch gyfrinair cryfach. Peidiwch defnyddio cyfrineiriau cyffredin iawn, fel 'password' neu ddilyniant o rifau.",
+          "samePassword": "Mae eich cyfrif eisoes yn defnyddio'r cyfrinair hwnnw. Rhowch gyfrinair gwahanol",
+          "alphaNumeric": "Mae'n rhaid i'ch cyfrinair fod yn o leiaf 8 nod o hyd a rhaid iddo gynnwys llythrennau a rhifau"
         }
       },
       "confirmPassword": {
-        "label": "Re-type your new password",
+        "label": "Ail-deipiwch eich cyfrinair newydd",
         "validationError": {
-          "required": "Re-type your new password",
-          "matches": "Enter the same password in both fields"
+          "required": "Ail-deipiwch eich cyfrinair newydd",
+          "matches": "Rhowch yr un cyfrinair yn y ddau faes"
         }
       },
       "securePasswordDetails": {
-        "summary": "How to create a secure password",
-        "text": "A good way to create a secure and memorable password is to use 3 random words. You can use numbers, symbols and spaces."
+        "summary": "Sut i greu cyfrinair diogel",
+        "text": "Ffordd dda o greu cyfrinair diogel a chofiadwy yw defnyddio 3 gair ar hap. Gallwch ddefnyddio rhifau, symbolau a gofodau."
       },
-      "backLink": "I do not want to change my password"
+      "backLink": "Nid wyf eisiau newid fy nghyfrinair"
     },
     "checkYourEmail": {
-      "title": "Check your email",
-      "header": "Check your email",
-      "text": "We have sent an email to: ",
+      "title": "Gwiriwch eich e-bost",
+      "header": "Gwiriwch eich e-bost",
+      "text": "Rydym wedi anfon e-bost at: ",
       "info": {
-        "paragraph1": "The email contains a 6 digit security code.",
-        "paragraph2": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder.",
-        "paragraph3": "The code will expire after  15 minutes.",
-        "requestNewCodeLink": "Request a new code",
-        "requestNewCodeParagraph": " if:",
-        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
-        "requestNewCodeReason2": "you want to use a different email address"
+        "paragraph1": "Mae'r e-bost yn cynnwys cod diogelwch 6 digid.",
+        "paragraph2": "Efallai y bydd eich e-bost yn cymryd ychydig funudau i gyrraedd. Os na chewch e-bost, edrychwch ar eich ffolder spam.",
+        "paragraph3": "Bydd y cod yn dod i ben ar ôl 15 munud.",
+        "requestNewCodeLink": "Gofynnwch am god newydd",
+        "requestNewCodeParagraph": " os:",
+        "requestNewCodeReason1": "nad yw'r cod yn gweithio neu mae wedi dod i ben, neu ni wnaethoch dderbyn un",
+        "requestNewCodeReason2": "rydych eisiau defnyddio cyfeiriad e-bost gwahanol"
       },
       "code": {
-        "label": "Enter the 6 digit security code",
+        "label": "Rhowch y cod diogelwch 6 digid",
         "validationError": {
-          "required": "Enter the security code",
-          "maxLength": "Enter the security code using only 6 digits",
-          "minLength": "Enter the security code using only 6 digits",
-          "invalidFormat": "Enter the security code using only 6 digits",
-          "invalidCode": "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
+          "required": "Rhowch y cod diogelwch",
+          "maxLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
+          "minLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
+          "invalidFormat": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
+          "invalidCode": "Nid yw'r cod diogelwch rydych wedi'i roi i mewn yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi i mewn eto neu ofyn am god diogelwch newydd."
         }
       }
     },
     "checkYourPhone": {
-      "title": "Check your phone",
-      "header": "Check your phone",
-      "text": "We sent a code to [mobile].",
+      "title": "Gwiriwch eich ffôn",
+      "header": "Gwiriwch eich ffôn",
+      "text": "Rydym wedi anfon cod i [mobile].",
       "info": {
-        "paragraph": "It might take a few minutes to arrive. The code will expire after  15 minutes.",
-        "requestNewCodeLink": "Request a new code",
-        "requestNewCodeParagraph": " if:",
-        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
-        "requestNewCodeReason2": "you want to use a different phone number"
+        "paragraph": "Efallai y bydd yn cymryd ychydig funudau i gyrraedd. Bydd y cod yn dod i ben ar ôl 15 munud.",
+        "requestNewCodeLink": "Gofynnwch am god newydd",
+        "requestNewCodeParagraph": " os:",
+        "requestNewCodeReason1": "nad yw'r cod yn gweithio neu mae wedi dod i ben, neu ni wnaethoch dderbyn un",
+        "requestNewCodeReason2": "rydych eisiau defnyddio rhif ffôn gwahanol"
       },
       "code": {
-        "label": "Enter the 6 digit security code",
+        "label": "Rhowch y cod diogelwch 6 digid",
         "validationError": {
-          "required": "Enter the security code",
-          "maxLength": "Enter the security code using only 6 digits",
-          "minLength": "Enter the security code using only 6 digits",
-          "invalidFormat": "Enter the security code using only 6 digits",
-          "invalidCode": "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
+          "required": "Rhowch y cod diogelwch",
+          "maxLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
+          "minLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
+          "invalidFormat": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
+          "invalidCode": "Nid yw'r cod diogelwch rydych wedi'i roi i mewn yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi i mewn eto neu ofyn am god diogelwch newydd."
         }
       }
     },
     "deleteAccount": {
-      "title": "Are you sure you want to delete your GOV.UK account?",
-      "header": "Are you sure you want to delete your GOV.UK account?",
-      "paragraph1": "This will:",
-      "listItem1": "permanently delete your GOV.UK account and the information stored in it",
-      "listItem2": "delete any <a class=\"govuk-link\" href=\"[emailManagementLink]\">GOV.UK email subscriptions</a> you may have",
-      "listItem3": "remove your ability to sign in to LITE (to apply for export licences for controlled goods), if you’ve used it with your GOV.UK account",
-      "paragraph2": "If you need a GOV.UK account in the future, you’ll have to create a new one.",
-      "paragraph3": "Deleting your GOV.UK account will not delete any other government accounts you may have, such as Government Gateway or Universal Credit.",
+      "title": "Ydych chi'n siwr eich bod am ddileu eich cyfrif GOV.UK?",
+      "header": "Ydych chi'n siwr eich bod am ddileu eich cyfrif GOV.UK?",
+      "paragraph1": "Bydd hyn yn:",
+      "listItem1": "dileu eich cyfrif GOV.UK yn barhaol a'r wybodaeth sydd wedi'i gadw ynddo",
+      "listItem2": "dileu unrhyw <a class=\"govuk-link\" href=\"[emailManagementLink]\">Tanysgrifiadau e-bost GOV.UK</a> y gallai fod gennych",
+      "listItem3": "tynnu i ffwrdd eich gallu i fewngofnodi i LITE (i wneud cais am drwyddedau allforio ar gyfer nwyddau rheoledig), os ydych wedi'i ddefnyddio gyda'ch cyfrif GOV.UK",
+      "paragraph2": "Os byddwch angen cyfrif GOV.UK yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
+      "paragraph3": "Ni fydd dileu eich cyfrif GOV.UK yn dileu unrhyw gyfrifon eraill y llywodraeth sydd gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.",
       "details": {
-        "summaryText": "If you use LITE",
-        "text": "<p class=\"govuk-body\">If you delete your GOV.UK account you will no longer be able to sign in to LITE (Licensing for International Trade and Enterprise).</p><p class=\"govuk-body\"> The information about you held in LITE will not be deleted. Email <a class=\"govuk-link\" href=\"mailto:data.protection@trade.gov.uk\">data.protection@trade.gov.uk</a> if you want to delete information held by LITE.</p>"
+        "summaryText": "Os ydych yn defnyddio LITE",
+        "text": "<p class=\"govuk-body\">Os ydych yn dileu eich cyfrif GOV.UK ni fyddwch mwyach yn gallu mewngofnodi i LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol).</p><p class=\"govuk-body\"> Ni fydd y wybodaeth amdanoch a gedwir yn LITE yn cael ei ddileu. E-bostiwch <a class=\"govuk-link\" href=\"mailto:data.protection@trade.gov.uk\">data.protection@trade.gov.uk</a> os ydych chi am ddileu gwybodaeth a gedwir gan LITE.</p>"
       },
-      "deleteAccount": "Delete your GOV.UK account",
-      "doNotDeleteAccount": "Cancel and go back to your account"
+      "deleteAccount": "Dileu eich cyfrif GOV.UK",
+      "doNotDeleteAccount": "Canslo a mynd yn ôl i'ch cyfrif"
     },
     "changePhoneNumber": {
-      "title": "Enter your new mobile phone number",
-      "header": "Enter your new mobile phone number",
+      "title": "Rhowch eich rhif ffôn symudol newydd",
+      "header": "Rhowch eich rhif ffôn symudol newydd",
       "info": {
-        "paragraph1": "We will send a 6 digit security code to the number you give us.",
-        "backLink": "I do not want to change my phone number"
+        "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i'r rhif rydych yn ei roi i ni.",
+        "backLink": "Nid wyf eisiau newid fy rhif ffôn"
       },
       "ukPhoneNumber": {
-        "label": "UK phone number",
+        "label": "Rhif ffôn y DU",
         "validationError": {
-          "required": "Enter a UK phone number",
-          "international": "Enter a UK phone number",
-          "length": "Enter a UK phone number, like 07700 900000",
-          "plusNumericOnly": "Enter a UK mobile phone number using only numbers or the + symbol",
-          "samePhoneNumber": "Your account is already using that phone number. Enter a different phone number."
+          "required": "Rhowch rif ffôn y DU",
+          "international": "Rhowch rif ffôn y DU",
+          "length": "Rhowch rif ffôn y DU, fel 07700 900000",
+          "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu'r symbol +",
+          "samePhoneNumber": "Mae eich cyfrif eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
         }
       },
       "internationalPhoneNumber": {
-        "checkBoxLabel": "I have an international mobile number",
-        "label": "International mobile number",
-        "hint": "Include the country code, for example +3537777666555",
+        "checkBoxLabel": "Mae gennyf rif ffôn symudol rhyngwladol",
+        "label": "Rhif ffôn symudol rhyngwladol",
+        "hint": "Dylech gynnwys y cod gwlad, er enghraifft +3537777666555",
         "validationError": {
-          "required": "Enter a phone number",
-          "plusNumericOnly": "Enter a phone number using only numbers or the + symbol",
-          "internationalFormat": "Enter a phone number in the correct format"
+          "required": "Rhowch rif ffôn",
+          "plusNumericOnly": "Rhowch rif ffôn gan ddefnyddio rhifau yn unig neu'r symbol +",
+          "internationalFormat": "Rhowch rif ffôn yn y ffurf cywir"
         }
       }
     },
     "signedOut": {
-      "title": "You have signed out",
-      "header": "You have signed out",
-      "paragraph1": "To go back, ",
-      "signInLinkText": "sign in to your GOV.UK account",
-      "paragraph2": "Or ",
-      "govukLinkText": "go to the GOV.UK homepage",
+      "title": "Rydych wedi allgofnodi",
+      "header": "Rydych wedi allgofnodi",
+      "paragraph1": "I fynd yn ôl, ",
+      "signInLinkText": "mewngofnodwch i'ch cyfrif GOV.UK",
+      "paragraph2": "Neu ",
+      "govukLinkText": "ewch i hafan GOV.UK",
       "govukLinkHref": "https://www.gov.uk/"
-    },
-    "securityCodeInvalid": {
-      "title": "You entered the wrong security code too many times",
-      "header": "You entered the wrong security code too many times",
-      "info": {
-        "paragraph1": "You need to wait 15 minutes.",
-        "paragraph2Start": "You can then ",
-        "link": "get a new code",
-        "paragraph2End": " and try again."
-      }
     }
   }
 }
