@@ -1,6 +1,7 @@
-import { getRequestConfig, Http, http } from "../../utils/http";
+import { createApiResponse, getRequestConfig, Http, http } from "../../utils/http";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { CheckYourPhoneServiceInterface } from "./types";
+import {ApiResponseResult} from "../../utils/types";
 
 export function checkYourPhoneService(
   axios: Http = http
@@ -13,8 +14,8 @@ export function checkYourPhoneService(
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string
-  ): Promise<boolean> {
-    const { status } = await axios.client.post<void>(
+  ): Promise<ApiResponseResult> {
+    const response = await axios.client.post<void>(
       API_ENDPOINTS.UPDATE_PHONE_NUMBER,
       {
         email,
@@ -30,7 +31,7 @@ export function checkYourPhoneService(
       )
     );
 
-    return status === HTTP_STATUS_CODES.NO_CONTENT;
+    return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
   };
 
   return {

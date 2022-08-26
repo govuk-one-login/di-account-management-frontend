@@ -4,7 +4,7 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, ERROR_CODES, PATH_DATA, SecurityCodeErrorType } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 
 describe("Integration:: check your phone", () => {
@@ -180,8 +180,11 @@ describe("Integration:: check your phone", () => {
       .expect(302, done);
   });
 
-  it("should return validation error when incorrect code entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.UPDATE_PHONE_NUMBER).once().reply(400, {});
+  it("should return validation error when incorrect mfa otp code entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.UPDATE_PHONE_NUMBER).once().reply(400, {
+      code: ERROR_CODES.INVALID_MFA_OTP_CODE,
+      success: false,
+    });
 
     request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
@@ -199,4 +202,49 @@ describe("Integration:: check your phone", () => {
       })
       .expect(400, done);
   });
+
+  it("should redirect to security code requests blocked when exceeded request limit", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.UPDATE_PHONE_NUMBER).once().reply(400, {
+      code: ERROR_CODES.INVALID_MFA_CODE_TOO_MANY_TIMES,
+      success: false,
+    });
+
+    request(app)
+      .post(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        code: "123455",
+      })
+      .expect(
+        "Location",
+        `${PATH_DATA.SECURITY_CODE_INVALID.url}?actionType=${SecurityCodeErrorType.OtpMaxRetries}`
+      )
+      .expect(302, done);
+  });
+
+  it("should return validation error when incorrect otp code entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.UPDATE_PHONE_NUMBER).once().reply(400, {
+      code: ERROR_CODES.INVALID_OTP_CODE,
+      success: false,
+    });
+
+    request(app)
+      .post(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        code: "123455",
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#code-error").text()).to.contains(
+          "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
+        );
+      })
+      .expect(400, done);
+  });
+
 });
