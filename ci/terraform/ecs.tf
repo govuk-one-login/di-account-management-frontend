@@ -128,6 +128,10 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
           value = var.support_international_numbers
         },
         {
+          name  = "SUPPORT_LANGUAGE_CY"
+          value = var.support_language_cy
+        },
+        {
           name  = "AUTH_FRONTEND_URL"
           value = local.frontend_fqdn
         },
