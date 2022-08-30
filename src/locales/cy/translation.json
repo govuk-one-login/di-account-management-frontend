@@ -325,6 +325,21 @@
       "paragraph2": "Neu ",
       "govukLinkText": "ewch i hafan GOV.UK",
       "govukLinkHref": "https://www.gov.uk/"
+    },
+    "securityCodeInvalid": {
+      "title": "Rydych wedi rhoi'r cod diogelwch anghywir ormod o weithiau",
+      "header": "Rydych wedi rhoi'r cod diogelwch anghywir ormod o weithiau",
+      "info": {
+        "paragraph1": "Mae angen i chi aros am 15 munud.",
+        "paragraph2Start": "Yna gallwch ",
+        "link": "gael cod newydd",
+        "paragraph2End": " a rhoi cynnig arall."
+      },
+      "authAppInfo": {
+        "paragraph2Start": "Yna gallwch ",
+        "link": "roi cynnig arall",
+        "paragraph2End": " gyda chod newydd."
+      }
     }
   }
 }
