@@ -6,6 +6,7 @@ import * as cheerio from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
+import { getBaseUrl } from "../../../config";
 
 describe("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;
@@ -114,6 +115,7 @@ describe("Integration:: delete account", () => {
       .reply(204);
 
     const opApi = process.env.API_BASE_URL;
+    const baseUrl = getBaseUrl();
 
     request(app)
       .post(PATH_DATA.DELETE_ACCOUNT.url)
@@ -125,7 +127,7 @@ describe("Integration:: delete account", () => {
       .expect(
         "Location",
         `${opApi}/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${encodeURIComponent(
-          "http://localhost:6000" + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url
+          `${baseUrl}${PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url}`
         )}`
       )
       .expect(302, done);
