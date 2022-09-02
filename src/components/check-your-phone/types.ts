@@ -1,13 +1,11 @@
-import {ApiResponseResult} from "../../utils/types";
-
 export interface CheckYourPhoneServiceInterface {
   updatePhoneNumber: (
-    accessToken: string,
-    email: string,
-    phoneNumber: string,
-    otp: string,
-    sourceIp: string,
-    sessionId: string,
-    persistentSessionId: string
-  ) => Promise<ApiResponseResult>;
+      accessToken: string,
+      email: string,
+      phoneNumber: string,
+      otp: string,
+      sourceIp: string,
+      sessionId: string,
+      persistentSessionId: string
+  ) => Promise<boolean>;
 }
