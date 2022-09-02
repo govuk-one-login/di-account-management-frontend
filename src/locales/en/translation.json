@@ -231,14 +231,19 @@
       "title": "Check your email",
       "header": "Check your email",
       "text": "We have sent an email to: ",
+      "changeEmailLinkHref": "/change-email",
+      "details": {
+        "summaryText": "Problems with the code?",
+        "text1": "We can ",
+        "sendCodeLinkText": "send the code again",
+        "sendCodeLinkHref": "/request-new-email-code",
+        "text2": " or you can ",
+        "changeEmailLinkText": "use a different email address"
+      },
       "info": {
         "paragraph1": "The email contains a 6 digit security code.",
         "paragraph2": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder.",
-        "paragraph3": "The code will expire after  15 minutes.",
-        "requestNewCodeLink": "Request a new code",
-        "requestNewCodeParagraph": " if:",
-        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
-        "requestNewCodeReason2": "you want to use a different email address"
+        "paragraph3": "The code will expire after 15 minutes."
       },
       "code": {
         "label": "Enter the 6 digit security code",

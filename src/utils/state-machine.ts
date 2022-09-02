@@ -1,4 +1,4 @@
-import { createMachine, EventType, StateValue } from "xstate";
+import {createMachine, EventType, StateValue} from "xstate";
 
 enum UserJourney {
   ChangeEmail = "changeEmail",
@@ -32,6 +32,7 @@ const amStateMachine = createMachine<AccountManagementEvent>({
       on: {
         VALUE_UPDATED: "CONFIRMATION",
         RESEND_CODE: "CHANGE_VALUE",
+        VERIFY_CODE_SENT: "CHANGE_VALUE"
       },
     },
     CONFIRMATION: { type: "final" },
