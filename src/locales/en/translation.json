@@ -330,16 +330,6 @@
       "paragraph2": "Or ",
       "govukLinkText": "go to the GOV.UK homepage",
       "govukLinkHref": "https://www.gov.uk/"
-    },
-    "securityCodeInvalid": {
-      "title": "You entered the wrong security code too many times",
-      "header": "You entered the wrong security code too many times",
-      "info": {
-        "paragraph1": "You need to wait 15 minutes.",
-        "paragraph2Start": "You can then ",
-        "link": "get a new code",
-        "paragraph2End": " and try again."
-      }
     }
   }
 }

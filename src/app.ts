@@ -56,7 +56,6 @@ import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
 import { subjectSessionIndex } from "./utils/subject-session-index";
 import { subjectSessionIndexMiddleware } from "./middleware/subject-session-index-middleware";
-import { securityCodeErrorRouter } from "./components/security-code-error/security-code-error-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -148,7 +147,6 @@ async function createApp(): Promise<express.Application> {
   app.use(deleteAccountRouter);
   app.use(checkYourPhoneRouter);
   app.use(sessionExpiredRouter);
-  app.use(securityCodeErrorRouter);
   app.use(signedOutRouter);
 
   app.use(logErrorMiddleware);
