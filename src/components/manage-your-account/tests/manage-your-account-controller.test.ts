@@ -25,12 +25,15 @@ describe("manage you account controller", () => {
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
+        isPhoneNumberVerified: true,
       };
       manageYourAccountGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("manage-your-account/index.njk", {
         email: "test@test.com",
         phoneNumber: "*******7898",
+        isPhoneNumberVerified: true,
+        manageEmailsLink: 'https://www.gov.uk/email/manage'
       });
     });
   });

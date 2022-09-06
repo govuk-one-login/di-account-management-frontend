@@ -4,7 +4,7 @@ module.exports = {
   },
   root: true,
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "mocha"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -25,5 +25,6 @@ module.exports = {
       "error",
       { blankLine: "any", prev: "*", next: "*" },
     ],
+    "mocha/no-exclusive-tests": "error",
   },
 };
