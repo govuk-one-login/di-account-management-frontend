@@ -26,7 +26,7 @@ describe("signed out controller", () => {
   });
 
   describe("signedOutGet", () => {
-    it.only("should return signed out page", () => {
+    it("should return signed out page", () => {
       signedOutGet(req as Request, res as Response);
 
       expect(res.render).to.have.been.calledWith("signed-out/index.njk");
