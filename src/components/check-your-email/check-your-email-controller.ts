@@ -10,6 +10,7 @@ import { CheckYourEmailServiceInterface } from "./types";
 import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
+import xss from "xss";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
 
@@ -36,7 +37,8 @@ export function checkYourEmailPost(
       code,
       req.ip,
       res.locals.sessionId,
-      res.locals.persistentSessionId
+      res.locals.persistentSessionId,
+      xss(req.cookies.lng as string)
     );
 
     if (isEmailUpdated) {

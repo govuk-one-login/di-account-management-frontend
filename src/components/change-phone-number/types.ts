@@ -7,6 +7,7 @@ export interface ChangePhoneNumberServiceInterface {
     phoneNumber: string,
     sourceIp: string,
     sessionId: string,
-    persistentSessionId: string
+    persistentSessionId: string,
+    userLanguage: string
   ) => Promise<ApiResponseResult>;
 }

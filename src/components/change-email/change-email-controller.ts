@@ -8,6 +8,7 @@ import {
 } from "../../utils/validation";
 import { ChangeEmailServiceInterface } from "./types";
 import { changeEmailService } from "./change-email-service";
+import xss from "xss";
 
 const TEMPLATE_NAME = "change-email/index.njk";
 export function changeEmailGet(req: Request, res: Response): void {
@@ -42,7 +43,8 @@ export function changeEmailPost(
       NOTIFICATION_TYPE.VERIFY_EMAIL,
       req.ip,
       res.locals.sessionId,
-      res.locals.persistentSessionId
+      res.locals.persistentSessionId,
+      xss(req.cookies.lng as string)
     );
 
     if (emailSent) {

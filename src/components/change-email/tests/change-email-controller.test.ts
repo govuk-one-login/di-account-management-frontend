@@ -16,7 +16,7 @@ describe("change email controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = { body: {}, session: { user: {} } };
+    req = { body: {}, session: { user: {} }, cookies: { lng: "en" } };
     res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
   });
 
@@ -44,6 +44,7 @@ describe("change email controller", () => {
         email: "test@dl.com",
         state: { changeEmail: getInitialState() },
       };
+      req.cookies.lng = "en";
 
       await changeEmailPost(fakeService)(req as Request, res as Response);
 

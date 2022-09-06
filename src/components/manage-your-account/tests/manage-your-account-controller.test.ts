@@ -33,7 +33,7 @@ describe("manage you account controller", () => {
         email: "test@test.com",
         phoneNumber: "*******7898",
         isPhoneNumberVerified: true,
-        manageEmailsLink: 'https://www.gov.uk/email/manage'
+        manageEmailsLink: "https://www.gov.uk/email/manage",
       });
     });
   });
