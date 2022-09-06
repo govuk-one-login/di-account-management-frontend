@@ -11,6 +11,7 @@ import {
 } from "../../utils/validation";
 import { prependInternationalPrefix } from "../../utils/phone-number";
 import { BadRequestError } from "../../utils/errors";
+import xss from "xss";
 
 const TEMPLATE_NAME = "change-phone-number/index.njk";
 
@@ -47,7 +48,8 @@ export function changePhoneNumberPost(
       newPhoneNumber,
       req.ip,
       res.locals.sessionId,
-      res.locals.persistentSessionId
+      res.locals.persistentSessionId,
+      xss(req.cookies.lng as string)
     );
 
     if (response.success) {

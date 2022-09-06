@@ -9,6 +9,7 @@ import {
   formatValidationError,
 } from "../../utils/validation";
 import { BadRequestError } from "../../utils/errors";
+import xss from "xss";
 
 const changePasswordTemplate = "change-password/index.njk";
 
@@ -30,7 +31,8 @@ export function changePasswordPost(
       newPassword,
       req.ip,
       res.locals.sessionId,
-      res.locals.persistentSessionId
+      res.locals.persistentSessionId,
+      xss(req.cookies.lng as string)
     );
 
     if (response.success) {

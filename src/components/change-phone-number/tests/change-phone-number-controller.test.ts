@@ -22,6 +22,7 @@ describe("change phone number controller", () => {
     req = {
       body: {},
       session: { user: { state: { changePhoneNumber: {} } } },
+      cookies: { lng: "en" },
       i18n: { language: "" },
       t: sandbox.fake(),
     };

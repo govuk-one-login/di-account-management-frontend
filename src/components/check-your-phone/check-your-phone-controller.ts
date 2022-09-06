@@ -9,6 +9,7 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { redactPhoneNumber } from "../../utils/strings";
+import xss from "xss";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -19,7 +20,7 @@ export function checkYourPhoneGet(req: Request, res: Response): void {
 }
 
 export function checkYourPhonePost(
-    service: CheckYourPhoneServiceInterface = checkYourPhoneService()
+  service: CheckYourPhoneServiceInterface = checkYourPhoneService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const code = req.body["code"];
@@ -27,13 +28,14 @@ export function checkYourPhonePost(
     const { accessToken } = req.session.user.tokens;
 
     const isPhoneNumberUpdated = await service.updatePhoneNumber(
-        accessToken,
-        email,
-        newPhoneNumber,
-        code,
-        req.ip,
-        res.locals.sessionId,
-        res.locals.persistentSessionId
+      accessToken,
+      email,
+      newPhoneNumber,
+      code,
+      req.ip,
+      res.locals.sessionId,
+      res.locals.persistentSessionId,
+      xss(req.cookies.lng as string)
     );
 
     if (isPhoneNumberUpdated) {
@@ -41,16 +43,16 @@ export function checkYourPhonePost(
       delete req.session.user.newPhoneNumber;
 
       req.session.user.state.changePhoneNumber = getNextState(
-          req.session.user.state.changePhoneNumber.value,
-          "VALUE_UPDATED"
+        req.session.user.state.changePhoneNumber.value,
+        "VALUE_UPDATED"
       );
 
       return res.redirect(PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url);
     }
 
     const error = formatValidationError(
-        "code",
-        req.t("pages.checkYourPhone.code.validationError.invalidCode")
+      "code",
+      req.t("pages.checkYourPhone.code.validationError.invalidCode")
     );
 
     renderBadRequest(res, req, TEMPLATE_NAME, error);
@@ -59,8 +61,8 @@ export function checkYourPhonePost(
 
 export function requestNewOTPCodeGet(req: Request, res: Response): void {
   req.session.user.state.changePhoneNumber = getNextState(
-      req.session.user.state.changePhoneNumber.value,
-      "RESEND_CODE"
+    req.session.user.state.changePhoneNumber.value,
+    "RESEND_CODE"
   );
 
   return res.redirect(PATH_DATA.CHANGE_PHONE_NUMBER.url);

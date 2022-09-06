@@ -21,6 +21,7 @@ describe("check your phone controller", () => {
     req = {
       body: {},
       session: { user: { state: { changePhoneNumber: {} } } },
+      cookies: { lng: "en" },
       i18n: { language: "en" },
     };
     res = {
@@ -56,7 +57,7 @@ describe("check your phone controller", () => {
 
       expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
       expect(res.redirect).to.have.calledWith(
-          PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
+        PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
       );
     });
 

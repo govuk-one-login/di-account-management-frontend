@@ -10,7 +10,7 @@ import { getBaseUrl, getManageGovukEmailsUrl } from "../../config";
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk", {
-    manageEmailsLink: getManageGovukEmailsUrl()
+    manageEmailsLink: getManageGovukEmailsUrl(),
   });
 }
 

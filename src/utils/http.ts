@@ -33,7 +33,8 @@ export function getRequestConfig(
   validationStatues?: number[],
   sourceIp?: string,
   persistentSessionId?: string,
-  sessionId?: string
+  sessionId?: string,
+  userLanguage?: string
 ): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
     headers: {
@@ -58,6 +59,10 @@ export function getRequestConfig(
 
   if (sessionId) {
     config.headers["Session-Id"] = sessionId;
+  }
+
+  if (userLanguage) {
+    config.headers["User-Language"] = userLanguage;
   }
 
   return config;

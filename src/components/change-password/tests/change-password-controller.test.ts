@@ -19,7 +19,11 @@ describe("change password controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = { body: {}, session: { user: { state: { changePassword: {} } } } };
+    req = {
+      body: {},
+      session: { user: { state: { changePassword: {} } } },
+      cookies: { lng: "en" },
+    };
     res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
   });
 
