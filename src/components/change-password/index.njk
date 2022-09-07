@@ -24,8 +24,30 @@
 
      <p class="govuk-body">{{'pages.changePassword.password.paragraph2' | translate}}</p>
 
-    {{ govukInputWithShowPassword('pages.changePassword.password.label'  | translate, "password", errors) }}
-    {{ govukInputWithShowPassword('pages.changePassword.confirmPassword.label' | translate, "confirm-password", errors) }}
+    {{ govukInputWithShowPassword(
+        'pages.changePassword.password.label'  | translate,
+        "password",
+        errors,
+        {
+            show: 'general.showPassword.show' | translate,
+            hide: 'general.showPassword.hide' | translate,
+            showFullText: 'general.showPassword.showFullText' | translate,
+            hideFullText: 'general.showPassword.hideFullText' | translate,
+            announceShown: 'general.showPassword.announceShown' | translate,
+            announceHidden: 'general.showPassword.announceHidden' | translate
+        }) }}
+    {{ govukInputWithShowPassword(
+        'pages.changePassword.confirmPassword.label' | translate,
+        "confirm-password",
+        errors,
+        {
+            show: 'general.showPassword.show' | translate,
+            hide: 'general.showPassword.hide' | translate,
+            showFullText: 'general.showPassword.showFullText' | translate,
+            hideFullText: 'general.showPassword.hideFullText' | translate,
+            announceShown: 'general.showPassword.announceShown' | translate,
+            announceHidden: 'general.showPassword.announceHidden' | translate
+        }) }}
 
 {{ govukDetails({
   summaryText: 'pages.changePassword.securePasswordDetails.summary' | translate,

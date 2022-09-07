@@ -69,6 +69,14 @@
         "pageTitle": "Hysbysiad preifatrwydd",
         "linkText": "Hysbysiad preifatrwydd"
       }
+    },
+    "showPassword": {
+      "show": "Dangos",
+      "hide": "TBC",
+      "showFullText": "TBC",
+      "hideFullText": "TBC",
+      "announceShown": "TBC",
+      "announceHidden": "TBC"
     }
   },
   "error": {

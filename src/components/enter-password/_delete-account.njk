@@ -7,7 +7,18 @@
 
     <p class="govuk-body">{{'pages.enterPassword.deleteAccount.paragraph' | translate}}</p>
 
-    {{ govukInputWithShowPassword('pages.enterPassword.password.label' | translate, "password", errors) }}
+    {{ govukInputWithShowPassword(
+        'pages.enterPassword.password.label' | translate,
+        "password",
+        errors,
+        {
+            show: 'general.showPassword.show' | translate,
+            hide: 'general.showPassword.hide' | translate,
+            showFullText: 'general.showPassword.showFullText' | translate,
+            hideFullText: 'general.showPassword.hideFullText' | translate,
+            announceShown: 'general.showPassword.announceShown' | translate,
+            announceHidden: 'general.showPassword.announceHidden' | translate
+        }) }}
 
     {{ govukButton({
     "text": button_text|default('general.continue.label' | translate, true),
