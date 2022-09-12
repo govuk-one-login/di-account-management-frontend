@@ -134,6 +134,10 @@ export function getManageGovukEmailsUrl(): string {
   return "https://www.gov.uk/email/manage";
 }
 
+export function getServiceDomain(): string {
+  return process.env.SERVICE_DOMAIN ?? "";
+}
+
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";
 }

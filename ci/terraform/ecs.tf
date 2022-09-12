@@ -147,6 +147,10 @@ resource "aws_ecs_task_definition" "account_management_task_definition" {
           name  = "KMS_KEY_ID"
           value = aws_kms_key.account_management_jwt_key.id
         },
+        {
+          name  = "SERVICE_DOMAIN"
+          value = local.service_domain
+        },
       ]
   }])
 
