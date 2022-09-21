@@ -68,7 +68,9 @@ describe("enter password controller", () => {
   describe("enterPasswordPost", () => {
     it("should redirect to change-email when the password is correct", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.returns(true),
+        authenticated: sandbox.fake.returns({
+          success: true,
+        }),
       };
 
       req.session.user = {

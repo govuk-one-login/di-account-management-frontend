@@ -72,6 +72,7 @@ export const PATH_DATA: {
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
+  ACCOUNT_LOCKED: { url: "/account-locked" },
 };
 
 export const API_ENDPOINTS = {
@@ -124,9 +125,38 @@ export const ERROR_CODES = {
   NEW_PASSWORD_SAME_AS_EXISTING: 1024,
   PASSWORD_IS_COMMON: 1040,
   NEW_PHONE_NUMBER_SAME_AS_EXISTING: 1044,
+  INVALID_PASSWORD_MAX_ATTEMPTS_REACHED: 1028,
 };
 
 export const ENVIRONMENT_NAME = {
   PROD: "production",
   DEV: "development",
 };
+
+export const ERROR_CODE_MAPPING: { [p: string]: string } = {
+  [ERROR_CODES.INVALID_PASSWORD_MAX_ATTEMPTS_REACHED]: pathWithQueryParam(
+    PATH_DATA["ACCOUNT_LOCKED"].url
+  ),
+};
+
+function pathWithQueryParam(path: string, queryParam?: string, value?: string) {
+  if (queryParam && value) {
+    const queryParams = new URLSearchParams({
+      [queryParam]: value,
+    }).toString();
+
+    return path + "?" + queryParams;
+  }
+
+  return path;
+}
+
+export function getErrorPathByCode(errorCode: number): string | undefined {
+  const nextPath = ERROR_CODE_MAPPING[errorCode];
+
+  if (!nextPath) {
+    return undefined;
+  }
+
+  return nextPath;
+}

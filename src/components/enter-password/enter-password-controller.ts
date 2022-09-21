@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { EnterPasswordServiceInterface } from "./types";
 import { enterPasswordService } from "./enter-password-service";
 import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA } from "../../app.constants";
+import { ERROR_CODES, getErrorPathByCode, PATH_DATA } from "../../app.constants";
 import {
   formatValidationError,
   renderBadRequest,
@@ -30,6 +30,10 @@ export function enterPasswordGet(req: Request, res: Response): void {
   res.render(`enter-password/index.njk`, { requestType });
 }
 
+export function enterPasswordAccountLockedGet(req: Request, res: Response): void {
+  res.render("enter-password/index-account-locked.njk");
+}
+
 export function enterPasswordPost(
   service: EnterPasswordServiceInterface = enterPasswordService()
 ): ExpressRouteFunc {
@@ -38,7 +42,7 @@ export function enterPasswordPost(
     const { accessToken } = req.session.user.tokens;
 
     const requestType = req.body.requestType;
-    const isAuthenticated = await service.authenticated(
+    const response = await service.authenticated(
       accessToken,
       email,
       req.body["password"],
@@ -47,13 +51,17 @@ export function enterPasswordPost(
       res.locals.persistentSessionId
     );
 
-    if (isAuthenticated) {
+    if (response.success) {
       req.session.user.state[requestType] = getNextState(
         req.session.user.state[requestType].value,
         "AUTHENTICATED"
       );
 
       return res.redirect(REDIRECT_PATHS[requestType]);
+    }
+
+    if (response.code === ERROR_CODES.INVALID_PASSWORD_MAX_ATTEMPTS_REACHED) {
+      return res.redirect(getErrorPathByCode(response.code));
     }
 
     const error = formatValidationError(

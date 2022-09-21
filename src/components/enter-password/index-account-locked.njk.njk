@@ -1,0 +1,30 @@
+@@ -0,0 +1,26 @@
+{% extends "common/layout/base.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitleName = 'pages.accountLocked.title' | translate %}
+
+{% block content %}
+
+{% include "common/errors/errorSummary.njk" %}
+
+<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.accountLocked.header' | translate}}</h1>
+
+<p class="govuk-body">{{'pages.accountLocked.paragraph' | translate}}</p>
+
+<p class="govuk-body">
+    {{'pages.accountLocked.info.paragraph1Start' | translate}}
+    <a class="govuk-link" rel="noreferrer" href="{{ newCodeLink }}">{{'pages.accountLocked.info.firstLink' | translate}}</a>
+    {{'pages.accountLocked.info.paragraph1End' | translate}}
+</p>
+
+<p class="govuk-body">
+    {{'pages.accountLocked.info.paragraph2Start' | translate}}
+    <a class="govuk-link" rel="noreferrer" href="{{ newCodeLink }}">{{'pages.accountLocked.info.secondLink' | translate}}</a>
+    {{'pages.accountLocked.info.paragraph2End' | translate}}
+</p>
+
+{% endblock %}

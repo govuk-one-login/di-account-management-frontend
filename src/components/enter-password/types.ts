@@ -1,3 +1,5 @@
+import { ApiResponseResult } from "../../utils/types";
+
 export interface EnterPasswordServiceInterface {
   authenticated: (
     token: string,
@@ -6,5 +8,5 @@ export interface EnterPasswordServiceInterface {
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string
-  ) => Promise<boolean>;
+  ) => Promise<ApiResponseResult>;
 }

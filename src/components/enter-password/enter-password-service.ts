@@ -1,6 +1,7 @@
-import { getRequestConfig, http, Http } from "../../utils/http";
+import { getRequestConfig, http, Http, createApiResponse } from "../../utils/http";
 import { EnterPasswordServiceInterface } from "./types";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
+import { ApiResponse, ApiResponseResult } from "../../utils/types";
 
 export function enterPasswordService(
   axios: Http = http
@@ -12,8 +13,8 @@ export function enterPasswordService(
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string
-  ): Promise<boolean> {
-    const { status } = await axios.client.post<void>(
+    ): Promise<ApiResponseResult> {
+    const response = await axios.client.post<ApiResponse>(
       API_ENDPOINTS.AUTHENTICATE,
       {
         email: emailAddress,
@@ -31,7 +32,7 @@ export function enterPasswordService(
         sessionId
       )
     );
-    return status === HTTP_STATUS_CODES.NO_CONTENT;
+    return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
   };
   return {
     authenticated,
