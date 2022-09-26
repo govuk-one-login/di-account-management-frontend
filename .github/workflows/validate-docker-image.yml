@@ -1,0 +1,65 @@
+---
+name: Build and Scan Docker Image
+
+# Triggered when:
+#   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
+#   - invoked by another workflow.
+on:
+  push:
+    paths:
+      - "Dockerfile"
+      - ".github/workflows/validate-docker-image.yml"
+    branches-ignore:
+      - main
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set tag
+        id: vars
+        run: echo "::set-output name=tag::${GITHUB_REF#refs/*/}"
+      - name: Set up AWS creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
+          aws-region: eu-west-2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build Docker Image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+      - name: Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+          format: 'table'
+          output: "image-vulnerability-results.sarif"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL"
+#      - name:  Upload Vulnerability results to GitHub Security
+#        if: always()
+#        env:
+#          BUCKET_NAME: ${{ secrets.BUILD_REPORTS_BUCKET }}
+#          AWS_REGION: 'eu-west-2'
+#        run: |
+#          aws s3 cp ./image-vulnerability-results s3://$BUCKET_NAME/<project-name>/<branch>/<image>/<date-time>-image-vulnerability-results.sarif
+#      - name: Upload Vulnerability results to GitHub Security
+#        uses: github/codeql-action/upload-sarif@v2
+#        if: always()
+#        with:
+#          sarif_file: 'image-vulnerability-results.sarif'

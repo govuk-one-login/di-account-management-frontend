@@ -1,0 +1,42 @@
+---
+name: Validate Artifacts
+
+# Triggered when:
+#   - a pull request has been raised to merge another branch into `main` branch.
+#   - the file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
+#   - invoked by another workflow.
+on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - ".github/workflows/ci-only.yml"
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - synchronize
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate_application:
+    uses: ./.github/workflows/build-test-application.yml
+
+  validate_container:
+    uses: ./.github/workflows/validate-docker-image.yml
+    secrets: inherit
+
+  validate_deployment:
+    uses: ./.github/workflows/validate-sam-template.yml
+    secrets: inherit
+
+
+
+
