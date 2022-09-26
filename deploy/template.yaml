@@ -98,7 +98,7 @@ Resources:
         AwsvpcConfiguration:
           AssignPublicIp: "DISABLED"
           SecurityGroups:
-            - !GetAtt ContainerServiceSecurityGroup.GroupId
+            - !GetAtt AccountManagementEcsTaskSecurityGroup.GroupId #TODO Confirm that this is the correct one
           Subnets:
             - Fn::ImportValue:
                 !Sub "${VpcStackName}-PrivateSubnetIdA"
@@ -120,7 +120,7 @@ Resources:
           Value: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
         - Key: Source
           Value: "alphagov/di-authentication-account-management/template.yaml"
-    DependsOn: ApplicationLoadBalancerListener
+    DependsOn: ApplicationLoadBalancerListenerHTTPS
 
   ContainerAutoScalingTarget:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
@@ -203,85 +203,85 @@ Resources:
         - Key: Application
           Value: "Account Management"
 
-    AllowAccesToAmFrontendRedisSecurityGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: Allow outgoing access to the Account Management frontend Redis session store
-        GroupName: !Join
-          - "-"
-          - - !Ref Environment
-            - "allow-access-to-acct-mgmt-frontend-redis"
-        SecurityGroupEgress:
-          - Description: Allow connection to AM frontend redis
-            FromPort: 6379
-            IpProtocol: tcp
-            SourceSecurityGroupId: Fn::GetAtt AmFrontendRedisSecurityGroup.GroupId
-            ToPort: 6379
-        VpcId:
-          Fn::ImportValue:
-            !Sub "${VpcStackName}-VpcId"
-        Tags:
-          - Key: Environment
-            Value: !Ref Environment
-          - Key: Application
-            Value: "Account Management"
+  AllowAccesToAmFrontendRedisSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow outgoing access to the Account Management frontend Redis session store
+      GroupName: !Join
+        - "-"
+        - - !Ref Environment
+          - "allow-access-to-acct-mgmt-frontend-redis"
+      SecurityGroupEgress:
+        - Description: Allow connection to AM frontend redis
+          FromPort: 6379
+          IpProtocol: tcp
+          SourceSecurityGroupId: Fn::GetAtt AmFrontendRedisSecurityGroup.GroupId
+          ToPort: 6379
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${VpcStackName}-VpcId"
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Application
+          Value: "Account Management"
 
-    AccountManagementAlbSecurityGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: What should the description be?
-        GroupName: !Join
-          - "-"
-          - - !Ref Environment
-            - "account-management-alb"
-        SecurityGroupIngress:
-          - Description: Allow ALB HTTP ingress from anywhere
-            FromPort: 80
-            IpProtocol: tcp
-            CidrIp: !Ref IncomingTrafficCIDRBlocks
-            ToPort: 80
-          - Description: Allow ALB HTTP ingress from anywhere
-            FromPort: 443
-            IpProtocol: tcp
-            CidrIp: !Ref IncomingTrafficCIDRBlocks
-            ToPort: 443
-        SecurityGroupEgress:
-          - Description: Allow ALB application egress to task group
-            FromPort: 6001
-            IpProtocol: tcp
-            SourceSecurityGroupId: Fn::GetAtt AccountManagementEcsTaskSecurityGroup.GroupId
-            ToPort: 6001
-        VpcId:
-          Fn::ImportValue:
-            !Sub "${VpcStackName}-VpcId"
-        Tags:
-          - Key: Environment
-            Value: !Ref Environment
-          - Key: Application
-            Value: "Account Management"
+  AccountManagementAlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: What should the description be?
+      GroupName: !Join
+        - "-"
+        - - !Ref Environment
+          - "account-management-alb"
+      SecurityGroupIngress:
+        - Description: Allow ALB HTTP ingress from anywhere
+          FromPort: 80
+          IpProtocol: tcp
+          CidrIp: !Ref IncomingTrafficCIDRBlocks
+          ToPort: 80
+        - Description: Allow ALB HTTP ingress from anywhere
+          FromPort: 443
+          IpProtocol: tcp
+          CidrIp: !Ref IncomingTrafficCIDRBlocks
+          ToPort: 443
+      SecurityGroupEgress:
+        - Description: Allow ALB application egress to task group
+          FromPort: 6001
+          IpProtocol: tcp
+          SourceSecurityGroupId: Fn::GetAtt AccountManagementEcsTaskSecurityGroup.GroupId
+          ToPort: 6001
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${VpcStackName}-VpcId"
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Application
+          Value: "Account Management"
 
-    AccountManagementEcsTaskSecurityGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: What should the description be?
-        GroupName: !Join
-          - "-"
-          - - !Ref Environment
-            - "account-management-ecs-task"
-        SecurityGroupIngress:
-          - Description: Allow ECS task igress from ALB
-            FromPort: 6001
-            IpProtocol: tcp
-            ToPort: 6001
-            SourceSecurityGroupId: Fn::GetAtt AccountManagementAlbSecurityGroup.GroupId
-        VpcId:
-          Fn::ImportValue:
-            !Sub "${VpcStackName}-VpcId"
-        Tags:
-          - Key: Environment
-            Value: !Ref Environment
-          - Key: Application
-            Value: "Account Management"
+  AccountManagementEcsTaskSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: What should the description be?
+      GroupName: !Join
+        - "-"
+        - - !Ref Environment
+          - "account-management-ecs-task"
+      SecurityGroupIngress:
+        - Description: Allow ECS task igress from ALB
+          FromPort: 6001
+          IpProtocol: tcp
+          ToPort: 6001
+          SourceSecurityGroupId: Fn::GetAtt AccountManagementAlbSecurityGroup.GroupId
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${VpcStackName}-VpcId"
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Application
+          Value: "Account Management"
 
   #
   # Fargate tasks
@@ -301,7 +301,7 @@ Resources:
         LogConfiguration:
           - LogDriver: awslogs
             Options:
-              awslogs-group : !Ref ECSAccessLogsGroup #TODO Create ECS Access Logs Group
+              awslogs-group : !Ref ECSAccessLogsGroup
               awslogs-region : !Sub ${AWS::Region}
               awslogs-stream-prefix : !Sub ${ApplicationName}-${Environment}
               awslogs-create-group: "true"
@@ -375,7 +375,28 @@ Resources:
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
 
-#  TaskExecutionRole:
+  ECSAccessLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      KmsKeyId: !GetAtt KmsKey.Arn
+      LogGroupName: !Sub "${Environment}-aam-ecs-access-logs-group"
+      RetentionInDays: 7
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-aam-ecs-access-logs-group"
+        - Key: Product
+          Value: "GOV.UK Sign In"
+        - Key: System
+          Value: "Account Management"
+        - Key: Service
+          Value: "account management frontend"
+        - Key: Owner
+          Value: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
+        - Key: Source
+          Value: "alphagov/di-authentication-account-management/template.yaml"
+
+
+  #  TaskExecutionRole:
 #    Type: AWS::IAM::Role
 #    Properties:
 #      AssumeRolePolicyDocument:
@@ -419,67 +440,67 @@ Resources:
   # API Gateway
   #
 
-  ApiGateway:
-    Type: AWS::ApiGatewayV2::Api
-    Properties:
-      Name: node-server-endpoint
-      ProtocolType: HTTP
-      Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ApiGateway"
-        - Key: Product
-          Value: "GOV.UK Sign In"
-        - Key: System
-          Value: "Account Management"
-        - Key: Service
-          Value: account management frontend
-        - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-        - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
-  
-  ApiGatewayIntegration:
-    Type: AWS::ApiGatewayV2::Integration
-    Properties:
-      ApiId: !Ref ApiGateway
-      IntegrationType: HTTP_PROXY
-      ConnectionId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcLinkId"
-      ConnectionType: VPC_LINK
-      IntegrationMethod: ANY
-      IntegrationUri: !Ref ApplicationLoadBalancerListener
-      PayloadFormatVersion: 1.0
-
-  ApiRoute:
-    Type: AWS::ApiGatewayV2::Route
-    Properties:
-      ApiId: !Ref ApiGateway
-      RouteKey: "ANY /{proxy+}"
-      Target: !Sub "integrations/${ApiGatewayIntegration}"
-
-  ApiDefaultStage:
-    Type: AWS::ApiGatewayV2::Stage
-    Properties:
-      ApiId: !Ref ApiGateway
-      StageName: "$default"
-      AutoDeploy: true
-      AccessLogSettings:
-        Format: "$context.requestId $context.httpMethod $context.path"
-        DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
-      Tags:
-        - Key: Name 
-          Value: !Sub "${AWS::StackName}-ApiDefaultStage"
-        - Key: Product
-          Value: "GOV.UK Sign In"
-        - Key: System
-          Value: "Account Management"
-        - Key: Service
-          Value: account management frontend
-        - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-        - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+#  ApiGateway:
+#    Type: AWS::ApiGatewayV2::Api
+#    Properties:
+#      Name: node-server-endpoint
+#      ProtocolType: HTTP
+#      Tags:
+#        - Key: Name
+#          Value: !Sub "${AWS::StackName}-ApiGateway"
+#        - Key: Product
+#          Value: "GOV.UK Sign In"
+#        - Key: System
+#          Value: "Account Management"
+#        - Key: Service
+#          Value: account management frontend
+#        - Key: Owner
+#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+#        - Key: Source
+#          Value: alphagov/di-authentication-account-management/template.yaml
+#
+#  ApiGatewayIntegration:
+#    Type: AWS::ApiGatewayV2::Integration
+#    Properties:
+#      ApiId: !Ref ApiGateway
+#      IntegrationType: HTTP_PROXY
+#      ConnectionId:
+#        Fn::ImportValue:
+#          !Sub "${VpcStackName}-VpcLinkId"
+#      ConnectionType: VPC_LINK
+#      IntegrationMethod: ANY
+#      IntegrationUri: !Ref ApplicationLoadBalancerListener
+#      PayloadFormatVersion: 1.0
+#
+#  ApiRoute:
+#    Type: AWS::ApiGatewayV2::Route
+#    Properties:
+#      ApiId: !Ref ApiGateway
+#      RouteKey: "ANY /{proxy+}"
+#      Target: !Sub "integrations/${ApiGatewayIntegration}"
+#
+#  ApiDefaultStage:
+#    Type: AWS::ApiGatewayV2::Stage
+#    Properties:
+#      ApiId: !Ref ApiGateway
+#      StageName: "$default"
+#      AutoDeploy: true
+#      AccessLogSettings:
+#        Format: "$context.requestId $context.httpMethod $context.path"
+#        DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
+#      Tags:
+#        - Key: Name
+#          Value: !Sub "${AWS::StackName}-ApiDefaultStage"
+#        - Key: Product
+#          Value: "GOV.UK Sign In"
+#        - Key: System
+#          Value: "Account Management"
+#        - Key: Service
+#          Value: account management frontend
+#        - Key: Owner
+#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+#        - Key: Source
+#          Value: alphagov/di-authentication-account-management/template.yaml
 
   #
   # Load balancing
@@ -560,7 +581,7 @@ Resources:
     Properties:
       # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
       # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
-      Certificates:
+#      Certificates:
 #        - TODO: Create certificate (aws_acm_certificate.account_management_alb_certificate.arn)
       DefaultActions:
         - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
@@ -646,7 +667,7 @@ Resources:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
-      DestinationSecurityGroupId: !GetAtt ContainerServiceSecurityGroup.GroupId
+      DestinationSecurityGroupId: !GetAtt AccountManagementAlbSecurityGroup.GroupId #TODO Confirm this is the correct one
       Description: Allow traffic to Container Service on port 8080
       IpProtocol: tcp
       FromPort: 8080
@@ -791,24 +812,24 @@ Resources:
   # Logging
   #
 
-  ApiGatewayAccessLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      RetentionInDays: 7
-      KmsKeyId: !GetAtt KmsKey.Arn
-      Tags:
-        - Key: Name
-          Value: ApiGatewayAccessLogGroup
-        - Key: Product
-          Value: "GOV.UK Sign In"
-        - Key: System
-          Value: "Account Management"
-        - Key: Service
-          Value: account management frontend
-        - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-        - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+#  ApiGatewayAccessLogGroup:
+#    Type: AWS::Logs::LogGroup
+#    Properties:
+#      RetentionInDays: 7
+#      KmsKeyId: !GetAtt KmsKey.Arn
+#      Tags:
+#        - Key: Name
+#          Value: ApiGatewayAccessLogGroup
+#        - Key: Product
+#          Value: "GOV.UK Sign In"
+#        - Key: System
+#          Value: "Account Management"
+#        - Key: Service
+#          Value: account management frontend
+#        - Key: Owner
+#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+#        - Key: Source
+#          Value: alphagov/di-authentication-account-management/template.yaml
 
   AccessLogsBucket:
     Type: AWS::S3::Bucket
@@ -932,7 +953,7 @@ Resources:
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
 
-Outputs:
-  ApiGatewayEndpoint:
-    Description: The base URI for this application.
-    Value: !GetAtt ApiGateway.ApiEndpoint
+#Outputs:
+#  ApiGatewayEndpoint:
+#    Description: The base URI for this application.
+#    Value: !GetAtt ApiGateway.ApiEndpoint
