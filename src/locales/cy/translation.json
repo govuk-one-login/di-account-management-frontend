@@ -10,22 +10,22 @@
     "errorSummaryTitle": "Mae problem",
     "phaseBanner": {
       "tag": "beta",
-      "text": "Mae hwn yn wasanaeth newydd – bydd eich <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">adborth (agor mewn tab newydd)</a> yn ein helpu i'w wella."
+      "text": "Mae hwn yn wasanaeth newydd – bydd eich <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">adborth (agor mewn tab newydd)</a> yn ein helpu i’w wella."
     },
     "yes": "Yes",
     "no": "Na",
-    "backToAccountButtonText": "Yn ôl i'ch cyfrif",
+    "backToAccountButtonText": "Yn ôl i’ch cyfrif",
     "backToGovUKButtonText": "Yn ôl i hafan GOV.UK",
     "cookie": {
       "cookieBanner": {
         "title": "Cwcis ar gyfrif GOV.UK",
         "heading": "Cwcis ar gyfrif GOV.UK",
-        "paragraph1": "Rydym yn defnyddio rhai cwcis hanfodol i wneud i'r gwasanaeth hwn weithio.",
-        "paragraph2": "Hoffem hefyd ddefnyddio cwcis dadansoddi er mwyn i ni allu deall sut rydych yn defnyddio'r gwasanaeth a gwneud gwelliannau.",
+        "paragraph1": "Rydym yn defnyddio rhai cwcis hanfodol i wneud i’r gwasanaeth hwn weithio.",
+        "paragraph2": "Hoffem hefyd ddefnyddio cwcis dadansoddi er mwyn i ni allu deall sut rydych yn defnyddio’r gwasanaeth a gwneud gwelliannau.",
         "buttonAcceptText": "Derbyn cwcis dadansoddi",
         "buttonRejectText": "Gwrthod cwcis dadansoddi",
         "linkViewCookiesText": "Gweld cwcis",
-        "cookieBannerHideLink": "Cuddio'r neges yma",
+        "cookieBannerHideLink": "Cuddio’r neges yma",
         "cookeBannerAccept": {
           "paragraph1": "Rydych wedi derbyn cwcis ychwanegol. Gallwch ",
           "paragraph2": " unrhyw bryd."
@@ -36,7 +36,7 @@
         },
         "changeCookiePreferencesLink": "newid eich gosodiadau cwcis"
       },
-      "cookieText": "Mae GOV.UK yn defnyddio cwcis i wneud y safle'n symlach.",
+      "cookieText": "Mae GOV.UK yn defnyddio cwcis i wneud y safle’n symlach.",
       "cookieLink": "#",
       "cookieLinkText": "Darganfyddwch fwy am gwcis"
     },
@@ -68,6 +68,12 @@
       "privacy": {
         "pageTitle": "Hysbysiad preifatrwydd",
         "linkText": "Hysbysiad preifatrwydd"
+      },
+      "copyright": {
+        "linkText": "© Hawlfraint y goron"
+      },
+      "contentLicence": {
+        "linkText": "Mae’r holl gynnwys ar gael o dan <a class=\"govuk-footer__link\" href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/\" rel=\"licence\">Trwydded Llywodraeth Agored v3.0</a>, oni nodir yn wahanol"
       }
     },
     "showPassword": {
@@ -84,15 +90,15 @@
       "title": "Tudalen heb ei darganfod",
       "header": "Tudalen heb ei darganfod",
       "content": {
-        "paragraph1": "Os ydych wedi teipio'r cyfeiriad gwe, edrychwch i weld ei fod yn gywir.",
-        "paragraph2": "Os ydych wedi gludo'r cyfeiriad gwe, edrychwch i weld eich bod wedi copïo'r cyfeiriad cyfan.",
+        "paragraph1": "Os ydych wedi teipio’r cyfeiriad gwe, edrychwch i weld ei fod yn gywir.",
+        "paragraph2": "Os ydych wedi gludo’r cyfeiriad gwe, edrychwch i weld eich bod wedi copïo’r cyfeiriad cyfan.",
         "govUKHomepageButtonHref": "https://www.gov.uk/",
         "govUKHomepageButtonText": "Ewch i hafan GOV.UK"
       }
     },
     "error500": {
-      "title": "Mae'n ddrwg gennym, mae problem gyda'r gwasanaeth",
-      "header": "Mae'n ddrwg gennym, mae problem gyda'r gwasanaeth",
+      "title": "Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth",
+      "header": "Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth",
       "content": {
         "paragraph1": "Rhowch gynnig arall yn nes ymlaen."
       }
@@ -102,8 +108,8 @@
       "header": "Rydych wedi cael eich allgofnodi",
       "content": {
         "paragraph1": "Rydych wedi cael eich allgofnodi oherwydd nad oeddech wedi defnyddio eich cyfrif am fwy na 2 awr.",
-        "paragraph2": "Mae hyn er mwyn cadw eich cyfrif a'ch gwybodaeth yn ddiogel.",
-        "signInButtonText": "Mewngofnodi i'ch cyfrif",
+        "paragraph2": "Mae hyn er mwyn cadw eich cyfrif a’ch gwybodaeth yn ddiogel.",
+        "signInButtonText": "Mewngofnodi i’ch cyfrif",
         "govUKHomepageLink": "https://www.gov.uk/",
         "govUKHomepageLinkText": "Ewch i hafan GOV.UK"
       }
@@ -124,18 +130,18 @@
       "manageEmailSubscriptions": {
         "heading": "Tanysgrifiadau e-bost GOV.UK",
         "link": "Rheoli eich tanysgrifiadau e-bost GOV.UK",
-        "info": "Gweld a rheoli'r e-byst rydych yn eu cael am ddiweddariadau i dudalennau ar GOV.UK."
+        "info": "Gweld a rheoli’r e-byst rydych yn eu cael am ddiweddariadau i dudalennau ar GOV.UK."
       },
       "deleteAccount": {
         "heading": "Dileu eich cyfrif GOV.UK",
         "link": "Dileu eich cyfrif GOV.UK",
-        "info": "Bydd hyn yn dileu eich cyfrif GOV.UK yn barhaol. Ni fyddwch bellach yn gallu mewngofnodi i'r gwasanaethau rydych wedi'u defnyddio gyda'ch cyfrif."
+        "info": "Bydd hyn yn dileu eich cyfrif GOV.UK yn barhaol. Ni fyddwch bellach yn gallu mewngofnodi i’r gwasanaethau rydych wedi’u defnyddio gyda’ch cyfrif."
       },
       "aboutAccounts": {
         "heading": "Am gyfrifon GOV.UK",
         "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gydag ychydig o wasanaethau.",
         "paragraph2": "Ar hyn o bryd mae cyfrifon GOV.UK ar wahân i gyfrifon eraill y llywodraeth (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
-        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i fewngofnodi i'r rhan fwyaf o wasanaethau ar GOV.UK."
+        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i fewngofnodi i’r rhan fwyaf o wasanaethau ar GOV.UK."
       }
     },
     "enterPassword": {
@@ -179,7 +185,7 @@
           "length": "Rhaid i gyfeiriad e-bost fod yn 256 nod neu lai",
           "email": "Rhowch gyfeiriad e-bost yn y ffurf cywir, fel name@example.com",
           "alreadyInUse": "Mae gan y cyfeiriad e-bost hwnnw gyfrif GOV.UK yn barod. Rhowch gyfeiriad e-bost gwahanol.",
-          "sameEmail": "Mae eich cyfrif eisoes yn defnyddio'r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol."
+          "sameEmail": "Mae eich cyfrif eisoes yn defnyddio’r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol."
         }
       },
       "dontWantTo": {
@@ -210,16 +216,16 @@
       "header": "Rhowch eich cyfrinair newydd",
       "password": {
         "label": "Rhowch gyfrinair newydd",
-        "paragraph1": "Mae'n rhaid i'ch cyfrinair:",
+        "paragraph1": "Mae’n rhaid i’ch cyfrinair:",
         "bulletPoint1": "fod yn o leiaf 8 nod o hyd",
         "bulletPoint2": "cynnwys llythrennau a rhifau",
-        "paragraph2": "Peidiwch defnyddio cyfrinair cyffredin iawn, fel 'password' neu ddilyniant o rifau.",
+        "paragraph2": "Peidiwch defnyddio cyfrinair cyffredin iawn, fel ‘password’ neu ddilyniant o rifau.",
         "validationError": {
           "required": "Rhowch eich cyfrinair newydd",
-          "maxLength": "Mae'n rhaid i'ch cyfrinair fod yn llai na 256 nod",
-          "commonPassword": "Rhowch gyfrinair cryfach. Peidiwch defnyddio cyfrineiriau cyffredin iawn, fel 'password' neu ddilyniant o rifau.",
-          "samePassword": "Mae eich cyfrif eisoes yn defnyddio'r cyfrinair hwnnw. Rhowch gyfrinair gwahanol",
-          "alphaNumeric": "Mae'n rhaid i'ch cyfrinair fod yn o leiaf 8 nod o hyd a rhaid iddo gynnwys llythrennau a rhifau"
+          "maxLength": "Mae’n rhaid i’ch cyfrinair fod yn llai na 256 nod",
+          "commonPassword": "Rhowch gyfrinair cryfach. Peidiwch defnyddio cyfrineiriau cyffredin iawn, fel ‘password’ neu ddilyniant o rifau.",
+          "samePassword": "Mae eich cyfrif eisoes yn defnyddio’r cyfrinair hwnnw. Rhowch gyfrinair gwahanol",
+          "alphaNumeric": "Mae’n rhaid i’ch cyfrinair fod yn o leiaf 8 nod o hyd a rhaid iddo gynnwys llythrennau a rhifau"
         }
       },
       "confirmPassword": {
@@ -241,7 +247,7 @@
       "text": "Rydym wedi anfon e-bost at: ",
       "changeEmailLinkHref": "/change-email",
       "details": {
-        "summaryText": "Problemau gyda'r cod?",
+        "summaryText": "Problemau gyda’r cod?",
         "text1": "Gallwn ",
         "sendCodeLinkText": "anfon y cod eto",
         "sendCodeLinkHref": "/request-new-email-code",
@@ -249,7 +255,7 @@
         "changeEmailLinkText": "ddefnyddio cyfeiriad e-bost gwahanol"
       },
       "info": {
-        "paragraph1": "Mae'r e-bost yn cynnwys cod diogelwch 6 digid.",
+        "paragraph1": "Mae’r e-bost yn cynnwys cod diogelwch 6 digid.",
         "paragraph2": "Efallai y bydd eich e-bost yn cymryd ychydig funudau i gyrraedd. Os na chewch e-bost, edrychwch ar eich ffolder spam.",
         "paragraph3": "Bydd y cod yn dod i ben ar ôl 15 munud."
       },
@@ -260,7 +266,7 @@
           "maxLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
           "minLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
           "invalidFormat": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
-          "invalidCode": "Nid yw'r cod diogelwch rydych wedi'i roi i mewn yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi i mewn eto neu ofyn am god diogelwch newydd."
+          "invalidCode": "Nid yw’r cod diogelwch rydych wedi’i roi i mewn yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi i mewn eto neu ofyn am god diogelwch newydd."
         }
       }
     },
@@ -272,7 +278,7 @@
         "paragraph": "Efallai y bydd yn cymryd ychydig funudau i gyrraedd. Bydd y cod yn dod i ben ar ôl 15 munud.",
         "requestNewCodeLink": "Gofynnwch am god newydd",
         "requestNewCodeParagraph": " os:",
-        "requestNewCodeReason1": "nad yw'r cod yn gweithio neu mae wedi dod i ben, neu ni wnaethoch dderbyn un",
+        "requestNewCodeReason1": "nad yw’r cod yn gweithio neu mae wedi dod i ben, neu ni wnaethoch dderbyn un",
         "requestNewCodeReason2": "rydych eisiau defnyddio rhif ffôn gwahanol"
       },
       "code": {
@@ -282,17 +288,17 @@
           "maxLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
           "minLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
           "invalidFormat": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
-          "invalidCode": "Nid yw'r cod diogelwch rydych wedi'i roi i mewn yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi i mewn eto neu ofyn am god diogelwch newydd."
+          "invalidCode": "Nid yw’r cod diogelwch rydych wedi’i roi i mewn yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi i mewn eto neu ofyn am god diogelwch newydd."
         }
       }
     },
     "deleteAccount": {
-      "title": "Ydych chi'n siwr eich bod am ddileu eich cyfrif GOV.UK?",
-      "header": "Ydych chi'n siwr eich bod am ddileu eich cyfrif GOV.UK?",
+      "title": "Ydych chi’n siwr eich bod am ddileu eich cyfrif GOV.UK?",
+      "header": "Ydych chi’n siwr eich bod am ddileu eich cyfrif GOV.UK?",
       "paragraph1": "Bydd hyn yn:",
-      "listItem1": "dileu eich cyfrif GOV.UK yn barhaol a'r wybodaeth sydd wedi'i gadw ynddo",
+      "listItem1": "dileu eich cyfrif GOV.UK yn barhaol a’r wybodaeth sydd wedi’i gadw ynddo",
       "listItem2": "dileu unrhyw <a class=\"govuk-link\" href=\"[emailManagementLink]\">Tanysgrifiadau e-bost GOV.UK</a> y gallai fod gennych",
-      "listItem3": "tynnu i ffwrdd eich gallu i fewngofnodi i LITE (i wneud cais am drwyddedau allforio ar gyfer nwyddau rheoledig), os ydych wedi'i ddefnyddio gyda'ch cyfrif GOV.UK",
+      "listItem3": "tynnu i ffwrdd eich gallu i fewngofnodi i LITE (i wneud cais am drwyddedau allforio ar gyfer nwyddau rheoledig), os ydych wedi’i ddefnyddio gyda’ch cyfrif GOV.UK",
       "paragraph2": "Os byddwch angen cyfrif GOV.UK yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
       "paragraph3": "Ni fydd dileu eich cyfrif GOV.UK yn dileu unrhyw gyfrifon eraill y llywodraeth sydd gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.",
       "details": {
@@ -300,13 +306,13 @@
         "text": "<p class=\"govuk-body\">Os ydych yn dileu eich cyfrif GOV.UK ni fyddwch mwyach yn gallu mewngofnodi i LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol).</p><p class=\"govuk-body\"> Ni fydd y wybodaeth amdanoch a gedwir yn LITE yn cael ei ddileu. E-bostiwch <a class=\"govuk-link\" href=\"mailto:data.protection@trade.gov.uk\">data.protection@trade.gov.uk</a> os ydych chi am ddileu gwybodaeth a gedwir gan LITE.</p>"
       },
       "deleteAccount": "Dileu eich cyfrif GOV.UK",
-      "doNotDeleteAccount": "Canslo a mynd yn ôl i'ch cyfrif"
+      "doNotDeleteAccount": "Canslo a mynd yn ôl i’ch cyfrif"
     },
     "changePhoneNumber": {
       "title": "Rhowch eich rhif ffôn symudol newydd",
       "header": "Rhowch eich rhif ffôn symudol newydd",
       "info": {
-        "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i'r rhif rydych yn ei roi i ni.",
+        "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i’r rhif rydych yn ei roi i ni.",
         "backLink": "Nid wyf eisiau newid fy rhif ffôn"
       },
       "ukPhoneNumber": {
@@ -315,8 +321,8 @@
           "required": "Rhowch rif ffôn y DU",
           "international": "Rhowch rif ffôn y DU",
           "length": "Rhowch rif ffôn y DU, fel 07700 900000",
-          "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu'r symbol +",
-          "samePhoneNumber": "Mae eich cyfrif eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
+          "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu’r symbol +",
+          "samePhoneNumber": "Mae eich cyfrif eisoes yn defnyddio’r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
         }
       },
       "internationalPhoneNumber": {
@@ -325,7 +331,7 @@
         "hint": "Dylech gynnwys y cod gwlad, er enghraifft +3537777666555",
         "validationError": {
           "required": "Rhowch rif ffôn",
-          "plusNumericOnly": "Rhowch rif ffôn gan ddefnyddio rhifau yn unig neu'r symbol +",
+          "plusNumericOnly": "Rhowch rif ffôn gan ddefnyddio rhifau yn unig neu’r symbol +",
           "internationalFormat": "Rhowch rif ffôn yn y ffurf cywir"
         }
       }
@@ -334,7 +340,7 @@
       "title": "Rydych wedi allgofnodi",
       "header": "Rydych wedi allgofnodi",
       "paragraph1": "I fynd yn ôl, ",
-      "signInLinkText": "mewngofnodwch i'ch cyfrif GOV.UK",
+      "signInLinkText": "mewngofnodwch i’ch cyfrif GOV.UK",
       "paragraph2": "Neu ",
       "govukLinkText": "ewch i hafan GOV.UK",
       "govukLinkHref": "https://www.gov.uk/"
