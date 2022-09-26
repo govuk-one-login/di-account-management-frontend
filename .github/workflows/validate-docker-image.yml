@@ -18,7 +18,7 @@ permissions:
   contents: read
 
 jobs:
-  build_image:
+  validate_image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
