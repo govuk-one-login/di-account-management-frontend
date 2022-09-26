@@ -207,7 +207,7 @@ Resources:
       ContainerDefinitions:
         Name: !Sub "${Environment}-aam-ecs-container-definition"
         Essential: true
-        Image: CONTAINER-IMAGE-PLACEHOLDER #TODO Provide container image
+        Image: CONTAINER-IMAGE-PLACEHOLDER
         PortMappings:
           - ContainerPort: "6001"
             HostPort: "6001"
@@ -239,7 +239,8 @@ Resources:
           - Name: "SESSION_EXPIRY"
             Value: "1800000"
           - Name: "SESSION_SECRET"
-            Value: "NULL" #TODO Create Session Secret value and pass through
+            Value:
+              '{{resolve:secretsmanager:${!ImportValue: "shared-redis-cache-password-secret-arn"}}}'
           - Name: "AM_YOUR_ACCOUNT_URL"
             Value: !Sub "https://www.${Environment}.publishing.service.gov.uk/account/home"
           - Name: "GTM_ID"
