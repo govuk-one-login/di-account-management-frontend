@@ -577,7 +577,7 @@ Resources:
     Properties:
       # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
       # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
-#      Certificates:
+#      Certificates: !Ref ACMCertificate
 #        - TODO: Create certificate (aws_acm_certificate.account_management_alb_certificate.arn)
       DefaultActions:
         - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
@@ -585,9 +585,14 @@ Resources:
       LoadBalancerArn: !Ref ApplicationLoadBalancer
 #      Port: 443
 #      Protocol: "HTTPS"
+#      SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
       Port: 80
       Protocol: "HTTP"
-#      SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+
+#  ACMCertificate:
+#    Type: AWS::CertificateManager::Certificate
+#    Properties:
+#      DomainName: "*"
 
   ApplicationLoadBalancerListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
@@ -621,20 +626,20 @@ Resources:
       ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
       Priority: 1
 
-  ApplicationLoadBalancerListenerHTTP:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
-      # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
-      DefaultActions:
-        - Type: redirect
-          RedirectConfig:
-            Port: "443"
-            Protocol: "HTTPS"
-            StatusCode: "HTTP_301"
-      LoadBalancerArn: !Ref ApplicationLoadBalancer
-      Port: 80
-      Protocol: "HTTP"
+#  ApplicationLoadBalancerListenerHTTP:
+#    Type: AWS::ElasticLoadBalancingV2::Listener
+#    Properties:
+#      # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
+#      # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
+#      DefaultActions:
+#        - Type: redirect
+#          RedirectConfig:
+#            Port: "443"
+#            Protocol: "HTTPS"
+#            StatusCode: "HTTP_301"
+#      LoadBalancerArn: !Ref ApplicationLoadBalancer
+#      Port: 80
+#      Protocol: "HTTP"
 
   ApplicationLoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -685,10 +690,10 @@ Resources:
     Properties:
       GroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
       DestinationSecurityGroupId: !GetAtt AccountManagementAlbSecurityGroup.GroupId #TODO Confirm this is the correct one
-      Description: Allow traffic to Container Service on port 8080
+      Description: Allow traffic to Container Service on port 6001
       IpProtocol: tcp
-      FromPort: 8080
-      ToPort: 8080
+      FromPort: 6001
+      ToPort: 6001
 
   #
   #  ElastiCache
