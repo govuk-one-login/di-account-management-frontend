@@ -91,7 +91,7 @@ Resources:
       HealthCheckGracePeriodSeconds: 15
       LaunchType: "FARGATE"
       LoadBalancers:
-        - ContainerName: "aam-application"
+        - ContainerName: !Sub "${Environment}-aam-ecs-container-definition"
           ContainerPort: 6001
           TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
       NetworkConfiguration:
@@ -104,7 +104,6 @@ Resources:
                 !Sub "${VpcStackName}-PrivateSubnetIdA"
             - Fn::ImportValue:
                 !Sub "${VpcStackName}-PrivateSubnetIdB"
-      SchedulingStrategy: String
       ServiceName: !Sub "${Environment}-accounts-ecs-service"
       TaskDefinition: !Ref TaskDefinition
       Tags:
@@ -120,7 +119,7 @@ Resources:
           Value: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
         - Key: Source
           Value: "alphagov/di-authentication-account-management/template.yaml"
-    DependsOn: ApplicationLoadBalancerListenerHTTPS
+#    DependsOn: ApplicationLoadBalancerListenerHTTPS
 
   ContainerAutoScalingTarget:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
@@ -154,7 +153,7 @@ Resources:
         TargetValue: 75.0
         PredefinedMetricSpecification:
           PredefinedMetricType: "ECSServiceAverageMemoryUtilization"
-    DependsOn: ContainerAutoScalingTarget
+#    DependsOn: ContainerAutoScalingTarget
 
   ContainerAutoScalingPolicyCPU:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
@@ -173,7 +172,7 @@ Resources:
         TargetValue: 65.0
         PredefinedMetricSpecification:
           PredefinedMetricType: "ECSServiceAverageCPUUtilization"
-    DependsOn: ContainerAutoScalingTarget
+#    DependsOn: ContainerAutoScalingTarget
 
   AmFrontendRedisSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -211,12 +210,6 @@ Resources:
         - "-"
         - - !Ref Environment
           - "allow-access-to-acct-mgmt-frontend-redis"
-      SecurityGroupEgress:
-        - Description: Allow connection to AM frontend redis
-          FromPort: 6379
-          IpProtocol: tcp
-          SourceSecurityGroupId: Fn::GetAtt AmFrontendRedisSecurityGroup.GroupId
-          ToPort: 6379
       VpcId:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
@@ -226,14 +219,24 @@ Resources:
         - Key: Application
           Value: "Account Management"
 
+  AllowAccessToAmFrontendRedisEgress:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Allow connection to AM frontend redis
+      DestinationSecurityGroupId: !GetAtt AmFrontendRedisSecurityGroup.GroupId
+      FromPort: 6379
+      GroupId: !GetAtt AllowAccesToAmFrontendRedisSecurityGroup.GroupId
+      IpProtocol: tcp
+      ToPort: 6379
+
   AccountManagementAlbSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: What should the description be?
+      GroupDescription: Security group for the Account Management ALB
       GroupName: !Join
         - "-"
         - - !Ref Environment
-          - "account-management-alb"
+          - "account-management-alb-sg"
       SecurityGroupIngress:
         - Description: Allow ALB HTTP ingress from anywhere
           FromPort: 80
@@ -245,12 +248,6 @@ Resources:
           IpProtocol: tcp
           CidrIp: !Ref IncomingTrafficCIDRBlocks
           ToPort: 443
-      SecurityGroupEgress:
-        - Description: Allow ALB application egress to task group
-          FromPort: 6001
-          IpProtocol: tcp
-          SourceSecurityGroupId: Fn::GetAtt AccountManagementEcsTaskSecurityGroup.GroupId
-          ToPort: 6001
       VpcId:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
@@ -260,20 +257,30 @@ Resources:
         - Key: Application
           Value: "Account Management"
 
+  AccountManagementAlbEgress:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Allow ALB application egress to task group
+      DestinationSecurityGroupId: !GetAtt AccountManagementEcsTaskSecurityGroup.GroupId
+      FromPort: 6001
+      GroupId: !GetAtt AccountManagementAlbSecurityGroup.GroupId
+      IpProtocol: tcp
+      ToPort: 6001
+
   AccountManagementEcsTaskSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: What should the description be?
+      GroupDescription: Security group for the Account Management ECS Task Definition
       GroupName: !Join
         - "-"
         - - !Ref Environment
-          - "account-management-ecs-task"
+          - "account-management-ecs-task-sg"
       SecurityGroupIngress:
         - Description: Allow ECS task igress from ALB
           FromPort: 6001
           IpProtocol: tcp
           ToPort: 6001
-          SourceSecurityGroupId: Fn::GetAtt AccountManagementAlbSecurityGroup.GroupId
+          SourceSecurityGroupId: !GetAtt AccountManagementAlbSecurityGroup.GroupId
       VpcId:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
@@ -291,66 +298,67 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        Name: !Sub "${Environment}-aam-ecs-container-definition"
-        Essential: true
-        Image: CONTAINER-IMAGE-PLACEHOLDER
-        PortMappings:
-          - ContainerPort: "6001"
-            HostPort: "6001"
-            Protocol: tcp
-        LogConfiguration:
-          - LogDriver: awslogs
+        -
+          Name: !Sub "${Environment}-aam-ecs-container-definition"
+          Essential: true
+          Image: CONTAINER-IMAGE-PLACEHOLDER
+          PortMappings:
+            - ContainerPort: "6001"
+              HostPort: "6001"
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
             Options:
               awslogs-group : !Ref ECSAccessLogsGroup
               awslogs-region : !Sub ${AWS::Region}
-              awslogs-stream-prefix : !Sub ${ApplicationName}-${Environment}
+              awslogs-stream-prefix : !Sub ${AWS::StackName}-${Environment}
               awslogs-create-group: "true"
-        Environment:
-          - Name: "NODE_ENV"
-            Value: "production"
-          - Name: "APP_ENV"
-            Value: !Sub "${Environment}"
-          - Name: "FARGATE"
-            Value: "1"
-          - Name: "API_BASE_URL"
-            Value: "NULL" #TODO Fill when value is available
-          - Name: "AM_API_BASE_URL"
-            Value: "NULL" #TODO Fill when value is available
-          - Name: "BASE_URL"
-            Value: "NULL" #TODO Fill when value is available
-          - Name: "OIDC_CLIENT_ID"
-            Value: "NULL" #TODO Fill when value is available
-          - Name: "OIDC_CLIENT_SCOPES"
-            Value: "NULL" #TODO Fill when value is available
-          - Name: "SESSION_EXPIRY"
-            Value: "1800000"
-          - Name: "SESSION_SECRET"
-            Value:
-              '{{resolve:secretsmanager:${!ImportValue: "shared-redis-cache-password-secret-arn"}}}'
-          - Name: "AM_YOUR_ACCOUNT_URL"
-            Value: !Sub "https://www.${Environment}.publishing.service.gov.uk/account/home"
-          - Name: "GTM_ID"
-            Value: ""
-          - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
-            Value: ""
-          - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
-            Value: ""
-          - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
-            Value: "0"
-          - Name: "SUPPORT_LANGUAGE_CY"
-            Value: "1"
-          - Name: "AUTH_FRONTEND_URL"
-            Value: "NULL" #TODO Fill when value is available
-          - Name: "ANALYTICS_COOKIE_DOMAIN"
-            Value: "NULL" #TODO Fill when value is available
-          - Name: "REDIS_KEY"
-            Value: "account-management-frontend" #TODO Confirm value
-          - Name: "KMS_KEY_ID"
-            Value:
-              Fn::ImportValue:
-                !Sub "account-management-kms-signing-key-id"
-          - Name: "SERVICE_DOMAIN"
-            Value: "" #TODO Fill when value is available
+          Environment:
+            - Name: "NODE_ENV"
+              Value: "production"
+            - Name: "APP_ENV"
+              Value: !Sub "${Environment}"
+            - Name: "FARGATE"
+              Value: "1"
+            - Name: "API_BASE_URL"
+              Value: "NULL" #TODO Fill when value is available
+            - Name: "AM_API_BASE_URL"
+              Value: "NULL" #TODO Fill when value is available
+            - Name: "BASE_URL"
+              Value: "NULL" #TODO Fill when value is available
+            - Name: "OIDC_CLIENT_ID"
+              Value: "NULL" #TODO Fill when value is available
+            - Name: "OIDC_CLIENT_SCOPES"
+              Value: "NULL" #TODO Fill when value is available
+            - Name: "SESSION_EXPIRY"
+              Value: "1800000"
+            - Name: "SESSION_SECRET"
+              Value:
+                '{{resolve:secretsmanager:arn:aws:secretsmanager:eu-west-2:301577035144:secret:shared-redis-cache-password-7Byad7}}'
+            - Name: "AM_YOUR_ACCOUNT_URL"
+              Value: !Sub "https://www.${Environment}.publishing.service.gov.uk/account/home"
+            - Name: "GTM_ID"
+              Value: ""
+            - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
+              Value: ""
+            - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
+              Value: ""
+            - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
+              Value: "0"
+            - Name: "SUPPORT_LANGUAGE_CY"
+              Value: "1"
+            - Name: "AUTH_FRONTEND_URL"
+              Value: "NULL" #TODO Fill when value is available
+            - Name: "ANALYTICS_COOKIE_DOMAIN"
+              Value: "NULL" #TODO Fill when value is available
+            - Name: "REDIS_KEY"
+              Value: "account-management-frontend" #TODO Confirm value
+            - Name: "KMS_KEY_ID"
+              Value:
+                Fn::ImportValue:
+                  !Sub "account-management-kms-signing-key-id"
+            - Name: "SERVICE_DOMAIN"
+              Value: "" #TODO Fill when value is available
       Cpu: "1024"
       ExecutionRoleArn:
         Fn::ImportValue:
@@ -440,67 +448,55 @@ Resources:
   # API Gateway
   #
 
-#  ApiGateway:
-#    Type: AWS::ApiGatewayV2::Api
-#    Properties:
-#      Name: node-server-endpoint
-#      ProtocolType: HTTP
-#      Tags:
-#        - Key: Name
-#          Value: !Sub "${AWS::StackName}-ApiGateway"
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
-#
-#  ApiGatewayIntegration:
-#    Type: AWS::ApiGatewayV2::Integration
-#    Properties:
-#      ApiId: !Ref ApiGateway
-#      IntegrationType: HTTP_PROXY
-#      ConnectionId:
-#        Fn::ImportValue:
-#          !Sub "${VpcStackName}-VpcLinkId"
-#      ConnectionType: VPC_LINK
-#      IntegrationMethod: ANY
-#      IntegrationUri: !Ref ApplicationLoadBalancerListener
-#      PayloadFormatVersion: 1.0
-#
-#  ApiRoute:
-#    Type: AWS::ApiGatewayV2::Route
-#    Properties:
-#      ApiId: !Ref ApiGateway
-#      RouteKey: "ANY /{proxy+}"
-#      Target: !Sub "integrations/${ApiGatewayIntegration}"
-#
-#  ApiDefaultStage:
-#    Type: AWS::ApiGatewayV2::Stage
-#    Properties:
-#      ApiId: !Ref ApiGateway
-#      StageName: "$default"
-#      AutoDeploy: true
-#      AccessLogSettings:
-#        Format: "$context.requestId $context.httpMethod $context.path"
-#        DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
-#      Tags:
-#        - Key: Name
-#          Value: !Sub "${AWS::StackName}-ApiDefaultStage"
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
+  ApiGateway:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: node-server-endpoint
+      ProtocolType: HTTP
+      Tags:
+        Name: !Sub "${AWS::StackName}-aam-gateway"
+        Product: "GOV.UK Sign In"
+        System: "Account Management"
+        Service: account management frontend
+        Owner: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        Source: alphagov/di-authentication-account-management/template.yaml
+
+  ApiGatewayIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref ApiGateway
+      IntegrationType: HTTP_PROXY
+      ConnectionId:
+        Fn::ImportValue:
+          !Sub "${VpcStackName}-VpcLinkId"
+      ConnectionType: VPC_LINK
+      IntegrationMethod: ANY
+      IntegrationUri: !Ref ApplicationLoadBalancerListenerHTTPS
+      PayloadFormatVersion: 1.0
+
+  ApiRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref ApiGateway
+      RouteKey: "ANY /{proxy+}"
+      Target: !Sub "integrations/${ApiGatewayIntegration}"
+
+  ApiDefaultStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref ApiGateway
+      StageName: "$default"
+      AutoDeploy: true
+      AccessLogSettings:
+        Format: "$context.requestId $context.httpMethod $context.path"
+        DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
+      Tags:
+        Name: !Sub "${AWS::StackName}-ApiDefaultStage"
+        Product: "GOV.UK Sign In"
+        System: "Account Management"
+        Service: account management frontend
+        Owner: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        Source: alphagov/di-authentication-account-management/template.yaml
 
   #
   # Load balancing
@@ -510,7 +506,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Name: !Sub "${Environment}-aam-loadbalancer"
-      Scheme: internet-facing
+      Scheme: internal
       Type: application
       SecurityGroups:
         - !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
@@ -587,15 +583,18 @@ Resources:
         - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
           Type: forward
       LoadBalancerArn: !Ref ApplicationLoadBalancer
-      Port: 443
-      Protocol: "HTTPS"
-      SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+#      Port: 443
+#      Protocol: "HTTPS"
+      Port: 80
+      Protocol: "HTTP"
+#      SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
 
   ApplicationLoadBalancerListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
       Actions:
-        - FixedResponseConfig:
+        - Type: fixed-response
+          FixedResponseConfig:
             ContentType: "text/plain"
             MessageBody: "static/robots.txt" # TODO Confirm what this is meant to be
             StatusCode: "200"
@@ -611,7 +610,8 @@ Resources:
       # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
       # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
       DefaultActions:
-        - RedirectConfig:
+        - Type: redirect
+          RedirectConfig:
             Port: "443"
             Protocol: "HTTPS"
             StatusCode: "HTTP_301"
@@ -812,24 +812,24 @@ Resources:
   # Logging
   #
 
-#  ApiGatewayAccessLogGroup:
-#    Type: AWS::Logs::LogGroup
-#    Properties:
-#      RetentionInDays: 7
-#      KmsKeyId: !GetAtt KmsKey.Arn
-#      Tags:
-#        - Key: Name
-#          Value: ApiGatewayAccessLogGroup
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
+  ApiGatewayAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 7
+      KmsKeyId: !GetAtt KmsKey.Arn
+      Tags:
+        - Key: Name
+          Value: ApiGatewayAccessLogGroup
+        - Key: Product
+          Value: "GOV.UK Sign In"
+        - Key: System
+          Value: "Account Management"
+        - Key: Service
+          Value: account management frontend
+        - Key: Owner
+          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        - Key: Source
+          Value: alphagov/di-authentication-account-management/template.yaml
 
   AccessLogsBucket:
     Type: AWS::S3::Bucket
@@ -886,11 +886,22 @@ Resources:
             Effect: Allow
             Principal:
               AWS:
-                - !Sub "arn:aws:iam::${ElbAccountId}:root"
-                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
+                - "arn:aws:iam::301577035144:root"
+#                - !Sub "arn:aws:iam::${ElbAccountId}:root" #TODO Get mapping working
+#                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
             Action:
               - s3:PutObject
             Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
+          - Sid: AllowSSLRequestsOnly
+            Effect: Deny
+            Principal:
+              Service: delivery.logs.amazonaws.com
+            Action:
+              - s3:*
+            Resource: !GetAtt AccessLogsBucket.Arn
+            Condition:
+              Bool:
+                "aws:SecureTransport": "false"
           - Sid: AllowAwsLogDeliveryToLogToS3
             Effect: Allow
             Principal:
@@ -902,6 +913,8 @@ Resources:
               StringEquals:
                 "s3:x-amz-acl": bucket-owner-full-control
                 "aws:SourceAccount": !Ref AWS::AccountId
+              Bool:
+                "aws:SecureTransport": "true"
           - Sid: AllowAwsLogDeliveryToReadBucketAcl
             Effect: Allow
             Principal:
@@ -912,6 +925,8 @@ Resources:
             Condition:
               StringEquals:
                 "aws:SourceAccount": !Ref AWS::AccountId
+              Bool:
+                "aws:SecureTransport": "true"
 
   KmsKey:
     Type: AWS::KMS::Key
