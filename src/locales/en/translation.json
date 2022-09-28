@@ -68,6 +68,12 @@
       "privacy": {
         "pageTitle": "Privacy notice",
         "linkText": "Privacy notice"
+      },
+      "copyright": {
+        "linkText": "© Crown copyright"
+      },
+      "contentLicence": {
+        "linkText": "All content is available under the <a class=\"govuk-footer__link\" href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/\" rel=\"licence\">Open Government Licence v3.0</a>, except where otherwise stated"
       }
     },
     "showPassword": {
