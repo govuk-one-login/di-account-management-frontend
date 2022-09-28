@@ -604,6 +604,23 @@ Resources:
       ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
       Priority: 10
 
+  ApplicationLoadBalancerListenerRuleForward:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          ForwardConfig:
+            TargetGroups:
+              - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
+      Conditions:
+        - Field: http-header
+          HttpHeaderConfig:
+            HttpHeaderName: User-Agent
+            Values:
+              - Mozilla
+      ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
+      Priority: 1
+
   ApplicationLoadBalancerListenerHTTP:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -875,6 +892,59 @@ Resources:
         - Key: CheckovRulesToSkip
           Value: CKV_AWS_18
 
+#  AccessLogsBucketPolicy:
+#    Type: AWS::S3::BucketPolicy
+#    Properties:
+#      Bucket: !Ref AccessLogsBucket
+#      PolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#          - Sid: AllowLoadBalancerToLogToS3
+#            Effect: Allow
+#            Principal:
+#              AWS:
+#                - "arn:aws:iam::301577035144:root"
+##                - !Sub "arn:aws:iam::${ElbAccountId}:root" #TODO Get mapping working
+##                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
+#            Action:
+#              - s3:PutObject
+#            Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
+#          - Sid: AllowSSLRequestsOnly
+#            Effect: Deny
+#            Principal:
+#              Service: delivery.logs.amazonaws.com
+#            Action:
+#              - s3:*
+#            Resource: !GetAtt AccessLogsBucket.Arn
+#            Condition:
+#              Bool:
+#                "aws:SecureTransport": "false"
+#          - Sid: AllowAwsLogDeliveryToLogToS3
+#            Effect: Allow
+#            Principal:
+#              Service: delivery.logs.amazonaws.com
+#            Action:
+#              - s3:PutObject
+#            Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
+#            Condition:
+#              StringEquals:
+#                "s3:x-amz-acl": bucket-owner-full-control
+#                "aws:SourceAccount": !Ref AWS::AccountId
+#              Bool:
+#                "aws:SecureTransport": "true"
+#          - Sid: AllowAwsLogDeliveryToReadBucketAcl
+#            Effect: Allow
+#            Principal:
+#              Service: delivery.logs.amazonaws.com
+#            Action:
+#              - s3:GetBucketAcl
+#            Resource: !GetAtt AccessLogsBucket.Arn
+#            Condition:
+#              StringEquals:
+#                "aws:SourceAccount": !Ref AWS::AccountId
+#              Bool:
+#                "aws:SecureTransport": "true"
+
   AccessLogsBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -885,30 +955,21 @@ Resources:
           - Sid: AllowLoadBalancerToLogToS3
             Effect: Allow
             Principal:
-              AWS:
-                - "arn:aws:iam::301577035144:root"
-#                - !Sub "arn:aws:iam::${ElbAccountId}:root" #TODO Get mapping working
-#                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
+              AWS: "arn:aws:iam::301577035144:root"
+            #                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
             Action:
               - s3:PutObject
-            Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
-          - Sid: AllowSSLRequestsOnly
-            Effect: Deny
-            Principal:
-              Service: delivery.logs.amazonaws.com
-            Action:
-              - s3:*
-            Resource: !GetAtt AccessLogsBucket.Arn
+            Resource: !Sub "${AccessLogsBucket.Arn}/*"
             Condition:
               Bool:
-                "aws:SecureTransport": "false"
+                "aws:SecureTransport": "true"
           - Sid: AllowAwsLogDeliveryToLogToS3
             Effect: Allow
             Principal:
               Service: delivery.logs.amazonaws.com
             Action:
               - s3:PutObject
-            Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
+            Resource: !Sub "${AccessLogsBucket.Arn}/*"
             Condition:
               StringEquals:
                 "s3:x-amz-acl": bucket-owner-full-control
