@@ -84,28 +84,9 @@ Resources:
       Cluster:
         Fn::ImportValue:
           !Sub "${Environment}-accounts-ecs-cluster"
-      DeploymentConfiguration:
-        MaximumPercent: 150
-        MinimumHealthyPercent: 50
-      DesiredCount: 2
-      HealthCheckGracePeriodSeconds: 15
-      LaunchType: "FARGATE"
-      LoadBalancers:
-        - ContainerName: !Sub "${Environment}-aam-ecs-container-definition"
-          ContainerPort: 6001
-          TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          AssignPublicIp: "DISABLED"
-          SecurityGroups:
-            - !GetAtt AccountManagementEcsTaskSecurityGroup.GroupId #TODO Confirm that this is the correct one
-          Subnets:
-            - Fn::ImportValue:
-                !Sub "${VpcStackName}-PrivateSubnetIdA"
-            - Fn::ImportValue:
-                !Sub "${VpcStackName}-PrivateSubnetIdB"
-      ServiceName: !Sub "${Environment}-accounts-ecs-service"
-      TaskDefinition: !Ref TaskDefinition
+      DeploymentController:
+        Type: EXTERNAL
+      PropagateTags: SERVICE
       Tags:
         - Key: Name
           Value: !Sub "${Environment}-accounts-ecs-service"
@@ -119,7 +100,84 @@ Resources:
           Value: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
         - Key: Source
           Value: "alphagov/di-authentication-account-management/template.yaml"
-#    DependsOn: ApplicationLoadBalancerListenerHTTPS
+    DependsOn: ApplicationLoadBalancerListenerHTTPS
+
+  ContainerServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group to access the Container Service
+      GroupName: !Join
+        - "-"
+        - - !Ref AWS::StackName
+          - ContainerService
+          - Fn::Select:
+              - 4
+              - Fn::Split:
+                  - "-"
+                  - Fn::Select:
+                      - 2
+                      - Fn::Split:
+                          - "/"
+                          - Ref: AWS::StackId
+      SecurityGroupIngress:
+        - Description: Allow traffic from the load balancer on port 6001
+          SourceSecurityGroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
+          IpProtocol: tcp
+          FromPort: 6001
+          ToPort: 6001
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${VpcStackName}-VpcId"
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ContainerServiceSecurityGroup"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: alphagov/di-devplatform-demo-sam-app/sam-app3/template.yaml
+
+#  ContainerService:
+#    Type: AWS::ECS::Service
+#    Properties:
+#      Cluster:
+#        Fn::ImportValue:
+#          !Sub "${Environment}-accounts-ecs-cluster"
+#      DeploymentConfiguration:
+#        MaximumPercent: 150
+#        MinimumHealthyPercent: 50
+#      DesiredCount: 2
+#      HealthCheckGracePeriodSeconds: 15
+#      LaunchType: "FARGATE"
+#      LoadBalancers:
+#        - ContainerName: !Sub "${Environment}-aam-ecs-container-definition"
+#          ContainerPort: 6001
+#          TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
+#      NetworkConfiguration:
+#        AwsvpcConfiguration:
+#          AssignPublicIp: "DISABLED"
+#          SecurityGroups:
+#            - !GetAtt AccountManagementEcsTaskSecurityGroup.GroupId #TODO Confirm that this is the correct one
+#          Subnets:
+#            - Fn::ImportValue:
+#                !Sub "${VpcStackName}-PrivateSubnetIdA"
+#            - Fn::ImportValue:
+#                !Sub "${VpcStackName}-PrivateSubnetIdB"
+#      ServiceName: !Sub "${Environment}-accounts-ecs-service"
+#      TaskDefinition: !Ref TaskDefinition
+#      Tags:
+#        - Key: Name
+#          Value: !Sub "${Environment}-accounts-ecs-service"
+#        - Key: Product
+#          Value: "GOV.UK Sign In"
+#        - Key: System
+#          Value: "Account Management"
+#        - Key: Service
+#          Value: "account management frontend"
+#        - Key: Owner
+#          Value: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
+#        - Key: Source
+#          Value: "alphagov/di-authentication-account-management/template.yaml"
+##    DependsOn: ApplicationLoadBalancerListenerHTTPS
 
   ContainerAutoScalingTarget:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
@@ -202,7 +260,7 @@ Resources:
         - Key: Application
           Value: "Account Management"
 
-  AllowAccesToAmFrontendRedisSecurityGroup:
+  AllowAccessToAmFrontendRedisSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Allow outgoing access to the Account Management frontend Redis session store
@@ -225,7 +283,7 @@ Resources:
       Description: Allow connection to AM frontend redis
       DestinationSecurityGroupId: !GetAtt AmFrontendRedisSecurityGroup.GroupId
       FromPort: 6379
-      GroupId: !GetAtt AllowAccesToAmFrontendRedisSecurityGroup.GroupId
+      GroupId: !GetAtt AllowAccessToAmFrontendRedisSecurityGroup.GroupId
       IpProtocol: tcp
       ToPort: 6379
 
@@ -309,7 +367,7 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group : !Ref ECSAccessLogsGroup
+              awslogs-group : !Ref TaskLogsGroup
               awslogs-region : !Sub ${AWS::Region}
               awslogs-stream-prefix : !Sub ${AWS::StackName}-${Environment}
               awslogs-create-group: "true"
@@ -383,7 +441,7 @@ Resources:
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
 
-  ECSAccessLogsGroup:
+  TaskLogsGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       KmsKeyId: !GetAtt KmsKey.Arn
@@ -877,7 +935,6 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       # checkov:skip=CKV_AWS_18:This is the access logs bucket. It should not log itself.
-      # checkov:skip=CKV_AWS_21:This is the access logs bucket. It should not log itself.
       BucketName: !Join
         - "-"
         - - !Ref AWS::StackName
@@ -892,7 +949,7 @@ Resources:
                           - /
                           - Ref: AWS::StackId
       VersioningConfiguration:
-        Status: Suspended # switch to Enabled once stack is working and won't be deleted theen remove CKV_AWS_21
+        Status: Enabled
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -916,7 +973,7 @@ Resources:
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
         - Key: CheckovRulesToSkip
-          Value: CKV_AWS_18,CKV_AWS_21
+          Value: CKV_AWS_18
 
   AccessLogsBucketPolicy:
     Type: AWS::S3::BucketPolicy
