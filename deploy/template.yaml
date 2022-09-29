@@ -51,7 +51,7 @@ Mappings:
   # see https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
   ElasticLoadBalancerAccountIds:
     eu-west-2:
-      AccountId: 301577035144
+      AccountId: 652711504416
 
 Resources:
   #
@@ -536,28 +536,46 @@ Resources:
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
 
+#  ApplicationLoadBalancerTargetGroup:
+#    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+#    Properties:
+#      HealthCheckEnabled: true
+#      HealthCheckIntervalSeconds: 30
+#      HealthCheckPath: "/healthcheck"
+#      HealthCheckPort: "80"
+#      HealthCheckProtocol: "HTTP"
+#      HealthCheckTimeoutSeconds: 3
+#      HealthyThresholdCount: 3
+#      UnhealthyThresholdCount: 2
+#      Matcher:
+#        HttpCode: "200"
+#      TargetType: "ip"
+#      Name: !Sub "${Environment}-aam-target-group"
+#      Port: 80
+#      Protocol: "HTTP"
+#      ProtocolVersion: "HTTP1"
+#      TargetType: "ip"
+
+
   ApplicationLoadBalancerTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckEnabled: true
-      HealthCheckIntervalSeconds: 30
-      HealthCheckPath: "/healthcheck"
-      HealthCheckPort: "80"
-      HealthCheckProtocol: "HTTP"
-      HealthCheckTimeoutSeconds: 3
-      HealthyThresholdCount: 3
-      UnhealthyThresholdCount: 2
+      HealthCheckPort: 6001
+      HealthCheckProtocol: HTTP
+      HealthCheckPath: /
+      Port: 6001
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
       Matcher:
-        HttpCode: "200"
-      TargetType: "ip"
-      Name: !Sub "${Environment}-aam-target-group"
-      Port: 80
-      Protocol: "HTTP"
-      ProtocolVersion: "HTTP1"
-      TargetType: "ip"
+        HttpCode: "200-499"
+      TargetType: ip
+      UnhealthyThresholdCount: 2
       VpcId:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
+      TargetGroupAttributes:
+        - Key: "deregistration_delay.timeout_seconds"
+          Value: "5"
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroup"
@@ -571,6 +589,7 @@ Resources:
           Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
+
 
   ApplicationLoadBalancerListenerHTTPS:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -617,6 +636,7 @@ Resources:
           ForwardConfig:
             TargetGroups:
               - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
+                Weight: 1
       Conditions:
         - Field: http-header
           HttpHeaderConfig:
@@ -857,6 +877,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       # checkov:skip=CKV_AWS_18:This is the access logs bucket. It should not log itself.
+      # checkov:skip=CKV_AWS_21:This is the access logs bucket. It should not log itself.
       BucketName: !Join
         - "-"
         - - !Ref AWS::StackName
@@ -871,7 +892,7 @@ Resources:
                           - /
                           - Ref: AWS::StackId
       VersioningConfiguration:
-        Status: Enabled
+        Status: Suspended # switch to Enabled once stack is working and won't be deleted theen remove CKV_AWS_21
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -895,60 +916,7 @@ Resources:
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
         - Key: CheckovRulesToSkip
-          Value: CKV_AWS_18
-
-#  AccessLogsBucketPolicy:
-#    Type: AWS::S3::BucketPolicy
-#    Properties:
-#      Bucket: !Ref AccessLogsBucket
-#      PolicyDocument:
-#        Version: 2012-10-17
-#        Statement:
-#          - Sid: AllowLoadBalancerToLogToS3
-#            Effect: Allow
-#            Principal:
-#              AWS:
-#                - "arn:aws:iam::301577035144:root"
-##                - !Sub "arn:aws:iam::${ElbAccountId}:root" #TODO Get mapping working
-##                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
-#            Action:
-#              - s3:PutObject
-#            Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
-#          - Sid: AllowSSLRequestsOnly
-#            Effect: Deny
-#            Principal:
-#              Service: delivery.logs.amazonaws.com
-#            Action:
-#              - s3:*
-#            Resource: !GetAtt AccessLogsBucket.Arn
-#            Condition:
-#              Bool:
-#                "aws:SecureTransport": "false"
-#          - Sid: AllowAwsLogDeliveryToLogToS3
-#            Effect: Allow
-#            Principal:
-#              Service: delivery.logs.amazonaws.com
-#            Action:
-#              - s3:PutObject
-#            Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
-#            Condition:
-#              StringEquals:
-#                "s3:x-amz-acl": bucket-owner-full-control
-#                "aws:SourceAccount": !Ref AWS::AccountId
-#              Bool:
-#                "aws:SecureTransport": "true"
-#          - Sid: AllowAwsLogDeliveryToReadBucketAcl
-#            Effect: Allow
-#            Principal:
-#              Service: delivery.logs.amazonaws.com
-#            Action:
-#              - s3:GetBucketAcl
-#            Resource: !GetAtt AccessLogsBucket.Arn
-#            Condition:
-#              StringEquals:
-#                "aws:SourceAccount": !Ref AWS::AccountId
-#              Bool:
-#                "aws:SecureTransport": "true"
+          Value: CKV_AWS_18,CKV_AWS_21
 
   AccessLogsBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -960,27 +928,28 @@ Resources:
           - Sid: AllowLoadBalancerToLogToS3
             Effect: Allow
             Principal:
-              AWS: "arn:aws:iam::301577035144:root"
-            #                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
+              AWS: !Sub
+                - "arn:aws:iam::${ElbAccountId}:root"
+                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
             Action:
               - s3:PutObject
-            Resource: !Sub "${AccessLogsBucket.Arn}/*"
+            Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
             Condition:
               Bool:
-                "aws:SecureTransport": "true"
+                "aws:SecureTransport": true
           - Sid: AllowAwsLogDeliveryToLogToS3
             Effect: Allow
             Principal:
               Service: delivery.logs.amazonaws.com
             Action:
               - s3:PutObject
-            Resource: !Sub "${AccessLogsBucket.Arn}/*"
+            Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
             Condition:
               StringEquals:
                 "s3:x-amz-acl": bucket-owner-full-control
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
-                "aws:SecureTransport": "true"
+                "aws:SecureTransport": true
           - Sid: AllowAwsLogDeliveryToReadBucketAcl
             Effect: Allow
             Principal:
@@ -992,7 +961,7 @@ Resources:
               StringEquals:
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
-                "aws:SecureTransport": "true"
+                "aws:SecureTransport": true
 
   KmsKey:
     Type: AWS::KMS::Key
@@ -1034,7 +1003,7 @@ Resources:
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
 
-#Outputs:
-#  ApiGatewayEndpoint:
-#    Description: The base URI for this application.
-#    Value: !GetAtt ApiGateway.ApiEndpoint
+Outputs:
+  ApiGatewayEndpoint:
+    Description: The base URI for this application.
+    Value: !GetAtt ApiGateway.ApiEndpoint
