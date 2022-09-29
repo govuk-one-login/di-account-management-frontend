@@ -55,28 +55,8 @@ Mappings:
 
 Resources:
   #
-  # Fargate cluster
+  # Fargate Cluster
   #
-
-#  FargateCluster:
-#    Type: AWS::ECS::Cluster
-#    Properties:
-#      ClusterSettings:
-#        - Name: containerInsights
-#          Value: enabled
-#      Tags:
-#        - Key: Name
-#          Value: !Sub "${AWS::StackName}-FargateCluster"
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
 
   ContainerService:
     Type: AWS::ECS::Service
@@ -87,6 +67,7 @@ Resources:
       DeploymentController:
         Type: EXTERNAL
       PropagateTags: SERVICE
+      LaunchType: FARGATE
       Tags:
         - Key: Name
           Value: !Sub "${Environment}-accounts-ecs-service"
@@ -100,7 +81,50 @@ Resources:
           Value: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
         - Key: Source
           Value: "alphagov/di-authentication-account-management/template.yaml"
-    DependsOn: ApplicationLoadBalancerListenerHTTPS
+    DependsOn: "ApplicationLoadBalancerListener"
+
+    #  ContainerService:
+    #    Type: AWS::ECS::Service
+    #    Properties:
+    #      Cluster:
+    #        Fn::ImportValue:
+    #          !Sub "${Environment}-accounts-ecs-cluster"
+    #      DeploymentConfiguration:
+    #        MaximumPercent: 150
+    #        MinimumHealthyPercent: 50
+    #      DesiredCount: 2
+    #      HealthCheckGracePeriodSeconds: 15
+    #      LaunchType: "FARGATE"
+    #      LoadBalancers:
+    #        - ContainerName: !Sub "${Environment}-aam-ecs-container-definition"
+    #          ContainerPort: 6001
+    #          TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
+    #      NetworkConfiguration:
+    #        AwsvpcConfiguration:
+    #          AssignPublicIp: "DISABLED"
+    #          SecurityGroups:
+    #            - !GetAtt AccountManagementEcsTaskSecurityGroup.GroupId #TODO Confirm that this is the correct one
+    #          Subnets:
+    #            - Fn::ImportValue:
+    #                !Sub "${VpcStackName}-PrivateSubnetIdA"
+    #            - Fn::ImportValue:
+    #                !Sub "${VpcStackName}-PrivateSubnetIdB"
+    #      ServiceName: !Sub "${Environment}-accounts-ecs-service"
+    #      TaskDefinition: !Ref TaskDefinition
+    #      Tags:
+    #        - Key: Name
+    #          Value: !Sub "${Environment}-accounts-ecs-service"
+    #        - Key: Product
+    #          Value: "GOV.UK Sign In"
+    #        - Key: System
+    #          Value: "Account Management"
+    #        - Key: Service
+    #          Value: "account management frontend"
+    #        - Key: Owner
+    #          Value: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
+    #        - Key: Source
+    #          Value: "alphagov/di-authentication-account-management/template.yaml"
+    ##    DependsOn: ApplicationLoadBalancerListenerHTTPS
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -136,100 +160,58 @@ Resources:
         - Key: Source
           Value: alphagov/di-devplatform-demo-sam-app/sam-app3/template.yaml
 
-#  ContainerService:
-#    Type: AWS::ECS::Service
+
+#  ContainerAutoScalingTarget:
+#    Type: AWS::ApplicationAutoScaling::ScalableTarget
 #    Properties:
-#      Cluster:
-#        Fn::ImportValue:
-#          !Sub "${Environment}-accounts-ecs-cluster"
-#      DeploymentConfiguration:
-#        MaximumPercent: 150
-#        MinimumHealthyPercent: 50
-#      DesiredCount: 2
-#      HealthCheckGracePeriodSeconds: 15
-#      LaunchType: "FARGATE"
-#      LoadBalancers:
-#        - ContainerName: !Sub "${Environment}-aam-ecs-container-definition"
-#          ContainerPort: 6001
-#          TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
-#      NetworkConfiguration:
-#        AwsvpcConfiguration:
-#          AssignPublicIp: "DISABLED"
-#          SecurityGroups:
-#            - !GetAtt AccountManagementEcsTaskSecurityGroup.GroupId #TODO Confirm that this is the correct one
-#          Subnets:
-#            - Fn::ImportValue:
-#                !Sub "${VpcStackName}-PrivateSubnetIdA"
-#            - Fn::ImportValue:
-#                !Sub "${VpcStackName}-PrivateSubnetIdB"
-#      ServiceName: !Sub "${Environment}-accounts-ecs-service"
-#      TaskDefinition: !Ref TaskDefinition
-#      Tags:
-#        - Key: Name
-#          Value: !Sub "${Environment}-accounts-ecs-service"
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: "account management frontend"
-#        - Key: Owner
-#          Value: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
-#        - Key: Source
-#          Value: "alphagov/di-authentication-account-management/template.yaml"
-##    DependsOn: ApplicationLoadBalancerListenerHTTPS
+#      MaxCapacity: 4
+#      MinCapacity: 2
+#      ResourceId: !Join
+#        - '/'
+#        - - "service"
+#          - Fn::ImportValue:
+#              !Sub "${Environment}-accounts-ecs-cluster"
+#          - !GetAtt ContainerService.Name
+#      RoleARN: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+#      ScalableDimension: "ecs:service:DesiredCount"
+#      ServiceNamespace: "ecs"
 
-  ContainerAutoScalingTarget:
-    Type: AWS::ApplicationAutoScaling::ScalableTarget
-    Properties:
-      MaxCapacity: 4
-      MinCapacity: 2
-      ResourceId: !Join
-        - '/'
-        - - "service"
-          - Fn::ImportValue:
-              !Sub "${Environment}-accounts-ecs-cluster"
-          - !GetAtt ContainerService.Name
-      RoleARN: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
-      ScalableDimension: "ecs:service:DesiredCount"
-      ServiceNamespace: "ecs"
-
-  ContainerAutoScalingPolicyMemory:
-    Type: AWS::ApplicationAutoScaling::ScalingPolicy
-    Properties:
-      PolicyName: !Sub "${Environment}-aam-auto-scaling-policy-memory"
-      PolicyType: "TargetTrackingScaling"
-      ResourceId: !Join
-        - '/'
-        - - "service"
-          - Fn::ImportValue:
-              !Sub "${Environment}-accounts-ecs-cluster"
-          - !GetAtt ContainerService.Name
-      ScalableDimension: "ecs:service:DesiredCount"
-      ServiceNamespace: "ecs"
-      TargetTrackingScalingPolicyConfiguration:
-        TargetValue: 75.0
-        PredefinedMetricSpecification:
-          PredefinedMetricType: "ECSServiceAverageMemoryUtilization"
+#  ContainerAutoScalingPolicyMemory:
+#    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+#    Properties:
+#      PolicyName: !Sub "${Environment}-aam-auto-scaling-policy-memory"
+#      PolicyType: "TargetTrackingScaling"
+#      ResourceId: !Join
+#        - '/'
+#        - - "service"
+#          - Fn::ImportValue:
+#              !Sub "${Environment}-accounts-ecs-cluster"
+#          - !GetAtt ContainerService.Name
+#      ScalableDimension: "ecs:service:DesiredCount"
+#      ServiceNamespace: "ecs"
+#      TargetTrackingScalingPolicyConfiguration:
+#        TargetValue: 75.0
+#        PredefinedMetricSpecification:
+#          PredefinedMetricType: "ECSServiceAverageMemoryUtilization"
 #    DependsOn: ContainerAutoScalingTarget
 
-  ContainerAutoScalingPolicyCPU:
-    Type: AWS::ApplicationAutoScaling::ScalingPolicy
-    Properties:
-      PolicyName: !Sub "${Environment}-aam-auto-scaling-policy-cpu"
-      PolicyType: "TargetTrackingScaling"
-      ResourceId: !Join
-        - '/'
-        - - "service"
-          - Fn::ImportValue:
-              !Sub "${Environment}-accounts-ecs-cluster"
-          - !GetAtt ContainerService.Name
-      ScalableDimension: "ecs:service:DesiredCount"
-      ServiceNamespace: "ecs"
-      TargetTrackingScalingPolicyConfiguration:
-        TargetValue: 65.0
-        PredefinedMetricSpecification:
-          PredefinedMetricType: "ECSServiceAverageCPUUtilization"
+#  ContainerAutoScalingPolicyCPU:
+#    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+#    Properties:
+#      PolicyName: !Sub "${Environment}-aam-auto-scaling-policy-cpu"
+#      PolicyType: "TargetTrackingScaling"
+#      ResourceId: !Join
+#        - '/'
+#        - - "service"
+#          - Fn::ImportValue:
+#              !Sub "${Environment}-accounts-ecs-cluster"
+#          - !GetAtt ContainerService.Name
+#      ScalableDimension: "ecs:service:DesiredCount"
+#      ServiceNamespace: "ecs"
+#      TargetTrackingScalingPolicyConfiguration:
+#        TargetValue: 65.0
+#        PredefinedMetricSpecification:
+#          PredefinedMetricType: "ECSServiceAverageCPUUtilization"
 #    DependsOn: ContainerAutoScalingTarget
 
   AmFrontendRedisSecurityGroup:
@@ -359,7 +341,7 @@ Resources:
         -
           Name: !Sub "${Environment}-aam-ecs-container-definition"
           Essential: true
-          Image: CONTAINER-IMAGE-PLACEHOLDER
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761
           PortMappings:
             - ContainerPort: "6001"
               HostPort: "6001"
@@ -461,47 +443,6 @@ Resources:
         - Key: Source
           Value: "alphagov/di-authentication-account-management/template.yaml"
 
-
-  #  TaskExecutionRole:
-#    Type: AWS::IAM::Role
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: "2012-10-17"
-#        Statement:
-#          - Effect: Allow
-#            Principal:
-#              Service: ecs-tasks.amazonaws.com
-#            Action:
-#              - sts:AssumeRole
-#      ManagedPolicyArns:
-#        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-#      Policies:
-#        - PolicyName: CreateLogGroup
-#          PolicyDocument:
-#            Version: "2012-10-17"
-#            Statement:
-#              - Effect: Allow
-#                Action:
-#                  - logs:CreateLogGroup
-#                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:*"
-#      PermissionsBoundary:
-#        - UsePermissionsBoundary
-#        - !Ref PermissionsBoundary
-#        - !Ref AWS::NoValue
-#      Tags:
-#        - Key: Name
-#          Value: !Sub "${AWS::StackName}-TaskExecutionRole"
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
-
   #
   # API Gateway
   #
@@ -529,7 +470,7 @@ Resources:
           !Sub "${VpcStackName}-VpcLinkId"
       ConnectionType: VPC_LINK
       IntegrationMethod: ANY
-      IntegrationUri: !Ref ApplicationLoadBalancerListenerHTTPS
+      IntegrationUri: !Ref ApplicationLoadBalancerListener
       PayloadFormatVersion: 1.0
 
   ApiRoute:
@@ -615,7 +556,7 @@ Resources:
 #      TargetType: "ip"
 
 
-  ApplicationLoadBalancerTargetGroup:
+  ApplicationLoadBalancerTargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckPort: 6001
@@ -649,42 +590,43 @@ Resources:
           Value: alphagov/di-authentication-account-management/template.yaml
 
 
-  ApplicationLoadBalancerListenerHTTPS:
+  ApplicationLoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
       # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
-#      Certificates: !Ref ACMCertificate
-#        - TODO: Create certificate (aws_acm_certificate.account_management_alb_certificate.arn)
       DefaultActions:
-        - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
+        - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
           Type: forward
       LoadBalancerArn: !Ref ApplicationLoadBalancer
-#      Port: 443
-#      Protocol: "HTTPS"
-#      SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
       Port: 80
       Protocol: "HTTP"
 
-#  ACMCertificate:
+      #      Certificates: !Ref ACMCertificate
+      #        - TODO: Create certificate (aws_acm_certificate.account_management_alb_certificate.arn)
+      #      Port: 443
+      #      Protocol: "HTTPS"
+      #      SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+
+  #  ACMCertificate:
 #    Type: AWS::CertificateManager::Certificate
 #    Properties:
 #      DomainName: "*"
 
-  ApplicationLoadBalancerListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      Actions:
-        - Type: fixed-response
-          FixedResponseConfig:
-            ContentType: "text/plain"
-            MessageBody: "static/robots.txt" # TODO Confirm what this is meant to be
-            StatusCode: "200"
-      Conditions:
-        - PathPatternConfig:
-            Values: ["/robots.txt"]
-      ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
-      Priority: 10
+#  ApplicationLoadBalancerListenerRule:
+#    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+#    Properties:
+#      Actions:
+#        - Type: fixed-response
+#          FixedResponseConfig:
+#            ContentType: "text/plain"
+#            MessageBody: "static/robots.txt"
+#            StatusCode: "200"
+#      Conditions:
+#        - PathPatternConfig:
+#            Values: ["/robots.txt"]
+#      ListenerArn: !Ref ApplicationLoadBalancerListener
+#      Priority: 10
 
   ApplicationLoadBalancerListenerRuleForward:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
@@ -693,7 +635,7 @@ Resources:
         - Type: forward
           ForwardConfig:
             TargetGroups:
-              - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
+              - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
                 Weight: 1
       Conditions:
         - Field: http-header
@@ -701,7 +643,7 @@ Resources:
             HttpHeaderName: User-Agent
             Values:
               - Mozilla
-      ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
+      ListenerArn: !Ref ApplicationLoadBalancerListener
       Priority: 1
 
 #  ApplicationLoadBalancerListenerHTTP:
@@ -772,141 +714,6 @@ Resources:
       IpProtocol: tcp
       FromPort: 6001
       ToPort: 6001
-
-  #
-  #  ElastiCache
-  #
-
-#  ApplicationCacheSubnetGroup:
-#    Type: AWS::ElastiCache::SubnetGroup
-#    Properties:
-#      CacheSubnetGroupName: application-cache-subnet-group
-#      Description: Cache Subnet Group
-#      SubnetIds:
-#        - Fn::ImportValue:
-#            !Sub "${VpcStackName}-PrivateSubnetIdA"
-#        - Fn::ImportValue:
-#            !Sub "${VpcStackName}-PrivateSubnetIdB"
-#      Tags:
-#        - Key: Name
-#          Value: ApplicationCacheSubnetGroup
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
-
-#  ApplicationParameterGroup:
-#    Type: AWS::ElastiCache::ParameterGroup
-#    Properties:
-#      CacheParameterGroupFamily: redis6.x
-#      Description: Hello! This is a nice description
-#      Properties:
-#        cluster-enabled: "yes"
-#      Tags:
-#        - Key: Name
-#          Value: ApplicationElastiCacheCluster
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
-
-#  ApplicationElastiCacheLogGroup:
-#    Type: AWS::Logs::LogGroup
-#    Properties:
-#      KmsKeyId: !GetAtt KmsKey.Arn
-#      LogGroupName: elasticache-replication-group-logs
-#      RetentionInDays: 1
-#      Tags:
-#        - Key: Name
-#          Value: ApplicationElastiCacheCluster
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
-
-#  ApplicationAuthPass:
-#    Type: AWS::SecretsManager::Secret
-#    Properties:
-#      Name: elasticache-application
-#      Description: Random password for elastiCache
-#      GenerateSecretString:
-#        ExcludeLowercase: false
-#        ExcludeNumbers: false
-#        ExcludePunctuation: true
-#        ExcludeUppercase: false
-#        IncludeSpace: false
-#        PasswordLength: 17
-#      KmsKeyId: !GetAtt KmsKey.Arn
-#      Tags:
-#        - Key: Name
-#          Value: ApplicationAuthPass
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
-
-#  ApplicationReplicationGroup:
-#    Type: AWS::ElastiCache::ReplicationGroup
-#    Properties:
-#      TransitEncryptionEnabled: true
-#      AtRestEncryptionEnabled: true
-#      AuthToken: !Sub '{{resolve:secretsmanager:${ApplicationAuthPass}}}'
-#      AutomaticFailoverEnabled: true
-#      CacheNodeType: cache.t2.micro
-#      CacheSubnetGroupName: !Ref ApplicationCacheSubnetGroup
-#      CacheParameterGroupName: !Ref ApplicationParameterGroup
-#      Engine: redis
-#      LogDeliveryConfigurations:
-#        - DestinationDetails:
-#            CloudWatchLogsDetails:
-#              LogGroup: !Ref ApplicationElastiCacheLogGroup
-#          DestinationType: cloudwatch-logs
-#          LogFormat: json
-#          LogType: engine-log
-#      MultiAZEnabled: true
-#      NumNodeGroups: 1
-#      ReplicasPerNodeGroup: 1
-#      ReplicationGroupDescription: Replication group for elasticache
-#      SecurityGroupIds:
-#        - Fn::ImportValue:
-#            !Sub "${VpcStackName}-AWSServicesEndpointSecurityGroupId"
-#      Tags:
-#        - Key: Name
-#          Value: ApplicationElastiCacheCluster
-#        - Key: Product
-#          Value: "GOV.UK Sign In"
-#        - Key: System
-#          Value: "Account Management"
-#        - Key: Service
-#          Value: account management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
 
   #
   # Logging
