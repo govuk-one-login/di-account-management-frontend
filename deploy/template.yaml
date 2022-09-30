@@ -8,35 +8,35 @@ Description: >-
   Account Management Frontend ECS Service
 Transform:
   - AWS::Serverless-2016-10-31
-  - AWS::CodeDeployBlueGreen
+#  - AWS::CodeDeployBlueGreen
 
-Hooks:
-  CodeDeployBlueGreenHook:
-    Properties:
-      TrafficRoutingConfig:
-        Type: TimeBasedCanary
-        TimeBasedCanary:
-          StepPercentage: 15
-          BakeTimeMins: 5
-      Applications:
-        - Target:
-            Type: 'AWS::ECS::Service'
-            LogicalID: ContainerService
-          ECSAttributes:
-            TaskDefinitions:
-              - BlueTaskDefinition
-              - GreenTaskDefinition
-            TaskSets:
-              - BlueTaskSet
-              - GreenTaskSet
-            TrafficRouting:
-              ProdTrafficRoute:
-                Type: 'AWS::ElasticLoadBalancingV2::Listener'
-                LogicalID: ApplicationLoadBalancerListener
-              TargetGroups:
-                - ApplicationLoadBalancerTargetGroupBlue
-                - ApplicationLoadBalancerTargetGroupGreen
-    Type: 'AWS::CodeDeploy::BlueGreen'
+#Hooks:
+#  CodeDeployBlueGreenHook:
+#    Properties:
+#      TrafficRoutingConfig:
+#        Type: TimeBasedCanary
+#        TimeBasedCanary:
+#          StepPercentage: 15
+#          BakeTimeMins: 5
+#      Applications:
+#        - Target:
+#            Type: 'AWS::ECS::Service'
+#            LogicalID: ContainerService
+#          ECSAttributes:
+#            TaskDefinitions:
+#              - BlueTaskDefinition
+#              - GreenTaskDefinition
+#            TaskSets:
+#              - BlueTaskSet
+#              - GreenTaskSet
+#            TrafficRouting:
+#              ProdTrafficRoute:
+#                Type: 'AWS::ElasticLoadBalancingV2::Listener'
+#                LogicalID: ApplicationLoadBalancerListener
+#              TargetGroups:
+#                - ApplicationLoadBalancerTargetGroupBlue
+#                - ApplicationLoadBalancerTargetGroupGreen
+#    Type: 'AWS::CodeDeploy::BlueGreen'
 
 Parameters:
   VpcStackName:
@@ -129,11 +129,11 @@ Resources:
                           - "/"
                           - Ref: AWS::StackId
       SecurityGroupIngress:
-        - Description: Allow traffic from the load balancer on port 5000
+        - Description: Allow traffic from the load balancer on port 6001
           SourceSecurityGroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
           IpProtocol: tcp
-          FromPort: 5000
-          ToPort: 5000
+          FromPort: 6001
+          ToPort: 6001
       VpcId:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
@@ -162,7 +162,7 @@ Resources:
         - Name: server
           Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest #TODO Pass through dynamically
           PortMappings:
-            - ContainerPort: 5000
+            - ContainerPort: 6001
               Protocol: tcp
           Essential: true
           LogConfiguration:
@@ -366,10 +366,10 @@ Resources:
   ApplicationLoadBalancerTargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckPort: 5000
+      HealthCheckPort: 6001
       HealthCheckProtocol: HTTP
       HealthCheckPath: /
-      Port: 5000
+      Port: 6001
       Protocol: HTTP
       ProtocolVersion: HTTP1
       Matcher:
@@ -399,10 +399,10 @@ Resources:
   ApplicationLoadBalancerTargetGroupGreen:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckPort: 5000
+      HealthCheckPort: 6001
       HealthCheckProtocol: HTTP
       HealthCheckPath: /
-      Port: 5000
+      Port: 6001
       Protocol: HTTP
       ProtocolVersion: HTTP1
       Matcher:
@@ -484,7 +484,7 @@ Resources:
       TaskDefinition: !Ref BlueTaskDefinition
       LoadBalancers:
         - ContainerName: server
-          ContainerPort: 5000
+          ContainerPort: 6001
           TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
   PrimaryTaskSet:
     Type: 'AWS::ECS::PrimaryTaskSet'
@@ -546,10 +546,10 @@ Resources:
     Properties:
       GroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
       DestinationSecurityGroupId: !GetAtt ContainerServiceSecurityGroup.GroupId
-      Description: Allow traffic to Container Service on port 5000
+      Description: Allow traffic to Container Service on port 6001
       IpProtocol: tcp
-      FromPort: 5000
-      ToPort: 5000
+      FromPort: 6001
+      ToPort: 6001
 
   #
   # Logging
