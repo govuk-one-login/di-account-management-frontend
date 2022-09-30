@@ -56,6 +56,7 @@ run:
         -var "gov_accounts_publishing_api_url=${PUBLISHING_API_URL}" \
         -var "gov_account_publishing_api_token=${PUBLISHING_API_URL_TOKEN}" \
         -var "logging_endpoint_arn=${LOGGING_ENDPOINT_ARN}" \
+        -var 'logging_endpoint_arns=["arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prod"]' \
         -var "logging_endpoint_enabled=${LOGGING_ENDPOINT_ENABLED}" \
         -var "account_management_image_uri=${ACCOUNT_MANAGEMENT_IMAGE_URI}" \
         -var "account_management_image_digest=${ACCOUNT_MANAGEMENT_IMAGE_DIGEST}" \
