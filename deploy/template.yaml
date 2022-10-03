@@ -46,6 +46,12 @@ Parameters:
     Type: String
     Default: "vpc"
 
+  RedisStackName:
+    Description: >
+      The name of the stack that defines the Redis cluster
+    Type: String
+    Default: "shared-redis"
+
   PermissionsBoundary:
     Description: "The ARN of the permissions boundary to apply when creating IAM roles"
     Type: String
@@ -69,6 +75,12 @@ Parameters:
     AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
 
+  CodeSigningConfigArn:
+    Type: String
+    Description: >
+      The ARN of the Code Signing Config to use, provided by the deployment pipeline
+    Default: "none"
+
 Conditions:
   UsePermissionsBoundary:
     Fn::Not:
@@ -87,12 +99,143 @@ Resources:
   # ECS Service
   #
 
+  ###
+
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub ${Environment}-aam-ecs-cluster
+      CapacityProviders:
+        - FARGATE
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
+      Tags:
+        - Key: Product
+          Value: GOV.UK Sign In
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-aam-ecs-cluster"
+        - Key: Owner
+          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        - Key: Source
+          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+        - Key: Application
+          Value: Shared
+
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${Environment}-aam-ecs-cluster-role
+      Path: !Sub /${Environment}/accounts/ecs/cluster-role/
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+      Policies:
+        - PolicyName: CreateLogGroup
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:*"
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
+      Tags:
+        - Key: Product
+          Value: GOV.UK Sign In
+        - Key: System
+          Value:  Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        - Key: Source
+          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+        - Key: Application
+          Value: Shared
+
+#  TaskRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      RoleName: !Sub "${Environment}-aam-ecs-cluster-task-role"
+#      Path: !Sub /${Environment}/accounts/ecs/cluster-task-role/
+#      AssumeRolePolicyDocument:
+#        Statement:
+#          - Effect: Allow
+#            Principal:
+#              Service: ecs-tasks.amazonaws.com
+#            Action:
+#              - sts:AssumeRole
+#      Policies:
+#        - PolicyName: !Sub "${Environment}-ecs-cluster-task-role-ssm-permissions"
+#          PolicyDocument:
+#            Version: "2012-10-17"
+#            Statement:
+#              - Effect: Allow
+#                Action:
+#                  - "ssm:GetParameter"
+#                  - "ssm:GetParameters"
+#                Resource:
+#                  - !Join [ "/",[ "arn:aws:ssm:eu-west-2:301577035144:parameter", Fn::ImportValue: !Sub "${Environment}-account-management-frontend-redis-tls"] ]
+#                  - !Join [ "/",[ "arn:aws:ssm:eu-west-2:301577035144:parameter", Fn::ImportValue: !Sub "${Environment}-account-management-frontend-redis-port"] ]
+#              - Effect: Allow
+#                Action:
+#                  - "secretsmanager:GetSecretValue"
+#                Resource:
+#                  - Fn::ImportValue:
+#                      "shared-redis-cache-password-secret-arn"
+#      PermissionsBoundary: !If
+#        - UsePermissionsBoundary
+#        - !Ref PermissionsBoundary
+#        - !Ref AWS::NoValue
+#      Tags:
+#        - Key: Product
+#          Value: GOV.UK Sign In
+#        - Key: System
+#          Value: Accounts
+#        - Key: Environment
+#          Value: !Ref Environment
+#        - Key: Owner
+#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+#        - Key: Source
+#          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+#        - Key: Application
+#          Value: Shared
+
+  ECSClusterNameParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: The name of the ECS cluster
+      Name: !Sub "/${Environment}/${AWS::StackName}/ECS/Cluster"
+      Type: String
+      Value: !Ref ECSCluster
+      Tags:
+        Product: GOV.UK Sign In
+        System: Accounts
+        Environment: !Ref Environment
+        Owner: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        Source: alphagov/di-accounts-infra/shared-ecs/template.yaml
+        Application: Shared
+
+  ###
+
   ContainerService:
     Type: AWS::ECS::Service
     Properties:
-      Cluster:
-        Fn::ImportValue:
-          !Sub "${Environment}-accounts-ecs-cluster"
+      Cluster: !Ref ECSCluster
       DeploymentController:
         Type: EXTERNAL
       PropagateTags: SERVICE
@@ -159,8 +302,9 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        - Name: server
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest #TODO Pass through dynamically
+        - Name: server #TODO Update Name and all references to application specific convention
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest #TODO Pass through dynamically
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
           PortMappings:
             - ContainerPort: 6001
               Protocol: tcp
@@ -191,16 +335,15 @@ Resources:
             - Name: "SESSION_EXPIRY"
               Value: "1800000"
             - Name: "SESSION_SECRET"
-              Value:
-                '{{resolve:secretsmanager:arn:aws:secretsmanager:eu-west-2:301577035144:secret:shared-redis-cache-password-7Byad7}}'
+              Value: !Sub '{{resolve:secretsmanager:${SessionSecret}}}'
             - Name: "AM_YOUR_ACCOUNT_URL"
               Value: !Sub "https://www.${Environment}.publishing.service.gov.uk/account/home"
             - Name: "GTM_ID"
-              Value: ""
+              Value: "" #TODO Fill when value is available
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
-              Value: ""
+              Value: "" #TODO Fill when value is available
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
-              Value: ""
+              Value: "" #TODO Fill when value is available
             - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
               Value: "0"
             - Name: "SUPPORT_LANGUAGE_CY"
@@ -210,7 +353,7 @@ Resources:
             - Name: "ANALYTICS_COOKIE_DOMAIN"
               Value: "NULL" #TODO Fill when value is available
             - Name: "REDIS_KEY"
-              Value: "account-management-frontend" #TODO Confirm value
+              Value: "shared-redis"
             - Name: "KMS_KEY_ID"
               Value:
                 Fn::ImportValue:
@@ -219,16 +362,14 @@ Resources:
               Value: "" #TODO Fill when value is available
       Cpu: 1024
       Memory: 2048
-      ExecutionRoleArn:
-        Fn::ImportValue:
-          !Sub "${Environment}-accounts-ecs-cluster-execution-role"
+      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       Family: server
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName}-TaskDefinition"
+          Value: !Sub "${AWS::StackName}-aam-task-definition"
         - Key: Product
           Value: GOV.UK Sign In
         - Key: System
@@ -239,6 +380,7 @@ Resources:
           Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
         - Key: Source
           Value: alphagov/di-authentication-account-management/template.yaml
+    DependsOn: SessionSecret
 
   TaskLogGroup:
     Type: AWS::Logs::LogGroup
@@ -247,36 +389,73 @@ Resources:
       RetentionInDays: 1
       KmsKeyId: !GetAtt LoggingKmsKey.Arn
 
-#  TaskExecutionRole:
-#    Type: AWS::IAM::Role
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: "2012-10-17"
-#        Statement:
-#          - Effect: Allow
-#            Principal:
-#              Service: ecs-tasks.amazonaws.com
-#            Action:
-#              - sts:AssumeRole
-#      ManagedPolicyArns:
-#        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-#      PermissionsBoundary: !If
-#        - UsePermissionsBoundary
-#        - !Ref PermissionsBoundary
-#        - !Ref AWS::NoValue
-#      Tags:
-#        - Key: Name
-#          Value: !Sub "${AWS::StackName}-TaskExecutionRole"
-#        - Key: Product
-#          Value: GOV.UK Sign In
-#        - Key: System
-#          Value: Authentication Account Management
-#        - Key: Service
-#          Value: Authentication Account Management frontend
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-authentication-account-management/template.yaml
+  SessionSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub ${AWS::StackName}-session-secret
+      Description: !Sub Random password for the ${AWS::StackName} session secret
+      GenerateSecretString:
+        ExcludeLowercase: false
+        ExcludeNumbers: false
+        ExcludePunctuation: true
+        ExcludeUppercase: false
+        IncludeSpace: false
+        RequireEachIncludedType: true
+        PasswordLength: 32
+      KmsKeyId: !GetAtt KmsKey.Arn
+      Tags:
+        - Key: Product
+          Value: GOV.UK Sign In
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        - Key: Source
+          Value: alphagov/di-authentication-account-management/template.yaml
+
+  KmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub KMS key used to protect session secret in ${AWS::StackName}
+      Enabled: true
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action:
+              - kms:*
+            Resource: "*"
+          - Effect: Allow
+            Principal:
+              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
+            Action:
+              - "kms:Encrypt*"
+              - "kms:Decrypt*"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:Describe*"
+            Resource: "*"
+            Condition:
+              ArnLike:
+                "kms:EncryptionContext:aws:logs:arn": !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-cache-kms-key"
+        - Key: Product
+          Value: GOV.UK Sign In
+        - Key: System
+          Value: Authentication Account Management
+        - Key: Service
+          Value: Authentication Account Management frontend
+        - Key: Owner
+          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        - Key: Source
+          Value: alphagov/di-authentication-account-management/template.yaml
 
   #
   # API Gateway
@@ -462,9 +641,7 @@ Resources:
   BlueTaskSet:
     Type: 'AWS::ECS::TaskSet'
     Properties:
-      Cluster:
-        Fn::ImportValue:
-          !Sub "${Environment}-accounts-ecs-cluster"
+      Cluster: !Ref ECSCluster
       LaunchType: FARGATE
       NetworkConfiguration:
         AwsVpcConfiguration:
@@ -489,9 +666,7 @@ Resources:
   PrimaryTaskSet:
     Type: 'AWS::ECS::PrimaryTaskSet'
     Properties:
-      Cluster:
-        Fn::ImportValue:
-          !Sub "${Environment}-accounts-ecs-cluster"
+      Cluster: !Ref ECSCluster
       Service: !Ref ContainerService
       TaskSetId: !GetAtt
         - BlueTaskSet
