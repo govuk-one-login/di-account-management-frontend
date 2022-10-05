@@ -56,6 +56,7 @@ import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
 import { subjectSessionIndex } from "./utils/subject-session-index";
 import { subjectSessionIndexMiddleware } from "./middleware/subject-session-index-middleware";
+import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -148,6 +149,7 @@ async function createApp(): Promise<express.Application> {
   app.use(checkYourPhoneRouter);
   app.use(sessionExpiredRouter);
   app.use(signedOutRouter);
+  app.use(resendEmailCodeRouter);
 
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
