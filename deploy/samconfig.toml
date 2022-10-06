@@ -9,4 +9,4 @@ capabilities = "CAPABILITY_NAMED_IAM"
 image_repositories = []
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-7d9zueiu0w51"
 s3_prefix = "account-management-frontend"
-parameter_overrides = "VpcStackName=\"vpc\" PermissionsBoundary=\"none\" Environment=\"build\" IncomingTrafficCIDRBlocks=\"0.0.0.0/0\""
+parameter_overrides = "VpcStackName=\"vpc-enhanced\" PermissionsBoundary=\"none\" Environment=\"build\" IncomingTrafficCIDRBlocks=\"0.0.0.0/0\""

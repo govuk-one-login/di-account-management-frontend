@@ -44,7 +44,7 @@ Parameters:
       The name of the stack that defines the VPC in which this container will
       run.
     Type: String
-    Default: "vpc"
+    Default: "vpc-enhanced"
 
   RedisStackName:
     Description: >
@@ -67,13 +67,6 @@ Parameters:
       - "staging"
       - "integration"
       - "production"
-
-  IncomingTrafficCIDRBlocks:
-    Description: The list of CIDR blocks allowed to send requests to the ALB
-    Type: String
-    Default: 0.0.0.0/0
-    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
-    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
 
   CodeSigningConfigArn:
     Type: String
@@ -167,53 +160,49 @@ Resources:
         - Key: Application
           Value: Shared
 
-#  TaskRole:
-#    Type: AWS::IAM::Role
-#    Properties:
-#      RoleName: !Sub "${Environment}-aam-ecs-cluster-task-role"
-#      Path: !Sub /${Environment}/accounts/ecs/cluster-task-role/
-#      AssumeRolePolicyDocument:
-#        Statement:
-#          - Effect: Allow
-#            Principal:
-#              Service: ecs-tasks.amazonaws.com
-#            Action:
-#              - sts:AssumeRole
-#      Policies:
-#        - PolicyName: !Sub "${Environment}-ecs-cluster-task-role-ssm-permissions"
-#          PolicyDocument:
-#            Version: "2012-10-17"
-#            Statement:
-#              - Effect: Allow
-#                Action:
-#                  - "ssm:GetParameter"
-#                  - "ssm:GetParameters"
-#                Resource:
-#                  - !Join [ "/",[ "arn:aws:ssm:eu-west-2:301577035144:parameter", Fn::ImportValue: !Sub "${Environment}-account-management-frontend-redis-tls"] ]
-#                  - !Join [ "/",[ "arn:aws:ssm:eu-west-2:301577035144:parameter", Fn::ImportValue: !Sub "${Environment}-account-management-frontend-redis-port"] ]
-#              - Effect: Allow
-#                Action:
-#                  - "secretsmanager:GetSecretValue"
-#                Resource:
-#                  - Fn::ImportValue:
-#                      "shared-redis-cache-password-secret-arn"
-#      PermissionsBoundary: !If
-#        - UsePermissionsBoundary
-#        - !Ref PermissionsBoundary
-#        - !Ref AWS::NoValue
-#      Tags:
-#        - Key: Product
-#          Value: GOV.UK Sign In
-#        - Key: System
-#          Value: Accounts
-#        - Key: Environment
-#          Value: !Ref Environment
-#        - Key: Owner
-#          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
-#        - Key: Source
-#          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
-#        - Key: Application
-#          Value: Shared
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${Environment}-aam-ecs-cluster-task-role"
+      Path: !Sub /${Environment}/accounts/ecs/cluster-task-role/
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub "${Environment}-ecs-cluster-task-role-ssm-permissions"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "ssm:GetParameter"
+                  - "ssm:GetParameters"
+                Resource: "arn:aws:ssm:eu-west-2:301577035144:parameter/*"
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetSecretValue"
+                Resource: "arn:aws:secretsmanager:eu-west-2:301577035144:*"
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
+      Tags:
+        - Key: Product
+          Value: GOV.UK Sign In
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        - Key: Source
+          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+        - Key: Application
+          Value: Shared
 
   ECSClusterNameParameter:
     Type: AWS::SSM::Parameter
@@ -304,6 +293,7 @@ Resources:
       ContainerDefinitions:
         - Name: server #TODO Update Name and all references to application specific convention
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest #TODO Pass through dynamically
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:redis2
           Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
           PortMappings:
             - ContainerPort: 6001
@@ -317,52 +307,59 @@ Resources:
               awslogs-stream-prefix: "ecs"
           Environment:
             - Name: "NODE_ENV"
-              Value: "production"
+              Value: "development"
             - Name: "APP_ENV"
               Value: !Sub "${Environment}"
             - Name: "FARGATE"
               Value: "1"
             - Name: "API_BASE_URL"
-              Value: "NULL" #TODO Fill when value is available
+              Value: "https://oidc.build.account.gov.uk" #TODO Fill when value is available
             - Name: "AM_API_BASE_URL"
-              Value: "NULL" #TODO Fill when value is available
+              Value: "https://manage.build.account.gov.uk" #TODO Fill when value is available
             - Name: "BASE_URL"
-              Value: "NULL" #TODO Fill when value is available
+              Value: "manage.build.account.gov.uk" #TODO Fill when value is available
             - Name: "OIDC_CLIENT_ID"
-              Value: "NULL" #TODO Fill when value is available
+              Value: "RqFZ83csmS4Mi4Y7s7ohD9-ekwU" #TODO Fill when value is available
             - Name: "OIDC_CLIENT_SCOPES"
-              Value: "NULL" #TODO Fill when value is available
+              Value: "openid phone email am offline_access govuk-account" #TODO Fill when value is available
             - Name: "SESSION_EXPIRY"
               Value: "1800000"
             - Name: "SESSION_SECRET"
               Value: !Sub '{{resolve:secretsmanager:${SessionSecret}}}'
             - Name: "AM_YOUR_ACCOUNT_URL"
-              Value: !Sub "https://www.${Environment}.publishing.service.gov.uk/account/home"
+              Value: "https://build.account.gov.uk"
             - Name: "GTM_ID"
               Value: "" #TODO Fill when value is available
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
-              Value: "" #TODO Fill when value is available
+              Value: "https://www.build.publishing.service.gov.uk/account/home" #TODO Fill when value is available
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
-              Value: "" #TODO Fill when value is available
+              Value: "tbc" #TODO Fill when value is available
             - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
               Value: "0"
             - Name: "SUPPORT_LANGUAGE_CY"
               Value: "1"
             - Name: "AUTH_FRONTEND_URL"
-              Value: "NULL" #TODO Fill when value is available
+              Value: "https://sigin.build.account.gov.uk" #TODO Fill when value is available
             - Name: "ANALYTICS_COOKIE_DOMAIN"
-              Value: "NULL" #TODO Fill when value is available
+              Value: "build.account.gov.uk" #TODO Fill when value is available
             - Name: "REDIS_KEY"
-              Value: "shared-redis"
+              Value: !Ref RedisStackName
+            - Name: "REDIS_HOST"
+              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
+            - Name: "REDIS_PORT"
+              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
             - Name: "KMS_KEY_ID"
               Value:
                 Fn::ImportValue:
                   !Sub "account-management-kms-signing-key-id"
             - Name: "SERVICE_DOMAIN"
               Value: "" #TODO Fill when value is available
+            - Name: "LOG_LEVEL"
+              Value: "debug"
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+      TaskRoleArn: !GetAtt TaskRole.Arn
       Family: server
       NetworkMode: awsvpc
       RequiresCompatibilities:
@@ -547,7 +544,7 @@ Resources:
     Properties:
       HealthCheckPort: 6001
       HealthCheckProtocol: HTTP
-      HealthCheckPath: /
+      HealthCheckPath: /healthcheck
       Port: 6001
       Protocol: HTTP
       ProtocolVersion: HTTP1
@@ -580,7 +577,7 @@ Resources:
     Properties:
       HealthCheckPort: 6001
       HealthCheckProtocol: HTTP
-      HealthCheckPath: /
+      HealthCheckPath: /healthcheck
       Port: 6001
       Protocol: HTTP
       ProtocolVersion: HTTP1
