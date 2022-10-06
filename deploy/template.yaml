@@ -181,11 +181,11 @@ Resources:
                 Action:
                   - "ssm:GetParameter"
                   - "ssm:GetParameters"
-                Resource: "arn:aws:ssm:eu-west-2:301577035144:parameter/*"
+                Resource: "arn:aws:ssm:eu-west-2:301577035144:parameter/*" #TODO Make granular
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
-                Resource: "arn:aws:secretsmanager:eu-west-2:301577035144:*"
+                Resource: "arn:aws:secretsmanager:eu-west-2:301577035144:*" #TODO Make granular
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
@@ -436,7 +436,7 @@ Resources:
               - "kms:ReEncrypt*"
               - "kms:GenerateDataKey*"
               - "kms:Describe*"
-            Resource: "*"
+            Resource: "*" #TODO Make granular
             Condition:
               ArnLike:
                 "kms:EncryptionContext:aws:logs:arn": !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
@@ -515,9 +515,9 @@ Resources:
         - !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
       Subnets:
         - Fn::ImportValue:
-            !Sub "${VpcStackName}-PrivateSubnetIdA"
+            !Sub "${VpcStackName}-ProtectedSubnetIdA"
         - Fn::ImportValue:
-            !Sub "${VpcStackName}-PrivateSubnetIdB"
+            !Sub "${VpcStackName}-ProtectedSubnetIdB"
       LoadBalancerAttributes:
         - Key: access_logs.s3.enabled
           Value: "true"
@@ -549,7 +549,7 @@ Resources:
       Protocol: HTTP
       ProtocolVersion: HTTP1
       Matcher:
-        HttpCode: "200-499"
+        HttpCode: "200"
       TargetType: ip
       UnhealthyThresholdCount: 2
       VpcId:
@@ -582,7 +582,7 @@ Resources:
       Protocol: HTTP
       ProtocolVersion: HTTP1
       Matcher:
-        HttpCode: "200-499"
+        HttpCode: "200"
       TargetType: ip
       UnhealthyThresholdCount: 2
       VpcId:
@@ -647,9 +647,9 @@ Resources:
             - !GetAtt ContainerServiceSecurityGroup.GroupId
           Subnets:
           - Fn::ImportValue:
-              !Sub "${VpcStackName}-PrivateSubnetIdA"
+              !Sub "${VpcStackName}-ProtectedSubnetIdA"
           - Fn::ImportValue:
-              !Sub "${VpcStackName}-PrivateSubnetIdB"
+              !Sub "${VpcStackName}-ProtectedSubnetIdB"
       PlatformVersion: 1.4.0
       Scale:
         Unit: PERCENT
