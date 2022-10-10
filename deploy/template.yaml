@@ -39,6 +39,17 @@ Transform:
 #    Type: 'AWS::CodeDeploy::BlueGreen'
 
 Parameters:
+  Environment:
+    Description: "The name of the environment to deploy to"
+    Type: "String"
+    Default: build
+    AllowedValues:
+      - "dev"
+      - "build"
+      - "staging"
+      - "integration"
+      - "production"
+
   VpcStackName:
     Description: >
       The name of the stack that defines the VPC in which this container will
@@ -52,29 +63,38 @@ Parameters:
     Type: String
     Default: "shared-redis"
 
+  ProductTagValue:
+    Description: Value for the Product Tag
+    Type: String
+    Default: "GOV.UK Sign In"
+
+  OwnerTagValue:
+    Description: Value for the Owner Tag
+    Type: String
+    Default: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
+
+  SourceTagValue:
+    Description: Value for the Source Tag
+    Type: String
+    Default: "alphagov/di-authentication-account-management/deploy/template.yaml"
+
+  CodeSigningConfigArn:
+    Type: String
+    Description: "The ARN of the Code Signing Config to use, provided by the deployment pipeline"
+    Default: "none"
+
   PermissionsBoundary:
     Description: "The ARN of the permissions boundary to apply when creating IAM roles"
     Type: String
     Default: "none"
 
-  Environment:
-    Description: "The name of the environment to deploy to"
-    Type: "String"
-    Default: build
-    AllowedValues:
-      - "dev"
-      - "build"
-      - "staging"
-      - "integration"
-      - "production"
-
-  CodeSigningConfigArn:
-    Type: String
-    Description: >
-      The ARN of the Code Signing Config to use, provided by the deployment pipeline
-    Default: "none"
-
 Conditions:
+  UseCodeSigning:
+    Fn::Not:
+      - Fn::Equals:
+          - !Ref CodeSigningConfigArn
+          - "none"
+
   UsePermissionsBoundary:
     Fn::Not:
       - Fn::Equals:
@@ -97,7 +117,7 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: !Sub ${Environment}-aam-ecs-cluster
+      ClusterName: !Sub "${AWS::StackName}-ECSCluster"
       CapacityProviders:
         - FARGATE
       ClusterSettings:
@@ -105,25 +125,24 @@ Resources:
           Value: enabled
       Tags:
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
           Value: Accounts
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
-          Value: !Sub "${AWS::StackName}-aam-ecs-cluster"
+          Value: !Sub "${AWS::StackName}-ECSCluster"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+          Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
 
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ${Environment}-aam-ecs-cluster-role
-      Path: !Sub /${Environment}/accounts/ecs/cluster-role/
+      RoleName: !Sub "${AWS::StackName}-ExecutionRole"
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
@@ -141,30 +160,31 @@ Resources:
               - Effect: Allow
                 Action:
                   - logs:CreateLogGroup
-                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:*" #TODO Update to specific log groups
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
         - !Ref AWS::NoValue
       Tags:
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value:  Accounts
+          Value: Accounts
         - Key: Environment
           Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ExecutionRole"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+          Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
 
   TaskRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "${Environment}-aam-ecs-cluster-task-role"
-      Path: !Sub /${Environment}/accounts/ecs/cluster-task-role/
+      RoleName: !Sub "${AWS::StackName}-TaskRole"
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
@@ -173,7 +193,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-        - PolicyName: !Sub "${Environment}-ecs-cluster-task-role-ssm-permissions"
+        - PolicyName: !Sub "${AWS::StackName}-TaskRolePolicy"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -181,42 +201,59 @@ Resources:
                 Action:
                   - "ssm:GetParameter"
                   - "ssm:GetParameters"
-                Resource: "arn:aws:ssm:eu-west-2:301577035144:parameter/*" #TODO Make granular
+                Resource:
+                 - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
+                 - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
-                Resource: "arn:aws:secretsmanager:eu-west-2:301577035144:*" #TODO Make granular
+                Resource:
+                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
+                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
+                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Config/Cache/Password"
+              - Effect: Allow
+                Action:
+                  - "kms:Sign"
+                  - "kms:GetPublicKey"
+                Resource:
+                  !Join
+                  - ""
+                  - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/"
+                    - !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
+
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
         - !Ref AWS::NoValue
       Tags:
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
           Value: Accounts
         - Key: Environment
           Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-TaskRole"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+          Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
 
   ECSClusterNameParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Description: The name of the ECS cluster
-      Name: !Sub "/${Environment}/${AWS::StackName}/ECS/Cluster"
+      Description: !Sub "The name of the ${AWS::StackName} ECS cluster"
+      Name: !Sub "/${AWS::StackName}/ECS/Cluster"
       Type: String
       Value: !Ref ECSCluster
       Tags:
-        Product: GOV.UK Sign In
+        Product: !Ref ProductTagValue
         System: Accounts
         Environment: !Ref Environment
-        Owner: govuk-accounts-tech@digital.cabinet-office.gov.uk
-        Source: alphagov/di-accounts-infra/shared-ecs/template.yaml
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
         Application: Shared
 
   ###
@@ -229,18 +266,20 @@ Resources:
         Type: EXTERNAL
       PropagateTags: SERVICE
       Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Name
           Value: !Sub "${AWS::StackName}-ContainerService"
-        - Key: Product
-          Value: GOV.UK Sign In
-        - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
     DependsOn: ApplicationLoadBalancerListener
 
   ContainerServiceSecurityGroup:
@@ -270,18 +309,20 @@ Resources:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
       Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Name
           Value: !Sub "${AWS::StackName}-ContainerServiceSecurityGroup"
-        - Key: Product
-          Value: GOV.UK Sign In
-        - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
 
   #
   # Fargate tasks
@@ -291,9 +332,7 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        - Name: server #TODO Update Name and all references to application specific convention
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest #TODO Pass through dynamically
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:redis2
+        - Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
           PortMappings:
             - ContainerPort: 6001
@@ -302,7 +341,7 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: !Sub "/ecs/${AWS::StackName}/server"
+              awslogs-group: !Sub "/ecs/${AWS::StackName}/BlueTaskDefinition"
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: "ecs"
           Environment:
@@ -347,49 +386,98 @@ Resources:
             - Name: "REDIS_HOST"
               Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
             - Name: "REDIS_PORT"
-              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
+              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-port}}'
             - Name: "KMS_KEY_ID"
-              Value:
-                Fn::ImportValue:
-                  !Sub "account-management-kms-signing-key-id"
+              Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
             - Name: "SERVICE_DOMAIN"
               Value: "" #TODO Fill when value is available
             - Name: "LOG_LEVEL"
               Value: "debug"
+
+#            - Name: "NODE_ENV"
+#              Value: "development" #TODO Make as parameter
+#            - Name: "APP_ENV"
+#              Value: !Sub "${Environment}"
+#            - Name: "FARGATE"
+#              Value: "1"
+#            - Name: "API_BASE_URL"
+#              Value: !Sub "https://oidc.${Environment}.account.gov.uk" # TODO Ternary if production then.. else current one set
+#            - Name: "AM_API_BASE_URL"
+#              Value: !Sub "https://settings.${Environment}.account.gov.uk" # TODO Ternary if prod just build.account.gov.uk else environment specified as current
+#            - Name: "BASE_URL"
+#              Value: !Sub "settings.${Environment}.account.gov.uk" # TODO Ternary if prod just build.account.gov.uk else environment specified as current
+#            - Name: "OIDC_CLIENT_ID"
+#              Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/OIDC/Client/Id}}"
+#            - Name: "OIDC_CLIENT_SCOPES"
+#              Value: "openid phone email am offline_access govuk-account" #TODO Make as parameter
+#            - Name: "SESSION_EXPIRY"
+#              Value: "1800000"
+#            - Name: "SESSION_SECRET"
+#              Value: !Sub "{{resolve:secretsmanager:${SessionSecret}}}"
+#            - Name: "AM_YOUR_ACCOUNT_URL"
+#              Value: !Sub "https://${Environment}.account.gov.uk" # TODO Ternary if prod just build.account.gov.uk else environment specified as current
+#            - Name: "GTM_ID"
+#              Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/GTM/Id}}"
+#            - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
+#              Value: !Sub "https://www.${Environment}.publishing.service.gov.uk/account/home" #TODO Ternary if prod just build.publishing.service.gov.uk else environment specified as current
+#            - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
+#              Value: !Sub "{{resolve:secretsmanager:/${AWS::StackName}/Config/Publishing/API/Key}}"
+#            - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
+#              Value: "0"
+#            - Name: "SUPPORT_LANGUAGE_CY"
+#              Value: "1"
+#            - Name: "AUTH_FRONTEND_URL"
+#              Value: !Sub "https://sigin.${Environment}.account.gov.uk" #TODO Ternary if prod just build.publishing.service.gov.uk else environment specified as current
+#            - Name: "ANALYTICS_COOKIE_DOMAIN"
+#              Value: !Sub "${Environment}.account.gov.uk" ##TODO Ternary if prod
+#            - Name: "REDIS_KEY"
+#              Value: !Ref RedisStackName
+#            - Name: "REDIS_HOST"
+#              Value: !Sub "{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}"
+#            - Name: "REDIS_PORT"
+#              Value: !Sub "{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-port}}"
+#            - Name: "KMS_KEY_ID"
+#              Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
+#            - Name: "SERVICE_DOMAIN"
+#              Value: "" #TODO Fill when value is available
+#            - Name: "LOG_LEVEL"
+#              Value: "debug" #TODO Turn into parameter
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       TaskRoleArn: !GetAtt TaskRole.Arn
-      Family: server
+      Family: !Sub "${AWS::StackName}-BlueTaskDefinition"
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
       Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-aam-task-definition"
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-BlueTaskDefinition"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
     DependsOn: SessionSecret
 
-  TaskLogGroup:
+  TaskDefinitionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/ecs/${AWS::StackName}/server"
+      LogGroupName: !Sub "/ecs/${AWS::StackName}/service"
       RetentionInDays: 1
       KmsKeyId: !GetAtt LoggingKmsKey.Arn
 
   SessionSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Name: !Sub ${AWS::StackName}-session-secret
+      Name: !Sub "/${AWS::StackName}/Config/Session/Secret"
       Description: !Sub Random password for the ${AWS::StackName} session secret
       GenerateSecretString:
         ExcludeLowercase: false
@@ -399,23 +487,27 @@ Resources:
         IncludeSpace: false
         RequireEachIncludedType: true
         PasswordLength: 32
-      KmsKeyId: !GetAtt KmsKey.Arn
+      KmsKeyId: !GetAtt SecretsKmsKey.Arn
       Tags:
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
           Value: Accounts
         - Key: Environment
           Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-SessionSecret"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
 
-  KmsKey:
+  SecretsKmsKey:
     Type: AWS::KMS::Key
     Properties:
-      Description: !Sub KMS key used to protect session secret in ${AWS::StackName}
+      Description: !Sub "KMS key used to protect secrets data in ${AWS::StackName}"
       Enabled: true
       EnableKeyRotation: true
       KeyPolicy:
@@ -436,23 +528,28 @@ Resources:
               - "kms:ReEncrypt*"
               - "kms:GenerateDataKey*"
               - "kms:Describe*"
-            Resource: "*" #TODO Make granular
-            Condition:
-              ArnLike:
-                "kms:EncryptionContext:aws:logs:arn": !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+            Resource: "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${AWS::StackName}/Config/Session/Secret*"
       Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-cache-kms-key"
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-SecretsKmsKey"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
+
+  SecretsKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-SecretsKmsKey"
+      TargetKeyId: !GetAtt SecretsKmsKey.Arn
 
   #
   # API Gateway
@@ -461,12 +558,16 @@ Resources:
   ApiGateway:
     Type: AWS::ApiGatewayV2::Api
     Properties:
-      Name: server-endpoint
+      Name: !Sub "${AWS::StackName}-ApiGateway"
       ProtocolType: HTTP
       Tags:
+        Product: !Ref ProductTagValue
+        System: Accounts
+        Environment: !Ref Environment
         Name: !Sub "${AWS::StackName}-ApiGateway"
-        Service: ci/cd
-        Source: alphagov/di-devplatform-deploy/sam-deploy-pipeline/tests/fargate-app/template.yaml
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
+        Application: Shared
 
   ApiGatewayIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -498,9 +599,13 @@ Resources:
         Format: "$context.requestId $context.httpMethod $context.path"
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
+        Product: !Ref ProductTagValue
+        System: Accounts
+        Environment: !Ref Environment
         Name: !Sub "${AWS::StackName}-ApiDefaultStage"
-        Service: ci/cd
-        Source: alphagov/di-devplatform-deploy/sam-deploy-pipeline/tests/fargate-app/template.yaml
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
+        Application: Shared
 
   #
   # Load balancing
@@ -526,18 +631,20 @@ Resources:
         - Key: routing.http.drop_invalid_header_fields.enabled
           Value: "true"
       Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Name
           Value: !Sub "${AWS::StackName}-ApplicationLoadBalancer"
-        - Key: Product
-          Value: GOV.UK Sign In
-        - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
 
   ApplicationLoadBalancerTargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -559,18 +666,20 @@ Resources:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "5"
       Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroup"
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroupBlue"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
 
   ApplicationLoadBalancerTargetGroupGreen:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -592,18 +701,20 @@ Resources:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "5"
       Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroup"
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroupGreen"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
 
   ApplicationLoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -657,7 +768,7 @@ Resources:
       Service: !Ref ContainerService
       TaskDefinition: !Ref BlueTaskDefinition
       LoadBalancers:
-        - ContainerName: server
+        - ContainerName: !Sub "${AWS::StackName}-BlueTaskDefinition"
           ContainerPort: 6001
           TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
   PrimaryTaskSet:
@@ -690,18 +801,20 @@ Resources:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
       Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Name
           Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerSecurityGroup"
-        - Key: Product
-          Value: GOV.UK Sign In
-        - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
 
   ApplicationLoadBalancerSecurityGroupIngress:
     Type: AWS::EC2::SecurityGroupIngress
@@ -730,16 +843,74 @@ Resources:
   ApiGatewayAccessLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/vendedlogs/${AWS::StackName}"
+      LogGroupName: !Sub "/apigateway/${AWS::StackName}/access"
       RetentionInDays: 7
       KmsKeyId: !GetAtt LoggingKmsKey.Arn
       Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Name
           Value: ApiGatewayAccessLogGroup
-        - Key: Service
-          Value: ci/cd
+        - Key: Owner
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-devplatform-demo-sam-app/sam-app/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
+
+  LoggingKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action:
+              - kms:*
+            Resource: "*"
+          - Effect: Allow
+            Principal:
+              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
+            Action:
+              - "kms:Encrypt*"
+              - "kms:Decrypt*"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:Describe*"
+            Resource: "*"
+            Condition:
+              ArnLike:
+                "kms:EncryptionContext:aws:logs:arn":
+                  - !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/ecs/${AWS::StackName}/service"
+                  - !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/apigateway/${AWS::StackName}/access"
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-LoggingKmsKey"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
+
+  LoggingKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-LoggingKmsKey"
+      TargetKeyId: !GetAtt LoggingKmsKey.Arn
 
   AccessLogsBucket:
     Type: AWS::S3::Bucket
@@ -770,18 +941,20 @@ Resources:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
       Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Name
           Value: !Sub "${AWS::StackName}-accesslogs"
-        - Key: Product
-          Value: GOV.UK Sign In
-        - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
         - Key: CheckovRulesToSkip
           Value: CKV_AWS_18
 
@@ -829,40 +1002,6 @@ Resources:
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
                 "aws:SecureTransport": true
-
-  LoggingKmsKey:
-    Type: AWS::KMS::Key
-    Properties:
-      EnableKeyRotation: true
-      KeyPolicy:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
-            Action:
-              - kms:*
-            Resource: "*"
-          - Effect: Allow
-            Principal:
-              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
-            Action:
-              - "kms:Encrypt*"
-              - "kms:Decrypt*"
-              - "kms:ReEncrypt*"
-              - "kms:GenerateDataKey*"
-              - "kms:Describe*"
-            Resource: "*"
-            Condition:
-              ArnLike:
-                "kms:EncryptionContext:aws:logs:arn": !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
-      Tags:
-        - Key: Service
-          Value: ci/cd
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-LoggingKmsKey"
-        - Key: Source
-          Value: alphagov/di-devplatform-demo-sam-app/sam-app3/template.yaml
 
 Outputs:
   ApiGatewayEndpoint:
