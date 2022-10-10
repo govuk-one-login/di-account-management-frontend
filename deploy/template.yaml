@@ -313,47 +313,45 @@ Resources:
             - Name: "FARGATE"
               Value: "1"
             - Name: "API_BASE_URL"
-              Value: "https://oidc.build.account.gov.uk" #TODO Fill when value is available
+              Value: "https://oidc.build.account.gov.uk"
             - Name: "AM_API_BASE_URL"
-              Value: "https://manage.build.account.gov.uk" #TODO Fill when value is available
+              Value: "https://manage.build.account.gov.uk"
             - Name: "BASE_URL"
-              Value: "manage.build.account.gov.uk" #TODO Fill when value is available
+              Value: "build.account.gov.uk"
             - Name: "OIDC_CLIENT_ID"
-              Value: "RqFZ83csmS4Mi4Y7s7ohD9-ekwU" #TODO Fill when value is available
+              Value: "UJtd0gskJAqo1MR0liyVU1FykG8"
             - Name: "OIDC_CLIENT_SCOPES"
-              Value: "openid phone email am offline_access govuk-account" #TODO Fill when value is available
+              Value: "openid phone email am offline_access govuk-account"
             - Name: "SESSION_EXPIRY"
-              Value: "1800000"
+              Value: "7200000"
             - Name: "SESSION_SECRET"
               Value: !Sub '{{resolve:secretsmanager:${SessionSecret}}}'
             - Name: "AM_YOUR_ACCOUNT_URL"
               Value: "https://build.account.gov.uk"
-            - Name: "GTM_ID"
-              Value: "" #TODO Fill when value is available
+            - Name: "GTM_ID" #TODO Update
+              Value: ""
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
-              Value: "https://www.build.publishing.service.gov.uk/account/home" #TODO Fill when value is available
+              Value: "https://account-api.integration.publishing.service.gov.uk/"
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
-              Value: "tbc" #TODO Fill when value is available
+              Value: "null"
             - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
               Value: "0"
             - Name: "SUPPORT_LANGUAGE_CY"
               Value: "1"
             - Name: "AUTH_FRONTEND_URL"
-              Value: "https://sigin.build.account.gov.uk" #TODO Fill when value is available
+              Value: "signin.build.account.gov.uk"
             - Name: "ANALYTICS_COOKIE_DOMAIN"
-              Value: "build.account.gov.uk" #TODO Fill when value is available
+              Value: "build.account.gov.uk"
             - Name: "REDIS_KEY"
               Value: !Ref RedisStackName
             - Name: "REDIS_HOST"
               Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
             - Name: "REDIS_PORT"
-              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
+              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-port}}'
             - Name: "KMS_KEY_ID"
-              Value:
-                Fn::ImportValue:
-                  !Sub "account-management-kms-signing-key-id"
+              Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
             - Name: "SERVICE_DOMAIN"
-              Value: "" #TODO Fill when value is available
+              Value: "build.account.gov.uk"
             - Name: "LOG_LEVEL"
               Value: "debug"
       Cpu: 1024
@@ -502,6 +500,36 @@ Resources:
         Service: ci/cd
         Source: alphagov/di-devplatform-deploy/sam-deploy-pipeline/tests/fargate-app/template.yaml
 
+  # app domain
+  AppFrontCustomDomain:
+    Type: AWS::ApiGatewayV2::DomainName
+    Properties:
+      DomainName: "settings.build.account.gov.uk"
+      DomainNameConfigurations:
+        - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Settings/ARN}}"
+          EndpointType: REGIONAL
+          SecurityPolicy: TLS_1_2
+
+  AppFrontApiRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: "settings.build.account.gov.uk"
+      Type: A
+      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Settings}}"
+      AliasTarget:
+        DNSName: !GetAtt AppFrontCustomDomain.RegionalDomainName
+        HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
+        EvaluateTargetHealth: false
+
+  AppFrontApiMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Properties:
+      DomainName: "settings.build.account.gov.uk"
+      ApiId: !Ref ApiGateway
+      Stage: !Ref ApiDefaultStage
+    DependsOn:
+      - AppFrontCustomDomain
+
   #
   # Load balancing
   #
@@ -635,6 +663,40 @@ Resources:
       ListenerArn: !Ref ApplicationLoadBalancerListener
       Priority: 1
 
+#  ApplicationLoadBalancerListenerHTTP:
+#    Type: AWS::ElasticLoadBalancingV2::Listener
+#    Properties:
+#      # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
+#    # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
+#      LoadBalancerArn: !Ref ApplicationLoadBalancer
+#      Port: 80
+#      Protocol: HTTP
+#      DefaultActions:
+#        - Type: redirect
+#          RedirectConfig:
+#            Port: "443"
+#            Protocol: "HTTPS"
+#            StatusCode: "HTTP_301"
+#
+#  ApplicationLoadBalancerListenerHTTPS:
+#    Type: AWS::ElasticLoadBalancingV2::Listener
+#    Properties:
+#      LoadBalancerArn: !Ref ApplicationLoadBalancer
+#      Port: 443
+#      Protocol: "HTTPS"
+#      SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+#      Certificates:
+#        - !Ref ApplicationLoadBalancerSSLPolicy
+#      DefaultActions:
+#        - Type: "forward"
+#          RedirectConfig: !Ref ApplicationLoadBalancerTargetGroupBlue
+#
+#  ApplicationLoadBalancerSSLPolicy:
+#    Type: AWS::CertificateManager::Certificate
+#    Properties:
+#      DomainName: "https://settings.build.account.gov.uk/"
+#      ValidationMethod: "DNS"
+
   BlueTaskSet:
     Type: 'AWS::ECS::TaskSet'
     Properties:
@@ -642,7 +704,7 @@ Resources:
       LaunchType: FARGATE
       NetworkConfiguration:
         AwsVpcConfiguration:
-          AssignPublicIp: ENABLED
+          AssignPublicIp: DISABLED
           SecurityGroups:
             - !GetAtt ContainerServiceSecurityGroup.GroupId
           Subnets:
