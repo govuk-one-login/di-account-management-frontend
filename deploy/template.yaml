@@ -334,7 +334,9 @@ Resources:
         - Name: !Sub "${AWS::StackName}-BlueTaskDefinition" #TODO Update Name and all references to application specific convention
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug2
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:bbc
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:demo3
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:strippedApp
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest
           PortMappings:
             - ContainerPort: 6001
               Protocol: tcp
