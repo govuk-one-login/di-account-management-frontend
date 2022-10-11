@@ -39,6 +39,17 @@ Transform:
 #    Type: 'AWS::CodeDeploy::BlueGreen'
 
 Parameters:
+  Environment:
+    Description: "The name of the environment to deploy to"
+    Type: "String"
+    Default: build
+    AllowedValues:
+      - "dev"
+      - "build"
+      - "staging"
+      - "integration"
+      - "production"
+
   VpcStackName:
     Description: >
       The name of the stack that defines the VPC in which this container will
@@ -52,29 +63,38 @@ Parameters:
     Type: String
     Default: "shared-redis"
 
+  ProductTagValue:
+    Description: Value for the Product Tag
+    Type: String
+    Default: "GOV.UK Sign In"
+
+  OwnerTagValue:
+    Description: Value for the Owner Tag
+    Type: String
+    Default: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
+
+  SourceTagValue:
+    Description: Value for the Source Tag
+    Type: String
+    Default: "alphagov/di-authentication-account-management/deploy/template.yaml"
+
+  CodeSigningConfigArn:
+    Type: String
+    Description: "The ARN of the Code Signing Config to use, provided by the deployment pipeline"
+    Default: "none"
+
   PermissionsBoundary:
     Description: "The ARN of the permissions boundary to apply when creating IAM roles"
     Type: String
     Default: "none"
 
-  Environment:
-    Description: "The name of the environment to deploy to"
-    Type: "String"
-    Default: build
-    AllowedValues:
-      - "dev"
-      - "build"
-      - "staging"
-      - "integration"
-      - "production"
-
-  CodeSigningConfigArn:
-    Type: String
-    Description: >
-      The ARN of the Code Signing Config to use, provided by the deployment pipeline
-    Default: "none"
-
 Conditions:
+  UseCodeSigning:
+    Fn::Not:
+      - Fn::Equals:
+          - !Ref CodeSigningConfigArn
+          - "none"
+
   UsePermissionsBoundary:
     Fn::Not:
       - Fn::Equals:
@@ -97,7 +117,7 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: !Sub ${Environment}-aam-ecs-cluster
+      ClusterName: !Sub "${AWS::StackName}-ECSCluster"
       CapacityProviders:
         - FARGATE
       ClusterSettings:
@@ -105,25 +125,24 @@ Resources:
           Value: enabled
       Tags:
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
           Value: Accounts
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
-          Value: !Sub "${AWS::StackName}-aam-ecs-cluster"
+          Value: !Sub "${AWS::StackName}-ECSCluster"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+          Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
 
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ${Environment}-aam-ecs-cluster-role
-      Path: !Sub /${Environment}/accounts/ecs/cluster-role/
+      RoleName: !Sub "${AWS::StackName}-ExecutionRole"
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
@@ -141,30 +160,31 @@ Resources:
               - Effect: Allow
                 Action:
                   - logs:CreateLogGroup
-                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:*" #TODO Update to specific log groups
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
         - !Ref AWS::NoValue
       Tags:
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value:  Accounts
+          Value: Accounts
         - Key: Environment
           Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ExecutionRole"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+          Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
 
   TaskRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "${Environment}-aam-ecs-cluster-task-role"
-      Path: !Sub /${Environment}/accounts/ecs/cluster-task-role/
+      RoleName: !Sub "${AWS::StackName}-TaskRole"
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
@@ -173,7 +193,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-        - PolicyName: !Sub "${Environment}-ecs-cluster-task-role-ssm-permissions"
+        - PolicyName: !Sub "${AWS::StackName}-TaskRolePolicy"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -181,42 +201,58 @@ Resources:
                 Action:
                   - "ssm:GetParameter"
                   - "ssm:GetParameters"
-                Resource: "arn:aws:ssm:eu-west-2:301577035144:parameter/*" #TODO Make granular
+                Resource:
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
-                Resource: "arn:aws:secretsmanager:eu-west-2:301577035144:*" #TODO Make granular
+                Resource:
+                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
+                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
+                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Config/Cache/Password"
+              - Effect: Allow
+                Action:
+                  - "kms:Sign"
+                  - "kms:GetPublicKey"
+                Resource:
+                  !Join
+                  - ""
+                  - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/"
+                    - !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
         - !Ref AWS::NoValue
       Tags:
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
           Value: Accounts
         - Key: Environment
           Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-TaskRole"
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-accounts-infra/shared-ecs/template.yaml
+          Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
 
   ECSClusterNameParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Description: The name of the ECS cluster
-      Name: !Sub "/${Environment}/${AWS::StackName}/ECS/Cluster"
+      Description: !Sub "The name of the ${AWS::StackName} ECS cluster"
+      Name: !Sub "/${AWS::StackName}/ECS/Cluster"
       Type: String
       Value: !Ref ECSCluster
       Tags:
-        Product: GOV.UK Sign In
+        Product: !Ref ProductTagValue
         System: Accounts
         Environment: !Ref Environment
-        Owner: govuk-accounts-tech@digital.cabinet-office.gov.uk
-        Source: alphagov/di-accounts-infra/shared-ecs/template.yaml
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
         Application: Shared
 
   ###
@@ -229,18 +265,20 @@ Resources:
         Type: EXTERNAL
       PropagateTags: SERVICE
       Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Name
           Value: !Sub "${AWS::StackName}-ContainerService"
-        - Key: Product
-          Value: GOV.UK Sign In
-        - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
     DependsOn: ApplicationLoadBalancerListener
 
   ContainerServiceSecurityGroup:
@@ -270,18 +308,20 @@ Resources:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
       Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Name
           Value: !Sub "${AWS::StackName}-ContainerServiceSecurityGroup"
-        - Key: Product
-          Value: GOV.UK Sign In
-        - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
 
   #
   # Fargate tasks
@@ -291,10 +331,10 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        - Name: server #TODO Update Name and all references to application specific convention
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest #TODO Pass through dynamically
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:redis2
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
+        - Name: !Sub "${AWS::StackName}-BlueTaskDefinition" #TODO Update Name and all references to application specific convention
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug2
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:bbc
           PortMappings:
             - ContainerPort: 6001
               Protocol: tcp
@@ -319,7 +359,8 @@ Resources:
             - Name: "BASE_URL"
               Value: "build.account.gov.uk"
             - Name: "OIDC_CLIENT_ID"
-              Value: "UJtd0gskJAqo1MR0liyVU1FykG8"
+              Value: "oJaR4kONocwN9PdLzGhvW5rUr6M" #TODO Karla's update after
+            #              Value: "UJtd0gskJAqo1MR0liyVU1FykG8"
             - Name: "OIDC_CLIENT_SCOPES"
               Value: "openid phone email am offline_access govuk-account"
             - Name: "SESSION_EXPIRY"
@@ -358,7 +399,7 @@ Resources:
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       TaskRoleArn: !GetAtt TaskRole.Arn
-      Family: server
+      Family: !Sub "${AWS::StackName}-BlueTaskDefinition"
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
@@ -570,6 +611,7 @@ Resources:
   ApplicationLoadBalancerTargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
+      HealthCheckIntervalSeconds: 300 #TODO Remove after testing
       HealthCheckPort: 6001
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
@@ -603,6 +645,7 @@ Resources:
   ApplicationLoadBalancerTargetGroupGreen:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
+      HealthCheckIntervalSeconds: 300 #TODO Remove after testing
       HealthCheckPort: 6001
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
@@ -719,7 +762,7 @@ Resources:
       Service: !Ref ContainerService
       TaskDefinition: !Ref BlueTaskDefinition
       LoadBalancers:
-        - ContainerName: server
+        - ContainerName: !Sub "${AWS::StackName}-BlueTaskDefinition"
           ContainerPort: 6001
           TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
   PrimaryTaskSet:
