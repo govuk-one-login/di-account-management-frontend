@@ -89,12 +89,17 @@ Parameters:
     Default: "none"
 
 Conditions:
+  IsNotDevelopment: !Or
+    - !Equals [ !Ref Environment, build ]
+    - !Equals [ !Ref Environment, staging ]
+    - !Equals [ !Ref Environment, integration ]
+    - !Equals [ !Ref Environment, production ]
+  IsProduction: !Equals [ !Ref Environment, production ]
   UseCodeSigning:
     Fn::Not:
       - Fn::Equals:
           - !Ref CodeSigningConfigArn
           - "none"
-
   UsePermissionsBoundary:
     Fn::Not:
       - Fn::Equals:
@@ -106,13 +111,99 @@ Mappings:
   ElasticLoadBalancerAccountIds:
     eu-west-2:
       AccountId: 652711504416
+  EnvironmentVariables:
+    ### These environment variables are referenced further down the file.
+    ### Please ensure that any variables defined for an environment are defined for _all_ environments.
+    dev:
+      NODEENV: "development"
+      FARGATE: "1"
+      APIBASEURL: "https://oidc.dev.account.gov.uk"
+      AMAPIBASEURL: "https://manage.dev.account.gov.uk"
+      BASEURL: "dev.account.gov.uk"
+      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      AMYOURACCOUNTURL: "https://development.account.gov.uk"
+      GTMID: "" #TODO Fill
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
+      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "1"
+      AUTHFRONTENDURL: "signin.dev.account.gov.uk"
+      ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
+      SERVICEDOMAIN: "dev.account.gov.uk"
+      LOGLEVEL: "debug"
+    build:
+      NODEENV: "development"
+      FARGATE: "1"
+      APIBASEURL: "https://oidc.build.account.gov.uk"
+      AMAPIBASEURL: "https://manage.build.account.gov.uk"
+      BASEURL: "build.account.gov.uk"
+      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      AMYOURACCOUNTURL: "https://build.account.gov.uk"
+      GTMID: ""
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
+      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "1"
+      AUTHFRONTENDURL: "signin.build.account.gov.uk"
+      ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
+      SERVICEDOMAIN: "build.account.gov.uk"
+      LOGLEVEL: "debug"
+    staging:
+      NODEENV: "production"
+      FARGATE: "1"
+      APIBASEURL: "https://oidc.staging.account.gov.uk"
+      AMAPIBASEURL: "https://manage.staging.account.gov.uk"
+      BASEURL: "staging.account.gov.uk"
+      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      AMYOURACCOUNTURL: "https://production.account.gov.uk"
+      GTMID: ""
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
+      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "1"
+      AUTHFRONTENDURL: "signin.staging.account.gov.uk"
+      ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
+      SERVICEDOMAIN: "staging.account.gov.uk"
+      LOGLEVEL: "debug"
+    integration:
+      NODEENV: "development"
+      FARGATE: "1"
+      APIBASEURL: "https://oidc.integration.account.gov.uk"
+      AMAPIBASEURL: "https://manage.integration.account.gov.uk"
+      BASEURL: "integration.account.gov.uk"
+      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      AMYOURACCOUNTURL: "https://integration.account.gov.uk"
+      GTMID: ""
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
+      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "1"
+      AUTHFRONTENDURL: "signin.integration.account.gov.uk"
+      ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
+      SERVICEDOMAIN: "integration.account.gov.uk"
+      LOGLEVEL: "debug"
+    production:
+      NODEENV: "production"
+      FARGATE: "1"
+      APIBASEURL: "https://oidc.account.gov.uk"
+      AMAPIBASEURL: "https://manage.account.gov.uk"
+      BASEURL: "account.gov.uk"
+      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      AMYOURACCOUNTURL: "https://production.account.gov.uk"
+      GTMID: ""
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
+      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "1"
+      AUTHFRONTENDURL: "signin.account.gov.uk"
+      ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
+      SERVICEDOMAIN: "account.gov.uk"
+      LOGLEVEL: "debug"
 
 Resources:
   #
   # ECS Service
   #
-
-  ###
 
   ECSCluster:
     Type: AWS::ECS::Cluster
@@ -334,11 +425,12 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        - Name: !Sub "${AWS::StackName}-BlueTaskDefinition" #TODO Update Name and all references to application specific convention
+        - Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug5
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug5
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:demo5
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:recreate13
           PortMappings:
             - ContainerPort: 6001
               Protocol: tcp
@@ -351,42 +443,42 @@ Resources:
               awslogs-stream-prefix: "ecs"
           Environment:
             - Name: "NODE_ENV"
-              Value: "development"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, NODEENV ]
             - Name: "APP_ENV"
               Value: !Sub "${Environment}"
             - Name: "FARGATE"
-              Value: "1"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, FARGATE ]
             - Name: "API_BASE_URL"
-              Value: "https://oidc.build.account.gov.uk"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, APIBASEURL ]
             - Name: "AM_API_BASE_URL"
-              Value: "https://manage.build.account.gov.uk"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, AMAPIBASEURL ]
             - Name: "BASE_URL"
-              Value: "build.account.gov.uk"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
             - Name: "OIDC_CLIENT_ID"
               Value: "oJaR4kONocwN9PdLzGhvW5rUr6M" #TODO Karla's update after
             #              Value: "UJtd0gskJAqo1MR0liyVU1FykG8"
             - Name: "OIDC_CLIENT_SCOPES"
-              Value: "openid phone email am offline_access govuk-account"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, OIDCCLIENTSCOPES ]
             - Name: "SESSION_EXPIRY"
               Value: "7200000"
             - Name: "SESSION_SECRET"
               Value: !Sub '{{resolve:secretsmanager:${SessionSecret}}}'
             - Name: "AM_YOUR_ACCOUNT_URL"
-              Value: "https://build.account.gov.uk"
-            - Name: "GTM_ID" #TODO Update
-              Value: ""
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, AMYOURACCOUNTURL ]
+            - Name: "GTM_ID"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, GTMID ]
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
-              Value: "https://account-api.integration.publishing.service.gov.uk/"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, GOVACCOUNTSPUBLISHINGAPIURL ]
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
-              Value: "null"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, GOVACCOUNTSPUBLISHINGAPITOKEN ]
             - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
-              Value: "0"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTINTERNATIONALNUMBERS ]
             - Name: "SUPPORT_LANGUAGE_CY"
-              Value: "1"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTLANGUAGECY ]
             - Name: "AUTH_FRONTEND_URL"
-              Value: "signin.build.account.gov.uk"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, AUTHFRONTENDURL ]
             - Name: "ANALYTICS_COOKIE_DOMAIN"
-              Value: "build.account.gov.uk"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, ANALYTICSCOOKIEDOMAIN ]
             - Name: "REDIS_KEY"
               Value: !Ref RedisStackName
             - Name: "REDIS_HOST"
@@ -396,9 +488,9 @@ Resources:
             - Name: "KMS_KEY_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
             - Name: "SERVICE_DOMAIN"
-              Value: "build.account.gov.uk"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SERVICEDOMAIN ]
             - Name: "LOG_LEVEL"
-              Value: "debug"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, LOGLEVEL ]
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
@@ -478,17 +570,17 @@ Resources:
             Resource: "*"
           - Effect: Allow
             Principal:
-              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
+              Service: !Sub "secretsmanager.amazonaws.com"
             Action:
               - "kms:Encrypt*"
               - "kms:Decrypt*"
               - "kms:ReEncrypt*"
               - "kms:GenerateDataKey*"
               - "kms:Describe*"
-            Resource: "*" #TODO Make granular
+            Resource: "*"
             Condition:
               ArnLike:
-                "kms:EncryptionContext:aws:logs:arn": !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+                aws:SourceArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${AWS::StackName}/Config/Session/Secret"
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
@@ -879,7 +971,9 @@ Resources:
             Resource: "*"
             Condition:
               ArnLike:
-                "kms:EncryptionContext:aws:logs:arn": !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+                "kms:EncryptionContext:aws:logs:arn":
+                  - !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/ecs/${AWS::StackName}/server"
+                  - !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/apigateway/${AWS::StackName}/access"
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
