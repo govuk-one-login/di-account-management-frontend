@@ -132,11 +132,11 @@ Mappings:
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGLEVEL: "debug"
     build:
-      NODEENV: "development"
+      NODEENV: "production"
       FARGATE: "1"
       APIBASEURL: "https://oidc.build.account.gov.uk"
       AMAPIBASEURL: "https://manage.build.account.gov.uk"
-      BASEURL: "build.account.gov.uk"
+      BASEURL: "settings.build.account.gov.uk"
       OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
       AMYOURACCOUNTURL: "https://build.account.gov.uk"
       GTMID: ""
@@ -297,14 +297,15 @@ Resources:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"               # for the future when no legacy
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*"  # for access to legacy params
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
                 Resource:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
-                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Config/Cache/Password"
+                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Cluster/Password"
               - Effect: Allow
                 Action:
                   - "kms:Sign"
@@ -428,9 +429,9 @@ Resources:
         - Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug5
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug6
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:demo5
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:recreate13
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:recreate13
           PortMappings:
             - ContainerPort: 6001
               Protocol: tcp
@@ -455,8 +456,7 @@ Resources:
             - Name: "BASE_URL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
             - Name: "OIDC_CLIENT_ID"
-              Value: "oJaR4kONocwN9PdLzGhvW5rUr6M" #TODO Karla's update after
-            #              Value: "UJtd0gskJAqo1MR0liyVU1FykG8"
+              Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/OIDC/Client/Id}}"
             - Name: "OIDC_CLIENT_SCOPES"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, OIDCCLIENTSCOPES ]
             - Name: "SESSION_EXPIRY"
@@ -481,10 +481,10 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, ANALYTICSCOOKIEDOMAIN ]
             - Name: "REDIS_KEY"
               Value: !Ref RedisStackName
-            - Name: "REDIS_HOST"
-              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
-            - Name: "REDIS_PORT"
-              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-port}}'
+#            - Name: "REDIS_HOST"
+#              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
+#            - Name: "REDIS_PORT"
+#              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-port}}'
             - Name: "KMS_KEY_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
             - Name: "SERVICE_DOMAIN"
