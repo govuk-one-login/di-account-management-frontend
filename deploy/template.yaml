@@ -116,11 +116,10 @@ Mappings:
     ### Please ensure that any variables defined for an environment are defined for _all_ environments.
     dev:
       NODEENV: "development"
-      FARGATE: "1"
       APIBASEURL: "https://oidc.dev.account.gov.uk"
       AMAPIBASEURL: "https://manage.dev.account.gov.uk"
       BASEURL: "dev.account.gov.uk"
-      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://development.account.gov.uk"
       GTMID: "" #TODO Fill
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
@@ -133,11 +132,10 @@ Mappings:
       LOGLEVEL: "debug"
     build:
       NODEENV: "production"
-      FARGATE: "1"
       APIBASEURL: "https://oidc.build.account.gov.uk"
       AMAPIBASEURL: "https://manage.build.account.gov.uk"
       BASEURL: "settings.build.account.gov.uk"
-      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://build.account.gov.uk"
       GTMID: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
@@ -150,11 +148,10 @@ Mappings:
       LOGLEVEL: "debug"
     staging:
       NODEENV: "production"
-      FARGATE: "1"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
       AMAPIBASEURL: "https://manage.staging.account.gov.uk"
       BASEURL: "staging.account.gov.uk"
-      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://production.account.gov.uk"
       GTMID: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
@@ -167,11 +164,10 @@ Mappings:
       LOGLEVEL: "debug"
     integration:
       NODEENV: "development"
-      FARGATE: "1"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
       AMAPIBASEURL: "https://manage.integration.account.gov.uk"
       BASEURL: "integration.account.gov.uk"
-      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://integration.account.gov.uk"
       GTMID: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
@@ -184,11 +180,10 @@ Mappings:
       LOGLEVEL: "debug"
     production:
       NODEENV: "production"
-      FARGATE: "1"
       APIBASEURL: "https://oidc.account.gov.uk"
       AMAPIBASEURL: "https://manage.account.gov.uk"
       BASEURL: "account.gov.uk"
-      OIDCCLIENTSCOPES: "openid phone email am offline_access govuk-account"
+      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://production.account.gov.uk"
       GTMID: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk/"
@@ -291,14 +286,19 @@ Resources:
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
+#              - Effect: Allow
+#                Action:
+#                  - "ssm:GetParameter"
+#                  - "ssm:GetParameters"
+#                Resource:
+#                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
+#                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"               # for the future when no legacy
+#                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*"  # for access to legacy params
               - Effect: Allow
                 Action:
-                  - "ssm:GetParameter"
-                  - "ssm:GetParameters"
+                  - "ssm:*"
                 Resource:
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"               # for the future when no legacy
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*"  # for access to legacy params
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*"
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
@@ -308,13 +308,20 @@ Resources:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Cluster/Password"
               - Effect: Allow
                 Action:
-                  - "kms:Sign"
-                  - "kms:GetPublicKey"
+                  - "kms:*"
                 Resource:
                   !Join
                   - ""
-                  - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/"
-                    - !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
+                  - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/*"
+#              - Effect: Allow
+#                Action:
+#                  - "kms:Sign"
+#                  - "kms:GetPublicKey"
+#                Resource:
+#                  !Join
+#                  - ""
+#                  - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/"
+#                    - !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
@@ -429,7 +436,7 @@ Resources:
         - Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug6
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug7
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:demo5
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:recreate13
           PortMappings:
@@ -447,8 +454,6 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, NODEENV ]
             - Name: "APP_ENV"
               Value: !Sub "${Environment}"
-            - Name: "FARGATE"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, FARGATE ]
             - Name: "API_BASE_URL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, APIBASEURL ]
             - Name: "AM_API_BASE_URL"
@@ -458,9 +463,9 @@ Resources:
             - Name: "OIDC_CLIENT_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/OIDC/Client/Id}}"
             - Name: "OIDC_CLIENT_SCOPES"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, OIDCCLIENTSCOPES ]
+              Value: "openid phone email am offline_access govuk-account"
             - Name: "SESSION_EXPIRY"
-              Value: "7200000"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SESSIONEXPIRY ]
             - Name: "SESSION_SECRET"
               Value: !Sub '{{resolve:secretsmanager:${SessionSecret}}}'
             - Name: "AM_YOUR_ACCOUNT_URL"
@@ -481,10 +486,6 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, ANALYTICSCOOKIEDOMAIN ]
             - Name: "REDIS_KEY"
               Value: !Ref RedisStackName
-#            - Name: "REDIS_HOST"
-#              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-master-host}}'
-#            - Name: "REDIS_PORT"
-#              Value: !Sub '{{resolve:ssm:${Environment}-${RedisStackName}-redis-port}}'
             - Name: "KMS_KEY_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
             - Name: "SERVICE_DOMAIN"
@@ -731,7 +732,7 @@ Resources:
   ApplicationLoadBalancerTargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckIntervalSeconds: 300 #TODO Remove after testing
+      HealthCheckIntervalSeconds: 60 #TODO Remove after testing
       HealthCheckPort: 6001
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
@@ -767,7 +768,7 @@ Resources:
   ApplicationLoadBalancerTargetGroupGreen:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckIntervalSeconds: 300 #TODO Remove after testing
+      HealthCheckIntervalSeconds: 60 #TODO Remove after testing
       HealthCheckPort: 6001
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
