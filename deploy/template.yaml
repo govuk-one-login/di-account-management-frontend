@@ -63,6 +63,12 @@ Parameters:
     Type: String
     Default: "shared-redis"
 
+  ContainerPort:
+    Description: >
+      The port on which the container is running
+    Type: Number
+    Default: 6001
+
   ProductTagValue:
     Description: Value for the Product Tag
     Type: String
@@ -78,11 +84,6 @@ Parameters:
     Type: String
     Default: "alphagov/di-authentication-account-management/deploy/template.yaml"
 
-  CodeSigningConfigArn:
-    Type: String
-    Description: "The ARN of the Code Signing Config to use, provided by the deployment pipeline"
-    Default: "none"
-
   PermissionsBoundary:
     Description: "The ARN of the permissions boundary to apply when creating IAM roles"
     Type: String
@@ -95,11 +96,6 @@ Conditions:
     - !Equals [ !Ref Environment, integration ]
     - !Equals [ !Ref Environment, production ]
   IsProduction: !Equals [ !Ref Environment, production ]
-  UseCodeSigning:
-    Fn::Not:
-      - Fn::Equals:
-          - !Ref CodeSigningConfigArn
-          - "none"
   UsePermissionsBoundary:
     Fn::Not:
       - Fn::Equals:
@@ -281,8 +277,8 @@ Resources:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"               # for the future when no legacy
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*"  # for access to legacy params
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"              # for the future when no legacy
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*" # for access to legacy params
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
@@ -334,8 +330,6 @@ Resources:
         Source: !Ref SourceTagValue
         Application: Shared
 
-  ###
-
   ContainerService:
     Type: AWS::ECS::Service
     Properties:
@@ -378,11 +372,11 @@ Resources:
                           - "/"
                           - Ref: AWS::StackId
       SecurityGroupIngress:
-        - Description: Allow traffic from the load balancer on port 6001
+        - Description: !Sub "Allow traffic from the load balancer on port ${ContainerPort}"
           SourceSecurityGroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
           IpProtocol: tcp
-          FromPort: 6001
-          ToPort: 6001
+          FromPort: !Ref ContainerPort
+          ToPort: !Ref ContainerPort
       VpcId:
         Fn::ImportValue:
           !Sub "${VpcStackName}-VpcId"
@@ -417,7 +411,7 @@ Resources:
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:demo5
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:recreate13
           PortMappings:
-            - ContainerPort: 6001
+            - ContainerPort: !Ref ContainerPort
               Protocol: tcp
           Essential: true
           LogConfiguration:
@@ -637,8 +631,11 @@ Resources:
         Source: !Ref SourceTagValue
         Application: Shared
 
-  # App Domain
+  #
+  # App domain
+  #
   AppFrontCustomDomain:
+    Condition: IsNotDevelopment
     Type: AWS::ApiGatewayV2::DomainName
     Properties:
       DomainName: "settings.build.account.gov.uk"
@@ -648,6 +645,7 @@ Resources:
           SecurityPolicy: TLS_1_2
 
   AppFrontApiRecord:
+    Condition: IsNotDevelopment
     Type: AWS::Route53::RecordSet
     Properties:
       Name: "settings.build.account.gov.uk"
@@ -659,6 +657,7 @@ Resources:
         EvaluateTargetHealth: false
 
   AppFrontApiMapping:
+    Condition: IsNotDevelopment
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties:
       DomainName: "settings.build.account.gov.uk"
@@ -711,11 +710,10 @@ Resources:
   ApplicationLoadBalancerTargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckIntervalSeconds: 60 #TODO Remove after testing
-      HealthCheckPort: 6001
+      HealthCheckPort: !Ref ContainerPort
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
-      Port: 6001
+      Port: !Ref ContainerPort
       Protocol: HTTP
       ProtocolVersion: HTTP1
       Matcher:
@@ -747,11 +745,10 @@ Resources:
   ApplicationLoadBalancerTargetGroupGreen:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckIntervalSeconds: 60 #TODO Remove after testing
-      HealthCheckPort: 6001
+      HealthCheckPort: !Ref ContainerPort
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
-      Port: 6001
+      Port: !Ref ContainerPort
       Protocol: HTTP
       ProtocolVersion: HTTP1
       Matcher:
@@ -832,7 +829,7 @@ Resources:
       TaskDefinition: !Ref BlueTaskDefinition
       LoadBalancers:
         - ContainerName: !Sub "${AWS::StackName}-BlueTaskDefinition"
-          ContainerPort: 6001
+          ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
   PrimaryTaskSet:
     Type: 'AWS::ECS::PrimaryTaskSet'
@@ -894,10 +891,10 @@ Resources:
     Properties:
       GroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
       DestinationSecurityGroupId: !GetAtt ContainerServiceSecurityGroup.GroupId
-      Description: Allow traffic to Container Service on port 6001
+      Description: !Sub "Allow traffic to Container Service on port ${ContainerPort}"
       IpProtocol: tcp
-      FromPort: 6001
-      ToPort: 6001
+      FromPort: !Ref ContainerPort
+      ToPort: !Ref ContainerPort
 
 
   #
