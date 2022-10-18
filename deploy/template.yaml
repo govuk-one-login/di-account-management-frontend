@@ -32,7 +32,7 @@ Transform:
 #            TrafficRouting:
 #              ProdTrafficRoute:
 #                Type: 'AWS::ElasticLoadBalancingV2::Listener'
-#                LogicalID: ApplicationLoadBalancerListener
+#                LogicalID: ApplicationLoadBalancerHTTPSListener
 #              TargetGroups:
 #                - ApplicationLoadBalancerTargetGroupBlue
 #                - ApplicationLoadBalancerTargetGroupGreen
@@ -52,8 +52,7 @@ Parameters:
 
   VpcStackName:
     Description: >
-      The name of the stack that defines the VPC in which this container will
-      run.
+      The name of the stack that defines the VPC in which this container will run.
     Type: String
     Default: "vpc-enhanced"
 
@@ -352,7 +351,7 @@ Resources:
           Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
-    DependsOn: ApplicationLoadBalancerListener
+    DependsOn: ApplicationLoadBalancerListenerHTTPS
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -405,11 +404,10 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
+#          Image: $CONTAINER_XYZ # value updated by build pipeline
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
 #          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug12
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:demo5
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:recreate13
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug15
           PortMappings:
             - ContainerPort: !Ref ContainerPort
               Protocol: tcp
@@ -603,8 +601,11 @@ Resources:
           !Sub "${VpcStackName}-VpcLinkId"
       ConnectionType: VPC_LINK
       IntegrationMethod: ANY
-      IntegrationUri: !Ref ApplicationLoadBalancerListener
+      IntegrationUri: !Ref ApplicationLoadBalancerListenerHTTPS
       PayloadFormatVersion: 1.0
+      Description: !Sub "API GW to ECS Container integration for ${AWS::StackName}"
+      TlsConfig:
+        ServerNameToVerify: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
 
   ApiRoute:
     Type: AWS::ApiGatewayV2::Route
@@ -638,7 +639,7 @@ Resources:
     Condition: IsNotDevelopment
     Type: AWS::ApiGatewayV2::DomainName
     Properties:
-      DomainName: "settings.build.account.gov.uk"
+      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
       DomainNameConfigurations:
         - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Settings/ARN}}"
           EndpointType: REGIONAL
@@ -648,7 +649,7 @@ Resources:
     Condition: IsNotDevelopment
     Type: AWS::Route53::RecordSet
     Properties:
-      Name: "settings.build.account.gov.uk"
+      Name: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
       Type: A
       HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Settings}}"
       AliasTarget:
@@ -660,7 +661,7 @@ Resources:
     Condition: IsNotDevelopment
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties:
-      DomainName: "settings.build.account.gov.uk"
+      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
       ApiId: !Ref ApiGateway
       Stage: !Ref ApiDefaultStage
     DependsOn:
@@ -713,6 +714,7 @@ Resources:
       HealthCheckPort: !Ref ContainerPort
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
+      HealthCheckIntervalSeconds: 30
       Port: !Ref ContainerPort
       Protocol: HTTP
       ProtocolVersion: HTTP1
@@ -748,6 +750,7 @@ Resources:
       HealthCheckPort: !Ref ContainerPort
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
+      HealthCheckIntervalSeconds: 30
       Port: !Ref ContainerPort
       Protocol: HTTP
       ProtocolVersion: HTTP1
@@ -777,14 +780,30 @@ Resources:
         - Key: Application
           Value: Shared
 
-  ApplicationLoadBalancerListener:
+  ApplicationLoadBalancerListenerHTTPS:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
-      # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
-      # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
       DefaultActions:
         - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
           Type: forward
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 443
+      Protocol: HTTPS
+      Certificates:
+        - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Settings/ARN}}"
+      SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+
+  ApplicationLoadBalancerListenerHTTP:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      # checkov:skip=CKV_AWS_2: Ignored as this is only redirects HTTP to HTTPS.
+      # checkov:skip=CKV_AWS_103: Ignored as only redirects HTTP to HTTPS.
+      DefaultActions:
+        - Type: redirect
+          RedirectConfig:
+            Port: 443
+            Protocol: HTTPS
+            StatusCode: HTTP_301
       LoadBalancerArn: !Ref ApplicationLoadBalancer
       Port: 80
       Protocol: HTTP
@@ -796,14 +815,16 @@ Resources:
         - Type: fixed-response
           FixedResponseConfig:
             ContentType: text/plain
-            MessageBody: static/robots.txt
+            MessageBody: >
+              "user-agent: *"
+              "disallow: /"
             StatusCode: 200
       Conditions:
         - Field: path-pattern
           PathPatternConfig:
             Values:
               - "/robots.txt"
-      ListenerArn: !Ref ApplicationLoadBalancerListener
+      ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
       Priority: 10
 
   BlueTaskSet:
@@ -831,6 +852,7 @@ Resources:
         - ContainerName: !Sub "${AWS::StackName}-BlueTaskDefinition"
           ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
+
   PrimaryTaskSet:
     Type: 'AWS::ECS::PrimaryTaskSet'
     Properties:
@@ -876,15 +898,25 @@ Resources:
         - Key: Application
           Value: Shared
 
-  ApplicationLoadBalancerSecurityGroupIngress:
+  ApplicationLoadBalancerSecurityGroupIngressHTTP:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
       CidrIp: 0.0.0.0/0
-      Description: Allow traffic from anyone on port 80
+      Description: Allows HTTP traffic from anyone on port 80
       IpProtocol: tcp
       FromPort: 80
       ToPort: 80
+
+  ApplicationLoadBalancerSecurityGroupIngressHTTPS:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
+      CidrIp: 0.0.0.0/0
+      Description: Allows HTTPS traffic from anyone on port 443
+      IpProtocol: tcp
+      FromPort: 443
+      ToPort: 443
 
   ApplicationLoadBalancerSecurityGroupEgress:
     Type: AWS::EC2::SecurityGroupEgress
@@ -895,7 +927,6 @@ Resources:
       IpProtocol: tcp
       FromPort: !Ref ContainerPort
       ToPort: !Ref ContainerPort
-
 
   #
   # Autoscaling
