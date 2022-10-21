@@ -8,85 +8,70 @@ Description: >-
   Account Management Frontend ECS Service
 Transform:
   - AWS::Serverless-2016-10-31
-#  - AWS::CodeDeployBlueGreen
+  - AWS::CodeDeployBlueGreen
 
-#Hooks:
-#  CodeDeployBlueGreenHook:
-#    Properties:
-#      TrafficRoutingConfig:
-#        Type: TimeBasedCanary
-#        TimeBasedCanary:
-#          StepPercentage: 15
-#          BakeTimeMins: 5
-#      Applications:
-#        - Target:
-#            Type: 'AWS::ECS::Service'
-#            LogicalID: ContainerService
-#          ECSAttributes:
-#            TaskDefinitions:
-#              - BlueTaskDefinition
-#              - GreenTaskDefinition
-#            TaskSets:
-#              - BlueTaskSet
-#              - GreenTaskSet
-#            TrafficRouting:
-#              ProdTrafficRoute:
-#                Type: 'AWS::ElasticLoadBalancingV2::Listener'
-#                LogicalID: ApplicationLoadBalancerHTTPSListener
-#              TargetGroups:
-#                - ApplicationLoadBalancerTargetGroupBlue
-#                - ApplicationLoadBalancerTargetGroupGreen
-#    Type: 'AWS::CodeDeploy::BlueGreen'
+Hooks:
+  CodeDeployBlueGreenHook:
+    Properties:
+      TrafficRoutingConfig:
+        Type: TimeBasedCanary
+        TimeBasedCanary:
+          StepPercentage: 15
+          BakeTimeMins: 5
+      Applications:
+        - Target:
+            Type: 'AWS::ECS::Service'
+            LogicalID: ContainerService
+          ECSAttributes:
+            TaskDefinitions:
+              - BlueTaskDefinition
+              - GreenTaskDefinition
+            TaskSets:
+              - BlueTaskSet
+              - GreenTaskSet
+            TrafficRouting:
+              ProdTrafficRoute:
+                Type: 'AWS::ElasticLoadBalancingV2::Listener'
+                LogicalID: ApplicationLoadBalancerListenerHTTPS
+              TargetGroups:
+                - ApplicationLoadBalancerTargetGroupBlue
+                - ApplicationLoadBalancerTargetGroupGreen
+    Type: 'AWS::CodeDeploy::BlueGreen'
 
 Parameters:
   Environment:
-    Description: "The name of the environment to deploy to"
-    Type: "String"
-    Default: build
+    Description: The name of the environment to deploy to
+    Type: String
     AllowedValues:
       - "dev"
       - "build"
       - "staging"
       - "integration"
       - "production"
-
   VpcStackName:
-    Description: >
-      The name of the stack that defines the VPC in which this container will run.
+    Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
-    Default: "vpc-enhanced"
-
   RedisStackName:
-    Description: >
-      The name of the stack that defines the Redis cluster
+    Description: The name of the stack that defines the Redis cluster
     Type: String
-    Default: "shared-redis"
-
   ContainerPort:
-    Description: >
-      The port on which the container is running
+    Description: The port on which the container is running
     Type: Number
-    Default: 6001
-
+  DevFrontendContainer:
+    Description: The ECR container for overriding in development, if you want to target a specific version/tag
+    Type: String
   ProductTagValue:
     Description: Value for the Product Tag
     Type: String
-    Default: "GOV.UK Sign In"
-
   OwnerTagValue:
     Description: Value for the Owner Tag
     Type: String
-    Default: "govuk-accounts-tech@digital.cabinet-office.gov.uk"
-
   SourceTagValue:
     Description: Value for the Source Tag
     Type: String
-    Default: "alphagov/di-authentication-account-management/deploy/template.yaml"
-
   PermissionsBoundary:
-    Description: "The ARN of the permissions boundary to apply when creating IAM roles"
+    Description: The ARN of the permissions boundary to apply when creating IAM roles
     Type: String
-    Default: "none"
 
 Conditions:
   IsNotDevelopment: !Or
@@ -115,10 +100,10 @@ Mappings:
       AMAPIBASEURL: "https://manage.dev.account.gov.uk"
       BASEURL: "dev.account.gov.uk"
       SESSIONEXPIRY: "7200000"
-      AMYOURACCOUNTURL: "https://development.account.gov.uk"
-      GTMID: "" #TODO Fill
+      AMYOURACCOUNTURL: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
-      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "0"
       AUTHFRONTENDURL: "signin.dev.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
@@ -129,10 +114,10 @@ Mappings:
       AMAPIBASEURL: "https://manage.build.account.gov.uk"
       BASEURL: "settings.build.account.gov.uk"
       SESSIONEXPIRY: "7200000"
-      AMYOURACCOUNTURL: "https://build.account.gov.uk"
-      GTMID: ""
+      AMYOURACCOUNTURL: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
-      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
@@ -143,10 +128,10 @@ Mappings:
       AMAPIBASEURL: "https://manage.staging.account.gov.uk"
       BASEURL: "staging.account.gov.uk"
       SESSIONEXPIRY: "7200000"
-      AMYOURACCOUNTURL: "https://production.account.gov.uk"
-      GTMID: ""
+      AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
-      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
@@ -157,10 +142,10 @@ Mappings:
       AMAPIBASEURL: "https://manage.integration.account.gov.uk"
       BASEURL: "integration.account.gov.uk"
       SESSIONEXPIRY: "7200000"
-      AMYOURACCOUNTURL: "https://integration.account.gov.uk"
-      GTMID: ""
+      AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
-      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "0"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
@@ -171,10 +156,10 @@ Mappings:
       AMAPIBASEURL: "https://manage.account.gov.uk"
       BASEURL: "account.gov.uk"
       SESSIONEXPIRY: "7200000"
-      AMYOURACCOUNTURL: "https://production.account.gov.uk"
-      GTMID: ""
+      AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
-      GOVACCOUNTSPUBLISHINGAPITOKEN: "null"
+      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTLANGUAGECY: "0"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
@@ -403,11 +388,12 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        - Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
-#          Image: $CONTAINER_XYZ # value updated by build pipeline
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:3522a772389d8b14846f3d06e1a20e444fb65761 #App Image
-#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:latest
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:debug15
+        - Essential: true
+          Image: !If
+            - IsNotDevelopment
+            - "CONTAINER-IMAGE-PLACEHOLDER"
+            - !Ref DevFrontendContainer
+          Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
             - ContainerPort: !Ref ContainerPort
               Protocol: tcp
@@ -415,7 +401,7 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: !Sub "/ecs/${AWS::StackName}/server"
+              awslogs-group: !Ref TaskLogGroup
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: "ecs"
           Environment:
@@ -440,15 +426,15 @@ Resources:
             - Name: "AM_YOUR_ACCOUNT_URL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, AMYOURACCOUNTURL ]
             - Name: "GTM_ID"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, GTMID ]
+              Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/GTM/Id}}"
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, GOVACCOUNTSPUBLISHINGAPIURL ]
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, GOVACCOUNTSPUBLISHINGAPITOKEN ]
+              Value: !Sub '{{resolve:secretsmanager:/${AWS::StackName}/Config/Publishing/API/Key}}'
             - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
-              Value: "0"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTINTERNATIONALNUMBERS ]
             - Name: "SUPPORT_LANGUAGE_CY"
-              Value: "1"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTLANGUAGECY ]
             - Name: "AUTH_FRONTEND_URL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, AUTHFRONTENDURL ]
             - Name: "ANALYTICS_COOKIE_DOMAIN"

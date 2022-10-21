@@ -1,12 +1,62 @@
 version = 0.1
-[default]
-[default.deploy]
+
+[default.build.parameters]
+beta_features = true
+[default.sync.parameters]
+beta_features = true
+
 [default.deploy.parameters]
-stack_name = "account-management-frontend"
+stack_name = "account-mgmt-frontend"
 region = "eu-west-2"
-confirm_changeset = true
-capabilities = "CAPABILITY_NAMED_IAM"
-image_repositories = []
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-7d9zueiu0w51"
 s3_prefix = "account-management-frontend"
-parameter_overrides = "VpcStackName=\"vpc-enhanced\" PermissionsBoundary=\"none\" Environment=\"build\" IncomingTrafficCIDRBlocks=\"0.0.0.0/0\""
+capabilities = "CAPABILITY_NAMED_IAM"
+confirm_changeset = true
+image_repositories = []
+tags = "project=\"account-management-frontend\" stage=\"dev\""
+parameter_overrides=[
+    "Environment=dev",
+    "VpcStackName=vpc-enhanced",
+    "RedisStackName=shared-redis",
+    "ContainerPort=6001",
+    "ProductTagValue=GOV.UK Sign In",
+    "OwnerTagValue=govuk-accounts-tech@digital.cabinet-office.gov.uk",
+    "SourceTagValue=alphagov/di-authentication-account-management/deploy/template.yaml",
+    "PermissionsBoundary=none"
+]
+
+[dev.deploy.parameters]
+tags = "project=\"account-management-frontend\" stage=\"dev\""
+parameter_overrides=[
+    "Environment=dev",
+    "PermissionsBoundary=none",
+    "DevFrontendContainer=301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:latest"
+]
+
+[build.deploy.parameters]
+tags = "project=\"account-management-frontend\" stage=\"build\""
+parameter_overrides=[
+    "Environment=build",
+    "PermissionsBoundary=none"
+]
+
+[staging.deploy.parameters]
+tags = "project=\"account-management-frontend\" stage=\"staging\""
+parameter_overrides=[
+    "Environment=staging",
+    "PermissionsBoundary=none"
+]
+
+[integration.deploy.parameters]
+tags = "project=\"account-management-frontend\" stage=\"integration\""
+parameter_overrides=[
+    "Environment=integration",
+    "PermissionsBoundary=none"
+]
+
+[production.deploy.parameters]
+tags = "project=\"account-management-frontend\" stage=\"production\""
+parameter_overrides=[
+    "Environment=production",
+    "PermissionsBoundary=none"
+]
