@@ -2,6 +2,7 @@
 name: "Verify & Publish"
 
 on:
+  push:
     branches: [ main ]
 
 permissions:
