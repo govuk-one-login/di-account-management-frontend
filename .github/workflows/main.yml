@@ -3,7 +3,7 @@ name: "Verify & Publish"
 
 on:
   push:
-    branches:
+    branches-ignore:
       - main
 
 permissions:
@@ -15,7 +15,7 @@ jobs:
     name: All Checks
     uses: ./.github/workflows/ci-only.yml
     secrets: inherit
-  
+
   publish_artifacts:
     name: "Publish Image & Template"
     runs-on: ubuntu-latest
