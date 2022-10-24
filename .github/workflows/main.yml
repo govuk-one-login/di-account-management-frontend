@@ -2,10 +2,7 @@
 name: "Verify & Publish"
 
 on:
-  push:
-    branches-ignore:
-      - main
-#    branches: [ main ]
+    branches: [ main ]
 
 permissions:
   id-token: write
