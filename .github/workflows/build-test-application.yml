@@ -72,6 +72,9 @@ jobs:
       REDIS_PORT: 6379
   code_analysis:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
