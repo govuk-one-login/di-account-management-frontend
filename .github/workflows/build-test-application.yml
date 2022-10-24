@@ -1,5 +1,5 @@
 ---
-name: Build and Test Application
+name: "Build & Test Application"
 
 # Triggered when:
 #   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
@@ -47,14 +47,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.17.0
+
       - name: Install dependencies defined in yarn.lock
-        run: yarn install --immutable
+        run: yarn install --frozen-lockfile
+
       - name: Build app
         run: yarn build
+
       - name: Run unit tests
         run: yarn test:unit
+
       - name: Run integration tests
         run: yarn test:integration
+
       - name: Run lint
         run: yarn lint
     env:

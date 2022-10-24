@@ -1,5 +1,5 @@
 ---
-name: Build and Scan Docker Image
+name: "Build & Scan Docker Image"
 
 # Triggered when:
 #   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
