@@ -15,6 +15,7 @@ jobs:
     name: All Checks
     uses: ./.github/workflows/ci-only.yml
     secrets: inherit
+  
   publish_artifacts:
     name: "Publish Image & Template"
     runs-on: ubuntu-latest
@@ -32,4 +33,4 @@ jobs:
           ecr-repo-name: ${{ secrets.ECR_REPOSITORY }}
 
       - name: "Delegated Deployment via AWS CodeDeploy"
-        run: echo "Deployment is delegated to AWS CodeDeploy"
+        run: echo "Deployment has been delegated to AWS CodeDeploy"
