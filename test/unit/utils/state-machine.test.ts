@@ -29,7 +29,11 @@ describe("state-machine", () => {
     it("should move state from change value state to verify code state", () => {
       const nextState = getNextState("CHANGE_VALUE", "VERIFY_CODE_SENT");
       expect(nextState.value).to.equal("VERIFY_CODE");
-      expect(nextState.events).to.all.members(["VALUE_UPDATED", "RESEND_CODE", "VERIFY_CODE_SENT"]);
+      expect(nextState.events).to.all.members([
+        "VALUE_UPDATED",
+        "RESEND_CODE",
+        "VERIFY_CODE_SENT",
+      ]);
     });
 
     it("should move state from verify code state to value updated state", () => {

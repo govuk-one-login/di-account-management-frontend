@@ -72,6 +72,7 @@ export const PATH_DATA: {
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
+  RESEND_EMAIL_CODE: { url: "/resend-email-code" },
 };
 
 export const API_ENDPOINTS = {

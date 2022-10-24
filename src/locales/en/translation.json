@@ -250,7 +250,7 @@
         "summaryText": "Problems with the code?",
         "text1": "We can ",
         "sendCodeLinkText": "send the code again",
-        "sendCodeLinkHref": "/request-new-email-code",
+        "sendCodeLinkHref": "/resend-email-code",
         "text2": " or you can ",
         "changeEmailLinkText": "use a different email address"
       },
@@ -344,6 +344,20 @@
       "paragraph2": "Or ",
       "govukLinkText": "go to the GOV.UK homepage",
       "govukLinkHref": "https://www.gov.uk/"
+    },
+    "resendMfaCode": {
+      "title": "Get security code",
+      "header": "Get security code",
+      "continue": "Get security code",
+      "message": "Text messages can sometimes take a few minutes to arrive.",
+      "phoneNumber": {
+        "default": "We will send a code to the phone number linked to your account",
+        "isResendCodeRequest": "We will send a code to: [mobile]."
+      },
+      "email": {
+        "recipientMessage": "We will send a code to: ",
+        "paragraph": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder."
+      }
     }
   }
 }
