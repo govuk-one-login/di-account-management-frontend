@@ -1,20 +1,25 @@
 ---
-name: Deploy
-  -
+name: "Verify & Publish"
 
-# Triggered when:
-#   - any change is pushed to `main` branch.
 on:
   push:
+    branches-ignore:
+      - main
 #    branches: [ main ]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
+#  validate_artifacts:
+#    name: All Checks
+#    uses: ./.github/workflows/ci-only.yml
+#    secrets: inherit
   publish_artifacts:
+    name: "Publish Image & Template"
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - name: "Push signed image to ECR, updated SAM template wih image then upload it to the S3 Artifact Bucket"
         uses: alphagov/di-devplatform-upload-action-ecr@1.0.1
@@ -25,3 +30,6 @@ jobs:
           template-file: deploy/template.yaml
           role-to-assume-arn: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
           ecr-repo-name: ${{ secrets.ECR_REPOSITORY }}
+
+      - name: "Delegated Deployment via AWS CodeDeploy"
+        run: echo "Delegated Deployment via AWS CodeDeploy"
