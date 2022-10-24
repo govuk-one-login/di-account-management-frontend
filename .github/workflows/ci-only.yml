@@ -9,8 +9,6 @@ on:
   push:
     branches-ignore:
       - main
-    paths:
-      - ".github/workflows/ci-only.yml"
   pull_request:
     branches:
       - main
@@ -27,15 +25,19 @@ permissions:
 
 jobs:
   validate_application:
+    name: validate_application
     uses: ./.github/workflows/build-test-application.yml
 
   validate_container:
+    name: validate_container
     uses: ./.github/workflows/validate-docker-image.yml
     secrets: inherit
+    needs: validate_application
 
   validate_deployment:
     uses: ./.github/workflows/validate-sam-template.yml
     secrets: inherit
+    needs: validate_container
 
 
 
