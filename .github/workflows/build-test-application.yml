@@ -20,6 +20,7 @@ on:
 
 jobs:
   build_test_application:
+    name: "Build & Test Application"
     runs-on: ubuntu-latest
     services:
       localstack:
@@ -72,10 +73,12 @@ jobs:
       REDIS_PORT: 6379
   code_analysis:
     runs-on: ubuntu-latest
+    name: "Code Analysis"
     permissions:
       id-token: write
       contents: read
     steps:
+      - uses: actions/checkout@v3
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
