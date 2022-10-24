@@ -16,6 +16,7 @@ on:
 
 jobs:
   validate_sam_template:
+    name: SAM Checks
     runs-on: ubuntu-latest
     permissions:
       id-token: write

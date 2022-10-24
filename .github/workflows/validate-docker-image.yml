@@ -19,16 +19,20 @@ permissions:
 
 jobs:
   validate_image:
+    name: "Image Checks"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set tag
         id: vars
-        run: echo "::set-output name=tag::${GITHUB_REF#refs/*/}"
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+#        run: echo "::set-output name=tag::${GITHUB_REF#refs/*/}"
 
       - name: Get current date
         id: datetime
-        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
+        run: echo "date=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
+#        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
 
       - name: Set up AWS creds
         uses: aws-actions/configure-aws-credentials@v1
