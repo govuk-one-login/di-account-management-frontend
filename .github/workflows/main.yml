@@ -30,4 +30,4 @@ jobs:
           ecr-repo-name: ${{ secrets.ECR_REPOSITORY }}
 
       - name: "Delegated Deployment via AWS CodeDeploy"
-        run: echo "Delegated Deployment via AWS CodeDeploy"
+        run: echo "Deployment is delegated to AWS CodeDeploy"
