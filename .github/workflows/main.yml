@@ -12,14 +12,15 @@ permissions:
   contents: read
 
 jobs:
-#  validate_artifacts:
-#    name: All Checks
-#    uses: ./.github/workflows/ci-only.yml
-#    secrets: inherit
+  validate_artifacts:
+    name: All Checks
+    uses: ./.github/workflows/ci-only.yml
+    secrets: inherit
   publish_artifacts:
     name: "Publish Image & Template"
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    needs: validate_artifacts
     steps:
       - name: "Push signed image to ECR, updated SAM template wih image then upload it to the S3 Artifact Bucket"
         uses: alphagov/di-devplatform-upload-action-ecr@1.0.1
