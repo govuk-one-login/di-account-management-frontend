@@ -43,17 +43,17 @@ jobs:
       - name: SAM Validate
         run: sam validate -t deploy/template.yaml
 
-      - name: SAM Build
-        run: sam build -t deploy/template.yaml
-
-      - name: Test with Checkov
-        id: checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          file: ./.aws-sam/build/template.yaml
-          framework: cloudformation
-
-      - name: CloudFormation Lint
-        uses: scottbrenner/cfn-lint-action@v2
-        with:
-          command: ./.aws-sam/build/template.yaml
+#      - name: SAM Build
+#        run: sam build -t deploy/template.yaml
+#
+#      - name: Test with Checkov
+#        id: checkov
+#        uses: bridgecrewio/checkov-action@master
+#        with:
+#          file: ./.aws-sam/build/template.yaml
+#          framework: cloudformation
+#
+#      - name: CloudFormation Lint
+#        uses: scottbrenner/cfn-lint-action@v2
+#        with:
+#          command: ./.aws-sam/build/template.yaml
