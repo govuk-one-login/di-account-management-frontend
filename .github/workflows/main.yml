@@ -1,70 +1,36 @@
 ---
-name: Deploy
-  -
-# TODO
-# - [ ] use github repo environments,
-# - [ ] enable deploy to dev env on push to non `main` branch.
-# - [ ] use tmp-branch-name prefix to enable multiple stack instances to exist in a single dev account.
-# - [ ] rename to cd
+name: "Verify & Publish"
 
-# Triggered when:
-#   - any change is pushed to `main` branch.
 on:
   push:
-#    branches: [ main ]
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  publish_and_deploy:
+  validate_artifacts:
+    name: All Checks
+    uses: ./.github/workflows/ci-only.yml
+    secrets: inherit
+
+  publish_artifacts:
+    name: "Publish Image & Template"
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    permissions:
-      id-token: write
-      contents: read
-    env:
-      SAM_CLI_TELEMETRY: 0
-      ENVIRONMENT: build
+    needs: validate_artifacts
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-      - name: Set up SAM cli
-        uses: aws-actions/setup-sam@v2
-      - name: Set up AWS creds
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
-          aws-region: eu-west-2
-      - name: SAM Build
-        run: sam build
-      - name: "Push signed image to ECR, update SAM template wih image then upload it to the S3 Artifact Bucket"
+      - name: "Push signed image to ECR, updated SAM template wih image then upload it to the S3 Artifact Bucket"
         uses: alphagov/di-devplatform-upload-action-ecr@1.0.1
         with:
           artifact-bucket-name: ${{ secrets.ARTIFACT_SOURCE_BUCKET_NAME }}
           container-sign-kms-key-arn: ${{ secrets.CONTAINER_SIGN_KMS_KEY }}
           working-directory: .
-          template-file: template.yaml
+          template-file: deploy/template.yaml
           role-to-assume-arn: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
           ecr-repo-name: ${{ secrets.ECR_REPOSITORY }}
 
-#      - name: CloudFormation Lint
-#        uses: scottbrenner/cfn-lint-action@v2
-#        with:
-#          command: cfn-lint -t ./cf-template.yaml
-
-      - name: SAM Deploy
-        run: sam deploy # supply env?
-
-#  functional_verification:
-
-#  non_functional_checks:
-#    performance-checks:
-#    security-checks:
-
-#  update_documentation:
-
-#  tag_and_release:
-#      - name Add tag (post merge) to repo?
-
-#  promote_to_next_environment:
+      - name: "Delegated Deployment via AWS CodeDeploy"
+        run: echo "Deployment has been delegated to AWS CodeDeploy"
