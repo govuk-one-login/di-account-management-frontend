@@ -1,9 +1,0 @@
-version = 0.1
-[default]
-[default.deploy]
-[default.deploy.parameters]
-stack_name = "account-management-frontend"
-region = "eu-west-2"
-confirm_changeset = true
-capabilities = "CAPABILITY_NAMED_IAM"
-image_repositories = []
