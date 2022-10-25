@@ -1,5 +1,5 @@
 ---
-name: Build and Test Application
+name: "Build & Test Application"
 
 # Triggered when:
 #   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
@@ -20,6 +20,7 @@ on:
 
 jobs:
   build_test_application:
+    name: "Build & Test Application"
     runs-on: ubuntu-latest
     services:
       localstack:
@@ -43,17 +44,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.17.0
+
       - name: Install dependencies defined in yarn.lock
-        run: yarn install --immutable
+        run: yarn install --frozen-lockfile
+
       - name: Build app
         run: yarn build
+
       - name: Run unit tests
         run: yarn test:unit
+
       - name: Run integration tests
         run: yarn test:integration
+
       - name: Run lint
         run: yarn lint
     env:
@@ -70,3 +76,16 @@ jobs:
       SESSION_EXPIRY: 3600000
       REDIS_HOST: localhost
       REDIS_PORT: 6379
+  code_analysis:
+    runs-on: ubuntu-latest
+    name: "Code Analysis"
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
