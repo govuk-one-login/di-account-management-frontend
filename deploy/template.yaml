@@ -8,35 +8,35 @@ Description: >-
   Account Management Frontend ECS Service
 Transform:
   - AWS::Serverless-2016-10-31
-  - AWS::CodeDeployBlueGreen
-
-Hooks:
-  CodeDeployBlueGreenHook:
-    Properties:
-      TrafficRoutingConfig:
-        Type: TimeBasedCanary
-        TimeBasedCanary:
-          StepPercentage: 15
-          BakeTimeMins: 5
-      Applications:
-        - Target:
-            Type: 'AWS::ECS::Service'
-            LogicalID: ContainerService
-          ECSAttributes:
-            TaskDefinitions:
-              - BlueTaskDefinition
-              - GreenTaskDefinition
-            TaskSets:
-              - BlueTaskSet
-              - GreenTaskSet
-            TrafficRouting:
-              ProdTrafficRoute:
-                Type: 'AWS::ElasticLoadBalancingV2::Listener'
-                LogicalID: ApplicationLoadBalancerListenerHTTPS
-              TargetGroups:
-                - ApplicationLoadBalancerTargetGroupBlue
-                - ApplicationLoadBalancerTargetGroupGreen
-    Type: 'AWS::CodeDeploy::BlueGreen'
+#  - AWS::CodeDeployBlueGreen
+#
+#Hooks:
+#  CodeDeployBlueGreenHook:
+#    Properties:
+#      TrafficRoutingConfig:
+#        Type: TimeBasedCanary
+#        TimeBasedCanary:
+#          StepPercentage: 15
+#          BakeTimeMins: 5
+#      Applications:
+#        - Target:
+#            Type: 'AWS::ECS::Service'
+#            LogicalID: ContainerService
+#          ECSAttributes:
+#            TaskDefinitions:
+#              - BlueTaskDefinition
+#              - GreenTaskDefinition
+#            TaskSets:
+#              - BlueTaskSet
+#              - GreenTaskSet
+#            TrafficRouting:
+#              ProdTrafficRoute:
+#                Type: 'AWS::ElasticLoadBalancingV2::Listener'
+#                LogicalID: ApplicationLoadBalancerListenerHTTPS
+#              TargetGroups:
+#                - ApplicationLoadBalancerTargetGroupBlue
+#                - ApplicationLoadBalancerTargetGroupGreen
+#    Type: 'AWS::CodeDeploy::BlueGreen'
 
 Parameters:
   Environment:
@@ -391,7 +391,8 @@ Resources:
         - Essential: true
           Image: !If
             - IsNotDevelopment
-            - "CONTAINER-IMAGE-PLACEHOLDER"
+#            - "CONTAINER-IMAGE-PLACEHOLDER"
+            - 301577035144.dkr.ecr.eu-west-2.amazonaws.com/app-container-repository-containerrepository-neycck3munxf:b0ef20fc4d63d417fdd1b709947c04865f65b237
             - !Ref DevFrontendContainer
           Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
@@ -563,64 +564,174 @@ Resources:
   # API Gateway
   #
 
-  ApiGateway:
-    Type: AWS::ApiGatewayV2::Api
+  RestApiGateway:
+    Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: !Sub "${AWS::StackName}-ApiGateway"
-      ProtocolType: HTTP
+      Name: !Sub "${AWS::StackName}-RestApiGateway"
       Tags:
-        Product: !Ref ProductTagValue
-        System: Accounts
-        Environment: !Ref Environment
-        Name: !Sub "${AWS::StackName}-ApiGateway"
-        Owner: !Ref OwnerTagValue
-        Source: !Ref SourceTagValue
-        Application: Shared
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-RestApiGateway"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
 
-  ApiGatewayIntegration:
-    Type: AWS::ApiGatewayV2::Integration
+  ApiGatewayDeployment:
+    DependsOn: RestApiGatewayMethod
+    Type: AWS::ApiGateway::Deployment
     Properties:
-      ApiId: !Ref ApiGateway
-      IntegrationType: HTTP_PROXY
-      ConnectionId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcLinkId"
-      ConnectionType: VPC_LINK
-      IntegrationMethod: ANY
-      IntegrationUri: !Ref ApplicationLoadBalancerListenerHTTPS
-      PayloadFormatVersion: 1.0
-      Description: !Sub "API GW to ECS Container integration for ${AWS::StackName}"
-      TlsConfig:
-        ServerNameToVerify: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+      RestApiId: !Ref RestApiGateway
+      StageName: !Sub "${AWS::StackName}-RestApiGatewayStage"
+      StageDescription:
+        CacheClusterEnabled: true
+        CacheClusterSize: 0.5
+        CacheDataEncrypted: true
+        CacheTtlInSeconds: 300
+        CachingEnabled: true
 
-  ApiRoute:
-    Type: AWS::ApiGatewayV2::Route
+  RestApiGatewayMethod:
+    Type: AWS::ApiGateway::Method
+#    Metadata:
+#      checkov:
+#        skip:
+#          - id: "CKV_AWS_59"
+#            comment: "API should have AuthorizationType if appropriate - this is intentionally public"
     Properties:
-      ApiId: !Ref ApiGateway
-      RouteKey: "ANY /{proxy+}"
-      Target: !Sub "integrations/${ApiGatewayIntegration}"
+      # checkov:skip=CKV_AWS_59: API should have AuthorizationType if appropriate - this is intentionally public
+      HttpMethod: ANY
+      ResourceId: !GetAtt RestApiGateway.RootResourceId
+      RestApiId: !Ref RestApiGateway
+      AuthorizationType: NONE
+      Integration:
+        Type: HTTP_PROXY
+        ConnectionType: VPC_LINK
+        ConnectionId: !Ref ApiGatewayVpcLink
+        IntegrationHttpMethod: ANY
+        Uri: !Sub
+          - "https://${LBDNS}"
+          - LBDNS: !GetAtt NetworkLoadBalancer.DNSName
 
-  ApiDefaultStage:
-    Type: AWS::ApiGatewayV2::Stage
+  ApiGatewayStage:
+    Type: AWS::ApiGateway::Stage
     Properties:
-      ApiId: !Ref ApiGateway
-      StageName: "$default"
-      AutoDeploy: true
-      AccessLogSettings:
-        Format: "$context.requestId $context.httpMethod $context.path"
+      DeploymentId: !Ref ApiGatewayDeployment
+      StageName: !Sub
+        - "${AWS::StackName}-RestApiGatewayStage-${StackId}"
+        - StackId: !Select [2, !Split ['/', !Ref AWS::StackId]]
+      RestApiId: !Ref RestApiGateway
+      AccessLogSetting:
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
+        Format: $context.requestId $context.apiId
+      CacheClusterEnabled: true
+      CacheClusterSize: 0.5
+      TracingEnabled: true
+      MethodSettings:
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          MetricsEnabled: 'true'
+          DataTraceEnabled: 'false'
+
+  ApiGatewayVpcLink:
+    Type: AWS::ApiGateway::VpcLink
+    Properties:
+      Description: Link from REST API Gateway to NetworkLoadBalancer
+      Name: !Sub "${AWS::StackName}-ApiVpcLink"
+      TargetArns:
+        - !Ref NetworkLoadBalancer
+
+  #
+  # Network Load Balancing
+  #
+
+  NetworkLoadBalancer:
+    DependsOn: ApplicationLoadBalancer
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internal
+      Type: network
+      Subnets:
+        - Fn::ImportValue:
+            !Sub "${VpcStackName}-ProtectedSubnetIdA"
+        - Fn::ImportValue:
+            !Sub "${VpcStackName}-ProtectedSubnetIdB"
+      LoadBalancerAttributes:
+        - Key: access_logs.s3.enabled
+          Value: "true"
+        - Key: access_logs.s3.bucket
+          Value: !Ref AccessLogsBucket
       Tags:
-        Product: !Ref ProductTagValue
-        System: Accounts
-        Environment: !Ref Environment
-        Name: !Sub "${AWS::StackName}-ApiDefaultStage"
-        Owner: !Ref OwnerTagValue
-        Source: !Ref SourceTagValue
-        Application: Shared
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-NetworkLoadBalancer"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: alphagov/di-devplatform-demo-sam-app/node-with-waf/template.yaml
+
+  NetworkLoadBalancerListenerHTTPS:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref NetworkLoadBalancerTargetGroup
+      LoadBalancerArn: !Ref NetworkLoadBalancer
+      Port: 443
+      Protocol: TCP
+
+#  NetworkLoadBalancerListenerHTTP:
+#    Type: AWS::ElasticLoadBalancingV2::Listener
+#    Properties:
+#      DefaultActions:
+#        - Type: forward
+#          TargetGroupArn: !Ref NetworkLoadBalancerTargetGroup
+#      LoadBalancerArn: !Ref NetworkLoadBalancer
+#      Port: 80
+#      Protocol: TCP
+
+  NetworkLoadBalancerTargetGroup:
+    DependsOn: ApplicationLoadBalancerListenerHTTPS
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${AWS::StackName}-NLBTgtGrp"
+      Port: 443
+      Protocol: TCP
+      Targets:
+        - Id: !Ref ApplicationLoadBalancer
+      TargetType: alb
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${VpcStackName}-VpcId"
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-NLBTgtGrp"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: alphagov/di-devplatform-demo-sam-app/node-with-waf/template.yaml
+
+  #
+  # WAF
+  #
+
+  WAFv2ACLAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Properties:
+      ResourceArn: !Sub
+        - "arn:aws:apigateway:${AWS::Region}::/restapis/${RestApiGateway}/stages/${ApiStage}"
+        - ApiStage: !Ref ApiGatewayStage #This is the hack to allow the API Gateway stage to be created before the association occurs.
+      WebACLArn: !Sub "{{resolve:ssm:/WAFv2/WebACL/ARN}}"
 
   #
   # App domain
   #
+
   AppFrontCustomDomain:
     Condition: IsNotDevelopment
     Type: AWS::ApiGatewayV2::DomainName
@@ -643,15 +754,15 @@ Resources:
         HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
         EvaluateTargetHealth: false
 
-  AppFrontApiMapping:
-    Condition: IsNotDevelopment
-    Type: AWS::ApiGatewayV2::ApiMapping
-    Properties:
-      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
-      ApiId: !Ref ApiGateway
-      Stage: !Ref ApiDefaultStage
-    DependsOn:
-      - AppFrontCustomDomain
+#  AppFrontApiMapping:
+#    Condition: IsNotDevelopment
+#    Type: AWS::ApiGatewayV2::ApiMapping
+#    Properties:
+#      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+#      ApiId: !Ref ApiGateway
+#      Stage: !Ref ApiDefaultStage
+#    DependsOn:
+#      - AppFrontCustomDomain
 
   #
   # Load balancing
@@ -1140,5 +1251,21 @@ Resources:
 
 Outputs:
   ApiGatewayEndpoint:
-    Description: The base URI for this application.
-    Value: !GetAtt ApiGateway.ApiEndpoint
+    Description: The base ID for this application.
+    Value: !Ref RestApiGateway
+
+  ApiGatewayStageName:
+    Description: The stage name for this application.
+    Value: !Ref ApiGatewayStage
+
+#  PipelineStackName:
+#    Condition: OutputPipelineStackName
+#    Description: "The name of the pipeline stack that deploys this application stack"
+#    Value: !Ref PipelineStackName
+
+  RestApiUrl:
+    Description: API URL
+    Value: !Sub
+      - "https://${restapi_id}.execute-api.${AWS::Region}.amazonaws.com/${stage_name}/"
+      - restapi_id: !Ref RestApiGateway
+        stage_name: !Ref ApiGatewayStage
