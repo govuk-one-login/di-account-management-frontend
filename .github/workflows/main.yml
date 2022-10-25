@@ -3,7 +3,7 @@ name: "Verify & Publish"
 
 on:
   push:
-    branches:
+    branches-ignore:
       - main
 
 permissions:
