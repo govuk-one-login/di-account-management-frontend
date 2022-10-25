@@ -7,8 +7,8 @@ name: Validate SAM Template
 on:
   push:
     paths:
-      - "template.yaml"
-      - "samconfig.toml"
+      - "deploy/template.yaml"
+      - "deploy/samconfig.toml"
       - ".github/workflows/validate-sam-template.yml"
     branches-ignore:
       - main
@@ -16,6 +16,7 @@ on:
 
 jobs:
   validate_sam_template:
+    name: SAM Checks
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -29,23 +30,29 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.8"
+
       - name: Set up SAM cli
         uses: aws-actions/setup-sam@v2
+
       - name: Set up AWS creds
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
           aws-region: eu-west-2
+
       - name: SAM Validate
-        run: sam validate
+        run: sam validate -t deploy/template.yaml
+
       - name: SAM Build
-        run: sam build
+        run: sam build -t deploy/template.yaml
+
       - name: Test with Checkov
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
           file: ./.aws-sam/build/template.yaml
           framework: cloudformation
+
       - name: CloudFormation Lint
         uses: scottbrenner/cfn-lint-action@v2
         with:

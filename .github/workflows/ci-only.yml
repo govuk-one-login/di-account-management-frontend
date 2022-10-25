@@ -1,16 +1,7 @@
 ---
-name: Validate Artifacts
+name: "Validate & Verify"
 
-# Triggered when:
-#   - a pull request has been raised to merge another branch into `main` branch.
-#   - the file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
-#   - invoked by another workflow.
 on:
-  push:
-    branches-ignore:
-      - main
-    paths:
-      - ".github/workflows/ci-only.yml"
   pull_request:
     branches:
       - main
@@ -27,15 +18,21 @@ permissions:
 
 jobs:
   validate_application:
+    name: App Checks
     uses: ./.github/workflows/build-test-application.yml
+    secrets: inherit
 
   validate_container:
+    name: Container Checks
     uses: ./.github/workflows/validate-docker-image.yml
     secrets: inherit
+    needs: validate_application
 
   validate_deployment:
+    name: Deployment Template Checks
     uses: ./.github/workflows/validate-sam-template.yml
     secrets: inherit
+    needs: validate_container
 
 
 
