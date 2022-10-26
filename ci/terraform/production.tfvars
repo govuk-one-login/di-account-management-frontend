@@ -5,8 +5,6 @@ common_state_bucket = "digital-identity-prod-tfstate"
 
 account_management_ecs_desired_count = 4
 
-support_language_cy = "1"
-
 logging_endpoint_arns = [
   "arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prod",
   "arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prodpython"
