@@ -22,7 +22,7 @@ params:
   DEPLOY_LISTENER: "true"
   SUPPORT_INTERNATIONAL_NUMBERS: "0"
   INCOMING_TRAFFIC_CIDR_BLOCKS: '["0.0.0.0/0"]'
-  SUPPORT_LANGUAGE_CY: "0"
+  SUPPORT_LANGUAGE_CY: "1"
 
 inputs:
   - name: account-management-src
