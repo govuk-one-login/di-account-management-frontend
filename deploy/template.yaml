@@ -641,7 +641,7 @@ Resources:
       HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Settings}}"
       AliasTarget:
         DNSName: !GetAtt AppFrontCustomDomain.RegionalDomainName
-        HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
+        HostedZoneId: !GetAtt CloudFrontDistribution.DomainName
         EvaluateTargetHealth: false
 
   AppFrontApiMapping:
@@ -1151,93 +1151,42 @@ Resources:
       DistributionConfig:
         Aliases:
           - "settings.build.account.gov.uk"
-#        CacheBehaviors:
-#          - CacheBehavior
         CNAMEs:
           - "settings.build.account.gov.uk"
         Comment: !Sub "CloudFront Distrubiton resource for the ${AWS::StackName} application"
-#        CustomErrorResponses:
-#          - CustomErrorResponse
-#        CustomOrigin:
-#          LegacyCustomOrigin
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
             - HEAD
-            - OPTIONS
-            - PUT
-            - PATCH
-            - POST
-            - DELETE
           CachedMethods:
             - GET
             - HEAD
           CachePolicyId: !GetAtt CloudFrontCachePolicy.Id
           Compress: false
-#          DefaultTTL: Double
-#          FieldLevelEncryptionId: String
-#          ForwardedValues:
-#            ForwardedValues
-#          FunctionAssociations:
-#            - FunctionAssociation
-#          LambdaFunctionAssociations:
-#            - LambdaFunctionAssociation
-#          MaxTTL: Double
           MinTTL: 0
-#          OriginRequestPolicyId: String
-#          RealtimeLogConfigArn: String
-#          ResponseHeadersPolicyId: String
-#          SmoothStreaming: Boolean
           TargetOriginId: "settings.build.account.gov.uk"
-#          TrustedKeyGroups:
-#            - String
-#          TrustedSigners:
-#            - String
           ViewerProtocolPolicy: redirect-to-https
-
-#        DefaultRootObject: String
         Enabled: true
         HttpVersion: "http2"
-#        IPV6Enabled:
         Logging:
           Bucket: !Sub "${CloudFrontLogsBucket}.s3.amazonaws.com"
-#          Prefix: String
-#          !GetAtt Cloud
-#        OriginGroups:
-#          OriginGroups
         Origins:
-#          - ConnectionAttempts: 3
-#            ConnectionTimeout: 10
-          - DomainName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
+          - ConnectionAttempts: 3
+            ConnectionTimeout: 10
+            DomainName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
             Id: "settings.build.account.gov.uk"
             CustomOriginConfig:
-#              HTTPPort: 80
               HTTPSPort: 443
               OriginKeepaliveTimeout: 5
               OriginProtocolPolicy: https-only
               OriginReadTimeout: 30
               OriginSSLProtocols:
               - TLSv1.2
-#            OriginAccessControlId: String
-#            OriginCustomHeaders:
-#              - OriginCustomHeader
-#            OriginPath: String
-#            OriginShield:
-#              OriginShield
-#            S3OriginConfig:
-#              S3OriginConfig
-#        PriceClass: String
-#        Restrictions:
-#          Restrictions
-#        S3Origin:
-#          LegacyS3Origin
         ViewerCertificate:
-          AcmCertificateArn: "arn:aws:acm:us-east-1:301577035144:certificate/f84cc3a4-c4c2-419c-a040-e89ca2362b67"
-#          CloudFrontDefaultCertificate: Boolean
-#          IamCertificateId: String
+          AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
-        WebACLId: "arn:aws:wafv2:us-east-1:301577035144:global/webacl/WAFv2-WebACL/278db2a3-6ff7-443b-b34f-077e374e1575"
+        WebACLId: !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
 
       Tags:
         - Key: Name
