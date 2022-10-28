@@ -65,6 +65,14 @@ describe("phone-number", () => {
       expect(containsUKMobileNumber("+330645453322")).to.equal(false);
     });
 
+    it("should return false when starting with 0033", () => {
+      expect(containsUKMobileNumber("0033 645453322")).to.equal(false);
+    });
+
+    it("should return true when Isle of Man phone number entered", () => {
+      expect(containsUKMobileNumber("+44 7624 311111")).to.equal(true);
+    });
+
     it("should return false when starting with +33 without 0", () => {
       expect(containsUKMobileNumber("+33645453322")).to.equal(false);
     });

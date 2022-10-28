@@ -1,9 +1,17 @@
-import { isValidPhoneNumber } from "libphonenumber-js/mobile";
+import {
+  isValidPhoneNumber,
+  parsePhoneNumberWithError,
+} from "libphonenumber-js/mobile";
 
 export function containsUKMobileNumber(value: string): boolean {
-  return (
-    isValidPhoneNumber(value, "GB") && /^([+?44]{2}|[07]{2}).*$/.test(value)
-  );
+  try {
+    return (
+      isValidPhoneNumber(value, "GB") &&
+      parsePhoneNumberWithError(value, "GB").countryCallingCode === "44"
+    );
+  } catch {
+    return false;
+  }
 }
 
 export function containsInternationalMobileNumber(value: string): boolean {
