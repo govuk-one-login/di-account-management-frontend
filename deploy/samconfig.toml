@@ -15,16 +15,5 @@ confirm_changeset = true
 image_repositories = []
 tags = "project=\"account-management-frontend\" stage=\"dev\""
 parameter_overrides=[
-    "VpcStackName=vpc-enhanced",
-    "RedisStackName=shared-redis",
-    "ContainerPort=6001",
-    "ProductTagValue=GOV.UK Sign In",
-    "OwnerTagValue=govuk-accounts-tech@digital.cabinet-office.gov.uk",
-    "SourceTagValue=alphagov/di-authentication-account-management/deploy/template.yaml"
-]
-
-[dev.deploy.parameters]
-tags = "project=\"account-management-frontend\" stage=\"dev\""
-parameter_overrides=[
-    "DevFrontendContainer=301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:latest"
+    "VpcStackName=vpc-enhanced"
 ]
