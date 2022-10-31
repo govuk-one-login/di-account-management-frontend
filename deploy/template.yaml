@@ -58,21 +58,27 @@ Parameters:
   RedisStackName:
     Description: The name of the stack that defines the Redis cluster
     Type: String
+    Default: shared-redis
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
+    Default: 6001
   DevFrontendContainer:
     Description: The ECR container for overriding in development, if you want to target a specific version/tag
     Type: String
+    Default: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:latest
   ProductTagValue:
     Description: Value for the Product Tag
     Type: String
+    Default: GOV.UK Sign In
   OwnerTagValue:
     Description: Value for the Owner Tag
     Type: String
+    Default: govuk-accounts-tech@digital.cabinet-office.gov.uk
   SourceTagValue:
     Description: Value for the Source Tag
     Type: String
+    Default: alphagov/di-authentication-account-management/deploy/template.yaml
   PermissionsBoundary:
     Description: The ARN of the permissions boundary to apply when creating IAM roles
     Type: String
