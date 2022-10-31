@@ -20,7 +20,7 @@ Hooks:
           BakeTimeMins: 5
       Applications:
         - Target:
-            Type: 'AWS::ECS::Service'
+            Type: AWS::ECS::Service
             LogicalID: ContainerService
           ECSAttributes:
             TaskDefinitions:
@@ -31,12 +31,12 @@ Hooks:
               - GreenTaskSet
             TrafficRouting:
               ProdTrafficRoute:
-                Type: 'AWS::ElasticLoadBalancingV2::Listener'
+                Type: AWS::ElasticLoadBalancingV2::Listener
                 LogicalID: ApplicationLoadBalancerListenerHTTPS
               TargetGroups:
                 - ApplicationLoadBalancerTargetGroupBlue
                 - ApplicationLoadBalancerTargetGroupGreen
-    Type: 'AWS::CodeDeploy::BlueGreen'
+    Type: AWS::CodeDeploy::BlueGreen
 
 Parameters:
   Environment:
@@ -98,7 +98,7 @@ Mappings:
       NODEENV: "development"
       APIBASEURL: "https://oidc.dev.account.gov.uk"
       AMAPIBASEURL: "https://manage.dev.account.gov.uk"
-      BASEURL: "dev.account.gov.uk"
+      BASEURL: "home.dev.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
@@ -112,7 +112,7 @@ Mappings:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
       AMAPIBASEURL: "https://manage.build.account.gov.uk"
-      BASEURL: "settings.build.account.gov.uk"
+      BASEURL: "home.build.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
@@ -126,7 +126,7 @@ Mappings:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
       AMAPIBASEURL: "https://manage.staging.account.gov.uk"
-      BASEURL: "staging.account.gov.uk"
+      BASEURL: "home.staging.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
@@ -140,7 +140,7 @@ Mappings:
       NODEENV: "development"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
       AMAPIBASEURL: "https://manage.integration.account.gov.uk"
-      BASEURL: "integration.account.gov.uk"
+      BASEURL: "home.integration.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
@@ -154,7 +154,7 @@ Mappings:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
       AMAPIBASEURL: "https://manage.account.gov.uk"
-      BASEURL: "account.gov.uk"
+      BASEURL: "home.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
@@ -627,7 +627,7 @@ Resources:
     Properties:
       DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
       DomainNameConfigurations:
-        - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Settings/ARN}}"
+        - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Home/ARN}}"
           EndpointType: REGIONAL
           SecurityPolicy: TLS_1_2
 
@@ -637,10 +637,10 @@ Resources:
     Properties:
       Name: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
       Type: A
-      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Settings}}"
+      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
       AliasTarget:
-        DNSName: !GetAtt AppFrontCustomDomain.RegionalDomainName
-        HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: "Z2FDTNDATAQYW2"
         EvaluateTargetHealth: false
 
   AppFrontApiMapping:
@@ -776,7 +776,7 @@ Resources:
       Port: 443
       Protocol: HTTPS
       Certificates:
-        - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Settings/ARN}}"
+        - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Home/ARN}}"
       SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
 
   ApplicationLoadBalancerListenerHTTP:
@@ -1137,6 +1137,202 @@ Resources:
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
                 "aws:SecureTransport": true
+
+  #
+  # CloudFront Distribution
+  #
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    DependsOn: CloudFrontLogsBucket
+    Properties:
+      # checkov:skip=CKV_AWS_86:Ensure Cloudfront distribution has Access Logging enabled
+      DistributionConfig:
+        Aliases:
+          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+        CNAMEs:
+          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+        Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          CachePolicyId: !GetAtt CloudFrontCachePolicy.Id
+          OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
+          Compress: false
+          MinTTL: 0
+          TargetOriginId: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+          ViewerProtocolPolicy: redirect-to-https
+        Enabled: true
+        HttpVersion: "http2"
+        Logging:
+          Bucket: !Sub "${CloudFrontLogsBucket}.s3.amazonaws.com"
+        Origins:
+          - ConnectionAttempts: 3
+            ConnectionTimeout: 10
+            DomainName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
+            Id: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+            CustomOriginConfig:
+              HTTPSPort: 443
+              OriginKeepaliveTimeout: 5
+              OriginProtocolPolicy: https-only
+              OriginReadTimeout: 30
+              OriginSSLProtocols:
+              - TLSv1.2
+        ViewerCertificate:
+          AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
+          MinimumProtocolVersion: TLSv1.2_2021
+          SslSupportMethod: sni-only
+        WebACLId: !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
+
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-CloudFrontDistribution"
+        - Key: Product
+          Value: GOV.UK Sign In
+        - Key: System
+          Value: Authentication Account Management
+        - Key: Service
+          Value: Authentication Account Management frontend
+        - Key: Owner
+          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        - Key: Source
+          Value: alphagov/di-authentication-account-management/template.yaml
+        - Key: CheckovRulesToSkip
+          Value: CKV_AWS_86
+
+  CloudFrontCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Comment: !Sub "Cache policy for the ${AWS::StackName} application"
+        DefaultTTL: 86400
+        MaxTTL: 31536000
+        MinTTL: 1
+        Name: !Sub "${AWS::StackName}-CachePolicy"
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          EnableAcceptEncodingBrotli: false
+          EnableAcceptEncodingGzip: false
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
+
+  CloudFrontOriginRequestPolicy:
+    Type: AWS::CloudFront::OriginRequestPolicy
+    Properties:
+      OriginRequestPolicyConfig:
+        Comment: String
+        CookiesConfig:
+          CookieBehavior: all
+        HeadersConfig:
+          HeaderBehavior: allViewer
+        Name: !Sub "${AWS::StackName}-OriginRequestPolicy"
+        QueryStringsConfig:
+          QueryStringBehavior:
+            all
+
+  CloudFrontLogsBucket:
+    Condition: IsNotDevelopment
+    Type: AWS::S3::Bucket
+    Properties:
+      # checkov:skip=CKV_AWS_18:This is the access logs bucket. It should not log itself.
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      BucketName: !Join
+        - "-"
+        - - !Ref AWS::StackName
+          - cloudfront
+          - Fn::Select:
+              - 4
+              - Fn::Split:
+                  - '-'
+                  - Fn::Select:
+                      - 2
+                      - Fn::Split:
+                          - /
+                          - Ref: AWS::StackId
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-AccessLogs"
+        - Key: Product
+          Value: GOV.UK Sign In
+        - Key: System
+          Value: Authentication Account Management
+        - Key: Service
+          Value: Authentication Account Management frontend
+        - Key: Owner
+          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+        - Key: Source
+          Value: alphagov/di-authentication-account-management/template.yaml
+        - Key: CheckovRulesToSkip
+          Value: CKV_AWS_18
+
+  CloudFrontLogsBucketPolicy:
+    Condition: IsNotDevelopment
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref CloudFrontLogsBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAwsLogDeliveryToLogToS3
+            Effect: Allow
+            Principal:
+              Service: delivery.logs.amazonaws.com
+            Action:
+              - s3:PutObject
+            Resource: !Sub "${CloudFrontLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
+            Condition:
+              StringEquals:
+                "s3:x-amz-acl": bucket-owner-full-control
+                "aws:SourceAccount": !Ref AWS::AccountId
+              Bool:
+                "aws:SecureTransport": true
+          - Sid: AllowAwsLogDeliveryToReadBucketAcl
+            Effect: Allow
+            Principal:
+              Service: delivery.logs.amazonaws.com
+            Action:
+              - s3:GetBucketAcl
+            Resource: !GetAtt CloudFrontLogsBucket.Arn
+            Condition:
+              StringEquals:
+                "aws:SourceAccount": !Ref AWS::AccountId
+              Bool:
+                "aws:SecureTransport": true
+
+  #
+  # Logs Subscription Filter
+  #
+
+  FrontendLogsSplunkSubscription:
+    Type: AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
+      FilterPattern: ""
+      LogGroupName: !Ref TaskLogGroup
+
+  #
+  # Outputs
+  #
 
 Outputs:
   ApiGatewayEndpoint:
