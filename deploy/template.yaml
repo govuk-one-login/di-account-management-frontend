@@ -8,35 +8,39 @@ Description: >-
   Account Management Frontend ECS Service
 Transform:
   - AWS::Serverless-2016-10-31
-  - AWS::CodeDeployBlueGreen
 
-Hooks:
-  CodeDeployBlueGreenHook:
-    Properties:
-      TrafficRoutingConfig:
-        Type: TimeBasedCanary
-        TimeBasedCanary:
-          StepPercentage: 15
-          BakeTimeMins: 5
-      Applications:
-        - Target:
-            Type: AWS::ECS::Service
-            LogicalID: ContainerService
-          ECSAttributes:
-            TaskDefinitions:
-              - BlueTaskDefinition
-              - GreenTaskDefinition
-            TaskSets:
-              - BlueTaskSet
-              - GreenTaskSet
-            TrafficRouting:
-              ProdTrafficRoute:
-                Type: AWS::ElasticLoadBalancingV2::Listener
-                LogicalID: ApplicationLoadBalancerListenerHTTPS
-              TargetGroups:
-                - ApplicationLoadBalancerTargetGroupBlue
-                - ApplicationLoadBalancerTargetGroupGreen
-    Type: AWS::CodeDeploy::BlueGreen
+# Must deploy the container on it's own first, having a successful cluster/container spun up
+# Then only do we configure the blue/green deployment on the second run, not making any infrastructure related changes
+
+#  - AWS::CodeDeployBlueGreen
+#
+#Hooks:
+#  CodeDeployBlueGreenHook:
+#    Properties:
+#      TrafficRoutingConfig:
+#        Type: TimeBasedCanary
+#        TimeBasedCanary:
+#          StepPercentage: 15
+#          BakeTimeMins: 5
+#      Applications:
+#        - Target:
+#            Type: AWS::ECS::Service
+#            LogicalID: ContainerService
+#          ECSAttributes:
+#            TaskDefinitions:
+#              - BlueTaskDefinition
+#              - GreenTaskDefinition
+#            TaskSets:
+#              - BlueTaskSet
+#              - GreenTaskSet
+#            TrafficRouting:
+#              ProdTrafficRoute:
+#                Type: AWS::ElasticLoadBalancingV2::Listener
+#                LogicalID: ApplicationLoadBalancerListenerHTTPS
+#              TargetGroups:
+#                - ApplicationLoadBalancerTargetGroupBlue
+#                - ApplicationLoadBalancerTargetGroupGreen
+#    Type: AWS::CodeDeploy::BlueGreen
 
 Parameters:
   Environment:
@@ -72,6 +76,7 @@ Parameters:
   PermissionsBoundary:
     Description: The ARN of the permissions boundary to apply when creating IAM roles
     Type: String
+    Default: none
 
 Conditions:
   IsNotDevelopment: !Or
@@ -194,6 +199,7 @@ Resources:
           Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
+    DependsOn: ApplicationLoadBalancerListenerHTTPS
 
   ExecutionRole:
     Type: AWS::IAM::Role
