@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   validate_artifacts:
-    name: All Checks
+    name: Acceptance Checks
     uses: ./.github/workflows/ci-only.yml
     secrets: inherit
 
