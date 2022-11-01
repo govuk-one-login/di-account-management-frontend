@@ -3,6 +3,7 @@ name: "Verify & Publish"
 
 on:
   push:
+#    branches: - TODO uncomment before merge to main
     branches-ignore:
       - main
 
