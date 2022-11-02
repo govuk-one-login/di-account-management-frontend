@@ -1,0 +1,30 @@
+{% set active = activeNav if activeNav else "settings" %}
+{# TODO the first two links are pointing to pages which to not exist yet, correct them once the pages are in place #}
+{% set navigationItems = [
+  {
+    active: true if (active == "home") else false,
+    href: govAccountsUrl,
+    text: 'general.header.accounNavHomeLink' | translate
+  },{
+    active: true if (active == "settings") else false,
+    href: "/settings",
+    text: 'general.header.accountNavSettingsLink' | translate
+  },{
+    active: true if (active == "sign-out") else false,
+    href: "/sign-out",
+    text: 'general.header.signOutLink' | translate
+  }]
+%}
+<nav aria-label="Account navigation" class="account-navigation" id="account-navigation" data-module="govuk-header">
+  <div class="account-navigation__container">
+      <button type="button" class="account-navigation__button govuk-js-header-toggle" aria-controls="account-navigation" aria-label="Show or hide menu" hidden="">
+        <span class="account-navigation__button-text--hidden">{{ 'general.header.buttonTextHidden' | translate }}</span>
+        <span class="account-navigation__button-text--visible">{{ 'general.header.buttonTextVisible' | translate }}</span>
+      </button>
+      <ul id="account-navigation" class="account-navigation__list">
+        {% for item in navigationItems %}
+          <li class="account-navigation__list-item {{ 'account-navigation__list-item--active' if item.active else '' }}"><a class="account-navigation__link" href="{{item.href}}">{{item.text}}</a></li>
+        {% endfor %}
+      </ul>
+  </div>
+</nav>

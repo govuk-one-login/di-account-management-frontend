@@ -49,7 +49,12 @@
     },
     "header": {
       "homepageHref": "https://www.gov.uk/",
+      "productName": "One Login",
       "accountLink": "Your GOV.UK account",
+      "accounNavHomeLink": "Your services",
+      "accountNavSettingsLink": "Settings",
+      "buttonTextHidden": "Menu",
+      "buttonTextVisible": "Close",
       "signOutLink": "Sign out"
     },
     "footer": {
