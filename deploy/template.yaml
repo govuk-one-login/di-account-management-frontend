@@ -628,6 +628,7 @@ Resources:
   #
   # App domain
   #
+
   AppFrontCustomDomain:
     Condition: IsNotDevelopment
     Type: AWS::ApiGatewayV2::DomainName
