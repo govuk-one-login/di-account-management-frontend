@@ -2,10 +2,10 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
   This creates the necessary components to deploy the Account Management
   Frontend onto ECS Fargate.
-  Account Management Frontend can be invoked via the public API Gateway
-  on the url in the AddressFrontUrl output.
-  The ingress route in summary is: API Gateway -> VPC link -> Private ALB ->
-  Account Management Frontend ECS Service
+  Account Management Frontend can be invoked via the CloudFront Distribution, 
+  use the CloudFrontDistributionEndpoint URL exported by this stack.
+  The ingress route in summary is: 
+  CloudFront -> WAF -> API Gateway -> VPC link -> Private ALB -> ECS Fargate
 Transform:
   - AWS::Serverless-2016-10-31
 
@@ -67,6 +67,10 @@ Parameters:
     Description: The ECR container for overriding in development, if you want to target a specific version/tag
     Type: String
     Default: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:latest
+  ECSClusterMaxCapacity:
+    Description: The maximum capacity of the ECS Cluster Auto Scaling Target
+    Type: Number
+    Default: 6
   ProductTagValue:
     Description: Value for the Product Tag
     Type: String
@@ -79,6 +83,10 @@ Parameters:
     Description: Value for the Source Tag
     Type: String
     Default: alphagov/di-authentication-account-management/deploy/template.yaml
+  SystemTagValue:
+    Description: Value for the System Tag
+    Type: String
+    Default: Accounts
   PermissionsBoundary:
     Description: The ARN of the permissions boundary to apply when creating IAM roles
     Type: String
@@ -114,7 +122,7 @@ Mappings:
       AMYOURACCOUNTURL: ""
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
-      SUPPORTLANGUAGECY: "0"
+      SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.dev.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
@@ -125,7 +133,7 @@ Mappings:
       AMAPIBASEURL: "https://manage.build.account.gov.uk"
       BASEURL: "home.build.account.gov.uk"
       SESSIONEXPIRY: "7200000"
-      AMYOURACCOUNTURL: ""
+      AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
@@ -139,16 +147,16 @@ Mappings:
       AMAPIBASEURL: "https://manage.staging.account.gov.uk"
       BASEURL: "home.staging.account.gov.uk"
       SESSIONEXPIRY: "7200000"
-      AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
+      AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
-      LOGSLEVEL: "debug"
+      LOGSLEVEL: "info"
     integration:
-      NODEENV: "development"
+      NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
       AMAPIBASEURL: "https://manage.integration.account.gov.uk"
       BASEURL: "home.integration.account.gov.uk"
@@ -156,11 +164,11 @@ Mappings:
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
-      SUPPORTLANGUAGECY: "0"
+      SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
-      LOGSLEVEL: "debug"
+      LOGSLEVEL: "info"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -168,9 +176,9 @@ Mappings:
       BASEURL: "home.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
-      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
+      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
-      SUPPORTLANGUAGECY: "0"
+      SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
@@ -194,7 +202,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -203,8 +211,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
     DependsOn: ApplicationLoadBalancerListenerHTTPS
 
   ExecutionRole:
@@ -240,7 +246,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -249,8 +255,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   TaskRole:
     Type: AWS::IAM::Role
@@ -299,7 +303,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -308,8 +312,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   ECSClusterNameParameter:
     Type: AWS::SSM::Parameter
@@ -320,11 +322,10 @@ Resources:
       Value: !Ref ECSCluster
       Tags:
         Product: !Ref ProductTagValue
-        System: Accounts
+        System: !Ref SystemTagValue
         Environment: !Ref Environment
         Owner: !Ref OwnerTagValue
         Source: !Ref SourceTagValue
-        Application: Shared
 
   ContainerService:
     Type: AWS::ECS::Service
@@ -337,7 +338,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -346,8 +347,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
     DependsOn: ApplicationLoadBalancerListenerHTTPS
 
   ContainerServiceSecurityGroup:
@@ -380,7 +379,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -389,8 +388,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   #
   # Fargate tasks
@@ -409,7 +406,6 @@ Resources:
           PortMappings:
             - ContainerPort: !Ref ContainerPort
               Protocol: tcp
-          Essential: true
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -471,7 +467,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -480,8 +476,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
     DependsOn: SessionSecret
 
   TaskLogGroup:
@@ -490,6 +484,13 @@ Resources:
       LogGroupName: !Sub "/ecs/${AWS::StackName}/server"
       RetentionInDays: 1
       KmsKeyId: !GetAtt LoggingKmsKey.Arn
+
+  TaskLogGroupCSLSSubscription:
+    Type: AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
+      FilterPattern: ""
+      LogGroupName: !Ref TaskLogGroup
 
   SessionSecret:
     Type: AWS::SecretsManager::Secret
@@ -509,7 +510,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -518,8 +519,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   SecretsKmsKey:
     Type: AWS::KMS::Key
@@ -553,7 +552,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -562,8 +561,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   SecretsKmsKeyAlias:
     Type: AWS::KMS::Alias
@@ -578,16 +575,15 @@ Resources:
   ApiGateway:
     Type: AWS::ApiGatewayV2::Api
     Properties:
-      Name: !Sub "${AWS::StackName}-ApiGateway"
+      Name: !Sub "${AWS::StackName}-Api"
       ProtocolType: HTTP
       Tags:
         Product: !Ref ProductTagValue
-        System: Accounts
+        System: !Ref SystemTagValue
         Environment: !Ref Environment
         Name: !Sub "${AWS::StackName}-ApiGateway"
         Owner: !Ref OwnerTagValue
         Source: !Ref SourceTagValue
-        Application: Shared
 
   ApiGatewayIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -623,12 +619,11 @@ Resources:
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
         Product: !Ref ProductTagValue
-        System: Accounts
+        System: !Ref SystemTagValue
         Environment: !Ref Environment
         Name: !Sub "${AWS::StackName}-ApiDefaultStage"
         Owner: !Ref OwnerTagValue
         Source: !Ref SourceTagValue
-        Application: Shared
 
   #
   # App domain
@@ -642,6 +637,12 @@ Resources:
         - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Home/ARN}}"
           EndpointType: REGIONAL
           SecurityPolicy: TLS_1_2
+      Tags:
+        Product: !Ref ProductTagValue
+        System: !Ref SystemTagValue
+        Environment: !Ref Environment
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
 
   AppFrontApiRecord:
     Condition: IsNotDevelopment
@@ -652,6 +653,7 @@ Resources:
       HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
+        # see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
         HostedZoneId: "Z2FDTNDATAQYW2"
         EvaluateTargetHealth: false
 
@@ -694,7 +696,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -703,8 +705,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   ApplicationLoadBalancerTargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -730,7 +730,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -739,8 +739,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   ApplicationLoadBalancerTargetGroupGreen:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -766,7 +764,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -775,8 +773,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   ApplicationLoadBalancerListenerHTTPS:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -826,7 +822,7 @@ Resources:
       Priority: 10
 
   BlueTaskSet:
-    Type: 'AWS::ECS::TaskSet'
+    Type: AWS::ECS::TaskSet
     Properties:
       Cluster: !Ref ECSCluster
       LaunchType: FARGATE
@@ -852,7 +848,7 @@ Resources:
           TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
 
   PrimaryTaskSet:
-    Type: 'AWS::ECS::PrimaryTaskSet'
+    Type: AWS::ECS::PrimaryTaskSet
     Properties:
       Cluster: !Ref ECSCluster
       Service: !Ref ContainerService
@@ -884,7 +880,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -893,8 +889,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   ApplicationLoadBalancerSecurityGroupIngressHTTP:
     Type: AWS::EC2::SecurityGroupIngress
@@ -934,7 +928,7 @@ Resources:
     Condition: IsProduction
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
-      MaxCapacity: 4
+      MaxCapacity: !Ref ECSClusterMaxCapacity
       MinCapacity: 2
       ResourceId: !Join
         - '/'
@@ -991,13 +985,13 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/apigateway/${AWS::StackName}/access"
-      RetentionInDays: 7
+      RetentionInDays: 1
       KmsKeyId: !GetAtt LoggingKmsKey.Arn
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -1006,8 +1000,13 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
+
+  ApiGatewayAccessLogGroupCSLSSubscription:
+    Type: AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
+      FilterPattern: ""
+      LogGroupName: !Ref ApiGatewayAccessLogGroup
 
   LoggingKmsKey:
     Type: AWS::KMS::Key
@@ -1041,7 +1040,7 @@ Resources:
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
-          Value: Accounts
+          Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
@@ -1050,8 +1049,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: Application
-          Value: Shared
 
   LoggingKmsKeyAlias:
     Type: AWS::KMS::Alias
@@ -1092,15 +1089,15 @@ Resources:
         - Key: Name
           Value: !Sub "${AWS::StackName}-AccessLogs"
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
         - Key: CheckovRulesToSkip
           Value: CKV_AWS_18
 
@@ -1199,20 +1196,19 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         WebACLId: !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
-
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-CloudFrontDistribution"
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
         - Key: CheckovRulesToSkip
           Value: CKV_AWS_86
 
@@ -1285,15 +1281,15 @@ Resources:
         - Key: Name
           Value: !Sub "${AWS::StackName}-AccessLogs"
         - Key: Product
-          Value: GOV.UK Sign In
+          Value: !Ref ProductTagValue
         - Key: System
-          Value: Authentication Account Management
-        - Key: Service
-          Value: Authentication Account Management frontend
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
         - Key: Owner
-          Value: govuk-accounts-tech@digital.cabinet-office.gov.uk
+          Value: !Ref OwnerTagValue
         - Key: Source
-          Value: alphagov/di-authentication-account-management/template.yaml
+          Value: !Ref SourceTagValue
         - Key: CheckovRulesToSkip
           Value: CKV_AWS_18
 
@@ -1332,21 +1328,13 @@ Resources:
                 "aws:SecureTransport": true
 
   #
-  # Logs Subscription Filter
-  #
-
-  FrontendLogsSplunkSubscription:
-    Type: AWS::Logs::SubscriptionFilter
-    Properties:
-      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
-      FilterPattern: ""
-      LogGroupName: !Ref TaskLogGroup
-
-  #
   # Outputs
   #
 
 Outputs:
   ApiGatewayEndpoint:
-    Description: The base URI for this application.
+    Description: The URL for the application's API Gateway.
     Value: !GetAtt ApiGateway.ApiEndpoint
+  CloudFrontDistributionEndpoint:
+    Description: The Application URL.
+    Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
