@@ -108,3 +108,64 @@
 .govuk-input--disabled {
   background-color: govuk-colour("light-grey", $legacy: "grey-3");
 }
+
+.account-navigation {
+  background-color: govuk-colour("light-grey");
+  border-bottom: 1px solid $govuk-border-colour;
+  // this is a hack and not very nice
+  // the DS header comes with a non-optional border on the bottom, annoyingly 
+  margin-top: -(govuk-spacing(2));
+  position: relative;
+}
+
+.account-navigation__list {
+  @include govuk-font($size: 19);
+  @include govuk-text-colour;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-navigation__list-item {
+  display: inline-block;
+  margin: 0 govuk-spacing(4) 0 0;
+
+  @include govuk-media-query($from: tablet) {
+    margin: 0 govuk-spacing(6) 0 0;
+  }
+}
+
+.account-navigation__link {
+  @extend .govuk-link;
+  display: inline-block;
+  font-weight: bold;
+  text-decoration: none;
+  padding: govuk-spacing(3) 0;
+
+  &:visited {
+    color: $govuk-link-colour;
+    
+    &:hover {
+      color: $govuk-link-hover-colour;
+    }
+
+    &:focus {
+      color: $govuk-focus-text-colour;
+    }
+  }
+
+  .account-navigation__list-item--active & {
+    padding: govuk-spacing(3) 0 govuk-spacing(2);
+    border-bottom: 5px solid;
+    border-color: govuk-colour("blue");
+
+    &:focus {
+      border-bottom: none;
+      padding: govuk-spacing(3) 0;
+    }
+
+    &:hover {
+      border-color: $govuk-link-hover-colour;
+    }
+  }
+}

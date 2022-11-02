@@ -25,7 +25,7 @@ initChangePhoneNumber();
   "use strict";
   function appInit(trackingId, analyticsCookieDomain) {
     window.GOVUKFrontend.initAll();
-    
+
     var cookies = window.GOVSignIn.Cookies(trackingId, analyticsCookieDomain);
 
     if (cookies.hasConsentForAnalytics()) {

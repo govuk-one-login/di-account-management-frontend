@@ -1,6 +1,7 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% set newLayout = true %}
 
 {% block head %}
     <!--[if !IE 8]><!-->
@@ -33,29 +34,30 @@
 {% endblock %}
 
 {% block header %}
-    {% if hideSignOutLink %}
-        {{ govukHeader({
-           homepageUrl: 'general.header.homepageHref' | translate
-       }) }}
-
-    {% else %}
-        {{ govukHeader({
-           homepageUrl: 'general.header.homepageHref' | translate,
-           navigationClasses: "govuk-header__navigation--end",
-           navigation: [
-               {
-                 href: govAccountsUrl,
-                 text: 'general.header.accountLink' | translate,
-                 active: true
-               },
-               {
-                   href: "/sign-out",
-                   text: 'general.header.signOutLink' | translate
-               }
-             ]
-       }) }}
+  {% if newLayout %}
+    {{ govukHeader({
+      homepageUrl: 'general.header.homepageHref' | translate
+    }) }}
+    {% if not hideSignOutLink %}
+      {% include 'common/layout/navigation.njk' %}
     {% endif %}
-
+  {% else %}
+    {{ govukHeader({
+        homepageUrl: 'general.header.homepageHref' | translate,
+        navigationClasses: "govuk-header__navigation--end",
+        navigation: false if hideSignOutLink else [
+        {
+          href: govAccountsUrl,
+          text: 'general.header.accountLink' | translate,
+          active: true
+        },
+        {
+            href: "/sign-out",
+            text: 'general.header.signOutLink' | translate
+        }
+      ]
+    }) }}
+  {% endif %}
 {% endblock %}
 
 {% block main %}
