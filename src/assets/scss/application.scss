@@ -13,31 +13,6 @@ $govuk-new-link-styles: true;
   }
 }
 
-.accounts-summary-list {
-  margin-bottom: govuk-spacing(7);
-
-  .govuk-summary-list {
-    border-top: 1px solid $govuk-border-colour;
-
-    @include govuk-media-query($until: "tablet") {
-      padding-top: govuk-spacing(3);
-    }
-  }
-
-  &.accounts-summary-list--paginated {
-    margin-bottom: 0;
-
-    .govuk-summary-list__row:last-of-type {
-      border-bottom: 0;
-    }
-
-    .govuk-summary-list__row:last-of-type .govuk-summary-list__key,
-    .govuk-summary-list__row:last-of-type .govuk-summary-list__value {
-      border-bottom: 0;
-    }
-  }
-}
-
 .govuk-show-password__input-wrapper {
   display: table; // IE fallback
   display: flex;

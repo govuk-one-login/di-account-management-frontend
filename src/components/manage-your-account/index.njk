@@ -1,93 +1,78 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% set pageTitleName = 'pages.manageYourAccount.title' | translate %}
+{% set pageTitleName = 'pages.yourSettings.title' | translate %}
 
 {% set govukSummaryListArgs =
 {
-    classes:"accounts-summary-list",
     rows: [
+      {
+        key: {
+          text: 'pages.yourSettings.summaryList.email' | translate
+        },
+        value: {
+          text: email
+        },
+        actions: {
+          items: [
             {
-                key: {
-                    text: 'pages.manageYourAccount.summaryList.email' | translate
-                },
-                value: {
-                    text: email
-                },
-                actions: {
-                    items: [
-                        {
-                            href: "/enter-password?type=changeEmail",
-                            text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
-                            visuallyHiddenText: 'pages.manageYourAccount.summaryList.email' | translate
-                        }
-                    ]
-                }
-            },
-            {
-                key: {
-                    text: 'pages.manageYourAccount.summaryList.password' | translate
-                },
-                value: {
-                    text: "••••••••••••••••"
-                },
-                actions: {
-                    items: [
-                        {
-                            href: "/enter-password?type=changePassword",
-                            text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
-                            visuallyHiddenText: 'pages.manageYourAccount.summaryList.password' | translate
-                        }
-                    ]
-                }
+              href: "/enter-password?type=changeEmail",
+              text: 'pages.yourSettings.summaryList.changeAction' | translate,
+              visuallyHiddenText: 'pages.yourSettings.summaryList.email' | translate
             }
+          ]
+        }
+      },
+      {
+        key: {
+          text: 'pages.yourSettings.summaryList.password' | translate
+        },
+        value: {
+          text: "••••••••••••••••"
+        },
+        actions: {
+          items: [
+            {
+              href: "/enter-password?type=changePassword",
+              text: 'pages.yourSettings.summaryList.changeAction' | translate,
+              visuallyHiddenText: 'pages.yourSettings.summaryList.password' | translate
+            }
+          ]
+        }
+      }
 ]} %}
 
 {% if isPhoneNumberVerified %}
-    {% set govukSummaryListArgs = (govukSummaryListArgs.rows.push(            {
-                key: {
-                    text: 'pages.manageYourAccount.summaryList.phoneNumber' | translate
-                },
-                value: {
-                    text: phoneNumber
-                },
-                actions: {
-                    items: [
-                        {
-                            href: "/enter-password?type=changePhoneNumber",
-                            text: 'pages.manageYourAccount.summaryList.changeAction' | translate,
-                            visuallyHiddenText: 'pages.manageYourAccount.summaryList.phoneNumber' | translate
-                        }
-                    ]
-                }
-            }), govukSummaryListArgs) %}
+  {% set govukSummaryListArgs = (govukSummaryListArgs.rows.push({
+    key: {
+        text: 'pages.yourSettings.summaryList.phoneNumber' | translate
+    },
+    value: {
+        text: phoneNumber
+    },
+    actions: {
+      items: [
+        {
+          href: "/enter-password?type=changePhoneNumber",
+          text: 'pages.yourSettings.summaryList.changeAction' | translate,
+          visuallyHiddenText: 'pages.yourSettings.summaryList.phoneNumber' | translate
+        }
+      ]
+    }
+  }), govukSummaryListArgs) %}
 {% endif %}
 
 {% block content %}
-    <div class="govuk-grid-row" id="your-account">
-        <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
-            <h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ 'pages.manageYourAccount.header' | translate }}</h1>
-            <p class="govuk-body">{{ 'pages.manageYourAccount.signedInStatus' | translate }}
-                <strong>{{ email }}</strong>
-            </p>
-            <hr class="govuk-section-break govuk-section-break--m">
-            <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.accountDetails' | translate }}</h2>
+  <div class="govuk-grid-row" id="your-account">
+    <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
+      <h1 class="govuk-heading-xl">{{ 'pages.yourSettings.header' | translate }}</h1>
 
-            {{ govukSummaryList(govukSummaryListArgs) }}
+      <h2 class="govuk-heading-m">{{ 'pages.yourSettings.accountDetails' | translate }}</h2>
 
-            <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.manageEmailSubscriptions.heading' | translate }}</h2>
-            <p class="govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.info' | translate }}</p>
-            <a href="{{ manageEmailsLink }}" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.link' | translate }}</a>
-            <hr class="govuk-section-break govuk-section-break--m">
-            <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.deleteAccount.heading' | translate }}</h2>
-            <p class="govuk-body">{{ 'pages.manageYourAccount.deleteAccount.info' | translate }}</p>
-            <a href="/enter-password?type=deleteAccount" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.deleteAccount.link' | translate }}</a>
-            <hr class="govuk-section-break govuk-section-break--m">
-            <div class="information-box">
-                <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.aboutAccounts.heading' | translate }}</h2>
-                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph1' | translate }}</p>
-                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph2' | translate }}</p>
-                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph3' | translate }}</p>
-            </div>
-        </div>
+      {{ govukSummaryList(govukSummaryListArgs) }}
+      <h2 class="govuk-heading-m">{{ 'pages.yourSettings.deleteAccount.heading' | translate }}</h2>
+      <p class="govuk-body">{{ 'pages.yourSettings.deleteAccount.info' | translate }}</p>
+      <a href="/enter-password?type=deleteAccount" class="govuk-link govuk-body">{{ 'pages.yourSettings.deleteAccount.link' | translate }}</a>
+      <hr class="govuk-section-break govuk-section-break--m">
     </div>
+  </div>
 {% endblock %}

@@ -121,10 +121,9 @@
     }
   },
   "pages": {
-    "manageYourAccount": {
-      "title": "Eich cyfrif GOV.UK",
-      "header": "Eich cyfrif GOV.UK",
-      "signedInStatus": "Rydych wedi mewngofnodi fel",
+    "yourSettings": {
+      "title": "Settings",
+      "header": "Settings",
       "accountDetails": "Eich manylion mewngofnodi",
       "summaryList": {
         "email": "Cyfeiriad e-bost",
@@ -132,21 +131,10 @@
         "phoneNumber": "Rhif ffôn",
         "changeAction": "Newid"
       },
-      "manageEmailSubscriptions": {
-        "heading": "Tanysgrifiadau e-bost GOV.UK",
-        "link": "Rheoli eich tanysgrifiadau e-bost GOV.UK",
-        "info": "Gweld a rheoli’r e-byst rydych yn eu cael am ddiweddariadau i dudalennau ar GOV.UK."
-      },
       "deleteAccount": {
-        "heading": "Dileu eich cyfrif GOV.UK",
-        "link": "Dileu eich cyfrif GOV.UK",
-        "info": "Bydd hyn yn dileu eich cyfrif GOV.UK yn barhaol. Ni fyddwch bellach yn gallu mewngofnodi i’r gwasanaethau rydych wedi’u defnyddio gyda’ch cyfrif."
-      },
-      "aboutAccounts": {
-        "heading": "Am gyfrifon GOV.UK",
-        "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gydag ychydig o wasanaethau.",
-        "paragraph2": "Ar hyn o bryd mae cyfrifon GOV.UK ar wahân i gyfrifon eraill y llywodraeth (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
-        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i fewngofnodi i’r rhan fwyaf o wasanaethau ar GOV.UK."
+        "heading": "Delete your GOV.UK One Login",
+        "link": "Delete your GOV.UK One Login",
+        "info": "This will permanently delete your GOV.UK One Login. You’ll no longer be able to sign in to the services you’ve used with it."
       }
     },
     "enterPassword": {

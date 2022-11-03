@@ -121,10 +121,9 @@
     }
   },
   "pages": {
-    "manageYourAccount": {
-      "title": "Your GOV.UK account",
-      "header": "Your GOV.UK account",
-      "signedInStatus": "You’re signed in as",
+    "yourSettings": {
+      "title": "Settings",
+      "header": "Settings",
       "accountDetails": "Your sign in details",
       "summaryList": {
         "email": "Email address",
@@ -132,21 +131,10 @@
         "phoneNumber": "Phone number",
         "changeAction": "Change"
       },
-      "manageEmailSubscriptions": {
-        "heading": "GOV.UK email subscriptions",
-        "link": "Manage your GOV.UK email subscriptions",
-        "info": "See and manage the emails you get about updates to pages on GOV.UK."
-      },
       "deleteAccount": {
-        "heading": "Delete your GOV.UK account",
-        "link": "Delete your GOV.UK account",
-        "info": "This will permanently delete your GOV.UK account. You’ll no longer be able to sign in to the services you’ve used with your account."
-      },
-      "aboutAccounts": {
-        "heading": "About GOV.UK accounts",
-        "paragraph1": "GOV.UK accounts are new. At the moment you can only use your GOV.UK account with a few services.",
-        "paragraph2": "GOV.UK accounts are currently separate from other government accounts (for example Government Gateway or Universal Credit).",
-        "paragraph3": "In the future, you’ll be able to use your GOV.UK account to sign in to most services on GOV.UK."
+        "heading": "Delete your GOV.UK One Login",
+        "link": "Delete your GOV.UK One Login",
+        "info": "This will permanently delete your GOV.UK One Login. You’ll no longer be able to sign in to the services you’ve used with it."
       }
     },
     "enterPassword": {
