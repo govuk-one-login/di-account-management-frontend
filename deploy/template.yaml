@@ -1334,7 +1334,7 @@ Resources:
 
 Outputs:
   ApiGatewayEndpoint:
-    Description: The URL for the application's API Gateway.
+    Description: The URL for the application's API Gateway Endpoint.
     Value: !GetAtt ApiGateway.ApiEndpoint
   CloudFrontDistributionEndpoint:
     Description: The Application URL.
