@@ -32,8 +32,9 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
 
 async function getJWKS(config: OIDCConfig) {
   const issuer = await cachedIssuer(config.idp_url);
-
-  return createRemoteJWKSet(new URL(issuer.metadata.jwks_uri));
+  return createRemoteJWKSet(new URL(issuer.metadata.jwks_uri), {
+    headers: { "User-Agent": '"AccountManagement/1.0.0"' },
+  });
 }
 
 const cached = pMemoize(getOIDCClient, { maxAge: 43200000 });
