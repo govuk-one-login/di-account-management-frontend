@@ -73,7 +73,7 @@ export async function globalLogoutPost(
           sessionId
         );
       });
-
+    res.cookie("lo", "true");
     res.send(HTTP_STATUS_CODES.OK);
     return;
   }
