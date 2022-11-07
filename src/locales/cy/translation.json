@@ -149,6 +149,45 @@
         "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i fewngofnodi i’r rhan fwyaf o wasanaethau ar GOV.UK."
       }
     },
+    "yourServices": {
+      "title": "Your services",
+      "header": "Your services",
+      "signedInStatus": "You’re signed in as",
+      "accountsList": {
+        "heading": "Your accounts"
+      },
+      "servicesList": {
+        "heading": "Other services you’ve used"
+      },
+      "informationBox": {
+        "heading": "Services you can use with your GOV.UK One Login",
+        "paragraph1": "You can use your GOV.UK One Login to access some government services.",
+        "paragraph2": "There are some government services that you cannot use with your GOV.UK One Login yet (for example Universal Credit).",
+        "paragraph3": "In the future, you'll be able to use your GOV.UK One Login to access all services on GOV.UK."
+      },
+      "clientRegistry": {
+        "sub1234": {
+          "header": "Childcare service",
+          "description": "Manage your Tax-Free Childcare and 30 hours free childcare.",
+          "link_text": "Go to your childcare account",
+          "link_href": "http://"
+        },
+        "sub4567": {
+          "header": "Personal tax account",
+          "description": "Check your records and manage your details with HM Revenue and Customs (HMRC).",
+          "link_text": "Go to your personal tax account",
+          "link_href": "http://"
+        },
+        "sub8910": {
+          "link_text": "Find a lost teacher reference number (TRN)",
+          "link_href": "http://"
+        },
+        "sub1112": {
+          "link_text": "Apply for a passport",
+          "link_href": "http://"
+        }
+      }
+    },
     "enterPassword": {
       "title": "Rhowch eich cyfrinair",
       "changeEmail": {
