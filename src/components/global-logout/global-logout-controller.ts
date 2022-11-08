@@ -64,16 +64,15 @@ export async function globalLogoutPost(
   const token = await verifyLogoutToken(req);
 
   if (token && validateLogoutTokenClaims(token, req)) {
-    req.app.locals.subjectSessionIndexService
-      .getSessions(token.sub)
-      .forEach((sessionId: string) => {
-        req.app.locals.sessionStore.destroy(sessionId);
-        req.app.locals.subjectSessionIndexService.removeSession(
-          token.sub,
-          sessionId
-        );
-      });
-
+      await req.app.locals.subjectSessionIndexService.getSessions(token.sub).then(
+          (sessions: string[]) => sessions.forEach((sessionId: string) => {
+            req.app.locals.sessionStore.destroy(sessionId);
+            req.app.locals.subjectSessionIndexService.removeSession(
+                token.sub,
+                sessionId
+            );
+          })
+     )
     res.send(HTTP_STATUS_CODES.OK);
     return;
   }
