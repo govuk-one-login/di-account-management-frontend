@@ -46,7 +46,7 @@ describe("global logout controller", () => {
           },
           subjectSessionIndexService: {
             removeSession: sandbox.fake(),
-            getSessions: sandbox.stub().returns(["session-1", "session-2"]),
+            getSessions: sandbox.stub().resolves(["session-1", "session-2"]),
           },
         },
       },
