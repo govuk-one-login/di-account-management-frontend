@@ -23,7 +23,7 @@ import { GetKeyFunction } from "jose/dist/types/types";
 describe("global logout controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
-  let res: any;
+  let res: Partial<Response>;
   let issuerJWKS: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
   let keySet: GenerateKeyPairResult;
 
@@ -97,12 +97,6 @@ describe("global logout controller", () => {
     res = {
       status: sandbox.stub().returnsThis(),
       send: sandbox.fake(),
-      mockCookies: {
-        lo: "false",
-      },
-      cookie: function (name: string, value: string) {
-        this.mockCookies[name] = value;
-      },
     };
   });
 
@@ -118,7 +112,6 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token not a valid JWT", async () => {
@@ -132,7 +125,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token is present but not signed", async () => {
@@ -149,7 +141,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token signed by wrong key", async () => {
@@ -169,7 +160,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token contains invalid issuer", async () => {
@@ -187,7 +177,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token contains invalid audience", async () => {
@@ -204,7 +193,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token is too old", async () => {
@@ -221,7 +209,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token does not contain a subject", async () => {
@@ -237,7 +224,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token is blank", async () => {
@@ -246,7 +232,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token does not contain correct event", async () => {
@@ -264,7 +249,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token does not any events", async () => {
@@ -279,7 +263,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token contains invalid event", async () => {
@@ -297,7 +280,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 401 if logout_token contains valid but non-empty event", async () => {
@@ -316,7 +298,6 @@ describe("global logout controller", () => {
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       expect(req.log.error).to.have.been.called;
-      expect(res.mockCookies.lo).to.equal("false");
     });
 
     it("should return 200 if logout_token is present and valid", async () => {
@@ -342,7 +323,6 @@ describe("global logout controller", () => {
           .getCall(1)
           .calledWith("123456", "session-2")
       ).eq(true);
-      expect(res.mockCookies.lo).to.equal("true");
     });
   });
 });
