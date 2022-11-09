@@ -400,7 +400,8 @@ Resources:
         - Essential: true
           Image: !If
             - IsNotDevelopment
-            - "CONTAINER-IMAGE-PLACEHOLDER"
+#            - "CONTAINER-IMAGE-PLACEHOLDER"
+            - 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:40eb55255f9ce25334cf959ddf9391a493b6f64c
             - !Ref DevFrontendContainer
           Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
@@ -615,7 +616,18 @@ Resources:
       StageName: "$default"
       AutoDeploy: true
       AccessLogSettings:
-        Format: "$context.requestId $context.httpMethod $context.path"
+        Format: >-
+          {
+          "requestId":"$context.requestId",
+          "ip": "$context.identity.sourceIp",
+          "requestTime":"$context.requestTime",
+          "httpMethod":"$context.httpMethod",
+          "path": "$context.path",
+          "routeKey":"$context.routeKey",
+          "status":"$context.status",
+          "protocol":"$context.protocol",
+          "responseLength":"$context.responseLength"
+          }
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
         Product: !Ref ProductTagValue
@@ -1327,6 +1339,74 @@ Resources:
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
                 "aws:SecureTransport": true
+
+  #
+  # Metrics and Alarms
+  #
+
+  # Metric Filter and Alarm for API Gateway
+  ApiGatewayStatusErrorMetricFilter:
+    Condition: IsNotDevelopment
+    DependsOn:
+      - ApiGateway
+      - ApiGatewayStatusErrorAlarm
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: >-
+        {
+          $.status = 5*
+        }
+      LogGroupName: !Ref ApiGatewayAccessLogGroup
+      MetricTransformations:
+        - MetricValue: "1"
+          MetricName: "ApiGatewayStatusError"
+          MetricNamespace: "ApiGateway/Access"
+
+  ApiGatewayStatusErrorAlarm:
+    Condition: IsNotDevelopment
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ApiGatewayStatusErrorAlarm"
+      AlarmDescription: "AAM Frontend API Gateway Status 5** Error Alarm"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      Statistic: Sum
+      Period: 86400
+      Threshold: 1
+      MetricName: "ApiGatewayStatusError"
+      Namespace: "ApiGateway/Access"
+
+  # Metric Filter and Alarm for ECS Cluster
+  ECSServerStatusErrorMetricFilter:
+    Condition: IsNotDevelopment
+    DependsOn:
+      - BlueTaskDefinition
+      - ECSServerStatusErrorAlarm
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: >-
+        {
+          $.res.status = 5*
+        }
+      LogGroupName: !Ref TaskLogGroup
+      MetricTransformations:
+        - MetricValue: "1"
+          MetricName: "ECSServerStatusError"
+          MetricNamespace: "ECS/Server"
+
+  ECSServerStatusErrorAlarm:
+    Condition: IsNotDevelopment
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ECSServerStatusErrorAlarm"
+      AlarmDescription: "AAM ECS Server Status 5** Error Alarm"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      Statistic: Sum
+      Period: 86400
+      Threshold: 1
+      MetricName: "ECSServerStatusError"
+      Namespace: "ECS/Server"
 
   #
   # Outputs
