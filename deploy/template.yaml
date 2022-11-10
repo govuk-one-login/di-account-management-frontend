@@ -630,7 +630,6 @@ Resources:
   # App domain
   #
   AppFrontCustomDomain:
-    Condition: IsNotDevelopment
     Type: AWS::ApiGatewayV2::DomainName
     Properties:
       DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
@@ -646,7 +645,6 @@ Resources:
         Source: !Ref SourceTagValue
 
   AppFrontApiRecord:
-    Condition: IsNotDevelopment
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
@@ -659,7 +657,6 @@ Resources:
         EvaluateTargetHealth: false
 
   AppFrontApiMapping:
-    Condition: IsNotDevelopment
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties:
       DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
@@ -1252,7 +1249,6 @@ Resources:
             all
 
   CloudFrontLogsBucket:
-    Condition: IsNotDevelopment
     Type: AWS::S3::Bucket
     Properties:
       # checkov:skip=CKV_AWS_18:This is the access logs bucket. It should not log itself.
@@ -1300,7 +1296,6 @@ Resources:
           Value: CKV_AWS_18
 
   CloudFrontLogsBucketPolicy:
-    Condition: IsNotDevelopment
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref CloudFrontLogsBucket
