@@ -12,16 +12,23 @@ permissions:
   contents: read
 
 jobs:
-  validate_artifacts:
+  validate_application:
     name: Acceptance Checks
-    uses: ./.github/workflows/ci-only.yml
+    uses: ./.github/workflows/build-test-application.yml
+    secrets: inherit
+
+  validate_deployment:
+    name: Deployment Template Checks
+    uses: ./.github/workflows/validate-sam-template.yml
     secrets: inherit
 
   publish_artifacts:
     name: "Publish Image & Template to Dev"
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    needs: validate_artifacts
+    needs:
+      - validate_application
+      - validate_deployment
     steps:
       - uses: actions/checkout@v3
 
