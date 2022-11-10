@@ -115,7 +115,7 @@ Mappings:
     ### These environment variables are referenced further down the file.
     ### Please ensure that any variables defined for an environment are defined for _all_ environments.
     dev:
-      NODEENV: "development"
+      NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
       AMAPIBASEURL: "https://manage.staging.account.gov.uk"
       BASEURL: "home.dev.account.gov.uk"
