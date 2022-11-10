@@ -400,8 +400,7 @@ Resources:
         - Essential: true
           Image: !If
             - IsNotDevelopment
-#            - "CONTAINER-IMAGE-PLACEHOLDER"
-            - 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:40eb55255f9ce25334cf959ddf9391a493b6f64c
+            - "CONTAINER-IMAGE-PLACEHOLDER"
             - !Ref DevFrontendContainer
           Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
