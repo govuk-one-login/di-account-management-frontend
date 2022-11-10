@@ -66,7 +66,8 @@ Parameters:
   DevFrontendContainer:
     Description: The ECR container for overriding in development, if you want to target a specific version/tag
     Type: String
-    Default: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:latest
+    # ECR Repo for dev is in the dev account - see dev envs account-mgmt-frontend-image cfn stack for details
+    Default: 985326104449.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-4wdxqsyli0gd:latest
   ECSClusterMaxCapacity:
     Description: The maximum capacity of the ECS Cluster Auto Scaling Target
     Type: Number
@@ -115,15 +116,15 @@ Mappings:
     ### Please ensure that any variables defined for an environment are defined for _all_ environments.
     dev:
       NODEENV: "development"
-      APIBASEURL: "https://oidc.dev.account.gov.uk"
-      AMAPIBASEURL: "https://manage.dev.account.gov.uk"
+      APIBASEURL: "https://oidc.staging.account.gov.uk"
+      AMAPIBASEURL: "https://manage.staging.account.gov.uk"
       BASEURL: "home.dev.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
-      AUTHFRONTENDURL: "signin.dev.account.gov.uk"
+      AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGSLEVEL: "debug"
