@@ -3,7 +3,8 @@ name: "Verify & Publish"
 
 on:
   push:
-    branches:
+#    branches: - TODO uncomment before merge to main
+    branches-ignore:
       - main
   workflow_dispatch:
 
