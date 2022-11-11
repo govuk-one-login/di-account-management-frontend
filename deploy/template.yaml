@@ -400,7 +400,8 @@ Resources:
         - Essential: true
           Image: !If
             - IsNotDevelopment
-            - "CONTAINER-IMAGE-PLACEHOLDER"
+#            - "CONTAINER-IMAGE-PLACEHOLDER"
+            - 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:98dbde4133f2740a1d0c60e3ceb47611bc3a9727
             - !Ref DevFrontendContainer
           Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
@@ -625,7 +626,8 @@ Resources:
           "routeKey":"$context.routeKey",
           "status":"$context.status",
           "protocol":"$context.protocol",
-          "responseLength":"$context.responseLength"
+          "responseLength":"$context.responseLength",
+          "responseLatency":"$context.responseLatency"
           }
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
@@ -1344,68 +1346,215 @@ Resources:
   #
 
   # Metric Filter and Alarm for API Gateway
-  ApiGatewayStatusErrorMetricFilter:
-    Condition: IsNotDevelopment
-    DependsOn:
-      - ApiGateway
-      - ApiGatewayStatusErrorAlarm
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      FilterPattern: >-
-        {
-          $.status = 5*
-        }
-      LogGroupName: !Ref ApiGatewayAccessLogGroup
-      MetricTransformations:
-        - MetricValue: "1"
-          MetricName: "ApiGatewayStatusError"
-          MetricNamespace: "ApiGateway/Access"
 
-  ApiGatewayStatusErrorAlarm:
+  # 400
+#  ApiGateway4xxStatusMetricFilter:
+#    Condition: IsNotDevelopment
+#    DependsOn:
+#      - ApiGateway
+#      - ApiGateway4xxStatusAlarm
+#    Type: AWS::Logs::MetricFilter
+#    Properties:
+#      FilterPattern: >-
+#        {
+#          $.status = 5*
+#        }
+#      LogGroupName: !Ref ApiGatewayAccessLogGroup
+#      MetricTransformations:
+#        - MetricValue: "1"
+#          MetricName: "ApiGateway4xxStatusError"
+#          MetricNamespace: "ApiGateway/Access"
+
+  ApiGateway4xxStatusAlarm:
     Condition: IsNotDevelopment
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmName: !Sub "${AWS::StackName}-ApiGatewayStatusErrorAlarm"
-      AlarmDescription: "AAM Frontend API Gateway Status 5** Error Alarm"
+      AlarmName: !Sub "${AWS::StackName}-ApiGateway4xxStatusAlarm"
+      AlarmDescription: "AAM Frontend API Gateway Status 4xx Error Alarm"
+      ActionsEnabled: false  # disabled until we're ready to invoke alarm actions
+      #      AlarmActions:
+      #        - !ImportValue sns-topic-placeholder
+      #      OKActions:
+      #        - !ImportValue sns-topic-placeholder
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 1
-      Statistic: Sum
-      Period: 86400
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 2
       Threshold: 1
-      MetricName: "ApiGatewayStatusError"
-      Namespace: "ApiGateway/Access"
+      TreatMissingData: missing
+      Metrics:
+        - Id: errorThreshold
+          Label: errorThreshold
+          ReturnData: true
+          Expression: IF(invocations<2 || error<2,0,errorPercentage)
+        - Id: invocations
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Count
+              Dimensions:
+                - Name: ApiName
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+        - Id: errorPercentage
+          Label: errorPercentage
+          ReturnData: false
+          Expression: (error/invocations)*100
+        - Id: error
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: 4xx
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+
+  # 500
+#  ApiGateway5xxStatusMetricFilter:
+#    Condition: IsNotDevelopment
+#    DependsOn:
+#      - ApiGateway
+#      - ApiGateway5xxStatusAlarm
+#    Type: AWS::Logs::MetricFilter
+#    Properties:
+#      FilterPattern: >-
+#        {
+#          $.status = 5*
+#        }
+#      LogGroupName: !Ref ApiGatewayAccessLogGroup
+#      MetricTransformations:
+#        - MetricValue: "1"
+#          MetricName: "ApiGateway5xxStatusError"
+#          MetricNamespace: "ApiGateway/Access"
+
+  ApiGateway5xxStatusAlarm:
+    Condition: IsNotDevelopment
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ApiGateway5xxStatusAlarm"
+      AlarmDescription: "AAM Frontend API Gateway Status 5xx Error Alarm"
+      ActionsEnabled: false  # disabled until we're ready to invoke alarm actions
+      #      AlarmActions:
+      #        - !ImportValue sns-topic-placeholder
+      #      OKActions:
+      #        - !ImportValue sns-topic-placeholder
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 2
+      Threshold: 1
+      TreatMissingData: missing
+      Metrics:
+        - Id: errorThreshold
+          Label: errorThreshold
+          ReturnData: true
+          Expression: IF(invocations<10,0,errorPercentage)
+        - Id: invocations
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Count
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+        - Id: errorPercentage
+          Label: errorPercentage
+          ReturnData: false
+          Expression: (error/invocations)*100
+        - Id: error
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: 5xx
+              Dimensions:
+                - Name: ApiName
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+
+  # Latency
+  ApiGatewayLatencyAlarm:
+    Condition: IsNotDevelopment
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ApiGatewayLatencyAlarm"
+      AlarmDescription: "Trigger the alarm if response latency exceeds 2.5 seconds with the minimum of 10 invocations in 2 out of the last 5 minutes"
+      ActionsEnabled: false  # disabled until we're ready to invoke alarm actions
+#      AlarmActions:
+#        - !ImportValue sns-topic-placeholder
+#      OKActions:
+#        - !ImportValue sns-topic-placeholder
+      ComparisonOperator: GreaterThanThreshold
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 2
+      Threshold: 2500
+      TreatMissingData: missing
+      Metrics:
+        - Id: safeLatency
+          Label: safeLatency
+          ReturnData: true
+          Expression: IF(invocations<10,0,maxLatency)
+        - Id: invocations
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Count
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+        - Id: maxLatency
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Latency
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Maximum
 
   # Metric Filter and Alarm for ECS Cluster
-  ECSServerStatusErrorMetricFilter:
-    Condition: IsNotDevelopment
-    DependsOn:
-      - BlueTaskDefinition
-      - ECSServerStatusErrorAlarm
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      FilterPattern: >-
-        {
-          $.res.status = 5*
-        }
-      LogGroupName: !Ref TaskLogGroup
-      MetricTransformations:
-        - MetricValue: "1"
-          MetricName: "ECSServerStatusError"
-          MetricNamespace: "ECS/Server"
-
-  ECSServerStatusErrorAlarm:
-    Condition: IsNotDevelopment
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: !Sub "${AWS::StackName}-ECSServerStatusErrorAlarm"
-      AlarmDescription: "AAM ECS Server Status 5** Error Alarm"
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 1
-      Statistic: Sum
-      Period: 86400
-      Threshold: 1
-      MetricName: "ECSServerStatusError"
-      Namespace: "ECS/Server"
+#  ECSServerStatusErrorMetricFilter:
+#    Condition: IsNotDevelopment
+#    DependsOn:
+#      - BlueTaskDefinition
+#      - ECSServerStatusErrorAlarm
+#    Type: AWS::Logs::MetricFilter
+#    Properties:
+#      FilterPattern: >-
+#        {
+#          $.res.status = 5*
+#        }
+#      LogGroupName: !Ref TaskLogGroup
+#      MetricTransformations:
+#        - MetricValue: "1"
+#          MetricName: "ECSServerStatusError"
+#          MetricNamespace: "ECS/Server"
+#
+#  ECSServerStatusErrorAlarm:
+#    Condition: IsNotDevelopment
+#    Type: AWS::CloudWatch::Alarm
+#    Properties:
+#      AlarmName: !Sub "${AWS::StackName}-ECSServerStatusErrorAlarm"
+#      AlarmDescription: "AAM ECS Server Status 5** Error Alarm"
+#      ComparisonOperator: GreaterThanOrEqualToThreshold
+#      EvaluationPeriods: 1
+#      Statistic: Sum
+#      Period: 86400
+#      Threshold: 1
+#      MetricName: "ECSServerStatusError"
+#      Namespace: "ECS/Server"
 
   #
   # Outputs
