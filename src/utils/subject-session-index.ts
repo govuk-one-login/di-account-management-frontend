@@ -11,18 +11,17 @@ export function subjectSessionIndex(
     redisClient.ZADD(subjectIdKey(subjectId), now, sessionId);
   };
 
-  const getSessions = (subjectId: string): string[] => {
-    const now = new Date().getTime();
-    purgeOld(subjectId, now);
-    let sessions: string[] = [];
-    redisClient.ZRANGE(subjectIdKey(subjectId), 0, now, (err, reply) => {
-      if (err) {
-        throw err;
-      }
-      return (sessions = reply);
+  const getSessions = (subjectId: string): Promise<string[]> => {
+    return new Promise((resolve, reject) => {
+      const now = new Date().getTime();
+      purgeOld(subjectId, now);
+      redisClient.ZRANGE(subjectIdKey(subjectId), 0, now, (err, reply) => {
+        if (err) {
+          reject(err);
+        }
+        return resolve(reply);
+      });
     });
-
-    return sessions;
   };
 
   const removeSession = (subjectId: string, sessionId: string): void => {

@@ -40,5 +40,5 @@ export interface Error {
 export interface SubjectSessionIndexService {
   addSession: (subjectId: string, sessionId: string) => void;
   removeSession: (subjectId: string, sessionId: string) => void;
-  getSessions: (subjectId: string) => string[];
+  getSessions: (subjectId: string) =>  Promise<string[]>;
 }

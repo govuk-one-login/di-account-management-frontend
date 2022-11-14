@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - main
+<<<<<<< HEAD
+=======
+  workflow_dispatch:
+>>>>>>> ddf218f87e3210c8ed0545d166f50ab614274d11
 
 permissions:
   id-token: write

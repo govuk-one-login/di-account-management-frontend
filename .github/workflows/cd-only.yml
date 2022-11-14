@@ -1,0 +1,72 @@
+---
+name: "Verify & Publish to Dev"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate_application:
+    name: Acceptance Checks
+    uses: ./.github/workflows/build-test-application.yml
+    secrets: inherit
+
+  validate_deployment:
+    name: Deployment Template Checks
+    uses: ./.github/workflows/validate-sam-template.yml
+    secrets: inherit
+
+  publish_artifacts:
+    name: "Publish Image & Template to Dev"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs:
+      - validate_application
+      - validate_deployment
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set tag
+        id: vars
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
+      - name: Get current date
+        id: datetime
+        run: echo "date=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
+
+      - name: Set up AWS creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build & Publish Docker Image as latest
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Upload SAM Template to Bucket
+        id: publish-template
+        env:
+          ARTIFACT_BUCKET_NAME: ${{ secrets.DEV_ARTIFACT_SOURCE_BUCKET_NAME }}
+        run: |
+          echo "Running sam build on template file"
+          sam build --template-file=./deploy/template.yaml
+          mv .aws-sam/build/template.yaml cf-template.yaml
+          zip template.zip cf-template.yaml
+          aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GITHUB_SHA"        
+
+      - name: "Delegated Deployment via AWS CodeDeploy"
+        run: echo "Deployment has been delegated to AWS CodeDeploy"

@@ -68,7 +68,21 @@
       "privacy": {
         "pageTitle": "Privacy notice",
         "linkText": "Privacy notice"
+      },
+      "copyright": {
+        "linkText": "© Crown copyright"
+      },
+      "contentLicence": {
+        "linkText": "All content is available under the <a class=\"govuk-footer__link\" href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/\" rel=\"licence\">Open Government Licence v3.0</a>, except where otherwise stated"
       }
+    },
+    "showPassword": {
+      "show": "Show",
+      "hide": "Hide",
+      "showFullText": "Show password",
+      "hideFullText": "Hide password",
+      "announceShown": "Your password is shown",
+      "announceHidden": "Your password is hidden"
     }
   },
   "error": {
@@ -236,7 +250,7 @@
         "summaryText": "Problems with the code?",
         "text1": "We can ",
         "sendCodeLinkText": "send the code again",
-        "sendCodeLinkHref": "/request-new-email-code",
+        "sendCodeLinkHref": "/resend-email-code",
         "text2": " or you can ",
         "changeEmailLinkText": "use a different email address"
       },
@@ -330,6 +344,20 @@
       "paragraph2": "Or ",
       "govukLinkText": "go to the GOV.UK homepage",
       "govukLinkHref": "https://www.gov.uk/"
+    },
+    "resendMfaCode": {
+      "title": "Get security code",
+      "header": "Get security code",
+      "continue": "Get security code",
+      "message": "Text messages can sometimes take a few minutes to arrive.",
+      "phoneNumber": {
+        "default": "We will send a code to the phone number linked to your account",
+        "isResendCodeRequest": "We will send a code to: [mobile]."
+      },
+      "email": {
+        "recipientMessage": "We will send a code to: ",
+        "paragraph": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder."
+      }
     }
   }
 }
