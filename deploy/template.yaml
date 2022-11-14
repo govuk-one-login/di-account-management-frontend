@@ -1354,7 +1354,7 @@ Resources:
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGateway4xxStatusAlarm"
       AlarmDescription: "AAM Frontend API Gateway Status 4xx Error Alarm"
-      ActionsEnabled: true  # disabled until we're ready to invoke alarm actions
+      ActionsEnabled: false  # disabled until we're ready to invoke alarm actions
       #      AlarmActions:
       #        - !ImportValue sns-topic-placeholder
       #      OKActions:
