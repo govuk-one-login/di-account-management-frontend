@@ -1,0 +1,37 @@
+---
+name: "Verify & Publish"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate_artifacts:
+    name: Acceptance Checks
+    uses: ./.github/workflows/ci-only.yml
+    secrets: inherit
+
+  publish_artifacts:
+    name: "Publish Image & Template"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: validate_artifacts
+    steps:
+      - name: "Push signed image to ECR, updated SAM template wih image then upload it to the S3 Artifact Bucket"
+        uses: alphagov/di-devplatform-upload-action-ecr@1.0.1
+        with:
+          artifact-bucket-name: ${{ secrets.ARTIFACT_SOURCE_BUCKET_NAME }}
+          container-sign-kms-key-arn: ${{ secrets.CONTAINER_SIGN_KMS_KEY }}
+          working-directory: .
+          template-file: deploy/template.yaml
+          role-to-assume-arn: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
+          ecr-repo-name: ${{ secrets.ECR_REPOSITORY }}
+
+      - name: "Delegated Deployment via AWS CodeDeploy"
+        run: echo "Deployment has been delegated to AWS CodeDeploy"

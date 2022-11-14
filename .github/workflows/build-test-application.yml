@@ -1,0 +1,91 @@
+---
+name: "Build & Test Application"
+
+# Triggered when:
+#   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
+#   - invoked by another workflow.
+on:
+  push:
+    paths:
+      - "src/**"
+      - "test/**"
+      - "@types/**"
+      - "package.json"
+      - "yarn.lock"
+      - "tsconfig.json"
+      - ".github/workflows/build-test-application.yml"
+    branches-ignore:
+      - main
+  workflow_call:
+
+jobs:
+  build_test_application:
+    name: "Build & Test Application"
+    runs-on: ubuntu-latest
+    services:
+      localstack:
+        image: localstack/localstack:0.12.15
+        env:
+          SERVICES: kms
+          HOSTNAME_EXTERNAL: localhost
+          DEFAULT_REGION: eu-west-2
+          DEBUG: 1
+        ports:
+          - 4566:4566
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.17.0
+
+      - name: Install dependencies defined in yarn.lock
+        run: yarn install --frozen-lockfile
+
+      - name: Build app
+        run: yarn build
+
+      - name: Run unit tests
+        run: yarn test:unit
+
+      - name: Run integration tests
+        run: yarn test:integration
+
+      - name: Run lint
+        run: yarn lint
+    env:
+      ENVIRONMENT: development
+      API_BASE_URL: http://localhost:6000/api
+      AM_API_BASE_URL: http://localhost:5000/api
+      SUPPORT_INTERNATIONAL_NUMBERS: 1
+      GOV_ACCOUNTS_PUBLISHING_API_URL: http://localhost:1000/api
+      GOV_ACCOUNTS_PUBLISHING_API_TOKEN: token
+      AM_YOUR_ACCOUNT_URL: some url
+      OIDC_CLIENT_ID: test
+      OIDC_CLIENT_SCOPES: openid
+      SESSION_SECRET: secret
+      SESSION_EXPIRY: 3600000
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+  code_analysis:
+    runs-on: ubuntu-latest
+    name: "Code Analysis"
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
