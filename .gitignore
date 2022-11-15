@@ -132,10 +132,7 @@ ci/terraform/*.plan
 //this gets added by the design system
 src/assets/javascript/all.js
 
-# SAM related files
-<<<<<<< HEAD
-deploy/.aws-sam
+# SAM related files-sam
 =======
 deploy/.aws-sam
 /.aws-sam/
->>>>>>> ddf218f87e3210c8ed0545d166f50ab614274d11
