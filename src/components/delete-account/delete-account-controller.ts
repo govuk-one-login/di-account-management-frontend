@@ -51,17 +51,7 @@ export function deleteAccountPost(
         getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
     });
 
-    await req.app.locals.subjectSessionIndexService
-      .getSessions(req.session.user.subjectId)
-      .then((sessions: string[]) =>
-        sessions.forEach((sessionId: string) => {
-          req.app.locals.sessionStore.destroy(sessionId);
-          req.app.locals.subjectSessionIndexService.removeSession(
-            req.session.user.subjectId,
-            sessionId
-          );
-        })
-      );
+    req.session.destroy();
 
     return res.redirect(logoutUrl);
   };
