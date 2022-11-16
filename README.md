@@ -170,7 +170,7 @@ Checks if the code conforms the linting standards.
 
 We can deploy the app to our development environment for pre-merge testing.
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
-Before deploying, check with the team to see if anyone else is using it.
+Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
 
 The [Verify and Publish to Dev](https://github.com/alphagov/di-authentication-account-management/actions/workflows/cd-only.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
 This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
