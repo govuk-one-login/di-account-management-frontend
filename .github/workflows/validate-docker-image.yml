@@ -12,6 +12,11 @@ on:
     branches-ignore:
       - main
   workflow_call:
+    inputs:
+      gitRef:
+        required: false
+        type: string
+        default: ${{ github.ref }}
 
 permissions:
   id-token: write
@@ -23,6 +28,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gitRef || github.ref }}
 
       - name: Set tag
         id: vars
