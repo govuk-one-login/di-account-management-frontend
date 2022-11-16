@@ -60,10 +60,14 @@ jobs:
         id: publish-template
         env:
           ARTIFACT_BUCKET_NAME: ${{ secrets.DEV_ARTIFACT_SOURCE_BUCKET_NAME }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
         run: |
           echo "Running sam build on template file"
           sam build --template-file=./deploy/template.yaml
           mv .aws-sam/build/template.yaml cf-template.yaml
+          echo "Replacing \"CONTAINER-IMAGE-PLACEHOLDER\" with new ECR image ref"
+          sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA|" cf-template.yaml
           zip template.zip cf-template.yaml
           aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GITHUB_SHA"        
 

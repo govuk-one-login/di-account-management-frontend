@@ -63,11 +63,6 @@ Parameters:
     Description: The port on which the container is running
     Type: Number
     Default: 6001
-  DevFrontendContainer:
-    Description: The ECR container for overriding in development, if you want to target a specific version/tag
-    Type: String
-    # ECR Repo for dev is in the dev account - see dev envs account-mgmt-frontend-image cfn stack for details
-    Default: 985326104449.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-4wdxqsyli0gd:latest
   ECSClusterMaxCapacity:
     Description: The maximum capacity of the ECS Cluster Auto Scaling Target
     Type: Number
@@ -94,11 +89,6 @@ Parameters:
     Default: none
 
 Conditions:
-  IsNotDevelopment: !Or
-    - !Equals [ !Ref Environment, build ]
-    - !Equals [ !Ref Environment, staging ]
-    - !Equals [ !Ref Environment, integration ]
-    - !Equals [ !Ref Environment, production ]
   IsProduction: !Equals [ !Ref Environment, production ]
   UsePermissionsBoundary:
     Fn::Not:
@@ -399,10 +389,7 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Essential: true
-          Image: !If
-            - IsNotDevelopment
-            - "CONTAINER-IMAGE-PLACEHOLDER"
-            - !Ref DevFrontendContainer
+          Image: "CONTAINER-IMAGE-PLACEHOLDER"
           Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
             - ContainerPort: !Ref ContainerPort
