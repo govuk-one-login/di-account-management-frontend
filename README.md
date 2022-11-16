@@ -165,3 +165,24 @@ yarn lint
 ```
 
 Checks if the code conforms the linting standards.
+
+## Deploying to the development AWS account
+
+We can deploy the app to our development environment for pre-merge testing.
+Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
+Before deploying, check with the team to see if anyone else is using it.
+
+The [Verify and Publish to Dev](https://github.com/alphagov/di-authentication-account-management/actions/workflows/cd-only.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
+This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
+
+To deploy the app:
+
+1. Rebase your branch onto `main`
+2. Go to the [action page](https://github.com/alphagov/di-authentication-account-management/actions/workflows/cd-only.yml) and click 'Run workflow'
+3. Choose your branch from the dropdown, then click 'Run workflow' again
+4. Wait for the action to finish running
+5. Log into the development AWS account (`gds aws di-account-dev -l`)
+6. Go to the [CodePipeline job](https://eu-west-2.console.aws.amazon.com/codesuite/codepipeline/pipelines/account-mgmt-frontend-pipeline-Pipeline-1RV59OLATETA7/view?region=eu-west-2) for the frontend
+7. Approve the pipeline run
+8. Wait for the pipeline to finish
+9. Go to https://home.dev.account.gov.uk to see the app (VPN required)
