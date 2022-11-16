@@ -8,7 +8,7 @@
 git@github.com:alphagov/di-authentication-account-management.git
 ```
 
-Clones the repository to the `<your_folder_name` directory.
+Clones the repository to the `your_folder_name` directory.
 
 ## Running the app locally in Docker
 
@@ -16,20 +16,24 @@ Before you can run the frontend app against the backend you will need a usable c
 
 ### Configure or find a usable client
 
-The client created by the pipeline is not currently usable by a local account management application as the private key is not available and it does not redirect to local clients.  To run account management locally you will need to configure another client.
+The client created by the pipeline is not currently usable by a local account management application as the private key is not available and it does not redirect to local clients. To run account management locally you will need to configure another client.
+
+If you are a member of the GOV.UK Account team, as a colleague if they have existing config they can share with you.
+
+If you need to generate new config follow the steps below.
 
 1. [Generate a key pair](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/generate-a-key/)
-1. Copy an existing client in the database, or [register a new one](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/manage-your-service-s-configuration/#manage-your-service-s-configuration-with-gov-uk-sign-in).
-1. In the database update the following values:
-    - SubjectType = public
-    - ConsentRequired = 0
-    - RedirectUrls = ["http://localhost:6001/auth/callback"]
-    - Scopes = ["openid", "phone", "email", "am", "offline_access", "govuk-account"]
-1. Copy and paste the public key from step 1.
+1. Ask the [Auth team](https://di-team-manual.london.cloudapps.digital/authentication/) to copy an existing client in the database, or [register a new one](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/manage-your-service-s-configuration/#manage-your-service-s-configuration-with-gov-uk-sign-in).
+1. If the Auth team ask for configuration values, tell them we need:
+   - SubjectType = public
+   - ConsentRequired = 0
+   - RedirectUrls = ["http://localhost:6001/auth/callback"]
+   - Scopes = ["openid", "phone", "email", "am", "offline_access", "govuk-account"]
+1. Send the Auth team the public key generated in step 1.
 
 ### Set the Environment variables
 
-Create a copy of the .env.sample file, rename it .env and fill in the value for the client id below.  All the other values should be correct.
+Create a copy of the .env.sample file, rename it .env and fill in the value for the client id below. All the other values should be correct.
 
 ```
 OIDC_CLIENT_ID=<client id>
@@ -37,11 +41,11 @@ OIDC_CLIENT_ID=<client id>
 
 ### Setup the private key
 
-Copy the private key generated in step one and put it in `seed.yaml` with the correct identation.
+Create a copy of the seed.yaml.sample, rename it seed.yaml and fill in the value for the private key, using the key generated above or shared by a colleague.
 
 ### Update the WAF
 
-The WAF will block attempts made by the local application to use the build api unless some rules are switched off.  This can be done temporarily in the build environment during testing.  When a deployment happens the rules will be reset, but it's a good idea to keep the rules the same in all environments as much as possible, so these rules have not been switched off permanently in build.
+The WAF will block attempts made by the local application to use the build api unless some rules are switched off. This can be done temporarily in the build environment during testing. When a deployment happens the rules will be reset, but it's a good idea to keep the rules the same in all environments as much as possible, so these rules have not been switched off permanently in build.
 
 1. Log into the AWS console
 1. Go to 'WAF & Shield'
@@ -61,7 +65,7 @@ Run the `docker compose up` command.
 
 To find out if the application has started, open a console window on the docker container and view the logs. If the server has started successfully you will see this message `Server listening on port 6001`.
 
-Navigate to http://localhost:6001.  You should be redirected to the 'sign-in-or-create' screen.
+Navigate to http://localhost:6001. You should be redirected to the 'sign-in-or-create' screen.
 
 Sign in and make sure you are returned to the local 'manage-your-account' screen.
 
@@ -84,7 +88,6 @@ docker exec -it di-auth-account-management-frontend-dev /bin/sh
 You can restart the app by re-running the `docker compose down` and then `docker compose up`.
 
 ## Other useful yarn commands
-
 
 ### Development
 
@@ -134,7 +137,6 @@ using mocha.
 ```shell script
 yarn test:integration
 ```
-
 
 ### Install dependencies
 
