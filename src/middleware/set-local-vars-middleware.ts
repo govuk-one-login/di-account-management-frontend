@@ -4,6 +4,7 @@ import {
   getAuthFrontEndUrl,
   getGtmId,
   getYourAccountUrl,
+  supportNewAccountHeader,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import xss from "xss";
@@ -18,6 +19,7 @@ export function setLocalVarsMiddleware(
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.govAccountsUrl = getYourAccountUrl();
+  res.locals.supportNewAccountHeader = supportNewAccountHeader();
 
   if (req.cookies && req.cookies.gs) {
     const ids = xss(req.cookies["gs"]).split(".");
