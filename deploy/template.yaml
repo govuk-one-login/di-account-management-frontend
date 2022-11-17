@@ -8,39 +8,38 @@ Description: >-
   CloudFront -> WAF -> API Gateway -> VPC link -> Private ALB -> ECS Fargate
 Transform:
   - AWS::Serverless-2016-10-31
+  - AWS::CodeDeployBlueGreen
 
-# Must deploy the container on it's own first, having a successful cluster/container spun up
 # Then only do we configure the blue/green deployment on the second run, not making any infrastructure related changes
+# Must deploy the container on it's own first, having a successful cluster/container spun up
 
-#  - AWS::CodeDeployBlueGreen
-#
-#Hooks:
-#  CodeDeployBlueGreenHook:
-#    Properties:
-#      TrafficRoutingConfig:
-#        Type: TimeBasedCanary
-#        TimeBasedCanary:
-#          StepPercentage: 15
-#          BakeTimeMins: 5
-#      Applications:
-#        - Target:
-#            Type: AWS::ECS::Service
-#            LogicalID: ContainerService
-#          ECSAttributes:
-#            TaskDefinitions:
-#              - BlueTaskDefinition
-#              - GreenTaskDefinition
-#            TaskSets:
-#              - BlueTaskSet
-#              - GreenTaskSet
-#            TrafficRouting:
-#              ProdTrafficRoute:
-#                Type: AWS::ElasticLoadBalancingV2::Listener
-#                LogicalID: ApplicationLoadBalancerListenerHTTPS
-#              TargetGroups:
-#                - ApplicationLoadBalancerTargetGroupBlue
-#                - ApplicationLoadBalancerTargetGroupGreen
-#    Type: AWS::CodeDeploy::BlueGreen
+Hooks:
+  CodeDeployBlueGreenHook:
+    Properties:
+      TrafficRoutingConfig:
+        Type: TimeBasedCanary
+        TimeBasedCanary:
+          StepPercentage: 15
+          BakeTimeMins: 5
+      Applications:
+        - Target:
+            Type: AWS::ECS::Service
+            LogicalID: ContainerService
+          ECSAttributes:
+            TaskDefinitions:
+              - BlueTaskDefinition
+              - GreenTaskDefinition
+            TaskSets:
+              - BlueTaskSet
+              - GreenTaskSet
+            TrafficRouting:
+              ProdTrafficRoute:
+                Type: AWS::ElasticLoadBalancingV2::Listener
+                LogicalID: ApplicationLoadBalancerListenerHTTPS
+              TargetGroups:
+                - ApplicationLoadBalancerTargetGroupBlue
+                - ApplicationLoadBalancerTargetGroupGreen
+    Type: AWS::CodeDeploy::BlueGreen
 
 Parameters:
   Environment:
@@ -119,7 +118,8 @@ Mappings:
       APIBASEURL: "https://oidc.staging.account.gov.uk"
       AMAPIBASEURL: "https://manage.staging.account.gov.uk"
       BASEURL: "home.dev.account.gov.uk"
-      SESSIONEXPIRY: "7200000"
+#      SESSIONEXPIRY: "7200000"
+      SESSIONEXPIRY: "3600000" #TODO Remove after testing and uncomment above
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
@@ -127,7 +127,8 @@ Mappings:
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
-      LOGSLEVEL: "debug"
+#      LOGSLEVEL: "debug"
+      LOGSLEVEL: "info" #TODO Remove after testing and uncomment above
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -374,8 +375,9 @@ Resources:
           FromPort: !Ref ContainerPort
           ToPort: !Ref ContainerPort
       VpcId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcId"
+        vpc-0ded6b9e48d5b1c56
+#        Fn::ImportValue:
+#          !Sub "${VpcStackName}-VpcId"
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
@@ -592,8 +594,9 @@ Resources:
       ApiId: !Ref ApiGateway
       IntegrationType: HTTP_PROXY
       ConnectionId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcLinkId"
+        lbid95
+#        Fn::ImportValue:
+#          !Sub "${VpcStackName}-VpcLinkId"
       ConnectionType: VPC_LINK
       IntegrationMethod: ANY
       IntegrationUri: !Ref ApplicationLoadBalancerListenerHTTPS
@@ -677,10 +680,12 @@ Resources:
       SecurityGroups:
         - !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
       Subnets:
-        - Fn::ImportValue:
-            !Sub "${VpcStackName}-ProtectedSubnetIdA"
-        - Fn::ImportValue:
-            !Sub "${VpcStackName}-ProtectedSubnetIdB"
+        - subnet-01fa55422ab9b3eb9
+        - subnet-0abc760f15156914d
+#        - Fn::ImportValue:
+#            !Sub "${VpcStackName}-ProtectedSubnetIdA"
+#        - Fn::ImportValue:
+#            !Sub "${VpcStackName}-ProtectedSubnetIdB"
       LoadBalancerAttributes:
         - Key: access_logs.s3.enabled
           Value: true
@@ -718,8 +723,9 @@ Resources:
       TargetType: ip
       UnhealthyThresholdCount: 2
       VpcId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcId"
+        vpc-0ded6b9e48d5b1c56
+#        Fn::ImportValue:
+#          !Sub "${VpcStackName}-VpcId"
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "5"
@@ -752,8 +758,9 @@ Resources:
       TargetType: ip
       UnhealthyThresholdCount: 2
       VpcId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcId"
+        vpc-0ded6b9e48d5b1c56
+#        Fn::ImportValue:
+#          !Sub "${VpcStackName}-VpcId"
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "5"
@@ -783,6 +790,24 @@ Resources:
       Certificates:
         - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Home/ARN}}"
       SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+
+  ApplicationLoadBalancerForrwardListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          ForwardConfig:
+            TargetGroups:
+              - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
+                Weight: 1
+      Conditions:
+        - Field: http-header
+          HttpHeaderConfig:
+            HttpHeaderName: User-Agent
+            Values:
+              - Mozilla
+      ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
+      Priority: 1
 
   ApplicationLoadBalancerListenerHTTP:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -829,10 +854,12 @@ Resources:
           SecurityGroups:
             - !GetAtt ContainerServiceSecurityGroup.GroupId
           Subnets:
-          - Fn::ImportValue:
-              !Sub "${VpcStackName}-ProtectedSubnetIdA"
-          - Fn::ImportValue:
-              !Sub "${VpcStackName}-ProtectedSubnetIdB"
+            - subnet-01fa55422ab9b3eb9
+            - subnet-0abc760f15156914d
+#          - Fn::ImportValue:
+#              !Sub "${VpcStackName}-ProtectedSubnetIdA"
+#          - Fn::ImportValue:
+#              !Sub "${VpcStackName}-ProtectedSubnetIdB"
       PlatformVersion: 1.4.0
       Scale:
         Unit: PERCENT
@@ -871,8 +898,9 @@ Resources:
                           - "/"
                           - Ref: AWS::StackId
       VpcId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcId"
+        vpc-0ded6b9e48d5b1c56
+#        Fn::ImportValue:
+#          !Sub "${VpcStackName}-VpcId"
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
@@ -1329,10 +1357,10 @@ Resources:
   # Outputs
   #
 
-Outputs:
-  ApiGatewayEndpoint:
-    Description: The URL for the application's API Gateway.
-    Value: !GetAtt ApiGateway.ApiEndpoint
-  CloudFrontDistributionEndpoint:
-    Description: The Application URL.
-    Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+#Outputs:
+#  ApiGatewayEndpoint:
+#    Description: The URL for the application's API Gateway.
+#    Value: !GetAtt ApiGateway.ApiEndpoint
+#  CloudFrontDistributionEndpoint:
+#    Description: The Application URL.
+#    Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
