@@ -134,6 +134,10 @@ export function supportDeleteServiceStore(): boolean {
   return process.env.SUPPORT_DELETE_SERVICE_STORE === "1";
 }
 
+export function supportServiceCards(): boolean {
+  return process.env.SUPPORT_SERVICE_CARDS === "1";
+}
+
 export function getLogoutTokenMaxAge(): number {
   return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
 }
