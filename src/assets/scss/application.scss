@@ -118,13 +118,6 @@
   position: relative;
 }
 
-.account-navigation__container {
-  @extend .govuk-width-container;
-  @include govuk-media-query($until: desktop) {
-    margin-left: 0;
-  }
-}
-
 .account-navigation__list {
   @include govuk-font($size: 19);
   @include govuk-text-colour;
@@ -134,97 +127,45 @@
 }
 
 .account-navigation__list-item {
-  display: block;
-  margin: govuk-spacing(2) govuk-spacing(2) govuk-spacing(2) 0;
-  @include govuk-media-query($from: desktop) {
-    display: inline-block;
+  display: inline-block;
+  margin: 0 govuk-spacing(4) 0 0;
+
+  @include govuk-media-query($from: tablet) {
     margin: 0 govuk-spacing(6) 0 0;
   }
 }
 
-.account-navigation__button {
-  position: relative;
-  @include govuk-font($size: 19, $weight: bold);
-  text-decoration: none;
-  color: $govuk-link-colour;
-  border: 0;
-  background: none;
-  margin: govuk-spacing(2) govuk-spacing(2) govuk-spacing(2) 0;
-
-  .account-navigation__button-text--hidden {
-    display: inline;
-  }
-  .account-navigation__button-text--visible {
-    display: none;
-  }
-
-  &:after {
-    content: "";
-    box-sizing: border-box;
-    display: inline-block;
-    position: relative;
-    width: 0.75rem;
-    height: 0.75rem;
-    transform: rotate(135deg);
-    border-top: 0.15rem solid;
-    border-right: 0.15rem solid;
-    margin-left: 10px;
-  }
-
-  &[aria-expanded="true"] {
-    &:after {      
-      transform: rotate(-45deg);
-      margin-bottom: -0.3rem;
-    }
-    .account-navigation__button-text--hidden {
-      display: none;
-    }
-    .account-navigation__button-text--visible {
-      display: inline;
-    }
-  }
-}
-
-.account-navigation__button,
 .account-navigation__link {
   @extend .govuk-link;
-  padding: govuk-spacing(1) govuk-spacing(6) govuk-spacing(1) govuk-spacing(3);
-  @include govuk-media-query($from: tablet, $until: desktop) {
-    padding: govuk-spacing(1) govuk-spacing(6);
-  }
-}
-
-.account-navigation__link {
   display: inline-block;
   font-weight: bold;
   text-decoration: none;
+  padding: govuk-spacing(3) 0;
+
   &:visited {
     color: $govuk-link-colour;
-    &:focus {
-      color: $govuk-focus-text-colour;
-    }
+    
     &:hover {
       color: $govuk-link-hover-colour;
+    }
+
+    &:focus {
+      color: $govuk-focus-text-colour;
     }
   }
 
   .account-navigation__list-item--active & {
-    padding-left: govuk-spacing(2);
-    border-left: 5px solid govuk-colour("blue");
+    padding: govuk-spacing(3) 0 govuk-spacing(2);
+    border-bottom: 5px solid;
+    border-color: govuk-colour("blue");
 
-    @include govuk-media-query($from: tablet, $until: desktop) {
-      padding-left: govuk-spacing(5);
+    &:focus {
+      border-bottom: none;
+      padding: govuk-spacing(3) 0;
     }
-  }
-  
-  @include govuk-media-query($from: desktop) {
-    padding: govuk-spacing(3) 0;
-    margin-top: govuk-spacing(1);
 
-    .account-navigation__list-item--active & {
-      border-left: none;
-      padding-left: 0;
-      border-bottom: 5px solid govuk-colour("blue");
+    &:hover {
+      border-color: $govuk-link-hover-colour;
     }
   }
 }

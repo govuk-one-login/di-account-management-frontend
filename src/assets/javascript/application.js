@@ -25,9 +25,6 @@ initChangePhoneNumber();
   "use strict";
   function appInit(trackingId, analyticsCookieDomain) {
     window.GOVUKFrontend.initAll();
-    if (document.querySelector('#account-navigation[data-module="govuk-header"]')) {
-      new window.GOVUKFrontend.Header(document.querySelector('#account-navigation[data-module="govuk-header"]')).init();
-    }
     var cookies = window.GOVSignIn.Cookies(trackingId, analyticsCookieDomain);
 
     if (cookies.hasConsentForAnalytics()) {
