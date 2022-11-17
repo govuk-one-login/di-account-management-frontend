@@ -1,7 +1,6 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
-{% set newLayout = true %}
 
 {% block head %}
     <!--[if !IE 8]><!-->
@@ -34,7 +33,7 @@
 {% endblock %}
 
 {% block header %}
-  {% if newLayout %}
+  {% if supportNewAccountHeader %}
     {{ govukHeader({
       homepageUrl: 'general.header.homepageHref' | translate,
       productName: 'general.header.productName' | translate
