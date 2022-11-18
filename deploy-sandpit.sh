@@ -69,6 +69,8 @@ if [[ $BUILD == "1" ]]; then
   echo "Digest = ${IMAGE_DIGEST}"
   echo "Complete"
   popd > /dev/null
+
+  zip redirect.zip redirect.js > /dev/null
 else
   docker pull "${REPO_URL}:${IMAGE_TAG}"
   IMAGE_DIGEST="$(docker inspect "${REPO_URL}:${IMAGE_TAG}" | jq -r '.[0].RepoDigests[0] | split("@") | .[1]')"

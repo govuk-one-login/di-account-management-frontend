@@ -187,3 +187,17 @@ variable "incoming_traffic_cidr_blocks" {
   type        = list(string)
   description = "The list of CIDR blocks allowed to send requests to the ALB"
 }
+
+variable "account_management_redirect_url" {
+  default = ""
+}
+
+variable "redirect_lambda_zip" {
+  default = "../../redirect.zip"
+  type    = string
+}
+
+variable "shared_state_bucket" {
+  default = "The name of the S3 bucket containing the shared API terraform state"
+  type    = string
+}
