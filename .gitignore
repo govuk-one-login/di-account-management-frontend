@@ -137,6 +137,3 @@ deploy/.aws-sam
 
 # App config
 seed.yaml
-
-# Redirect ZIP file
-redirect.zip

@@ -40,7 +40,7 @@ resource "aws_alb_listener" "account_management_alb_listener_https" {
   certificate_arn = aws_acm_certificate.account_management_alb_certificate.arn
 
   default_action {
-    target_group_arn = var.account_management_redirect_url == "" ? aws_alb_target_group.account_management_alb_target_group.id : aws_lb_target_group.redirect_lambda[0].arn
+    target_group_arn = aws_alb_target_group.account_management_alb_target_group.id
     type             = "forward"
   }
 
