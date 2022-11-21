@@ -4,3 +4,5 @@ common_state_bucket = "di-auth-staging-tfstate"
 
 account_management_auto_scaling_enabled = true
 support_language_cy                     = "1"
+
+account_management_redirect_url = "https://home.staging.account.gov.uk"
