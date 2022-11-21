@@ -140,3 +140,8 @@ seed.yaml
 
 # Redirect ZIP file
 redirect.zip
+
+# Yarn files
+.pnp.*
+.yarn/
+.yarnrc.yml
