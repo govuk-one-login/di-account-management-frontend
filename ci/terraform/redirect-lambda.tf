@@ -171,13 +171,13 @@ resource "aws_lambda_permission" "redirect_lambda" {
 }
 
 resource "aws_lb_target_group" "redirect_lambda" {
-  name        = "redirect-lambda"
+  name        = "${var.environment}-redirect-lambda"
   target_type = "lambda"
 
   tags = local.default_tags
 }
 
-resource "aws_lb_target_group_attachment" "test" {
+resource "aws_lb_target_group_attachment" "redirect_lambda" {
   target_group_arn = aws_lb_target_group.redirect_lambda.arn
   target_id        = aws_lambda_function.redirect_lambda.arn
   depends_on       = [aws_lambda_permission.redirect_lambda]
