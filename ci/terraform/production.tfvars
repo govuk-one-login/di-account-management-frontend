@@ -8,3 +8,5 @@ account_management_ecs_desired_count = 4
 logging_endpoint_arns = [
   "arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prodpython"
 ]
+
+account_management_redirect_url = "https://home.account.gov.uk"
