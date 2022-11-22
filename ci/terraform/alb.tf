@@ -40,7 +40,7 @@ resource "aws_alb_listener" "account_management_alb_listener_https" {
   certificate_arn = aws_acm_certificate.account_management_alb_certificate.arn
 
   default_action {
-    target_group_arn = var.account_management_redirect_url == "" ? aws_alb_target_group.account_management_alb_target_group.id : aws_lb_target_group.redirect_lambda[0].arn
+    target_group_arn = aws_alb_target_group.account_management_alb_target_group.id
     type             = "forward"
   }
 
@@ -70,6 +70,25 @@ resource "aws_alb_listener_rule" "account_management_alb_listener_https_robots" 
     }
   }
 }
+
+resource "aws_alb_listener_rule" "account_management_alb_listener_redirect" {
+  count = var.account_management_redirect_url == "" ? 0 : 1
+
+  listener_arn = aws_alb_listener.account_management_alb_listener_https.arn
+  priority     = 20
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.redirect_lambda.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["*"]
+    }
+  }
+}
+
 
 resource "aws_alb_listener" "account_managment_alb_listener_http" {
   load_balancer_arn = aws_lb.account_management_alb.id

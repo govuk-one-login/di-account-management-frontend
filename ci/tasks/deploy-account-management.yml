@@ -66,7 +66,7 @@ run:
         -var "incoming_traffic_cidr_blocks=${INCOMING_TRAFFIC_CIDR_BLOCKS}" \
         -var "support_language_cy=${SUPPORT_LANGUAGE_CY}" \
         -var "shared_state_bucket=${STATE_BUCKET}" \
-        -var "redirect_lambda_zip=$(ls -1 ../../../../acct-mgmt-redirect-release/*.zip)" \
+        -var "redirect_lambda_zip=$(ls -1 ../../../acct-mgmt-redirect-release/*.zip)" \
         -var-file ${DEPLOY_ENVIRONMENT}.tfvars \
       
       terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json
