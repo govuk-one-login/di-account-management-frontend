@@ -145,3 +145,6 @@ redirect.zip
 .pnp.*
 .yarn/
 .yarnrc.yml
+
+# Localstack
+volume/
