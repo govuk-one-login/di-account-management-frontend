@@ -1405,6 +1405,124 @@ Resources:
                 "aws:SecureTransport": true
 
   #
+  # DynamoDB
+  #
+
+  SessionsDynamoDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        AttributeDefinition:
+        -
+          AttributeName: "id"
+          AttributeType: "S"
+        -
+          AttributeName: "expires"
+          AttributeType: "N"
+        -
+          AttributeName: "type"
+          AttributeType: "S"
+        -
+          AttributeName: "sess"
+          AttributeType: "S"
+      #          AttributeName: "subjectId"
+      #          AttributeType: "S" - part of GSI
+      BillingMode: PROVISIONED
+      ContributorInsightsSpecification:
+        Enabled: true
+      #      GlobalSecondaryIndexes: # Karla - not just primary key indexing - TBC
+      #        IndexName: subjectIdIndex
+      #        KeySchema: HASH
+      #        Projection:
+      #          ProjectionType: KEYS_ONLY
+      #        ProvisionedThroughput:
+      #          ReadCapacityUnits: Integer
+      #          WriteCapacityUnits: Integer
+      # ImportSourceSpecification: #properties of data being imported from the S3 bucket to table.
+      #        InputCompressionType: String #GZIP | NONE | ZSTD ???
+      #        InputFormat: String  # CSV | >DYNAMODB_JSON<  | ION
+      #        InputFormatOptions:
+      #        Csv:
+      #          Csv #Figure out later?
+      KeySchema:
+        AttributeName: "id"
+        KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      SSESpecification:
+        KMSMasterKeyId: !Ref DynamoDBKmsKey
+        SSEEnabled: true
+        SSEType: KMS
+      TableClass: STANDARD
+      TableName: !Sub ${AWS::StackName}-SessionsDynamoDB
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: Accounts
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+        - Key: Application
+          Value: Shared
+  #      TimeToLiveSpecification:
+  #        AttributeName: String
+  #        Enabled: Boolean #KARLA - Sessions to be deleted or not?
+
+
+  DynamoDBKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub "KMS key used to protect DynamoDB data in ${AWS::StackName}"
+      Enabled: true
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action:
+              - kms:*
+            Resource: "*"
+          - Effect: Allow
+            Principal:
+              Service: !Sub "dynamodb.amazonaws.com"
+            Action:
+              - "kms:Encrypt*"
+              - "kms:Decrypt*"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:Describe*"
+            Resource: "*"
+#            Condition:
+#              ArnLike:
+#                aws:SourceArn: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:secret:/${AWS::StackName}/Config/Session/secret"
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-DynamoDBKmsKey"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  DynamoDBKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-DynamoDBKmsKey"
+      TargetKeyId: !GetAtt DynamoDBKmsKey.Arn
+
+  #
   # Outputs
   #
 
