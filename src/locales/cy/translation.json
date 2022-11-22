@@ -46,10 +46,14 @@
     },
     "continue": {
       "label": "Parhau"
-    },
+    },    
     "header": {
       "homepageHref": "https://www.gov.uk/",
       "accountLink": "Eich cyfrif GOV.UK",
+      "accounNavHomeLink": "Your services",
+      "accountNavSettingsLink": "Settings",
+      "buttonTextHidden": "Menu",
+      "buttonTextVisible": "Close",
       "signOutLink": "Allgofnodi"
     },
     "footer": {
