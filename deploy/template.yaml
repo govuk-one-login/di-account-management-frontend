@@ -1308,17 +1308,13 @@ Resources:
     Properties:
       AttributeDefinitions:
         AttributeDefinition:
-        -
-          AttributeName: "id"
+        - AttributeName: "id"
           AttributeType: "S"
-        -
-          AttributeName: "expires"
+        - AttributeName: "expires"
           AttributeType: "N"
-        -
-          AttributeName: "type"
+        - AttributeName: "type"
           AttributeType: "S"
-        -
-          AttributeName: "sess"
+        - AttributeName: "sess"
           AttributeType: "S"
       #          AttributeName: "subjectId"
       #          AttributeType: "S" - part of GSI
