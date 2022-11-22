@@ -39,9 +39,14 @@ describe("check your email controller", () => {
 
   describe("resendEmailCodeGet", () => {
     it("should render resend email code view", () => {
+      req.session.user = {
+        newEmailAddress: "test@test.com",
+      };
       resendEmailCodeGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("resend-email-code/index.njk");
+      expect(res.render).to.have.calledWith("resend-email-code/index.njk", {
+        emailAddress: "test@test.com",
+      });
     });
   });
 
