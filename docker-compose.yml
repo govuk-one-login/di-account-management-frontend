@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   localstack:
-    image: localstack/localstack:0.12.15
+    container_name: localstack_main
+    image: localstack/localstack:1.2.0
     ports:
       - 4566:4566
     environment:
@@ -10,8 +11,10 @@ services:
       - HOSTNAME_EXTERNAL=localhost
       - DEFAULT_REGION=eu-west-2
       - DEBUG=1
+      - KMS_PROVIDER=local-kms
     volumes:
       - ./seed.yaml:/init/seed.yaml
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
 
   redis:
     image: redis:6.0.5-alpine
