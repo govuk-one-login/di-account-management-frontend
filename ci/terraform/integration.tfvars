@@ -9,3 +9,5 @@ support_language_cy = "1"
 logging_endpoint_arns = [
   "arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prodpython"
 ]
+
+account_management_redirect_url = "https://home.integration.account.gov.uk"
