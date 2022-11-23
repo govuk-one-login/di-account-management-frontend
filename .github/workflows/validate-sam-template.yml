@@ -13,6 +13,11 @@ on:
     branches-ignore:
       - main
   workflow_call:
+    inputs:
+      gitRef:
+        required: false
+        type: string
+        default: ${{ github.ref }}
 
 jobs:
   validate_sam_template:
@@ -25,7 +30,11 @@ jobs:
       SAM_CLI_TELEMETRY: 0
       ENVIRONMENT: build
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gitRef || github.ref }}
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:

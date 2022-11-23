@@ -17,6 +17,11 @@ on:
     branches-ignore:
       - main
   workflow_call:
+    inputs:
+      gitRef:
+        required: false
+        type: string
+        default: ${{ github.ref }}
 
 jobs:
   build_test_application:
@@ -43,6 +48,9 @@ jobs:
           - 6379:6379
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gitRef || github.ref }}
+
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
@@ -76,6 +84,7 @@ jobs:
       SESSION_EXPIRY: 3600000
       REDIS_HOST: localhost
       REDIS_PORT: 6379
+
   code_analysis:
     runs-on: ubuntu-latest
     name: "Code Analysis"
@@ -84,6 +93,9 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gitRef || github.ref }}
+
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:

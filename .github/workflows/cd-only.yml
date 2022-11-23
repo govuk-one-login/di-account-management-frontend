@@ -3,6 +3,12 @@ name: "Verify & Publish to Dev"
 
 on:
   workflow_dispatch:
+    inputs:
+      gitRef:
+        description: "Commit SHA, branch name or tag"
+        required: true
+        type: string
+        default: main
 
 permissions:
   id-token: write
@@ -13,11 +19,15 @@ jobs:
     name: Acceptance Checks
     uses: ./.github/workflows/build-test-application.yml
     secrets: inherit
+    with:
+      gitRef: ${{ inputs.gitRef }}
 
   validate_deployment:
     name: Deployment Template Checks
     uses: ./.github/workflows/validate-sam-template.yml
     secrets: inherit
+    with:
+      gitRef: ${{ inputs.gitRef }}
 
   publish_artifacts:
     name: "Publish Image & Template to Dev"
@@ -28,6 +38,8 @@ jobs:
       - validate_deployment
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gitRef }}
 
       - name: Set tag
         id: vars
@@ -66,10 +78,10 @@ jobs:
           echo "Running sam build on template file"
           sam build --template-file=./deploy/template.yaml
           mv .aws-sam/build/template.yaml cf-template.yaml
-          echo "Replacing \"CONTAINER-IMAGE-PLACEHOLDER\" with new ECR image ref"
+          echo "Replacing 'CONTAINER-IMAGE-PLACEHOLDER' with new ECR image ref"
           sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA|" cf-template.yaml
           zip template.zip cf-template.yaml
-          aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GITHUB_SHA"        
+          aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GITHUB_SHA"
 
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
