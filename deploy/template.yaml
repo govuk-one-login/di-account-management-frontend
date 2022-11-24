@@ -1412,40 +1412,23 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        AttributeDefinition:
         - AttributeName: "id"
           AttributeType: "S"
-        - AttributeName: "expires"
-          AttributeType: "N"
-        - AttributeName: "type"
+        - AttributeName: "subjectId"
           AttributeType: "S"
-        - AttributeName: "sess"
-          AttributeType: "S"
-      #          AttributeName: "subjectId"
-      #          AttributeType: "S" - part of GSI
-      BillingMode: PROVISIONED
+      BillingMode: PAY_PER_REQUEST
       ContributorInsightsSpecification:
         Enabled: true
-      #      GlobalSecondaryIndexes: # Karla - not just primary key indexing - TBC
-      #        IndexName: subjectIdIndex
-      #        KeySchema: HASH
-      #        Projection:
-      #          ProjectionType: KEYS_ONLY
-      #        ProvisionedThroughput:
-      #          ReadCapacityUnits: Integer
-      #          WriteCapacityUnits: Integer
-      # ImportSourceSpecification: #properties of data being imported from the S3 bucket to table.
-      #        InputCompressionType: String #GZIP | NONE | ZSTD ???
-      #        InputFormat: String  # CSV | >DYNAMODB_JSON<  | ION
-      #        InputFormatOptions:
-      #        Csv:
-      #          Csv #Figure out later?
+      GlobalSecondaryIndexes:
+        - IndexName: "subjectIdIndex"
+          KeySchema:
+            - AttributeName: "subjectId"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: KEYS_ONLY
       KeySchema:
-        AttributeName: "id"
-        KeyType: "HASH"
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
+        - AttributeName: "id"
+          KeyType: "HASH"
       SSESpecification:
         KMSMasterKeyId: !Ref DynamoDBKmsKey
         SSEEnabled: true
@@ -1465,10 +1448,6 @@ Resources:
           Value: !Ref SourceTagValue
         - Key: Application
           Value: Shared
-  #      TimeToLiveSpecification:
-  #        AttributeName: String
-  #        Enabled: Boolean #KARLA - Sessions to be deleted or not?
-
 
   DynamoDBKmsKey:
     Type: AWS::KMS::Key
@@ -1495,9 +1474,9 @@ Resources:
               - "kms:GenerateDataKey*"
               - "kms:Describe*"
             Resource: "*"
-#            Condition:
-#              ArnLike:
-#                aws:SourceArn: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:secret:/${AWS::StackName}/Config/Session/secret"
+            Condition:
+              ArnLike:
+                aws:SourceArn: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}"
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
