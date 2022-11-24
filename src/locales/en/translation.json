@@ -49,6 +49,7 @@
     },
     "header": {
       "homepageHref": "https://www.gov.uk/",
+      "productName": "Account",
       "accountLink": "Your GOV.UK account",
       "accounNavHomeLink": "Your services",
       "accountNavSettingsLink": "Settings",
