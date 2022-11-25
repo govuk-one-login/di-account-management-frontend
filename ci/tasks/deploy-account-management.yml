@@ -5,7 +5,7 @@ image_resource:
     repository: hashicorp/terraform
     tag: 1.0.4
     username: ((docker-hub-username))
-    password: ((docker-hub-password))    
+    password: ((docker-hub-password))
 params:
   DEPLOYER_ROLE_ARN: ((deployer-role-arn-non-prod))
   DNS_DEPLOYER_ROLE_ARN: ((deployer-role-arn-production))
@@ -38,7 +38,7 @@ run:
       export ACCOUNT_MANAGEMENT_IMAGE_URI=$(cat account-management-image/repository)
       export ACCOUNT_MANAGEMENT_IMAGE_TAG=$(cat account-management-image/tag)
       export ACCOUNT_MANAGEMENT_IMAGE_DIGEST=$(cat account-management-image/digest)
-           
+
       cd "account-management-src/ci/terraform/"
       terraform init -input=false \
         -backend-config "role_arn=${DEPLOYER_ROLE_ARN}" \
@@ -68,5 +68,5 @@ run:
         -var "shared_state_bucket=${STATE_BUCKET}" \
         -var "redirect_lambda_zip=$(ls -1 ../../../acct-mgmt-redirect-release/*.zip)" \
         -var-file ${DEPLOY_ENVIRONMENT}.tfvars \
-      
+
       terraform output --json > ../../../terraform-outputs/${DEPLOY_ENVIRONMENT}-terraform-outputs.json

@@ -16,7 +16,7 @@
   }]
 %}
 <nav aria-label="Account navigation" class="account-navigation">
-  <div class="govuk-width-container"> 
+  <div class="govuk-width-container">
     <ul class="account-navigation__list">
       {% for item in navigationItems %}
         <li class="account-navigation__list-item {{ 'account-navigation__list-item--active' if item.active else '' }}"><a class="account-navigation__link" href="{{item.href}}">{{item.text}}</a></li>

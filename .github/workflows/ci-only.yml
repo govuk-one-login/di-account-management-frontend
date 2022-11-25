@@ -33,7 +33,3 @@ jobs:
     uses: ./.github/workflows/validate-sam-template.yml
     secrets: inherit
     needs: validate_container
-
-
-
-

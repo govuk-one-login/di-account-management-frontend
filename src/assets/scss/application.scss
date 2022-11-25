@@ -113,7 +113,7 @@
   background-color: govuk-colour("light-grey");
   border-bottom: 1px solid $govuk-border-colour;
   // this is a hack and not very nice
-  // the DS header comes with a non-optional border on the bottom, annoyingly 
+  // the DS header comes with a non-optional border on the bottom, annoyingly
   margin-top: -(govuk-spacing(2));
   position: relative;
 }
@@ -144,7 +144,7 @@
 
   &:visited {
     color: $govuk-link-colour;
-    
+
     &:hover {
       color: $govuk-link-hover-colour;
     }
