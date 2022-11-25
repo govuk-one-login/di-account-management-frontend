@@ -1239,6 +1239,14 @@ Resources:
           QueryStringBehavior:
             all
 
+  CloudFrontMonitoringSubscription:
+    Type: AWS::CloudFront::MonitoringSubscription
+    Properties: 
+      DistributionId: !Ref CloudFrontDistribution
+      MonitoringSubscription:
+        RealtimeMetricsSubscriptionConfig:
+          RealtimeMetricsSubscriptionStatus: Enabled
+
   CloudFrontLogsBucket:
     Type: AWS::S3::Bucket
     Properties:
