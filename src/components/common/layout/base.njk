@@ -35,7 +35,8 @@
 {% block header %}
   {% if supportNewAccountHeader %}
     {{ govukHeader({
-      homepageUrl: 'general.header.homepageHref' | translate
+      homepageUrl: 'general.header.homepageHref' | translate,
+      productName: 'general.header.productName' | translate
     }) }}
     {% if not hideSignOutLink %}
       {% include 'common/layout/navigation.njk' %}

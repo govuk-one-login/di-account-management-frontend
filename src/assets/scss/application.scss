@@ -1,3 +1,5 @@
+$govuk-new-link-styles: true;
+
 @import "../../../node_modules/govuk-frontend/govuk/all";
 
 .information-box {
@@ -139,8 +141,11 @@
   @extend .govuk-link;
   display: inline-block;
   font-weight: bold;
-  text-decoration: none;
   padding: govuk-spacing(3) 0;
+  
+  &:not(:hover) {
+    text-decoration: none;
+  }
 
   &:visited {
     color: $govuk-link-colour;
