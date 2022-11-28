@@ -3,6 +3,12 @@ resource "aws_route53_record" "account_management" {
   type    = "A"
   zone_id = local.zone_id
 
+  weighted_routing_policy {
+    weight = 255
+  }
+
+  set_identifier = local.default_tags.application
+
   alias {
     evaluate_target_health = false
     name                   = aws_lb.account_management_alb.dns_name
