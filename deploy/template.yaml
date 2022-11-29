@@ -1144,7 +1144,6 @@ Resources:
     Type: AWS::CloudFront::Distribution
     DependsOn: CloudFrontLogsBucket
     Properties:
-      # checkov:skip=CKV_AWS_86:Ensure Cloudfront distribution has Access Logging enabled
       DistributionConfig:
         Aliases:
           - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
@@ -1163,7 +1162,9 @@ Resources:
           CachedMethods:
             - GET
             - HEAD
-          CachePolicyId: !GetAtt CloudFrontCachePolicy.Id
+          # CachingDisabled managed cache policy id
+          # see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
           OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
           Compress: false
           MinTTL: 0
@@ -1203,27 +1204,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - Key: CheckovRulesToSkip
-          Value: CKV_AWS_86
-
-  CloudFrontCachePolicy:
-    Type: AWS::CloudFront::CachePolicy
-    Properties:
-      CachePolicyConfig:
-        Comment: !Sub "Cache policy for the ${AWS::StackName} application"
-        DefaultTTL: 86400
-        MaxTTL: 31536000
-        MinTTL: 1
-        Name: !Sub "${AWS::StackName}-CachePolicy"
-        ParametersInCacheKeyAndForwardedToOrigin:
-          CookiesConfig:
-            CookieBehavior: none
-          EnableAcceptEncodingBrotli: false
-          EnableAcceptEncodingGzip: false
-          HeadersConfig:
-            HeaderBehavior: none
-          QueryStringsConfig:
-            QueryStringBehavior: none
 
   CloudFrontOriginRequestPolicy:
     Type: AWS::CloudFront::OriginRequestPolicy
