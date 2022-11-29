@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
 import { PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
+import { updateSubjectId } from "../../utils/dynamodb-queries";
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
@@ -94,6 +95,8 @@ export function oidcAuthCallbackGet(
       isAuthenticated: true,
       state: {},
     };
+
+    updateSubjectId(req, userInfoResponse.sub);
 
     if (req.query.cookie_consent) {
       setPreferencesCookie(

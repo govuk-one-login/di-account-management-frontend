@@ -1,35 +1,25 @@
-import redis, { ClientOpts, RedisClient } from "redis";
-import connect_redis, { RedisStore } from "connect-redis";
+import DynamoDBConnection from "connect-dynamodb";
 import session from "express-session";
-import { getRedisHost, getRedisPort } from "../config";
-import { RedisConfig } from "../types";
-const RedisStore = connect_redis(session);
+import { dynamodb } from "./dynamodb";
+import { updateSessionTable, waitForTable } from "../utils/dynamodb-queries";
+import { getSessionTableName } from "../config";
 
-export function getRedisClient(redisConfig: RedisConfig): RedisClient {
-  let config: ClientOpts;
+const DynamoDBStore = DynamoDBConnection(session);
 
-  if (redisConfig.isLocal) {
-    config = {
-      host: getRedisHost(),
-      port: getRedisPort(),
-    };
-  } else {
-    config = {
-      host: redisConfig.host,
-      port: redisConfig.port,
-      password: redisConfig.password,
-      tls: true,
-    };
-  }
+export const getSessionStore = () => {
+  const tableName = getSessionTableName();
 
-  return redis.createClient(config);
-}
-
-export function getSessionStore(redisClient: RedisClient): RedisStore {
-  return new RedisStore({
-    client: redisClient,
+  const sessionStore = new DynamoDBStore({
+    client: dynamodb,
+    table: tableName,
   });
-}
+
+  waitForTable(tableName).then(() => {
+    updateSessionTable();
+  });
+
+  return sessionStore;
+};
 
 export function getSessionCookieOptions(
   isProdEnv: boolean,

@@ -13,6 +13,7 @@ import session from "express-session";
 import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
+<<<<<<< HEAD
 import {
   getAppEnv,
   getNodeEnv,
@@ -23,6 +24,9 @@ import {
   getSessionSecret,
   supportServiceCards,
 } from "./config";
+=======
+import { getNodeEnv, getSessionExpiry, getSessionSecret } from "./config";
+>>>>>>> ATB-108 switched sesstion storage to dynamodb
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
@@ -36,11 +40,7 @@ import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
 import { authMiddleware } from "./middleware/auth-middleware";
 import { logoutRouter } from "./components/logout/logout-routes";
-import {
-  getRedisClient,
-  getSessionCookieOptions,
-  getSessionStore,
-} from "./config/session";
+import { getSessionCookieOptions, getSessionStore } from "./config/session";
 import { getOIDCConfig } from "./config/oidc";
 import { enterPasswordRouter } from "./components/enter-password/enter-password-routes";
 import { changeEmailRouter } from "./components/change-email/change-email-routes";
@@ -56,8 +56,6 @@ import { signedOutRouter } from "./components/signed-out/signed-out-routes";
 import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
 import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
-import { subjectSessionIndex } from "./utils/subject-session-index";
-import { subjectSessionIndexMiddleware } from "./middleware/subject-session-index-middleware";
 import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
 
 const APP_VIEWS = [
@@ -100,12 +98,8 @@ async function createApp(): Promise<express.Application> {
   app.use(i18nextMiddleware.handle(i18next));
   app.use(helmet(helmetConfiguration));
 
-  const redisConfig = isProduction
-    ? await getRedisConfig(getAppEnv())
-    : { host: getRedisHost(), port: getRedisPort(), isLocal: true };
+  const sessionStore = await getSessionStore();
 
-  const redisClient = getRedisClient(redisConfig);
-  const sessionStore = getSessionStore(redisClient);
   app.use(
     session({
       name: "am",
@@ -121,12 +115,6 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
-
-  const subjectSessionIndexService = subjectSessionIndex(redisClient);
-  app.use(subjectSessionIndexMiddleware(subjectSessionIndexService));
-
-  app.locals.sessionStore = sessionStore;
-  app.locals.subjectSessionIndexService = subjectSessionIndexService;
 
   app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
