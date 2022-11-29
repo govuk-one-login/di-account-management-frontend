@@ -55,10 +55,14 @@ Parameters:
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
-  RedisStackName:
-    Description: The name of the stack that defines the Redis cluster
+#  RedisStackName:
+#    Description: The name of the stack that defines the Redis cluster
+#    Type: String
+#    Default: shared-redis
+  DynamoDBStackName:
+    Description: The name of the stack that defines the DynamoDB table
     Type: String
-    Default: shared-redis
+    Default: DynamoDB
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
@@ -284,6 +288,15 @@ Resources:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Cluster/Password"
               - Effect: Allow
                 Action:
+                  - "dynamodb:GetItem"
+                  - "dynamodb:PutItem"
+                  - "dynamodb:DeleteItem"
+                  - "dynamodb:Query"
+                  - "dynamodb:DeleteItem"
+                  - "dynamodb:UpdateItem"
+                Resource: !GetAtt SessionsDynamoDB.Arn
+              - Effect: Allow
+                Action:
                   - "kms:Sign"
                   - "kms:GetPublicKey"
                 Resource:
@@ -442,6 +455,8 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, AUTHFRONTENDURL ]
             - Name: "ANALYTICS_COOKIE_DOMAIN"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, ANALYTICSCOOKIEDOMAIN ]
+            - Name: "SESSION_TABLE_NAME" #Env for dynamoDb
+              Value: !Ref SessionsDynamoDB
             - Name: "REDIS_KEY"
               Value: !Ref RedisStackName
             - Name: "KMS_KEY_ID"
