@@ -67,9 +67,11 @@ export async function globalLogoutPost(
   if (token && validateLogoutTokenClaims(token, req)) {
     const subjectSessionService = subjectSessionIndex();
     const sessions = await subjectSessionService.getSessions(token.sub);
-    sessions.forEach((session) => {
-      subjectSessionService.removeSession(session.id);
-    });
+    if (sessions) {
+      sessions.forEach((session) => {
+        subjectSessionService.removeSession(session.id);
+      });
+    }
     res.send(HTTP_STATUS_CODES.OK);
     return;
   }

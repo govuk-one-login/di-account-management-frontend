@@ -1,4 +1,5 @@
 import { KMS, SNS, DynamoDB } from "aws-sdk";
+import { DocumentClient } from "aws-sdk/lib/dynamodb/document_client";
 
 type ClientId = string;
 type UrnFdnSub = string;
@@ -68,8 +69,7 @@ export interface Error {
   text: string;
   href: string;
 }
-
 export interface SubjectSessionIndexService {
   removeSession: (subjectId: string) => void;
-  getSessions: (subjectId: string) => Promise<string[]>;
+  getSessions: (subjectId: string) => Promise<DocumentClient.ItemList | void>;
 }

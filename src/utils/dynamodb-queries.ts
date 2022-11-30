@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { dynamodb, dynamodbDocClient } from "../config/dynamodb";
 import { getSessionTableName } from "../config";
 import { SubjectSessionIndexService } from "./types";
@@ -35,7 +36,7 @@ export const updateSessionTable = () => {
 
 const retryInterval = 5000;
 
-export const waitForTable = (tableName) =>
+export const waitForTable = (tableName: string): Promise<unknown> =>
   dynamodb
     .describeTable({ TableName: tableName })
     .promise()
@@ -81,13 +82,13 @@ export function subjectSessionIndex(): SubjectSessionIndexService {
       .promise()
       .then((data) => {
         console.log("successfully retrieved sessions");
-        return data;
+        return data.Items;
       })
       .catch((error) => {
         console.log(`error: Could not query: ${error.stack}`);
       });
 
-    return sessions.Items;
+    return sessions;
   };
 
   const removeSession = (sessionId: string): void => {
@@ -121,7 +122,7 @@ export function subjectSessionIndex(): SubjectSessionIndexService {
   };
 }
 
-export const updateSubjectId = (req, subjectId) => {
+export const updateSubjectId = (req: Request, subjectId: string): void => {
   const params = {
     TableName: getSessionTableName(),
     Key: { id: { S: `sess:${req.session.id}` } },
