@@ -6,8 +6,13 @@ import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
-import { getBaseUrl, getManageGovukEmailsUrl, supportDeleteServiceStore } from "../../config";
+import {
+  getBaseUrl,
+  getManageGovukEmailsUrl,
+  supportDeleteServiceStore,
+} from "../../config";
 import { getSNSDeleteTopic } from "../../config";
+import { getSessions, removeSession } from "../../utils/dynamodb-queries";
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk", {
@@ -25,11 +30,13 @@ export function deleteAccountPost(
     const { accessToken } = req.session.user.tokens;
 
     if (supportDeleteServiceStore()) {
-      const DeleteTopicARN = getSNSDeleteTopic()
+      const DeleteTopicARN = getSNSDeleteTopic();
       try {
-        await service.deleteServiceData(subjectId, DeleteTopicARN)
+        await service.deleteServiceData(subjectId, DeleteTopicARN);
       } catch (err) {
-        req.log.error(`Unable to pubish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
+        req.log.error(
+          `Unable to pubish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`
+        );
       }
     }
 
@@ -62,17 +69,12 @@ export function deleteAccountPost(
         getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
     });
 
-    await req.app.locals.subjectSessionIndexService
-      .getSessions(req.session.user.subjectId)
-      .then((sessions: string[]) =>
-        sessions.forEach((sessionId: string) => {
-          req.app.locals.sessionStore.destroy(sessionId);
-          req.app.locals.subjectSessionIndexService.removeSession(
-            req.session.user.subjectId,
-            sessionId
-          );
-        })
-      );
+    const sessions = await getSessions(req.session.user.subjectId);
+    if (sessions) {
+      sessions.forEach((session) => {
+        removeSession(session.id);
+      });
+    }
 
     return res.redirect(logoutUrl);
   };
