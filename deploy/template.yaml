@@ -1213,7 +1213,7 @@ Resources:
         Comment: !Sub "Cache policy for the ${AWS::StackName} application"
         DefaultTTL: 86400
         MaxTTL: 31536000
-        MinTTL: 1
+        MinTTL: 30
         Name: !Sub "${AWS::StackName}-CachePolicy"
         ParametersInCacheKeyAndForwardedToOrigin:
           CookiesConfig:
