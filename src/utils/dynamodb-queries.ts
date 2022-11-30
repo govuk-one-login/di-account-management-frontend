@@ -1,9 +1,9 @@
 import { Request } from "express";
 import { dynamodb, dynamodbDocClient } from "../config/dynamodb";
 import { getSessionTableName } from "../config";
-import { SubjectSessionIndexService } from "./types";
+import { subjectSessions } from "../utils/types";
 
-export const updateSessionTable = () => {
+const updateSessionTable = () => {
   const params = {
     TableName: getSessionTableName(),
     AttributeDefinitions: [
@@ -36,7 +36,7 @@ export const updateSessionTable = () => {
 
 const retryInterval = 5000;
 
-export const waitForTable = (tableName: string): Promise<unknown> =>
+const waitForTable = (tableName: string): Promise<unknown> =>
   dynamodb
     .describeTable({ TableName: tableName })
     .promise()
@@ -66,63 +66,56 @@ export const waitForTable = (tableName: string): Promise<unknown> =>
       });
     });
 
-export function subjectSessionIndex(): SubjectSessionIndexService {
-  const getSessions = async (subjectId: string) => {
-    const params = {
-      TableName: getSessionTableName(),
-      IndexName: "subjectId_index",
-      KeyConditionExpression: "subjectId = :e",
-      ExpressionAttributeValues: {
-        ":e": subjectId,
-      },
-    };
-
-    const sessions = await dynamodbDocClient
-      .query(params)
-      .promise()
-      .then((data) => {
-        console.log("successfully retrieved sessions");
-        return data.Items;
-      })
-      .catch((error) => {
-        console.log(`error: Could not query: ${error.stack}`);
-      });
-
-    return sessions;
+const getSessions = async (subjectId: string): subjectSessions => {
+  const params = {
+    TableName: getSessionTableName(),
+    IndexName: "subjectId_index",
+    KeyConditionExpression: "subjectId = :e",
+    ExpressionAttributeValues: {
+      ":e": subjectId,
+    },
   };
 
-  const removeSession = (sessionId: string): void => {
-    const params = {
-      TableName: getSessionTableName(),
-      Key: { id: sessionId },
-    };
+  const sessions = await dynamodbDocClient
+    .query(params)
+    .promise()
+    .then((data) => {
+      console.log("successfully retrieved sessions");
+      return data.Items;
+    })
+    .catch((error) => {
+      console.log(`error: Could not query: ${error.stack}`);
+    });
 
-    dynamodbDocClient
-      .delete(params)
-      .promise()
-      .then(() => {
-        console.log("successfully deleted session: ", sessionId);
-      })
-      .catch((error) => {
-        console.log(`error: Could not delete session: ${error.stack}`);
-      });
+  return sessions;
+};
+
+const removeSession = (sessionId: string): void => {
+  const params = {
+    TableName: getSessionTableName(),
+    Key: { id: sessionId },
   };
 
-  // const purgeOld = (subjectId: string, now: number) => {
-  //   redisClient.ZREMRANGEBYSCORE(
-  //     subjectIdKey(subjectId),
-  //     0,
-  //     now - getSessionExpiry()
-  //   );
-  // };
+  dynamodbDocClient
+    .delete(params)
+    .promise()
+    .then(() => {
+      console.log("successfully deleted session: ", sessionId);
+    })
+    .catch((error) => {
+      console.log(`error: Could not delete session: ${error.stack}`);
+    });
+};
 
-  return {
-    getSessions,
-    removeSession,
-  };
-}
+// const purgeOld = (subjectId: string, now: number) => {
+//   redisClient.ZREMRANGEBYSCORE(
+//     subjectIdKey(subjectId),
+//     0,
+//     now - getSessionExpiry()
+//   );
+// };
 
-export const updateSubjectId = (req: Request, subjectId: string): void => {
+const updateSubjectId = (req: Request, subjectId: string): void => {
   const params = {
     TableName: getSessionTableName(),
     Key: { id: { S: `sess:${req.session.id}` } },
@@ -139,4 +132,12 @@ export const updateSubjectId = (req: Request, subjectId: string): void => {
     if (err) console.log("Update subjectId Error: ", err);
     else console.log(data);
   });
+};
+
+export {
+  updateSessionTable,
+  waitForTable,
+  getSessions,
+  removeSession,
+  updateSubjectId,
 };

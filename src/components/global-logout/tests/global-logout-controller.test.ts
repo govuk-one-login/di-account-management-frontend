@@ -5,6 +5,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
 import { globalLogoutPost } from "../global-logout-controller";
+import * as dynamoDbQueries from "../../../utils/dynamodb-queries";
 
 import {
   createLocalJWKSet,
@@ -39,17 +40,6 @@ describe("global logout controller", () => {
 
   function validRequest(logoutJwt: string): any {
     return {
-      app: {
-        locals: {
-          sessionStore: {
-            destroy: sandbox.fake(),
-          },
-          subjectSessionIndexService: {
-            removeSession: sandbox.fake(),
-            getSessions: sandbox.stub().resolves(["session-1", "session-2"]),
-          },
-        },
-      },
       body: {
         logout_token: logoutJwt,
       },
@@ -301,28 +291,20 @@ describe("global logout controller", () => {
     });
 
     it("should return 200 if logout_token is present and valid", async () => {
+      const stubRemoveSession = sandbox.stub(dynamoDbQueries, "removeSession");
+
+      sandbox.stub(dynamoDbQueries, "getSessions").resolves([
+        { subjectId: "subject-1", id: "session-1" },
+        { subjectId: "subject-1", id: "session-2" },
+      ]);
+
       req = validRequest(await generateValidToken(validLogoutToken));
 
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
-      expect(
-        req.app.locals.sessionStore.destroy.getCall(0).calledWith("session-1")
-      ).eq(true);
-      expect(
-        req.app.locals.sessionStore.destroy.getCall(1).calledWith("session-2")
-      ).eq(true);
-
-      expect(
-        req.app.locals.subjectSessionIndexService.removeSession
-          .getCall(0)
-          .calledWith("123456", "session-1")
-      ).eq(true);
-      expect(
-        req.app.locals.subjectSessionIndexService.removeSession
-          .getCall(1)
-          .calledWith("123456", "session-2")
-      ).eq(true);
+      expect(stubRemoveSession.getCall(0).calledWith("session-1")).eq(true);
+      expect(stubRemoveSession.getCall(1).calledWith("session-2")).eq(true);
     });
   });
 });

@@ -69,7 +69,5 @@ export interface Error {
   text: string;
   href: string;
 }
-export interface SubjectSessionIndexService {
-  removeSession: (subjectId: string) => void;
-  getSessions: (subjectId: string) => Promise<DocumentClient.ItemList | void>;
-}
+
+export type subjectSessions = Promise<void | DocumentClient.ItemList>;
