@@ -3,6 +3,7 @@ import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
+import * as dynamoDbQueries from "../../../utils/dynamodb-queries";
 
 import {
   deleteAccountGet,
@@ -59,6 +60,13 @@ describe("delete account controller", () => {
 
   describe("deleteAccountPost", () => {
     it("should redirect to deletion confirmed page", async () => {
+      const stubRemoveSession = sandbox.stub(dynamoDbQueries, "removeSession");
+
+      sandbox.stub(dynamoDbQueries, "getSessions").resolves([
+        { subjectId: "subject-1", id: "session-1" },
+        { subjectId: "subject-1", id: "session-2" },
+      ]);
+
       req = validRequest();
       const fakeService: DeleteAccountServiceInterface = {
         deleteAccount: sandbox.fake(),
@@ -86,23 +94,8 @@ describe("delete account controller", () => {
         .calledOnce;
       expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
       expect(res.redirect).to.have.been.calledWith("logout-url");
-      expect(
-        req.app.locals.sessionStore.destroy.getCall(0).calledWith("session-1")
-      ).eq(true);
-      expect(
-        req.app.locals.sessionStore.destroy.getCall(1).calledWith("session-2")
-      ).eq(true);
-
-      expect(
-        req.app.locals.subjectSessionIndexService.removeSession
-          .getCall(0)
-          .calledWith("public-subject-id", "session-1")
-      ).eq(true);
-      expect(
-        req.app.locals.subjectSessionIndexService.removeSession
-          .getCall(1)
-          .calledWith("public-subject-id", "session-2")
-      ).eq(true);
+      expect(stubRemoveSession.getCall(0).calledWith("session-1")).eq(true);
+      expect(stubRemoveSession.getCall(1).calledWith("session-2")).eq(true);
     });
   });
 });
