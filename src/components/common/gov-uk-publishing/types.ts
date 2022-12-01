@@ -1,5 +1,5 @@
 export interface GovUkNotificationRequest {
-  subjectId: string;
+  publicSubjectId: string;
   newEmail?: string;
   legacySubjectId: string;
 }

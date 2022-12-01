@@ -16,7 +16,7 @@ export function govUkPublishingService(
     request: GovUkNotificationRequest
   ): Promise<void> => {
     await axios.client.put<void>(
-      getRequestUrl(request.subjectId),
+      getRequestUrl(request.publicSubjectId),
       {
         email: request.newEmail,
         email_verified: true,
@@ -30,7 +30,7 @@ export function govUkPublishingService(
   const notifyAccountDeleted = async function (
     request: GovUkNotificationRequest
   ): Promise<void> {
-    let deleteUrl = getRequestUrl(request.subjectId);
+    let deleteUrl = getRequestUrl(request.publicSubjectId);
 
     if (request.legacySubjectId) {
       deleteUrl = deleteUrl + "?legacy_sub=" + request.legacySubjectId;
