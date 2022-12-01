@@ -55,14 +55,10 @@ Parameters:
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
-#  RedisStackName:
-#    Description: The name of the stack that defines the Redis cluster
-#    Type: String
-#    Default: shared-redis
-  DynamoDBStackName:
-    Description: The name of the stack that defines the DynamoDB table
+  RedisStackName:
+    Description: The name of the stack that defines the Redis cluster
     Type: String
-    Default: DynamoDB
+    Default: shared-redis
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
@@ -407,7 +403,8 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Essential: true
-          Image: "CONTAINER-IMAGE-PLACEHOLDER"
+#          Image: "CONTAINER-IMAGE-PLACEHOLDER"
+          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:98dbde4133f2740a1d0c60e3ceb47611bc3a9727
           Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
             - ContainerPort: !Ref ContainerPort
