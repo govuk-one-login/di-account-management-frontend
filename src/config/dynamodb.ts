@@ -10,14 +10,14 @@ import {
 
 const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
 
-const awsConfig = isProduction
-  ? { region: getAwsRegion() }
-  : {
-      accessKeyId: getSessionAccessKey(),
-      secretAccessKey: getSessionSecretAccessKey(),
-    };
+const awsConfig = {
+  accessKeyId: getSessionAccessKey(),
+  secretAccessKey: getSessionSecretAccessKey(),
+};
 
-AWS.config.update(awsConfig);
+if (!isProduction) {
+  AWS.config.update(awsConfig);
+}
 
 const sessionConfig = isProduction
   ? {}
