@@ -85,6 +85,7 @@ export function oidcAuthCallbackGet(
       isPhoneNumberVerified: userInfoResponse.phone_number_verified,
       subjectId: userInfoResponse.sub,
       legacySubjectId: userInfoResponse.legacy_subject_id,
+      publicSubjectId: userInfoResponse.public_subject_id,
       tokens: {
         idToken: tokenResponse.id_token,
         accessToken: tokenResponse.access_token,

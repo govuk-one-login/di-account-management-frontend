@@ -19,7 +19,8 @@ export function deleteAccountPost(
   publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { email, subjectId, legacySubjectId } = req.session.user;
+    const { email, subjectId, publicSubjectId, legacySubjectId } =
+      req.session.user;
     const { accessToken } = req.session.user.tokens;
 
     await service.deleteAccount(
@@ -31,7 +32,7 @@ export function deleteAccountPost(
     );
     await publishingService
       .notifyAccountDeleted({
-        subjectId,
+        publicSubjectId,
         legacySubjectId,
       })
       .catch((err) => {
