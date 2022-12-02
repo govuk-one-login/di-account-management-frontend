@@ -37,19 +37,19 @@ jobs:
           DEBUG: 1
         ports:
           - 4566:4566
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.gitRef || github.ref }}
+#      redis:
+#        image: redis
+#        options: >-
+#          --health-cmd "redis-cli ping"
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#        ports:
+#          - 6379:6379
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          ref: ${{ inputs.gitRef || github.ref }}
 
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3

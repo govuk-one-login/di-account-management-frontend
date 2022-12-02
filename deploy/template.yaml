@@ -55,10 +55,10 @@ Parameters:
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
-  RedisStackName:
-    Description: The name of the stack that defines the Redis cluster
-    Type: String
-    Default: shared-redis
+#  RedisStackName:
+#    Description: The name of the stack that defines the Redis cluster
+#    Type: String
+#    Default: shared-redis
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
@@ -273,15 +273,15 @@ Resources:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"              # for the future when no legacy
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*" # for access to legacy params
+#                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"              # for the future when no legacy
+#                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*" # for access to legacy params
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
                 Resource:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
-                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Cluster/Password"
+#                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Cluster/Password" - {DynamoDBStackName}?
               - Effect: Allow
                 Action:
                   - "kms:Sign"
@@ -442,8 +442,8 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, AUTHFRONTENDURL ]
             - Name: "ANALYTICS_COOKIE_DOMAIN"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, ANALYTICSCOOKIEDOMAIN ]
-            - Name: "REDIS_KEY"
-              Value: !Ref RedisStackName
+#            - Name: "REDIS_KEY"
+#              Value: !Ref RedisStackName
             - Name: "KMS_KEY_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
             - Name: "SERVICE_DOMAIN"

@@ -16,10 +16,10 @@ services:
       - ./seed.yaml:/init/seed.yaml
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
 
-  redis:
-    image: redis:6.0.5-alpine
-    ports:
-      - 6379:6379
+#  redis:
+#    image: redis:6.0.5-alpine
+#    ports:
+#      - 6379:6379
 
   di-auth-account-management-frontend:
     container_name: di-auth-account-management-frontend-dev
