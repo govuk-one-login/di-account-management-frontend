@@ -175,6 +175,14 @@ $govuk-new-link-styles: true;
   }
 }
 
+.your-services__heading {
+  margin-bottom: govuk-spacing(3);
+}
+
+.your-services__signed-in-status {
+  margin-bottom: govuk-spacing(6);
+}
+
 .account-card {
   border: 1px solid $govuk-border-colour;
 }
@@ -196,7 +204,16 @@ $govuk-new-link-styles: true;
 .service-list {
   margin-bottom: govuk-spacing(7);
 }
+
 .service-list__card {
   border-top: 1px solid $govuk-border-colour;
   padding-top: govuk-spacing(3);
+}
+
+.your-services__empty-state {
+  @include govuk-responsive-padding(4, "top");
+  @include govuk-responsive-padding(4, "right");
+  @include govuk-responsive-padding(4, "left");
+  margin-bottom: govuk-spacing(6);
+  border: 1px solid $govuk-border-colour;
 }

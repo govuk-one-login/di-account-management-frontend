@@ -1,52 +1,73 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% set pageTitleName = 'pages.yourServices.title' | translate %}
+{% set activeNav = 'your-services' %}
 
 {% block content %}
-    <div class="govuk-grid-row" id="your-account">
-        <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
-            <h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ 'pages.yourServices.header' | translate }}</h1>
-            <p class="govuk-body">{{ 'pages.yourServices.signedInStatus' | translate }}
-                <strong>{{ email }}</strong>
-            </p>
-            <h2 class="govuk-heading-m">{{ 'pages.yourServices.accountsList.heading' | translate }}</h2>
-            {% if accountsList %}
-            <ul class="govuk-list govuk-list--spaced">
-              {% for account in accountsList %}
-                {% set locale = ['pages.yourServices.clientRegistry.', account.client_id, '.'] | join %}
-                <li class="account-card">
-                  <h3 class="govuk-heading-s account-card__heading">{{ [locale, 'header'] | join | translate }}</h2>
-                  <div class="account-card__content">
-                      <p class="govuk-body">{{ [locale, 'description'] | join | translate }}</p>
-                      <p class="govuk-body">
-                        <a class="govuk-link" href="{{ [locale, 'link_href'] | join | translate }}">{{ [locale, 'link_text'] | join | translate }}</a>
-                      </p>
-                      <p class="govuk-body account-card__last-used">Last used: {{ account.last_accessed }}</p>
-                  </div>
-                </li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-            <h2 class="govuk-heading-m">{{ 'pages.yourServices.servicesList.heading' | translate }}</h2>
-            {% if servicesList %}
-            <ul class="govuk-list service-list">
-              {% for service in servicesList %}
-                {% set locale = ['pages.yourServices.clientRegistry.', service.client_id, '.'] | join %}
-                <li class="service-list__card">
-                  <p class="govuk-body">
-                    <a class="govuk-link" href="{{ [locale, 'link_href'] | join | translate }}">{{ [locale, 'link_text'] | join | translate }}</a>
-                  </p>
-                  <p class="govuk-body account-card__last-used">Last used: {{ service.last_accessed }}</p>
-                </li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-            <div class="information-box">
-              <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
-              <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph1' | translate }}</p>
-              <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph2' | translate }}</p>
-              <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph3' | translate }}</p>
-            </div>
+  <div class="govuk-grid-row" id="your-account">
+    <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
+      <h1 class="govuk-heading-xl your-services__heading">{{ 'pages.yourServices.header' | translate }}</h1>
+      <div class="your-services__signed-in-status">
+        <p class="govuk-body">{{ 'pages.yourServices.signedInStatus' | translate }}
+            <strong>{{ email }}</strong>
+        </p>
+      </div>
+      {% if not (servicesList.length and accountsList.length) %}
+        {# Display an empty state when no accounts nor services have been used #}
+        {# This should be an edge case as the only pathways into the account would be signing up via other services #}
+        <div class="your-services__empty-state">
+          <p class="govuk-body">{{ 'pages.yourServices.empty' | translate }}</p>
         </div>
+      {% endif %}
+      {% if servicesList.length and accountsList.length %}
+        {# Show heading ONLY when there are both accounts and services #}
+        <h2 class="govuk-heading-m">{{ 'pages.yourServices.accountsList.heading' | translate }}</h2>
+      {% endif %}
+      {% if accountsList.length %}
+      <ul class="govuk-list govuk-list--spaced">
+        {% for account in accountsList %}
+          {% set locale = ['pages.yourServices.clientRegistry.', account.client_id, '.'] | join %}
+          <li class="account-card">
+            <h3 class="govuk-heading-s account-card__heading">{{ [locale, 'header'] | join | translate }}</h2>
+            <div class="account-card__content">
+              <p class="govuk-body">{{ [locale, 'description'] | join | translate }}</p>
+              <p class="govuk-body">
+                <a class="govuk-link" href="{{ [locale, 'link_href'] | join | translate }}">{{ [locale, 'link_text'] | join | translate }}</a>
+              </p>
+              <p class="govuk-body account-card__last-used">{{ 'pages.yourServices.lastUsed' | translate }}: {{ account.last_accessed }}</p>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if servicesList.length and accountsList.length %}
+        {# Show heading ONLY when there are both accounts and services #}
+        <h2 class="govuk-heading-m">{{ 'pages.yourServices.servicesList.heading' | translate }}</h2>
+      {% endif %}
+      {% if servicesList.length %}
+      <ul class="govuk-list service-list">
+        {% for service in servicesList %}
+          {% set locale = ['pages.yourServices.clientRegistry.', service.client_id, '.'] | join %}
+          <li class="service-list__card">
+            <p class="govuk-body">
+              <a class="govuk-link" href="{{ [locale, 'link_href'] | join | translate }}">{{ [locale, 'link_text'] | join | translate }}</a>
+            </p>
+            <p class="govuk-body account-card__last-used">{{ 'pages.yourServices.lastUsed' | translate }}: {{ service.last_accessed }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <div class="information-box">
+        <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
+        <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph1' | translate }}</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>{{ 'pages.yourServices.informationBox.listItem1' | translate }}</li>
+          <li>{{ 'pages.yourServices.informationBox.listItem2' | translate }}</li>
+          <li>{{ 'pages.yourServices.informationBox.listItem3' | translate }}</li>
+        </ul>
+        <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph2' | translate }}</p>
+        <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph3' | translate }}</p>
+      </div>
     </div>
+  </div>
 {% endblock %}
