@@ -4,6 +4,7 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import * as dynamoDbQueries from "../../../utils/dynamodb";
+import { marshall } from "@aws-sdk/util-dynamodb";
 
 import {
   deleteAccountGet,
@@ -62,10 +63,12 @@ describe("delete account controller", () => {
     it("should redirect to deletion confirmed page", async () => {
       const stubRemoveSession = sandbox.stub(dynamoDbQueries, "removeSession");
 
-      sandbox.stub(dynamoDbQueries, "getSessions").resolves([
-        { subjectId: "subject-1", id: "session-1" },
-        { subjectId: "subject-1", id: "session-2" },
-      ]);
+      sandbox
+        .stub(dynamoDbQueries, "getSessions")
+        .resolves([
+          marshall({ subjectId: "subject-1", id: "session-1" }),
+          marshall({ subjectId: "subject-1", id: "session-2" }),
+        ]);
 
       req = validRequest();
       const fakeService: DeleteAccountServiceInterface = {

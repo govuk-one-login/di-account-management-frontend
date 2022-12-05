@@ -1,7 +1,7 @@
 import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
-import nock = require("nock");
+import nock from "nock";
 import * as cheerio from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
@@ -63,7 +63,7 @@ describe("Integration:: change email", () => {
     });
 
     app = await require("../../../app").createApp();
-    baseApi = process.env.AM_API_BASE_URL;
+    baseApi = process.env.AM_API_BASE_URL || "";
 
     request(app)
       .get(PATH_DATA.CHANGE_EMAIL.url)
