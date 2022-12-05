@@ -96,7 +96,7 @@ export function oidcAuthCallbackGet(
       state: {},
     };
 
-    updateSubjectId(req, userInfoResponse.sub);
+    await updateSubjectId(req, userInfoResponse.sub);
 
     if (req.query.cookie_consent) {
       setPreferencesCookie(
