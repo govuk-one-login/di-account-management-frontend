@@ -34,6 +34,10 @@ export function getAppEnv(): string {
   return process.env.APP_ENV || "local";
 }
 
+export function isLocal(): boolean {
+  return getAppEnv() == "local";
+}
+
 export function getGtmId(): string {
   return process.env.GTM_ID;
 }

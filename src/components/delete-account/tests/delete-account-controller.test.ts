@@ -3,7 +3,7 @@ import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-import * as dynamoDbQueries from "../../../utils/dynamodb-queries";
+import * as dynamoDbQueries from "../../../utils/dynamodb";
 
 import {
   deleteAccountGet,

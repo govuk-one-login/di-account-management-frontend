@@ -5,7 +5,8 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
 import { globalLogoutPost } from "../global-logout-controller";
-import * as dynamoDbQueries from "../../../utils/dynamodb-queries";
+import { marshall } from "@aws-sdk/util-dynamodb";
+import * as dynamoDbQueries from "../../../utils/dynamodb";
 
 import {
   createLocalJWKSet,
@@ -293,10 +294,12 @@ describe("global logout controller", () => {
     it("should return 200 if logout_token is present and valid", async () => {
       const stubRemoveSession = sandbox.stub(dynamoDbQueries, "removeSession");
 
-      sandbox.stub(dynamoDbQueries, "getSessions").resolves([
-        { subjectId: "subject-1", id: "session-1" },
-        { subjectId: "subject-1", id: "session-2" },
-      ]);
+      sandbox
+        .stub(dynamoDbQueries, "getSessions")
+        .resolves([
+          marshall({ subjectId: "subject-1", id: "session-1" }),
+          marshall({ subjectId: "subject-1", id: "session-2" }),
+        ]);
 
       req = validRequest(await generateValidToken(validLogoutToken));
 

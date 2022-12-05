@@ -6,13 +6,18 @@ import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
+<<<<<<< HEAD
 import {
   getBaseUrl,
   getManageGovukEmailsUrl,
   supportDeleteServiceStore,
 } from "../../config";
 import { getSNSDeleteTopic } from "../../config";
-import { getSessions, removeSession } from "../../utils/dynamodb-queries";
+import { getSessions, removeSession } from "../../utils/dynamodb";
+=======
+import { getBaseUrl, getManageGovukEmailsUrl } from "../../config";
+import { getSessions, removeSession } from "../../utils/dynamodb";
+>>>>>>> ATB-108 Refactored to use aws-sdk version 3
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk", {

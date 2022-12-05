@@ -1,21 +1,39 @@
 import DynamoDBConnection from "connect-dynamodb";
 import session from "express-session";
-import { dynamodb } from "./dynamodb";
-import { updateSessionTable, waitForTable } from "../utils/dynamodb-queries";
-import { getSessionTableName } from "../config";
+import { updateSessionTable, waitForTable } from "../utils/dynamodb";
+import {
+  getLocalDynamoDbBaseUrl,
+  getSessionAccessKey,
+  getSessionTableName,
+  getSessionSecretAccessKey,
+  isLocal,
+} from "../config";
 
 const DynamoDBStore = DynamoDBConnection(session);
 
 export const getSessionStore = () => {
-  const tableName = getSessionTableName();
+  const tableName: string = getSessionTableName();
 
-  const sessionStore = new DynamoDBStore({
-    client: dynamodb,
-    table: tableName,
-  });
+  const options = isLocal()
+    ? {
+        AWSConfigJSON: {
+          accessKeyId: getSessionAccessKey(),
+          secretAccessKey: getSessionSecretAccessKey(),
+          region: "localhost",
+          endpoint: getLocalDynamoDbBaseUrl(),
+        },
+        table: tableName,
+      }
+    : { table: tableName };
 
-  waitForTable(tableName).then(() => {
-    updateSessionTable();
+  const sessionStore = new DynamoDBStore(options);
+
+  waitForTable(tableName).then(async () => {
+    try {
+      await updateSessionTable(tableName);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   return sessionStore;

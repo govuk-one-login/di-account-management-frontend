@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import { HTTP_STATUS_CODES } from "../../app.constants";
 import { LogoutToken } from "./types";
 import { jwtVerify } from "jose";
-import { getSessions, removeSession } from "../../utils/dynamodb-queries";
+import { getSessions, removeSession } from "../../utils/dynamodb";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
+
 import {
   getLogoutTokenMaxAge,
   getTokenValidationClockSkew,
@@ -66,9 +68,11 @@ export async function globalLogoutPost(
 
   if (token && validateLogoutTokenClaims(token, req)) {
     const sessions = await getSessions(token.sub);
+
     if (sessions) {
       sessions.forEach((session) => {
-        removeSession(session.id);
+        const { id } = unmarshall(session);
+        removeSession(id);
       });
     }
     res.send(HTTP_STATUS_CODES.OK);
