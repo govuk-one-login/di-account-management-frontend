@@ -132,9 +132,9 @@
         "changeAction": "Change"
       },
       "deleteAccount": {
-        "heading": "Delete your GOV.UK One Login",
-        "link": "Delete your GOV.UK One Login",
-        "info": "This will permanently delete your GOV.UK One Login. You’ll no longer be able to sign in to the services you’ve used with it."
+        "heading": "Delete your GOV.UK account",
+        "link": "Delete your GOV.UK account",
+        "info": "This will permanently delete your GOV.UK account. You’ll no longer be able to sign in to the services you access with your GOV.UK account details."
       }
     },
     "enterPassword": {
