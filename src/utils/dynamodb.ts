@@ -61,7 +61,7 @@ const updateSessionTable = async (tableName: string) => {
         },
       ],
     };
-    ddbClient.send(new UpdateTableCommand(params));
+    await ddbClient.send(new UpdateTableCommand(params));
   }
 };
 
