@@ -14,6 +14,7 @@ const DynamoDBStore = DynamoDBConnection(session);
 export const getSessionStore = () => {
   const tableName: string = getSessionTableName();
 
+  console.log("isLocal", isLocal());
   const options = isLocal()
     ? {
         AWSConfigJSON: {
@@ -24,7 +25,7 @@ export const getSessionStore = () => {
         },
         table: tableName,
       }
-    : { table: tableName };
+    : { AWSRegion: "eu-west-2", table: tableName };
 
   const sessionStore = new DynamoDBStore(options);
 
