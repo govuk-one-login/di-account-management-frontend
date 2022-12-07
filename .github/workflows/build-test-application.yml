@@ -35,6 +35,8 @@ jobs:
           HOSTNAME_EXTERNAL: localhost
           DEFAULT_REGION: eu-west-2
           AWS_DEFAULT_REGION: eu-west-2
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
           DEBUG: 1
         ports:
           - 4566:4566
@@ -64,6 +66,7 @@ jobs:
         run: yarn lint
     env:
       ENVIRONMENT: development
+      APP_ENV:
       API_BASE_URL: http://localhost:6000/api
       AM_API_BASE_URL: http://localhost:5000/api
       SUPPORT_INTERNATIONAL_NUMBERS: 1
