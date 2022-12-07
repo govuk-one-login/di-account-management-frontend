@@ -37,15 +37,11 @@ jobs:
           DEBUG: 1
         ports:
           - 4566:4566
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+      dynamodb-local:
+        image: amazon/dynamodb-local
+        container_name: dynamodb-local
         ports:
-          - 6379:6379
+          - 8000:8000
     steps:
       - uses: actions/checkout@v3
         with:
@@ -82,8 +78,7 @@ jobs:
       OIDC_CLIENT_SCOPES: openid
       SESSION_SECRET: secret
       SESSION_EXPIRY: 3600000
-      REDIS_HOST: localhost
-      REDIS_PORT: 6379
+      SESSION_TABLE_NAME: sessionTable
 
   code_analysis:
     runs-on: ubuntu-latest
