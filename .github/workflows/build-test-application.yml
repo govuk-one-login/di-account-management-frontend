@@ -39,7 +39,6 @@ jobs:
           - 4566:4566
       dynamodb-local:
         image: amazon/dynamodb-local
-        container_name: dynamodb-local
         ports:
           - 8000:8000
     steps:
