@@ -66,7 +66,6 @@ jobs:
         run: yarn lint
     env:
       ENVIRONMENT: development
-      APP_ENV:
       API_BASE_URL: http://localhost:6000/api
       AM_API_BASE_URL: http://localhost:5000/api
       SUPPORT_INTERNATIONAL_NUMBERS: 1
@@ -78,6 +77,8 @@ jobs:
       SESSION_SECRET: secret
       SESSION_EXPIRY: 3600000
       SESSION_TABLE_NAME: sessionTable
+      SESSION_ACCESS_KEY_ID: test
+      SESSION_SECRET_ACCESS_KEY: test
 
   code_analysis:
     runs-on: ubuntu-latest

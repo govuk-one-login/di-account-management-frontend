@@ -13,6 +13,8 @@ services:
       - AWS_DEFAULT_REGION=eu-west-2
       - DEBUG=1
       - KMS_PROVIDER=local-kms
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
     volumes:
       - ./seed.yaml:/init/seed.yaml
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
