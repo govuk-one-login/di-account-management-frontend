@@ -11,15 +11,15 @@ import { marshall } from "@aws-sdk/util-dynamodb";
 import { getSessionTableName, isLocal } from "../config";
 import { subjectSessions } from "./types";
 import {
-  getLocalDynamoDbBaseUrl,
+  getLocalStackBaseUrl,
   getSessionAccessKey,
   getSessionSecretAccessKey,
 } from "../config";
 
 const dynamodbConfig = isLocal()
   ? {
-      region: "localhost",
-      endpoint: getLocalDynamoDbBaseUrl(),
+      region: "eu-west-2",
+      endpoint: getLocalStackBaseUrl(),
       credentials: {
         accessKeyId: getSessionAccessKey(),
         secretAccessKey: getSessionSecretAccessKey(),

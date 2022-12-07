@@ -10,17 +10,12 @@ services:
       - SERVICES=kms,sns,dynamodb
       - HOSTNAME_EXTERNAL=localhost
       - DEFAULT_REGION=eu-west-2
+      - AWS_DEFAULT_REGION=eu-west-2
       - DEBUG=1
       - KMS_PROVIDER=local-kms
     volumes:
       - ./seed.yaml:/init/seed.yaml
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
-
-  dynamodb-local:
-    image: amazon/dynamodb-local
-    container_name: dynamodb-local
-    ports:
-      - 8000:8000
 
   di-auth-account-management-frontend:
     container_name: di-auth-account-management-frontend-dev

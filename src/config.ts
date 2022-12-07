@@ -14,10 +14,6 @@ export function getLocalStackBaseUrl(): string {
   return "http://host.docker.internal:4566";
 }
 
-export function getLocalDynamoDbBaseUrl(): string {
-  return "http://host.docker.internal:8000";
-}
-
 export function getOIDCClientId(): string {
   return process.env.OIDC_CLIENT_ID;
 }

@@ -1,8 +1,10 @@
+import AWS from "aws-sdk";
 import DynamoDBConnection from "connect-dynamodb";
 import session from "express-session";
 import { updateSessionTable, waitForTable } from "../utils/dynamodb";
+import { logger } from "../utils/logger";
 import {
-  getLocalDynamoDbBaseUrl,
+  getLocalStackBaseUrl,
   getSessionAccessKey,
   getSessionTableName,
   getSessionSecretAccessKey,
@@ -14,14 +16,13 @@ const DynamoDBStore = DynamoDBConnection(session);
 export const getSessionStore = () => {
   const tableName: string = getSessionTableName();
 
-  console.log("isLocal", isLocal());
   const options = isLocal()
     ? {
         AWSConfigJSON: {
           accessKeyId: getSessionAccessKey(),
           secretAccessKey: getSessionSecretAccessKey(),
-          region: "localhost",
-          endpoint: getLocalDynamoDbBaseUrl(),
+          region: "eu-west-2",
+          endpoint: new AWS.Endpoint(getLocalStackBaseUrl()),
         },
         table: tableName,
       }
@@ -33,7 +34,7 @@ export const getSessionStore = () => {
     try {
       await updateSessionTable(tableName);
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   });
 
