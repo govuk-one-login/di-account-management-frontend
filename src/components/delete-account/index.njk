@@ -12,22 +12,13 @@
 <h1 class="govuk-heading-l govuk-!-margin-top-0">{{'pages.deleteAccount.header' | translate}}</h1>
 
 <p class="govuk-body">{{'pages.deleteAccount.paragraph1' | translate}}</p>
+<p class="govuk-body">{{'pages.deleteAccount.paragraph2' | translate}}</p>
+<p class="govuk-body">{{'pages.deleteAccount.paragraph3' | translate | safe | replace("[emailManagementLink]", manageEmailsLink)}}</p>
+<p class="govuk-body">{{'pages.deleteAccount.paragraph4' | translate}}</p>
+<p class="govuk-body">{{'pages.deleteAccount.paragraph5' | translate}}</p>
 
-<ul class="govuk-list govuk-list--bullet">
-  <li>{{ 'pages.deleteAccount.listItem1' | translate }}</li>
-  <li>{{ 'pages.deleteAccount.listItem2'
-    | translate
-    | replace("[emailManagementLink]", manageEmailsLink)
-    | safe
-  }}</li>
-  <li>{{ 'pages.deleteAccount.listItem3' | translate }}</li>
-</ul>
-<p class="govuk-body">{{ 'pages.deleteAccount.paragraph2' | translate }}</p>
-<p class="govuk-body">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
-
-{{ govukDetails({
-  summaryText: 'pages.deleteAccount.details.summaryText' | translate,
-  html: 'pages.deleteAccount.details.text' | translate
+{{ govukInsetText({
+  text: 'pages.deleteAccount.insetText' | translate
 }) }}
 
 <form action="/delete-account" method="post" novalidate>

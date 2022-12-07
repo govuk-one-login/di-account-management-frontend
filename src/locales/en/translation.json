@@ -300,18 +300,14 @@
     "deleteAccount": {
       "title": "Are you sure you want to delete your GOV.UK account?",
       "header": "Are you sure you want to delete your GOV.UK account?",
-      "paragraph1": "This will:",
-      "listItem1": "permanently delete your GOV.UK account and the information stored in it",
-      "listItem2": "delete any <a class=\"govuk-link\" href=\"[emailManagementLink]\">GOV.UK email subscriptions</a> you may have",
-      "listItem3": "remove your ability to sign in to LITE (to apply for export licences for controlled goods), if you’ve used it with your GOV.UK account",
-      "paragraph2": "If you need a GOV.UK account in the future, you’ll have to create a new one.",
-      "paragraph3": "Deleting your GOV.UK account will not delete any other government accounts you may have, such as Government Gateway or Universal Credit.",
-      "details": {
-        "summaryText": "If you use LITE",
-        "text": "<p class=\"govuk-body\">If you delete your GOV.UK account you will no longer be able to sign in to LITE (Licensing for International Trade and Enterprise).</p><p class=\"govuk-body\"> The information about you held in LITE will not be deleted. Email <a class=\"govuk-link\" href=\"mailto:data.protection@trade.gov.uk\">data.protection@trade.gov.uk</a> if you want to delete information held by LITE.</p>"
-      },
+      "paragraph1": "This will permanently delete the sign in details for your GOV.UK account.",
+      "paragraph2": "This means you’ll no longer be able to sign in to the services you access with your GOV.UK account.",
+      "paragraph3": "If you have <a class=\"govuk-link\" href=\"[emailManagementLink]\">GOV.UK email subscriptions</a>, these will also be deleted.",
+      "paragraph4": "It will not delete the personal information held by services you’ve used with your GOV.UK account.",
+      "paragraph5": "If you need a GOV.UK account in the future, you’ll have to create a new one.",
+      "insetText": "Deleting your GOV.UK account will not affect any other government accounts you may have, such as Government Gateway or Universal Credit.",
       "deleteAccount": "Delete your GOV.UK account",
-      "doNotDeleteAccount": "Cancel and go back to your account"
+      "doNotDeleteAccount": "Cancel and go back to settings"
     },
     "changePhoneNumber": {
       "title": "Enter your new mobile phone number",
