@@ -25,15 +25,7 @@ repos:
         exclude:
           yarn.lock
           package.json
-  #        .*/hashes/.*
-  #          (?x)(
-  #           yarn.lock$/|
-  ##          package.json
-  ##          ^package-lock.json$/|
-  ##          ^Pipfile/|
-  ##          ^pyproject.toml
-  ##  //c file
-  #          )
+
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.1.11
     hooks:
