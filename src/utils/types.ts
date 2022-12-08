@@ -1,7 +1,11 @@
-import { KMS } from "aws-sdk";
+import { KMS, SNS } from "aws-sdk";
 
 export interface KmsService {
   sign: (payload: string) => Promise<KMS.Types.SignResponse>;
+}
+
+export interface SnsService {
+  publish: (topic_arn: string, message: string) => Promise<SNS.Types.PublishResponse>;
 }
 
 export interface AwsConfig {
