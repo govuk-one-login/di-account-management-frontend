@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   localstack:
@@ -7,7 +7,7 @@ services:
     ports:
       - 4566:4566
     environment:
-      - SERVICES=kms
+      - SERVICES=kms,sns
       - HOSTNAME_EXTERNAL=localhost
       - DEFAULT_REGION=eu-west-2
       - DEBUG=1
