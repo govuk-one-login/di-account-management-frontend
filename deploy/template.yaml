@@ -59,6 +59,10 @@ Parameters:
     Description: The name of the stack that defines the Redis cluster
     Type: String
     Default: shared-redis
+  BackendStackName:
+    Description: The name of the backend stack
+    Type: String
+    Default: account-mgmt-backend
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
@@ -292,6 +296,12 @@ Resources:
                   - ""
                   - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/"
                     - !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
+              - Effect: Allow
+                Action:
+                  - "kms:GenerateDataKey*"
+                  - "kms:Decrypt"
+                Resource:
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
