@@ -22,9 +22,15 @@ import {
 
 import { GetKeyFunction } from "jose/dist/types/types";
 
+type DeepPartial<K> = {
+  [attr in keyof K]?: K[attr] extends Record<string, unknown>
+    ? DeepPartial<K[attr]>
+    : K[attr];
+};
+
 describe("global logout controller", () => {
   let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request>;
+  let req: DeepPartial<Request>;
   let res: Partial<Response>;
   let issuerJWKS: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
   let keySet: GenerateKeyPairResult;
@@ -115,7 +121,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token is present but not signed", async () => {
@@ -131,7 +137,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token signed by wrong key", async () => {
@@ -150,7 +156,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token contains invalid issuer", async () => {
@@ -167,7 +173,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token contains invalid audience", async () => {
@@ -183,7 +189,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token is too old", async () => {
@@ -199,7 +205,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token does not contain a subject", async () => {
@@ -214,7 +220,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token is blank", async () => {
@@ -222,7 +228,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token does not contain correct event", async () => {
@@ -239,7 +245,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token does not any events", async () => {
@@ -253,7 +259,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token contains invalid event", async () => {
@@ -270,7 +276,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 401 if logout_token contains valid but non-empty event", async () => {
@@ -288,7 +294,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      expect(req.log?.error).to.have.been.called;
     });
 
     it("should return 200 if logout_token is present and valid", async () => {
