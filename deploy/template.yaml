@@ -275,6 +275,7 @@ Resources:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"              # for the future when no legacy
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*" # for access to legacy params
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${BackendStackName}/SNS/DeleteTopic/ARN"
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
@@ -450,6 +451,8 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, SERVICEDOMAIN ]
             - Name: "LOGS_LEVEL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL ]
+            - Name: "DELETE_TOPIC_ARN"
+              Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/DeleteTopic/ARN}}"
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
