@@ -274,6 +274,11 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                  - "sns:Publish"
+                Resource:
+                  - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
+              - Effect: Allow
+                Action:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
