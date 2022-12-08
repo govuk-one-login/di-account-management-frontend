@@ -20,8 +20,10 @@ const dynamodbConfig = isLocal()
   ? {
       region: "eu-west-2",
       endpoint: getLocalStackBaseUrl(),
-      accessKeyId: getSessionAccessKey(),
-      secretAccessKey: getSessionSecretAccessKey(),
+      credentials: {
+        accessKeyId: getSessionAccessKey(),
+        secretAccessKey: getSessionSecretAccessKey(),
+      },
     }
   : {};
 
