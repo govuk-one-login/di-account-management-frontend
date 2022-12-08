@@ -25,6 +25,7 @@ describe("check your email controller", () => {
       session: { user: { state: { changeEmail: {} } } },
       cookies: { lng: "en" },
       i18n: { language: "en" },
+      log: { info: sandbox.fake() }
     };
     res = {
       render: sandbox.fake(),

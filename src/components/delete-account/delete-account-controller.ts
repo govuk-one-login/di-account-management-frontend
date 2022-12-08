@@ -21,11 +21,14 @@ export function deleteAccountPost(
   publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+      req.log.info("In the deleteAccountPost function")
     const { email, subjectId, publicSubjectId, legacySubjectId } =
       req.session.user;
     const { accessToken } = req.session.user.tokens;
+    
+    req.log.info(`deleteAccountPost - req.session.user: ${req.session.user}. req.session.user.tokens: ${accessToken}.`)
 
-    if (supportDeleteServiceStore()) {
+      if (supportDeleteServiceStore()) {
       const DeleteTopicARN = getSNSDeleteTopic()
       try {
         await service.deleteServiceData(subjectId, DeleteTopicARN)
@@ -34,14 +37,19 @@ export function deleteAccountPost(
       }
     }
 
-    await service.deleteAccount(
+      req.log.info("deleteAccountPost - before await service.deleteAccount")
+
+      await service.deleteAccount(
       accessToken,
       email,
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId
     );
-    await publishingService
+
+      req.log.info("deleteAccountPost - after await service.deleteAccount")
+
+      await publishingService
       .notifyAccountDeleted({
         publicSubjectId,
         legacySubjectId,
@@ -52,7 +60,9 @@ export function deleteAccountPost(
         );
       });
 
-    req.session.user.state.deleteAccount = getNextState(
+      req.log.info("deleteAccountPost - after await publishingService.notifyAccountDeleted")
+
+      req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,
       "VALUE_UPDATED"
     );

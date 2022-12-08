@@ -31,7 +31,7 @@ describe("delete account controller", () => {
         user: { state: { deleteAccount: {} } },
         destroy: sandbox.fake(),
       },
-      log: { error: sandbox.fake() },
+      log: { error: sandbox.fake(), info: sandbox.fake()},
     };
   }
 

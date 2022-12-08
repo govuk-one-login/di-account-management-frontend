@@ -25,6 +25,7 @@ export function checkYourEmailPost(
   publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    req.log.info("checkYourEmailPost - line 28")
     const code = req.body["code"];
     const {
       email,
@@ -34,6 +35,10 @@ export function checkYourEmailPost(
       legacySubjectId,
     } = req.session.user;
     const { accessToken } = req.session.user.tokens;
+
+    req.log.info(`checkYourEmailPost - line 39 - req.session.user: ${req.session.user}. req.session.user.tokens: ${accessToken}.`)
+
+    req.log.info("checkYourEmailPost - line 41 - before await service.updateEmail")
 
     const isEmailUpdated = await service.updateEmail(
       accessToken,
@@ -45,6 +50,8 @@ export function checkYourEmailPost(
       res.locals.persistentSessionId,
       xss(req.cookies.lng as string)
     );
+
+    req.log.info(`checkYourEmailPost - after await service.updateEmail: ${isEmailUpdated}`)
 
     if (isEmailUpdated) {
       await publishingService
@@ -58,6 +65,8 @@ export function checkYourEmailPost(
             `Unable to send change email notification for:${subjectId}. Error:${err}`
           );
         });
+
+      req.log.info("checkYourEmailPost - after await publishingService.notifyEmailChanged")
 
       req.session.user.email = newEmailAddress;
       delete req.session.user.newEmailAddress;

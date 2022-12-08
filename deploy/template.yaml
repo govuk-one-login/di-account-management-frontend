@@ -98,6 +98,9 @@ Conditions:
       - Fn::Equals:
           - !Ref PermissionsBoundary
           - "none"
+  IsMockedEnvironment: !Or
+    - !Equals [ !Ref Environment, dev ]
+    - !Equals [ !Ref Environment, build ]
 
 Mappings:
   # see https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
@@ -114,7 +117,7 @@ Mappings:
       BASEURL: "home.dev.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
-      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
+      GOVACCOUNTSPUBLISHINGAPIURL: ""
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
@@ -131,7 +134,7 @@ Mappings:
       BASEURL: "home.build.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
-      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
+      GOVACCOUNTSPUBLISHINGAPIURL: ""
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
@@ -488,11 +491,13 @@ Resources:
             - Name: "GTM_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/GTM/Id}}"
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  GOVACCOUNTSPUBLISHINGAPIURL,
+              Value: !If
+                - IsMockedEnvironment
+                - !Sub "{{resolve:ssm:/dev/APIGateway/MockPublishingAPI/Endpoint}}"
+                - !FindInMap [
+                    EnvironmentVariables,
+                    !Ref Environment,
+                    GOVACCOUNTSPUBLISHINGAPIURL,
                 ]
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
               Value: !Sub "{{resolve:secretsmanager:/${AWS::StackName}/Config/Publishing/API/Key}}"
