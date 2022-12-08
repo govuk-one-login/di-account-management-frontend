@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
   This creates the necessary components to deploy the Account Management
   Frontend onto ECS Fargate.
-  Account Management Frontend can be invoked via the CloudFront Distribution, 
+  Account Management Frontend can be invoked via the CloudFront Distribution,
   use the CloudFrontDistributionEndpoint URL exported by this stack.
-  The ingress route in summary is: 
+  The ingress route in summary is:
   CloudFront -> WAF -> API Gateway -> VPC link -> Private ALB -> ECS Fargate
 Transform:
   - AWS::Serverless-2016-10-31
