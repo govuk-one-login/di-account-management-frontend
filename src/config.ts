@@ -114,6 +114,10 @@ export function getKmsKeyId(): string {
   return process.env.KMS_KEY_ID;
 }
 
+export function getSNSDeleteTopic(): string {
+  return process.env.DELETE_TOPIC_ARN;
+}
+
 export function supportInternationalNumbers(): boolean {
   return process.env.SUPPORT_INTERNATIONAL_NUMBERS === "1";
 }
