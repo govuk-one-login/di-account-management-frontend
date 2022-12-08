@@ -119,6 +119,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
