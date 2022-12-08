@@ -8,6 +8,7 @@ import {
   UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
+import { logger } from "./logger";
 import { getSessionTableName, isLocal } from "../config";
 import { subjectSessions } from "./types";
 import {
@@ -73,7 +74,7 @@ const waitForTable = async (tableName: string) => {
       new DescribeTableCommand({ TableName: tableName })
     );
     if (Table.TableStatus !== "ACTIVE") {
-      console.log(
+      logger.info(
         `Table status: ${Table.TableStatus}, retrying in ${retryInterval}ms...`
       );
       return new Promise((resolve) => {
@@ -81,7 +82,7 @@ const waitForTable = async (tableName: string) => {
       });
     }
   } catch (error) {
-    console.warn(
+    logger.info(
       `Table not found! Error below. Retrying in ${retryInterval} ms...`,
       error
     );
