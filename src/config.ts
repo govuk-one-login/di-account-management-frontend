@@ -11,7 +11,7 @@ export function getOIDCApiDiscoveryUrl(): string {
 }
 
 export function getLocalStackBaseUrl(): string {
-  return "http://host.docker.internal:4566";
+  return "http://docker.for.mac.localhost:4566";
 }
 
 export function getOIDCClientId(): string {
