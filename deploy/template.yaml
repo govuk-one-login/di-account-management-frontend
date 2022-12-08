@@ -666,8 +666,8 @@ Resources:
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-       checkov:skip=CKV_AWS_91:Ensure the ELBv2 (Application/Network) has access logging enabled.
-       checkov:skip=CKV_AWS_131:Ensure that ALB drops HTTP headers.
+#       checkov:skip=CKV_AWS_91:Ensure the ELBv2 (Application/Network) has access logging enabled.
+#       checkov:skip=CKV_AWS_131:Ensure that ALB drops HTTP headers.
       Scheme: internal
       Type: application
       SecurityGroups:
