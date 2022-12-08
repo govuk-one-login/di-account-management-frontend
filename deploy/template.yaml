@@ -134,6 +134,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "0"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
@@ -149,6 +150,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "0"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
@@ -164,6 +166,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "0"
+      SUPPORTDELETESERVICESTORE: "0"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
@@ -179,6 +182,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "0"
+      SUPPORTDELETESERVICESTORE: "0"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
@@ -454,6 +458,8 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTLANGUAGECY ]
             - Name: "SUPPORT_NEW_ACCOUNT_HEADER"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTNEWACCOUNTHEADER ]
+            - Name: "SUPPORT_DELETE_SERVICE_STORE"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTDELETESERVICESTORE ]
             - Name: "AUTH_FRONTEND_URL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, AUTHFRONTENDURL ]
             - Name: "ANALYTICS_COOKIE_DOMAIN"
