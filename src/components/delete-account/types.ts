@@ -6,4 +6,8 @@ export interface DeleteAccountServiceInterface {
     sessionId: string,
     persistentSessionId: string
   ) => Promise<void>;
+  deleteServiceData: (
+    user_id: string,
+    topic_arn?: string,
+  ) => Promise<void>;
 }

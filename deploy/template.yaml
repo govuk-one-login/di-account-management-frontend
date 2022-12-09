@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
   This creates the necessary components to deploy the Account Management
   Frontend onto ECS Fargate.
-  Account Management Frontend can be invoked via the CloudFront Distribution, 
+  Account Management Frontend can be invoked via the CloudFront Distribution,
   use the CloudFrontDistributionEndpoint URL exported by this stack.
-  The ingress route in summary is: 
+  The ingress route in summary is:
   CloudFront -> WAF -> API Gateway -> VPC link -> Private ALB -> ECS Fargate
 Transform:
   - AWS::Serverless-2016-10-31
@@ -59,6 +59,10 @@ Parameters:
     Description: The name of the stack that defines the Redis cluster
     Type: String
     Default: shared-redis
+  BackendStackName:
+    Description: The name of the backend stack
+    Type: String
+    Default: account-mgmt-backend
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
@@ -115,6 +119,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
@@ -130,6 +135,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "0"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
@@ -145,6 +151,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "0"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
@@ -160,6 +167,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "0"
+      SUPPORTDELETESERVICESTORE: "0"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
@@ -175,6 +183,7 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "0"
+      SUPPORTDELETESERVICESTORE: "0"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
@@ -270,11 +279,17 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                  - "sns:Publish"
+                Resource:
+                  - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
+              - Effect: Allow
+                Action:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*"              # for the future when no legacy
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*" # for access to legacy params
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${BackendStackName}/SNS/DeleteTopic/ARN"
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
@@ -291,6 +306,12 @@ Resources:
                   - ""
                   - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/"
                     - !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
+              - Effect: Allow
+                Action:
+                  - "kms:GenerateDataKey*"
+                  - "kms:Decrypt"
+                Resource:
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
@@ -438,6 +459,8 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTLANGUAGECY ]
             - Name: "SUPPORT_NEW_ACCOUNT_HEADER"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTNEWACCOUNTHEADER ]
+            - Name: "SUPPORT_DELETE_SERVICE_STORE"
+              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTDELETESERVICESTORE ]
             - Name: "AUTH_FRONTEND_URL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, AUTHFRONTENDURL ]
             - Name: "ANALYTICS_COOKIE_DOMAIN"
@@ -450,6 +473,8 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, SERVICEDOMAIN ]
             - Name: "LOGS_LEVEL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL ]
+            - Name: "DELETE_TOPIC_ARN"
+              Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/DeleteTopic/ARN}}"
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn

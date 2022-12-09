@@ -114,6 +114,10 @@ export function getKmsKeyId(): string {
   return process.env.KMS_KEY_ID;
 }
 
+export function getSNSDeleteTopic(): string {
+  return process.env.DELETE_TOPIC_ARN;
+}
+
 export function supportInternationalNumbers(): boolean {
   return process.env.SUPPORT_INTERNATIONAL_NUMBERS === "1";
 }
@@ -124,6 +128,10 @@ export function supportLanguageCY(): boolean {
 
 export function supportNewAccountHeader(): boolean {
   return process.env.SUPPORT_NEW_ACCOUNT_HEADER === "1";
+}
+
+export function supportDeleteServiceStore(): boolean {
+  return process.env.SUPPORT_DELETE_SERVICE_STORE === "1";
 }
 
 export function getLogoutTokenMaxAge(): number {

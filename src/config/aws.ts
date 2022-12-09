@@ -1,4 +1,5 @@
 import AWS from "aws-sdk";
+import type { Endpoint } from "aws-sdk";
 import {
   getAppEnv,
   getAwsRegion,
@@ -18,25 +19,54 @@ export interface AWSCredentials {
 }
 
 export interface KmsConfig {
-  awsConfig: any;
+  awsConfig: AwsConfig;
   kmsKeyId: string;
 }
 
-function getLocalStackConfig() {
+export interface SnsConfig {
+  awsConfig: AwsConfig;
+}
+
+export interface AwsConfig {
+  endpoint?: Endpoint,
+  accessKeyId?: string,
+  secretAccessKey?: string,
+  region: string
+}
+
+function getLocalStackKmsConfig() {
+  return {
+    awsConfig: { ...getLocalStackAWSConfig() },
+    kmsKeyId: LOCAL_KEY_ID,
+  };
+}
+
+function getLocalStackAWSConfig(): AwsConfig {
+  return {
+    endpoint: new AWS.Endpoint(getLocalStackBaseUrl()),
+    accessKeyId: "na",
+    secretAccessKey: "na",
+    region: "eu-west-2",
+  }
+}
+
+export function getSNSConfig(): SnsConfig {
+  if (getAppEnv() === "local") {
+    return { 
+      awsConfig: { ...getLocalStackAWSConfig() }
+    }
+  }
+
   return {
     awsConfig: {
-      endpoint: new AWS.Endpoint(getLocalStackBaseUrl()),
-      accessKeyId: "na",
-      secretAccessKey: "na",
-      region: "eu-west-2",
+      region: getAwsRegion(),
     },
-    kmsKeyId: LOCAL_KEY_ID,
   };
 }
 
 export function getKMSConfig(): KmsConfig {
   if (getAppEnv() === "local") {
-    return getLocalStackConfig();
+    return getLocalStackKmsConfig();
   }
 
   return {
