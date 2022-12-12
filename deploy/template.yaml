@@ -1394,10 +1394,7 @@ Resources:
               - "kms:ReEncrypt*"
               - "kms:GenerateDataKey*"
               - "kms:Describe*"
-            Resource: "*"
-            Condition:
-              ArnLike:
-                aws:SourceArn: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}"
+            Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${AWS::StackName}-SessionsDynamoDB"
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
