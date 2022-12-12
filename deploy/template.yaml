@@ -55,10 +55,10 @@ Parameters:
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
- RedisStackName:
-   Description: The name of the stack that defines the Redis cluster
-   Type: String
-   Default: shared-redis
+  RedisStackName:
+    Description: The name of the stack that defines the Redis cluster
+    Type: String
+    Default: shared-redis
   DynamoDBStackName:
     Description: The name of the stack that defines the DynamoDB table
     Type: String
@@ -555,7 +555,6 @@ Resources:
                   !Ref Environment,
                   ANALYTICSCOOKIEDOMAIN,
                 ]
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, ANALYTICSCOOKIEDOMAIN ]
             - Name: "SESSION_TABLE_NAME" #Env for dynamoDb
               Value: !Ref SessionsDynamoDB
             - Name: "REDIS_KEY"
