@@ -55,10 +55,10 @@ Parameters:
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
-#  RedisStackName:
-#    Description: The name of the stack that defines the Redis cluster
-#    Type: String
-#    Default: shared-redis
+ RedisStackName:
+   Description: The name of the stack that defines the Redis cluster
+   Type: String
+   Default: shared-redis
   DynamoDBStackName:
     Description: The name of the stack that defines the DynamoDB table
     Type: String
