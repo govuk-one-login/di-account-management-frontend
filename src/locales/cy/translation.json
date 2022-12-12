@@ -122,8 +122,8 @@
   },
   "pages": {
     "yourSettings": {
-      "title": "Settings",
-      "header": "Settings",
+      "title": "Gosodiadau",
+      "header": "Gosodiadau",
       "accountDetails": "Eich manylion mewngofnodi",
       "summaryList": {
         "email": "Cyfeiriad e-bost",
@@ -134,7 +134,7 @@
       "deleteAccount": {
         "heading": "Dileu eich cyfrif GOV.UK",
         "link": "Dileu eich cyfrif GOV.UK",
-        "info": "This will permanently delete your GOV.UK account. You’ll no longer be able to sign in to the services you access with your GOV.UK account details."
+        "info": "Bydd hyn yn dileu eich cyfrif GOV.UK yn barhaol. Ni fyddwch bellach yn gallu mewngofnodi i'r gwasanaethau rydych wedi'u defnyddio gyda'ch manylion cyfrif GOV.UK."
       }
     },
     "enterPassword": {
