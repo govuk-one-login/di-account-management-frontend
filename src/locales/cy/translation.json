@@ -46,7 +46,7 @@
     },
     "continue": {
       "label": "Parhau"
-    },    
+    },
     "header": {
       "homepageHref": "https://www.gov.uk/",
       "productName": "Cyfrif",
@@ -148,25 +148,26 @@
       }
     },
     "yourServices": {
-      "title": "Your services",
-      "header": "Your services",
-      "signedInStatus": "You’re signed in as",
-      "lastUsed": "Last used",
-      "empty": "You’re not using any services with your GOV.UK account yet.",
+      "title": "Eich gwasanaethau",
+      "header": "Eich gwasanaethau",
+      "signedInStatus": "Rydych wedi mewngofnodi fel",
+      "lastUsed": "Defnyddwyd ddiwethaf",
+      "empty": "Nid ydych yn defnyddio unrhyw wasanaethau gyda’ch cyfrif GOV.UK eto.",
       "accountsList": {
-        "heading": "Your accounts"
+        "heading": "Eich cyfrifon"
       },
       "servicesList": {
-        "heading": "Other services you’ve used"
+        "heading": "Gwasanaethau eraill rydych wedi eu defnyddio"
       },
       "informationBox": {
-        "heading": "About GOV.UK accounts",
-        "paragraph1": "GOV.UK accounts are new. At the moment you can only use your GOV.UK account with:",
-        "listItem1": "GOV.UK email subscriptions",
-        "listItem2": "LITE (Licensing for International Trade and Enterprise)",
-        "listItem3": "Request a basic DBS check",
-        "paragraph2": "GOV.UK accounts do not work with all government accounts and services yet (for example Government Gateway or Universal Credit).",
-        "paragraph3": "In the future, you'll be able to use your GOV.UK account to access all services on GOV.UK."
+        "heading": "Am gyfrifon GOV.UK",
+        "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gyda:",
+        "listItem1": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "listItem2": "Tanysgrifiadau e-byst GOV.UK",
+        "listItem3": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "listItem4": "Gwneud cais am wiriad DBS sylfaenol",
+        "paragraph2": "Nid yw cyfrifon GOV.UK yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
+        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i gael mynediad i holl wasanaethau ar GOV.UK."
       },
       "clientRegistry": {
         "production": {
