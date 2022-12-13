@@ -28,6 +28,8 @@ const dynamodbConfig = isLocal()
     }
   : {};
 
+logger.info(`DynamoDb configurations: ${dynamodbConfig}`);
+
 export const ddbClient = new DynamoDBClient(dynamodbConfig);
 
 const updateSessionTable = async (tableName: string) => {
@@ -68,11 +70,12 @@ const updateSessionTable = async (tableName: string) => {
 
 const waitForTable = async (tableName: string) => {
   const retryInterval = 5000;
-
+  logger.info(`Table name: ${tableName}}`);
   try {
     const { Table } = await ddbClient.send(
       new DescribeTableCommand({ TableName: tableName })
     );
+    logger.info(`Table found! ${Table}`);
     if (Table.TableStatus !== "ACTIVE") {
       logger.info(
         `Table status: ${Table.TableStatus}, retrying in ${retryInterval}ms...`

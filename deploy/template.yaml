@@ -556,7 +556,7 @@ Resources:
                   ANALYTICSCOOKIEDOMAIN,
                 ]
             - Name: "SESSION_TABLE_NAME" #Env for dynamoDb
-              Value: !GetAtt SessionsDynamoDB.Arn
+              Value: !Ref SessionsDynamoDB
             - Name: "REDIS_KEY"
               Value: !Ref RedisStackName
             - Name: "KMS_KEY_ID"

@@ -28,6 +28,8 @@ export const getSessionStore = () => {
       }
     : { AWSRegion: "eu-west-2", table: tableName };
 
+  logger.info(`Connect DynamoDb options: ${options}`);
+
   const sessionStore = new DynamoDBStore(options);
 
   waitForTable(tableName).then(async () => {
