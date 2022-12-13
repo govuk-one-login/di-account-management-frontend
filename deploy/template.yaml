@@ -332,6 +332,20 @@ Resources:
         Owner: !Ref OwnerTagValue
         Source: !Ref SourceTagValue
 
+  APIGatewayIDParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: SSM parameter for API Gateway ID reference
+      Name: !Sub "/${AWS::StackName}/ApiGateway/ID"
+      Type: String
+      Value: !Ref ApiGateway
+      Tags:
+        Product: !Ref ProductTagValue
+        System: !Ref SystemTagValue
+        Environment: !Ref Environment
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
+
   ContainerService:
     Type: AWS::ECS::Service
     Properties:
@@ -403,8 +417,8 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Essential: true
-#          Image: "CONTAINER-IMAGE-PLACEHOLDER"
-          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:98dbde4133f2740a1d0c60e3ceb47611bc3a9727
+          Image: "CONTAINER-IMAGE-PLACEHOLDER"
+#          Image: 301577035144.dkr.ecr.eu-west-2.amazonaws.com/account-mgmt-frontend-image-containerrepository-aax5wa5iq29s:98dbde4133f2740a1d0c60e3ceb47611bc3a9727
           Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
             - ContainerPort: !Ref ContainerPort
@@ -462,6 +476,7 @@ Resources:
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, SERVICEDOMAIN ]
             - Name: "LOGS_LEVEL"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL ]
+
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
