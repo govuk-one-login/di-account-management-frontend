@@ -21,6 +21,7 @@ import {
   getRedisPort,
   getSessionExpiry,
   getSessionSecret,
+  supportServiceCards,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 
@@ -137,7 +138,9 @@ async function createApp(): Promise<express.Application> {
   app.use(setHtmlLangMiddleware);
 
   app.use(manageYourAccountRouter);
-  app.use(yourServicesRouter);
+  if (supportServiceCards()) {
+    app.use(yourServicesRouter);
+  }
   app.use(oidcAuthCallbackRouter);
   app.use(startRouter);
   app.use(logoutRouter);
