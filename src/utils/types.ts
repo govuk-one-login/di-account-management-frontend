@@ -1,11 +1,39 @@
-import { KMS, SNS } from "aws-sdk";
+import { KMS, SNS, DynamoDB } from "aws-sdk";
+
+type ClientId = string;
+type UrnFdnSub = string;
+
+export interface UserServices {
+  user_id: UrnFdnSub;
+  services: Service[];
+}
+
+export interface Service {
+  client_id: ClientId;
+  count_successful_logins: number;
+  last_accessed: string;
+}
+
+export interface YourServices {
+  accountsList: Service[];
+  servicesList: Service[];
+}
 
 export interface KmsService {
   sign: (payload: string) => Promise<KMS.Types.SignResponse>;
 }
 
 export interface SnsService {
-  publish: (topic_arn: string, message: string) => Promise<SNS.Types.PublishResponse>;
+  publish: (
+    topic_arn: string,
+    message: string
+  ) => Promise<SNS.Types.PublishResponse>;
+}
+
+export interface DynamoDBService {
+  getItem: (
+    getCommand: DynamoDB.Types.GetItemInput
+  ) => Promise<DynamoDB.Types.GetItemOutput>;
 }
 
 export interface AwsConfig {
@@ -44,5 +72,5 @@ export interface Error {
 export interface SubjectSessionIndexService {
   addSession: (subjectId: string, sessionId: string) => void;
   removeSession: (subjectId: string, sessionId: string) => void;
-  getSessions: (subjectId: string) =>  Promise<string[]>;
+  getSessions: (subjectId: string) => Promise<string[]>;
 }
