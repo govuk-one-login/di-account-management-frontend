@@ -118,6 +118,10 @@ export function getSNSDeleteTopic(): string {
   return process.env.DELETE_TOPIC_ARN;
 }
 
+export function getDynamoServiceStoreTableName(): string {
+  return process.env.SERVICE_STORE_TABLE_NAME;
+}
+
 export function supportInternationalNumbers(): boolean {
   return process.env.SUPPORT_INTERNATIONAL_NUMBERS === "1";
 }
