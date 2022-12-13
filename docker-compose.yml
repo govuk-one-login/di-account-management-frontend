@@ -7,7 +7,7 @@ services:
     ports:
       - 4566:4566
     environment:
-      - SERVICES=kms,sns
+      - SERVICES=kms,sns,dynamodb
       - HOSTNAME_EXTERNAL=localhost
       - DEFAULT_REGION=eu-west-2
       - DEBUG=1
