@@ -123,7 +123,7 @@ Mappings:
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
       SUPPORTDELETESERVICESTORE: "1"
-      SUPPORTSERVICECARDS: "0"
+      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
