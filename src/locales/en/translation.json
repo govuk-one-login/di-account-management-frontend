@@ -213,7 +213,7 @@
             "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
           }
         },
-        "development": {
+        "dev": {
           "gov-uk": {
             "header": "GOV.UK email subscriptions",
             "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
@@ -251,6 +251,10 @@
           "dbs": {
             "link_text": "Request a basic DBS check",
             "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Apply for a vehicle operator licence",
+            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
           }
         }
       }
