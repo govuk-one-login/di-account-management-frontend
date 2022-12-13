@@ -91,6 +91,9 @@ Parameters:
     Description: The ARN of the permissions boundary to apply when creating IAM roles
     Type: String
     Default: none
+  ServiceStoreTableName:
+    Type: String
+    Default: user_services
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
@@ -304,6 +307,12 @@ Resources:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Cluster/Password"
               - Effect: Allow
                 Action:
+                  - dynamodb:Query
+                  - dynamodb:GetItem
+                Resource:
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
+              - Effect: Allow
+                Action:
                   - "kms:Sign"
                   - "kms:GetPublicKey"
                 Resource: !Join
@@ -316,6 +325,8 @@ Resources:
                   - "kms:Decrypt"
                 Resource:
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
+
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
@@ -544,6 +555,8 @@ Resources:
                 !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL]
             - Name: "DELETE_TOPIC_ARN"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/DeleteTopic/ARN}}"
+            - Name: "SERVICE_STORE_TABLE_NAME"
+              Value: !Ref ServiceStoreTableName
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
