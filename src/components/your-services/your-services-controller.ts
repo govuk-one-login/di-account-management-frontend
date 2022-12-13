@@ -1,33 +1,21 @@
 import { Request, Response } from "express";
+import { presentYourServices } from "../../utils/yourServices";
 
-const accountsList = [
-  {
-    "client_id": "sub1234",
-    "last_accessed": "10 October 2022"
-  },
-  {
-    "client_id": "sub4567",
-    "last_accessed": "10 October 2022"
+export async function yourServicesGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const { user } = req.session;
+  if (user && user.subjectId) {
+    const serviceData = await presentYourServices(user.subjectId);
+    const data = {
+      email: req.session.user.email,
+      accountsList: serviceData.accountsList,
+      servicesList: serviceData.servicesList,
+    };
+
+    res.render("your-services/index.njk", data);
+  } else {
+    res.render("your-services/index.njk", { email: user.email });
   }
-]
-
-const servicesList = [
-  {
-    "client_id": "sub8910",
-    "last_accessed": "10 October 2022"
-  },
-  {
-    "client_id": "sub1112",
-    "last_accessed": "10 October 2022"
-  }
-]
-
-export function yourServicesGet(req: Request, res: Response): void {
-  const data = {
-    email: req.session.user.email,
-    accountsList: accountsList,
-    servicesList: servicesList,
-  };
-
-  res.render("your-services/index.njk", data);
 }
