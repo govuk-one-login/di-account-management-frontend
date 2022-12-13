@@ -51,10 +51,8 @@
       "homepageHref": "https://www.gov.uk/",
       "productName": "Cyfrif",
       "accountLink": "Eich cyfrif GOV.UK",
-      "accounNavHomeLink": "Your services",
-      "accountNavSettingsLink": "Settings",
-      "buttonTextHidden": "Menu",
-      "buttonTextVisible": "Close",
+      "accounNavHomeLink": "Eich gwasanaethau",
+      "accountNavSettingsLink": "Gosodiadau",
       "signOutLink": "Allgofnodi"
     },
     "footer": {
