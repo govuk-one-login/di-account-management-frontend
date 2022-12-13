@@ -26,7 +26,7 @@ aws --endpoint-url=http://localhost:4566 dynamodb put-item \
     --region eu-west-2 \
     --profile $AWS_PROFILE \
     --item \
-        "{\"user_id\":{\"S\": \"$BUILD_CLIENT_ID\"}, \"services\": {\"L\":[{\"M\":{\"count_successful_logins\":{\"N\":\"2\"},\"client_id\":{\"S\":\"client_id_1\"},\"last_accessed\":{\"N\":\"1666169856\"}}}]}}"
+        "{\"user_id\":{\"S\": \"$BUILD_CLIENT_ID\"}, \"services\": {\"L\":[{\"M\":{\"count_successful_logins\":{\"N\":\"2\"},\"client_id\":{\"S\":\"gov-uk\"},\"last_accessed\":{\"N\":\"1666169856\"},\"last_accessed_pretty\":{\"S\":\"20 January 1970\"}}}]}}"
 
 aws --endpoint-url=http://localhost:4566 dynamodb get-item \
     --table-name $TABLE_NAME  \
