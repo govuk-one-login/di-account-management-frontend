@@ -8,7 +8,7 @@
 export TABLE_NAME=user_services
 export TABLE_SCHEMA_SEED=user_services_table_seed.json
 export AWS_PROFILE=test-profile
-export BUILD_CLIENT_ID=nXx0aoWYfQr13mhQ1Kr9WLAOR7WMQZFmRT4-Yoq7Uw0
+export BUILD_CLIENT_ID=<YOUR_SUBJECT_ID_HERE>
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
     --cli-input-json "$(cat  ./localstack/$TABLE_SCHEMA_SEED)" \
