@@ -183,37 +183,35 @@ $govuk-new-link-styles: true;
   margin-bottom: govuk-spacing(6);
 }
 
-.account-card {
+.your-services__card {
   border: 1px solid $govuk-border-colour;
+
+  // this degree of specificity is required to overrule the default govuk-list style
+  .govuk-list > & {
+    margin-bottom: govuk-spacing(4);
+  }
+
+  &.your-services__card--empty {
+    margin-bottom: govuk-spacing(6);
+  }
 }
 
-.account-card__heading {
+.your-services__card__heading {
   padding: govuk-spacing(3) govuk-spacing(3) govuk-spacing(4) govuk-spacing(3);
   background-color: govuk-colour("light-grey");
   margin: 0;
 }
 
-.account-card__content {
-  padding: govuk-spacing(4) govuk-spacing(3) 0;
+.your-services__card__content {
+  @include govuk-responsive-padding(4, "top");
+  @include govuk-responsive-padding(3, "right");
+  @include govuk-responsive-padding(3, "left");
 }
 
-.account-card__last-used {
+.your-services__card__last-used {
   color: $govuk-secondary-text-colour;
 }
 
-.service-list {
+.your-services__list {
   margin-bottom: govuk-spacing(7);
-}
-
-.service-list__card {
-  border-top: 1px solid $govuk-border-colour;
-  padding-top: govuk-spacing(3);
-}
-
-.your-services__empty-state {
-  @include govuk-responsive-padding(4, "top");
-  @include govuk-responsive-padding(4, "right");
-  @include govuk-responsive-padding(4, "left");
-  margin-bottom: govuk-spacing(6);
-  border: 1px solid $govuk-border-colour;
 }
