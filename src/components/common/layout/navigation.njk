@@ -3,15 +3,15 @@
 {% set navigationItems = [
   {
     active: true if (active == "your-services") else false,
-    href: "/your-services",
+    href: accountHome,
     text: 'general.header.accounNavHomeLink' | translate
   },{
     active: true if (active == "settings") else false,
-    href: "/settings",
+    href: accountSettings,
     text: 'general.header.accountNavSettingsLink' | translate
   },{
     active: true if (active == "sign-out") else false,
-    href: "/sign-out",
+    href: accountSignOut,
     text: 'general.header.signOutLink' | translate
   }]
 %}
