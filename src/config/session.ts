@@ -16,6 +16,8 @@ const DynamoDBStore = DynamoDBConnection(session);
 export const getSessionStore = () => {
   const tableName: string = getSessionTableName();
 
+  logger.info(`DynamoDB Table Name:": ${tableName}`);
+
   const options = isLocal()
     ? {
         AWSConfigJSON: {
