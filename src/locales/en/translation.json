@@ -53,8 +53,6 @@
       "accountLink": "Your GOV.UK account",
       "accounNavHomeLink": "Your services",
       "accountNavSettingsLink": "Settings",
-      "buttonTextHidden": "Menu",
-      "buttonTextVisible": "Close",
       "signOutLink": "Sign out"
     },
     "footer": {
@@ -147,6 +145,119 @@
         "paragraph1": "GOV.UK accounts are new. At the moment you can only use your GOV.UK account with a few services.",
         "paragraph2": "GOV.UK accounts are currently separate from other government accounts (for example Government Gateway or Universal Credit).",
         "paragraph3": "In the future, you’ll be able to use your GOV.UK account to sign in to most services on GOV.UK."
+      }
+    },
+    "yourServices": {
+      "title": "Your services",
+      "header": "Your services",
+      "signedInStatus": "You’re signed in as",
+      "lastUsed": "Last used",
+      "empty": "You’re not using any services with your GOV.UK account yet.",
+      "accountsList": {
+        "heading": "Your accounts"
+      },
+      "servicesList": {
+        "heading": "Other services you’ve used"
+      },
+      "informationBox": {
+        "heading": "About GOV.UK accounts",
+        "paragraph1": "GOV.UK accounts are new. At the moment you can only use your GOV.UK account with:",
+        "listItem1": "Apply for a vehicle operator licence",
+        "listItem2": "GOV.UK email subscriptions ",
+        "listItem3": "LITE (Licensing for International Trade and Enterprise)",
+        "listItem4": "Request a basic DBS check",
+        "paragraph2": "GOV.UK accounts do not work with all government accounts and services yet (for example Government Gateway or Universal Credit).",
+        "paragraph3": "In the future, you'll be able to use your GOV.UK account to access all services on GOV.UK."
+      },
+      "clientRegistry": {
+        "production": {
+          "LcueBVCnGZw-YFdTZ4S07XbQx7I": {
+            "header": "GOV.UK email subscriptions",
+            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+            "link_text": "Go to your GOV.UK email subscriptions",
+            "link_href": "https://manage.account.gov.uk"
+          },
+          "ZL0kvRBP5xMy5OwONj8ARLPyuko": {
+            "header": "LITE (Licensing for International Trade and Enterprise)",
+            "description": "Apply for or manage export control licences for controlled goods.",
+            "link_text": "Go to your LITE account",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
+            "link_text": "Request a basic DBS check",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
+            "link_text": "Apply for a vehicle operator licence",
+            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+          }
+        },
+        "integration": {
+          "LcueBVCnGZw-YFdTZ4S07XbQx7I": {
+            "header": "GOV.UK email subscriptions",
+            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+            "link_text": "Go to your GOV.UK email subscriptions",
+            "link_href": "https://manage.account.gov.uk"
+          },
+          "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
+            "header": "LITE (Licensing for International Trade and Enterprise)",
+            "description": "Apply for or manage export control licences for controlled goods.",
+            "link_text": "Go to your LITE account",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "Dw7Cxas8W7O2usHMHok95elKDRU": {
+            "link_text": "Request a basic DBS check",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "oLciSn5b6-cqcJjzgMMwCw1moD8": {
+            "link_text": "Apply for a vehicle operator licence",
+            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+          }
+        },
+        "dev": {
+          "gov-uk": {
+            "header": "GOV.UK email subscriptions",
+            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+            "link_text": "Go to your GOV.UK email subscriptions",
+            "link_href": "https://manage.account.gov.uk"
+          },
+          "lite": {
+            "header": "LITE (Licensing for International Trade and Enterprise)",
+            "description": "Apply for or manage export control licences for controlled goods.",
+            "link_text": "Go to your LITE account",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Request a basic DBS check",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Apply for a vehicle operator licence",
+            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+          }
+        },
+        "local": {
+          "gov-uk": {
+            "header": "GOV.UK email subscriptions",
+            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+            "link_text": "Go to your GOV.UK email subscriptions",
+            "link_href": "https://manage.account.gov.uk"
+          },
+          "lite": {
+            "header": "LITE (Licensing for International Trade and Enterprise)",
+            "description": "Apply for or manage export control licences for controlled goods.",
+            "link_text": "Go to your LITE account",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Request a basic DBS check",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Apply for a vehicle operator licence",
+            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+          }
+        }
       }
     },
     "enterPassword": {

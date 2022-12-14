@@ -7,7 +7,7 @@ services:
     ports:
       - 4566:4566
     environment:
-      - SERVICES=kms,sns
+      - SERVICES=kms,sns,dynamodb
       - HOSTNAME_EXTERNAL=localhost
       - DEFAULT_REGION=eu-west-2
       - DEBUG=1
@@ -52,4 +52,6 @@ services:
       - SUPPORT_LANGUAGE_CY=${SUPPORT_LANGUAGE_CY}
       - SUPPORT_NEW_ACCOUNT_HEADER=${SUPPORT_NEW_ACCOUNT_HEADER}
       - SUPPORT_DELETE_SERVICE_STORE=${SUPPORT_DELETE_SERVICE_STORE}
+      - SUPPORT_SERVICE_CARDS=${SUPPORT_SERVICE_CARDS}
+      - SERVICE_STORE_TABLE_NAME=${SERVICE_STORE_TABLE_NAME}
     restart: on-failure
