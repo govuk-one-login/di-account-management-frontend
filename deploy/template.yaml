@@ -311,11 +311,14 @@ Resources:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Cluster/Password"
               - Effect: Allow
                 Action:
+                  - "dynamodb:DescribeTable"
                   - "dynamodb:GetItem"
+                  - "dynamodb:BatchGetItem"
                   - "dynamodb:PutItem"
+                  - "dynamodb:BatchWriteItem"
                   - "dynamodb:DeleteItem"
                   - "dynamodb:Query"
-                  - "dynamodb:DeleteItem"
+                  - "dynamodb.Scan"
                   - "dynamodb:UpdateItem"
                 Resource: !GetAtt SessionsDynamoDB.Arn
               - Effect: Allow
