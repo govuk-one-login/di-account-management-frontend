@@ -175,7 +175,7 @@
             "header": "GOV.UK email subscriptions",
             "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
             "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://manage.account.gov.uk"
+            "link_href": "https://www.gov.uk/email/manage"
           },
           "ZL0kvRBP5xMy5OwONj8ARLPyuko": {
             "header": "LITE (Licensing for International Trade and Enterprise)",
@@ -189,7 +189,7 @@
           },
           "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
             "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
           }
         },
         "integration": {
@@ -197,7 +197,7 @@
             "header": "GOV.UK email subscriptions",
             "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
             "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://manage.account.gov.uk"
+            "link_href": "https://www.staging.publishing.service.gov.uk/email/manage"
           },
           "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
             "header": "LITE (Licensing for International Trade and Enterprise)",
@@ -211,7 +211,51 @@
           },
           "oLciSn5b6-cqcJjzgMMwCw1moD8": {
             "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "staging": {
+          "gov-uk": {
+            "header": "GOV.UK email subscriptions",
+            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+            "link_text": "Go to your GOV.UK email subscriptions",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "lite": {
+            "header": "LITE (Licensing for International Trade and Enterprise)",
+            "description": "Apply for or manage export control licences for controlled goods.",
+            "link_text": "Go to your LITE account",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Request a basic DBS check",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Apply for a vehicle operator licence",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "build": {
+          "gov-uk": {
+            "header": "GOV.UK email subscriptions",
+            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+            "link_text": "Go to your GOV.UK email subscriptions",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "lite": {
+            "header": "LITE (Licensing for International Trade and Enterprise)",
+            "description": "Apply for or manage export control licences for controlled goods.",
+            "link_text": "Go to your LITE account",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Request a basic DBS check",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Apply for a vehicle operator licence",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
           }
         },
         "dev": {
@@ -219,7 +263,7 @@
             "header": "GOV.UK email subscriptions",
             "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
             "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://manage.account.gov.uk"
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
           },
           "lite": {
             "header": "LITE (Licensing for International Trade and Enterprise)",
@@ -233,7 +277,7 @@
           },
           "vehicleOperatorLicense": {
             "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
           }
         },
         "local": {
@@ -241,7 +285,7 @@
             "header": "GOV.UK email subscriptions",
             "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
             "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://manage.account.gov.uk"
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
           },
           "lite": {
             "header": "LITE (Licensing for International Trade and Enterprise)",
@@ -255,7 +299,7 @@
           },
           "vehicleOperatorLicense": {
             "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
           }
         }
       }

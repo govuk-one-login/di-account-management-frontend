@@ -175,7 +175,7 @@
             "header": "Tanysgrifiadau e-byst GOV.UK",
             "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
             "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://manage.account.gov.uk"
+            "link_href": "https://www.gov.uk/email/manage"
           },
           "ZL0kvRBP5xMy5OwONj8ARLPyuko": {
             "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
@@ -189,7 +189,7 @@
           },
           "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
           }
         },
         "integration": {
@@ -197,7 +197,7 @@
             "header": "Tanysgrifiadau e-byst GOV.UK",
             "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
             "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://manage.account.gov.uk"
+            "link_href": "https://www.staging.publishing.service.gov.uk/email/manage"
           },
           "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
             "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
@@ -211,7 +211,51 @@
           },
           "oLciSn5b6-cqcJjzgMMwCw1moD8": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "staging": {
+          "gov-uk": {
+            "header": "Tanysgrifiadau e-byst GOV.UK",
+            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "lite": {
+            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+            "link_text": "Ewch i’ch cyfrif LITE",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "build": {
+          "gov-uk": {
+            "header": "Tanysgrifiadau e-byst GOV.UK",
+            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "lite": {
+            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+            "link_text": "Ewch i’ch cyfrif LITE",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
           }
         },
         "dev": {
@@ -219,7 +263,7 @@
             "header": "Tanysgrifiadau e-byst GOV.UK",
             "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
             "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://manage.account.gov.uk"
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
           },
           "lite": {
             "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
@@ -233,7 +277,7 @@
           },
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
           }
         },
         "local": {
@@ -241,7 +285,7 @@
             "header": "Tanysgrifiadau e-byst GOV.UK",
             "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
             "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://manage.account.gov.uk"
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
           },
           "lite": {
             "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
@@ -255,7 +299,7 @@
           },
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.vehicle-operator-licensing.service.gov.uk"
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
           }
         }
       }
