@@ -13,20 +13,12 @@ import session from "express-session";
 import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
-<<<<<<< HEAD
 import {
-  getAppEnv,
   getNodeEnv,
-  getRedisConfig,
-  getRedisHost,
-  getRedisPort,
   getSessionExpiry,
   getSessionSecret,
   supportServiceCards,
 } from "./config";
-=======
-import { getNodeEnv, getSessionExpiry, getSessionSecret } from "./config";
->>>>>>> ATB-108 switched sesstion storage to dynamodb
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";

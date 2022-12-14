@@ -73,6 +73,7 @@ describe("delete account controller", () => {
       req = validRequest();
       const fakeService: DeleteAccountServiceInterface = {
         deleteAccount: sandbox.fake(),
+        deleteServiceData: sandbox.fake(),
       };
 
       const fakePublishingService: GovUkPublishingServiceInterface = {
