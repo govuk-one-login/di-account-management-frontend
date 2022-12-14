@@ -6,7 +6,7 @@ import * as nock from "nock";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
 
-const { url } = PATH_DATA.MANAGE_YOUR_ACCOUNT
+const { url } = PATH_DATA.SETTINGS
 const TEST_USER_EMAIL = "test@test.com";
 const TEST_USER_PHONE_NUMBER = "07839490040";
 const DEFAULT_USER_SESSION = {
