@@ -323,8 +323,8 @@ Resources:
                 Resource: !GetAtt SessionsDynamoDB.Arn
               - Effect: Allow
                 Action:
-                  - dynamodb:Query
-                  - dynamodb:GetItem
+                  - "dynamodb:Query"
+                  - "dynamodb:GetItem"
                 Resource:
                   - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
               - Effect: Allow
