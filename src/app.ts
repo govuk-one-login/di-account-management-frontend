@@ -59,6 +59,7 @@ import { globalLogoutRouter } from "./components/global-logout/global-logout-rou
 import { subjectSessionIndex } from "./utils/subject-session-index";
 import { subjectSessionIndexMiddleware } from "./middleware/subject-session-index-middleware";
 import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
+import { redirectsRouter } from "./components/redirects/redirects-routes"
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -155,6 +156,10 @@ async function createApp(): Promise<express.Application> {
   app.use(sessionExpiredRouter);
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
+
+  // Router for all previously used URLs, that we want to redirect on
+  // No URL left behind policy
+  app.use(redirectsRouter);
 
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);

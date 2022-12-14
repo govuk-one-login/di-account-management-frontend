@@ -3,7 +3,7 @@ import { UserJourney } from "./utils/state-machine";
 export const PATH_DATA: {
   [key: string]: { url: string; event?: string; type?: UserJourney };
 } = {
-  MANAGE_YOUR_ACCOUNT: { url: "/settings" },
+  MANAGE_YOUR_ACCOUNT: { url: "/manage-your-account" },
   SETTINGS: { url: "/settings" },
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
