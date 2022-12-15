@@ -15,6 +15,7 @@ import {
   getLocalStackBaseUrl,
   getSessionAccessKey,
   getSessionSecretAccessKey,
+  getAppEnv
 } from "../config";
 
 const dynamodbConfig = isLocal()
@@ -39,7 +40,7 @@ const updateSessionTable = async (tableName: string) => {
   const hasSubjectIdGsi =
     Table.GlobalSecondaryIndexes &&
     Table.GlobalSecondaryIndexes[0].IndexName == "subjectId_index";
-  if (!hasSubjectIdGsi) {
+  if (!hasSubjectIdGsi && getAppEnv() === "local") {
     const params = {
       TableName: tableName,
       AttributeDefinitions: [
@@ -57,8 +58,8 @@ const updateSessionTable = async (tableName: string) => {
               ProjectionType: "KEYS_ONLY",
             },
             ProvisionedThroughput: {
-              ReadCapacityUnits: 0,
-              WriteCapacityUnits: 0,
+              ReadCapacityUnits: 5,
+              WriteCapacityUnits: 5,
             },
           },
         },
