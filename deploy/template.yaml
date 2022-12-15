@@ -318,7 +318,7 @@ Resources:
                   - "dynamodb:BatchWriteItem"
                   - "dynamodb:DeleteItem"
                   - "dynamodb:Query"
-                  - "dynamodb.Scan"
+                  - "dynamodb:Scan"
                   - "dynamodb:UpdateItem"
                 Resource: !GetAtt SessionsDynamoDB.Arn
               - Effect: Allow
@@ -342,6 +342,7 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
+                  - !GetAtt DynamoDBKmsKey.Arn
 
       PermissionsBoundary: !If
         - UsePermissionsBoundary

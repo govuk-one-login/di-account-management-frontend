@@ -57,8 +57,8 @@ const updateSessionTable = async (tableName: string) => {
               ProjectionType: "KEYS_ONLY",
             },
             ProvisionedThroughput: {
-              ReadCapacityUnits: 5,
-              WriteCapacityUnits: 5,
+              ReadCapacityUnits: 0,
+              WriteCapacityUnits: 0,
             },
           },
         },
