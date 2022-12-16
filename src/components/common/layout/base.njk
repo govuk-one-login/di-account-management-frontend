@@ -35,9 +35,14 @@
 {% block header %}
   {% if supportNewAccountHeader %}
     {{ govukHeader({
+<<<<<<< HEAD
       homepageUrl: 'general.header.homepageHref' | translate,
       productName: 'general.header.productName' | translate,
       classes: "govuk-header--with-account-navigation" if not hideSignOutLink
+=======
+      homepageUrl: accountHome,
+      productName: 'general.header.productName' | translate
+>>>>>>> 11eae2d (GUA-462-change header to point to /your-services)
     }) }}
     {% if not hideSignOutLink %}
       {% include 'common/layout/navigation.njk' %}
