@@ -555,8 +555,7 @@ Resources:
                   !Ref Environment,
                   ANALYTICSCOOKIEDOMAIN,
                 ]
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, ANALYTICSCOOKIEDOMAIN ]
-            - Name: "SESSION_TABLE_NAME" #Env for dynamoDb
+            - Name: "SESSION_TABLE_NAME"
               Value: !Ref SessionsDynamoDB
             - Name: "REDIS_KEY"
               Value: !Ref RedisStackName
