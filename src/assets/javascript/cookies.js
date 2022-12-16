@@ -122,6 +122,25 @@ var cookies = function (trackingId, analyticsCookieDomain) {
     initGtm();
   }
 
+  function pushLanguageToDataLayer() {
+    var languageCode = document.querySelector('html') &&
+        document.querySelector('html').getAttribute('lang');
+
+    var languageNames = {
+      'en':'english',
+      'cy':'welsh'
+    }
+
+    if (languageCode && languageNames[languageCode]) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "langEvent",        
+        language: languageNames[languageCode],
+        languagecode: languageCode
+      });
+    }
+  }
+
   function loadGtmScript() {
     var gtmScriptTag = document.createElement("script");
     gtmScriptTag.type = "text/javascript";
@@ -165,6 +184,7 @@ var cookies = function (trackingId, analyticsCookieDomain) {
       dataLayer.push(obj);
     }
 
+    pushLanguageToDataLayer();
     gtag({ "gtm.start": new Date().getTime(), event: "gtm.js" });
 
     var govAccountsLink = document.getElementById("gov-uk-accounts-link");
