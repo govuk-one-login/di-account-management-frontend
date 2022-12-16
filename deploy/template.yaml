@@ -314,7 +314,6 @@ Resources:
         - Key: Source
           Value: !Ref SourceTagValue
 
-
   ECSClusterNameParameter:
     Type: AWS::SSM::Parameter
     Properties:
