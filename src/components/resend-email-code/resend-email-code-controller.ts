@@ -41,7 +41,6 @@ export function resendEmailCodePost(
     const emailSent = await service.sendCodeVerificationNotification(
       accessToken,
       newEmailAddress,
-      NOTIFICATION_TYPE.VERIFY_EMAIL,
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId,
