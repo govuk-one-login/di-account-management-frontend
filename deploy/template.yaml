@@ -352,7 +352,7 @@ Resources:
       Description: SSM parameter for ECS Service Name reference
       Name: !Sub "/${AWS::StackName}/ECS/Service/Name"
       Type: String
-      Value: !Ref ServiceName
+      Value: !Ref ContainerService
       Tags:
         Product: !Ref ProductTagValue
         System: !Ref SystemTagValue
