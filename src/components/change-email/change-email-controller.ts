@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { NOTIFICATION_TYPE, PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { getNextState } from "../../utils/state-machine";
 import {
