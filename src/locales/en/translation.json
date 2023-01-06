@@ -460,9 +460,7 @@
       "paragraph3": "If you have <a class=\"govuk-link\" href=\"[emailManagementLink]\">GOV.UK email subscriptions</a>, these will also be deleted.",
       "paragraph4": "It will not delete the personal information held by services you’ve used with your GOV.UK account.",
       "paragraph5": "If you need a GOV.UK account in the future, you’ll have to create a new one.",
-      "details": {
-        "text": "<p class=\"govuk-body\">Deleting your GOV.UK account will not affect any other government accounts you may have, such as Government Gateway or Universal Credit.</p>"
-      },
+      "details": "Deleting your GOV.UK account will not affect any other government accounts you may have, such as Government Gateway or Universal Credit.",
       "deleteAccount": "Delete your GOV.UK account",
       "doNotDeleteAccount": "Cancel and go back to settings"
     },
