@@ -717,7 +717,18 @@ Resources:
       StageName: "$default"
       AutoDeploy: true
       AccessLogSettings:
-        Format: "$context.requestId $context.httpMethod $context.path"
+        Format: >-
+          {
+          "requestId":"$context.requestId",
+          "requestTime":"$context.requestTime",
+          "httpMethod":"$context.httpMethod",
+          "path": "$context.path",
+          "routeKey":"$context.routeKey",
+          "status":"$context.status",
+          "protocol":"$context.protocol",
+          "responseLength":"$context.responseLength",
+          "responseLatency":"$context.responseLatency"
+          }
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
         Product: !Ref ProductTagValue
