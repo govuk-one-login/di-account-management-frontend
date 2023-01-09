@@ -7,6 +7,7 @@ import {
   supportNewAccountHeader,
 } from "../config";
 import { generateNonce } from "../utils/strings";
+import { PATH_DATA } from "../app.constants";
 import xss from "xss";
 
 export function setLocalVarsMiddleware(
@@ -19,6 +20,9 @@ export function setLocalVarsMiddleware(
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.govAccountsUrl = getYourAccountUrl();
+  res.locals.accountHome = PATH_DATA.YOUR_SERVICES.url;
+  res.locals.accountSettings = PATH_DATA.SETTINGS.url;
+  res.locals.accountSignOut = PATH_DATA.SIGN_OUT.url;
   res.locals.supportNewAccountHeader = supportNewAccountHeader();
 
   if (req.cookies && req.cookies.gs) {
