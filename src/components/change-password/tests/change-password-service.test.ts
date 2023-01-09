@@ -1,17 +1,13 @@
 import nock from "nock";
 import { sinon } from "../../../../test/utils/test-utils";
-import { changeEmailService } from "../change-email-service";
+import { changePasswordService } from "../change-password-service";
 import { expect } from "chai";
-import {
-  API_ENDPOINTS,
-  NOTIFICATION_TYPE,
-  HTTP_STATUS_CODES,
-} from "../../../app.constants";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
 import { getApiBaseUrl } from "../../../config";
 
 const baseUrl = getApiBaseUrl();
 
-describe("changeEmailService", () => {
+describe("changePasswordService", () => {
   let sandbox: sinon.SinonSandbox;
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -23,9 +19,10 @@ describe("changeEmailService", () => {
 
   //after(nock.restore);
 
-  it("send Code verification Notification", async () => {
+  it("update password", async () => {
     const accessToken = "1234";
     const email = "something@test.com";
+    const newPassword = "newPassword";
     const sourceIp = "0.0.0.0";
     const sessionId = "session-123";
     const persistentSessionId = "persistentsession123";
@@ -40,22 +37,22 @@ describe("changeEmailService", () => {
         "user-language": userLanguage,
       },
     })
-      .post(API_ENDPOINTS.SEND_NOTIFICATION, {
+      .post(API_ENDPOINTS.UPDATE_PASSWORD, {
         email: email,
-        notificationType: NOTIFICATION_TYPE.VERIFY_EMAIL,
+        newPassword: newPassword,
       })
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
-    const sendCodeVerificationNotification =
-      await changeEmailService().sendCodeVerificationNotification(
-        accessToken,
-        email,
-        sourceIp,
-        sessionId,
-        persistentSessionId,
-        userLanguage
-      );
-
-    expect(sendCodeVerificationNotification).to.true;
+    const updatePasswordResult = await changePasswordService().updatePassword(
+      accessToken,
+      email,
+      newPassword,
+      sourceIp,
+      sessionId,
+      persistentSessionId,
+      userLanguage
+    );
+    // console.log(JSON.stringify(updatePasswordResult));
+    expect(updatePasswordResult.success).to.be.true;
   });
 });
