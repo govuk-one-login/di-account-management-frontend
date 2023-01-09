@@ -22,7 +22,7 @@ export function enterPasswordGet(req: Request, res: Response): void {
   const requestType = req.query.type as string;
 
   if (!requestType) {
-    return res.redirect(PATH_DATA.SETTINGS.url);
+    return res.redirect(PATH_DATA.MANAGE_YOUR_ACCOUNT.url);
   }
 
   req.session.user.state[requestType] = getInitialState();

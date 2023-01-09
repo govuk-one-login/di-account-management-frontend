@@ -35,7 +35,7 @@
 {% block header %}
   {% if supportNewAccountHeader %}
     {{ govukHeader({
-      homepageUrl: accountHome,
+      homepageUrl: 'general.header.homepageHref' | translate,
       productName: 'general.header.productName' | translate,
       classes: "govuk-header--with-account-navigation" if not hideSignOutLink
     }) }}
@@ -48,7 +48,7 @@
         navigationClasses: "govuk-header__navigation--end",
         navigation: false if hideSignOutLink else [
         {
-          href: accountHome,
+          href: govAccountsUrl,
           text: 'general.header.accountLink' | translate,
           active: true
         },

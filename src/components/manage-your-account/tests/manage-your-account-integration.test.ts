@@ -4,9 +4,7 @@ import { sinon, expect } from "../../../../test/utils/test-utils";
 import * as cheerio from "cheerio";
 import * as nock from "nock";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
 
-const { url } = PATH_DATA.SETTINGS
 const TEST_USER_EMAIL = "test@test.com";
 const TEST_USER_PHONE_NUMBER = "07839490040";
 const DEFAULT_USER_SESSION = {
@@ -29,13 +27,13 @@ describe("Integration:: manage your account", () => {
 
   it("should return manage your account page", async () => {
     const app = await appWithMiddlewareSetup();
-    await request(app).get(url).expect(200);
+    await request(app).get("/manage-your-account").expect(200);
   });
 
   it("should display a redacted phone number when one is available", async () => {
     const app = await appWithMiddlewareSetup();
     await request(app)
-      .get(url)
+      .get("/manage-your-account")
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
@@ -58,7 +56,7 @@ describe("Integration:: manage your account", () => {
     });
 
     await request(app)
-      .get(url)
+      .get("/manage-your-account")
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
