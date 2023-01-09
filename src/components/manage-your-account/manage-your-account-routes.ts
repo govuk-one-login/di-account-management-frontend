@@ -6,7 +6,7 @@ import { requiresAuthMiddleware } from "../../middleware/requires-auth-middlewar
 const router = express.Router();
 
 router.get(
-  PATH_DATA.MANAGE_YOUR_ACCOUNT.url,
+  PATH_DATA.SETTINGS.url,
   requiresAuthMiddleware,
   manageYourAccountGet
 );
