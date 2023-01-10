@@ -722,20 +722,18 @@ Resources:
           "requestId":"$context.requestId",
           "requestTime":"$context.requestTime",
           "httpMethod":"$context.httpMethod",
+          "domainName":"$context.domainName",
           "path": "$context.path",
           "routeKey":"$context.routeKey",
-          "status":"$context.status",
           "protocol":"$context.protocol",
+          "status":"$context.status",
           "responseLength":"$context.responseLength",
           "responseLatency":"$context.responseLatency",
-          "integrationErrorMessage":"$context.integrationErrorMessage",
-          "awsEndpointRequestId":"$context.awsEndpointRequestId",
-          "domainName":"$context.domainName",
-          "errorMessage":"$context.error.message",
-          "errorResponseType":"$context.error.responseType",
-          "identityCaller":"$context.identity.caller",
           "integrationStatus":"$context.integrationStatus",
           "integrationLatency":"$context.integrationLatency"
+          "integrationErrorMessage":"$context.integrationErrorMessage",
+          "errorMessage":"$context.error.message",
+          "errorResponseType":"$context.error.responseType",
           }
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
