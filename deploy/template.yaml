@@ -733,7 +733,7 @@ Resources:
           "integrationLatency":"$context.integrationLatency"
           "integrationErrorMessage":"$context.integrationErrorMessage",
           "errorMessage":"$context.error.message",
-          "errorResponseType":"$context.error.responseType",
+          "errorResponseType":"$context.error.responseType"
           }
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
