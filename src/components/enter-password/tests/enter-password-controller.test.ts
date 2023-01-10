@@ -60,7 +60,7 @@ describe("enter password controller", () => {
       enterPasswordGet(req as Request, res as Response);
 
       expect(res.redirect).to.have.calledWith(
-        PATH_DATA.MANAGE_YOUR_ACCOUNT.url
+        PATH_DATA.SETTINGS.url
       );
     });
   });

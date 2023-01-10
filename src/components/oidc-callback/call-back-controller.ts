@@ -53,7 +53,7 @@ export function oidcAuthCallbackGet(
       req.oidc.issuer.metadata.token_endpoint
     );
     const crossDomainGaIdParam = req.query._ga as string;
-    let redirectUri = PATH_DATA.MANAGE_YOUR_ACCOUNT.url;
+    let redirectUri = PATH_DATA.YOUR_SERVICES.url;
 
     const tokenResponse: TokenSet = await req.oidc.callback(
       req.oidc.metadata.redirect_uris[0],

@@ -3,20 +3,20 @@
 {% set navigationItems = [
   {
     active: true if (active == "your-services") else false,
-    href: govAccountsUrl,
+    href: accountHome,
     text: 'general.header.accounNavHomeLink' | translate
   },{
     active: true if (active == "settings") else false,
-    href: "/settings",
+    href: accountSettings,
     text: 'general.header.accountNavSettingsLink' | translate
   },{
     active: true if (active == "sign-out") else false,
-    href: "/sign-out",
+    href: accountSignOut,
     text: 'general.header.signOutLink' | translate
   }]
 %}
 <nav aria-label="Account navigation" class="account-navigation">
-  <div class="govuk-width-container"> 
+  <div class="govuk-width-container">
     <ul class="account-navigation__list">
       {% for item in navigationItems %}
         <li class="account-navigation__list-item {{ 'account-navigation__list-item--active' if item.active else '' }}"><a class="account-navigation__link" href="{{item.href}}">{{item.text}}</a></li>

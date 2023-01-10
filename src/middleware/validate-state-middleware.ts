@@ -15,7 +15,7 @@ export function validateStateMiddleware(
     )
   ) {
     req.log.warn(`state exists but no value for ${pageState.type}`);
-    return res.redirect(PATH_DATA.MANAGE_YOUR_ACCOUNT.url);
+    return res.redirect(PATH_DATA.YOUR_SERVICES.url);
   }
 
   if (
@@ -23,7 +23,7 @@ export function validateStateMiddleware(
     !req.session.user.state[pageState.type].events.includes(pageState.event)
   ) {
     delete req.session.user.state[pageState.type];
-    return res.redirect(PATH_DATA.MANAGE_YOUR_ACCOUNT.url);
+    return res.redirect(PATH_DATA.YOUR_SERVICES.url);
   }
 
   next();
