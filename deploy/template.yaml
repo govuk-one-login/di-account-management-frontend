@@ -728,7 +728,6 @@ Resources:
           "protocol":"$context.protocol",
           "responseLength":"$context.responseLength",
           "responseLatency":"$context.responseLatency",
-
           "integrationErrorMessage":"$context.integrationErrorMessage",
           "awsEndpointRequestId":"$context.awsEndpointRequestId",
           "domainName":"$context.domainName",
