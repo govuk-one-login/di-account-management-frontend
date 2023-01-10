@@ -727,7 +727,16 @@ Resources:
           "status":"$context.status",
           "protocol":"$context.protocol",
           "responseLength":"$context.responseLength",
-          "responseLatency":"$context.responseLatency"
+          "responseLatency":"$context.responseLatency",
+
+          "integrationErrorMessage":"$context.integrationErrorMessage",
+          "awsEndpointRequestId":"$context.awsEndpointRequestId",
+          "domainName":"$context.domainName",
+          "errorMessage":"$context.error.message",
+          "errorResponseType":"$context.error.responseType",
+          "identityCaller":"$context.identity.caller",
+          "integrationStatus":"$context.integrationStatus",
+          "integrationLatency":"$context.integrationLatency"
           }
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
