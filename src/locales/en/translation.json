@@ -197,7 +197,7 @@
             "header": "GOV.UK email subscriptions",
             "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
             "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://www.staging.publishing.service.gov.uk/email/manage"
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
           },
           "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
             "header": "LITE (Licensing for International Trade and Enterprise)",
