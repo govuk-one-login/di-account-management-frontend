@@ -5,8 +5,9 @@ import {
   getAllowedAccountListClientIDs,
   getAllowedServiceListClientIDs,
 } from "../config";
-import { logger } from "./logger";
+import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
+import pino from "pino";
 
 const serviceStoreDynamoDBRequest = (
   subjectId: string
@@ -21,6 +22,7 @@ const unmarshallDynamoData = (dynamoDBResponse: DynamoDB.Types.AttributeMap) =>
   DynamoDB.Converter.unmarshall(dynamoDBResponse);
 
 const getServiceStoreItem = async (subjectId: string): Promise<Service[]> => {
+  const logger = pino();
   try {
     const response = await dynamoDBService().getItem(
       serviceStoreDynamoDBRequest(subjectId)
@@ -37,11 +39,14 @@ export const presentYourServices = async (
 ): Promise<YourServices> => {
   const userServices = await getServiceStoreItem(subjectId);
   if (userServices) {
+    const userServicesWithPresentableDates = userServices.map((service) =>
+      formatService(service)
+    );
     return {
-      accountsList: userServices.filter((service) =>
+      accountsList: userServicesWithPresentableDates.filter((service) =>
         getAllowedAccountListClientIDs.includes(service.client_id)
       ),
-      servicesList: userServices.filter((service) =>
+      servicesList: userServicesWithPresentableDates.filter((service) =>
         getAllowedServiceListClientIDs.includes(service.client_id)
       ),
     };
@@ -51,4 +56,14 @@ export const presentYourServices = async (
       servicesList: [],
     };
   }
+};
+
+export const formatService = (service: Service): Service => {
+  const readable_format_date = prettifyDate(service.last_accessed);
+  return {
+    client_id: service.client_id,
+    count_successful_logins: service.count_successful_logins,
+    last_accessed: service.last_accessed,
+    last_accessed_readable_format: readable_format_date,
+  };
 };
