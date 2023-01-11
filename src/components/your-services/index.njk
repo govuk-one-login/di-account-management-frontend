@@ -36,7 +36,7 @@
               <p class="govuk-body">
                 <a class="govuk-link" href="{{ [locale, 'link_href'] | join | translate }}">{{ [locale, 'link_text'] | join | translate }}</a>
               </p>
-              <p class="govuk-body govuk-body your-services__card__last-used">{{ 'pages.yourServices.lastUsed' | translate }}: {{ account.last_accessed_pretty }}</p>
+              <p class="govuk-body govuk-body your-services__card__last-used">{{ 'pages.yourServices.lastUsed' | translate }}: {{ account.last_accessed_readable_format }}</p>
             </div>
           </li>
         {% endfor %}
@@ -55,7 +55,7 @@
             <h3 class="govuk-heading-s govuk-!-font-weight-regular">
               <a class="govuk-link" href="{{ [locale, 'link_href'] | join | translate }}">{{ [locale, 'link_text'] | join | translate }}</a>
             </h3>
-            <p class="govuk-body your-services__card__last-used">{{ 'pages.yourServices.lastUsed' | translate }}: {{ service.last_accessed_pretty }}</p>
+            <p class="govuk-body your-services__card__last-used">{{ 'pages.yourServices.lastUsed' | translate }}: {{ service.last_accessed_readable_format }}</p>
             </div>
           </li>
         {% endfor %}
