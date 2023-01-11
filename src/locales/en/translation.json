@@ -107,11 +107,13 @@
       }
     },
     "timeoutError": {
-      "title": "You have been signed out",
-      "header": "You have been signed out",
+      "title": "You’ve been signed out",
+      "header": "You’ve been signed out",
       "content": {
-        "paragraph1": "You’ve been signed out because you did not use your account for more than 2 hours.",
-        "paragraph2": "This is to keep your account and your information secure.",
+        "paragraph1": "This could be because you:",
+        "listItem1": "have not used your account for more than 2 hours",
+        "listItem2": "signed out of your account while using another service",
+        "paragraph2": "We signed you out to keep your account and your information secure.",
         "signInButtonText": "Sign in to your account",
         "govUKHomepageLink": "https://www.gov.uk/",
         "govUKHomepageLinkText": "Go to the GOV.UK homepage"
