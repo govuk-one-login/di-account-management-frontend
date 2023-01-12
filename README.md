@@ -1,13 +1,11 @@
-# di-authentication-account-management frontend
-
-[![Application Integration and Deployment](https://github.com/alphagov/di-authentication-account-management/actions/workflows/main.yml/badge.svg)](https://github.com/alphagov/di-authentication-account-management/actions/workflows/main.yml)  
-Also known as the Account Management Frontend (AMF).
+# di-account-management-frontend
 
 ## Clone the repo
 
-Clone this repo to your local machine
-```bash
-git clone git@github.com:alphagov/di-authentication-account-management.git ./your_folder_name
+> Clone this repo to your local machine
+
+```shell script
+git@github.com:alphagov/di-account-management-frontend.git
 ```
 
 Clones the repository to the `your_folder_name` directory.
@@ -64,7 +62,7 @@ For certain features to run locally, we'll need localstack running and provision
 
 The provisioning of the infra in localstack is done automatically on startup when calling `docker compose up`.
 The provisioning and setup of the infra is done by following script, 
-[provision script](https://github.com/alphagov/di-authentication-account-management/tree/main/docs/localstack/provision.sh).
+[provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh).
 The script is mounted as volume onto localstack and invoked as soon as the container is ready.
 
 #### Setting up an AWS test user
@@ -91,21 +89,18 @@ If that fails to connect the application may throw an error or not render any ca
 
 The `user_services` Dynamo table in localstack is provisioned with a user service record populated with a `user_id`. 
 The `user_id` value can be overridden in the 
-[provision script](https://github.com/alphagov/di-authentication-account-management/tree/main/docs/localstack/provision.sh) 
+[provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh) 
 by explicitly setting `MY_ONE_LOGIN_USER_ID` env var in the same terminal where `docker compose up` is executed.  
 For this to work you will need to get your-subject-id from the build environment or session.
 
 ```bash
 export MY_ONE_LOGIN_USER_ID=<your-subject-id>
 ```
-Or [provide it on line 7](https://github.com/alphagov/di-authentication-account-management/tree/main/docs/localstack/provision.sh#L7).
+Or [provide it on line 7](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh#L7).
 
-A DynamoDB table also provides tha applications session store, which automatically deletes expired sessions.
-To facilitate destroying all sessions for a user upon account deletion or global logout, 
-the session store table has an index to allows the application to find all sessions by user.
+For convenience the [provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh) will do this for you. It creates the table from a seed, list the result and provisions a service record.
 
-The session store resources are also provisioned in localstack through the
-[provision script](https://github.com/alphagov/di-authentication-account-management/tree/main/docs/localstack/provision.sh)
+For this to work you will need to get your subjectID from the build environment or session and [provide it on line 11](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh#L11)
 
 ### Running the tests
 The unit tests have been written with Mocha and Supertest.
@@ -126,13 +121,13 @@ We can deploy the app to our development environment for pre-merge testing.
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
 Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
 
-The [Verify and Publish to Dev](https://github.com/alphagov/di-authentication-account-management/actions/workflows/cd-only.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
+The [Verify and Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/cd-only.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
 This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
 
 To deploy the app:
 
 1. Rebase your branch onto `main`
-2. Go to the [action page](https://github.com/alphagov/di-authentication-account-management/actions/workflows/cd-only.yml) and click 'Run workflow'
+2. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/cd-only.yml) and click 'Run workflow'
 3. Choose your branch from the dropdown, then click 'Run workflow' again
 4. Wait for the action to finish running
 5. Log into the development AWS account (`gds aws di-account-dev -l`)
@@ -146,7 +141,7 @@ We can deploy the app to our development environment (`di-account-dev`) for pre-
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
 Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
 
-Under the [Actions Tab](https://github.com/alphagov/di-authentication-account-management/actions) there is a [Verify & Publish to Dev](https://github.com/alphagov/di-authentication-account-management/actions/workflows/cd-only.yml) action.
+Under the [Actions Tab](https://github.com/alphagov/di-account-management-frontend/actions) there is a [Verify & Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/cd-only.yml) action.
 
 Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
 This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
@@ -154,9 +149,9 @@ This action has a `workflow_dispatch` trigger which means we can click an button
 To deploy the app:
 
 1. Rebase your branch onto `main`
-1. Go to the [action page](https://github.com/alphagov/di-authentication-account-management/actions/workflows/cd-only.yml) and click 'Run workflow'
-1. Use workflow from branch `main` - Leave this at the default unless you are modifying the workflow
-1. Select `Commit SHA, branch name or tag` - Provide the SHA, branch name or tag that you wish to deploy.
+1. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/cd-only.yml) and click 'Run workflow'
+1. Use workflow from branch `main`" - Leave this at the default unless you are modifying the workflow
+1. Select "Commit SHA, branch name or tag" - Provide the SHA, branch name or tag that you wish to deploy.
 1. Wait for the action to finish running
 1. Log into the development AWS account (`gds aws di-account-dev -l`)
 1. Go to the [CodePipeline job](https://eu-west-2.console.aws.amazon.com/codesuite/codepipeline/pipelines/account-mgmt-frontend-pipeline-Pipeline-1RV59OLATETA7/view?region=eu-west-2) for the frontend
