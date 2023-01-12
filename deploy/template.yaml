@@ -82,7 +82,7 @@ Parameters:
   SourceTagValue:
     Description: Value for the Source Tag
     Type: String
-    Default: alphagov/di-authentication-account-management/deploy/template.yaml
+    Default: alphagov/di-account-management-frontend/deploy/template.yaml
   SystemTagValue:
     Description: Value for the System Tag
     Type: String
