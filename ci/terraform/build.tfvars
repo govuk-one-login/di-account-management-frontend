@@ -2,7 +2,8 @@ environment         = "build"
 your_account_url    = ""
 common_state_bucket = "digital-identity-dev-tfstate"
 
-account_management_auto_scaling_enabled = true
+account_management_auto_scaling_enabled = false
+account_management_ecs_desired_count    = 0
 
 support_language_cy = "1"
 
