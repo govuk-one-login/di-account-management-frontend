@@ -6,7 +6,8 @@ import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
-import { getBaseUrl, getManageGovukEmailsUrl } from "../../config";
+import { getBaseUrl, getManageGovukEmailsUrl, supportDeleteServiceStore } from "../../config";
+import { getSNSDeleteTopic } from "../../config";
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk", {
@@ -19,8 +20,18 @@ export function deleteAccountPost(
   publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { email, subjectId, legacySubjectId } = req.session.user;
+    const { email, subjectId, publicSubjectId, legacySubjectId } =
+      req.session.user;
     const { accessToken } = req.session.user.tokens;
+
+    if (supportDeleteServiceStore()) {
+      const DeleteTopicARN = getSNSDeleteTopic()
+      try {
+        await service.deleteServiceData(subjectId, DeleteTopicARN)
+      } catch (err) {
+        req.log.error(`Unable to pubish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
+      }
+    }
 
     await service.deleteAccount(
       accessToken,
@@ -31,7 +42,7 @@ export function deleteAccountPost(
     );
     await publishingService
       .notifyAccountDeleted({
-        subjectId,
+        publicSubjectId,
         legacySubjectId,
       })
       .catch((err) => {

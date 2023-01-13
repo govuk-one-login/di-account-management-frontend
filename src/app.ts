@@ -21,6 +21,7 @@ import {
   getRedisPort,
   getSessionExpiry,
   getSessionSecret,
+  supportServiceCards,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 
@@ -28,6 +29,7 @@ import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
 import { serverErrorHandler } from "./handlers/internal-server-error-handler";
 import { csrfMiddleware } from "./middleware/csrf-middleware";
 import { manageYourAccountRouter } from "./components/manage-your-account/manage-your-account-routes";
+import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getCSRFCookieOptions } from "./config/cookie";
 import { ENVIRONMENT_NAME } from "./app.constants";
 import { startRouter } from "./components/start/start-routes";
@@ -57,6 +59,7 @@ import { globalLogoutRouter } from "./components/global-logout/global-logout-rou
 import { subjectSessionIndex } from "./utils/subject-session-index";
 import { subjectSessionIndexMiddleware } from "./middleware/subject-session-index-middleware";
 import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
+import { redirectsRouter } from "./components/redirects/redirects-routes"
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -136,6 +139,9 @@ async function createApp(): Promise<express.Application> {
   app.use(setHtmlLangMiddleware);
 
   app.use(manageYourAccountRouter);
+  if (supportServiceCards()) {
+    app.use(yourServicesRouter);
+  }
   app.use(oidcAuthCallbackRouter);
   app.use(startRouter);
   app.use(logoutRouter);
@@ -150,6 +156,10 @@ async function createApp(): Promise<express.Application> {
   app.use(sessionExpiredRouter);
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
+
+  // Router for all previously used URLs, that we want to redirect on
+  // No URL left behind policy
+  app.use(redirectsRouter);
 
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);

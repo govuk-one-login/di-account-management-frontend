@@ -71,6 +71,40 @@ Sign in and make sure you are returned to the local 'manage-your-account' screen
 
 Changes made locally will automatically be deployed after a few seconds. You should check the docker console to check that your changes have been picked up.
 
+### Provisioning localstack
+
+The application is now quite tightly integrated into AWS services.
+For certain features to run locally, we'll need localstack running an provisioned to facilitate requests:
+
+#### Setting up an AWS test user
+
+You will need to have a profile in AWS vault prepared you can use for local testing.
+
+You can list your AWS profiles with the aws-vault command.
+
+```bash
+aws-vault ls
+```
+
+If you do not have an appropriate one you can create one with dummy keys suitable for localstack with:
+
+```bash
+aws configure set aws_access_key_id "dummy" --profile test-profile
+aws configure set aws_secret_access_key "dummy" --profile test-profile
+aws configure set region "eu-west-2" --profile test-profile
+```
+
+#### DynamoDB
+
+The user sevice store uses dynamoDB to render service cards on the root page of the application.
+If that fails to connect the application may throw an error or not render any cards.
+
+You will need to create a dynamo table in localstack and provision it with a user service record.
+
+For convenience the [provision script](https://github.com/alphagov/di-authentication-account-management/tree/main/docs/localstack/provision.sh) will do this for you. It creates the table from a seed, list the result and provisions a service record.
+
+For this to work you will need to get your subjectID from the build environment or session and [provide it on line 11](https://github.com/alphagov/di-authentication-account-management/tree/main/docs/localstack/provision.sh#L11)
+
 ### Running the tests
 
 The unit tests have been written with Mocha and Supertest.

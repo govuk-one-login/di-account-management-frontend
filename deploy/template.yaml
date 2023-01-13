@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
   This creates the necessary components to deploy the Account Management
   Frontend onto ECS Fargate.
-  Account Management Frontend can be invoked via the CloudFront Distribution, 
+  Account Management Frontend can be invoked via the CloudFront Distribution,
   use the CloudFrontDistributionEndpoint URL exported by this stack.
-  The ingress route in summary is: 
+  The ingress route in summary is:
   CloudFront -> WAF -> API Gateway -> VPC link -> Private ALB -> ECS Fargate
 Transform:
   - AWS::Serverless-2016-10-31
@@ -55,6 +55,10 @@ Parameters:
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
+  BackendStackName:
+    Description: The name of the backend stack
+    Type: String
+    Default: account-mgmt-backend
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
@@ -83,9 +87,12 @@ Parameters:
     Description: The ARN of the permissions boundary to apply when creating IAM roles
     Type: String
     Default: none
+  ServiceStoreTableName:
+    Type: String
+    Default: user_services
 
 Conditions:
-  IsProduction: !Equals [ !Ref Environment, production ]
+  IsProduction: !Equals [!Ref Environment, production]
   UsePermissionsBoundary:
     Fn::Not:
       - Fn::Equals:
@@ -111,6 +118,8 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "1"
+      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
@@ -126,6 +135,8 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "1"
+      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
@@ -141,6 +152,8 @@ Mappings:
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "1"
+      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
@@ -155,7 +168,9 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "0"
+      SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "1"
+      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
@@ -170,7 +185,9 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "0"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "0"
+      SUPPORTNEWACCOUNTHEADER: "1"
+      SUPPORTDELETESERVICESTORE: "1"
+      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
@@ -266,9 +283,15 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                  - "sns:Publish"
+                Resource:
+                  - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
+              - Effect: Allow
+                Action:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${BackendStackName}/SNS/DeleteTopic/ARN"
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
@@ -277,13 +300,26 @@ Resources:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
               - Effect: Allow
                 Action:
+                  - dynamodb:Query
+                  - dynamodb:GetItem
+                Resource:
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
+              - Effect: Allow
+                Action:
                   - "kms:Sign"
                   - "kms:GetPublicKey"
-                Resource:
-                  !Join
+                Resource: !Join
                   - ""
                   - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/"
                     - !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
+              - Effect: Allow
+                Action:
+                  - "kms:GenerateDataKey*"
+                  - "kms:Decrypt"
+                Resource:
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
+
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
@@ -362,8 +398,7 @@ Resources:
           FromPort: !Ref ContainerPort
           ToPort: !Ref ContainerPort
       VpcId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcId"
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
@@ -400,47 +435,114 @@ Resources:
               awslogs-stream-prefix: "ecs"
           Environment:
             - Name: "NODE_ENV"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, NODEENV ]
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, NODEENV]
             - Name: "APP_ENV"
               Value: !Sub "${Environment}"
             - Name: "API_BASE_URL"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, APIBASEURL ]
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, APIBASEURL]
             - Name: "AM_API_BASE_URL"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, AMAPIBASEURL ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  AMAPIBASEURL,
+                ]
             - Name: "BASE_URL"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
             - Name: "OIDC_CLIENT_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/OIDC/Client/Id}}"
             - Name: "OIDC_CLIENT_SCOPES"
               Value: "openid phone email am offline_access govuk-account"
             - Name: "SESSION_EXPIRY"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SESSIONEXPIRY ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SESSIONEXPIRY,
+                ]
             - Name: "SESSION_SECRET"
-              Value: !Sub '{{resolve:secretsmanager:${SessionSecret}}}'
+              Value: !Sub "{{resolve:secretsmanager:${SessionSecret}}}"
             - Name: "AM_YOUR_ACCOUNT_URL"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, AMYOURACCOUNTURL ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  AMYOURACCOUNTURL,
+                ]
             - Name: "GTM_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/GTM/Id}}"
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, GOVACCOUNTSPUBLISHINGAPIURL ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  GOVACCOUNTSPUBLISHINGAPIURL,
+                ]
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
-              Value: !Sub '{{resolve:secretsmanager:/${AWS::StackName}/Config/Publishing/API/Key}}'
+              Value: !Sub "{{resolve:secretsmanager:/${AWS::StackName}/Config/Publishing/API/Key}}"
             - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTINTERNATIONALNUMBERS ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTINTERNATIONALNUMBERS,
+                ]
             - Name: "SUPPORT_LANGUAGE_CY"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTLANGUAGECY ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTLANGUAGECY,
+                ]
             - Name: "SUPPORT_NEW_ACCOUNT_HEADER"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SUPPORTNEWACCOUNTHEADER ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTNEWACCOUNTHEADER,
+                ]
+            - Name: "SUPPORT_DELETE_SERVICE_STORE"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTDELETESERVICESTORE,
+                ]
+            - Name: "SUPPORT_SERVICE_CARDS"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTSERVICECARDS,
+                ]
             - Name: "AUTH_FRONTEND_URL"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, AUTHFRONTENDURL ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  AUTHFRONTENDURL,
+                ]
             - Name: "ANALYTICS_COOKIE_DOMAIN"
               Value: !FindInMap [EnvironmentVariables, !Ref Environment, ANALYTICSCOOKIEDOMAIN ]
             - Name: "KMS_KEY_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
             - Name: "SERVICE_DOMAIN"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, SERVICEDOMAIN ]
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SERVICEDOMAIN,
+                ]
             - Name: "LOGS_LEVEL"
-              Value: !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL ]
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL]
+            - Name: "DELETE_TOPIC_ARN"
+              Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/DeleteTopic/ARN}}"
+            - Name: "SERVICE_STORE_TABLE_NAME"
+              Value: !Ref ServiceStoreTableName
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
@@ -577,15 +679,15 @@ Resources:
       ApiId: !Ref ApiGateway
       IntegrationType: HTTP_PROXY
       ConnectionId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcLinkId"
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcLinkId"
       ConnectionType: VPC_LINK
       IntegrationMethod: ANY
       IntegrationUri: !Ref ApplicationLoadBalancerListenerHTTPS
       PayloadFormatVersion: 1.0
       Description: !Sub "API GW to ECS Container integration for ${AWS::StackName}"
       TlsConfig:
-        ServerNameToVerify: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+        ServerNameToVerify:
+          !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
 
   ApiRoute:
     Type: AWS::ApiGatewayV2::Route
@@ -601,7 +703,24 @@ Resources:
       StageName: "$default"
       AutoDeploy: true
       AccessLogSettings:
-        Format: "$context.requestId $context.httpMethod $context.path"
+        Format: >-
+          {
+          "requestId":"$context.requestId",
+          "requestTime":"$context.requestTime",
+          "httpMethod":"$context.httpMethod",
+          "domainName":"$context.domainName",
+          "path": "$context.path",
+          "routeKey":"$context.routeKey",
+          "protocol":"$context.protocol",
+          "status":"$context.status",
+          "responseLength":"$context.responseLength",
+          "responseLatency":"$context.responseLatency",
+          "integrationStatus":"$context.integrationStatus",
+          "integrationLatency":"$context.integrationLatency"
+          "integrationErrorMessage":"$context.integrationErrorMessage",
+          "errorMessage":"$context.error.message",
+          "errorResponseType":"$context.error.responseType"
+          }
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
         Product: !Ref ProductTagValue
@@ -617,7 +736,7 @@ Resources:
   AppFrontCustomDomain:
     Type: AWS::ApiGatewayV2::DomainName
     Properties:
-      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
       DomainNameConfigurations:
         - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Home/ARN}}"
           EndpointType: REGIONAL
@@ -632,7 +751,7 @@ Resources:
   AppFrontApiRecord:
     Type: AWS::Route53::RecordSet
     Properties:
-      Name: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+      Name: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
       Type: A
       HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
       AliasTarget:
@@ -644,7 +763,7 @@ Resources:
   AppFrontApiMapping:
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties:
-      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
       ApiId: !Ref ApiGateway
       Stage: !Ref ApiDefaultStage
     DependsOn:
@@ -662,10 +781,8 @@ Resources:
       SecurityGroups:
         - !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
       Subnets:
-        - Fn::ImportValue:
-            !Sub "${VpcStackName}-ProtectedSubnetIdA"
-        - Fn::ImportValue:
-            !Sub "${VpcStackName}-ProtectedSubnetIdB"
+        - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
+        - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
       LoadBalancerAttributes:
         - Key: access_logs.s3.enabled
           Value: true
@@ -703,8 +820,7 @@ Resources:
       TargetType: ip
       UnhealthyThresholdCount: 2
       VpcId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcId"
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "5"
@@ -737,8 +853,7 @@ Resources:
       TargetType: ip
       UnhealthyThresholdCount: 2
       VpcId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcId"
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "5"
@@ -814,10 +929,8 @@ Resources:
           SecurityGroups:
             - !GetAtt ContainerServiceSecurityGroup.GroupId
           Subnets:
-          - Fn::ImportValue:
-              !Sub "${VpcStackName}-ProtectedSubnetIdA"
-          - Fn::ImportValue:
-              !Sub "${VpcStackName}-ProtectedSubnetIdB"
+            - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
+            - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
       PlatformVersion: 1.4.0
       Scale:
         Unit: PERCENT
@@ -856,8 +969,7 @@ Resources:
                           - "/"
                           - Ref: AWS::StackId
       VpcId:
-        Fn::ImportValue:
-          !Sub "${VpcStackName}-VpcId"
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
@@ -913,7 +1025,7 @@ Resources:
       MaxCapacity: !Ref ECSClusterMaxCapacity
       MinCapacity: 2
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
@@ -928,7 +1040,7 @@ Resources:
       PolicyName: !Sub "${AWS::StackName}-ECSAutoScalingPolicyMemory"
       PolicyType: TargetTrackingScaling
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
@@ -947,7 +1059,7 @@ Resources:
       PolicyName: !Sub "${AWS::StackName}-ECSAutoScalingPolicyCPU"
       PolicyType: TargetTrackingScaling
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
@@ -1049,7 +1161,7 @@ Resources:
           - Fn::Select:
               - 4
               - Fn::Split:
-                  - '-'
+                  - "-"
                   - Fn::Select:
                       - 2
                       - Fn::Split:
@@ -1094,7 +1206,12 @@ Resources:
             Principal:
               AWS: !Sub
                 - "arn:aws:iam::${ElbAccountId}:root"
-                - ElbAccountId: !FindInMap [ ElasticLoadBalancerAccountIds, !Ref AWS::Region, AccountId ]
+                - ElbAccountId:
+                    !FindInMap [
+                      ElasticLoadBalancerAccountIds,
+                      !Ref AWS::Region,
+                      AccountId,
+                    ]
             Action:
               - s3:PutObject
             Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
@@ -1137,9 +1254,9 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
         CNAMEs:
-          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
         Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
         DefaultCacheBehavior:
           AllowedMethods:
@@ -1159,7 +1276,8 @@ Resources:
           OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
           Compress: false
           MinTTL: 0
-          TargetOriginId: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+          TargetOriginId:
+            !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
           ViewerProtocolPolicy: redirect-to-https
         Enabled: true
         HttpVersion: "http2"
@@ -1169,14 +1287,14 @@ Resources:
           - ConnectionAttempts: 3
             ConnectionTimeout: 10
             DomainName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
-            Id: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+            Id: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
             CustomOriginConfig:
               HTTPSPort: 443
               OriginKeepaliveTimeout: 5
               OriginProtocolPolicy: https-only
               OriginReadTimeout: 30
               OriginSSLProtocols:
-              - TLSv1.2
+                - TLSv1.2
         ViewerCertificate:
           AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
           MinimumProtocolVersion: TLSv1.2_2021
@@ -1207,8 +1325,7 @@ Resources:
           HeaderBehavior: allViewer
         Name: !Sub "${AWS::StackName}-OriginRequestPolicy"
         QueryStringsConfig:
-          QueryStringBehavior:
-            all
+          QueryStringBehavior: all
 
   CloudFrontLogsBucket:
     Type: AWS::S3::Bucket
@@ -1224,7 +1341,7 @@ Resources:
           - Fn::Select:
               - 4
               - Fn::Split:
-                  - '-'
+                  - "-"
                   - Fn::Select:
                       - 2
                       - Fn::Split:
@@ -1300,4 +1417,4 @@ Outputs:
     Value: !GetAtt ApiGateway.ApiEndpoint
   CloudFrontDistributionEndpoint:
     Description: The Application URL.
-    Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL ]
+    Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]

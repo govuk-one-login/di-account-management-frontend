@@ -46,15 +46,13 @@
     },
     "continue": {
       "label": "Parhau"
-    },    
+    },
     "header": {
       "homepageHref": "https://www.gov.uk/",
       "productName": "Cyfrif",
       "accountLink": "Eich cyfrif GOV.UK",
-      "accounNavHomeLink": "Your services",
-      "accountNavSettingsLink": "Settings",
-      "buttonTextHidden": "Menu",
-      "buttonTextVisible": "Close",
+      "accounNavHomeLink": "Eich gwasanaethau",
+      "accountNavSettingsLink": "Gosodiadau",
       "signOutLink": "Allgofnodi"
     },
     "footer": {
@@ -112,8 +110,10 @@
       "title": "Rydych wedi cael eich allgofnodi",
       "header": "Rydych wedi cael eich allgofnodi",
       "content": {
-        "paragraph1": "Rydych wedi cael eich allgofnodi oherwydd nad oeddech wedi defnyddio eich cyfrif am fwy na 2 awr.",
-        "paragraph2": "Mae hyn er mwyn cadw eich cyfrif a’ch gwybodaeth yn ddiogel.",
+        "paragraph1": "Gallai hyn fod oherwydd rydych:",
+        "listItem1": "heb ddefnyddio eich cyfrif am fwy na 2 awr",
+        "listItem2": "wedi allgofnodi o'ch cyfrif tra'n defnyddio gwasanaeth arall",
+        "paragraph2": "Rydym wedi eich allgofnodi i gadw eich cyfrif a'ch gwybodaeth yn ddiogel.",
         "signInButtonText": "Mewngofnodi i’ch cyfrif",
         "govUKHomepageLink": "https://www.gov.uk/",
         "govUKHomepageLinkText": "Ewch i hafan GOV.UK"
@@ -147,6 +147,163 @@
         "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gydag ychydig o wasanaethau.",
         "paragraph2": "Ar hyn o bryd mae cyfrifon GOV.UK ar wahân i gyfrifon eraill y llywodraeth (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
         "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i fewngofnodi i’r rhan fwyaf o wasanaethau ar GOV.UK."
+      }
+    },
+    "yourServices": {
+      "title": "Eich gwasanaethau",
+      "header": "Eich gwasanaethau",
+      "signedInStatus": "Rydych wedi mewngofnodi fel",
+      "lastUsed": "Defnyddwyd ddiwethaf",
+      "empty": "Nid ydych yn defnyddio unrhyw wasanaethau gyda’ch cyfrif GOV.UK eto.",
+      "accountsList": {
+        "heading": "Eich cyfrifon"
+      },
+      "servicesList": {
+        "heading": "Gwasanaethau eraill rydych wedi eu defnyddio"
+      },
+      "informationBox": {
+        "heading": "Am gyfrifon GOV.UK",
+        "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gyda:",
+        "listItem1": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "listItem2": "Tanysgrifiadau e-byst GOV.UK",
+        "listItem3": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "listItem4": "Gwneud cais am wiriad DBS sylfaenol",
+        "paragraph2": "Nid yw cyfrifon GOV.UK yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
+        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i gael mynediad i holl wasanaethau ar GOV.UK."
+      },
+      "clientRegistry": {
+        "production": {
+          "LcueBVCnGZw-YFdTZ4S07XbQx7I": {
+            "header": "Tanysgrifiadau e-byst GOV.UK",
+            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+            "link_href": "https://www.gov.uk/email/manage"
+          },
+          "ZL0kvRBP5xMy5OwONj8ARLPyuko": {
+            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+            "link_text": "Ewch i’ch cyfrif LITE",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
+            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
+            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "integration": {
+          "CEr97IZfEPQFgBxq8QNcM8LFxw4": {
+            "header": "Tanysgrifiadau e-byst GOV.UK",
+            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
+            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+            "link_text": "Ewch i’ch cyfrif LITE",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "Dw7Cxas8W7O2usHMHok95elKDRU": {
+            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "oLciSn5b6-cqcJjzgMMwCw1moD8": {
+            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "staging": {
+          "gov-uk": {
+            "header": "Tanysgrifiadau e-byst GOV.UK",
+            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "lite": {
+            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+            "link_text": "Ewch i’ch cyfrif LITE",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "build": {
+          "gov-uk": {
+            "header": "Tanysgrifiadau e-byst GOV.UK",
+            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "lite": {
+            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+            "link_text": "Ewch i’ch cyfrif LITE",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "dev": {
+          "gov-uk": {
+            "header": "Tanysgrifiadau e-byst GOV.UK",
+            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "lite": {
+            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+            "link_text": "Ewch i’ch cyfrif LITE",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        },
+        "local": {
+          "gov-uk": {
+            "header": "Tanysgrifiadau e-byst GOV.UK",
+            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+          },
+          "lite": {
+            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+            "link_text": "Ewch i’ch cyfrif LITE",
+            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "dbs": {
+            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+            "link_href": "https://www.gov.uk/request-copy-criminal-record"
+          },
+          "vehicleOperatorLicense": {
+            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          }
+        }
       }
     },
     "enterPassword": {
@@ -300,18 +457,16 @@
     "deleteAccount": {
       "title": "Ydych chi’n siwr eich bod am ddileu eich cyfrif GOV.UK?",
       "header": "Ydych chi’n siwr eich bod am ddileu eich cyfrif GOV.UK?",
-      "paragraph1": "Bydd hyn yn:",
-      "listItem1": "dileu eich cyfrif GOV.UK yn barhaol a’r wybodaeth sydd wedi’i gadw ynddo",
-      "listItem2": "dileu unrhyw <a class=\"govuk-link\" href=\"[emailManagementLink]\">Tanysgrifiadau e-bost GOV.UK</a> y gallai fod gennych",
-      "listItem3": "tynnu i ffwrdd eich gallu i fewngofnodi i LITE (i wneud cais am drwyddedau allforio ar gyfer nwyddau rheoledig), os ydych wedi’i ddefnyddio gyda’ch cyfrif GOV.UK",
-      "paragraph2": "Os byddwch angen cyfrif GOV.UK yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
-      "paragraph3": "Ni fydd dileu eich cyfrif GOV.UK yn dileu unrhyw gyfrifon eraill y llywodraeth sydd gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.",
+      "paragraph1": "Bydd hyn yn dileu y manylion mewngofnodi ar gyfer eich cyfrif GOV.UK yn barhaol.",
+      "paragraph2": "Mae hyn yn golygu na fyddwch yn gallu mewngofnodi mwyach i'r gwasanaethau rydych yn eu defnyddio gyda'ch cyfrif GOV.UK.",
+      "paragraph3": "Os oes gennych <a class=\"govuk-link\" href=\"[emailManagementLink]\">danysgrifiadau e-byst GOV.UK</a>, bydd y rhain hefyd yn cael eu dileu.",
+      "paragraph4": "Ni fydd yn dileu'r wybodaeth bersonol a gedwir gan wasanaethau rydych wedi'u defnyddio gyda'ch cyfrif GOV.UK.",
+      "paragraph5": "Os byddwch angen cyfrif GOV.UK yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
       "details": {
-        "summaryText": "Os ydych yn defnyddio LITE",
-        "text": "<p class=\"govuk-body\">Os ydych yn dileu eich cyfrif GOV.UK ni fyddwch mwyach yn gallu mewngofnodi i LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol).</p><p class=\"govuk-body\"> Ni fydd y wybodaeth amdanoch a gedwir yn LITE yn cael ei ddileu. E-bostiwch <a class=\"govuk-link\" href=\"mailto:data.protection@trade.gov.uk\">data.protection@trade.gov.uk</a> os ydych chi am ddileu gwybodaeth a gedwir gan LITE.</p>"
+        "text": "<p class=\"govuk-body\">Ni fydd dileu eich cyfrif GOV.UK yn effeithio ar unrhyw gyfrifon eraill y llywodraeth y gallai fod gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.</p>"
       },
       "deleteAccount": "Dileu eich cyfrif GOV.UK",
-      "doNotDeleteAccount": "Canslo a mynd yn ôl i’ch cyfrif"
+      "doNotDeleteAccount": "Canslo a mynd yn ôl i gosodiadau"
     },
     "changePhoneNumber": {
       "title": "Rhowch eich rhif ffôn symudol newydd",

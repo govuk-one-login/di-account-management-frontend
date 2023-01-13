@@ -111,12 +111,25 @@ $govuk-new-link-styles: true;
   background-color: govuk-colour("light-grey", $legacy: "grey-3");
 }
 
+// the modifier below is in place to remove the non-optional blue border at the bottom of the Design System header component
+// this is not ideal, however since there is no option/flag to remove the border from the component, it is the only way
+.govuk-header--with-account-navigation {
+  border-bottom: 0;
+
+  .govuk-header__container {
+    margin-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .govuk-header__logo {
+    float: left;
+    width: 100%;
+  }
+}
+
 .account-navigation {
   background-color: govuk-colour("light-grey");
   border-bottom: 1px solid $govuk-border-colour;
-  // this is a hack and not very nice
-  // the DS header comes with a non-optional border on the bottom, annoyingly 
-  margin-top: -(govuk-spacing(2));
   position: relative;
 }
 
@@ -149,7 +162,7 @@ $govuk-new-link-styles: true;
 
   &:visited {
     color: $govuk-link-colour;
-    
+
     &:hover {
       color: $govuk-link-hover-colour;
     }
@@ -173,4 +186,45 @@ $govuk-new-link-styles: true;
       border-color: $govuk-link-hover-colour;
     }
   }
+}
+
+.your-services__heading {
+  margin-bottom: govuk-spacing(3);
+}
+
+.your-services__signed-in-status {
+  margin-bottom: govuk-spacing(6);
+}
+
+.your-services__card {
+  border: 1px solid $govuk-border-colour;
+
+  // this degree of specificity is required to overrule the default govuk-list style
+  .govuk-list > & {
+    margin-bottom: govuk-spacing(4);
+  }
+
+  &.your-services__card--empty {
+    margin-bottom: govuk-spacing(6);
+  }
+}
+
+.your-services__card__heading {
+  padding: govuk-spacing(3) govuk-spacing(3) govuk-spacing(4) govuk-spacing(3);
+  background-color: govuk-colour("light-grey");
+  margin: 0;
+}
+
+.your-services__card__content {
+  @include govuk-responsive-padding(4, "top");
+  @include govuk-responsive-padding(3, "right");
+  @include govuk-responsive-padding(3, "left");
+}
+
+.your-services__card__last-used {
+  color: $govuk-secondary-text-colour;
+}
+
+.your-services__list {
+  margin-bottom: govuk-spacing(7);
 }

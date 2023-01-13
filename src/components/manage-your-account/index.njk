@@ -74,20 +74,9 @@
 
             {{ govukSummaryList(govukSummaryListArgs) }}
 
-            <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.manageEmailSubscriptions.heading' | translate }}</h2>
-            <p class="govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.info' | translate }}</p>
-            <a href="{{ manageEmailsLink }}" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.manageEmailSubscriptions.link' | translate }}</a>
-            <hr class="govuk-section-break govuk-section-break--m">
             <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.deleteAccount.heading' | translate }}</h2>
             <p class="govuk-body">{{ 'pages.manageYourAccount.deleteAccount.info' | translate }}</p>
             <a href="/enter-password?type=deleteAccount" class="govuk-link govuk-body">{{ 'pages.manageYourAccount.deleteAccount.link' | translate }}</a>
-            <hr class="govuk-section-break govuk-section-break--m">
-            <div class="information-box">
-                <h2 class="govuk-heading-m">{{ 'pages.manageYourAccount.aboutAccounts.heading' | translate }}</h2>
-                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph1' | translate }}</p>
-                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph2' | translate }}</p>
-                <p class="govuk-body">{{ 'pages.manageYourAccount.aboutAccounts.paragraph3' | translate }}</p>
-            </div>
         </div>
     </div>
 {% endblock %}

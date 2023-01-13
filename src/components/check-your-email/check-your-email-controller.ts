@@ -26,8 +26,13 @@ export function checkYourEmailPost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const code = req.body["code"];
-    const { email, newEmailAddress, subjectId, legacySubjectId } =
-      req.session.user;
+    const {
+      email,
+      newEmailAddress,
+      subjectId,
+      publicSubjectId,
+      legacySubjectId,
+    } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
     const isEmailUpdated = await service.updateEmail(
@@ -44,7 +49,7 @@ export function checkYourEmailPost(
     if (isEmailUpdated) {
       await publishingService
         .notifyEmailChanged({
-          subjectId: subjectId,
+          publicSubjectId: publicSubjectId,
           newEmail: newEmailAddress,
           legacySubjectId: legacySubjectId,
         })
