@@ -122,8 +122,8 @@
   },
   "pages": {
     "manageYourAccount": {
-      "title": "Your GOV.UK account",
-      "header": "Your GOV.UK account",
+      "title": "Settings",
+      "header": "Settings",
       "signedInStatus": "You’re signed in as",
       "accountDetails": "Your sign in details",
       "summaryList": {
