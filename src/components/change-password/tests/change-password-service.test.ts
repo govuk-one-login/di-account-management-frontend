@@ -17,8 +17,6 @@ describe("changePasswordService", () => {
     nock.cleanAll;
   });
 
-  //after(nock.restore);
-
   it("update password", async () => {
     const accessToken = "1234";
     const email = "something@test.com";
@@ -52,7 +50,6 @@ describe("changePasswordService", () => {
       persistentSessionId,
       userLanguage
     );
-    // console.log(JSON.stringify(updatePasswordResult));
     expect(updatePasswordResult.success).to.be.true;
   });
 });

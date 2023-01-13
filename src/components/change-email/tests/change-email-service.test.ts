@@ -21,8 +21,6 @@ describe("changeEmailService", () => {
     nock.cleanAll;
   });
 
-  //after(nock.restore);
-
   it("send Code verification Notification", async () => {
     const accessToken = "1234";
     const email = "something@test.com";
