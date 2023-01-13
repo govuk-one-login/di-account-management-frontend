@@ -110,8 +110,10 @@
       "title": "Rydych wedi cael eich allgofnodi",
       "header": "Rydych wedi cael eich allgofnodi",
       "content": {
-        "paragraph1": "Rydych wedi cael eich allgofnodi oherwydd nad oeddech wedi defnyddio eich cyfrif am fwy na 2 awr.",
-        "paragraph2": "Mae hyn er mwyn cadw eich cyfrif a’ch gwybodaeth yn ddiogel.",
+        "paragraph1": "Gallai hyn fod oherwydd rydych:",
+        "listItem1": "heb ddefnyddio eich cyfrif am fwy na 2 awr",
+        "listItem2": "wedi allgofnodi o'ch cyfrif tra'n defnyddio gwasanaeth arall",
+        "paragraph2": "Rydym wedi eich allgofnodi i gadw eich cyfrif a'ch gwybodaeth yn ddiogel.",
         "signInButtonText": "Mewngofnodi i’ch cyfrif",
         "govUKHomepageLink": "https://www.gov.uk/",
         "govUKHomepageLinkText": "Ewch i hafan GOV.UK"
