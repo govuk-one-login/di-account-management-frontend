@@ -53,7 +53,7 @@ describe("check your email controller", () => {
       };
 
       const fakePublishingService: GovUkPublishingServiceInterface = {
-        notifyAccountDeleted: sandbox.fake(),
+        // notifyAccountDeleted: sandbox.fake(),
         notifyEmailChanged: sandbox.fake.returns(Promise.resolve()),
       };
 

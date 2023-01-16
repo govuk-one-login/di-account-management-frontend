@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { SnsService } from "../../../utils/types";
 import { sinon } from "../../../../test/utils/test-utils";
-import { http } from "../../../utils/http";
+// import { http } from "../../../utils/http";
 
 import {
   deleteAccountService,
@@ -22,11 +22,17 @@ describe("deleteAccountService", () => {
   });
 
   describe("deleteServiceData", () => {
-    const expected_message = JSON.stringify({ "user_id": "abc" })
+    // const expected_message = JSON.stringify({ "user_id": "abc" })
+    const expected_message = JSON.stringify({ "user_id": "abc", "access_token": "access_token",
+  "email": "email", "source_ip": "source_ip", "session_id": "session_id", "persistent_session_id": "persistent_session_id",
+      "public_subject_id": "public_subject_id", "legacy_subject_id": "legacy_subject_id"})
+
 
     it("fills the topic ARN from config if not provided", async () => {
       const fakeSnsService: SnsService = { publish: sandbox.fake() };  
-      await deleteAccountService(http, fakeSnsService).deleteServiceData("abc")
+      await deleteAccountService(fakeSnsService).deleteServiceData("abc", "access_token",
+          "email", "source_ip", "session_id", "persistent_session_id", "public_subject_id",
+          "legacy_subject_id")
       expect(fakeSnsService.publish).to.have.been.calledOnceWith(
         "UserAccountDeletionEnv",
         expected_message
@@ -35,7 +41,10 @@ describe("deleteAccountService", () => {
 
     it("calls snsService.publish with a topic ARN and message JSON", async () => {
       const fakeSnsService: SnsService = { publish: sandbox.fake() };
-      await deleteAccountService(http, fakeSnsService).deleteServiceData("abc", "UserAccountDeletion")
+      await deleteAccountService(fakeSnsService).deleteServiceData("abc", "access_token",
+          "email", "source_ip", "session_id", "persistent_session_id", "public_subject_id",
+          "legacy_subject_id", "UserAccountDeletion")
+      // await deleteAccountService(http, fakeSnsService).deleteServiceData("abc", "UserAccountDeletion")
       expect(fakeSnsService.publish).to.have.been.calledOnceWith(
         "UserAccountDeletion",
         expected_message

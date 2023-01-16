@@ -27,20 +27,20 @@ export function govUkPublishingService(
     );
   };
 
-  const notifyAccountDeleted = async function (
-    request: GovUkNotificationRequest
-  ): Promise<void> {
-    let deleteUrl = getRequestUrl(request.publicSubjectId);
-
-    if (request.legacySubjectId) {
-      deleteUrl = deleteUrl + "?legacy_sub=" + request.legacySubjectId;
-    }
-
-    await axios.client.delete<void>(
-      deleteUrl,
-      getRequestConfig(getGovPublishingBaseAPIToken())
-    );
-  };
+  // const notifyAccountDeleted = async function (
+  //   request: GovUkNotificationRequest
+  // ): Promise<void> {
+  //   let deleteUrl = getRequestUrl(request.publicSubjectId);
+  //
+  //   if (request.legacySubjectId) {
+  //     deleteUrl = deleteUrl + "?legacy_sub=" + request.legacySubjectId;
+  //   }
+  //
+  //   await axios.client.delete<void>(
+  //     deleteUrl,
+  //     getRequestConfig(getGovPublishingBaseAPIToken())
+  //   );
+  // };
 
   function getRequestUrl(subjectId: string) {
     return `${getGovPublishingBaseAPIUrl()}${
@@ -50,6 +50,6 @@ export function govUkPublishingService(
 
   return {
     notifyEmailChanged,
-    notifyAccountDeleted,
+    // notifyAccountDeleted,
   };
 }

@@ -4,8 +4,8 @@ import { DeleteAccountServiceInterface } from "./types";
 import { deleteAccountService } from "./delete-account-service";
 import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
-import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
-import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
+// import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
+// import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 import { getBaseUrl, getManageGovukEmailsUrl, supportDeleteServiceStore } from "../../config";
 import { getSNSDeleteTopic } from "../../config";
 
@@ -17,7 +17,7 @@ export function deleteAccountGet(req: Request, res: Response): void {
 
 export function deleteAccountPost(
   service: DeleteAccountServiceInterface = deleteAccountService(),
-  publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
+    // publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const { email, subjectId, publicSubjectId, legacySubjectId } =
@@ -27,29 +27,30 @@ export function deleteAccountPost(
     if (supportDeleteServiceStore()) {
       const DeleteTopicARN = getSNSDeleteTopic()
       try {
-        await service.deleteServiceData(subjectId, DeleteTopicARN)
+        await service.deleteServiceData(subjectId, accessToken, email, req.ip, res.locals.sessionId, res.locals.persistentSessionId, publicSubjectId, legacySubjectId, DeleteTopicARN)
       } catch (err) {
-        req.log.error(`Unable to pubish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
+        req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
       }
     }
 
-    await service.deleteAccount(
-      accessToken,
-      email,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId
-    );
-    await publishingService
-      .notifyAccountDeleted({
-        publicSubjectId,
-        legacySubjectId,
-      })
-      .catch((err) => {
-        req.log.error(
-          `Unable to send delete account notification for:${subjectId}. Error:${err}`
-        );
-      });
+        // await service.deleteAccount(
+        //     accessToken,
+        //     email,
+        //     req.ip,
+        //     res.locals.sessionId,
+        //     res.locals.persistentSessionId
+        // );
+        
+        // await publishingService
+        //     .notifyAccountDeleted({
+        //         publicSubjectId,
+        //         legacySubjectId,
+        //     })
+        //     .catch((err) => {
+        //         req.log.error(
+        //             `Unable to send delete account notification for:${subjectId}. Error:${err}`
+        //         );
+        //     });
 
     req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,
