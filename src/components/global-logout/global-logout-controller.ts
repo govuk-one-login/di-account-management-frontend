@@ -6,6 +6,7 @@ import {
   getLogoutTokenMaxAge,
   getTokenValidationClockSkew,
 } from "../../config";
+import { destroyUserSessions } from "../../utils/session-store";
 
 const BACK_CHANNEL_LOGOUT_EVENT =
   "http://schemas.openid.net/event/backchannel-logout";
@@ -64,15 +65,7 @@ export async function globalLogoutPost(
   const token = await verifyLogoutToken(req);
 
   if (token && validateLogoutTokenClaims(token, req)) {
-      await req.app.locals.subjectSessionIndexService.getSessions(token.sub).then(
-          (sessions: string[]) => sessions.forEach((sessionId: string) => {
-            req.app.locals.sessionStore.destroy(sessionId);
-            req.app.locals.subjectSessionIndexService.removeSession(
-                token.sub,
-                sessionId
-            );
-          })
-     )
+    await destroyUserSessions(token.sub, req.app.locals.sessionStore);
     res.send(HTTP_STATUS_CODES.OK);
     return;
   }
