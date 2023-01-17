@@ -11,7 +11,7 @@ export function getOIDCApiDiscoveryUrl(): string {
 }
 
 export function getLocalStackBaseUrl(): string {
-  return "http://localstack:4566";
+  return "http://localhost:4566";
 }
 
 export function getOIDCClientId(): string {
