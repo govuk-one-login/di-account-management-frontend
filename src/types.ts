@@ -22,13 +22,3 @@ export type ValidationChainFunc = (
       next: express.NextFunction
     ) => any)
 )[];
-
-export interface RedisConfig {
-  host: string;
-  port: number;
-  password?: string;
-  name?: string;
-  uri?: string;
-  tls?: boolean;
-  isLocal: boolean;
-}

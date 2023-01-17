@@ -1,5 +1,6 @@
-import AWS from "aws-sdk";
-import type { Endpoint } from "aws-sdk";
+import { Endpoint } from "aws-sdk";
+import { DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
+import { ClientConfiguration } from "aws-sdk/clients/dynamodb";
 import {
   getAppEnv,
   getAwsRegion,
@@ -9,14 +10,6 @@ import {
 
 //refer to seed.yaml
 const LOCAL_KEY_ID = "ff275b92-0def-4dfc-b0f6-87c96b26c6c7";
-
-export interface AWSCredentials {
-  AWS_ACCESS_KEY_ID: string;
-  AWS_REGION: string;
-  AWS_SECRET_ACCESS_KEY: string;
-  KMS_KEY_ALIAS: string;
-  KMS_KEY_ID: string;
-}
 
 export interface KmsConfig {
   awsConfig: AwsConfig;
@@ -43,10 +36,10 @@ function getLocalStackKmsConfig() {
 
 function getLocalStackAWSConfig(): AwsConfig {
   return {
-    endpoint: new AWS.Endpoint(getLocalStackBaseUrl()),
+    endpoint: new Endpoint(getLocalStackBaseUrl()),
     accessKeyId: "na",
     secretAccessKey: "na",
-    region: "eu-west-2",
+    region: getAwsRegion(),
   };
 }
 
@@ -85,4 +78,25 @@ export function getKMSConfig(): KmsConfig {
     },
     kmsKeyId: getKmsKeyId(),
   };
+}
+
+export function getDBConfig(config: AwsConfig = getAWSConfig()): ClientConfiguration | DynamoDBClientConfig {
+  const dbConfig:any = {};
+
+  if (config.accessKeyId || config.secretAccessKey) {
+    dbConfig.credentials = {
+      accessKeyId: config.accessKeyId || "",
+      secretAccessKey: config.secretAccessKey || ""
+    }
+  }
+
+  if (config.endpoint) {
+    dbConfig.endpoint = `${config.endpoint.protocol}//${config.endpoint.host}`
+  }
+
+  if (config.region) {
+    dbConfig.region = config.region;
+  }
+
+  return dbConfig;
 }
