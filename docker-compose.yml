@@ -4,13 +4,11 @@ services:
   localstack:
     container_name: localstack
     image: localstack/localstack:1.3.1
-    network_mode: host
     ports:
       - "4566:4566"
     environment:
       - SERVICES=kms,sns,dynamodb
       - HOSTNAME_EXTERNAL=localhost
-      - DEFAULT_REGION=eu-west-2
       - DEBUG=0
       - KMS_PROVIDER=local-kms
       - AWS_ACCESS_KEY_ID=na
@@ -25,7 +23,6 @@ services:
     build:
       context: .
       dockerfile: local.Dockerfile
-    network_mode: host
     ports:
       - "6001:6001"
       - "9240:9230"
@@ -55,6 +52,7 @@ services:
       - SERVICE_STORE_TABLE_NAME=${SERVICE_STORE_TABLE_NAME}
       - SESSION_STORE_TABLE_NAME=${SESSION_STORE_TABLE_NAME}
       - DEBUG=express-session
+      - LOCALSTACK_HOSTNAME=host.docker.internal
     restart: on-failure
     depends_on:
       localstack:

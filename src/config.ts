@@ -11,7 +11,13 @@ export function getOIDCApiDiscoveryUrl(): string {
 }
 
 export function getLocalStackBaseUrl(): string {
-  return "http://localhost:4566";
+  //  Env var LOCALSTACK_HOSTNAME used by docker-compose.yml because host mode does not work in Docker for Mac
+  //  and thus it uses host.docker.internal as the hostname to get to localstack.
+  //  Github actions does not support host.docker.internal and therefore uses localhost hostname to get to localstack.
+  const host = "LOCALSTACK_HOSTNAME" in process.env && process.env.LOCALSTACK_HOSTNAME.trim().length > 0
+      ? process.env.LOCALSTACK_HOSTNAME.trim()
+      : "localhost";
+  return `http://${host}:4566`;
 }
 
 export function getOIDCClientId(): string {
