@@ -435,13 +435,13 @@
     "checkYourPhone": {
       "title": "Check your phone",
       "header": "Check your phone",
-      "text": "We sent a code to [mobile].",
+      "text": "We have sent a code to [mobile].",
       "info": {
-        "paragraph": "It might take a few minutes to arrive. The code will expire after  15 minutes.",
-        "requestNewCodeLink": "Request a new code",
-        "requestNewCodeParagraph": " if:",
-        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
-        "requestNewCodeReason2": "you want to use a different phone number"
+        "paragraph": "It might take a few minutes to arrive. The code will expire after  15 minutes."
+      },
+      "details": {
+        "summaryText": "Problems with the code",
+        "text": "We can <a class=\"govuk-link\" href=\"[resendCodeLink]\">send the code again</a> or you can <a class=\"govuk-link\" href=\"[changePhoneNumberLink]\">use a different phone number</a>."
       },
       "code": {
         "label": "Enter the 6 digit security code",
@@ -471,10 +471,11 @@
       "header": "Enter your new mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
+        "paragraph2": "You must use a UK mobile phone number.",
         "backLink": "I do not want to change my phone number"
       },
       "ukPhoneNumber": {
-        "label": "UK phone number",
+        "label": "UK mobile phone number",
         "validationError": {
           "required": "Enter a UK phone number",
           "international": "Enter a UK phone number",
@@ -509,8 +510,8 @@
       "continue": "Get security code",
       "message": "Text messages can sometimes take a few minutes to arrive.",
       "phoneNumber": {
-        "default": "We will send a code to the phone number linked to your account",
-        "isResendCodeRequest": "We will send a code to: [mobile]."
+        "insetText": "We will send a code to [mobile]",
+        "paragraph": "Text messages can sometimes take a few minutes to arrive."
       },
       "email": {
         "recipientMessage": "We will send a code to: ",

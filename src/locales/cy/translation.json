@@ -437,11 +437,11 @@
       "header": "Gwiriwch eich ffôn",
       "text": "Rydym wedi anfon cod i [mobile].",
       "info": {
-        "paragraph": "Efallai y bydd yn cymryd ychydig funudau i gyrraedd. Bydd y cod yn dod i ben ar ôl 15 munud.",
-        "requestNewCodeLink": "Gofynnwch am god newydd",
-        "requestNewCodeParagraph": " os:",
-        "requestNewCodeReason1": "nad yw’r cod yn gweithio neu mae wedi dod i ben, neu ni wnaethoch dderbyn un",
-        "requestNewCodeReason2": "rydych eisiau defnyddio rhif ffôn gwahanol"
+        "paragraph": "Efallai y bydd yn cymryd ychydig funudau i gyrraedd. Bydd y cod yn dod i ben ar ôl 15 munud."
+      },
+      "details": {
+        "summaryText": "Problemau gyda'r cod",
+        "text": "Gallwn <a class=\"govuk-link\" href=\"[resendCodeLink]\">anfon y cod eto</a> neu gallwch <a class=\"govuk-link\" href=\"[changePhoneNumberLink]\">ddefnyddio rhif ffôn gwahanol</a>."
       },
       "code": {
         "label": "Rhowch y cod diogelwch 6 digid",
@@ -473,10 +473,11 @@
       "header": "Rhowch eich rhif ffôn symudol newydd",
       "info": {
         "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i’r rhif rydych yn ei roi i ni.",
+        "paragraph2":"Mae'n rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
         "backLink": "Nid wyf eisiau newid fy rhif ffôn"
       },
       "ukPhoneNumber": {
-        "label": "Rhif ffôn y DU",
+        "label": "Rhif ffôn symudol y DU",
         "validationError": {
           "required": "Rhowch rif ffôn y DU",
           "international": "Rhowch rif ffôn y DU",
@@ -511,8 +512,8 @@
       "continue": "Cael cod diogelwch",
       "message": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd.",
       "phoneNumber": {
-        "default": "Byddwn yn anfon cod at y rhif ffôn sy'n gysylltiedig â'ch cyfrif",
-        "isResendCodeRequest": "Byddwn yn anfon cod i: [mobile]."
+        "insetText": "Byddwn yn anfon cod i: [mobile].",
+        "paragraph": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd."
       },
       "email": {
         "recipientMessage": "Byddwn yn anfon cod i: ",
