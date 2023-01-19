@@ -11,7 +11,7 @@
 We will use Dynamo DB as the session storage layer in the express application.
 We picked this option as it is simple, requiring replacing a pluggable dependency in the app.
 
-The DynamoDB table will become part of the same stack along with and index (users sessions), with SSE enabled using a
+The DynamoDB table will become part of the same stack along with an index (users sessions), with SSE enabled using a
 KMS CMK.
 The `users-sessions` index shall be indexed using the session's `user_id` value - which is `sub` from the user's userinfo. 
 The table will have Point-in-time-recovery (PITR) disabled as sessions only last for 2 hours and will not need to be
@@ -24,10 +24,11 @@ As the solution does not use Redis, the SSM parameter values (redis host, port, 
 thus no longer acquired by the application.
 Currently, each AWS account in Accounts, has a Redis cluster stack that can be destroyed once no longer used.
 
-The trade-off is that there is a Dynamo DB table been added to the stack.
+The trade-off is that a Dynamo DB table has to be added to the stack.
 Cache latency increases from sub-millisecond to 10's of milliseconds, however this delay shouldn't be perceptible to 
 users.
-It makes core functionality dependent on the AWS instead of just a Redis cluster.
+The application's functionality becomes reliant on AWS instead of just a Redis cluster because Redis is solution 
+that can be self-hosted or hosted in any cloud provider whereas DynamoDB is an AWS propriety solution. 
 Active sessions, held in Redis, will be lost when the stack is deployed and therefore should occur during a period of 
 low usage.
 The Redis cluster stacks can only be decommissioned once the AMF version without the dependency on Redis has been 

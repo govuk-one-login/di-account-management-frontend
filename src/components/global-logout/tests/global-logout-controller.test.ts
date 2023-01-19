@@ -20,7 +20,7 @@ import {
 
 import { GetKeyFunction } from "jose/dist/types/types";
 import { logger } from "../../../utils/logger";
-import {destroyUserSessions} from "../../../utils/session-store";
+import { destroyUserSessions } from "../../../utils/session-store";
 
 describe("global logout controller", () => {
   let sandbox: sinon.SinonSandbox;
