@@ -315,10 +315,7 @@ Resources:
                   - dynamodb:UpdateItem
                 Resource:
                   - !GetAtt SessionsDynamoDB.Arn
-                  - !Join
-                    - ""
-                    - - !GetAtt SessionsDynamoDB.Arn
-                      - "/index/users-sessions"     # must match index name in ../src/utils/session-store.ts
+                  - !Sub "${SessionsDynamoDB.Arn}/index/users-sessions"
               - Effect: Allow
                 Action:
                   - "kms:Sign"
