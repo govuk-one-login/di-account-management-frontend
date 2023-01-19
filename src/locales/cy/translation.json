@@ -409,7 +409,7 @@
       "text": "Rydym wedi anfon e-bost at: ",
       "changeEmailLinkHref": "/change-email",
       "details": {
-        "summaryText": "Problemau gyda’r cod?",
+        "summaryText": "Problemau gyda’r cod",
         "text1": "Gallwn ",
         "sendCodeLinkText": "anfon y cod eto",
         "sendCodeLinkHref": "/request-new-email-code",
