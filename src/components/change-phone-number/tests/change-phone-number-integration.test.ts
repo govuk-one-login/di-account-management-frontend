@@ -10,6 +10,18 @@ import {
   PATH_DATA,
 } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
+import {
+    PactV3,
+} from "@pact-foundation/pact";
+import path from "path";
+
+const provider = new PactV3({
+    consumer: "Account Management Frontend",
+    provider: "Account Management API",
+    dir: path.resolve(process.cwd(), "pacts"),
+});
+
+
 
 describe("Integration:: change phone number", () => {
   let sandbox: sinon.SinonSandbox;
@@ -85,6 +97,7 @@ describe("Integration:: change phone number", () => {
     app = undefined;
   });
 
+  // those test do form validation
   it("should return change phone number page", (done) => {
     request(app).get(PATH_DATA.CHANGE_PHONE_NUMBER.url).expect(200, done);
   });
@@ -189,19 +202,34 @@ describe("Integration:: change phone number", () => {
       .expect(400, done);
   });
 
-  it("should redirect to /check-your-phone page when valid UK phone number entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+  // HERE this is where it hits the Account Management API
+  it("should redirect to /check-your-phone page when valid UK phone number entered", async (done) => {
+      // because the end point to call is hard coded in the application, we just intercept it
+      // there seems to be no way to redirect this call to the PACT provider mock (not out of the box at least)
+      nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
 
-    request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        phoneNumber: "07738394991",
-      })
-      .expect("Location", "/check-your-phone")
-      .expect(302, done);
+      await provider.addInteraction({
+          uponReceiving: "send notification request",
+          withRequest: {
+              method: "GET",
+              path: "/send-otp-notification",
+
+          },
+          willRespondWith: {
+              status: 200,
+          },
+      });
+
+      request(app)
+          .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+          .type("form")
+          .set("Cookie", cookies)
+          .send({
+              _csrf: token,
+              phoneNumber: "07738394991",
+          })
+          .expect("Location", "/check-your-phone")
+          .expect(302, done);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", (done) => {
