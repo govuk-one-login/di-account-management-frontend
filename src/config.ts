@@ -1,7 +1,3 @@
-import ssm from "./utils/ssm";
-import { RedisConfig } from "./types";
-import { Parameter } from "aws-sdk/clients/ssm";
-
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
 }
@@ -15,7 +11,13 @@ export function getOIDCApiDiscoveryUrl(): string {
 }
 
 export function getLocalStackBaseUrl(): string {
-  return "http://host.docker.internal:4566";
+  //  Env var LOCALSTACK_HOSTNAME used by docker-compose.yml because host mode does not work in Docker for Mac
+  //  and thus it uses host.docker.internal as the hostname to get to localstack.
+  //  Github actions does not support host.docker.internal and therefore uses localhost hostname to get to localstack.
+  const host = "LOCALSTACK_HOSTNAME" in process.env && process.env.LOCALSTACK_HOSTNAME.trim().length > 0
+      ? process.env.LOCALSTACK_HOSTNAME.trim()
+      : "localhost";
+  return `http://${host}:4566`;
 }
 
 export function getOIDCClientId(): string {
@@ -58,41 +60,6 @@ export function getGovPublishingBaseAPIToken(): string {
   return process.env.GOV_ACCOUNTS_PUBLISHING_API_TOKEN;
 }
 
-export function getRedisHost(): string {
-  return process.env.REDIS_HOST ?? "redis";
-}
-
-export function getRedisPort(): number {
-  return Number(process.env.REDIS_PORT) ?? 6379;
-}
-
-export async function getRedisConfig(appEnv: string): Promise<RedisConfig> {
-  const hostKey = `${appEnv}-${process.env.REDIS_KEY}-redis-master-host`;
-  const portKey = `${appEnv}-${process.env.REDIS_KEY}-redis-port`;
-  const passwordKey = `${appEnv}-${process.env.REDIS_KEY}-redis-password`;
-
-  const params = {
-    Names: [hostKey, portKey, passwordKey],
-    WithDecryption: true,
-  };
-
-  const result = await ssm.getParameters(params).promise();
-
-  if (result.InvalidParameters && result.InvalidParameters.length > 0) {
-    throw Error("Invalid SSM config values for redis");
-  }
-
-  return {
-    password: result.Parameters.find((p: Parameter) => p.Name === passwordKey)
-      .Value,
-    host: result.Parameters.find((p: Parameter) => p.Name === hostKey).Value,
-    port: Number(
-      result.Parameters.find((p: Parameter) => p.Name === portKey).Value
-    ),
-    isLocal: false,
-  };
-}
-
 export function getAuthFrontEndUrl(): string {
   return getProtocol() + process.env.AUTH_FRONTEND_URL;
 }
@@ -120,6 +87,10 @@ export function getSNSDeleteTopic(): string {
 
 export function getDynamoServiceStoreTableName(): string {
   return process.env.SERVICE_STORE_TABLE_NAME;
+}
+
+export function getSessionStoreTableName(): string {
+  return process.env.SESSION_STORE_TABLE_NAME;
 }
 
 export function supportInternationalNumbers(): boolean {
