@@ -1,36 +1,56 @@
 #!/bin/sh
 
-# If you don't have a test profile make one
-# aws configure set aws_access_key_id "dummy" --profile test-profile
-# aws configure set aws_secret_access_key "dummy" --profile test-profile
-# aws configure set region "eu-west-2" --profile test-profile
+# Creates account-mgmt-backend infra dependencies
 
+# either `export MY_ONE_LOGIN_USER_ID=xyz` otherwise the value defaults to `<YOUR_SUBJECT_ID_HERE>`
+# or what ever the hardcoded replacement is
+export BUILD_CLIENT_ID="${MY_ONE_LOGIN_USER_ID:-<YOUR_SUBJECT_ID_HERE>}"
 export TABLE_NAME=user_services
-export TABLE_SCHEMA_SEED=user_services_table_seed.json
-export AWS_PROFILE=test-profile
-export BUILD_CLIENT_ID=<YOUR_SUBJECT_ID_HERE>
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
-    --cli-input-json "$(cat  ./localstack/$TABLE_SCHEMA_SEED)" \
-    --profile $AWS_PROFILE \
-    --region eu-west-2 \
-  | cat
-
-aws --endpoint-url=http://localhost:4566 dynamodb describe-table \
     --table-name $TABLE_NAME \
-    --region eu-west-2 \
-    --profile $AWS_PROFILE
+    --attribute-definitions AttributeName=user_id,AttributeType=S \
+    --key-schema AttributeName=user_id,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
+    --region eu-west-2
 
 aws --endpoint-url=http://localhost:4566 dynamodb put-item \
     --table-name $TABLE_NAME  \
     --region eu-west-2 \
-    --profile $AWS_PROFILE \
     --item \
         "{\"user_id\":{\"S\": \"$BUILD_CLIENT_ID\"}, \"services\": {\"L\":[{\"M\":{\"count_successful_logins\":{\"N\":\"2\"},\"client_id\":{\"S\":\"gov-uk\"},\"last_accessed\":{\"N\":\"1666169856\"},\"last_accessed_pretty\":{\"S\":\"20 January 1970\"}}}]}}"
 
-aws --endpoint-url=http://localhost:4566 dynamodb get-item \
-    --table-name $TABLE_NAME  \
-    --region eu-west-2 \
-    --profile $AWS_PROFILE \
-    --key \
-        "{\"user_id\":{\"S\": \"$BUILD_CLIENT_ID\"}}"
+# Creates account-mgmt-frontend infra dependencies
+
+aws --endpoint-url http://localhost:4566 dynamodb create-table \
+  --table-name account-mgmt-frontend-SessionStore \
+  --region eu-west-2 \
+  --attribute-definitions AttributeName=id,AttributeType=S AttributeName=user_id,AttributeType=S \
+  --key-schema AttributeName=id,KeyType=HASH \
+  --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+  --global-secondary-indexes \
+      "[
+          {
+              \"IndexName\": \"users-sessions\",
+              \"KeySchema\": [
+                  {\"AttributeName\":\"user_id\",\"KeyType\":\"HASH\"}
+              ],
+              \"Projection\": {
+                  \"ProjectionType\":\"KEYS_ONLY\"
+              },
+              \"ProvisionedThroughput\": {
+                  \"ReadCapacityUnits\": 5,
+                  \"WriteCapacityUnits\": 5
+              }
+          }
+      ]"
+
+aws --endpoint-url http://localhost:4566 dynamodb update-time-to-live \
+  --table-name account-mgmt-frontend-SessionStore \
+  --region eu-west-2 \
+  --time-to-live-specification Enabled=true,AttributeName=expires
+
+aws --endpoint-url http://localhost:4567 sns create-topic \
+  --name delete-account-test-topic \
+  --region eu-west-2 \
+

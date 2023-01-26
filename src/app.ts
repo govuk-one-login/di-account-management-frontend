@@ -14,33 +14,23 @@ import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
-  getAppEnv,
   getNodeEnv,
-  getRedisConfig,
-  getRedisHost,
-  getRedisPort,
   getSessionExpiry,
   getSessionSecret,
   supportServiceCards,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
-
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
 import { serverErrorHandler } from "./handlers/internal-server-error-handler";
 import { csrfMiddleware } from "./middleware/csrf-middleware";
 import { manageYourAccountRouter } from "./components/manage-your-account/manage-your-account-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
-import { getCSRFCookieOptions } from "./config/cookie";
+import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
 import { ENVIRONMENT_NAME } from "./app.constants";
 import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
 import { authMiddleware } from "./middleware/auth-middleware";
 import { logoutRouter } from "./components/logout/logout-routes";
-import {
-  getRedisClient,
-  getSessionCookieOptions,
-  getSessionStore,
-} from "./config/session";
 import { getOIDCConfig } from "./config/oidc";
 import { enterPasswordRouter } from "./components/enter-password/enter-password-routes";
 import { changeEmailRouter } from "./components/change-email/change-email-routes";
@@ -56,10 +46,10 @@ import { signedOutRouter } from "./components/signed-out/signed-out-routes";
 import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
 import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
-import { subjectSessionIndex } from "./utils/subject-session-index";
-import { subjectSessionIndexMiddleware } from "./middleware/subject-session-index-middleware";
 import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
+import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
 import { redirectsRouter } from "./components/redirects/redirects-routes"
+import { getSessionStore } from "./utils/session-store";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -89,7 +79,7 @@ async function createApp(): Promise<express.Application> {
   app.use(setLocalVarsMiddleware);
   app.use(noCacheMiddleware);
 
-  i18next
+  await i18next
     .use(Backend)
     .use(i18nextMiddleware.LanguageDetector)
     .init(
@@ -101,12 +91,7 @@ async function createApp(): Promise<express.Application> {
   app.use(i18nextMiddleware.handle(i18next));
   app.use(helmet(helmetConfiguration));
 
-  const redisConfig = isProduction
-    ? await getRedisConfig(getAppEnv())
-    : { host: getRedisHost(), port: getRedisPort(), isLocal: true };
-
-  const redisClient = getRedisClient(redisConfig);
-  const sessionStore = getSessionStore(redisClient);
+  const sessionStore = getSessionStore({session : session});
   app.use(
     session({
       name: "am",
@@ -123,11 +108,7 @@ async function createApp(): Promise<express.Application> {
     })
   );
 
-  const subjectSessionIndexService = subjectSessionIndex(redisClient);
-  app.use(subjectSessionIndexMiddleware(subjectSessionIndexService));
-
   app.locals.sessionStore = sessionStore;
-  app.locals.subjectSessionIndexService = subjectSessionIndexService;
 
   app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
@@ -156,6 +137,7 @@ async function createApp(): Promise<express.Application> {
   app.use(sessionExpiredRouter);
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
+  app.use(resendPhoneCodeRouter);
 
   // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy

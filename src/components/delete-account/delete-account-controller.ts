@@ -8,6 +8,7 @@ import { getNextState } from "../../utils/state-machine";
 // import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 import { getBaseUrl, getManageGovukEmailsUrl, supportDeleteServiceStore } from "../../config";
 import { getSNSDeleteTopic } from "../../config";
+import { destroyUserSessions } from "../../utils/session-store";
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk", {
@@ -70,17 +71,7 @@ export function deleteAccountPost(
         getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
     });
 
-    await req.app.locals.subjectSessionIndexService
-      .getSessions(req.session.user.subjectId)
-      .then((sessions: string[]) =>
-        sessions.forEach((sessionId: string) => {
-          req.app.locals.sessionStore.destroy(sessionId);
-          req.app.locals.subjectSessionIndexService.removeSession(
-            req.session.user.subjectId,
-            sessionId
-          );
-        })
-      );
+    await destroyUserSessions(subjectId, req.app.locals.sessionStore);
 
     return res.redirect(logoutUrl);
   };

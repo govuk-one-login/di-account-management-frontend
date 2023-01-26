@@ -95,6 +95,9 @@ export function oidcAuthCallbackGet(
       state: {},
     };
 
+    // saved to session where `user_id` attribute is stored as a db item's root-level attribute that is used in indexing
+    req.session.user_id = userInfoResponse.sub;
+
     if (req.query.cookie_consent) {
       setPreferencesCookie(
         req.query.cookie_consent as string,

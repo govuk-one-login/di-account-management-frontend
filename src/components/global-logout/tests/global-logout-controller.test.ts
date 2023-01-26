@@ -19,6 +19,8 @@ import {
 } from "jose";
 
 import { GetKeyFunction } from "jose/dist/types/types";
+import { logger } from "../../../utils/logger";
+import { destroyUserSessions } from "../../../utils/session-store";
 
 describe("global logout controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -43,11 +45,7 @@ describe("global logout controller", () => {
         locals: {
           sessionStore: {
             destroy: sandbox.fake(),
-          },
-          subjectSessionIndexService: {
-            removeSession: sandbox.fake(),
-            getSessions: sandbox.stub().resolves(["session-1", "session-2"]),
-          },
+          }
         },
       },
       body: {
@@ -119,7 +117,7 @@ describe("global logout controller", () => {
         body: {
           logout_token: "zzzzzzzz",
         },
-        log: { error: sandbox.fake() },
+        log: sinon.spy(logger),
       };
       await globalLogoutPost(req as Request, res as Response);
 
@@ -303,26 +301,13 @@ describe("global logout controller", () => {
     it("should return 200 if logout_token is present and valid", async () => {
       req = validRequest(await generateValidToken(validLogoutToken));
 
+      const sessionStore = require("../../../utils/session-store");
+      sandbox.stub(sessionStore, "destroyUserSessions").resolves();
+
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
-      expect(
-        req.app.locals.sessionStore.destroy.getCall(0).calledWith("session-1")
-      ).eq(true);
-      expect(
-        req.app.locals.sessionStore.destroy.getCall(1).calledWith("session-2")
-      ).eq(true);
-
-      expect(
-        req.app.locals.subjectSessionIndexService.removeSession
-          .getCall(0)
-          .calledWith("123456", "session-1")
-      ).eq(true);
-      expect(
-        req.app.locals.subjectSessionIndexService.removeSession
-          .getCall(1)
-          .calledWith("123456", "session-2")
-      ).eq(true);
+      expect(destroyUserSessions).to.have.been.calledWith("123456")
     });
   });
 });
