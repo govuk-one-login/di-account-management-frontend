@@ -29,7 +29,7 @@ export function deleteAccountPost(
       const DeleteTopicARN = getSNSDeleteTopic()
       try {
         // eslint-disable-next-line no-console
-        console.log("res.locals", res.locals);
+        console.log("res.locals", JSON.stringify(res.locals));
         // eslint-disable-next-line no-console
         console.log("subject email address", email);
         // eslint-disable-next-line no-console
@@ -37,8 +37,6 @@ export function deleteAccountPost(
         // eslint-disable-next-line no-console
         console.log("res.locals.persistentSessionId", res.locals.persistentSessionId);
         
-        // test comment to trigger a re-build due to sonar issue
-
         await service.deleteServiceData(subjectId, accessToken, email, req.ip, res.locals.sessionId, res.locals.persistentSessionId, publicSubjectId, legacySubjectId, DeleteTopicARN)
       } catch (err) {
         req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
