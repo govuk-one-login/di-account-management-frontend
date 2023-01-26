@@ -50,9 +50,3 @@ aws --endpoint-url http://localhost:4566 dynamodb update-time-to-live \
   --region eu-west-2 \
   --time-to-live-specification Enabled=true,AttributeName=expires
   
-
-aws --endpoint-url http://localhost:4567 sns create-topic \
-    --name delete-account-test-topic
-
-aws --endpoint-url http://localhost:4567 sns set-topic-attributes \
-    --topic-arn arn:aws:sns:us-east-1:000000000000:delete-account-test-topic --attribute-name DeleteAccountTest --attribute-value DeleteAccountTestDisplayName
