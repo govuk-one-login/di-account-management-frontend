@@ -29,6 +29,8 @@ export function deleteAccountPost(
       const DeleteTopicARN = getSNSDeleteTopic()
       try {
         // eslint-disable-next-line no-console
+        console.log("res.locals", res.locals);
+        // eslint-disable-next-line no-console
         console.log("subject email address", email);
         // eslint-disable-next-line no-console
         console.log("res.locals.sessionId", res.locals.sessionId);

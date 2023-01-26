@@ -50,7 +50,3 @@ aws --endpoint-url http://localhost:4566 dynamodb update-time-to-live \
   --region eu-west-2 \
   --time-to-live-specification Enabled=true,AttributeName=expires
 
-aws --endpoint-url http://localhost:4567 sns create-topic \
-  --name delete-account-test-topic \
-  --region eu-west-2 \
-
