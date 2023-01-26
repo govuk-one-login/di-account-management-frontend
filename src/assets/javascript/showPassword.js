@@ -50,7 +50,7 @@ window.GOVUK.Modules = window.GOVUK.Modules || {};
     this.moveDataAttributesToButton();
 
     this.parentForm = this.input.form;
-    var disableFormSubmitCheck = this.$module.getAttribute(
+    const disableFormSubmitCheck = this.$module.getAttribute(
       "data-disable-form-submit-check"
     );
 
@@ -92,9 +92,9 @@ window.GOVUK.Modules = window.GOVUK.Modules || {};
   };
 
   ShowPassword.prototype.moveDataAttributesToButton = function () {
-    var attrs = this.input.attributes;
-    for (var i = attrs.length; i >= 0; i--) {
-      var attr = attrs[i];
+    let attrs = this.input.attributes;
+    for (let i = attrs.length; i >= 0; i--) {
+      let attr = attrs[i];
       if (attr && /^data-button/.test(attr.name)) {
         this.showHide.setAttribute(
           attr.name.replace("-button", ""),
