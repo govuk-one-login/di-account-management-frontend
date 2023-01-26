@@ -9,7 +9,7 @@ import {
   deleteAccountPost,
 } from "../delete-account-controller";
 import { DeleteAccountServiceInterface } from "../types";
-import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
+// import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
 import { destroyUserSessions } from "../../../utils/session-store";
 
 describe("delete account controller", () => {
@@ -70,10 +70,10 @@ describe("delete account controller", () => {
           deleteServiceData: sandbox.fake(),
         };
 
-        const fakePublishingService: GovUkPublishingServiceInterface = {
-          // notifyAccountDeleted: sandbox.fake.returns(Promise.resolve()),
-          notifyEmailChanged: sandbox.fake(),
-        };
+        // const fakePublishingService: GovUkPublishingServiceInterface = {
+        //   // notifyAccountDeleted: sandbox.fake.returns(Promise.resolve()),
+        //   notifyEmailChanged: sandbox.fake(),
+        // };
 
         req.session.user.email = "test@test.com";
         req.session.user.subjectId = "public-subject-id";
@@ -116,10 +116,10 @@ describe("delete account controller", () => {
           deleteServiceData: sandbox.fake(),
         };
 
-        const fakePublishingService: GovUkPublishingServiceInterface = {
-          // notifyAccountDeleted: sandbox.fake.returns(Promise.resolve()),
-          notifyEmailChanged: sandbox.fake(),
-        };
+        // const fakePublishingService: GovUkPublishingServiceInterface = {
+        //   // notifyAccountDeleted: sandbox.fake.returns(Promise.resolve()),
+        //   notifyEmailChanged: sandbox.fake(),
+        // };
 
         req.session.user.email = "test@test.com";
         req.session.user.subjectId = "public-subject-id";
