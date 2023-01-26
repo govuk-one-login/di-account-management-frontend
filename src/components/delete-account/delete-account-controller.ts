@@ -31,6 +31,10 @@ export function deleteAccountPost(
         // eslint-disable-next-line no-console
         console.log("res.locals", JSON.stringify(res.locals));
         // eslint-disable-next-line no-console
+        console.log("req.app.locals.sessionStore", req.app.locals.sessionStore)
+        // eslint-disable-next-line no-console
+        console.log("res", JSON.stringify(res));
+        // eslint-disable-next-line no-console
         console.log("subject email address", email);
         // eslint-disable-next-line no-console
         console.log("res.locals.sessionId", res.locals.sessionId);
