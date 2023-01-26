@@ -36,6 +36,8 @@ export function deleteAccountPost(
         console.log("res.locals.sessionId", res.locals.sessionId);
         // eslint-disable-next-line no-console
         console.log("res.locals.persistentSessionId", res.locals.persistentSessionId);
+        
+        // test comment to trigger a re-build due to sonar issue
 
         await service.deleteServiceData(subjectId, accessToken, email, req.ip, res.locals.sessionId, res.locals.persistentSessionId, publicSubjectId, legacySubjectId, DeleteTopicARN)
       } catch (err) {
