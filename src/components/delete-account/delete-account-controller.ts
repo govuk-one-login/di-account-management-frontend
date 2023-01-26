@@ -33,10 +33,6 @@ export function deleteAccountPost(
         // eslint-disable-next-line no-console
         console.log("req.app.locals.sessionStore", req.app.locals.sessionStore)
         // eslint-disable-next-line no-console
-        console.log("res", JSON.stringify(res));
-        // eslint-disable-next-line no-console
-        console.log("subject email address", email);
-        // eslint-disable-next-line no-console
         console.log("res.locals.sessionId", res.locals.sessionId);
         // eslint-disable-next-line no-console
         console.log("res.locals.persistentSessionId", res.locals.persistentSessionId);
@@ -46,25 +42,6 @@ export function deleteAccountPost(
         req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
       }
     }
-
-        // await service.deleteAccount(
-        //     accessToken,
-        //     email,
-        //     req.ip,
-        //     res.locals.sessionId,
-        //     res.locals.persistentSessionId
-        // );
-        
-        // await publishingService
-        //     .notifyAccountDeleted({
-        //         publicSubjectId,
-        //         legacySubjectId,
-        //     })
-        //     .catch((err) => {
-        //         req.log.error(
-        //             `Unable to send delete account notification for:${subjectId}. Error:${err}`
-        //         );
-        //     });
 
     req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,
