@@ -14,7 +14,7 @@ Clones the repository to the `your_folder_name` directory.
 
 Before you can run the frontend app against the backend you will need a usable client and configuration.
 
-### Configure or find a usable client
+### Configure or find a usable client   <<<<< change somthing >>>>>
 
 The client created by the pipeline is not currently usable by a local account management application as the private key is not available and it does not redirect to local clients. To run account management locally you will need to configure another client.
 
