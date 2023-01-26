@@ -52,6 +52,8 @@ export function deleteAccountPost(
         );
       });
 
+    // adding a change to commit
+
     req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,
       "VALUE_UPDATED"
