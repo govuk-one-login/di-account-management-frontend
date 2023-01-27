@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { SnsService } from "../../../utils/types";
 import { sinon } from "../../../../test/utils/test-utils";
-// import { http } from "../../../utils/http";
 
 import {
   deleteAccountService,
@@ -22,7 +21,6 @@ describe("deleteAccountService", () => {
   });
 
   describe("deleteServiceData", () => {
-    // const expected_message = JSON.stringify({ "user_id": "abc" })
     const expected_message = JSON.stringify({ "user_id": "abc", "access_token": "access_token",
   "email": "email", "source_ip": "source_ip", "session_id": "session_id", "persistent_session_id": "persistent_session_id",
       "public_subject_id": "public_subject_id", "legacy_subject_id": "legacy_subject_id"})
@@ -44,7 +42,6 @@ describe("deleteAccountService", () => {
       await deleteAccountService(fakeSnsService).deleteServiceData("abc", "access_token",
           "email", "source_ip", "session_id", "persistent_session_id", "public_subject_id",
           "legacy_subject_id", "UserAccountDeletion")
-      // await deleteAccountService(http, fakeSnsService).deleteServiceData("abc", "UserAccountDeletion")
       expect(fakeSnsService.publish).to.have.been.calledOnceWith(
         "UserAccountDeletion",
         expected_message
