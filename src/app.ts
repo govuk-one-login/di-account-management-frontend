@@ -48,7 +48,7 @@ import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
 import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
 import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
-import { redirectsRouter } from "./components/redirects/redirects-routes"
+import { redirectsRouter } from "./components/redirects/redirects-routes";
 import { getSessionStore } from "./utils/session-store";
 
 const APP_VIEWS = [
@@ -91,7 +91,7 @@ async function createApp(): Promise<express.Application> {
   app.use(i18nextMiddleware.handle(i18next));
   app.use(helmet(helmetConfiguration));
 
-  const sessionStore = getSessionStore({session : session});
+  const sessionStore = getSessionStore({ session: session });
   app.use(
     session({
       name: "am",

@@ -59,9 +59,7 @@ describe("callback controller", () => {
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(
-        PATH_DATA.YOUR_SERVICES.url
-      );
+      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
     });
 
     it("should redirect to /manage-your-account and set cookie when consent query param present", async () => {
@@ -74,9 +72,7 @@ describe("callback controller", () => {
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
       expect(res.cookie).to.have.calledOnce;
-      expect(res.redirect).to.have.calledWith(
-        PATH_DATA.YOUR_SERVICES.url
-      );
+      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
     });
 
     it("should redirect to /manage-your-account and have _ga as query param when cookie consent accepted", async () => {
