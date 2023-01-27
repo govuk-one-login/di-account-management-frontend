@@ -6,5 +6,4 @@ export interface GovUkNotificationRequest {
 
 export interface GovUkPublishingServiceInterface {
   notifyEmailChanged: (request: GovUkNotificationRequest) => Promise<void>;
-  // notifyAccountDeleted: (request: GovUkNotificationRequest) => Promise<void>;
 }

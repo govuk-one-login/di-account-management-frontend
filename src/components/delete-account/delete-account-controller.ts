@@ -4,8 +4,6 @@ import { DeleteAccountServiceInterface } from "./types";
 import { deleteAccountService } from "./delete-account-service";
 import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
-// import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
-// import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 import { getBaseUrl, getManageGovukEmailsUrl, supportDeleteServiceStore } from "../../config";
 import { getSNSDeleteTopic } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
@@ -18,26 +16,24 @@ export function deleteAccountGet(req: Request, res: Response): void {
 
 export function deleteAccountPost(
   service: DeleteAccountServiceInterface = deleteAccountService(),
-    // publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const { email, subjectId, publicSubjectId, legacySubjectId } =
       req.session.user;
     const { accessToken } = req.session.user.tokens;
+    const { sessionId } = res.locals.sessionId;
+    const { persistentSessionId } = res.locals.persistentSessionId;
+
 
     if (supportDeleteServiceStore()) {
       const DeleteTopicARN = getSNSDeleteTopic()
       try {
         // eslint-disable-next-line no-console
-        console.log("res.locals", JSON.stringify(res.locals));
+        console.log("sessionId", sessionId);
         // eslint-disable-next-line no-console
-        console.log("req.app.locals.sessionStore", req.app.locals.sessionStore)
-        // eslint-disable-next-line no-console
-        console.log("res.locals.sessionId", res.locals.sessionId);
-        // eslint-disable-next-line no-console
-        console.log("res.locals.persistentSessionId", res.locals.persistentSessionId);
+        console.log("persistentSessionId", persistentSessionId);
         
-        await service.deleteServiceData(subjectId, accessToken, email, req.ip, res.locals.sessionId, res.locals.persistentSessionId, publicSubjectId, legacySubjectId, DeleteTopicARN)
+        await service.deleteServiceData(subjectId, accessToken, email, req.ip, sessionId, persistentSessionId, publicSubjectId, legacySubjectId, DeleteTopicARN)
       } catch (err) {
         req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
       }
