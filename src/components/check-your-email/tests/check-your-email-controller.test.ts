@@ -1,9 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-
 import { PATH_DATA } from "../../../app.constants";
 import {
   checkYourEmailGet,
@@ -53,7 +51,6 @@ describe("check your email controller", () => {
       };
 
       const fakePublishingService: GovUkPublishingServiceInterface = {
-        // notifyAccountDeleted: sandbox.fake(),
         notifyEmailChanged: sandbox.fake.returns(Promise.resolve()),
       };
 

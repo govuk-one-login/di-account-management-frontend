@@ -7,6 +7,7 @@ import { getNextState } from "../../utils/state-machine";
 import { getBaseUrl, getManageGovukEmailsUrl, supportDeleteServiceStore } from "../../config";
 import { getSNSDeleteTopic } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
+import { logger } from "../../utils/logger"
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk", {
@@ -21,19 +22,16 @@ export function deleteAccountPost(
     const { email, subjectId, publicSubjectId, legacySubjectId } =
       req.session.user;
     const { accessToken } = req.session.user.tokens;
-    const { sessionId } = res.locals.sessionId;
-    const { persistentSessionId } = res.locals.persistentSessionId;
 
-
+    logger.info({
+          "sessionId": res.locals.sessionId,
+          "persistentSessionId": res.locals.persistentSessionId
+        }
+    )
     if (supportDeleteServiceStore()) {
       const DeleteTopicARN = getSNSDeleteTopic()
-      try {
-        // eslint-disable-next-line no-console
-        console.log("sessionId", sessionId);
-        // eslint-disable-next-line no-console
-        console.log("persistentSessionId", persistentSessionId);
-        
-        await service.deleteServiceData(subjectId, accessToken, email, req.ip, sessionId, persistentSessionId, publicSubjectId, legacySubjectId, DeleteTopicARN)
+      try {        
+        await service.deleteServiceData(subjectId, accessToken, email, req.ip, res.locals.sessionId, res.locals.persistentSessionId, publicSubjectId, legacySubjectId, DeleteTopicARN)
       } catch (err) {
         req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
       }
