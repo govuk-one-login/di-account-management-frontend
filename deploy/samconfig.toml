@@ -8,12 +8,10 @@ beta_features = true
 [default.deploy.parameters]
 stack_name = "account-mgmt-frontend"
 region = "eu-west-2"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-7d9zueiu0w51"
-s3_prefix = "account-management-frontend"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-44r43ey3knwx"
+s3_prefix = "account-mgmt-frontend"
 capabilities = "CAPABILITY_NAMED_IAM"
 confirm_changeset = true
 image_repositories = []
 tags = "project=\"account-management-frontend\" stage=\"dev\""
-parameter_overrides=[
-    "VpcStackName=vpc-enhanced"
-]
+parameter_overrides = "Environment=\"dev\" VpcStackName=\"vpc-enhanced\" BackendStackName=\"account-mgmt-backend\" ContainerPort=\"6001\" ECSClusterMaxCapacity=\"6\" ProductTagValue=\"GOV.UK Sign In\" OwnerTagValue=\"govuk-accounts-tech@digital.cabinet-office.gov.uk\" SourceTagValue=\"alphagov/di-authentication-account-management/deploy/template.yaml\" SystemTagValue=\"Accounts\" PermissionsBoundary=\"none\" ServiceStoreTableName=\"user_services\""

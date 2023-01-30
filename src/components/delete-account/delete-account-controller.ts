@@ -30,7 +30,7 @@ export function deleteAccountPost(
     )
     if (supportDeleteServiceStore()) {
       const DeleteTopicARN = getSNSDeleteTopic()
-      try {        
+      try {
         await service.deleteServiceData(subjectId, accessToken, email, req.ip, res.locals.sessionId, res.locals.persistentSessionId, publicSubjectId, legacySubjectId, DeleteTopicARN)
       } catch (err) {
         req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)

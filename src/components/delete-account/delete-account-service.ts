@@ -1,10 +1,8 @@
-// import {getRequestConfig, Http, http} from "../../utils/http";
-// import {API_ENDPOINTS} from "../../app.constants";
 import { snsService } from "../../utils/sns";
 import { SnsService } from "../../utils/types";
 import { getSNSDeleteTopic } from "../../config";
-
 import { DeleteAccountServiceInterface } from "./types";
+import { logger } from "../../utils/logger"
 
 export function deleteAccountService(
     sns: SnsService = snsService()
@@ -20,8 +18,7 @@ export function deleteAccountService(
         legacy_subject_id: string,
         topic_arn: string = getSNSDeleteTopic(),
     ): Promise<void> {
-        // eslint-disable-next-line no-console
-        console.log("Message to publish to SNS:", JSON.stringify({
+        logger.info("Message to publish to SNS:", JSON.stringify({
             "user_id": user_id,
             "access_token": access_token,
             "email": email,
