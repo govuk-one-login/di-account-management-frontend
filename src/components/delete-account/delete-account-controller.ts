@@ -7,7 +7,6 @@ import { getNextState } from "../../utils/state-machine";
 import { getBaseUrl, getManageGovukEmailsUrl, supportDeleteServiceStore } from "../../config";
 import { getSNSDeleteTopic } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
-import { logger } from "../../utils/logger"
 
 export function deleteAccountGet(req: Request, res: Response): void {
   res.render("delete-account/index.njk", {
@@ -22,12 +21,7 @@ export function deleteAccountPost(
     const { email, subjectId, publicSubjectId, legacySubjectId } =
       req.session.user;
     const { accessToken } = req.session.user.tokens;
-
-    logger.info({
-          "sessionId": res.locals.sessionId,
-          "persistentSessionId": res.locals.persistentSessionId
-        }
-    )
+    
     if (supportDeleteServiceStore()) {
       const DeleteTopicARN = getSNSDeleteTopic()
       try {
