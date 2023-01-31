@@ -3,7 +3,7 @@ export function getLogLevel(): string {
 }
 
 export function getApiBaseUrl(): string {
-  return process.env.AM_API_BASE_URL;
+  return process.env.AM_API_BASE_URL ||"http://127.0.0.1:8080";
 }
 
 export function getOIDCApiDiscoveryUrl(): string {
@@ -41,11 +41,11 @@ export function getGtmId(): string {
 }
 
 export function getSessionExpiry(): number {
-  return Number(process.env.SESSION_EXPIRY);
+  return Number(process.env.SESSION_EXPIRY || 2000000);
 }
 
 export function getSessionSecret(): string {
-  return process.env.SESSION_SECRET;
+  return process.env.SESSION_SECRET || "secret";
 }
 
 export function getYourAccountUrl(): string {

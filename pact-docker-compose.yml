@@ -1,0 +1,90 @@
+version: "3.8"
+
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:1.3.1
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=kms,sns,dynamodb
+      - HOSTNAME_EXTERNAL=localhost
+      - DEBUG=0
+      - KMS_PROVIDER=local-kms
+      - AWS_ACCESS_KEY_ID=na
+      - AWS_SECRET_ACCESS_KEY=na
+      - MY_ONE_LOGIN_USER_ID=${MY_ONE_LOGIN_USER_ID}
+    volumes:
+      - ./seed.yaml:/init/seed.yaml
+      - ./localstack/provision.sh:/etc/localstack/init/ready.d/init-aws.sh
+
+  account-management-frontend-pact-testing:
+    container_name: account-management-frontend-pact-testing
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: pact.local.Dockerfile
+    env_file:
+      ./.env.pact
+    ports:
+      - "6001:6001"
+      - "9240:9230"
+      - "9229:9229"
+    volumes:
+      - ./:/app
+    environment:
+      - COMPOSE_DOCKER_CLI_BUILD=1
+      - DOCKER_BUILDKIT=1
+      - AUTH_FRONTEND_URL=${AUTH_FRONTEND_URL}
+      - API_BASE_URL=${API_BASE_URL}
+      - BASE_URL=${BASE_URL}
+      - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}
+      - OIDC_CLIENT_SCOPES=${OIDC_CLIENT_SCOPES}
+      - AM_API_BASE_URL=${AM_API_BASE_URL}
+      - AM_YOUR_ACCOUNT_URL=${AM_YOUR_ACCOUNT_URL}
+      - SESSION_EXPIRY=${SESSION_EXPIRY}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - GOV_ACCOUNTS_PUBLISHING_API_URL=${GOV_ACCOUNTS_PUBLISHING_API_URL}
+      - GOV_ACCOUNTS_PUBLISHING_API_TOKEN=${GOV_ACCOUNTS_PUBLISHING_API_TOKEN}
+      - ANALYTICS_COOKIE_DOMAIN=${ANALYTICS_COOKIE_DOMAIN}
+      - GTM_ID=${GTM_ID}
+      - DELETE_TOPIC_ARN=${DELETE_TOPIC_ARN}
+      - SUPPORT_INTERNATIONAL_NUMBERS=${SUPPORT_INTERNATIONAL_NUMBERS}
+      - SUPPORT_LANGUAGE_CY=${SUPPORT_LANGUAGE_CY}
+      - SUPPORT_NEW_ACCOUNT_HEADER=${SUPPORT_NEW_ACCOUNT_HEADER}
+      - SUPPORT_DELETE_SERVICE_STORE=${SUPPORT_DELETE_SERVICE_STORE}
+      - SUPPORT_SERVICE_CARDS=${SUPPORT_SERVICE_CARDS}
+      - SERVICE_STORE_TABLE_NAME=${SERVICE_STORE_TABLE_NAME}
+      - SESSION_STORE_TABLE_NAME=${SESSION_STORE_TABLE_NAME}
+      - DEBUG=express-session
+      - LOCALSTACK_HOSTNAME=host.docker.internal
+    restart: on-failure
+    depends_on:
+      localstack:
+        condition: service_healthy
+
+  postgres:
+    image: postgres
+    healthcheck:
+      test: psql postgres --command "select 1" -U postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+
+  broker_app:
+    image: pactfoundation/pact-broker
+    links:
+      - postgres
+    ports:
+      - "8000:9292"
+    environment:
+      PACT_BROKER_BASIC_AUTH_USERNAME: test
+      PACT_BROKER_BASIC_AUTH_PASSWORD: test
+      PACT_BROKER_DATABASE_USERNAME: postgres
+      PACT_BROKER_DATABASE_PASSWORD: password
+      PACT_BROKER_DATABASE_HOST: postgres
+      PACT_BROKER_DATABASE_NAME: postgres
+      PACT_BROKER_LOG_LEVEL: DEBUG
