@@ -25,6 +25,8 @@ describe("check your email controller", () => {
       session: { user: { state: { changeEmail: {} } } },
       cookies: { lng: "en" },
       i18n: { language: "en" },
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       log: { info: sandbox.fake() }
     };
     res = {

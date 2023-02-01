@@ -21,7 +21,6 @@ export function deleteAccountPost(
   publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-      req.log.info("In the deleteAccountPost function")
     const { email, subjectId, publicSubjectId, legacySubjectId } =
       req.session.user;
     const { accessToken } = req.session.user.tokens;
@@ -36,8 +35,6 @@ export function deleteAccountPost(
         req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
       }
     }
-
-      req.log.info("deleteAccountPost - before await service.deleteAccount")
 
       await service.deleteAccount(
       accessToken,

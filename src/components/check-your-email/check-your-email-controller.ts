@@ -25,7 +25,6 @@ export function checkYourEmailPost(
   publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.log.info("checkYourEmailPost - line 28")
     const code = req.body["code"];
     const {
       email,
@@ -36,9 +35,7 @@ export function checkYourEmailPost(
     } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    req.log.info(`checkYourEmailPost - line 39 - req.session.user: ${req.session.user}. req.session.user.tokens: ${accessToken}.`)
-
-    req.log.info("checkYourEmailPost - line 41 - before await service.updateEmail")
+    req.log.info(`checkYourEmailPost - req.session.user: ${req.session.user}. req.session.user.tokens: ${accessToken}.`)
 
     const isEmailUpdated = await service.updateEmail(
       accessToken,
