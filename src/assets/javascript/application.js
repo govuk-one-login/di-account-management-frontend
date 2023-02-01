@@ -16,7 +16,9 @@ function initChangePhoneNumber() {
     intPhoneNumberCheckbox.addEventListener("click", function(event) {
       onIntNumberSelected(event.currentTarget, phoneNumberInput);
     });
-    window.addEventListener("load", onIntNumberSelected(intPhoneNumberCheckbox, phoneNumberInput));
+    window.addEventListener("load", function(event) {
+      onIntNumberSelected(intPhoneNumberCheckbox, phoneNumberInput)
+    });
   }
 }
 initChangePhoneNumber();
