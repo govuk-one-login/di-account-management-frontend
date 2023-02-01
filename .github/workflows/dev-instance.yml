@@ -8,7 +8,7 @@ on:
         description: "Commit SHA, branch name or tag"
         required: true
         type: string
-        default: main
+        default: ATB-128
       devInstance:
         description: "Dev instance to deploy to (1-3)"
         required: true
