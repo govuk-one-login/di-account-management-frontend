@@ -1,7 +1,6 @@
 {
   "general": {
     "provider": "GOV.UK",
-    "pageTitle": "GOV.UK Sign in",
     "serviceName": "Sign in to or create your GOV.UK One Login",
     "serviceNameTitle": "GOV.UK One Login",
     "errorTitlePrefix": "Error",
@@ -14,7 +13,7 @@
     },
     "yes": "Yes",
     "no": "No",
-    "backToAccountButtonText": "Back to settings",
+    "backToAccountButtonText": "Yn ôl i osodiadau",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "cookie": {
       "cookieBanner": {
@@ -141,12 +140,6 @@
         "heading": "Delete your GOV.UK One Login",
         "link": "Delete your GOV.UK One Login",
         "info": "This will permanently delete your GOV.UK One Login. You’ll no longer be able to access the services you’ve used with it."
-      },
-      "aboutAccounts": {
-        "heading": "About GOV.UK One Login",
-        "paragraph1": "GOV.UK accounts are new. At the moment you can only use your GOV.UK account with a few services.",
-        "paragraph2": "GOV.UK accounts are currently separate from other government accounts (for example Government Gateway or Universal Credit).",
-        "paragraph3": "In the future, you’ll be able to use your GOV.UK account to sign in to most services on GOV.UK."
       }
     },
     "yourServices": {
@@ -411,7 +404,7 @@
           "required": "Enter your new password",
           "maxLength": "Your password must be less than 256 characters",
           "commonPassword": "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers.",
-          "samePassword": "You are already using that password. Enter a different password",
+          "samePassword": "You are already using that password. Enter a different password.",
           "alphaNumeric": "Your password must be at least 8 characters long and must include letters and numbers"
         }
       },

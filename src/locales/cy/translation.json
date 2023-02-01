@@ -1,9 +1,8 @@
 {
   "general": {
     "provider": "GOV.UK",
-    "pageTitle": "Mewngofnodi i GOV.UK",
-    "serviceName": "Mewngofnodwch i neu greu eich cyfrif GOV.UK",
-    "serviceNameTitle": "Cyfrif GOV.UK",
+    "serviceName": "Mewngofnodwch i neu greu eich GOV.UK One Login",
+    "serviceNameTitle": "GOV.UK One Login",
     "errorTitlePrefix": "Gwall",
     "back": "Yn ôl",
     "warning": "Rhybudd",
@@ -15,7 +14,7 @@
     "yes": "Yes",
     "no": "Na",
     "backToAccountButtonText": "Yn ôl i’ch cyfrif",
-    "backToGovUKButtonText": "Yn ôl i hafan GOV.UK",
+    "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "cookie": {
       "cookieBanner": {
         "title": "Cwcis ar gyfrif GOV.UK",
@@ -50,7 +49,7 @@
     "header": {
       "homepageHref": "https://www.gov.uk/",
       "productName": "Cyfrif",
-      "accountLink": "Eich cyfrif GOV.UK",
+      "accountLink": "Eich GOV.UK One Login",
       "accounNavHomeLink": "Eich gwasanaethau",
       "accountNavSettingsLink": "Gosodiadau",
       "signOutLink": "Allgofnodi"
@@ -110,11 +109,11 @@
       "title": "Rydych wedi cael eich allgofnodi",
       "header": "Rydych wedi cael eich allgofnodi",
       "content": {
-        "paragraph1": "Gallai hyn fod oherwydd rydych:",
-        "listItem1": "heb ddefnyddio eich cyfrif am fwy na 2 awr",
-        "listItem2": "wedi allgofnodi o'ch cyfrif tra'n defnyddio gwasanaeth arall",
-        "paragraph2": "Rydym wedi eich allgofnodi i gadw eich cyfrif a'ch gwybodaeth yn ddiogel.",
-        "signInButtonText": "Mewngofnodi i’ch cyfrif",
+        "paragraph1": "Gallai hyn fod oherwydd:",
+        "listItem1": "nid ydych wedi defnyddio eich GOV.UK One Login am fwy na 2 awr",
+        "listItem2": "rydych wedi allgofnodi o'ch GOV.UK One Login tra yn defnyddio gwasanaeth arall",
+        "paragraph2": "Rydym wedi eich allgofnodi i gadw eich GOV.UK One Login a'ch gwybodaeth yn ddiogel.",
+        "signInButtonText": "Mewngofnodi i GOV.UK One Login",
         "govUKHomepageLink": "https://www.gov.uk/",
         "govUKHomepageLinkText": "Ewch i hafan GOV.UK"
       }
@@ -138,15 +137,9 @@
         "info": "Gweld a rheoli’r e-byst rydych yn eu cael am ddiweddariadau i dudalennau ar GOV.UK."
       },
       "deleteAccount": {
-        "heading": "Dileu eich cyfrif GOV.UK",
-        "link": "Dileu eich cyfrif GOV.UK",
-        "info": "Bydd hyn yn dileu eich cyfrif GOV.UK yn barhaol. Ni fyddwch bellach yn gallu mewngofnodi i’r gwasanaethau rydych wedi’u defnyddio gyda’ch cyfrif."
-      },
-      "aboutAccounts": {
-        "heading": "Am gyfrifon GOV.UK",
-        "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gydag ychydig o wasanaethau.",
-        "paragraph2": "Ar hyn o bryd mae cyfrifon GOV.UK ar wahân i gyfrifon eraill y llywodraeth (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
-        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i fewngofnodi i’r rhan fwyaf o wasanaethau ar GOV.UK."
+        "heading": "Dileu eich GOV.UK One Login",
+        "link": "Dileu eich GOV.UK One Login",
+        "info": "Bydd hyn yn dileu eich GOV.UK One Login yn barhaol. Ni fyddwch bellach yn gallu cael mynediad i'r gwasanaethau rydych wedi'u defnyddio gydag ef."
       }
     },
     "yourServices": {
@@ -154,7 +147,7 @@
       "header": "Eich gwasanaethau",
       "signedInStatus": "Rydych wedi mewngofnodi fel",
       "lastUsed": "Defnyddwyd ddiwethaf",
-      "empty": "Nid ydych yn defnyddio unrhyw wasanaethau gyda’ch cyfrif GOV.UK eto.",
+      "empty": "Nid ydych yn defnyddio unrhyw wasanaethau gyda'ch GOV.UK One Login ar hyn o bryd.",
       "accountsList": {
         "heading": "Eich cyfrifon"
       },
@@ -162,15 +155,15 @@
         "heading": "Gwasanaethau eraill rydych wedi eu defnyddio"
       },
       "informationBox": {
-        "heading": "Am gyfrifon GOV.UK",
-        "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gyda:",
+        "heading": "Am GOV.UK One Login",
+        "paragraph1": "Mae GOV.UK One Login yn newydd. Ar hyn o bryd gallwch ond ei ddefnyddio gyda:",
         "listItem1": "Gwneud cais am drwydded gweithredwr cerbyd",
         "listItem2": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
         "listItem3": "Tanysgrifiadau e-byst GOV.UK",
         "listItem4": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
         "listItem5": "Gwneud cais am wiriad DBS sylfaenol",
-        "paragraph2": "Nid yw cyfrifon GOV.UK yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
-        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i gael mynediad i holl wasanaethau ar GOV.UK."
+        "paragraph2": "Nid yw GOV.UK One Login yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
+        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich GOV.UK One Login i gael mynediad i holl wasanaethau ar GOV.UK."
       },
       "clientRegistry": {
         "production": {
@@ -351,8 +344,8 @@
       },
       "deleteAccount": {
         "header": "Rhowch eich cyfrinair",
-        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch ddileu eich cyfrif.",
-        "backLink": "Nid wyf eisiau dileu fy nghyfrif"
+        "paragraph": "Rydym angen sicrhau mai chi yw chi cyn y gallwch ddileu eich GOV.UK One Login.",
+        "backLink": "Nid wyf eisiau dileu fy GOV.UK One Login"
       },
       "password": {
         "label": "Rhowch eich cyfrinair",
@@ -371,8 +364,8 @@
           "required": "Rhowch eich cyfeiriad e-bost",
           "length": "Rhaid i gyfeiriad e-bost fod yn 256 nod neu lai",
           "email": "Rhowch gyfeiriad e-bost yn y ffurf cywir, fel name@example.com",
-          "alreadyInUse": "Mae gan y cyfeiriad e-bost hwnnw gyfrif GOV.UK yn barod. Rhowch gyfeiriad e-bost gwahanol.",
-          "sameEmail": "Mae eich cyfrif eisoes yn defnyddio’r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol."
+          "alreadyInUse": "Mae GOV.UK One Login eisoes yn defnyddio'r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol.",
+          "sameEmail": "Rydych eisoes yn defnyddio'r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol."
         }
       },
       "dontWantTo": {
@@ -394,9 +387,9 @@
       "summaryText": "Mae eich rhif ffôn wedi cael ei newid i [mobile]."
     },
     "deleteAccountConfirmation": {
-      "title": "Rydych wedi dileu eich cyfrif GOV.UK",
-      "panelText": "Rydych wedi dileu eich cyfrif GOV.UK",
-      "summaryText": "Os byddwch angen defnyddio cyfrif GOV.UK yn y dyfodol, bydd angen i chi greu un newydd."
+      "title": "Rydych wedi dileu eich GOV.UK One Login",
+      "panelText": "Rydych wedi dileu eich GOV.UK One Login",
+      "summaryText": "Os byddwch angen defnyddio GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd."
     },
     "changePassword": {
       "title": "Rhowch eich cyfrinair newydd",
@@ -411,7 +404,7 @@
           "required": "Rhowch eich cyfrinair newydd",
           "maxLength": "Mae’n rhaid i’ch cyfrinair fod yn llai na 256 nod",
           "commonPassword": "Rhowch gyfrinair cryfach. Peidiwch defnyddio cyfrineiriau cyffredin iawn, fel ‘password’ neu ddilyniant o rifau.",
-          "samePassword": "Mae eich cyfrif eisoes yn defnyddio’r cyfrinair hwnnw. Rhowch gyfrinair gwahanol",
+          "samePassword": "Rydych chi eisoes yn defnyddio'r cyfrinair hwnnw. Rhowch gyfrinair gwahanol.",
           "alphaNumeric": "Mae’n rhaid i’ch cyfrinair fod yn o leiaf 8 nod o hyd a rhaid iddo gynnwys llythrennau a rhifau"
         }
       },
@@ -480,17 +473,15 @@
       }
     },
     "deleteAccount": {
-      "title": "Ydych chi’n siwr eich bod am ddileu eich cyfrif GOV.UK?",
-      "header": "Ydych chi’n siwr eich bod am ddileu eich cyfrif GOV.UK?",
-      "paragraph1": "Bydd hyn yn dileu y manylion mewngofnodi ar gyfer eich cyfrif GOV.UK yn barhaol.",
-      "paragraph2": "Mae hyn yn golygu na fyddwch yn gallu mewngofnodi mwyach i'r gwasanaethau rydych yn eu defnyddio gyda'ch cyfrif GOV.UK.",
+      "title": "Ydych chi'n siwr eich bod eisiau dileu eich GOV.UK One Login?",
+      "header": "Ydych chi'n siwr eich bod eisiau dileu eich GOV.UK One Login?",
+      "paragraph1": "Bydd hyn yn dileu eich manylion mewngofnodi GOV.UK One Login yn barhaol.",
+      "paragraph2": "Mae hyn yn golygu na fyddwch bellach yn gallu cael mynediad i'r gwasanaethau rydych yn eu defnyddio gyda'ch GOV.UK One Login.",
       "paragraph3": "Os oes gennych <a class=\"govuk-link\" href=\"[emailManagementLink]\">danysgrifiadau e-byst GOV.UK</a>, bydd y rhain hefyd yn cael eu dileu.",
-      "paragraph4": "Ni fydd yn dileu'r wybodaeth bersonol a gedwir gan wasanaethau rydych wedi'u defnyddio gyda'ch cyfrif GOV.UK.",
-      "paragraph5": "Os byddwch angen cyfrif GOV.UK yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
-      "details": {
-        "text": "<p class=\"govuk-body\">Ni fydd dileu eich cyfrif GOV.UK yn effeithio ar unrhyw gyfrifon eraill y llywodraeth y gallai fod gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.</p>"
-      },
-      "deleteAccount": "Dileu eich cyfrif GOV.UK",
+      "paragraph4": "Ni fydd yn dileu'r wybodaeth bersonol a gedwir gan wasanaethau rydych wedi'u defnyddio gyda'ch GOV.UK One Login.",
+      "paragraph5": "Os byddwch angen GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
+      "details": "Ni fydd dileu eich GOV.UK One Login yn effeithio ar unrhyw gyfrifon eraill y llywodraeth sydd gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.",
+      "deleteAccount": "Dileu eich GOV.UK One Login",
       "doNotDeleteAccount": "Canslo a mynd yn ôl i gosodiadau"
     },
     "changePhoneNumber": {
@@ -508,7 +499,7 @@
           "international": "Rhowch rif ffôn y DU",
           "length": "Rhowch rif ffôn y DU, fel 07700 900000",
           "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu’r symbol +",
-          "samePhoneNumber": "Mae eich cyfrif eisoes yn defnyddio’r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
+          "samePhoneNumber": "Rydych eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
         }
       },
       "internationalPhoneNumber": {
@@ -526,7 +517,7 @@
       "title": "Rydych wedi allgofnodi",
       "header": "Rydych wedi allgofnodi",
       "paragraph1": "I fynd yn ôl, ",
-      "signInLinkText": "mewngofnodwch i’ch cyfrif GOV.UK",
+      "signInLinkText": "mewngofnodwch i'ch GOV.UK One Login",
       "paragraph2": "Neu ",
       "govukLinkText": "ewch i hafan GOV.UK",
       "govukLinkHref": "https://www.gov.uk/"
