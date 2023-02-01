@@ -302,7 +302,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#phoneNumber-error").text()).to.contains(
-          "Your account is already using that phone number. Enter a different phone number."
+          "You are already using that phone number. Enter a different phone number."
         );
       })
       .expect(400, done);

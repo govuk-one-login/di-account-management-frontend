@@ -145,7 +145,7 @@ describe("Integration:: change email", () => {
       .expect(function (res) {
         const page = cheerio.load(res.text);
         expect(page("#email-error").text()).to.contains(
-          "Your account is already using that email address. Enter a different email address."
+          "You are already using that email address. Enter a different email address."
         );
       })
       .expect(400, done);
@@ -164,7 +164,7 @@ describe("Integration:: change email", () => {
       .expect(function (res) {
         const page = cheerio.load(res.text);
         expect(page("#email-error").text()).to.contains(
-          "That email address already has a GOV.UK account. Enter a different email address."
+          "There’s already a GOV.UK One Login using that email address. Enter a different email address."
         );
       })
       .expect(400, done);
