@@ -9,7 +9,7 @@ on:
         required: true
         type: string
         default: main
-      devInstance:
+      environmentNumber:
         description: "Dev instance to deploy to (1-3)"
         required: true
         type: string
@@ -84,8 +84,8 @@ jobs:
           mv .aws-sam/build/template.yaml cf-template.yaml
           echo "Replacing 'CONTAINER-IMAGE-PLACEHOLDER' with new ECR image ref"
           sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA|" cf-template.yaml
-          echo "Updating the Environment Number to ${{ inputs.devInstance }}"
-          sed -i "s|ENVIRONMENT_NUMBER_PLACEHOLDER|${{ inputs.devInstance }}|" cf-template.yaml
+          echo "Updating the Environment Number to ${{ inputs.environmentNumber }}"
+          sed -i "s|ENVIRONMENT_NUMBER_PLACEHOLDER|${{ inputs.environmentNumber }}|" cf-template.yaml
           zip template.zip cf-template.yaml
           aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GITHUB_SHA"
       - name: "Delegated Deployment via AWS CodeDeploy"
