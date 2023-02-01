@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Get Terraform version
         id: getterraformversion
-        run: echo "::set-output name=version::$(cat ci/terraform/.terraform-version)"
+        run: echo "name=version::$(cat ci/terraform/.terraform-version)" >> $GITHUB_OUTPUT
 
       - uses: hashicorp/setup-terraform@v1
         with:
