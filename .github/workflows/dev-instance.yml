@@ -1,5 +1,5 @@
 ---
-name: "Verify & Publish to Dev Instance"
+name: "Verify & Publish to Dev (1-3) Instance"
 
 on:
   workflow_dispatch:
