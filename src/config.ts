@@ -143,6 +143,8 @@ export const getAllowedServiceListClientIDs: string[] = [
   "XwwVDyl5oJKtK0DVsuw3sICWkPU",
   "Dw7Cxas8W7O2usHMHok95elKDRU",
   "oLciSn5b6-cqcJjzgMMwCw1moD8",
+  "LUIZbIuJ_xVZxwhkNAApcO4O_6o",
+  "socialWorkEngland",
   "dbs",
   "vehicleOperatorLicense",
 ];

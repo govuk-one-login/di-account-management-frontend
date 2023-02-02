@@ -165,9 +165,10 @@
         "heading": "Am gyfrifon GOV.UK",
         "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gyda:",
         "listItem1": "Gwneud cais am drwydded gweithredwr cerbyd",
-        "listItem2": "Tanysgrifiadau e-byst GOV.UK",
-        "listItem3": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-        "listItem4": "Gwneud cais am wiriad DBS sylfaenol",
+        "listItem2": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "listItem3": "Tanysgrifiadau e-byst GOV.UK",
+        "listItem4": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "listItem5": "Gwneud cais am wiriad DBS sylfaenol",
         "paragraph2": "Nid yw cyfrifon GOV.UK yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
         "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i gael mynediad i holl wasanaethau ar GOV.UK."
       },
@@ -192,6 +193,10 @@
           "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "integration": {
@@ -214,6 +219,10 @@
           "oLciSn5b6-cqcJjzgMMwCw1moD8": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "staging": {
@@ -236,6 +245,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "build": {
@@ -258,6 +271,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "dev": {
@@ -280,6 +297,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "local": {
@@ -302,6 +323,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         }
       }
