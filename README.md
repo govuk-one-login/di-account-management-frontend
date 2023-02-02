@@ -115,7 +115,7 @@ If the app is run in a container then the tests are run there too:
 ```shell script
 docker exec -it di-auth-account-management-frontend-dev /bin/sh
 
-# yarn run test:unit
+# yarn run test:unit 
 ```
 
 ### Restarting the app
