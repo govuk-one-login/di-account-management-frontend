@@ -24,7 +24,7 @@ jobs:
     needs: validate_artifacts
     steps:
       - name: "Push signed image to ECR, updated SAM template wih image then upload it to the S3 Artifact Bucket"
-        uses: alphagov/di-devplatform-upload-action-ecr@1.0.1
+        uses: alphagov/di-devplatform-upload-action-ecr@1.0.2
         with:
           artifact-bucket-name: ${{ secrets.ARTIFACT_SOURCE_BUCKET_NAME }}
           container-sign-kms-key-arn: ${{ secrets.CONTAINER_SIGN_KMS_KEY }}
