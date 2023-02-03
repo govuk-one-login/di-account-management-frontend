@@ -22,10 +22,10 @@ services:
     container_name: account-management-frontend-pact-testing
     platform: linux/amd64
     build:
-      context: .
-      dockerfile: pact.local.Dockerfile
+      context: ..
+      dockerfile: ./pact.local.Dockerfile
     env_file:
-      ./.env.pact
+      ./pact-docker/.env
     ports:
       - "6001:6001"
       - "9240:9230"

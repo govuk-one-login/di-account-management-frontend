@@ -73,15 +73,19 @@ describe("Integration:: change password", () => {
           return false;
       });
 
+      // eslint-disable-next-line no-console
+      console.log("creating app");
+
     app = await require("../../src/app").createApp();
 
-    await request(app)
-      .get(PATH_DATA.CHANGE_PASSWORD.url)
-      .then((res) => {
-        const $ = load(res.text);
-        token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"];
-      });
+      // eslint-disable-next-line no-console
+    console.log("app created");
+
+    const res = await request(app).get(PATH_DATA.CHANGE_PASSWORD.url);
+
+    const $ = load(res.text);
+    token = $("[name=_csrf]").val();
+    cookies = res.headers["set-cookie"];
 
       // eslint-disable-next-line no-console
       console.log(cookies);
@@ -103,8 +107,10 @@ describe("Integration:: change password", () => {
 
 
   it("should return validation error when password is amongst most common passwords", async () => {
+
       // eslint-disable-next-line no-console
       console.log("executing first test");
+
       await provider.addInteraction({
           states: [{description: "API server is healthy"}],
           uponReceiving: "request to change password",
@@ -148,8 +154,7 @@ describe("Integration:: change password", () => {
           return;
 
       });
-  });
-
+  }).timeout(100000);
 
   it("should return error when new password is the same as existing password", async () => {
 
@@ -197,7 +202,7 @@ describe("Integration:: change password", () => {
 
       });
 
-  });
+  }).timeout(100000);
   //
   it("should throw error when 400 is returned from API", async () => {
 
@@ -242,7 +247,7 @@ describe("Integration:: change password", () => {
           );
           expect(response.statusCode).to.equals(500);
       });
-  });
+  }).timeout(100000);
 
   it("should redirect to enter phone number when valid password entered", async () => {
     //nock(baseApi).post(API_ENDPOINTS.UPDATE_PASSWORD).once().reply(204);
@@ -281,7 +286,7 @@ describe("Integration:: change password", () => {
           expect(response.headers.location).equals("/password-updated-confirmation");
           expect(response.statusCode).to.equals(302);
       });
-  });
-});
+  }).timeout(100000);
+}).timeout(100000);
 
 

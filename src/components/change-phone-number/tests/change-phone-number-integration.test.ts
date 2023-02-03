@@ -65,7 +65,7 @@ describe("Integration:: change phone number", () => {
     });
 
     app = await require("../../../app").createApp();
-    baseApi = process.env.AM_API_BASE_URL;
+      baseApi = "https://oidc.build.account.gov.uk";
 
     request(app)
       .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
@@ -205,6 +205,10 @@ describe("Integration:: change phone number", () => {
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", (done) => {
+      // eslint-disable-next-line no-console
+      console.log(baseApi);
+      // eslint-disable-next-line no-console
+      console.log(API_ENDPOINTS.SEND_NOTIFICATION);
     nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
 
     request(app)

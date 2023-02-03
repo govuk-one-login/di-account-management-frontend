@@ -63,7 +63,7 @@ describe("Integration:: change email", () => {
     });
 
     app = await require("../../../app").createApp();
-    baseApi = process.env.AM_API_BASE_URL;
+    baseApi = "https://oidc.build.account.gov.uk";
 
     request(app)
       .get(PATH_DATA.CHANGE_EMAIL.url)

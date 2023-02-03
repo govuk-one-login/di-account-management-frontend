@@ -8,7 +8,6 @@ import {PactV3} from "@pact-foundation/pact";
 import path from "path";
 import {like} from "@pact-foundation/pact/src/v3/matchers";
 import {load} from "cheerio";
-import {cookie} from "express-validator";
 
 
 const provider = new PactV3({
@@ -79,13 +78,11 @@ describe("Integration:: change email", () => {
     app = await require("../../src/app").createApp();
 
 
-    await request(app)
-        .get(PATH_DATA.CHANGE_PASSWORD.url)
-        .then((res) => {
-          const $ = load(res.text);
-          token = $("[name=_csrf]").val();
-          cookies = res.headers["set-cookie"];
-        });
+    const res = await request(app).get(PATH_DATA.CHANGE_EMAIL.url);
+
+    const $ = load(res.text);
+    token = $("[name=_csrf]").val();
+    cookies = res.headers["set-cookie"];
 
     // eslint-disable-next-line no-console
     console.log(cookies);

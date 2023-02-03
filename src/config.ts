@@ -3,7 +3,7 @@ export function getLogLevel(): string {
 }
 
 export function getApiBaseUrl(): string {
-  return process.env.AM_API_BASE_URL ||"http://127.0.0.1:8080";
+  return "http://localhost:8080";
 }
 
 export function getOIDCApiDiscoveryUrl(): string {

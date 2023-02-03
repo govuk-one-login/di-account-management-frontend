@@ -1,15 +1,15 @@
 import request from "supertest";
 import {describe} from "mocha";
 import {expect, sinon} from "../utils/test-utils";
-import * as cheerio from "cheerio";
 import decache from "decache";
 import {PATH_DATA} from "../../src/app.constants";
 import {MatchersV3, PactV3} from "@pact-foundation/pact";
 import path from "path";
 import nock = require("nock");
 import {email} from "@pact-foundation/pact/src/dsl/matchers";
+import {load} from "cheerio";
 
-const {  like } = MatchersV3;
+const { like } = MatchersV3;
 
 
 const provider = new PactV3({
@@ -78,19 +78,28 @@ describe("Integration:: change phone number", () => {
             return false;
         });
 
-    app = await require("../../src/app").createApp();
+        app = await require("../../src/app").createApp();
 
-    await request(app)
-      .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .then((res) => {
-        const $ = cheerio.load(res.text);
-        token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"];
-      });
+      const res = await request(app).get(PATH_DATA.CHANGE_PHONE_NUMBER.url);
 
+      // console.log("printing res");
+      // console.log(res);
+
+      const $ = load(res.text);
+      console.log("printing $");
+      console.log($);
+
+      token = $("[name=_csrf]").val();
+      cookies = res.headers["set-cookie"];
+
+
+      // eslint-disable-next-line no-console
+      console.log("printing cookies")
       // eslint-disable-next-line no-console
       console.log(cookies);
 
+      // eslint-disable-next-line no-console
+      console.log("printing csrf")
       // eslint-disable-next-line no-console
       console.log(token);
   });

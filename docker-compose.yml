@@ -9,11 +9,12 @@ services:
     environment:
       - SERVICES=kms,sns,dynamodb
       - HOSTNAME_EXTERNAL=localhost
-      - DEBUG=0
+      - DEBUG=1
       - KMS_PROVIDER=local-kms
       - AWS_ACCESS_KEY_ID=na
       - AWS_SECRET_ACCESS_KEY=na
       - MY_ONE_LOGIN_USER_ID=${MY_ONE_LOGIN_USER_ID}
+      - LS_LOG=debug
     volumes:
       - ./seed.yaml:/init/seed.yaml
       - ./localstack/provision.sh:/etc/localstack/init/ready.d/init-aws.sh
