@@ -92,7 +92,7 @@ Parameters:
     Default: user_services
 
 Conditions:
-  IsProduction: !Equals [!Ref Environment, production]
+  IsProduction: !Equals [!Ref Environment, dev]
   UsePermissionsBoundary:
     Fn::Not:
       - Fn::Equals:
