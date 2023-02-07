@@ -18,6 +18,7 @@ Before you can run the frontend app against the backend you will need a usable c
 
 ### Configure or find a usable client
 
+
 The client created by the pipeline is not currently usable by a local account management application as the private key is not available and it does not redirect to local clients. To run account management locally you will need to configure another client.
 
 If you are a member of the GOV.UK Account team, as a colleague if they have existing config they can share with you.
