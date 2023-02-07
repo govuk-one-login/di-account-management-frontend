@@ -55,10 +55,6 @@ Parameters:
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
-  RedisStackName:
-    Description: The name of the stack that defines the Redis cluster
-    Type: String
-    Default: shared-redis
   BackendStackName:
     Description: The name of the backend stack
     Type: String
@@ -119,7 +115,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
-      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
       SUPPORTDELETESERVICESTORE: "1"
@@ -136,7 +132,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
-      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
       SUPPORTDELETESERVICESTORE: "1"
@@ -153,7 +149,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
-      SUPPORTINTERNATIONALNUMBERS: "0"
+      SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
       SUPPORTNEWACCOUNTHEADER: "1"
       SUPPORTDELETESERVICESTORE: "1"
@@ -295,8 +291,6 @@ Resources:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${RedisStackName}/Cluster/*" # for the future when no legacy
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${Environment}-${RedisStackName}-redis-*" # for access to legacy params
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${BackendStackName}/SNS/DeleteTopic/ARN"
               - Effect: Allow
                 Action:
@@ -304,13 +298,24 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
-                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${RedisStackName}/Cluster/Password"
               - Effect: Allow
                 Action:
                   - dynamodb:Query
                   - dynamodb:GetItem
                 Resource:
                   - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
+              - Effect: Allow
+                Action:
+                  - dynamodb:DescribeTable
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:UpdateItem
+                Resource:
+                  - !GetAtt SessionsDynamoDB.Arn
+                  - !Sub "${SessionsDynamoDB.Arn}/index/users-sessions"
               - Effect: Allow
                 Action:
                   - "kms:Sign"
@@ -326,6 +331,7 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
+                  - !GetAtt DynamoDBKmsKey.Arn
 
       PermissionsBoundary: !If
         - UsePermissionsBoundary
@@ -539,8 +545,8 @@ Resources:
                   !Ref Environment,
                   ANALYTICSCOOKIEDOMAIN,
                 ]
-            - Name: "REDIS_KEY"
-              Value: !Ref RedisStackName
+            - Name: "SESSION_STORE_TABLE_NAME"
+              Value: !Ref SessionsDynamoDB
             - Name: "KMS_KEY_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
             - Name: "SERVICE_DOMAIN"
@@ -1420,6 +1426,102 @@ Resources:
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
                 "aws:SecureTransport": true
+
+  #
+  # DynamoDB
+  #
+
+  SessionsDynamoDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-SessionStore
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "user_id"          # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      TimeToLiveSpecification:
+        AttributeName: "expires"
+        Enabled: true
+      BillingMode: PAY_PER_REQUEST
+      ContributorInsightsSpecification:
+        Enabled: true
+      # checkov:skip=CKV_AWS_28: Ignored enable Dynamodb point in time recovery as it is only a short-term cache
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      GlobalSecondaryIndexes:
+        - IndexName: "users-sessions"       # must match index name in ../src/utils/session-store.ts
+          KeySchema:
+            - AttributeName: "user_id"      # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: KEYS_ONLY
+      SSESpecification:
+        KMSMasterKeyId: !Ref DynamoDBKmsKey
+        SSEEnabled: true
+        SSEType: KMS
+      TableClass: STANDARD
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+        - Key: CheckovRulesToSkip
+          Value: CKV_AWS_28
+
+  DynamoDBKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub "KMS key used to protect DynamoDB data in ${AWS::StackName}"
+      Enabled: true
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action:
+              - kms:*
+            Resource: "*"
+          - Effect: Allow
+            Principal:
+              Service: dynamodb.amazonaws.com
+            Action:
+              - kms:Encrypt*
+              - kms:Decrypt*
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+              - kms:Describe*
+            Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${AWS::StackName}-SessionStore"
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-DynamoDBKmsKey"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  DynamoDBKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-DynamoDBKmsKey"
+      TargetKeyId: !GetAtt DynamoDBKmsKey.Arn
 
   #
   # Outputs

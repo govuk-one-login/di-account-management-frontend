@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ExpressRouteFunc } from "../../types";
 import xss from "xss";
 import { getNextState } from "../../utils/state-machine";
-import { NOTIFICATION_TYPE, PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants";
 import { ChangeEmailServiceInterface } from "../change-email/types";
 import { changeEmailService } from "../change-email/change-email-service";
 import {
@@ -41,7 +41,6 @@ export function resendEmailCodePost(
     const emailSent = await service.sendCodeVerificationNotification(
       accessToken,
       newEmailAddress,
-      NOTIFICATION_TYPE.VERIFY_EMAIL,
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId,

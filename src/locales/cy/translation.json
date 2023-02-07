@@ -110,8 +110,10 @@
       "title": "Rydych wedi cael eich allgofnodi",
       "header": "Rydych wedi cael eich allgofnodi",
       "content": {
-        "paragraph1": "Rydych wedi cael eich allgofnodi oherwydd nad oeddech wedi defnyddio eich cyfrif am fwy na 2 awr.",
-        "paragraph2": "Mae hyn er mwyn cadw eich cyfrif a’ch gwybodaeth yn ddiogel.",
+        "paragraph1": "Gallai hyn fod oherwydd rydych:",
+        "listItem1": "heb ddefnyddio eich cyfrif am fwy na 2 awr",
+        "listItem2": "wedi allgofnodi o'ch cyfrif tra'n defnyddio gwasanaeth arall",
+        "paragraph2": "Rydym wedi eich allgofnodi i gadw eich cyfrif a'ch gwybodaeth yn ddiogel.",
         "signInButtonText": "Mewngofnodi i’ch cyfrif",
         "govUKHomepageLink": "https://www.gov.uk/",
         "govUKHomepageLinkText": "Ewch i hafan GOV.UK"
@@ -120,8 +122,8 @@
   },
   "pages": {
     "manageYourAccount": {
-      "title": "Eich cyfrif GOV.UK",
-      "header": "Eich cyfrif GOV.UK",
+      "title": "Gosodiadau",
+      "header": "Gosodiadau",
       "signedInStatus": "Rydych wedi mewngofnodi fel",
       "accountDetails": "Eich manylion mewngofnodi",
       "summaryList": {
@@ -163,9 +165,10 @@
         "heading": "Am gyfrifon GOV.UK",
         "paragraph1": "Mae cyfrifon GOV.UK yn newydd. Ar hyn o bryd gallwch ond defnyddio eich cyfrif GOV.UK gyda:",
         "listItem1": "Gwneud cais am drwydded gweithredwr cerbyd",
-        "listItem2": "Tanysgrifiadau e-byst GOV.UK",
-        "listItem3": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-        "listItem4": "Gwneud cais am wiriad DBS sylfaenol",
+        "listItem2": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "listItem3": "Tanysgrifiadau e-byst GOV.UK",
+        "listItem4": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "listItem5": "Gwneud cais am wiriad DBS sylfaenol",
         "paragraph2": "Nid yw cyfrifon GOV.UK yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
         "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich cyfrif GOV.UK i gael mynediad i holl wasanaethau ar GOV.UK."
       },
@@ -190,6 +193,10 @@
           "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "integration": {
@@ -212,6 +219,10 @@
           "oLciSn5b6-cqcJjzgMMwCw1moD8": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "staging": {
@@ -234,6 +245,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "build": {
@@ -256,6 +271,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "dev": {
@@ -278,6 +297,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "local": {
@@ -300,6 +323,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         }
       }
@@ -407,7 +434,7 @@
       "text": "Rydym wedi anfon e-bost at: ",
       "changeEmailLinkHref": "/change-email",
       "details": {
-        "summaryText": "Problemau gyda’r cod?",
+        "summaryText": "Problemau gyda’r cod",
         "text1": "Gallwn ",
         "sendCodeLinkText": "anfon y cod eto",
         "sendCodeLinkHref": "/request-new-email-code",
@@ -435,11 +462,11 @@
       "header": "Gwiriwch eich ffôn",
       "text": "Rydym wedi anfon cod i [mobile].",
       "info": {
-        "paragraph": "Efallai y bydd yn cymryd ychydig funudau i gyrraedd. Bydd y cod yn dod i ben ar ôl 15 munud.",
-        "requestNewCodeLink": "Gofynnwch am god newydd",
-        "requestNewCodeParagraph": " os:",
-        "requestNewCodeReason1": "nad yw’r cod yn gweithio neu mae wedi dod i ben, neu ni wnaethoch dderbyn un",
-        "requestNewCodeReason2": "rydych eisiau defnyddio rhif ffôn gwahanol"
+        "paragraph": "Efallai y bydd yn cymryd ychydig funudau i gyrraedd. Bydd y cod yn dod i ben ar ôl 15 munud."
+      },
+      "details": {
+        "summaryText": "Problemau gyda'r cod",
+        "text": "Gallwn <a class=\"govuk-link\" href=\"[resendCodeLink]\">anfon y cod eto</a> neu gallwch <a class=\"govuk-link\" href=\"[changePhoneNumberLink]\">ddefnyddio rhif ffôn gwahanol</a>."
       },
       "code": {
         "label": "Rhowch y cod diogelwch 6 digid",
@@ -471,10 +498,11 @@
       "header": "Rhowch eich rhif ffôn symudol newydd",
       "info": {
         "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i’r rhif rydych yn ei roi i ni.",
+        "paragraph2":"Mae'n rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
         "backLink": "Nid wyf eisiau newid fy rhif ffôn"
       },
       "ukPhoneNumber": {
-        "label": "Rhif ffôn y DU",
+        "label": "Rhif ffôn symudol y DU",
         "validationError": {
           "required": "Rhowch rif ffôn y DU",
           "international": "Rhowch rif ffôn y DU",
@@ -509,8 +537,8 @@
       "continue": "Cael cod diogelwch",
       "message": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd.",
       "phoneNumber": {
-        "default": "Byddwn yn anfon cod at y rhif ffôn sy'n gysylltiedig â'ch cyfrif",
-        "isResendCodeRequest": "Byddwn yn anfon cod i: [mobile]."
+        "insetText": "Byddwn yn anfon cod i: [mobile].",
+        "paragraph": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd."
       },
       "email": {
         "recipientMessage": "Byddwn yn anfon cod i: ",

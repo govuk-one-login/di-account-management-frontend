@@ -10,6 +10,7 @@ import {
 } from "../delete-account-controller";
 import { DeleteAccountServiceInterface } from "../types";
 import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
+import { destroyUserSessions } from "../../../utils/session-store";
 
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -22,10 +23,6 @@ describe("delete account controller", () => {
         locals: {
           sessionStore: {
             destroy: sandbox.fake(),
-          },
-          subjectSessionIndexService: {
-            removeSession: sandbox.fake(),
-            getSessions: sandbox.stub().resolves(["session-1", "session-2"]),
           },
         },
       },
@@ -62,7 +59,7 @@ describe("delete account controller", () => {
       beforeEach(() => {
         process.env.SUPPORT_DELETE_SERVICE_STORE = "0"
       });
-    
+
       afterEach(() => {
         delete process.env.SUPPORT_DELETE_SERVICE_STORE;
       });
@@ -84,6 +81,9 @@ describe("delete account controller", () => {
         req.oidc = {
           endSessionUrl: sandbox.fake.returns("logout-url"),
         };
+
+        const sessionStore = require("../../../utils/session-store");
+        sandbox.stub(sessionStore, "destroyUserSessions").resolves();
 
         await deleteAccountPost(fakeService, fakePublishingService)(
           req as Request,
@@ -96,23 +96,7 @@ describe("delete account controller", () => {
           .calledOnce;
         expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
         expect(res.redirect).to.have.been.calledWith("logout-url");
-        expect(
-          req.app.locals.sessionStore.destroy.getCall(0).calledWith("session-1")
-        ).eq(true);
-        expect(
-          req.app.locals.sessionStore.destroy.getCall(1).calledWith("session-2")
-        ).eq(true);
-
-        expect(
-          req.app.locals.subjectSessionIndexService.removeSession
-            .getCall(0)
-            .calledWith("public-subject-id", "session-1")
-        ).eq(true);
-        expect(
-          req.app.locals.subjectSessionIndexService.removeSession
-            .getCall(1)
-            .calledWith("public-subject-id", "session-2")
-        ).eq(true);
+        expect(destroyUserSessions).to.have.been.calledWith("public-subject-id");
       });
     });
 
@@ -120,7 +104,7 @@ describe("delete account controller", () => {
       beforeEach(() => {
         process.env.SUPPORT_DELETE_SERVICE_STORE = "1"
       });
-    
+
       afterEach(() => {
         delete process.env.SUPPORT_DELETE_SERVICE_STORE;
       });
@@ -143,6 +127,9 @@ describe("delete account controller", () => {
           endSessionUrl: sandbox.fake.returns("logout-url"),
         };
 
+        const sessionStore = require("../../../utils/session-store");
+        sandbox.stub(sessionStore, "destroyUserSessions").resolves();
+
         await deleteAccountPost(fakeService, fakePublishingService)(
           req as Request,
           res as Response
@@ -154,23 +141,7 @@ describe("delete account controller", () => {
           .calledOnce;
         expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
         expect(res.redirect).to.have.been.calledWith("logout-url");
-        expect(
-          req.app.locals.sessionStore.destroy.getCall(0).calledWith("session-1")
-        ).eq(true);
-        expect(
-          req.app.locals.sessionStore.destroy.getCall(1).calledWith("session-2")
-        ).eq(true);
-
-        expect(
-          req.app.locals.subjectSessionIndexService.removeSession
-            .getCall(0)
-            .calledWith("public-subject-id", "session-1")
-        ).eq(true);
-        expect(
-          req.app.locals.subjectSessionIndexService.removeSession
-            .getCall(1)
-            .calledWith("public-subject-id", "session-2")
-        ).eq(true);
+        expect(destroyUserSessions).to.have.been.calledWith("public-subject-id");
       });
     });
   });

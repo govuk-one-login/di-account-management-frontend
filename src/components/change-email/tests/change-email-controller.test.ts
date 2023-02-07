@@ -7,6 +7,7 @@ import { Request, Response } from "express";
 import { changeEmailGet, changeEmailPost } from "../change-email-controller";
 import { ChangeEmailServiceInterface } from "../types";
 import { getInitialState } from "../../../utils/state-machine";
+import { HTTP_STATUS_CODES } from "../../../app.constants";
 
 describe("change email controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -16,8 +17,19 @@ describe("change email controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = { body: {}, session: { user: {} }, cookies: { lng: "en" } };
-    res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
+    req = {
+      body: {},
+      session: { user: {} },
+      cookies: { lng: "en" },
+      i18n: { language: "en" },
+      t: sandbox.fake(),
+    };
+    res = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(),
+      locals: {},
+      status: sandbox.fake(),
+    };
   });
 
   afterEach(() => {
@@ -51,6 +63,23 @@ describe("change email controller", () => {
       expect(fakeService.sendCodeVerificationNotification).to.have.been
         .calledOnce;
       expect(res.redirect).to.have.calledWith("/check-your-email");
+    });
+
+    it("should render bad request", async () => {
+      const fakeService: ChangeEmailServiceInterface = {
+        sendCodeVerificationNotification: sandbox.fake.returns(true),
+      };
+
+      req.body.email = "test@test.com";
+      req.session.user = {
+        tokens: { accessToken: "token" },
+        email: "test@test.com",
+        state: { changeEmail: getInitialState() },
+      };
+      req.cookies.lng = "en";
+
+      await changeEmailPost(fakeService)(req as Request, res as Response);
+      expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
   });
 });

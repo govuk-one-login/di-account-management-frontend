@@ -107,11 +107,13 @@
       }
     },
     "timeoutError": {
-      "title": "You have been signed out",
-      "header": "You have been signed out",
+      "title": "You’ve been signed out",
+      "header": "You’ve been signed out",
       "content": {
-        "paragraph1": "You’ve been signed out because you did not use your account for more than 2 hours.",
-        "paragraph2": "This is to keep your account and your information secure.",
+        "paragraph1": "This could be because you:",
+        "listItem1": "have not used your account for more than 2 hours",
+        "listItem2": "signed out of your account while using another service",
+        "paragraph2": "We signed you out to keep your account and your information secure.",
         "signInButtonText": "Sign in to your account",
         "govUKHomepageLink": "https://www.gov.uk/",
         "govUKHomepageLinkText": "Go to the GOV.UK homepage"
@@ -120,8 +122,8 @@
   },
   "pages": {
     "manageYourAccount": {
-      "title": "Your GOV.UK account",
-      "header": "Your GOV.UK account",
+      "title": "Settings",
+      "header": "Settings",
       "signedInStatus": "You’re signed in as",
       "accountDetails": "Your sign in details",
       "summaryList": {
@@ -163,9 +165,10 @@
         "heading": "About GOV.UK accounts",
         "paragraph1": "GOV.UK accounts are new. At the moment you can only use your GOV.UK account with:",
         "listItem1": "Apply for a vehicle operator licence",
-        "listItem2": "GOV.UK email subscriptions ",
-        "listItem3": "LITE (Licensing for International Trade and Enterprise)",
-        "listItem4": "Request a basic DBS check",
+        "listItem2": "Apply to become a registered social worker in England ",
+        "listItem3": "GOV.UK email subscriptions ",
+        "listItem4": "LITE (Licensing for International Trade and Enterprise)",
+        "listItem5": "Request a basic DBS check",
         "paragraph2": "GOV.UK accounts do not work with all government accounts and services yet (for example Government Gateway or Universal Credit).",
         "paragraph3": "In the future, you'll be able to use your GOV.UK account to access all services on GOV.UK."
       },
@@ -190,6 +193,10 @@
           "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
             "link_text": "Apply for a vehicle operator licence",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+            "link_text": "Apply to become a registered social worker in England",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "integration": {
@@ -212,6 +219,10 @@
           "oLciSn5b6-cqcJjzgMMwCw1moD8": {
             "link_text": "Apply for a vehicle operator licence",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+            "link_text": "Apply to become a registered social worker in England",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "staging": {
@@ -234,6 +245,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Apply for a vehicle operator licence",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Apply to become a registered social worker in England",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "build": {
@@ -256,6 +271,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Apply for a vehicle operator licence",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Apply to become a registered social worker in England",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "dev": {
@@ -278,6 +297,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Apply for a vehicle operator licence",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Apply to become a registered social worker in England",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         },
         "local": {
@@ -300,6 +323,10 @@
           "vehicleOperatorLicense": {
             "link_text": "Apply for a vehicle operator licence",
             "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+          },
+          "socialWorkEngland": {
+            "link_text": "Apply to become a registered social worker in England",
+            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           }
         }
       }
@@ -407,7 +434,7 @@
       "text": "We have sent an email to: ",
       "changeEmailLinkHref": "/change-email",
       "details": {
-        "summaryText": "Problems with the code?",
+        "summaryText": "Problems with the code",
         "text1": "We can ",
         "sendCodeLinkText": "send the code again",
         "sendCodeLinkHref": "/resend-email-code",
@@ -433,13 +460,13 @@
     "checkYourPhone": {
       "title": "Check your phone",
       "header": "Check your phone",
-      "text": "We sent a code to [mobile].",
+      "text": "We have sent a code to [mobile].",
       "info": {
-        "paragraph": "It might take a few minutes to arrive. The code will expire after  15 minutes.",
-        "requestNewCodeLink": "Request a new code",
-        "requestNewCodeParagraph": " if:",
-        "requestNewCodeReason1": "the code isn’t working or has expired, or you didn’t receive one",
-        "requestNewCodeReason2": "you want to use a different phone number"
+        "paragraph": "It might take a few minutes to arrive. The code will expire after  15 minutes."
+      },
+      "details": {
+        "summaryText": "Problems with the code",
+        "text": "We can <a class=\"govuk-link\" href=\"[resendCodeLink]\">send the code again</a> or you can <a class=\"govuk-link\" href=\"[changePhoneNumberLink]\">use a different phone number</a>."
       },
       "code": {
         "label": "Enter the 6 digit security code",
@@ -469,10 +496,11 @@
       "header": "Enter your new mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
+        "paragraph2": "You must use a UK mobile phone number.",
         "backLink": "I do not want to change my phone number"
       },
       "ukPhoneNumber": {
-        "label": "UK phone number",
+        "label": "UK mobile phone number",
         "validationError": {
           "required": "Enter a UK phone number",
           "international": "Enter a UK phone number",
@@ -507,8 +535,8 @@
       "continue": "Get security code",
       "message": "Text messages can sometimes take a few minutes to arrive.",
       "phoneNumber": {
-        "default": "We will send a code to the phone number linked to your account",
-        "isResendCodeRequest": "We will send a code to: [mobile]."
+        "insetText": "We will send a code to [mobile]",
+        "paragraph": "Text messages can sometimes take a few minutes to arrive."
       },
       "email": {
         "recipientMessage": "We will send a code to: ",

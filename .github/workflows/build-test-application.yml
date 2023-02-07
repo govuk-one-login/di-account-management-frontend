@@ -29,32 +29,35 @@ jobs:
     runs-on: ubuntu-latest
     services:
       localstack:
-        image: localstack/localstack:0.12.15
+        image: localstack/localstack:1.3.1
         env:
-          SERVICES: kms
-          HOSTNAME_EXTERNAL: localhost
-          DEFAULT_REGION: eu-west-2
-          DEBUG: 1
+          SERVICES: kms,sns,dynamodb
+          HOSTNAME_EXTERNAL: localstack
+          AWS_DEFAULT_REGION: eu-west-2
+          AWS_ACCESS_KEY_ID: na
+          AWS_SECRET_ACCESS_KEY: na
+          DEBUG: 0
         ports:
           - 4566:4566
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.gitRef || github.ref }}
 
+      - name: Provision localstack
+        env:
+          AWS_DEFAULT_REGION: eu-west-2
+          AWS_ACCESS_KEY_ID: na
+          AWS_SECRET_ACCESS_KEY: na
+        run:
+          ./localstack/provision.sh
+
+        shell: bash
+
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version-file: .node-version
 
       - name: Install dependencies defined in yarn.lock
         run: yarn install --frozen-lockfile
@@ -71,7 +74,6 @@ jobs:
       - name: Run lint
         run: yarn lint
     env:
-      ENVIRONMENT: development
       API_BASE_URL: http://localhost:6000/api
       AM_API_BASE_URL: http://localhost:5000/api
       SUPPORT_INTERNATIONAL_NUMBERS: 1
@@ -82,8 +84,7 @@ jobs:
       OIDC_CLIENT_SCOPES: openid
       SESSION_SECRET: secret
       SESSION_EXPIRY: 3600000
-      REDIS_HOST: localhost
-      REDIS_PORT: 6379
+      SESSION_STORE_TABLE_NAME: account-mgmt-frontend-SessionStore
 
   code_analysis:
     runs-on: ubuntu-latest

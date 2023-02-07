@@ -12,43 +12,42 @@
     {% include "common/errors/errorSummary.njk" %}
 
     <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.checkYourPhone.header' | translate}}</h1>
-
-    <p class="govuk-body">{{'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber )}}</p>
+    {{ govukInsetText({
+        text: 'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber)
+    })}}
 
     <p class="govuk-body">{{'pages.checkYourPhone.info.paragraph' | translate}}</p>
 
     <form action="/check-your-phone" method="post" novalidate="novalidate">
-
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
         <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
         {{ govukInput({
-    label: {
-        text: 'pages.checkYourPhone.code.label' | translate
-    },
-    classes:"govuk-input--width-5",
-    id: "code",
-    name: "code",
-    inputmode: "numeric",
-    spellcheck: false,
-    errorMessage: {
-        text: errors['code'].text
-    } if (errors['code'])})
-}}
+            label: {
+                text: 'pages.checkYourPhone.code.label' | translate
+            },
+            classes:"govuk-input--width-5",
+            id: "code",
+            name: "code",
+            inputmode: "numeric",
+            spellcheck: false,
+            errorMessage: {
+                text: errors['code'].text
+            } if (errors['code'])})
+        }}
+
+        {% set detailsHTML %}
+            <p class="govuk-body">{{'pages.checkYourPhone.details.text' | translate | replace("[resendCodeLink]", resendCodeLink) | replace("[changePhoneNumberLink]", changePhoneNumberLink) | safe }}</p>
+        {% endset %}
+
+        {{ govukDetails({
+            summaryText: 'pages.checkYourPhone.details.summaryText' | translate,
+            html: detailsHTML
+        }) }}
 
         {{ govukButton({
-    "text": button_text|default("general.continue.label" | translate, true),
-    "type": "Submit",
-    "preventDoubleClick": true
-}) }}
-
+            "text": button_text|default("general.continue.label" | translate, true),
+            "type": "Submit",
+            "preventDoubleClick": true
+        }) }}
     </form>
-    <p class="govuk-body">
-        <a href="/request-new-opt-code" class="govuk-link govuk-body" rel="noreferrer noopener">{{'pages.checkYourPhone.info.requestNewCodeLink' | translate }}</a>
-        {{'pages.checkYourPhone.info.requestNewCodeParagraph' | translate }}
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-        <li>{{ 'pages.checkYourPhone.info.requestNewCodeReason1' | translate}}</li>
-        <li>{{ 'pages.checkYourPhone.info.requestNewCodeReason2' | translate}}</li>
-    </ul>
 {% endblock %}

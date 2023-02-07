@@ -150,11 +150,16 @@ $govuk-new-link-styles: true;
   }
 }
 
+$nav-link-padding: govuk-spacing(3);
+$nav-link-outline-thickness: 2px;
+$nav-active-border-thickness: 5px;
+
 .account-navigation__link {
   @extend .govuk-link;
   display: inline-block;
   font-weight: bold;
-  padding: govuk-spacing(3) 0;
+  padding: $nav-link-padding - $nav-link-outline-thickness 0 $nav-link-padding;
+  margin-top: $nav-link-outline-thickness;
   
   &:not(:hover) {
     text-decoration: none;
@@ -173,13 +178,12 @@ $govuk-new-link-styles: true;
   }
 
   .account-navigation__list-item--active & {
-    padding: govuk-spacing(3) 0 govuk-spacing(2);
-    border-bottom: 5px solid;
-    border-color: govuk-colour("blue");
+    padding: $nav-link-padding - $nav-link-outline-thickness 0 $nav-link-padding - $nav-active-border-thickness;
+    border-bottom: $nav-active-border-thickness solid $govuk-link-colour;
 
     &:focus {
       border-bottom: none;
-      padding: govuk-spacing(3) 0;
+      padding: $nav-link-padding - $nav-link-outline-thickness 0 $nav-link-padding;
     }
 
     &:hover {
