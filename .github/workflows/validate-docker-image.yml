@@ -65,7 +65,7 @@ jobs:
         with:
           image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
           format: 'table'
-          output: "results-di-authentication-account-management-${{ steps.datetime.outputs.date }}.sarif"
+          output: "results-di-account-management-frontend-${{ steps.datetime.outputs.date }}.sarif"
           exit-code: "1"
           ignore-unfixed: true
           vuln-type: "os,library"
