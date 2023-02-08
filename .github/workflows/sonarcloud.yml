@@ -1,0 +1,40 @@
+name: Sonarcloud
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  sonarcloud:
+    name: Run Sonar scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gitRef || github.ref }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - name: Install dependencies
+        run: yarn install
+      - name: Generate coverage report
+        run: yarn test:coverage
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    env:
+      API_BASE_URL: http://localhost:6000/api
+      AM_API_BASE_URL: http://localhost:5000/api
+      SUPPORT_INTERNATIONAL_NUMBERS: 1
+      GOV_ACCOUNTS_PUBLISHING_API_URL: http://localhost:1000/api
+      GOV_ACCOUNTS_PUBLISHING_API_TOKEN: token
+      AM_YOUR_ACCOUNT_URL: some url
+      OIDC_CLIENT_ID: test
+      OIDC_CLIENT_SCOPES: openid
+      SESSION_SECRET: secret
+      SESSION_EXPIRY: 3600000
+      SESSION_STORE_TABLE_NAME: account-mgmt-frontend-SessionStore
