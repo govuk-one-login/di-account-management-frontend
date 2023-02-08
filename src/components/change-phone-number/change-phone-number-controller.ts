@@ -13,7 +13,7 @@ import { prependInternationalPrefix } from "../../utils/phone-number";
 import { BadRequestError } from "../../utils/errors";
 import xss from "xss";
 
-const TEMPLATE_NAME = "change-phone-number/index.njk";
+const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
   res.render("change-phone-number/index.njk", {
@@ -64,13 +64,18 @@ export function changePhoneNumberPost(
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
+      
+      const href: string = (
+        hasInternationalPhoneNumber &&
+        hasInternationalPhoneNumber === "true") ? "internationalPhoneNumber" : "phoneNumber";
+
       const error = formatValidationError(
-        "phoneNumber",
+        href,
         req.t(
-          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
+          "pages.changePhoneNumber.internationalPhoneNumber.validationError.samePhoneNumber"
         )
       );
-      return renderBadRequest(res, req, TEMPLATE_NAME, error);
+      return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);
     } else {
       throw new BadRequestError(response.message, response.code);
     }

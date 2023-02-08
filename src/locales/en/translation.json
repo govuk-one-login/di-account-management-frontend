@@ -489,27 +489,27 @@
       "header": "Enter your new mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
-        "paragraph2": "You must use a UK mobile phone number.",
         "backLink": "I do not want to change my phone number"
       },
       "ukPhoneNumber": {
         "label": "UK mobile phone number",
         "validationError": {
-          "required": "Enter a UK phone number",
-          "international": "Enter a UK phone number",
-          "length": "Enter a UK phone number, like 07700 900000",
+          "required": "Enter a UK mobile phone number",
+          "international": "Enter a UK mobile phone number",
+          "length": "Enter a UK mobile phone number, like 07700 900000",
           "plusNumericOnly": "Enter a UK mobile phone number using only numbers or the + symbol",
-          "samePhoneNumber": "You are already using that phone number. Enter a different phone number."
+          "samePhoneNumber": "You’re already using that phone number. Enter a different phone number"
         }
       },
       "internationalPhoneNumber": {
-        "checkBoxLabel": "I have an international mobile number",
-        "label": "International mobile number",
-        "hint": "Include the country code, for example +3537777666555",
+        "checkBoxLabel": "I do not have a UK mobile number",
+        "label": "Mobile phone number",
+        "hint": "Include the country code, for example +33 for France",
         "validationError": {
-          "required": "Enter a phone number",
-          "plusNumericOnly": "Enter a phone number using only numbers or the + symbol",
-          "internationalFormat": "Enter a phone number in the correct format"
+          "required": "Enter a mobile phone number",
+          "plusNumericOnly": "Enter a mobile phone number using only numbers or the + symbol",
+          "internationalFormat": "Enter a mobile phone number in the correct format, including the country code",
+          "samePhoneNumber": "You’re already using that phone number. Enter a different phone number."
         }
       }
     },
