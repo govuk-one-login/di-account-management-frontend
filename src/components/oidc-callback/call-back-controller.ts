@@ -4,7 +4,6 @@ import { PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
-import * as querystring from "querystring";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
@@ -109,10 +108,11 @@ export function oidcAuthCallbackGet(
         crossDomainGaIdParam &&
         req.query.cookie_consent === COOKIE_CONSENT.ACCEPT
       ) {
+        const searchParams = new URLSearchParams({ _ga: crossDomainGaIdParam });
         redirectUri =
           redirectUri +
           "?" +
-          querystring.stringify({ _ga: crossDomainGaIdParam });
+          searchParams.toString();
       }
     }
 
