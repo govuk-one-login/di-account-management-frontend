@@ -11,6 +11,7 @@ import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 import xss from "xss";
+import { UpdateInformationInput, UpdateInformationSessionValues } from "../../utils/types";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
 
@@ -25,7 +26,6 @@ export function checkYourEmailPost(
   publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const code = req.body["code"];
     const {
       email,
       newEmailAddress,
@@ -33,17 +33,23 @@ export function checkYourEmailPost(
       publicSubjectId,
       legacySubjectId,
     } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
+
+    const updateInput : UpdateInformationInput = {
+      email: email,
+      updatedValue: newEmailAddress,
+      otp: req.body["code"]
+    };
+
+    const sessionDetails : UpdateInformationSessionValues = {
+      accessToken : req.session.user.tokens,
+      sourceIp: req.ip,
+      sessionId: res.locals.sessionId,
+      persistentSessionId : res.locals.persistentSessionId,
+      userLanguage: xss(req.cookies.lng as string)
+    }
 
     const isEmailUpdated = await service.updateEmail(
-      accessToken,
-      email,
-      newEmailAddress,
-      code,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string)
+      updateInput, sessionDetails
     );
 
     if (isEmailUpdated) {
