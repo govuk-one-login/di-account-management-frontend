@@ -235,7 +235,7 @@ describe("Integration:: change password", () => {
       .expect(function (res) {
         const $ = load(res.text);
         expect($("#password-error").text()).to.contains(
-          "Your account is already using that password. Enter a different password"
+          "You are already using that password. Enter a different password"
         );
       })
       .expect(400, done);
