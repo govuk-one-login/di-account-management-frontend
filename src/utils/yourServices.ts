@@ -21,7 +21,7 @@ const serviceStoreDynamoDBRequest = (
 const unmarshallDynamoData = (dynamoDBResponse: DynamoDB.Types.AttributeMap) =>
   DynamoDB.Converter.unmarshall(dynamoDBResponse);
 
-const getServiceStoreItem = async (subjectId: string): Promise<Service[]> => {
+export const getServices = async (subjectId: string): Promise<Service[]> => {
   const logger = pino();
   try {
     const response = await dynamoDBService().getItem(
@@ -37,7 +37,7 @@ const getServiceStoreItem = async (subjectId: string): Promise<Service[]> => {
 export const presentYourServices = async (
   subjectId: string
 ): Promise<YourServices> => {
-  const userServices = await getServiceStoreItem(subjectId);
+  const userServices = await getServices(subjectId);
   if (userServices) {
     const userServicesWithPresentableDates = userServices.map((service) =>
       formatService(service)
