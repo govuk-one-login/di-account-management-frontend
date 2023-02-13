@@ -69,3 +69,17 @@ export interface Error {
   text: string;
   href: string;
 }
+
+export interface UpdateInformationInput {
+  email: string;
+  updatedValue: string;
+  otp: string;
+}
+
+export interface UpdateInformationSessionValues {
+  accessToken: string
+  sourceIp: string;
+  sessionId: string;
+  persistentSessionId: string;
+  userLanguage: string;
+}

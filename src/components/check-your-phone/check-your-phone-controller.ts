@@ -10,6 +10,7 @@ import {
 } from "../../utils/validation";
 import { redactPhoneNumber } from "../../utils/strings";
 import xss from "xss";
+import { UpdateInformationInput, UpdateInformationSessionValues } from "../../utils/types";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -25,19 +26,24 @@ export function checkYourPhonePost(
   service: CheckYourPhoneServiceInterface = checkYourPhoneService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const code = req.body["code"];
     const { email, newPhoneNumber } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
+
+    const updateInput : UpdateInformationInput = {
+      email,
+      updatedValue: newPhoneNumber,
+      otp: req.body["code"]
+    };
+
+    const sessionDetails : UpdateInformationSessionValues = {
+      accessToken : req.session.user.tokens,
+      sourceIp: req.ip,
+      sessionId: res.locals.sessionId,
+      persistentSessionId : res.locals.persistentSessionId,
+      userLanguage: xss(req.cookies.lng as string)
+    }
 
     const isPhoneNumberUpdated = await service.updatePhoneNumber(
-      accessToken,
-      email,
-      newPhoneNumber,
-      code,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string)
+        updateInput, sessionDetails
     );
 
     if (isPhoneNumberUpdated) {
