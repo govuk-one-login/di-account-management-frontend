@@ -1,3 +1,3 @@
 # Security Policy
 
-Vulnerability Disclosure Policy - https://www.ncsc.gov.uk/information/vulnerability-reporting
+Vulnerability Disclosure Policy - https://www.gov.uk/help/report-vulnerability
