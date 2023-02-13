@@ -1044,7 +1044,7 @@ Resources:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
       MaxCapacity: !Ref ECSClusterMaxCapacity
-      MinCapacity: 2
+      MinCapacity: 3
       ResourceId: !Join
         - "/"
         - - "service"
