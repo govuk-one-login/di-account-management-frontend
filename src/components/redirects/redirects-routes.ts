@@ -16,6 +16,11 @@ router.get(
   securityTextRedirect
 );
 
+router.get(
+  PATH_DATA.THANKS_TXT.url,
+  thanksTextRedirect
+);
+
 async function redirectManageYourAccount(
   req: Request,
   res: Response
@@ -27,6 +32,12 @@ async function securityTextRedirect(
   res: Response
 ): Promise<void> {
   res.redirect(302, WELL_KNOWN_FILES.SECURITY_TEXT_URL);
+}
+
+async function thanksTextRedirect(
+  res: Response
+): Promise<void> {
+  res.redirect(302, WELL_KNOWN_FILES.THANKS_TEXT_URL);
 }
 
 export { router as redirectsRouter };

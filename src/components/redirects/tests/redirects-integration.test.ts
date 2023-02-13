@@ -27,4 +27,12 @@ describe("Integration::redirects", () => {
         .expect(302, done());
     });
   });
+
+  describe("thanks.txt", async () => {
+    it("302 redirects to cabinet office thanks.txt", (done) => {
+      request(app).get(PATH_DATA.THANKS_TXT.url)
+        .expect("Location", WELL_KNOWN_FILES.THANKS_TEXT_URL)
+        .expect(302, done());
+    });
+  });
 });
