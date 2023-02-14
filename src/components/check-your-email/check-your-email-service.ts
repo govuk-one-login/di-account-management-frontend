@@ -2,34 +2,29 @@ import { getRequestConfig, Http, http } from "../../utils/http";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { CheckYourEmailServiceInterface } from "./types";
 import { AxiosResponse } from "axios";
+import { UpdateInformationInput, UpdateInformationSessionValues } from "../../utils/types";
 
 export function checkYourEmailService(
   axios: Http = http
 ): CheckYourEmailServiceInterface {
   const updateEmail = async function (
-    accessToken: string,
-    existingEmailAddress: string,
-    replacementEmailAddress: string,
-    code: string,
-    sourceIp: string,
-    sessionId: string,
-    persistentSessionId: string,
-    userLanguage: string
+    updateInput : UpdateInformationInput,
+    sessionDetails: UpdateInformationSessionValues,
   ): Promise<boolean> {
     const { status }: AxiosResponse = await axios.client.post(
       API_ENDPOINTS.UPDATE_EMAIL,
       {
-        existingEmailAddress,
-        replacementEmailAddress,
-        otp: code,
+        existingEmailAddress : updateInput.email,
+        replacementEmailAddress : updateInput.updatedValue,
+        otp: updateInput.otp,
       },
       getRequestConfig(
-        accessToken,
+        sessionDetails.accessToken,
         [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
-        sourceIp,
-        persistentSessionId,
-        sessionId,
-        userLanguage
+        sessionDetails.sourceIp,
+        sessionDetails.persistentSessionId,
+        sessionDetails.sessionId,
+        sessionDetails.userLanguage
       )
     );
 

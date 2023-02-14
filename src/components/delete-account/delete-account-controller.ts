@@ -6,8 +6,7 @@ import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
-import { getBaseUrl, getManageGovukEmailsUrl, supportDeleteServiceStore } from "../../config";
-import { getSNSDeleteTopic } from "../../config";
+import { getBaseUrl, getManageGovukEmailsUrl, getSNSDeleteTopic, supportDeleteServiceStore } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
 
 export function deleteAccountGet(req: Request, res: Response): void {

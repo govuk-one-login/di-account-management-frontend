@@ -52,6 +52,7 @@ Parameters:
       - "staging"
       - "integration"
       - "production"
+    Default: dev
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
@@ -82,7 +83,7 @@ Parameters:
   SourceTagValue:
     Description: Value for the Source Tag
     Type: String
-    Default: alphagov/di-authentication-account-management/deploy/template.yaml
+    Default: alphagov/di-account-management-frontend/deploy/template.yaml
   SystemTagValue:
     Description: Value for the System Tag
     Type: String
@@ -1053,7 +1054,7 @@ Resources:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
       MaxCapacity: !Ref ECSClusterMaxCapacity
-      MinCapacity: 2
+      MinCapacity: 3
       ResourceId: !Join
         - "/"
         - - "service"
@@ -1297,9 +1298,6 @@ Resources:
             - PATCH
             - POST
             - DELETE
-          CachedMethods:
-            - GET
-            - HEAD
           # CachingDisabled managed cache policy id
           # see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
           CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad

@@ -85,20 +85,3 @@ jobs:
       SESSION_SECRET: secret
       SESSION_EXPIRY: 3600000
       SESSION_STORE_TABLE_NAME: account-mgmt-frontend-SessionStore
-
-  code_analysis:
-    runs-on: ubuntu-latest
-    name: "Code Analysis"
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.gitRef || github.ref }}
-
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
