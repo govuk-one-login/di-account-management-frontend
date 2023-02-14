@@ -35,7 +35,7 @@ export function checkYourPhonePost(
     };
 
     const sessionDetails : UpdateInformationSessionValues = {
-      accessToken : req.session.user.tokens,
+      accessToken : req.session.user.tokens.accessToken,
       sourceIp: req.ip,
       sessionId: res.locals.sessionId,
       persistentSessionId : res.locals.persistentSessionId,
