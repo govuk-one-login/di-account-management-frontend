@@ -1448,7 +1448,7 @@ Resources:
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGateway4xxStatusAlarm"
       AlarmDescription: "Trigger the alarm if errorThreshold exceeds 1% with the minimum of 10 invocations in 2 out of the last 5 minutes"
-      ActionsEnabled: false  # disabled until we're ready to invoke alarm actions
+      ActionsEnabled: true
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       OKActions:
@@ -1497,7 +1497,7 @@ Resources:
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGateway5xxStatusAlarm"
       AlarmDescription: "Trigger the alarm if errorThreshold exceeds 1% with the minimum of 10 invocations in 2 out of the last 5 minutes"
-      ActionsEnabled: false  # disabled until we're ready to invoke alarm actions
+      ActionsEnabled: true
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       OKActions:
@@ -1546,7 +1546,7 @@ Resources:
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGatewayLatencyAlarm"
       AlarmDescription: "Trigger the alarm if response latency exceeds 2.5 seconds with the minimum of 10 invocations in 2 out of the last 5 minutes"
-      ActionsEnabled: false  # disabled until we're ready to invoke alarm actions
+      ActionsEnabled: true
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/LowAlertNotificationTopic/ARN}}"
       OKActions:
