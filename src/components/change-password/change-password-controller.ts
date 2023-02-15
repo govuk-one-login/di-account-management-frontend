@@ -17,6 +17,10 @@ export function changePasswordGet(req: Request, res: Response): void {
   res.render(changePasswordTemplate);
 }
 
+export function test() {
+  return "test"
+}
+
 export function changePasswordPost(
   service: ChangePasswordServiceInterface = changePasswordService()
 ): ExpressRouteFunc {
