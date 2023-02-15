@@ -23,8 +23,7 @@ export async function deleteAccountGet(
   res: Response
 ): Promise<void> {
   const env = getAppEnv();
-
-  const user = req.session;
+  const { user } = req.session;
   if (user && user.subjectId) {
     const services: Service[] = await getServices(user.subjectId);
     const data = {

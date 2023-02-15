@@ -12,13 +12,20 @@
 <h1 class="govuk-heading-l govuk-!-margin-top-0">{{'pages.deleteAccount.header' | translate}}</h1>
 
 <p class="govuk-body">{{'pages.deleteAccount.paragraph1' | translate}}</p>
-<p class="govuk-body">{{ 'pages.deleteAccount.paragraph2' | translate }}</p>
-<p class="govuk-body">{{ 'pages.deleteAccount.paragraph3' 
-    | translate
-    | replace("[emailManagementLink]", manageEmailsLink)
-    | safe
-    }}</p>
-<p class="govuk-body">{{ 'pages.deleteAccount.paragraph4' | translate }}</p>
+ {% if services.length %}
+ <p class="govuk-body">{{ 'pages.deleteAccount.paragraph2' | translate }}</p>
+ <ul class="govuk-list govuk-list--bullet">
+  {% for service in services %}
+     {% set locale = ['pages.yourServices.clientRegistry.', env, '.', service.client_id, '.'] | join %}
+      <li>{{ [locale, 'header'] | join | translate }}</li>
+  {% endfor %}
+  </ul>
+ <p class="govuk-body">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
+ <p class="govuk-body">{{ 'pages.deleteAccount.paragraph4b' | translate }}</p>
+  {% endif %}
+  {% if not services.length %}
+<p class="govuk-body">{{ 'pages.deleteAccount.paragraph4a' | translate }}</p>
+ {% endif %}
 <p class="govuk-body">{{ 'pages.deleteAccount.paragraph5' | translate }}</p>
 
 {{ govukInsetText({
