@@ -5,6 +5,7 @@
     "serviceNameTitle": "GOV.UK One Login",
     "errorTitlePrefix": "Gwall",
     "back": "Yn ôl",
+    "change": "Newid",
     "warning": "Rhybudd",
     "errorSummaryTitle": "Mae problem",
     "phaseBanner": {
@@ -124,12 +125,26 @@
       "title": "Gosodiadau",
       "header": "Gosodiadau",
       "signedInStatus": "Rydych wedi mewngofnodi fel",
-      "accountDetails": "Eich manylion mewngofnodi",
-      "summaryList": {
-        "email": "Cyfeiriad e-bost",
-        "password": "Cyfrinair",
-        "phoneNumber": "Rhif ffôn",
-        "changeAction": "Newid"
+      "accountDetails": {
+        "heading": "Eich manylion mewngofnodi",
+        "summaryList": {
+          "email": "Cyfeiriad e-bost",
+          "password": "Cyfrinair"
+        }
+      },
+      "mfaSection": {
+        "heading": "Sut i gael codau diogelwch",
+        "paragraph": "Rydym yn defnyddio codau diogelwch i wneud yn siwr mae chi yw chi pan fyddwch yn mewngofnodi.",
+        "summaryList": {
+          "phoneNumber": {
+            "title": "Neges testun i [phoneNumber]",
+            "hiddenText": "Rhif ffôn"
+          },
+          "app": {
+            "title": "Ap dilysydd",
+            "hiddenText": "Ap dilysydd"
+          }
+        }
       },
       "manageEmailSubscriptions": {
         "heading": "Tanysgrifiadau e-bost GOV.UK",

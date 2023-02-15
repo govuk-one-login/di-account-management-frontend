@@ -5,6 +5,7 @@
     "serviceNameTitle": "GOV.UK One Login",
     "errorTitlePrefix": "Error",
     "back": "Back",
+    "change": "Change",
     "warning": "Warning",
     "errorSummaryTitle": "There is a problem",
     "phaseBanner": {
@@ -124,12 +125,26 @@
       "title": "Settings",
       "header": "Settings",
       "signedInStatus": "You’re signed in as",
-      "accountDetails": "Your sign in details",
-      "summaryList": {
-        "email": "Email address",
-        "password": "Password",
-        "phoneNumber": "Phone number",
-        "changeAction": "Change"
+      "accountDetails": {
+        "heading": "Your sign in details",
+        "summaryList": {
+          "email": "Email address",
+          "password": "Password"
+        }
+      },
+      "mfaSection": {
+        "heading": "How you get security codes",
+        "paragraph": "We use security codes to make sure it’s you when you sign in.",
+        "summaryList": {
+          "phoneNumber": {
+            "title": "Text message to [phoneNumber]",
+            "hiddenText": "Phone number"
+          },
+          "app": {
+            "title": "Authenticator app",
+            "hiddenText": "Authenticator app"
+          }
+        }
       },
       "manageEmailSubscriptions": {
         "heading": "GOV.UK email subscriptions",
