@@ -111,7 +111,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#phoneNumber-error").text()).to.contains(
-          "Enter a UK phone number"
+          "Enter a UK mobile phone number"
         );
       })
       .expect(400, done);
@@ -129,7 +129,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#phoneNumber-error").text()).to.contains(
-          "Enter a UK phone number"
+          "Enter a UK mobile phone number"
         );
       })
       .expect(400, done);
@@ -165,7 +165,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#phoneNumber-error").text()).to.contains(
-          "Enter a UK phone number, like 07700 900000"
+          "Enter a UK mobile phone number, like 07700 900000"
         );
       })
       .expect(400, done);
@@ -183,7 +183,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#phoneNumber-error").text()).to.contains(
-          "Enter a UK phone number, like 07700 900000"
+          "Enter a UK mobile phone number, like 07700 900000"
         );
       })
       .expect(400, done);
@@ -278,14 +278,40 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#internationalPhoneNumber-error").text()).to.contains(
-          "Enter a phone number"
+          "Enter a mobile phone number"
         );
         expect($("#phoneNumber-error").text()).to.contains("");
       })
       .expect(400, done);
   });
 
-  it("should return validation error when new phone number is the same as old phone number", (done) => {
+  it("should return validation error when new international phone number entered is same as current phone number", (done) => {
+    nock(baseApi)
+        .post(API_ENDPOINTS.SEND_NOTIFICATION)
+        .once()
+        .reply(400, { code: 1044 });
+
+    request(app)
+        .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+            _csrf: token,
+            hasInternationalPhoneNumber: true,
+            internationalPhoneNumber: "+33645453322",
+            supportInternationalNumbers: true,
+        })
+        .expect(function (res) {
+            const $ = cheerio.load(res.text);
+            expect($("#internationalPhoneNumber-error").text()).to.contains(
+                "You’re already using that phone number. Enter a different phone number"
+            );
+            expect($("#phoneNumber-error").text()).to.contains("");
+        })
+        .expect(400, done);
+  });
+
+  it("should return validation error when new UK phone number is the same as curent phone number", (done) => {
     nock(baseApi)
       .post(API_ENDPOINTS.SEND_NOTIFICATION)
       .once()
@@ -302,7 +328,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#phoneNumber-error").text()).to.contains(
-          "You are already using that phone number. Enter a different phone number."
+          "You’re already using that phone number. Enter a different phone number"
         );
       })
       .expect(400, done);
@@ -322,7 +348,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#internationalPhoneNumber-error").text()).to.contains(
-          "Enter a phone number in the correct format"
+          "Enter a mobile phone number in the correct format, including the country code"
         );
         expect($("#phoneNumber-error").text()).to.contains("");
       })
@@ -343,7 +369,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#internationalPhoneNumber-error").text()).to.contains(
-          "Enter a phone number using only numbers or the + symbol"
+          "Enter a mobile phone number using only numbers or the + symbol"
         );
         expect($("#phoneNumber-error").text()).to.contains("");
       })
@@ -358,13 +384,13 @@ describe("Integration:: change phone number", () => {
       .send({
         _csrf: token,
         hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "1234567",
+        internationalPhoneNumber: "+33123",
         supportInternationalNumbers: true,
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#internationalPhoneNumber-error").text()).to.contains(
-          "Enter a phone number in the correct format"
+          "Enter a mobile phone number in the correct format, including the country code"
         );
         expect($("#phoneNumber-error").text()).to.contains("");
       })
@@ -379,13 +405,13 @@ describe("Integration:: change phone number", () => {
       .send({
         _csrf: token,
         hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "12345678901234567",
+        internationalPhoneNumber: "+3312345678901234567",
         supportInternationalNumbers: true,
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($("#internationalPhoneNumber-error").text()).to.contains(
-          "Enter a phone number in the correct format"
+          "Enter a mobile phone number in the correct format, including the country code"
         );
         expect($("#phoneNumber-error").text()).to.contains("");
       })

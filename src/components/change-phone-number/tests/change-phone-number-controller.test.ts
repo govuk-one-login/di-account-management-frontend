@@ -64,7 +64,7 @@ describe("change phone number controller", () => {
       expect(res.redirect).to.have.calledWith(PATH_DATA.CHECK_YOUR_PHONE.url);
     });
 
-    it("should return validation error when same number", async () => {
+    it("should return validation error when same UK number", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
         sendPhoneVerificationNotification: sandbox.fake.returns({
           success: false,
@@ -80,6 +80,25 @@ describe("change phone number controller", () => {
       expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
+
+    it("should return validation error when same international number", async () => {
+      const fakeService: ChangePhoneNumberServiceInterface = {
+        sendPhoneVerificationNotification: sandbox.fake.returns({
+          success: false,
+          code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
+        }),
+      };
+
+      req.session.user.tokens = { accessToken: "token" };
+      req.body.phoneNumber = "12345678991";
+      req.body.hasInternationalPhoneNumber = true;
+
+      await changePhoneNumberPost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
+      expect(res.render).to.have.calledWith("change-phone-number/index.njk");
+    });
+
     it("should redirect to /phone-number-updated-confirmation when success with valid international number", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
         sendPhoneVerificationNotification: sandbox.fake.returns({
