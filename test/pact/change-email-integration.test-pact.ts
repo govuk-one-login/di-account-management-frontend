@@ -9,6 +9,7 @@ import path from "path";
 import {like} from "@pact-foundation/pact/src/v3/matchers";
 import {load} from "cheerio";
 import {UnsecuredJWT} from "jose";
+import {email} from "@pact-foundation/pact/src/dsl/matchers";
 
 
 const provider = new PactV3({
@@ -117,7 +118,7 @@ describe("Integration:: change email", () => {
           "Content-Type": "application/json; charset=utf-8",
         },
         body : {
-          email : like("something"),
+          email : email("myEmail@mail.com"),
           notificationType: "VERIFY_EMAIL"
         },
 
@@ -159,12 +160,12 @@ describe("Integration:: change email", () => {
         method: "POST",
         path: "/send-otp-notification",
         headers : {
-          Authorization : "Bearer ".concat(testToken),
+          Authorization : like("Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzQ3Mz"),
           accept : "application/json",
           "Content-Type": "application/json; charset=utf-8",
         },
         body : {
-          email : like("something"),
+          email : email("myEmail@mail.com"),
           notificationType: "VERIFY_EMAIL"
         },
 
