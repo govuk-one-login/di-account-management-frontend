@@ -8,6 +8,7 @@ import {PactV3} from "@pact-foundation/pact";
 import path from "path";
 import {like} from "@pact-foundation/pact/src/v3/matchers";
 import {load} from "cheerio";
+import {UnsecuredJWT} from "jose";
 
 
 const provider = new PactV3({
@@ -32,7 +33,14 @@ describe("Integration:: change email", () => {
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../src/middleware/requires-auth-middleware");
 
-    testToken = "eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzQ3MzM3NDcsInN1YiI6IjEyMzQ1IiwiaXNzIjoidXJuOmV4YW1wbGU6aXNzdWVyIiwiYXVkIjoidXJuOmV4YW1wbGU6YXVkaWVuY2UiLCJleHAiOjE2NzQ3NDA5NDd9.";
+    testToken =new UnsecuredJWT({})
+      .setIssuedAt()
+      .setSubject("12345")
+      .setIssuer("urn:example:issuer")
+      .setAudience("urn:example:audience")
+      .setExpirationTime("2h")
+      .encode();
+
 
     sandbox = sinon.createSandbox();
     sandbox
@@ -104,7 +112,7 @@ describe("Integration:: change email", () => {
         method: "POST",
         path: "/send-otp-notification",
         headers : {
-          Authorization : "Bearer ".concat(testToken),
+          Authorization : like("Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzQ3Mz"),
           accept : "application/json",
           "Content-Type": "application/json; charset=utf-8",
         },
