@@ -25,7 +25,7 @@ services:
       context: ..
       dockerfile: ./pact.local.Dockerfile
     env_file:
-      ./pact-docker/.env
+      .env
     ports:
       - "6001:6001"
       - "9240:9230"

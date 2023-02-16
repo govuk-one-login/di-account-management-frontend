@@ -84,11 +84,6 @@ describe("Integration:: change email", () => {
     token = $("[name=_csrf]").val();
     cookies = res.headers["set-cookie"];
 
-    // eslint-disable-next-line no-console
-    console.log(cookies);
-
-    // eslint-disable-next-line no-console
-    console.log(token);
 
   });
 
