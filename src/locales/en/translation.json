@@ -498,7 +498,7 @@
           "international": "Enter a UK mobile phone number",
           "length": "Enter a UK mobile phone number, like 07700 900000",
           "plusNumericOnly": "Enter a UK mobile phone number using only numbers or the + symbol",
-          "samePhoneNumber": "You’re already using that phone number. Enter a different phone number"
+          "samePhoneNumber": "You’re already using that phone number. Enter a different phone number."
         }
       },
       "internationalPhoneNumber": {
@@ -508,8 +508,7 @@
         "validationError": {
           "required": "Enter a mobile phone number",
           "plusNumericOnly": "Enter a mobile phone number using only numbers or the + symbol",
-          "internationalFormat": "Enter a mobile phone number in the correct format, including the country code",
-          "samePhoneNumber": "You’re already using that phone number. Enter a different phone number."
+          "internationalFormat": "Enter a mobile phone number in the correct format, including the country code"
         }
       }
     },
