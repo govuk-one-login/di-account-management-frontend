@@ -206,7 +206,7 @@ describe("Integration:: change email", () => {
 
     await provider.addInteraction({
       states: [{ description: "API server is healthy" }],
-      uponReceiving: "send verify valid email update request",
+      uponReceiving: "send valid email update request",
       withRequest: {
         method: "POST",
         path: "/update-email",

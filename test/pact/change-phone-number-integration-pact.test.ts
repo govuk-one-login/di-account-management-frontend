@@ -2,12 +2,14 @@ import request from "supertest";
 import {describe} from "mocha";
 import {expect, sinon} from "../utils/test-utils";
 import decache from "decache";
-import {PATH_DATA} from "../../src/app.constants";
+import {API_ENDPOINTS, PATH_DATA} from "../../src/app.constants";
 import {MatchersV3, PactV3} from "@pact-foundation/pact";
 import path from "path";
 import nock = require("nock");
 import {email} from "@pact-foundation/pact/src/dsl/matchers";
 import {load} from "cheerio";
+import {regex} from "@pact-foundation/pact/src/v3/matchers";
+import {UnsecuredJWT} from "jose";
 
 const { like } = MatchersV3;
 
@@ -28,12 +30,21 @@ describe("Integration:: change phone number", () => {
   let app: any;
   const TEST_SUBJECT_ID = "jkduasd";
   let testToken : string;
+  let exampleToken : string;
 
   before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     decache("../../../middleware/refresh-token-middleware");
-    testToken = "eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzQ3MzM3NDcsInN1YiI6IjEyMzQ1IiwiaXNzIjoidXJuOmV4YW1wbGU6aXNzdWVyIiwiYXVkIjoidXJuOmV4YW1wbGU6YXVkaWVuY2UiLCJleHAiOjE2NzQ3NDA5NDd9.";
+    exampleToken = "Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzY1NDU1MjcsInN1YiI6IjEyMzQ1IiwiaXNzIjoidXJuOmV4YW1wbGU6aXNzdWVyIiwiYXVkIjoidXJuOmV4YW1wbGU6YXVkaWVuY2UiLCJleHAiOjE2NzY1NTI3Mjd9."
+
+    testToken =new UnsecuredJWT({})
+      .setIssuedAt()
+      .setSubject("12345")
+      .setIssuer("urn:example:issuer")
+      .setAudience("urn:example:audience")
+      .setExpirationTime("2h")
+      .encode();
     const sessionMiddleware = require("../../src/middleware/requires-auth-middleware");
     sandbox = sinon.createSandbox();
     sandbox
@@ -42,6 +53,7 @@ describe("Integration:: change phone number", () => {
         req.session.user = {
             email: "test@test.com",
             phoneNumber: "07839490040",
+            newPhoneNumber : "07839880040",
             subjectId: TEST_SUBJECT_ID,
             isAuthenticated: true,
             state: {
@@ -82,26 +94,10 @@ describe("Integration:: change phone number", () => {
 
       const res = await request(app).get(PATH_DATA.CHANGE_PHONE_NUMBER.url);
 
-      // console.log("printing res");
-      // console.log(res);
-
       const $ = load(res.text);
-      console.log("printing $");
-      console.log($);
-
       token = $("[name=_csrf]").val();
       cookies = res.headers["set-cookie"];
 
-
-      // eslint-disable-next-line no-console
-      console.log("printing cookies")
-      // eslint-disable-next-line no-console
-      console.log(cookies);
-
-      // eslint-disable-next-line no-console
-      console.log("printing csrf")
-      // eslint-disable-next-line no-console
-      console.log(token);
   });
 
   beforeEach(() => {
@@ -114,7 +110,6 @@ describe("Integration:: change phone number", () => {
   });
 
 
-  // HERE this is where it hits the Account Management API
     it("should redirect to /check-your-phone page when valid phone number entered", async () => {
         // eslint-disable-next-line no-console
         console.log("executing first test");
@@ -134,7 +129,6 @@ describe("Integration:: change phone number", () => {
                   phoneNumber: like("077567634"),
                   notificationType: "VERIFY_PHONE_NUMBER"
               },
-
           },
           willRespondWith: {
               status: 204,
@@ -142,8 +136,6 @@ describe("Integration:: change phone number", () => {
       });
 
       await provider.executeTest(async () => {
-
-          //with supertest request
           const response = await request(app).post("/change-phone-number")
               .type("form")
               .set("Cookie", cookies)
@@ -155,20 +147,14 @@ describe("Integration:: change phone number", () => {
           expect(response.headers.location).equals("/check-your-phone");
           expect(response.statusCode).equals(302);
           return;
-
-
       });
-
-
   });
 
     // other test considered here was to use an international phone number, but that is not relevant to the interaction with this endpoint
 
     // this is different interaction, where the server is not healthy
     it("should return internal server error if send-otp-notification API call fails", async () => {
-        // nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(500, {
-        //     sessionState: "done",
-        // });
+
         await provider.addInteraction({
             states: [{ description: "API server is not healthy" }],
             uponReceiving: "send notification request uk phone number",
@@ -213,6 +199,51 @@ describe("Integration:: change phone number", () => {
 
     });
 
+    it("should redirect to to /email-updated-confirmation when valid code entered", async () => {
+    nock("http://localhost:4444")
+      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
+      .once()
+      .reply(200);
 
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send valid phone number update request",
+      withRequest: {
+        method: "POST",
+        path: "/update-phone-number",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          accept : "application/json",
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body : {
+          email : email("myEmail@mail.com"),
+          phoneNumber: like("something"),
+          otp: regex("^[0-9]{1,6}$", "123456")
+        },
+
+      },
+      willRespondWith: {
+        status: 204,
+      },
+    });
+
+    await provider.executeTest(async () => {
+
+      //with supertest request
+      const response = await request(app).post("/check-your-phone")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          code: "123456",
+        });
+
+      expect(response.headers.location).equals("/phone-number-updated-confirmation");
+      expect(response.statusCode).equals(302);
+      return;
+
+    });
+  });
 
 });
