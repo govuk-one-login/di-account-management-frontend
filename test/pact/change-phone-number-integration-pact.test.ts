@@ -114,7 +114,7 @@ describe("Integration:: change phone number", () => {
               method: "POST",
               path: "/send-otp-notification",
               headers : {
-                  Authorization : "Bearer ".concat(testToken),
+                  Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
                   "Content-Type" : "application/json; charset=utf-8",
                   accept : "application/json",
               },
@@ -154,7 +154,7 @@ describe("Integration:: change phone number", () => {
                 method: "POST",
                 path: "/send-otp-notification",
                 headers : {
-                    Authorization : "Bearer ".concat(testToken),
+                    Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
                     "Content-Type" : "application/json; charset=utf-8",
                     accept : "application/json",
                 },
@@ -191,7 +191,7 @@ describe("Integration:: change phone number", () => {
 
     });
 
-    it("should redirect to to /email-updated-confirmation when valid code entered", async () => {
+    it("should redirect to to /phone-number-updated-confirmation when valid code entered", async () => {
     nock("http://localhost:4444")
       .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
       .once()

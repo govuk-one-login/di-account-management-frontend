@@ -149,5 +149,3 @@ redirect.zip
 # Localstack
 volume/
 
-# config file
-src/config.ts

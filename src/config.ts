@@ -21,11 +21,11 @@ export function getLocalStackBaseUrl(): string {
 }
 
 export function getOIDCClientId(): string {
-  return process.env.OIDC_CLIENT_ID;
+  return process.env.OIDC_CLIENT_ID || "something";
 }
 
 export function getOIDCClientScopes(): string {
-  return process.env.OIDC_CLIENT_SCOPES;
+  return process.env.OIDC_CLIENT_SCOPES || "openid phone email am offline_access govuk-account";
 }
 
 export function getNodeEnv(): string {
@@ -49,7 +49,7 @@ export function getSessionSecret(): string {
 }
 
 export function getYourAccountUrl(): string {
-  return process.env.AM_YOUR_ACCOUNT_URL;
+  return process.env.AM_YOUR_ACCOUNT_URL || "https://build.account.gov.uk";
 }
 
 export function getGovPublishingBaseAPIUrl(): string {
@@ -57,7 +57,7 @@ export function getGovPublishingBaseAPIUrl(): string {
 }
 
 export function getGovPublishingBaseAPIToken(): string {
-  return process.env.GOV_ACCOUNTS_PUBLISHING_API_TOKEN;
+  return process.env.GOV_ACCOUNTS_PUBLISHING_API_TOKEN || "token";
 }
 
 export function getAuthFrontEndUrl(): string {
@@ -86,11 +86,11 @@ export function getSNSDeleteTopic(): string {
 }
 
 export function getDynamoServiceStoreTableName(): string {
-  return process.env.SERVICE_STORE_TABLE_NAME;
+  return process.env.SERVICE_STORE_TABLE_NAME || "user_services";
 }
 
 export function getSessionStoreTableName(): string {
-  return process.env.SESSION_STORE_TABLE_NAME;
+  return process.env.SESSION_STORE_TABLE_NAME || "account-mgmt-frontend-SessionStore";
 }
 
 export function supportInternationalNumbers(): boolean {

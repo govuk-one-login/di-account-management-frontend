@@ -56,6 +56,8 @@ describe("Integration:: change email", () => {
           phoneNumber: "07839490040",
           newEmailAddress: "myNewEmail@mail.com",
           subjectId: TEST_SUBJECT_ID,
+          publicSubjectId: TEST_SUBJECT_ID,
+          legacySubjectId: TEST_SUBJECT_ID,
           isAuthenticated: true,
           state: {
             changeEmail: {
@@ -198,7 +200,7 @@ describe("Integration:: change email", () => {
 
   it("should redirect to to /email-updated-confirmation when valid code entered", async () => {
     nock("http://localhost:4444")
-      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
+      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}` + "jkduasd")
       .once()
       .reply(200);
 
