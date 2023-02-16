@@ -170,9 +170,9 @@ describe("Integration:: check your email", () => {
   });
 
   it("should redirect to /email-updated-confirmation when valid code entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.UPDATE_EMAIL).once().reply(204);
-    nock(govUkPublishingBaseApi)
-      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
+    nock("https://manage.build.account.gov.uk").post(API_ENDPOINTS.UPDATE_EMAIL).once().reply(204);
+    nock("http://localhost:4444")
+      .put(`${"/api/oidc-users/"}${TEST_SUBJECT_ID}`)
       .once()
       .reply(200);
 

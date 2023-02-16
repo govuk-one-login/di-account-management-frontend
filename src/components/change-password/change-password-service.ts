@@ -20,8 +20,6 @@ export function changePasswordService(
     persistentSessionId: string,
     userLanguage: string
   ): Promise<ApiResponseResult> {
-    // eslint-disable-next-line no-console
-    console.log("sending request to MANAGEMENT API")
     const response = await axios.client.post<ApiResponse>(
       API_ENDPOINTS.UPDATE_PASSWORD,
       {

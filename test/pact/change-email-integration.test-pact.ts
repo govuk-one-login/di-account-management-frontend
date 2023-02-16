@@ -16,7 +16,7 @@ import nock = require("nock");
 const provider = new PactV3({
   consumer: "Account Management Frontend",
   provider: "Account Management API",
-  logLevel: 'debug',
+  logLevel: "error",
   dir: path.resolve(process.cwd(), "pacts"),
   port: 8080,
 
@@ -108,8 +108,6 @@ describe("Integration:: change email", () => {
 
   it("should return validation error when same email used by another user", async () => {
 
-    // eslint-disable-next-line no-console
-    console.log("executing first test");
     await provider.addInteraction({
       states: [{ description: "API server is healthy, email already assigned to another user" }],
       uponReceiving: "send verify email notification with email already in use by other user",
@@ -244,6 +242,5 @@ describe("Integration:: change email", () => {
 
     });
   });
-
 
 });

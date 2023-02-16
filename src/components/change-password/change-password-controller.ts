@@ -57,8 +57,6 @@ export function changePasswordPost(
       );
       return renderBadRequest(res, req, changePasswordTemplate, error);
     } else {
-      // eslint-disable-next-line no-console
-      console.log("request to management API failed")
       throw new BadRequestError(response.message, response.code);
     }
   };

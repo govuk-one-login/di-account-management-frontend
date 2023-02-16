@@ -53,7 +53,7 @@ export function getYourAccountUrl(): string {
 }
 
 export function getGovPublishingBaseAPIUrl(): string {
-  return process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
+  return process.env.GOV_ACCOUNTS_PUBLISHING_API_URL || "http://localhost:4444";
 }
 
 export function getGovPublishingBaseAPIToken(): string {

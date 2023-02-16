@@ -17,7 +17,7 @@ const { like } = MatchersV3;
 const provider = new PactV3({
     consumer: "Account Management Frontend",
     provider: "Account Management API",
-    logLevel: 'debug',
+    logLevel: "error",
     dir: path.resolve(process.cwd(), "pacts"),
     port: 8080,
 
@@ -36,8 +36,8 @@ describe("Integration:: change phone number", () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     decache("../../../middleware/refresh-token-middleware");
-    exampleToken = "Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzY1NDU1MjcsInN1YiI6IjEyMzQ1IiwiaXNzIjoidXJuOmV4YW1wbGU6aXNzdWVyIiwiYXVkIjoidXJuOmV4YW1wbGU6YXVkaWVuY2UiLCJleHAiOjE2NzY1NTI3Mjd9."
 
+    exampleToken = "Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzY1NDU1MjcsInN1YiI6IjEyMzQ1IiwiaXNzIjoidXJuOmV4YW1wbGU6aXNzdWVyIiwiYXVkIjoidXJuOmV4YW1wbGU6YXVkaWVuY2UiLCJleHAiOjE2NzY1NTI3Mjd9.";
     testToken =new UnsecuredJWT({})
       .setIssuedAt()
       .setSubject("12345")
@@ -45,6 +45,7 @@ describe("Integration:: change phone number", () => {
       .setAudience("urn:example:audience")
       .setExpirationTime("2h")
       .encode();
+
     const sessionMiddleware = require("../../src/middleware/requires-auth-middleware");
     sandbox = sinon.createSandbox();
     sandbox
@@ -71,32 +72,28 @@ describe("Integration:: change phone number", () => {
         next();
       });
 
-
         const oidc = require("../../src/utils/oidc");
-
         sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
             return new Promise((resolve) => {
                 resolve({});
             });
         });
-
         sandbox.stub(oidc, "getJWKS").callsFake(() => {
             return new Promise((resolve) => {
                 resolve({});
             });
         });
-
         sandbox.stub(oidc, "isTokenExpired").callsFake(() => {
             return false;
         });
 
         app = await require("../../src/app").createApp();
 
-      const res = await request(app).get(PATH_DATA.CHANGE_PHONE_NUMBER.url);
+        const res = await request(app).get(PATH_DATA.CHANGE_PHONE_NUMBER.url);
 
-      const $ = load(res.text);
-      token = $("[name=_csrf]").val();
-      cookies = res.headers["set-cookie"];
+        const $ = load(res.text);
+        token = $("[name=_csrf]").val();
+        cookies = res.headers["set-cookie"];
 
   });
 
@@ -109,10 +106,7 @@ describe("Integration:: change phone number", () => {
     app = undefined;
   });
 
-
     it("should redirect to /check-your-phone page when valid phone number entered", async () => {
-        // eslint-disable-next-line no-console
-        console.log("executing first test");
       await provider.addInteraction({
           states: [{ description: "API server is healthy" }],
           uponReceiving: "send notification request uk phone number",
@@ -150,8 +144,6 @@ describe("Integration:: change phone number", () => {
       });
   });
 
-    // other test considered here was to use an international phone number, but that is not relevant to the interaction with this endpoint
-
     // this is different interaction, where the server is not healthy
     it("should return internal server error if send-otp-notification API call fails", async () => {
 
@@ -168,7 +160,7 @@ describe("Integration:: change phone number", () => {
                 },
                 body : {
                     email: email("testEmail@mail.com"),
-                    phoneNumber: like("something"),
+                    phoneNumber: like("+447738394991"),
                     notificationType: "VERIFY_PHONE_NUMBER"
                 },
 

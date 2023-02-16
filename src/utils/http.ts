@@ -37,8 +37,6 @@ export function getRequestConfig(
   userLanguage?: string
 ): AxiosRequestConfig {
 
-  // eslint-disable-next-line no-console
-  console.log(token);
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -46,8 +44,6 @@ export function getRequestConfig(
     proxy: false,
   };
 
-  // eslint-disable-next-line no-console
-  console.log(validationStatues);
 
   if (validationStatues) {
     config.validateStatus = function (status: number) {
@@ -71,11 +67,6 @@ export function getRequestConfig(
     config.headers["User-Language"] = userLanguage;
   }
 
-  // eslint-disable-next-line no-console
-  console.log("returning config")
-
-  // eslint-disable-next-line no-console
-  console.log(config)
   return config;
 }
 
@@ -84,9 +75,6 @@ export class Http {
   private readonly baseUrl: string;
 
   constructor(baseUrl: string) {
-
-    // eslint-disable-next-line no-console
-    console.log(baseUrl)
     this.baseUrl = baseUrl;
   }
 
@@ -97,9 +85,6 @@ export class Http {
   private static handleError(error: AxiosError) {
     let apiError;
 
-    // eslint-disable-next-line no-console
-    console.log("handle api error in http init invoked");
-
     if (error.response && error.response.data) {
       apiError = new ApiError(
         error.message,
@@ -109,9 +94,6 @@ export class Http {
     } else {
       apiError = new ApiError(error.message);
     }
-
-    // eslint-disable-next-line no-console
-    console.log(apiError);
 
     return Promise.reject(apiError);
   }

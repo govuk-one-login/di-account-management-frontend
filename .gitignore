@@ -128,7 +128,7 @@ ci/terraform/.terraform
 *.tfstate.backup
 ci/terraform/*.plan
 
-//this gets added by the design system
+# this gets added by the design system
 src/assets/javascript/all.js
 
 # SAM related files
@@ -148,3 +148,6 @@ redirect.zip
 
 # Localstack
 volume/
+
+# config file
+src/config.ts

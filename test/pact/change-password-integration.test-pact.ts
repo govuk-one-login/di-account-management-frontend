@@ -8,12 +8,14 @@ import { PATH_DATA } from "../../src/app.constants";
 import {PactV3} from "@pact-foundation/pact";
 import path from "path";
 import {email} from "@pact-foundation/pact/src/dsl/matchers";
+import {UnsecuredJWT} from "jose";
+import {regex} from "@pact-foundation/pact/src/v3/matchers";
 
 
 const provider = new PactV3({
     consumer: "Account Management Frontend",
     provider: "Account Management API",
-    logLevel: 'debug',
+    logLevel: "error",
     dir: path.resolve(process.cwd(), "pacts"),
     port: 8080,
 });
@@ -24,13 +26,21 @@ describe("Integration:: change password", () => {
   let cookies: string;
   let app: any;
   let testToken : string;
+  let exampleToken : string;
 
   before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
 
-    // this is hard coded because we need a stable value in the contract
-    testToken = "eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzQ3MzM3NDcsInN1YiI6IjEyMzQ1IiwiaXNzIjoidXJuOmV4YW1wbGU6aXNzdWVyIiwiYXVkIjoidXJuOmV4YW1wbGU6YXVkaWVuY2UiLCJleHAiOjE2NzQ3NDA5NDd9.";
+    exampleToken = "Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzY1NDU1MjcsInN1YiI6IjEyMzQ1IiwiaXNzIjoidXJuOmV4YW1wbGU6aXNzdWVyIiwiYXVkIjoidXJuOmV4YW1wbGU6YXVkaWVuY2UiLCJleHAiOjE2NzY1NTI3Mjd9."
+
+    testToken =new UnsecuredJWT({})
+      .setIssuedAt()
+      .setSubject("12345")
+      .setIssuer("urn:example:issuer")
+      .setAudience("urn:example:audience")
+      .setExpirationTime("2h")
+      .encode();
 
     const sessionMiddleware = require("../../src/middleware/requires-auth-middleware");
     sandbox = sinon.createSandbox();
@@ -73,13 +83,8 @@ describe("Integration:: change password", () => {
           return false;
       });
 
-      // eslint-disable-next-line no-console
-      console.log("creating app");
 
     app = await require("../../src/app").createApp();
-
-      // eslint-disable-next-line no-console
-    console.log("app created");
 
     const res = await request(app).get(PATH_DATA.CHANGE_PASSWORD.url);
 
@@ -101,9 +106,6 @@ describe("Integration:: change password", () => {
 
   it("should return validation error when password is amongst most common passwords", async () => {
 
-      // eslint-disable-next-line no-console
-      console.log("executing first test");
-
       await provider.addInteraction({
           states: [{description: "API server is healthy"}],
           uponReceiving: "request to change password",
@@ -112,7 +114,7 @@ describe("Integration:: change password", () => {
               path: "/update-password",
               headers: {
                   // this will need to be request filtered on the provider side
-                  Authorization : "Bearer ".concat(testToken),
+                  Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
                   accept: "application/json",
                   "Content-Type": "application/json; charset=utf-8",
               },
@@ -159,7 +161,7 @@ describe("Integration:: change password", () => {
               path: "/update-password",
               headers: {
                   // this will need to be request filtered on the provider side
-                  Authorization : "Bearer ".concat(testToken),
+                  Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
                   accept: "application/json",
                   "Content-Type": "application/json; charset=utf-8",
               },
@@ -207,7 +209,7 @@ describe("Integration:: change password", () => {
               path: "/update-password",
               headers: {
                   // this will need to be request filtered on the provider side
-                  Authorization : "Bearer ".concat(testToken),
+                  Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
                   accept: "application/json",
                   "Content-Type": "application/json; charset=utf-8",
               },
@@ -252,7 +254,7 @@ describe("Integration:: change password", () => {
               path: "/update-password",
               headers: {
                   // this will need to be request filtered on the provider side
-                  Authorization : "Bearer ".concat(testToken),
+                  Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
                   accept: "application/json",
                   "Content-Type": "application/json; charset=utf-8",
               },
