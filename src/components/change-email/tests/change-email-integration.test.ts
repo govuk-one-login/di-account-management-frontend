@@ -49,6 +49,7 @@ describe("Integration:: change email", () => {
         next();
       });
 
+
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
       return new Promise((resolve) => {
