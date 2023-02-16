@@ -147,7 +147,7 @@ describe("Integration:: change password", () => {
           return;
 
       });
-  }).timeout(100000);
+  });
 
   it("should return error when new password is the same as existing password", async () => {
 
@@ -195,7 +195,7 @@ describe("Integration:: change password", () => {
 
       });
 
-  }).timeout(100000);
+  });
   //
   it("should throw error when 400 is returned from API", async () => {
 
@@ -240,7 +240,7 @@ describe("Integration:: change password", () => {
           );
           expect(response.statusCode).to.equals(500);
       });
-  }).timeout(100000);
+  });
 
   it("should redirect to enter phone number when valid password entered", async () => {
     //nock(baseApi).post(API_ENDPOINTS.UPDATE_PASSWORD).once().reply(204);
@@ -279,7 +279,7 @@ describe("Integration:: change password", () => {
           expect(response.headers.location).equals("/password-updated-confirmation");
           expect(response.statusCode).to.equals(302);
       });
-  }).timeout(100000);
-}).timeout(100000);
+  });
+});
 
 

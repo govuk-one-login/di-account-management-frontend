@@ -3,13 +3,14 @@ import { describe } from "mocha";
 import { expect, sinon } from "../utils/test-utils";
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../src/app.constants";
+import {API_ENDPOINTS, PATH_DATA} from "../../src/app.constants";
 import {PactV3} from "@pact-foundation/pact";
 import path from "path";
-import {like} from "@pact-foundation/pact/src/v3/matchers";
+import { regex} from "@pact-foundation/pact/src/v3/matchers";
 import {load} from "cheerio";
 import {UnsecuredJWT} from "jose";
 import {email} from "@pact-foundation/pact/src/dsl/matchers";
+import nock = require("nock");
 
 
 const provider = new PactV3({
@@ -28,11 +29,14 @@ describe("Integration:: change email", () => {
   let app: any;
   const TEST_SUBJECT_ID = "jkduasd";
   let testToken : string;
+  let exampleToken : string;
 
   before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../src/middleware/requires-auth-middleware");
+
+    exampleToken = "Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzY1NDU1MjcsInN1YiI6IjEyMzQ1IiwiaXNzIjoidXJuOmV4YW1wbGU6aXNzdWVyIiwiYXVkIjoidXJuOmV4YW1wbGU6YXVkaWVuY2UiLCJleHAiOjE2NzY1NTI3Mjd9."
 
     testToken =new UnsecuredJWT({})
       .setIssuedAt()
@@ -50,6 +54,7 @@ describe("Integration:: change email", () => {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
+          newEmailAddress: "myNewEmail@mail.com",
           subjectId: TEST_SUBJECT_ID,
           isAuthenticated: true,
           state: {
@@ -93,7 +98,6 @@ describe("Integration:: change email", () => {
     token = $("[name=_csrf]").val();
     cookies = res.headers["set-cookie"];
 
-
   });
 
   after(() => {
@@ -102,18 +106,18 @@ describe("Integration:: change email", () => {
   });
 
 
-  it("should redirect to /check-your-email when valid email provided", async () => {
+  it("should return validation error when same email used by another user", async () => {
 
     // eslint-disable-next-line no-console
     console.log("executing first test");
     await provider.addInteraction({
       states: [{ description: "API server is healthy, email already assigned to another user" }],
-      uponReceiving: "send verify email notification",
+      uponReceiving: "send verify email notification with email already in use by other user",
       withRequest: {
         method: "POST",
         path: "/send-otp-notification",
         headers : {
-          Authorization : like("Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzQ3Mz"),
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
           accept : "application/json",
           "Content-Type": "application/json; charset=utf-8",
         },
@@ -150,17 +154,17 @@ describe("Integration:: change email", () => {
 
   });
 
-  it("should return validation error when same email used by another user", async () => {
+  it("should redirect to /check-your-email when valid email provided", async () => {
 
 
     await provider.addInteraction({
       states: [{ description: "API server is healthy" }],
-      uponReceiving: "send verify email notification with email already in use by other user",
+      uponReceiving: "send verify email notification",
       withRequest: {
         method: "POST",
         path: "/send-otp-notification",
         headers : {
-          Authorization : like("Bearer eyJhbGciOiJub25lIn0.eyJpYXQiOjE2NzQ3Mz"),
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
           accept : "application/json",
           "Content-Type": "application/json; charset=utf-8",
         },
@@ -192,6 +196,53 @@ describe("Integration:: change email", () => {
 
     });
 
+  });
+
+  it("should redirect to to /email-updated-confirmation when valid code entered", async () => {
+    nock("http://localhost:4444")
+      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
+      .once()
+      .reply(200);
+
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send verify valid email update request",
+      withRequest: {
+        method: "POST",
+        path: "/update-email",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          accept : "application/json",
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body : {
+          existingEmailAddress : email("myEmail@mail.com"),
+          replacementEmailAddress: email("myNewEmail@mail.com"),
+          otp: regex("^[0-9]{1,6}$", "123456")
+        },
+
+      },
+      willRespondWith: {
+        status: 204,
+      },
+    });
+
+    await provider.executeTest(async () => {
+
+      //with supertest request
+      const response = await request(app).post("/check-your-email")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          code: "123456",
+        });
+
+      expect(response.headers.location).equals("/email-updated-confirmation");
+      expect(response.statusCode).equals(302);
+      return;
+
+    });
   });
 
 
