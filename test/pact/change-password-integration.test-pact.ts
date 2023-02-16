@@ -244,7 +244,7 @@ describe("Integration:: change password", () => {
       });
   });
 
-  it("should redirect to enter phone number when valid password entered", async () => {
+  it("should redirect to password updated confirmation when valid password is entered", async () => {
     //nock(baseApi).post(API_ENDPOINTS.UPDATE_PASSWORD).once().reply(204);
       await provider.addInteraction({
           states: [{description: "API server is healthy and valid new password is entered"}],
