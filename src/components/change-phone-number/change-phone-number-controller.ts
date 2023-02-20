@@ -72,7 +72,7 @@ export function changePhoneNumberPost(
       const error = formatValidationError(
         href,
         req.t(
-          "pages.changePhoneNumber.internationalPhoneNumber.validationError.samePhoneNumber"
+          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
         )
       );
       return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);
