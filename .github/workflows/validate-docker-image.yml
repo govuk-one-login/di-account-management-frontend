@@ -60,27 +60,12 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
 
-      # - name: Vulnerability Scan
-      #   uses: aquasecurity/trivy-action@master
-      #   with:
-      #     image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
-      #     format: 'table'
-      #     output: "results-di-account-management-frontend-${{ steps.datetime.outputs.date }}.sarif"
-      #     exit-code: "1"
-      #     ignore-unfixed: true
-      #     vuln-type: "os,library"
-      #     severity: "CRITICAL"
-
-#      - name:  Upload Vulnerability results to GitHub Security
-#        if: always()
-#        env:
-#          BUCKET_NAME: ${{ secrets.BUILD_REPORTS_BUCKET }}
-#          AWS_REGION: 'eu-west-2'
-#        run: |
-#          aws s3 cp ./image-vulnerability-results s3://$BUCKET_NAME/<project-name>/<branch>/<image>/<date-time>-image-vulnerability-results.sarif
-#      - name: Upload Vulnerability results to GitHub Security
-#        uses: github/codeql-action/upload-sarif@v2
-#        if: always()
-#        with:
-#          sarif_file: 'image-vulnerability-results.sarif'
-
+      - name: Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL"
