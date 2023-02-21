@@ -1712,7 +1712,7 @@ Resources:
             "x": 12,
             "type": "metric",
             "properties": {
-              "title": "Number Of Requests Made To ELB vs Response Time",
+              "title": "Number Of Requests Made To ALB vs Response Time",
               "region": "${AWS::Region}",
               "metrics": [
                 [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}", { "yAxis": "right" } ],
@@ -1735,7 +1735,7 @@ Resources:
             "x": 12,
             "type": "metric",
             "properties": {
-              "title": "Load Balancer Endpoint Functionality",
+              "title": "ALB Endpoint Functionality",
               "region": "${AWS::Region}",
               "metrics": [
                 [ "AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}",{ "yAxis": "right" } ],
@@ -1754,7 +1754,7 @@ Resources:
             "x": 12,
             "type": "metric",
             "properties": {
-              "title": "ELB 502,503 And 504 Errors",
+              "title": "ALB 502,503 And 504 Errors",
               "region": "${AWS::Region}",
               "metrics": [
                 [ "AWS/ApplicationELB", "HTTPCode_ELB_502_Count", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
@@ -1774,7 +1774,7 @@ Resources:
             "x": 12,
             "type": "metric",
             "properties": {
-              "title": " ELB Target Health Check",
+              "title": " ALB Target Health Check",
               "region": "${AWS::Region}",
               "metrics": [
                 [ "AWS/ApplicationELB", "HealthyHostCount", "TargetGroup","${ApplicationLoadBalancerTargetGroupBlue.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
