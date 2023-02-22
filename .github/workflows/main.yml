@@ -12,10 +12,22 @@ permissions:
   contents: read
 
 jobs:
-  validate_artifacts:
-    name: Acceptance Checks
-    uses: ./.github/workflows/ci-only.yml
+  validate_application:
+    name: App Checks
+    uses: ./.github/workflows/build-test-application.yml
     secrets: inherit
+
+  validate_container:
+    name: Container Checks
+    uses: ./.github/workflows/validate-docker-image.yml
+    secrets: inherit
+    needs: validate_application
+
+  validate_deployment:
+    name: Deployment Template Checks
+    uses: ./.github/workflows/validate-sam-template.yml
+    secrets: inherit
+    needs: validate_container
 
   publish_artifacts:
     name: "Publish Image & Template"
