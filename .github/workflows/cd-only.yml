@@ -32,7 +32,7 @@ jobs:
 
   validate_deployment:
     name: Deployment Template Checks
-    uses: ./.github/workflows/validate-sam-template.yml
+    uses: ./.github/workflows/validate-sam-template-dev.yml
     secrets: inherit
     with:
       gitRef: ${{ inputs.gitRef }}
