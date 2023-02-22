@@ -1,6 +1,27 @@
 $govuk-new-link-styles: true;
 
-@import "../../../node_modules/govuk-frontend/govuk/all";
+@import "base";
+@import "core/all";
+@import "utilities/all";
+@import "objects/all";
+@import "overrides/all";
+
+// start Design System component imports
+@import "components/back-link/back-link";
+@import "components/button/button";
+@import "components/checkboxes/checkboxes";
+@import "components/cookie-banner/cookie-banner";
+@import "components/details/details";
+@import "components/error-summary/error-summary";
+@import "components/footer/footer";
+@import "components/header/header";
+@import "components/input/input";
+@import "components/inset-text/inset-text";
+@import "components/panel/panel";
+@import "components/phase-banner/phase-banner";
+@import "components/skip-link/skip-link";
+@import "components/summary-list/summary-list";
+// end Design System component imports
 
 .information-box {
   margin-bottom: govuk-spacing(4);
