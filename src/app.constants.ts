@@ -76,7 +76,18 @@ export const PATH_DATA: {
   GLOBAL_LOGOUT: { url: "/global-logout" },
   RESEND_EMAIL_CODE: { url: "/resend-email-code" },
   RESEND_PHONE_CODE: { url: "/resend-phone-code" },
+  SECURITY_TXT: {
+    url: "/.well-known/security.txt"
+  },
+  THANKS_TXT: {
+    url: "/.well-known/thanks.txt"
+  }
 };
+
+export const WELL_KNOWN_FILES = {
+  SECURITY_TEXT_URL: "https://vdp.cabinetoffice.gov.uk/.well-known/security.txt",
+  THANKS_TEXT_URL: "https://vdp.cabinetoffice.gov.uk/thanks.txt"
+}
 
 export const API_ENDPOINTS = {
   AUTHENTICATE: "/authenticate",
