@@ -1,0 +1,66 @@
+---
+name: "Build & Scan Docker Image against Dev Env"
+
+on:
+  push:
+    paths:
+      - "Dockerfile"
+      - ".github/workflows/validate-docker-image-dev.yml"
+    branches-ignore:
+      - main
+  workflow_call:
+    inputs:
+      gitRef:
+        required: false
+        type: string
+        default: ${{ github.ref }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate_image:
+    name: "Image Checks"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gitRef || github.ref }}
+
+      - name: Set tag
+        id: vars
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
+      - name: Get current date
+        id: datetime
+        run: echo "date=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
+
+      - name: Set up AWS creds
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker Image
+        id: build-image
+        env:
+          DEV_ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          DEV_ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $DEV_ECR_REGISTRY/$DEV_ECR_REPOSITORY:$IMAGE_TAG .
+
+      - name: Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.DEV_ECR_REPOSITORY }}:latest
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL"
