@@ -1,0 +1,34 @@
+---
+name: "Validation & Verification checks against Dev instance"
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - synchronize
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate_application:
+    name: App Checks
+    uses: ./.github/workflows/build-test-application.yml
+    secrets: inherit
+
+  validate_container:
+    name: Container Checks against Dev Instance
+    uses: ./.github/workflows/validate-docker-image-dev.yml
+    secrets: inherit
+    needs: validate_application
+
+  validate_deployment:
+    name: Deployment Template Checks against Dev Instance
+    uses: ./.github/workflows/validate-sam-template-dev.yml
+    secrets: inherit
+    needs: validate_container
