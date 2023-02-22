@@ -56,6 +56,10 @@ Parameters:
   VpcStackName:
     Description: The name of the stack that defines the VPC in which this container will run.
     Type: String
+  AlertingStackName:
+    Description: The name of the stack that defines the Alerting resources
+    Type: String
+    Default: platform-alerting
   BackendStackName:
     Description: The name of the backend stack
     Type: String
@@ -93,6 +97,11 @@ Parameters:
     Default: user_services
 
 Conditions:
+  IsNotDevelopment: !Or
+    - !Equals [!Ref Environment, build]
+    - !Equals [!Ref Environment, staging]
+    - !Equals [!Ref Environment, integration]
+    - !Equals [!Ref Environment, production]
   IsProduction: !Equals [!Ref Environment, production]
   UsePermissionsBoundary:
     Fn::Not:
@@ -754,6 +763,7 @@ Resources:
   #
   # App domain
   #
+
   AppFrontCustomDomain:
     Type: AWS::ApiGatewayV2::DomainName
     Properties:
@@ -1424,6 +1434,155 @@ Resources:
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
                 "aws:SecureTransport": true
+
+  #
+  # Metrics and Alarms
+  #
+
+  # API Gateway Alarms
+
+  # 4xx Status Code
+  ApiGateway4xxStatusAlarm:
+    Condition: IsNotDevelopment
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ApiGateway4xxStatusAlarm"
+      AlarmDescription: "Trigger the alarm if errorThreshold exceeds 1% with the minimum of 10 invocations in 2 out of the last 5 minutes"
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+      OKActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 2
+      Threshold: 1
+      TreatMissingData: missing
+      Metrics:
+        - Id: errorThreshold
+          Label: errorThreshold
+          ReturnData: true
+          Expression: IF(invocations<10,0,errorPercentage)
+        - Id: invocations
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Count
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+        - Id: errorPercentage
+          Label: errorPercentage
+          ReturnData: false
+          Expression: (error/invocations)*100
+        - Id: error
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: 4xx
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+
+  # 5xx Status Code
+  ApiGateway5xxStatusAlarm:
+    Condition: IsNotDevelopment
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ApiGateway5xxStatusAlarm"
+      AlarmDescription: "Trigger the alarm if errorThreshold exceeds 1% with the minimum of 10 invocations in 2 out of the last 5 minutes"
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+      OKActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 2
+      Threshold: 1
+      TreatMissingData: missing
+      Metrics:
+        - Id: errorThreshold
+          Label: errorThreshold
+          ReturnData: true
+          Expression: IF(invocations<10,0,errorPercentage)
+        - Id: invocations
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Count
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+        - Id: errorPercentage
+          Label: errorPercentage
+          ReturnData: false
+          Expression: (error/invocations)*100
+        - Id: error
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: 5xx
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+
+  # Latency
+  ApiGatewayLatencyAlarm:
+    Condition: IsNotDevelopment
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ApiGatewayLatencyAlarm"
+      AlarmDescription: "Trigger the alarm if response latency exceeds 2.5 seconds with the minimum of 10 invocations in 2 out of the last 5 minutes"
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/LowAlertNotificationTopic/ARN}}"
+      OKActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/LowAlertNotificationTopic/ARN}}"
+      ComparisonOperator: GreaterThanThreshold
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 2
+      Threshold: 2500
+      TreatMissingData: missing
+      Metrics:
+        - Id: safeLatency
+          Label: safeLatency
+          ReturnData: true
+          Expression: IF(invocations<10,0,maxLatency)
+        - Id: invocations
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Count
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Sum
+        - Id: maxLatency
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Latency
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 60
+            Stat: Maximum
 
   #
   # DynamoDB
