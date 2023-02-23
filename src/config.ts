@@ -144,9 +144,11 @@ export const getAllowedServiceListClientIDs: string[] = [
   "Dw7Cxas8W7O2usHMHok95elKDRU",
   "oLciSn5b6-cqcJjzgMMwCw1moD8",
   "LUIZbIuJ_xVZxwhkNAApcO4O_6o",
+  "VsAkrtMBzAosSveAv4xsuUDyiSs",
   "socialWorkEngland",
   "dbs",
   "vehicleOperatorLicense",
+  "mortgageDeed",
 ];
 
 function getProtocol(): string {
