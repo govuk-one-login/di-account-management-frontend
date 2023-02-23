@@ -1,20 +1,23 @@
 import request from "supertest";
 import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { getBaseUrl } from "../../../config";
+import { Service } from "../../../utils/types";
+import { SinonStub } from "sinon";
 
-describe("Integration:: delete account", () => {
+describe.only("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
   let app: any;
   let baseApi: string;
   let govUkPublishingBaseApi: string;
+  let yourServicesStub: SinonStub<any[], any>;
   const idToken = "Idtoken";
   const TEST_SUBJECT_ID = "sub";
 
@@ -22,7 +25,9 @@ describe("Integration:: delete account", () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
+    const yourServices = require("../../../utils/yourServices");
     sandbox = sinon.createSandbox();
+    yourServicesStub = sandbox.stub(yourServices, "getServices");
     sandbox
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
@@ -91,12 +96,27 @@ describe("Integration:: delete account", () => {
     nock.cleanAll();
   });
 
+  afterEach(() => {
+    yourServicesStub.reset();
+  });
   after(() => {
     sandbox.restore();
     app = undefined;
   });
 
   it("should return delete account page", (done) => {
+    const serviceList: Service[] = [
+      {
+        client_id: "client_id",
+        count_successful_logins: 1,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+      },
+    ];
+
+    yourServicesStub.callsFake(function (): Service[] {
+      return serviceList;
+    });
     request(app).get(PATH_DATA.DELETE_ACCOUNT.url).expect(200, done);
   });
 
@@ -131,5 +151,42 @@ describe("Integration:: delete account", () => {
         )}`
       )
       .expect(302, done);
+  });
+
+  it("should display generic content if no services exist", (done) => {
+    yourServicesStub.callsFake(function (): Service[] {
+      return [];
+    });
+    request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#no-services-content").text()).to.not.be.empty;
+        expect($("#govuk-email-subscription-info").text()).to.be.empty;
+      })
+      .expect(200, done);
+  });
+
+  it("should display One Login services if they exist", (done) => {
+    const serviceList: Service[] = [
+      {
+        client_id: "client_id",
+        count_successful_logins: 1,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+      },
+    ];
+
+    yourServicesStub.callsFake(function (): Service[] {
+      return serviceList;
+    });
+    request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#govuk-email-subscription-info").text()).to.not.be.empty;
+        //expect there to be a service within the list of bullet points
+      })
+      .expect(200, done);
   });
 });

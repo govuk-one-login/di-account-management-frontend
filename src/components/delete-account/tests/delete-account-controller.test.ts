@@ -71,6 +71,7 @@ describe("delete account controller", () => {
         });
       });
     });
+
     it("deleteAccountGetWithoutServices", () => {
       it("should render delete account page", () => {
         const serviceList: Service[] = [];
@@ -99,6 +100,7 @@ describe("delete account controller", () => {
           last_accessed_readable_format: "last_accessed_readable_format",
         },
       ];
+      
       it("should render the delete account page with list of services used", () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");

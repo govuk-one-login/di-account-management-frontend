@@ -15,7 +15,10 @@ import {
 } from "../../config";
 
 import { destroyUserSessions } from "../../utils/session-store";
-import { getServices } from "../../utils/yourServices";
+import {
+  getServices,
+  containsGovUkPublishingService,
+} from "../../utils/yourServices";
 import { Service } from "../../utils/types";
 
 export async function deleteAccountGet(
@@ -26,7 +29,10 @@ export async function deleteAccountGet(
   const { user } = req.session;
   if (user && user.subjectId) {
     const services: Service[] = await getServices(user.subjectId);
+    const hasGovUkEmailSubscription: boolean =
+      containsGovUkPublishingService(services);
     const data = {
+      hasGovUkEmailSubscription: hasGovUkEmailSubscription,
       services: services,
       env: env,
       manageEmailsLink: getManageGovukEmailsUrl(),
