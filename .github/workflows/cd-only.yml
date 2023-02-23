@@ -4,8 +4,16 @@ name: "Verify & Publish to Dev"
 on:
   workflow_dispatch:
     inputs:
+      refType:
+        type: choice
+        description: "Find branch name, commit SHA, or tag?"
+        options:
+          - Branch name
+          - Commit SHA
+          - Tag
+        default: Branch name
       gitRef:
-        description: "Commit SHA, branch name or tag"
+        description: "Input branch name, commit SHA, or tag"
         required: true
         type: string
         default: main
@@ -41,6 +49,21 @@ jobs:
         with:
           ref: ${{ inputs.gitRef }}
 
+      - name: Fetch Commit SHA
+        id: gitRefSHA
+        if: ${{ github.event.inputs.choice }} == "Commit SHA"
+        run: echo GIT_REF_SHA=${{ inputs.gitRef }} >> $GITHUB_ENV
+
+      - name: Fetch Commit SHA by Branch name
+        id: gitRefBranch
+        if: ${{ github.event.inputs.choice }} == "Branch name"
+        run: echo GIT_REF_SHA=$(git log -1 ${{ inputs.gitRef }} --pretty=format:%H) >> $GITHUB_ENV
+
+      - name: Fetch Commit SHA by Tag
+        id: gitRefTag
+        if: ${{ github.event.inputs.choice }} == "Tag"
+        run : echo GIT_REF_SHA=$(git rev-list -n 1 ${{ inputs.gitRef }}) >> $GITHUB_ENV
+
       - name: Set tag
         id: vars
         run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
@@ -65,8 +88,9 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA
 
       - name: Upload SAM Template to Bucket
         id: publish-template
@@ -79,9 +103,9 @@ jobs:
           sam build --template-file=./deploy/template.yaml
           mv .aws-sam/build/template.yaml cf-template.yaml
           echo "Replacing 'CONTAINER-IMAGE-PLACEHOLDER' with new ECR image ref"
-          sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA|" cf-template.yaml
+          sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA|" cf-template.yaml
           zip template.zip cf-template.yaml
-          aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GITHUB_SHA"
+          aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
 
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
