@@ -127,13 +127,13 @@ We can deploy the app to our development environment for pre-merge testing.
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
 Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
 
-The [Verify and Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/cd-only.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
+The [Verify and Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
 This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
 
 To deploy the app:
 
 1. Rebase your branch onto `main`
-2. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/cd-only.yml) and click 'Run workflow'
+2. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) and click 'Run workflow'
 3. Choose your branch from the dropdown, then click 'Run workflow' again
 4. Wait for the action to finish running
 5. Log into the development AWS account (`gds aws di-account-dev -l`)
@@ -147,7 +147,7 @@ We can deploy the app to our development environment (`di-account-dev`) for pre-
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
 Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
 
-Under the [Actions Tab](https://github.com/alphagov/di-account-management-frontend/actions) there is a [Verify & Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/cd-only.yml) action.
+Under the [Actions Tab](https://github.com/alphagov/di-account-management-frontend/actions) there is a [Verify & Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) action.
 
 Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
 This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
@@ -155,7 +155,7 @@ This action has a `workflow_dispatch` trigger which means we can click an button
 To deploy the app:
 
 1. Rebase your branch onto `main`
-1. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/cd-only.yml) and click 'Run workflow'
+1. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) and click 'Run workflow'
 1. Use workflow from branch `main` - Leave this at the default unless you are modifying the workflow
 1. Select `Commit SHA, branch name or tag` - Provide the SHA, branch name or tag that you wish to deploy.
 1. Wait for the action to finish running
