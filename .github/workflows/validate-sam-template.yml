@@ -5,13 +5,6 @@ name: Validate SAM Template
 #   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
 #   - invoked by another workflow.
 on:
-  push:
-    paths:
-      - "deploy/template.yaml"
-      - "deploy/samconfig.toml"
-      - ".github/workflows/validate-sam-template.yml"
-    branches-ignore:
-      - main
   workflow_call:
     inputs:
       gitRef:
