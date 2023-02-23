@@ -5,13 +5,6 @@ name: Validate SAM Template
 #   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
 #   - invoked by another workflow.
 on:
-  push:
-    paths:
-      - "deploy/template.yaml"
-      - "deploy/samconfig.toml"
-      - ".github/workflows/validate-sam-template.yml"
-    branches-ignore:
-      - main
   workflow_call:
     inputs:
       gitRef:
@@ -35,14 +28,14 @@ jobs:
         with:
           ref: ${{ inputs.gitRef || github.ref }}
 
-      - name: Set up Python 
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
 
       - name: Set up SAM cli
         uses: aws-actions/setup-sam@v2
-        
+
       - name: sam fix https://github.com/aws/aws-sam-cli/issues/4527
         run: $(dirname $(readlink $(which sam)))/pip install --force-reinstall "cryptography==38.0.4"
 
@@ -54,18 +47,3 @@ jobs:
 
       - name: SAM Validate
         run: sam validate -t deploy/template.yaml
-
-#      - name: SAM Build
-#        run: sam build -t deploy/template.yaml
-#
-#      - name: Test with Checkov
-#        id: checkov
-#        uses: bridgecrewio/checkov-action@master
-#        with:
-#          file: ./.aws-sam/build/template.yaml
-#          framework: cloudformation
-#
-#      - name: CloudFormation Lint
-#        uses: scottbrenner/cfn-lint-action@v2
-#        with:
-#          command: ./.aws-sam/build/template.yaml
