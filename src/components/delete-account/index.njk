@@ -19,7 +19,7 @@
     {% for service in services %}
 
       {% set locale = ['pages.yourServices.clientRegistry.', env, '.', service.client_id, '.'] | join %}
-        <li>{{ [locale, 'header'] | join | translate }}</li>
+        <li id="service-list-item">{{ [locale, 'header'] | join | translate }}</li>
 
     {% endfor %}
     </ul>

@@ -10,7 +10,7 @@ import { getBaseUrl } from "../../../config";
 import { Service } from "../../../utils/types";
 import { SinonStub } from "sinon";
 
-describe.only("Integration:: delete account", () => {
+describe("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
@@ -20,6 +20,36 @@ describe.only("Integration:: delete account", () => {
   let yourServicesStub: SinonStub<any[], any>;
   const idToken = "Idtoken";
   const TEST_SUBJECT_ID = "sub";
+
+  const aSingleService: Service[] = [
+    {
+      client_id: "client_id",
+      count_successful_logins: 1,
+      last_accessed: 14567776,
+      last_accessed_readable_format: "last_accessed_readable_format",
+    },
+  ];
+
+  const manyServicesIncludingGovUkPublishing: Service[] = [
+    {
+      client_id: "client_id",
+      count_successful_logins: 1,
+      last_accessed: 14567776,
+      last_accessed_readable_format: "last_accessed_readable_format",
+    },
+    {
+      client_id: "gov-uk",
+      count_successful_logins: 2,
+      last_accessed: 14567776,
+      last_accessed_readable_format: "last_accessed_readable_format",
+    },
+  ];
+
+  function stubGetServicesToReturn(serviceList: Service[]) {
+    yourServicesStub.callsFake(function (): Service[] {
+      return serviceList;
+    });
+  }
 
   before(async () => {
     decache("../../../app");
@@ -99,35 +129,65 @@ describe.only("Integration:: delete account", () => {
   afterEach(() => {
     yourServicesStub.reset();
   });
+
   after(() => {
     sandbox.restore();
     app = undefined;
   });
 
   it("should return delete account page", (done) => {
-    const serviceList: Service[] = [
-      {
-        client_id: "client_id",
-        count_successful_logins: 1,
-        last_accessed: 14567776,
-        last_accessed_readable_format: "last_accessed_readable_format",
-      },
-    ];
-
-    yourServicesStub.callsFake(function (): Service[] {
-      return serviceList;
-    });
+    stubGetServicesToReturn(aSingleService);
     request(app).get(PATH_DATA.DELETE_ACCOUNT.url).expect(200, done);
   });
 
-  it("should return error when csrf not present", (done) => {
+  it("should display generic content if no services exist", (done) => {
+    stubGetServicesToReturn([]);
+
+    request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#no-services-content").text()).to.not.be.empty;
+        expect($("#govuk-email-subscription-info").text()).to.be.empty;
+        expect($("#service-list-item").text()).to.be.empty;
+      })
+      .expect(200, done);
+  });
+
+  it("should display GovUk subscription info if publishing service exists", (done) => {
+    stubGetServicesToReturn(manyServicesIncludingGovUkPublishing);
+
+    request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#govuk-email-subscription-info").text()).to.not.be.empty;
+        expect($("#service-list-item").text()).to.not.be.empty;
+      })
+      .expect(200, done);
+  });
+
+  it("should not display subscription info if publishing service does not exists", (done) => {
+    stubGetServicesToReturn(aSingleService);
+
+    request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#service-list-item").text()).to.not.be.empty;
+        expect($("#govuk-email-subscription-info").text()).to.be.empty;
+      })
+      .expect(200, done);
+  });
+
+  it("post should return error when csrf not present", (done) => {
     request(app)
       .post(PATH_DATA.DELETE_ACCOUNT.url)
       .type("form")
       .expect(500, done);
   });
 
-  it("should redirect to end session endpoint", (done) => {
+  it("post should redirect to end session endpoint", (done) => {
     nock(baseApi).post(API_ENDPOINTS.DELETE_ACCOUNT).once().reply(204);
     nock(govUkPublishingBaseApi)
       .delete(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
@@ -151,42 +211,5 @@ describe.only("Integration:: delete account", () => {
         )}`
       )
       .expect(302, done);
-  });
-
-  it("should display generic content if no services exist", (done) => {
-    yourServicesStub.callsFake(function (): Service[] {
-      return [];
-    });
-    request(app)
-      .get(PATH_DATA.DELETE_ACCOUNT.url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect($("#no-services-content").text()).to.not.be.empty;
-        expect($("#govuk-email-subscription-info").text()).to.be.empty;
-      })
-      .expect(200, done);
-  });
-
-  it("should display One Login services if they exist", (done) => {
-    const serviceList: Service[] = [
-      {
-        client_id: "client_id",
-        count_successful_logins: 1,
-        last_accessed: 14567776,
-        last_accessed_readable_format: "last_accessed_readable_format",
-      },
-    ];
-
-    yourServicesStub.callsFake(function (): Service[] {
-      return serviceList;
-    });
-    request(app)
-      .get(PATH_DATA.DELETE_ACCOUNT.url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect($("#govuk-email-subscription-info").text()).to.not.be.empty;
-        //expect there to be a service within the list of bullet points
-      })
-      .expect(200, done);
   });
 });

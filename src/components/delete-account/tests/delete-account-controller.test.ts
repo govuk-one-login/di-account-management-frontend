@@ -55,7 +55,9 @@ describe("delete account controller", () => {
   });
 
   describe("deleteAccountGet", () => {
+
     it("deleteAccountGetWithoutSubjectId", () => {
+
       it("should render delete account page", () => {
         const req: any = {
           body: {},
@@ -64,6 +66,7 @@ describe("delete account controller", () => {
             destroy: sandbox.fake(),
           },
         };
+
         deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
           manageEmailsLink: "https://www.gov.uk/email/manage",
@@ -73,6 +76,7 @@ describe("delete account controller", () => {
     });
 
     it("deleteAccountGetWithoutServices", () => {
+
       it("should render delete account page", () => {
         const serviceList: Service[] = [];
         req = validRequest();
@@ -82,6 +86,7 @@ describe("delete account controller", () => {
           .callsFake(function (): Service[] {
             return serviceList;
           });
+          
         deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
           manageEmailsLink: "https://www.gov.uk/email/manage",
@@ -122,6 +127,7 @@ describe("delete account controller", () => {
 
   describe("deleteAccountPost", () => {
     describe("when not supporting DELETE_SERVICE_STORE", () => {
+
       beforeEach(() => {
         process.env.SUPPORT_DELETE_SERVICE_STORE = "0";
       });
@@ -129,6 +135,7 @@ describe("delete account controller", () => {
       afterEach(() => {
         delete process.env.SUPPORT_DELETE_SERVICE_STORE;
       });
+
       it("should redirect to deletion confirmed page", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {
@@ -176,6 +183,7 @@ describe("delete account controller", () => {
       afterEach(() => {
         delete process.env.SUPPORT_DELETE_SERVICE_STORE;
       });
+
       it("should redirect to deletion confirmed page", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {

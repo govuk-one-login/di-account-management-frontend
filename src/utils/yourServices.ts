@@ -68,18 +68,16 @@ export const formatService = (service: Service): Service => {
   };
 };
 
-export const containsGovUkPublishingService =  (serviceList: Service[]): boolean => {
-
-  // console.log(Date.now() + " DOUGAL - within govuk service calculation")
-
+export const containsGovUkPublishingService = (
+  serviceList: Service[]
+): boolean => {
   const govUkPublishingClientIds: string[] = [
     "LcueBVCnGZw-YFdTZ4S07XbQx7I",
     "CEr97IZfEPQFgBxq8QNcM8LFxw4",
-    "gov-uk"
+    "gov-uk",
   ];
 
-    return serviceList.some((service) => {
-          return govUkPublishingClientIds.includes(service.client_id);
-        }
-    )
+  return serviceList.some((service) => {
+    return govUkPublishingClientIds.includes(service.client_id);
+  });
 };
