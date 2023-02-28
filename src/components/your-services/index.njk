@@ -2,6 +2,8 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% set pageTitleName = 'pages.yourServices.title' | translate %}
 {% set activeNav = 'your-services' %}
+{% set showSecondaryHeadings = servicesList.length and accountsList.length %}
+{% set serviceHeadingLevel =  "h3" if showSecondaryHeadings else "h2" %}
 
 {% block content %}
   <div class="govuk-grid-row" id="your-services">
@@ -15,22 +17,22 @@
       {% if not (servicesList.length or accountsList.length) %}
         {# Display an empty state when no accounts nor services have been used #}
         {# This should be an edge case as the only pathways into the account would be signing up via other services #}
-      <div class="your-services__card your-services__card--empty">
+      <div class="your-services__card your-services__card--empty" data-test-id="empty-state">
         <div class="your-services__card__content">
           <p class="govuk-body">{{ 'pages.yourServices.empty' | translate }}</p>
         </div>
       </div>
       {% endif %}
-      {% if servicesList.length and accountsList.length %}
+      {% if showSecondaryHeadings %}
         {# Show heading ONLY when there are both accounts and services #}
-        <h2 class="govuk-heading-m">{{ 'pages.yourServices.accountsList.heading' | translate }}</h2>
+        <h2 class="govuk-heading-m" data-test-id="accounts-heading">{{ 'pages.yourServices.accountsList.heading' | translate }}</h2>
       {% endif %}
       {% if accountsList.length %}
-      <ul class="govuk-list your-services__list">
+      <ul class="govuk-list your-services__list ">
         {% for account in accountsList %}
           {% set locale = ['pages.yourServices.clientRegistry.', env, '.', account.client_id, '.'] | join %}
           <li class="your-services__card">
-            <h3 class="govuk-heading-s your-services__card__heading">{{ [locale, 'header'] | join | translate }}</h2>
+            <{{serviceHeadingLevel}} class="govuk-heading-s your-services__card__heading" data-test-id="account-card-heading">{{ [locale, 'header'] | join | translate }}</{{serviceHeadingLevel}}>
             <div class="your-services__card__content">
               <p class="govuk-body">{{ [locale, 'description'] | join | translate }}</p>
               <p class="govuk-body">
@@ -42,9 +44,9 @@
         {% endfor %}
       </ul>
       {% endif %}
-      {% if servicesList.length and accountsList.length %}
+      {% if showSecondaryHeadings %}
         {# Show heading ONLY when there are both accounts and services #}
-        <h2 class="govuk-heading-m">{{ 'pages.yourServices.servicesList.heading' | translate }}</h2>
+        <h2 class="govuk-heading-m" data-test-id="services-heading">{{ 'pages.yourServices.servicesList.heading' | translate }}</h2>
       {% endif %}
       {% if servicesList.length %}
       <ul class="govuk-list your-services__list">
@@ -52,9 +54,9 @@
           {% set locale = ['pages.yourServices.clientRegistry.', env, '.', service.client_id, '.'] | join %}
           <li class="your-services__card">
             <div class="your-services__card__content">
-            <h3 class="govuk-heading-s govuk-!-font-weight-regular">
+            <{{serviceHeadingLevel}} class="govuk-heading-s govuk-!-font-weight-regular" data-test-id="service-card-heading">
               <a class="govuk-link" href="{{ [locale, 'link_href'] | join | translate }}">{{ [locale, 'link_text'] | join | translate }}</a>
-            </h3>
+            </{{serviceHeadingLevel}}>
             <p class="govuk-body your-services__card__last-used">{{ 'pages.yourServices.lastUsed' | translate }}: {{ service.last_accessed_readable_format }}</p>
             </div>
           </li>
@@ -65,6 +67,7 @@
         <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
         <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph1' | translate }}</p>
         <ul class="govuk-list govuk-list--bullet">
+
           <li>{{ 'pages.yourServices.informationBox.listItem1' | translate }}</li>
           <li>{{ 'pages.yourServices.informationBox.listItem2' | translate }}</li>
           <li>{{ 'pages.yourServices.informationBox.listItem3' | translate }}</li>
