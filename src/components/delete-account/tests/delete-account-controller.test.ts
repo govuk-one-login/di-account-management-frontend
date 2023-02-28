@@ -57,7 +57,6 @@ describe("delete account controller", () => {
   describe("deleteAccountGet", () => {
 
     it("deleteAccountGetWithoutSubjectId", () => {
-
       it("should render delete account page", () => {
         const req: any = {
           body: {},
@@ -76,21 +75,17 @@ describe("delete account controller", () => {
     });
 
     it("deleteAccountGetWithoutServices", () => {
-
       it("should render delete account page", () => {
-        const serviceList: Service[] = [];
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
         sandbox
-          .stub(yourServices, "getServices")
-          .callsFake(function (): Service[] {
-            return serviceList;
-          });
-          
+          .stub(yourServices, "getAllowedListServices")
+          .callsFake(function (): Service[] { return []; });
+
         deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
           manageEmailsLink: "https://www.gov.uk/email/manage",
-          servicesList: serviceList,
+          servicesList: [],
           env: getAppEnv(),
         });
       });
@@ -105,12 +100,12 @@ describe("delete account controller", () => {
           last_accessed_readable_format: "last_accessed_readable_format",
         },
       ];
-      
+
       it("should render the delete account page with list of services used", () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
         sandbox
-          .stub(yourServices, "getServices")
+          .stub(yourServices, "getAllowedListServices")
           .callsFake(function (): Service[] {
             return serviceList;
           });
@@ -126,8 +121,8 @@ describe("delete account controller", () => {
   });
 
   describe("deleteAccountPost", () => {
-    describe("when not supporting DELETE_SERVICE_STORE", () => {
 
+    describe("when not supporting DELETE_SERVICE_STORE", () => {
       beforeEach(() => {
         process.env.SUPPORT_DELETE_SERVICE_STORE = "0";
       });

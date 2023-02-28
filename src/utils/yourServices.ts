@@ -21,7 +21,7 @@ const serviceStoreDynamoDBRequest = (
 const unmarshallDynamoData = (dynamoDBResponse: DynamoDB.Types.AttributeMap) =>
   DynamoDB.Converter.unmarshall(dynamoDBResponse);
 
-export const getServices = async (subjectId: string): Promise<Service[]> => {
+const getServices = async (subjectId: string): Promise<Service[]> => {
   const logger = pino();
   try {
     const response = await dynamoDBService().getItem(
@@ -55,6 +55,22 @@ export const presentYourServices = async (
       accountsList: [],
       servicesList: [],
     };
+  }
+};
+
+export const getAllowedListServices = async (
+  subjectId: string
+): Promise<Service[]> => {
+  const userServices = await getServices(subjectId);
+  if (userServices) {
+    return userServices.filter((service) => {
+      return (
+        getAllowedAccountListClientIDs.includes(service.client_id) ||
+        getAllowedServiceListClientIDs.includes(service.client_id)
+      );
+    });
+  } else {
+    return [];
   }
 };
 

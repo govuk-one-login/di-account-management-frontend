@@ -15,11 +15,10 @@ import {
 } from "../../config";
 
 import { destroyUserSessions } from "../../utils/session-store";
-import {
-  getServices,
-  containsGovUkPublishingService,
-} from "../../utils/yourServices";
+
+import { containsGovUkPublishingService } from "../../utils/yourServices";
 import { Service } from "../../utils/types";
+import { getAllowedListServices } from "../../utils/yourServices";
 
 export async function deleteAccountGet(
   req: Request,
@@ -28,7 +27,7 @@ export async function deleteAccountGet(
   const env = getAppEnv();
   const { user } = req.session;
   if (user && user.subjectId) {
-    const services: Service[] = await getServices(user.subjectId);
+    const services: Service[] = await getAllowedListServices(user.subjectId);
     const hasGovUkEmailSubscription: boolean =
       containsGovUkPublishingService(services);
     const data = {

@@ -257,6 +257,7 @@
             "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
           },
           "VsAkrtMBzAosSveAv4xsuUDyiSs": {
+            "header": "Sign your mortgage deed",
             "link_text": "Sign your mortgage deed",
             "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
           }
@@ -361,7 +362,7 @@
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "dbs": {
-             "header": "Request a basic DBS check",
+            "header": "Request a basic DBS check",
             "link_text": "Request a basic DBS check",
             "link_href": "https://www.gov.uk/request-copy-criminal-record"
           },
