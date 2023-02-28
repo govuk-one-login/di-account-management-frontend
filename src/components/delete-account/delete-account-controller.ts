@@ -12,14 +12,16 @@ import {
   getManageGovukEmailsUrl,
   supportDeleteServiceStore,
   getSNSDeleteTopic,
+  getAllowedAccountListClientIDs,
 } from "../../config";
 
 import { destroyUserSessions } from "../../utils/session-store";
 import {
-  getServices,
   containsGovUkPublishingService,
+  presentYourServices,
 } from "../../utils/yourServices";
 import { Service } from "../../utils/types";
+import { combineAllowedServiceList } from "../../utils/yourServices";
 
 export async function deleteAccountGet(
   req: Request,
@@ -28,7 +30,11 @@ export async function deleteAccountGet(
   const env = getAppEnv();
   const { user } = req.session;
   if (user && user.subjectId) {
-    const services: Service[] = await getServices(user.subjectId);
+    const serviceData = await presentYourServices(user.subjectId);
+    const services: Service[] = combineAllowedServiceList(
+      serviceData.accountsList,
+      serviceData.servicesList
+    );
     const hasGovUkEmailSubscription: boolean =
       containsGovUkPublishingService(services);
     const data = {

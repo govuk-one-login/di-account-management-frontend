@@ -57,7 +57,7 @@ describe("Integration:: delete account", () => {
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
     const yourServices = require("../../../utils/yourServices");
     sandbox = sinon.createSandbox();
-    yourServicesStub = sandbox.stub(yourServices, "getServices");
+    yourServicesStub = sandbox.stub(yourServices, "presentYourServices");
     sandbox
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {

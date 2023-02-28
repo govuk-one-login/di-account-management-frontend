@@ -81,3 +81,10 @@ export const containsGovUkPublishingService = (
     return govUkPublishingClientIds.includes(service.client_id);
   });
 };
+
+export const combineAllowedServiceList = (
+  accountsList: Service[],
+  servicesList: Service[]
+): Service[] => {
+  return accountsList.concat(servicesList);
+};
