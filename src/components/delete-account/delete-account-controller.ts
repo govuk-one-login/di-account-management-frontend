@@ -6,13 +6,45 @@ import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
-import { getBaseUrl, getManageGovukEmailsUrl, getSNSDeleteTopic, supportDeleteServiceStore } from "../../config";
-import { destroyUserSessions } from "../../utils/session-store";
+import {
+  getAppEnv,
+  getBaseUrl,
+  getManageGovukEmailsUrl,
+  supportDeleteServiceStore,
+  getSNSDeleteTopic,
+} from "../../config";
 
-export function deleteAccountGet(req: Request, res: Response): void {
-  res.render("delete-account/index.njk", {
-    manageEmailsLink: getManageGovukEmailsUrl(),
-  });
+import { destroyUserSessions } from "../../utils/session-store";
+import {
+  getServices,
+  containsGovUkPublishingService,
+} from "../../utils/yourServices";
+import { Service } from "../../utils/types";
+
+export async function deleteAccountGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const env = getAppEnv();
+  const { user } = req.session;
+  if (user && user.subjectId) {
+    const services: Service[] = await getServices(user.subjectId);
+    const hasGovUkEmailSubscription: boolean =
+      containsGovUkPublishingService(services);
+    const data = {
+      hasGovUkEmailSubscription: hasGovUkEmailSubscription,
+      services: services,
+      env: env,
+      manageEmailsLink: getManageGovukEmailsUrl(),
+    };
+    res.render("delete-account/index.njk", data);
+  } else {
+    const data = {
+      env: env,
+      manageEmailsLink: getManageGovukEmailsUrl(),
+    };
+    res.render("delete-account/index.njk", data);
+  }
 }
 
 export function deleteAccountPost(
@@ -25,11 +57,13 @@ export function deleteAccountPost(
     const { accessToken } = req.session.user.tokens;
 
     if (supportDeleteServiceStore()) {
-      const DeleteTopicARN = getSNSDeleteTopic()
+      const DeleteTopicARN = getSNSDeleteTopic();
       try {
-        await service.deleteServiceData(subjectId, DeleteTopicARN)
+        await service.deleteServiceData(subjectId, DeleteTopicARN);
       } catch (err) {
-        req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
+        req.log.error(
+          `Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`
+        );
       }
     }
 

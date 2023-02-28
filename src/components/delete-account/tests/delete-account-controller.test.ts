@@ -1,9 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-
 import {
   deleteAccountGet,
   deleteAccountPost,
@@ -11,11 +9,14 @@ import {
 import { DeleteAccountServiceInterface } from "../types";
 import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
 import { destroyUserSessions } from "../../../utils/session-store";
+import { getAppEnv } from "../../../config";
+import { Service } from "../../../utils/types";
 
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  const TEST_SUBJECT_ID = "testSubjectId";
 
   function validRequest(): any {
     return {
@@ -24,11 +25,19 @@ describe("delete account controller", () => {
           sessionStore: {
             destroy: sandbox.fake(),
           },
+          subjectSessionIndexService: {
+            removeSession: sandbox.fake(),
+            getSessions: sandbox.stub().resolves(["session-1"]),
+          },
         },
       },
       body: {},
       session: {
-        user: { state: { deleteAccount: {} } },
+        user: {
+          subjectId: TEST_SUBJECT_ID,
+          email: "test@test.com",
+          state: { deleteAccount: {} },
+        },
         destroy: sandbox.fake(),
       },
       log: { error: sandbox.fake() },
@@ -46,23 +55,87 @@ describe("delete account controller", () => {
   });
 
   describe("deleteAccountGet", () => {
-    it("should render delete account page", () => {
-      req = validRequest();
-      deleteAccountGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("delete-account/index.njk");
+    it("deleteAccountGetWithoutSubjectId", () => {
+
+      it("should render delete account page", () => {
+        const req: any = {
+          body: {},
+          session: {
+            user: { email: "test@test.com" },
+            destroy: sandbox.fake(),
+          },
+        };
+
+        deleteAccountGet(req as Request, res as Response);
+        expect(res.render).to.have.calledWith("delete-account/index.njk", {
+          manageEmailsLink: "https://www.gov.uk/email/manage",
+          env: getAppEnv(),
+        });
+      });
+    });
+
+    it("deleteAccountGetWithoutServices", () => {
+
+      it("should render delete account page", () => {
+        const serviceList: Service[] = [];
+        req = validRequest();
+        const yourServices = require("../../../utils/yourServices");
+        sandbox
+          .stub(yourServices, "getServices")
+          .callsFake(function (): Service[] {
+            return serviceList;
+          });
+          
+        deleteAccountGet(req as Request, res as Response);
+        expect(res.render).to.have.calledWith("delete-account/index.njk", {
+          manageEmailsLink: "https://www.gov.uk/email/manage",
+          servicesList: serviceList,
+          env: getAppEnv(),
+        });
+      });
+    });
+
+    it("deleteAccountGetWithServices", () => {
+      const serviceList: Service[] = [
+        {
+          client_id: "client_id",
+          count_successful_logins: 1,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
+      ];
+      
+      it("should render the delete account page with list of services used", () => {
+        req = validRequest();
+        const yourServices = require("../../../utils/yourServices");
+        sandbox
+          .stub(yourServices, "getServices")
+          .callsFake(function (): Service[] {
+            return serviceList;
+          });
+
+        deleteAccountGet(req as Request, res as Response);
+        expect(res.render).to.have.calledWith("delete-account/index.njk", {
+          manageEmailsLink: "https://www.gov.uk/email/manage",
+          servicesList: serviceList,
+          env: getAppEnv(),
+        });
+      });
     });
   });
 
   describe("deleteAccountPost", () => {
     describe("when not supporting DELETE_SERVICE_STORE", () => {
+
       beforeEach(() => {
-        process.env.SUPPORT_DELETE_SERVICE_STORE = "0"
+        process.env.SUPPORT_DELETE_SERVICE_STORE = "0";
       });
 
       afterEach(() => {
         delete process.env.SUPPORT_DELETE_SERVICE_STORE;
       });
+
       it("should redirect to deletion confirmed page", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {
@@ -96,18 +169,21 @@ describe("delete account controller", () => {
           .calledOnce;
         expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
         expect(res.redirect).to.have.been.calledWith("logout-url");
-        expect(destroyUserSessions).to.have.been.calledWith("public-subject-id");
+        expect(destroyUserSessions).to.have.been.calledWith(
+          "public-subject-id"
+        );
       });
     });
 
     describe("when supporting DELETE_SERVICE_STORE", () => {
       beforeEach(() => {
-        process.env.SUPPORT_DELETE_SERVICE_STORE = "1"
+        process.env.SUPPORT_DELETE_SERVICE_STORE = "1";
       });
 
       afterEach(() => {
         delete process.env.SUPPORT_DELETE_SERVICE_STORE;
       });
+
       it("should redirect to deletion confirmed page", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {
@@ -141,7 +217,9 @@ describe("delete account controller", () => {
           .calledOnce;
         expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
         expect(res.redirect).to.have.been.calledWith("logout-url");
-        expect(destroyUserSessions).to.have.been.calledWith("public-subject-id");
+        expect(destroyUserSessions).to.have.been.calledWith(
+          "public-subject-id"
+        );
       });
     });
   });
