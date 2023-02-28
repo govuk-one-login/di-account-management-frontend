@@ -1,5 +1,5 @@
-window.GOVUK = window.GOVUK || {};
-window.GOVUK.Modules = window.GOVUK.Modules || {};
+window.GOVSignIn = window.GOVSignIn || {};
+window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
 
 (function (Modules) {
   function ShowPassword($module) {
@@ -106,4 +106,4 @@ window.GOVUK.Modules = window.GOVUK.Modules || {};
   };
 
   Modules.ShowPassword = ShowPassword;
-})(window.GOVUK.Modules);
+})(window.GOVSignIn.Modules);

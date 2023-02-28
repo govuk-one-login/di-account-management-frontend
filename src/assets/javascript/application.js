@@ -35,12 +35,12 @@ initChangePhoneNumber();
     cookies.cookieBannerInit();
   }
 
-  if (w.GOVUK && w.GOVUK.Modules && w.GOVUK.Modules.ShowPassword) {
+  if (w.GOVSignIn && w.GOVSignIn.Modules && w.GOVSignIn.Modules.ShowPassword) {
     var modules = document.querySelectorAll('[data-module="show-password"]');
 
     for (var i = 0, l = modules.length; i < l; i++) {
-      if (GOVUK.Modules.ShowPassword.prototype.init) {
-        new GOVUK.Modules.ShowPassword(modules[i]).init();
+      if (GOVSignIn.Modules.ShowPassword.prototype.init) {
+        new GOVSignIn.Modules.ShowPassword(modules[i]).init();
       }
     }
   }
