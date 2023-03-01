@@ -21,7 +21,7 @@ const serviceStoreDynamoDBRequest = (
 const unmarshallDynamoData = (dynamoDBResponse: DynamoDB.Types.AttributeMap) =>
   DynamoDB.Converter.unmarshall(dynamoDBResponse);
 
-export const getServices = async (subjectId: string): Promise<Service[]> => {
+const getServiceStoreItem = async (subjectId: string): Promise<Service[]> => {
   const logger = pino();
   try {
     const response = await dynamoDBService().getItem(
@@ -37,7 +37,7 @@ export const getServices = async (subjectId: string): Promise<Service[]> => {
 export const presentYourServices = async (
   subjectId: string
 ): Promise<YourServices> => {
-  const userServices = await getServices(subjectId);
+  const userServices = await getServiceStoreItem(subjectId);
   if (userServices) {
     const userServicesWithPresentableDates = userServices.map((service) =>
       formatService(service)
@@ -66,18 +66,4 @@ export const formatService = (service: Service): Service => {
     last_accessed: service.last_accessed,
     last_accessed_readable_format: readable_format_date,
   };
-};
-
-export const containsGovUkPublishingService = (
-  serviceList: Service[]
-): boolean => {
-  const govUkPublishingClientIds: string[] = [
-    "LcueBVCnGZw-YFdTZ4S07XbQx7I",
-    "CEr97IZfEPQFgBxq8QNcM8LFxw4",
-    "gov-uk",
-  ];
-
-  return serviceList.some((service) => {
-    return govUkPublishingClientIds.includes(service.client_id);
-  });
 };
