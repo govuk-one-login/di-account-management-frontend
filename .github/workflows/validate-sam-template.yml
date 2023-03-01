@@ -5,12 +5,22 @@ name: Validate SAM Template
 #   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
 #   - invoked by another workflow.
 on:
+  push:
+    paths:
+      - "deploy/template.yaml"
+      - "deploy/samconfig.toml"
+      - ".github/workflows/validate-sam-template-dev.yml"
+    branches-ignore:
+      - main
   workflow_call:
     inputs:
       gitRef:
         required: false
         type: string
         default: ${{ github.ref }}
+      githubActionsRoleARN:
+        required: false
+        type: string
 
 jobs:
   validate_sam_template:
@@ -21,7 +31,6 @@ jobs:
       contents: read
     env:
       SAM_CLI_TELEMETRY: 0
-      ENVIRONMENT: build
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -42,7 +51,7 @@ jobs:
       - name: Set up AWS creds
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          role-to-assume: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
+          role-to-assume: ${{ inputs.githubActionsRoleARN || secrets.DEV_GH_ACTIONS_ROLE_ARN }}
           aws-region: eu-west-2
 
       - name: SAM Validate

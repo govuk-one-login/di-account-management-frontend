@@ -23,12 +23,18 @@ jobs:
 
   validate_container:
     name: Container Checks against Dev Instance
-    uses: ./.github/workflows/validate-docker-image-dev.yml
+    uses: ./.github/workflows/validate-docker-image.yml
     secrets: inherit
+    with:
+      githubActionsRoleARN: ${{ secrets.DEV_GITHUB_ACTIONS_ROLE_ARN }}
+      ecrRepository: ${{ secrets.DEV_ECR_REPOSITORY }}
     needs: validate_application
 
   validate_deployment:
     name: Deployment Template Checks against Dev Instance
-    uses: ./.github/workflows/validate-sam-template-dev.yml
+    uses: ./.github/workflows/validate-sam-template.yml
+    with:
+      gitRef: ${{ inputs.gitRef }}
+      githubActionsRoleARN: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN }}
     secrets: inherit
     needs: validate_container

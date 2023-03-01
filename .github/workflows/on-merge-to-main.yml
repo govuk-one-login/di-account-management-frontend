@@ -21,12 +21,18 @@ jobs:
     name: Container Checks
     uses: ./.github/workflows/validate-docker-image.yml
     secrets: inherit
+    with:
+      githubActionsRoleARN: ${{ secrets.GITHUB_ACTIONS_ROLE_ARN }}
+      ecrRepository: ${{ secrets.ECR_REPOSITORY }}
     needs: validate_application
 
   validate_deployment:
     name: Deployment Template Checks
     uses: ./.github/workflows/validate-sam-template.yml
     secrets: inherit
+    with:
+      gitRef: ${{ inputs.gitRef }}
+      githubActionsRoleARN: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
     needs: validate_container
 
   publish_artifacts:

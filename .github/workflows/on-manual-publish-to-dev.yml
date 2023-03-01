@@ -32,10 +32,11 @@ jobs:
 
   validate_deployment:
     name: Deployment Template Checks
-    uses: ./.github/workflows/validate-sam-template-dev.yml
+    uses: ./.github/workflows/validate-sam-template.yml
     secrets: inherit
     with:
       gitRef: ${{ inputs.gitRef }}
+      githubActionsRoleARN: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN }}
 
   publish_artifacts:
     name: "Publish Image & Template to Dev"

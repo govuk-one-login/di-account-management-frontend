@@ -33,6 +33,7 @@ jobs:
     secrets: inherit
     with:
       gitRef: ${{ inputs.gitRef }}
+      githubActionsRoleARN: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
 
   publish_artifacts:
     name: "Publish Image & Template to Dev"
