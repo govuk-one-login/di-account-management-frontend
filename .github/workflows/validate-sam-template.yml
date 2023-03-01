@@ -9,7 +9,7 @@ on:
     paths:
       - "deploy/template.yaml"
       - "deploy/samconfig.toml"
-      - ".github/workflows/validate-sam-template-dev.yml"
+      - ".github/workflows/validate-sam-template.yml"
     branches-ignore:
       - main
   workflow_call:
