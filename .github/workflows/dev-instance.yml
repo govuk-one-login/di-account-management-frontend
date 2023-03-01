@@ -4,6 +4,14 @@ name: "Verify & Publish to Dev (1-3) Instance"
 on:
   workflow_dispatch:
     inputs:
+      refType:
+        type: choice
+        description: "Find branch name, commit SHA, or tag?"
+        options:
+          - Branch name
+          - Commit SHA
+          - Tag
+        default: Branch name
       gitRef:
         description: "Commit SHA, branch name or tag"
         required: true
@@ -29,7 +37,7 @@ jobs:
 
   validate_deployment:
     name: Deployment Template Checks
-    uses: ./.github/workflows/validate-sam-template.yml
+    uses: ./.github/workflows/validate-sam-template-dev.yml
     secrets: inherit
     with:
       gitRef: ${{ inputs.gitRef }}
@@ -45,6 +53,21 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.gitRef }}
+          
+      - name: Fetch Commit SHA
+        id: gitRefSHA
+        if: ${{ github.event.inputs.choice }} == "Commit SHA"
+        run: echo GIT_REF_SHA=${{ inputs.gitRef }} >> $GITHUB_ENV
+
+      - name: Fetch Commit SHA by Branch name
+        id: gitRefBranch
+        if: ${{ github.event.inputs.choice }} == "Branch name"
+        run: echo GIT_REF_SHA=$(git log -1 ${{ inputs.gitRef }} --pretty=format:%H) >> $GITHUB_ENV
+
+      - name: Fetch Commit SHA by Tag
+        id: gitRefTag
+        if: ${{ github.event.inputs.choice }} == "Tag"
+        run : echo GIT_REF_SHA=$(git rev-list -n 1 ${{ inputs.gitRef }}) >> $GITHUB_ENV
 
       - name: Set tag
         id: vars
@@ -68,25 +91,30 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
+          ECR_REPOSITORY: ${{ secrets.DEV_INSTANCE_ECR_REPOSITORY }}
+          DEV_ENVIRONMENT_NUMBER: ${{ inputs.environmentNumber }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA-$DEV_ENVIRONMENT_NUMBER .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA-$DEV_ENVIRONMENT_NUMBER
       - name: Upload SAM Template to Bucket
         id: publish-template
         env:
           ARTIFACT_BUCKET_NAME: ${{ secrets.DEV_INSTANCE_ARTIFACT_SOURCE_BUCKET_NAME }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
+          ECR_REPOSITORY: ${{ secrets.DEV_INSTANCE_ECR_REPOSITORY }}
+          DEV_ENVIRONMENT_NUMBER: ${{ inputs.environmentNumber }}
         run: |
           echo "Running sam build on template file"
           sam build --template-file=./deploy/template.yaml
           mv .aws-sam/build/template.yaml cf-template.yaml
           echo "Replacing 'CONTAINER-IMAGE-PLACEHOLDER' with new ECR image ref"
-          sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA|" cf-template.yaml
+          sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA-$DEV_ENVIRONMENT_NUMBER|" cf-template.yaml
           echo "Updating the Environment Number to ${{ inputs.environmentNumber }}"
           sed -i "s|ENVIRONMENT_NUMBER_PLACEHOLDER|${{ inputs.environmentNumber }}|" cf-template.yaml
-          zip template.zip cf-template.yaml
-          aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GITHUB_SHA"
+          echo "Create config.properties file to provide the environment number"
+          touch config.properties
+          echo "environmentNumber:${{ inputs.environmentNumber }}" > config.properties
+          zip template.zip cf-template.yaml config.properties
+          aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
