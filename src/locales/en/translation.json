@@ -330,7 +330,7 @@
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
           "dbs": {
-             "header": "Request a basic DBS check",
+            "header": "Request a basic DBS check",
             "link_text": "Request a basic DBS check",
             "link_href": "https://www.gov.uk/request-copy-criminal-record"
           },
