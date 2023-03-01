@@ -176,8 +176,9 @@
         "listItem2": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
         "listItem3": "Tanysgrifiadau e-byst GOV.UK",
         "listItem4": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-        "listItem5": "Gwneud cais am wiriad DBS sylfaenol",
-        "listItem6": "Llofnodwch eich gweithred morgais",
+        "listItem5": "Ofqual subject matter specialist account",
+        "listItem6": "Gwneud cais am wiriad DBS sylfaenol",
+        "listItem7": "Llofnodwch eich gweithred morgais",
         "paragraph2": "Nid yw GOV.UK One Login yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
         "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich GOV.UK One Login i gael mynediad i holl wasanaethau ar GOV.UK."
       },
@@ -194,6 +195,12 @@
             "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
             "link_text": "Ewch i’ch cyfrif LITE",
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "TGygWFxGDNn8ItyaecWCopqIX3s": {
+            "header": "Ofqual subject matter specialist account",
+            "description": "Apply to give specialist advice to Ofqual.",
+            "link_text": "Go to your Ofqual subject matter specialist account",
+            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
             "link_text": "Gwneud cais am wiriad DBS sylfaenol",
@@ -225,6 +232,12 @@
             "link_text": "Ewch i’ch cyfrif LITE",
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
+          "TGygWFxGDNn8ItyaecWCopqIX3s": {
+            "header": "Ofqual subject matter specialist account",
+            "description": "Apply to give specialist advice to Ofqual.",
+            "link_text": "Go to your Ofqual subject matter specialist account",
+            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+          },
           "Dw7Cxas8W7O2usHMHok95elKDRU": {
             "link_text": "Gwneud cais am wiriad DBS sylfaenol",
             "link_href": "https://www.gov.uk/request-copy-criminal-record"
@@ -254,6 +267,12 @@
             "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
             "link_text": "Ewch i’ch cyfrif LITE",
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "ofqual": {
+            "header": "Ofqual subject matter specialist account",
+            "description": "Apply to give specialist advice to Ofqual.",
+            "link_text": "Go to your Ofqual subject matter specialist account",
+            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "dbs": {
             "link_text": "Gwneud cais am wiriad DBS sylfaenol",
@@ -285,6 +304,12 @@
             "link_text": "Ewch i’ch cyfrif LITE",
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
+          "ofqual": {
+            "header": "Ofqual subject matter specialist account",
+            "description": "Apply to give specialist advice to Ofqual.",
+            "link_text": "Go to your Ofqual subject matter specialist account",
+            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+          },
           "dbs": {
             "link_text": "Gwneud cais am wiriad DBS sylfaenol",
             "link_href": "https://www.gov.uk/request-copy-criminal-record"
@@ -315,6 +340,12 @@
             "link_text": "Ewch i’ch cyfrif LITE",
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
+          "ofqual": {
+            "header": "Ofqual subject matter specialist account",
+            "description": "Apply to give specialist advice to Ofqual.",
+            "link_text": "Go to your Ofqual subject matter specialist account",
+            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+          },
           "dbs": {
             "link_text": "Gwneud cais am wiriad DBS sylfaenol",
             "link_href": "https://www.gov.uk/request-copy-criminal-record"
@@ -344,6 +375,12 @@
             "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
             "link_text": "Ewch i’ch cyfrif LITE",
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+          },
+          "ofqual": {
+            "header": "Ofqual subject matter specialist account",
+            "description": "Apply to give specialist advice to Ofqual.",
+            "link_text": "Go to your Ofqual subject matter specialist account",
+            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "dbs": {
             "link_text": "Gwneud cais am wiriad DBS sylfaenol",
