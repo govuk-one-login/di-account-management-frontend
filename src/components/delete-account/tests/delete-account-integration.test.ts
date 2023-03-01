@@ -45,7 +45,7 @@ describe("Integration:: delete account", () => {
     },
   ];
 
-  function stubGetServicesToReturn(serviceList: Service[]) {
+  function stubGetAllowedListServicesToReturn(serviceList: Service[]) {
     yourServicesStub.callsFake(function (): Service[] {
       return serviceList;
     });
@@ -57,7 +57,7 @@ describe("Integration:: delete account", () => {
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
     const yourServices = require("../../../utils/yourServices");
     sandbox = sinon.createSandbox();
-    yourServicesStub = sandbox.stub(yourServices, "getServices");
+    yourServicesStub = sandbox.stub(yourServices, "getAllowedListServices");
     sandbox
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
@@ -136,12 +136,12 @@ describe("Integration:: delete account", () => {
   });
 
   it("should return delete account page", (done) => {
-    stubGetServicesToReturn(aSingleService);
+    stubGetAllowedListServicesToReturn(aSingleService);
     request(app).get(PATH_DATA.DELETE_ACCOUNT.url).expect(200, done);
   });
 
   it("should display generic content if no services exist", (done) => {
-    stubGetServicesToReturn([]);
+    stubGetAllowedListServicesToReturn([]);
 
     request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
@@ -155,7 +155,7 @@ describe("Integration:: delete account", () => {
   });
 
   it("should display GovUk subscription info if publishing service exists", (done) => {
-    stubGetServicesToReturn(manyServicesIncludingGovUkPublishing);
+    stubGetAllowedListServicesToReturn(manyServicesIncludingGovUkPublishing);
 
     request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
@@ -168,7 +168,7 @@ describe("Integration:: delete account", () => {
   });
 
   it("should not display subscription info if publishing service does not exists", (done) => {
-    stubGetServicesToReturn(aSingleService);
+    stubGetAllowedListServicesToReturn(aSingleService);
 
     request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
