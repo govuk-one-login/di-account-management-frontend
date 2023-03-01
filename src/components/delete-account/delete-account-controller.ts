@@ -12,16 +12,20 @@ import {
   getManageGovukEmailsUrl,
   supportDeleteServiceStore,
   getSNSDeleteTopic,
-  getAllowedAccountListClientIDs,
 } from "../../config";
 
 import { destroyUserSessions } from "../../utils/session-store";
+<<<<<<< Updated upstream
 import {
   containsGovUkPublishingService,
   presentYourServices,
 } from "../../utils/yourServices";
 import { Service } from "../../utils/types";
-import { combineAllowedServiceList } from "../../utils/yourServices";
+=======
+import { containsGovUkPublishingService } from "../../utils/yourServices";
+import { Service } from "../../utils/types";
+import { getAllowedListServices } from "../../utils/yourServices";
+>>>>>>> Stashed changes
 
 export async function deleteAccountGet(
   req: Request,
@@ -30,11 +34,14 @@ export async function deleteAccountGet(
   const env = getAppEnv();
   const { user } = req.session;
   if (user && user.subjectId) {
+<<<<<<< Updated upstream
     const serviceData = await presentYourServices(user.subjectId);
-    const services: Service[] = combineAllowedServiceList(
-      serviceData.accountsList,
+    const services: Service[] = serviceData.accountsList.concat(
       serviceData.servicesList
     );
+=======
+    const services: Service[] = await getAllowedListServices(user.subjectId);
+>>>>>>> Stashed changes
     const hasGovUkEmailSubscription: boolean =
       containsGovUkPublishingService(services);
     const data = {
