@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { formatService } from "../../../src/utils/yourServices"
+import { formatService, containsGovUkPublishingService } from "../../../src/utils/yourServices"
 import type { Service } from "../../../src/utils/types";
 
 describe("YourService Util", () => {
@@ -21,6 +21,33 @@ describe("YourService Util", () => {
             expect(formattedService.last_accessed_readable_format).equal("10 January 2023");
           });
     
+    })
+
+    describe("does GovUK Publishing service exist in array", async () => {
+
+        it("return false if array does not contain govUK publishing service", () => {
+            const serviceList: Service[] = [
+                {
+                  client_id: "client_id",
+                  count_successful_logins: 1,
+                  last_accessed: 14567776,
+                  last_accessed_readable_format: "last_accessed_readable_format",
+                },
+              ];
+            expect(containsGovUkPublishingService(serviceList)).equal(false);
+        })
+
+        it("return true if array contains govUK publishing service", () => {
+            const serviceList: Service[] = [
+                {
+                  client_id: "gov-uk",
+                  count_successful_logins: 1,
+                  last_accessed: 14567776,
+                  last_accessed_readable_format: "last_accessed_readable_format",
+                },
+              ];
+            expect(containsGovUkPublishingService(serviceList)).equal(true);
+        })
     })
 })
  
