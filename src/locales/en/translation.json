@@ -176,9 +176,10 @@
         "listItem2": "Apply to become a registered social worker in England",
         "listItem3": "GOV.UK email subscriptions",
         "listItem4": "LITE (Licensing for International Trade and Enterprise)",
-        "listItem5": "Ofqual subject matter specialist account",
-        "listItem6": "Request a basic DBS check",
-        "listItem7": "Sign your mortgage deed",
+        "listItem5": "Modern slavery statement registry",
+        "listItem6": "Ofqual subject matter specialist account",
+        "listItem7": "Request a basic DBS check",
+        "listItem8": "Sign your mortgage deed",
         "paragraph2": "GOV.UK One Login does not work with all government accounts and services yet (for example Government Gateway or Universal Credit).",
         "paragraph3": "In the future, you'll be able to use GOV.UK One Login to access all services on GOV.UK."
       },
@@ -201,6 +202,12 @@
             "description": "Apply to give specialist advice to Ofqual.",
             "link_text": "Go to your Ofqual subject matter specialist account",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+          },
+          "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
+            "header": "Modern slavery statement registry",
+            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+            "link_text": "Go to your modern slavery statement registry account",
+            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
             "header": "Request a basic DBS check",
@@ -240,6 +247,12 @@
             "description": "Apply to give specialist advice to Ofqual.",
             "link_text": "Go to your Ofqual subject matter specialist account",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+          },
+          "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
+            "header": "Modern slavery statement registry",
+            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+            "link_text": "Go to your modern slavery statement registry account",
+            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "Dw7Cxas8W7O2usHMHok95elKDRU": {
             "header": "Request a basic DBS check",
@@ -281,6 +294,12 @@
             "link_text": "Go to your Ofqual subject matter specialist account",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
+          "modernSlavery": {
+            "header": "Modern slavery statement registry",
+            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+            "link_text": "Go to your modern slavery statement registry account",
+            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+          },
           "dbs": {
             "header": "Request a basic DBS check",
             "link_text": "Request a basic DBS check",
@@ -320,6 +339,12 @@
             "description": "Apply to give specialist advice to Ofqual.",
             "link_text": "Go to your Ofqual subject matter specialist account",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+          },
+          "modernSlavery": {
+            "header": "Modern slavery statement registry",
+            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+            "link_text": "Go to your modern slavery statement registry account",
+            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "dbs": {
             "header": "Request a basic DBS check",
@@ -361,6 +386,12 @@
             "link_text": "Go to your Ofqual subject matter specialist account",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
+          "modernSlavery": {
+            "header": "Modern slavery statement registry",
+            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+            "link_text": "Go to your modern slavery statement registry account",
+            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+          },
           "dbs": {
             "header": "Request a basic DBS check",
             "link_text": "Request a basic DBS check",
@@ -400,6 +431,12 @@
             "description": "Apply to give specialist advice to Ofqual.",
             "link_text": "Go to your Ofqual subject matter specialist account",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+          },
+          "modernSlavery": {
+            "header": "Modern slavery statement registry",
+            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+            "link_text": "Go to your modern slavery statement registry account",
+            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "dbs": {
             "header": "Request a basic DBS check",
