@@ -4,7 +4,6 @@ import {
   getAuthFrontEndUrl,
   getGtmId,
   getYourAccountUrl,
-  supportNewAccountHeader,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
@@ -23,7 +22,6 @@ export function setLocalVarsMiddleware(
   res.locals.accountHome = PATH_DATA.YOUR_SERVICES.url;
   res.locals.accountSettings = PATH_DATA.SETTINGS.url;
   res.locals.accountSignOut = PATH_DATA.SIGN_OUT.url;
-  res.locals.supportNewAccountHeader = supportNewAccountHeader();
 
   if (req.cookies && req.cookies.gs) {
     const ids = xss(req.cookies["gs"]).split(".");

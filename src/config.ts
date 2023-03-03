@@ -103,10 +103,6 @@ export function supportLanguageCY(): boolean {
   return process.env.SUPPORT_LANGUAGE_CY === "1";
 }
 
-export function supportNewAccountHeader(): boolean {
-  return process.env.SUPPORT_NEW_ACCOUNT_HEADER === "1";
-}
-
 export function getLogoutTokenMaxAge(): number {
   return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
 }

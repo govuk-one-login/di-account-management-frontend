@@ -33,7 +33,6 @@
 {% endblock %}
 
 {% block header %}
-  {% if supportNewAccountHeader %}
     {{ govukHeader({
       homepageUrl: accountHome,
       productName: 'general.header.productName' | translate,
@@ -42,23 +41,6 @@
     {% if not hideSignOutLink %}
       {% include 'common/layout/navigation.njk' %}
     {% endif %}
-  {% else %}
-    {{ govukHeader({
-        homepageUrl: 'general.header.homepageHref' | translate,
-        navigationClasses: "govuk-header__navigation--end",
-        navigation: false if hideSignOutLink else [
-        {
-          href: accountHome,
-          text: 'general.header.accountLink' | translate,
-          active: true
-        },
-        {
-            href: "/sign-out",
-            text: 'general.header.signOutLink' | translate
-        }
-      ]
-    }) }}
-  {% endif %}
 {% endblock %}
 
 {% block main %}

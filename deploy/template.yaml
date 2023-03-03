@@ -127,7 +127,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
@@ -142,7 +141,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
@@ -157,7 +155,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
@@ -172,7 +169,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
@@ -187,7 +183,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.publishing.service.gov.uk"
       SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
@@ -509,13 +504,6 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTLANGUAGECY,
-                ]
-            - Name: "SUPPORT_NEW_ACCOUNT_HEADER"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTNEWACCOUNTHEADER,
                 ]
             - Name: "AUTH_FRONTEND_URL"
               Value:

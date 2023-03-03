@@ -47,25 +47,5 @@ describe("set-local-vars-middleware", () => {
       expect(res.locals).to.not.have.property("persistentSessionId");
       expect(next).to.be.calledOnce;
     });
-
-    describe("supportNewAccountHeader feature flag", () => {
-      afterEach(() => {
-        delete process.env.SUPPORT_NEW_ACCOUNT_HEADER;
-      })
-
-      it("should set a supportNewAccountHeader to locale from the environment", () => {
-        process.env.SUPPORT_NEW_ACCOUNT_HEADER = "1"
-        setLocalVarsMiddleware(req as Request, res as Response, next);
-        expect(res.locals).to.have.property("supportNewAccountHeader");
-        expect(res.locals.supportNewAccountHeader).to.equal(true);
-      })
-
-      it("should have a false supportNewAccountHeader when SUPPORT_NEW_ACCOUNT_HEADER is 0", () => {
-        process.env.SUPPORT_NEW_ACCOUNT_HEADER = "0"
-        setLocalVarsMiddleware(req as Request, res as Response, next);
-        expect(res.locals).to.have.property("supportNewAccountHeader");
-        expect(res.locals.supportNewAccountHeader).to.equal(false);
-      });
-    });
   });
 });
