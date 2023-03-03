@@ -107,10 +107,6 @@ export function supportNewAccountHeader(): boolean {
   return process.env.SUPPORT_NEW_ACCOUNT_HEADER === "1";
 }
 
-export function supportDeleteServiceStore(): boolean {
-  return process.env.SUPPORT_DELETE_SERVICE_STORE === "1";
-}
-
 export function getLogoutTokenMaxAge(): number {
   return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
 }

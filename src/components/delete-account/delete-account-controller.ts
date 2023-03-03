@@ -6,7 +6,11 @@ import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
-import { getBaseUrl, getManageGovukEmailsUrl, getSNSDeleteTopic, supportDeleteServiceStore } from "../../config";
+import {
+  getBaseUrl,
+  getManageGovukEmailsUrl,
+  getSNSDeleteTopic,
+} from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
 
 export function deleteAccountGet(req: Request, res: Response): void {
@@ -24,13 +28,13 @@ export function deleteAccountPost(
       req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    if (supportDeleteServiceStore()) {
-      const DeleteTopicARN = getSNSDeleteTopic()
-      try {
-        await service.deleteServiceData(subjectId, DeleteTopicARN)
-      } catch (err) {
-        req.log.error(`Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`)
-      }
+    const DeleteTopicARN = getSNSDeleteTopic();
+    try {
+      await service.deleteServiceData(subjectId, DeleteTopicARN);
+    } catch (err) {
+      req.log.error(
+        `Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`
+      );
     }
 
     await service.deleteAccount(
