@@ -1,12 +1,14 @@
 import request from "supertest";
 import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { getBaseUrl } from "../../../config";
+import { Service } from "../../../utils/types";
+import { SinonStub } from "sinon";
 
 describe("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;
@@ -15,14 +17,47 @@ describe("Integration:: delete account", () => {
   let app: any;
   let baseApi: string;
   let govUkPublishingBaseApi: string;
+  let yourServicesStub: SinonStub<any[], any>;
   const idToken = "Idtoken";
   const TEST_SUBJECT_ID = "sub";
+
+  const aSingleService: Service[] = [
+    {
+      client_id: "client_id",
+      count_successful_logins: 1,
+      last_accessed: 14567776,
+      last_accessed_readable_format: "last_accessed_readable_format",
+    },
+  ];
+
+  const manyServicesIncludingGovUkPublishing: Service[] = [
+    {
+      client_id: "client_id",
+      count_successful_logins: 1,
+      last_accessed: 14567776,
+      last_accessed_readable_format: "last_accessed_readable_format",
+    },
+    {
+      client_id: "gov-uk",
+      count_successful_logins: 2,
+      last_accessed: 14567776,
+      last_accessed_readable_format: "last_accessed_readable_format",
+    },
+  ];
+
+  function stubGetAllowedListServicesToReturn(serviceList: Service[]) {
+    yourServicesStub.callsFake(function (): Service[] {
+      return serviceList;
+    });
+  }
 
   before(async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
+    const yourServices = require("../../../utils/yourServices");
     sandbox = sinon.createSandbox();
+    yourServicesStub = sandbox.stub(yourServices, "getAllowedListServices");
     sandbox
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
@@ -91,23 +126,68 @@ describe("Integration:: delete account", () => {
     nock.cleanAll();
   });
 
+  afterEach(() => {
+    yourServicesStub.reset();
+  });
+
   after(() => {
     sandbox.restore();
     app = undefined;
   });
 
   it("should return delete account page", (done) => {
+    stubGetAllowedListServicesToReturn(aSingleService);
     request(app).get(PATH_DATA.DELETE_ACCOUNT.url).expect(200, done);
   });
 
-  it("should return error when csrf not present", (done) => {
+  it("should display generic content if no services exist", (done) => {
+    stubGetAllowedListServicesToReturn([]);
+
+    request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#no-services-content").text()).to.not.be.empty;
+        expect($("#govuk-email-subscription-info").text()).to.be.empty;
+        expect($("#service-list-item").text()).to.be.empty;
+      })
+      .expect(200, done);
+  });
+
+  it("should display GovUk subscription info if publishing service exists", (done) => {
+    stubGetAllowedListServicesToReturn(manyServicesIncludingGovUkPublishing);
+
+    request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#govuk-email-subscription-info").text()).to.not.be.empty;
+        expect($("#service-list-item").text()).to.not.be.empty;
+      })
+      .expect(200, done);
+  });
+
+  it("should not display subscription info if publishing service does not exists", (done) => {
+    stubGetAllowedListServicesToReturn(aSingleService);
+
+    request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#service-list-item").text()).to.not.be.empty;
+        expect($("#govuk-email-subscription-info").text()).to.be.empty;
+      })
+      .expect(200, done);
+  });
+
+  it("post should return error when csrf not present", (done) => {
     request(app)
       .post(PATH_DATA.DELETE_ACCOUNT.url)
       .type("form")
       .expect(500, done);
   });
 
-  it("should redirect to end session endpoint", (done) => {
+  it("post should redirect to end session endpoint", (done) => {
     nock(baseApi).post(API_ENDPOINTS.DELETE_ACCOUNT).once().reply(204);
     nock(govUkPublishingBaseApi)
       .delete(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
