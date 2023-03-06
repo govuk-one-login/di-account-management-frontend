@@ -121,9 +121,11 @@ export const getAllowedAccountListClientIDs: string[] = [
   "JO3ET6EtFN3FzjGC3yRP2qpuoHQ",
   "CEr97IZfEPQFgBxq8QNcM8LFxw4",
   "TGygWFxGDNn8ItyaecWCopqIX3s",
+  "pDqO7_Hu-pq5wam5I4MlURXrv5k",
   "gov-uk",
   "lite",
   "ofqual",
+  "modernSlavery",
 ];
 
 export const getAllowedServiceListClientIDs: string[] = [
