@@ -11,7 +11,6 @@ session_expiry                            = 1800000
 gtm_id                                    = ""
 gov_accounts_publishing_api_url           = ""
 gov_account_publishing_api_token          = ""
-support_international_numbers             = 1
 support_language_cy                       = "1"
 support_mfa_options                       = "1"
 account_management_task_definition_cpu    = 256
