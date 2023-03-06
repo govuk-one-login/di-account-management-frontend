@@ -176,8 +176,8 @@
         "listItem2": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
         "listItem3": "Tanysgrifiadau e-byst GOV.UK",
         "listItem4": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-        "listItem5": "Modern slavery statement registry",
-        "listItem6": "Ofqual subject matter specialist account",
+        "listItem5": "Cofrestrfa datganiad caethwasiaeth modern",
+        "listItem6": "Cyfrif arbenigwr pwnc Ofqual",
         "listItem7": "Gwneud cais am wiriad DBS sylfaenol",
         "listItem8": "Llofnodwch eich gweithred morgais",
         "paragraph2": "Nid yw GOV.UK One Login yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
@@ -198,15 +198,15 @@
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
           "TGygWFxGDNn8ItyaecWCopqIX3s": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
+            "header": "Cyfrif arbenigwr pwnc Ofqual",
+            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
+            "header": "Cofrestrfa datganiad caethwasiaeth modern",
+            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
             "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
@@ -243,15 +243,15 @@
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
           "TGygWFxGDNn8ItyaecWCopqIX3s": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
+            "header": "Cyfrif arbenigwr pwnc Ofqual",
+            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
+            "header": "Cofrestrfa datganiad caethwasiaeth modern",
+            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
             "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "Dw7Cxas8W7O2usHMHok95elKDRU": {
@@ -289,15 +289,15 @@
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
           "ofqual": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
+            "header": "Cyfrif arbenigwr pwnc Ofqual",
+            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "modernSlavery": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
+            "header": "Cofrestrfa datganiad caethwasiaeth modern",
+            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
             "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "dbs": {
@@ -335,15 +335,15 @@
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
           "ofqual": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
+            "header": "Cyfrif arbenigwr pwnc Ofqual",
+            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "modernSlavery": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
+            "header": "Cofrestrfa datganiad caethwasiaeth modern",
+            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
             "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "dbs": {
@@ -381,15 +381,15 @@
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
           "ofqual": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
+            "header": "Cyfrif arbenigwr pwnc Ofqual",
+            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "modernSlavery": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
+            "header": "Cofrestrfa datganiad caethwasiaeth modern",
+            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
             "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "dbs": {
@@ -427,15 +427,15 @@
             "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
           },
           "ofqual": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
+            "header": "Cyfrif arbenigwr pwnc Ofqual",
+            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
             "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
           },
           "modernSlavery": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
+            "header": "Cofrestrfa datganiad caethwasiaeth modern",
+            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
             "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
           },
           "dbs": {
@@ -613,10 +613,9 @@
       "title": "Ydych chi'n siwr eich bod eisiau dileu eich GOV.UK One Login?",
       "header": "Ydych chi'n siwr eich bod eisiau dileu eich GOV.UK One Login?",
       "paragraph1": "Bydd hyn yn dileu eich manylion mewngofnodi GOV.UK One Login yn barhaol.",
-      "paragraph2": "Ni fyddwch bellach yn gallu mewngofnodi i ddefnyddio:",
-      "paragraph3": "Bydd hyn hefyd yn dileu eich tanysgrifiadau e-bost GOV.UK.",
-      "paragraph4a": "Ni fydd yn dileu'r wybodaeth bersonol a gedwir gan wasanaethau rydych wedi'u defnyddio gyda'ch GOV.UK One Login.",
-      "paragraph4b": "Ni fydd yn dileu'r wybodaeth bersonol a gedwir gan wasanaethau rydych wedi'u defnyddio.",
+      "paragraph2": "Mae hyn yn golygu na fyddwch bellach yn gallu cael mynediad i'r gwasanaethau rydych yn eu defnyddio gyda'ch GOV.UK One Login.",
+      "paragraph3": "Os oes gennych <a class=\"govuk-link\" href=\"[emailManagementLink]\">danysgrifiadau e-byst GOV.UK</a>, bydd y rhain hefyd yn cael eu dileu.",
+      "paragraph4": "Ni fydd yn dileu'r wybodaeth bersonol a gedwir gan wasanaethau rydych wedi'u defnyddio gyda'ch GOV.UK One Login.",
       "paragraph5": "Os byddwch angen GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
       "details": "Ni fydd dileu eich GOV.UK One Login yn effeithio ar unrhyw gyfrifon eraill y llywodraeth sydd gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.",
       "deleteAccount": "Dileu eich GOV.UK One Login",
