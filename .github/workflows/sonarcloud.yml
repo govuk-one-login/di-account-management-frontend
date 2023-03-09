@@ -29,7 +29,6 @@ jobs:
     env:
       API_BASE_URL: http://localhost:6000/api
       AM_API_BASE_URL: http://localhost:5000/api
-      SUPPORT_INTERNATIONAL_NUMBERS: 1
       GOV_ACCOUNTS_PUBLISHING_API_URL: http://localhost:1000/api
       GOV_ACCOUNTS_PUBLISHING_API_TOKEN: token
       AM_YOUR_ACCOUNT_URL: some url

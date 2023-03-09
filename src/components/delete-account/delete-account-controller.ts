@@ -10,7 +10,6 @@ import {
   getAppEnv,
   getBaseUrl,
   getManageGovukEmailsUrl,
-  supportDeleteServiceStore,
   getSNSDeleteTopic,
 } from "../../config";
 
@@ -55,15 +54,13 @@ export function deleteAccountPost(
       req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    if (supportDeleteServiceStore()) {
-      const DeleteTopicARN = getSNSDeleteTopic();
-      try {
-        await service.deleteServiceData(subjectId, DeleteTopicARN);
-      } catch (err) {
-        req.log.error(
-          `Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`
-        );
-      }
+    const DeleteTopicARN = getSNSDeleteTopic();
+    try {
+      await service.deleteServiceData(subjectId, DeleteTopicARN);
+    } catch (err) {
+      req.log.error(
+        `Unable to publish delete topic message for: ${subjectId} and ARN ${DeleteTopicARN}. Error:${err}`
+      );
     }
 
     await service.deleteAccount(

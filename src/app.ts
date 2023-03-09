@@ -13,12 +13,7 @@ import session from "express-session";
 import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
-import {
-  getNodeEnv,
-  getSessionExpiry,
-  getSessionSecret,
-  supportServiceCards,
-} from "./config";
+import { getNodeEnv, getSessionExpiry, getSessionSecret } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
 import { serverErrorHandler } from "./handlers/internal-server-error-handler";
@@ -120,9 +115,7 @@ async function createApp(): Promise<express.Application> {
   app.use(setHtmlLangMiddleware);
 
   app.use(manageYourAccountRouter);
-  if (supportServiceCards()) {
-    app.use(yourServicesRouter);
-  }
+  app.use(yourServicesRouter);
   app.use(oidcAuthCallbackRouter);
   app.use(startRouter);
   app.use(logoutRouter);

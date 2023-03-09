@@ -146,10 +146,6 @@ variable "logging_endpoint_arns" {
   description = "Amazon Resource Name (ARN) for the CSLS endpoints to ship logs to"
 }
 
-variable "support_international_numbers" {
-  type = string
-}
-
 variable "support_language_cy" {
   type = string
 }

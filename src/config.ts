@@ -14,7 +14,9 @@ export function getLocalStackBaseUrl(): string {
   //  Env var LOCALSTACK_HOSTNAME used by docker-compose.yml because host mode does not work in Docker for Mac
   //  and thus it uses host.docker.internal as the hostname to get to localstack.
   //  Github actions does not support host.docker.internal and therefore uses localhost hostname to get to localstack.
-  const host = "LOCALSTACK_HOSTNAME" in process.env && process.env.LOCALSTACK_HOSTNAME.trim().length > 0
+  const host =
+    "LOCALSTACK_HOSTNAME" in process.env &&
+    process.env.LOCALSTACK_HOSTNAME.trim().length > 0
       ? process.env.LOCALSTACK_HOSTNAME.trim()
       : "localhost";
   return `http://${host}:4566`;
@@ -93,24 +95,8 @@ export function getSessionStoreTableName(): string {
   return process.env.SESSION_STORE_TABLE_NAME;
 }
 
-export function supportInternationalNumbers(): boolean {
-  return process.env.SUPPORT_INTERNATIONAL_NUMBERS === "1";
-}
-
 export function supportLanguageCY(): boolean {
   return process.env.SUPPORT_LANGUAGE_CY === "1";
-}
-
-export function supportNewAccountHeader(): boolean {
-  return process.env.SUPPORT_NEW_ACCOUNT_HEADER === "1";
-}
-
-export function supportDeleteServiceStore(): boolean {
-  return process.env.SUPPORT_DELETE_SERVICE_STORE === "1";
-}
-
-export function supportServiceCards(): boolean {
-  return process.env.SUPPORT_SERVICE_CARDS === "1";
 }
 
 export function getLogoutTokenMaxAge(): number {

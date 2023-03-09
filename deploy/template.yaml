@@ -125,11 +125,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
-      SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
-      SUPPORTDELETESERVICESTORE: "1"
-      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
@@ -142,11 +138,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
-      SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
-      SUPPORTDELETESERVICESTORE: "1"
-      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
@@ -159,11 +151,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
-      SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
-      SUPPORTDELETESERVICESTORE: "1"
-      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
@@ -176,11 +164,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
-      SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
-      SUPPORTDELETESERVICESTORE: "1"
-      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
@@ -193,11 +177,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "account-api.publishing.service.gov.uk"
-      SUPPORTINTERNATIONALNUMBERS: "1"
       SUPPORTLANGUAGECY: "1"
-      SUPPORTNEWACCOUNTHEADER: "1"
-      SUPPORTDELETESERVICESTORE: "1"
-      SUPPORTSERVICECARDS: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
@@ -506,40 +486,12 @@ Resources:
                 ]
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_TOKEN"
               Value: !Sub "{{resolve:secretsmanager:/${AWS::StackName}/Config/Publishing/API/Key}}"
-            - Name: "SUPPORT_INTERNATIONAL_NUMBERS"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTINTERNATIONALNUMBERS,
-                ]
             - Name: "SUPPORT_LANGUAGE_CY"
               Value:
                 !FindInMap [
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTLANGUAGECY,
-                ]
-            - Name: "SUPPORT_NEW_ACCOUNT_HEADER"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTNEWACCOUNTHEADER,
-                ]
-            - Name: "SUPPORT_DELETE_SERVICE_STORE"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTDELETESERVICESTORE,
-                ]
-            - Name: "SUPPORT_SERVICE_CARDS"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTSERVICECARDS,
                 ]
             - Name: "AUTH_FRONTEND_URL"
               Value:
@@ -1585,7 +1537,7 @@ Resources:
     Type: AWS::CloudWatch::Dashboard
     Properties:
       DashboardBody:
-        !Sub >- 
+        !Sub >-
        {
         "start": "-PT6H",
         "periodOverride": "inherit",
@@ -1828,7 +1780,7 @@ Resources:
                  "region": "${AWS::Region}",
                  "metrics": [
                    [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "GetItem"],
-                   [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "PutItem"],   
+                   [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "PutItem"],
                    [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "UpdateItem"],
                    [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "DeleteItem"]
                  ],

@@ -4,7 +4,6 @@ import { ExpressRouteFunc } from "../../types";
 import { ChangePhoneNumberServiceInterface } from "./types";
 import { changePhoneNumberService } from "./change-phone-number-service";
 import { getNextState } from "../../utils/state-machine";
-import { supportInternationalNumbers } from "../../config";
 import {
   formatValidationError,
   renderBadRequest,
@@ -16,9 +15,7 @@ import xss from "xss";
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
-  res.render("change-phone-number/index.njk", {
-    supportInternationalNumbers: supportInternationalNumbers() ? true : null,
-  });
+  res.render("change-phone-number/index.njk");
 }
 
 export function changePhoneNumberPost(
@@ -30,11 +27,7 @@ export function changePhoneNumberPost(
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
     let newPhoneNumber;
 
-    if (
-      hasInternationalPhoneNumber &&
-      hasInternationalPhoneNumber === "true" &&
-      supportInternationalNumbers()
-    ) {
+    if (hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true") {
       newPhoneNumber = prependInternationalPrefix(
         req.body.internationalPhoneNumber
       );
@@ -64,10 +57,10 @@ export function changePhoneNumberPost(
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
-      
-      const href: string = (
-        hasInternationalPhoneNumber &&
-        hasInternationalPhoneNumber === "true") ? "internationalPhoneNumber" : "phoneNumber";
+      const href: string =
+        hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true"
+          ? "internationalPhoneNumber"
+          : "phoneNumber";
 
       const error = formatValidationError(
         href,
