@@ -1454,25 +1454,10 @@ available-typed-arrays@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz"
 
-aws-sdk@2.1261.0:
-  version "2.1261.0"
-  resolved "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1261.0.tgz"
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.16.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    util "^0.12.4"
-    uuid "8.0.0"
-    xml2js "0.4.19"
-
-aws-sdk@^2.1264.0:
-  version "2.1311.0"
-  resolved "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1311.0.tgz"
-  integrity sha512-X3cFNsfs3HUfz6LKiLqvDTO4EsqO5DnNssh9SOoxhwmoMyJ2et3dEmigO6TaA44BjVNdLW98+sXJVPTGvINY1Q==
+aws-sdk@2.1332.0, aws-sdk@^2.1264.0:
+  version "2.1332.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1332.0.tgz#101482e088cc9f8dca1a2bdaab3fa091ba806f87"
+  integrity sha512-WuzpeiVv+80gPDv+foHTDap0FW0OkBax+wXf8frm1mub0aBOAGJ2rGnTaCbNVPOZ5zbMFSiEuODvlebMdWBnRg==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
