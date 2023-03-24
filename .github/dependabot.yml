@@ -8,6 +8,7 @@ updates:
     target-branch: main
     labels:
     - dependabot
+    - dependencies
     ignore:
       - dependency-name: "node"
         versions: ["17.x","18.x"]
@@ -21,5 +22,6 @@ updates:
     target-branch: main
     labels:
     - dependabot
+    - dependencies
     commit-message:
       prefix: BAU
