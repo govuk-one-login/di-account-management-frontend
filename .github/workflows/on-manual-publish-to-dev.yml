@@ -62,7 +62,7 @@ jobs:
       - name: Fetch Commit SHA by Tag
         id: gitRefTag
         if: ${{ github.event.inputs.choice }} == "Tag"
-        run : echo GIT_REF_SHA=$(git rev-list -n 1 ${{ inputs.gitRef }}) >> $GITHUB_ENV
+        run: echo GIT_REF_SHA=$(git rev-list -n 1 ${{ inputs.gitRef }}) >> $GITHUB_ENV
 
       - name: Set tag
         id: vars
