@@ -1,8 +1,8 @@
 import { Issuer, Client, custom, generators } from "openid-client";
 import { OIDCConfig } from "../types";
-import pMemoize = require("p-memoize");
 import { ClientAssertionServiceInterface, KmsService } from "./types";
 import { kmsService } from "./kms";
+import pMemoize from "p-memoize";
 import base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
