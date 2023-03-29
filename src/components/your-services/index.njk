@@ -1,6 +1,8 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.yourServices.title' | translate %}
+{% set serviceLinks =  'pages.yourServices.informationBox.details.listItems' | translate({ returnObjects: true }) %}
 {% set activeNav = 'your-services' %}
 {% set showSecondaryHeadings = servicesList.length and accountsList.length %}
 {% set serviceHeadingLevel =  "h3" if showSecondaryHeadings else "h2" %}
@@ -63,20 +65,21 @@
         {% endfor %}
       </ul>
       {% endif %}
+      {% set detailsHTML %}
+        <p class="govuk-body">{{ 'pages.yourServices.informationBox.details.paragraph' | translate }}</p>
+         <ul class="govuk-list govuk-list--bullet">
+          {% for serviceLink in serviceLinks %}
+            <li><a class="govuk-link" href="{{ serviceLink["href"] }}">{{ serviceLink["text"] }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endset %}
       <div class="information-box">
         <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
         <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph1' | translate }}</p>
-        <ul class="govuk-list govuk-list--bullet">
-
-          <li>{{ 'pages.yourServices.informationBox.listItem1' | translate }}</li>
-          <li>{{ 'pages.yourServices.informationBox.listItem2' | translate }}</li>
-          <li>{{ 'pages.yourServices.informationBox.listItem3' | translate }}</li>
-          <li>{{ 'pages.yourServices.informationBox.listItem4' | translate }}</li>
-          <li>{{ 'pages.yourServices.informationBox.listItem5' | translate }}</li>
-          <li>{{ 'pages.yourServices.informationBox.listItem6' | translate }}</li>
-          <li>{{ 'pages.yourServices.informationBox.listItem7' | translate }}</li>
-          <li>{{ 'pages.yourServices.informationBox.listItem8' | translate }}</li>
-        </ul>
+        {{ govukDetails({
+          summaryText: 'pages.yourServices.informationBox.details.summary' | translate,
+          html: detailsHTML
+        }) }}
         <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph2' | translate }}</p>
         <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph3' | translate }}</p>
       </div>
