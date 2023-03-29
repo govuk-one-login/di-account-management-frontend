@@ -15,7 +15,7 @@ async function getIssuer(discoveryUri: string) {
   return await Issuer.discover(discoveryUri);
 }
 
-const cachedIssuer = pMemoize(getIssuer, { maxAge: 43200000 });
+const cachedIssuer = pMemoize(getIssuer);
 
 async function getOIDCClient(config: OIDCConfig): Promise<Client> {
   const issuer = await cachedIssuer(config.idp_url);
@@ -37,9 +37,9 @@ async function getJWKS(config: OIDCConfig) {
   });
 }
 
-const cached = pMemoize(getOIDCClient, { maxAge: 43200000 });
+const cached = pMemoize(getOIDCClient);
 
-const cachedJwks = pMemoize(getJWKS, { maxAge: 43200000 });
+const cachedJwks = pMemoize(getJWKS);
 
 function isTokenExpired(token: string): boolean {
   const decodedToken = decodeJwt(token);
