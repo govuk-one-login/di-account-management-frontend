@@ -8,4 +8,4 @@ WORKDIR /app
 
 EXPOSE $PORT
 
-CMD yarn install && yarn copy-assets && yarn dev
+CMD npm install && npm run copy-assets && npm run dev
