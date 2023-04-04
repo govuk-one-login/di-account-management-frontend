@@ -1,6 +1,7 @@
 import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
+import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
@@ -116,7 +117,7 @@ describe("Integration::enter password", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#password-error").text()).to.contains("Enter your password");
+        expect($(testComponent('password-error')).text()).to.contains("Enter your password");
       })
       .expect(400, done);
   });
@@ -136,7 +137,7 @@ describe("Integration::enter password", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#password-error").text()).to.contains(
+        expect($(testComponent('password-error')).text()).to.contains(
           "Enter the correct password"
         );
       })

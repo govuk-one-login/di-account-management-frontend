@@ -1,5 +1,6 @@
 import request from "supertest";
 import { describe } from "mocha";
+import { testComponent } from "../../../../test/utils/helpers";
 import { expect, sinon } from "../../../../test/utils/test-utils";
 import * as cheerio from "cheerio";
 import * as nock from "nock";
@@ -32,7 +33,7 @@ describe("Integration:: your services", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($("[data-test-id='empty-state']").length).to.not.equal(0);
+        expect($(testComponent('empty-state')).length).to.not.equal(0);
       });
   });
 
@@ -43,8 +44,8 @@ describe("Integration:: your services", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($("h2[data-test-id='accounts-heading']").length).to.equal(0);
-        expect($("h2[data-test-id='account-card-heading']").length).to.not.equal(0);
+        expect($(`h2${testComponent('accounts-heading')}`).length).to.equal(0);
+        expect($(`h2${testComponent('account-card-heading')}`).length).to.not.equal(0);
       });
   });
 
@@ -55,8 +56,8 @@ describe("Integration:: your services", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($("h2[data-test-id='services-heading']").length).to.equal(0);
-        expect($("h2[data-test-id='service-card-heading']").length).to.not.equal(0);
+        expect($(`h2${testComponent('services-heading')}`).length).to.equal(0);
+        expect($(`h2${testComponent('service-card-heading')}`).length).to.not.equal(0);
       });
   });
 
@@ -68,10 +69,10 @@ describe("Integration:: your services", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($("h3[data-test-id='account-card-heading']").length).to.not.equal(0);
-        expect($("h3[data-test-id='service-card-heading']").length).to.not.equal(0);
-        expect($("h2[data-test-id='services-heading']").length).to.not.equal(0);
-        expect($("h2[data-test-id='accounts-heading']").length).to.not.equal(0);
+        expect($(`h3${testComponent('account-card-heading')}`).length).to.not.equal(0);
+        expect($(`h3${testComponent('service-card-heading')}`).length).to.not.equal(0);
+        expect($(`h2${testComponent('services-heading')}`).length).to.not.equal(0);
+        expect($(`h2${testComponent('accounts-heading')}`).length).to.not.equal(0);
       });
   });
 });

@@ -12,7 +12,8 @@
             type: "password",
             spellcheck: false,
             errorMessage: {
-                text: errors[id].text
+                text: errors[id].text,
+                attributes: { "data-test-id": id + "-error"}
             } if (errors[id])})
         }}
     </div>

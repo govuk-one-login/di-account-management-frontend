@@ -1,6 +1,7 @@
 import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
+import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
@@ -108,7 +109,7 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#email-error").text()).to.contains(
+        expect($(testComponent('email-error')).text()).to.contains(
           "Enter your email address"
         );
       })
@@ -126,7 +127,7 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page("#email-error").text()).to.contains(
+        expect(page(testComponent('email-error')).text()).to.contains(
           "Enter an email address in the correct format, like name@example.com"
         );
       })
@@ -144,7 +145,7 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page("#email-error").text()).to.contains(
+        expect(page(testComponent('email-error')).text()).to.contains(
           "You are already using that email address. Enter a different email address."
         );
       })
@@ -163,7 +164,7 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page("#email-error").text()).to.contains(
+        expect(page(testComponent('email-error')).text()).to.contains(
           "There’s already a GOV.UK One Login using that email address. Enter a different email address."
         );
       })

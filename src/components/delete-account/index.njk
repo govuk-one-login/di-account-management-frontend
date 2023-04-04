@@ -19,20 +19,20 @@
     {% for service in services %}
 
       {% set locale = ['pages.yourServices.clientRegistry.', env, '.', service.client_id, '.'] | join %}
-        <li id="service-list-item">{{ [locale, 'header'] | join | translate }}</li>
+        <li data-test-id="service-list-item">{{ [locale, 'header'] | join | translate }}</li>
 
     {% endfor %}
     </ul>
     {% if hasGovUkEmailSubscription %}
-      <p class="govuk-body" id="govuk-email-subscription-info">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
+      <p class="govuk-body" data-test-id="govuk-email-subscription-info">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
     {% endif %}
   <p class="govuk-body">{{ 'pages.deleteAccount.paragraph4b' | translate }}</p>
   {% endif %}
 
   {% if not services.length %}
-<p class="govuk-body", id="no-services-content">{{ 'pages.deleteAccount.paragraph4a' | translate }}</p>
- {% endif %}
-<p class="govuk-body">{{ 'pages.deleteAccount.paragraph5' | translate }}</p>
+    <p class="govuk-body", data-test-id="no-services-content">{{ 'pages.deleteAccount.paragraph4a' | translate }}</p>
+  {% endif %}
+  <p class="govuk-body">{{ 'pages.deleteAccount.paragraph5' | translate }}</p>
 
 {{ govukInsetText({
   text: 'pages.deleteAccount.details' | translate
