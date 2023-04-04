@@ -11,7 +11,7 @@ on:
       - "test/**"
       - "@types/**"
       - "package.json"
-      - "yarn.lock"
+      - "package-lock.json"
       - "tsconfig.json"
       - ".github/workflows/build-test-application.yml"
     branches-ignore:
@@ -58,20 +58,20 @@ jobs:
         with:
           node-version-file: .node-version
 
-      - name: Install dependencies defined in yarn.lock
-        run: yarn install --frozen-lockfile
+      - name: Install dependencies defined in package.json as a clean install
+        run: npm ci
 
       - name: Build app
-        run: yarn build
+        run: npm run build
 
       - name: Run unit tests
-        run: yarn test:unit
+        run: npm run test:unit
 
       - name: Run integration tests
-        run: yarn test:integration
+        run: npm run test:integration
 
       - name: Run lint
-        run: yarn lint
+        run: npm run lint
     env:
       API_BASE_URL: http://localhost:6000/api
       AM_API_BASE_URL: http://localhost:5000/api

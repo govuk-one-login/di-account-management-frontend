@@ -1,11 +1,11 @@
 FROM node:16.19.1-alpine@sha256:0fcf4fb718a763fa53ac8d60073a7cd7dc1520076e08ea0180591174122e52f3 as builder
 WORKDIR /app
 COPY package.json ./
-COPY yarn.lock ./
+COPY package-lock.json ./
 COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
-RUN yarn install && yarn build && yarn clean-modules && yarn install --production=true
+RUN npm install && npm run build && npm run clean-modules && npm install --production=true
 
 FROM node:16.19.1@sha256:0fcf4fb718a763fa53ac8d60073a7cd7dc1520076e08ea0180591174122e52f3 as final
 WORKDIR /app
@@ -18,4 +18,4 @@ ENV PORT 6001
 
 EXPOSE $PORT
 USER node
-CMD ["yarn", "start"]
+CMD ["npm", "start"]

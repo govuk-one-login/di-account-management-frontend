@@ -1,11 +1,12 @@
 # di-account-management-frontend
 
-[![Application Integration and Deployment](https://github.com/alphagov/di-account-management-frontend/actions/workflows/main.yml/badge.svg)](https://github.com/alphagov/di-account-management-frontend/actions/workflows/main.yml)  
+[![Application Integration and Deployment](https://github.com/alphagov/di-account-management-frontend/actions/workflows/main.yml/badge.svg)](https://github.com/alphagov/di-account-management-frontend/actions/workflows/main.yml)
 Also known as the Account Management Frontend (AMF).
 
 ## Clone the repo
 
 Clone this repo to your local machine
+
 ```bash
 git clone git@github.com:alphagov/di-account-management-frontend.git ./your_folder_name
 ```
@@ -17,7 +18,6 @@ Clones the repository to the `your_folder_name` directory.
 Before you can run the frontend app against the backend you will need a usable client and configuration.
 
 ### Configure or find a usable client
-
 
 The client created by the pipeline is not currently usable by a local account management application as the private key is not available and it does not redirect to local clients. To run account management locally you will need to configure another client.
 
@@ -61,10 +61,10 @@ Changes made locally will automatically be deployed after a few seconds. You sho
 ### Provisioning localstack
 
 The application is now quite tightly integrated into AWS services.
-For certain features to run locally, we'll need localstack running and provisioned to facilitate requests.  
+For certain features to run locally, we'll need localstack running and provisioned to facilitate requests.
 
 The provisioning of the infra in localstack is done automatically on startup when calling `docker compose up`.
-The provisioning and setup of the infra is done by following script, 
+The provisioning and setup of the infra is done by following script,
 [provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh).
 The script is mounted as volume onto localstack and invoked as soon as the container is ready.
 
@@ -87,28 +87,31 @@ aws configure set region "eu-west-2" --profile test-profile
 ```
 
 #### DynamoDB
+
 The user service store uses DynamoDB to render service cards on the root page of the application.
 If that fails to connect the application may throw an error or not render any cards.
 
-The `user_services` Dynamo table in localstack is provisioned with a user service record populated with a `user_id`. 
-The `user_id` value can be overridden in the 
-[provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh) 
-by explicitly setting `MY_ONE_LOGIN_USER_ID` env var in the same terminal where `docker compose up` is executed.  
+The `user_services` Dynamo table in localstack is provisioned with a user service record populated with a `user_id`.
+The `user_id` value can be overridden in the
+[provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh)
+by explicitly setting `MY_ONE_LOGIN_USER_ID` env var in the same terminal where `docker compose up` is executed.
 For this to work you will need to get your-subject-id from the build environment or session.
 
 ```bash
 export MY_ONE_LOGIN_USER_ID=<your-subject-id>
 ```
+
 Or [provide it on line 7](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh#L7).
 
 A DynamoDB table also provides tha applications session store, which automatically deletes expired sessions.
-To facilitate destroying all sessions for a user upon account deletion or global logout, 
+To facilitate destroying all sessions for a user upon account deletion or global logout,
 the session store table has an index to allows the application to find all sessions by user.
 
 The session store resources are also provisioned in localstack through the
 [provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh)
 
 ### Running the tests
+
 The unit tests have been written with Mocha and Supertest.
 
 If the app is run in a container then the tests are run there too:
@@ -116,13 +119,15 @@ If the app is run in a container then the tests are run there too:
 ```shell script
 docker exec -it di-auth-account-management-frontend-dev /bin/sh
 
-# yarn run test:unit
+# npm run test:unit
 ```
 
 ### Restarting the app
+
 You can restart the app by re-running the `docker compose down` and then `docker compose up`.
 
 ## Deploying to the development AWS account
+
 We can deploy the app to our development environment for pre-merge testing.
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
 Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
@@ -143,6 +148,7 @@ To deploy the app:
 9. Go to https://home.dev.account.gov.uk to see the app (VPN required)
 
 ## Branch Deploys
+
 We can deploy the app to our development environment (`di-account-dev`) for pre-merge testing.
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
 Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
@@ -165,14 +171,14 @@ To deploy the app:
 1. Wait for the pipeline to finish
 1. Go to https://home.dev.account.gov.uk to see the app (VPN required)
 
-## Other useful yarn commands
+## Other useful npm commands
 
 ### Development
 
 > To run the app in development mode with nodemon watching the files
 
 ```shell script
-yarn dev
+npm run dev
 ```
 
 Starts a nodemon server serving the files from the `dist/`
@@ -183,7 +189,7 @@ directory.
 > To build the app
 
 ```shell script
-yarn build
+npm run build
 ```
 
 ### Start
@@ -191,7 +197,7 @@ yarn build
 > To run the built app
 
 ```shell script
-yarn start
+npm start
 ```
 
 Starts a node server pointing to the entry point found in
@@ -202,7 +208,7 @@ the build directory.
 > To run the unit tests
 
 ```shell script
-yarn test:unit
+npm run test:unit
 ```
 
 Runs all unit tests found in the `tests/unit/` directory
@@ -213,15 +219,15 @@ using mocha.
 > To run the integration tests
 
 ```shell script
-yarn test:integration
+npm run test:integration
 ```
 
 ### Install dependencies
 
-> To install dependencies, run yarn install
+> To install dependencies, run npm install
 
 ```shell script
-yarn install
+npm install
 ```
 
 Installs the dependencies required to run the application.
@@ -231,7 +237,7 @@ Installs the dependencies required to run the application.
 > To get a coverage report
 
 ```shell script
-yarn test:coverage
+npm run test:coverage
 ```
 
 ### Linting
@@ -239,7 +245,7 @@ yarn test:coverage
 > To run lint checks
 
 ```shell script
-yarn lint
+npm run lint
 ```
 
 Checks if the code conforms the linting standards.
