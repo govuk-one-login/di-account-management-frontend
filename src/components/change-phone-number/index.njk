@@ -28,7 +28,8 @@
   type: "tel",
   autocomplete: "tel",
   errorMessage: {
-  text: errors['phoneNumber'].text
+    attributes: { "data-test-id": "phoneNumber-error"},
+    text: errors['phoneNumber'].text
   } if (errors['phoneNumber'])})
   }}
 
@@ -46,7 +47,8 @@
         text: 'pages.changePhoneNumber.internationalPhoneNumber.hint' | translate
       },
       errorMessage: {
-      text: errors['internationalPhoneNumber'].text
+        attributes: { "data-test-id": "internationalPhoneNumber-error"},
+        text: errors['internationalPhoneNumber'].text
       } if (errors['internationalPhoneNumber'])
     }) }}
   {% endset -%}

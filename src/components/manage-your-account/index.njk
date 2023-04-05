@@ -42,6 +42,7 @@
 {% 
 set mfaSummaryList = {
   classes:"govuk-summary-list--wide-key",
+  attributes: {"data-test-id": "mfa-summary-list"},
   rows: [{
     key: {
       text: 'pages.manageYourAccount.mfaSection.summaryList.phoneNumber.title' | translate | replace("[phoneNumber]", phoneNumber)
@@ -49,6 +50,7 @@ set mfaSummaryList = {
     actions: {
       items: [
         {
+          attributes: {"data-test-id": "change-phone-number"},
           href: "/enter-password?type=changePhoneNumber",
           text: 'general.change' | translate,
           visuallyHiddenText: 'pages.manageYourAccount.mfaSection.summaryList.phoneNumber.hiddenText' | translate

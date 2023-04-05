@@ -1,6 +1,7 @@
 import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
+import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
@@ -147,9 +148,9 @@ describe("Integration:: delete account", () => {
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#no-services-content").text()).to.not.be.empty;
-        expect($("#govuk-email-subscription-info").text()).to.be.empty;
-        expect($("#service-list-item").text()).to.be.empty;
+        expect($(testComponent('no-services-content')).text()).to.not.be.empty;
+        expect($(testComponent('govuk-email-subscription-info')).text()).to.be.empty;
+        expect($(testComponent('service-list-item')).text()).to.be.empty;
       })
       .expect(200, done);
   });
@@ -161,8 +162,8 @@ describe("Integration:: delete account", () => {
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#govuk-email-subscription-info").text()).to.not.be.empty;
-        expect($("#service-list-item").text()).to.not.be.empty;
+        expect($(testComponent('govuk-email-subscription-info')).text()).to.not.be.empty;
+        expect($(testComponent('service-list-item')).text()).to.not.be.empty;
       })
       .expect(200, done);
   });
@@ -174,8 +175,8 @@ describe("Integration:: delete account", () => {
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#service-list-item").text()).to.not.be.empty;
-        expect($("#govuk-email-subscription-info").text()).to.be.empty;
+        expect($(testComponent('service-list-item')).text()).to.not.be.empty;
+        expect($(testComponent('govuk-email-subscription-info')).text()).to.be.empty;
       })
       .expect(200, done);
   });

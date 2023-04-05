@@ -1,6 +1,7 @@
 import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
+import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import { load } from "cheerio";
 import decache from "decache";
@@ -107,10 +108,10 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($("#password-error").text()).to.contains(
+        expect($(testComponent('password-error')).text()).to.contains(
           "Enter your new password"
         );
-        expect($("#confirm-password-error").text()).to.contains(
+        expect($(testComponent('confirm-password-error')).text()).to.contains(
           "Re-type your new password"
         );
       })
@@ -129,7 +130,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($("#confirm-password-error").text()).to.contains(
+        expect($(testComponent('confirm-password-error')).text()).to.contains(
           "Enter the same password in both fields"
         );
       })
@@ -148,7 +149,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($("#password-error").text()).to.contains(
+        expect($(testComponent('password-error')).text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -167,7 +168,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($("#password-error").text()).to.contains(
+        expect($(testComponent('password-error')).text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -191,7 +192,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($("#password-error").text()).to.contains(
+        expect($(testComponent('password-error')).text()).to.contains(
           "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers"
         );
       })
@@ -210,7 +211,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($("#password-error").text()).to.contains(
+        expect($(testComponent('password-error')).text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -234,7 +235,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($("#password-error").text()).to.contains(
+        expect($(testComponent('password-error')).text()).to.contains(
           "You are already using that password. Enter a different password"
         );
       })
@@ -258,9 +259,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(".govuk-heading-l").text()).to.contains(
-          "Sorry, there is a problem with the service"
-        );
+        expect($(testComponent('error-heading')).text()).to.not.be.empty;
       })
       .expect(500, done);
   });

@@ -1,6 +1,7 @@
 import request from "supertest";
 import { describe } from "mocha";
 import { sinon, expect } from "../../../../test/utils/test-utils";
+import { testComponent } from "../../../../test/utils/helpers";
 import * as cheerio from "cheerio";
 import * as nock from "nock";
 import decache from "decache";
@@ -39,7 +40,7 @@ describe("Integration:: manage your account", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(".govuk-summary-list").text()).to.contains(
+        expect($(testComponent('mfa-summary-list')).text()).to.contains(
           TEST_USER_PHONE_NUMBER.slice(-4)
         );
       });
@@ -62,7 +63,7 @@ describe("Integration:: manage your account", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(".govuk-summary-list").text()).to.not.contains("phoneNumber");
+        expect($(testComponent('change-phone-number')).length).to.equal(0);
       });
   });
 });

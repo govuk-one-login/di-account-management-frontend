@@ -1,6 +1,7 @@
 import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
+import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
@@ -106,7 +107,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains("Enter the security code");
+        expect($(testComponent('code-error')).text()).to.contains("Enter the security code");
       })
       .expect(400, done);
   });
@@ -122,7 +123,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains(
+        expect($(testComponent('code-error')).text()).to.contains(
           "Enter the security code using only 6 digits"
         );
       })
@@ -140,7 +141,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains(
+        expect($(testComponent('code-error')).text()).to.contains(
           "Enter the security code using only 6 digits"
         );
       })
@@ -158,7 +159,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains(
+        expect($(testComponent('code-error')).text()).to.contains(
           "Enter the security code using only 6 digits"
         );
       })
@@ -193,7 +194,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains(
+        expect($(testComponent('code-error')).text()).to.contains(
           "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
         );
       })

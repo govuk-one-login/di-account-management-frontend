@@ -37,7 +37,8 @@
     inputmode: "numeric",
     spellcheck: false,
     errorMessage: {
-        text: errors['code'].text
+        text: errors['code'].text,
+        attributes: { "data-test-id": "code-error"}
     } if (errors['code'])})
 }}
 
