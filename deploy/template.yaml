@@ -124,7 +124,7 @@ Mappings:
       BASEURL: "home.dev.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
-      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
@@ -137,7 +137,7 @@ Mappings:
       BASEURL: "home.build.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
-      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
@@ -150,7 +150,7 @@ Mappings:
       BASEURL: "home.staging.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
-      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.staging.publishing.service.gov.uk"
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
@@ -163,7 +163,7 @@ Mappings:
       BASEURL: "home.integration.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
-      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.integration.publishing.service.gov.uk"
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
@@ -176,7 +176,7 @@ Mappings:
       BASEURL: "home.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
-      GOVACCOUNTSPUBLISHINGAPIURL: "account-api.publishing.service.gov.uk"
+      GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.publishing.service.gov.uk"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
@@ -1536,103 +1536,30 @@ Resources:
   AMFCloudWatchDashboard:
     Type: AWS::CloudWatch::Dashboard
     Properties:
-      DashboardBody:
-        !Sub >-
-       {
-        "start": "-PT6H",
-        "periodOverride": "inherit",
-        "widgets": [ {
-          "height": 6,
-          "width": 12,
-          "y": 0,
-          "x": 0,
-          "type": "metric",
-          "properties": {
-            "title": "API Gateway 4xx, 5xx Errors and Total Invocations",
-            "region": "${AWS::Region}",
-            "metrics": [
-              [ "AWS/ApiGateway", "4xx", "ApiId", "${ApiGateway}" ],
-              [ "AWS/ApiGateway", "5xx", "ApiId", "${ApiGateway}" ],
-              [ "AWS/ApiGateway", "Count", "ApiId", "${ApiGateway}" ]
-            ],
-            "view": "timeSeries",
-            "stacked": false,
-            "stat": "Sum",
-            "period": 60
-          }
-        },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "title": "API Gateway Latency",
-              "region": "${AWS::Region}",
-              "metrics": [
-                [ "AWS/ApiGateway", "Latency", "ApiId", "${ApiGateway}" ]
-              ],
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Maximum",
-              "period": 60
-            }
-          },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 6,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "metrics": [
-                [ "AWS/ApiGateway", "Count", "ApiId", "${ApiGateway}",
-                  {
-                    "stat": "Sum", "label": "API Request Count"
-                  }
-                ],
-                [ "AWS/ECS", "CPUUtilization", "ClusterName", "${ECSCluster}",
-                  "ServiceName", "${ContainerService.Name}", { "label": "ECS CPUUtilization" }
-                ],
-                [ "AWS/ECS", "MemoryUtilization", "ClusterName", "${ECSCluster}",
-                  "ServiceName", "${ContainerService.Name}", { "label": "ECS MemoryUtilization" }
-                ]
-              ],
-              "title": "ECS Auto Scaling (Production Only)",
-              "region": "${AWS::Region}",
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Maximum",
-              "period": 60
-            }
-          },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "title": "ECS Running Task Count, Desired And Pending Task Count",
-              "region": "${AWS::Region}",
-              "metrics": [
-                [ "ECS/ContainerInsights", "RunningTaskCount", "ClusterName", "${ECSCluster}",
-                  "ServiceName", "${ContainerService.Name}"
-                ],
-                [ "ECS/ContainerInsights", "DesiredTaskCount", "ClusterName", "${ECSCluster}",
-                  "ServiceName", "${ContainerService.Name}"
-                ],
-                [ "ECS/ContainerInsights", "PendingTaskCount", "ClusterName", "${ECSCluster}",
-                    "ServiceName", "${ContainerService.Name}"
-                  ]
-              ],
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Sum",
-              "period": 60
-            }
-          },
+      DashboardBody: !Sub >-
+        {
+         "start": "-PT6H",
+         "periodOverride": "inherit",
+         "widgets": [ {
+           "height": 6,
+           "width": 12,
+           "y": 0,
+           "x": 0,
+           "type": "metric",
+           "properties": {
+             "title": "API Gateway 4xx, 5xx Errors and Total Invocations",
+             "region": "${AWS::Region}",
+             "metrics": [
+               [ "AWS/ApiGateway", "4xx", "ApiId", "${ApiGateway}" ],
+               [ "AWS/ApiGateway", "5xx", "ApiId", "${ApiGateway}" ],
+               [ "AWS/ApiGateway", "Count", "ApiId", "${ApiGateway}" ]
+             ],
+             "view": "timeSeries",
+             "stacked": false,
+             "stat": "Sum",
+             "period": 60
+           }
+         },
            {
              "height": 6,
              "width": 12,
@@ -1640,158 +1567,230 @@ Resources:
              "x": 12,
              "type": "metric",
              "properties": {
-               "title": "ECS Cluster Service Count",
+               "title": "API Gateway Latency",
                "region": "${AWS::Region}",
                "metrics": [
-                 [ "ECS/ContainerInsights", "ServiceCount", "ClusterName", "${ECSCluster}" ]
+                 [ "AWS/ApiGateway", "Latency", "ApiId", "${ApiGateway}" ]
                ],
                "view": "timeSeries",
                "stacked": false,
-               "stat": "Average",
+               "stat": "Maximum",
                "period": 60
              }
            },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "title": "Number Of Requests Made To ALB vs Response Time",
-              "region": "${AWS::Region}",
-              "metrics": [
-                [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}", { "yAxis": "right" } ],
-                [ "AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}",
-                  {
-                    "stat": "Average"
-                  }
-                ]
-              ],
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Sum",
-              "period": 60
-            }
-          },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "title": "ALB Endpoint Functionality",
-              "region": "${AWS::Region}",
-              "metrics": [
-                [ "AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}",{ "yAxis": "right" } ],
-                [ "AWS/ApplicationELB", "ProcessedBytes", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
-              ],
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Sum",
-              "period": 60
-            }
-          },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "title": "ALB 502,503 And 504 Errors",
-              "region": "${AWS::Region}",
-              "metrics": [
-                [ "AWS/ApplicationELB", "HTTPCode_ELB_502_Count", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
-                [ "AWS/ApplicationELB", "HTTPCode_ELB_503_Count", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
-                [ "AWS/ApplicationELB", "HTTPCode_ELB_504_Count", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
-              ],
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Sum",
-              "period": 60
-            }
-          },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "title": " ALB Target Health Check",
-              "region": "${AWS::Region}",
-              "metrics": [
-                [ "AWS/ApplicationELB", "HealthyHostCount", "TargetGroup","${ApplicationLoadBalancerTargetGroupBlue.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
-                [ "AWS/ApplicationELB", "UnHealthyHostCount","TargetGroup","${ApplicationLoadBalancerTargetGroupBlue.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
-              ],
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Sum",
-              "period": 60
-            }
-          },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "title": "Unsuccessful Connections Between Load Balancer And Host",
-              "region": "${AWS::Region}",
-              "metrics": [
-                [ "AWS/ApplicationELB", "TargetConnectionErrorCount", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
-              ],
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Sum",
-              "period": 60
-            }
-          },
-          {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-              "title": "DynamoDB Read And Write Capacity",
-              "region": "${AWS::Region}",
-              "metrics": [
-                [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "${SessionsDynamoDB}" ],
-                [ "AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${SessionsDynamoDB}" ]
-              ],
-              "view": "timeSeries",
-              "stacked": false,
-              "stat": "Sum",
-              "period": 60
-            }
-          },
            {
-               "height": 6,
-               "width": 12,
-               "y": 0,
-               "x": 12,
-               "type": "metric",
-               "properties": {
-                 "title": "DynamoDB Average Latency",
-                 "region": "${AWS::Region}",
-                 "metrics": [
-                   [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "GetItem"],
-                   [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "PutItem"],
-                   [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "UpdateItem"],
-                   [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "DeleteItem"]
+             "height": 6,
+             "width": 12,
+             "y": 6,
+             "x": 12,
+             "type": "metric",
+             "properties": {
+               "metrics": [
+                 [ "AWS/ApiGateway", "Count", "ApiId", "${ApiGateway}",
+                   {
+                     "stat": "Sum", "label": "API Request Count"
+                   }
                  ],
-                 "view": "timeSeries",
-                 "stacked": false,
-                 "stat": "Average",
-                 "period": 60
-               }
+                 [ "AWS/ECS", "CPUUtilization", "ClusterName", "${ECSCluster}",
+                   "ServiceName", "${ContainerService.Name}", { "label": "ECS CPUUtilization" }
+                 ],
+                 [ "AWS/ECS", "MemoryUtilization", "ClusterName", "${ECSCluster}",
+                   "ServiceName", "${ContainerService.Name}", { "label": "ECS MemoryUtilization" }
+                 ]
+               ],
+               "title": "ECS Auto Scaling (Production Only)",
+               "region": "${AWS::Region}",
+               "view": "timeSeries",
+               "stacked": false,
+               "stat": "Maximum",
+               "period": 60
              }
-          ]
-        }
+           },
+           {
+             "height": 6,
+             "width": 12,
+             "y": 0,
+             "x": 12,
+             "type": "metric",
+             "properties": {
+               "title": "ECS Running Task Count, Desired And Pending Task Count",
+               "region": "${AWS::Region}",
+               "metrics": [
+                 [ "ECS/ContainerInsights", "RunningTaskCount", "ClusterName", "${ECSCluster}",
+                   "ServiceName", "${ContainerService.Name}"
+                 ],
+                 [ "ECS/ContainerInsights", "DesiredTaskCount", "ClusterName", "${ECSCluster}",
+                   "ServiceName", "${ContainerService.Name}"
+                 ],
+                 [ "ECS/ContainerInsights", "PendingTaskCount", "ClusterName", "${ECSCluster}",
+                     "ServiceName", "${ContainerService.Name}"
+                   ]
+               ],
+               "view": "timeSeries",
+               "stacked": false,
+               "stat": "Sum",
+               "period": 60
+             }
+           },
+            {
+              "height": 6,
+              "width": 12,
+              "y": 0,
+              "x": 12,
+              "type": "metric",
+              "properties": {
+                "title": "ECS Cluster Service Count",
+                "region": "${AWS::Region}",
+                "metrics": [
+                  [ "ECS/ContainerInsights", "ServiceCount", "ClusterName", "${ECSCluster}" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "stat": "Average",
+                "period": 60
+              }
+            },
+           {
+             "height": 6,
+             "width": 12,
+             "y": 0,
+             "x": 12,
+             "type": "metric",
+             "properties": {
+               "title": "Number Of Requests Made To ALB vs Response Time",
+               "region": "${AWS::Region}",
+               "metrics": [
+                 [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}", { "yAxis": "right" } ],
+                 [ "AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}",
+                   {
+                     "stat": "Average"
+                   }
+                 ]
+               ],
+               "view": "timeSeries",
+               "stacked": false,
+               "stat": "Sum",
+               "period": 60
+             }
+           },
+           {
+             "height": 6,
+             "width": 12,
+             "y": 0,
+             "x": 12,
+             "type": "metric",
+             "properties": {
+               "title": "ALB Endpoint Functionality",
+               "region": "${AWS::Region}",
+               "metrics": [
+                 [ "AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}",{ "yAxis": "right" } ],
+                 [ "AWS/ApplicationELB", "ProcessedBytes", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
+               ],
+               "view": "timeSeries",
+               "stacked": false,
+               "stat": "Sum",
+               "period": 60
+             }
+           },
+           {
+             "height": 6,
+             "width": 12,
+             "y": 0,
+             "x": 12,
+             "type": "metric",
+             "properties": {
+               "title": "ALB 502,503 And 504 Errors",
+               "region": "${AWS::Region}",
+               "metrics": [
+                 [ "AWS/ApplicationELB", "HTTPCode_ELB_502_Count", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
+                 [ "AWS/ApplicationELB", "HTTPCode_ELB_503_Count", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
+                 [ "AWS/ApplicationELB", "HTTPCode_ELB_504_Count", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
+               ],
+               "view": "timeSeries",
+               "stacked": false,
+               "stat": "Sum",
+               "period": 60
+             }
+           },
+           {
+             "height": 6,
+             "width": 12,
+             "y": 0,
+             "x": 12,
+             "type": "metric",
+             "properties": {
+               "title": " ALB Target Health Check",
+               "region": "${AWS::Region}",
+               "metrics": [
+                 [ "AWS/ApplicationELB", "HealthyHostCount", "TargetGroup","${ApplicationLoadBalancerTargetGroupBlue.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
+                 [ "AWS/ApplicationELB", "UnHealthyHostCount","TargetGroup","${ApplicationLoadBalancerTargetGroupBlue.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
+               ],
+               "view": "timeSeries",
+               "stacked": false,
+               "stat": "Sum",
+               "period": 60
+             }
+           },
+           {
+             "height": 6,
+             "width": 12,
+             "y": 0,
+             "x": 12,
+             "type": "metric",
+             "properties": {
+               "title": "Unsuccessful Connections Between Load Balancer And Host",
+               "region": "${AWS::Region}",
+               "metrics": [
+                 [ "AWS/ApplicationELB", "TargetConnectionErrorCount", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
+               ],
+               "view": "timeSeries",
+               "stacked": false,
+               "stat": "Sum",
+               "period": 60
+             }
+           },
+           {
+             "height": 6,
+             "width": 12,
+             "y": 0,
+             "x": 12,
+             "type": "metric",
+             "properties": {
+               "title": "DynamoDB Read And Write Capacity",
+               "region": "${AWS::Region}",
+               "metrics": [
+                 [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "${SessionsDynamoDB}" ],
+                 [ "AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${SessionsDynamoDB}" ]
+               ],
+               "view": "timeSeries",
+               "stacked": false,
+               "stat": "Sum",
+               "period": 60
+             }
+           },
+            {
+                "height": 6,
+                "width": 12,
+                "y": 0,
+                "x": 12,
+                "type": "metric",
+                "properties": {
+                  "title": "DynamoDB Average Latency",
+                  "region": "${AWS::Region}",
+                  "metrics": [
+                    [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "GetItem"],
+                    [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "PutItem"],
+                    [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "UpdateItem"],
+                    [ "AWS/DynamoDB", "SuccessfulRequestLatency", "TableName", "${SessionsDynamoDB}", "Operation", "DeleteItem"]
+                  ],
+                  "view": "timeSeries",
+                  "stacked": false,
+                  "stat": "Average",
+                  "period": 60
+                }
+              }
+           ]
+         }
       DashboardName: !Sub "${AWS::StackName}-AMF"
 
   #
@@ -1805,7 +1804,7 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "id"
           AttributeType: "S"
-        - AttributeName: "user_id"          # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
+        - AttributeName: "user_id" # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
           AttributeType: "S"
       KeySchema:
         - AttributeName: "id"
@@ -1820,9 +1819,9 @@ Resources:
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: false
       GlobalSecondaryIndexes:
-        - IndexName: "users-sessions"       # must match index name in ../src/utils/session-store.ts
+        - IndexName: "users-sessions" # must match index name in ../src/utils/session-store.ts
           KeySchema:
-            - AttributeName: "user_id"      # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
+            - AttributeName: "user_id" # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
               KeyType: "HASH"
           Projection:
             ProjectionType: KEYS_ONLY
