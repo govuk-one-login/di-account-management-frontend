@@ -106,10 +106,10 @@ describe("Integration:: change phone number", () => {
     app = undefined;
   });
 
-  it("should redirect to /check-your-phone page when valid phone number entered", async () => {
+  it("should redirect to /check-your-phone page when valid UK phone number (07) entered", async () => {
     await provider.addInteraction({
       states: [{ description: "API server is healthy" }],
-      uponReceiving: "send notification request uk phone number",
+      uponReceiving: "send SMS notification request to change phone number valid UK phone number (07)",
       withRequest: {
         method: "POST",
         path: "/send-otp-notification",
@@ -135,6 +135,120 @@ describe("Integration:: change phone number", () => {
         .set("Cookie", cookies)
         .send({
           _csrf: token,
+          phoneNumber: "07738394991",
+        });
+
+      expect(response.headers.location).equals("/check-your-phone");
+      expect(response.statusCode).equals(302);
+      return;
+    });
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number (447) entered", async () => {
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send SMS notification request to change phone number to valid UK phone number (447)",
+      withRequest: {
+        method: "POST",
+        path: "/send-otp-notification",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          "Content-Type" : "application/json; charset=utf-8",
+          accept : "application/json",
+        },
+        body : {
+          email: email("testEmail@mail.com"),
+          phoneNumber: like("4477567634"),
+          notificationType: "VERIFY_PHONE_NUMBER"
+        },
+      },
+      willRespondWith: {
+        status: 204,
+      },
+    });
+
+    await provider.executeTest(async () => {
+      const response = await request(app).post("/change-phone-number")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          phoneNumber: "447738394991",
+        });
+
+      expect(response.headers.location).equals("/check-your-phone");
+      expect(response.statusCode).equals(302);
+      return;
+    });
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number (440) entered", async () => {
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send SMS notification request to change phone number to valid UK phone number (440)",
+      withRequest: {
+        method: "POST",
+        path: "/send-otp-notification",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          "Content-Type" : "application/json; charset=utf-8",
+          accept : "application/json",
+        },
+        body : {
+          email: email("testEmail@mail.com"),
+          phoneNumber: like("44077567634"),
+          notificationType: "VERIFY_PHONE_NUMBER"
+        },
+      },
+      willRespondWith: {
+        status: 204,
+      },
+    });
+
+    await provider.executeTest(async () => {
+      const response = await request(app).post("/change-phone-number")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          phoneNumber: "4407738394991",
+        });
+
+      expect(response.headers.location).equals("/check-your-phone");
+      expect(response.statusCode).equals(302);
+      return;
+    });
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number (+447) entered", async () => {
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send SMS notification request to change phone number valid UK phone number (+447)",
+      withRequest: {
+        method: "POST",
+        path: "/send-otp-notification",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          "Content-Type" : "application/json; charset=utf-8",
+          accept : "application/json",
+        },
+        body : {
+          email: email("testEmail@mail.com"),
+          phoneNumber: like("+447738394991"),
+          notificationType: "VERIFY_PHONE_NUMBER"
+        },
+      },
+      willRespondWith: {
+        status: 204,
+      },
+    });
+
+    await provider.executeTest(async () => {
+      const response = await request(app).post("/change-phone-number")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
           phoneNumber: "+447738394991",
         });
 
@@ -144,12 +258,90 @@ describe("Integration:: change phone number", () => {
     });
   });
 
+  it("should redirect to /check-your-phone page when valid UK phone number (+440) entered", async () => {
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send SMS notification request to change phone number to valid UK phone number (+440) entered",
+      withRequest: {
+        method: "POST",
+        path: "/send-otp-notification",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          "Content-Type" : "application/json; charset=utf-8",
+          accept : "application/json",
+        },
+        body : {
+          email: email("testEmail@mail.com"),
+          phoneNumber: like("+4407738394991"),
+          notificationType: "VERIFY_PHONE_NUMBER"
+        },
+      },
+      willRespondWith: {
+        status: 204,
+      },
+    });
+
+    await provider.executeTest(async () => {
+      const response = await request(app).post("/change-phone-number")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          phoneNumber: "+4407738394991",
+        });
+
+      expect(response.headers.location).equals("/check-your-phone");
+      expect(response.statusCode).equals(302);
+      return;
+    });
+  });
+
+  it("should redirect to /check-your-phone page when valid international phone number entered", async () => {
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send SMS notification request to change phone number to valid new phone number",
+      withRequest: {
+        method: "POST",
+        path: "/send-otp-notification",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          "Content-Type" : "application/json; charset=utf-8",
+          accept : "application/json",
+        },
+        body : {
+          email: email("testEmail@mail.com"),
+          phoneNumber: like("+33645453322"),
+          notificationType: "VERIFY_PHONE_NUMBER"
+        },
+      },
+      willRespondWith: {
+        status: 204,
+      },
+    });
+
+    await provider.executeTest(async () => {
+      const response = await request(app).post("/change-phone-number")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          hasInternationalPhoneNumber: true,
+          internationalPhoneNumber: "+33645453322",
+          supportInternationalNumbers: true,
+        })
+
+      expect(response.headers.location).equals("/check-your-phone");
+      expect(response.statusCode).equals(302);
+      return;
+    });
+  });
+
   // this is different interaction, where the server is not healthy
-  it("should return internal server error if send-otp-notification API call fails", async () => {
+  it("should return 400 if new phone number is the same as existing one", async () => {
 
     await provider.addInteraction({
-      states: [{ description: "API server is not healthy" }],
-      uponReceiving: "send notification request uk phone number",
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send SMS notification request to change phone number to same number",
       withRequest: {
         method: "POST",
         path: "/send-otp-notification",
@@ -166,9 +358,9 @@ describe("Integration:: change phone number", () => {
 
       },
       willRespondWith: {
-        status: 500,
+        status: 400,
         body : {
-          sessionState: "done",
+          code: 1044,
         },
       },
     });
@@ -184,7 +376,50 @@ describe("Integration:: change phone number", () => {
           phoneNumber: "+447738394991",
         });
 
-      expect(response.statusCode).equals(500);
+      expect(response.statusCode).equals(400);
+      return;
+
+    });
+
+  });
+
+  it("should return 400 if new phone number is invalid", async () => {
+
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy" }],
+      uponReceiving: "send SMS notification request with invalid new phone number",
+      withRequest: {
+        method: "POST",
+        path: "/send-otp-notification",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          "Content-Type" : "application/json; charset=utf-8",
+          accept : "application/json",
+        },
+        body : {
+          email: email("testEmail@mail.com"),
+          phoneNumber: like("+0000000000"),
+          notificationType: "VERIFY_PHONE_NUMBER"
+        },
+
+      },
+      willRespondWith: {
+        status: 400
+      },
+    });
+
+    await provider.executeTest(async () => {
+
+      //with supertest request
+      const response = await request(app).post("/change-phone-number")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          phoneNumber: "+447738394991",
+        });
+
+      expect(response.statusCode).equals(400);
       return;
 
     });

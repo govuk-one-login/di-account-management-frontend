@@ -189,82 +189,6 @@ describe("Integration:: change phone number", () => {
       .expect(400, done);
   });
 
-  it("should redirect to /check-your-phone page when valid UK phone number entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
-
-    request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        phoneNumber: "07738394991",
-      })
-      .expect("Location", "/check-your-phone")
-      .expect(302, done);
-  });
-
-  it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", (done) => {
-
-    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
-
-    request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        phoneNumber: "+447738394991",
-      })
-      .expect("Location", "/check-your-phone")
-      .expect(302, done);
-  });
-
-  it("should redirect to /check-your-phone page when valid UK phone number prefixed with 447 is entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
-
-    request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        phoneNumber: "447738394991",
-      })
-      .expect("Location", "/check-your-phone")
-      .expect(302, done);
-  });
-
-  it("should redirect to /check-your-phone page when valid UK phone number prefixed with 440 is entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
-
-    request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        phoneNumber: "4407738394991",
-      })
-      .expect("Location", "/check-your-phone")
-      .expect(302, done);
-  });
-
-  it("should redirect to /check-your-phone page when valid UK phone number prefixed with +440 is entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
-
-    request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        phoneNumber: "+4407738394991",
-      })
-      .expect("Location", "/check-your-phone")
-      .expect(302, done);
-  });
-
   it("should return validation error when international phone number not entered", (done) => {
     request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
@@ -282,29 +206,6 @@ describe("Integration:: change phone number", () => {
           "Enter a phone number"
         );
         expect($("#phoneNumber-error").text()).to.contains("");
-      })
-      .expect(400, done);
-  });
-
-  it("should return validation error when new phone number is the same as old phone number", (done) => {
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .once()
-      .reply(400, { code: 1044 });
-
-    request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        phoneNumber: "07738394991",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect($("#phoneNumber-error").text()).to.contains(
-          "Your account is already using that phone number. Enter a different phone number."
-        );
       })
       .expect(400, done);
   });
@@ -393,6 +294,29 @@ describe("Integration:: change phone number", () => {
       .expect(400, done);
   });
 
+  it("should return validation error when new phone number is the same as old phone number", (done) => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.SEND_NOTIFICATION)
+      .once()
+      .reply(400, { code: 1044 });
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "07738394991",
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($("#phoneNumber-error").text()).to.contains(
+          "Your account is already using that phone number. Enter a different phone number."
+        );
+      })
+      .expect(400, done);
+  });
+
   it("should redirect to /check-your-phone page when valid international phone number entered", (done) => {
     nock(baseApi)
       .post(API_ENDPOINTS.SEND_NOTIFICATION)
@@ -427,5 +351,81 @@ describe("Integration:: change phone number", () => {
         phoneNumber: "07738394991",
       })
       .expect(500, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "07738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", (done) => {
+
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "+447738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number prefixed with 447 is entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "447738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number prefixed with 440 is entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "4407738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
+  });
+
+  it("should redirect to /check-your-phone page when valid UK phone number prefixed with +440 is entered", (done) => {
+    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+
+    request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        phoneNumber: "+4407738394991",
+      })
+      .expect("Location", "/check-your-phone")
+      .expect(302, done);
   });
 });
