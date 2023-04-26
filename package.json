@@ -28,8 +28,8 @@
     "test:pact:phone": "rm -rf test/coverage && NODE_ENV=development mocha -r dotenv/config  \"test/pact/change-phone-number-integration-pact.test.ts\"",
     "test:pact:email": "rm -rf test/coverage && NODE_ENV=development mocha -r dotenv/config  \"test/pact/change-email-integration.test-pact.ts\"",
     "test:pact:passw": "rm -rf test/coverage && NODE_ENV=development mocha -r dotenv/config  \"test/pact/change-password-integration.test-pact.ts\"",
-    "pact:publish": "pact-broker publish ./pacts --consumer-app-version=\"$(git rev-parse --short HEAD)\" --auto-detect-version-properties --broker-base-url=http://localhost:8000 --broker-username test --broker-password test",
-    "pact:can-i-deploy": "pact-broker can-i-deploy --pacticipant \"Account Management Frontend\" --version \"$(git rev-parse --short HEAD)\"  --broker-base-url=http://localhost:8000 --broker-username test --broker-password test",
+    "pact:publish": "pact-broker publish ./pacts --consumer-app-version=\"$(git rev-parse --short HEAD)\" --auto-detect-version-properties --broker-base-url=http://localhost:8080 --broker-username test --broker-password test",
+    "pact:can-i-deploy": "pact-broker can-i-deploy --pacticipant \"Account Management Frontend\" --version \"$(git rev-parse --short HEAD)\"  --broker-base-url=http://localhost:8080 --broker-username test --broker-password test",
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --watch src/assets/scss/application.scss dist/public/style.css"

@@ -9,7 +9,7 @@ import {PactV3} from "@pact-foundation/pact";
 import path from "path";
 import {email} from "@pact-foundation/pact/src/dsl/matchers";
 import {UnsecuredJWT} from "jose";
-import {regex} from "@pact-foundation/pact/src/v3/matchers";
+import {number, regex, string} from "@pact-foundation/pact/src/v3/matchers";
 
 
 const provider = new PactV3({
@@ -108,7 +108,7 @@ describe("Integration:: change password", () => {
 
       await provider.addInteraction({
           states: [{description: "API server is healthy"}],
-          uponReceiving: "request to change password",
+          uponReceiving: "request to change password with too common new password",
           withRequest: {
               method: "POST",
               path: "/update-password",
@@ -120,7 +120,7 @@ describe("Integration:: change password", () => {
               },
               body: {
                   email: email("testEmail@mail.com"),
-                  newPassword : "password123"
+                  newPassword : "TestCommonPassword1"
               },
 
           },
@@ -137,8 +137,8 @@ describe("Integration:: change password", () => {
               .set("Cookie", cookies)
               .send({
                   _csrf: token,
-                  password: "password123",
-                  "confirm-password": "password123",
+                  password: "TestCommonPassword1",
+                  "confirm-password": "TestCommonPassword1",
               })
 
           const $ = load(response.text);
@@ -154,8 +154,8 @@ describe("Integration:: change password", () => {
   it("should return error when new password is the same as existing password", async () => {
 
       await provider.addInteraction({
-          states: [{description: "API server is healthy and new password is same as existing password"}],
-          uponReceiving: "request to change password",
+          states: [{description: "API server is healthy"}],
+          uponReceiving: "request to change password with new same password as current password",
           withRequest: {
               method: "POST",
               path: "/update-password",
@@ -167,7 +167,7 @@ describe("Integration:: change password", () => {
               },
               body: {
                   email: email("testEmail@mail.com"),
-                  newPassword : "p@ssw0rd-123"
+                  newPassword : "password-1"
               },
 
           },
@@ -184,8 +184,8 @@ describe("Integration:: change password", () => {
               .set("Cookie", cookies)
               .send({
                   _csrf: token,
-                  password: "p@ssw0rd-123",
-                  "confirm-password": "p@ssw0rd-123",
+                  password: "password-1",
+                  "confirm-password": "password-1",
               })
 
           const $ = load(response.text);
@@ -198,12 +198,12 @@ describe("Integration:: change password", () => {
       });
 
   });
-  //
-  it("should throw error when 400 is returned from API", async () => {
+
+  it("should throw error when 400 is returned from API with a code other than 1024 or 1040", async () => {
 
       await provider.addInteraction({
-          states: [{description: "API server is not healthy"}],
-          uponReceiving: "request to change password",
+          states: [{description: "API server is healthy"}],
+          uponReceiving: "request to change password for non-existing user",
           withRequest: {
               method: "POST",
               path: "/update-password",
@@ -214,7 +214,7 @@ describe("Integration:: change password", () => {
                   "Content-Type": "application/json; charset=utf-8",
               },
               body: {
-                  email: email("testEmail@mail.com"),
+                  email: email("nonExistingUser@mail.com"),
                   newPassword: "p@ssw0rd-123"
               },
 
@@ -222,7 +222,8 @@ describe("Integration:: change password", () => {
           willRespondWith: {
               status: 400,
               body: {
-                  code: 1000
+                  code: number(1000),
+                  message: string("something")
               }
           },
       });
@@ -247,8 +248,8 @@ describe("Integration:: change password", () => {
   it("should redirect to password updated confirmation when valid password is entered", async () => {
     //nock(baseApi).post(API_ENDPOINTS.UPDATE_PASSWORD).once().reply(204);
       await provider.addInteraction({
-          states: [{description: "API server is healthy and valid new password is entered"}],
-          uponReceiving: "request to change password",
+          states: [{description: "API server is healthy"}],
+          uponReceiving: "request to change password to valid new password",
           withRequest: {
               method: "POST",
               path: "/update-password",

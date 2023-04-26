@@ -79,7 +79,7 @@ services:
     links:
       - postgres
     ports:
-      - "8000:9292"
+      - "8080:9292"
     environment:
       PACT_BROKER_BASIC_AUTH_USERNAME: test
       PACT_BROKER_BASIC_AUTH_PASSWORD: test
