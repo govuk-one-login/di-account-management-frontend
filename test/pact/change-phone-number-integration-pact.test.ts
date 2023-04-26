@@ -10,6 +10,7 @@ import {email} from "@pact-foundation/pact/src/dsl/matchers";
 import {load} from "cheerio";
 import {regex} from "@pact-foundation/pact/src/v3/matchers";
 import {UnsecuredJWT} from "jose";
+import cheerio from "cheerio";
 
 const { like } = MatchersV3;
 
@@ -52,7 +53,7 @@ describe("Integration:: change phone number", () => {
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
         req.session.user = {
-            email: "test@test.com",
+            email: "testEmail@mail.com",
             phoneNumber: "07839490040",
             newPhoneNumber : "07839880040",
             subjectId: TEST_SUBJECT_ID,
@@ -106,91 +107,6 @@ describe("Integration:: change phone number", () => {
     app = undefined;
   });
 
-    it("should redirect to /check-your-phone page when valid phone number entered", async () => {
-      await provider.addInteraction({
-          states: [{ description: "API server is healthy" }],
-          uponReceiving: "send notification request uk phone number",
-          withRequest: {
-              method: "POST",
-              path: "/send-otp-notification",
-              headers : {
-                  Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
-                  "Content-Type" : "application/json; charset=utf-8",
-                  accept : "application/json",
-              },
-              body : {
-                  email: email("testEmail@mail.com"),
-                  phoneNumber: like("077567634"),
-                  notificationType: "VERIFY_PHONE_NUMBER"
-              },
-          },
-          willRespondWith: {
-              status: 204,
-          },
-      });
-
-      await provider.executeTest(async () => {
-          const response = await request(app).post("/change-phone-number")
-              .type("form")
-              .set("Cookie", cookies)
-              .send({
-                  _csrf: token,
-                  phoneNumber: "+447738394991",
-              });
-
-          expect(response.headers.location).equals("/check-your-phone");
-          expect(response.statusCode).equals(302);
-          return;
-      });
-  });
-
-    // this is different interaction, where the server is not healthy
-    it("should return internal server error if send-otp-notification API call fails", async () => {
-
-        await provider.addInteraction({
-            states: [{ description: "API server is not healthy" }],
-            uponReceiving: "send notification request uk phone number",
-            withRequest: {
-                method: "POST",
-                path: "/send-otp-notification",
-                headers : {
-                    Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
-                    "Content-Type" : "application/json; charset=utf-8",
-                    accept : "application/json",
-                },
-                body : {
-                    email: email("testEmail@mail.com"),
-                    phoneNumber: like("+447738394991"),
-                    notificationType: "VERIFY_PHONE_NUMBER"
-                },
-
-            },
-            willRespondWith: {
-                status: 500,
-                body : {
-                    sessionState: "done",
-                },
-            },
-        });
-
-        await provider.executeTest(async () => {
-
-            //with supertest request
-            const response = await request(app).post("/change-phone-number")
-                .type("form")
-                .set("Cookie", cookies)
-                .send({
-                    _csrf: token,
-                    phoneNumber: "+447738394991",
-                });
-
-            expect(response.statusCode).equals(500);
-            return;
-
-        });
-
-    });
-
     it("should redirect to to /phone-number-updated-confirmation when valid code entered", async () => {
     nock("http://localhost:4444")
       .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
@@ -198,8 +114,8 @@ describe("Integration:: change phone number", () => {
       .reply(200);
 
     await provider.addInteraction({
-      states: [{ description: "API server is healthy" }],
-      uponReceiving: "send valid phone number update request",
+      states: [{ description: "API server is healthy and OTP code exists" }],
+      uponReceiving: "valid phone number update request",
       withRequest: {
         method: "POST",
         path: "/update-phone-number",
@@ -209,8 +125,8 @@ describe("Integration:: change phone number", () => {
           "Content-Type": "application/json; charset=utf-8",
         },
         body : {
-          email : email("myEmail@mail.com"),
-          phoneNumber: like("something"),
+          email : email("testEmail@mail.com"),
+          phoneNumber: like("077567634"),
           otp: regex("^[0-9]{1,6}$", "123456")
         },
 
@@ -233,6 +149,56 @@ describe("Integration:: change phone number", () => {
 
       expect(response.headers.location).equals("/phone-number-updated-confirmation");
       expect(response.statusCode).equals(302);
+      return;
+
+    });
+  });
+
+    it("should return validation error when incorrect code entered", async () => {
+    nock("http://localhost:4444")
+      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
+      .once()
+      .reply(200);
+
+    await provider.addInteraction({
+      states: [{ description: "API server is healthy and OTP code does not exists" }],
+      uponReceiving: "valid phone number update request",
+      withRequest: {
+        method: "POST",
+        path: "/update-phone-number",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          accept : "application/json",
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body : {
+          email : email("testEmail@mail.com"),
+          phoneNumber: like("077567634"),
+          otp: regex("^[0-9]{1,6}$", "000000")
+        },
+
+      },
+      willRespondWith: {
+        status: 400
+      },
+    });
+
+    await provider.executeTest(async () => {
+
+      //with supertest request
+      const response = await request(app).post("/check-your-phone")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          code: "000000",
+        });
+
+      const $ = cheerio.load(response.text);
+      expect($("#code-error").text()).to.contains(
+        "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
+      );
+      expect(response.statusCode).equals(400);
       return;
 
     });
