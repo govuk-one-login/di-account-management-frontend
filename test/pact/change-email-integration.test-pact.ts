@@ -51,7 +51,7 @@ describe("Pact::/update-email", () => {
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
         req.session.user = {
-          email: "test@test.com",
+          email: "testEmail@mail.com",
           phoneNumber: "07839490040",
           newEmailAddress: "myNewEmail@mail.com",
           subjectId: TEST_SUBJECT_ID,
@@ -124,7 +124,7 @@ describe("Pact::/update-email", () => {
           "Content-Type": "application/json; charset=utf-8",
         },
         body : {
-          existingEmailAddress : email("myEmail@mail.com"),
+          existingEmailAddress : email("testEmail@mail.com"),
           replacementEmailAddress: email("myNewEmail@mail.com"),
           otp: regex("^[0-9]{1,6}$", "654321")
         },
@@ -171,7 +171,7 @@ describe("Pact::/update-email", () => {
           "Content-Type": "application/json; charset=utf-8",
         },
         body : {
-          existingEmailAddress : email("myEmail@mail.com"),
+          existingEmailAddress : email("testEmail@mail.com"),
           replacementEmailAddress: email("myNewEmail@mail.com"),
           otp: regex("^[0-9]{1,6}$", "000000")
         },
