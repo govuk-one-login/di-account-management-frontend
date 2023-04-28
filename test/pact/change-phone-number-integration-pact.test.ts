@@ -24,7 +24,7 @@ const provider = new PactV3({
 
 });
 
-describe("Integration:: change phone number", () => {
+describe("Pact::/update-phone-number", () => {
   let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;

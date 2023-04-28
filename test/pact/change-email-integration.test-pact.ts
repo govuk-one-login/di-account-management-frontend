@@ -1,7 +1,6 @@
 import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../utils/test-utils";
-import * as cheerio from "cheerio";
 import decache from "decache";
 import {API_ENDPOINTS, PATH_DATA} from "../../src/app.constants";
 import {PactV3} from "@pact-foundation/pact";
@@ -22,7 +21,7 @@ const provider = new PactV3({
 
 });
 
-describe("Integration:: change email", () => {
+describe("Pact::/update-email", () => {
   let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;

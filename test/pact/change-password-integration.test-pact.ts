@@ -20,7 +20,7 @@ const provider = new PactV3({
     port: 8080,
 });
 
-describe("Integration:: change password", () => {
+describe("Pact::/update-password", () => {
   let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
@@ -107,7 +107,7 @@ describe("Integration:: change password", () => {
   it("should return validation error when password is amongst most common passwords", async () => {
 
       await provider.addInteraction({
-          states: [{description: "API server is healthy"}],
+          states: [{description: "Base state: user testEmail@mail.com with password: password-1 exists"}],
           uponReceiving: "request to change password with too common new password",
           withRequest: {
               method: "POST",
@@ -154,7 +154,7 @@ describe("Integration:: change password", () => {
   it("should return error when new password is the same as existing password", async () => {
 
       await provider.addInteraction({
-          states: [{description: "API server is healthy"}],
+          states: [{description: "Base state: user testEmail@mail.com with password: password-1 exists"}],
           uponReceiving: "request to change password with new same password as current password",
           withRequest: {
               method: "POST",
@@ -202,7 +202,7 @@ describe("Integration:: change password", () => {
   it("should throw error when 400 is returned from API with a code other than 1024 or 1040", async () => {
 
       await provider.addInteraction({
-          states: [{description: "API server is healthy"}],
+          states: [{description: "Base state: user testEmail@mail.com with password: password-1 exists"}, {description: "nonExistingUser@mail.com user does not exist"}],
           uponReceiving: "request to change password for non-existing user",
           withRequest: {
               method: "POST",
@@ -248,7 +248,7 @@ describe("Integration:: change password", () => {
   it("should redirect to password updated confirmation when valid password is entered", async () => {
     //nock(baseApi).post(API_ENDPOINTS.UPDATE_PASSWORD).once().reply(204);
       await provider.addInteraction({
-          states: [{description: "API server is healthy"}],
+          states: [{description: "Base state: user testEmail@mail.com with password: password-1 exists"}],
           uponReceiving: "request to change password to valid new password",
           withRequest: {
               method: "POST",

@@ -24,7 +24,7 @@ const provider = new PactV3({
 
 });
 
-describe("Integration:: change phone number", () => {
+describe("Pact::/send-otp-code", () => {
   let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
@@ -436,7 +436,7 @@ describe("Integration:: change phone number", () => {
   it("should return validation error when same email used by another user", async () => {
 
     await provider.addInteraction({
-      states: [{ description: "New email (myEmail@mail.com) is already assigned to another user" }],
+      states: [{ description: "New email (alreadyTakenEmail@email.com) is already assigned to another user" }],
       uponReceiving: "send verify email notification with email already in use by other user",
       withRequest: {
         method: "POST",
@@ -447,7 +447,7 @@ describe("Integration:: change phone number", () => {
           "Content-Type": "application/json; charset=utf-8",
         },
         body : {
-          email : email("myEmail@mail.com"),
+          email : email("alreadyTakenEmail@email.com"),
           notificationType: "VERIFY_EMAIL"
         },
 
@@ -465,7 +465,7 @@ describe("Integration:: change phone number", () => {
         .set("Cookie", cookies)
         .send({
           _csrf: token,
-          email: "test1@test.com",
+          email: "alreadyTakenEmail@email.com",
         });
 
       const page = cheerio.load(response.text);
@@ -483,7 +483,7 @@ describe("Integration:: change phone number", () => {
 
 
     await provider.addInteraction({
-      states: [{ description: "New email (myEmail@mail.com) is not assigned to another user" }],
+      states: [{ description: "New email (newTestEmail@mail.com) is not assigned to another user" }],
       uponReceiving: "send verify email notification",
       withRequest: {
         method: "POST",
@@ -494,7 +494,7 @@ describe("Integration:: change phone number", () => {
           "Content-Type": "application/json; charset=utf-8",
         },
         body : {
-          email : email("myEmail@mail.com"),
+          email : email("newTestEmail@mail.com"),
           notificationType: "VERIFY_EMAIL"
         },
 
@@ -512,7 +512,7 @@ describe("Integration:: change phone number", () => {
         .set("Cookie", cookies)
         .send({
           _csrf: token,
-          email: "myEmail@mail.com",
+          email: "newTestEmail@mail.com",
         });
 
       expect(response.headers.location).equals("/check-your-email");
