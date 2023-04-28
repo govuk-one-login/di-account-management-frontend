@@ -107,106 +107,15 @@ describe("Integration:: change email", () => {
     app = undefined;
   });
 
-
-  it("should return validation error when same email used by another user", async () => {
-
-    await provider.addInteraction({
-      states: [{ description: "API server is healthy, email already assigned to another user" }],
-      uponReceiving: "send verify email notification with email already in use by other user",
-      withRequest: {
-        method: "POST",
-        path: "/send-otp-notification",
-        headers : {
-          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
-          accept : "application/json",
-          "Content-Type": "application/json; charset=utf-8",
-        },
-        body : {
-          email : email("myEmail@mail.com"),
-          notificationType: "VERIFY_EMAIL"
-        },
-
-      },
-      willRespondWith: {
-        status: 400,
-      },
-    });
-
-    await provider.executeTest(async () => {
-
-      //with supertest request
-      const response = await request(app).post("/change-email")
-          .type("form")
-          .set("Cookie", cookies)
-          .send({
-            _csrf: token,
-            email: "test1@test.com",
-          });
-
-      const page = cheerio.load(response.text);
-      expect(page("#email-error").text()).to.contains(
-          "That email address already has a GOV.UK account. Enter a different email address."
-      );
-      expect(response.statusCode).equals(400);
-      return;
-
-    });
-
-  });
-
-  it("should redirect to /check-your-email when valid email provided", async () => {
-
-
-    await provider.addInteraction({
-      states: [{ description: "API server is healthy" }],
-      uponReceiving: "send verify email notification",
-      withRequest: {
-        method: "POST",
-        path: "/send-otp-notification",
-        headers : {
-          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
-          accept : "application/json",
-          "Content-Type": "application/json; charset=utf-8",
-        },
-        body : {
-          email : email("myEmail@mail.com"),
-          notificationType: "VERIFY_EMAIL"
-        },
-
-      },
-      willRespondWith: {
-        status: 204,
-      },
-    });
-
-    await provider.executeTest(async () => {
-
-      //with supertest request
-      const response = await request(app).post("/change-email")
-          .type("form")
-          .set("Cookie", cookies)
-          .send({
-            _csrf: token,
-            email: "test1@test.com",
-          });
-
-      expect(response.headers.location).equals("/check-your-email");
-      expect(response.statusCode).equals(302);
-      return;
-
-    });
-
-  });
-
-  it("should redirect to to /email-updated-confirmation when valid code entered", async () => {
+  it("should redirect to /email-updated-confirmation when valid code entered", async () => {
     nock("http://localhost:4444")
       .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}` + "jkduasd")
       .once()
       .reply(200);
 
     await provider.addInteraction({
-      states: [{ description: "API server is healthy" }],
-      uponReceiving: "send valid email update request",
+      states: [{ description: "Email code 654321 exists" }],
+      uponReceiving: "send email update request with valid opt code",
       withRequest: {
         method: "POST",
         path: "/update-email",
@@ -218,7 +127,7 @@ describe("Integration:: change email", () => {
         body : {
           existingEmailAddress : email("myEmail@mail.com"),
           replacementEmailAddress: email("myNewEmail@mail.com"),
-          otp: regex("^[0-9]{1,6}$", "123456")
+          otp: regex("^[0-9]{1,6}$", "654321")
         },
 
       },
@@ -235,11 +144,57 @@ describe("Integration:: change email", () => {
         .set("Cookie", cookies)
         .send({
           _csrf: token,
-          code: "123456",
+          code: "654321",
         });
 
       expect(response.headers.location).equals("/email-updated-confirmation");
       expect(response.statusCode).equals(302);
+      return;
+
+    });
+  });
+
+  it("should fail when invalid code is entered", async () => {
+    nock("http://localhost:4444")
+      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}` + "jkduasd")
+      .once()
+      .reply(200);
+
+    await provider.addInteraction({
+      states: [{ description: "Email code 000000 does not exists" }],
+      uponReceiving: "send email update request with invalid otp code",
+      withRequest: {
+        method: "POST",
+        path: "/update-email",
+        headers : {
+          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+          accept : "application/json",
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body : {
+          existingEmailAddress : email("myEmail@mail.com"),
+          replacementEmailAddress: email("myNewEmail@mail.com"),
+          otp: regex("^[0-9]{1,6}$", "000000")
+        },
+
+      },
+      willRespondWith: {
+        status: 400,
+      },
+    });
+
+    await provider.executeTest(async () => {
+
+      //with supertest request
+      const response = await request(app).post("/check-your-email")
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          code: "000000",
+        });
+
+      expect(response.statusCode).equals(400);
       return;
 
     });

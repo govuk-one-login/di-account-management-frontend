@@ -114,8 +114,8 @@ describe("Integration:: change phone number", () => {
       .reply(200);
 
     await provider.addInteraction({
-      states: [{ description: "API server is healthy and OTP code exists" }],
-      uponReceiving: "valid phone number update request",
+      states: [{ description: "Phone number code 123456 exists" }],
+      uponReceiving: "valid phone number update request with existing OPT code",
       withRequest: {
         method: "POST",
         path: "/update-phone-number",
@@ -161,8 +161,8 @@ describe("Integration:: change phone number", () => {
       .reply(200);
 
     await provider.addInteraction({
-      states: [{ description: "API server is healthy and OTP code does not exists" }],
-      uponReceiving: "valid phone number update request",
+      states: [{ description: "Phone number code 000000 does not exists" }],
+      uponReceiving: "Phone number update request with non-existing OTP code",
       withRequest: {
         method: "POST",
         path: "/update-phone-number",

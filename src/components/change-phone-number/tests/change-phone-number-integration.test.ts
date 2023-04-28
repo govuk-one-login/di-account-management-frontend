@@ -294,6 +294,7 @@ describe("Integration:: change phone number", () => {
       .expect(400, done);
   });
 
+  // hitting API
   it("should return validation error when new phone number is the same as old phone number", (done) => {
     nock(baseApi)
       .post(API_ENDPOINTS.SEND_NOTIFICATION)
