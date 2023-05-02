@@ -29,7 +29,6 @@ export function checkYourEmailPost(
     const {
       email,
       newEmailAddress,
-      subjectId,
       publicSubjectId,
       legacySubjectId,
     } = req.session.user;
@@ -61,7 +60,7 @@ export function checkYourEmailPost(
         })
         .catch((err) => {
           req.log.error(
-            `Unable to send change email notification for:${subjectId}. Error:${err}`
+            `Unable to send change email notification for:${publicSubjectId}. Error:${err}`
           );
         });
 
