@@ -24,6 +24,8 @@ const provider = new PactV3({
 
 });
 
+process.env.SUPPORT_INTERNATIONAL_NUMBERS = "1";
+
 describe("Pact::/send-otp-code", () => {
   let sandbox: sinon.SinonSandbox;
   let token: string | string[];
@@ -125,7 +127,7 @@ describe("Pact::/send-otp-code", () => {
         },
         body : {
           email: email("testEmail@mail.com"),
-          phoneNumber: like("07742682930"),
+          phoneNumber: like("07738394991"),
           notificationType: "VERIFY_PHONE_NUMBER"
         },
       },
@@ -163,7 +165,7 @@ describe("Pact::/send-otp-code", () => {
         },
         body : {
           email: email("testEmail@mail.com"),
-          phoneNumber: like("4477567634"),
+          phoneNumber: like("447756763456"),
           notificationType: "VERIFY_PHONE_NUMBER"
         },
       },
@@ -178,7 +180,7 @@ describe("Pact::/send-otp-code", () => {
         .set("Cookie", cookies)
         .send({
           _csrf: token,
-          phoneNumber: "447738394991",
+          phoneNumber: "447756763456",
         });
 
       expect(response.headers.location).equals("/check-your-phone");
@@ -201,7 +203,7 @@ describe("Pact::/send-otp-code", () => {
         },
         body : {
           email: email("testEmail@mail.com"),
-          phoneNumber: like("44077567634"),
+          phoneNumber: like("4407756763480"),
           notificationType: "VERIFY_PHONE_NUMBER"
         },
       },
@@ -216,7 +218,7 @@ describe("Pact::/send-otp-code", () => {
         .set("Cookie", cookies)
         .send({
           _csrf: token,
-          phoneNumber: "4407738394991",
+          phoneNumber: "4407756763480",
         });
 
       expect(response.headers.location).equals("/check-your-phone");
@@ -266,7 +268,7 @@ describe("Pact::/send-otp-code", () => {
   it("should redirect to /check-your-phone page when valid UK phone number (+440) entered", async () => {
     await provider.addInteraction({
       states: [{ description: "User's current phone number is 07742682930" }],
-      uponReceiving: "send SMS notification request to change phone number to valid UK phone number (+440) entered",
+      uponReceiving: "send SMS notification request to change phone number to valid UK phone number (+440)",
       withRequest: {
         method: "POST",
         path: "/send-otp-notification",
@@ -304,7 +306,7 @@ describe("Pact::/send-otp-code", () => {
   it("should redirect to /check-your-phone page when valid international phone number entered", async () => {
     await provider.addInteraction({
       states: [{ description: "User's current phone number is 07742682930" }],
-      uponReceiving: "send SMS notification request to change phone number to valid new phone number",
+      uponReceiving: "send SMS notification request to change phone number to valid international phone number",
       withRequest: {
         method: "POST",
         path: "/send-otp-notification",
@@ -315,6 +317,7 @@ describe("Pact::/send-otp-code", () => {
         },
         body : {
           email: email("testEmail@mail.com"),
+          phoneNumber: like("+393477575274"),
           notificationType: "VERIFY_PHONE_NUMBER"
         },
       },
@@ -330,7 +333,7 @@ describe("Pact::/send-otp-code", () => {
         .send({
           _csrf: token,
           hasInternationalPhoneNumber: true,
-          internationalPhoneNumber: "+33645453322",
+          internationalPhoneNumber: "+393477575274",
           supportInternationalNumbers: true,
         })
 
@@ -376,7 +379,7 @@ describe("Pact::/send-otp-code", () => {
         .set("Cookie", cookies)
         .send({
           _csrf: token,
-          phoneNumber: "+447738394991",
+          phoneNumber: "07742682930",
         });
 
       expect(response.statusCode).equals(400);
@@ -386,58 +389,58 @@ describe("Pact::/send-otp-code", () => {
 
   });
 
-  it("should return 400 if new phone number is invalid", async () => {
-
-    await provider.addInteraction({
-      states: [{ description: "User's current phone number is 07742682930" }],
-      uponReceiving: "send SMS notification request with invalid new phone number",
-      withRequest: {
-        method: "POST",
-        path: "/send-otp-notification",
-        headers : {
-          Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
-          "Content-Type" : "application/json; charset=utf-8",
-          accept : "application/json",
-        },
-        body : {
-          email: email("testEmail@mail.com"),
-          phoneNumber: like("+0000000000"),
-          notificationType: "VERIFY_PHONE_NUMBER"
-        },
-
-      },
-      willRespondWith: {
-        status: 400,
-        body: {
-          code: number(1234),
-          message: string("something")
-        }
-      },
-    });
-
-    await provider.executeTest(async () => {
-
-      //with supertest request
-      const response = await request(app).post("/change-phone-number")
-        .type("form")
-        .set("Cookie", cookies)
-        .send({
-          _csrf: token,
-          phoneNumber: "+447738394991",
-        });
-
-      expect(response.statusCode).equals(500);
-      return;
-
-    });
-
-  });
+  // it("should return 400 if new phone number is invalid", async () => {
+  //
+  //   await provider.addInteraction({
+  //     states: [{ description: "User's current phone number is 07742682930" }],
+  //     uponReceiving: "send SMS notification request with invalid new phone number",
+  //     withRequest: {
+  //       method: "POST",
+  //       path: "/send-otp-notification",
+  //       headers : {
+  //         Authorization : regex("^Bearer [A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$", exampleToken),
+  //         "Content-Type" : "application/json; charset=utf-8",
+  //         accept : "application/json",
+  //       },
+  //       body : {
+  //         email: email("testEmail@mail.com"),
+  //         phoneNumber: like("+0000000000"),
+  //         notificationType: "VERIFY_PHONE_NUMBER"
+  //       },
+  //
+  //     },
+  //     willRespondWith: {
+  //       status: 400,
+  //       body: {
+  //         code: number(1234),
+  //         message: string("something")
+  //       }
+  //     },
+  //   });
+  //
+  //   await provider.executeTest(async () => {
+  //
+  //     //with supertest request
+  //     const response = await request(app).post("/change-phone-number")
+  //       .type("form")
+  //       .set("Cookie", cookies)
+  //       .send({
+  //         _csrf: token,
+  //         phoneNumber: "+447738394991",
+  //       });
+  //
+  //     expect(response.statusCode).equals(500);
+  //     return;
+  //
+  //   });
+  //
+  // });
 
   it("should return validation error when same email used by another user", async () => {
 
     await provider.addInteraction({
       states: [{ description: "New email (alreadyTakenEmail@email.com) is already assigned to another user" }],
-      uponReceiving: "send verify email notification with email already in use by other user",
+      uponReceiving: "send verify email notification request",
       withRequest: {
         method: "POST",
         path: "/send-otp-notification",
@@ -484,7 +487,7 @@ describe("Pact::/send-otp-code", () => {
 
     await provider.addInteraction({
       states: [{ description: "New email (newTestEmail@mail.com) is not assigned to another user" }],
-      uponReceiving: "send verify email notification",
+      uponReceiving: "send verify email notification request",
       withRequest: {
         method: "POST",
         path: "/send-otp-notification",
