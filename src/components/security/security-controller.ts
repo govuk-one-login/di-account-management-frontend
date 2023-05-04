@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
-import { redactPhoneNumber } from "../../utils/strings";
 import { getManageGovukEmailsUrl } from "../../config";
 
-export function manageYourAccountGet(req: Request, res: Response): void {
+export function securityGet(req: Request, res: Response): void {
   const data = {
     email: req.session.user.email,
-    phoneNumber: redactPhoneNumber(req.session.user.phoneNumber),
+    phoneNumber: req.session.user.phoneNumber.slice(-4),
     isPhoneNumberVerified: req.session.user.isPhoneNumberVerified,
     manageEmailsLink: getManageGovukEmailsUrl(),
   };
 
-  res.render("manage-your-account/index.njk", data);
+  res.render("security/index.njk", data);
 }

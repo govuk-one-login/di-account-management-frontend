@@ -56,7 +56,7 @@ describe("enter password controller", () => {
       expect(res.render).to.have.calledWith("enter-password/index.njk");
     });
 
-    it("should redirect to manage your account when no with query param", () => {
+    it("should redirect to security when no with query param", () => {
       enterPasswordGet(req as Request, res as Response);
 
       expect(res.redirect).to.have.calledWith(

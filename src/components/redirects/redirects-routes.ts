@@ -6,9 +6,9 @@ import { requiresAuthMiddleware } from "../../middleware/requires-auth-middlewar
 const router = express.Router();
 
 router.get(
-  PATH_DATA.MANAGE_YOUR_ACCOUNT.url,
+  [PATH_DATA.MANAGE_YOUR_ACCOUNT.url, PATH_DATA.SETTINGS.url],
   requiresAuthMiddleware,
-  redirectManageYourAccount
+  redirectToSecurity
 );
 
 router.get(PATH_DATA.SECURITY_TXT.url, (_, res) => (
@@ -21,11 +21,11 @@ router.get(PATH_DATA.THANKS_TXT.url, (_, res) => (
   )
 );
 
-async function redirectManageYourAccount(
+function redirectToSecurity(
   req: Request,
   res: Response
-): Promise<void> {
-  return res.redirect(PATH_DATA.SETTINGS.url);
+) {
+  return res.redirect(PATH_DATA.SECURITY.url);
 }
 
 export { router as redirectsRouter };

@@ -1,5 +1,4 @@
 {% extends "common/layout/base.njk" %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.yourServices.title' | translate %}
 {% set serviceLinks =  'pages.yourServices.informationBox.details.listItems' | translate({ returnObjects: true }) %}
@@ -13,7 +12,7 @@
       <h1 class="govuk-heading-xl your-services__heading">{{ 'pages.yourServices.header' | translate }}</h1>
       <div class="your-services__signed-in-status">
         <p class="govuk-body">{{ 'pages.yourServices.signedInStatus' | translate }}
-            <strong>{{ email }}</strong>
+          <strong>{{ email }}</strong>
         </p>
       </div>
       {% if not (servicesList.length or accountsList.length) %}

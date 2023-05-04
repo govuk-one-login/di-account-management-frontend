@@ -1,0 +1,103 @@
+{% extends "common/layout/base.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% set pageTitleName = 'pages.security.title' | translate %}
+
+{% set accountDetailsSummaryList = {
+  classes: 'govuk-summary-list--security',
+  rows: [
+    {
+      key: {
+        text: 'pages.security.accountDetails.summaryList.email' | translate
+      },
+      value: {
+        text: email
+      },
+      actions: {
+        items: [
+          {
+            href: "/enter-password?type=changeEmail",
+            text: 'general.change' | translate,
+            visuallyHiddenText: 'pages.security.accountDetails.summaryList.email' | translate
+          }
+        ]
+      }
+    },
+    {
+      classes: 'govuk-summary-list__row--no-border',
+      key: {
+        text: 'pages.security.accountDetails.summaryList.password' | translate
+      },
+      value: {
+        text: "••••••••••••••••"
+      },
+      actions: {
+        items: [
+          {
+            href: "/enter-password?type=changePassword",
+            text: 'general.change' | translate,
+            visuallyHiddenText: 'pages.security.accountDetails.summaryList.password' | translate
+          }
+        ]
+      }
+    }
+]} %}
+{% 
+set mfaSummaryList = {
+  classes:"govuk-summary-list--security",
+  attributes: {"data-test-id": "mfa-summary-list"},
+  rows: [{
+    classes: 'govuk-summary-list__row--no-border',
+    key: {
+      text: 'pages.security.mfaSection.summaryList.phoneNumber.title' | translate
+    },
+    value: {
+      text: 'pages.security.mfaSection.summaryList.phoneNumber.value' | translate | replace("[phoneNumber]", phoneNumber)
+    },
+    actions: {
+      items: [
+        {
+          attributes: {"data-test-id": "change-phone-number"},
+          href: "/enter-password?type=changePhoneNumber",
+          text: 'general.change' | translate,
+          visuallyHiddenText: 'pages.security.mfaSection.summaryList.phoneNumber.hiddenText' | translate
+        }
+      ]
+    }
+  }]
+}
+%}
+
+{% block content %}
+  <div class="govuk-grid-row" id="your-account">
+    <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
+      <h1 class="govuk-heading-xl">{{ 'pages.security.header' | translate }}</h1>
+
+      <div class="summary-list-container">
+        <div class="summary-list-container__context">
+          <h2 class="govuk-heading-m">{{ 'pages.security.accountDetails.heading' | translate }}</h2>
+        </div>
+        {{ govukSummaryList(accountDetailsSummaryList) }}
+      </div>
+      <div class="summary-list-container">
+        <div class="summary-list-container__context">
+          <h2 class="govuk-heading-m">{{ 'pages.security.mfaSection.heading' | translate }}</h2>
+          <p class="govuk-body">{{ 'pages.security.mfaSection.paragraph' | translate }}</p>
+        </div>
+        {% if isPhoneNumberVerified %}
+          {{ govukSummaryList(mfaSummaryList) }}
+        {% else %}
+          {# there is not the option to change authenticator app yet so doing this instead of using summary list #}
+          <p class="govuk-body govuk-!-font-weight-bold govuk-!-padding-top-4"> 
+            <span class="govuk-visually-hidden">{{ 'pages.security.mfaSection.heading' | translate }}: </span>
+            {{ 'pages.security.mfaSection.summaryList.app.title' | translate }}
+          </p>
+        {% endif %}
+      </div>
+      <div class="summary-list-container">
+        <h2 class="govuk-heading-m">{{ 'pages.security.deleteAccount.heading' | translate }}</h2>
+        <p class="govuk-body">{{ 'pages.security.deleteAccount.info' | translate }}</p>
+        <p class="govuk-body"><a href="/enter-password?type=deleteAccount" class="govuk-link">{{ 'pages.security.deleteAccount.link' | translate }}</a></p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

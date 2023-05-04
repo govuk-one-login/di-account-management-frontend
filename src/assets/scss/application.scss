@@ -35,8 +35,9 @@ $govuk-new-link-styles: true;
 }
 
 .summary-list-container {
-  margin-bottom: govuk-spacing(7);
-  border-top: 1px solid $govuk-border-colour;
+  padding: govuk-spacing(4) govuk-spacing(4) 0 govuk-spacing(4);
+  margin-bottom: govuk-spacing(6);
+  border: 1px solid $govuk-border-colour;
 
   .govuk-summary-list {
     @include govuk-media-query($until: "tablet") {
@@ -44,12 +45,22 @@ $govuk-new-link-styles: true;
     }
   }
 
+  @include govuk-media-query($from: "tablet") {
+    .govuk-summary-list__key, 
+    .govuk-summary-list__value, 
+    .govuk-summary-list__actions {
+      padding-top: govuk-spacing(4);
+      padding-bottom: govuk-spacing(4);
+    }
+  }
 }
 
-.govuk-summary-list--wide-key .govuk-summary-list__key {
-  @include govuk-media-query($from: "tablet") {
-    width: 70%;
-  }
+.summary-list-container__context {
+  border-bottom: 1px solid $govuk-border-colour;
+}
+
+.govuk-summary-list--security {
+  margin-bottom: 0;
 }
 
 .govuk-show-password__input-wrapper {

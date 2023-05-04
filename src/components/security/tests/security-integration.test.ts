@@ -7,7 +7,7 @@ import * as nock from "nock";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
 
-const { url } = PATH_DATA.SETTINGS;
+const { url } = PATH_DATA.SECURITY;
 const TEST_USER_EMAIL = "test@test.com";
 const TEST_USER_PHONE_NUMBER = "07839490040";
 const DEFAULT_USER_SESSION = {
@@ -23,12 +23,12 @@ const DEFAULT_USER_SESSION = {
   },
 };
 
-describe("Integration:: manage your account", () => {
+describe("Integration:: security", () => {
   beforeEach(() => {
     nock.cleanAll();
   });
 
-  it("should return manage your account page", async () => {
+  it("should return security page", async () => {
     const app = await appWithMiddlewareSetup();
     await request(app).get(url).expect(200);
   });

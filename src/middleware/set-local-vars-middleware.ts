@@ -20,7 +20,7 @@ export function setLocalVarsMiddleware(
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.govAccountsUrl = getYourAccountUrl();
   res.locals.accountHome = PATH_DATA.YOUR_SERVICES.url;
-  res.locals.accountSettings = PATH_DATA.SETTINGS.url;
+  res.locals.accountSecurity = PATH_DATA.SECURITY.url;
   res.locals.accountSignOut = PATH_DATA.SIGN_OUT.url;
 
   if (req.cookies && req.cookies.gs) {

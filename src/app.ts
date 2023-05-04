@@ -18,7 +18,7 @@ import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
 import { serverErrorHandler } from "./handlers/internal-server-error-handler";
 import { csrfMiddleware } from "./middleware/csrf-middleware";
-import { manageYourAccountRouter } from "./components/manage-your-account/manage-your-account-routes";
+import { securityRouter } from "./components/security/security-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
 import { ENVIRONMENT_NAME } from "./app.constants";
@@ -114,7 +114,7 @@ async function createApp(): Promise<express.Application> {
   app.use(csrfMiddleware);
   app.use(setHtmlLangMiddleware);
 
-  app.use(manageYourAccountRouter);
+  app.use(securityRouter);
   app.use(yourServicesRouter);
   app.use(oidcAuthCallbackRouter);
   app.use(startRouter);
