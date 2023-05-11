@@ -155,6 +155,29 @@
         "heading": "Delete your GOV.UK One Login",
         "link": "Delete your GOV.UK One Login",
         "info": "This will permanently delete your GOV.UK One Login. You’ll no longer be able to access the services you’ve used with it."
+      },
+      "signInHistory": {
+        "heading": "Sign in history",
+        "link": "See your sign in history",
+        "info": "See when you’ve signed in to your GOV.UK One Login and what services you visited."
+      }
+    },
+    "signInHistory": {
+      "title": "Sign in history",
+      "header": "Sign in history",
+      "page": "Page [pageNumber]",
+      "notice": "If you see something you do not recognise, <a class=\"govuk-link\" href=\"[link]\">contact us</a>.",
+      "timeInfo": "UK time",
+      "featureIntro": "GOV.UK One Login started showing sign in activity on [date].",
+      "activities": {
+        "signedIn": {
+          "title": "Signed in",
+          "contentOne": "You visited [serviceName].",
+          "contentMany": "You visited:"
+        },
+        "created": {
+          "title": "Created your GOV.UK One Login"
+        }
       }
     },
     "yourServices": {
@@ -212,284 +235,6 @@
         },
         "paragraph2": "GOV.UK One Login does not work with all government accounts and services yet (for example Government Gateway or Universal Credit).",
         "paragraph3": "In the future, you'll be able to use GOV.UK One Login to access all services on GOV.UK."
-      },
-      "clientRegistry": {
-        "production": {
-          "LcueBVCnGZw-YFdTZ4S07XbQx7I": {
-            "header": "GOV.UK email subscriptions",
-            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
-            "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://www.gov.uk/email/manage"
-          },
-          "ZL0kvRBP5xMy5OwONj8ARLPyuko": {
-            "header": "LITE (Licensing for International Trade and Enterprise)",
-            "description": "Apply for or manage export control licences for controlled goods.",
-            "link_text": "Go to your LITE account",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "TGygWFxGDNn8ItyaecWCopqIX3s": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
-            "header": "Request a basic DBS check",
-            "link_text": "Request a basic DBS check",
-            "link_href": "https://www.gov.uk/request-copy-criminal-record"
-          },
-          "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
-            "header": "Apply for a vehicle operator licence",
-            "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
-            "header": "Apply to become a registered social worker in England",
-            "link_text": "Apply to become a registered social worker in England",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "VsAkrtMBzAosSveAv4xsuUDyiSs": {
-            "header":"Sign your mortgage deed",
-            "link_text": "Sign your mortgage deed",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "integration": {
-          "CEr97IZfEPQFgBxq8QNcM8LFxw4": {
-            "header": "GOV.UK email subscriptions",
-            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
-            "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
-            "header": "LITE (Licensing for International Trade and Enterprise)",
-            "description": "Apply for or manage export control licences for controlled goods.",
-            "link_text": "Go to your LITE account",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "TGygWFxGDNn8ItyaecWCopqIX3s": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "Dw7Cxas8W7O2usHMHok95elKDRU": {
-            "header": "Request a basic DBS check",
-            "link_text": "Request a basic DBS check",
-            "link_href": "https://www.gov.uk/request-copy-criminal-record"
-          },
-          "oLciSn5b6-cqcJjzgMMwCw1moD8": {
-            "header": "Apply for a vehicle operator licence",
-            "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
-            "header": "Apply to become a registered social worker in England",
-            "link_text": "Apply to become a registered social worker in England",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "VsAkrtMBzAosSveAv4xsuUDyiSs": {
-            "header": "Sign your mortgage deed",
-            "link_text": "Sign your mortgage deed",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "staging": {
-          "gov-uk": {
-            "header": "GOV.UK email subscriptions",
-            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
-            "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "lite": {
-            "header": "LITE (Licensing for International Trade and Enterprise)",
-            "description": "Apply for or manage export control licences for controlled goods.",
-            "link_text": "Go to your LITE account",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "ofqual": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "modernSlavery": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "dbs": {
-            "header": "Request a basic DBS check",
-            "link_text": "Request a basic DBS check",
-            "link_href": "https://www.gov.uk/request-copy-criminal-record"
-          },
-          "vehicleOperatorLicense": {
-            "header": "Apply for a vehicle operator licence",
-            "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "socialWorkEngland": {
-            "header": "Apply to become a registered social worker in England",
-            "link_text": "Apply to become a registered social worker in England",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "mortgageDeed": {
-            "header": "Sign your mortgage deed",
-            "link_text": "Sign your mortgage deed",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "build": {
-          "gov-uk": {
-            "header": "GOV.UK email subscriptions",
-            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
-            "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "lite": {
-            "header": "LITE (Licensing for International Trade and Enterprise)",
-            "description": "Apply for or manage export control licences for controlled goods.",
-            "link_text": "Go to your LITE account",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "ofqual": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "modernSlavery": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "dbs": {
-            "header": "Request a basic DBS check",
-            "link_text": "Request a basic DBS check",
-            "link_href": "https://www.gov.uk/request-copy-criminal-record"
-          },
-          "vehicleOperatorLicense": {
-            "header": "Apply for a vehicle operator licence",
-            "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "socialWorkEngland": {
-            "header": "Apply to become a registered social worker in England",
-            "link_text": "Apply to become a registered social worker in England",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "mortgageDeed": {
-            "header": "Sign your mortgage deed",
-            "link_text": "Sign your mortgage deed",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "dev": {
-          "gov-uk": {
-            "header": "GOV.UK email subscriptions",
-            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
-            "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "lite": {
-            "header": "LITE (Licensing for International Trade and Enterprise)",
-            "description": "Apply for or manage export control licences for controlled goods.",
-            "link_text": "Go to your LITE account",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "ofqual": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "modernSlavery": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "dbs": {
-            "header": "Request a basic DBS check",
-            "link_text": "Request a basic DBS check",
-            "link_href": "https://www.gov.uk/request-copy-criminal-record"
-          },
-          "vehicleOperatorLicense": {
-            "header":"Apply for a vehicle operator licence",
-            "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "socialWorkEngland": {
-            "header": "Apply to become a registered social worker in England",
-            "link_text": "Apply to become a registered social worker in England",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "mortgageDeed": {
-            "header": "Sign your mortgage deed",
-            "link_text": "Sign your mortgage deed",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "local": {
-          "gov-uk": {
-            "header": "GOV.UK email subscriptions",
-            "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
-            "link_text": "Go to your GOV.UK email subscriptions",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "lite": {
-            "header": "LITE (Licensing for International Trade and Enterprise)",
-            "description": "Apply for or manage export control licences for controlled goods.",
-            "link_text": "Go to your LITE account",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "ofqual": {
-            "header": "Ofqual subject matter specialist account",
-            "description": "Apply to give specialist advice to Ofqual.",
-            "link_text": "Go to your Ofqual subject matter specialist account",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "modernSlavery": {
-            "header": "Modern slavery statement registry",
-            "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
-            "link_text": "Go to your modern slavery statement registry account",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "dbs": {
-            "header": "Request a basic DBS check",
-            "link_text": "Request a basic DBS check",
-            "link_href": "https://www.gov.uk/request-copy-criminal-record"
-          },
-          "vehicleOperatorLicense": {
-            "header": "Apply for a vehicle operator licence",
-            "link_text": "Apply for a vehicle operator licence",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "socialWorkEngland": {
-            "header": "Apply to become a registered social worker in England",
-            "link_text": "Apply to become a registered social worker in England",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "mortgageDeed": {
-            "header": "Sign your mortgage deed",
-            "link_text": "Sign your mortgage deed",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        }
       }
     },
     "enterPassword": {
@@ -702,6 +447,284 @@
       "email": {
         "recipientMessage": "We will send a code to: ",
         "paragraph": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder."
+      }
+    }
+  },
+  "clientRegistry": {
+    "production": {
+      "LcueBVCnGZw-YFdTZ4S07XbQx7I": {
+        "header": "GOV.UK email subscriptions",
+        "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+        "link_text": "Go to your GOV.UK email subscriptions",
+        "link_href": "https://www.gov.uk/email/manage"
+      },
+      "ZL0kvRBP5xMy5OwONj8ARLPyuko": {
+        "header": "LITE (Licensing for International Trade and Enterprise)",
+        "description": "Apply for or manage export control licences for controlled goods.",
+        "link_text": "Go to your LITE account",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "TGygWFxGDNn8ItyaecWCopqIX3s": {
+        "header": "Ofqual subject matter specialist account",
+        "description": "Apply to give specialist advice to Ofqual.",
+        "link_text": "Go to your Ofqual subject matter specialist account",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
+        "header": "Modern slavery statement registry",
+        "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+        "link_text": "Go to your modern slavery statement registry account",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
+        "header": "Request a basic DBS check",
+        "link_text": "Request a basic DBS check",
+        "link_href": "https://www.gov.uk/request-copy-criminal-record"
+      },
+      "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
+        "header": "Apply for a vehicle operator licence",
+        "link_text": "Apply for a vehicle operator licence",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+        "header": "Apply to become a registered social worker in England",
+        "link_text": "Apply to become a registered social worker in England",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "VsAkrtMBzAosSveAv4xsuUDyiSs": {
+        "header":"Sign your mortgage deed",
+        "link_text": "Sign your mortgage deed",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "integration": {
+      "CEr97IZfEPQFgBxq8QNcM8LFxw4": {
+        "header": "GOV.UK email subscriptions",
+        "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+        "link_text": "Go to your GOV.UK email subscriptions",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
+        "header": "LITE (Licensing for International Trade and Enterprise)",
+        "description": "Apply for or manage export control licences for controlled goods.",
+        "link_text": "Go to your LITE account",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "TGygWFxGDNn8ItyaecWCopqIX3s": {
+        "header": "Ofqual subject matter specialist account",
+        "description": "Apply to give specialist advice to Ofqual.",
+        "link_text": "Go to your Ofqual subject matter specialist account",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
+        "header": "Modern slavery statement registry",
+        "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+        "link_text": "Go to your modern slavery statement registry account",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "Dw7Cxas8W7O2usHMHok95elKDRU": {
+        "header": "Request a basic DBS check",
+        "link_text": "Request a basic DBS check",
+        "link_href": "https://www.gov.uk/request-copy-criminal-record"
+      },
+      "oLciSn5b6-cqcJjzgMMwCw1moD8": {
+        "header": "Apply for a vehicle operator licence",
+        "link_text": "Apply for a vehicle operator licence",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+        "header": "Apply to become a registered social worker in England",
+        "link_text": "Apply to become a registered social worker in England",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "VsAkrtMBzAosSveAv4xsuUDyiSs": {
+        "header": "Sign your mortgage deed",
+        "link_text": "Sign your mortgage deed",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "staging": {
+      "gov-uk": {
+        "header": "GOV.UK email subscriptions",
+        "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+        "link_text": "Go to your GOV.UK email subscriptions",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "lite": {
+        "header": "LITE (Licensing for International Trade and Enterprise)",
+        "description": "Apply for or manage export control licences for controlled goods.",
+        "link_text": "Go to your LITE account",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Ofqual subject matter specialist account",
+        "description": "Apply to give specialist advice to Ofqual.",
+        "link_text": "Go to your Ofqual subject matter specialist account",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Modern slavery statement registry",
+        "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+        "link_text": "Go to your modern slavery statement registry account",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Request a basic DBS check",
+        "link_text": "Request a basic DBS check",
+        "link_href": "https://www.gov.uk/request-copy-criminal-record"
+      },
+      "vehicleOperatorLicense": {
+        "header": "Apply for a vehicle operator licence",
+        "link_text": "Apply for a vehicle operator licence",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Apply to become a registered social worker in England",
+        "link_text": "Apply to become a registered social worker in England",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Sign your mortgage deed",
+        "link_text": "Sign your mortgage deed",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "build": {
+      "gov-uk": {
+        "header": "GOV.UK email subscriptions",
+        "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+        "link_text": "Go to your GOV.UK email subscriptions",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "lite": {
+        "header": "LITE (Licensing for International Trade and Enterprise)",
+        "description": "Apply for or manage export control licences for controlled goods.",
+        "link_text": "Go to your LITE account",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Ofqual subject matter specialist account",
+        "description": "Apply to give specialist advice to Ofqual.",
+        "link_text": "Go to your Ofqual subject matter specialist account",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Modern slavery statement registry",
+        "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+        "link_text": "Go to your modern slavery statement registry account",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Request a basic DBS check",
+        "link_text": "Request a basic DBS check",
+        "link_href": "https://www.gov.uk/request-copy-criminal-record"
+      },
+      "vehicleOperatorLicense": {
+        "header": "Apply for a vehicle operator licence",
+        "link_text": "Apply for a vehicle operator licence",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Apply to become a registered social worker in England",
+        "link_text": "Apply to become a registered social worker in England",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Sign your mortgage deed",
+        "link_text": "Sign your mortgage deed",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "dev": {
+      "gov-uk": {
+        "header": "GOV.UK email subscriptions",
+        "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+        "link_text": "Go to your GOV.UK email subscriptions",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "lite": {
+        "header": "LITE (Licensing for International Trade and Enterprise)",
+        "description": "Apply for or manage export control licences for controlled goods.",
+        "link_text": "Go to your LITE account",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Ofqual subject matter specialist account",
+        "description": "Apply to give specialist advice to Ofqual.",
+        "link_text": "Go to your Ofqual subject matter specialist account",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Modern slavery statement registry",
+        "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+        "link_text": "Go to your modern slavery statement registry account",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Request a basic DBS check",
+        "link_text": "Request a basic DBS check",
+        "link_href": "https://www.gov.uk/request-copy-criminal-record"
+      },
+      "vehicleOperatorLicense": {
+        "header":"Apply for a vehicle operator licence",
+        "link_text": "Apply for a vehicle operator licence",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Apply to become a registered social worker in England",
+        "link_text": "Apply to become a registered social worker in England",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Sign your mortgage deed",
+        "link_text": "Sign your mortgage deed",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "local": {
+      "gov-uk": {
+        "header": "GOV.UK email subscriptions",
+        "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+        "link_text": "Go to your GOV.UK email subscriptions",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "lite": {
+        "header": "LITE (Licensing for International Trade and Enterprise)",
+        "description": "Apply for or manage export control licences for controlled goods.",
+        "link_text": "Go to your LITE account",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Ofqual subject matter specialist account",
+        "description": "Apply to give specialist advice to Ofqual.",
+        "link_text": "Go to your Ofqual subject matter specialist account",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Modern slavery statement registry",
+        "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+        "link_text": "Go to your modern slavery statement registry account",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Request a basic DBS check",
+        "link_text": "Request a basic DBS check",
+        "link_href": "https://www.gov.uk/request-copy-criminal-record"
+      },
+      "vehicleOperatorLicense": {
+        "header": "Apply for a vehicle operator licence",
+        "link_text": "Apply for a vehicle operator licence",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Apply to become a registered social worker in England",
+        "link_text": "Apply to become a registered social worker in England",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Sign your mortgage deed",
+        "link_text": "Sign your mortgage deed",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
       }
     }
   }

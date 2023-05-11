@@ -17,6 +17,7 @@ $govuk-new-link-styles: true;
 @import "components/header/header";
 @import "components/input/input";
 @import "components/inset-text/inset-text";
+@import "components/pagination/pagination";
 @import "components/panel/panel";
 @import "components/phase-banner/phase-banner";
 @import "components/skip-link/skip-link";
@@ -61,6 +62,21 @@ $govuk-new-link-styles: true;
 
 .govuk-summary-list--security {
   margin-bottom: 0;
+}
+
+.govuk-summary-list--activity-log {
+  .govuk-summary-list__key {
+    @include govuk-font($size: 24, $weight: bold)
+  }
+
+  @include govuk-media-query($from: "tablet") {
+    .govuk-summary-list__key, 
+    .govuk-summary-list__value, 
+    .govuk-summary-list__actions {
+      padding-top: govuk-spacing(4);
+      padding-bottom: govuk-spacing(4);
+    }
+  }
 }
 
 .govuk-show-password__input-wrapper {

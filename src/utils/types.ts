@@ -24,6 +24,21 @@ export interface KmsService {
   sign: (payload: string) => Promise<KMS.Types.SignResponse>;
 }
 
+export interface ActivityLogEvent {
+  event_type: string;
+  session_id: string;
+  user_id: string;
+  timestamp: string;
+  activities?: ActivityLogEventActivity[],
+  truncated: boolean
+}
+
+export interface ActivityLogEventActivity {
+  type: string;
+  client_id: ClientId;
+  timestamp: string;
+}
+
 export interface SnsService {
   publish: (
     topic_arn: string,

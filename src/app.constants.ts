@@ -3,6 +3,7 @@ import { UserJourney } from "./utils/state-machine";
 export const PATH_DATA: {
   [key: string]: { url: string; event?: string; type?: UserJourney };
 } = {
+  SIGN_IN_HISTORY: { url: "/security/sign-in-history" },
   MANAGE_YOUR_ACCOUNT: { url: "/manage-your-account" },
   SETTINGS: { url: "/settings" },
   SECURITY: { url: "/security" },
