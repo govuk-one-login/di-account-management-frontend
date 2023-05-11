@@ -18,7 +18,7 @@
   <ul class="govuk-list govuk-list--bullet">
     {% for service in services %}
 
-      {% set locale = ['pages.yourServices.clientRegistry.', env, '.', service.client_id, '.'] | join %}
+      {% set locale = ['clientRegistry.', env, '.', service.client_id, '.'] | join %}
         <li data-test-id="service-list-item">{{ [locale, 'header'] | join | translate }}</li>
 
     {% endfor %}

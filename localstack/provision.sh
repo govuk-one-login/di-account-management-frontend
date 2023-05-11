@@ -44,9 +44,7 @@ aws --endpoint-url http://localhost:4566 dynamodb create-table \
               }
           }
       ]"
-
 aws --endpoint-url http://localhost:4566 dynamodb update-time-to-live \
   --table-name account-mgmt-frontend-SessionStore \
   --region eu-west-2 \
   --time-to-live-specification Enabled=true,AttributeName=expires
-

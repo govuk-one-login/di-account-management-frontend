@@ -66,6 +66,29 @@ describe("Integration:: security", () => {
         expect($(testComponent('change-phone-number')).length).to.equal(0);
       });
   });
+
+  it("should display link to activity log when supportActivityLog is true", async () => {
+    const app = await appWithMiddlewareSetup({supportActivityLog: true});
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent('activity-log-section')).length).to.equal(1);
+      });
+  });
+
+
+  it("should not display link to activity log when supportActivityLog is false", async () => {
+    const app = await appWithMiddlewareSetup();
+      await request(app)
+        .get(url)
+        .expect(function (res) {
+          const $ = cheerio.load(res.text);
+          expect(res.status).to.equal(200);
+          expect($(testComponent('activity-log-section')).length).to.equal(0);
+        });
+    });
 });
 
 const appWithMiddlewareSetup = async (config: any = {}) => {
@@ -73,6 +96,8 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   decache("../../../middleware/requires-auth-middleware");
   const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
+  const oidc = require("../../../utils/oidc");
+  const configFuncs = require("../../../config");
 
   sandbox
     .stub(sessionMiddleware, "requiresAuthMiddleware")
@@ -83,7 +108,6 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
       next();
     });
 
-  const oidc = require("../../../utils/oidc");
   sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
     return new Promise((resolve) => {
       resolve({});
@@ -94,7 +118,12 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     return new Promise((resolve) => {
       resolve({});
     });
+  });    
+  
+  sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+    return config.supportActivityLog
   });
 
   return await require("../../../app").createApp();
+
 };

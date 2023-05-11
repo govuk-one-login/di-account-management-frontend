@@ -1,0 +1,81 @@
+{% extends "common/layout/base.njk" %}
+{% set pageTitleName = 'pages.signInHistory.title' | translate %}
+{% set backLink = "/settings" %}
+{% set paginationItems = [] %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
+{% set signInHistoryList = {
+  classes: "govuk-summary-list--activity-log",
+  attributes: {"data-test-id": "sign-in-history"},
+  rows: []
+} %}
+
+{% if pagination.items and pagination.currentPage %}
+  {% set pageTitleName = [pageTitleName, " - ", 'pages.signInHistory.page' | translate | replace("[pageNumber]", pagination.currentPage)] | join %}
+{% endif %}
+
+
+{% for item in pagination.items %}
+  {% set paginationItems = (paginationItems.push({
+    number: item,
+    href: "?page="+item,
+    current: true if (item == pagination.currentPage) else false
+  }), paginationItems) %}
+{% endfor %}
+{% if data.length %}
+  {% for event in data %}
+    {% set contentLocale = ['pages.signInHistory.activities.', event.eventType] | join %}
+    {% set valueHTML %}
+      <p class="govuk-body govuk-!-font-weight-bold">{{event.time}} ({{ 'pages.signInHistory.timeInfo' | translate }})</p>
+      {% if event.visitedServicesIds.length > 1 %}
+        <p class="govuk-body">{{[contentLocale, '.', 'contentMany'] | join | translate }}</p>
+        <ul class="govuk-list govuk-list--bullet">
+          {% for serviceId in event.visitedServicesIds %}
+            {% set serviceName = ['clientRegistry.', env, '.', serviceId, '.header'] | join | translate %}
+            <li>{{ serviceName }}</li>
+          {% endfor %}
+        </ul>
+      {% elif (event.visitedServicesIds.length == 1) %}
+        {% set serviceName = ['clientRegistry.', env, '.', event.visitedServicesIds[0], '.header'] | join | translate %}
+        <p class="govuk-body">{{[contentLocale, '.', 'contentOne'] | join | translate | replace("[serviceName]", serviceName) }}</p>
+      {% endif %}
+    {% endset %}
+    
+    {% set row = {
+      key: {
+        text: [contentLocale, '.', 'title'] | join | translate  
+      },
+      value: {
+        text: valueHTML | safe
+      }
+    } %}
+    {% set signInHistoryList = (signInHistoryList.rows.push(row), signInHistoryList) %}
+  {% endfor %}
+{% endif %}
+
+{% block content %}
+  <div class="govuk-grid-row" id="sign-in-history">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.signInHistory.header' | translate }}</h1>
+      <p class="govuk-body">{{ 'pages.signInHistory.notice' | translate | replace("[link]", "https://signin.account.gov.uk/contact-us-questions?theme=something_else&referer=") | safe }}</p>
+      {{ govukSummaryList(signInHistoryList) }}
+      {% if not isNewUser %}
+        <p class="govuk-body" data-for-test="activity-log-explainer">{{ 'pages.signInHistory.featureIntro' | translate }}</p>
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      {% endif %}
+      {{ govukPagination({
+        attributes: {
+          "data-test-id": "activity-log-pagination"
+        },
+        previous: {
+          href: "?page=" + pagination.previousPage
+        } if pagination.previousPage,
+        next: {
+          href: "?page=" + pagination.nextPage
+        } if pagination.nextPage,
+        items: paginationItems
+      }) if pagination.items }}
+    </div>
+  </div>
+{% endblock %}
