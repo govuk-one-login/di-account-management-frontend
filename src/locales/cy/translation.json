@@ -14,7 +14,7 @@
     },
     "yes": "Yes",
     "no": "Na",
-    "backToAccountButtonText": "Yn ôl i osodiadau",
+    "backToAccountButtonText": "Yn ôl i’r dudalen ddiogelwch",
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "cookie": {
       "cookieBanner": {
@@ -51,8 +51,8 @@
       "homepageHref": "https://www.gov.uk/",
       "productName": "One Login",
       "accountLink": "Eich GOV.UK One Login",
-      "accounNavHomeLink": "Eich gwasanaethau",
-      "accountNavSettingsLink": "Gosodiadau",
+      "accountNavHomeLink": "Eich gwasanaethau",
+      "accountNavSecurityLink": "Diogelwch",
       "signOutLink": "Allgofnodi"
     },
     "footer": {
@@ -121,10 +121,9 @@
     }
   },
   "pages": {
-    "manageYourAccount": {
-      "title": "Gosodiadau",
-      "header": "Gosodiadau",
-      "signedInStatus": "Rydych wedi mewngofnodi fel",
+    "security": {
+      "title": "Diogelwch",
+      "header": "Diogelwch",
       "accountDetails": {
         "heading": "Eich manylion mewngofnodi",
         "summaryList": {
@@ -137,7 +136,8 @@
         "paragraph": "Rydym yn defnyddio codau diogelwch i wneud yn siwr mae chi yw chi pan fyddwch yn mewngofnodi.",
         "summaryList": {
           "phoneNumber": {
-            "title": "Neges testun i [phoneNumber]",
+            "title": "Neges testun",
+            "value": "Rhif ffôn sy'n gorffen gyda [phoneNumber]",
             "hiddenText": "Rhif ffôn"
           },
           "app": {
@@ -650,7 +650,7 @@
       "paragraph5": "Os byddwch angen GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
       "details": "Ni fydd dileu eich GOV.UK One Login yn effeithio ar unrhyw gyfrifon eraill y llywodraeth sydd gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.",
       "deleteAccount": "Dileu eich GOV.UK One Login",
-      "doNotDeleteAccount": "Canslo a mynd yn ôl i gosodiadau"
+      "doNotDeleteAccount": "Canslo a mynd yn ôl i’r dudalen ddiogelwch"
     },
     "changePhoneNumber": {
       "title": "Rhowch eich rhif ffôn symudol newydd",

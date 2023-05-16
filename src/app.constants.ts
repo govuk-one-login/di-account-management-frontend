@@ -5,6 +5,7 @@ export const PATH_DATA: {
 } = {
   MANAGE_YOUR_ACCOUNT: { url: "/manage-your-account" },
   SETTINGS: { url: "/settings" },
+  SECURITY: { url: "/security" },
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
   CHANGE_EMAIL: {

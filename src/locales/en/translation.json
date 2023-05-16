@@ -14,7 +14,7 @@
     },
     "yes": "Yes",
     "no": "No",
-    "backToAccountButtonText": "Back to settings",
+    "backToAccountButtonText": "Back to security",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "cookie": {
       "cookieBanner": {
@@ -51,8 +51,8 @@
       "homepageHref": "https://www.gov.uk/",
       "productName": "One Login",
       "accountLink": "Your GOV.UK One Login",
-      "accounNavHomeLink": "Your services",
-      "accountNavSettingsLink": "Settings",
+      "accountNavHomeLink": "Your services",
+      "accountNavSecurityLink": "Security",
       "signOutLink": "Sign out"
     },
     "footer": {
@@ -121,10 +121,9 @@
     }
   },
   "pages": {
-    "manageYourAccount": {
-      "title": "Settings",
-      "header": "Settings",
-      "signedInStatus": "You’re signed in as",
+    "security": {
+      "title": "Security",
+      "header": "Security",
       "accountDetails": {
         "heading": "Your sign in details",
         "summaryList": {
@@ -137,7 +136,8 @@
         "paragraph": "We use security codes to make sure it’s you when you sign in.",
         "summaryList": {
           "phoneNumber": {
-            "title": "Text message to [phoneNumber]",
+            "title": "Text message",
+            "value": "Phone number ending with [phoneNumber]",
             "hiddenText": "Phone number"
           },
           "app": {
@@ -651,7 +651,7 @@
       "paragraph5": "If you need a GOV.UK One Login in the future, you’ll have to create a new one.",
       "details": "Deleting your GOV.UK One Login will not affect any other government accounts you may have, such as Government Gateway or Universal Credit.",
       "deleteAccount": "Delete your GOV.UK One Login",
-      "doNotDeleteAccount": "Cancel and go back to settings"
+      "doNotDeleteAccount": "Cancel and go back to security"
     },
     "changePhoneNumber": {
       "title": "Enter your new mobile phone number",

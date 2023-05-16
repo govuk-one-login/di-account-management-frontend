@@ -1,14 +1,14 @@
 import * as express from "express";
-import { manageYourAccountGet } from "./manage-your-account-controller";
+import { securityGet } from "./security-controller";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 
 const router = express.Router();
 
 router.get(
-  PATH_DATA.SETTINGS.url,
+  PATH_DATA.SECURITY.url,
   requiresAuthMiddleware,
-  manageYourAccountGet
+  securityGet
 );
 
-export { router as manageYourAccountRouter };
+export { router as securityRouter };
