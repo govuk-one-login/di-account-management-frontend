@@ -8,7 +8,7 @@ import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
-import { prependInternationalPrefix } from "../../utils/phone-number";
+import { convertInternationalPhoneNumberToE164Format } from "../../utils/phone-number";
 import { BadRequestError } from "../../utils/errors";
 import xss from "xss";
 
@@ -27,8 +27,8 @@ export function changePhoneNumberPost(
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
     let newPhoneNumber;
 
-    if (hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true") {
-      newPhoneNumber = prependInternationalPrefix(
+    if (hasInternationalPhoneNumber === "true") {
+      newPhoneNumber = convertInternationalPhoneNumberToE164Format(
         req.body.internationalPhoneNumber
       );
     } else {

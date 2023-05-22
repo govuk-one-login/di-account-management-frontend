@@ -70,7 +70,7 @@ export function validateChangePhoneNumberRequest(): ValidationChainFunc {
         return true;
       })
       .custom((value, { req }) => {
-        if (!lengthInRangeWithoutSpaces(value, 5, 16)) {
+        if (!lengthInRangeWithoutSpaces(value, 5, 26)) {
           throw new Error(
             req.t(
               "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
