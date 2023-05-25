@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getAppEnv, activityLogItemsPerPage } from "../../config";
-import { presentSignInHistory, generatePagination, formatData, hasAccountCreationEvent } from "../../utils/signInHistory";
+import { presentSignInHistory, generatePagination, formatData, hasExplanationParagraph } from "../../utils/signInHistory";
 
 
 export async function signInHistoryGet(
@@ -10,14 +10,14 @@ export async function signInHistoryGet(
   const { user } = req.session;
   const env = getAppEnv();
   let activityData:any[] = [];
-  let isNewUser = false;
+  let showExplanation = false;
   let data:any = [];
   let pagination:any = {};
   if (user && user.subjectId) {
     activityData = await presentSignInHistory();
     const pageParameter = req.query?.page
     const dataLength = activityData.length;
-    isNewUser = hasAccountCreationEvent(activityData)
+    showExplanation = hasExplanationParagraph(activityData)
     if (dataLength <= activityLogItemsPerPage) {
       data = formatData(activityData);
     } else {
@@ -27,7 +27,7 @@ export async function signInHistoryGet(
   } 
 
   res.render("sign-in-history/index.njk", { 
-    isNewUser: isNewUser,
+    showExplanation: showExplanation,
     data: data, 
     env: env, 
     pagination: pagination

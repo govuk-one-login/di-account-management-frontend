@@ -50,7 +50,7 @@ describe("Sign in history controller", () => {
       };
       await signInHistoryGet(req as Request, res as Response).then(() => {
         expect(res.render).to.have.been.calledWith("sign-in-history/index.njk", {
-          isNewUser: false,
+          showExplanation: false,
           env: getAppEnv(),
           data: [],
           pagination: {},

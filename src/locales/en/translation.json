@@ -174,9 +174,6 @@
           "title": "Signed in",
           "contentOne": "You visited [serviceName].",
           "contentMany": "You visited:"
-        },
-        "created": {
-          "title": "Created your GOV.UK One Login"
         }
       }
     },
