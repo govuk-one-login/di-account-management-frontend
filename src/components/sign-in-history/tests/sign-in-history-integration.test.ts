@@ -186,32 +186,13 @@ describe("Integration:: Sign in history", () => {
       });
   });
 
-
-  it("should display with `created your GOVUK One Login` event if data contains `created` event", async () => {
-    const dataWithCreated = [{ 
-      "event_type": "created",
-      "session_id": "asdf",
-      "user_id": "string",
-      "timestamp": "1699210000",
-      "truncated": false
-    }];
-    const app = await appWithMiddlewareSetup(dataWithCreated);
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent('sign-in-history')).text()).to.contains("Created your GOV.UK One Login");
-      });
-  });
-
-
-  it("should display an introductory paragraph if data doesn't contain the `created` event i.e the user is an existing user at the time the feature is introduced", async () => {
+  it("should display an introductory paragraph if the first event in the log is older than feature launch date", async () => {
     const dataWithoutCreated = [{
       "event_type": "signed-in",
       "session_id": "asdf",
       "user_id": "string",
-      "timestamp": "1689210000" ,
+        // Sun Jan 29 2023
+      "timestamp": "1675032269060",
       "activities":[
         {
           "type": "visited",

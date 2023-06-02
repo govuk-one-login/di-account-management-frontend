@@ -6,9 +6,12 @@ import { prettifyDate } from "./prettifyDate";
 import { ActivityLogEvent } from "./types";
 
 const activityLogEventTypeLocales: Record<string, unknown> = {
-  "signed-in": "signedIn",
-  "created": "created",
+  "signed-in": "signedIn"
 }
+
+// TODO should be in a config somewhere I suppose. 
+// Should be generated using Date.now() whenever a launch date is agreed upon
+const activityLogLaunchDateInMs = 1685032269060;
 
 const data = [
   {
@@ -224,16 +227,13 @@ const data = [
     }
   ],
   "truncated": false
-},{ 
-  "event_type": "created",
-  "session_id": "asdf",
-  "user_id": "string",
-  "timestamp": "1699210000",
-  "truncated": false
 }];
 
-export const hasAccountCreationEvent = (data: Array<any>):boolean => {
-  return data?.filter((event: ActivityLogEvent) => event["event_type"] == "created").length > 0
+export const hasExplanationParagraph = (data: Array<any>) => {
+  if (data && data[data.length - 1]) {
+    return data[data.length - 1]["timestamp"] < activityLogLaunchDateInMs;
+  } 
+  return false;
 }
 
 export const generatePagination = (dataLength: number, page: any): [] => {

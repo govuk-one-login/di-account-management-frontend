@@ -3,57 +3,40 @@ import { describe } from "mocha";
 import {
   formatData,
   generatePagination,
-  hasAccountCreationEvent
+  hasExplanationParagraph
 } from "../../../src/utils/signInHistory";
 import type { ActivityLogEvent } from "../../../src/utils/types";
 
 describe("YourService Util", () => {
-  describe("check if account creation event exists", () => {
-    it("returns false if data array does not have 'created' event", async () => {
+  describe("show a paragraph explaining the feature where appropriate", () => {
+    it("flag is false when the earliest event in the log is newer than feature launch date", async () => {
       const data: ActivityLogEvent[] = [{
         "event_type": "signed-in",
         "session_id": "asdf",
         "user_id": "1234",
-        "timestamp": "1689210000" ,
-        "activities":[
-          {
-            "type": "visited",
-            "client_id": "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
-            "timestamp": "1689210000",
-          }
-        ],
+        // Thu Nov 25 2032
+        "timestamp": "1985032269060",
         "truncated": false
       }];
 
-      expect(hasAccountCreationEvent(data)).equal(false);
+      expect(hasExplanationParagraph(data)).equal(false);
     });
 
-    it("returns true if data array does have 'created' event", async () => {
+    it("flag is true when the earliest event in the log is older than feature launch date", async () => {
       const data: ActivityLogEvent[] = [{
         "event_type": "signed-in",
         "session_id": "asdf",
         "user_id": "1234",
-        "timestamp": "1689210000" ,
-        "activities":[
-          {
-            "type": "visited",
-            "client_id": "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
-            "timestamp": "1689210000",
-          }
-        ],
-        "truncated": false
-      },{ 
-        "event_type": "created",
-        "session_id": "asdf",
-        "user_id": "string",
-        "timestamp": "1699210000",
+        // Sun Jan 29 2023
+        "timestamp": "1675032269060",
         "truncated": false
       }];
 
-      expect(hasAccountCreationEvent(data)).equal(true);
+      expect(hasExplanationParagraph(data)).equal(true);
     });
   });
 
+  
   describe("format user activity to display", () => {
     it("returns the correct events for the current page", async () => {
       const longData: ActivityLogEvent[] = [{
