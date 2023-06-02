@@ -157,26 +157,23 @@
         "info": "Bydd hyn yn dileu eich GOV.UK One Login yn barhaol. Ni fyddwch bellach yn gallu cael mynediad i'r gwasanaethau rydych wedi'u defnyddio gydag ef."
       },
       "signInHistory": {
-        "heading": "Sign in history",
-        "link": "See your sign in history",
-        "info": "See when you’ve signed in to your GOV.UK One Login and what services you visited."
+        "heading": "Hanes mewngofnodi",
+        "link": "Gweld eich hanes mewngofnodi",
+        "info": "Gweld pan rydych wedi mewngofnodi i'ch GOV.UK One Login a pha wasanaethau rydych wedi ymweld â hwy."
       }
     },
     "signInHistory": {
-      "title": "Sign in history",
-      "header": "Sign in history",
-      "page": "Page [pageNumber]",
-      "notice": "If you see something you do not recognise, <a class=\"govuk-link\" href=\"[link]\">contact us</a>.",
-      "timeInfo": "UK time",
-      "featureIntro": "GOV.UK One Login started showing sign in activity on [date].",
+      "title": "Hanes mewngofnodi",
+      "header": "Hanes mewngofnodi",
+      "page": "Tudalen [pageNumber]",
+      "notice": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod, <a class=\"govuk-link\" href=\"[link]\">cysylltwch â ni</a>.",
+      "timeInfo": "amser yn y DU",
+      "featureIntro": "Dechreuodd GOV.UK One Login ddangos gweithgaredd mewngofnodi ar [date].",
       "activities": {
         "signedIn": {
-          "title": "Signed in",
-          "contentOne": "You visited [serviceName].",
-          "contentMany": "You visited:"
-        },
-        "created": {
-          "title": "Created your GOV.UK One Login"
+          "title": "Wedi mewngofnodi",
+          "contentOne": "Gwnaethoch ymweld â [serviceName].",
+          "contentMany": "Gwnaethoch ymweld â:"
         }
       }
     },
