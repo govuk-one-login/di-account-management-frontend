@@ -22,7 +22,7 @@ const DEFAULT_USER_SESSION = {
   },
 };
 
-describe.only("Integration:: Sign in history", () => {
+describe("Integration:: Sign in history", () => {
   beforeEach(() => {
     nock.cleanAll();
   });
@@ -40,7 +40,6 @@ describe.only("Integration:: Sign in history", () => {
   it("should not return sign in history page if feature flag is off", async () => {
     const app = await appWithMiddlewareSetup([], {hideActivityLog: true});
     await request(app).get(url).expect(function(res) {
-      const $ = cheerio.load(res.text);
       expect(res.status).to.equal(404);
     });
   });
