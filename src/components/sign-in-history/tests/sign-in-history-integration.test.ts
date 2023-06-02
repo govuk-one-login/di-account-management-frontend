@@ -22,7 +22,7 @@ const DEFAULT_USER_SESSION = {
   },
 };
 
-describe("Integration:: Sign in history", () => {
+describe.only("Integration:: Sign in history", () => {
   beforeEach(() => {
     nock.cleanAll();
   });
@@ -33,6 +33,15 @@ describe("Integration:: Sign in history", () => {
       const $ = cheerio.load(res.text);
       expect(res.status).to.equal(200);
       expect($(testComponent('sign-in-history')).length).to.equal(1);
+    });
+  });
+
+
+  it("should not return sign in history page if feature flag is off", async () => {
+    const app = await appWithMiddlewareSetup([], {hideActivityLog: true});
+    await request(app).get(url).expect(function(res) {
+      const $ = cheerio.load(res.text);
+      expect(res.status).to.equal(404);
     });
   });
 
@@ -213,7 +222,7 @@ describe("Integration:: Sign in history", () => {
   });
 });
 
-const appWithMiddlewareSetup = async (data?: any) => {
+const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   decache("../../../app");
   decache("../../../middleware/requires-auth-middleware");
   const oidc = require("../../../utils/oidc");
@@ -221,6 +230,7 @@ const appWithMiddlewareSetup = async (data?: any) => {
   const signInHistory = require("../../../utils/signInHistory");
   const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
+  const showActivityLog = !config?.hideActivityLog;
   const activity = data || [{
     "event_type": "signed-in",
     "session_id": "asdf",
@@ -266,7 +276,7 @@ const appWithMiddlewareSetup = async (data?: any) => {
   });
 
   sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-    return true
+    return showActivityLog;
   });
   return await require("../../../app").createApp();
 };
