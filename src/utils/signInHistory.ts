@@ -306,8 +306,12 @@ export const formatData = (data: ActivityLogEvent[], currentPage?:number): [] =>
     if (!newRow.eventType) continue;
 
     newRow.time = prettifyDate(Number(row["timestamp"]), {
-      dateStyle: "long", 
-      timeStyle: "short", 
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hourCycle: "h12",
       timeZone: "GB"
     })
 

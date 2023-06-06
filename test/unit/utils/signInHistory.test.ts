@@ -7,7 +7,7 @@ import {
 } from "../../../src/utils/signInHistory";
 import type { ActivityLogEvent } from "../../../src/utils/types";
 
-describe("YourService Util", () => {
+describe("Sign in History Util", () => {
   describe("show a paragraph explaining the feature where appropriate", () => {
     it("flag is false when the earliest event in the log is newer than feature launch date", async () => {
       const data: ActivityLogEvent[] = [{
@@ -235,7 +235,7 @@ describe("YourService Util", () => {
 
       expect(formattedData[0].eventType).equal("signedIn");
       expect(formattedData[0].visitedServicesIds[0]).equal('RqFZ83csmS4Mi4Y7s7ohD9-ekwU');
-      expect(formattedData[0].time).equal("13 July 2023 at 02:00");
+      expect(formattedData[0].time).equal("13 July 2023 at 2:00 am");
     });
   });
 
