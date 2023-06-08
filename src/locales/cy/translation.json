@@ -166,6 +166,7 @@
       "title": "Hanes mewngofnodi",
       "header": "Hanes mewngofnodi",
       "page": "Tudalen [pageNumber]",
+      "empty": "There is a problem showing your sign in history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">report it</a>.",
       "notice": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod, <a class=\"govuk-link\" href=\"[link]\">cysylltwch â ni</a>.",
       "timeInfo": "amser yn y DU",
       "featureIntro": "Dechreuodd GOV.UK One Login ddangos gweithgaredd mewngofnodi ar [date].",

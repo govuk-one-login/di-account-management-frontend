@@ -166,6 +166,7 @@
       "title": "Sign in history",
       "header": "Sign in history",
       "page": "Page [pageNumber]",
+      "empty": "There is a problem showing your sign in history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">report it</a>.",
       "notice": "If you see something you do not recognise, <a class=\"govuk-link\" href=\"[link]\">contact us</a>.",
       "timeInfo": "UK time",
       "featureIntro": "GOV.UK One Login started showing sign in activity on [date].",

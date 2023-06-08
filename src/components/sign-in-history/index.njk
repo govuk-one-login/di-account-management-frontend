@@ -1,9 +1,11 @@
 {% extends "common/layout/base.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% set pageTitleName = 'pages.signInHistory.title' | translate %}
 {% set backLink = "/settings" %}
+{% set contactLink = "https://signin.account.gov.uk/contact-us-questions?theme=something_else&referer=" %}
 {% set paginationItems = [] %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 
 {% set signInHistoryList = {
   classes: "govuk-summary-list--activity-log",
@@ -58,7 +60,14 @@
   <div class="govuk-grid-row" id="sign-in-history">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.signInHistory.header' | translate }}</h1>
-      <p class="govuk-body">{{ 'pages.signInHistory.notice' | translate | replace("[link]", "https://signin.account.gov.uk/contact-us-questions?theme=something_else&referer=") | safe }}</p>
+      {% if data.length %}
+        <p class="govuk-body">{{ 'pages.signInHistory.notice' | translate | replace("[link]", contactLink) | safe }}</p>
+      {% else %}
+        {# This should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
+        {{ govukInsetText({
+          html: 'pages.signInHistory.empty' | translate | replace("[link]", contactLink)
+        }) }}
+      {% endif %}
       {{ govukSummaryList(signInHistoryList) }}
       {% if showExplanation and not pagination.nextPage %}
         {# if this is the last page of the activity log, show an explanatory paragraph #}
@@ -69,6 +78,7 @@
         attributes: {
           "data-test-id": "activity-log-pagination"
         },
+        landmarkLabel: "pages",
         previous: {
           href: "?page=" + pagination.previousPage
         } if pagination.previousPage,
