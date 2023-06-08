@@ -4,6 +4,7 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% set pageTitleName = 'pages.signInHistory.title' | translate %}
 {% set backLink = "/settings" %}
+{% set contactLink = "https://signin.account.gov.uk/contact-us-questions?theme=something_else&referer=" %}
 {% set paginationItems = [] %}
 
 {% set signInHistoryList = {
@@ -60,11 +61,11 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.signInHistory.header' | translate }}</h1>
       {% if data.length %}
-        <p class="govuk-body">{{ 'pages.signInHistory.notice' | translate | replace("[link]", "https://signin.account.gov.uk/contact-us-questions?theme=something_else&referer=") | safe }}</p>
+        <p class="govuk-body">{{ 'pages.signInHistory.notice' | translate | replace("[link]", contactLink) | safe }}</p>
       {% else %}
         {# This should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
         {{ govukInsetText({
-          html: 'pages.signInHistory.empty' | translate | replace("[link]", "https://signin.account.gov.uk/contact-us-questions?theme=something_else&referer=")
+          html: 'pages.signInHistory.empty' | translate | replace("[link]", contactLink)
         }) }}
       {% endif %}
       {{ govukSummaryList(signInHistoryList) }}
