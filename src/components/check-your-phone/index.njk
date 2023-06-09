@@ -21,6 +21,9 @@
     <form action="/check-your-phone" method="post" novalidate="novalidate">
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
         <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
+         {# These fields are needed when the page is re-rendered once an error has occurred #}
+        <input type="hidden" name="resendCodeLink" value="{{resendCodeLink}}"/>
+        <input type="hidden" name="changePhoneNumberLink" value="{{changePhoneNumberLink}}"/>
         {{ govukInput({
             label: {
                 text: 'pages.checkYourPhone.code.label' | translate
