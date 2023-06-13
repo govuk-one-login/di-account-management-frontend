@@ -1,20 +1,23 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% macro govukInputWithShowPassword(label, id, errors, showSettings) %}
-    <div class="govuk-show-password" data-module="show-password" data-disable-form-submit-check="false" data-show-text="{{ showSettings.show }}" data-hide-text="{{ showSettings.hide }}" data-show-full-text="{{ showSettings.showFullText }}" data-hide-full-text="{{ showSettings.hideFullText }}" data-announce-show="{{ showSettings.announceShown }}" data-announce-hide="{{ showSettings.announceHidden }}">
+{% macro govukInputWithShowPassword(settings) %}
+    <div class="govuk-show-password" data-module="show-password" data-disable-form-submit-check="false" data-show-text="{{ settings.showSettings.show }}" data-hide-text="{{ settings.showSettings.hide }}" data-show-full-text="{{ settings.showSettings.showFullText }}" data-hide-full-text="{{ settings.showSettings.hideFullText }}" data-announce-show="{{ settings.showSettings.announceShown }}" data-announce-hide="{{ settings.showSettings.announceHidden }}">
         {{ govukInput({
             label: {
-                text: label
+                text: settings.label
             },
             classes: "govuk-!-width-two-thirds govuk-password-input",
-            id: id,
-            name: id,
+            id: settings.id,
+            name: settings.id,
             type: "password",
             spellcheck: false,
+            hint: {
+                text: settings.hint
+            } if settings.hint,
             errorMessage: {
-                text: errors[id].text,
-                attributes: { "data-test-id": id + "-error"}
-            } if (errors[id])})
+                text: settings.errors[settings.id].text,
+                attributes: { "data-test-id": settings.id + "-error"}
+            } if (settings.errors[settings.id])})
         }}
     </div>
 {% endmacro %}

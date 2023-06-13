@@ -306,11 +306,8 @@
       "title": "Enter your new password",
       "header": "Enter your new password",
       "password": {
+        "hint": "Your password must be at least 8 characters and must include letters and numbers. Do not use a very common password, such as ‘password’ or a sequence of numbers.",
         "label": "Enter a new password",
-        "paragraph1": "Your password must:",
-        "bulletPoint1": "be at least 8 characters long",
-        "bulletPoint2": "include letters and numbers",
-        "paragraph2": "Do not use a very common password, such as ‘password’ or a sequence of numbers.",
         "validationError": {
           "required": "Enter your new password",
           "maxLength": "Your password must be less than 256 characters",
