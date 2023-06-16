@@ -13,7 +13,7 @@ export async function signInHistoryGet(
   let showExplanation = false;
   let data:any = [];
   let pagination:any = {};
-  if (user && user.subjectId) {
+  if (user?.subjectId) {
     activityData = await presentSignInHistory();
     const pageParameter = req.query?.page
     const dataLength = activityData.length;

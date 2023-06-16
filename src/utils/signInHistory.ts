@@ -1,6 +1,3 @@
-// import { DynamoDB } from "aws-sdk";
-// import { dynamoDBService } from "./dynamo";
-// import { Request } from "express";
 import { activityLogItemsPerPage } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import { ActivityLogEvent } from "./types";
@@ -22,7 +19,7 @@ const data = [
     "truncated": false
   }];
 
-export const hasExplanationParagraph = (data: Array<any>) => {
+export const hasExplanationParagraph = (data: Array<any>): boolean => {
   if (data && data[data.length - 1]) {
     return data[data.length - 1]["timestamp"] < activityLogLaunchDateInMs;
   } 
@@ -118,10 +115,8 @@ export const formatData = (data: ActivityLogEvent[], currentPage?:number): [] =>
   return formattedData;
 }
 
-export const presentSignInHistory = (
-  // subjectId: string
-): ActivityLogEvent[] => {
-  // const userServices = await getServices(subjectId);
+export const presentSignInHistory = async(): Promise<ActivityLogEvent[]> => {
+  //  TODO: make this return real data
   if (data) {
     return data;
   } else {
