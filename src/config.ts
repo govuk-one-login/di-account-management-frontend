@@ -91,6 +91,10 @@ export function getDynamoServiceStoreTableName(): string {
   return process.env.SERVICE_STORE_TABLE_NAME;
 }
 
+export function getDynamoActivityLogStoreTableName(): string {
+  return process.env.ACTIVITY_LOG_STORE_TABLE_NAME;
+}
+
 export function getSessionStoreTableName(): string {
   return process.env.SESSION_STORE_TABLE_NAME;
 }
