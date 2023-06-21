@@ -155,6 +155,27 @@
         "heading": "Dileu eich GOV.UK One Login",
         "link": "Dileu eich GOV.UK One Login",
         "info": "Bydd hyn yn dileu eich GOV.UK One Login yn barhaol. Ni fyddwch bellach yn gallu cael mynediad i'r gwasanaethau rydych wedi'u defnyddio gydag ef."
+      },
+      "signInHistory": {
+        "heading": "Hanes mewngofnodi",
+        "link": "Gweld eich hanes mewngofnodi",
+        "info": "Gweld pan rydych wedi mewngofnodi i'ch GOV.UK One Login a pha wasanaethau rydych wedi ymweld â hwy."
+      }
+    },
+    "signInHistory": {
+      "title": "Hanes mewngofnodi",
+      "header": "Hanes mewngofnodi",
+      "page": "Tudalen [pageNumber]",
+      "empty": "There is a problem showing your sign in history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">report it</a>.",
+      "notice": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod, <a class=\"govuk-link\" href=\"[link]\">cysylltwch â ni</a>.",
+      "timeInfo": "amser yn y DU",
+      "featureIntro": "Dechreuodd GOV.UK One Login ddangos gweithgaredd mewngofnodi ar [date].",
+      "activities": {
+        "signedIn": {
+          "title": "Wedi mewngofnodi",
+          "contentOne": "Gwnaethoch ymweld â [serviceName].",
+          "contentMany": "Gwnaethoch ymweld â:"
+        }
       }
     },
     "yourServices": {
@@ -212,284 +233,6 @@
         },
         "paragraph2": "Nid yw GOV.UK One Login yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
         "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich GOV.UK One Login i gael mynediad i holl wasanaethau ar GOV.UK."
-      },
-      "clientRegistry": {
-        "production": {
-          "LcueBVCnGZw-YFdTZ4S07XbQx7I": {
-            "header": "Tanysgrifiadau e-byst GOV.UK",
-            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
-            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://www.gov.uk/email/manage"
-          },
-          "ZL0kvRBP5xMy5OwONj8ARLPyuko": {
-            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
-            "link_text": "Ewch i’ch cyfrif LITE",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "TGygWFxGDNn8ItyaecWCopqIX3s": {
-            "header": "Cyfrif arbenigwr pwnc Ofqual",
-            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
-            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
-            "header": "Cofrestrfa datganiad caethwasiaeth modern",
-            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
-            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
-            "header": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
-          },
-          "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
-            "header": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
-            "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "VsAkrtMBzAosSveAv4xsuUDyiSs": {
-            "header": "Llofnodwch eich gweithred morgais",
-            "link_text": "Llofnodwch eich gweithred morgais",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "integration": {
-          "CEr97IZfEPQFgBxq8QNcM8LFxw4": {
-            "header": "Tanysgrifiadau e-byst GOV.UK",
-            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
-            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
-            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
-            "link_text": "Ewch i’ch cyfrif LITE",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "TGygWFxGDNn8ItyaecWCopqIX3s": {
-            "header": "Cyfrif arbenigwr pwnc Ofqual",
-            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
-            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
-            "header": "Cofrestrfa datganiad caethwasiaeth modern",
-            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
-            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "Dw7Cxas8W7O2usHMHok95elKDRU": {
-            "header": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
-          },
-          "oLciSn5b6-cqcJjzgMMwCw1moD8": {
-            "header": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
-            "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "VsAkrtMBzAosSveAv4xsuUDyiSs": {
-            "header": "Llofnodwch eich gweithred morgais",
-            "link_text": "Llofnodwch eich gweithred morgais",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "staging": {
-          "gov-uk": {
-            "header": "Tanysgrifiadau e-byst GOV.UK",
-            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
-            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "lite": {
-            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
-            "link_text": "Ewch i’ch cyfrif LITE",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "ofqual": {
-            "header": "Cyfrif arbenigwr pwnc Ofqual",
-            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
-            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "modernSlavery": {
-            "header": "Cofrestrfa datganiad caethwasiaeth modern",
-            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
-            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "dbs": {
-            "header": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
-          },
-          "vehicleOperatorLicense": {
-            "header": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "socialWorkEngland": {
-            "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "mortgageDeed": {
-            "header": "Llofnodwch eich gweithred morgais",
-            "link_text": "Llofnodwch eich gweithred morgais",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "build": {
-          "gov-uk": {
-            "header": "Tanysgrifiadau e-byst GOV.UK",
-            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
-            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "lite": {
-            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
-            "link_text": "Ewch i’ch cyfrif LITE",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "ofqual": {
-            "header": "Cyfrif arbenigwr pwnc Ofqual",
-            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
-            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "modernSlavery": {
-            "header": "Cofrestrfa datganiad caethwasiaeth modern",
-            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
-            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "dbs": {
-            "header": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
-          },
-          "vehicleOperatorLicense": {
-            "header": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "socialWorkEngland": {
-            "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "mortgageDeed": {
-            "header": "Llofnodwch eich gweithred morgais",
-            "link_text": "Llofnodwch eich gweithred morgais",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "dev": {
-          "gov-uk": {
-            "header": "Tanysgrifiadau e-byst GOV.UK",
-            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
-            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "lite": {
-            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
-            "link_text": "Ewch i’ch cyfrif LITE",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "ofqual": {
-            "header": "Cyfrif arbenigwr pwnc Ofqual",
-            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
-            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "modernSlavery": {
-            "header": "Cofrestrfa datganiad caethwasiaeth modern",
-            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
-            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "dbs": {
-            "header": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
-          },
-          "vehicleOperatorLicense": {
-            "header": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "socialWorkEngland": {
-            "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "mortgageDeed": {
-            "header": "Llofnodwch eich gweithred morgais",
-            "link_text": "Llofnodwch eich gweithred morgais",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        },
-        "local": {
-          "gov-uk": {
-            "header": "Tanysgrifiadau e-byst GOV.UK",
-            "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
-            "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
-            "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
-          },
-          "lite": {
-            "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-            "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
-            "link_text": "Ewch i’ch cyfrif LITE",
-            "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-          },
-          "ofqual": {
-            "header": "Cyfrif arbenigwr pwnc Ofqual",
-            "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
-            "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
-            "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
-          },
-          "modernSlavery": {
-            "header": "Cofrestrfa datganiad caethwasiaeth modern",
-            "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
-            "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
-            "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
-          },
-          "dbs": {
-            "header": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_text": "Gwneud cais am wiriad DBS sylfaenol",
-            "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
-          },
-          "vehicleOperatorLicense": {
-            "header": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
-            "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
-          },
-          "socialWorkEngland": {
-            "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-            "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-          },
-          "mortgageDeed": {
-            "header": "Llofnodwch eich gweithred morgais",
-            "link_text": "Llofnodwch eich gweithred morgais",
-            "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-          }
-        }
       }
     },
     "enterPassword": {
@@ -698,6 +441,284 @@
       "email": {
         "recipientMessage": "Byddwn yn anfon cod i: ",
         "paragraph": "Efallai y bydd eich e-bost yn cymryd ychydig funudau i gyrraedd. Os na chewch e-bost, edrychwch ar eich ffolder spam."
+      }
+    }
+  },
+  "clientRegistry": {
+    "production": {
+      "LcueBVCnGZw-YFdTZ4S07XbQx7I": {
+        "header": "Tanysgrifiadau e-byst GOV.UK",
+        "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+        "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+        "link_href": "https://www.gov.uk/email/manage"
+      },
+      "ZL0kvRBP5xMy5OwONj8ARLPyuko": {
+        "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+        "link_text": "Ewch i’ch cyfrif LITE",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "TGygWFxGDNn8ItyaecWCopqIX3s": {
+        "header": "Cyfrif arbenigwr pwnc Ofqual",
+        "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+        "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
+        "header": "Cofrestrfa datganiad caethwasiaeth modern",
+        "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+        "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "RqFZ83csmS4Mi4Y7s7ohD9-ekwU": {
+        "header": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
+      },
+      "XwwVDyl5oJKtK0DVsuw3sICWkPU": {
+        "header": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+        "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "VsAkrtMBzAosSveAv4xsuUDyiSs": {
+        "header": "Llofnodwch eich gweithred morgais",
+        "link_text": "Llofnodwch eich gweithred morgais",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "integration": {
+      "CEr97IZfEPQFgBxq8QNcM8LFxw4": {
+        "header": "Tanysgrifiadau e-byst GOV.UK",
+        "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+        "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "JO3ET6EtFN3FzjGC3yRP2qpuoHQ": {
+        "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+        "link_text": "Ewch i’ch cyfrif LITE",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "TGygWFxGDNn8ItyaecWCopqIX3s": {
+        "header": "Cyfrif arbenigwr pwnc Ofqual",
+        "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+        "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "pDqO7_Hu-pq5wam5I4MlURXrv5k": {
+        "header": "Cofrestrfa datganiad caethwasiaeth modern",
+        "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+        "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "Dw7Cxas8W7O2usHMHok95elKDRU": {
+        "header": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
+      },
+      "oLciSn5b6-cqcJjzgMMwCw1moD8": {
+        "header": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "LUIZbIuJ_xVZxwhkNAApcO4O_6o": {
+        "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "VsAkrtMBzAosSveAv4xsuUDyiSs": {
+        "header": "Llofnodwch eich gweithred morgais",
+        "link_text": "Llofnodwch eich gweithred morgais",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "staging": {
+      "gov-uk": {
+        "header": "Tanysgrifiadau e-byst GOV.UK",
+        "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+        "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "lite": {
+        "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+        "link_text": "Ewch i’ch cyfrif LITE",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Cyfrif arbenigwr pwnc Ofqual",
+        "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+        "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Cofrestrfa datganiad caethwasiaeth modern",
+        "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+        "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
+      },
+      "vehicleOperatorLicense": {
+        "header": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Llofnodwch eich gweithred morgais",
+        "link_text": "Llofnodwch eich gweithred morgais",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "build": {
+      "gov-uk": {
+        "header": "Tanysgrifiadau e-byst GOV.UK",
+        "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+        "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "lite": {
+        "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+        "link_text": "Ewch i’ch cyfrif LITE",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Cyfrif arbenigwr pwnc Ofqual",
+        "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+        "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Cofrestrfa datganiad caethwasiaeth modern",
+        "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+        "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
+      },
+      "vehicleOperatorLicense": {
+        "header": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Llofnodwch eich gweithred morgais",
+        "link_text": "Llofnodwch eich gweithred morgais",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "dev": {
+      "gov-uk": {
+        "header": "Tanysgrifiadau e-byst GOV.UK",
+        "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+        "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "lite": {
+        "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+        "link_text": "Ewch i’ch cyfrif LITE",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Cyfrif arbenigwr pwnc Ofqual",
+        "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+        "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Cofrestrfa datganiad caethwasiaeth modern",
+        "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+        "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
+      },
+      "vehicleOperatorLicense": {
+        "header": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Llofnodwch eich gweithred morgais",
+        "link_text": "Llofnodwch eich gweithred morgais",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      }
+    },
+    "local": {
+      "gov-uk": {
+        "header": "Tanysgrifiadau e-byst GOV.UK",
+        "description": "Gweld a rheoli’r diweddariadau rydych yn eu cael am dudalennau GOV.UK mae gennych ddiddordeb ynddynt.",
+        "link_text": "Ewch i’ch tanysgrifiadau e-byst GOV.UK",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage"
+      },
+      "lite": {
+        "header": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+        "description": "Gwneud cais am neu reoli trwyddedau rheoli allforio ar gyfer nwyddau a reolir.",
+        "link_text": "Ewch i’ch cyfrif LITE",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Cyfrif arbenigwr pwnc Ofqual",
+        "description": "Gwneud gais i roi cyngor arbenigol i Ofqual.",
+        "link_text": "Ewch i'ch cyfrif arbenigwr pwnc Ofqual",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Cofrestrfa datganiad caethwasiaeth modern",
+        "description": "Ychwanegu neu olygu'r datganiadau sy'n dweud beth mae eich sefydliad yn ei wneud i ddileu caethwasiaeth fodern o'i gadwyni cyflenwi.",
+        "link_text": "Ewch i'ch cyfrif cofrestrfa datganiad caethwasiaeth modern",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_text": "Gwneud cais am wiriad DBS sylfaenol",
+        "link_href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
+      },
+      "vehicleOperatorLicense": {
+        "header": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_text": "Gwneud cais am drwydded gweithredwr cerbyd",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Llofnodwch eich gweithred morgais",
+        "link_text": "Llofnodwch eich gweithred morgais",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
       }
     }
   }

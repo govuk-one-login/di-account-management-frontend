@@ -22,6 +22,10 @@ describe("security controller", () => {
 
   describe("securityGet", () => {
     it("should render security view", () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true
+      });
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -34,6 +38,8 @@ describe("security controller", () => {
         phoneNumber: "7898",
         isPhoneNumberVerified: true,
         manageEmailsLink: "https://www.gov.uk/email/manage",
+        supportActivityLog: true,
+        activityLogUrl: '/security/sign-in-history'
       });
     });
   });

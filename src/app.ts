@@ -13,12 +13,13 @@ import session from "express-session";
 import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
-import { getNodeEnv, getSessionExpiry, getSessionSecret } from "./config";
+import { getNodeEnv, getSessionExpiry, getSessionSecret, supportActivityLog } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
 import { serverErrorHandler } from "./handlers/internal-server-error-handler";
 import { csrfMiddleware } from "./middleware/csrf-middleware";
 import { securityRouter } from "./components/security/security-routes";
+import { signInHistoryRouter } from "./components/sign-in-history/sign-in-history-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
 import { ENVIRONMENT_NAME } from "./app.constants";
@@ -131,6 +132,9 @@ async function createApp(): Promise<express.Application> {
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
+  if (supportActivityLog()) {
+    app.use(signInHistoryRouter);
+  }
 
   // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy
