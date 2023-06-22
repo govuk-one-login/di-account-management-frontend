@@ -95,6 +95,9 @@ Parameters:
   ServiceStoreTableName:
     Type: String
     Default: user_services
+  ActivityLogStoreTableName:
+    Type: String
+    Default: activity_logs
 
 Conditions:
   IsNotDevelopment: !Or
@@ -299,6 +302,7 @@ Resources:
                   - dynamodb:GetItem
                 Resource:
                   - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ActivityLogStoreTableName}"
               - Effect: Allow
                 Action:
                   - dynamodb:DescribeTable
@@ -537,6 +541,8 @@ Resources:
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/DeleteTopic/ARN}}"
             - Name: "SERVICE_STORE_TABLE_NAME"
               Value: !Ref ServiceStoreTableName
+            - Name: "ACTIVITY_LOG_STORE_TABLE_NAME"
+              Value: !Ref ActivityLogStoreTableName
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
