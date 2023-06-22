@@ -111,7 +111,7 @@
       "header": "You’ve been signed out",
       "content": {
         "paragraph1": "This could be because you:",
-        "listItem1": "have not used your GOV.UK One Login for more than 2 hours",
+        "listItem1": "have not used your GOV.UK One Login for more than an hour",
         "listItem2": "signed out of your GOV.UK One Login while using another service",
         "paragraph2": "We signed you out to keep your GOV.UK One Login and your information secure.",
         "signInButtonText": "Sign in to GOV.UK One Login",

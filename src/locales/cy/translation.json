@@ -111,7 +111,7 @@
       "header": "Rydych wedi cael eich allgofnodi",
       "content": {
         "paragraph1": "Gallai hyn fod oherwydd:",
-        "listItem1": "nid ydych wedi defnyddio eich GOV.UK One Login am fwy na 2 awr",
+        "listItem1": "heb ddefnyddio eich GOV.UK One Login am fwy nag awr",
         "listItem2": "rydych wedi allgofnodi o'ch GOV.UK One Login tra yn defnyddio gwasanaeth arall",
         "paragraph2": "Rydym wedi eich allgofnodi i gadw eich GOV.UK One Login a'ch gwybodaeth yn ddiogel.",
         "signInButtonText": "Mewngofnodi i GOV.UK One Login",
