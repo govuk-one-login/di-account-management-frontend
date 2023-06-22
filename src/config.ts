@@ -150,3 +150,7 @@ export const activityLogItemsPerPage = 10;
 export function supportActivityLog(): boolean {
   return process.env.SUPPORT_ACTIVITY_LOG === "1";
 }
+
+export function getDynamoActivityLogStoreTableName(): string {
+  return process.env.ACTIVITY_LOG_STORE_TABLE_NAME;
+}
