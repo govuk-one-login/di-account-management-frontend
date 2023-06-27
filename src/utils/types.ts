@@ -24,19 +24,19 @@ export interface KmsService {
   sign: (payload: string) => Promise<KMS.Types.SignResponse>;
 }
 
-export interface ActivityLogEvent {
+export interface ActivityLogEntry {
   event_type: string;
   session_id: string;
   user_id: string;
-  timestamp: string;
-  activities?: ActivityLogEventActivity[],
-  truncated: boolean
+  timestamp: number;
+  activities?: Activity[];
+  truncated: boolean;
 }
 
-export interface ActivityLogEventActivity {
+export interface Activity {
   type: string;
   client_id: ClientId;
-  timestamp: string;
+  timestamp: number;
 }
 
 export interface SnsService {
@@ -50,6 +50,9 @@ export interface DynamoDBService {
   getItem: (
     getCommand: DynamoDB.Types.GetItemInput
   ) => Promise<DynamoDB.Types.GetItemOutput>;
+  queryItem: (
+    queryCommand: DynamoDB.Types.QueryInput
+  ) => Promise<DynamoDB.Types.QueryOutput>;
 }
 
 export interface AwsConfig {
@@ -92,9 +95,14 @@ export interface UpdateInformationInput {
 }
 
 export interface UpdateInformationSessionValues {
-  accessToken: string
+  accessToken: string;
   sourceIp: string;
   sessionId: string;
   persistentSessionId: string;
   userLanguage: string;
 }
+
+export const allowedTxmaEvents: Array<string> = [
+  "AUTH_AUTH_CODE_ISSUED",
+  "AUTH_IPV_AUTHORISATION_REQUESTED",
+];
