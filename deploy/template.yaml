@@ -105,7 +105,6 @@ Conditions:
     - !Equals [!Ref Environment, staging]
     - !Equals [!Ref Environment, integration]
     - !Equals [!Ref Environment, production]
-  IsProduction: !Equals [!Ref Environment, production]
   UsePermissionsBoundary:
     Fn::Not:
       - Fn::Equals:
@@ -1020,7 +1019,7 @@ Resources:
   #
 
   ECSAutoScalingTarget:
-    Condition: IsProduction
+    Condition: IsNotDevelopment
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
       MaxCapacity: !Ref ECSClusterMaxCapacity
@@ -1035,7 +1034,7 @@ Resources:
       ServiceNamespace: ecs
 
   ECSAutoScalingPolicyMemory:
-    Condition: IsProduction
+    Condition: IsNotDevelopment
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
       PolicyName: !Sub "${AWS::StackName}-ECSAutoScalingPolicyMemory"
@@ -1054,7 +1053,7 @@ Resources:
     DependsOn: ECSAutoScalingTarget
 
   ECSAutoScalingPolicyCPU:
-    Condition: IsProduction
+    Condition: IsNotDevelopment
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
       PolicyName: !Sub "${AWS::StackName}-ECSAutoScalingPolicyCPU"
