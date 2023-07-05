@@ -5,9 +5,11 @@ export interface DeleteAccountServiceInterface {
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string
-  ) => Promise<void>;
-  deleteServiceData: (
+  ) => Promise<boolean>;
+  publishToDeleteTopic: (
     user_id: string,
-    topic_arn?: string,
+    public_subject_id: string,
+    legacy_subject_id?: string,
+    topic_arn?: string
   ) => Promise<void>;
 }
