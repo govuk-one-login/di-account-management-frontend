@@ -305,6 +305,12 @@
     "changePassword": {
       "title": "Enter your new password",
       "header": "Enter your new password",
+      "showRetypedPassword": {
+        "showFullText": "Show retyped password",
+        "hideFullText": "Hide retyped password",
+        "announceShown": "Your retyped password is shown",
+        "announceHidden": "Your retyped password is hidden"
+      },
       "password": {
         "hint": "Your password must be at least 8 characters and must include letters and numbers. Do not use a very common password, such as ‘password’ or a sequence of numbers.",
         "label": "Enter a new password",

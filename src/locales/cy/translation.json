@@ -305,6 +305,12 @@
     "changePassword": {
       "title": "Rhowch eich cyfrinair newydd",
       "header": "Rhowch eich cyfrinair newydd",
+      "showRetypedPassword": {
+        "showFullText": "Dangos cyfrinair wedi'i aildeipio",
+        "hideFullText": "Cuddio cyfrinair wedi'i aildeipio",
+        "announceShown": "Mae eich cyfrinair wedi'i aildeipio wedi cael ei ddangos",
+        "announceHidden": "Mae eich cyfrinair wedi'i aildeipio wedi cael ei guddio"
+      },
       "password": {
         "hint": "Mae'n rhaid iddo fod yn o leiaf 8 nod o hyd a rhaid cynnwys llythrennau a rhifau. Peidiwch defnyddio cyfrinair cyffredin iawn, fel 'password' neu ddilyniant o rifau.",
         "label": "Rhowch gyfrinair newydd",
