@@ -7,7 +7,6 @@ import {
   deleteAccountPost,
 } from "../delete-account-controller";
 import { DeleteAccountServiceInterface } from "../types";
-import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
 import { destroyUserSessions } from "../../../utils/session-store";
 import { getAppEnv } from "../../../config";
 import { Service } from "../../../utils/types";
@@ -55,7 +54,6 @@ describe("delete account controller", () => {
   });
 
   describe("deleteAccountGet", () => {
-
     it("deleteAccountGetWithoutSubjectId", () => {
       it("should render delete account page", () => {
         const req: any = {
@@ -80,7 +78,9 @@ describe("delete account controller", () => {
         const yourServices = require("../../../utils/yourServices");
         sandbox
           .stub(yourServices, "getAllowedListServices")
-          .callsFake(function (): Service[] { return []; });
+          .callsFake(function (): Service[] {
+            return [];
+          });
 
         deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
@@ -122,17 +122,11 @@ describe("delete account controller", () => {
 
   describe("deleteAccountPost", () => {
     describe("when supporting DELETE_SERVICE_STORE", () => {
-
       it("should redirect to deletion confirmed page", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {
-          deleteAccount: sandbox.fake(),
-          deleteServiceData: sandbox.fake(),
-        };
-
-        const fakePublishingService: GovUkPublishingServiceInterface = {
-          notifyAccountDeleted: sandbox.fake.returns(Promise.resolve()),
-          notifyEmailChanged: sandbox.fake(),
+          deleteAccount: sandbox.fake.returns(true),
+          publishToDeleteTopic: sandbox.fake(),
         };
 
         req.session.user.email = "test@test.com";
@@ -145,15 +139,10 @@ describe("delete account controller", () => {
         const sessionStore = require("../../../utils/session-store");
         sandbox.stub(sessionStore, "destroyUserSessions").resolves();
 
-        await deleteAccountPost(fakeService, fakePublishingService)(
-          req as Request,
-          res as Response
-        );
+        await deleteAccountPost(fakeService)(req as Request, res as Response);
 
         expect(fakeService.deleteAccount).to.have.been.calledOnce;
-        expect(fakeService.deleteServiceData).to.have.been.calledOnce;
-        expect(fakePublishingService.notifyAccountDeleted).to.have.been
-          .calledOnce;
+        expect(fakeService.publishToDeleteTopic).to.have.been.calledOnce;
         expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
         expect(res.redirect).to.have.been.calledWith("logout-url");
         expect(destroyUserSessions).to.have.been.calledWith(
