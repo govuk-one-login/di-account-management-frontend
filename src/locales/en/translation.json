@@ -228,6 +228,10 @@
             {
               "text": "Sign your mortgage deed",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+            },
+            {
+              "text": "Manage apprenticeships",
+              "href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
             }
           ]
         },
@@ -496,6 +500,12 @@
         "header":"Sign your mortgage deed",
         "link_text": "Sign your mortgage deed",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "x3F_Iu0LgqJpegY5ni0QSB0uezw": {
+        "header": "Manage apprenticeships",
+        "description": "Manage your apprentices, training providers, recruitment and funding.",
+        "link_text": "Go to your apprenticeship service account",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "integration": {
@@ -542,6 +552,12 @@
         "header": "Sign your mortgage deed",
         "link_text": "Sign your mortgage deed",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "x3F_Iu0LgqJpegY5ni0QSB0uezw": {
+        "header": "Manage apprenticeships",
+        "description": "Manage your apprentices, training providers, recruitment and funding.",
+        "link_text": "Go to your apprenticeship service account",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "staging": {
@@ -588,6 +604,12 @@
         "header": "Sign your mortgage deed",
         "link_text": "Sign your mortgage deed",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "apprenticeshipsService": {
+        "header": "Manage apprenticeships",
+        "description": "Manage your apprentices, training providers, recruitment and funding.",
+        "link_text": "Go to your apprenticeship service account",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "build": {
@@ -634,6 +656,12 @@
         "header": "Sign your mortgage deed",
         "link_text": "Sign your mortgage deed",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "apprenticeshipsService": {
+        "header": "Manage apprenticeships",
+        "description": "Manage your apprentices, training providers, recruitment and funding.",
+        "link_text": "Go to your apprenticeship service account",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "dev": {
@@ -680,6 +708,12 @@
         "header": "Sign your mortgage deed",
         "link_text": "Sign your mortgage deed",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "apprenticeshipsService": {
+        "header": "Manage apprenticeships",
+        "description": "Manage your apprentices, training providers, recruitment and funding.",
+        "link_text": "Go to your apprenticeship service account",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "local": {
@@ -726,6 +760,12 @@
         "header": "Sign your mortgage deed",
         "link_text": "Sign your mortgage deed",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "apprenticeshipsService": {
+        "header": "Manage apprenticeships",
+        "description": "Manage your apprentices, training providers, recruitment and funding.",
+        "link_text": "Go to your apprenticeship service account",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     }
   }
