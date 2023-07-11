@@ -505,7 +505,7 @@
         "header": "Manage apprenticeships",
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
-        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service/index"
       }
     },
     "integration": {
