@@ -228,6 +228,10 @@
             {
               "text": "Llofnodwch eich gweithred morgais",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+            },
+            {
+              "text": "Rheoli prentisiaethau",
+              "href": "https://accounts.manage-apprenticeships.service.gov.uk/service/index"
             }
           ]
         },
@@ -495,6 +499,12 @@
         "header": "Llofnodwch eich gweithred morgais",
         "link_text": "Llofnodwch eich gweithred morgais",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "x3F_Iu0LgqJpegY5ni0QSB0uezw": {
+        "header": "Rheoli prentisiaethau",
+        "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
+        "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "integration": {
@@ -541,6 +551,12 @@
         "header": "Llofnodwch eich gweithred morgais",
         "link_text": "Llofnodwch eich gweithred morgais",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "x3F_Iu0LgqJpegY5ni0QSB0uezw": {
+        "header": "Rheoli prentisiaethau",
+        "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
+        "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "staging": {
@@ -587,6 +603,12 @@
         "header": "Llofnodwch eich gweithred morgais",
         "link_text": "Llofnodwch eich gweithred morgais",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "apprenticeshipsService": {
+        "header": "Rheoli prentisiaethau",
+        "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
+        "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "build": {
@@ -633,6 +655,12 @@
         "header": "Llofnodwch eich gweithred morgais",
         "link_text": "Llofnodwch eich gweithred morgais",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "apprenticeshipsService": {
+        "header": "Rheoli prentisiaethau",
+        "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
+        "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "dev": {
@@ -679,6 +707,12 @@
         "header": "Llofnodwch eich gweithred morgais",
         "link_text": "Llofnodwch eich gweithred morgais",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "apprenticeshipsService": {
+        "header": "Rheoli prentisiaethau",
+        "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
+        "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "local": {
@@ -725,6 +759,12 @@
         "header": "Llofnodwch eich gweithred morgais",
         "link_text": "Llofnodwch eich gweithred morgais",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+      },
+      "apprenticeshipsService": {
+        "header": "Rheoli prentisiaethau",
+        "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
+        "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     }
   }
