@@ -28,6 +28,7 @@ describe("global logout controller", () => {
   let res: Partial<Response>;
   let issuerJWKS: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
   let keySet: GenerateKeyPairResult;
+  let loggerSpy: sinon.SinonSpy;
 
   const validIssuer = "urn:example:issuer";
   const validAudience = "urn:example:audience";
@@ -45,13 +46,13 @@ describe("global logout controller", () => {
         locals: {
           sessionStore: {
             destroy: sandbox.fake(),
-          }
+          },
         },
       },
       body: {
         logout_token: logoutJwt,
       },
-      log: { error: sandbox.fake() },
+      log: logger,
       issuerJWKS: issuerJWKS,
       oidc: {
         issuer: {
@@ -96,6 +97,8 @@ describe("global logout controller", () => {
       status: sandbox.stub().returnsThis(),
       send: sandbox.fake(),
     };
+
+    loggerSpy = sandbox.spy(logger, "error");
   });
 
   afterEach(async () => {
@@ -117,12 +120,12 @@ describe("global logout controller", () => {
         body: {
           logout_token: "zzzzzzzz",
         },
-        log: sinon.spy(logger),
+        log: logger,
       };
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token is present but not signed", async () => {
@@ -138,7 +141,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token signed by wrong key", async () => {
@@ -157,7 +160,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token contains invalid issuer", async () => {
@@ -174,7 +177,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token contains invalid audience", async () => {
@@ -190,7 +193,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token is too old", async () => {
@@ -206,7 +209,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token does not contain a subject", async () => {
@@ -221,7 +224,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token is blank", async () => {
@@ -229,7 +232,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token does not contain correct event", async () => {
@@ -246,7 +249,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token does not any events", async () => {
@@ -260,7 +263,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token contains invalid event", async () => {
@@ -277,7 +280,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 401 if logout_token contains valid but non-empty event", async () => {
@@ -295,7 +298,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      expect(req.log.error).to.have.been.called;
+      sandbox.assert.calledOnce(loggerSpy);
     });
 
     it("should return 200 if logout_token is present and valid", async () => {
@@ -307,7 +310,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
-      expect(destroyUserSessions).to.have.been.calledWith("123456")
+      expect(destroyUserSessions).to.have.been.calledWith("123456");
     });
   });
 });
