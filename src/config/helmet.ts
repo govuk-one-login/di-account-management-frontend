@@ -39,5 +39,4 @@ export const helmetConfiguration: Parameters<typeof helmet>[0] = {
   },
   referrerPolicy: false,
   permittedCrossDomainPolicies: false,
-  expectCt: false,
 };
