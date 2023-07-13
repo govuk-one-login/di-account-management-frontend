@@ -210,6 +210,10 @@
               "href": "https://www.gov.uk/guidance/find-government-grants"
             },
             {
+              "text": "Digolledau anafiadau troseddol",
+              "href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/apply"
+            },
+            {
               "text": "Gwneud cais am drwydded gweithredwr cerbyd",
               "href": "https://www.gov.uk/apply-vehicle-operator-licence"
             },
@@ -515,6 +519,12 @@
         "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth",
         "link_text": "Ewch i'ch cyfrif grantiau",
         "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
+      },
+      "bGAwNKM0XvnxCAuDQ_rMhhP3dxM": {
+        "header": "Digolledau anafiadau troseddol",
+        "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
+        "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "integration": {
@@ -567,6 +577,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "bGAwNKM0XvnxCAuDQ_rMhhP3dxM": {
+        "header": "Digolledau anafiadau troseddol",
+        "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
+        "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "staging": {
@@ -619,6 +635,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Digolledau anafiadau troseddol",
+        "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
+        "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "build": {
@@ -671,6 +693,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Digolledau anafiadau troseddol",
+        "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
+        "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "dev": {
@@ -723,6 +751,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Digolledau anafiadau troseddol",
+        "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
+        "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "local": {
@@ -775,6 +809,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Digolledau anafiadau troseddol",
+        "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
+        "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     }
   }
