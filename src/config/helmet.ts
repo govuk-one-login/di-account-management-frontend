@@ -24,6 +24,7 @@ export const helmetConfiguration: Parameters<typeof helmet>[0] = {
       ],
       objectSrc: ["'none'"],
       connectSrc: ["'self'", "https://www.google-analytics.com"],
+      formAction: ["'self'", "https://*.account.gov.uk"],
     },
   },
   dnsPrefetchControl: {
