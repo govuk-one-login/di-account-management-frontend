@@ -497,7 +497,7 @@
         "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
       },
       "VsAkrtMBzAosSveAv4xsuUDyiSs": {
-        "header":"Sign your mortgage deed",
+        "header": "Sign your mortgage deed",
         "link_text": "Sign your mortgage deed",
         "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
       },
@@ -505,7 +505,7 @@
         "header": "Manage apprenticeships",
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
-        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service/index"
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       }
     },
     "integration": {
@@ -695,7 +695,7 @@
         "link_href": "https://www.gov.uk/request-copy-criminal-record"
       },
       "vehicleOperatorLicense": {
-        "header":"Apply for a vehicle operator licence",
+        "header": "Apply for a vehicle operator licence",
         "link_text": "Apply for a vehicle operator licence",
         "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
       },
