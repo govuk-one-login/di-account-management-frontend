@@ -64,6 +64,10 @@ Parameters:
     Description: The name of the backend stack
     Type: String
     Default: account-mgmt-backend
+  StubsStackName:
+    Description: The name of the stubs stack
+    Type: String
+    Default: account-mgmt-stubs
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
@@ -110,6 +114,10 @@ Conditions:
       - Fn::Equals:
           - !Ref PermissionsBoundary
           - "none"
+
+  UseStubServices: !Or
+    - !Equals [!Ref Environment, build]
+    - !Equals [!Ref Environment, dev]
 
 Mappings:
   # see https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
@@ -289,6 +297,7 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${BackendStackName}/SNS/DeleteTopic/ARN"
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${StubsStackName}/Stub/AccountManagement/Endpoint"
               - Effect: Allow
                 Action:
                   - "secretsmanager:GetSecretValue"
@@ -455,10 +464,14 @@ Resources:
                 !FindInMap [EnvironmentVariables, !Ref Environment, APIBASEURL]
             - Name: "AM_API_BASE_URL"
               Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  AMAPIBASEURL,
+                !If [
+                  UseStubServices,
+                  !Sub "{{resolve:ssm:/${StubsStackName}/Stub/AccountManagement/Endpoint}}",
+                  !FindInMap [
+                    EnvironmentVariables,
+                    !Ref Environment,
+                    AMAPIBASEURL,
+                  ],
                 ]
             - Name: "SUPPORT_ACTIVITY_LOG"
               Value:
