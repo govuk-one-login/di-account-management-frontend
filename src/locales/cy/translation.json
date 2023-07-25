@@ -214,6 +214,10 @@
               "href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
             },
             {
+              "text": "Rheoli prentisiaethau",
+              "href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+            },
+            {
               "text": "Cofrestrfa datganiad caethwasiaeth modern",
               "href": "https://www.gov.uk/guidance/add-your-modern-slavery-statement-to-the-statement-registry"
             },
@@ -228,10 +232,6 @@
             {
               "text": "Llofnodwch eich gweithred morgais",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-            },
-            {
-              "text": "Rheoli prentisiaethau",
-              "href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
             }
           ]
         },
