@@ -213,6 +213,10 @@
               "text": "LITE (Licensing for International Trade and Enterprise)",
               "href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
             },
+             {
+              "text": "Manage apprenticeships",
+              "href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+            },
             {
               "text": "Modern slavery statement registry",
               "href": "https://www.gov.uk/guidance/add-your-modern-slavery-statement-to-the-statement-registry"
@@ -228,10 +232,6 @@
             {
               "text": "Sign your mortgage deed",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-            },
-            {
-              "text": "Manage apprenticeships",
-              "href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
             }
           ]
         },
