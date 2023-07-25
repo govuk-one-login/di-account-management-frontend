@@ -466,7 +466,7 @@ Resources:
               Value:
                 !If [
                   UseStubServices,
-                  !Sub "{{resolve:ssm:/${StubsStackName}/Stub/AccountManagement/Endpoint}}",
+                  !Sub "https://{{resolve:ssm:/${StubsStackName}/Stub/AccountManagement/Endpoint}}",
                   !FindInMap [
                     EnvironmentVariables,
                     !Ref Environment,
