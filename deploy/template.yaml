@@ -461,7 +461,11 @@ Resources:
               Value: !Sub "${Environment}"
             - Name: "API_BASE_URL"
               Value:
+                !If [
+                  UseStubServices,
+                  !Sub "https://{{resolve:ssm:/${StubsStackName}/Stub/OIDC}}",
                 !FindInMap [EnvironmentVariables, !Ref Environment, APIBASEURL]
+                ]
             - Name: "AM_API_BASE_URL"
               Value:
                 !If [
