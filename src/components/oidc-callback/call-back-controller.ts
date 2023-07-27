@@ -4,7 +4,7 @@ import { PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
-
+import { logger } from "../../utils/logger";
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
 export const COOKIE_CONSENT = {
@@ -47,7 +47,8 @@ export function oidcAuthCallbackGet(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
-    console.log(`DEBUGGING QUERY PARAMS:: ${queryParams}`);
+
+    logger.info(`DEBUGGING QUERY PARAMS:: ${JSON.stringify(queryParams)}`);
     const clientAssertion = await service.generateAssertionJwt(
       req.oidc.metadata.client_id,
       req.oidc.issuer.metadata.token_endpoint
@@ -67,7 +68,8 @@ export function oidcAuthCallbackGet(
         },
       }
     );
-    console.log(`DEBUGGING TOKEN SET :: ${tokenResponse}`);
+
+    logger.info(`DEBUGGING TOKEN SET :: ${JSON.stringify(tokenResponse)}`);
 
     const vot = tokenResponse.claims().vot;
 

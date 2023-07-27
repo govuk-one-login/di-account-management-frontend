@@ -55,3 +55,4 @@ services:
     depends_on:
       localstack:
         condition: service_healthy
+    command: npm run dev
