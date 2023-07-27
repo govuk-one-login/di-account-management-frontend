@@ -47,6 +47,7 @@ export function oidcAuthCallbackGet(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
+    console.log(`DEBUGGING QUERY PARAMS:: ${queryParams}`);
     const clientAssertion = await service.generateAssertionJwt(
       req.oidc.metadata.client_id,
       req.oidc.issuer.metadata.token_endpoint
@@ -66,6 +67,7 @@ export function oidcAuthCallbackGet(
         },
       }
     );
+    console.log(`DEBUGGING TOKEN SET :: ${tokenResponse}`);
 
     const vot = tokenResponse.claims().vot;
 
@@ -109,10 +111,7 @@ export function oidcAuthCallbackGet(
         req.query.cookie_consent === COOKIE_CONSENT.ACCEPT
       ) {
         const searchParams = new URLSearchParams({ _ga: crossDomainGaIdParam });
-        redirectUri =
-          redirectUri +
-          "?" +
-          searchParams.toString();
+        redirectUri = redirectUri + "?" + searchParams.toString();
       }
     }
 
