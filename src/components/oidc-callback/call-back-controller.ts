@@ -48,7 +48,9 @@ export function oidcAuthCallbackGet(
   return async function (req: Request, res: Response) {
     const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
 
-    logger.info(`DEBUGGING REQUEST OBJECT :: ${JSON.stringify(req)}`);
+    logger.info(
+      `DEBUGGING REQUEST SESSION OBJECT :: ${JSON.stringify(req.session)}`
+    );
     const clientAssertion = await service.generateAssertionJwt(
       req.oidc.metadata.client_id,
       req.oidc.issuer.metadata.token_endpoint
