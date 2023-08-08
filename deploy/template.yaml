@@ -1275,6 +1275,10 @@ Resources:
         CNAMEs:
           - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
         Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
+        CustomErrorResponses:
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /customError.html
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
