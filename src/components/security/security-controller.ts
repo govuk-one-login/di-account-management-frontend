@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getManageGovukEmailsUrl, supportActivityLog } from "../../config";
+import { supportActivityLog } from "../../config";
 import { PATH_DATA } from "../../app.constants";
 
 export function securityGet(req: Request, res: Response): void {
@@ -8,7 +8,6 @@ export function securityGet(req: Request, res: Response): void {
     phoneNumber:
       req.session.user.phoneNumber && req.session.user.phoneNumber.slice(-4),
     isPhoneNumberVerified: req.session.user.isPhoneNumberVerified,
-    manageEmailsLink: getManageGovukEmailsUrl(),
     supportActivityLog: supportActivityLog(),
     activityLogUrl: PATH_DATA.SIGN_IN_HISTORY.url
   };

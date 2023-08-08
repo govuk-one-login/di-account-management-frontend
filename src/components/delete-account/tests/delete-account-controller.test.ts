@@ -66,7 +66,6 @@ describe("delete account controller", () => {
 
         deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
-          manageEmailsLink: "https://www.gov.uk/email/manage",
           env: getAppEnv(),
         });
       });
@@ -84,7 +83,6 @@ describe("delete account controller", () => {
 
         deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
-          manageEmailsLink: "https://www.gov.uk/email/manage",
           servicesList: [],
           env: getAppEnv(),
         });
@@ -112,7 +110,6 @@ describe("delete account controller", () => {
 
         deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
-          manageEmailsLink: "https://www.gov.uk/email/manage",
           servicesList: serviceList,
           env: getAppEnv(),
         });

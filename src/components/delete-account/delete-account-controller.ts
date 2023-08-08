@@ -7,7 +7,6 @@ import { getNextState } from "../../utils/state-machine";
 import {
   getAppEnv,
   getBaseUrl,
-  getManageGovukEmailsUrl,
   getSNSDeleteTopic,
 } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
@@ -31,13 +30,11 @@ export async function deleteAccountGet(
       hasGovUkEmailSubscription: hasGovUkEmailSubscription,
       services: services,
       env: env,
-      manageEmailsLink: getManageGovukEmailsUrl(),
     };
     res.render("delete-account/index.njk", data);
   } else {
     const data = {
       env: env,
-      manageEmailsLink: getManageGovukEmailsUrl(),
     };
     res.render("delete-account/index.njk", data);
   }

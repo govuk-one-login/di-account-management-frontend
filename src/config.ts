@@ -107,10 +107,6 @@ export function getTokenValidationClockSkew(): number {
   return Number(process.env.TOKEN_CLOCK_SKEW) || 10;
 }
 
-export function getManageGovukEmailsUrl(): string {
-  return "https://www.gov.uk/email/manage";
-}
-
 export function getServiceDomain(): string {
   return process.env.SERVICE_DOMAIN ?? "";
 }
