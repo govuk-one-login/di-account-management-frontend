@@ -1301,9 +1301,9 @@ Resources:
           - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
         Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
         CustomErrorResponses:
-          - ErrorCode: 404
+          - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: /customError.html
+            ResponsePagePath: /4xx-errors-account-mgmt-frontend/customError.html
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
