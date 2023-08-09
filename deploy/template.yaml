@@ -1261,9 +1261,34 @@ Resources:
               Bool:
                 "aws:SecureTransport": true
 
+  CustomErrorPageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "4xx-errors-${AWS::StackName}"
+      AccessControl: Private
+
   #
   # CloudFront Distribution
   #
+
+  CloudFrontFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+         FunctionCode: |
+            function handler(event) {
+                var response = event.response;
+
+                if (response.headers['content-type'] === 'application/octet-stream') {
+                    response.headers['content-type'] = 'text/html';
+                }
+
+                return response;
+            }
+         FunctionConfig:
+              Comment: "Function to allow HTML pages to be displayed"
+              Runtime: cloudfront-js-1.0
+
+         Name: SetContentTypeFunction
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -1313,6 +1338,10 @@ Resources:
               OriginReadTimeout: 30
               OriginSSLProtocols:
                 - TLSv1.2
+          - DomainName: !GetAtt CustomErrorPageBucket.DomainName
+            Id: S3Origin
+            S3OriginConfig:
+              OriginAccessIdentity: ""
         ViewerCertificate:
           AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
           MinimumProtocolVersion: TLSv1.2_2021
