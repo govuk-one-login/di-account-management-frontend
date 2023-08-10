@@ -1287,8 +1287,8 @@ Resources:
          FunctionConfig:
               Comment: "Function to allow HTML pages to be displayed"
               Runtime: cloudfront-js-1.0
-
          Name: SetContentTypeFunction
+
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -1302,6 +1302,9 @@ Resources:
         Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
         CustomErrorResponses:
           - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /4xx-errors-account-mgmt-frontend/customError.html
+          - ErrorCode: 503
             ResponseCode: 200
             ResponsePagePath: /4xx-errors-account-mgmt-frontend/customError.html
         DefaultCacheBehavior:
