@@ -199,6 +199,70 @@ Mappings:
       LOGSLEVEL: "info"
 
 Resources:
+  ErrorPageUploadFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: ErrorPageUploadFunction
+      Handler: index.handler
+      Runtime: nodejs14.x
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          const AWS = require('aws-sdk');
+          const s3 = new AWS.S3();
+
+          exports.handler = async (event, context) => {
+              try {
+                  const bucketName = event.ResourceProperties.BucketName;
+                  const objectKey = event.ResourceProperties.ObjectKey;
+                  const contentType = event.ResourceProperties.ContentType;
+                  const fileContent = event.ResourceProperties.FileContent;
+
+                  await s3.putObject({
+                      Bucket: bucketName,
+                      Key: objectKey,
+                      ContentType: contentType,
+                      Body: fileContent
+                  }).promise();
+
+                  return 'Success';
+              } catch (error) {
+                  throw error;
+              }
+          }
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LambdaExecutionRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: S3AccessPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "s3:PutObject"
+                Resource: !Ref CustomErrorPageBucket
+
+  CustomFileUploadResource:
+    Type: Custom::UploadErrorPage
+    Properties:
+     ServiceToken: !GetAtt ErrorPageUploadFunction.Arn
+     BucketName: !Ref CustomErrorPageBucket
+     ObjectKey: customError.html
+     ContentType: text/html
+     FileContent: "<html> <head><title>Error</title></head><body><h1>Sorry, there is a problem with the service</h1><p>Try again later</p></body></html>"
+
   #
   # ECS Service
   #
