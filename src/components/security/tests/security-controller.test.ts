@@ -37,7 +37,6 @@ describe("security controller", () => {
         email: "test@test.com",
         phoneNumber: "7898",
         isPhoneNumberVerified: true,
-        manageEmailsLink: "https://www.gov.uk/email/manage",
         supportActivityLog: true,
         activityLogUrl: '/security/sign-in-history'
       });
