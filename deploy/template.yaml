@@ -257,7 +257,7 @@ Resources:
           - Effect: Allow
             Action:
               - s3:PutObject
-            Resource: !Ref CustomErrorPageBucket
+            Resource: !GetAtt CustomErrorPageBucket.Arn
 
 
 
