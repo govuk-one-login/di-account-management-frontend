@@ -202,7 +202,7 @@ Resources:
   ErrorPageUploadFunction:
     Type: "AWS::Lambda::Function"
     Properties:
-      FunctionName: ErrorPageUploadFunction
+      FunctionName: !Sub ${Environment}-${AWS::StackName}-error-page-upload
       Handler: index.handler
       Runtime: nodejs16.x
       Role: !GetAtt ErrorPageUploadRole.Arn
