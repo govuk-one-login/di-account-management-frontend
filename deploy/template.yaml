@@ -204,8 +204,8 @@ Resources:
     Properties:
       FunctionName: ErrorPageUploadFunction
       Handler: index.handler
-      Runtime: nodejs14.x
-      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: nodejs16.x
+      Role: !GetAtt ErrorPageUploadRole.Arn
       Code:
         ZipFile: |
           const AWS = require('aws-sdk');
@@ -231,28 +231,37 @@ Resources:
               }
           }
 
-  LambdaExecutionRole:
+  ErrorPageUploadRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: LambdaExecutionRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - !Ref ErrorPageUploadRolePolicy
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
-              Service: lambda.amazonaws.com
-            Action: "sts:AssumeRole"
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      Policies:
-        - PolicyName: S3AccessPolicy
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "s3:PutObject"
-                Resource: !Ref CustomErrorPageBucket
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+
+  ErrorPageUploadRolePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:PutObject
+            Resource: !Ref CustomErrorPageBucket
+
+
+
+
 
   CustomFileUploadResource:
     Type: Custom::UploadErrorPage
