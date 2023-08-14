@@ -199,59 +199,6 @@ Mappings:
       LOGSLEVEL: "info"
 
 Resources:
-  ErrorPageUploadFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${Environment}-${AWS::StackName}-error-page-upload
-      Handler: index.handler
-      Runtime: nodejs16.x
-      Role: !GetAtt ErrorPageUploadRole.Arn
-      CodeUri: ../src/lambda/error-page-upload
-
-  ErrorPageUploadRole:
-    Type: AWS::IAM::Role
-    Properties:
-      PermissionsBoundary: !If
-        - UsePermissionsBoundary
-        - !Ref PermissionsBoundary
-        - !Ref AWS::NoValue
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - !Ref ErrorPageUploadRolePolicy
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - "sts:AssumeRole"
-
-  ErrorPageUploadRolePolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action:
-              - s3:PutObject
-            Resource: !GetAtt CustomErrorPageBucket.Arn
-
-
-
-
-
-  CustomFileUploadResource:
-    Type: Custom::UploadErrorPage
-    Properties:
-     ServiceToken: !GetAtt ErrorPageUploadFunction.Arn
-     BucketName: !Ref CustomErrorPageBucket
-     ObjectKey: customError.html
-     ContentType: text/html
-     FileContent: "<html> <head><title>Error</title></head><body><h1>Sorry, there is a problem with the service</h1><p>Try again later</p></body></html>"
-
   #
   # ECS Service
   #
@@ -1314,11 +1261,6 @@ Resources:
               Bool:
                 "aws:SecureTransport": true
 
-  CustomErrorPageBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub "4xx-errors-${AWS::StackName}"
-      AccessControl: Private
 
   #
   # CloudFront Distribution
@@ -1356,10 +1298,10 @@ Resources:
         CustomErrorResponses:
           - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: /4xx-errors-account-mgmt-frontend/customError.html
+            ResponsePagePath: !Sub /4xx-errors-${BackendStackName}/customError.html
           - ErrorCode: 503
             ResponseCode: 200
-            ResponsePagePath: /4xx-errors-account-mgmt-frontend/customError.html
+            ResponsePagePath: !Sub /4xx-errors-${BackendStackName}/customError.html
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
