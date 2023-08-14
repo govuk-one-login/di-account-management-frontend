@@ -235,6 +235,10 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: LambdaExecutionRole
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - !Ref ErrorPageUploadRolePolicy
