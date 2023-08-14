@@ -234,7 +234,6 @@ Resources:
   ErrorPageUploadRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: LambdaExecutionRole
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
