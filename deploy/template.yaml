@@ -1336,7 +1336,7 @@ Resources:
               OriginReadTimeout: 30
               OriginSSLProtocols:
                 - TLSv1.2
-          - DomainName: !GetAtt CustomErrorPageBucket.DomainName
+          - DomainName: !Sub "{{resolve:ssm:/${BackendStackName}/S3/CustomErrorPage/DomainName}}"
             Id: S3Origin
             S3OriginConfig:
               OriginAccessIdentity: ""
