@@ -200,36 +200,13 @@ Mappings:
 
 Resources:
   ErrorPageUploadFunction:
-    Type: "AWS::Lambda::Function"
+    Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${Environment}-${AWS::StackName}-error-page-upload
       Handler: index.handler
       Runtime: nodejs16.x
       Role: !GetAtt ErrorPageUploadRole.Arn
-      Code:
-        ZipFile: |
-          const AWS = require('aws-sdk');
-          const s3 = new AWS.S3();
-
-          exports.handler = async (event, context) => {
-              try {
-                  const bucketName = event.ResourceProperties.BucketName;
-                  const objectKey = event.ResourceProperties.ObjectKey;
-                  const contentType = event.ResourceProperties.ContentType;
-                  const fileContent = event.ResourceProperties.FileContent;
-
-                  await s3.putObject({
-                      Bucket: bucketName,
-                      Key: objectKey,
-                      ContentType: contentType,
-                      Body: fileContent
-                  }).promise();
-
-                  return 'Success';
-              } catch (error) {
-                  throw error;
-              }
-          }
+      CodeUri: ../src/lambda/error-page-upload
 
   ErrorPageUploadRole:
     Type: AWS::IAM::Role
