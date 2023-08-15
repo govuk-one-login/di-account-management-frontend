@@ -23,6 +23,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    timeout-minutes: 15
     env:
       SAM_CLI_TELEMETRY: 0
       ENVIRONMENT: build
