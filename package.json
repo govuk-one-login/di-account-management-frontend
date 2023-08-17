@@ -85,7 +85,7 @@
     "xstate": "^4.38.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.4",
+    "@types/chai": "^4.3.5",
     "@types/chai-as-promised": "^7.1.5",
     "@types/cheerio": "^0.22.31",
     "@types/cookie-parser": "^1.4.3",
