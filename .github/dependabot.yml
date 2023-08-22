@@ -14,6 +14,18 @@ updates:
         versions: ["17.x", "18.x", "19.x"]
     commit-message:
       prefix: BAU
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
   - package-ecosystem: docker
     directory: "/"
     schedule:
