@@ -1,19 +1,23 @@
 import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { ValidationError, validationResult } from "express-validator";
 import { isObjectEmpty, renderBadRequest } from "../utils/validation";
+import { Error } from "src/utils/types";
 
-export const validationErrorFormatter = ({
-  msg,
-  param,
-}: {
-  msg: string;
-  param: string;
-}): any => {
-  return {
-    text: msg,
-    href: `#${param}`,
-  };
-};
+export function validationErrorFormatter(error: ValidationError): Error {
+  switch (error.type) {
+    case "alternative":
+      return validationErrorFormatter(error.nestedErrors[0]);
+
+    case "alternative_grouped":
+      return validationErrorFormatter(error.nestedErrors[0][0]);
+
+    case "field":
+      return {
+        text: error.msg,
+        href: `#${error.path}`,
+      };
+  }
+}
 
 export function validateBodyMiddleware(template: string) {
   return (req: Request, res: Response, next: NextFunction): any => {
