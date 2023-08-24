@@ -81,13 +81,13 @@ export class Http {
   }
 
   private static handleError(error: AxiosError) {
-    let apiError;
+    let apiError: ApiError;
 
     if (error.response && error.response.data) {
       apiError = new ApiError(
         error.message,
         error.response.status,
-        error.response.data
+        error.response.data as string
       );
     } else {
       apiError = new ApiError(error.message);
