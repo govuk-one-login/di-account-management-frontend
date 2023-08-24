@@ -1,15 +1,13 @@
 import {
   DynamoDBClient,
   QueryCommand,
-  DynamoDBClientConfig,
+  ScalarAttributeType,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { getSessionStoreTableName } from "../config";
 import { getDBConfig } from "../config/aws";
 import { logger } from "./logger";
 import connect_dynamodb from "connect-dynamodb";
-import { DynamoDB } from "aws-sdk";
-import { ClientConfiguration } from "aws-sdk/clients/dynamodb";
 import { Store } from "express-session";
 
 // the value of the USER_IDENTIFIER_IDX_ATTRIBUTE must match the indexed attribute in SessionsDynamoDB table
@@ -17,7 +15,7 @@ import { Store } from "express-session";
 const USER_IDENTIFIER_IDX_ATTRIBUTE = "user_id";
 
 const PREFIX = "sess:";
-const ddbClient = new DynamoDBClient(getDBConfig() as DynamoDBClientConfig);
+const ddbClient = new DynamoDBClient(getDBConfig());
 
 interface SessionStore {
   session: any;
@@ -26,9 +24,11 @@ interface SessionStore {
 export function getSessionStore({ session }: SessionStore): Store {
   const DynamoDBStore = connect_dynamodb(session);
   const storeOptions = {
-    client: new DynamoDB(getDBConfig() as ClientConfiguration),
+    client: new DynamoDBClient(getDBConfig()),
     table: getSessionStoreTableName(),
-    specialKeys: [{ name: USER_IDENTIFIER_IDX_ATTRIBUTE, type: "S" }],
+    specialKeys: [
+      { name: USER_IDENTIFIER_IDX_ATTRIBUTE, type: ScalarAttributeType.S },
+    ],
     skipThrowMissingSpecialKeys: true,
     prefix: PREFIX,
   };

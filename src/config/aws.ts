@@ -1,6 +1,5 @@
 import { Endpoint } from "aws-sdk";
 import { DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
-import { ClientConfiguration } from "aws-sdk/clients/dynamodb";
 import {
   getAppEnv,
   getAwsRegion,
@@ -80,18 +79,20 @@ export function getKMSConfig(): KmsConfig {
   };
 }
 
-export function getDBConfig(config: AwsConfig = getAWSConfig()): ClientConfiguration | DynamoDBClientConfig {
-  const dbConfig:any = {};
+export function getDBConfig(
+  config: AwsConfig = getAWSConfig()
+): DynamoDBClientConfig {
+  const dbConfig: any = {};
 
   if (config.accessKeyId || config.secretAccessKey) {
     dbConfig.credentials = {
       accessKeyId: config.accessKeyId || "",
-      secretAccessKey: config.secretAccessKey || ""
-    }
+      secretAccessKey: config.secretAccessKey || "",
+    };
   }
 
   if (config.endpoint) {
-    dbConfig.endpoint = `${config.endpoint.protocol}//${config.endpoint.host}`
+    dbConfig.endpoint = `${config.endpoint.protocol}//${config.endpoint.host}`;
   }
 
   if (config.region) {
