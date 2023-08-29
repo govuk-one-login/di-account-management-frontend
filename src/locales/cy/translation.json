@@ -232,6 +232,10 @@
             {
               "text": "Llofnodwch eich gweithred morgais",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
+            },
+            {
+              "text": "Darganfod a gwneud cais am grant",
+              "href": "https://www.gov.uk/guidance/find-government-grants"
             }
           ]
         },
@@ -505,6 +509,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "tya4DoMpw_B7FK5YvuMAj3asc0A": {
+        "header": "Darganfod a gwneud cais am grant",
+        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth",
+        "link_text": "Ewch i'ch cyfrif grantiau",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       }
     },
     "integration": {
