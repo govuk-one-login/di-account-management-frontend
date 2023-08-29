@@ -3,14 +3,14 @@ import axios, {
   AxiosRequestConfig,
   AxiosError,
   AxiosResponse,
-  AxiosRequestHeaders,
+  RawAxiosRequestHeaders,
 } from "axios";
 import { ApiResponseResult } from "../utils/types";
 import { getApiBaseUrl } from "../config";
 import { HTTP_STATUS_CODES } from "../app.constants";
 import { ApiError } from "./errors";
 
-const headers: AxiosRequestHeaders = {
+const headers: RawAxiosRequestHeaders = {
   Accept: "application/json",
   "Content-Type": "application/json; charset=utf-8",
   "Access-Control-Allow-Credentials": "true",
@@ -81,13 +81,13 @@ export class Http {
   }
 
   private static handleError(error: AxiosError) {
-    let apiError;
+    let apiError: ApiError;
 
     if (error.response && error.response.data) {
       apiError = new ApiError(
         error.message,
         error.response.status,
-        error.response.data
+        error.response.data as string
       );
     } else {
       apiError = new ApiError(error.message);
