@@ -464,7 +464,11 @@ Resources:
                 !If [
                   UseStubServices,
                   !Sub "https://{{resolve:ssm:/${StubsStackName}/Stub/OIDC}}",
-                !FindInMap [EnvironmentVariables, !Ref Environment, APIBASEURL]
+                  !FindInMap [
+                    EnvironmentVariables,
+                    !Ref Environment,
+                    APIBASEURL,
+                  ],
                 ]
             - Name: "AM_API_BASE_URL"
               Value:
@@ -1481,7 +1485,7 @@ Resources:
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGateway5xxStatusAlarm"
       AlarmDescription: "Trigger the alarm if errorThreshold exceeds 1% with the minimum of 10 invocations in 2 out of the last 5 minutes"
-      ActionsEnabled: false
+      ActionsEnabled: true
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       ComparisonOperator: GreaterThanOrEqualToThreshold
