@@ -206,6 +206,10 @@
               "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
             },
             {
+              "text": "Find and apply for a grant",
+              "href": "https://www.gov.uk/guidance/find-government-grants"
+            },
+            {
               "text": "GOV.UK email subscriptions",
               "href": "https://www.gov.uk/email/manage?from=your-services"
             },
@@ -232,10 +236,6 @@
             {
               "text": "Sign your mortgage deed",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
-            },
-            {
-              "text": "Find and apply for a grant",
-              "href": "https://www.gov.uk/guidance/find-government-grants"
             }
           ]
         },

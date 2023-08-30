@@ -198,26 +198,6 @@
           "paragraph": "Gallwch ddefnyddio GOV.UK One Login gyda:",
           "listItems": [
             {
-              "text": "Gwneud cais am drwydded gweithredwr cerbyd",
-              "href": "https://www.gov.uk/apply-vehicle-operator-licence"
-            },
-            {
-              "text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-              "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-            },
-            {
-              "text": "Tanysgrifiadau e-byst GOV.UK",
-              "href": "https://www.gov.uk/email/manage?from=your-services"
-            },
-            {
-              "text": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
-              "href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
-            },
-            {
-              "text": "Rheoli prentisiaethau",
-              "href": "https://www.gov.uk/sign-in-apprenticeship-service-account"
-            },
-            {
               "text": "Cofrestrfa datganiad caethwasiaeth modern",
               "href": "https://www.gov.uk/guidance/add-your-modern-slavery-statement-to-the-statement-registry"
             },
@@ -226,16 +206,36 @@
               "href": "https://www.gov.uk/guidance/subject-matter-specialists-for-ofqual"
             },
             {
+              "text": "Darganfod a gwneud cais am grant",
+              "href": "https://www.gov.uk/guidance/find-government-grants"
+            },
+            {
+              "text": "Gwneud cais am drwydded gweithredwr cerbyd",
+              "href": "https://www.gov.uk/apply-vehicle-operator-licence"
+            },
+            {
               "text": "Gwneud cais am wiriad DBS sylfaenol",
               "href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
+            },
+            {
+              "text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
+              "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+            },
+            {
+              "text": "LITE (Trwyddedu ar gyfer Masnach a Menter Ryngwladol)",
+              "href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
             },
             {
               "text": "Llofnodwch eich gweithred morgais",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk/interceptor"
             },
             {
-              "text": "Darganfod a gwneud cais am grant",
-              "href": "https://www.gov.uk/guidance/find-government-grants"
+              "text": "Rheoli prentisiaethau",
+              "href": "https://www.gov.uk/sign-in-apprenticeship-service-account"
+            },
+            {
+              "text": "Tanysgrifiadau e-byst GOV.UK",
+              "href": "https://www.gov.uk/email/manage?from=your-services"
             }
           ]
         },
