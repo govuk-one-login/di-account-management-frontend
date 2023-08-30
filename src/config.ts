@@ -119,7 +119,6 @@ export const getAllowedAccountListClientIDs: string[] = [
   "TGygWFxGDNn8ItyaecWCopqIX3s",
   "pDqO7_Hu-pq5wam5I4MlURXrv5k",
   "x3F_Iu0LgqJpegY5ni0QSB0uezw",
-  "tya4DoMpw_B7FK5YvuMAj3asc0A",
   "gov-uk",
   "lite",
   "ofqual",

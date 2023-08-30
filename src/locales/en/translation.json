@@ -206,10 +206,6 @@
               "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
             },
             {
-              "text": "Find and apply for a grant",
-              "href": "https://www.gov.uk/guidance/find-government-grants"
-            },
-            {
               "text": "GOV.UK email subscriptions",
               "href": "https://www.gov.uk/email/manage?from=your-services"
             },
@@ -510,12 +506,6 @@
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
-      },
-      "tya4DoMpw_B7FK5YvuMAj3asc0A": {
-        "header": "Find and apply for a grant",
-        "description": "Search and apply for government grant funding",
-        "link_text": "Go to your grants account",
-        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       }
     },
     "integration": {
