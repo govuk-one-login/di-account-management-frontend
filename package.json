@@ -69,7 +69,7 @@
     "govuk-frontend": "^4.7.0",
     "helmet": "7.0.0",
     "i18next": "^23.5.1",
-    "i18next-fs-backend": "^1.1.4",
+    "i18next-fs-backend": "^2.1.5",
     "i18next-http-middleware": "^3.3.2",
     "jose": "^4.9.2",
     "jsdom": "^22.1.0",
