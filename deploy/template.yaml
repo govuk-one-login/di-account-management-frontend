@@ -136,6 +136,7 @@ Mappings:
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
+      SUPPORTGA4: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
@@ -150,6 +151,7 @@ Mappings:
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
+      SUPPORTGA4: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
@@ -164,6 +166,7 @@ Mappings:
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
+      SUPPORTGA4: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
@@ -178,6 +181,7 @@ Mappings:
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "0"
+      SUPPORTGA4: "0"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
@@ -192,6 +196,7 @@ Mappings:
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "0"
+      SUPPORTGA4: "0"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
@@ -488,6 +493,13 @@ Resources:
                   !Ref Environment,
                   SUPPORTACTIVITYLOG,
                 ]
+            - Name: "SUPPORT_GA4"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTGA4,
+                ]
             - Name: "BASE_URL"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
@@ -513,6 +525,8 @@ Resources:
                 ]
             - Name: "GTM_ID"
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/GTM/Id}}"
+            - Name: "GTM_ID_2"
+              Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/GTM/Id2}}"
             - Name: "GOV_ACCOUNTS_PUBLISHING_API_URL"
               Value:
                 !FindInMap [

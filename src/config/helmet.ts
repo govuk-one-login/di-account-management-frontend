@@ -23,7 +23,7 @@ export const helmetConfiguration: Parameters<typeof helmet>[0] = {
         "https://www.google-analytics.com",
       ],
       objectSrc: ["'none'"],
-      connectSrc: ["'self'", "https://www.google-analytics.com"],
+      connectSrc: ["'self'", "https://*.google-analytics.com"],
       formAction: ["'self'", "https://*.account.gov.uk"],
     },
   },

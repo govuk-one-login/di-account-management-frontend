@@ -1,5 +1,5 @@
-window.GOVSignIn = window.GOVSignIn || {};
-window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
+window.DI = window.DI || {};
+window.DI.Modules = window.DI.Modules || {};
 
 (function (Modules) {
   function ShowPassword($module) {
@@ -106,4 +106,4 @@ window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
   };
 
   Modules.ShowPassword = ShowPassword;
-})(window.GOVSignIn.Modules);
+})(window.DI.Modules);

@@ -101,7 +101,12 @@
     <script type="text/javascript" src="/public/scripts/all.js"></script>
     <script type="text/javascript" nonce='{{scriptNonce}}'>
         window
-            .GOVSignIn
-            .appInit("{{gtmId}}", "{{ analyticsCookieDomain }}")
+            .DI
+            .appInit({
+                uaTrackingId: "{{gtmId}}", 
+                ga4TrackingId: "{{gtmIdGa4}}",
+                analyticsCookieDomain: "{{ analyticsCookieDomain }}", 
+                ga4Enabled: "{{supportGa4}}"
+            })
     </script>
 {% endblock %}
