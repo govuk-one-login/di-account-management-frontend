@@ -206,6 +206,10 @@
               "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
             },
             {
+              "text": "Criminal injuries compensation",
+              "href": "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
+            },
+            {
               "text": "Find and apply for a grant",
               "href": "https://www.gov.uk/guidance/find-government-grants"
             },
@@ -516,6 +520,12 @@
         "description": "Search and apply for government grant funding",
         "link_text": "Go to your grants account",
         "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
+      },
+      "bGAwNKM0XvnxCAuDQ_rMhhP3dxM": {
+        "header": "Criminal injuries compensation",
+        "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
+        "link_text": "Go to your criminal injuries compensation account",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "integration": {
@@ -568,6 +578,12 @@
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "bGAwNKM0XvnxCAuDQ_rMhhP3dxM": {
+        "header": "Criminal injuries compensation",
+        "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
+        "link_text": "Go to your criminal injuries compensation account",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "staging": {
@@ -620,6 +636,12 @@
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Criminal injuries compensation",
+        "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
+        "link_text": "Go to your criminal injuries compensation account",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "build": {
@@ -672,6 +694,12 @@
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Criminal injuries compensation",
+        "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
+        "link_text": "Go to your criminal injuries compensation account",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "dev": {
@@ -724,6 +752,12 @@
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Criminal injuries compensation",
+        "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
+        "link_text": "Go to your criminal injuries compensation account",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     },
     "local": {
@@ -776,6 +810,12 @@
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Criminal injuries compensation",
+        "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
+        "link_text": "Go to your criminal injuries compensation account",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
       }
     }
   }
