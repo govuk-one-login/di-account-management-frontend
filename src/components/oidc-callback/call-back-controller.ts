@@ -51,8 +51,14 @@ export function oidcAuthCallbackGet(
       req.oidc.metadata.client_id,
       req.oidc.issuer.metadata.token_endpoint
     );
+    let redirectUri;
     const crossDomainGaIdParam = req.query._ga as string;
-    let redirectUri = PATH_DATA.YOUR_SERVICES.url;
+
+    if (req.session.currentURL) {
+      redirectUri = req.session.currentURL;
+    } else {
+      redirectUri = PATH_DATA.YOUR_SERVICES.url;
+    }
 
     const tokenResponse: TokenSet = await req.oidc.callback(
       req.oidc.metadata.redirect_uris[0],
@@ -109,10 +115,7 @@ export function oidcAuthCallbackGet(
         req.query.cookie_consent === COOKIE_CONSENT.ACCEPT
       ) {
         const searchParams = new URLSearchParams({ _ga: crossDomainGaIdParam });
-        redirectUri =
-          redirectUri +
-          "?" +
-          searchParams.toString();
+        redirectUri = redirectUri + "?" + searchParams.toString();
       }
     }
 
