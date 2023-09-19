@@ -53,9 +53,9 @@
     "semi": true
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.410.0",
-    "@aws-sdk/util-dynamodb": "^3.410.0",
-    "aws-sdk": "2.1456.0",
+    "@aws-sdk/client-dynamodb": "^3.415.0",
+    "@aws-sdk/util-dynamodb": "^3.415.0",
+    "aws-sdk": "2.1460.0",
     "axios": "^1.5.0",
     "base64url": "3.0.1",
     "body-parser": "^1.20.2",
