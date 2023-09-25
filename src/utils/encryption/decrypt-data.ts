@@ -54,7 +54,7 @@ export async function decryptData(
   data: string,
   userId: string
 ): Promise<string> {
-  try {
+  //try {
     keyring ??= await buildKmsKeyring();
     const result = await decryptClient.decrypt(keyring, data);
     validateEncryptionContext(
@@ -62,8 +62,8 @@ export async function decryptData(
       generateExpectedContext(userId)
     );
     return result.plaintext.toString(DECODING);
-  } catch (error) {
-    //console.error("Failed to decrypt data.", { error });
-    throw error;
-  }
+  // } catch (error) {
+  //   console.error("Failed to decrypt data.", { error });
+  //   throw error;
+  // }
 }
