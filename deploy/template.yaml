@@ -339,6 +339,9 @@ Resources:
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
                   - !GetAtt DynamoDBKmsKey.Arn
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/GeneratorKey/ID}}"
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/WrapperKey/ID}}"
+
 
       PermissionsBoundary: !If
         - UsePermissionsBoundary
@@ -563,6 +566,11 @@ Resources:
               Value: !Ref ServiceStoreTableName
             - Name: "ACTIVITY_LOG_STORE_TABLE_NAME"
               Value: !Ref ActivityLogStoreTableName
+            - Name: "GENERATOR_KEY_ARN"
+              Value: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/GeneratorKey/ID}}"
+            - Name: "WRAPPING_KEY_ARN"
+              Value: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/WrapperKey/ID}}"
+
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn

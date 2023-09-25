@@ -53,6 +53,7 @@
     "semi": true
   },
   "dependencies": {
+    "@aws-crypto/client-node": "^4.0.0",
     "@aws-sdk/client-dynamodb": "^3.415.0",
     "@aws-sdk/util-dynamodb": "^3.415.0",
     "aws-sdk": "2.1460.0",

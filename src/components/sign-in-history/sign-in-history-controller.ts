@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { getAppEnv, activityLogItemsPerPage } from "../../config";
 import {
-  presentSignInHistory,
   generatePagination,
   formatData,
   hasExplanationParagraph,
 } from "../../utils/signInHistory";
+import { getActivityLog } from "../../middleware/activity-log-middleware";
 
 export async function signInHistoryGet(
   req: Request,
@@ -18,7 +18,7 @@ export async function signInHistoryGet(
   let data: any = [];
   let pagination: any = {};
   if (user?.subjectId) {
-    activityData = await presentSignInHistory(user.subjectId);
+    activityData = await getActivityLog(user.subjectId);
     const pageParameter = req.query?.page;
     const dataLength = activityData.length;
     showExplanation = hasExplanationParagraph(activityData);

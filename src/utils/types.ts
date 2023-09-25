@@ -33,6 +33,15 @@ export interface ActivityLogEntry {
   truncated: boolean;
 }
 
+export interface EncryptedActivityLogEntry {
+  event_type: string;
+  session_id: string;
+  user_id: string;
+  timestamp: number;
+  activities: string;
+  truncated: boolean;
+}
+
 export interface Activity {
   type: string;
   client_id: ClientId;

@@ -1,12 +1,9 @@
-import { DynamoDB } from "aws-sdk";
 import {
   activityLogItemsPerPage,
-  getDynamoActivityLogStoreTableName,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
-import { ActivityLogEntry, allowedTxmaEvents } from "./types";
-import pino from "pino";
-import { dynamoDBService } from "./dynamo";
+import { Activity, ActivityLogEntry, EncryptedActivityLogEntry, allowedTxmaEvents } from "./types";
+import { decryptData } from "./encryption/decrypt-data";
 
 // TODO should be in a config somewhere I suppose.
 // Should be generated using Date.now() whenever a launch date is agreed upon
@@ -143,43 +140,25 @@ export const formatData = (
   return formattedData;
 };
 
-const activityLogDynamoDBRequest = (
-  subjectId: string
-): DynamoDB.Types.QueryInput => ({
-  TableName: getDynamoActivityLogStoreTableName(),
-  KeyConditionExpression: "user_id = :user_id",
-  ExpressionAttributeValues: {
-    ":user_id": { S: subjectId },
-  },
-  ScanIndexForward: false, // Set to 'true' for ascending order
-});
 
-const getActivityLogEntry = async (
-  subjectId: string
-): Promise<ActivityLogEntry[]> => {
-  const logger = pino();
-
-  try {
-    const response = await dynamoDBService().queryItem(
-      activityLogDynamoDBRequest(subjectId)
-    );
-    const unmarshalledItems = response.Items?.map((item) =>
-      DynamoDB.Converter.unmarshall(item)
-    ) as ActivityLogEntry[];
-    return unmarshalledItems;
-  } catch (err) {
-    logger.error(err);
-    return [];
+export const decryptActivityLogEntry = async (
+  subjectId: string,
+  encrypted?: EncryptedActivityLogEntry | undefined
+): Promise<ActivityLogEntry | undefined> => {
+  if (!encrypted) {
+    return undefined;
   }
+  const activities = JSON.parse(
+    await decryptData(encrypted.activities, subjectId)
+  ) as Activity[];
+
+  return {
+    session_id: encrypted.session_id,
+    user_id: encrypted.user_id,
+    event_type: encrypted.event_type,
+    timestamp: encrypted.timestamp,
+    activities,
+    truncated: encrypted.truncated,
+  };
 };
 
-export const presentSignInHistory = async (
-  subjectId: string
-): Promise<ActivityLogEntry[]> => {
-  const activityLogEntry = await getActivityLogEntry(subjectId);
-  if (activityLogEntry) {
-    return activityLogEntry;
-  } else {
-    return [];
-  }
-};
