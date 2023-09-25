@@ -226,7 +226,7 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   decache("../../../middleware/requires-auth-middleware");
   const oidc = require("../../../utils/oidc");
   const configFuncs = require("../../../config");
-  const signInHistory = require("../../../utils/signInHistory");
+  const activityLogMiddleware = require("../../../middleware/activity-log-middleware")
   const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
   const showActivityLog = !config?.hideActivityLog;
@@ -270,7 +270,7 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
     });
   });
 
-  sandbox.stub(signInHistory, "presentSignInHistory").callsFake(function() {
+  sandbox.stub(activityLogMiddleware, "getActivityLog").callsFake(function() {
     return activity;
   });
 

@@ -21,9 +21,9 @@ describe("Sign in history controller", () => {
 
   describe("sign in history get", () => {
     sandbox = sinon.createSandbox();
-    const signInHistory = require("../../../utils/signInHistory");
+    const activityLogMiddleware = require("../../../middleware/activity-log-middleware")
     it("should render the sign in history page with data", async () => {
-      sandbox.stub(signInHistory, "presentSignInHistory").callsFake(() => {
+      sandbox.stub(activityLogMiddleware, "getActivityLog").callsFake(() => {
         return new Promise((resolve) => {
           resolve([]);
         });
