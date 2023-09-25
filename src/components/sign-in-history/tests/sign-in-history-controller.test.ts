@@ -21,7 +21,7 @@ describe("Sign in history controller", () => {
 
   describe("sign in history get", () => {
     sandbox = sinon.createSandbox();
-    const activityLogMiddleware = require("../../../middleware/activity-log-middleware")
+    const activityLogMiddleware = require("../../../middleware/activity-log-middleware");
     it("should render the sign in history page with data", async () => {
       sandbox.stub(activityLogMiddleware, "getActivityLog").callsFake(() => {
         return new Promise((resolve) => {
@@ -49,14 +49,16 @@ describe("Sign in history controller", () => {
         log: { error: sandbox.fake() },
       };
       await signInHistoryGet(req as Request, res as Response).then(() => {
-        expect(res.render).to.have.been.calledWith("sign-in-history/index.njk", {
-          showExplanation: false,
-          env: getAppEnv(),
-          data: [],
-          pagination: {},
-        });
-      })
+        expect(res.render).to.have.been.calledWith(
+          "sign-in-history/index.njk",
+          {
+            showExplanation: false,
+            env: getAppEnv(),
+            data: [],
+            pagination: {},
+          }
+        );
+      });
     });
   });
 });
-

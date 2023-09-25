@@ -1,8 +1,11 @@
-import {
-  activityLogItemsPerPage,
-} from "../config";
+import { activityLogItemsPerPage } from "../config";
 import { prettifyDate } from "./prettifyDate";
-import { Activity, ActivityLogEntry, EncryptedActivityLogEntry, allowedTxmaEvents } from "./types";
+import {
+  Activity,
+  ActivityLogEntry,
+  EncryptedActivityLogEntry,
+  allowedTxmaEvents,
+} from "./types";
 import { decryptData } from "./encryption/decrypt-data";
 
 // TODO should be in a config somewhere I suppose.
@@ -140,7 +143,6 @@ export const formatData = (
   return formattedData;
 };
 
-
 export const decryptActivityLogEntry = async (
   subjectId: string,
   encrypted?: EncryptedActivityLogEntry | undefined
@@ -161,4 +163,3 @@ export const decryptActivityLogEntry = async (
     truncated: encrypted.truncated,
   };
 };
-

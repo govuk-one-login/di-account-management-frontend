@@ -27,7 +27,9 @@ export const getActivityLog = async (
     const unmarshalledItems = response.Items?.map((item) =>
       DynamoDB.Converter.unmarshall(item)
     ) as EncryptedActivityLogEntry[];
-    return Promise.all(unmarshalledItems.map(item => decryptActivityLogEntry(subjectId, item)));
+    return Promise.all(
+      unmarshalledItems.map((item) => decryptActivityLogEntry(subjectId, item))
+    );
   } catch (err) {
     logger.error(err);
     return [];

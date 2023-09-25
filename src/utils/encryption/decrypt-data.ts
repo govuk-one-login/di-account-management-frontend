@@ -63,7 +63,7 @@ export async function decryptData(
     );
     return result.plaintext.toString(DECODING);
   } catch (error) {
-    console.error("Failed to decrypt data.", { error });
+    //console.error("Failed to decrypt data.", { error });
     throw error;
   }
 }
