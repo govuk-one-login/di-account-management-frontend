@@ -3,6 +3,7 @@ import { UserJourney } from "./utils/state-machine";
 export const PATH_DATA: {
   [key: string]: { url: string; event?: string; type?: UserJourney };
 } = {
+  CONTACT: { url: "/contact-govuk-one-login" },
   SIGN_IN_HISTORY: { url: "/security/sign-in-history" },
   MANAGE_YOUR_ACCOUNT: { url: "/manage-your-account" },
   SETTINGS: { url: "/settings" },
@@ -79,17 +80,18 @@ export const PATH_DATA: {
   RESEND_EMAIL_CODE: { url: "/resend-email-code" },
   RESEND_PHONE_CODE: { url: "/resend-phone-code" },
   SECURITY_TXT: {
-    url: "/.well-known/security.txt"
+    url: "/.well-known/security.txt",
   },
   THANKS_TXT: {
-    url: "/.well-known/thanks.txt"
-  }
+    url: "/.well-known/thanks.txt",
+  },
 };
 
 export const WELL_KNOWN_FILES = {
-  SECURITY_TEXT_URL: "https://vdp.cabinetoffice.gov.uk/.well-known/security.txt",
-  THANKS_TEXT_URL: "https://vdp.cabinetoffice.gov.uk/thanks.txt"
-}
+  SECURITY_TEXT_URL:
+    "https://vdp.cabinetoffice.gov.uk/.well-known/security.txt",
+  THANKS_TEXT_URL: "https://vdp.cabinetoffice.gov.uk/thanks.txt",
+};
 
 export const API_ENDPOINTS = {
   AUTHENTICATE: "/authenticate",

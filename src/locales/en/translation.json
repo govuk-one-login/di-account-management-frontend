@@ -461,6 +461,10 @@
         "recipientMessage": "We will send a code to: ",
         "paragraph": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder."
       }
+    },
+    "contact": {
+      "title": "Get help with GOV.UK One Login",
+      "header": "Contact GOV.UK One Login"
     }
   },
   "clientRegistry": {
