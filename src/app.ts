@@ -19,6 +19,7 @@ import {
   getSessionSecret,
   supportActivityLog,
   supportTriagePage,
+  supportWebchatDemo,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
@@ -53,6 +54,7 @@ import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-pho
 import { redirectsRouter } from "./components/redirects/redirects-routes";
 import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes";
 import { getSessionStore } from "./utils/session-store";
+import { webchatRouter } from "./components/webchat-demo/webchat-demo-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -144,6 +146,9 @@ async function createApp(): Promise<express.Application> {
   }
   if (supportTriagePage()) {
     app.use(contactRouter);
+  }
+  if (supportWebchatDemo()) {
+    app.use(webchatRouter);
   }
 
   // Router for all previously used URLs, that we want to redirect on
