@@ -155,3 +155,7 @@ export function supportActivityLog(): boolean {
 export function getDynamoActivityLogStoreTableName(): string {
   return process.env.ACTIVITY_LOG_STORE_TABLE_NAME;
 }
+
+export function supportTriagePage(): boolean {
+  return process.env.SUPPORT_TRIAGE_PAGE === "1";
+}

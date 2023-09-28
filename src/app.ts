@@ -13,7 +13,13 @@ import session from "express-session";
 import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
-import { getNodeEnv, getSessionExpiry, getSessionSecret, supportActivityLog } from "./config";
+import {
+  getNodeEnv,
+  getSessionExpiry,
+  getSessionSecret,
+  supportActivityLog,
+  supportTriagePage,
+} from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
 import { serverErrorHandler } from "./handlers/internal-server-error-handler";
@@ -45,6 +51,7 @@ import { globalLogoutRouter } from "./components/global-logout/global-logout-rou
 import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
 import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
 import { redirectsRouter } from "./components/redirects/redirects-routes";
+import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes";
 import { getSessionStore } from "./utils/session-store";
 
 const APP_VIEWS = [
@@ -134,6 +141,9 @@ async function createApp(): Promise<express.Application> {
   app.use(resendPhoneCodeRouter);
   if (supportActivityLog()) {
     app.use(signInHistoryRouter);
+  }
+  if (supportTriagePage()) {
+    app.use(contactRouter);
   }
 
   // Router for all previously used URLs, that we want to redirect on

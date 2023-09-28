@@ -460,6 +460,10 @@
         "recipientMessage": "Byddwn yn anfon cod i: ",
         "paragraph": "Efallai y bydd eich e-bost yn cymryd ychydig funudau i gyrraedd. Os na chewch e-bost, edrychwch ar eich ffolder spam."
       }
+    },
+    "contact": {
+      "title": "Get help with GOV.UK One Login",
+      "header": "Contact GOV.UK One Login"
     }
   },
   "clientRegistry": {

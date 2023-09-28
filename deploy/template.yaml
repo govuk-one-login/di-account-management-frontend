@@ -141,6 +141,7 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGSLEVEL: "debug"
+      SUPPORTTRIAGEPAGE: "1"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -155,6 +156,7 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
       LOGSLEVEL: "debug"
+      SUPPORTTRIAGEPAGE: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -169,6 +171,7 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
       LOGSLEVEL: "info"
+      SUPPORTTRIAGEPAGE: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -183,6 +186,7 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
+      SUPPORTTRIAGEPAGE: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -197,6 +201,7 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
+      SUPPORTTRIAGEPAGE: "0"
 
 Resources:
   #
@@ -563,6 +568,13 @@ Resources:
               Value: !Ref ServiceStoreTableName
             - Name: "ACTIVITY_LOG_STORE_TABLE_NAME"
               Value: !Ref ActivityLogStoreTableName
+            - Name: "SUPPORT_TRIAGE_PAGE"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTTRIAGEPAGE,
+                ]
       Cpu: 1024
       Memory: 2048
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
