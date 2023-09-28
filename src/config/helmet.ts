@@ -15,6 +15,7 @@ export const helmetConfiguration: Parameters<typeof helmet>[0] = {
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
         "https://ssl.google-analytics.com",
+        "https://*.smartagent.app",
       ],
       imgSrc: [
         "'self'",
@@ -23,7 +24,11 @@ export const helmetConfiguration: Parameters<typeof helmet>[0] = {
         "https://www.google-analytics.com",
       ],
       objectSrc: ["'none'"],
-      connectSrc: ["'self'", "https://www.google-analytics.com"],
+      connectSrc: [
+        "'self'",
+        "https://www.google-analytics.com",
+        "https://*.smartagent.app",
+      ],
       formAction: ["'self'", "https://*.account.gov.uk"],
     },
   },

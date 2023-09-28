@@ -142,6 +142,7 @@ Mappings:
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
+      SUPPORTWEBCHATDEMO: "1"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -157,6 +158,7 @@ Mappings:
       SERVICEDOMAIN: "build.account.gov.uk"
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
+      SUPPORTWEBCHATDEMO: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -172,6 +174,7 @@ Mappings:
       SERVICEDOMAIN: "staging.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
+      SUPPORTWEBCHATDEMO: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -187,6 +190,7 @@ Mappings:
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "0"
+      SUPPORTWEBCHATDEMO: "1"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -202,6 +206,7 @@ Mappings:
       SERVICEDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "0"
+      SUPPORTWEBCHATDEMO: "0"
 
 Resources:
   #
@@ -574,6 +579,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTTRIAGEPAGE,
+                ]
+            - Name: "SUPPORT_WEBCHAT_DEMO"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTWEBCHATDEMO,
                 ]
       Cpu: 1024
       Memory: 2048
