@@ -163,3 +163,12 @@ export function supportTriagePage(): boolean {
 export function supportWebchatDemo(): boolean {
   return process.env.SUPPORT_WEBCHAT_DEMO === "1";
 }
+
+export function getWebchatUrl(): string {
+  const env = getAppEnv();
+  if (env == "local" || env == "dev") {
+    return "https://dev-chat-loader.smartagent.app/loader/main.js";
+  } else {
+    return "https://uat-chat-loader.smartagent.app/loader/main.js";
+  }
+}
