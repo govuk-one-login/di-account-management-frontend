@@ -34,13 +34,11 @@ Create a copy of the seed.yaml.sample, rename it seed.yaml and ask a team member
 
 ### Start the application
 
-Run the `docker compose up` command.
+Run `docker compose build && docker compose up` to force a new build of the containers.
 
 To find out if the application has started, open a console window on the docker container and view the logs. If the server has started successfully you will see this message `Server listening on port 6001`.
 
-Navigate to [http://localhost:6001](http://localhost:6001). You should be redirected to the 'sign-in-or-create' screen.
-
-Sign in and make sure you are returned to the local 'your-services' screen.
+Navigate to [http://localhost:6001](http://localhost:6001). You should be redirected through the OIDC stub and back to the application.
 
 Changes made locally will automatically be deployed after a few seconds. You should check the docker console to check that your changes have been picked up.
 
