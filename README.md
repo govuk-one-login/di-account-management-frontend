@@ -44,31 +44,12 @@ Changes made locally will automatically be deployed after a few seconds. You sho
 
 ### Provisioning localstack
 
-The application is now quite tightly integrated into AWS services.
-For certain features to run locally, we'll need localstack running and provisioned to facilitate requests.
-
+The application is now tightly integrated into AWS services.
+We use localstack to mimic AWS when running locally.
 The provisioning of the infra in localstack is done automatically on startup when calling `docker compose up`.
-The provisioning and setup of the infra is done by following script,
+The provisioning and setup of the infra is done by the following script,
 [provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh).
 The script is mounted as volume onto localstack and invoked as soon as the container is ready.
-
-#### Setting up an AWS test user
-
-You will need to have a profile in AWS vault prepared you can use for local testing.
-
-You can list your AWS profiles with the aws-vault command.
-
-```bash
-aws-vault ls
-```
-
-If you do not have an appropriate one you can create one with dummy keys suitable for localstack with:
-
-```bash
-aws configure set aws_access_key_id "na" --profile test-profile
-aws configure set aws_secret_access_key "na" --profile test-profile
-aws configure set region "eu-west-2" --profile test-profile
-```
 
 #### DynamoDB
 
