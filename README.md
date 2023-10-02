@@ -96,7 +96,8 @@ docker exec -it account-management-frontend /bin/sh
 
 ### Restarting the app
 
-You can restart the app by re-running the `docker compose down` and then `docker compose up`.
+You can restart the app by running `docker compose down` and then `docker compose up`.
+You'll need to do this if you make changes to environment variables or the localstack config.
 
 ## Deploying to the development AWS account
 
