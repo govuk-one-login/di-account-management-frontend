@@ -79,12 +79,19 @@ The session store resources are also provisioned in localstack through the
 
 The unit tests have been written with Mocha and Supertest.
 
-If the app is run in a container then the tests are run there too:
+You'll be able to run the unit tests from outside the container
+
+```shell
+npm run test:unit
+```
+
+The integration tests need localstack to run successfully.
+The easiest way is to start the docker compose stack and run the tests from inside the app container.
 
 ```shell script
-docker exec -it di-auth-account-management-frontend-dev /bin/sh
+docker exec -it account-management-frontend /bin/sh
 
-# npm run test:unit
+# npm run test:integration
 ```
 
 ### Restarting the app
