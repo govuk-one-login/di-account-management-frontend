@@ -7,7 +7,10 @@ import i18nextMiddleware from "i18next-http-middleware";
 import * as path from "path";
 import { configureNunjucks } from "./config/nunchucks";
 import { i18nextConfigurationOptions } from "./config/i18next";
-import { helmetConfiguration } from "./config/helmet";
+import {
+  helmetConfiguration,
+  webchatHelmetConfiguration,
+} from "./config/helmet";
 import helmet from "helmet";
 import session from "express-session";
 import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
@@ -94,7 +97,11 @@ async function createApp(): Promise<express.Application> {
     );
 
   app.use(i18nextMiddleware.handle(i18next));
-  app.use(helmet(helmetConfiguration));
+  if (supportWebchatDemo()) {
+    app.use(helmet(webchatHelmetConfiguration));
+  } else {
+    app.use(helmet(helmetConfiguration));
+  }
 
   const sessionStore = getSessionStore({ session: session });
   app.use(
