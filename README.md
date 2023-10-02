@@ -103,7 +103,7 @@ You'll need to do this if you make changes to environment variables or the local
 
 We can deploy the app to our development environment for pre-merge testing.
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
-Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
+Before deploying, check with the team in the [#di-one-login-home-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
 
 The [Verify and Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
 This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
@@ -112,37 +112,12 @@ To deploy the app:
 
 1. Rebase your branch onto `main`
 2. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) and click 'Run workflow'
-3. Choose your branch from the dropdown, then click 'Run workflow' again
-4. Wait for the action to finish running
-5. Log into the development AWS account (`gds aws di-account-dev -l`)
-6. Go to the [CodePipeline job](https://eu-west-2.console.aws.amazon.com/codesuite/codepipeline/pipelines/account-mgmt-frontend-pipeline-Pipeline-1RV59OLATETA7/view?region=eu-west-2) for the frontend
-7. Approve the pipeline run
-8. Wait for the pipeline to finish
-9. Go to https://home.dev.account.gov.uk to see the app (VPN required)
-
-## Branch Deploys
-
-We can deploy the app to our development environment (`di-account-dev`) for pre-merge testing.
-Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
-Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
-
-Under the [Actions Tab](https://github.com/alphagov/di-account-management-frontend/actions) there is a [Verify & Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) action.
-
-Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
-This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
-
-To deploy the app:
-
-1. Rebase your branch onto `main`
-1. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) and click 'Run workflow'
-1. Use workflow from branch `main` - Leave this at the default unless you are modifying the workflow
-1. Select `Commit SHA, branch name or tag` - Provide the SHA, branch name or tag that you wish to deploy.
-1. Wait for the action to finish running
-1. Log into the development AWS account (`gds aws di-account-dev -l`)
-1. Go to the [CodePipeline job](https://eu-west-2.console.aws.amazon.com/codesuite/codepipeline/pipelines/account-mgmt-frontend-pipeline-Pipeline-1RV59OLATETA7/view?region=eu-west-2) for the frontend
-1. Approve the pipeline run
-1. Wait for the pipeline to finish
-1. Go to https://home.dev.account.gov.uk to see the app (VPN required)
+3. Choose your branch from the dropdown
+4. Select `Commit SHA, branch name or tag` - Provide the SHA, branch name or tag that you wish to deploy
+5. Click 'Run workflow' again
+6. Wait for the action to finish running
+7. Wait for AWS Code Pipeline to finish the deploy
+8. Go to https://home.dev.account.gov.uk to see the app (VPN required)
 
 ## Other useful npm commands
 
