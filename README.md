@@ -15,28 +15,14 @@ Clones the repository to the `your_folder_name` directory.
 
 ## Running the app locally in Docker
 
-Before you can run the frontend app against the backend you will need a usable client and configuration.
+We can run the Account Management frontend locally using our OIDC and Account Management API stubs deployed to the dev or build environment.
+This means we don't need to register a new client with the Authentication team for each of us.
 
-### Configure or find a usable client
+### Configure environment variables
 
-The client created by the pipeline is not currently usable by a local account management application as the private key is not available and it does not redirect to local clients. To run account management locally you will need to configure another client.
-
-If you are a member of the GOV.UK Account team, as a colleague if they have existing config they can share with you.
-
-If you need to generate new config follow the steps below.
-
-1. [Generate a key pair](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/generate-a-key/)
-1. Ask the [Auth team](https://di-team-manual.london.cloudapps.digital/authentication/) to copy an existing client in the database, or [register a new one](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/manage-your-service-s-configuration/#manage-your-service-s-configuration-with-gov-uk-sign-in).
-1. If the Auth team ask for configuration values, tell them we need:
-   - SubjectType = public
-   - ConsentRequired = 0
-   - RedirectUrls = ["http://localhost:6001/auth/callback"]
-   - Scopes = ["openid", "phone", "email", "am", "offline_access", "govuk-account"]
-1. Send the Auth team the public key generated in step 1.
-
-### Set the Environment variables
-
-Create a copy of the .env.sample file, rename it .env and fill in the value for the client id below. All the other values should be correct.
+Create a copy of the `.env.sample` file and rename it `.env`.
+Ask another team member for the client ID and add that to your `.env` file.
+All other values should be correct.
 
 ```
 OIDC_CLIENT_ID=<client id>
@@ -44,7 +30,7 @@ OIDC_CLIENT_ID=<client id>
 
 ### Setup the private key
 
-Create a copy of the seed.yaml.sample, rename it seed.yaml and fill in the value for the private key, using the key generated above or shared by a colleague.
+Create a copy of the seed.yaml.sample, rename it seed.yaml and ask a team member for the value for the private key.
 
 ### Start the application
 
