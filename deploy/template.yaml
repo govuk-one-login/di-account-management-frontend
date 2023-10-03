@@ -144,6 +144,8 @@ Mappings:
       SUPPORTTRIAGEPAGE: "1"
       SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://dev-chat-loader.smartagent.app/loader/main.js"
+      SUPPORTWEBCHATCONTACT: "1"
+      SUPPORTPHONECONTACT: "1"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -161,6 +163,8 @@ Mappings:
       SUPPORTTRIAGEPAGE: "1"
       SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
+      SUPPORTWEBCHATCONTACT: "1"
+      SUPPORTPHONECONTACT: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -178,6 +182,8 @@ Mappings:
       SUPPORTTRIAGEPAGE: "1"
       SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
+      SUPPORTWEBCHATCONTACT: "1"
+      SUPPORTPHONECONTACT: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -195,6 +201,8 @@ Mappings:
       SUPPORTTRIAGEPAGE: "0"
       SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
+      SUPPORTWEBCHATCONTACT: "0"
+      SUPPORTPHONECONTACT: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -212,6 +220,8 @@ Mappings:
       SUPPORTTRIAGEPAGE: "0"
       SUPPORTWEBCHATDEMO: "0"
       WEBCHATSOURCEURL: "0"
+      SUPPORTWEBCHATCONTACT: "0"
+      SUPPORTPHONECONTACT: "0"
 
 Resources:
   #
@@ -598,6 +608,20 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   WEBCHATSOURCEURL,
+                ]
+            - Name: "SUPPORT_WEBCHAT_CONTACT"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTWEBCHATCONTACT,
+                ]
+            - Name: "SUPPORT_PHONE_CONTACT"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTPHONECONTACT,
                 ]
       Cpu: 1024
       Memory: 2048
