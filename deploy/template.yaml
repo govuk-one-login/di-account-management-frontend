@@ -146,6 +146,7 @@ Mappings:
       WEBCHATSOURCEURL: "https://dev-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
+      SHOWCONTACTGUIDANCE: "1"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -165,6 +166,7 @@ Mappings:
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
+      SHOWCONTACTGUIDANCE: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -184,6 +186,7 @@ Mappings:
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
+      SHOWCONTACTGUIDANCE: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -203,6 +206,7 @@ Mappings:
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "0"
+      SHOWCONTACTGUIDANCE: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -222,6 +226,7 @@ Mappings:
       WEBCHATSOURCEURL: "0"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "0"
+      SHOWCONTACTGUIDANCE: "0"
 
 Resources:
   #
@@ -622,6 +627,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTPHONECONTACT,
+                ]
+            - Name: "SHOW_CONTACT_GUIDANCE"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SHOWCONTACTGUIDANCE,
                 ]
       Cpu: 1024
       Memory: 2048
