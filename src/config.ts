@@ -165,10 +165,5 @@ export function supportWebchatDemo(): boolean {
 }
 
 export function getWebchatUrl(): string {
-  const env = getAppEnv();
-  if (env == "local" || env == "dev") {
-    return "https://dev-chat-loader.smartagent.app/loader/main.js";
-  } else {
-    return "https://uat-chat-loader.smartagent.app/loader/main.js";
-  }
+  return process.env.WEBCHAT_SOURCE_URL;
 }

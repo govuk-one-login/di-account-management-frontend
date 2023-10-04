@@ -143,6 +143,7 @@ Mappings:
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
       SUPPORTWEBCHATDEMO: "1"
+      WEBCHATSOURCEURL: "https://dev-chat-loader.smartagent.app/loader/main.js"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -159,6 +160,7 @@ Mappings:
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
       SUPPORTWEBCHATDEMO: "1"
+      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -175,6 +177,7 @@ Mappings:
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
       SUPPORTWEBCHATDEMO: "1"
+      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -191,6 +194,7 @@ Mappings:
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "0"
       SUPPORTWEBCHATDEMO: "1"
+      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -207,6 +211,7 @@ Mappings:
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "0"
       SUPPORTWEBCHATDEMO: "0"
+      WEBCHATSOURCEURL: "0"
 
 Resources:
   #
@@ -586,6 +591,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTWEBCHATDEMO,
+                ]
+            - Name: "WEBCHAT_SOURCE_URL"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  WEBCHATSOURCEURL,
                 ]
       Cpu: 1024
       Memory: 2048
