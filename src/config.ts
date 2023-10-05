@@ -163,3 +163,7 @@ export function supportTriagePage(): boolean {
 export function supportWebchatDemo(): boolean {
   return process.env.SUPPORT_WEBCHAT_DEMO === "1";
 }
+
+export function getWebchatUrl(): string {
+  return process.env.WEBCHAT_SOURCE_URL;
+}
