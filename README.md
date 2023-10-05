@@ -15,28 +15,14 @@ Clones the repository to the `your_folder_name` directory.
 
 ## Running the app locally in Docker
 
-Before you can run the frontend app against the backend you will need a usable client and configuration.
+We can run the Account Management frontend locally using our OIDC and Account Management API stubs deployed to the dev or build environment.
+This means we don't need to register a new client with the Authentication team for each of us.
 
-### Configure or find a usable client
+### Configure environment variables
 
-The client created by the pipeline is not currently usable by a local account management application as the private key is not available and it does not redirect to local clients. To run account management locally you will need to configure another client.
-
-If you are a member of the GOV.UK Account team, as a colleague if they have existing config they can share with you.
-
-If you need to generate new config follow the steps below.
-
-1. [Generate a key pair](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/generate-a-key/)
-1. Ask the [Auth team](https://di-team-manual.london.cloudapps.digital/authentication/) to copy an existing client in the database, or [register a new one](https://auth-tech-docs.london.cloudapps.digital/integrate-with-integration-environment/manage-your-service-s-configuration/#manage-your-service-s-configuration-with-gov-uk-sign-in).
-1. If the Auth team ask for configuration values, tell them we need:
-   - SubjectType = public
-   - ConsentRequired = 0
-   - RedirectUrls = ["http://localhost:6001/auth/callback"]
-   - Scopes = ["openid", "phone", "email", "am", "offline_access", "govuk-account"]
-1. Send the Auth team the public key generated in step 1.
-
-### Set the Environment variables
-
-Create a copy of the .env.sample file, rename it .env and fill in the value for the client id below. All the other values should be correct.
+Create a copy of the `.env.sample` file and rename it `.env`.
+Ask another team member for the client ID and add that to your `.env` file.
+All other values should be correct.
 
 ```
 OIDC_CLIENT_ID=<client id>
@@ -44,47 +30,26 @@ OIDC_CLIENT_ID=<client id>
 
 ### Setup the private key
 
-Create a copy of the seed.yaml.sample, rename it seed.yaml and fill in the value for the private key, using the key generated above or shared by a colleague.
+Create a copy of the seed.yaml.sample, rename it seed.yaml and ask a team member for the value for the private key.
 
 ### Start the application
 
-Run the `docker compose up` command.
+Run `docker compose build && docker compose up` to force a new build of the containers.
 
 To find out if the application has started, open a console window on the docker container and view the logs. If the server has started successfully you will see this message `Server listening on port 6001`.
 
-Navigate to [http://localhost:6001](http://localhost:6001). You should be redirected to the 'sign-in-or-create' screen.
-
-Sign in and make sure you are returned to the local 'your-services' screen.
+Navigate to [http://localhost:6001](http://localhost:6001). You should be redirected through the OIDC stub and back to the application.
 
 Changes made locally will automatically be deployed after a few seconds. You should check the docker console to check that your changes have been picked up.
 
 ### Provisioning localstack
 
-The application is now quite tightly integrated into AWS services.
-For certain features to run locally, we'll need localstack running and provisioned to facilitate requests.
-
+The application is now tightly integrated into AWS services.
+We use localstack to mimic AWS when running locally.
 The provisioning of the infra in localstack is done automatically on startup when calling `docker compose up`.
-The provisioning and setup of the infra is done by following script,
+The provisioning and setup of the infra is done by the following script,
 [provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh).
 The script is mounted as volume onto localstack and invoked as soon as the container is ready.
-
-#### Setting up an AWS test user
-
-You will need to have a profile in AWS vault prepared you can use for local testing.
-
-You can list your AWS profiles with the aws-vault command.
-
-```bash
-aws-vault ls
-```
-
-If you do not have an appropriate one you can create one with dummy keys suitable for localstack with:
-
-```bash
-aws configure set aws_access_key_id "na" --profile test-profile
-aws configure set aws_secret_access_key "na" --profile test-profile
-aws configure set region "eu-west-2" --profile test-profile
-```
 
 #### DynamoDB
 
@@ -114,23 +79,31 @@ The session store resources are also provisioned in localstack through the
 
 The unit tests have been written with Mocha and Supertest.
 
-If the app is run in a container then the tests are run there too:
+You'll be able to run the unit tests from outside the container
+
+```shell
+npm run test:unit
+```
+
+The integration tests need localstack to run successfully.
+The easiest way is to start the docker compose stack and run the tests from inside the app container.
 
 ```shell script
-docker exec -it di-auth-account-management-frontend-dev /bin/sh
+docker exec -it account-management-frontend /bin/sh
 
-# npm run test:unit
+# npm run test:integration
 ```
 
 ### Restarting the app
 
-You can restart the app by re-running the `docker compose down` and then `docker compose up`.
+You can restart the app by running `docker compose down` and then `docker compose up`.
+You'll need to do this if you make changes to environment variables or the localstack config.
 
 ## Deploying to the development AWS account
 
 We can deploy the app to our development environment for pre-merge testing.
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
-Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
+Before deploying, check with the team in the [#di-one-login-home-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
 
 The [Verify and Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
 This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
@@ -139,37 +112,12 @@ To deploy the app:
 
 1. Rebase your branch onto `main`
 2. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) and click 'Run workflow'
-3. Choose your branch from the dropdown, then click 'Run workflow' again
-4. Wait for the action to finish running
-5. Log into the development AWS account (`gds aws di-account-dev -l`)
-6. Go to the [CodePipeline job](https://eu-west-2.console.aws.amazon.com/codesuite/codepipeline/pipelines/account-mgmt-frontend-pipeline-Pipeline-1RV59OLATETA7/view?region=eu-west-2) for the frontend
-7. Approve the pipeline run
-8. Wait for the pipeline to finish
-9. Go to https://home.dev.account.gov.uk to see the app (VPN required)
-
-## Branch Deploys
-
-We can deploy the app to our development environment (`di-account-dev`) for pre-merge testing.
-Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
-Before deploying, check with the team in the [#govuk-accounts-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
-
-Under the [Actions Tab](https://github.com/alphagov/di-account-management-frontend/actions) there is a [Verify & Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) action.
-
-Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
-This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
-
-To deploy the app:
-
-1. Rebase your branch onto `main`
-1. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) and click 'Run workflow'
-1. Use workflow from branch `main` - Leave this at the default unless you are modifying the workflow
-1. Select `Commit SHA, branch name or tag` - Provide the SHA, branch name or tag that you wish to deploy.
-1. Wait for the action to finish running
-1. Log into the development AWS account (`gds aws di-account-dev -l`)
-1. Go to the [CodePipeline job](https://eu-west-2.console.aws.amazon.com/codesuite/codepipeline/pipelines/account-mgmt-frontend-pipeline-Pipeline-1RV59OLATETA7/view?region=eu-west-2) for the frontend
-1. Approve the pipeline run
-1. Wait for the pipeline to finish
-1. Go to https://home.dev.account.gov.uk to see the app (VPN required)
+3. Choose your branch from the dropdown
+4. Select `Commit SHA, branch name or tag` - Provide the SHA, branch name or tag that you wish to deploy
+5. Click 'Run workflow' again
+6. Wait for the action to finish running
+7. Wait for AWS Code Pipeline to finish the deploy
+8. Go to https://home.dev.account.gov.uk to see the app (VPN required)
 
 ## Other useful npm commands
 
