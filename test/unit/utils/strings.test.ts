@@ -3,6 +3,7 @@ import { describe } from "mocha";
 import {
   containsNumber,
   containsNumbersOnly,
+  isSafeString,
   isValidUrl,
   redactPhoneNumber,
 } from "../../../src/utils/strings";
@@ -68,8 +69,9 @@ describe("string-helpers", () => {
       expect(isValidUrl("home.account.gov.uk")).to.be.true;
       expect(isValidUrl("https://home.account.gov.uk")).to.be.true;
       expect(isValidUrl("https://home.account.gov.uk/security")).to.be.true;
-      expect(isValidUrl("https://home.account.gov.uk/security?foo=bar&bar=foo")).to.be.true;
-    })
+      expect(isValidUrl("https://home.account.gov.uk/security?foo=bar&bar=foo"))
+        .to.be.true;
+    });
 
     it("should return false if url is invalid", () => {
       expect(isValidUrl("")).to.be.false;
@@ -79,5 +81,28 @@ describe("string-helpers", () => {
       expect(isValidUrl("https:///home.account.gov.uk")).to.be.false;
     });
 
-  })
+    it("should return true if string is safe is invalid", () => {
+      expect(isValidUrl("")).to.be.false;
+      expect(isValidUrl("1")).to.be.false;
+      expect(isValidUrl("qwerty")).to.be.false;
+      expect(isValidUrl("qwerty.gov.&^")).to.be.false;
+      expect(isValidUrl("https:///home.account.gov.uk")).to.be.false;
+    });
+  });
+
+  describe("isSafeString", () => {
+    it("letters numbers hyphens and underscores should be accepted", () => {
+      expect(isSafeString("hEllo-12_3")).to.be.true;
+    });
+
+    it("should return false if contains special characters", () => {
+      expect(isSafeString("hEllo***")).to.be.false;
+    });
+
+    it("should return false if over 50 characters", () => {
+      expect(
+        isSafeString("qqqqqqqqqqaaaaaaaaaahhhhhhhhhhhddddddddddooooooooooojjj")
+      ).to.be.false;
+    });
+  });
 });

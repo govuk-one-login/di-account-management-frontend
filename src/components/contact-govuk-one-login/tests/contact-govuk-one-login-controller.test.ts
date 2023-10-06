@@ -42,9 +42,15 @@ describe("Contact GOV.UK One Login controller", () => {
       const validUrl = "https://home.account.gov.uk/security";
       req.query.fromURL = validUrl;
       contactGet(req as Request, res as Response);
+      // query data should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         fromURL: validUrl,
+        appSessionId: undefined,
+        appErrorCode: undefined,
+        theme: undefined,
       });
+      // query data should be saved into session
+      expect(req.session.fromURL).to.equal(validUrl);
     });
 
     it("should render contact centre triage page when session contains fromURL", () => {
@@ -53,6 +59,73 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         fromURL: validUrl,
+        appSessionId: undefined,
+        appErrorCode: undefined,
+        theme: undefined,
+      });
+    });
+
+    it("should render contact centre triage page with additional fields from the mobile app", () => {
+      const validUrl = "https://home.account.gov.uk/security";
+      const appSessionId = "123456789";
+      const appErrorCode = "ERRORCODE123";
+      const theme = "WaveyTheme";
+      req.query.fromURL = validUrl;
+      req.query.appSessionId = appSessionId;
+      req.query.appErrorCode = appErrorCode;
+      req.query.theme = theme;
+      contactGet(req as Request, res as Response);
+      // query data should be passed to the page render
+      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+        fromURL: validUrl,
+        appSessionId,
+        appErrorCode,
+        theme,
+      });
+      // query data should be saved into session
+      expect(req.session.fromURL).to.equal(validUrl);
+      expect(req.session.appSessionId).to.equal(appSessionId);
+      expect(req.session.appErrorCode).to.equal(appErrorCode);
+      expect(req.session.theme).to.equal(theme);
+    });
+
+    it("should render contact centre triage page with invalid fields from the mobile app", () => {
+      const validUrl = "https://home.account.gov.uk/security";
+      const appSessionId = "123456789123456789123456789123456789123456789123456789123456789123456789123456789"; // too long
+      const appErrorCode = ";;***;;"; // unsafe characters
+      req.query.fromURL = validUrl;
+      req.query.appSessionId = appSessionId;
+      req.query.appErrorCode = appErrorCode;
+      contactGet(req as Request, res as Response);
+      // invalid query data not should be passed to the page render
+      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+        fromURL: validUrl,
+        appSessionId: undefined,
+        appErrorCode: undefined,
+        theme: undefined,
+      });
+      // invalid query data should not be saved into session
+      expect(req.session.fromURL).to.equal(validUrl);
+      expect(req.session.appSessionId).to.be.undefined;
+      expect(req.session.appErrorCode).to.be.undefined;
+      expect(req.session.theme).to.be.undefined;
+    });
+
+    it("should render contact centre triage page with additional fields from the mobile app from session", () => {
+      const validUrl = "https://home.account.gov.uk/security";
+      const appSessionId = "123456789";
+      const appErrorCode = "ERRORCODE123";
+      const theme = "WaveyTheme";
+      req.session.fromURL = validUrl;
+      req.session.appSessionId = appSessionId;
+      req.session.appErrorCode = appErrorCode;
+      req.session.theme = theme;
+      contactGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+        fromURL: validUrl,
+        appSessionId,
+        appErrorCode,
+        theme,
       });
     });
 
@@ -62,6 +135,9 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         fromURL: undefined,
+        appSessionId: undefined,
+        appErrorCode: undefined,
+        theme: undefined,
       });
     });
 
@@ -69,6 +145,9 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         fromURL: undefined,
+        appSessionId: undefined,
+        appErrorCode: undefined,
+        theme: undefined,
       });
     });
   });
