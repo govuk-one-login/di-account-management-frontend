@@ -49,6 +49,6 @@ export function deleteAccountConfirmationGet(
     panelText: req.t("pages.deleteAccountConfirmation.panelText"),
     summaryText: req.t("pages.deleteAccountConfirmation.summaryText"),
     showGovUKButton: true,
-    hideSignoutLink: true,
+    hideAccountNavigation: true,
   });
 }

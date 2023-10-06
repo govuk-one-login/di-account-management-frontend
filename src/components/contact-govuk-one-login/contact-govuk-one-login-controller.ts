@@ -4,13 +4,22 @@ import {
   supportPhoneContact,
   showContactGuidance,
 } from "../../config";
+import { logger } from "../../utils/logger";
 
 export function contactGet(req: Request, res: Response): void {
+  const isAuthenticated = req.session?.user?.isAuthenticated;
+  let isLoggedOut = req.cookies?.lo;
+
+  if (typeof(isLoggedOut) === 'string') {
+    isLoggedOut = JSON.parse(isLoggedOut)
+  }
+
   const data = {
     contactWebchatEnabled: supportWebchatContact(),
     contactPhoneEnabled: supportPhoneContact(),
-    showContactGuidance: showContactGuidance()
+    showContactGuidance: showContactGuidance(),
+    showSignOut: isAuthenticated && !isLoggedOut
   };
-
+  
   res.render("contact-govuk-one-login/index.njk", data);
 }

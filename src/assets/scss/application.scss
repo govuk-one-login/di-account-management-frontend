@@ -168,6 +168,12 @@ $govuk-new-link-styles: true;
   }
 }
 
+.govuk-header--right-align-nav .govuk-header__navigation-list {
+  @include govuk-media-query($from: tablet) {
+    text-align: right;
+  }
+}
+
 .account-navigation {
   background-color: govuk-colour("light-grey");
   border-bottom: 1px solid $govuk-border-colour;
