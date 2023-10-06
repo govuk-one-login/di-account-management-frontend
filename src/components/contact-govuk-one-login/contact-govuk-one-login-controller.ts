@@ -4,7 +4,6 @@ import {
   supportPhoneContact,
   showContactGuidance,
 } from "../../config";
-import { logger } from "../../utils/logger";
 
 export function contactGet(req: Request, res: Response): void {
   const isAuthenticated = req.session?.user?.isAuthenticated;
