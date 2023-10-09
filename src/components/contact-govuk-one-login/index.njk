@@ -73,7 +73,7 @@
       }) }}
 
       {% for paragraph in phoneParagraphs2 %}
-        <p class="govuk-body">{{ paragraph | safe | replace('[callChargeLink]', 'pages.contact.section3.phone.callChargesLinkHref' | translate ) }}</p>
+        <p class="govuk-body">{{ paragraph | safe | replace('[callChargesLinkHref]', 'pages.contact.section3.phone.callChargesLinkHref' | translate ) }}</p>
       {% endfor %}
     </section>
   {% endif %}
@@ -82,7 +82,7 @@
     {% set emailParagraphs =  'pages.contact.section3.email.paragraphs' | translate({ returnObjects: true }) %}
 
     {% for paragraph in emailParagraphs %}
-      <p class="govuk-body">{{ paragraph | safe | replace('[emailServiceLinkHref]', 'pages.contact.section3.email.emailServiceLinkHref' | translate ) }}</p>
+      <p class="govuk-body">{{ paragraph | safe | replace('[emailServiceLinkHref]', contactEmailServiceUrl | translate ) }}</p>
     {% endfor %}
   </section>
 </section>

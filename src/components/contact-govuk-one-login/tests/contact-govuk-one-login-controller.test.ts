@@ -46,12 +46,18 @@ describe("Contact GOV.UK One Login controller", () => {
     process.env.SUPPORT_PHONE_CONTACT = "1";
     process.env.SHOW_CONTACT_GUIDANCE = "1";
     process.env.SUPPORT_WEBCHAT_CONTACT = "1";
+    process.env.CONTACT_EMAIL_SERVICE_URL =
+      "https://signin.account.gov.uk/contact-us";
   });
 
   afterEach(() => {
     sandbox.restore();
     loggerSpy.restore();
     delete process.env.SUPPORT_TRIAGE_PAGE;
+    delete process.env.SUPPORT_PHONE_CONTACT;
+    delete process.env.SHOW_CONTACT_GUIDANCE;
+    delete process.env.SUPPORT_WEBCHAT_CONTACT;
+    delete process.env.CONTACT_EMAIL_SERVICE_URL;
   });
 
   describe("contactGet", () => {
@@ -65,11 +71,9 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
-        fromURL: validUrl,
-        appSessionId: undefined,
-        appErrorCode: undefined,
-        theme: undefined,
         referenceCode: MOCK_REFERENCE_CODE,
+        contactEmailServiceUrl:
+          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -89,11 +93,9 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: false,
-        fromURL: validUrl,
-        appSessionId: undefined,
-        appErrorCode: undefined,
-        theme: undefined,
         referenceCode: MOCK_REFERENCE_CODE,
+        contactEmailServiceUrl:
+          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
       });
     });
 
@@ -109,10 +111,8 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       // query data should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        fromURL: validUrl,
-        appSessionId,
-        appErrorCode,
-        theme,
+        contactEmailServiceUrl:
+          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity&theme=WaveyTheme&appSessionId=123456789&appErrorCode=ERRORCODE123",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -137,10 +137,8 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       // invalid query data not should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        fromURL: validUrl,
-        appSessionId: undefined,
-        appErrorCode: undefined,
-        theme: undefined,
+        contactEmailServiceUrl:
+          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -165,10 +163,8 @@ describe("Contact GOV.UK One Login controller", () => {
       req.session.theme = theme;
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        fromURL: validUrl,
-        appSessionId,
-        appErrorCode,
-        theme,
+        contactEmailServiceUrl:
+          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity&theme=WaveyTheme&appSessionId=123456789&appErrorCode=ERRORCODE123",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -182,10 +178,7 @@ describe("Contact GOV.UK One Login controller", () => {
       req.query.fromURL = invalidUrl;
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        fromURL: undefined,
-        appSessionId: undefined,
-        appErrorCode: undefined,
-        theme: undefined,
+        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -197,10 +190,7 @@ describe("Contact GOV.UK One Login controller", () => {
     it("should render centre triage page when no fromURL is present", () => {
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        fromURL: undefined,
-        appSessionId: undefined,
-        appErrorCode: undefined,
-        theme: undefined,
+        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -218,15 +208,12 @@ describe("Contact GOV.UK One Login controller", () => {
       };
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        fromURL: undefined,
-        appSessionId: undefined,
-        appErrorCode: undefined,
-        theme: undefined,
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
         referenceCode: "654321",
+        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
       });
     });
 
@@ -242,7 +229,13 @@ describe("Contact GOV.UK One Login controller", () => {
       req.query.appSessionId = appSessionId;
       req.query.appErrorCode = appErrorCode;
       req.query.theme = theme;
-      req.session = { user: { sessionId, persistentSessionId } };
+      req.session = {
+        user: {
+          isAuthenticated: true,
+          sessionId,
+          persistentSessionId,
+        },
+      };
 
       contactGet(req as Request, res as Response);
 
