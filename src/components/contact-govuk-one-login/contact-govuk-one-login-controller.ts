@@ -6,6 +6,7 @@ import {
   supportPhoneContact,
   showContactGuidance,
 } from "../../config";
+import { generateReferenceCode } from "./../../utils/referenceCode";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const logger = pino();
@@ -25,6 +26,12 @@ export function contactGet(req: Request, res: Response): void {
     );
   }
 
+  const referenceCode = req.session.referenceCode
+    ? req.session.referenceCode
+    : generateReferenceCode();
+
+  req.session.referenceCode = referenceCode;
+
   // optional fields from mobile
   const theme = getValueFromRequestOrSession(req, "theme");
   const appSessionId = getValueFromRequestOrSession(req, "appSessionId");
@@ -39,6 +46,7 @@ export function contactGet(req: Request, res: Response): void {
     appSessionId,
     appErrorCode,
     theme,
+    referenceCode,
   };
 
   res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);

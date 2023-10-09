@@ -4,8 +4,10 @@ import { Request, Response } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
 import { contactGet } from "../contact-govuk-one-login-controller";
 import { logger } from "../../../utils/logger";
+import * as reference from "../../../utils/referenceCode";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
+const MOCK_REFERENCE_CODE = "123456";
 
 describe("Contact GOV.UK One Login controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -33,6 +35,10 @@ describe("Contact GOV.UK One Login controller", () => {
       status: sandbox.fake(),
     };
 
+    sandbox
+      .stub(reference, "generateReferenceCode")
+      .returns(MOCK_REFERENCE_CODE);
+
     process.env.SUPPORT_TRIAGE_PAGE = "1";
     process.env.SUPPORT_PHONE_CONTACT = "1";
     process.env.SHOW_CONTACT_GUIDANCE = "1";
@@ -59,6 +65,7 @@ describe("Contact GOV.UK One Login controller", () => {
         appSessionId: undefined,
         appErrorCode: undefined,
         theme: undefined,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -82,6 +89,7 @@ describe("Contact GOV.UK One Login controller", () => {
         appSessionId: undefined,
         appErrorCode: undefined,
         theme: undefined,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
     });
 
@@ -105,6 +113,7 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -132,6 +141,7 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
       // invalid query data should not be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -159,6 +169,7 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
     });
 
@@ -175,6 +186,7 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
     });
 
@@ -189,6 +201,28 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
+      });
+    });
+
+    it("should keep the reference code from the session if present", () => {
+      req.session = {
+        referenceCode: "654321",
+        user: {
+          isAuthenticated: true,
+        },
+      };
+      contactGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+        fromURL: undefined,
+        appSessionId: undefined,
+        appErrorCode: undefined,
+        theme: undefined,
+        contactWebchatEnabled: true,
+        contactPhoneEnabled: true,
+        showContactGuidance: true,
+        showSignOut: true,
+        referenceCode: "654321",
       });
     });
   });
