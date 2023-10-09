@@ -13,14 +13,17 @@ describe("Contact GOV.UK One Login controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  let loggerSpy: sinon.SinonSpy;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    loggerSpy = sinon.spy(logger, "info");
 
     req = {
       body: {},
       cookies: { lng: "en" },
       query: {},
+      headers: { "user-agent": "user-agent" },
       session: {
         user: {
           isAuthenticated: true,
@@ -47,6 +50,7 @@ describe("Contact GOV.UK One Login controller", () => {
 
   afterEach(() => {
     sandbox.restore();
+    loggerSpy.restore();
     delete process.env.SUPPORT_TRIAGE_PAGE;
   });
 
@@ -224,6 +228,36 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: "654321",
       });
+    });
+
+    it("logs the reference code and request data", () => {
+      const validUrl = "https://home.account.gov.uk/security";
+      const appSessionId = "123456789";
+      const appErrorCode = "ERRORCODE123";
+      const theme = "WaveyTheme";
+      const sessionId = "sessionId";
+      const persistentSessionId = "persistentSessionId";
+
+      req.query.fromURL = validUrl;
+      req.query.appSessionId = appSessionId;
+      req.query.appErrorCode = appErrorCode;
+      req.query.theme = theme;
+      req.session = { user: { sessionId, persistentSessionId } };
+
+      contactGet(req as Request, res as Response);
+
+      expect(loggerSpy).to.have.calledWith(
+        {
+          fromURL: validUrl,
+          referenceCode: MOCK_REFERENCE_CODE,
+          appSessionId: appSessionId,
+          appErrorCode: appErrorCode,
+          sessionId: sessionId,
+          persistentSessionId: persistentSessionId,
+          userAgent: "user-agent",
+        },
+        "User visited triage page"
+      );
     });
   });
 });
