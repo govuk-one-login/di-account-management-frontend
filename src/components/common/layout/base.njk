@@ -1,6 +1,10 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{%- set headerClasses -%}
+{%- if not hideAccountNavigation -%} govuk-header--with-account-navigation {%- endif -%}
+{%- if showSignOut -%} govuk-header--right-align-nav {%- endif -%}
+{%- endset-%}
 
 {% block head %}
     <!--[if !IE 8]><!-->
@@ -36,9 +40,13 @@
     {{ govukHeader({
       homepageUrl: accountHome,
       productName: 'general.header.productName' | translate,
-      classes: "govuk-header--with-account-navigation" if not hideSignOutLink
+      classes: headerClasses,
+      navigation: [{
+        href: accountSignOut, 
+        text: 'general.header.signOutLink' | translate
+      }] if showSignOut
     }) }}
-    {% if not hideSignOutLink %}
+    {% if not hideAccountNavigation %}
       {% include 'common/layout/navigation.njk' %}
     {% endif %}
 {% endblock %}
@@ -50,7 +58,7 @@
                 text: 'general.phaseBanner.tag' | translate
             },
             html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us?supportType=PUBLIC")
-        }) }}
+        }) if not hidePhaseBanner}}
         {% if backLink %}
             <a href="{{backLink}}" class="govuk-back-link">{{'general.back' | translate}}</a>
         {% endif %}

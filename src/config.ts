@@ -167,3 +167,15 @@ export function supportWebchatDemo(): boolean {
 export function getWebchatUrl(): string {
   return process.env.WEBCHAT_SOURCE_URL;
 }
+
+export function supportWebchatContact(): boolean {
+  return process.env.SUPPORT_WEBCHAT_CONTACT === "1";
+}
+
+export function supportPhoneContact(): boolean {
+  return process.env.SUPPORT_PHONE_CONTACT === "1";
+}
+
+export function showContactGuidance(): boolean {
+  return process.env.SHOW_CONTACT_GUIDANCE === "1";
+}

@@ -168,6 +168,12 @@ $govuk-new-link-styles: true;
   }
 }
 
+.govuk-header--right-align-nav .govuk-header__navigation-list {
+  @include govuk-media-query($from: tablet) {
+    text-align: right;
+  }
+}
+
 .account-navigation {
   background-color: govuk-colour("light-grey");
   border-bottom: 1px solid $govuk-border-colour;
@@ -272,4 +278,16 @@ $nav-active-border-thickness: 5px;
 
 .your-services__list {
   margin-bottom: govuk-spacing(7);
+}
+
+.contact-reference {
+  padding: govuk-spacing(3);
+  background-color: govuk-colour(light-grey);
+  border-left: 5px solid $govuk-border-colour;
+}
+
+.contact-reference__code {
+  display: block;
+  margin: govuk-spacing(2) 0;
+  @include govuk-font($size: 48, $weight: bold);
 }
