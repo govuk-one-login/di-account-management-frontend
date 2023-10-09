@@ -6,6 +6,7 @@ import {
   isSafeString,
   isValidUrl,
   redactPhoneNumber,
+  zeroPad,
 } from "../../../src/utils/strings";
 
 describe("string-helpers", () => {
@@ -103,6 +104,17 @@ describe("string-helpers", () => {
       expect(
         isSafeString("qqqqqqqqqqaaaaaaaaaahhhhhhhhhhhddddddddddooooooooooojjj")
       ).to.be.false;
+    });
+  });
+
+  describe("zeroPad", () => {
+    it("should return a string of the correct length", () => {
+      const expectedLength = 6;
+      expect(zeroPad("abc", expectedLength).length).to.equal(expectedLength);
+    });
+
+    it("should pad a short string with zeros", () => {
+      expect(zeroPad("123", 6)).to.equal("000123");
     });
   });
 });
