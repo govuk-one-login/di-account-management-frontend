@@ -5,6 +5,7 @@ import {
   supportWebchatContact,
   supportPhoneContact,
   showContactGuidance,
+  getContactEmailServiceUrl,
 } from "../../config";
 import { generateReferenceCode } from "./../../utils/referenceCode";
 
@@ -13,45 +14,60 @@ const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 export function contactGet(req: Request, res: Response): void {
   const isAuthenticated = req.session?.user?.isAuthenticated;
   let isLoggedOut = req.cookies?.lo;
-  const fromURL = getFromUrlAndSaveIt(req);
-
   if (typeof isLoggedOut === "string") {
     isLoggedOut = JSON.parse(isLoggedOut);
-  }
-
-  if (!fromURL) {
-    logger.info(
-      "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
-    );
   }
 
   const referenceCode = req.session.referenceCode
     ? req.session.referenceCode
     : generateReferenceCode();
-
   req.session.referenceCode = referenceCode;
-
-  // optional fields from mobile
-  const theme = getValueFromRequestOrSession(req, "theme");
-  const appSessionId = getValueFromRequestOrSession(req, "appSessionId");
-  const appErrorCode = getValueFromRequestOrSession(req, "appErrorCode");
-
-  logContactData(req);
+  
+  const contactEmailServiceUrl =
+    buildContactEmailServiceUrlAndSaveDataToSession(req).toString();
+  
+  logContactDataFromSession(req);
 
   const data = {
     contactWebchatEnabled: supportWebchatContact(),
     contactPhoneEnabled: supportPhoneContact(),
     showContactGuidance: showContactGuidance(),
     showSignOut: isAuthenticated && !isLoggedOut,
-    fromURL,
-    appSessionId,
-    appErrorCode,
-    theme,
     referenceCode,
+    contactEmailServiceUrl: contactEmailServiceUrl,
   };
 
   res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);
 }
+
+const buildContactEmailServiceUrlAndSaveDataToSession = (req: Request): URL => {
+  const fromURL = getFromUrlAndSaveIt(req);
+  if (!fromURL) {
+    logger.info(
+      "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
+    );
+  }
+  // optional fields from mobile
+  const theme = getValueFromRequestOrSession(req, "theme");
+  const appSessionId = getValueFromRequestOrSession(req, "appSessionId");
+  const appErrorCode = getValueFromRequestOrSession(req, "appErrorCode");
+
+  const contactEmailServiceUrl: URL = new URL(getContactEmailServiceUrl());
+
+  if (fromURL) {
+    contactEmailServiceUrl.searchParams.append("fromUrl", fromURL);
+  }
+  if (theme) {
+    contactEmailServiceUrl.searchParams.append("theme", theme);
+  }
+  if (appSessionId) {
+    contactEmailServiceUrl.searchParams.append("appSessionId", appSessionId);
+  }
+  if (appErrorCode) {
+    contactEmailServiceUrl.searchParams.append("appErrorCode", appErrorCode);
+  }
+  return contactEmailServiceUrl;
+};
 
 const getFromUrlAndSaveIt = (request: Request): string => {
   const fromURLFromRequest = request.query.fromURL as string;
@@ -84,7 +100,7 @@ const getValueFromRequestOrSession = (
   return valueFromSession;
 };
 
-const logContactData = (req: Request) => {
+const logContactDataFromSession = (req: Request) => {
   logger.info(
     {
       fromURL: req.session.fromURL,
