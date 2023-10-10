@@ -214,6 +214,10 @@
               "href": "https://www.gov.uk/guidance/find-government-grants"
             },
             {
+              "text": "Find a UK market conformity assessment body",
+              "href": "https://find-a-conformity-assessment-body.service.gov.uk"
+            },
+            {
               "text": "GOV.UK email subscriptions",
               "href": "https://www.gov.uk/email/manage?from=your-services"
             },
@@ -602,6 +606,12 @@
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
         "link_text": "Go to your criminal injuries compensation account",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "9fduJ6KAE8WwCb1VCKp788BC8mM": {
+        "header": "Find a UK market conformity assessment body",
+        "description": "Manage conformity assessment bodies on the register.",
+        "link_text": "Go to your conformity assessment body account",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "integration": {
@@ -660,6 +670,12 @@
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
         "link_text": "Go to your criminal injuries compensation account",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "KiYrXyFTTy0JFZyYJI22WuxPIf8": {
+        "header": "Find a UK market conformity assessment body",
+        "description": "Manage conformity assessment bodies on the register.",
+        "link_text": "Go to your conformity assessment body account",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "staging": {
@@ -718,6 +734,12 @@
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
         "link_text": "Go to your criminal injuries compensation account",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab": {
+        "header": "Find a UK market conformity assessment body",
+        "description": "Manage conformity assessment bodies on the register.",
+        "link_text": "Go to your conformity assessment body account",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "build": {
@@ -776,6 +798,12 @@
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
         "link_text": "Go to your criminal injuries compensation account",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab": {
+        "header": "Find a UK market conformity assessment body",
+        "description": "Manage conformity assessment bodies on the register.",
+        "link_text": "Go to your conformity assessment body account",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "dev": {
@@ -834,6 +862,12 @@
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
         "link_text": "Go to your criminal injuries compensation account",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab": {
+        "header": "Find a UK market conformity assessment body",
+        "description": "Manage conformity assessment bodies on the register.",
+        "link_text": "Go to your conformity assessment body account",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "local": {
@@ -892,6 +926,12 @@
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
         "link_text": "Go to your criminal injuries compensation account",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab": {
+        "header": "Find a UK market conformity assessment body",
+        "description": "Manage conformity assessment bodies on the register.",
+        "link_text": "Go to your conformity assessment body account",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     }
   }
