@@ -4,21 +4,26 @@ import { Request, Response } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
 import { contactGet } from "../contact-govuk-one-login-controller";
 import { logger } from "../../../utils/logger";
+import * as reference from "../../../utils/referenceCode";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
+const MOCK_REFERENCE_CODE = "123456";
 
 describe("Contact GOV.UK One Login controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  let loggerSpy: sinon.SinonSpy;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    loggerSpy = sinon.spy(logger, "info");
 
     req = {
       body: {},
       cookies: { lng: "en" },
       query: {},
+      headers: { "user-agent": "user-agent" },
       session: {
         user: {
           isAuthenticated: true,
@@ -33,6 +38,10 @@ describe("Contact GOV.UK One Login controller", () => {
       status: sandbox.fake(),
     };
 
+    sandbox
+      .stub(reference, "generateReferenceCode")
+      .returns(MOCK_REFERENCE_CODE);
+
     process.env.SUPPORT_TRIAGE_PAGE = "1";
     process.env.SUPPORT_PHONE_CONTACT = "1";
     process.env.SHOW_CONTACT_GUIDANCE = "1";
@@ -41,6 +50,7 @@ describe("Contact GOV.UK One Login controller", () => {
 
   afterEach(() => {
     sandbox.restore();
+    loggerSpy.restore();
     delete process.env.SUPPORT_TRIAGE_PAGE;
   });
 
@@ -59,6 +69,7 @@ describe("Contact GOV.UK One Login controller", () => {
         appSessionId: undefined,
         appErrorCode: undefined,
         theme: undefined,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -82,6 +93,7 @@ describe("Contact GOV.UK One Login controller", () => {
         appSessionId: undefined,
         appErrorCode: undefined,
         theme: undefined,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
     });
 
@@ -105,6 +117,7 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -132,6 +145,7 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
       // invalid query data should not be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -159,6 +173,7 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
     });
 
@@ -175,6 +190,7 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
     });
 
@@ -189,7 +205,59 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: MOCK_REFERENCE_CODE,
       });
+    });
+
+    it("should keep the reference code from the session if present", () => {
+      req.session = {
+        referenceCode: "654321",
+        user: {
+          isAuthenticated: true,
+        },
+      };
+      contactGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+        fromURL: undefined,
+        appSessionId: undefined,
+        appErrorCode: undefined,
+        theme: undefined,
+        contactWebchatEnabled: true,
+        contactPhoneEnabled: true,
+        showContactGuidance: true,
+        showSignOut: true,
+        referenceCode: "654321",
+      });
+    });
+
+    it("logs the reference code and request data", () => {
+      const validUrl = "https://home.account.gov.uk/security";
+      const appSessionId = "123456789";
+      const appErrorCode = "ERRORCODE123";
+      const theme = "WaveyTheme";
+      const sessionId = "sessionId";
+      const persistentSessionId = "persistentSessionId";
+
+      req.query.fromURL = validUrl;
+      req.query.appSessionId = appSessionId;
+      req.query.appErrorCode = appErrorCode;
+      req.query.theme = theme;
+      req.session = { user: { sessionId, persistentSessionId } };
+
+      contactGet(req as Request, res as Response);
+
+      expect(loggerSpy).to.have.calledWith(
+        {
+          fromURL: validUrl,
+          referenceCode: MOCK_REFERENCE_CODE,
+          appSessionId: appSessionId,
+          appErrorCode: appErrorCode,
+          sessionId: sessionId,
+          persistentSessionId: persistentSessionId,
+          userAgent: "user-agent",
+        },
+        "User visited triage page"
+      );
     });
   });
 });

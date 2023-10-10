@@ -1,7 +1,6 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% set pageTitleName = 'pages.contact.title' | translate %}
-{% set refCode = 123456 %}
 {% set hideAccountNavigation = true %}
 {% set hidePhaseBanner = true %}
 
@@ -34,7 +33,7 @@
 
   <p class="govuk-body contact-reference">
     {{'pages.contact.section2.refCode' | translate}}
-    <strong class="contact-reference__code">{{refCode}}</strong>
+    <strong class="contact-reference__code">{{ referenceCode }}</strong>
   </p>
 </section>
 

@@ -32,3 +32,7 @@ export function isValidUrl(url: string): boolean {
 export function isSafeString(url: string): boolean {
   return lowerAndUpperCaseLettersAndNumbersMax50.test(url);
 }
+export function zeroPad(input: string, length: number): string {
+  const pad = "0".repeat(length);
+  return (pad + input).slice(-length);
+}

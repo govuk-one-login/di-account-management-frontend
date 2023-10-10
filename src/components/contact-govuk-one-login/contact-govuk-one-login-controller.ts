@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import pino from "pino";
+import { logger } from "../../utils/logger";
 import { isSafeString, isValidUrl } from "./../../utils/strings";
 import {
   supportWebchatContact,
   supportPhoneContact,
   showContactGuidance,
 } from "../../config";
+import { generateReferenceCode } from "./../../utils/referenceCode";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
-const logger = pino();
 
 export function contactGet(req: Request, res: Response): void {
   const isAuthenticated = req.session?.user?.isAuthenticated;
@@ -25,10 +25,18 @@ export function contactGet(req: Request, res: Response): void {
     );
   }
 
+  const referenceCode = req.session.referenceCode
+    ? req.session.referenceCode
+    : generateReferenceCode();
+
+  req.session.referenceCode = referenceCode;
+
   // optional fields from mobile
   const theme = getValueFromRequestOrSession(req, "theme");
   const appSessionId = getValueFromRequestOrSession(req, "appSessionId");
   const appErrorCode = getValueFromRequestOrSession(req, "appErrorCode");
+
+  logContactData(req);
 
   const data = {
     contactWebchatEnabled: supportWebchatContact(),
@@ -39,6 +47,7 @@ export function contactGet(req: Request, res: Response): void {
     appSessionId,
     appErrorCode,
     theme,
+    referenceCode,
   };
 
   res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);
@@ -73,4 +82,19 @@ const getValueFromRequestOrSession = (
   }
   const valueFromSession = request.session[`${propertyName}`];
   return valueFromSession;
+};
+
+const logContactData = (req: Request) => {
+  logger.info(
+    {
+      fromURL: req.session.fromURL,
+      referenceCode: req.session.referenceCode,
+      appSessionId: req.session.appSessionId,
+      appErrorCode: req.session.appErrorCode,
+      sessionId: req.session.user?.sessionId,
+      persistentSessionId: req.session.user?.persistentSessionId,
+      userAgent: req.headers["user-agent"],
+    },
+    "User visited triage page"
+  );
 };
