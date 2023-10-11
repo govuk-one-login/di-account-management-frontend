@@ -55,7 +55,7 @@ const buildContactEmailServiceUrlAndSaveDataToSession = (req: Request): URL => {
   const contactEmailServiceUrl: URL = new URL(getContactEmailServiceUrl());
 
   if (fromURL) {
-    contactEmailServiceUrl.searchParams.append("fromUrl", fromURL);
+    contactEmailServiceUrl.searchParams.append("fromURL", fromURL);
   }
   if (theme) {
     contactEmailServiceUrl.searchParams.append("theme", theme);

@@ -73,7 +73,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
+          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -95,7 +95,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: false,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
+          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
       });
     });
 
@@ -112,7 +112,7 @@ describe("Contact GOV.UK One Login controller", () => {
       // query data should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity&theme=WaveyTheme&appSessionId=123456789&appErrorCode=ERRORCODE123",
+          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity&theme=WaveyTheme&appSessionId=123456789&appErrorCode=ERRORCODE123",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -138,7 +138,7 @@ describe("Contact GOV.UK One Login controller", () => {
       // invalid query data not should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
+          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -164,7 +164,7 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromUrl=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity&theme=WaveyTheme&appSessionId=123456789&appErrorCode=ERRORCODE123",
+          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity&theme=WaveyTheme&appSessionId=123456789&appErrorCode=ERRORCODE123",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
