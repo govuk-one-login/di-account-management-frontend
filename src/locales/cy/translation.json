@@ -44,6 +44,14 @@
       "english": "Saesneg",
       "welsh": "Cymraeg"
     },
+    "languageToggle": {
+      "en": {
+        "linkText": "English"
+      },
+      "cy": {
+        "linkText": "Cymraeg"
+      }
+    },
     "continue": {
       "label": "Parhau"
     },

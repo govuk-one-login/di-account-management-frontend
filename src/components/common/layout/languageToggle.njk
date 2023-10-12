@@ -1,0 +1,17 @@
+<nav class="language-select" aria-label="Choose a language">
+    <ul class="govuk-list language-select__list">
+        {% for lang in ['en', 'cy'] %}
+            <li class="language-select__list-item">
+                {% set translationKey = 'general.languageToggle.' + lang + '.linkText' %}
+                {% if language == lang %}
+                    <span class="govuk-!-font-size-16" aria-current="page">{{ translationKey | translate }}</span>
+                {% else %}
+                    <a class="govuk-link govuk-link--no-visited-state language-select__link"
+                       lang="{{ lang }}" hreflang="{{ lang }}" href="{{ currentUrl | addLanguageParam(lang, baseUrl) }}">
+                        {{ translationKey | translate }}
+                    </a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</nav>

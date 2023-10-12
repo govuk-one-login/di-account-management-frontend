@@ -44,6 +44,14 @@
       "english": "English",
       "welsh": "Cymraeg (Welsh)"
     },
+    "languageToggle": {
+      "en": {
+        "linkText": "English"
+      },
+      "cy": {
+        "linkText": "Cymraeg"
+      }
+    },
     "continue": {
       "label": "Continue"
     },

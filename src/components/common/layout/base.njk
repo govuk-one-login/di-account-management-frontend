@@ -42,7 +42,7 @@
       productName: 'general.header.productName' | translate,
       classes: headerClasses,
       navigation: [{
-        href: accountSignOut, 
+        href: accountSignOut,
         text: 'general.header.signOutLink' | translate
       }] if showSignOut
     }) }}
@@ -63,6 +63,9 @@
             <a href="{{backLink}}" class="govuk-back-link">{{'general.back' | translate}}</a>
         {% endif %}
         {% block beforeContent %}{% endblock %}
+        {% if languageToggle %}
+            {% include 'common/layout/languageToggle.njk' %}
+        {% endif %}
         <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main" {% if mainLang %} lang="{{ mainLang }}" {% endif %}>
             {% block content %}{% endblock %}
         </main>
