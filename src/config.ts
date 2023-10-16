@@ -127,6 +127,9 @@ export const getAllowedAccountListClientIDs: string[] = [
   "modernSlavery",
   "apprenticeshipsService",
   "criminalInjuriesCompensation",
+  "9fduJ6KAE8WwCb1VCKp788BC8mM",
+  "KiYrXyFTTy0JFZyYJI22WuxPIf8",
+  "ukmcab"
 ];
 
 export const getAllowedServiceListClientIDs: string[] = [
@@ -139,7 +142,7 @@ export const getAllowedServiceListClientIDs: string[] = [
   "socialWorkEngland",
   "dbs",
   "vehicleOperatorLicense",
-  "mortgageDeed",
+  "mortgageDeed"
 ];
 
 function getProtocol(): string {

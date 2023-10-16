@@ -210,6 +210,10 @@
               "href": "https://www.gov.uk/guidance/find-government-grants"
             },
             {
+              "text": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
+              "href": "https://find-a-conformity-assessment-body.service.gov.uk"
+            },
+            {
               "text": "Digolledau anafiadau troseddol",
               "href": "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
             },
@@ -464,6 +468,12 @@
     "contact": {
       "title": "Get help with GOV.UK One Login",
       "header": "Contact GOV.UK One Login"
+    },
+    "9fduJ6KAE8WwCb1VCKp788BC8mM" : {
+      "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
+      "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
+      "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
+      "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
     }
   },
   "clientRegistry": {
@@ -587,6 +597,12 @@
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
         "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "KiYrXyFTTy0JFZyYJI22WuxPIf8" : {
+        "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
+        "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
+        "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "staging": {
@@ -645,6 +661,12 @@
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
         "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab" : {
+        "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
+        "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
+        "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "build": {
@@ -703,6 +725,12 @@
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
         "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab" : {
+        "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
+        "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
+        "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "dev": {
@@ -761,6 +789,12 @@
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
         "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab" : {
+        "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
+        "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
+        "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     },
     "local": {
@@ -819,6 +853,12 @@
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
         "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab" : {
+        "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
+        "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
+        "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       }
     }
   }
