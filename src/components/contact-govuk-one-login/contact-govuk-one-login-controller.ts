@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { logger } from "../../utils/logger";
 import { isSafeString, isValidUrl } from "./../../utils/strings";
 import {
+  getWebchatUrl,
   supportWebchatContact,
   supportPhoneContact,
   showContactGuidance,
@@ -22,10 +23,10 @@ export function contactGet(req: Request, res: Response): void {
     ? req.session.referenceCode
     : generateReferenceCode();
   req.session.referenceCode = referenceCode;
-  
+
   const contactEmailServiceUrl =
     buildContactEmailServiceUrlAndSaveDataToSession(req).toString();
-  
+
   logContactDataFromSession(req);
 
   const data = {
@@ -35,6 +36,7 @@ export function contactGet(req: Request, res: Response): void {
     showSignOut: isAuthenticated && !isLoggedOut,
     referenceCode,
     contactEmailServiceUrl: contactEmailServiceUrl,
+    webchatSource: getWebchatUrl(),
   };
 
   res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);
