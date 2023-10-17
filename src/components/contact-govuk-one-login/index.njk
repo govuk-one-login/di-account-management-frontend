@@ -5,6 +5,14 @@
 {% set hidePhaseBanner = true %}
 
 {% block pageContent %}
+
+{% if contactWebchatEnabled %}
+  <script id="smartagent" type="module" defer 
+    src="{{ webchatSource }}" 
+    data-company="hgsgds" data-brand="hgsgds">
+  </script>
+{% endif %}
+
 <h1 class="govuk-heading-xl">{{'pages.contact.header' | translate}}</h1>
 {% if showContactGuidance %} 
   <section>

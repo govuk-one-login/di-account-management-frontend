@@ -48,6 +48,7 @@ describe("Contact GOV.UK One Login controller", () => {
     process.env.SUPPORT_WEBCHAT_CONTACT = "1";
     process.env.CONTACT_EMAIL_SERVICE_URL =
       "https://signin.account.gov.uk/contact-us";
+    process.env.WEBCHAT_SOURCE_URL = "https://example.com";
   });
 
   afterEach(() => {
@@ -58,6 +59,7 @@ describe("Contact GOV.UK One Login controller", () => {
     delete process.env.SHOW_CONTACT_GUIDANCE;
     delete process.env.SUPPORT_WEBCHAT_CONTACT;
     delete process.env.CONTACT_EMAIL_SERVICE_URL;
+    delete process.env.WEBCHAT_SOURCE_URL;
   });
 
   describe("contactGet", () => {
@@ -74,6 +76,7 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl:
           "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
+        webchatSource: "https://example.com",
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -96,6 +99,7 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl:
           "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
+        webchatSource: "https://example.com",
       });
     });
 
@@ -118,6 +122,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
+        webchatSource: "https://example.com",
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -144,6 +149,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
+        webchatSource: "https://example.com",
       });
       // invalid query data should not be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -170,6 +176,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
+        webchatSource: "https://example.com",
       });
     });
 
@@ -184,6 +191,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
+        webchatSource: "https://example.com",
       });
     });
 
@@ -196,6 +204,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
+        webchatSource: "https://example.com",
       });
     });
 
@@ -214,6 +223,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: "654321",
         contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
+        webchatSource: "https://example.com",
       });
     });
 
