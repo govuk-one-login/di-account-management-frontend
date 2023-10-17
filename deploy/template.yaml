@@ -374,6 +374,15 @@ Resources:
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
                   - !GetAtt DynamoDBKmsKey.Arn
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                  - kms:GenerateDataKey*
+                  - kms:ReEncrypt*
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/KMS/AuditQueueKey/ARN}}"
+              - Effect: Allow
+                Action: sqs:SendMessage
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/ARN}}"
 
       PermissionsBoundary: !If
         - UsePermissionsBoundary
@@ -647,6 +656,8 @@ Resources:
                   !Ref Environment,
                   CONTACTEMAILSERVICEURL,
                 ]
+            - Name: "AUDIT_QUEUE_URL"
+              Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
 
       Cpu: 1024
       Memory: 2048
