@@ -10,7 +10,7 @@ import {
 } from "../../config";
 import { generateReferenceCode } from "./../../utils/referenceCode";
 import { TxMaEventService} from "./txma-service";
-import { TxMaEventServiceInterface, TxmaEvent, User, Platform, Extensions } from "./types";
+import { TxMaEventServiceInterface, TxMaEvent, User, Platform, Extensions } from "./types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
@@ -123,10 +123,10 @@ const logContactDataFromSession = (req: Request) => {
 };
 
 const auditUserVisitsContactPage = (req: Request) => {
-  const txmaEventService: TxMaEventServiceInterface = TxMaEventService();
+  const txMaEventService: TxMaEventServiceInterface = TxMaEventService();
   const user: User = {
-    session_id: req.session.sessionId,
-    persistent_session_id: req.session.persistentSessionId,
+    session_id: req.session.user.sessionId,
+    persistent_session_id: req.session.user.persistentSessionId,
   };
   const platform: Platform = {
     user_agent: req.session.userAgent,
@@ -137,7 +137,7 @@ const auditUserVisitsContactPage = (req: Request) => {
     app_session_id: "app session id",
     reference_code: "reference_code",
   }
-  const audit_event: TxmaEvent = {
+  const audit_event: TxMaEvent = {
     timestamp: req.session.timestamp,
     event_name: "HOME_TRIAGE_PAGE_VISIT",
     component_id: "HOME",
@@ -146,5 +146,5 @@ const auditUserVisitsContactPage = (req: Request) => {
     extensions: extensions,
   }
 
-  txmaEventService.send(audit_event);
+  txMaEventService.send(audit_event);
 };

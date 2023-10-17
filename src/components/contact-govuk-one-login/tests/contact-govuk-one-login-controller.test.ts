@@ -5,6 +5,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { contactGet } from "../contact-govuk-one-login-controller";
 import { logger } from "../../../utils/logger";
 import * as reference from "../../../utils/referenceCode";
+import { TxMaEvent } from "../types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
@@ -262,5 +263,55 @@ describe("Contact GOV.UK One Login controller", () => {
         "User visited triage page"
       );
     });
+
+    it("emits an audit event when the user visits the contact page", () => {
+      // Arrange
+      const expectedSessionId = "sessionId";
+      const expectedPersistentSessionId = "persistentSessionId";
+      const expectedTimestamp = 1111;
+      const expectedUserAgent = "user-agent";
+
+      req.session = {
+        user: {
+          isAuthenticated: true,
+          sessionId: expectedSessionId,
+          persistentSessionId: expectedPersistentSessionId,
+        },
+        timestamp: expectedTimestamp,
+        userAgent: expectedUserAgent,
+      };
+
+      const expectedTxMaEvent: TxMaEvent = {
+        timestamp: expectedTimestamp,
+        event_name: "HOME_TRIAGE_PAGE_VISIT",
+        component_id: "HOME",
+        user: {
+          session_id: expectedSessionId,
+          persistent_session_id: expectedPersistentSessionId,
+        },
+        platform: {
+          user_agent: expectedUserAgent
+        },
+        extensions: {
+          from_url: "fromUrl",
+          app_error_code: "app error code",
+          app_session_id: "app session id",
+          reference_code: "reference_code",
+        },
+      }
+
+      // Act
+      contactGet(req as Request, res as Response);
+
+      // Assert
+      expect(loggerSpy).to.have.calledWith(
+        {
+          txMaEvent: expectedTxMaEvent,
+        },
+        "will use the SQSClient to send a txma event"
+      )
+    })
+
+
   });
 });

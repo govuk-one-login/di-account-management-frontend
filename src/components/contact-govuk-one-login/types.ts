@@ -1,10 +1,10 @@
 export interface TxMaEventServiceInterface {
   send: (
-    data: TxmaEvent,
+    data: TxMaEvent,
   ) => void;
 }
 
-export interface TxmaEvent {
+export interface TxMaEvent {
   timestamp: number;
   event_name: string;
   component_id: string;
