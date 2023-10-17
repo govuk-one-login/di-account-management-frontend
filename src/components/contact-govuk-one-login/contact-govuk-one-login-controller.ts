@@ -124,23 +124,26 @@ const logContactDataFromSession = (req: Request) => {
 
 const auditUserVisitsContactPage = (req: Request) => {
   const txmaEventService: TxMaEventServiceInterface = TxMaEventService();
+  const user: User = {
+    session_id: req.session.sessionId,
+    persistent_session_id: req.session.persistentSessionId,
+  };
+  const platform: Platform = {
+    user_agent: req.session.userAgent,
+  };
+  const extensions: Extensions = {
+    from_url: "fromUrl",
+    app_error_code: "app error code",
+    app_session_id: "app session id",
+    reference_code: "reference_code",
+  }
   const audit_event: TxmaEvent = {
-    timestamp: 100,
+    timestamp: req.session.timestamp,
     event_name: "HOME_TRIAGE_PAGE_VISIT",
     component_id: "HOME",
-    user: {
-      session_id: "session",
-      persistent_session_id: "persistent_session",
-    },
-    platform: {
-      user_agent: "agent",
-    },
-    extensions: {
-      from_url: "fromUrl",
-      app_error_code: "app error code",
-      app_session_id: "app session id",
-      reference_code: "reference_code",
-    }
+    user: user,
+    platform: platform,
+    extensions: extensions,
   }
 
   txmaEventService.send(audit_event);
