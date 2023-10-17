@@ -5,6 +5,8 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { contactGet } from "../contact-govuk-one-login-controller";
 import { logger } from "../../../utils/logger";
 import * as reference from "../../../utils/referenceCode";
+import { SinonStub, stub } from "sinon";
+import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { I18NextRequest } from "i18next-http-middleware";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
@@ -15,6 +17,7 @@ describe("Contact GOV.UK One Login controller", () => {
   let req: Partial<Request> & Partial<I18NextRequest>;
   let res: Partial<Response>;
   let loggerSpy: sinon.SinonSpy;
+  let sqsClientStub: SinonStub;
   const baseUrl = "https://home.account.gov.uk";
 
   beforeEach(() => {
@@ -150,7 +153,7 @@ describe("Contact GOV.UK One Login controller", () => {
       expect(req.session.theme).to.equal(theme);
     });
 
-    it("should render contact centre triage page with invalid fields from the mobile app", () => {
+    it("should render contact centre triage page ignoring invalid fields from the mobile app", () => {
       const validUrl = "https://home.account.gov.uk/security";
       const appSessionId =
         "123456789123456789123456789123456789123456789123456789123456789123456789123456789"; // too long
@@ -221,6 +224,9 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
       });
+      expect(loggerSpy).to.have.calledWith(
+        "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
+      );
     });
 
     it("should render centre triage page when no fromURL is present", () => {
@@ -252,6 +258,29 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: "654321",
+        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
+        webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
+      });
+    });
+
+    it("should render the contact page when a user is logged out", () => {
+      req.session = {
+        referenceCode: "654321",
+        user: {
+          isAuthenticated: true,
+        },
+      };
+      req.cookies.lo = 'true';
+      contactGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+        contactWebchatEnabled: true,
+        contactPhoneEnabled: true,
+        showContactGuidance: true,
+        showSignOut: false,
         referenceCode: "654321",
         contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
         webchatSource: "https://example.com",
@@ -296,5 +325,48 @@ describe("Contact GOV.UK One Login controller", () => {
         "User visited triage page"
       );
     });
+
+    it("emits an audit event when the user visits the contact page", () => {
+      // Arrange
+      const expectedSessionId = "sessionId";
+      const expectedPersistentSessionId = "persistentSessionId";
+      const expectedTimestamp = 1111;
+
+      sqsClientStub = stub(SQSClient.prototype, 'send');
+      const sqsResponse: SendMessageCommandOutput = {
+        $metadata: undefined,
+        MessageId: "message-id",
+        MD5OfMessageBody: "md5-hash"
+      }
+      process.env.AUDIT_QUEUE_URL = "queue";
+      sqsClientStub.returns(sqsResponse);
+
+      req.session = {
+        user: {
+          isAuthenticated: true,
+          sessionId: expectedSessionId,
+          persistentSessionId: expectedPersistentSessionId,
+        },
+        timestamp: expectedTimestamp,
+        fromURL: "fromUrl",
+        appErrorCode: "app-error-code",
+        appSessionId: "app-session-id",
+        referenceCode: "reference-code",
+      };
+
+      req.query.fromURL = 'https://gov.uk/ogd';
+      req.query.appErrorCode = "app-error-code";
+      req.query.appSessionId = "app-session-id";
+
+      // Act
+      contactGet(req as Request, res as Response);
+
+      // Assert
+      expect(sqsClientStub.called);
+
+      // Tidy up
+      sqsClientStub.restore();
+    })
+
   });
 });
