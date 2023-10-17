@@ -9,10 +9,13 @@ import {
   getContactEmailServiceUrl,
 } from "../../config";
 import { generateReferenceCode } from "./../../utils/referenceCode";
+import { TxMaEventService} from "./txma-service";
+import { TxMaEventServiceInterface, TxmaEvent, User, Platform, Extensions } from "./types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
-export function contactGet(req: Request, res: Response): void {
+
+export function contactGet(req: Request, res: Response, ): void {
   const isAuthenticated = req.session?.user?.isAuthenticated;
   let isLoggedOut = req.cookies?.lo;
   if (typeof isLoggedOut === "string") {
@@ -28,6 +31,8 @@ export function contactGet(req: Request, res: Response): void {
     buildContactEmailServiceUrlAndSaveDataToSession(req).toString();
 
   logContactDataFromSession(req);
+
+  auditUserVisitsContactPage(req);
 
   const data = {
     contactWebchatEnabled: supportWebchatContact(),
@@ -115,4 +120,28 @@ const logContactDataFromSession = (req: Request) => {
     },
     "User visited triage page"
   );
+};
+
+const auditUserVisitsContactPage = (req: Request) => {
+  const txmaEventService: TxMaEventServiceInterface = TxMaEventService();
+  const audit_event: TxmaEvent = {
+    timestamp: 100,
+    event_name: "HOME_TRIAGE_PAGE_VISIT",
+    component_id: "HOME",
+    user: {
+      session_id: "session",
+      persistent_session_id: "persistent_session",
+    },
+    platform: {
+      user_agent: "agent",
+    },
+    extensions: {
+      from_url: "fromUrl",
+      app_error_code: "app error code",
+      app_session_id: "app session id",
+      reference_code: "reference_code",
+    }
+  }
+
+  txmaEventService.send(audit_event);
 };
