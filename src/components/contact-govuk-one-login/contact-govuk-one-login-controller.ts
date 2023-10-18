@@ -2,109 +2,73 @@ import { Request, Response } from "express";
 import { logger } from "../../utils/logger";
 import { isSafeString, isValidUrl } from "./../../utils/strings";
 import {
-  getWebchatUrl,
-  supportWebchatContact,
-  supportPhoneContact,
-  showContactGuidance,
   getContactEmailServiceUrl,
+  getWebchatUrl,
+  showContactGuidance,
+  supportPhoneContact,
+  supportWebchatContact,
 } from "../../config";
 import { generateReferenceCode } from "./../../utils/referenceCode";
-import { EventService} from "./event-service";
-import { EventServiceInterface, AuditEvent, User, Platform, Extensions } from "./types";
+import { EventService } from "./event-service";
+import { AuditEvent, EventServiceInterface, Extensions, Platform, User } from "./types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
-
 export function contactGet(req: Request, res: Response, ): void {
-  const isAuthenticated = req.session?.user?.isAuthenticated;
-  let isLoggedOut = req.cookies?.lo;
-  if (typeof isLoggedOut === "string") {
-    isLoggedOut = JSON.parse(isLoggedOut);
-  }
-
-  const referenceCode = req.session.referenceCode
-    ? req.session.referenceCode
-    : generateReferenceCode();
-  req.session.referenceCode = referenceCode;
-
-  const contactEmailServiceUrl =
-    buildContactEmailServiceUrlAndSaveDataToSession(req).toString();
-
+  updateSessionFromQueryParams(req.session, req.query);
   logContactDataFromSession(req);
-
-  auditUserVisitsContactPage(req);
-
-  const data = {
-    contactWebchatEnabled: supportWebchatContact(),
-    contactPhoneEnabled: supportPhoneContact(),
-    showContactGuidance: showContactGuidance(),
-    showSignOut: isAuthenticated && !isLoggedOut,
-    referenceCode,
-    contactEmailServiceUrl: contactEmailServiceUrl,
-    webchatSource: getWebchatUrl(),
-  };
-
-  res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);
+  sendUserVisitsContactPageAuditEvent(req);
+  render(req, res);
 }
 
-const buildContactEmailServiceUrlAndSaveDataToSession = (req: Request): URL => {
-  const fromURL = getFromUrlAndSaveIt(req);
-  if (!fromURL) {
+const updateSessionFromQueryParams = (session: any, queryParams: any): void => {
+  if (isValidUrl(queryParams.fromURL as string)) {
+    session.fromURL = queryParams.fromURL;
+  } else {
+    logger.error("fromURL in request query for contact-govuk-one-login page did not pass validation");
+  }
+
+  copySafeQueryParamToSession(session, queryParams, 'theme');
+  copySafeQueryParamToSession(session, queryParams, 'appSessionId');
+  copySafeQueryParamToSession(session, queryParams, 'appErrorCode');
+
+  if (!session.referenceCode) {
+    session.referenceCode = generateReferenceCode();
+  }
+}
+
+const copySafeQueryParamToSession = (session: any, queryParams: any, paramName: string) => {
+  if (queryParams[paramName] && isSafeString(queryParams[paramName] as string)) {
+    session[paramName] = queryParams[paramName];
+  } else {
+    logger.error(`${paramName} in request query for contact-govuk-one-login page did not pass validation`);
+  }
+};
+
+const buildContactEmailServiceUrl = (req: Request): URL => {
+  const contactEmailServiceUrl: URL = new URL(getContactEmailServiceUrl());
+
+  if (req.session.fromURL) {
+    contactEmailServiceUrl.searchParams.append("fromURL", req.session.fromURL);
+  } else {
     logger.info(
       "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
     );
   }
-  // optional fields from mobile
-  const theme = getValueFromRequestOrSession(req, "theme");
-  const appSessionId = getValueFromRequestOrSession(req, "appSessionId");
-  const appErrorCode = getValueFromRequestOrSession(req, "appErrorCode");
 
-  const contactEmailServiceUrl: URL = new URL(getContactEmailServiceUrl());
+  if (req.session.theme) {
+    contactEmailServiceUrl.searchParams.append("theme", req.session.theme);
+  }
 
-  if (fromURL) {
-    contactEmailServiceUrl.searchParams.append("fromURL", fromURL);
+  if (req.session.appSessionId) {
+    contactEmailServiceUrl.searchParams.append("appSessionId", req.session.appSessionId);
   }
-  if (theme) {
-    contactEmailServiceUrl.searchParams.append("theme", theme);
+
+  if (req.session.appErrorCode) {
+    contactEmailServiceUrl.searchParams.append("appErrorCode", req.session.appErrorCode);
   }
-  if (appSessionId) {
-    contactEmailServiceUrl.searchParams.append("appSessionId", appSessionId);
-  }
-  if (appErrorCode) {
-    contactEmailServiceUrl.searchParams.append("appErrorCode", appErrorCode);
-  }
+
   return contactEmailServiceUrl;
-};
-
-const getFromUrlAndSaveIt = (request: Request): string => {
-  const fromURLFromRequest = request.query.fromURL as string;
-  if (fromURLFromRequest && isValidUrl(fromURLFromRequest)) {
-    request.session.fromURL = fromURLFromRequest;
-    return fromURLFromRequest;
-  } else if (fromURLFromRequest) {
-    logger.error(
-      "fromURL in request query for contact-govuk-one-login page did not pass validation"
-    );
-  }
-  const fromURLFromSession = request.session.fromURL;
-  return fromURLFromSession;
-};
-
-const getValueFromRequestOrSession = (
-  request: Request,
-  propertyName: string
-): string => {
-  const valueFromRequest = request.query[`${propertyName}`] as string;
-  if (valueFromRequest && isSafeString(valueFromRequest)) {
-    request.session[`${propertyName}`] = valueFromRequest;
-    return valueFromRequest;
-  } else if (valueFromRequest) {
-    logger.error(
-      `${propertyName} in request query for contact-govuk-one-login page did not pass validation`
-    );
-  }
-  const valueFromSession = request.session[`${propertyName}`];
-  return valueFromSession;
 };
 
 const logContactDataFromSession = (req: Request) => {
@@ -122,21 +86,25 @@ const logContactDataFromSession = (req: Request) => {
   );
 };
 
-const auditUserVisitsContactPage = (req: Request) => {
+const sendUserVisitsContactPageAuditEvent = (req: Request) => {
   const eventService: EventServiceInterface = EventService();
+
   const user: User = {
     session_id: req.session.user?.sessionId,
     persistent_session_id: req.session.user?.persistentSessionId,
   };
+
   const platform: Platform = {
     user_agent: req.session.userAgent,
   };
+
   const extensions: Extensions = {
     from_url: req.session.fromURL,
     app_error_code: req.session.appErrorCode,
     app_session_id: req.session.appSessionId,
     reference_code: req.session.referenceCode,
   };
+
   const audit_event: AuditEvent = {
     timestamp: req.session.timestamp,
     event_name: "HOME_TRIAGE_PAGE_VISIT",
@@ -148,3 +116,25 @@ const auditUserVisitsContactPage = (req: Request) => {
 
   eventService.send(audit_event);
 };
+
+const render = (req: Request, res: Response): void => {
+  const isAuthenticated = req.session.user?.isAuthenticated;
+  let isLoggedOut = req.cookies?.lo;
+  if (typeof isLoggedOut === "string") {
+    isLoggedOut = JSON.parse(isLoggedOut);
+  }
+  const referenceCode = req.session.referenceCode;
+
+  const data = {
+    contactWebchatEnabled: supportWebchatContact(),
+    contactPhoneEnabled: supportPhoneContact(),
+    showContactGuidance: showContactGuidance(),
+    showSignOut: isAuthenticated && !isLoggedOut,
+    referenceCode,
+    contactEmailServiceUrl: buildContactEmailServiceUrl(req).toString(),
+    webchatSource: getWebchatUrl(),
+  };
+
+  res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);
+};
+

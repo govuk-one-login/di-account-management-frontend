@@ -132,7 +132,7 @@ describe("Contact GOV.UK One Login controller", () => {
       expect(req.session.theme).to.equal(theme);
     });
 
-    it("should render contact centre triage page with invalid fields from the mobile app", () => {
+    it("should render contact centre triage page ignoring invalid fields from the mobile app", () => {
       const validUrl = "https://home.account.gov.uk/security";
       const appSessionId =
         "123456789123456789123456789123456789123456789123456789123456789123456789123456789"; // too long
@@ -194,6 +194,9 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
       });
+      expect(loggerSpy).to.have.calledWith(
+        "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
+      );
     });
 
     it("should render centre triage page when no fromURL is present", () => {
@@ -222,6 +225,26 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: "654321",
+        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
+        webchatSource: "https://example.com",
+      });
+    });
+
+    it("should render the contact page when a user is loggedOut", () => {
+      req.session = {
+        referenceCode: "654321",
+        user: {
+          isAuthenticated: true,
+        },
+      };
+      req.cookies.lo = 'true';
+      contactGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+        contactWebchatEnabled: true,
+        contactPhoneEnabled: true,
+        showContactGuidance: true,
+        showSignOut: false,
         referenceCode: "654321",
         contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
         webchatSource: "https://example.com",
@@ -285,7 +308,11 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: "reference-code",
       };
 
-      const expectedTxMaEvent: AuditEvent = {
+      req.query.fromURL = 'https://gov.uk/ogd';
+      req.query.appErrorCode = "app-error-code";
+      req.query.appSessionId = "app-session-id";
+
+      const expectedAuditEvent: AuditEvent = {
         timestamp: expectedTimestamp,
         event_name: "HOME_TRIAGE_PAGE_VISIT",
         component_id: "HOME",
@@ -297,7 +324,7 @@ describe("Contact GOV.UK One Login controller", () => {
           user_agent: expectedUserAgent
         },
         extensions: {
-          from_url: "fromUrl",
+          from_url: "https://gov.uk/ogd",
           app_error_code: "app-error-code",
           app_session_id: "app-session-id",
           reference_code: "reference-code",
@@ -310,9 +337,9 @@ describe("Contact GOV.UK One Login controller", () => {
       // Assert
       expect(loggerSpy).to.have.calledWith(
         {
-          Event: expectedTxMaEvent,
+          Event: expectedAuditEvent,
         },
-        "will use the SQSClient to send a txma event"
+        "will use the SQSClient to send an audit event"
       )
     })
 
