@@ -46,6 +46,12 @@ export interface SnsService {
   ) => Promise<SNS.Types.PublishResponse>;
 }
 
+export interface SqsService {
+  send: (
+    message: string,
+  ) =>  Promise<string | undefined>
+}
+
 export interface DynamoDBService {
   getItem: (
     getCommand: DynamoDB.Types.GetItemInput
