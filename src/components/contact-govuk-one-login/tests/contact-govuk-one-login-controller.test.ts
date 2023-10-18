@@ -5,7 +5,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { contactGet } from "../contact-govuk-one-login-controller";
 import { logger } from "../../../utils/logger";
 import * as reference from "../../../utils/referenceCode";
-import { TxMaEvent } from "../types";
+import { AuditEvent } from "../types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
@@ -279,9 +279,13 @@ describe("Contact GOV.UK One Login controller", () => {
         },
         timestamp: expectedTimestamp,
         userAgent: expectedUserAgent,
+        fromURL: "fromUrl",
+        appErrorCode: "app-error-code",
+        appSessionId: "app-session-id",
+        referenceCode: "reference-code",
       };
 
-      const expectedTxMaEvent: TxMaEvent = {
+      const expectedTxMaEvent: AuditEvent = {
         timestamp: expectedTimestamp,
         event_name: "HOME_TRIAGE_PAGE_VISIT",
         component_id: "HOME",
@@ -294,9 +298,9 @@ describe("Contact GOV.UK One Login controller", () => {
         },
         extensions: {
           from_url: "fromUrl",
-          app_error_code: "app error code",
-          app_session_id: "app session id",
-          reference_code: "reference_code",
+          app_error_code: "app-error-code",
+          app_session_id: "app-session-id",
+          reference_code: "reference-code",
         },
       }
 
@@ -306,7 +310,7 @@ describe("Contact GOV.UK One Login controller", () => {
       // Assert
       expect(loggerSpy).to.have.calledWith(
         {
-          txMaEvent: expectedTxMaEvent,
+          Event: expectedTxMaEvent,
         },
         "will use the SQSClient to send a txma event"
       )

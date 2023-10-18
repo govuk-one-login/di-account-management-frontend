@@ -1,12 +1,15 @@
-export interface TxMaEventServiceInterface {
+export interface EventServiceInterface {
   send: (
-    data: TxMaEvent,
+    data: Event,
   ) => void;
 }
 
-export interface TxMaEvent {
-  timestamp: number;
+export interface Event {
   event_name: string;
+}
+
+export interface AuditEvent extends Event {
+  timestamp: number;
   component_id: string;
   user: User;
   platform: Platform;

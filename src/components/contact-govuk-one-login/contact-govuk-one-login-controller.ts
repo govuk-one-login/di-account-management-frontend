@@ -9,8 +9,8 @@ import {
   getContactEmailServiceUrl,
 } from "../../config";
 import { generateReferenceCode } from "./../../utils/referenceCode";
-import { TxMaEventService} from "./txma-service";
-import { TxMaEventServiceInterface, TxMaEvent, User, Platform, Extensions } from "./types";
+import { EventService} from "./event-service";
+import { EventServiceInterface, AuditEvent, User, Platform, Extensions } from "./types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
@@ -123,28 +123,28 @@ const logContactDataFromSession = (req: Request) => {
 };
 
 const auditUserVisitsContactPage = (req: Request) => {
-  const txMaEventService: TxMaEventServiceInterface = TxMaEventService();
+  const eventService: EventServiceInterface = EventService();
   const user: User = {
-    session_id: req.session.user.sessionId,
-    persistent_session_id: req.session.user.persistentSessionId,
+    session_id: req.session.user?.sessionId,
+    persistent_session_id: req.session.user?.persistentSessionId,
   };
   const platform: Platform = {
     user_agent: req.session.userAgent,
   };
   const extensions: Extensions = {
-    from_url: "fromUrl",
-    app_error_code: "app error code",
-    app_session_id: "app session id",
-    reference_code: "reference_code",
-  }
-  const audit_event: TxMaEvent = {
+    from_url: req.session.fromURL,
+    app_error_code: req.session.appErrorCode,
+    app_session_id: req.session.appSessionId,
+    reference_code: req.session.referenceCode,
+  };
+  const audit_event: AuditEvent = {
     timestamp: req.session.timestamp,
     event_name: "HOME_TRIAGE_PAGE_VISIT",
     component_id: "HOME",
     user: user,
     platform: platform,
     extensions: extensions,
-  }
+  };
 
-  txMaEventService.send(audit_event);
+  eventService.send(audit_event);
 };
