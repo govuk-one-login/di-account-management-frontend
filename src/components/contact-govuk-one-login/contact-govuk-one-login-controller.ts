@@ -15,6 +15,7 @@ import { AuditEvent, EventServiceInterface, Extensions, Platform, User } from ".
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
 export function contactGet(req: Request, res: Response, ): void {
+  logger.info(req.session, "The session contains:")
   updateSessionFromQueryParams(req.session, req.query);
   const audit_event = buildAuditEvent(req);
   logUserVisitsContactPage(audit_event);
