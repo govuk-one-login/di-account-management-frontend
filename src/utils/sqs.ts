@@ -18,9 +18,11 @@ export function sqsService(): SqsService {
       MessageBody: messageBody,
     };
     try {
+      logger.info(`Sending message to SQS::${AUDIT_QUEUE_URL}`)
       const result: SendMessageCommandOutput = await client.send(new SendMessageCommand(message));
       logger.info(`Event sent with message id ${result.MessageId}`);
     } catch(err) {
+      logger.error(`Failed to send message to SQS: ${err}`)
       const dlqMessage: SendMessageRequest = {
         QueueUrl: DLQ_URL,
         MessageBody: messageBody,

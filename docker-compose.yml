@@ -7,7 +7,7 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=kms,sns,dynamodb
+      - SERVICES=kms,sns,dynamodb,sqs
       - HOSTNAME_EXTERNAL=localhost
       - DEBUG=0
       - KMS_PROVIDER=local-kms
@@ -51,6 +51,9 @@ services:
       - SUPPORT_ACTIVITY_LOG=${SUPPORT_ACTIVITY_LOG}
       - DEBUG=express-session
       - LOCALSTACK_HOSTNAME=host.docker.internal
+      - AWS_REGION=eu-west-2
+      - AUDIT_QUEUE_URL="http://localhost:4566/000000000000/localstack-queue"
+      - DLQ_URL="http://localhost:4566/000000000000/localstack-queue"
     restart: on-failure
     depends_on:
       localstack:

@@ -36,6 +36,7 @@ const updateSessionFromQueryParams = (session: any, queryParams: any): void => {
   if (!session.referenceCode) {
     session.referenceCode = generateReferenceCode();
   }
+  logger.info("completed updating session");
 }
 
 const copySafeQueryParamToSession = (session: any, queryParams: any, paramName: string) => {
