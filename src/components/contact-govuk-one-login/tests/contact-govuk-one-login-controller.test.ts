@@ -231,7 +231,7 @@ describe("Contact GOV.UK One Login controller", () => {
       });
     });
 
-    it("should render the contact page when a user is loggedOut", () => {
+    it("should render the contact page when a user is logged out", () => {
       req.session = {
         referenceCode: "654321",
         user: {
@@ -301,7 +301,6 @@ describe("Contact GOV.UK One Login controller", () => {
           persistentSessionId: expectedPersistentSessionId,
         },
         timestamp: expectedTimestamp,
-        userAgent: expectedUserAgent,
         fromURL: "fromUrl",
         appErrorCode: "app-error-code",
         appSessionId: "app-session-id",

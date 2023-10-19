@@ -16,8 +16,9 @@ const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
 export function contactGet(req: Request, res: Response, ): void {
   updateSessionFromQueryParams(req.session, req.query);
-  logContactDataFromSession(req);
-  sendUserVisitsContactPageAuditEvent(req);
+  const audit_event = buildAuditEvent(req);
+  logUserVisitsContactPage(audit_event);
+  sendUserVisitsContactPageAuditEvent(audit_event);
   render(req, res);
 }
 
@@ -45,6 +46,33 @@ const copySafeQueryParamToSession = (session: any, queryParams: any, paramName: 
   }
 };
 
+function buildAuditEvent(req: Request): AuditEvent {
+  const user: User = {
+    session_id: req.session.user?.sessionId,
+    persistent_session_id: req.session.user?.persistentSessionId,
+  };
+
+  const platform: Platform = {
+    user_agent: req.headers["user-agent"],
+  };
+
+  const extensions: Extensions = {
+    from_url: req.session.fromURL,
+    app_error_code: req.session.appErrorCode,
+    app_session_id: req.session.appSessionId,
+    reference_code: req.session.referenceCode,
+  };
+
+  return {
+    timestamp: req.session.timestamp,
+    event_name: "HOME_TRIAGE_PAGE_VISIT",
+    component_id: "HOME",
+    user: user,
+    platform: platform,
+    extensions: extensions,
+  };
+}
+
 const buildContactEmailServiceUrl = (req: Request): URL => {
   const contactEmailServiceUrl: URL = new URL(getContactEmailServiceUrl());
 
@@ -71,49 +99,23 @@ const buildContactEmailServiceUrl = (req: Request): URL => {
   return contactEmailServiceUrl;
 };
 
-const logContactDataFromSession = (req: Request) => {
+const logUserVisitsContactPage = (event: AuditEvent) => {
   logger.info(
     {
-      fromURL: req.session.fromURL,
-      referenceCode: req.session.referenceCode,
-      appSessionId: req.session.appSessionId,
-      appErrorCode: req.session.appErrorCode,
-      sessionId: req.session.user?.sessionId,
-      persistentSessionId: req.session.user?.persistentSessionId,
-      userAgent: req.headers["user-agent"],
+      fromURL: event.extensions.from_url,
+      referenceCode: event.extensions.reference_code,
+      appSessionId: event.extensions.app_session_id,
+      appErrorCode: event.extensions.app_error_code,
+      sessionId: event.user.session_id,
+      persistentSessionId: event.user.persistent_session_id,
+      userAgent: event.platform.user_agent,
     },
     "User visited triage page"
   );
 };
 
-const sendUserVisitsContactPageAuditEvent = (req: Request) => {
+const sendUserVisitsContactPageAuditEvent = (audit_event: AuditEvent) => {
   const eventService: EventServiceInterface = EventService();
-
-  const user: User = {
-    session_id: req.session.user?.sessionId,
-    persistent_session_id: req.session.user?.persistentSessionId,
-  };
-
-  const platform: Platform = {
-    user_agent: req.session.userAgent,
-  };
-
-  const extensions: Extensions = {
-    from_url: req.session.fromURL,
-    app_error_code: req.session.appErrorCode,
-    app_session_id: req.session.appSessionId,
-    reference_code: req.session.referenceCode,
-  };
-
-  const audit_event: AuditEvent = {
-    timestamp: req.session.timestamp,
-    event_name: "HOME_TRIAGE_PAGE_VISIT",
-    component_id: "HOME",
-    user: user,
-    platform: platform,
-    extensions: extensions,
-  };
-
   eventService.send(audit_event);
 };
 
