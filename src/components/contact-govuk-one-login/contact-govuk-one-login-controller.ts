@@ -13,6 +13,7 @@ import { EventService } from "./event-service";
 import { AuditEvent, EventServiceInterface, Extensions, Platform, User } from "./types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
+const MISSING_SESSION_VALUE_SPECIAL_CASE : string = "";
 
 export function contactGet(req: Request, res: Response, ): void {
   logger.info(req.session, "The session contains:")
@@ -48,20 +49,45 @@ const copySafeQueryParamToSession = (session: any, queryParams: any, paramName: 
   }
 };
 
-function buildAuditEvent(req: Request): AuditEvent {
+const buildAuditEvent = (req: Request): AuditEvent => {
+  const session: any = req.session;
+  let sessionId: string;
+
+  if (userHasSignedIntoHomeRelyingParty(session)) {
+    sessionId = session.user.sessionId;
+  } else {
+    sessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
+  }
+
+  let persistentSessionId: string;
+
+  if (session.user && session.user.persistentSessionId) {
+    persistentSessionId = session.user.persistentSessionId;
+  } else {
+    persistentSessionId = MISSING_SESSION_VALUE_SPECIAL_CASE
+  }
+
   const user: User = {
-    session_id: req.session.user?.sessionId,
-    persistent_session_id: req.session.user?.persistentSessionId,
+    session_id: sessionId,
+    persistent_session_id: persistentSessionId,
   };
 
   const platform: Platform = {
     user_agent: req.headers["user-agent"],
   };
 
+  let appSessionId: string;
+
+  if (userHasComeFromTheApp(session)) {
+    appSessionId = req.session.appSessionId;
+  } else {
+    appSessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
+  }
+
   const extensions: Extensions = {
     from_url: req.session.fromURL,
     app_error_code: req.session.appErrorCode,
-    app_session_id: req.session.appSessionId,
+    app_session_id: appSessionId,
     reference_code: req.session.referenceCode,
   };
 
@@ -73,6 +99,22 @@ function buildAuditEvent(req: Request): AuditEvent {
     platform: platform,
     extensions: extensions,
   };
+}
+
+const userHasSignedIntoHomeRelyingParty = (session: any): boolean => {
+  if (session.user?.sessionId) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+const userHasComeFromTheApp = (session: any): boolean => {
+  if (session.appSessionId) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 const buildContactEmailServiceUrl = (req: Request): URL => {
