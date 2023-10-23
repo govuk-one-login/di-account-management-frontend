@@ -18,7 +18,6 @@ const provider = new PactV3({
   logLevel: "error",
   dir: path.resolve(process.cwd(), "pacts"),
   port: 8080,
-
 });
 
 describe("Pact::/update-email", () => {
