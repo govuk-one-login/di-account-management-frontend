@@ -315,18 +315,6 @@ $nav-active-border-thickness: 5px;
   .language-select__link {
     @include govuk-font($size: 16);
     padding: govuk-spacing(1);
-
-    &:visited {
-      color: $govuk-link-colour;
-
-      &:hover {
-        color: $govuk-link-hover-colour;
-      }
-
-      &:focus {
-        color: $govuk-focus-text-colour;
-      }
-    }
   }
 
   .language-select__list-item {
