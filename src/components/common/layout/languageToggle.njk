@@ -4,7 +4,7 @@
             <li class="language-select__list-item">
                 {% set translationKey = 'general.languageToggle.' + lang + '.linkText' %}
                 {% if language == lang %}
-                    <span class="govuk-!-font-size-16" aria-current="page">{{ translationKey | translate }}</span>
+                    <span aria-current="page">{{ translationKey | translate }}</span>
                 {% else %}
                     <a class="govuk-link govuk-link--no-visited-state language-select__link"
                        lang="{{ lang }}" hreflang="{{ lang }}" href="{{ currentUrl | addLanguageParam(lang, baseUrl) }}">

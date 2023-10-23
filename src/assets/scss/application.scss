@@ -313,11 +313,11 @@ $nav-active-border-thickness: 5px;
   }
 
   .language-select__link {
-    @include govuk-font($size: 16);
     padding: govuk-spacing(1);
   }
 
   .language-select__list-item {
+    @include govuk-font($size: 16);
     display: inline-block;
     margin-right: 0;
     border-bottom: 0;
