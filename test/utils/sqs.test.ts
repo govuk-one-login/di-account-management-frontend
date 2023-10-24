@@ -1,11 +1,11 @@
 import { describe } from "mocha";
-import { SqsService } from "../types";
-import { AuditEvent } from "../../components/contact-govuk-one-login/types";
-import { sqsService } from "../sqs";
+import { SqsService } from "../../src/utils/types";
+import { AuditEvent } from "../../src/components/contact-govuk-one-login/types";
+import { sqsService } from "../../src/utils/sqs";
 import { SQSClient, SendMessageCommandOutput } from "@aws-sdk/client-sqs";
 import { SinonStub, stub } from "sinon";
-import { sinon } from "../../../test/utils/test-utils";
-import { logger } from "../logger";
+import { sinon } from "./test-utils";
+import { logger } from "../../src/utils/logger";
 import { expect } from "chai";
 
 describe("SQS service tests", () : void => {
