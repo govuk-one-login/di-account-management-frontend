@@ -300,37 +300,36 @@ $nav-active-border-thickness: 5px;
     display: block;
     clear: both;
   }
+}
 
-  .language-select__list {
-    border-bottom: 1px solid $govuk-border-colour;
-    margin-bottom: 0;
-    float: right;
-    text-align: right;
-    @include govuk-media-query($until: tablet) {
-      float: none;
-      text-align: left;
-    }
+.language-select__list {
+  border-bottom: 1px solid $govuk-border-colour;
+  margin-bottom: 0;
+  float: right;
+  text-align: right;
+  @include govuk-media-query($until: tablet) {
+    float: none;
+    text-align: left;
   }
+}
 
-  .language-select__link {
-    padding: govuk-spacing(1);
-  }
+.language-select__link {
+  padding: govuk-spacing(1);
+}
 
-  .language-select__list-item {
-    @include govuk-font($size: 16);
-    display: inline-block;
-    margin-right: 0;
-    border-bottom: 0;
-  }
+.language-select__list-item {
+  @include govuk-font($size: 16);
+  display: inline-block;
+  margin-right: 0;
+  border-bottom: 0;
+}
 
-  .language-select__list-item [aria-current] {
-    padding: govuk-spacing(1);
-  }
+.language-select__list-item [aria-current] {
+  padding: govuk-spacing(1);
+}
 
-  .language-select__list-item + .language-select__list-item::before {
-    content: "|";
-    color: $govuk-border-colour;
-  }
-
+.language-select__list-item + .language-select__list-item::before {
+  content: "|";
+  color: $govuk-border-colour;
 }
 
