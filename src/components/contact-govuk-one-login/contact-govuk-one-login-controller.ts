@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { logger } from "../../utils/logger";
-import { isSafeString, isValidUrl } from "./../../utils/strings";
+import { isSafeString, isValidUrl } from "../../utils/strings";
 import {
-  getWebchatUrl,
-  supportWebchatContact,
-  supportPhoneContact,
-  showContactGuidance,
   getContactEmailServiceUrl,
+  getWebchatUrl,
+  showContactGuidance,
+  supportPhoneContact,
+  supportWebchatContact,
 } from "../../config";
-import { generateReferenceCode } from "./../../utils/referenceCode";
+import { generateReferenceCode } from "../../utils/referenceCode";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
@@ -18,6 +18,9 @@ export function contactGet(req: Request, res: Response): void {
   if (typeof isLoggedOut === "string") {
     isLoggedOut = JSON.parse(isLoggedOut);
   }
+
+  const { originalUrl, language, protocol, hostname } = req;
+  const baseUrl = protocol + "://" + hostname;
 
   const referenceCode = req.session.referenceCode
     ? req.session.referenceCode
@@ -37,6 +40,9 @@ export function contactGet(req: Request, res: Response): void {
     referenceCode,
     contactEmailServiceUrl: contactEmailServiceUrl,
     webchatSource: getWebchatUrl(),
+    currentUrl: originalUrl,
+    baseUrl,
+    language,
   };
 
   res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);
@@ -81,8 +87,7 @@ const getFromUrlAndSaveIt = (request: Request): string => {
       "fromURL in request query for contact-govuk-one-login page did not pass validation"
     );
   }
-  const fromURLFromSession = request.session.fromURL;
-  return fromURLFromSession;
+  return request.session.fromURL;
 };
 
 const getValueFromRequestOrSession = (
@@ -98,8 +103,7 @@ const getValueFromRequestOrSession = (
       `${propertyName} in request query for contact-govuk-one-login page did not pass validation`
     );
   }
-  const valueFromSession = request.session[`${propertyName}`];
-  return valueFromSession;
+  return request.session[`${propertyName}`];
 };
 
 const logContactDataFromSession = (req: Request) => {

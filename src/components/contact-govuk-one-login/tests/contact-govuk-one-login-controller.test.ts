@@ -5,15 +5,17 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { contactGet } from "../contact-govuk-one-login-controller";
 import { logger } from "../../../utils/logger";
 import * as reference from "../../../utils/referenceCode";
+import { I18NextRequest } from "i18next-http-middleware";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
 
 describe("Contact GOV.UK One Login controller", () => {
   let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request>;
+  let req: Partial<Request> & Partial<I18NextRequest>;
   let res: Partial<Response>;
   let loggerSpy: sinon.SinonSpy;
+  const baseUrl = "https://home.account.gov.uk";
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -29,6 +31,10 @@ describe("Contact GOV.UK One Login controller", () => {
           isAuthenticated: true,
         },
       },
+      protocol: "https",
+      hostname: "home.account.gov.uk",
+      originalUrl: baseUrl,
+      language: "en",
       log: logger,
     };
     res = {
@@ -77,6 +83,9 @@ describe("Contact GOV.UK One Login controller", () => {
         contactEmailServiceUrl:
           "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
         webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -90,6 +99,10 @@ describe("Contact GOV.UK One Login controller", () => {
           isAuthenticated: false,
         },
       };
+      req.cookies = {
+        ...req.cookies,
+        lo: JSON.stringify({ user: null }),
+      };
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
@@ -100,6 +113,9 @@ describe("Contact GOV.UK One Login controller", () => {
         contactEmailServiceUrl:
           "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
         webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
       });
     });
 
@@ -123,6 +139,9 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
       });
       // query data should be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -150,6 +169,9 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
       });
       // invalid query data should not be saved into session
       expect(req.session.fromURL).to.equal(validUrl);
@@ -177,6 +199,9 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
       });
     });
 
@@ -192,6 +217,9 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
       });
     });
 
@@ -205,6 +233,9 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
       });
     });
 
@@ -224,6 +255,9 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: "654321",
         contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
         webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
       });
     });
 
