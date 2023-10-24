@@ -80,6 +80,10 @@
         "pageTitle": "Privacy notice",
         "linkText": "Privacy notice"
       },
+      "support": {
+        "pageTitle": "Support",
+        "linkText": "Support (opens in new tab)"
+      },
       "copyright": {
         "linkText": "© Crown copyright"
       },

@@ -80,6 +80,10 @@
         "pageTitle": "Hysbysiad preifatrwydd",
         "linkText": "Hysbysiad preifatrwydd"
       },
+      "support": {
+        "pageTitle": "Cefnogaeth",
+        "linkText": "Cefnogaeth (agor mewn tab newydd)"
+      },
       "copyright": {
         "linkText": "© Hawlfraint y goron"
       },
