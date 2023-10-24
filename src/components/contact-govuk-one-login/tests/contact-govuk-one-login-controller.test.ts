@@ -5,7 +5,8 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { contactGet } from "../contact-govuk-one-login-controller";
 import { logger } from "../../../utils/logger";
 import * as reference from "../../../utils/referenceCode";
-import { AuditEvent } from "../types";
+import { SinonStub, stub } from "sinon";
+import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
@@ -15,6 +16,7 @@ describe("Contact GOV.UK One Login controller", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let loggerSpy: sinon.SinonSpy;
+  let sqsClientStub: SinonStub;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -292,7 +294,15 @@ describe("Contact GOV.UK One Login controller", () => {
       const expectedSessionId = "sessionId";
       const expectedPersistentSessionId = "persistentSessionId";
       const expectedTimestamp = 1111;
-      const expectedUserAgent = "user-agent";
+
+      sqsClientStub = stub(SQSClient.prototype, 'send');
+      const sqsResponse: SendMessageCommandOutput = {
+        $metadata: undefined,
+        MessageId: "message-id",
+        MD5OfMessageBody: "md5-hash"
+      }
+      process.env.AUDIT_QUEUE_URL = "queue";
+      sqsClientStub.returns(sqsResponse);
 
       req.session = {
         user: {
@@ -311,37 +321,17 @@ describe("Contact GOV.UK One Login controller", () => {
       req.query.appErrorCode = "app-error-code";
       req.query.appSessionId = "app-session-id";
 
-      const expectedAuditEvent: AuditEvent = {
-        timestamp: expectedTimestamp,
-        event_name: "HOME_TRIAGE_PAGE_VISIT",
-        component_id: "HOME",
-        user: {
-          session_id: expectedSessionId,
-          persistent_session_id: expectedPersistentSessionId,
-        },
-        platform: {
-          user_agent: expectedUserAgent
-        },
-        extensions: {
-          from_url: "https://gov.uk/ogd",
-          app_error_code: "app-error-code",
-          app_session_id: "app-session-id",
-          reference_code: "reference-code",
-        },
-      }
-
       // Act
       contactGet(req as Request, res as Response);
 
       // Assert
       expect(loggerSpy).to.have.calledWith(
-        {
-          Event: expectedAuditEvent,
-        },
-        "will use the SQSClient to send an audit event"
+        "completed updating session"
       )
-    })
 
+      // Tidy up
+      sqsClientStub.restore();
+    })
 
   });
 });

@@ -1,57 +1,83 @@
 import { describe } from "mocha";
-import { sinon } from "../../../test/utils/test-utils";
 import { SqsService } from "../types";
-import { EventService } from "../../components/contact-govuk-one-login/event-service";
 import { AuditEvent } from "../../components/contact-govuk-one-login/types";
+import { sqsService } from "../sqs";
+import { SQSClient, SendMessageCommandOutput } from "@aws-sdk/client-sqs";
+import { SinonStub, stub } from "sinon";
+import { sinon } from "../../../test/utils/test-utils";
+import { logger } from "../logger";
 import { expect } from "chai";
-// import { SQSClient } from "@aws-sdk/client-sqs";
-// import { sqsService } from "../../utils/sqs";
 
 describe("SQS service tests", () : void => {
-
-  let sandbox: sinon.SinonSandbox;
+  let sqsClientStub: SinonStub;
+  let loggerSpy: sinon.SinonSpy;
+  let errorLoggerSpy: sinon.SinonSpy;
+  const expectedEvent : AuditEvent = {
+    timestamp: undefined,
+    event_name: "HOME_TRIAGE_PAGE_VISIT",
+    component_id: "HOME",
+    user: undefined,
+    platform: undefined,
+    extensions: undefined,
+  }
 
   beforeEach((): void => {
-    sandbox = sinon.createSandbox();
+    sqsClientStub = stub(SQSClient.prototype, 'send');
+    loggerSpy = sinon.spy(logger, "info");
+    errorLoggerSpy = sinon.spy(logger, "error");
+    process.env.AUDIT_QUEUE_URL = "queue";
   });
 
-  it("can send a message to an SQS queue", (): void => {
-    const fakeSqsService: SqsService = {send: sandbox.fake()};
+  afterEach((): void => {
+    sqsClientStub.restore();
+    loggerSpy.restore();
+    errorLoggerSpy.restore();
+  });
 
-    const expectedEvent : AuditEvent = {
-      timestamp: undefined,
-      event_name: "HOME_TRIAGE_PAGE_VISIT",
-      component_id: "HOME",
-      user: undefined,
-      platform: undefined,
-      extensions: undefined,
+  it("can send a message to an SQS queue", async (): Promise<void> => {
+    // Arrange
+    const sqsResponse: SendMessageCommandOutput = {
+      $metadata: undefined,
+      MessageId: "message-id",
+      MD5OfMessageBody: "md5-hash"
     }
+    sqsClientStub.returns(sqsResponse);
+    const sqs: SqsService = sqsService();
 
-    EventService(fakeSqsService).send(expectedEvent);
+    // Act
+    await sqs.send(JSON.stringify(expectedEvent));
 
-    expect(fakeSqsService.send).to.have.been.calledOnceWith(JSON.stringify(expectedEvent));
+    // Assert
+    expect(sqsClientStub).to.have.calledOnce;
+    expect(loggerSpy).to.have.calledWith("Event sent with message id message-id");
   });
 
-  it("sends a failed message to the DLQ", (): void => {
-    // const eventService: EventServiceInterface = EventService();
-    // const stub = sinon.stub(eventService);
-    // stub.send.onFirstCall().throwsException()
+  it("logs event when error sending to SQS", async (): Promise<void> => {
+    // Arrange
+    const expectedError: Error = new Error("simulated error");
+    sqsClientStub.throws(expectedError);
+    const sqs: SqsService = sqsService();
 
-    // const fakeSqsClient: SQSClient = {send: sandbox.stub().onFirstCall().throws(new Error("AWS error"))}
-    //
-    // const sut: SqsService = sqsService();
-    //
-    //
-    // const expectedEvent : AuditEvent = {
-    //   timestamp: undefined,
-    //   event_name: "HOME_TRIAGE_PAGE_VISIT",
-    //   component_id: "HOME",
-    //   user: undefined,
-    //   platform: undefined,
-    //   extensions: undefined,
-    // }
+    // Act
+    await sqs.send(JSON.stringify(expectedEvent));
 
-
-
+    // Assert
+    expect(errorLoggerSpy).to.have.calledWith(
+      `Failed to send message ${JSON.stringify(expectedEvent)} to SQS: ${expectedError}`);
   });
+
+  it("logs at error level if environment not set correctly", async (): Promise<void> => {
+    // Arrange
+    const sqs: SqsService = sqsService();
+    const expectedMessage: string = JSON.stringify(expectedEvent);
+    delete process.env.AUDIT_QUEUE_URL;
+
+    // Act
+    await sqs.send(expectedMessage);
+
+    // Assert
+    expect(errorLoggerSpy).to.have.calledWith(
+      `Environment missing value for AUDIT_QUEUE_URL, cannot send ${expectedMessage}.`);
+  });
+
 });

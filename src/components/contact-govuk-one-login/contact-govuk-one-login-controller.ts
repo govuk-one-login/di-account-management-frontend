@@ -9,7 +9,7 @@ import {
   supportWebchatContact,
 } from "../../config";
 import { generateReferenceCode } from "./../../utils/referenceCode";
-import { EventService } from "./event-service";
+import { eventService } from "./event-service";
 import { AuditEvent, EventServiceInterface, Extensions, Platform, User } from "./types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
@@ -159,8 +159,8 @@ const logUserVisitsContactPage = (event: AuditEvent) => {
 };
 
 const sendUserVisitsContactPageAuditEvent = (audit_event: AuditEvent) => {
-  const eventService: EventServiceInterface = EventService();
-  eventService.send(audit_event);
+  const events: EventServiceInterface = eventService();
+  events.send(audit_event);
 };
 
 const render = (req: Request, res: Response): void => {
