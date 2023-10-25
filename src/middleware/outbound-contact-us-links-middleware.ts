@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { getSupportLinkUrl } from "../config";
-import { logger } from "../utils/logger";
 
 export function buildUrlFromRequest(req: Request): string {
   return `${req.protocol}://${req.get("host")}${req.originalUrl}`;
