@@ -478,7 +478,7 @@
       }
     },
     "contact": {
-      "title": "Get help with GOV.UK One Login",
+      "title": "Contact GOV.UK One Login",
       "header": "Contact GOV.UK One Login",
       "section1": {
         "heading": "Before you contact us",
@@ -491,34 +491,42 @@
             "text": "Using the GOV.UK ID Check app"
           },{
             "href": "",
-            "text": "Scanning identity documents and your face in the GOV.UK ID Check app"
+            "text": "Proving your identity with GOV.UK One Login using security questions"
           },{
             "href": "",
-            "text": "Confirming your identity if you do not have photo ID"
+            "text": "Change the sign in details for your GOV.UK One Login"
           },{
             "href": "",
-            "text": "Changing your sign in details"
+            "text": "Getting a security code for GOV.UK One Login"
           }, {
             "href": "",
-            "text": "Getting a security code"
+            "text": "Deleting your GOV.UK One Login"
           }
         ]
       },
       "section2": {
-        "heading": "When you contact us",
-        "paragraphs": [
-          "If you call or use webchat to contact the GOV.UK One Login team, you will be asked for a reference code.",
+        "heading": "When you contact us"
+      },
+      "refCodeBlock": {
+        "paragraphsWebchat": [
+          "If you contact us by phone or use webchat, you'll be asked for a reference code.",
+          "This code helps us to see where you may be having a problem."
+        ],
+        "paragraphsNoWebchat": [
+          "When you contact us by phone, you’ll be asked for a reference code.",
           "This code helps us to see where you may be having a problem."
         ],
         "refCode": "Your reference code is:"
       },
       "section3": {
-        "heading": "Ways to contact us",
+        "headingOne": "How to contact us",
+        "headingMany": "Ways to contact us",
         "webchat": {
           "heading": "Webchat",
           "paragraphs": [
-            "Ask GOV.UK One Login’s digital assistant to find information to help you. If the digital assistant cannot help you, you can chat live with a webchat adviser if they're available.",
-            "You'll need your reference code to chat with an adviser.",
+            "Ask GOV.UK One Login's digital assistant to find information to help you or chat with an advisor.",
+            "Our webchat is not yet fully accessible. Find out <a class=\"govuk-link\" href=\"link-to-statement\">more about the limitations and how we're working to fix this</a>.",
+            "Opening times:</br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm",
             "<a class=\"govuk-link\" href=\"[useWebchatLinkHref]\">Use webchat</a>"
           ],
           "useWebchatLinkHref":"/webchat"
@@ -526,7 +534,6 @@
         "phone": {
           "heading": "Phone",
           "paragraphs": [
-            "Call GOV.UK One Login for help.",
             "You'll need your reference code when you call."
           ],
           "insetText":{
@@ -536,8 +543,7 @@
             ]
           },
           "paragraphs2": [
-            "Opening times:",
-            "Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 8am to 5.30pm",
+            "Opening times:</br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm",
             "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Find out about call charges</a>"
           ],
           "callChargesLinkHref": "https://www.gov.uk/call-charges"
@@ -545,12 +551,18 @@
         "email": {
           "heading": "Email",
           "paragraphs": [
-            "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Use our email service</a> to ask for help.",
-            "We will respond to your support queries during office hours. Our office hours are 9:30am to 5:30pm, Monday to Friday.",
-            "We will try to reply within 2 working days."
-          ],
-          "emailServiceLinkHref": "/tbd"
+            "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Fill in the contact form</a> to ask for help.",
+            "We’ll reply by email within 2 working days.",
+            "We’ll respond during office hours.",
+            "Office hours: </br>Monday to Friday, 9:30am to 5:30pm"
+          ]
         }
+      },
+      "section4": {
+        "heading": "How we use your information",
+        "paragraphs": [
+          "To find out what information we store when you contact us and how we use it, see the <a href=\"https://signin.account.gov.uk/privacy-notice\" class=\"govuk-link\">GOV.UK One Login privacy notice.</a>"
+        ]
       }
     }
   },

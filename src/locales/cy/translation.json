@@ -477,8 +477,92 @@
       }
     },
     "contact": {
-      "title": "Get help with GOV.UK One Login",
-      "header": "Contact GOV.UK One Login"
+      "title": "Cysylltu â GOV.UK One Login",
+      "header": "Cysylltu â GOV.UK One Login",
+      "section1": {
+        "heading": "Cyn i chi gysylltu â ni",
+        "paragraphs": [
+          "Darllenwch ein canllaw os ydych yn cael problem gyda:"
+        ],
+        "links": [
+          {
+            "href": "",
+            "text": "Defnyddio'r ap GOV.UK ID Check app"
+          },{
+            "href": "",
+            "text": "Profi eich hunaniaeth gyda GOV.UK One Login drwy ateb cwestiynau diogelwch"
+          },{
+            "href": "",
+            "text": "Newid y manylion mewngofnodi ar gyfer eich GOV.UK One Login"
+          },{
+            "href": "",
+            "text": "Cael cod diogelwch ar gyfer GOV.UK One Login"
+          }, {
+            "href": "",
+            "text": "Dileu eich GOV.UK One Login"
+          }
+        ]
+      },
+      "section2": {
+        "heading": "Pan fyddwch yn cysylltu â ni"
+      },
+      "refCodeBlock": {
+        "paragraphsWebchat": [
+          "Os ydych yn ffonio neu'n defnyddio gwesgwrs i gysylltu â'r tîm GOV.UK  One Login, gofynnir i chi am god cyfeirinod.",
+          "Mae'r cod hwn yn ein helpu i weld lle y gallech fod yn cael problem."
+        ],
+        "paragraphsNoWebchat": [
+          "Pan fyddwch yn cysylltu â ni dros y ffôn, gofynnir i chi am god cyfeirio.",
+          "Mae'r cod hwn yn ein helpu i weld lle y gallech fod yn cael problem."
+        ],
+        "refCode": "Eich cod cyfeirnod yw:"
+      },
+      "section3": {
+        "headingOne": "Sut i gysylltu â ni",
+        "headingMany": "Ffyrdd o gysylltu â ni",
+        "webchat": {
+          "heading": "Gwesgwrs",
+          "paragraphs": [
+            "Gofynnwch i gynorthwyydd digidol GOV.UK One Login i ddod o hyd i wybodaeth i'ch helpu chi neu sgwrsiwch ag ymgynghorydd.",
+            "Nid yw ein gwesgwrs yn gwbl hygyrch eto. Rydym yn gweithio i'w wella.Gallwch ddarganfod mwy am <a class=\"govuk-link\" href=\"link-to-statement\">ein datganiad hygyrchedd</a>.",
+            "Oriau agor: </br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm",
+            "<a class=\"govuk-link\" href=\"[useWebchatLinkHref]\">Defnyddio gwesgwrs</a>"
+          ],
+          "useWebchatLinkHref":"/webchat"
+        },
+        "phone": {
+          "heading": "Ffôn",
+          "paragraphs": [
+            "Byddwch angen eich cod cyfeirnod pan fyddwch yn ffonio."
+          ],
+          "insetText":{
+            "paragraphs": [
+              "O'r DU:</br><strong>0300 123 2345</strong>",
+              "Y tu allan i'r DU:</br><strong>+44 117 393 3928</strong>"
+            ]
+          },
+          "paragraphs2": [
+            "Oriau agor:</br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm",
+            "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Darganfyddwch fwy am gostau galwadau</a>"
+          ],
+          "callChargesLinkHref": "https://www.gov.uk/call-charges"
+        },
+        "email": {
+          "heading": "E-bost",
+          "paragraphs": [
+            "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Cwblhewch y ffurflen gyswllt</a>  i ofyn am help.",
+            "Byddwn yn ateb drwy e-bost o fewn 2 ddiwrnod gwaith.",
+            "Byddwn yn ymateb yn ystod oriau swyddfa.",
+            "Oriau swyddfa: </br>Dydd Llun i ddydd Gwener, 9:30am i 5:30pm"
+          ]
+        }
+      },
+      "section4": {
+        "heading": "Sut rydym yn defnyddio eich gwybodaeth",
+        "paragraphs": [
+          "I ddarganfod pa wybodaeth rydym yn ei gadw pan fyddwch yn cysylltu â ni a sut rydym yn ei defnyddio, gweler <a href=\"https://signin.account.gov.uk/privacy-notice\" class=\"govuk-link\">hysbysiad preifatrwydd GOV.UK One Login</a>"
+        ]
+      }
     },
     "9fduJ6KAE8WwCb1VCKp788BC8mM" : {
       "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
