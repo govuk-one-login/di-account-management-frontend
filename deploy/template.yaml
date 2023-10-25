@@ -148,6 +148,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      URL_FOR_SUPPORT_LINKS: "https://home.dev.account.gov.uk/contact-gov-uk-one-login"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -169,6 +170,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      URL_FOR_SUPPORT_LINKS: "https://home.build.account.gov.uk/contact-gov-uk-one-login"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -190,6 +192,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      URL_FOR_SUPPORT_LINKS: "https://home.staging.account.gov.uk/contact-gov-uk-one-login"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -211,6 +214,7 @@ Mappings:
       SUPPORTPHONECONTACT: "0"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
+      URL_FOR_SUPPORT_LINKS: "https://home.integration.account.gov.uk/contact-gov-uk-one-login"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -232,6 +236,7 @@ Mappings:
       SUPPORTPHONECONTACT: "0"
       SHOWCONTACTGUIDANCE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
+      URL_FOR_SUPPORT_LINKS: "https://home.account.gov.uk/contact-gov-uk-one-login"
 
 Resources:
   #
