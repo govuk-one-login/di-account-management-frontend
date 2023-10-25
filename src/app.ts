@@ -73,6 +73,7 @@ async function createApp(): Promise<express.Application> {
   app.enable("trust proxy");
 
   app.use(loggerMiddleware);
+  app.use(outboundContactUsLinksMiddleware);
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
@@ -167,7 +168,6 @@ async function createApp(): Promise<express.Application> {
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
   app.use(pageNotFoundHandler);
-  app.use(outboundContactUsLinksMiddleware);
 
   return app;
 }
