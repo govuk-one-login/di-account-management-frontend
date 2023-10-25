@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getSupportLinkUrl } from "../config";
+import { PATH_DATA } from "../app.constants";
 
 export function buildUrlFromRequest(req: Request): string {
   return `${req.protocol}://${req.get("host")}${req.originalUrl}`;
@@ -25,7 +25,7 @@ export function outboundContactUsLinksMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  let contactUsLinkUrl = getSupportLinkUrl();
+  let contactUsLinkUrl = `${req.protocol}://${req.get("host")}${PATH_DATA.CONTACT.url}`;
   const fromUrl = buildUrlFromRequest(req);
 
   contactUsLinkUrl = appendFromUrlWhenTriagePageUrl(contactUsLinkUrl, fromUrl);

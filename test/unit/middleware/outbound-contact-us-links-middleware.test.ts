@@ -19,8 +19,12 @@ describe("Middleware", () => {
 
     beforeEach(() => {
       req = {
+        protocol: "https",
+        headers: {
+          host: "home.account.gov.uk",
+        },
+        originalUrl: "/contact-gov-uk-one-login",
         cookies: {},
-        headers: {},
         session: {
           id: "session-id",
           destroy: sinon.stub().callsArg(0),
@@ -32,6 +36,9 @@ describe("Middleware", () => {
         get: function (headerName: string) {
           if (headerName === "Referrer") {
             return this.headers["referer"] || this.headers["referrer"];
+          }
+          if (headerName === "host") {
+            return "home.account.gov.uk";
           }
         },
       } as any;
@@ -55,6 +62,13 @@ describe("Middleware", () => {
       expect(res.locals).to.not.have.property("contactUsLinkUrl");
       outboundContactUsLinksMiddleware(req, res, next);
       expect(res.locals).to.have.property("contactUsLinkUrl");
+    });
+    it("should set `res.locals.contactUsLinkUrl correct value`", () => {
+      expect(res.locals).to.not.have.property("contactUsLinkUrl");
+      outboundContactUsLinksMiddleware(req, res, next);
+      expect(res.locals).to.have.property("contactUsLinkUrl");
+      expect(res.locals.contactUsLinkUrl).to.equal("https://home.account.gov.uk/contact-gov-uk-one-login?" +
+        "fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fcontact-gov-uk-one-login");
     });
   });
 

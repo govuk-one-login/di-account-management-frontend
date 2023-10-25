@@ -79,6 +79,8 @@ const buildContactEmailServiceUrlAndSaveDataToSession = (req: Request): URL => {
 
 const getFromUrlAndSaveIt = (request: Request): string => {
   const fromURLFromRequest = request.query.fromURL as string;
+  logger.info(`From URL is: ${fromURLFromRequest}`);
+  logger.info(`isValidUrl is: ${isValidUrl(fromURLFromRequest)}`);
   if (fromURLFromRequest && isValidUrl(fromURLFromRequest)) {
     request.session.fromURL = fromURLFromRequest;
     return fromURLFromRequest;

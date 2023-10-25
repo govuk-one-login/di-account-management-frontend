@@ -186,7 +186,3 @@ export function showContactGuidance(): boolean {
 export function getContactEmailServiceUrl(): string {
   return process.env.CONTACT_EMAIL_SERVICE_URL;
 }
-
-export function getSupportLinkUrl(): string {
-  return process.env.URL_FOR_SUPPORT_LINKS || "/contact-us";
-}
