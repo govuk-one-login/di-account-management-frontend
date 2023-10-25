@@ -3,7 +3,7 @@
 {% set pageTitleName = 'pages.contact.title' | translate %}
 {% set hideAccountNavigation = true %}
 {% set hidePhaseBanner = true %}
-
+{% set languageToggle = true %}
 {% block pageContent %}
 
 {% if contactWebchatEnabled %}
@@ -14,7 +14,7 @@
 {% endif %}
 
 <h1 class="govuk-heading-xl">{{'pages.contact.header' | translate}}</h1>
-{% if showContactGuidance %} 
+{% if showContactGuidance %}
   <section>
     {% set section1Paragraphs =  'pages.contact.section1.paragraphs' | translate({ returnObjects: true }) %}
     {% set section1Links =  'pages.contact.section1.links' | translate({ returnObjects: true }) %}
@@ -71,7 +71,7 @@
       {% endset %}
 
       <h3 class="govuk-heading-m">{{'pages.contact.section3.phone.heading' | translate}}</h3>
-    
+
       {% for paragraph in phoneParagraphs1 %}
         <p class="govuk-body">{{ paragraph }}</p>
       {% endfor %}
