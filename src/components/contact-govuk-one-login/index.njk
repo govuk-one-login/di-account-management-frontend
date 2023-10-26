@@ -116,14 +116,17 @@
 
     {{ emailBlock | safe }}
   </section>
-  <hr class="govuk-section-break govuk-section-break--m">
-  <section>
-    {% set section4Paragraphs =  'pages.contact.section4.paragraphs' | translate({ returnObjects: true }) %}
-    <h2 class="govuk-heading-l">{{'pages.contact.section4.heading' | translate}}</h2>
-    {% for paragraph in section4Paragraphs %}
-      <p class="govuk-body">{{ paragraph | safe }}</p>
-    {% endfor %}
-  </section>
+  {% if secondaryContactMethodEnabled %}
+    {# privacy notice section should only be visible if webchat and/or phone contact are enabled #}
+    <hr class="govuk-section-break govuk-section-break--m">
+    <section>
+      {% set section4Paragraphs =  'pages.contact.section4.paragraphs' | translate({ returnObjects: true }) %}
+      <h2 class="govuk-heading-l">{{'pages.contact.section4.heading' | translate}}</h2>
+      {% for paragraph in section4Paragraphs %}
+        <p class="govuk-body">{{ paragraph | safe }}</p>
+      {% endfor %}
+    </section>
+  {% endif %}
 {% endif %}
 
 {% if contactWebchatEnabled %}
