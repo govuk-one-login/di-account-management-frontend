@@ -9,6 +9,8 @@ export async function startGet(req: Request, res: Response): Promise<void> {
   const authUrl = req.oidc.authorizationUrl({
     client_id: req.oidc.metadata.client_id,
     response_type: "code",
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     scope: req.oidc.metadata.scopes,
     state: req.session.state,
     nonce: req.session.nonce,

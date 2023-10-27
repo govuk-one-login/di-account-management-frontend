@@ -5,6 +5,8 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { contactGet } from "../contact-govuk-one-login-controller";
 import { logger } from "../../../utils/logger";
 import * as reference from "../../../utils/referenceCode";
+import { SinonStub, stub } from "sinon";
+import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { I18NextRequest } from "i18next-http-middleware";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
@@ -15,6 +17,7 @@ describe("Contact GOV.UK One Login controller", () => {
   let req: Partial<Request> & Partial<I18NextRequest>;
   let res: Partial<Response>;
   let loggerSpy: sinon.SinonSpy;
+  let sqsClientStub: SinonStub;
   const baseUrl = "https://home.account.gov.uk";
 
   beforeEach(() => {
@@ -88,7 +91,7 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.fromURL).to.equal(validUrl);
+      expect(req.session.parameters.fromURL).to.equal(validUrl);
     });
 
     it("should render contact centre triage page with fromURL from session and signedOut = false ", () => {
@@ -144,13 +147,13 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.fromURL).to.equal(validUrl);
-      expect(req.session.appSessionId).to.equal(appSessionId);
-      expect(req.session.appErrorCode).to.equal(appErrorCode);
+      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.appSessionId).to.equal(appSessionId);
+      expect(req.session.queryParameters.appErrorCode).to.equal(appErrorCode);
       expect(req.session.theme).to.equal(theme);
     });
 
-    it("should render contact centre triage page with invalid fields from the mobile app", () => {
+    it("should render contact centre triage page ignoring invalid fields from the mobile app", () => {
       const validUrl = "https://home.account.gov.uk/security";
       const appSessionId =
         "123456789123456789123456789123456789123456789123456789123456789123456789123456789"; // too long
@@ -174,9 +177,9 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // invalid query data should not be saved into session
-      expect(req.session.fromURL).to.equal(validUrl);
-      expect(req.session.appSessionId).to.be.undefined;
-      expect(req.session.appErrorCode).to.be.undefined;
+      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.appSessionId).to.be.undefined;
+      expect(req.session.queryParameters.appErrorCode).to.be.undefined;
       expect(req.session.theme).to.be.undefined;
     });
 
@@ -185,9 +188,9 @@ describe("Contact GOV.UK One Login controller", () => {
       const appSessionId = "123456789";
       const appErrorCode = "ERRORCODE123";
       const theme = "WaveyTheme";
-      req.session.fromURL = validUrl;
-      req.session.appSessionId = appSessionId;
-      req.session.appErrorCode = appErrorCode;
+      req.session.parameters.fromURL = validUrl;
+      req.session.queryParameters.appSessionId = appSessionId;
+      req.session.queryParameters.appErrorCode = appErrorCode;
       req.session.theme = theme;
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
@@ -206,8 +209,7 @@ describe("Contact GOV.UK One Login controller", () => {
     });
 
     it("should render centre triage page when invalid fromURL is present", () => {
-      const invalidUrl = "DROP * FROM *;";
-      req.query.fromURL = invalidUrl;
+      req.query.fromURL = "DROP * FROM *;";
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
@@ -221,6 +223,9 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
       });
+      expect(loggerSpy).to.have.calledWith(
+        "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
+      );
     });
 
     it("should render centre triage page when no fromURL is present", () => {
@@ -252,6 +257,29 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showSignOut: true,
+        referenceCode: "654321",
+        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
+        webchatSource: "https://example.com",
+        currentUrl: baseUrl,
+        baseUrl,
+        language: "en",
+      });
+    });
+
+    it("should render the contact page when a user is logged out", () => {
+      req.session = {
+        referenceCode: "654321",
+        user: {
+          isAuthenticated: true,
+        },
+      };
+      req.cookies.lo = "true";
+      contactGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+        contactWebchatEnabled: true,
+        contactPhoneEnabled: true,
+        showContactGuidance: true,
+        showSignOut: false,
         referenceCode: "654321",
         contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
         webchatSource: "https://example.com",
@@ -295,6 +323,48 @@ describe("Contact GOV.UK One Login controller", () => {
         },
         "User visited triage page"
       );
+    });
+
+    it("emits an audit event when the user visits the contact page", () => {
+      // Arrange
+      const expectedSessionId = "sessionId";
+      const expectedPersistentSessionId = "persistentSessionId";
+      const expectedTimestamp = 1111;
+
+      sqsClientStub = stub(SQSClient.prototype, "send");
+      const sqsResponse: SendMessageCommandOutput = {
+        $metadata: undefined,
+        MessageId: "message-id",
+        MD5OfMessageBody: "md5-hash",
+      };
+      process.env.AUDIT_QUEUE_URL = "queue";
+      sqsClientStub.returns(sqsResponse);
+
+      req.session = {
+        user: {
+          isAuthenticated: true,
+          sessionId: expectedSessionId,
+          persistentSessionId: expectedPersistentSessionId,
+        },
+        timestamp: expectedTimestamp,
+        fromURL: "fromUrl",
+        appErrorCode: "app-error-code",
+        appSessionId: "app-session-id",
+        referenceCode: "reference-code",
+      };
+
+      req.query.fromURL = "https://gov.uk/ogd";
+      req.query.appErrorCode = "app-error-code";
+      req.query.appSessionId = "app-session-id";
+
+      // Act
+      contactGet(req as Request, res as Response);
+
+      // Assert
+      expect(loggerSpy).to.have.calledWith("completed updating session");
+
+      // Tidy up
+      sqsClientStub.restore();
     });
   });
 });

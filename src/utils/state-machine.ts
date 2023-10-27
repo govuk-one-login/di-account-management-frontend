@@ -13,6 +13,11 @@ type AccountManagementEvent =
   | "AUTHENTICATED"
   | "RESEND_CODE";
 
+interface StateAction {
+  value: StateValue;
+  events: EventType[];
+}
+
 const amStateMachine = createMachine<AccountManagementEvent>({
   id: "AM",
   initial: "AUTHENTICATE",
@@ -42,7 +47,7 @@ const amStateMachine = createMachine<AccountManagementEvent>({
 function getNextState(
   from: StateValue,
   to: AccountManagementEvent
-): { value: StateValue; events: EventType[] } {
+): StateAction {
   const t = amStateMachine.transition(from, to);
   return {
     value: t.value,
@@ -50,7 +55,7 @@ function getNextState(
   };
 }
 
-function getInitialState(): { value: StateValue; events: EventType[] } {
+function getInitialState(): StateAction {
   return {
     value: amStateMachine.initialState.value,
     events: amStateMachine.initialState.nextEvents,
@@ -64,4 +69,10 @@ function canTransition(
   return !!amStateMachine.transition(currentState, event).changed;
 }
 
-export { getNextState, canTransition, UserJourney, getInitialState };
+export {
+  getNextState,
+  canTransition,
+  UserJourney,
+  getInitialState,
+  StateAction,
+};

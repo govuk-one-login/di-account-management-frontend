@@ -86,6 +86,9 @@ export const PATH_DATA: {
   THANKS_TXT: {
     url: "/.well-known/thanks.txt",
   },
+  TRACK_AND_REDIRECT: {
+    url: "/track-and-redirect",
+  },
 };
 
 export const WELL_KNOWN_FILES = {
@@ -138,6 +141,7 @@ export const ERROR_MESSAGES = {
   FORBIDDEN: "Unauthorized HTTP request",
   INTERNAL_SERVER_ERROR: "Internal server error",
   PAGE_NOT_FOUND: "Request page not found",
+  INVALID_URL: "Invalid URL",
 };
 
 export const ERROR_CODES = {
@@ -149,4 +153,9 @@ export const ERROR_CODES = {
 export const ENVIRONMENT_NAME = {
   PROD: "production",
   DEV: "development",
+};
+
+export const EVENT_NAME = {
+  HOME_TRIAGE_PAGE_VISIT: "HOME_TRIAGE_PAGE_VISIT",
+  HOME_TRIAGE_PAGE_EMAIL: "HOME_TRIAGE_PAGE_EMAIL",
 };

@@ -58,6 +58,7 @@ import { redirectsRouter } from "./components/redirects/redirects-routes";
 import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes";
 import { getSessionStore } from "./utils/session-store";
 import { webchatRouter } from "./components/webchat-demo/webchat-demo-routes";
+import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -157,6 +158,7 @@ async function createApp(): Promise<express.Application> {
   if (supportWebchatDemo()) {
     app.use(webchatRouter);
   }
+  app.use(trackAndRedirectRouter);
 
   // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy
