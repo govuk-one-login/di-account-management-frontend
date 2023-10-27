@@ -7,7 +7,11 @@ import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
-import { getInitialState, getNextState } from "../../utils/state-machine";
+import {
+  getInitialState,
+  getNextState,
+  UserJourney,
+} from "../../utils/state-machine";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -19,7 +23,7 @@ const REDIRECT_PATHS: { [key: string]: string } = {
 };
 
 export function enterPasswordGet(req: Request, res: Response): void {
-  const requestType = req.query.type as string;
+  const requestType = req.query.type as UserJourney;
 
   if (!requestType) {
     return res.redirect(PATH_DATA.SETTINGS.url);
@@ -37,7 +41,7 @@ export function enterPasswordPost(
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    const requestType = req.body.requestType;
+    const requestType = req.body.requestType as UserJourney;
     const isAuthenticated = await service.authenticated(
       accessToken,
       email,

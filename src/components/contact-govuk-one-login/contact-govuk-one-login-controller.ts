@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { logger } from "../../utils/logger";
 import { isSafeString, isValidUrl } from "../../utils/strings";
 import {
-  getContactEmailServiceUrl,
   getWebchatUrl,
   showContactGuidance,
   supportPhoneContact,
@@ -11,21 +10,25 @@ import {
 import { generateReferenceCode } from "../../utils/referenceCode";
 import { eventService } from "./event-service";
 import { AuditEvent, Extensions, Platform, User } from "./types";
+import { EVENT_NAME, PATH_DATA } from "../../app.constants";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MISSING_SESSION_VALUE_SPECIAL_CASE: string = "";
 
 export function contactGet(req: Request, res: Response): void {
+  logger.info(req.session, "The session contains:");
   updateSessionFromQueryParams(req.session, req.query);
-  const audit_event = buildAuditEvent(req, res);
+  const audit_event = buildAuditEvent(req, EVENT_NAME.HOME_TRIAGE_PAGE_VISIT);
   logUserVisitsContactPage(audit_event);
   sendUserVisitsContactPageAuditEvent(audit_event);
   render(req, res);
 }
 
 const updateSessionFromQueryParams = (session: any, queryParams: any): void => {
-  if (isValidUrl(queryParams.fromURL as string)) {
-    session.fromURL = queryParams.fromURL;
+  if (isValidUrl(queryParams.fromURL)) {
+    session.queryParams = {
+      fromURL: queryParams.fromURL,
+    };
   } else {
     logger.error(
       "fromURL in request query for contact-govuk-one-login page did not pass validation"
@@ -39,6 +42,7 @@ const updateSessionFromQueryParams = (session: any, queryParams: any): void => {
   if (!session.referenceCode) {
     session.referenceCode = generateReferenceCode();
   }
+  logger.info("completed updating session");
 };
 
 const copySafeQueryParamToSession = (
@@ -50,28 +54,32 @@ const copySafeQueryParamToSession = (
     queryParams[paramName] &&
     isSafeString(queryParams[paramName] as string)
   ) {
-    session[paramName] = queryParams[paramName];
+    session.queryParams[paramName] = queryParams[paramName];
   } else {
     logger.error(
       `${paramName} in request query for contact-govuk-one-login page did not pass validation`
     );
   }
 };
+type EventNameType = typeof EVENT_NAME[keyof typeof EVENT_NAME];
 
-const buildAuditEvent = (req: Request, res: Response): AuditEvent => {
+export const buildAuditEvent = (
+  req: Request,
+  eventName: EventNameType
+): AuditEvent => {
   const session: any = req.session;
   let sessionId: string;
 
-  if (userHasSignedIntoHomeRelyingParty(res)) {
-    sessionId = res.locals.sessionId;
+  if (userHasSignedIntoHomeRelyingParty(session)) {
+    sessionId = session.user.sessionId;
   } else {
     sessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
   }
 
   let persistentSessionId: string;
 
-  if (res.locals.persistentSessionId) {
-    persistentSessionId = res.locals.persistentSessionId;
+  if (session.user?.persistentSessionId) {
+    persistentSessionId = session.user.persistentSessionId;
   } else {
     persistentSessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
   }
@@ -88,21 +96,21 @@ const buildAuditEvent = (req: Request, res: Response): AuditEvent => {
   let appSessionId: string;
 
   if (userHasComeFromTheApp(session)) {
-    appSessionId = req.session.appSessionId;
+    appSessionId = req.session.queryParameters.appSessionId;
   } else {
     appSessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
   }
 
   const extensions: Extensions = {
-    from_url: req.session.fromURL,
-    app_error_code: req.session.appErrorCode,
+    from_url: req.session.queryParameters.fromURL,
+    app_error_code: req.session.queryParameters.appErrorCode,
     app_session_id: appSessionId,
     reference_code: req.session.referenceCode,
   };
 
   return {
-    timestamp: Date.now(),
-    event_name: "HOME_TRIAGE_PAGE_VISIT",
+    timestamp: req.session.timestamp,
+    event_name: eventName,
     component_id: "HOME",
     user: user,
     platform: platform,
@@ -110,44 +118,12 @@ const buildAuditEvent = (req: Request, res: Response): AuditEvent => {
   };
 };
 
-const userHasSignedIntoHomeRelyingParty = (res: Response): boolean => {
-  return !!res.locals?.sessionId;
+const userHasSignedIntoHomeRelyingParty = (session: any): boolean => {
+  return !!session.user?.sessionId;
 };
 
 const userHasComeFromTheApp = (session: any): boolean => {
-  return !!session.appSessionId;
-};
-
-const buildContactEmailServiceUrl = (req: Request): URL => {
-  const contactEmailServiceUrl: URL = new URL(getContactEmailServiceUrl());
-
-  if (req.session.fromURL) {
-    contactEmailServiceUrl.searchParams.append("fromURL", req.session.fromURL);
-  } else {
-    logger.info(
-      "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
-    );
-  }
-
-  if (req.session.theme) {
-    contactEmailServiceUrl.searchParams.append("theme", req.session.theme);
-  }
-
-  if (req.session.appSessionId) {
-    contactEmailServiceUrl.searchParams.append(
-      "appSessionId",
-      req.session.appSessionId
-    );
-  }
-
-  if (req.session.appErrorCode) {
-    contactEmailServiceUrl.searchParams.append(
-      "appErrorCode",
-      req.session.appErrorCode
-    );
-  }
-
-  return contactEmailServiceUrl;
+  return !!session.queryParameters.appSessionId;
 };
 
 const logUserVisitsContactPage = (event: AuditEvent) => {
@@ -185,7 +161,7 @@ const render = (req: Request, res: Response): void => {
     showContactGuidance: showContactGuidance(),
     showSignOut: isAuthenticated && !isLoggedOut,
     referenceCode,
-    contactEmailServiceUrl: buildContactEmailServiceUrl(req).toString(),
+    contactEmailServiceUrl: PATH_DATA.TRACK_AND_REDIRECT.url,
     webchatSource: getWebchatUrl(),
     currentUrl: originalUrl,
     baseUrl,

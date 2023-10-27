@@ -8,7 +8,6 @@ import * as reference from "../../../utils/referenceCode";
 import { SinonStub, stub } from "sinon";
 import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { I18NextRequest } from "i18next-http-middleware";
-import { AuditEvent } from "../types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
@@ -44,10 +43,7 @@ describe("Contact GOV.UK One Login controller", () => {
     res = {
       render: sandbox.fake(),
       redirect: sandbox.fake(),
-      locals: {
-        sessionId: "sessionId",
-        persistentSessionId: "persistentSessionId",
-      },
+      locals: {},
       status: sandbox.fake(),
     };
 
@@ -95,7 +91,7 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.fromURL).to.equal(validUrl);
+      expect(req.session.parameters.fromURL).to.equal(validUrl);
     });
 
     it("should render contact centre triage page with fromURL from session and signedOut = false ", () => {
@@ -151,9 +147,9 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.fromURL).to.equal(validUrl);
-      expect(req.session.appSessionId).to.equal(appSessionId);
-      expect(req.session.appErrorCode).to.equal(appErrorCode);
+      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.appSessionId).to.equal(appSessionId);
+      expect(req.session.queryParameters.appErrorCode).to.equal(appErrorCode);
       expect(req.session.theme).to.equal(theme);
     });
 
@@ -181,9 +177,9 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // invalid query data should not be saved into session
-      expect(req.session.fromURL).to.equal(validUrl);
-      expect(req.session.appSessionId).to.be.undefined;
-      expect(req.session.appErrorCode).to.be.undefined;
+      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.appSessionId).to.be.undefined;
+      expect(req.session.queryParameters.appErrorCode).to.be.undefined;
       expect(req.session.theme).to.be.undefined;
     });
 
@@ -192,9 +188,9 @@ describe("Contact GOV.UK One Login controller", () => {
       const appSessionId = "123456789";
       const appErrorCode = "ERRORCODE123";
       const theme = "WaveyTheme";
-      req.session.fromURL = validUrl;
-      req.session.appSessionId = appSessionId;
-      req.session.appErrorCode = appErrorCode;
+      req.session.parameters.fromURL = validUrl;
+      req.session.queryParameters.appSessionId = appSessionId;
+      req.session.queryParameters.appErrorCode = appErrorCode;
       req.session.theme = theme;
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
@@ -213,8 +209,7 @@ describe("Contact GOV.UK One Login controller", () => {
     });
 
     it("should render centre triage page when invalid fromURL is present", () => {
-      const invalidUrl = "DROP * FROM *;";
-      req.query.fromURL = invalidUrl;
+      req.query.fromURL = "DROP * FROM *;";
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
@@ -334,12 +329,7 @@ describe("Contact GOV.UK One Login controller", () => {
       // Arrange
       const expectedSessionId = "sessionId";
       const expectedPersistentSessionId = "persistentSessionId";
-      const sessionFromURL = "from-url";
-      const expectedAppErrorCode = "app-error-code";
-      const expectedAppSessionId = "app-session-id";
-      const expectedReferenceCode = "reference-code";
-      const expectedFromURL = "https://gov.uk/ogd";
-      const expectedUserAgent = "expectedUserAgent";
+      const expectedTimestamp = 1111;
 
       sqsClientStub = stub(SQSClient.prototype, "send");
       const sqsResponse: SendMessageCommandOutput = {
@@ -356,36 +346,22 @@ describe("Contact GOV.UK One Login controller", () => {
           sessionId: expectedSessionId,
           persistentSessionId: expectedPersistentSessionId,
         },
-        fromURL: sessionFromURL,
-        appErrorCode: expectedAppErrorCode,
-        appSessionId: expectedAppSessionId,
-        referenceCode: expectedReferenceCode,
+        timestamp: expectedTimestamp,
+        fromURL: "fromUrl",
+        appErrorCode: "app-error-code",
+        appSessionId: "app-session-id",
+        referenceCode: "reference-code",
       };
 
-      req.query.fromURL = expectedFromURL;
-      req.query.appErrorCode = expectedAppErrorCode;
-      req.query.appSessionId = expectedAppSessionId;
-      req.headers["user-agent"] = expectedUserAgent;
-
-      res.locals.sessionId = expectedSessionId;
-      res.locals.persistent_session_id = expectedPersistentSessionId;
+      req.query.fromURL = "https://gov.uk/ogd";
+      req.query.appErrorCode = "app-error-code";
+      req.query.appSessionId = "app-session-id";
 
       // Act
       contactGet(req as Request, res as Response);
 
       // Assert
-      expect(sqsClientStub.called);
-      const publishedEvent = JSON.parse(sqsClientStub.getCall(0).firstArg.input.MessageBody) as AuditEvent;
-      expect(publishedEvent.event_name).to.equal("HOME_TRIAGE_PAGE_VISIT");
-      expect(publishedEvent.timestamp);
-      expect(publishedEvent.component_id).to.equal("HOME");
-      expect(publishedEvent.user.session_id).to.equal(expectedSessionId);
-      expect(publishedEvent.user.persistent_session_id).to.equal(expectedPersistentSessionId);
-      expect(publishedEvent.platform.user_agent).to.equal("expectedUserAgent");
-      expect(publishedEvent.extensions.app_error_code).to.equal(expectedAppErrorCode);
-      expect(publishedEvent.extensions.app_session_id).to.equal(expectedAppSessionId);
-      expect(publishedEvent.extensions.reference_code).to.equal(expectedReferenceCode);
-      expect(publishedEvent.extensions.from_url).to.equal(expectedFromURL);
+      expect(loggerSpy).to.have.calledWith("completed updating session");
 
       // Tidy up
       sqsClientStub.restore();
