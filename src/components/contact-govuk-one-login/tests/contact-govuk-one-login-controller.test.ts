@@ -91,7 +91,7 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
     });
 
     it("should render contact centre triage page with fromURL from session and signedOut = false ", () => {
@@ -147,7 +147,7 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
       expect(req.session.queryParameters.appSessionId).to.equal(appSessionId);
       expect(req.session.queryParameters.appErrorCode).to.equal(appErrorCode);
       expect(req.session.theme).to.equal(theme);
@@ -177,7 +177,7 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // invalid query data should not be saved into session
-      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
       expect(req.session.queryParameters.appSessionId).to.be.undefined;
       expect(req.session.queryParameters.appErrorCode).to.be.undefined;
       expect(req.session.theme).to.be.undefined;
@@ -188,7 +188,7 @@ describe("Contact GOV.UK One Login controller", () => {
       const appSessionId = "123456789";
       const appErrorCode = "ERRORCODE123";
       const theme = "WaveyTheme";
-      req.session.parameters.fromURL = validUrl;
+      req.session.queryParameters.fromURL = validUrl;
       req.session.queryParameters.appSessionId = appSessionId;
       req.session.queryParameters.appErrorCode = appErrorCode;
       req.session.theme = theme;
