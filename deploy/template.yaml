@@ -145,7 +145,7 @@ Mappings:
       SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "0"
-      SUPPORTPHONECONTACT: "0"
+      SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
     build:
