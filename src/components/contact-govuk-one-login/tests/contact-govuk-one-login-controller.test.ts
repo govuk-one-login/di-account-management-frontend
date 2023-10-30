@@ -9,7 +9,6 @@ import { SinonStub, stub } from "sinon";
 import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { I18NextRequest } from "i18next-http-middleware";
 import { AuditEvent } from "../types";
-import { SendMessageCommandInput } from "@aws-sdk/client-sqs/dist-types/commands/SendMessageCommand";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
