@@ -6,6 +6,7 @@ import {
   getKmsKeyId,
   getLocalStackBaseUrl,
 } from "../config";
+import { SQSClientConfig } from "@aws-sdk/client-sqs";
 
 //refer to seed.yaml
 const LOCAL_KEY_ID = "ff275b92-0def-4dfc-b0f6-87c96b26c6c7";
@@ -17,6 +18,11 @@ export interface KmsConfig {
 
 export interface SnsConfig {
   awsConfig: AwsConfig;
+}
+
+export interface SqsConfig {
+  awsConfig: AwsConfig;
+  sqsClientConfig: SQSClientConfig;
 }
 
 export interface AwsConfig {
@@ -51,6 +57,31 @@ export function getSNSConfig(): SnsConfig {
 
   return {
     awsConfig: {
+      region: getAwsRegion(),
+    },
+  };
+}
+
+export function getSQSConfig(): SqsConfig {
+  if (getAppEnv() === "local") {
+    return {
+      awsConfig: { ...getLocalStackAWSConfig() },
+      sqsClientConfig: {
+        region: getAwsRegion(),
+        endpoint: "http://localstack:4566",  // NOSONAR: http used locally
+        credentials: {
+          accessKeyId: "na",
+          secretAccessKey: "na",
+        }
+      },
+    };
+  }
+
+  return {
+    awsConfig: {
+      region: getAwsRegion(),
+    },
+    sqsClientConfig: {
       region: getAwsRegion(),
     },
   };

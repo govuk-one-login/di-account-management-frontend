@@ -66,3 +66,6 @@ aws --endpoint-url http://localhost:4566 dynamodb update-time-to-live \
   --table-name account-mgmt-frontend-SessionStore \
   --region eu-west-2 \
   --time-to-live-specification Enabled=true,AttributeName=expires
+
+aws sqs --endpoint-url http://localhost:4566 create-queue --queue-name audit-events \
+  --region eu-west-2
