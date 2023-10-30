@@ -26,7 +26,7 @@ describe("change password controller", () => {
 
     req = {
       body: {},
-      session: { user: { state: { changePassword: {} } } },
+      session: { user: { state: { changePassword: {} } } } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
       t: sandbox.fake(),
@@ -57,7 +57,7 @@ describe("change password controller", () => {
         updatePassword: sandbox.fake.returns({ success: true }),
       };
 
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.password = "Password1";
 
       await changePasswordPost(fakeService)(req as Request, res as Response);
@@ -74,7 +74,7 @@ describe("change password controller", () => {
           code: ERROR_CODES.NEW_PASSWORD_SAME_AS_EXISTING,
         }),
       };
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       await changePasswordPost(fakeService)(req as Request, res as Response);
 
       expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
@@ -87,7 +87,7 @@ describe("change password controller", () => {
           code: ERROR_CODES.PASSWORD_IS_COMMON,
         }),
       };
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       await changePasswordPost(fakeService)(req as Request, res as Response);
 
       expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);

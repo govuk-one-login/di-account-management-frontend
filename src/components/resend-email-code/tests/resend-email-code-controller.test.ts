@@ -21,7 +21,7 @@ describe("check your email controller", () => {
 
     req = {
       body: {},
-      session: { user: {} },
+      session: { user: {} } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
     };
@@ -41,7 +41,7 @@ describe("check your email controller", () => {
     it("should render resend email code view", () => {
       req.session.user = {
         newEmailAddress: "test@test.com",
-      };
+      } as any;
       resendEmailCodeGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("resend-email-code/index.njk", {
@@ -61,7 +61,7 @@ describe("check your email controller", () => {
         email: "test@dl.com",
         newEmailAddress: "test@test.com",
         state: { changeEmail: getInitialState() },
-      };
+      } as any;
       req.cookies.lng = "en";
 
       await resendEmailCodePost(fakeService)(req as Request, res as Response);

@@ -87,10 +87,10 @@ export function oidcAuthCallbackGet(
     req.session.user = {
       email: userInfoResponse.email,
       phoneNumber: userInfoResponse.phone_number,
-      isPhoneNumberVerified: userInfoResponse.phone_number_verified,
+      isPhoneNumberVerified: userInfoResponse.phone_number_verified as boolean,
       subjectId: userInfoResponse.sub,
-      legacySubjectId: userInfoResponse.legacy_subject_id,
-      publicSubjectId: userInfoResponse.public_subject_id,
+      legacySubjectId: userInfoResponse.legacy_subject_id as string,
+      publicSubjectId: userInfoResponse.public_subject_id as string,
       tokens: {
         idToken: tokenResponse.id_token,
         accessToken: tokenResponse.access_token,

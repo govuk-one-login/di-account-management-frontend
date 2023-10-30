@@ -20,7 +20,7 @@ describe("check your phone controller", () => {
 
     req = {
       body: {},
-      session: { user: { state: { changePhoneNumber: {} } } },
+      session: { user: { state: { changePhoneNumber: {} } } } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
     };
@@ -50,7 +50,7 @@ describe("check your phone controller", () => {
         updatePhoneNumber: sandbox.fake.returns(true),
       };
 
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.code = "123456";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
@@ -66,7 +66,7 @@ describe("check your phone controller", () => {
         updatePhoneNumber: sandbox.fake.returns(false),
       };
 
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.t = sandbox.fake.returns("translated string");
       req.body.code = "678988";
       res.locals.sessionId = "123456-djjad";

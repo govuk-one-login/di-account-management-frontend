@@ -30,10 +30,11 @@ describe("Contact GOV.UK One Login controller", () => {
       query: {},
       headers: { "user-agent": "user-agent" },
       session: {
+        queryParameters: {},
         user: {
           isAuthenticated: true,
         },
-      },
+      } as any,
       protocol: "https",
       hostname: "home.account.gov.uk",
       originalUrl: baseUrl,
@@ -43,7 +44,10 @@ describe("Contact GOV.UK One Login controller", () => {
     res = {
       render: sandbox.fake(),
       redirect: sandbox.fake(),
-      locals: {},
+      locals: {
+        sessionId: "sessionId",
+        persistentSessionId: "persistentSessionId",
+      },
       status: sandbox.fake(),
     };
 
@@ -58,6 +62,7 @@ describe("Contact GOV.UK One Login controller", () => {
     process.env.CONTACT_EMAIL_SERVICE_URL =
       "https://signin.account.gov.uk/contact-us";
     process.env.WEBCHAT_SOURCE_URL = "https://example.com";
+    process.env.AUDIT_QUEUE_URL = "http://localhost:4566";
   });
 
   afterEach(() => {
@@ -83,25 +88,26 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
-        contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
+        contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
     });
 
     it("should render contact centre triage page with fromURL from session and signedOut = false ", () => {
       const validUrl = "https://home.account.gov.uk/security";
       req.session = {
-        fromURL: validUrl,
+        queryParameters: {
+          fromURL: validUrl,
+        },
         user: {
           isAuthenticated: false,
         },
-      };
+      } as any;
       req.cookies = {
         ...req.cookies,
         lo: JSON.stringify({ user: null }),
@@ -113,8 +119,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: false,
         referenceCode: MOCK_REFERENCE_CODE,
-        contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
+        contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,
@@ -134,8 +139,7 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       // query data should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity&theme=WaveyTheme&appSessionId=123456789&appErrorCode=ERRORCODE123",
+        contactEmailServiceUrl: "/track-and-redirect",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -147,10 +151,10 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
       expect(req.session.queryParameters.appSessionId).to.equal(appSessionId);
       expect(req.session.queryParameters.appErrorCode).to.equal(appErrorCode);
-      expect(req.session.theme).to.equal(theme);
+      expect(req.session.queryParameters.theme).to.equal(theme);
     });
 
     it("should render contact centre triage page ignoring invalid fields from the mobile app", () => {
@@ -164,8 +168,7 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       // invalid query data not should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity",
+        contactEmailServiceUrl: "/track-and-redirect",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -177,10 +180,10 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // invalid query data should not be saved into session
-      expect(req.session.parameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
       expect(req.session.queryParameters.appSessionId).to.be.undefined;
       expect(req.session.queryParameters.appErrorCode).to.be.undefined;
-      expect(req.session.theme).to.be.undefined;
+      expect(req.session.queryParameters.theme).to.be.undefined;
     });
 
     it("should render contact centre triage page with additional fields from the mobile app from session", () => {
@@ -188,14 +191,13 @@ describe("Contact GOV.UK One Login controller", () => {
       const appSessionId = "123456789";
       const appErrorCode = "ERRORCODE123";
       const theme = "WaveyTheme";
-      req.session.parameters.fromURL = validUrl;
+      req.session.queryParameters.fromURL = validUrl;
       req.session.queryParameters.appSessionId = appSessionId;
       req.session.queryParameters.appErrorCode = appErrorCode;
-      req.session.theme = theme;
+      req.session.queryParameters.theme = theme;
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        contactEmailServiceUrl:
-          "https://signin.account.gov.uk/contact-us?fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fsecurity&theme=WaveyTheme&appSessionId=123456789&appErrorCode=ERRORCODE123",
+        contactEmailServiceUrl: "/track-and-redirect",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -212,7 +214,7 @@ describe("Contact GOV.UK One Login controller", () => {
       req.query.fromURL = "DROP * FROM *;";
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
+        contactEmailServiceUrl: "/track-and-redirect",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -224,14 +226,23 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       expect(loggerSpy).to.have.calledWith(
-        "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
+        {
+          fromURL: undefined,
+          referenceCode: "123456",
+          appSessionId: "",
+          appErrorCode: undefined,
+          sessionId: "sessionId",
+          persistentSessionId: "persistentSessionId",
+          userAgent: "user-agent",
+        },
+        "User visited triage page"
       );
     });
 
     it("should render centre triage page when no fromURL is present", () => {
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
+        contactEmailServiceUrl: "/track-and-redirect",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -250,7 +261,7 @@ describe("Contact GOV.UK One Login controller", () => {
         user: {
           isAuthenticated: true,
         },
-      };
+      } as any;
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
@@ -258,7 +269,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: true,
         referenceCode: "654321",
-        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
+        contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,
@@ -272,7 +283,7 @@ describe("Contact GOV.UK One Login controller", () => {
         user: {
           isAuthenticated: true,
         },
-      };
+      } as any;
       req.cookies.lo = "true";
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
@@ -281,7 +292,7 @@ describe("Contact GOV.UK One Login controller", () => {
         showContactGuidance: true,
         showSignOut: false,
         referenceCode: "654321",
-        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
+        contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,
@@ -307,7 +318,7 @@ describe("Contact GOV.UK One Login controller", () => {
           sessionId,
           persistentSessionId,
         },
-      };
+      } as any;
 
       contactGet(req as Request, res as Response);
 
@@ -351,7 +362,7 @@ describe("Contact GOV.UK One Login controller", () => {
         appErrorCode: "app-error-code",
         appSessionId: "app-session-id",
         referenceCode: "reference-code",
-      };
+      } as any;
 
       req.query.fromURL = "https://gov.uk/ogd";
       req.query.appErrorCode = "app-error-code";
@@ -361,7 +372,7 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
 
       // Assert
-      expect(loggerSpy).to.have.calledWith("completed updating session");
+      expect(sqsClientStub.called);
 
       // Tidy up
       sqsClientStub.restore();

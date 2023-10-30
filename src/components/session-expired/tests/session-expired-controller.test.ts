@@ -14,8 +14,8 @@ describe("session expired controller", () => {
     sandbox = sinon.createSandbox();
     req = {
       body: {},
-      session: { user: sinon.fake() },
-      oidc: { authorizationUrl: sandbox.fake(), metadata: {} },
+      session: { user: sinon.fake() } as any,
+      oidc: { authorizationUrl: sandbox.fake(), metadata: {} as any } as any,
     };
     res = {
       render: sandbox.fake(),

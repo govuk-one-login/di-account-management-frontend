@@ -128,7 +128,7 @@ describe("delete account controller", () => {
 
         req.session.user.email = "test@test.com";
         req.session.user.subjectId = "public-subject-id";
-        req.session.user.tokens = { accessToken: "token" };
+        req.session.user.tokens = { accessToken: "token" } as any;
         req.oidc = {
           endSessionUrl: sandbox.fake.returns("logout-url"),
         };

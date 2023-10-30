@@ -18,7 +18,7 @@ describe("callback controller", () => {
     req = {
       body: {},
       query: {},
-      session: { user: {}, destroy: sandbox.fake() },
+      session: { user: {}, destroy: sandbox.fake() } as any,
       t: sandbox.fake(),
       oidc: {
         callbackParams: sandbox.fake(),

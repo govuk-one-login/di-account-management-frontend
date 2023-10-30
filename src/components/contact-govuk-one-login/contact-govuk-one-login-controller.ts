@@ -10,23 +10,30 @@ import {
 import { generateReferenceCode } from "../../utils/referenceCode";
 import { eventService } from "./event-service";
 import { AuditEvent, Extensions, Platform, User } from "./types";
-import { EVENT_NAME, PATH_DATA } from "../../app.constants";
+import { EVENT_NAME, ParamName, PATH_DATA } from "../../app.constants";
+import { Session } from "express-session";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MISSING_SESSION_VALUE_SPECIAL_CASE: string = "";
 
 export function contactGet(req: Request, res: Response): void {
-  logger.info(req.session, "The session contains:");
   updateSessionFromQueryParams(req.session, req.query);
-  const audit_event = buildAuditEvent(req, EVENT_NAME.HOME_TRIAGE_PAGE_VISIT);
+  const audit_event = buildAuditEvent(
+    req,
+    res,
+    EVENT_NAME.HOME_TRIAGE_PAGE_VISIT
+  );
   logUserVisitsContactPage(audit_event);
   sendUserVisitsContactPageAuditEvent(audit_event);
   render(req, res);
 }
 
-const updateSessionFromQueryParams = (session: any, queryParams: any): void => {
+const updateSessionFromQueryParams = (
+  session: Session,
+  queryParams: any
+): void => {
   if (isValidUrl(queryParams.fromURL)) {
-    session.queryParams = {
+    session.queryParameters = {
       fromURL: queryParams.fromURL,
     };
   } else {
@@ -42,19 +49,18 @@ const updateSessionFromQueryParams = (session: any, queryParams: any): void => {
   if (!session.referenceCode) {
     session.referenceCode = generateReferenceCode();
   }
-  logger.info("completed updating session");
 };
 
 const copySafeQueryParamToSession = (
-  session: any,
+  session: Session,
   queryParams: any,
-  paramName: string
+  paramName: ParamName
 ) => {
   if (
     queryParams[paramName] &&
     isSafeString(queryParams[paramName] as string)
   ) {
-    session.queryParams[paramName] = queryParams[paramName];
+    session.queryParameters[paramName] = queryParams[paramName];
   } else {
     logger.error(
       `${paramName} in request query for contact-govuk-one-login page did not pass validation`
@@ -65,21 +71,22 @@ type EventNameType = typeof EVENT_NAME[keyof typeof EVENT_NAME];
 
 export const buildAuditEvent = (
   req: Request,
+  res: Response,
   eventName: EventNameType
 ): AuditEvent => {
-  const session: any = req.session;
+  const session = req.session;
   let sessionId: string;
 
-  if (userHasSignedIntoHomeRelyingParty(session)) {
-    sessionId = session.user.sessionId;
+  if (userHasSignedIntoHomeRelyingParty(res)) {
+    sessionId = res.locals.sessionId;
   } else {
     sessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
   }
 
   let persistentSessionId: string;
 
-  if (session.user?.persistentSessionId) {
-    persistentSessionId = session.user.persistentSessionId;
+  if (res.locals.persistentSessionId) {
+    persistentSessionId = res.locals.persistentSessionId;
   } else {
     persistentSessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
   }
@@ -96,14 +103,14 @@ export const buildAuditEvent = (
   let appSessionId: string;
 
   if (userHasComeFromTheApp(session)) {
-    appSessionId = req.session.queryParameters.appSessionId;
+    appSessionId = req.session.queryParameters?.appSessionId;
   } else {
     appSessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
   }
 
   const extensions: Extensions = {
-    from_url: req.session.queryParameters.fromURL,
-    app_error_code: req.session.queryParameters.appErrorCode,
+    from_url: req.session.queryParameters?.fromURL,
+    app_error_code: req.session.queryParameters?.appErrorCode,
     app_session_id: appSessionId,
     reference_code: req.session.referenceCode,
   };
@@ -118,12 +125,12 @@ export const buildAuditEvent = (
   };
 };
 
-const userHasSignedIntoHomeRelyingParty = (session: any): boolean => {
-  return !!session.user?.sessionId;
+const userHasSignedIntoHomeRelyingParty = (res: Response): boolean => {
+  return !!res.locals?.sessionId;
 };
 
 const userHasComeFromTheApp = (session: any): boolean => {
-  return !!session.queryParameters.appSessionId;
+  return !!session.queryParameters?.appSessionId;
 };
 
 const logUserVisitsContactPage = (event: AuditEvent) => {

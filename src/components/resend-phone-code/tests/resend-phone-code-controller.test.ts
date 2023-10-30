@@ -8,7 +8,7 @@ import { getInitialState } from "../../../utils/state-machine";
 
 import {
   resendPhoneCodeGet,
-  resendPhoneCodePost
+  resendPhoneCodePost,
 } from "../resend-phone-code-controller";
 
 describe("resend phone code controller", () => {
@@ -21,7 +21,7 @@ describe("resend phone code controller", () => {
 
     req = {
       body: {},
-      session: { user: {} },
+      session: { user: {} } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
     };
@@ -41,11 +41,11 @@ describe("resend phone code controller", () => {
     it("should render resend phone code view", () => {
       req.session.user = {
         newPhoneNumber: "07111111111",
-      };
+      } as any;
       resendPhoneCodeGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("resend-phone-code/index.njk", {
-        phoneNumberRedacted: '*******1111',
+        phoneNumberRedacted: "*******1111",
         phoneNumber: "07111111111",
       });
     });
@@ -60,10 +60,10 @@ describe("resend phone code controller", () => {
       };
 
       res.locals.sessionId = "123456-djjad";
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "+33645453322";
       req.session.user.email = "test@test.com";
-      req.session.user.state = { changePhoneNumber: getInitialState() }
+      req.session.user.state = { changePhoneNumber: getInitialState() };
 
       await resendPhoneCodePost(fakeService)(req as Request, res as Response);
 
