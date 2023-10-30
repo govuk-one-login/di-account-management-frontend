@@ -80,7 +80,7 @@
     "openid-client": "^5.5.0",
     "p-memoize": "^4.0.1",
     "pino": "^8.15.1",
-    "pino-http": "^6.5.0",
+    "pino-http": "^8.5.1",
     "prettier": "^2.3.2",
     "uuid": "^8.3.2",
     "xss": "^1.0.14",
