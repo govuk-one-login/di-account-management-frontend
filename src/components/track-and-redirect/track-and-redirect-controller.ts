@@ -2,7 +2,7 @@ import { Request } from "express";
 import { getContactEmailServiceUrl } from "../../config";
 import { logger } from "../../utils/logger";
 
-enum ExpectedParams {
+export enum ExpectedParams {
   FromURL = "fromURL",
   Theme = "theme",
   AppSessionId = "appSessionId",
@@ -28,13 +28,5 @@ export const buildContactEmailServiceUrl = (req: Request): URL => {
       logger.info(`Missing ${paramValue} in the request or session.`);
     }
   }
-
-  // Check for any unexpected parameters that might be an attempt to hack
-  for (const param in req.session) {
-    if (!Object.values(ExpectedParams).includes(param as ExpectedParams)) {
-      logger.warn(`Unexpected parameter detected: ${param}`);
-    }
-  }
-
   return contactEmailServiceUrl;
 };
