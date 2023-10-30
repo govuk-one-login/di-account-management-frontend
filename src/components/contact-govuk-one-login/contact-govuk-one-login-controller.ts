@@ -60,6 +60,7 @@ const render = (req: Request, res: Response): void => {
     currentUrl: originalUrl,
     baseUrl,
     language,
+    nonce: res.locals.scriptNonce,
   };
 
   res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);
