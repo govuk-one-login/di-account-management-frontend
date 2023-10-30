@@ -167,4 +167,6 @@ export interface QueryParameters {
   theme?: string;
 }
 
+export const MISSING_SESSION_VALUE_SPECIAL_CASE = "";
+
 export type ParamName = keyof QueryParameters;
