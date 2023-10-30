@@ -16,7 +16,6 @@ const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MISSING_SESSION_VALUE_SPECIAL_CASE: string = "";
 
 export function contactGet(req: Request, res: Response): void {
-  logger.info(req.session, "The session contains:");
   updateSessionFromQueryParams(req.session, req.query);
   const audit_event = buildAuditEvent(req, EVENT_NAME.HOME_TRIAGE_PAGE_VISIT);
   logUserVisitsContactPage(audit_event);
@@ -42,7 +41,6 @@ const updateSessionFromQueryParams = (session: any, queryParams: any): void => {
   if (!session.referenceCode) {
     session.referenceCode = generateReferenceCode();
   }
-  logger.info("completed updating session");
 };
 
 const copySafeQueryParamToSession = (
