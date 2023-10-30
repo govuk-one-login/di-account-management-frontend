@@ -17,7 +17,7 @@ const MISSING_SESSION_VALUE_SPECIAL_CASE : string = "";
 
 export function contactGet(req: Request, res: Response): void {
   updateSessionFromQueryParams(req.session, req.query);
-  const audit_event = buildAuditEvent(req);
+  const audit_event = buildAuditEvent(req, res);
   logUserVisitsContactPage(audit_event);
   sendUserVisitsContactPageAuditEvent(audit_event);
   render(req, res);
@@ -47,20 +47,20 @@ const copySafeQueryParamToSession = (session: any, queryParams: any, paramName: 
   }
 };
 
-const buildAuditEvent = (req: Request): AuditEvent => {
+const buildAuditEvent = (req: Request, res: Response): AuditEvent => {
   const session: any = req.session;
   let sessionId: string;
 
-  if (userHasSignedIntoHomeRelyingParty(session)) {
-    sessionId = session.user.sessionId;
+  if (userHasSignedIntoHomeRelyingParty(res)) {
+    sessionId = res.locals.sessionId;
   } else {
     sessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
   }
 
   let persistentSessionId: string;
 
-  if (session.user?.persistentSessionId) {
-    persistentSessionId = session.user.persistentSessionId;
+  if (res.locals.persistentSessionId) {
+    persistentSessionId = res.locals.persistentSessionId;
   } else {
     persistentSessionId = MISSING_SESSION_VALUE_SPECIAL_CASE;
   }
@@ -97,15 +97,15 @@ const buildAuditEvent = (req: Request): AuditEvent => {
     platform: platform,
     extensions: extensions,
   };
-}
+};
 
-const userHasSignedIntoHomeRelyingParty = (session: any): boolean => {
-  return !!session.user?.sessionId;
-}
+const userHasSignedIntoHomeRelyingParty = (res: Response): boolean => {
+  return !!res.locals?.sessionId;
+};
 
 const userHasComeFromTheApp = (session: any): boolean => {
   return !!session.appSessionId;
-}
+};
 
 const buildContactEmailServiceUrl = (req: Request): URL => {
   const contactEmailServiceUrl: URL = new URL(getContactEmailServiceUrl());
