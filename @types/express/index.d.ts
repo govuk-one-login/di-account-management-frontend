@@ -1,9 +1,9 @@
-import { Session } from "express-session";
 import { Client } from "openid-client";
 import { User } from "../../src/types";
+import { QueryParameters } from "../../src/app.constants";
 
 declare module "express-session" {
-  interface OneLoginSession {
+  interface Session {
     timestamp?: number;
     nonce?: string;
     state?: string;
@@ -11,12 +11,7 @@ declare module "express-session" {
     user?: User;
     user_id?: string;
     referenceCode?: string;
-    queryParameters: {
-      fromURL?: string;
-      appSessionId?: string;
-      appErrorCode?: string;
-      theme?: string;
-    };
+    queryParameters: QueryParameters;
   }
 }
 declare module "express-serve-static-core" {
@@ -24,8 +19,8 @@ declare module "express-serve-static-core" {
     i18n?: {
       language?: string;
     };
+    t?: (string) => string;
     csrfToken?: () => string;
-    session: Session & OneLoginSession;
     oidc?: Client;
     issuerJWKS?: any;
   }

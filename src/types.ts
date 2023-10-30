@@ -32,15 +32,15 @@ type UserState = {
 };
 
 export interface User {
-  phoneNumber: string;
+  phoneNumber?: string;
   newEmailAddress?: string;
   newPhoneNumber?: string;
-  email: string;
-  isPhoneNumberVerified: boolean;
-  subjectId: string;
-  legacySubjectId: string;
-  publicSubjectId: string;
-  tokens: UserTokens;
+  email?: string;
+  isPhoneNumberVerified?: boolean;
+  subjectId?: string;
+  legacySubjectId?: string;
+  publicSubjectId?: string;
+  tokens?: UserTokens;
   isAuthenticated: boolean;
   state?: UserState;
 }

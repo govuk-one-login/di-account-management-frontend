@@ -19,7 +19,7 @@ describe("change email controller", () => {
 
     req = {
       body: {},
-      session: { user: {} },
+      session: { user: {} } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
       t: sandbox.fake(),
@@ -52,10 +52,10 @@ describe("change email controller", () => {
 
       req.body.email = "test@test.com";
       req.session.user = {
-        tokens: { accessToken: "token" },
+        tokens: { accessToken: "token" } as any,
         email: "test@dl.com",
         state: { changeEmail: getInitialState() },
-      };
+      } as any;
       req.cookies.lng = "en";
 
       await changeEmailPost(fakeService)(req as Request, res as Response);
@@ -75,7 +75,7 @@ describe("change email controller", () => {
         tokens: { accessToken: "token" },
         email: "test@test.com",
         state: { changeEmail: getInitialState() },
-      };
+      } as any;
       req.cookies.lng = "en";
 
       await changeEmailPost(fakeService)(req as Request, res as Response);
