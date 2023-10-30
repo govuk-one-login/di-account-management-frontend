@@ -229,7 +229,7 @@ Mappings:
       SUPPORTWEBCHATDEMO: "0"
       WEBCHATSOURCEURL: "0"
       SUPPORTWEBCHATCONTACT: "0"
-      SUPPORTPHONECONTACT: "0"
+      SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
 
