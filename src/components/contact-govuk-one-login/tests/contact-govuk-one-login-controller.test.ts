@@ -277,7 +277,7 @@ describe("Contact GOV.UK One Login controller", () => {
           isAuthenticated: true,
         },
       };
-      req.cookies.lo = 'true';
+      req.cookies.lo = "true";
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
@@ -335,12 +335,12 @@ describe("Contact GOV.UK One Login controller", () => {
       const expectedPersistentSessionId = "persistentSessionId";
       const expectedTimestamp = 1111;
 
-      sqsClientStub = stub(SQSClient.prototype, 'send');
+      sqsClientStub = stub(SQSClient.prototype, "send");
       const sqsResponse: SendMessageCommandOutput = {
         $metadata: undefined,
         MessageId: "message-id",
-        MD5OfMessageBody: "md5-hash"
-      }
+        MD5OfMessageBody: "md5-hash",
+      };
       process.env.AUDIT_QUEUE_URL = "queue";
       sqsClientStub.returns(sqsResponse);
 
@@ -357,7 +357,7 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: "reference-code",
       };
 
-      req.query.fromURL = 'https://gov.uk/ogd';
+      req.query.fromURL = "https://gov.uk/ogd";
       req.query.appErrorCode = "app-error-code";
       req.query.appSessionId = "app-session-id";
 
@@ -369,7 +369,6 @@ describe("Contact GOV.UK One Login controller", () => {
 
       // Tidy up
       sqsClientStub.restore();
-    })
-
+    });
   });
 });
