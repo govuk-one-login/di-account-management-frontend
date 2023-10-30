@@ -1,4 +1,5 @@
 import { randomBytes } from "crypto";
+import { ParsedQs } from "qs";
 
 const urlRegex = new RegExp(
   "^(http(s)?://)?(www.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\\.[a-z]{2,6}([-a-zA-Z0-9@:%_+.~#?&//=]*)$"
@@ -25,7 +26,12 @@ export function generateNonce(): string {
   return randomBytes(16).toString("hex");
 }
 
-export function isValidUrl(url: string): boolean {
+export function isValidUrl(
+  url: string | string[] | ParsedQs | ParsedQs[]
+): boolean {
+  if (typeof url !== "string") {
+    return false;
+  }
   return urlRegex.test(url);
 }
 
