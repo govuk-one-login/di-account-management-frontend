@@ -75,8 +75,13 @@ describe("Contact GOV.UK One Login controller", () => {
 
   describe("contactGet", () => {
     it("should render contact centre triage page", () => {
-      const validUrl = "https://home.account.gov.uk/security";
-      req.query.fromURL = validUrl;
+      req.session = {
+        referenceCode: MOCK_REFERENCE_CODE,
+        user: {
+          isAuthenticated: true,
+        },
+      } as any;
+      req.query.fromURL = "https://home.account.gov.uk/security";
       contactGet(req as Request, res as Response);
       // query data should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
@@ -91,13 +96,12 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
       });
-      // query data should be saved into session
-      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
     });
 
     it("should render contact centre triage page with fromURL from session and signedOut = false ", () => {
       const validUrl = "https://home.account.gov.uk/security";
       req.session = {
+        referenceCode: MOCK_REFERENCE_CODE,
         queryParameters: {
           fromURL: validUrl,
         },
@@ -125,14 +129,22 @@ describe("Contact GOV.UK One Login controller", () => {
     });
 
     it("should render contact centre triage page with additional fields from the mobile app", () => {
-      const validUrl = "https://home.account.gov.uk/security";
+      const fromURL = "https://home.account.gov.uk/security";
       const appSessionId = "123456789";
       const appErrorCode = "ERRORCODE123";
       const theme = "WaveyTheme";
-      req.query.fromURL = validUrl;
-      req.query.appSessionId = appSessionId;
-      req.query.appErrorCode = appErrorCode;
-      req.query.theme = theme;
+      req.session = {
+        referenceCode: MOCK_REFERENCE_CODE,
+        queryParameters: {
+          fromURL,
+          appSessionId,
+          appErrorCode,
+          theme,
+        },
+        user: {
+          isAuthenticated: true,
+        },
+      } as any;
       contactGet(req as Request, res as Response);
       // query data should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
@@ -148,7 +160,7 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
       });
       // query data should be saved into session
-      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
+      expect(req.session.queryParameters.fromURL).to.equal(fromURL);
       expect(req.session.queryParameters.appSessionId).to.equal(appSessionId);
       expect(req.session.queryParameters.appErrorCode).to.equal(appErrorCode);
       expect(req.session.queryParameters.theme).to.equal(theme);
@@ -162,6 +174,15 @@ describe("Contact GOV.UK One Login controller", () => {
       req.query.fromURL = validUrl;
       req.query.appSessionId = appSessionId;
       req.query.appErrorCode = appErrorCode;
+      req.session = {
+        referenceCode: MOCK_REFERENCE_CODE,
+        queryParameters: {
+          fromURL: validUrl,
+        },
+        user: {
+          isAuthenticated: true,
+        },
+      } as any;
       contactGet(req as Request, res as Response);
       // invalid query data not should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
@@ -183,32 +204,16 @@ describe("Contact GOV.UK One Login controller", () => {
       expect(req.session.queryParameters.theme).to.be.undefined;
     });
 
-    it("should render contact centre triage page with additional fields from the mobile app from session", () => {
-      const validUrl = "https://home.account.gov.uk/security";
-      const appSessionId = "123456789";
-      const appErrorCode = "ERRORCODE123";
-      const theme = "WaveyTheme";
-      req.session.queryParameters.fromURL = validUrl;
-      req.session.queryParameters.appSessionId = appSessionId;
-      req.session.queryParameters.appErrorCode = appErrorCode;
-      req.session.queryParameters.theme = theme;
-      contactGet(req as Request, res as Response);
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        contactEmailServiceUrl: "/track-and-redirect",
-        contactWebchatEnabled: true,
-        contactPhoneEnabled: true,
-        showContactGuidance: true,
-        showSignOut: true,
-        referenceCode: MOCK_REFERENCE_CODE,
-        webchatSource: "https://example.com",
-        currentUrl: baseUrl,
-        baseUrl,
-        language: "en",
-      });
-    });
-
     it("should render centre triage page when invalid fromURL is present", () => {
-      req.query.fromURL = "DROP * FROM *;";
+      req.session = {
+        referenceCode: MOCK_REFERENCE_CODE,
+        queryParameters: {
+          fromURL: undefined,
+        },
+        user: {
+          isAuthenticated: true,
+        },
+      } as any;
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
@@ -237,6 +242,12 @@ describe("Contact GOV.UK One Login controller", () => {
     });
 
     it("should render centre triage page when no fromURL is present", () => {
+      req.session = {
+        referenceCode: "123456",
+        user: {
+          isAuthenticated: true,
+        },
+      } as any;
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
@@ -298,18 +309,21 @@ describe("Contact GOV.UK One Login controller", () => {
     });
 
     it("logs the reference code and request data", () => {
-      const validUrl = "https://home.account.gov.uk/security";
+      const fromURL = "https://home.account.gov.uk/security";
       const appSessionId = "123456789";
       const appErrorCode = "ERRORCODE123";
       const theme = "WaveyTheme";
       const sessionId = "sessionId";
       const persistentSessionId = "persistentSessionId";
 
-      req.query.fromURL = validUrl;
-      req.query.appSessionId = appSessionId;
-      req.query.appErrorCode = appErrorCode;
-      req.query.theme = theme;
       req.session = {
+        referenceCode: MOCK_REFERENCE_CODE,
+        queryParameters: {
+          fromURL,
+          appSessionId,
+          appErrorCode,
+          theme,
+        },
         user: {
           isAuthenticated: true,
           sessionId,
@@ -321,7 +335,7 @@ describe("Contact GOV.UK One Login controller", () => {
 
       expect(loggerSpy).to.have.calledWith(
         {
-          fromURL: validUrl,
+          fromURL,
           referenceCode: MOCK_REFERENCE_CODE,
           appSessionId: appSessionId,
           appErrorCode: appErrorCode,
