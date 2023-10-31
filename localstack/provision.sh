@@ -18,8 +18,49 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
 aws --endpoint-url=http://localhost:4566 dynamodb put-item \
     --table-name $TABLE_NAME  \
     --region eu-west-2 \
-    --item \
-        "{\"user_id\":{\"S\": \"$BUILD_CLIENT_ID\"}, \"services\": {\"L\":[{\"M\":{\"count_successful_logins\":{\"N\":\"2\"},\"client_id\":{\"S\":\"gov-uk\"},\"last_accessed\":{\"N\":\"1666169856\"},\"last_accessed_pretty\":{\"S\":\"20 January 1970\"}}}]}}"
+    --item '
+    {
+      "user_id": {
+        "S":  "'"$BUILD_CLIENT_ID"'"
+      },
+      "services": {
+        "L": [
+          {
+            "M": {
+              "count_successful_logins": {
+                "N": "4"
+              },
+              "client_id": {
+                "S": "gov.uk"
+              },
+              "last_accessed": {
+                "N": "1666169856"
+              },
+              "last_accessed_pretty": {
+                "S": "20 January 1970"
+              }
+            }
+          },
+          {
+            "M": {
+              "count_successful_logins": {
+                "N": "4"
+              },
+              "client_id": {
+                "S": "cqGoT1LYLsjn-iwGcDTzamckhZU"
+              },
+              "last_accessed": {
+                "N": "1666169856"
+              },
+              "last_accessed_pretty": {
+                "S": "20 January 1970"
+              }
+            }
+          }
+        ]
+      }
+    }'
+
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
     --table-name $ACTIVITY_LOG_TABLE_NAME \
@@ -31,12 +72,74 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
 aws --endpoint-url=http://localhost:4566 dynamodb put-item \
     --table-name $ACTIVITY_LOG_TABLE_NAME  \
     --region eu-west-2 \
-    --item \
-        "{\"user_id\":{\"S\": \"$BUILD_CLIENT_ID\"},
-        \"timestamp\" :{\"N\":\"1680025701\"},
-         \"session_id\" :{\"S\":\"session_123\"},
-          \"event_type\" :{\"S\":\"AUTH_AUTH_CODE_ISSUED\"},
-         \"activities\": {\"L\":[{\"M\":{\"client_id\":{\"S\":\"gov-uk\"},\"timestamp\":{\"N\":\"1666169856\"},\"type\":{\"S\":\"AUTH_AUTH_CODE_ISSUED\"}}}]}}"
+    --item '
+    {
+      "user_id": {
+        "S": "'"$BUILD_CLIENT_ID"'"
+      },
+      "timestamp": {
+        "N": "1680025701"
+      },
+      "session_id": {
+        "S": "session_123"
+      },
+      "event_type": {
+        "S": "AUTH_AUTH_CODE_ISSUED"
+      },
+      "activities": {
+        "L": [
+          {
+            "M": {
+              "client_id": {
+                "S": "gov-uk"
+              },
+              "timestamp": {
+                "N": "1666169856"
+              },
+              "type": {
+                "S": "AUTH_AUTH_CODE_ISSUED"
+              }
+            }
+          }
+        ]
+      }
+    }'
+
+aws --endpoint-url=http://localhost:4566 dynamodb put-item \
+    --table-name $ACTIVITY_LOG_TABLE_NAME  \
+    --region eu-west-2 \
+    --item '
+    {
+      "user_id": {
+        "S": "'"$BUILD_CLIENT_ID"'"
+      },
+      "timestamp": {
+        "N": "1680025701"
+      },
+      "session_id": {
+        "S": "session_123"
+      },
+      "event_type": {
+        "S": "AUTH_AUTH_CODE_ISSUED"
+      },
+      "activities": {
+        "L": [
+          {
+            "M": {
+              "client_id": {
+                "S": "cqGoT1LYLsjn-iwGcDTzamckhZU"
+              },
+              "timestamp": {
+                "N": "1666169856"
+              },
+              "type": {
+                "S": "AUTH_AUTH_CODE_ISSUED"
+              }
+            }
+          }
+        ]
+      }
+    }'
 
 # Creates account-mgmt-frontend infra dependencies
 
@@ -46,22 +149,26 @@ aws --endpoint-url http://localhost:4566 dynamodb create-table \
   --attribute-definitions AttributeName=id,AttributeType=S AttributeName=user_id,AttributeType=S \
   --key-schema AttributeName=id,KeyType=HASH \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
-  --global-secondary-indexes \
-      "[
-          {
-              \"IndexName\": \"users-sessions\",
-              \"KeySchema\": [
-                  {\"AttributeName\":\"user_id\",\"KeyType\":\"HASH\"}
-              ],
-              \"Projection\": {
-                  \"ProjectionType\":\"KEYS_ONLY\"
-              },
-              \"ProvisionedThroughput\": {
-                  \"ReadCapacityUnits\": 5,
-                  \"WriteCapacityUnits\": 5
-              }
-          }
-      ]"
+  --global-secondary-indexes '
+  [
+    {
+      "IndexName": "users-sessions",
+      "KeySchema": [
+        {
+          "AttributeName": "user_id",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "KEYS_ONLY"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    }
+  ]'
+
 aws --endpoint-url http://localhost:4566 dynamodb update-time-to-live \
   --table-name account-mgmt-frontend-SessionStore \
   --region eu-west-2 \

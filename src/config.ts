@@ -130,6 +130,10 @@ export const getAllowedAccountListClientIDs: string[] = [
   "9fduJ6KAE8WwCb1VCKp788BC8mM",
   "KiYrXyFTTy0JFZyYJI22WuxPIf8",
   "ukmcab",
+  "cqGoT1LYLsjn-iwGcDTzamckhZU",
+  "manageFamilySupport",
+  "zbNToJPcre4BXEap0na8kOjniKg",
+  "connectFamilies",
 ];
 
 export const getAllowedServiceListClientIDs: string[] = [

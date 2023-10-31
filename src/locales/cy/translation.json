@@ -217,6 +217,10 @@
               "href": "https://www.gov.uk/guidance/subject-matter-specialists-for-ofqual"
             },
             {
+              "text": "Cysylltu teuluoedd i gymorth",
+              "href": "https://www.connect-families-to-support.education.gov.uk"
+            },
+            {
               "text": "Darganfod a gwneud cais am grant",
               "href": "https://www.gov.uk/guidance/find-government-grants"
             },
@@ -243,6 +247,10 @@
             {
               "text": "Llofnodwch eich gweithred morgais",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk"
+            },
+            {
+              "text": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
+              "href": "https://manage-family-support-services-and-accounts.education.gov.uk"
             },
             {
               "text": "Rheoli prentisiaethau",
@@ -629,6 +637,18 @@
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
         "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "zbNToJPcre4BXEap0na8kOjniKg": {
+        "header": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
+        "description": "Ychwanegu a rheoli cyfrifon a gwasanaethau yn 'Dod o hyd i gymorth i'ch teulu' a 'Cysylltu teuluoedd i gymorth'.",
+        "link_text": "Ewch i'ch cyfrif rheoli gwasanaethau cymorth i deuluoedd",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "cqGoT1LYLsjn-iwGcDTzamckhZU": {
+        "header": "Cysylltu teuluoedd i gymorth",
+        "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
+        "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
     },
     "integration": {
@@ -693,6 +713,18 @@
         "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
         "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "zbNToJPcre4BXEap0na8kOjniKg": {
+        "header": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
+        "description": "Ychwanegu a rheoli cyfrifon a gwasanaethau yn 'Dod o hyd i gymorth i'ch teulu' a 'Cysylltu teuluoedd i gymorth'.",
+        "link_text": "Ewch i'ch cyfrif rheoli gwasanaethau cymorth i deuluoedd",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "cqGoT1LYLsjn-iwGcDTzamckhZU": {
+        "header": "Cysylltu teuluoedd i gymorth",
+        "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
+        "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
     },
     "staging": {
@@ -757,6 +789,18 @@
         "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
         "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
+        "description": "Ychwanegu a rheoli cyfrifon a gwasanaethau yn 'Dod o hyd i gymorth i'ch teulu' a 'Cysylltu teuluoedd i gymorth'.",
+        "link_text": "Ewch i'ch cyfrif rheoli gwasanaethau cymorth i deuluoedd",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "connectFamilies": {
+        "header": "Cysylltu teuluoedd i gymorth",
+        "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
+        "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
     },
     "build": {
@@ -821,6 +865,18 @@
         "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
         "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
+        "description": "Ychwanegu a rheoli cyfrifon a gwasanaethau yn 'Dod o hyd i gymorth i'ch teulu' a 'Cysylltu teuluoedd i gymorth'.",
+        "link_text": "Ewch i'ch cyfrif rheoli gwasanaethau cymorth i deuluoedd",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "connectFamilies": {
+        "header": "Cysylltu teuluoedd i gymorth",
+        "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
+        "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
     },
     "dev": {
@@ -885,6 +941,18 @@
         "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
         "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
+        "description": "Ychwanegu a rheoli cyfrifon a gwasanaethau yn 'Dod o hyd i gymorth i'ch teulu' a 'Cysylltu teuluoedd i gymorth'.",
+        "link_text": "Ewch i'ch cyfrif rheoli gwasanaethau cymorth i deuluoedd",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "connectFamilies": {
+        "header": "Cysylltu teuluoedd i gymorth",
+        "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
+        "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
     },
     "local": {
@@ -949,6 +1017,18 @@
         "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
         "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
+        "description": "Ychwanegu a rheoli cyfrifon a gwasanaethau yn 'Dod o hyd i gymorth i'ch teulu' a 'Cysylltu teuluoedd i gymorth'.",
+        "link_text": "Ewch i'ch cyfrif rheoli gwasanaethau cymorth i deuluoedd",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "connectFamilies": {
+        "header": "Cysylltu teuluoedd i gymorth",
+        "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
+        "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
     }
   }
