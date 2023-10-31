@@ -6,30 +6,25 @@ import {
   SQSClient,
 } from "@aws-sdk/client-sqs";
 import { logger } from "./logger";
-import { ENVIRONMENT_NAME } from "../app.constants";
+import { getSQSConfig, SqsConfig } from "../config/aws";
 
-// Initialize the SQSClient only once
-const { AWS_REGION } = process.env;
-const { AUDIT_QUEUE_URL } = process.env;
-const isDevelopment = process.env.NODE_ENV === ENVIRONMENT_NAME.DEV;
-const client = new SQSClient({
-  region: AWS_REGION,
-  endpoint: isDevelopment ? AUDIT_QUEUE_URL : undefined,
-});
-
-export function sqsService(): SqsService {
+export function sqsService(config: SqsConfig = getSQSConfig()): SqsService {
   const send = async function (messageBody: string): Promise<any> {
+    const { AUDIT_QUEUE_URL } = process.env;
+
+    if (AUDIT_QUEUE_URL == null) {
+      logger.error(
+        `Environment missing value for AUDIT_QUEUE_URL, cannot send ${messageBody}.`
+      );
+      return;
+    }
+
+    const client = new SQSClient(config.sqsClientConfig);
+
     const message: SendMessageRequest = {
       QueueUrl: AUDIT_QUEUE_URL,
       MessageBody: messageBody,
     };
-
-    if (!AUDIT_QUEUE_URL) {
-      logger.error(
-        `Environment missing value for AUDIT_QUEUE_URL, cannot send ${message.MessageBody}.`
-      );
-      return;
-    }
 
     try {
       const result: SendMessageCommandOutput = await client.send(

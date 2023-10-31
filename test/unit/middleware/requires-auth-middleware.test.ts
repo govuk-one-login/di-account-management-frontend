@@ -129,7 +129,7 @@ it("should redirect to Log in page", () => {
         redirect_uris: ["url"],
         client_id: "test-client",
       },
-    },
+    } as any, // Bypass type checking for this part,
   };
 
   const res: Partial<Response> = {

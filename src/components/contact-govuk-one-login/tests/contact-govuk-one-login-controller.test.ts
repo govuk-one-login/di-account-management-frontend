@@ -8,6 +8,7 @@ import * as reference from "../../../utils/referenceCode";
 import { SinonStub, stub } from "sinon";
 import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { I18NextRequest } from "i18next-http-middleware";
+import { AuditEvent } from "../../../services/types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
@@ -354,7 +355,11 @@ describe("Contact GOV.UK One Login controller", () => {
       // Arrange
       const expectedSessionId = "sessionId";
       const expectedPersistentSessionId = "persistentSessionId";
-      const expectedTimestamp = 1111;
+      const expectedAppErrorCode = "app-error-code";
+      const expectedAppSessionId = "app-session-id";
+      const expectedReferenceCode = "reference-code";
+      const expectedFromURL = "https://gov.uk/ogd";
+      const expectedUserAgent = "expectedUserAgent";
 
       sqsClientStub = stub(SQSClient.prototype, "send");
       const sqsResponse: SendMessageCommandOutput = {
@@ -371,22 +376,48 @@ describe("Contact GOV.UK One Login controller", () => {
           sessionId: expectedSessionId,
           persistentSessionId: expectedPersistentSessionId,
         },
-        timestamp: expectedTimestamp,
-        fromURL: "fromUrl",
-        appErrorCode: "app-error-code",
-        appSessionId: "app-session-id",
-        referenceCode: "reference-code",
+        queryParameters: {
+          fromURL: expectedFromURL,
+          appErrorCode: expectedAppErrorCode,
+          appSessionId: expectedAppSessionId,
+        },
+        referenceCode: expectedReferenceCode,
       } as any;
 
-      req.query.fromURL = "https://gov.uk/ogd";
-      req.query.appErrorCode = "app-error-code";
-      req.query.appSessionId = "app-session-id";
+      req.query.fromURL = expectedFromURL;
+      req.query.appErrorCode = expectedAppErrorCode;
+      req.query.appSessionId = expectedAppSessionId;
+      req.headers["user-agent"] = expectedUserAgent;
+
+      res.locals.sessionId = expectedSessionId;
+      res.locals.persistent_session_id = expectedPersistentSessionId;
 
       // Act
       contactGet(req as Request, res as Response);
 
       // Assert
       expect(sqsClientStub.called);
+      const publishedEvent = JSON.parse(
+        sqsClientStub.getCall(0).firstArg.input.MessageBody
+      ) as AuditEvent;
+      expect(publishedEvent.event_name).to.equal("HOME_TRIAGE_PAGE_VISIT");
+      expect(publishedEvent.timestamp).to.be.a("number");
+      expect(publishedEvent.component_id).to.equal("HOME");
+      expect(publishedEvent.user.session_id).to.equal(expectedSessionId);
+      expect(publishedEvent.user.persistent_session_id).to.equal(
+        expectedPersistentSessionId
+      );
+      expect(publishedEvent.platform.user_agent).to.equal("expectedUserAgent");
+      expect(publishedEvent.extensions.app_error_code).to.equal(
+        expectedAppErrorCode
+      );
+      expect(publishedEvent.extensions.app_session_id).to.equal(
+        expectedAppSessionId
+      );
+      expect(publishedEvent.extensions.reference_code).to.equal(
+        expectedReferenceCode
+      );
+      expect(publishedEvent.extensions.from_url).to.equal(expectedFromURL);
 
       // Tidy up
       sqsClientStub.restore();

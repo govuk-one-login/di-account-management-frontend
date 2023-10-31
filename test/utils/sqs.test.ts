@@ -7,6 +7,7 @@ import { SinonStub, stub } from "sinon";
 import { sinon } from "./test-utils";
 import { logger } from "../../src/utils/logger";
 import { expect } from "chai";
+import { EVENT_NAME } from "../../src/app.constants";
 
 describe("SQS service tests", (): void => {
   let sqsClientStub: SinonStub;
@@ -14,7 +15,7 @@ describe("SQS service tests", (): void => {
   let errorLoggerSpy: sinon.SinonSpy;
   const expectedEvent: AuditEvent = {
     timestamp: undefined,
-    event_name: "HOME_TRIAGE_PAGE_VISIT",
+    event_name: EVENT_NAME.HOME_TRIAGE_PAGE_VISIT,
     component_id: "HOME",
     user: undefined,
     platform: undefined,
