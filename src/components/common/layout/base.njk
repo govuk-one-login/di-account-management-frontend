@@ -57,7 +57,7 @@
             tag: {
                 text: 'general.phaseBanner.tag' | translate
             },
-            html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us?supportType=PUBLIC")
+            html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback")
         }) if not hidePhaseBanner}}
         {% if backLink %}
             <a href="{{backLink}}" class="govuk-back-link">{{'general.back' | translate}}</a>
