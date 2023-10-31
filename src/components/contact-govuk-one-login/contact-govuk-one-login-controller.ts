@@ -101,7 +101,7 @@ const buildAuditEvent = (req: Request, res: Response): AuditEvent => {
   };
 
   return {
-    timestamp: req.session.timestamp,
+    timestamp: Date.now(),
     event_name: "HOME_TRIAGE_PAGE_VISIT",
     component_id: "HOME",
     user: user,
