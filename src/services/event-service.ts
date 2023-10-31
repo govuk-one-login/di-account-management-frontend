@@ -8,6 +8,7 @@ import {
 import { SqsService } from "../utils/types";
 import { sqsService } from "../utils/sqs";
 import { MISSING_SESSION_VALUE_SPECIAL_CASE } from "../app.constants";
+import { Session } from "express-session";
 
 export function eventService(
   sqs: SqsService = sqsService()
@@ -15,7 +16,7 @@ export function eventService(
   const userHasSignedIntoHomeRelyingParty = (res: Response): boolean =>
     !!res.locals?.sessionId;
 
-  const userHasComeFromTheApp = (session: any): boolean =>
+  const userHasComeFromTheApp = (session: Session): boolean =>
     !!session.queryParameters?.appSessionId;
 
   const getSessionId = (res: Response): string =>
@@ -26,7 +27,7 @@ export function eventService(
   const getPersistentSessionId = (res: Response): string =>
     res.locals.persistentSessionId || MISSING_SESSION_VALUE_SPECIAL_CASE;
 
-  const getAppSessionId = (session: any): string =>
+  const getAppSessionId = (session: Session): string =>
     userHasComeFromTheApp(session)
       ? session.queryParameters?.appSessionId
       : MISSING_SESSION_VALUE_SPECIAL_CASE;
