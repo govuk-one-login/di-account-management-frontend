@@ -526,7 +526,7 @@
           "paragraphs": [
             "Ask GOV.UK One Login's digital assistant to find information to help you or chat with an advisor.",
             "Our webchat is not yet fully accessible. Find out <a class=\"govuk-link\" href=\"link-to-statement\">more about the limitations and how we're working to fix this</a>.",
-            "Opening times:</br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm"
+            "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm"
           ],
           "linkText":"Use webchat"
         },
@@ -537,12 +537,12 @@
           ],
           "insetText":{
             "paragraphs": [
-              "From the UK:</br><strong>0300 373 9020</strong>",
-              "Outside the UK:</br><strong>+44 208 629 0008</strong>"
+              "From the UK:<br><strong>0300 373 9020</strong>",
+              "Outside the UK:<br><strong>+44 208 629 0008</strong>"
             ]
           },
           "paragraphs2": [
-            "Opening times:</br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm",
+            "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm",
             "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Find out about call charges</a>"
           ],
           "callChargesLinkHref": "https://www.gov.uk/call-charges"
@@ -553,7 +553,7 @@
             "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Fill in the contact form</a> to ask for help.",
             "We’ll reply by email within 2 working days.",
             "We’ll respond during office hours.",
-            "Office hours: </br>Monday to Friday, 9:30am to 5:30pm"
+            "Office hours: <br>Monday to Friday, 9:30am to 5:30pm"
           ]
         }
       },
