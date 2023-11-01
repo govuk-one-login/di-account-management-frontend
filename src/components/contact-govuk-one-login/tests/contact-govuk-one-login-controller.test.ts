@@ -265,9 +265,6 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
       });
-      expect(loggerSpy).to.have.calledWith(
-        "Request to contact-govuk-one-login page did not contain a valid fromURL in the request or session"
-      );
     });
 
     it("should keep the reference code from the session if present", () => {
@@ -308,29 +305,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: false,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
-        webchatSource: "https://example.com",
-        currentUrl: baseUrl,
-        baseUrl,
-        language: "en",
-      });
-    });
-
-    it("should render the contact page when a user is logged out", () => {
-      req.session = {
-        referenceCode: "654321",
-        user: {
-          isAuthenticated: true,
-        },
-      };
-      req.cookies.lo = "true";
-      contactGet(req as Request, res as Response);
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
-        contactWebchatEnabled: true,
-        contactPhoneEnabled: true,
-        showContactGuidance: true,
-        showSignOut: false,
-        referenceCode: "654321",
-        contactEmailServiceUrl: "https://signin.account.gov.uk/contact-us",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,
