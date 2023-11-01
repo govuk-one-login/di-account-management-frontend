@@ -145,8 +145,8 @@ Mappings:
       SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "0"
-      SUPPORTPHONECONTACT: "0"
-      SHOWCONTACTGUIDANCE: "0"
+      SUPPORTPHONECONTACT: "1"
+      SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
     build:
       NODEENV: "production"
@@ -167,7 +167,7 @@ Mappings:
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "0"
-      SHOWCONTACTGUIDANCE: "0"
+      SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
     staging:
       NODEENV: "production"
@@ -229,8 +229,8 @@ Mappings:
       SUPPORTWEBCHATDEMO: "0"
       WEBCHATSOURCEURL: "0"
       SUPPORTWEBCHATCONTACT: "0"
-      SUPPORTPHONECONTACT: "0"
-      SHOWCONTACTGUIDANCE: "0"
+      SUPPORTPHONECONTACT: "1"
+      SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
 
 Resources:

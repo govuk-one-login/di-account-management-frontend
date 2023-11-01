@@ -25,6 +25,7 @@
     "test:unit": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config --exclude \"src/**/*-integration.test.ts\"  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary npm run test:unit",
+    "test:js": "NODE_ENV=development nyc mocha -r dotenv/config \"src/assets/**/*.test.js\"",
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/govuk --watch src/assets/scss/application.scss dist/public/style.css"
@@ -56,6 +57,7 @@
     "@aws-sdk/client-dynamodb": "^3.415.0",
     "@aws-sdk/util-dynamodb": "^3.415.0",
     "aws-sdk": "2.1460.0",
+    "@aws-sdk/client-sqs": "^3.382.0",
     "axios": "^1.5.0",
     "base64url": "3.0.1",
     "body-parser": "^1.20.2",

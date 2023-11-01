@@ -89,6 +89,7 @@ describe("string-helpers", () => {
       expect(isValidUrl("qwerty")).to.be.false;
       expect(isValidUrl("qwerty.gov.&^")).to.be.false;
       expect(isValidUrl("https:///home.account.gov.uk")).to.be.false;
+      expect(isValidUrl("http://localhost:6001")).to.be.false;
     });
   });
 
