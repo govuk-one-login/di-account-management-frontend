@@ -526,10 +526,9 @@
           "paragraphs": [
             "Ask GOV.UK One Login's digital assistant to find information to help you or chat with an advisor.",
             "Our webchat is not yet fully accessible. Find out <a class=\"govuk-link\" href=\"link-to-statement\">more about the limitations and how we're working to fix this</a>.",
-            "Opening times:</br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm",
-            "<a class=\"govuk-link\" href=\"[useWebchatLinkHref]\">Use webchat</a>"
+            "Opening times:</br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm"
           ],
-          "useWebchatLinkHref":"/webchat"
+          "linkText":"Use webchat"
         },
         "phone": {
           "heading": "Phone",

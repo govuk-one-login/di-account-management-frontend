@@ -525,10 +525,9 @@
           "paragraphs": [
             "Gofynnwch i gynorthwyydd digidol GOV.UK One Login i ddod o hyd i wybodaeth i'ch helpu chi neu sgwrsiwch ag ymgynghorydd.",
             "Nid yw ein gwesgwrs yn gwbl hygyrch eto. Rydym yn gweithio i'w wella.Gallwch ddarganfod mwy am <a class=\"govuk-link\" href=\"link-to-statement\">ein datganiad hygyrchedd</a>.",
-            "Oriau agor: </br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm",
-            "<a class=\"govuk-link\" href=\"[useWebchatLinkHref]\">Defnyddio gwesgwrs</a>"
+            "Oriau agor: </br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm"
           ],
-          "useWebchatLinkHref":"/webchat"
+          "linkText":"Defnyddio gwesgwrs"
         },
         "phone": {
           "heading": "Ffôn",
