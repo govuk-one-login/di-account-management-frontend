@@ -10,7 +10,6 @@ export const PATH_DATA: {
   SECURITY: { url: "/security" },
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
-  WEBCHAT_DEMO: { url: "/webchat-demo" },
   CHANGE_EMAIL: {
     url: "/change-email",
     event: "VERIFY_CODE_SENT",
@@ -174,4 +173,3 @@ export type ParamName = keyof QueryParameters;
 export const OIDC_ERRORS = {
   ACCESS_DENIED: "access_denied",
 };
-
