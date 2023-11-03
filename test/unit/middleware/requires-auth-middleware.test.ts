@@ -12,7 +12,7 @@ describe("Requires auth middleware", () => {
       session: {
         user: {
           isAuthenticated: false,
-        },
+        } as any,
       },
       cookies: {
         lo: "true",
@@ -120,7 +120,7 @@ it("should redirect to Log in page", () => {
   const req: Partial<Request> = {
     body: {},
     query: {},
-    session: { user: { isAuthenticated: undefined } },
+    session: { user: { isAuthenticated: undefined } as any } as any,
     url: "/test_url",
     oidc: {
       authorizationUrl: sandbox.spy(),
@@ -129,7 +129,7 @@ it("should redirect to Log in page", () => {
         redirect_uris: ["url"],
         client_id: "test-client",
       },
-    },
+    } as any, // Bypass type checking for this part,
   };
 
   const res: Partial<Response> = {

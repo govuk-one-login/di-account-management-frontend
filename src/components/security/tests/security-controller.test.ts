@@ -12,7 +12,7 @@ describe("security controller", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    req = { body: {}, session: { user: {} } };
+    req = { body: {}, session: { user: {} } as any };
     res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
   });
 
@@ -24,13 +24,13 @@ describe("security controller", () => {
     it("should render security view", () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-        return true
+        return true;
       });
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
         isPhoneNumberVerified: true,
-      };
+      } as any;
       securityGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("security/index.njk", {
@@ -38,7 +38,7 @@ describe("security controller", () => {
         phoneNumber: "7898",
         isPhoneNumberVerified: true,
         supportActivityLog: true,
-        activityLogUrl: '/security/sign-in-history'
+        activityLogUrl: "/security/sign-in-history",
       });
     });
   });

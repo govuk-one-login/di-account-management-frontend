@@ -30,7 +30,7 @@ describe("enter password controller", () => {
             deleteAccount: {},
           },
         },
-      },
+      } as any,
       t: sandbox.fake(),
       i18n: { language: "" },
       query: {},
@@ -59,9 +59,7 @@ describe("enter password controller", () => {
     it("should redirect to security when no with query param", () => {
       enterPasswordGet(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(
-        PATH_DATA.SETTINGS.url
-      );
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);
     });
   });
 
@@ -76,7 +74,7 @@ describe("enter password controller", () => {
         phoneNumber: "xxxxxxx7898",
         state: { changeEmail: {} },
         tokens: { accessToken: "token" },
-      };
+      } as any;
 
       req.body["password"] = "password";
       req.body["requestType"] = "changeEmail";
@@ -95,7 +93,7 @@ describe("enter password controller", () => {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
         tokens: { accessToken: "token" },
-      };
+      } as any;
 
       req.body["password"] = "password";
       req.body["requestType"] = "changeEmail";

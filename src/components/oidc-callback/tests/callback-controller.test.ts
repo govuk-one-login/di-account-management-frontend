@@ -18,7 +18,7 @@ describe("callback controller", () => {
     req = {
       body: {},
       query: {},
-      session: { user: {}, destroy: sandbox.fake() },
+      session: { user: {}, destroy: sandbox.fake() } as any,
       t: sandbox.fake(),
       oidc: {
         callbackParams: sandbox.fake(),
@@ -33,11 +33,11 @@ describe("callback controller", () => {
           email: "ad@ad.com",
           phoneNumber: "12345678999",
         }),
-        metadata: { redirect_uris: [] },
+        metadata: { client_id: "", redirect_uris: [] },
         issuer: {
           metadata: {},
-        },
-      },
+        } as any,
+      } as any,
     };
     res = {
       render: sandbox.fake(),

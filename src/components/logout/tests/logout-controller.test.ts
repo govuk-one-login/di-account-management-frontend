@@ -13,7 +13,7 @@ describe("logout controller", () => {
     sandbox = sinon.createSandbox();
     req = {
       body: {},
-      session: { user: {} },
+      session: { user: {} } as any,
       oidc: { endSessionUrl: sandbox.fake() },
     };
     res = {
@@ -35,7 +35,7 @@ describe("logout controller", () => {
     it("should redirect to end session url and set cookie", () => {
       req.session.user.tokens = {
         idToken: "id-token",
-      };
+      } as any;
 
       req.session.destroy = sandbox.fake();
 

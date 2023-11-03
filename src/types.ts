@@ -1,6 +1,7 @@
-import { ValidationChain } from "express-validator";
 import "express-session";
 import { NextFunction, Request, Response } from "express";
+import { ValidationChain } from "express-validator";
+import { StateAction, UserJourney } from "./utils/state-machine";
 
 export interface OIDCConfig {
   idp_url: string;
@@ -20,40 +21,26 @@ export type ValidationChainFunc = (
   | ((req: Request, res: Response, next: NextFunction) => any)
 )[];
 
-declare module "express-session" {
-  export interface SessionData {
-    // The express-session middleware manages this:
-    cookie: Cookie;
-
-    nonce?: string;
-    state?: string;
-    currentURL?: string;
-    user?: User;
-    user_id?: string;
-    referenceCode?: string;
-    fromURL?: string;
-    appSessionId?: string;
-    appErrorCode?: string;
-  }
+interface UserTokens {
+  idToken: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
-interface Cookie {
-  originalMaxAge: number;
-  expires: string;
-  secure: boolean;
-  httpOnly: boolean;
-  path: string;
-}
+type UserState = {
+  [key in UserJourney]?: StateAction;
+};
 
-interface User {
-  email: string;
-  phoneNumber: string;
-  isPhoneNumberVerified: boolean;
-  subjectId: string;
-  tokens: {
-    idToken: string;
-    accessToken: string;
-    refreshToken: string;
-  };
+export interface User {
+  phoneNumber?: string;
+  newEmailAddress?: string;
+  newPhoneNumber?: string;
+  email?: string;
+  isPhoneNumberVerified?: boolean;
+  subjectId?: string;
+  legacySubjectId?: string;
+  publicSubjectId?: string;
+  tokens?: UserTokens;
   isAuthenticated: boolean;
+  state?: UserState;
 }

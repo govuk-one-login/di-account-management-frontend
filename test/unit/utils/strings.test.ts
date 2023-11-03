@@ -76,6 +76,7 @@ describe("string-helpers", () => {
 
     it("should return false if url is invalid", () => {
       expect(isValidUrl("")).to.be.false;
+      expect(isValidUrl([""])).to.be.false;
       expect(isValidUrl("1")).to.be.false;
       expect(isValidUrl("qwerty")).to.be.false;
       expect(isValidUrl("qwerty.gov.&^")).to.be.false;

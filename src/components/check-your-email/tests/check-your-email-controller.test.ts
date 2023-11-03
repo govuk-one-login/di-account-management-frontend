@@ -22,7 +22,7 @@ describe("check your email controller", () => {
 
     req = {
       body: {},
-      session: { user: { state: { changeEmail: {} } } },
+      session: { user: { state: { changeEmail: {} } } } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
     };
@@ -57,7 +57,7 @@ describe("check your email controller", () => {
         notifyEmailChanged: sandbox.fake.returns(Promise.resolve()),
       };
 
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.code = "123456";
 
       await checkYourEmailPost(fakeService, fakePublishingService)(
@@ -77,7 +77,7 @@ describe("check your email controller", () => {
         updateEmail: sandbox.fake.returns(false),
       };
 
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.t = sandbox.fake.returns("translated string");
       req.body.code = "678988";
       res.locals.sessionId = "123456-djjad";

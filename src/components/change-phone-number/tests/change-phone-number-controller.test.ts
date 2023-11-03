@@ -21,7 +21,7 @@ describe("change phone number controller", () => {
 
     req = {
       body: {},
-      session: { user: { state: { changePhoneNumber: {} } } },
+      session: { user: { state: { changePhoneNumber: {} } } } as any,
       cookies: { lng: "en" },
       i18n: { language: "" },
       t: sandbox.fake(),
@@ -54,7 +54,7 @@ describe("change phone number controller", () => {
         }),
       };
 
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "12345678991";
 
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
@@ -72,7 +72,7 @@ describe("change phone number controller", () => {
         }),
       };
 
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "12345678991";
 
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
@@ -89,7 +89,7 @@ describe("change phone number controller", () => {
         }),
       };
 
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "12345678991";
       req.body.hasInternationalPhoneNumber = true;
 
@@ -107,7 +107,7 @@ describe("change phone number controller", () => {
       };
 
       res.locals.sessionId = "123456-djjad";
-      req.session.user.tokens = { accessToken: "token" };
+      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "+33645453322";
       req.session.user.email = "test@test.com";
 

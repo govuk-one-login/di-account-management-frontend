@@ -1,6 +1,7 @@
 import { SqsService } from "./types";
 import {
-  SendMessageCommand, SendMessageCommandOutput,
+  SendMessageCommand,
+  SendMessageCommandOutput,
   SendMessageRequest,
   SQSClient,
 } from "@aws-sdk/client-sqs";
