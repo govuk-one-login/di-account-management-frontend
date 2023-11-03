@@ -47,7 +47,7 @@ export function oidcAuthCallbackGet(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
-    if(queryParams?.error === OIDC_ERRORS.ACCESS_DENIED) {
+    if (queryParams?.error === OIDC_ERRORS.ACCESS_DENIED) {
       res.status(HTTP_STATUS_CODES.FORBIDDEN);
     }
     const clientAssertion = await service.generateAssertionJwt(
