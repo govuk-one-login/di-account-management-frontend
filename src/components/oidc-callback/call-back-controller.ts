@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
-import { PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
+import { HTTP_STATUS_CODES, OIDC_ERRORS, PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
@@ -47,6 +47,9 @@ export function oidcAuthCallbackGet(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
+    if(queryParams.error === OIDC_ERRORS.ACCESS_DENIED) {
+      res.status(HTTP_STATUS_CODES.FORBIDDEN);
+    }
     const clientAssertion = await service.generateAssertionJwt(
       req.oidc.metadata.client_id,
       req.oidc.issuer.metadata.token_endpoint

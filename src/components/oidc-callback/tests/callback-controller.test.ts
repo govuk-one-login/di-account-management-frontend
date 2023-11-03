@@ -4,7 +4,7 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { oidcAuthCallbackGet } from "../call-back-controller";
-import { PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants";
+import { HTTP_STATUS_CODES, PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants";
 import { ClientAssertionServiceInterface } from "../../../utils/types";
 
 describe("callback controller", () => {
@@ -107,6 +107,31 @@ describe("callback controller", () => {
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
       expect(res.redirect).to.have.calledWith(PATH_DATA.START.url);
+    });
+    it("should throw 500 error when access denied error occured", async () => {
+      req.params = {
+        error:'access_denied',
+          state:'m0H_2VvrhKR0qA'
+      };
+      req.oidc = {
+        callbackParams: ''
+      };
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake.returns("testassert"),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
+    });
+
+    it("response status code should be 403 when access denied error occurs", async () => {
+      req.oidc.callbackParams = sandbox.fake.returns({"error":"access_denied","state":"m0H_2VvrhKR0qA"});
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake.returns("testassert"),
+      };
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+      expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.FORBIDDEN);
     });
   });
 });
