@@ -41,6 +41,7 @@ describe("callback controller", () => {
     };
     res = {
       render: sandbox.fake(),
+      status: sandbox.fake(),
       redirect: sandbox.fake(),
       cookie: sandbox.fake(),
       locals: {},
@@ -107,22 +108,6 @@ describe("callback controller", () => {
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
       expect(res.redirect).to.have.calledWith(PATH_DATA.START.url);
-    });
-    it("should throw 500 error when access denied error occured", async () => {
-      req.params = {
-        error:'access_denied',
-          state:'m0H_2VvrhKR0qA'
-      };
-      req.oidc = {
-        callbackParams: ''
-      };
-      const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.returns("testassert"),
-      };
-
-      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
-
-      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
     });
 
     it("response status code should be 403 when access denied error occurs", async () => {
