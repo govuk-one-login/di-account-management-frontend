@@ -170,3 +170,8 @@ export interface QueryParameters {
 export const MISSING_SESSION_VALUE_SPECIAL_CASE = "";
 
 export type ParamName = keyof QueryParameters;
+
+export const OIDC_ERRORS = {
+  ACCESS_DENIED: "access_denied",
+};
+
