@@ -11,7 +11,7 @@ declare module "express-session" {
     user?: User;
     user_id?: string;
     referenceCode?: string;
-    queryParameters: QueryParameters;
+    queryParameters?: QueryParameters;
   }
 }
 declare module "express-serve-static-core" {
