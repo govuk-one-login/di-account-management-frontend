@@ -105,8 +105,9 @@
         <h3 class="govuk-heading-m">{{'pages.contact.section3.webchat.heading' | translate}}</h3>
 
         {% for paragraph in webchatParagraphs %}
-          <p class="govuk-body">{{ paragraph | safe | replace('[useWebchatLinkHref]', 'pages.contact.section3.webchat.useWebchatLinkHref' | translate ) }}</p>
+          <p class="govuk-body">{{ paragraph | safe  }}</p>
         {% endfor %}
+        <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
       </section>
     {% endif %}
 
@@ -133,6 +134,14 @@
   <script id="smartagent" type="module" defer 
     src="{{ webchatSource }}" 
     data-company="hgsgds" data-brand="hgsgds">
+  </script>
+  <script type="text/javascript" nonce='{{scriptNonce}}'>
+    var launchWebchatButton = document.querySelector("[data-launch-webchat]");
+    launchWebchatButton.addEventListener("click", function() {
+      if (window._sa) {
+        window._sa.openChat();
+      }
+    })
   </script>
 {% endif %}
 {% endblock %}

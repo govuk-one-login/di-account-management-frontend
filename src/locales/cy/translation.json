@@ -525,10 +525,9 @@
           "paragraphs": [
             "Gofynnwch i gynorthwyydd digidol GOV.UK One Login i ddod o hyd i wybodaeth i'ch helpu chi neu sgwrsiwch ag ymgynghorydd.",
             "Nid yw ein gwesgwrs yn gwbl hygyrch eto. Rydym yn gweithio i'w wella.Gallwch ddarganfod mwy am <a class=\"govuk-link\" href=\"link-to-statement\">ein datganiad hygyrchedd</a>.",
-            "Oriau agor: </br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm",
-            "<a class=\"govuk-link\" href=\"[useWebchatLinkHref]\">Defnyddio gwesgwrs</a>"
+            "Oriau agor: <br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm"
           ],
-          "useWebchatLinkHref":"/webchat"
+          "linkText":"Defnyddio gwesgwrs"
         },
         "phone": {
           "heading": "Ffôn",
@@ -537,12 +536,12 @@
           ],
           "insetText":{
             "paragraphs": [
-              "O'r DU:</br><strong>0300 373 9020</strong>",
-              "Y tu allan i'r DU:</br><strong>+44 208 629 0008</strong>"
+              "O'r DU:<br><strong>0300 373 9020</strong>",
+              "Y tu allan i'r DU:<br><strong>+44 208 629 0008</strong>"
             ]
           },
           "paragraphs2": [
-            "Oriau agor:</br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm",
+            "Oriau agor:<br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm",
             "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Darganfyddwch fwy am gostau galwadau</a>"
           ],
           "callChargesLinkHref": "https://www.gov.uk/call-charges"
@@ -553,7 +552,7 @@
             "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Cwblhewch y ffurflen gyswllt</a>  i ofyn am help.",
             "Byddwn yn ateb drwy e-bost o fewn 2 ddiwrnod gwaith.",
             "Byddwn yn ymateb yn ystod oriau swyddfa.",
-            "Oriau swyddfa: </br>Dydd Llun i ddydd Gwener, 9:30am i 5:30pm"
+            "Oriau swyddfa: <br>Dydd Llun i ddydd Gwener, 9:30am i 5:30pm"
           ]
         }
       },
