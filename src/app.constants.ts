@@ -150,3 +150,7 @@ export const ENVIRONMENT_NAME = {
   PROD: "production",
   DEV: "development",
 };
+
+export const OIDC_ERRORS = {
+  ACCESS_DENIED: "access_denied",
+};
