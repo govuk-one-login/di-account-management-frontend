@@ -333,3 +333,16 @@ $nav-active-border-thickness: 5px;
   color: $govuk-border-colour;
 }
 
+.launch-webchat-link {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: inherit;
+  color: $govuk-link-colour;
+
+  @include govuk-link-common;
+  @include govuk-link-style-default;
+  @include govuk-link-print-friendly;
+}
