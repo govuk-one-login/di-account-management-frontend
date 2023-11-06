@@ -109,6 +109,7 @@ Parameters:
     Default: "none"
 
 Conditions:
+  IsProduction: !Equals [!Ref Environment, production]
   IsNotDevelopment: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, staging]
@@ -252,12 +253,18 @@ Resources:
   # ECS Service
   #
 
+
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: !Sub "${AWS::StackName}-ECSCluster"
-      CapacityProviders:
-        - FARGATE
+      CapacityProviders: !If
+        - IsProduction
+        - - 'FARGATE'
+        - - 'FARGATE_SPOT'
+      DefaultCapacityProviderStrategy:
+        - CapacityProvider: !If [IsProduction, 'FARGATE', 'FARGATE_SPOT']
+          Weight: 1
       ClusterSettings:
         - Name: containerInsights
           Value: enabled
