@@ -1,11 +1,15 @@
 import request from "supertest";
-import { describe } from "mocha";
+import { describe, Done } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
 import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import {
+  API_ENDPOINTS,
+  NOTIFICATION_TYPE,
+  PATH_DATA,
+} from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 
 describe("Integration:: change email", () => {
@@ -109,7 +113,7 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('email-error')).text()).to.contains(
+        expect($(testComponent("email-error")).text()).to.contains(
           "Enter your email address"
         );
       })
@@ -127,7 +131,7 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page(testComponent('email-error')).text()).to.contains(
+        expect(page(testComponent("email-error")).text()).to.contains(
           "Enter an email address in the correct format, like name@example.com"
         );
       })
@@ -145,7 +149,7 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page(testComponent('email-error')).text()).to.contains(
+        expect(page(testComponent("email-error")).text()).to.contains(
           "You are already using that email address. Enter a different email address."
         );
       })
@@ -164,7 +168,7 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page(testComponent('email-error')).text()).to.contains(
+        expect(page(testComponent("email-error")).text()).to.contains(
           "There’s already a GOV.UK One Login using that email address. Enter a different email address."
         );
       })
@@ -184,5 +188,74 @@ describe("Integration:: change email", () => {
       })
       .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url)
       .expect(302, done);
+  });
+  describe("Email Normalization Tests", () => {
+    let receivedEmail: string;
+
+    const setupTest = (
+      inputEmail: string,
+      expectedNormalisedEmail: string,
+      done: Done
+    ) => {
+      nock(baseApi)
+        .post(API_ENDPOINTS.SEND_NOTIFICATION)
+        .reply(
+          204,
+          (
+            uri,
+            requestBody: {
+              email: string;
+              notificationType: NOTIFICATION_TYPE.VERIFY_EMAIL;
+            }
+          ) => {
+            receivedEmail = requestBody.email;
+            return {};
+          }
+        );
+
+      request(app)
+        .post(PATH_DATA.CHANGE_EMAIL.url)
+        .type("form")
+        .set("Cookie", cookies)
+        .send({
+          _csrf: token,
+          email: inputEmail,
+        })
+        .expect(302)
+        .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url)
+        .end((err) => {
+          if (err) return done(err);
+          expect(receivedEmail).to.equal(expectedNormalisedEmail);
+          done();
+        });
+    };
+
+    it("should normalise email to all lowercase", (done) => {
+      setupTest("Test@Example.Com", "test@example.com", done);
+    });
+
+    it("should normalise Gmail email to lowercase", (done) => {
+      setupTest("Test@Gmail.Com", "test@gmail.com", done);
+    });
+
+    it("should not remove full stops from email", (done) => {
+      setupTest("Test.user@Gmail.Com", "test.user@gmail.com", done);
+    });
+
+    it("should not remove sub-addresses for gmail accounts", (done) => {
+      setupTest("Test+user@Gmail.Com", "test+user@gmail.com", done);
+    });
+
+    it("should not remove sub-addresses for outlook accounts", (done) => {
+      setupTest("Test+user@outlook.Com", "test+user@outlook.com", done);
+    });
+
+    it("should not remove sub-addresses for yahoo accounts", (done) => {
+      setupTest("Test+user@icloud.Com", "test+user@icloud.com", done);
+    });
+
+    it("should convert googlemail.com addresses to gmail.com", (done) => {
+      setupTest("Test@googlemail.com", "test@gmail.com", done);
+    });
   });
 });
