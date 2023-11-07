@@ -129,7 +129,7 @@ export const getAllowedAccountListClientIDs: string[] = [
   "criminalInjuriesCompensation",
   "9fduJ6KAE8WwCb1VCKp788BC8mM",
   "KiYrXyFTTy0JFZyYJI22WuxPIf8",
-  "ukmcab"
+  "ukmcab",
 ];
 
 export const getAllowedServiceListClientIDs: string[] = [
@@ -142,7 +142,7 @@ export const getAllowedServiceListClientIDs: string[] = [
   "socialWorkEngland",
   "dbs",
   "vehicleOperatorLicense",
-  "mortgageDeed"
+  "mortgageDeed",
 ];
 
 function getProtocol(): string {
@@ -161,10 +161,6 @@ export function getDynamoActivityLogStoreTableName(): string {
 
 export function supportTriagePage(): boolean {
   return process.env.SUPPORT_TRIAGE_PAGE === "1";
-}
-
-export function supportWebchatDemo(): boolean {
-  return process.env.SUPPORT_WEBCHAT_DEMO === "1";
 }
 
 export function getWebchatUrl(): string {

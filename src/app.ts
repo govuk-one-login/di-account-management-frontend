@@ -22,7 +22,7 @@ import {
   getSessionSecret,
   supportActivityLog,
   supportTriagePage,
-  supportWebchatDemo,
+  supportWebchatContact,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
@@ -57,7 +57,6 @@ import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-pho
 import { redirectsRouter } from "./components/redirects/redirects-routes";
 import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes";
 import { getSessionStore } from "./utils/session-store";
-import { webchatRouter } from "./components/webchat-demo/webchat-demo-routes";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 
@@ -100,7 +99,7 @@ async function createApp(): Promise<express.Application> {
     );
 
   app.use(i18nextMiddleware.handle(i18next));
-  if (supportWebchatDemo()) {
+  if (supportWebchatContact()) {
     app.use(helmet(webchatHelmetConfiguration));
   } else {
     app.use(helmet(helmetConfiguration));
@@ -156,9 +155,6 @@ async function createApp(): Promise<express.Application> {
   }
   if (supportTriagePage()) {
     app.use(contactRouter);
-  }
-  if (supportWebchatDemo()) {
-    app.use(webchatRouter);
   }
   app.use(trackAndRedirectRouter);
 

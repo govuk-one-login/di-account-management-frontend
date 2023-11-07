@@ -142,7 +142,6 @@ Mappings:
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
-      SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
@@ -163,7 +162,6 @@ Mappings:
       SERVICEDOMAIN: "build.account.gov.uk"
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
-      SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "0"
@@ -184,7 +182,6 @@ Mappings:
       SERVICEDOMAIN: "staging.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
@@ -205,7 +202,6 @@ Mappings:
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      SUPPORTWEBCHATDEMO: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
@@ -226,7 +222,6 @@ Mappings:
       SERVICEDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      SUPPORTWEBCHATDEMO: "0"
       WEBCHATSOURCEURL: "0"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
@@ -613,13 +608,6 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTTRIAGEPAGE,
-                ]
-            - Name: "SUPPORT_WEBCHAT_DEMO"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTWEBCHATDEMO,
                 ]
             - Name: "WEBCHAT_SOURCE_URL"
               Value:
