@@ -107,7 +107,7 @@
         {% for paragraph in webchatParagraphs %}
           <p class="govuk-body">{{ paragraph | safe  }}</p>
         {% endfor %}
-        <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
+        <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
       </section>
     {% endif %}
 
@@ -137,11 +137,35 @@
   </script>
   <script type="text/javascript" nonce='{{scriptNonce}}'>
     var launchWebchatButton = document.querySelector("[data-launch-webchat]");
+
     launchWebchatButton.addEventListener("click", function() {
       if (window._sa) {
         window._sa.openChat();
       }
-    })
+    });
+
+    function waitForSaEvents(){
+      // if saEvents does not exist, chat has not loaded yet
+      if(typeof window.saEvents !== "undefined"){
+        window.saEvents.subscribe(function (event) {
+          if (event.type === "CHAT_LOADED") {
+            // as soon as a CHAT_LOADED event is received from the webchat, make the "Use webchat" toggle visible and stop listening for chat events
+            launchWebchatButton.removeAttribute('hidden');
+            clearInterval(webchatInterval);
+            clearTimeout(cancelInterval);
+          }
+        });
+      }
+    }
+
+    // the webchat script injects other scripts and assets into the page
+    // therefore the "saEvents" object is not immediately available to subscribe to
+    // this checks whether "saEvents" is available every 200ms 
+    var webchatInterval = setInterval(waitForSaEvents, 200);
+    var cancelInterval = setTimeout(function(){
+      // if webchat events still unavailable after 10s, clear the interval
+      clearInterval(webchatInterval);
+    }, 10000)
   </script>
 {% endif %}
 {% endblock %}
