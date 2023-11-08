@@ -12,6 +12,7 @@ import { AuditEvent } from "../../../services/types";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
+const MOCK_NONCE = "abcdef";
 
 describe("Contact GOV.UK One Login controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -48,6 +49,7 @@ describe("Contact GOV.UK One Login controller", () => {
       locals: {
         sessionId: "sessionId",
         persistentSessionId: "persistentSessionId",
+        scriptNonce: MOCK_NONCE,
       },
       status: sandbox.fake(),
     };
@@ -99,6 +101,7 @@ describe("Contact GOV.UK One Login controller", () => {
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
+        nonce: MOCK_NONCE,
       });
     });
 
@@ -129,6 +132,7 @@ describe("Contact GOV.UK One Login controller", () => {
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
+        nonce: MOCK_NONCE,
       });
     });
 
@@ -162,6 +166,7 @@ describe("Contact GOV.UK One Login controller", () => {
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
+        nonce: MOCK_NONCE,
       });
       // query data should be saved into session
       expect(req.session.queryParameters.fromURL).to.equal(fromURL);
@@ -200,6 +205,7 @@ describe("Contact GOV.UK One Login controller", () => {
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
+        nonce: MOCK_NONCE,
       });
       // invalid query data should not be saved into session
       expect(req.session.queryParameters.fromURL).to.equal(validUrl);
@@ -230,6 +236,7 @@ describe("Contact GOV.UK One Login controller", () => {
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
+        nonce: MOCK_NONCE,
       });
       expect(loggerSpy).to.have.calledWith(
         {
@@ -264,6 +271,7 @@ describe("Contact GOV.UK One Login controller", () => {
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
+        nonce: MOCK_NONCE,
       });
     });
 
@@ -286,6 +294,7 @@ describe("Contact GOV.UK One Login controller", () => {
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
+        nonce: MOCK_NONCE,
       });
     });
 
@@ -309,6 +318,7 @@ describe("Contact GOV.UK One Login controller", () => {
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
+        nonce: MOCK_NONCE,
       });
     });
 

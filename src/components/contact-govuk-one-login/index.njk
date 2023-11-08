@@ -133,7 +133,8 @@
 {% if contactWebchatEnabled %}
   <script id="smartagent" type="module" defer 
     src="{{ webchatSource }}" 
-    data-company="hgsgds" data-brand="hgsgds">
+    data-company="hgsgds" data-brand="hgsgds"
+    nonce="{{ nonce }}">
   </script>
   <script type="text/javascript" nonce='{{scriptNonce}}'>
     var launchWebchatButton = document.querySelector("[data-launch-webchat]");

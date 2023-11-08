@@ -56,7 +56,7 @@ export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
         "https://www.google-analytics.com",
         "https://ssl.google-analytics.com",
         "https://*.smartagent.app",
-        "'unsafe-inline'",
+        "'strict-dynamic'",
       ],
       scriptSrcAttr: ["'self'", "'unsafe-inline'"],
       imgSrc: [
@@ -64,6 +64,7 @@ export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
         "data:",
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
+        "https://*.s3.eu-west-2.amazonaws.com"
       ],
       objectSrc: ["'none'"],
       connectSrc: [
