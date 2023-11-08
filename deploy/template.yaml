@@ -119,6 +119,12 @@ Conditions:
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
 
+  ExportLogsToSplunk:
+    Fn::Or:
+      - !Equals [!Ref Environment, staging]
+      - !Equals [!Ref Environment, integration]
+      - !Equals [!Ref Environment, production]
+
 Mappings:
   # see https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
   ElasticLoadBalancerAccountIds:
@@ -678,6 +684,7 @@ Resources:
       KmsKeyId: !GetAtt LoggingKmsKey.Arn
 
   TaskLogGroupCSLSSubscription:
+    Condition: ExportLogsToSplunk
     Type: AWS::Logs::SubscriptionFilter
     Properties:
       DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
@@ -1201,6 +1208,7 @@ Resources:
           Value: !Ref SourceTagValue
 
   ApiGatewayAccessLogGroupCSLSSubscription:
+    Condition: ExportLogsToSplunk
     Type: AWS::Logs::SubscriptionFilter
     Properties:
       DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
