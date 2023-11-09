@@ -102,6 +102,11 @@ Parameters:
   ActivityLogStoreTableName:
     Type: String
     Default: activity_logs
+  CodeSigningConfigArn:
+    Type: String
+    Description: >
+      The ARN of the Code Signing Config to use, provided by the deployment pipeline
+    Default: "none"
 
 Conditions:
   IsNotDevelopment: !Or
@@ -114,10 +119,13 @@ Conditions:
       - Fn::Equals:
           - !Ref PermissionsBoundary
           - "none"
-
   UseStubServices: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
+  UseCodeSigning:
+    !Not [!Equals [none, !Ref CodeSigningConfigArn]]
+  IsProd:
+     !Equals [production, !Ref Environment]
 
   ExportLogsToSplunk:
     Fn::Or:
@@ -153,6 +161,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -173,6 +182,7 @@ Mappings:
       SUPPORTPHONECONTACT: "0"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -193,6 +203,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -213,6 +224,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
+      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -233,6 +245,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
+      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
 
 Resources:
   #
@@ -288,6 +301,21 @@ Resources:
                 Resource:
                   - !GetAtt TaskLogGroup.Arn
                   - !Sub "${TaskLogGroup.Arn}:*"
+        - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                  - secretsmanager:ListSecrets
+                Resource:
+                  - arn:aws:secretsmanager:eu-west-2:216552277552:secret:*
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                Resource:
+                  - arn:aws:kms:eu-west-2:216552277552:key/*
       PermissionsBoundary: !If
         - UsePermissionsBoundary
         - !Ref PermissionsBoundary
@@ -384,6 +412,21 @@ Resources:
               - Effect: Allow
                 Action: sqs:SendMessage
                 Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/ARN}}"
+        - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetSecretValue"
+                Resource:
+                  - !Sub "arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables"
+                  - !Sub "arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables"
+              - Effect: Allow
+                Action:
+                  - "kms:Decrypt"
+                Resource:
+                  - !Sub "arn:aws:kms:eu-west-2:216552277552:key/*"
 
       PermissionsBoundary: !If
         - UsePermissionsBoundary
@@ -652,9 +695,25 @@ Resources:
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
+          Secrets:
+            - Name: DT_TENANT
+              ValueFrom: !Join
+                - ''
+                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
+                  - ':DT_TENANT::'
+            - Name: DT_TENANTTOKEN
+              ValueFrom: !Join
+                - ''
+                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
+                  - ':DT_TENANTTOKEN::'
+            - Name: DT_CONNECTION_POINT
+              ValueFrom: !Join
+                - ''
+                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
+                  - ':DT_CONNECTION_POINT::'
 
       Cpu: 1024
-      Memory: 2048
+      Memory: 4096
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
       TaskRoleArn: !GetAtt TaskRole.Arn
       Family: !Sub "${AWS::StackName}-BlueTaskDefinition"
