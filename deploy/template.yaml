@@ -203,7 +203,7 @@ Mappings:
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
-      SUPPORTWEBCHATCONTACT: "0"
+      SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
