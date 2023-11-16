@@ -6,18 +6,18 @@
   "license": "ISC",
   "scripts": {
     "build-ts": "tsc",
-    "build": "npm run build-sass && npm run build-ts && npm run copy-assets && npm run minfiy-build-js",
-    "build-dev": "npm run build-sass && npm run build-ts && npm run copy-assets",
-    "build-sass": "rm -rf dist/public/style.css && sass --load-path=node_modules/govuk-frontend/govuk --no-source-map src/assets/scss/application.scss dist/public/style.css --style compressed",
+    "build": "npm run build-sass && npm run build-ts && npm run copy-assets && npm run bundle-js && npm run minfiy-build-js",
+    "build-dev": "npm run build-sass && npm run build-ts && npm run copy-assets && npm run bundle-js",
+    "build-sass": "rm -rf dist/public/style.css && sass --load-path=node_modules/govuk-frontend/dist/govuk --no-source-map src/assets/scss/application.scss dist/public/style.css --style compressed",
+    "bundle-js": "rollup --config rollup.config.mjs",
     "clean": "rm -rf dist node_modules logs.json",
     "clean-modules": "rm -rf node_modules",
-    "concat-client-js": "mkdir -p dist/public/scripts && uglifyjs src/assets/javascript/cookies.js src/assets/javascript/application.js -o dist/public/scripts/application.js -b",
-    "copy-assets": "mkdir -p dist && npm run concat-client-js && copyfiles -u 1 src/**/*.njk dist/ src/locales/**/** dist/ src/config/*.txt dist/ && cp node_modules/govuk-frontend/govuk/all.js dist/public/scripts && cp src/assets/javascript/showPassword.js dist/public/scripts",
+    "copy-assets": "mkdir -p dist && copyfiles -u 1 src/**/*.njk dist/ src/locales/**/** dist/ src/config/*.txt dist/ && copyfiles -f src/assets/javascript/*.js dist/public/scripts",
     "dev": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run watch-node\"",
     "dummy-server": "node dev-app.js",
     "depcheck": "depcheck",
     "lint": "eslint . --ext .ts,.js",
-    "minfiy-build-js": "uglifyjs dist/public/scripts/application.js -o dist/public/scripts/application.js -c -m && uglifyjs dist/public/scripts/all.js -o dist/public/scripts/all.js -c -m && uglifyjs dist/public/scripts/showPassword.js -o dist/public/scripts/showPassword.js -c -m",
+    "minfiy-build-js": "uglifyjs dist/public/scripts/application.js -o dist/public/scripts/application.js -c -m && uglifyjs dist/public/scripts/cookies.js -o dist/public/scripts/cookies.js -c -m",
     "pretty": "prettier --write \"*/**/*.{ts,json}\"",
     "start": "node dist/server.js",
     "test:audit": "npm audit",
@@ -28,7 +28,7 @@
     "test:js": "NODE_ENV=development nyc mocha -r dotenv/config \"src/assets/**/*.test.js\"",
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
-    "watch-sass": "sass --load-path=node_modules/govuk-frontend/govuk --watch src/assets/scss/application.scss dist/public/style.css"
+    "watch-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --watch src/assets/scss/application.scss dist/public/style.css"
   },
   "mocha": {
     "diff": true,
@@ -69,7 +69,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^7.0.1",
     "fast-memoize": "^2.5.2",
-    "govuk-frontend": "^4.7.0",
+    "govuk-frontend": "^5.0.0",
     "helmet": "7.0.0",
     "i18next": "^23.5.1",
     "i18next-fs-backend": "^1.1.4",
@@ -87,6 +87,7 @@
     "xstate": "^4.38.2"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/chai": "^4.3.6",
     "@types/chai-as-promised": "^7.1.6",
     "@types/cheerio": "^0.22.32",
@@ -123,6 +124,7 @@
     "nodemon": "2.0.20",
     "nyc": "^15.1.0",
     "pino-pretty": "^10.2.0",
+    "rollup": "^4.9.4",
     "sass": "^1.67.0",
     "sinon": "^15.2.0",
     "sinon-chai": "^3.7.0",

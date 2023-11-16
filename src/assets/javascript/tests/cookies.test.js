@@ -18,7 +18,7 @@ describe("Cookies function tests", () => {
 
   it("can check user has given consent for analytics", () => {
     // Arrange
-    const cookies = window.GOVSignIn.Cookies("trackingId", "analyticsCookieDomain");
+    const cookies = window.DI.Cookies("trackingId", "analyticsCookieDomain");
 
     // Act
     let result = cookies.hasConsentForAnalytics();

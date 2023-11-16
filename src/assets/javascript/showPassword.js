@@ -1,17 +1,23 @@
-window.GOVSignIn = window.GOVSignIn || {};
-window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
+export class ShowPassword {
+  /** @private */
+  $module
+  $input
 
-(function (Modules) {
-  function ShowPassword($module) {
-    this.$module = $module;
-    this.input = this.$module.querySelector(".govuk-password-input");
-  }
+  constructor($module) {
+    if (!($module instanceof HTMLElement)) {
+      return;
+    }
+    this.$module = $module
+    this.$input = this.$module.querySelector(".govuk-password-input");
+    
+    if (!this.$input) {
+      return;
+    }
 
-  ShowPassword.prototype.init = function () {
     this.$module.togglePassword = this.togglePassword.bind(this);
     this.$module.revertToPasswordOnFormSubmit =
       this.revertToPasswordOnFormSubmit.bind(this);
-    this.input.classList.add("govuk-input--with-password");
+    this.$input.classList.add("govuk-input--with-password");
 
     this.showPasswordText = this.$module.getAttribute("data-show-text");
     this.hidePasswordText = this.$module.getAttribute("data-hide-text");
@@ -27,17 +33,17 @@ window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
     // wrap the input in a new div
     this.wrapper = document.createElement("div");
     this.wrapper.classList.add("govuk-show-password__input-wrapper");
-    this.input.parentNode.insertBefore(this.wrapper, this.input);
-    this.wrapper.appendChild(this.input);
+    this.$input.parentNode.insertBefore(this.wrapper, this.$input);
+    this.wrapper.appendChild(this.$input);
 
     // create and append the button
     this.showHide = document.createElement("button");
     this.showHide.className = "govuk-show-password__toggle";
-    this.showHide.setAttribute("aria-controls", this.input.getAttribute("id"));
+    this.showHide.setAttribute("aria-controls", this.$input.getAttribute("id"));
     this.showHide.setAttribute("type", "button");
     this.showHide.setAttribute("aria-label", this.showPasswordFullText);
     this.showHide.innerHTML = this.showPasswordText;
-    this.wrapper.insertBefore(this.showHide, this.input.nextSibling);
+    this.wrapper.insertBefore(this.showHide, this.$input.nextSibling);
 
     // create and append the status text for screen readers
     this.statusText = document.createElement("span");
@@ -49,7 +55,7 @@ window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
     this.showHide.addEventListener("click", this.$module.togglePassword);
     this.moveDataAttributesToButton();
 
-    this.parentForm = this.input.form;
+    this.parentForm = this.$input.form;
     var disableFormSubmitCheck = this.$module.getAttribute(
       "data-disable-form-submit-check"
     );
@@ -60,9 +66,9 @@ window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
         this.$module.revertToPasswordOnFormSubmit
       );
     }
-  };
+  }
 
-  ShowPassword.prototype.togglePassword = function (event) {
+  togglePassword(event) {
     event.preventDefault();
     this.showHide.innerHTML =
       this.showHide.innerHTML === this.showPasswordText
@@ -78,21 +84,21 @@ window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
       this.statusText.innerHTML === this.shownPassword
         ? this.hiddenPassword
         : this.shownPassword;
-    this.input.setAttribute(
+    this.$input.setAttribute(
       "type",
-      this.input.getAttribute("type") === "text" ? "password" : "text"
+      this.$input.getAttribute("type") === "text" ? "password" : "text"
     );
   };
 
-  ShowPassword.prototype.revertToPasswordOnFormSubmit = function (event) {
+  revertToPasswordOnFormSubmit(event) {
     this.showHide.innerHTML = this.showPasswordText;
     this.showHide.setAttribute("aria-label", this.showPasswordFullText);
     this.statusText.innerHTML = this.hiddenPassword;
-    this.input.setAttribute("type", "password");
+    this.$input.setAttribute("type", "password");
   };
 
-  ShowPassword.prototype.moveDataAttributesToButton = function () {
-    var attrs = this.input.attributes;
+  moveDataAttributesToButton() {
+    var attrs = this.$input.attributes;
     for (var i = attrs.length; i >= 0; i--) {
       var attr = attrs[i];
       if (attr && /^data-button/.test(attr.name)) {
@@ -100,10 +106,11 @@ window.GOVSignIn.Modules = window.GOVSignIn.Modules || {};
           attr.name.replace("-button", ""),
           attr.value
         );
-        this.input.removeAttribute(attr.name);
+        this.$input.removeAttribute(attr.name);
       }
     }
   };
 
-  Modules.ShowPassword = ShowPassword;
-})(window.GOVSignIn.Modules);
+  static moduleName = 'show-password';
+}
+
