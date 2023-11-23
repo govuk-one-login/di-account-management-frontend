@@ -102,21 +102,6 @@ Parameters:
   ActivityLogStoreTableName:
     Type: String
     Default: activity_logs
-  AdditionalCodeSigningVersionArns:
-    Type: String
-    Default: none
-  AccessLogsCustomBucketNameEnabled:
-    Type: String
-    Default: none
-  TruncatedPipelineStackName:
-    Type: String
-    Default: none
-  PipelineEnvironentNameEnabled:
-    Type: String
-    Default: none
-  OneLoginRepositoryName:
-    Type: String
-    Default: none
 
 Conditions:
   IsNotDevelopment: !Or
