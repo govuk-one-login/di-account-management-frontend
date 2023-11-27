@@ -1,40 +1,48 @@
 import { Request, Response } from "express";
 import { getAppEnv, activityLogItemsPerPage } from "../../config";
+import { PATH_DATA } from "../../app.constants";
 import {
-  presentSignInHistory,
+  presentActivityHistory,
   generatePagination,
   formatData,
-  hasExplanationParagraph,
-} from "../../utils/signInHistory";
+} from "../../utils/activityHistory";
+import { logger } from "../../utils/logger";
 
-export async function signInHistoryGet(
+export async function activityHistoryGet(
   req: Request,
   res: Response
 ): Promise<void> {
   const { user } = req.session;
   const env = getAppEnv();
   let activityData: any[] = [];
-  let showExplanation = false;
   let data: any = [];
   let pagination: any = {};
+  const backLink = PATH_DATA.SECURITY.url;
+
   if (user?.subjectId) {
     const trace = res.locals.sessionId;
-    activityData = await presentSignInHistory(user.subjectId, trace);
+    activityData = await presentActivityHistory(user.subjectId, trace);
+
     const pageParameter = req.query?.page;
     const dataLength = activityData.length;
-    showExplanation = hasExplanationParagraph(activityData);
+
     if (dataLength <= activityLogItemsPerPage) {
       data = formatData(activityData);
     } else {
       pagination = generatePagination(dataLength, pageParameter);
       data = formatData(activityData, pagination.currentPage);
     }
+
+    logger.info(`activityData has ${activityData.length}`);
+  } else {
+    logger.error("user_id missing from session");
   }
 
-  res.render("sign-in-history/index.njk", {
-    showExplanation: showExplanation,
+  res.render("activity-history/index.njk", {
     data: data,
     env: env,
     pagination: pagination,
+    backLink: backLink,
+    changePasswordLink: PATH_DATA.CHANGE_PASSWORD.url,
   });
 }

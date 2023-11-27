@@ -25,18 +25,16 @@ export interface KmsService {
 }
 
 export interface ActivityLogEntry {
+  event_id: string;
   event_type: string;
   session_id: string;
   user_id: string;
   timestamp: number;
-  activities?: Activity[];
+  client_id: string;
   truncated: boolean;
-}
-
-export interface Activity {
-  type: string;
-  client_id: ClientId;
-  timestamp: number;
+  reported_suspicious_time?: number;
+  reported_suspicious?: boolean;
+  zendesk_ticket_number?: string;
 }
 
 export interface SnsService {

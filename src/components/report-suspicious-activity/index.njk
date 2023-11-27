@@ -1,0 +1,84 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% set pageTitleName = 'pages.reportSuspiciousActivity.alreadyReported.title' | translate if eventReportedTime else 'pages.reportSuspiciousActivity.title' | translate %}
+{% set backLinkJS = true %}
+{# takes a service ID and location of the content in the translation file. Returns service names #}
+{%- macro setServiceName(serviceId, contentLocale) -%}
+  {%- if (serviceId == "ol" or serviceId == "hmrc") -%}
+    {%- set serviceName = [contentLocale, '.', serviceId] | join | translate -%}
+  {%- else -%}
+    {%- set serviceName = ['clientRegistry.', env, '.', serviceId, '.header'] | join | translate -%}
+  {%- endif -%}
+  {{ serviceName }}
+{%- endmacro -%}
+
+{% block pageContent %}
+  {% if alreadyReported == true %}
+    {# The event has already been reported #}
+    <h1 class="govuk-heading-l">{{ 'pages.reportSuspiciousActivity.alreadyReported.header' | translate }}</h1>
+    <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.paragraph' | translate | safe | replace("[date]", eventReportedTime)}}</p>
+    {% if reportNumber %}
+      <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.paragraph2' | translate | safe | replace("[reportNumber]", reportNumber)}}</p>
+
+      <h2 class="govuk-heading-m">{{ 'pages.reportSuspiciousActivity.alreadyReported.contact.heading' | translate }}</h2>
+      <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.contact.paragraph1' | translate | safe | replace("[contactHref]", contactUrl)}}</p>
+      <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.contact.paragraph2' | translate }}</p>
+    {% else %}
+      {# account for the possibility of users re-visiting the report page soon after reporting an event, before a report number is known #}
+      <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.noReportNo' | translate }}</p>
+    {% endif %}
+  {% else %}
+    {# The event has not been reported yet – show report form #}
+    <h1 class="govuk-heading-l">{{ 'pages.reportSuspiciousActivity.header' | translate }}</h1>
+    <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.intro' | translate }}</p>
+
+    {% set insetTextHTML %}
+      {% set contentLocale = ['pages.activityHistory.activities.', event.eventType] | join %}
+      {% set serviceName = setServiceName(event.visitedServiceId, contentLocale) %}
+      <h2 class="govuk-heading-s">{{event.time}} ({{ 'pages.activityHistory.timeInfo' | translate }})</h2>
+      <p class="govuk-body">{{[contentLocale, '.', 'contentOne'] | join | translate | replace("[serviceName]", serviceName) }}</p>
+    {% endset %}
+    {{ govukInsetText({
+        html: insetTextHTML
+    })}}
+
+    <form action="{{reportSuspiciousActivityUrl}}/done" method="post" novalidate="novalidate">
+      <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+      <input type="hidden" name="event_id" value="{{eventId}}"/>
+      <input type="hidden" name="page" value="{{page}}"/>
+
+      {{ govukCheckboxes({
+        name: "issue_type",
+        fieldset: {
+          legend: {
+            text: 'pages.reportSuspiciousActivity.issueType.title' | translate,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        hint: {
+          text: 'pages.reportSuspiciousActivity.issueType.hint' | translate
+        },
+        items: [
+          {
+            value: "timestamp",
+            text: 'pages.reportSuspiciousActivity.issueType.option1' | translate
+          },
+          {
+            value: "services",
+            text: 'pages.reportSuspiciousActivity.issueType.option2' | translate
+          }
+        ]
+      }) }}
+
+    <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.responseTimeConfirmation' | translate | safe | replace("[emailAddress]", email) }}</p>
+
+    {{ govukButton({
+      "text": 'pages.reportSuspiciousActivity.submitButtonText' | translate,
+      "type": "Submit",
+      "preventDoubleClick": true
+    }) }}
+  </form>
+{% endif %}
+{% endblock %}

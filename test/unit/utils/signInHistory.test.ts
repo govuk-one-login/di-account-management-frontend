@@ -3,226 +3,128 @@ import { describe } from "mocha";
 import {
   formatData,
   generatePagination,
-  hasExplanationParagraph,
-} from "../../../src/utils/signInHistory";
+} from "../../../src/utils/activityHistory";
 import type { ActivityLogEntry } from "../../../src/utils/types";
 
 describe("Sign in History Util", () => {
-  describe("show a paragraph explaining the feature where appropriate", () => {
-    it("flag is false when the earliest event in the log is newer than feature launch date", async () => {
-      const data: ActivityLogEntry[] = [
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          // Thu Nov 25 2032
-          timestamp: 1985032269060,
-          truncated: false,
-        },
-      ];
-
-      expect(hasExplanationParagraph(data)).equal(false);
-    });
-
-    it("flag is true when the earliest event in the log is older than feature launch date", async () => {
-      const data: ActivityLogEntry[] = [
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          // Sun Jan 29 2023
-          timestamp: 1675032269060,
-          truncated: false,
-        },
-      ];
-
-      expect(hasExplanationParagraph(data)).equal(true);
-    });
-  });
-
   describe("format user activity to display", () => {
     it("returns the correct events for the current page", async () => {
       const longData: ActivityLogEntry[] = [
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "showme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "showme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "showme",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "client-id",
           truncated: false,
         },
       ];
@@ -239,29 +141,24 @@ describe("Sign in History Util", () => {
     it("takes an array of events and the current page and returns formatted data", async () => {
       const data: ActivityLogEntry[] = [
         {
+          event_id: "1234",
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
-              timestamp: 1689210000,
-            },
-          ],
+          client_id: "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
           truncated: false,
         },
       ];
 
       const formattedData: {
         eventType: string;
-        visitedServicesIds: [string];
+        visitedServiceId: string;
         time: string;
       }[] = formatData(data, 1);
 
       expect(formattedData[0].eventType).equal("signedIn");
-      expect(formattedData[0].visitedServicesIds[0]).equal(
+      expect(formattedData[0].visitedServiceId).equal(
         "RqFZ83csmS4Mi4Y7s7ohD9-ekwU"
       );
       expect(formattedData[0].time).equal("13 July 2023 at 2:00 am");

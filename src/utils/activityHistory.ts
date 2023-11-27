@@ -5,19 +5,9 @@ import {
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import { ActivityLogEntry, allowedTxmaEvents } from "./types";
-import pino from "pino";
 import { dynamoDBService } from "./dynamo";
-
-// TODO should be in a config somewhere I suppose.
-// Should be generated using Date.now() whenever a launch date is agreed upon
-const activityLogLaunchDateInMs = 1685032269060;
-
-export const hasExplanationParagraph = (data: Array<any>): boolean => {
-  if (data && data[data.length - 1]) {
-    return data[data.length - 1]["timestamp"] < activityLogLaunchDateInMs;
-  }
-  return false;
-};
+import { PATH_DATA } from "../app.constants";
+import { logger } from "./logger";
 
 export const generatePagination = (dataLength: number, page: any): [] => {
   const pagination: any = {
@@ -97,6 +87,55 @@ export const generatePagination = (dataLength: number, page: any): [] => {
   return pagination;
 };
 
+export const formatEvent = (
+  row: ActivityLogEntry,
+  currentPage?: number
+): any => {
+  const newRow: any = {};
+  newRow.eventType = allowedTxmaEvents.includes(row.event_type)
+    ? "signedIn"
+    : null;
+
+  if (!newRow.eventType) return;
+  newRow.eventId = row.event_id;
+  newRow.sessionId = row.session_id;
+  newRow.reportedSuspicious = row.reported_suspicious;
+  newRow.reportSuspiciousActivityUrl = `${
+    PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url
+  }?event=${row.event_id}&reported=${row.reported_suspicious}${
+    currentPage ? "page=" + currentPage : ""
+  }`;
+  newRow.time = prettifyDate(Number(row["timestamp"]), {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hourCycle: "h12",
+    timeZone: "GB",
+  });
+
+  newRow.visitedService = row.client_id;
+  newRow.visitedServiceId = row.client_id;
+  newRow.reportNumber = row.zendesk_ticket_number;
+
+  newRow.visitedServicesEventIds = newRow.visitedServices?.map(
+    (obj: any) => obj["event_id"]
+  );
+  if (row["reported_suspicious_time"]) {
+    newRow.reportedSuspiciousTime = prettifyDate(
+      Number(row["reported_suspicious_time"]),
+      {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }
+    );
+  }
+
+  return newRow;
+};
+
 export const formatData = (
   data: ActivityLogEntry[],
   currentPage?: number
@@ -108,36 +147,9 @@ export const formatData = (
 
   // only format and return activity data for the current page
   for (let i = indexStart; i < indexEnd; i++) {
-    const newRow: any = {};
     const row = data[i];
     if (!row) break;
-
-    newRow.eventType = allowedTxmaEvents.includes(row.event_type)
-      ? "signedIn"
-      : null;
-
-    if (!newRow.eventType) continue;
-
-    newRow.time = prettifyDate(Number(row["timestamp"]), {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hourCycle: "h12",
-      timeZone: "GB",
-    });
-
-    newRow.visitedServices =
-      row.activities?.length &&
-      row.activities.filter((activity: any) =>
-        allowedTxmaEvents.includes(activity.type)
-      );
-    newRow.visitedServicesIds = newRow.visitedServices?.map(
-      (obj: any) => obj["client_id"]
-    );
-
-    formattedData.push(newRow);
+    formattedData.push(formatEvent(row));
   }
 
   return formattedData;
@@ -158,23 +170,25 @@ const getActivityLogEntry = async (
   subjectId: string,
   trace: string
 ): Promise<ActivityLogEntry[]> => {
-  const logger = pino();
-
   try {
     const response = await dynamoDBService().queryItem(
       activityLogDynamoDBRequest(subjectId)
     );
+    logger.info(`Retrieved ${response.Count} Items`);
     const unmarshalledItems = response.Items?.map((item) =>
       DynamoDB.Converter.unmarshall(item)
     ) as ActivityLogEntry[];
     return unmarshalledItems;
   } catch (err) {
-    logger.error({ trace: trace }, err);
+    logger.error(
+      { trace: trace },
+      `Failed to retrieve from dynamodb ${err.message}`
+    );
     return [];
   }
 };
 
-export const presentSignInHistory = async (
+export const presentActivityHistory = async (
   subjectId: string,
   trace: string
 ): Promise<ActivityLogEntry[]> => {

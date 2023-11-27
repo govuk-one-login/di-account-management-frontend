@@ -10,6 +10,7 @@ services:
     environment:
       - SERVICES=kms,sns,dynamodb,sqs
       - HOSTNAME_EXTERNAL=localhost
+      - DYNAMODB_SHARE_DB=1                                       # Removes regions and allows NoSQL Workbench to work.
       - DEBUG=0
       - KMS_PROVIDER=local-kms
       - AWS_ACCESS_KEY_ID=na

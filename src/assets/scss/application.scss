@@ -9,6 +9,7 @@ $govuk-new-link-styles: true;
 // start Design System component imports
 @import "components/back-link/back-link";
 @import "components/button/button";
+@import "components/character-count/character-count";
 @import "components/checkboxes/checkboxes";
 @import "components/cookie-banner/cookie-banner";
 @import "components/details/details";
@@ -450,4 +451,16 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   min-width: 1.1em;
   --sa-message-count-x-position: -17%;
   --sa-message-count-y-position: -20%;
+}
+
+.activity-history__list {
+  list-style: none;
+  padding: 0;
+  margin: govuk-spacing(4) 0;
+  border-top: 1px solid $govuk-border-colour;
+}
+
+.activity-history__list-item {
+  border-bottom: 1px solid $govuk-border-colour;
+  @include govuk-responsive-padding(4, "top");
 }
