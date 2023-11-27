@@ -101,7 +101,12 @@ Parameters:
     Default: user_services
   ActivityLogStoreTableName:
     Type: String
-    Default: activity_logs
+    Default: activity_log
+  CodeSigningConfigArn:
+    Type: String
+    Description: >
+      The ARN of the Code Signing Config to use, provided by the deployment pipeline
+    Default: "none"
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
@@ -118,6 +123,7 @@ Conditions:
   UseStubServices: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
+  UseCodeSigning: !Not [!Equals [none, !Ref CodeSigningConfigArn]]
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, staging]

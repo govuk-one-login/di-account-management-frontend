@@ -167,13 +167,13 @@
         "link": "Dileu eich GOV.UK One Login",
         "info": "Bydd hyn yn dileu eich GOV.UK One Login yn barhaol. Ni fyddwch bellach yn gallu cael mynediad i'r gwasanaethau rydych wedi'u defnyddio gydag ef."
       },
-      "signInHistory": {
+      "activityHistory": {
         "heading": "Hanes mewngofnodi",
         "link": "Gweld eich hanes mewngofnodi",
         "info": "Gweld pan rydych wedi mewngofnodi i'ch GOV.UK One Login a pha wasanaethau rydych wedi ymweld â hwy."
       }
     },
-    "signInHistory": {
+    "activityHistory": {
       "title": "Hanes mewngofnodi",
       "header": "Hanes mewngofnodi",
       "page": "Tudalen [pageNumber]",

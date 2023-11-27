@@ -1,0 +1,28 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% set backLinkText = 'pages.reportSuspiciousActivity.success.backLinkText' | translate %}
+{% set pageTitleName = 'pages.reportSuspiciousActivity.success.title' | translate %}
+
+{% block pageContent %}
+  {{ govukPanel({
+    titleText: 'pages.reportSuspiciousActivity.success.header' | translate
+  }) }}
+  <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.success.paragraph' | translate | safe | replace("[email]", email)}}</p>
+
+  <h2 class="govuk-heading-l">{{ 'pages.reportSuspiciousActivity.success.section1.heading' | translate }}</h2>
+  <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.success.section1.paragraph1' | translate | safe | replace("[changePasswordHref]", changePasswordLink) }}</p>
+  <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.success.section1.paragraph2' | translate }}</p>
+  <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.success.section1.paragraph3' | translate }}</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>{{ 'pages.reportSuspiciousActivity.success.section1.listItem1' | translate }}</li>
+    <li>{{ 'pages.reportSuspiciousActivity.success.section1.listItem2' | translate }}</li>
+  </ul>
+
+  <h2 class="govuk-heading-l">{{ 'pages.reportSuspiciousActivity.success.section2.heading' | translate }}</h2>
+  <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.success.section2.paragraph1' | translate }}</p>
+  <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.success.section2.paragraph2' | translate }}</p>
+
+  <h2 class="govuk-heading-m">{{ 'pages.reportSuspiciousActivity.success.section3.heading' | translate }}</h2>
+  <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.success.section3.paragraph1' | translate | safe | replace("[contactHref]", contactLink)}}</p>
+  <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.success.section3.paragraph2' | translate }}</p>
+{% endblock %}

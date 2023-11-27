@@ -3,16 +3,16 @@ import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-
-import { signInHistoryGet } from "../sign-in-history-controller";
+import { PATH_DATA } from "../../../app.constants";
+import { activityHistoryGet } from "../activity-history-controller";
 import { getAppEnv } from "../../../config";
-describe("Sign in history controller", () => {
+describe("Activity history controller", () => {
   let sandbox: sinon.SinonSandbox;
   let res: Partial<Response>;
   const TEST_SUBJECT_ID = "testSubjectId";
 
   beforeEach(() => {
-    res = { header: sandbox.fake(), render: sandbox.fake(), locals: {} };
+    res = { render: sandbox.fake(), locals: {} };
   });
 
   afterEach(() => {
@@ -21,9 +21,9 @@ describe("Sign in history controller", () => {
 
   describe("sign in history get", () => {
     sandbox = sinon.createSandbox();
-    const signInHistory = require("../../../utils/signInHistory");
+    const activityHistory = require("../../../utils/activityHistory");
     it("should render the sign in history page with data", async () => {
-      sandbox.stub(signInHistory, "presentSignInHistory").callsFake(() => {
+      sandbox.stub(activityHistory, "presentActivityHistory").callsFake(() => {
         return new Promise((resolve) => {
           resolve([]);
         });
@@ -46,20 +46,22 @@ describe("Sign in history controller", () => {
           query: {},
           destroy: sandbox.fake(),
         },
-        log: { error: sandbox.fake() },
+        log: { error: sandbox.fake(), info: sandbox.fake() },
         i18n: { language: "en"}
       };
-      await signInHistoryGet(req as Request, res as Response).then(() => {
+      await activityHistoryGet(req as Request, res as Response).then(() => {
         expect(res.render).to.have.been.calledWith(
-          "sign-in-history/index.njk",
+          "activity-history/index.njk",
           {
-            showExplanation: false,
             env: getAppEnv(),
             data: [],
             pagination: {},
+            backLink: PATH_DATA.SECURITY.url,
+            changePasswordLink: PATH_DATA.SECURITY.url,
           }
         );
       });
     });
   });
 });
+

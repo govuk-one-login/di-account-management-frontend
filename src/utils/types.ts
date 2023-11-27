@@ -31,8 +31,11 @@ export interface ActivityLogEntry {
   client_id: string;
   event_id: string;
   event_type: string;
-  reported_suspicious: boolean;
+  reported_suspicious?: boolean;
   session_id: string;
+  truncated: boolean;
+  reported_suspicious_time?: number;
+  zendesk_ticket_number?: string;
 }
 
 export interface FormattedActivityLog {
@@ -41,9 +44,15 @@ export interface FormattedActivityLog {
   clientId: string | null;
   eventId: string | null;
   eventType: string | null;
-  reportedSuspicious: boolean;
+  reportedSuspicious?: boolean;
   sessionId: string | null;
+  reportSuspiciousActivityUrl?: string;
+  visitedService?: string;
+  visitedServiceId?: string;
+  reportNumber?: string;
+  reportedSuspiciousTime?: string;
 }
+
 export interface SnsService {
   publish: (
     topic_arn: string,
