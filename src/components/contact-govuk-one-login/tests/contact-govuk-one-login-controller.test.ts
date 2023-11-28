@@ -9,6 +9,7 @@ import { SinonStub, stub } from "sinon";
 import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { I18NextRequest } from "i18next-http-middleware";
 import { AuditEvent } from "../../../services/types";
+import { MISSING_APP_SESSION_ID_SPECIAL_CASE } from "../../../app.constants";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
@@ -242,7 +243,7 @@ describe("Contact GOV.UK One Login controller", () => {
         {
           fromURL: undefined,
           referenceCode: "123456",
-          appSessionId: "",
+          appSessionId: MISSING_APP_SESSION_ID_SPECIAL_CASE,
           appErrorCode: undefined,
           sessionId: "sessionId",
           persistentSessionId: "persistentSessionId",

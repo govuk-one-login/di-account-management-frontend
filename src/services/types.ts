@@ -25,6 +25,7 @@ export interface AuditEvent extends Event {
 export interface User {
   session_id: string;
   persistent_session_id: string;
+  user_id: string;
 }
 
 export interface Platform {
@@ -36,4 +37,5 @@ export interface Extensions {
   app_session_id: string;
   app_error_code: string;
   reference_code: string;
+  is_signed_in?: boolean;
 }

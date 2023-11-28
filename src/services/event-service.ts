@@ -7,7 +7,12 @@ import {
 } from "./types";
 import { SqsService } from "../utils/types";
 import { sqsService } from "../utils/sqs";
-import { MISSING_SESSION_VALUE_SPECIAL_CASE } from "../app.constants";
+import {
+  MISSING_APP_SESSION_ID_SPECIAL_CASE,
+  MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
+  MISSING_SESSION_ID_SPECIAL_CASE,
+  MISSING_USER_ID_SPECIAL_CASE,
+} from "../app.constants";
 import { Session } from "express-session";
 
 export function eventService(
@@ -22,15 +27,22 @@ export function eventService(
   const getSessionId = (res: Response): string =>
     userHasSignedIntoHomeRelyingParty(res)
       ? res.locals.sessionId
-      : MISSING_SESSION_VALUE_SPECIAL_CASE;
+      : MISSING_SESSION_ID_SPECIAL_CASE;
 
   const getPersistentSessionId = (res: Response): string =>
-    res.locals.persistentSessionId || MISSING_SESSION_VALUE_SPECIAL_CASE;
+    res.locals.persistentSessionId ||
+    MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE;
+
+  const getUserId = (session: Session): string =>
+    session.user_id || MISSING_USER_ID_SPECIAL_CASE;
 
   const getAppSessionId = (session: Session): string =>
     userHasComeFromTheApp(session)
       ? session.queryParameters?.appSessionId
-      : MISSING_SESSION_VALUE_SPECIAL_CASE;
+      : MISSING_APP_SESSION_ID_SPECIAL_CASE;
+
+  const isSignedIn = (session: Session): boolean =>
+    session.user?.isAuthenticated || false;
 
   const buildAuditEvent = (
     req: Request,
@@ -46,6 +58,7 @@ export function eventService(
       user: {
         session_id: getSessionId(res),
         persistent_session_id: getPersistentSessionId(res),
+        user_id: getUserId(session),
       },
       platform: {
         user_agent: headers["user-agent"],
@@ -55,6 +68,7 @@ export function eventService(
         app_error_code: session.queryParameters?.appErrorCode,
         app_session_id: getAppSessionId(session),
         reference_code: session.referenceCode,
+        is_signed_in: isSignedIn(session),
       },
     };
   };
