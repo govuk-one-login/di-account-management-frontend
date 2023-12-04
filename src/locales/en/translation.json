@@ -217,6 +217,10 @@
               "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
             },
             {
+              "text": "Connect families to support",
+              "href": "https://www.connect-families-to-support.education.gov.uk"
+            },
+            {
               "text": "Criminal injuries compensation",
               "href": "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
             },
@@ -235,6 +239,10 @@
             {
               "text": "Manage apprenticeships",
               "href": "https://www.gov.uk/sign-in-apprenticeship-service-account"
+            },
+            {
+              "text": "Manage family support services and accounts",
+              "href": "https://manage-family-support-services-and-accounts.education.gov.uk"
             },
             {
               "text": "Modern slavery statement registry",
@@ -630,6 +638,18 @@
         "description": "Manage conformity assessment bodies on the register.",
         "link_text": "Go to your conformity assessment body account",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "zbNToJPcre4BXEap0na8kOjniKg": {
+        "header": "Manage family support services and accounts",
+        "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
+        "link_text": "Go to your manage family support services account",
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+      },
+      "cqGoT1LYLsjn-iwGcDTzamckhZU": {
+        "header": "Connect families to support",
+        "description": "Find local support services for children, young people, parents and carers.",
+        "link_text": "Go to your connect families to support account",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
     },
     "integration": {
@@ -694,7 +714,20 @@
         "description": "Manage conformity assessment bodies on the register.",
         "link_text": "Go to your conformity assessment body account",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "zbNToJPcre4BXEap0na8kOjniKg": {
+        "header": "Manage family support services and accounts",
+        "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
+        "link_text": "Go to your manage family support services account",
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+      },
+      "cqGoT1LYLsjn-iwGcDTzamckhZU": {
+        "header": "Connect families to support",
+        "description": "Find local support services for children, young people, parents and carers.",
+        "link_text": "Go to your connect families to support account",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
+
     },
     "staging": {
       "gov-uk": {
@@ -758,7 +791,20 @@
         "description": "Manage conformity assessment bodies on the register.",
         "link_text": "Go to your conformity assessment body account",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Manage family support services and accounts",
+        "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
+        "link_text": "Go to your manage family support services account",
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+      },
+      "connectFamilies": {
+        "header": "Connect families to support",
+        "description": "Find local support services for children, young people, parents and carers.",
+        "link_text": "Go to your connect families to support account",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
+
     },
     "build": {
       "gov-uk": {
@@ -822,7 +868,20 @@
         "description": "Manage conformity assessment bodies on the register.",
         "link_text": "Go to your conformity assessment body account",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Manage family support services and accounts",
+        "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
+        "link_text": "Go to your manage family support services account",
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+      },
+      "connectFamilies": {
+        "header": "Connect families to support",
+        "description": "Find local support services for children, young people, parents and carers.",
+        "link_text": "Go to your connect families to support account",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
+
     },
     "dev": {
       "gov-uk": {
@@ -886,7 +945,20 @@
         "description": "Manage conformity assessment bodies on the register.",
         "link_text": "Go to your conformity assessment body account",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Manage family support services and accounts",
+        "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
+        "link_text": "Go to your manage family support services account",
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+      },
+      "connectFamilies": {
+        "header": "Connect families to support",
+        "description": "Find local support services for children, young people, parents and carers.",
+        "link_text": "Go to your connect families to support account",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
+
     },
     "local": {
       "gov-uk": {
@@ -950,7 +1022,20 @@
         "description": "Manage conformity assessment bodies on the register.",
         "link_text": "Go to your conformity assessment body account",
         "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Manage family support services and accounts",
+        "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
+        "link_text": "Go to your manage family support services account",
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+      },
+      "connectFamilies": {
+        "header": "Connect families to support",
+        "description": "Find local support services for children, young people, parents and carers.",
+        "link_text": "Go to your connect families to support account",
+        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       }
+
     }
   }
 }
