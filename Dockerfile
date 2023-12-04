@@ -13,6 +13,10 @@ COPY --chown=node:node --from=builder /app/package*.json ./
 COPY --chown=node:node --from=builder /app/node_modules/ node_modules
 COPY --chown=node:node --from=builder /app/dist/ dist
 
+# DynaTrace
+COPY --from=khw46367.live.dynatrace.com/linux/oneagent-codemodules-musl:nodejs / /
+ENV LD_PRELOAD /opt/dynatrace/oneagent/agent/lib64/liboneagentproc.so
+
 ENV NODE_ENV "production"
 ENV PORT 6001
 

@@ -78,6 +78,13 @@ jobs:
           role-to-assume: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN }}
           aws-region: eu-west-2
 
+      - name: Login to GDS Dev Dynatrace Container Registry
+        uses: docker/login-action@1f401f745bf57e30b3a2800ad308a87d2ebdf14b
+        with:
+          registry: khw46367.live.dynatrace.com
+          username: khw46367
+          password: ${{ secrets.DYNATRACE_PAAS_TOKEN }}
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@261a7de32bda11ba01f4d75c4ed6caf3739e54be # pin@v1
