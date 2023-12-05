@@ -1,11 +1,14 @@
 import { Issuer, Client, custom, generators } from "openid-client";
 import { OIDCConfig } from "../types";
-import pMemoize = require("p-memoize");
+import ExpiryMap from "expiry-map";
+import pMemoize from "p-memoize";
 import { ClientAssertionServiceInterface, KmsService } from "./types";
 import { kmsService } from "./kms";
 import base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
+
+const cache = new ExpiryMap(43200000);
 
 custom.setHttpOptionsDefaults({
   timeout: 10000,
@@ -15,7 +18,7 @@ async function getIssuer(discoveryUri: string) {
   return await Issuer.discover(discoveryUri);
 }
 
-const cachedIssuer = pMemoize(getIssuer, { maxAge: 43200000 });
+const cachedIssuer = pMemoize(getIssuer, { cache });
 
 async function getOIDCClient(config: OIDCConfig): Promise<Client> {
   const issuer = await cachedIssuer(config.idp_url);
@@ -37,9 +40,9 @@ async function getJWKS(config: OIDCConfig) {
   });
 }
 
-const cached = pMemoize(getOIDCClient, { maxAge: 43200000 });
+const cached = pMemoize(getOIDCClient, { cache });
 
-const cachedJwks = pMemoize(getJWKS, { maxAge: 43200000 });
+const cachedJwks = pMemoize(getJWKS, { cache });
 
 function isTokenExpired(token: string): boolean {
   const decodedToken = decodeJwt(token);
