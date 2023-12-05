@@ -45,6 +45,8 @@ jobs:
           template-file: deploy/template.yaml
           role-to-assume-arn: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
           ecr-repo-name: ${{ secrets.ECR_REPOSITORY }}
-
+          private-docker-registry: khw46367.live.dynatrace.com
+          private-docker-login-username: khw46367
+          private-docker-login-password: ${{ secrets.DYNATRACE_PAAS_TOKEN }}
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
