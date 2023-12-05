@@ -78,7 +78,7 @@
     "jsdom": "^22.1.0",
     "libphonenumber-js": "^1.10.44",
     "nunjucks": "^3.2.4",
-    "openid-client": "^5.5.0",
+    "openid-client": "^5.6.1",
     "p-memoize": "^7.1.1",
     "pino": "^8.15.1",
     "pino-http": "^6.5.0",
