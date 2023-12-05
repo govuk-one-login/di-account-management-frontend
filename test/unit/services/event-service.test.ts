@@ -3,7 +3,12 @@ import { describe } from "mocha";
 import { sinon } from "../../utils/test-utils";
 import { SqsService } from "../../../src/utils/types";
 import { eventService } from "../../../src/services/event-service";
-import { MISSING_SESSION_VALUE_SPECIAL_CASE } from "../../../src/app.constants";
+import {
+  MISSING_APP_SESSION_ID_SPECIAL_CASE,
+  MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
+  MISSING_SESSION_ID_SPECIAL_CASE,
+  MISSING_USER_ID_SPECIAL_CASE,
+} from "../../../src/app.constants";
 
 describe("eventService", () => {
   let sqs: SqsService;
@@ -29,6 +34,10 @@ describe("eventService", () => {
             appSessionId: "test-app-session-id",
           },
           referenceCode: "test-reference-code",
+          user_id: "test-user-id",
+          user: {
+            isAuthenticated: true,
+          },
         },
       };
 
@@ -47,14 +56,16 @@ describe("eventService", () => {
       expect(result.user.persistent_session_id).to.equal(
         "test-persistent-session-id"
       );
+      expect(result.user.user_id).to.equal("test-user-id");
       expect(result.platform.user_agent).to.equal("test-user-agent");
       expect(result.extensions.from_url).to.equal("test-from-url");
       expect(result.extensions.app_error_code).to.equal("test-error-code");
       expect(result.extensions.app_session_id).to.equal("test-app-session-id");
       expect(result.extensions.reference_code).to.equal("test-reference-code");
+      expect(result.extensions.is_signed_in).to.equal(true);
     });
 
-    it("should handle missing session IDs", () => {
+    it("should handle missing IDs", () => {
       const service = eventService(sqs);
 
       const mockReq: any = {
@@ -68,11 +79,13 @@ describe("eventService", () => {
 
       const result = service.buildAuditEvent(mockReq, mockRes, "TEST_EVENT");
 
-      expect(result.user.session_id).to.equal(
-        MISSING_SESSION_VALUE_SPECIAL_CASE
-      );
+      expect(result.user.session_id).to.equal(MISSING_SESSION_ID_SPECIAL_CASE);
       expect(result.user.persistent_session_id).to.equal(
-        MISSING_SESSION_VALUE_SPECIAL_CASE
+        MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE
+      );
+      expect(result.user.user_id).to.equal(MISSING_USER_ID_SPECIAL_CASE);
+      expect(result.extensions.app_session_id).to.equal(
+        MISSING_APP_SESSION_ID_SPECIAL_CASE
       );
     });
 
@@ -98,7 +111,7 @@ describe("eventService", () => {
       expect(result.extensions.from_url).to.be.undefined;
       expect(result.extensions.app_error_code).to.be.undefined;
       expect(result.extensions.app_session_id).to.equal(
-        MISSING_SESSION_VALUE_SPECIAL_CASE
+        MISSING_APP_SESSION_ID_SPECIAL_CASE
       );
     });
   });

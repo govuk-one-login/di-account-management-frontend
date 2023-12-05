@@ -166,7 +166,11 @@ export interface QueryParameters {
   theme?: string;
 }
 
-export const MISSING_SESSION_VALUE_SPECIAL_CASE = "";
+export const MISSING_APP_SESSION_ID_SPECIAL_CASE = "No app session ID";
+export const MISSING_SESSION_ID_SPECIAL_CASE = "No session ID";
+export const MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE =
+  "No persistent session ID";
+export const MISSING_USER_ID_SPECIAL_CASE = "No user ID";
 
 export type ParamName = keyof QueryParameters;
 
