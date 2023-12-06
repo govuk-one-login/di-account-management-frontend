@@ -968,6 +968,8 @@ Resources:
           Value: !Ref AccessLogsBucket
         - Key: routing.http.drop_invalid_header_fields.enabled
           Value: true
+        - Key: deletion_protection.enabled
+          Value: true
         - !Ref AWS::NoValue
       Tags:
         - Key: Product
