@@ -8,7 +8,7 @@ import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
 
 custom.setHttpOptionsDefaults({
-  timeout: 10000,
+  timeout: 20000,
 });
 
 async function getIssuer(discoveryUri: string) {
