@@ -155,7 +155,8 @@ const activityLogDynamoDBRequest = (
 });
 
 const getActivityLogEntry = async (
-  subjectId: string
+  subjectId: string,
+  trace: string
 ): Promise<ActivityLogEntry[]> => {
   const logger = pino();
 
@@ -168,15 +169,16 @@ const getActivityLogEntry = async (
     ) as ActivityLogEntry[];
     return unmarshalledItems;
   } catch (err) {
-    logger.error(err);
+    logger.error({ trace: trace }, err);
     return [];
   }
 };
 
 export const presentSignInHistory = async (
-  subjectId: string
+  subjectId: string,
+  trace: string
 ): Promise<ActivityLogEntry[]> => {
-  const activityLogEntry = await getActivityLogEntry(subjectId);
+  const activityLogEntry = await getActivityLogEntry(subjectId, trace);
   if (activityLogEntry) {
     return activityLogEntry;
   } else {

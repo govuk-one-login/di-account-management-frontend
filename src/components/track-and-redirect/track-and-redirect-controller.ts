@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import { getContactEmailServiceUrl } from "../../config";
 import { logger } from "../../utils/logger";
 
@@ -9,7 +9,10 @@ export enum ExpectedParams {
   AppErrorCode = "appErrorCode",
 }
 
-export const buildContactEmailServiceUrl = (req: Request): URL => {
+export const buildContactEmailServiceUrl = (
+  req: Request,
+  res: Response
+): URL => {
   const contactEmailServiceUrl = new URL(getContactEmailServiceUrl());
 
   for (const paramValue of Object.values(ExpectedParams)) {
@@ -25,7 +28,10 @@ export const buildContactEmailServiceUrl = (req: Request): URL => {
         ]
       );
     } else {
-      logger.info(`Missing ${paramValue} in the request or session.`);
+      logger.info(
+        { trace: res.locals.sessionId },
+        `Missing ${paramValue} in the request or session.`
+      );
     }
   }
   return contactEmailServiceUrl;

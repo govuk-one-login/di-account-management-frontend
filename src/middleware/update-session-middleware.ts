@@ -9,13 +9,15 @@ import { ParsedQs } from "qs";
 const copySafeQueryParamToSession = (
   session: Session,
   queryParams: ParsedQs,
-  paramName: ParamName
+  paramName: ParamName,
+  sessionId: string
 ) => {
   if (queryParams[paramName]) {
     if (isSafeString(queryParams[paramName] as string)) {
       session.queryParameters[paramName] = queryParams[paramName] as string;
     } else {
       logger.error(
+        { trace: sessionId },
         `${paramName} in request query for contact-govuk-one-login page did not pass validation`
       );
     }
@@ -37,14 +39,30 @@ export const updateSessionMiddleware = (
       session.queryParameters.fromURL = fromURL as string;
     } else {
       logger.error(
+        { trace: res.locals.sessionId },
         "fromURL in request query for contact-govuk-one-login page did not pass validation"
       );
     }
   }
 
-  copySafeQueryParamToSession(session, queryParams, "theme");
-  copySafeQueryParamToSession(session, queryParams, "appSessionId");
-  copySafeQueryParamToSession(session, queryParams, "appErrorCode");
+  copySafeQueryParamToSession(
+    session,
+    queryParams,
+    "theme",
+    res.locals.sessionId
+  );
+  copySafeQueryParamToSession(
+    session,
+    queryParams,
+    "appSessionId",
+    res.locals.sessionId
+  );
+  copySafeQueryParamToSession(
+    session,
+    queryParams,
+    "appErrorCode",
+    res.locals.sessionId
+  );
 
   if (!session.referenceCode) {
     session.referenceCode = generateReferenceCode();

@@ -17,7 +17,11 @@ describe("updateSessionMiddleware", () => {
       query: {},
     };
 
-    mockResponse = {};
+    mockResponse = {
+      locals: {
+        sessionId: "session-id",
+      },
+    };
 
     nextFunction = sinon.stub();
 

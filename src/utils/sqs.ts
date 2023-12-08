@@ -9,11 +9,17 @@ import { logger } from "./logger";
 import { getSQSConfig, SqsConfig } from "../config/aws";
 
 export function sqsService(config: SqsConfig = getSQSConfig()): SqsService {
-  const send = async function (messageBody: string): Promise<any> {
+  const send = async function (
+    messageBody: string,
+    trace: string
+  ): Promise<any> {
     const { AUDIT_QUEUE_URL } = process.env;
 
     if (AUDIT_QUEUE_URL == null) {
-      logger.error(`Environment missing value for AUDIT_QUEUE_URL, cannot send ${messageBody}.`);
+      logger.error(
+        { trace: trace },
+        `Environment missing value for AUDIT_QUEUE_URL, cannot send ${messageBody}.`
+      );
       return;
     }
 
@@ -25,10 +31,18 @@ export function sqsService(config: SqsConfig = getSQSConfig()): SqsService {
     };
 
     try {
-      const result: SendMessageCommandOutput = await client.send(new SendMessageCommand(message));
-      logger.info(`Event sent with message id ${result.MessageId}`);
+      const result: SendMessageCommandOutput = await client.send(
+        new SendMessageCommand(message)
+      );
+      logger.info(
+        { trace: trace },
+        `Event sent with message id ${result.MessageId}`
+      );
     } catch (err) {
-      logger.error(`Failed to send message ${message.MessageBody} to SQS: ${err}`)
+      logger.error(
+        { trace: trace },
+        `Failed to send message ${message.MessageBody} to SQS: ${err}`
+      );
     }
   };
 
