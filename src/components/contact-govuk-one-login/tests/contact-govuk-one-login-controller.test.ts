@@ -241,7 +241,6 @@ describe("Contact GOV.UK One Login controller", () => {
       });
       expect(loggerSpy).to.have.calledWith(
         {
-          trace: "sessionId",
           fromURL: undefined,
           referenceCode: "123456",
           appSessionId: MISSING_APP_SESSION_ID_SPECIAL_CASE,
@@ -351,7 +350,6 @@ describe("Contact GOV.UK One Login controller", () => {
 
       expect(loggerSpy).to.have.calledWith(
         {
-          trace: sessionId,
           fromURL,
           referenceCode: MOCK_REFERENCE_CODE,
           appSessionId: appSessionId,

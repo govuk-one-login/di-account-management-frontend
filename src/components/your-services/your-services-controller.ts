@@ -9,8 +9,7 @@ export async function yourServicesGet(
   const { user } = req.session;
   const env = getAppEnv();
   if (user && user.subjectId) {
-    const trace = res.locals.sessionId;
-    const serviceData = await presentYourServices(user.subjectId, trace);
+    const serviceData = await presentYourServices(user.subjectId);
     const data = {
       email: req.session.user.email,
       accountsList: serviceData.accountsList,

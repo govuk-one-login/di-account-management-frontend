@@ -47,7 +47,9 @@ export interface SnsService {
 }
 
 export interface SqsService {
-  send: (message: string, trace: string) => Promise<string | undefined>;
+  send: (
+    message: string,
+  ) =>  Promise<string | undefined>
 }
 
 export interface DynamoDBService {

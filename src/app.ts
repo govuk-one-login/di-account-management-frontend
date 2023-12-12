@@ -59,7 +59,6 @@ import { contactRouter } from "./components/contact-govuk-one-login/contact-govu
 import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
-import { getSessionIdsFrom } from "./utils/session-ids";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -73,12 +72,6 @@ async function createApp(): Promise<express.Application> {
   app.enable("trust proxy");
 
   app.use(loggerMiddleware);
-
-  app.use((req, res, next) => {
-    req.log = req.log.child({ trace: getSessionIdsFrom(req).sessionId });
-    next();
-  });
-
   app.use(outboundContactUsLinksMiddleware);
 
   app.use(express.json());

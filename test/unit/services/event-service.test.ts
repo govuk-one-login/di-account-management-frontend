@@ -120,7 +120,7 @@ describe("eventService", () => {
     it("should send the event to SQS", () => {
       const service = eventService(sqs);
 
-      service.send({ event_name: "TEST_EVENT" }, "session-id");
+      service.send({ event_name: "TEST_EVENT" });
 
       expect(sendSpy.calledOnce).to.be.true;
       expect(sendSpy.calledWith(JSON.stringify({ event_name: "TEST_EVENT" })))
@@ -131,7 +131,7 @@ describe("eventService", () => {
       const service = eventService(sqs);
 
       const mockEvent = { event_name: "MOCK_EVENT" };
-      service.send(mockEvent, "session-id");
+      service.send(mockEvent);
 
       expect(sendSpy.calledOnceWith(JSON.stringify(mockEvent))).to.be.true;
     });

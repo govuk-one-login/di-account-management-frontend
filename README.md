@@ -13,12 +13,6 @@ git clone git@github.com:govuk-one-login/di-account-management-frontend.git ./yo
 
 Clones the repository to the `your_folder_name` directory.
 
-## Developer notes
-
-### Logging with a trace id
-
-See [One Login home developer notes](https://team-manual.account.gov.uk/teams/home-team/) in our section of the DI Manual.
-
 ## Running the app locally in Docker
 
 We can run the Account Management frontend locally using our OIDC and Account Management API stubs deployed to the dev or build environment.
