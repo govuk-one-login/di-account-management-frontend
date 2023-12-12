@@ -1,6 +1,6 @@
 # di-account-management-frontend
 
-[![Application Integration and Deployment](https://github.com/alphagov/di-account-management-frontend/actions/workflows/main.yml/badge.svg)](https://github.com/alphagov/di-account-management-frontend/actions/workflows/main.yml)
+[![Application Integration and Deployment](https://github.com/govuk-one-login/di-account-management-frontend/actions/workflows/main.yml/badge.svg)](https://github.com/govuk-one-login/di-account-management-frontend/actions/workflows/main.yml)
 Also known as the Account Management Frontend (AMF).
 
 ## Clone the repo
@@ -8,7 +8,7 @@ Also known as the Account Management Frontend (AMF).
 Clone this repo to your local machine
 
 ```bash
-git clone git@github.com:alphagov/di-account-management-frontend.git ./your_folder_name
+git clone git@github.com:govuk-one-login/di-account-management-frontend.git ./your_folder_name
 ```
 
 Clones the repository to the `your_folder_name` directory.
@@ -48,7 +48,7 @@ The application is now tightly integrated into AWS services.
 We use localstack to mimic AWS when running locally.
 The provisioning of the infra in localstack is done automatically on startup when calling `docker compose up`.
 The provisioning and setup of the infra is done by the following script,
-[provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh).
+[provision script](https://github.com/govuk-one-login/di-account-management-frontend/tree/main/docs/localstack/provision.sh).
 The script is mounted as volume onto localstack and invoked as soon as the container is ready.
 
 #### DynamoDB
@@ -58,7 +58,7 @@ If that fails to connect the application may throw an error or not render any ca
 
 The `user_services` Dynamo table in localstack is provisioned with a user service record populated with a `user_id`.
 The `user_id` value can be overridden in the
-[provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh)
+[provision script](https://github.com/govuk-one-login/di-account-management-frontend/tree/main/docs/localstack/provision.sh)
 by explicitly setting `MY_ONE_LOGIN_USER_ID` env var in the same terminal where `docker compose up` is executed.
 For this to work you will need to get your-subject-id from the build environment or session.
 
@@ -66,14 +66,14 @@ For this to work you will need to get your-subject-id from the build environment
 export MY_ONE_LOGIN_USER_ID=<your-subject-id>
 ```
 
-Or [provide it on line 7](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh#L7).
+Or [provide it on line 7](https://github.com/govuk-one-login/di-account-management-frontend/tree/main/docs/localstack/provision.sh#L7).
 
 A DynamoDB table also provides tha applications session store, which automatically deletes expired sessions.
 To facilitate destroying all sessions for a user upon account deletion or global logout,
 the session store table has an index to allows the application to find all sessions by user.
 
 The session store resources are also provisioned in localstack through the
-[provision script](https://github.com/alphagov/di-account-management-frontend/tree/main/docs/localstack/provision.sh)
+[provision script](https://github.com/govuk-one-login/di-account-management-frontend/tree/main/docs/localstack/provision.sh)
 
 ### Running the tests
 
@@ -105,13 +105,13 @@ We can deploy the app to our development environment for pre-merge testing.
 Only one branch can be deployed at a time because registering an OIDC client with Auth is a manual process at the moment.
 Before deploying, check with the team in the [#di-one-login-home-tech Slack channel](https://gds.slack.com/archives/C011Y5SAY3U) to see if anyone else is using it.
 
-The [Verify and Publish to Dev](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
+The [Verify and Publish to Dev](https://github.com/govuk-one-login/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) Github action builds the Docker container, pushes it to ECR in the dev account and starts the deploy pipeline.
 This action has a `workflow_dispatch` trigger which means we can click an button in Github and start it.
 
 To deploy the app:
 
 1. Rebase your branch onto `main`
-2. Go to the [action page](https://github.com/alphagov/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) and click 'Run workflow'
+2. Go to the [action page](https://github.com/govuk-one-login/di-account-management-frontend/actions/workflows/on-manual-publish-to-dev.yml) and click 'Run workflow'
 3. Choose your branch from the dropdown
 4. Select `Commit SHA, branch name or tag` - Provide the SHA, branch name or tag that you wish to deploy
 5. Click 'Run workflow' again
