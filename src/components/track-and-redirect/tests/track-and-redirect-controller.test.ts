@@ -2,7 +2,7 @@ import {
   buildContactEmailServiceUrl,
   ExpectedParams,
 } from "../track-and-redirect-controller";
-import { Request, Response } from "express";
+import { Request } from "express";
 import { expect } from "chai";
 import { describe } from "mocha";
 import sinon from "sinon";
@@ -11,7 +11,6 @@ import * as config from "../../../config";
 
 describe("buildContactEmailServiceUrl", () => {
   let req: Partial<Request>;
-  let res: any;
   let logInfoSpy: sinon.SinonSpy;
 
   beforeEach(() => {
@@ -21,9 +20,6 @@ describe("buildContactEmailServiceUrl", () => {
         queryParameters: {},
       },
     } as any;
-    res = {
-      locals: { sessionId: "session-id" },
-    };
     logInfoSpy = sinon.spy(logger, "info");
   });
 
@@ -39,7 +35,7 @@ describe("buildContactEmailServiceUrl", () => {
       appErrorCode: "testAppErrorCode",
     };
 
-    const result = buildContactEmailServiceUrl(req as Request, res as Response);
+    const result = buildContactEmailServiceUrl(req as Request);
 
     for (const paramValue of Object.values(ExpectedParams)) {
       expect(result.searchParams.get(paramValue)).to.equal(
@@ -49,12 +45,11 @@ describe("buildContactEmailServiceUrl", () => {
   });
 
   it("should log missing parameters", () => {
-    buildContactEmailServiceUrl(req as Request, res as Response);
+    buildContactEmailServiceUrl(req as Request);
     expect(logInfoSpy.callCount).to.equal(4);
     for (const paramValue of Object.values(ExpectedParams)) {
       expect(
         logInfoSpy.calledWith(
-          { trace: "session-id" },
           `Missing ${paramValue} in the request or session.`
         )
       ).to.be.true;

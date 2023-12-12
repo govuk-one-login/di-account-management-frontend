@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { expect, sinon } from "../../utils/test-utils";
 import { describe } from "mocha";
 import { setLocalVarsMiddleware } from "../../../src/middleware/set-local-vars-middleware";
-import { PERSISTENT_SESSION_ID_UNKNOWN } from "../../../src/app.constants";
 
 describe("set-local-vars-middleware", () => {
   let sandbox: sinon.SinonSandbox;
@@ -45,10 +44,7 @@ describe("set-local-vars-middleware", () => {
 
       setLocalVarsMiddleware(req as Request, res as Response, next);
 
-      expect(res.locals).to.have.property("persistentSessionId");
-      expect(res.locals.persistentSessionId).to.equal(
-        PERSISTENT_SESSION_ID_UNKNOWN
-      );
+      expect(res.locals).to.not.have.property("persistentSessionId");
       expect(next).to.be.calledOnce;
     });
   });

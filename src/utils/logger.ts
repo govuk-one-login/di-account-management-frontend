@@ -1,7 +1,6 @@
 import pino from "pino";
 import PinoHttp from "pino-http";
 import { getLogLevel } from "../config";
-import { getSessionIdsFrom } from "./session-ids";
 
 const logger = pino({
   name: "di-account-management-frontend",
@@ -13,7 +12,6 @@ const logger = pino({
         method: req.method,
         url: req.url,
         from: getRefererFrom(req.headers.referer),
-        trace: getSessionIdsFrom(req).sessionId,
       };
     },
     res: (res) => {
@@ -22,7 +20,6 @@ const logger = pino({
         sessionId: res.locals.sessionId,
         clientSessionId: res.locals.clientSessionId,
         persistentSessionId: res.locals.persistentSessionId,
-        trace: res.locals.sessionId,
       };
     },
   },

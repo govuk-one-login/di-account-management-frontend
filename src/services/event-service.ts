@@ -73,8 +73,8 @@ export function eventService(
     };
   };
 
-  const send = (event: Event, trace: string): void => {
-    sqs.send(JSON.stringify(event), trace);
+  const send = (event: Event): void => {
+    sqs.send(JSON.stringify(event));
   };
 
   return { buildAuditEvent, send };
