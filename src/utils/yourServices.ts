@@ -21,7 +21,10 @@ const serviceStoreDynamoDBRequest = (
 const unmarshallDynamoData = (dynamoDBResponse: DynamoDB.Types.AttributeMap) =>
   DynamoDB.Converter.unmarshall(dynamoDBResponse);
 
-const getServices = async (subjectId: string): Promise<Service[]> => {
+const getServices = async (
+  subjectId: string,
+  trace: string
+): Promise<Service[]> => {
   const logger = pino();
   try {
     const response = await dynamoDBService().getItem(
@@ -29,15 +32,16 @@ const getServices = async (subjectId: string): Promise<Service[]> => {
     );
     return unmarshallDynamoData(response["Item"]).services;
   } catch (err) {
-    logger.error(err);
+    logger.error({ trace: trace }, err);
     return [];
   }
 };
 
 export const presentYourServices = async (
-  subjectId: string
+  subjectId: string,
+  trace: string
 ): Promise<YourServices> => {
-  const userServices = await getServices(subjectId);
+  const userServices = await getServices(subjectId, trace);
   if (userServices) {
     const userServicesWithPresentableDates = userServices.map((service) =>
       formatService(service)
@@ -61,7 +65,7 @@ export const presentYourServices = async (
 export const getAllowedListServices = async (
   subjectId: string
 ): Promise<Service[]> => {
-  const userServices = await getServices(subjectId);
+  const userServices = await getServices(subjectId, "session-id");
   if (userServices) {
     return userServices.filter((service) => {
       return (

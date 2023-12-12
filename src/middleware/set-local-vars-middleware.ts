@@ -7,7 +7,7 @@ import {
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
-import xss from "xss";
+import { getSessionIdsFrom } from "../utils/session-ids";
 
 export function setLocalVarsMiddleware(
   req: Request,
@@ -23,15 +23,10 @@ export function setLocalVarsMiddleware(
   res.locals.accountSecurity = PATH_DATA.SECURITY.url;
   res.locals.accountSignOut = PATH_DATA.SIGN_OUT.url;
 
-  if (req.cookies && req.cookies.gs) {
-    const ids = xss(req.cookies["gs"]).split(".");
-    res.locals.sessionId = ids[0];
-    res.locals.clientSessionId = ids[1];
-  }
-  if (req.cookies && req.cookies["di-persistent-session-id"]) {
-    res.locals.persistentSessionId = xss(
-      req.cookies["di-persistent-session-id"]
-    );
-  }
+  const sessionIds = getSessionIdsFrom(req);
+  res.locals.sessionId = sessionIds.sessionId;
+  res.locals.clientSessionId = sessionIds.clientSessionId;
+  res.locals.persistentSessionId = sessionIds.persistentSessionId;
+
   next();
 }

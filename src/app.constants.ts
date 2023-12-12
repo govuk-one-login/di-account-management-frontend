@@ -132,15 +132,17 @@ export enum LOCALE {
   CY = "cy",
 }
 
+export const LOG_MESSAGES = {
+  ATTEMPTING_TO_DESTROY_SESSION: "Attempting to destroy session",
+  GS_COOKIE_NOT_IN_REQUEST: "gs cookie not in request.",
+  DI_PERSISTENT_SESSION_ID_COOKIE_NOT_IN_REQUEST:
+    "di-persistent-session-id cookie not in request.",
+  MALFORMED_GS_COOKIE: (details: string): string =>
+    `Malformed gs cookie contained: ${details}`,
+};
+
 export const ERROR_MESSAGES = {
-  FAILED_HTTP_REQUEST: "Failed HTTP request",
-  INVALID_CSRF_TOKEN: "Invalid CSRF token",
-  INVALID_SESSION: "Invalid session",
-  INVALID_HTTP_REQUEST: "Invalid HTTP request",
-  FORBIDDEN: "Unauthorized HTTP request",
-  INTERNAL_SERVER_ERROR: "Internal server error",
-  PAGE_NOT_FOUND: "Request page not found",
-  INVALID_URL: "Invalid URL",
+  FAILED_TO_DESTROY_SESSION: "Failed to destroy session",
 };
 
 export const ERROR_CODES = {
@@ -177,3 +179,7 @@ export type ParamName = keyof QueryParameters;
 export const OIDC_ERRORS = {
   ACCESS_DENIED: "access_denied",
 };
+
+export const SESSION_ID_UNKNOWN = "session-id-unknown";
+export const CLIENT_SESSION_ID_UNKNOWN = "session-id-unknown";
+export const PERSISTENT_SESSION_ID_UNKNOWN = "session-id-unknown";

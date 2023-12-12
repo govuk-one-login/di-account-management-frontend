@@ -20,13 +20,14 @@ export function contactGet(req: Request, res: Response): void {
     EVENT_NAME.HOME_TRIAGE_PAGE_VISIT
   );
   logUserVisitsContactPage(audit_event);
-  service.send(audit_event);
+  service.send(audit_event, res.locals.sessionId);
   render(req, res);
 }
 
 const logUserVisitsContactPage = (event: AuditEvent) => {
   logger.info(
     {
+      trace: event.user.session_id,
       fromURL: event.extensions.from_url,
       referenceCode: event.extensions.reference_code,
       appSessionId: event.extensions.app_session_id,
