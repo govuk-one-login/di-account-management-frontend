@@ -4,11 +4,7 @@ import { DeleteAccountServiceInterface } from "./types";
 import { deleteAccountService } from "./delete-account-service";
 import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
-import {
-  getAppEnv,
-  getBaseUrl,
-  getSNSDeleteTopic,
-} from "../../config";
+import { getAppEnv, getBaseUrl, getSNSDeleteTopic } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
 import {
   containsGovUkPublishingService,
@@ -23,7 +19,10 @@ export async function deleteAccountGet(
   const env = getAppEnv();
   const { user } = req.session;
   if (user?.subjectId) {
-    const services: Service[] = await getAllowedListServices(user.subjectId);
+    const services: Service[] = await getAllowedListServices(
+      user.subjectId,
+      res.locals.trace
+    );
     const hasGovUkEmailSubscription: boolean =
       containsGovUkPublishingService(services);
     const data = {

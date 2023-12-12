@@ -51,6 +51,7 @@ describe("Contact GOV.UK One Login controller", () => {
         sessionId: "sessionId",
         persistentSessionId: "persistentSessionId",
         scriptNonce: MOCK_NONCE,
+        trace: "trace-id",
       },
       status: sandbox.fake(),
     };
@@ -241,6 +242,7 @@ describe("Contact GOV.UK One Login controller", () => {
       });
       expect(loggerSpy).to.have.calledWith(
         {
+          trace: res.locals.trace,
           fromURL: undefined,
           referenceCode: "123456",
           appSessionId: MISSING_APP_SESSION_ID_SPECIAL_CASE,
@@ -350,6 +352,7 @@ describe("Contact GOV.UK One Login controller", () => {
 
       expect(loggerSpy).to.have.calledWith(
         {
+          trace: res.locals.trace,
           fromURL,
           referenceCode: MOCK_REFERENCE_CODE,
           appSessionId: appSessionId,

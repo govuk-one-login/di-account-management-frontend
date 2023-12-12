@@ -4,6 +4,9 @@ import { sinon } from "../../utils/test-utils";
 import { updateSessionMiddleware } from "../../../src/middleware/update-session-middleware";
 import { logger } from "../../../src/utils/logger";
 
+const CURRENT_GS_SESSION_ID = "session-id";
+const REFERENCE_CODE = "reference-code";
+const ANOTHER_GS_SESSION_ID = "another-session";
 describe("updateSessionMiddleware", () => {
   let mockRequest: any;
   let mockResponse: any;
@@ -17,7 +20,11 @@ describe("updateSessionMiddleware", () => {
       query: {},
     };
 
-    mockResponse = {};
+    mockResponse = {
+      locals: {
+        sessionId: CURRENT_GS_SESSION_ID,
+      },
+    };
 
     nextFunction = sinon.stub();
 
@@ -62,17 +69,80 @@ describe("updateSessionMiddleware", () => {
     expect(mockRequest.session.queryParameters.theme).to.equal("light");
   });
 
-  it("should generate referenceCode if not present in session", () => {
-    updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
+  describe("Reference Codes", () => {
+    it("should create a new reference code when one is not present in the session", () => {
+      // Arrange
+      expect(mockRequest.session).to.not.have.property("referenceCode");
+      expect(mockRequest.session).to.not.have.property(
+        "referenceCodeOwningSessionId"
+      );
+      expect(mockResponse.locals).to.have.property("sessionId");
 
-    expect(mockRequest.session.referenceCode).to.not.be.undefined;
-  });
+      // Act
+      updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
-  it("should not overwrite existing referenceCode", () => {
-    mockRequest.session.referenceCode = "existing-code";
-    updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
+      // Assert
+      expect(mockRequest.session).to.have.property("referenceCode");
+      expect(mockRequest.session).to.have.property(
+        "referenceCodeOwningSessionId"
+      );
+      expect(mockRequest.session.referenceCodeOwningSessionId).to.equal(
+        CURRENT_GS_SESSION_ID
+      );
+    });
 
-    expect(mockRequest.session.referenceCode).to.equal("existing-code");
+    it("should create a new referenceCode when the one in the session was created when there wasn't a GS session", () => {
+      // Arrange
+      const session = mockRequest.session;
+      expect(session).to.not.have.property("referenceCodeOwningSessionId");
+      session.referenceCode = REFERENCE_CODE;
+      expect(mockResponse.locals).to.have.property("sessionId");
+
+      // Act
+      updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
+
+      // Assert
+      expect(mockRequest.session.referenceCode).to.not.equal(REFERENCE_CODE);
+      expect(mockRequest.session).to.have.property(
+        "referenceCodeOwningSessionId"
+      );
+      expect(mockRequest.session.referenceCodeOwningSessionId).to.equal(
+        CURRENT_GS_SESSION_ID
+      );
+    });
+
+    it("should create a new referenceCode if the one in the session was not created for the current GS session", () => {
+      // Arrange
+      mockRequest.session.referenceCode = REFERENCE_CODE;
+      mockRequest.session.referenceCodeOwningSessionId = ANOTHER_GS_SESSION_ID;
+      expect(mockResponse.locals).to.have.property("sessionId");
+
+      // Act
+      updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
+
+      // Assert
+      expect(mockRequest.session.referenceCode).to.not.equal(REFERENCE_CODE);
+      expect(mockRequest.session.referenceCodeOwningSessionId).equals(
+        CURRENT_GS_SESSION_ID
+      );
+    });
+
+    it("should not overwrite existing referenceCode when created for current GS session", () => {
+      // Arrange
+      mockRequest.session.referenceCodeOwningSessionId =
+        "session that owns existing-reference-code";
+      mockRequest.session.referenceCode = "existing-reference-code";
+      mockResponse.locals.sessionId =
+        "session that owns existing-reference-code";
+
+      // Act
+      updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
+
+      // Assert
+      expect(mockRequest.session.referenceCode).to.equal(
+        "existing-reference-code"
+      );
+    });
   });
 
   it("should call the next function once", () => {
