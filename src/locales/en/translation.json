@@ -555,9 +555,8 @@
           "heading": "Email",
           "paragraphs": [
             "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Fill in the contact form</a> to ask for help.",
-            "We’ll reply by email within 2 working days.",
-            "We’ll respond during office hours.",
-            "Office hours: <br>Monday to Friday, 9:30am to 5:30pm"
+            "We’ll reply by email within 2 days.",
+            "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm"
           ]
         }
       },
