@@ -17,6 +17,8 @@ export interface Event {
 
 export interface AuditEvent extends Event {
   timestamp: number;
+  event_timestamp_ms: number;
+  event_timestamp_ms_formatted: string;
   component_id: string;
   user: User;
   platform: Platform;
@@ -38,4 +40,10 @@ export interface Extensions {
   app_error_code: string;
   reference_code: string;
   is_signed_in?: boolean;
+}
+
+export interface CurrentTimeDescriptor {
+  isoString: string;
+  milliseconds: number;
+  seconds: number;
 }
