@@ -142,6 +142,10 @@
     launchWebchatButton.addEventListener("click", function() {
       if (window._sa) {
         window._sa.openChat();
+          const webchat = document.querySelector("iframe.sa-chat-iframe");
+          if (webchat) {
+            webchat.focus();
+          }
       }
     });
 
