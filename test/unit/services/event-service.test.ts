@@ -9,6 +9,7 @@ import {
   MISSING_SESSION_ID_SPECIAL_CASE,
   MISSING_USER_ID_SPECIAL_CASE,
 } from "../../../src/app.constants";
+import { SinonFakeTimers } from "sinon";
 
 describe("eventService", () => {
   let sqs: SqsService;
@@ -20,6 +21,14 @@ describe("eventService", () => {
   });
 
   describe("buildAuditEvent", () => {
+    let clock: SinonFakeTimers
+    beforeEach(() => {
+      clock = sinon.useFakeTimers(new Date(Date.UTC(2023, 20, 12)));
+    });
+    afterEach(() => {
+      clock.restore();
+    });
+
     it("should build an audit event correctly", () => {
       const service = eventService(sqs);
 
@@ -63,6 +72,12 @@ describe("eventService", () => {
       expect(result.extensions.app_session_id).to.equal("test-app-session-id");
       expect(result.extensions.reference_code).to.equal("test-reference-code");
       expect(result.extensions.is_signed_in).to.equal(true);
+      expect(result.extensions.is_signed_in).to.equal(true);
+      expect(result.extensions.is_signed_in).to.equal(true);
+      expect(result.extensions.is_signed_in).to.equal(true);
+      expect(result.event_timestamp_ms).to.equal(1726099200000);
+      expect(result.event_timestamp_ms_formatted).to.equal("2024-09-12T00:00:00.000Z");
+      expect(result.timestamp).to.equal(1726099200);
     });
 
     it("should handle missing IDs", () => {

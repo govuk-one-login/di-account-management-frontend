@@ -3,7 +3,7 @@ import {
   EventServiceInterface,
   EventNameType,
   AuditEvent,
-  Event,
+  Event, CurrentTimeDescriptor,
 } from "./types";
 import { SqsService } from "../utils/types";
 import { sqsService } from "../utils/sqs";
@@ -44,6 +44,21 @@ export function eventService(
   const isSignedIn = (session: Session): boolean =>
     session.user?.isAuthenticated || false;
 
+
+  /**
+   * A function for calculating and returning an object containing the current timestamp.
+   *
+   * @returns CurrentTimeDescriptor object, containing different formats of the current time
+   */
+  function getCurrentTimestamp(date = new Date()): CurrentTimeDescriptor {
+    return {
+      milliseconds: date.valueOf(),
+      isoString: date.toISOString(),
+      seconds: Math.floor(date.valueOf() / 1000),
+    };
+  }
+
+
   const buildAuditEvent = (
     req: Request,
     res: Response,
@@ -51,8 +66,11 @@ export function eventService(
   ): AuditEvent => {
     const { headers, session } = req;
 
+    const timestamps = getCurrentTimestamp();
     return {
-      timestamp: Date.now(),
+      timestamp: timestamps.seconds,
+      event_timestamp_ms: timestamps.milliseconds,
+      event_timestamp_ms_formatted: timestamps.isoString,
       event_name: eventName,
       component_id: "HOME",
       user: {
