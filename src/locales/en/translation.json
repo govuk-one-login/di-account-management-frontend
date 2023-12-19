@@ -659,6 +659,12 @@
         "description": "Assess apprenticeships.",
         "link_text": "Go to your apprenticeship assessments account",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "FakIq5aYsHQ02dBOc6XwyA1wRRs": {
+        "header": "Great British Insulation Scheme (GBIS)",
+        "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
+        "link_text": "Go to your GBIS dashboard",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "integration": {
@@ -741,6 +747,12 @@
         "description": "Assess apprenticeships.",
         "link_text": "Go to your apprenticeship assessments account",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "FakIq5aYsHQ02dBOc6XwyA1wRRs": {
+        "header": "Great British Insulation Scheme (GBIS)",
+        "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
+        "link_text": "Go to your GBIS dashboard",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "staging": {
@@ -823,6 +835,12 @@
         "description": "Assess apprenticeships.",
         "link_text": "Go to your apprenticeship assessments account",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Great British Insulation Scheme (GBIS)",
+        "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
+        "link_text": "Go to your GBIS dashboard",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "build": {
@@ -905,6 +923,12 @@
         "description": "Assess apprenticeships.",
         "link_text": "Go to your apprenticeship assessments account",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Great British Insulation Scheme (GBIS)",
+        "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
+        "link_text": "Go to your GBIS dashboard",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "dev": {
@@ -987,6 +1011,12 @@
         "description": "Assess apprenticeships.",
         "link_text": "Go to your apprenticeship assessments account",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Great British Insulation Scheme (GBIS)",
+        "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
+        "link_text": "Go to your GBIS dashboard",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "local": {
@@ -1069,6 +1099,12 @@
         "description": "Assess apprenticeships.",
         "link_text": "Go to your apprenticeship assessments account",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Great British Insulation Scheme (GBIS)",
+        "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
+        "link_text": "Go to your GBIS dashboard",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     }
   }
