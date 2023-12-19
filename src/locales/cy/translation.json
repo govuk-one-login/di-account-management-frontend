@@ -209,6 +209,9 @@
           "paragraph": "Gallwch ddefnyddio GOV.UK One Login gyda:",
           "listItems": [
             {
+              "text": "Gwasanaeth asesu prentisiaeth (AAS)",
+              "href":  "https://assessors.apprenticeships.education.gov.uk/"},
+            {
               "text": "Cofrestrfa datganiad caethwasiaeth modern",
               "href": "https://www.gov.uk/guidance/add-your-modern-slavery-statement-to-the-statement-registry"
             },
@@ -648,6 +651,12 @@
         "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "dVrdJ7aemrvR0YlX7lDRaXnz0mE": {
+        "header": "Gwasanaeth asesu prentisiaeth (AAS)",
+        "description": "Asesu prentisiaethau.",
+        "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
+        "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       }
     },
     "integration": {
@@ -724,6 +733,12 @@
         "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "dVrdJ7aemrvR0YlX7lDRaXnz0mE": {
+        "header": "Gwasanaeth asesu prentisiaeth (AAS)",
+        "description": "Asesu prentisiaethau.",
+        "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
+        "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       }
     },
     "staging": {
@@ -800,6 +815,12 @@
         "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "aas": {
+        "header": "Gwasanaeth asesu prentisiaeth (AAS)",
+        "description": "Asesu prentisiaethau.",
+        "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
+        "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       }
     },
     "build": {
@@ -876,6 +897,12 @@
         "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "aas": {
+        "header": "Gwasanaeth asesu prentisiaeth (AAS)",
+        "description": "Asesu prentisiaethau.",
+        "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
+        "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       }
     },
     "dev": {
@@ -952,6 +979,12 @@
         "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "aas": {
+        "header": "Gwasanaeth asesu prentisiaeth (AAS)",
+        "description": "Asesu prentisiaethau.",
+        "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
+        "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       }
     },
     "local": {
@@ -1028,6 +1061,12 @@
         "description": "Darganfyddwch wasanaethau cymorth lleol ar gyfer plant, pobl ifanc, rhieni a gofalwyr.",
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "aas": {
+        "header": "Gwasanaeth asesu prentisiaeth (AAS)",
+        "description": "Asesu prentisiaethau.",
+        "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
+        "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       }
     }
   }
