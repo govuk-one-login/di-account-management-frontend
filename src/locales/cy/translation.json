@@ -657,6 +657,12 @@
         "description": "Asesu prentisiaethau.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "FakIq5aYsHQ02dBOc6XwyA1wRRs": {
+        "header": "Cynllun Inswleiddio Prydain Fawr (GBIS)",
+        "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
+        "link_text": "Ewch i'ch dangosfwrdd GBIS",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "integration": {
@@ -739,6 +745,12 @@
         "description": "Asesu prentisiaethau.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "FakIq5aYsHQ02dBOc6XwyA1wRRs": {
+        "header": "Cynllun Inswleiddio Prydain Fawr (GBIS)",
+        "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
+        "link_text": "Ewch i'ch dangosfwrdd GBIS",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "staging": {
@@ -821,6 +833,12 @@
         "description": "Asesu prentisiaethau.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Cynllun Inswleiddio Prydain Fawr (GBIS)",
+        "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
+        "link_text": "Ewch i'ch dangosfwrdd GBIS",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "build": {
@@ -903,6 +921,12 @@
         "description": "Asesu prentisiaethau.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Cynllun Inswleiddio Prydain Fawr (GBIS)",
+        "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
+        "link_text": "Ewch i'ch dangosfwrdd GBIS",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "dev": {
@@ -985,6 +1009,12 @@
         "description": "Asesu prentisiaethau.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Cynllun Inswleiddio Prydain Fawr (GBIS)",
+        "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
+        "link_text": "Ewch i'ch dangosfwrdd GBIS",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     },
     "local": {
@@ -1067,6 +1097,12 @@
         "description": "Asesu prentisiaethau.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Cynllun Inswleiddio Prydain Fawr (GBIS)",
+        "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
+        "link_text": "Ewch i'ch dangosfwrdd GBIS",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
       }
     }
   }
