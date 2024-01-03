@@ -351,3 +351,25 @@ $nav-active-border-thickness: 5px;
     visibility: hidden;
   }
 }
+
+.sa-chat-tab { 
+  // limit size of webchat button when zoom is applied 
+  max-width: 25vw !important; 
+  max-height: 25vw !important;
+  bottom: 2vh !important;
+  right: 2vw !important;
+  left: auto !important;
+  @include govuk-media-query($from: tablet) {
+    max-width: 20vw !important; 
+    max-height: 20vw !important;
+  }
+}
+
+.sa-message-count {
+  // ensure webchat notification icon number is visible when zoom is applied
+  // the notification counter has fixed width and height which is no longer readable when text zoom is applied
+  min-height: 1.1em;
+  min-width: 1.1em;
+  --sa-message-count-x-position: -17%;
+  --sa-message-count-y-position: -20%;
+}
