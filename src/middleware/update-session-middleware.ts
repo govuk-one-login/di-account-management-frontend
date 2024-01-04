@@ -9,13 +9,15 @@ import { ParsedQs } from "qs";
 const copySafeQueryParamToSession = (
   session: Session,
   queryParams: ParsedQs,
-  paramName: ParamName
+  paramName: ParamName,
+  sessionId: string
 ) => {
   if (queryParams[paramName]) {
     if (isSafeString(queryParams[paramName] as string)) {
       session.queryParameters[paramName] = queryParams[paramName] as string;
     } else {
       logger.error(
+        { trace: sessionId },
         `${paramName} in request query for contact-govuk-one-login page did not pass validation`
       );
     }
@@ -30,6 +32,7 @@ export const updateSessionMiddleware = (
   const session = req.session;
   const queryParams = req.query;
   const { fromURL } = queryParams;
+  const trace = res.locals.sessionId;
   session.queryParameters = {};
 
   if (fromURL) {
@@ -37,17 +40,42 @@ export const updateSessionMiddleware = (
       session.queryParameters.fromURL = fromURL as string;
     } else {
       logger.error(
+        { trace: trace },
         "fromURL in request query for contact-govuk-one-login page did not pass validation"
       );
     }
   }
 
-  copySafeQueryParamToSession(session, queryParams, "theme");
-  copySafeQueryParamToSession(session, queryParams, "appSessionId");
-  copySafeQueryParamToSession(session, queryParams, "appErrorCode");
+  copySafeQueryParamToSession(session, queryParams, "theme", trace);
+  copySafeQueryParamToSession(session, queryParams, "appSessionId", trace);
+  copySafeQueryParamToSession(session, queryParams, "appErrorCode", trace);
 
   if (!session.referenceCode) {
+    addReferenceCodeAndOwningGSSessionIdToSession();
+  }
+
+  if (referenceCodeInSessionWasNotCreatedWhenAGSSessionExisted()) {
+    addReferenceCodeAndOwningGSSessionIdToSession();
+  }
+
+  if (referenceCodeInSessionWasNotCreatedForThisGSSession()) {
+    addReferenceCodeAndOwningGSSessionIdToSession();
+  }
+
+  function referenceCodeInSessionWasNotCreatedWhenAGSSessionExisted() {
+    return session.referenceCode && !session.referenceCodeOwningSessionId;
+  }
+
+  function referenceCodeInSessionWasNotCreatedForThisGSSession() {
+    return (
+      session.referenceCode &&
+      session.referenceCodeOwningSessionId != res.locals.sessionId
+    );
+  }
+
+  function addReferenceCodeAndOwningGSSessionIdToSession() {
     session.referenceCode = generateReferenceCode();
+    session.referenceCodeOwningSessionId = res.locals.sessionId;
   }
 
   next();

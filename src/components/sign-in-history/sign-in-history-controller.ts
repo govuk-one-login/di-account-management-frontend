@@ -18,7 +18,8 @@ export async function signInHistoryGet(
   let data: any = [];
   let pagination: any = {};
   if (user?.subjectId) {
-    activityData = await presentSignInHistory(user.subjectId);
+    const trace = res.locals.sessionId;
+    activityData = await presentSignInHistory(user.subjectId, trace);
     const pageParameter = req.query?.page;
     const dataLength = activityData.length;
     showExplanation = hasExplanationParagraph(activityData);

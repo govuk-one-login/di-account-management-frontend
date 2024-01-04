@@ -8,7 +8,7 @@ export interface EventServiceInterface {
     res: Response,
     eventName: EventNameType
   ) => AuditEvent;
-  send: (event: Event) => void;
+  send: (event: Event, trace: string) => void;
 }
 
 export interface Event {

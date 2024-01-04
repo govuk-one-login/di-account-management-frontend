@@ -71,13 +71,21 @@ async function createApp(): Promise<express.Application> {
 
   app.enable("trust proxy");
 
-  app.use(loggerMiddleware);
   app.use(outboundContactUsLinksMiddleware);
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
   app.use(cookieParser());
+  app.use(setLocalVarsMiddleware);
+  app.use(loggerMiddleware);
+
+  app.use((req, res, next) => {
+    req.log = req.log.child({
+      trace: res.locals.trace,
+    });
+    next();
+  });
 
   app.use(
     "/assets",
@@ -86,7 +94,6 @@ async function createApp(): Promise<express.Application> {
 
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
-  app.use(setLocalVarsMiddleware);
   app.use(noCacheMiddleware);
 
   await i18next
