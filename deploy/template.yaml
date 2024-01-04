@@ -125,9 +125,6 @@ Conditions:
     - !Equals [!Ref Environment, dev]
   UseCodeSigning:
     !Not [!Equals [none, !Ref CodeSigningConfigArn]]
-  IsProd:
-     !Equals [production, !Ref Environment]
-
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, staging]
