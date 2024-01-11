@@ -6,7 +6,7 @@ import {
   getKmsKeyId,
   getLocalStackBaseUrl,
 } from "../config";
-import { SQSClientConfig } from "@aws-sdk/client-sqs";
+import { SQSClient, SQSClientConfig } from "@aws-sdk/client-sqs";
 
 //refer to seed.yaml
 const LOCAL_KEY_ID = "ff275b92-0def-4dfc-b0f6-87c96b26c6c7";
@@ -18,11 +18,6 @@ export interface KmsConfig {
 
 export interface SnsConfig {
   awsConfig: AwsConfig;
-}
-
-export interface SqsConfig {
-  awsConfig: AwsConfig;
-  sqsClientConfig: SQSClientConfig;
 }
 
 export interface AwsConfig {
@@ -62,17 +57,23 @@ export function getSNSConfig(): SnsConfig {
   };
 }
 
+/* SQS */
+export interface SqsConfig {
+  awsConfig: AwsConfig;
+  sqsClientConfig: SQSClientConfig;
+}
+
 export function getSQSConfig(): SqsConfig {
   if (getAppEnv() === "local") {
     return {
       awsConfig: { ...getLocalStackAWSConfig() },
       sqsClientConfig: {
         region: getAwsRegion(),
-        endpoint: "http://localstack:4566",  // NOSONAR: http used locally
+        endpoint: "http://localstack:4566", // NOSONAR: http used locally
         credentials: {
           accessKeyId: "na",
           secretAccessKey: "na",
-        }
+        },
       },
     };
   }
@@ -86,6 +87,20 @@ export function getSQSConfig(): SqsConfig {
     },
   };
 }
+
+// Singleton
+
+export const sqsClient = (() => {
+  let instance: SQSClient;
+  return {
+    getClient: () => {
+      if (!instance) {
+        instance = new SQSClient(getSQSConfig());
+      }
+      return instance;
+    },
+  };
+})();
 
 export function getAWSConfig(): AwsConfig {
   if (getAppEnv() === "local") {

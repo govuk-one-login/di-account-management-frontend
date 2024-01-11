@@ -3,12 +3,11 @@ import {
   SendMessageCommand,
   SendMessageCommandOutput,
   SendMessageRequest,
-  SQSClient,
 } from "@aws-sdk/client-sqs";
 import { logger } from "./logger";
-import { getSQSConfig, SqsConfig } from "../config/aws";
+import { sqsClient } from "../config/aws";
 
-export function sqsService(config: SqsConfig = getSQSConfig()): SqsService {
+export function sqsService(): SqsService {
   const send = async function (
     messageBody: string,
     trace: string
@@ -23,17 +22,15 @@ export function sqsService(config: SqsConfig = getSQSConfig()): SqsService {
       return;
     }
 
-    const client = new SQSClient(config.sqsClientConfig);
-
     const message: SendMessageRequest = {
       QueueUrl: AUDIT_QUEUE_URL,
       MessageBody: messageBody,
     };
 
     try {
-      const result: SendMessageCommandOutput = await client.send(
-        new SendMessageCommand(message)
-      );
+      const result: SendMessageCommandOutput = await sqsClient
+        .getClient()
+        .send(new SendMessageCommand(message));
       logger.info(
         { trace: trace },
         `Event sent with message id ${result.MessageId}`
