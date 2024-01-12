@@ -711,6 +711,8 @@ Resources:
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
+            - Name: "AUDIT_QUEUE_DLQ_URL"
+              Value: !Ref TxMAPublishErrorDeadLetterQueue
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join
@@ -750,6 +752,35 @@ Resources:
         - Key: Source
           Value: !Ref SourceTagValue
     DependsOn: SessionSecret
+
+  TxMAPublishErrorDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      MessageRetentionPeriod: 1209600
+      KmsMasterKeyId: !GetAtt QueueKmsKey.Arn
+
+  QueueKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+            Action: kms:*
+            Resource:
+              - "*"
+
+  QueueKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}/${Environment}/QueueKmsKey"
+      TargetKeyId: !Ref QueueKmsKey
+
 
   TaskLogGroup:
     Type: AWS::Logs::LogGroup

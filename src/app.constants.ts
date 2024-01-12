@@ -139,11 +139,19 @@ export const LOG_MESSAGES = {
     "di-persistent-session-id cookie not in request.",
   MALFORMED_GS_COOKIE: (details: string): string =>
     `Malformed gs cookie contained: ${details}`,
+  EVENT_SENT_SUCCESSFULLY: (queue: string, messageId: string): string =>
+    `Event sent to ${queue} with message id ${messageId}`,
 };
 
 export const ERROR_MESSAGES = {
   FAILED_TO_DESTROY_SESSION: (details: string): string =>
     `Failed to destroy session: ${details}`,
+  QUEUE_URL_MISSING: "Environment missing queue url variable.",
+  MESSAGE_COULD_NOT_BE_REDACTED: (details: string): string =>
+    `Error: ${details} - message could not be redacted.`,
+  REDACTED_EVENT: (details: string): string => `Redacted event: ${details}`,
+  FAILED_TO_SEND_TO_TXMA: "Failed to send to TxMA",
+  FAILED_SEND_TO_TXMA_DLQ: "Failed to send to TxMA DLQ.",
 };
 
 export const ERROR_CODES = {
