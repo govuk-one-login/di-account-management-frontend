@@ -1,4 +1,6 @@
 import express from "express";
+import https from "https";
+import fs from "fs";
 import cookieParser from "cookie-parser";
 import csurf from "csurf";
 import { loggerMiddleware } from "./utils/logger";
@@ -59,16 +61,25 @@ import { contactRouter } from "./components/contact-govuk-one-login/contact-govu
 import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
+import { Server } from "node:net";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
   path.resolve("node_modules/govuk-frontend/"),
 ];
 
-async function createApp(): Promise<express.Application> {
+async function createApp(): Promise<Server> {
   const app: express.Application = express();
   const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
-
+  const pkPath = path.join(process.cwd(), "key.pem");
+  const certPath = path.join(process.cwd(), "cert.pem");
+  const privateKey = fs.readFileSync(pkPath, "utf8");
+  const certificate = fs.readFileSync(certPath, "utf8");
+  const serverOptions = {
+    key: privateKey,
+    cert: certificate,
+    keepAliveTimeout: 61 * 1000,
+  };
   app.enable("trust proxy");
 
   app.use(outboundContactUsLinksMiddleware);
@@ -173,7 +184,7 @@ async function createApp(): Promise<express.Application> {
   app.use(serverErrorHandler);
   app.use(pageNotFoundHandler);
 
-  return app;
+  return https.createServer(serverOptions, app);
 }
 
 export { createApp };
