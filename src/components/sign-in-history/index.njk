@@ -30,23 +30,13 @@
     {% set contentLocale = ['pages.signInHistory.activities.', event.eventType] | join %}
     {% set valueHTML %}
       <p class="govuk-body govuk-!-font-weight-bold">{{event.time}} ({{ 'pages.signInHistory.timeInfo' | translate }})</p>
-      {% if event.visitedServicesIds.length > 1 %}
-        <p class="govuk-body">{{[contentLocale, '.', 'contentMany'] | join | translate }}</p>
-        <ul class="govuk-list govuk-list--bullet">
-          {% for serviceId in event.visitedServicesIds %}
-            {% set serviceName = ['clientRegistry.', env, '.', serviceId, '.header'] | join | translate %}
-            <li>{{ serviceName }}</li>
-          {% endfor %}
-        </ul>
-      {% elif (event.visitedServicesIds.length == 1) %}
-        {% set serviceName = ['clientRegistry.', env, '.', event.visitedServicesIds[0], '.header'] | join | translate %}
-        <p class="govuk-body">{{[contentLocale, '.', 'contentOne'] | join | translate | replace("[serviceName]", serviceName) }}</p>
-      {% endif %}
+      {% set serviceName = ['clientRegistry.', env, '.', event.visitedServicesIds, '.header'] | join | translate %}
+      <p class="govuk-body">{{[contentLocale, '.', 'contentOne'] | join | translate | replace("[serviceName]", serviceName) }}</p>
     {% endset %}
-    
+
     {% set row = {
       key: {
-        text: [contentLocale, '.', 'title'] | join | translate  
+        text: [contentLocale, '.', 'title'] | join | translate
       },
       value: {
         text: valueHTML | safe

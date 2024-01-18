@@ -7,6 +7,7 @@ import { prettifyDate } from "./prettifyDate";
 import { ActivityLogEntry, allowedTxmaEvents } from "./types";
 import pino from "pino";
 import { dynamoDBService } from "./dynamo";
+import { decryptData } from "./decrypt-data";
 
 // TODO should be in a config somewhere I suppose.
 // Should be generated using Date.now() whenever a launch date is agreed upon
@@ -97,10 +98,10 @@ export const generatePagination = (dataLength: number, page: any): [] => {
   return pagination;
 };
 
-export const formatData = (
+export const formatData = async (
   data: ActivityLogEntry[],
   currentPage?: number
-): [] => {
+): Promise<[]> => {
   const curr = currentPage || 1;
   const formattedData: any = [];
   const indexStart = (curr - 1) * activityLogItemsPerPage;
@@ -109,16 +110,17 @@ export const formatData = (
   // only format and return activity data for the current page
   for (let i = indexStart; i < indexEnd; i++) {
     const newRow: any = {};
-    const row = data[i];
-    if (!row) break;
+    if (data[i]) break;
+    const { user_id, event_type, timestamp, client_id } = data[i];
+    const eventType = await decryptData(user_id, event_type);
 
-    newRow.eventType = allowedTxmaEvents.includes(row.event_type)
+    newRow.eventType = allowedTxmaEvents.includes(eventType)
       ? "signedIn"
       : null;
 
     if (!newRow.eventType) continue;
 
-    newRow.time = prettifyDate(Number(row["timestamp"]), {
+    newRow.time = prettifyDate(Number(timestamp), {
       month: "long",
       day: "numeric",
       year: "numeric",
@@ -128,14 +130,8 @@ export const formatData = (
       timeZone: "GB",
     });
 
-    newRow.visitedServices =
-      row.activities?.length &&
-      row.activities.filter((activity: any) =>
-        allowedTxmaEvents.includes(activity.type)
-      );
-    newRow.visitedServicesIds = newRow.visitedServices?.map(
-      (obj: any) => obj["client_id"]
-    );
+    newRow.visitedServices = eventType;
+    newRow.visitedServicesIds = client_id;
 
     formattedData.push(newRow);
   }
@@ -144,41 +140,39 @@ export const formatData = (
 };
 
 const activityLogDynamoDBRequest = (
-  subjectId: string
+  user_id: string
 ): DynamoDB.Types.QueryInput => ({
   TableName: getDynamoActivityLogStoreTableName(),
   KeyConditionExpression: "user_id = :user_id",
   ExpressionAttributeValues: {
-    ":user_id": { S: subjectId },
+    ":user_id": { S: user_id },
   },
   ScanIndexForward: false, // Set to 'true' for ascending order
 });
 
 const getActivityLogEntry = async (
-  subjectId: string,
+  user_id: string,
   trace: string
 ): Promise<ActivityLogEntry[]> => {
   const logger = pino();
 
   try {
     const response = await dynamoDBService().queryItem(
-      activityLogDynamoDBRequest(subjectId)
+      activityLogDynamoDBRequest(user_id)
     );
-    const unmarshalledItems = response.Items?.map((item) =>
+    return response.Items?.map((item) =>
       DynamoDB.Converter.unmarshall(item)
     ) as ActivityLogEntry[];
-    return unmarshalledItems;
   } catch (err) {
     logger.error({ trace: trace }, err);
-    return [];
   }
 };
 
 export const presentSignInHistory = async (
-  subjectId: string,
+  user_id: string,
   trace: string
 ): Promise<ActivityLogEntry[]> => {
-  const activityLogEntry = await getActivityLogEntry(subjectId, trace);
+  const activityLogEntry = await getActivityLogEntry(user_id, trace);
   if (activityLogEntry) {
     return activityLogEntry;
   } else {

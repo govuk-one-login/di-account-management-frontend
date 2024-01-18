@@ -25,18 +25,13 @@ export interface KmsService {
 }
 
 export interface ActivityLogEntry {
-  event_type: string;
-  session_id: string;
   user_id: string;
   timestamp: number;
-  activities?: Activity[];
-  truncated: boolean;
-}
-
-export interface Activity {
-  type: string;
-  client_id: ClientId;
-  timestamp: number;
+  client_id: string;
+  event_id: string;
+  event_type: string;
+  reported_suspicious: boolean;
+  session_id: string;
 }
 
 export interface SnsService {

@@ -6,20 +6,21 @@ import {
   formatData,
   hasExplanationParagraph,
 } from "../../utils/signInHistory";
+import { ActivityLogEntry } from "../../utils/types";
 
 export async function signInHistoryGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  const { user } = req.session;
+  const { user_id } = req.session;
   const env = getAppEnv();
   let activityData: any[] = [];
   let showExplanation = false;
   let data: any = [];
   let pagination: any = {};
-  if (user?.subjectId) {
+  if (user_id) {
     const trace = res.locals.sessionId;
-    activityData = await presentSignInHistory(user.subjectId, trace);
+    activityData = await presentSignInHistory(user_id, trace);
     const pageParameter = req.query?.page;
     const dataLength = activityData.length;
     showExplanation = hasExplanationParagraph(activityData);
