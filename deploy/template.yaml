@@ -1211,7 +1211,7 @@ Resources:
       ServiceNamespace: ecs
 
   ECSAutoScalingPolicyMemory:
-    Condition: IsNotDevelopment
+#    Condition: IsNotDevelopment
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
       PolicyName: !Sub "${AWS::StackName}-ECSAutoScalingPolicyMemory"
@@ -1230,7 +1230,7 @@ Resources:
     DependsOn: ECSAutoScalingTarget
 
   ECSAutoScalingPolicyCPU:
-    Condition: IsNotDevelopment
+#    Condition: IsNotDevelopment
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
       PolicyName: !Sub "${AWS::StackName}-ECSAutoScalingPolicyCPU"
