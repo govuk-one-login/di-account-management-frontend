@@ -1196,7 +1196,7 @@ Resources:
   #
 
   ECSAutoScalingTarget:
-    Condition: IsNotDevelopment
+#    Condition: IsNotDevelopment
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
       MaxCapacity: !Ref ECSClusterMaxCapacity
