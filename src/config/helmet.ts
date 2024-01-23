@@ -45,7 +45,12 @@ export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "https://*.smartagent.app", "'unsafe-inline'"],
+      styleSrc: [
+        (req: Request, res: Response): string =>
+        `'nonce-${res.locals.scriptNonce}'`,
+        "'self'", 
+        "https://*.smartagent.app", 
+      ],
       scriptSrc: [
         "'self'",
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
