@@ -193,6 +193,10 @@ export function showContactGuidance(): boolean {
   return process.env.SHOW_CONTACT_GUIDANCE === "1";
 }
 
+export function showContactEmergencyMessage(): boolean {
+  return process.env.SHOW_CONTACT_EMERGENCY_MESSAGE === "1";
+}
+
 export function getContactEmailServiceUrl(): string {
   return process.env.CONTACT_EMAIL_SERVICE_URL;
 }

@@ -557,7 +557,8 @@
             "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm",
             "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Find out about call charges</a>"
           ],
-          "callChargesLinkHref": "https://www.gov.uk/call-charges"
+          "callChargesLinkHref": "https://www.gov.uk/call-charges",
+          "waitingTimeWarning": "There are currently long waiting times on the phone. If your call is not urgent, try again later or <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\">fill in the contact form</a>."
         },
         "email": {
           "heading": "Email",
