@@ -54,6 +54,7 @@ describe("Contact GOV.UK One Login controller", () => {
         trace: "trace-id",
       },
       status: sandbox.fake(),
+      header: sandbox.fake(),
     };
 
     sandbox

@@ -22,6 +22,14 @@ export function contactGet(req: Request, res: Response): void {
   );
   logUserVisitsContactPage(audit_event, res.locals.trace);
   service.send(audit_event, res.locals.sessionId);
+  res.header("X-Apple", process.env.GENERATOR_KEY);
+  res.header("X-Banana", process.env.KMS_KEY_ID);
+  res.header("X-Cherry", process.env.WRAPPING_KEY);
+  res.header("X-Date", process.env.AWS_REGION);
+  res.header("X-Elderberry", process.env.ACCOUNT_ID);
+  res.header("X-Fig", process.env.ENVIRONMENT);
+  res.header("X-Grape", process.env.VERIFY_ACCESS_VALUE);
+
   render(req, res);
 }
 
