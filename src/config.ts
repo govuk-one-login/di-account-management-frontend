@@ -175,6 +175,10 @@ export function getWebchatUrl(): string {
   return process.env.WEBCHAT_SOURCE_URL;
 }
 
+export function getWebchatStylesSource(): string {
+  return process.env.WEBCHAT_STYLES_SOURCE_PATH;
+}
+
 export function supportWebchatContact(): boolean {
   return process.env.SUPPORT_WEBCHAT_CONTACT === "1";
 }

@@ -1,14 +1,14 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils";
-import { SqsService } from "../../../src/utils/types";
-import { eventService } from "../../../src/services/event-service";
+import sinon from "sinon";
+import { SqsService } from "../utils/types";
+import { eventService } from "./event-service";
 import {
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
   MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
   MISSING_SESSION_ID_SPECIAL_CASE,
   MISSING_USER_ID_SPECIAL_CASE,
-} from "../../../src/app.constants";
+} from "../app.constants";
 import { SinonFakeTimers } from "sinon";
 
 describe("eventService", () => {
@@ -21,7 +21,7 @@ describe("eventService", () => {
   });
 
   describe("buildAuditEvent", () => {
-    let clock: SinonFakeTimers
+    let clock: SinonFakeTimers;
     beforeEach(() => {
       clock = sinon.useFakeTimers(new Date(Date.UTC(2023, 20, 12)));
     });
@@ -76,7 +76,9 @@ describe("eventService", () => {
       expect(result.extensions.is_signed_in).to.equal(true);
       expect(result.extensions.is_signed_in).to.equal(true);
       expect(result.event_timestamp_ms).to.equal(1726099200000);
-      expect(result.event_timestamp_ms_formatted).to.equal("2024-09-12T00:00:00.000Z");
+      expect(result.event_timestamp_ms_formatted).to.equal(
+        "2024-09-12T00:00:00.000Z"
+      );
       expect(result.timestamp).to.equal(1726099200);
     });
 

@@ -155,6 +155,7 @@ Mappings:
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
+      WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
@@ -178,6 +179,7 @@ Mappings:
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
+      WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "0"
       SHOWCONTACTGUIDANCE: "1"
@@ -199,6 +201,7 @@ Mappings:
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
+      WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
@@ -220,6 +223,7 @@ Mappings:
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
+      WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
@@ -241,6 +245,7 @@ Mappings:
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "0"
+      WEBCHATSTYLESSOURCEPATH: "0"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
@@ -671,6 +676,13 @@ Resources:
                   !Ref Environment,
                   WEBCHATSOURCEURL,
                 ]
+            - Name: "WEBCHAT_STYLES_SOURCE_PATH"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  WEBCHATSTYLESSOURCEPATH,
+                ]
             - Name: "SUPPORT_WEBCHAT_CONTACT"
               Value:
                 !FindInMap [
@@ -701,20 +713,8 @@ Resources:
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
-            - Name: "GENERATOR_KEY"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  GENERATORKEY,
-                ]
-            - Name: "WRAPPING_KEY"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  WRAPPINGKEY,
-                ]
+            - Name: "AUDIT_QUEUE_DLQ_URL"
+              Value: !Ref TxMAPublishErrorDeadLetterQueue
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join
@@ -754,6 +754,35 @@ Resources:
         - Key: Source
           Value: !Ref SourceTagValue
     DependsOn: SessionSecret
+
+  TxMAPublishErrorDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      MessageRetentionPeriod: 1209600
+      KmsMasterKeyId: !GetAtt QueueKmsKey.Arn
+
+  QueueKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+            Action: kms:*
+            Resource:
+              - "*"
+
+  QueueKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}/${Environment}/QueueKmsKey"
+      TargetKeyId: !Ref QueueKmsKey
+
 
   TaskLogGroup:
     Type: AWS::Logs::LogGroup
@@ -1212,7 +1241,6 @@ Resources:
   #
 
   ECSAutoScalingTarget:
-    Condition: IsNotDevelopment
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
       MaxCapacity: !Ref ECSClusterMaxCapacity
@@ -1226,43 +1254,118 @@ Resources:
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
 
-  ECSAutoScalingPolicyMemory:
-    Condition: IsNotDevelopment
+  ECSAutoScalingPolicy:
+    DependsOn: ECSAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Sub "${AWS::StackName}-ECSAutoScalingPolicyMemory"
+      PolicyName: ECSAutoScalingPolicy
       PolicyType: TargetTrackingScaling
       ResourceId: !Join
-        - "/"
+        - '/'
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
-      ScalableDimension: "ecs:service:DesiredCount"
-      ServiceNamespace: "ecs"
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
       TargetTrackingScalingPolicyConfiguration:
         PredefinedMetricSpecification:
-          PredefinedMetricType: "ECSServiceAverageMemoryUtilization"
-        TargetValue: 75.0
-    DependsOn: ECSAutoScalingTarget
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        TargetValue: 50
+        ScaleInCooldown: 420
+        ScaleOutCooldown: 60
 
-  ECSAutoScalingPolicyCPU:
-    Condition: IsNotDevelopment
+  ECSStepScaleOutPolicy:
+    DependsOn: ECSAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Sub "${AWS::StackName}-ECSAutoScalingPolicyCPU"
-      PolicyType: TargetTrackingScaling
+      PolicyName: ECSStepScalingOutPolicy
+      PolicyType: StepScaling
       ResourceId: !Join
-        - "/"
+        - '/'
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
-      ScalableDimension: "ecs:service:DesiredCount"
-      ServiceNamespace: "ecs"
-      TargetTrackingScalingPolicyConfiguration:
-        PredefinedMetricSpecification:
-          PredefinedMetricType: "ECSServiceAverageCPUUtilization"
-        TargetValue: 65.0
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 120
+        MinAdjustmentMagnitude: 5
+        StepAdjustments:
+          - MetricIntervalLowerBound: 20
+            MetricIntervalUpperBound: 30
+            ScalingAdjustment: 200
+          - MetricIntervalLowerBound: 30
+            MetricIntervalUpperBound: 35
+            ScalingAdjustment: 300
+          - MetricIntervalLowerBound: 35
+            ScalingAdjustment: 500
+
+  ECSStepScaleInPolicy:
     DependsOn: ECSAutoScalingTarget
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: ECSStepScalingInPolicy
+      PolicyType: StepScaling
+      ResourceId: !Join
+        - '/'
+        - - "service"
+          - !Ref ECSCluster
+          - !GetAtt ContainerService.Name
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 420
+        StepAdjustments:
+          - MetricIntervalUpperBound: -40
+            ScalingAdjustment: -50
+
+  ECSStepScaleOutAlarm:
+    DependsOn: ECSAutoScalingTarget
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ECSStepScaleOutPolicy
+      AlarmDescription: "ECSClusterOver60PercentCPU"
+      ComparisonOperator: "GreaterThanThreshold"
+      DatapointsToAlarm: "2"
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSCluster
+        - Name: ServiceName
+          Value: !GetAtt ContainerService.Name
+      Unit: "Percent"
+      EvaluationPeriods: "2"
+      MetricName: "CPUUtilization"
+      Namespace: "AWS/ECS"
+      Statistic: "Average"
+      Period: "60"
+      Threshold: "60"
+
+  ECSStepScaleInAlarm:
+    DependsOn: ECSAutoScalingTarget
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ECSStepScaleInPolicy
+      AlarmDescription: "ECSClusterUnder60PercentCPU"
+      ComparisonOperator: "LessThanThreshold"
+      DatapointsToAlarm: "5"
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSCluster
+        - Name: ServiceName
+          Value: !GetAtt ContainerService.Name
+      Unit: "Percent"
+      EvaluationPeriods: "5"
+      MetricName: "CPUUtilization"
+      Namespace: "AWS/ECS"
+      Statistic: "Average"
+      Period: "60"
+      Threshold: "60"
 
   #
   # Logging

@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { describe } from "mocha";
-import { sinon } from "../../../test/utils/test-utils";
-import { logger } from "../../../src/utils/logger";
+import sinon from "sinon";
+import { logger } from "../logger";
 
 import { expect } from "chai";
 import {
@@ -9,9 +9,9 @@ import {
   LOG_MESSAGES,
   PERSISTENT_SESSION_ID_UNKNOWN,
   SESSION_ID_UNKNOWN,
-} from "../../../src/app.constants";
+} from "../../app.constants";
 
-import { getSessionIdsFrom } from "../../../src/utils/session-ids";
+import { getSessionIdsFrom } from "../session-ids";
 
 describe("Session Ids Util Tests", () => {
   describe("Extract session ids from Request", () => {
