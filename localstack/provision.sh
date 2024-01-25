@@ -4,7 +4,7 @@
 
 # either `export MY_ONE_LOGIN_USER_ID=xyz` otherwise the value defaults to `<YOUR_SUBJECT_ID_HERE>`
 # or what ever the hardcoded replacement is
-export BUILD_CLIENT_ID="${MY_ONE_LOGIN_USER_ID:-<YOUR_SUBJECT_ID_HERE>}"
+export BUILD_CLIENT_ID="user_id"
 export TABLE_NAME=user_services
 export ACTIVITY_LOG_TABLE_NAME=activity_logs
 
@@ -83,25 +83,17 @@ aws --endpoint-url=http://localhost:4566 dynamodb put-item \
       "session_id": {
         "S": "session_123"
       },
+      "client_id": {
+        "S": "vehicleOperatorLicense"
+      },
       "event_type": {
         "S": "AUTH_AUTH_CODE_ISSUED"
       },
-      "activities": {
-        "L": [
-          {
-            "M": {
-              "client_id": {
-                "S": "gov-uk"
-              },
-              "timestamp": {
-                "N": "1666169856"
-              },
-              "type": {
-                "S": "AUTH_AUTH_CODE_ISSUED"
-              }
-            }
-          }
-        ]
+      "event_id": {
+        "S": "4a3e09e0-ce9e-4fd5-b47e-4934f35c6e40"
+      },
+      "reported_suspicious": {
+        "BOOL": false
       }
     }'
 
@@ -119,25 +111,17 @@ aws --endpoint-url=http://localhost:4566 dynamodb put-item \
       "session_id": {
         "S": "session_123"
       },
+      "client_id": {
+        "S": "vehicleOperatorLicense"
+      },
       "event_type": {
         "S": "AUTH_AUTH_CODE_ISSUED"
       },
-      "activities": {
-        "L": [
-          {
-            "M": {
-              "client_id": {
-                "S": "cqGoT1LYLsjn-iwGcDTzamckhZU"
-              },
-              "timestamp": {
-                "N": "1666169856"
-              },
-              "type": {
-                "S": "AUTH_AUTH_CODE_ISSUED"
-              }
-            }
-          }
-        ]
+      "event_id": {
+         "S": "4a3e09e0-ce9e-4fd5-b47e-4934f35c6e40"
+      },
+      "reported_suspicious": {
+         "BOOL": false
       }
     }'
 
