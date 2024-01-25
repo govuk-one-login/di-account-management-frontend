@@ -159,6 +159,8 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      GENERATORKEY: !ImportValue:
+        Fn::ImportValue: !Sub "${AWS::StackName}-GeneratorKey"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
       NODEENV: "production"
@@ -699,6 +701,20 @@ Resources:
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
+            - Name: "GENERATOR_KEY"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  GENERATORKEY,
+                ]
+            - Name: "WRAPPING_KEY"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  WRAPPINGKEY,
+                ]
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join

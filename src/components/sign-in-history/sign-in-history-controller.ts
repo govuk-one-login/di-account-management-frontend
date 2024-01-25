@@ -6,7 +6,6 @@ import {
   formatData,
   hasExplanationParagraph,
 } from "../../utils/signInHistory";
-import { ActivityLogEntry } from "../../utils/types";
 
 export async function signInHistoryGet(
   req: Request,

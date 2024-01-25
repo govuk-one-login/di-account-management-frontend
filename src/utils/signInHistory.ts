@@ -111,7 +111,13 @@ export const formatData = async (
   for (let i = indexStart; i < indexEnd; i++) {
     const newRow: any = {};
     if (data[i]) break;
-    const { user_id, event_type, timestamp, client_id } = data[i];
+    const {
+      user_id = null,
+      event_type = null,
+      timestamp = null,
+      client_id = null,
+    } = data[i];
+    if (!user_id || !event_type) break;
     const eventType = await decryptData(user_id, event_type);
 
     newRow.eventType = allowedTxmaEvents.includes(eventType)
