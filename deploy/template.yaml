@@ -102,11 +102,6 @@ Parameters:
   ActivityLogStoreTableName:
     Type: String
     Default: activity_logs
-  CodeSigningConfigArn:
-    Type: String
-    Description: >
-      The ARN of the Code Signing Config to use, provided by the deployment pipeline
-    Default: "none"
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
@@ -123,8 +118,6 @@ Conditions:
   UseStubServices: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
-  UseCodeSigning:
-    !Not [!Equals [none, !Ref CodeSigningConfigArn]]
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, staging]
@@ -160,8 +153,6 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
-      GENERATORKEY: !ImportValue:
-        Fn::ImportValue: !Sub "${AWS::StackName}-GeneratorKey"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
       NODEENV: "production"
