@@ -5,7 +5,6 @@ import {
 } from "@aws-crypto/client-node";
 import buildKmsKeyring from "./kms-keyring-builder";
 import { logger } from "./logger";
-import { ActivityLogEntry } from "./types";
 
 const MAX_ENCRYPTED_DATA_KEY = 5;
 const DECODING = "utf8";
