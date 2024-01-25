@@ -233,6 +233,10 @@
               "href": "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
             },
             {
+              "text": "Early years child development training",
+              "href": "https://child-development-training.education.gov.uk/"
+            },
+            {
               "text": "Find and apply for a grant",
               "href": "https://www.gov.uk/guidance/find-government-grants"
             },
@@ -675,6 +679,12 @@
         "header": "Apply for an HM Armed Forces Veteran Card",
         "link_text": "Apply for an HM Armed Forces Veteran Card",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "txsGLvMYYCPaWPZRq2L7XxEnyro": {
+        "header": "Early years child development training",
+        "description": "Training on child development, including advice on supporting child development in your early years setting.",
+        "link_text": "Go to your early years child development training account",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "integration": {
@@ -768,6 +778,12 @@
         "header": "Apply for an HM Armed Forces Veteran Card",
         "link_text": "Apply for an HM Armed Forces Veteran Card",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "txsGLvMYYCPaWPZRq2L7XxEnyro": {
+        "header": "Early years child development training",
+        "description": "Training on child development, including advice on supporting child development in your early years setting.",
+        "link_text": "Go to your early years child development training account",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "staging": {
@@ -861,6 +877,12 @@
         "header": "Apply for an HM Armed Forces Veteran Card",
         "link_text": "Apply for an HM Armed Forces Veteran Card",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Early years child development training",
+        "description": "Training on child development, including advice on supporting child development in your early years setting.",
+        "link_text": "Go to your early years child development training account",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "build": {
@@ -954,6 +976,12 @@
         "header": "Apply for an HM Armed Forces Veteran Card",
         "link_text": "Apply for an HM Armed Forces Veteran Card",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Early years child development training",
+        "description": "Training on child development, including advice on supporting child development in your early years setting.",
+        "link_text": "Go to your early years child development training account",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "dev": {
@@ -1047,6 +1075,12 @@
         "header": "Apply for an HM Armed Forces Veteran Card",
         "link_text": "Apply for an HM Armed Forces Veteran Card",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Early years child development training",
+        "description": "Training on child development, including advice on supporting child development in your early years setting.",
+        "link_text": "Go to your early years child development training account",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "local": {
@@ -1140,6 +1174,12 @@
         "header": "Apply for an HM Armed Forces Veteran Card",
         "link_text": "Apply for an HM Armed Forces Veteran Card",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Early years child development training",
+        "description": "Training on child development, including advice on supporting child development in your early years setting.",
+        "link_text": "Go to your early years child development training account",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     }
   }
