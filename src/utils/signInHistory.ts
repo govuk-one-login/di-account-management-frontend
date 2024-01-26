@@ -102,36 +102,35 @@ export const generatePagination = (dataLength: number, page: any): [] => {
 
 export const formatData = async (
   data: ActivityLogEntry[],
-  currentPage?: number
-): Promise<[]> => {
-  const curr = currentPage || 1;
-  const formattedData: any = [];
-  const indexStart = (curr - 1) * activityLogItemsPerPage;
+  currentPage: number = 1
+): Promise<FormattedData[]> => {
+  const indexStart = (currentPage - 1) * activityLogItemsPerPage;
   const indexEnd = indexStart + activityLogItemsPerPage;
 
-  // only format and return activity data for the current page
-  for (let i = indexStart; i < indexEnd; i++) {
-    const newRow: any = {};
-    if (!data[i]) break;
+  const formattedData: FormattedData[] = [];
+
+  for (let i = indexStart; i < indexEnd && i < data.length; i++) {
+    const entry = data[i];
     const {
-      user_id = null,
-      event_type = null,
-      timestamp = null,
-      client_id = null,
-    } = data[i];
-    if (!user_id || !event_type) break;
+      user_id,
+      timestamp,
+      client_id,
+      event_id,
+      event_type,
+      reported_suspicious,
+      session_id,
+    } = entry;
+
+    if (!user_id || !event_type) continue;
+
     const eventType =
       getNodeEnv() !== ENVIRONMENT_NAME.DEV
         ? await decryptData(user_id, event_type)
         : event_type;
 
-    newRow.eventType = allowedTxmaEvents.includes(eventType)
-      ? "signedIn"
-      : null;
+    if (!allowedTxmaEvents.includes(eventType)) continue;
 
-    if (!newRow.eventType) continue;
-
-    newRow.time = prettifyDate(Number(timestamp), {
+    const timeFormatted = prettifyDate(Number(timestamp), {
       month: "long",
       day: "numeric",
       year: "numeric",
@@ -141,13 +140,29 @@ export const formatData = async (
       timeZone: "GB",
     });
 
-    newRow.visitedServices = eventType;
-    newRow.visitedServicesIds = client_id;
-
-    formattedData.push(newRow);
+    formattedData.push({
+      userId: user_id,
+      time: timeFormatted,
+      clientId: client_id,
+      eventId: event_id,
+      eventType: "signedIn",
+      reportedSuspicious: reported_suspicious,
+      sessionId: session_id,
+    });
   }
-  return Promise.resolve(formattedData);
+
+  return formattedData;
 };
+
+interface FormattedData {
+  userId: string | null;
+  time: string;
+  clientId: string | null;
+  eventId: string | null;
+  eventType: string | null;
+  reportedSuspicious: boolean;
+  sessionId: string | null;
+}
 
 const activityLogDynamoDBRequest = (
   user_id: string

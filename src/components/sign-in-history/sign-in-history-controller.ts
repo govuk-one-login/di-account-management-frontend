@@ -28,7 +28,7 @@ export async function signInHistoryGet(
       pagination =
         activityData.length > activityLogItemsPerPage
           ? generatePagination(activityData.length, pageParameter)
-          : {};
+          : { currentPage: 1 };
       data = await formatData(activityData, pagination?.currentPage);
     }
   }

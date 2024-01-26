@@ -44,13 +44,13 @@
             {% set contentLocale = ['pages.signInHistory.activities.', event.eventType] | join %}
               <li class="sign-in-history__list-item">
                 <h2 class="govuk-heading-m">{{event.time}} ({{ 'pages.signInHistory.timeInfo' | translate }})</h2>
-                {% if event.visitedServicesIds %}
-                  {% set serviceName = ['clientRegistry.', env, '.', event.visitedServicesIds, '.header'] | join | translate %}
+                {% if event.clientId %}
+                  {% set serviceName = ['clientRegistry.', env, '.', event.clientId, '.header'] | join | translate %}
                   <p class="govuk-body">{{[contentLocale, '.', 'contentOne'] | join | translate | replace("[serviceName]", serviceName) }}</p>
                 {% else %}
                   <p class="govuk-body">{{[contentLocale,'.','fallback'] | join | translate }}</p>
                 {% endif %}
-                <p class="govuk-body"><a class="govuk-link" href="/security/report-suspicious-activity?page={{ pagination.currentPage }}&id={{event.sessionId}}">{{ 'pages.signInHistory.report' | translate }}</a></p>
+                <p class="govuk-body"><a class="govuk-link" href="/security/report-suspicious-activity?page={{ pagination.currentPage }}&id={{event.eventId}}">{{ 'pages.signInHistory.report' | translate }}</a></p>
               </li>
 
           {% endfor %}
