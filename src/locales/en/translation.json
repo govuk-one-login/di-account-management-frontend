@@ -178,15 +178,48 @@
       "header": "Sign in history",
       "page": "Page [pageNumber]",
       "empty": "There is a problem showing your sign in history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">report it</a>.",
-      "notice": "If you see something you do not recognise, <a class=\"govuk-link\" href=\"[link]\">contact us</a>.",
+      "notice": "If you see something you do not recognise, report it.",
       "timeInfo": "UK time",
       "featureIntro": "GOV.UK One Login started showing sign in activity on [date].",
+      "report": "Report this",
       "activities": {
         "signedIn": {
-          "title": "Signed in",
           "contentOne": "You visited [serviceName].",
-          "contentMany": "You visited:"
+          "contentMany": "You visited:",
+          "fallback": "You visited your GOV.UK One Login."
         }
+      }
+    },
+    "reportSuspiciousActivity": {
+      "title": "Report something you do not recognise",
+      "header": "Report something you do not recognise",
+      "intro": "If there’s something you do not recognise about this activity, report it to the GOV.UK One Login team.",
+      "issueType": {
+        "title": "What do you want to report?",
+        "hint": "Select all the things you do not recognise about this activity.",
+        "option1": "Time or date",
+        "option2": "List of services you visited",
+        "option3": "Something else"
+      },
+      "additionalInformation": "Is there anything else you’d like to tell us (optional)?",
+      "responseTimeConfirmation": "The GOV.UK One Login team will reply to you within 2 working days on <strong>[emailAddress]</strong>.",
+      "submitButtonText": "Report",
+      "success": {
+        "title": "You’ve successfully reported an event",
+        "header": "You’ve successfully reported an event",
+        "referenceNumberText": "Your reference number<br><strong>[referenceNumber]</strong>",
+        "paragraph1": "You’ve reported this event because there’s something you do not recognise.",
+        "subheading": "What happens next",
+        "paragraph2": "A confirmation email has been sent to <strong>[email]</strong>.",
+        "paragraph3": "The GOV.UK One Login team will investigate this and reply to you by email within 2 working days. We might ask for more information about the event you’ve reported.",
+        "paragraph4": "Go back to your sign in history"
+
+      },
+
+      "alreadyReported": {
+        "title": "You’ve already  reported this event",
+        "header": "You’ve already  reported this event",
+        "paragraph": "You reported this event on <strong>[date]</strong>."
       }
     },
     "yourServices": {

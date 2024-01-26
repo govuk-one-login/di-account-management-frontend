@@ -352,15 +352,15 @@ $nav-active-border-thickness: 5px;
   }
 }
 
-.sa-chat-tab { 
-  // limit size of webchat button when zoom is applied 
-  max-width: 25vw !important; 
+.sa-chat-tab {
+  // limit size of webchat button when zoom is applied
+  max-width: 25vw !important;
   max-height: 25vw !important;
   bottom: 2vh !important;
   right: 2vw !important;
   left: auto !important;
   @include govuk-media-query($from: tablet) {
-    max-width: 20vw !important; 
+    max-width: 20vw !important;
     max-height: 20vw !important;
   }
 }
@@ -372,4 +372,15 @@ $nav-active-border-thickness: 5px;
   min-width: 1.1em;
   --sa-message-count-x-position: -17%;
   --sa-message-count-y-position: -20%;
+}
+
+.sign-in-history__list {
+  list-style: none;
+  padding: 0;
+  margin: govuk-spacing(4) 0;
+}
+
+.sign-in-history__list-item {
+  border-bottom: 1px solid $govuk-border-colour;
+  @include govuk-responsive-padding(4, "top");
 }
