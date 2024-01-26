@@ -5,7 +5,7 @@ import {
   getNodeEnv,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
-import { ActivityLogEntry, allowedTxmaEvents } from "./types";
+import { ActivityLogEntry, allowedTxmaEvents, FormattedData } from "./types";
 import pino from "pino";
 import { dynamoDBService } from "./dynamo";
 import { decryptData } from "./decrypt-data";
@@ -153,16 +153,6 @@ export const formatData = async (
 
   return formattedData;
 };
-
-interface FormattedData {
-  userId: string | null;
-  time: string;
-  clientId: string | null;
-  eventId: string | null;
-  eventType: string | null;
-  reportedSuspicious: boolean;
-  sessionId: string | null;
-}
 
 const activityLogDynamoDBRequest = (
   user_id: string

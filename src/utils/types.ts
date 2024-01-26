@@ -34,6 +34,15 @@ export interface ActivityLogEntry {
   session_id: string;
 }
 
+export interface FormattedData {
+  userId: string | null;
+  time: string;
+  clientId: string | null;
+  eventId: string | null;
+  eventType: string | null;
+  reportedSuspicious: boolean;
+  sessionId: string | null;
+}
 export interface SnsService {
   publish: (
     topic_arn: string,
