@@ -54,6 +54,8 @@ services:
       - LOCALSTACK_HOSTNAME=localstack
       - AWS_REGION=eu-west-2
       - AUDIT_QUEUE_URL=http://localstack:4566/audit-events
+      - GENERATOR_KEY=${GENERATOR_KEY}
+      - WRAPPING_KEY=${WRAPPING_KEY}
     restart: on-failure
     depends_on:
       localstack:
