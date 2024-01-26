@@ -15,19 +15,21 @@ export async function signInHistoryGet(
   const env = getAppEnv();
   let activityData: any[] = [];
   let showExplanation = false;
-  let data: any = [];
   let pagination: any = {};
+  let data: any = [];
+
   if (user_id) {
     const trace = res.locals.sessionId;
     activityData = await presentSignInHistory(user_id, trace);
-    const pageParameter = req.query?.page;
-    const dataLength = activityData.length;
-    showExplanation = hasExplanationParagraph(activityData);
-    if (dataLength <= activityLogItemsPerPage) {
-      data = formatData(activityData);
-    } else {
-      pagination = generatePagination(dataLength, pageParameter);
-      data = formatData(activityData, pagination.currentPage);
+
+    if (activityData.length > 0) {
+      const pageParameter = req.query?.page;
+      showExplanation = hasExplanationParagraph(activityData);
+      pagination =
+        activityData.length > activityLogItemsPerPage
+          ? generatePagination(activityData.length, pageParameter)
+          : {};
+      data = await formatData(activityData, pagination?.currentPage);
     }
   }
 

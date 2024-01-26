@@ -2,12 +2,14 @@ import { DynamoDB } from "aws-sdk";
 import {
   activityLogItemsPerPage,
   getDynamoActivityLogStoreTableName,
+  getNodeEnv,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import { ActivityLogEntry, allowedTxmaEvents } from "./types";
 import pino from "pino";
 import { dynamoDBService } from "./dynamo";
 import { decryptData } from "./decrypt-data";
+import { ENVIRONMENT_NAME } from "../app.constants";
 
 // TODO should be in a config somewhere I suppose.
 // Should be generated using Date.now() whenever a launch date is agreed upon
@@ -110,7 +112,7 @@ export const formatData = async (
   // only format and return activity data for the current page
   for (let i = indexStart; i < indexEnd; i++) {
     const newRow: any = {};
-    if (data[i]) break;
+    if (!data[i]) break;
     const {
       user_id = null,
       event_type = null,
@@ -118,7 +120,10 @@ export const formatData = async (
       client_id = null,
     } = data[i];
     if (!user_id || !event_type) break;
-    const eventType = await decryptData(user_id, event_type);
+    const eventType =
+      getNodeEnv() !== ENVIRONMENT_NAME.DEV
+        ? await decryptData(user_id, event_type)
+        : event_type;
 
     newRow.eventType = allowedTxmaEvents.includes(eventType)
       ? "signedIn"
@@ -141,8 +146,7 @@ export const formatData = async (
 
     formattedData.push(newRow);
   }
-
-  return formattedData;
+  return Promise.resolve(formattedData);
 };
 
 const activityLogDynamoDBRequest = (
@@ -164,7 +168,7 @@ const getActivityLogEntry = async (
 
   try {
     const response = await dynamoDBService().queryItem(
-      activityLogDynamoDBRequest(user_id)
+      activityLogDynamoDBRequest("user_id")
     );
     return response.Items?.map((item) =>
       DynamoDB.Converter.unmarshall(item)
