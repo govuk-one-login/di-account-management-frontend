@@ -27,7 +27,7 @@
 {% endfor %}
 
 {% block content %}
-  <div class="govuk-grid-row" id="sign-in-history">
+  <div class="govuk-grid-row" id="sign-in-history" data-test-id="sign-in-history">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.signInHistory.header' | translate }}</h1>
       {% if data.length %}
