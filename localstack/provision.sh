@@ -106,7 +106,7 @@ aws --endpoint-url=http://localhost:4566 dynamodb put-item \
         "S": "'"$BUILD_CLIENT_ID"'"
       },
       "timestamp": {
-        "N": "1680025701"
+        "N": "1680025800"
       },
       "session_id": {
         "S": "session_123"
