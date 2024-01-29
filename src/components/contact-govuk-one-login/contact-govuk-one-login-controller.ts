@@ -4,7 +4,6 @@ import { eventService } from "../../services/event-service";
 import { AuditEvent } from "../../services/types";
 import {
   getWebchatUrl,
-  getWebchatStylesSource,
   showContactGuidance,
   showContactEmergencyMessage,
   supportPhoneContact,
@@ -61,7 +60,6 @@ const render = (req: Request, res: Response): void => {
     referenceCode,
     contactEmailServiceUrl: PATH_DATA.TRACK_AND_REDIRECT.url,
     webchatSource: getWebchatUrl(),
-    webchatStylesSource: getWebchatStylesSource(),
     currentUrl: originalUrl,
     baseUrl,
     language,

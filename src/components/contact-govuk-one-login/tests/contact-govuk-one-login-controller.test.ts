@@ -68,7 +68,6 @@ describe("Contact GOV.UK One Login controller", () => {
     process.env.CONTACT_EMAIL_SERVICE_URL =
       "https://signin.account.gov.uk/contact-us";
     process.env.WEBCHAT_SOURCE_URL = "https://example.com";
-    process.env.WEBCHAT_STYLES_SOURCE_PATH = "https://example.com/css";
     process.env.AUDIT_QUEUE_URL = "http://localhost:4566";
   });
 
@@ -104,7 +103,6 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -137,7 +135,6 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -173,7 +170,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -214,7 +210,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -247,7 +242,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -285,7 +279,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -310,7 +303,6 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -336,7 +328,6 @@ describe("Contact GOV.UK One Login controller", () => {
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
