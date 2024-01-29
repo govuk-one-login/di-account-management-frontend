@@ -123,8 +123,7 @@ Conditions:
   UseStubServices: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
-  UseCodeSigning:
-    !Not [!Equals [none, !Ref CodeSigningConfigArn]]
+  UseCodeSigning: !Not [!Equals [none, !Ref CodeSigningConfigArn]]
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, staging]
@@ -223,7 +222,7 @@ Mappings:
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
+      WEBCHATSOURCEURL: "https://dev-chat-loader.smartagent.app/loader/main.js"
       WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
@@ -260,17 +259,16 @@ Resources:
   # ECS Service
   #
 
-
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: !Sub "${AWS::StackName}-ECSCluster"
       CapacityProviders: !If
         - IsProduction
-        - - 'FARGATE'
-        - - 'FARGATE_SPOT'
+        - - "FARGATE"
+        - - "FARGATE_SPOT"
       DefaultCapacityProviderStrategy:
-        - CapacityProvider: !If [IsProduction, 'FARGATE', 'FARGATE_SPOT']
+        - CapacityProvider: !If [IsProduction, "FARGATE", "FARGATE_SPOT"]
           Weight: 1
       ClusterSettings:
         - Name: containerInsights
@@ -728,19 +726,31 @@ Resources:
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join
-                - ''
-                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
-                  - ':DT_TENANT::'
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_TENANT::"
             - Name: DT_TENANTTOKEN
               ValueFrom: !Join
-                - ''
-                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
-                  - ':DT_TENANTTOKEN::'
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_TENANTTOKEN::"
             - Name: DT_CONNECTION_POINT
               ValueFrom: !Join
-                - ''
-                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
-                  - ':DT_CONNECTION_POINT::'
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_CONNECTION_POINT::"
 
       Cpu: 1024
       Memory: 4096
@@ -792,7 +802,6 @@ Resources:
     Properties:
       AliasName: !Sub "alias/${AWS::StackName}/${Environment}/QueueKmsKey"
       TargetKeyId: !Ref QueueKmsKey
-
 
   TaskLogGroup:
     Type: AWS::Logs::LogGroup
@@ -1271,7 +1280,7 @@ Resources:
       PolicyName: ECSAutoScalingPolicy
       PolicyType: TargetTrackingScaling
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
@@ -1291,7 +1300,7 @@ Resources:
       PolicyName: ECSStepScalingOutPolicy
       PolicyType: StepScaling
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
@@ -1318,7 +1327,7 @@ Resources:
       PolicyName: ECSStepScalingInPolicy
       PolicyType: StepScaling
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
