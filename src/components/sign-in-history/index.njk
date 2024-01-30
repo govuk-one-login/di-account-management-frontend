@@ -50,7 +50,7 @@
                 {% else %}
                   <p class="govuk-body">{{[contentLocale,'.','fallback'] | join | translate }}</p>
                 {% endif %}
-                <p class="govuk-body"><a class="govuk-link" href="/security/report-suspicious-activity?page={{ pagination.currentPage }}&id={{event.eventId}}">{{ 'pages.signInHistory.report' | translate }}</a></p>
+                <p class="govuk-body"><a class="govuk-link" href="/security/report-suspicious-activity?page={{ pagination.currentPage }}&id={{event.eventId}}">{{ 'pages.signInHistory.report' | translate | replace("[date]", event.time) }}</a></p>
               </li>
 
           {% endfor %}

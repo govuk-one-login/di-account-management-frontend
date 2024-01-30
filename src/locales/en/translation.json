@@ -181,7 +181,7 @@
       "notice": "If you see something you do not recognise, report it.",
       "timeInfo": "UK time",
       "featureIntro": "GOV.UK One Login started showing sign in activity on [date].",
-      "report": "Report this",
+      "report": "Report activity from [date]",
       "activities": {
         "signedIn": {
           "contentOne": "You visited [serviceName].",
