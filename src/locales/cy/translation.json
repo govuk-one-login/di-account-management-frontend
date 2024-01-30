@@ -556,7 +556,8 @@
             "Oriau agor:<br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm",
             "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Darganfyddwch fwy am gostau galwadau</a>"
           ],
-          "callChargesLinkHref": "https://www.gov.uk/call-charges"
+          "callChargesLinkHref": "https://www.gov.uk/call-charges",
+          "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\">cwblhewch y ffurflen gyswllt</a>."
         },
         "email": {
           "heading": "E-bost",

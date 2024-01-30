@@ -1,5 +1,6 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% set pageTitleName = 'pages.contact.title' | translate %}
 {% set hideAccountNavigation = true %}
 {% set languageToggle = true %}
@@ -58,6 +59,11 @@
         <p class="govuk-body">{{ paragraph }}</p>
       {% endfor %}
     {% endif %}
+
+    {{ govukWarningText({
+      html: 'pages.contact.section3.phone.waitingTimeWarning' | translate | replace('[contactEmailServiceUrl]', contactEmailServiceUrl),
+      iconFallbackText: "Warning"
+    }) if showContactEmergencyMessage }}
 
     {{ govukInsetText({
       html: insetTextHtml

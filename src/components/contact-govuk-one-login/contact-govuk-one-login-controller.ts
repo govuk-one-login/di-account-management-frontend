@@ -6,6 +6,7 @@ import {
   getWebchatUrl,
   getWebchatStylesSource,
   showContactGuidance,
+  showContactEmergencyMessage,
   supportPhoneContact,
   supportWebchatContact,
 } from "../../config";
@@ -55,6 +56,7 @@ const render = (req: Request, res: Response): void => {
     contactWebchatEnabled: supportWebchatContact(),
     contactPhoneEnabled: supportPhoneContact(),
     showContactGuidance: showContactGuidance(),
+    showContactEmergencyMessage: showContactEmergencyMessage(),
     showSignOut: isAuthenticated && !isLoggedOut,
     referenceCode,
     contactEmailServiceUrl: PATH_DATA.TRACK_AND_REDIRECT.url,
