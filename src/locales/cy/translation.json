@@ -210,7 +210,12 @@
           "listItems": [
             {
               "text": "Gwasanaeth asesu prentisiaeth (AAS)",
-              "href":  "https://assessors.apprenticeships.education.gov.uk/"},
+              "href":  "https://assessors.apprenticeships.education.gov.uk/"
+            },
+            {
+              "text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+              "href": "https://www.gov.uk/veteran-card"
+            },
             {
               "text": "Cofrestrfa datganiad caethwasiaeth modern",
               "href": "https://www.gov.uk/guidance/add-your-modern-slavery-statement-to-the-statement-registry"
@@ -663,6 +668,11 @@
         "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
         "link_text": "Ewch i'ch dangosfwrdd GBIS",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "zFeCxrwpLCUHFm-C4_CztwWtLfQ": {
+        "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "integration": {
@@ -751,6 +761,11 @@
         "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
         "link_text": "Ewch i'ch dangosfwrdd GBIS",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "zFeCxrwpLCUHFm-C4_CztwWtLfQ": {
+        "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "staging": {
@@ -839,6 +854,11 @@
         "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
         "link_text": "Ewch i'ch dangosfwrdd GBIS",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "build": {
@@ -927,7 +947,13 @@
         "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
         "link_text": "Ewch i'ch dangosfwrdd GBIS",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
+
     },
     "dev": {
       "gov-uk": {
@@ -1015,6 +1041,11 @@
         "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
         "link_text": "Ewch i'ch dangosfwrdd GBIS",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "local": {
@@ -1103,6 +1134,11 @@
         "description": "Anfonwch eich mesurau effeithlonrwydd ynni cwsmeriaid wedi'u cwblhau i Ofgem i'w hadolygu.",
         "link_text": "Ewch i'ch dangosfwrdd GBIS",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     }
   }

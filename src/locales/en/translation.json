@@ -246,6 +246,10 @@
               "href": "https://www.gov.uk/apply-vehicle-operator-licence"
             },
             {
+              "text": "Apply for an HM Armed Forces Veteran Card",
+              "href": "https://www.gov.uk/veteran-card"
+            },
+            {
               "text": "Apply to become a registered social worker in England",
               "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
             },
@@ -698,6 +702,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "zFeCxrwpLCUHFm-C4_CztwWtLfQ": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "integration": {
@@ -786,6 +795,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "zFeCxrwpLCUHFm-C4_CztwWtLfQ": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "staging": {
@@ -874,6 +888,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "build": {
@@ -962,6 +981,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "dev": {
@@ -1050,6 +1074,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "local": {
@@ -1138,6 +1167,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     }
   }
