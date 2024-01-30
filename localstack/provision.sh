@@ -2,9 +2,9 @@
 
 # Creates account-mgmt-backend infra dependencies
 
-# either `export MY_ONE_LOGIN_USER_ID=xyz` otherwise the value defaults to `<YOUR_SUBJECT_ID_HERE>`
+# either `export MY_ONE_LOGIN_USER_ID=xyz` otherwise the value defaults to `user_id`
 # or what ever the hardcoded replacement is
-export BUILD_CLIENT_ID="user_id"
+export BUILD_CLIENT_ID="${MY_ONE_LOGIN_USER_ID:-user_id}"
 export TABLE_NAME=user_services
 export ACTIVITY_LOG_TABLE_NAME=activity_logs
 
