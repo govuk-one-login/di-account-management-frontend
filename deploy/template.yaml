@@ -672,13 +672,6 @@ Resources:
                   !Ref Environment,
                   WEBCHATSOURCEURL,
                 ]
-            - Name: "WEBCHAT_STYLES_SOURCE_PATH"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  WEBCHATSTYLESSOURCEPATH,
-                ]
             - Name: "SUPPORT_WEBCHAT_CONTACT"
               Value:
                 !FindInMap [
