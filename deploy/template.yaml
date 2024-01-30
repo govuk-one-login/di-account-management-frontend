@@ -152,6 +152,7 @@ Mappings:
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
@@ -174,6 +175,7 @@ Mappings:
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "0"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     staging:
@@ -196,6 +198,7 @@ Mappings:
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     integration:
@@ -218,6 +221,7 @@ Mappings:
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     production:
@@ -240,6 +244,7 @@ Mappings:
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
 
@@ -694,6 +699,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SHOWCONTACTGUIDANCE,
+                ]
+            - Name: "SHOW_CONTACT_EMERGENCY_MESSAGE"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SHOWCONTACTEMERGENCYMESSAGE,
                 ]
             - Name: "CONTACT_EMAIL_SERVICE_URL"
               Value:
