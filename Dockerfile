@@ -1,4 +1,4 @@
-FROM node:20.5.1-alpine@sha256:f62abc08fe1004555c4f28b6793af8345a76230b21d2d249976f329079e2fef2 as builder
+FROM node:21.6.1-alpine@sha256:4cc2d9f365691fc6f8fe227321d32d9a2691216a71f51c21c7f02224515dea48 as builder
 WORKDIR /app
 COPY package.json ./
 COPY package-lock.json ./
@@ -7,7 +7,7 @@ COPY ./src ./src
 COPY ./@types ./@types
 RUN npm install && npm run build && npm run clean-modules && npm install --production=true
 
-FROM node:20.5.1-alpine@sha256:f62abc08fe1004555c4f28b6793af8345a76230b21d2d249976f329079e2fef2 as final
+FROM node:21.6.1-alpine@sha256:4cc2d9f365691fc6f8fe227321d32d9a2691216a71f51c21c7f02224515dea48 as final
 WORKDIR /app
 COPY --chown=node:node --from=builder /app/package*.json ./
 COPY --chown=node:node --from=builder /app/node_modules/ node_modules
