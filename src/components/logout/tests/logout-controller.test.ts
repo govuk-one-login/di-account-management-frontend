@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
-import { logoutGet } from "../logout-controller";
+import { logoutPost } from "../logout-controller";
 import { logger } from "../../../utils/logger";
 import { ERROR_MESSAGES, LOG_MESSAGES } from "../../../app.constants";
 
@@ -51,7 +51,7 @@ describe("logout controller", () => {
 
     req.session.destroy = sandbox.fake();
 
-    logoutGet(req, res);
+      logoutPost(req, res);
 
     expect(req.session.destroy).to.have.been.calledOnce;
     expect(res.mockCookies.lo).to.equal("true");
@@ -65,7 +65,7 @@ describe("logout controller", () => {
 
   it("should log error when session destroy fails and continue with logout process", () => {
     const ERROR_MESSAGE = "error";
-    const mockSession = {
+    req.session = {
       user: {
         tokens: {
           idToken: "id-token",
@@ -76,9 +76,7 @@ describe("logout controller", () => {
       },
     };
 
-    req.session = mockSession;
-
-    logoutGet(req, res);
+    logoutPost(req, res);
 
     expect(errorLoggerSpy).to.have.been.calledWith(
       { trace: TEST_TRACE_ID },

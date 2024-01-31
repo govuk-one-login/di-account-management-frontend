@@ -1,10 +1,10 @@
 import * as express from "express";
-import { logoutGet } from "./logout-controller";
+import { logoutPost } from "./logout-controller";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 
 const router = express.Router();
 
-router.get(PATH_DATA.SIGN_OUT.url, requiresAuthMiddleware, logoutGet);
+router.post(PATH_DATA.SIGN_OUT.url, requiresAuthMiddleware, logoutPost);
 
 export { router as logoutRouter };
