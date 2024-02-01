@@ -147,11 +147,11 @@ Mappings:
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
-      WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
+      WEBCHATSOURCEURL: "https://dev-chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
@@ -169,11 +169,11 @@ Mappings:
       SERVICEDOMAIN: "build.account.gov.uk"
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
-      WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
+      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "0"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     staging:
@@ -191,11 +191,11 @@ Mappings:
       SERVICEDOMAIN: "staging.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
-      WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
+      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     integration:
@@ -213,11 +213,11 @@ Mappings:
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app/loader/main.js"
-      WEBCHATSTYLESSOURCEPATH: "https://dev-chat-loader.smartagent.app/css/"
+      WEBCHATSOURCEURL: "https://dev-chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     production:
@@ -236,10 +236,10 @@ Mappings:
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "0"
-      WEBCHATSTYLESSOURCEPATH: "0"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
 
@@ -248,17 +248,16 @@ Resources:
   # ECS Service
   #
 
-
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: !Sub "${AWS::StackName}-ECSCluster"
       CapacityProviders: !If
         - IsProduction
-        - - 'FARGATE'
-        - - 'FARGATE_SPOT'
+        - - "FARGATE"
+        - - "FARGATE_SPOT"
       DefaultCapacityProviderStrategy:
-        - CapacityProvider: !If [IsProduction, 'FARGATE', 'FARGATE_SPOT']
+        - CapacityProvider: !If [IsProduction, "FARGATE", "FARGATE_SPOT"]
           Weight: 1
       ClusterSettings:
         - Name: containerInsights
@@ -667,13 +666,6 @@ Resources:
                   !Ref Environment,
                   WEBCHATSOURCEURL,
                 ]
-            - Name: "WEBCHAT_STYLES_SOURCE_PATH"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  WEBCHATSTYLESSOURCEPATH,
-                ]
             - Name: "SUPPORT_WEBCHAT_CONTACT"
               Value:
                 !FindInMap [
@@ -694,6 +686,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SHOWCONTACTGUIDANCE,
+                ]
+            - Name: "SHOW_CONTACT_EMERGENCY_MESSAGE"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SHOWCONTACTEMERGENCYMESSAGE,
                 ]
             - Name: "CONTACT_EMAIL_SERVICE_URL"
               Value:
@@ -721,19 +720,31 @@ Resources:
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join
-                - ''
-                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
-                  - ':DT_TENANT::'
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_TENANT::"
             - Name: DT_TENANTTOKEN
               ValueFrom: !Join
-                - ''
-                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
-                  - ':DT_TENANTTOKEN::'
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_TENANTTOKEN::"
             - Name: DT_CONNECTION_POINT
               ValueFrom: !Join
-                - ''
-                - - !FindInMap [ EnvironmentVariables, !Ref Environment, dynatraceSecretArn ]
-                  - ':DT_CONNECTION_POINT::'
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_CONNECTION_POINT::"
 
       Cpu: 1024
       Memory: 4096
@@ -785,7 +796,6 @@ Resources:
     Properties:
       AliasName: !Sub "alias/${AWS::StackName}/${Environment}/QueueKmsKey"
       TargetKeyId: !Ref QueueKmsKey
-
 
   TaskLogGroup:
     Type: AWS::Logs::LogGroup
@@ -1264,7 +1274,7 @@ Resources:
       PolicyName: ECSAutoScalingPolicy
       PolicyType: TargetTrackingScaling
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
@@ -1284,7 +1294,7 @@ Resources:
       PolicyName: ECSStepScalingOutPolicy
       PolicyType: StepScaling
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name
@@ -1311,7 +1321,7 @@ Resources:
       PolicyName: ECSStepScalingInPolicy
       PolicyType: StepScaling
       ResourceId: !Join
-        - '/'
+        - "/"
         - - "service"
           - !Ref ECSCluster
           - !GetAtt ContainerService.Name

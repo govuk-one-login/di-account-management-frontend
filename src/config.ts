@@ -151,6 +151,8 @@ export const getAllowedServiceListClientIDs: string[] = [
   "dbs",
   "vehicleOperatorLicense",
   "mortgageDeed",
+  "zFeCxrwpLCUHFm-C4_CztwWtLfQ",
+  "veteransCard",
 ];
 
 function getProtocol(): string {
@@ -175,10 +177,6 @@ export function getWebchatUrl(): string {
   return process.env.WEBCHAT_SOURCE_URL;
 }
 
-export function getWebchatStylesSource(): string {
-  return process.env.WEBCHAT_STYLES_SOURCE_PATH;
-}
-
 export function supportWebchatContact(): boolean {
   return process.env.SUPPORT_WEBCHAT_CONTACT === "1";
 }
@@ -189,6 +187,10 @@ export function supportPhoneContact(): boolean {
 
 export function showContactGuidance(): boolean {
   return process.env.SHOW_CONTACT_GUIDANCE === "1";
+}
+
+export function showContactEmergencyMessage(): boolean {
+  return process.env.SHOW_CONTACT_EMERGENCY_MESSAGE === "1";
 }
 
 export function getContactEmailServiceUrl(): string {

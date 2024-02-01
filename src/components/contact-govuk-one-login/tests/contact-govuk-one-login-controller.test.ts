@@ -64,11 +64,11 @@ describe("Contact GOV.UK One Login controller", () => {
     process.env.SUPPORT_TRIAGE_PAGE = "1";
     process.env.SUPPORT_PHONE_CONTACT = "1";
     process.env.SHOW_CONTACT_GUIDANCE = "1";
+    process.env.SHOW_CONTACT_EMERGENCY_MESSAGE = "1";
     process.env.SUPPORT_WEBCHAT_CONTACT = "1";
     process.env.CONTACT_EMAIL_SERVICE_URL =
       "https://signin.account.gov.uk/contact-us";
     process.env.WEBCHAT_SOURCE_URL = "https://example.com";
-    process.env.WEBCHAT_STYLES_SOURCE_PATH = "https://example.com/css";
     process.env.AUDIT_QUEUE_URL = "http://localhost:4566";
   });
 
@@ -78,6 +78,7 @@ describe("Contact GOV.UK One Login controller", () => {
     delete process.env.SUPPORT_TRIAGE_PAGE;
     delete process.env.SUPPORT_PHONE_CONTACT;
     delete process.env.SHOW_CONTACT_GUIDANCE;
+    delete process.env.SHOW_CONTACT_EMERGENCY_MESSAGE;
     delete process.env.SUPPORT_WEBCHAT_CONTACT;
     delete process.env.CONTACT_EMAIL_SERVICE_URL;
     delete process.env.WEBCHAT_SOURCE_URL;
@@ -98,11 +99,11 @@ describe("Contact GOV.UK One Login controller", () => {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
+        showContactEmergencyMessage: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -130,11 +131,11 @@ describe("Contact GOV.UK One Login controller", () => {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
+        showContactEmergencyMessage: true,
         showSignOut: false,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -166,10 +167,10 @@ describe("Contact GOV.UK One Login controller", () => {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
+        showContactEmergencyMessage: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -206,10 +207,10 @@ describe("Contact GOV.UK One Login controller", () => {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
+        showContactEmergencyMessage: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -238,10 +239,10 @@ describe("Contact GOV.UK One Login controller", () => {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
+        showContactEmergencyMessage: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -275,10 +276,10 @@ describe("Contact GOV.UK One Login controller", () => {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
+        showContactEmergencyMessage: true,
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -298,11 +299,11 @@ describe("Contact GOV.UK One Login controller", () => {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
+        showContactEmergencyMessage: true,
         showSignOut: true,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",
@@ -323,11 +324,11 @@ describe("Contact GOV.UK One Login controller", () => {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
+        showContactEmergencyMessage: true,
         showSignOut: false,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
         webchatSource: "https://example.com",
-        webchatStylesSource: "https://example.com/css",
         currentUrl: baseUrl,
         baseUrl,
         language: "en",

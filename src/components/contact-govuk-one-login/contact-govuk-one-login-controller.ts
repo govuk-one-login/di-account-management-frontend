@@ -4,8 +4,8 @@ import { eventService } from "../../services/event-service";
 import { AuditEvent } from "../../services/types";
 import {
   getWebchatUrl,
-  getWebchatStylesSource,
   showContactGuidance,
+  showContactEmergencyMessage,
   supportPhoneContact,
   supportWebchatContact,
 } from "../../config";
@@ -63,11 +63,11 @@ const render = (req: Request, res: Response): void => {
     contactWebchatEnabled: supportWebchatContact(),
     contactPhoneEnabled: supportPhoneContact(),
     showContactGuidance: showContactGuidance(),
+    showContactEmergencyMessage: showContactEmergencyMessage(),
     showSignOut: isAuthenticated && !isLoggedOut,
     referenceCode,
     contactEmailServiceUrl: PATH_DATA.TRACK_AND_REDIRECT.url,
     webchatSource: getWebchatUrl(),
-    webchatStylesSource: getWebchatStylesSource(),
     currentUrl: originalUrl,
     baseUrl,
     language,

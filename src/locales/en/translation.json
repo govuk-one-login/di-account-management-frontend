@@ -213,6 +213,10 @@
               "href": "https://www.gov.uk/apply-vehicle-operator-licence"
             },
             {
+              "text": "Apply for an HM Armed Forces Veteran Card",
+              "href": "https://www.gov.uk/veteran-card"
+            },
+            {
               "text": "Apply to become a registered social worker in England",
               "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
             },
@@ -553,7 +557,8 @@
             "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm",
             "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Find out about call charges</a>"
           ],
-          "callChargesLinkHref": "https://www.gov.uk/call-charges"
+          "callChargesLinkHref": "https://www.gov.uk/call-charges",
+          "waitingTimeWarning": "There are currently long waiting times on the phone. If your call is not urgent, try again later or <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\">fill in the contact form</a>."
         },
         "email": {
           "heading": "Email",
@@ -665,6 +670,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "zFeCxrwpLCUHFm-C4_CztwWtLfQ": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "integration": {
@@ -753,6 +763,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "zFeCxrwpLCUHFm-C4_CztwWtLfQ": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "staging": {
@@ -841,6 +856,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "build": {
@@ -929,6 +949,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "dev": {
@@ -1017,6 +1042,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     },
     "local": {
@@ -1105,6 +1135,11 @@
         "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
         "link_text": "Go to your GBIS dashboard",
         "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
       }
     }
   }
