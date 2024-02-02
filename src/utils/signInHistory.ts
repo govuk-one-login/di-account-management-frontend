@@ -125,7 +125,7 @@ export const formatData = async (
 
     const eventType =
       getNodeEnv() !== ENVIRONMENT_NAME.DEV
-        ? await decryptData(user_id, event_type)
+        ? await decryptData(event_type, user_id)
         : event_type;
 
     if (!allowedTxmaEvents.includes(eventType)) continue;
