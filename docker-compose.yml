@@ -56,6 +56,9 @@ services:
       - AUDIT_QUEUE_URL=http://localstack:4566/audit-events
       - GENERATOR_KEY=${GENERATOR_KEY}
       - WRAPPING_KEY=${WRAPPING_KEY}
+      - ACCOUNT_ID={ACCOUNT_ID}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - VERIFY_ACCESS_VALUE=${VERIFY_ACCESS_VALUE}
     restart: on-failure
     depends_on:
       localstack:
