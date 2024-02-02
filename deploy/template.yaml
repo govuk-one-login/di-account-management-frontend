@@ -705,10 +705,10 @@ Resources:
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
             - Name: "AUDIT_QUEUE_DLQ_URL"
               Value: !Ref TxMAPublishErrorDeadLetterQueue
-            - Name: "GENERATOR_KEY"
+            - Name: "GENERATOR_KEY_ARN"
               Value: !ImportValue
                 'Fn::Sub': "${BackendStackName}-GeneratorKey"
-            - Name: "WRAPPING_KEY"
+            - Name: "WRAPPING_KEY_ARN"
               Value: !ImportValue
                 'Fn::Sub': "${BackendStackName}-WrappingKey"
             - Name: "ACCOUNT_ID"
