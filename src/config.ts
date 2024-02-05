@@ -138,6 +138,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "aas",
   "FakIq5aYsHQ02dBOc6XwyA1wRRs",
   "gbis",
+  "txsGLvMYYCPaWPZRq2L7XxEnyro",
+  "childDevelopmentTraining",
 ];
 
 export const getAllowedServiceListClientIDs: string[] = [

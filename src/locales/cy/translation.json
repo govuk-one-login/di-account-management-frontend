@@ -253,6 +253,10 @@
               "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
             },
             {
+              "text": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+              "href": "https://child-development-training.education.gov.uk/"
+            },
+            {
               "text": "Llofnodwch eich gweithred morgais",
               "href": "https://sign-your-mortgage-deed.landregistry.gov.uk"
             },
@@ -674,6 +678,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "txsGLvMYYCPaWPZRq2L7XxEnyro": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "integration": {
@@ -767,6 +777,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "txsGLvMYYCPaWPZRq2L7XxEnyro": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "staging": {
@@ -860,6 +876,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "build": {
@@ -953,6 +975,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
 
     },
@@ -1047,6 +1075,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "local": {
@@ -1140,6 +1174,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     }
   }
