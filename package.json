@@ -23,7 +23,7 @@
     "test:audit": "npm audit",
     "test:integration": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"src/**/*-integration.test.ts\"",
     "test:unit": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config --exclude \"src/**/*-integration.test.ts\"  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
-    "test": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
+    "test": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"src/utils/test/decrypt-data.test.ts\"",
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary npm run test:unit",
     "test:js": "NODE_ENV=development nyc mocha -r dotenv/config \"src/assets/**/*.test.js\"",
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
@@ -39,7 +39,8 @@
     "timeout": 30000,
     "recursive": true,
     "require": [
-      "ts-node/register"
+      "ts-node/register",
+      "dotenv/config"
     ],
     "exit": true
   },

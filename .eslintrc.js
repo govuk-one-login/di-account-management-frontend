@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     node: true,
+    mocha: true
   },
   root: true,
   parser: "@typescript-eslint/parser",
