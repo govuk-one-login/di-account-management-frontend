@@ -8,18 +8,21 @@
     active: true if (active == "security") else false,
     href: accountSecurity,
     text: 'general.header.accountNavSecurityLink' | translate
-  },{
-    active: true if (active == "sign-out") else false,
-    href: accountSignOut,
-    text: 'general.header.signOutLink' | translate
   }]
 %}
 <nav aria-label="Account navigation" class="account-navigation">
-  <div class="govuk-width-container">
-    <ul class="account-navigation__list">
-      {% for item in navigationItems %}
-        <li class="account-navigation__list-item {{ 'account-navigation__list-item--active' if item.active else '' }}"><a class="account-navigation__link" href="{{item.href}}">{{item.text}}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
+    <div class="govuk-width-container">
+        <ul class="account-navigation__list">
+            {% for item in navigationItems %}
+                <li class="account-navigation__list-item {{ 'account-navigation__list-item--active' if item.active else '' }}">
+                    <a class="account-navigation__link" href="{{ item.href }}">{{ item.text }}</a></li>
+            {% endfor %}
+            <li class="account-navigation__list-item">
+                <form action="{{ accountSignOut }}" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                    <button class="account-navigation__button" type="submit"><span class="account-navigation__button-content">{{ 'general.header.signOutLink' | translate }}</span></button>
+                </form>
+            </li>
+        </ul>
+    </div>
 </nav>

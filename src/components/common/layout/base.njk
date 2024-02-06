@@ -36,15 +36,7 @@
 {% endblock %}
 
 {% block header %}
-    {{ govukHeader({
-      homepageUrl: accountHome,
-      productName: 'general.header.productName' | translate,
-      classes: headerClasses,
-      navigation: [{
-        href: accountSignOut,
-        text: 'general.header.signOutLink' | translate
-      }] if showSignOut
-    }) }}
+    {% include 'common/layout/header.njk' %}
     {% if not hideAccountNavigation %}
       {% include 'common/layout/navigation.njk' %}
     {% endif %}
