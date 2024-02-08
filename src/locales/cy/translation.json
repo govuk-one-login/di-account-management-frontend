@@ -209,12 +209,8 @@
           "paragraph": "Gallwch ddefnyddio GOV.UK One Login gyda:",
           "listItems": [
             {
-              "text": "Gwasanaeth asesu prentisiaeth (AAS)",
-              "href":  "https://assessors.apprenticeships.education.gov.uk/"
-            },
-            {
-              "text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
-              "href": "https://www.gov.uk/veteran-card"
+              "text": "Cofrestr darparwr prentisiaeth ac asesiad",
+              "href": "https://apply.apprenticeships.education.gov.uk/"
             },
             {
               "text": "Cofrestrfa datganiad caethwasiaeth modern",
@@ -239,10 +235,17 @@
             {
               "text": "Digolledau anafiadau troseddol",
               "href": "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
+            },{
+              "text": "Gwasanaeth asesu prentisiaeth (AAS)",
+              "href":  "https://assessors.apprenticeships.education.gov.uk/"
             },
             {
               "text": "Gwneud cais am drwydded gweithredwr cerbyd",
               "href": "https://www.gov.uk/apply-vehicle-operator-licence"
+            },
+            {
+              "text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
+              "href": "https://www.gov.uk/veteran-card"
             },
             {
               "text": "Gwneud cais am wiriad DBS sylfaenol",
@@ -251,6 +254,10 @@
             {
               "text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
               "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+            },
+            {
+              "text": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+              "href": "https://child-development-training.education.gov.uk/"
             },
             {
               "text": "Llofnodwch eich gweithred morgais",
@@ -658,9 +665,15 @@
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "2nAxHa72OqhE6eKymHZIx-sV3vI": {
+        "header": "Cofrestr darparwr prentisiaeth ac asesiad",
+        "description": "Dechrau neu barhau â chais i ymuno â'r darparwr prentisiaeth a'r gofrestr asesiadau.",
+        "link_text": "Ewch i'ch cyfrif cofrestr darparwr prentisiaeth ac asesiad",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "dVrdJ7aemrvR0YlX7lDRaXnz0mE": {
         "header": "Gwasanaeth asesu prentisiaeth (AAS)",
-        "description": "Asesu prentisiaethau.",
+        "description": "Gweld neu gofnodi eich asesiadau prentisiaeth.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       },
@@ -674,6 +687,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "txsGLvMYYCPaWPZRq2L7XxEnyro": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "integration": {
@@ -751,9 +770,15 @@
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "2nAxHa72OqhE6eKymHZIx-sV3vI": {
+        "header": "Cofrestr darparwr prentisiaeth ac asesiad",
+        "description": "Dechrau neu barhau â chais i ymuno â'r darparwr prentisiaeth a'r gofrestr asesiadau.",
+        "link_text": "Ewch i'ch cyfrif cofrestr darparwr prentisiaeth ac asesiad",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "dVrdJ7aemrvR0YlX7lDRaXnz0mE": {
         "header": "Gwasanaeth asesu prentisiaeth (AAS)",
-        "description": "Asesu prentisiaethau.",
+        "description": "Gweld neu gofnodi eich asesiadau prentisiaeth.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       },
@@ -767,6 +792,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "txsGLvMYYCPaWPZRq2L7XxEnyro": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "staging": {
@@ -844,9 +875,15 @@
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "apar": {
+        "header": "Cofrestr darparwr prentisiaeth ac asesiad",
+        "description": "Dechrau neu barhau â chais i ymuno â'r darparwr prentisiaeth a'r gofrestr asesiadau.",
+        "link_text": "Ewch i'ch cyfrif cofrestr darparwr prentisiaeth ac asesiad",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "aas": {
         "header": "Gwasanaeth asesu prentisiaeth (AAS)",
-        "description": "Asesu prentisiaethau.",
+        "description": "Gweld neu gofnodi eich asesiadau prentisiaeth.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       },
@@ -860,6 +897,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "build": {
@@ -937,9 +980,15 @@
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "apar": {
+        "header": "Cofrestr darparwr prentisiaeth ac asesiad",
+        "description": "Dechrau neu barhau â chais i ymuno â'r darparwr prentisiaeth a'r gofrestr asesiadau.",
+        "link_text": "Ewch i'ch cyfrif cofrestr darparwr prentisiaeth ac asesiad",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "aas": {
         "header": "Gwasanaeth asesu prentisiaeth (AAS)",
-        "description": "Asesu prentisiaethau.",
+        "description": "Gweld neu gofnodi eich asesiadau prentisiaeth.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       },
@@ -953,6 +1002,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
 
     },
@@ -1031,9 +1086,15 @@
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "apar": {
+        "header": "Cofrestr darparwr prentisiaeth ac asesiad",
+        "description": "Dechrau neu barhau â chais i ymuno â'r darparwr prentisiaeth a'r gofrestr asesiadau.",
+        "link_text": "Ewch i'ch cyfrif cofrestr darparwr prentisiaeth ac asesiad",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "aas": {
         "header": "Gwasanaeth asesu prentisiaeth (AAS)",
-        "description": "Asesu prentisiaethau.",
+        "description": "Gweld neu gofnodi eich asesiadau prentisiaeth.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       },
@@ -1047,6 +1108,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     },
     "local": {
@@ -1124,9 +1191,15 @@
         "link_text": "Ewch i'ch cyfrif cysylltu teuluoedd i gefnogi",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "apar": {
+        "header": "Cofrestr darparwr prentisiaeth ac asesiad",
+        "description": "Dechrau neu barhau â chais i ymuno â'r darparwr prentisiaeth a'r gofrestr asesiadau.",
+        "link_text": "Ewch i'ch cyfrif cofrestr darparwr prentisiaeth ac asesiad",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "aas": {
         "header": "Gwasanaeth asesu prentisiaeth (AAS)",
-        "description": "Asesu prentisiaethau.",
+        "description": "Gweld neu gofnodi eich asesiadau prentisiaeth.",
         "link_text": "Ewch i'ch cyfrif asesiadau prentisiaeth",
         "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
       },
@@ -1140,6 +1213,12 @@
         "header": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
         "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
+        "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
       }
     }
   }

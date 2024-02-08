@@ -3,7 +3,7 @@ import { logger } from "../../utils/logger";
 import { LOG_MESSAGES } from "../../app.constants";
 import { ERROR_MESSAGES } from "../../app.constants";
 
-export async function logoutGet(req: Request, res: Response): Promise<void> {
+export async function logoutPost(req: Request, res: Response): Promise<void> {
   const idToken = req.session.user.tokens.idToken;
   logger.info(
     { trace: res.locals.trace },
