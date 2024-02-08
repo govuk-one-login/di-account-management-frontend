@@ -225,6 +225,10 @@
               "href": "https://assessors.apprenticeships.education.gov.uk/"
             },
             {
+              "text": "Apprenticeship provider and assessment register",
+              "href": "https://apply.apprenticeships.education.gov.uk/"
+            },
+            {
               "text": "Connect families to support",
               "href": "https://www.connect-families-to-support.education.gov.uk"
             },
@@ -237,12 +241,12 @@
               "href": "https://child-development-training.education.gov.uk/"
             },
             {
-              "text": "Find and apply for a grant",
-              "href": "https://www.gov.uk/guidance/find-government-grants"
-            },
-            {
               "text": "Find a UK market conformity assessment body",
               "href": "https://find-a-conformity-assessment-body.service.gov.uk"
+            },
+            {
+              "text": "Find and apply for a grant",
+              "href": "https://www.gov.uk/guidance/find-government-grants"
             },
             {
               "text": "GOV.UK email subscriptions",
@@ -663,6 +667,12 @@
         "link_text": "Go to your connect families to support account",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "2nAxHa72OqhE6eKymHZIx-sV3vI": {
+        "header": "Apprenticeship provider and assessment register",
+        "description": "Start or continue an application to join the apprenticeship provider and assessment register.",
+        "link_text": "Go to your apprenticeship provider and assessment register account",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "dVrdJ7aemrvR0YlX7lDRaXnz0mE": {
         "header": "Apprenticeship assessment service (AAS)",
         "description": "Assess apprenticeships.",
@@ -761,6 +771,12 @@
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "2nAxHa72OqhE6eKymHZIx-sV3vI": {
+        "header": "Apprenticeship provider and assessment register",
+        "description": "Start or continue an application to join the apprenticeship provider and assessment register.",
+        "link_text": "Go to your apprenticeship provider and assessment register account",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
       },
       "dVrdJ7aemrvR0YlX7lDRaXnz0mE": {
         "header": "Apprenticeship assessment service (AAS)",
@@ -861,6 +877,12 @@
         "link_text": "Go to your connect families to support account",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "apar": {
+        "header": "Apprenticeship provider and assessment register",
+        "description": "Start or continue an application to join the apprenticeship provider and assessment register.",
+        "link_text": "Go to your apprenticeship provider and assessment register account",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "aas": {
         "header": "Apprenticeship assessment service (AAS)",
         "description": "Assess apprenticeships.",
@@ -959,6 +981,12 @@
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "apar": {
+        "header": "Apprenticeship provider and assessment register",
+        "description": "Start or continue an application to join the apprenticeship provider and assessment register.",
+        "link_text": "Go to your apprenticeship provider and assessment register account",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
       },
       "aas": {
         "header": "Apprenticeship assessment service (AAS)",
@@ -1059,6 +1087,12 @@
         "link_text": "Go to your connect families to support account",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
       },
+      "apar": {
+        "header": "Apprenticeship provider and assessment register",
+        "description": "Start or continue an application to join the apprenticeship provider and assessment register.",
+        "link_text": "Go to your apprenticeship provider and assessment register account",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
       "aas": {
         "header": "Apprenticeship assessment service (AAS)",
         "description": "Assess apprenticeships.",
@@ -1157,6 +1191,12 @@
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
         "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+      },
+      "apar": {
+        "header": "Apprenticeship provider and assessment register",
+        "description": "Start or continue an application to join the apprenticeship provider and assessment register.",
+        "link_text": "Go to your apprenticeship provider and assessment register account",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
       },
       "aas": {
         "header": "Apprenticeship assessment service (AAS)",

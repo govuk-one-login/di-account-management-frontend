@@ -134,6 +134,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "manageFamilySupport",
   "zbNToJPcre4BXEap0na8kOjniKg",
   "connectFamilies",
+  "2nAxHa72OqhE6eKymHZIx-sV3vI",
+  "apar",
   "dVrdJ7aemrvR0YlX7lDRaXnz0mE",
   "aas",
   "FakIq5aYsHQ02dBOc6XwyA1wRRs",
