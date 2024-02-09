@@ -173,7 +173,7 @@ const getActivityLogEntry = async (
 
   try {
     const response = await dynamoDBService().queryItem(
-      activityLogDynamoDBRequest("user_id")
+      activityLogDynamoDBRequest(user_id)
     );
     return response.Items?.map((item) =>
       DynamoDB.Converter.unmarshall(item)
