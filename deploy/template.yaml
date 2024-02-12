@@ -358,6 +358,11 @@ Resources:
                   - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
               - Effect: Allow
                 Action:
+                  - "kms:Decrypt"
+                Resource:
+                  - Fn::ImportValue: !Sub "${BackendStackName}-GeneratorKey"
+              - Effect: Allow
+                Action:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
