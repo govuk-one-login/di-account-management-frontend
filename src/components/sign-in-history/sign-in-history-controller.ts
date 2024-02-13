@@ -6,6 +6,7 @@ import {
   formatData,
   hasExplanationParagraph,
 } from "../../utils/signInHistory";
+import { HTTP_STATUS_CODES } from "../../app.constants";
 
 export async function signInHistoryGet(
   req: Request,
@@ -17,28 +18,32 @@ export async function signInHistoryGet(
   let showExplanation = false;
   let pagination: any = {};
   let data: any = [];
+  try {
+    if (user_id) {
+      const trace = res.locals.sessionId;
+      // localstack uses hardcoded user_id string
+      const userId = "user_id";
+      activityData = await presentSignInHistory(userId, trace);
 
-  if (user_id) {
-    const trace = res.locals.sessionId;
-    // localstack uses hardcoded user_id string
-    const userId = "user_id";
-    activityData = await presentSignInHistory(userId, trace);
-
-    if (activityData.length > 0) {
-      const pageParameter = req.query?.page;
-      showExplanation = hasExplanationParagraph(activityData);
-      pagination =
-        activityData.length > activityLogItemsPerPage
-          ? generatePagination(activityData.length, pageParameter)
-          : { currentPage: 1 };
-      data = await formatData(activityData, pagination?.currentPage);
+      if (activityData.length > 0) {
+        const pageParameter = req.query?.page;
+        showExplanation = hasExplanationParagraph(activityData);
+        pagination =
+          activityData.length > activityLogItemsPerPage
+            ? generatePagination(activityData.length, pageParameter)
+            : { currentPage: 1 };
+        data = await formatData(activityData, pagination?.currentPage);
+      }
     }
-  }
 
-  res.render("sign-in-history/index.njk", {
-    showExplanation: showExplanation,
-    data: data,
-    env: env,
-    pagination: pagination,
-  });
+    res.render("sign-in-history/index.njk", {
+      showExplanation: showExplanation,
+      data: data,
+      env: env,
+      pagination: pagination,
+    });
+  } catch (e) {
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+    res.render("common/errors/500.njk");
+  }
 }
