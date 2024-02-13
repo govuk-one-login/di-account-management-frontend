@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
-import { getAppEnv, activityLogItemsPerPage, getNodeEnv } from "../../config";
+import { getAppEnv, activityLogItemsPerPage } from "../../config";
 import {
   presentSignInHistory,
   generatePagination,
   formatData,
   hasExplanationParagraph,
 } from "../../utils/signInHistory";
-import { ENVIRONMENT_NAME } from "../../app.constants";
 
 export async function signInHistoryGet(
   req: Request,
@@ -22,7 +21,7 @@ export async function signInHistoryGet(
   if (user_id) {
     const trace = res.locals.sessionId;
     // localstack uses hardcoded user_id string
-    const userId = getNodeEnv() !== ENVIRONMENT_NAME.DEV ? user_id : "user_id";
+    const userId = "user_id";
     activityData = await presentSignInHistory(userId, trace);
 
     if (activityData.length > 0) {
