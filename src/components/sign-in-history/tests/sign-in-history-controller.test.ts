@@ -12,7 +12,7 @@ describe("Sign in history controller", () => {
   const TEST_SUBJECT_ID = "testSubjectId";
 
   beforeEach(() => {
-    res = { render: sandbox.fake(), locals: {} };
+    res = { header: sandbox.fake(), render: sandbox.fake(), locals: {} };
   });
 
   afterEach(() => {
@@ -49,14 +49,16 @@ describe("Sign in history controller", () => {
         log: { error: sandbox.fake() },
       };
       await signInHistoryGet(req as Request, res as Response).then(() => {
-        expect(res.render).to.have.been.calledWith("sign-in-history/index.njk", {
-          showExplanation: false,
-          env: getAppEnv(),
-          data: [],
-          pagination: {},
-        });
-      })
+        expect(res.render).to.have.been.calledWith(
+          "sign-in-history/index.njk",
+          {
+            showExplanation: false,
+            env: getAppEnv(),
+            data: [],
+            pagination: {},
+          }
+        );
+      });
     });
   });
 });
-
