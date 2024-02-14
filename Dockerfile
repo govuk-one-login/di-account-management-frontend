@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package.json ./
 COPY package-lock.json ./
 COPY tsconfig.json ./
+COPY rollup.config.mjs ./
 COPY ./src ./src
 COPY ./@types ./@types
 RUN npm install && npm run build && npm run clean-modules && npm install --production=true

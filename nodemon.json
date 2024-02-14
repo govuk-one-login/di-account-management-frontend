@@ -8,7 +8,7 @@
     "NODE_ENV": "development"
   },
   "events": {
-    "restart": "npm run copy-assets"
+    "restart": "npm run copy-assets && npm run bundle-js"
   },
   "args": [
     "--inspect=6001"

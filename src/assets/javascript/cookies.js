@@ -10,6 +10,12 @@ var cookies = function (trackingId, analyticsCookieDomain) {
   var cookieBanner = document.querySelector("#cookies-banner-main");
   var acceptCookies = document.querySelector('button[name="cookiesAccept"]');
   var rejectCookies = document.querySelector('button[name="cookiesReject"]');
+  
+  if (hasConsentForAnalytics()) {
+    initAnalytics();
+  }
+  
+  cookieBannerInit();
 
   function cookieBannerInit() {
     acceptCookies.addEventListener(
@@ -327,5 +333,5 @@ var cookies = function (trackingId, analyticsCookieDomain) {
   };
 };
 
-window.GOVSignIn = window.GOVSignIn || {};
-window.GOVSignIn.Cookies = cookies;
+window.DI = window.DI || {};
+window.DI.Cookies = cookies;

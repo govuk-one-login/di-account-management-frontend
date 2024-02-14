@@ -9,7 +9,7 @@
     "warning": "Rhybudd",
     "errorSummaryTitle": "Mae problem",
     "phaseBanner": {
-      "tag": "beta",
+      "tag": "Beta",
       "text": "Mae hwn yn wasanaeth newydd – bydd eich <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">adborth (agor mewn tab newydd)</a> yn ein helpu i’w wella."
     },
     "yes": "Yes",

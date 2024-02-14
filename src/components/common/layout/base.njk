@@ -5,18 +5,10 @@
 {%- if not hideAccountNavigation -%} govuk-header--with-account-navigation {%- endif -%}
 {%- if showSignOut -%} govuk-header--right-align-nav {%- endif -%}
 {%- endset-%}
+{% set cspNonce = scriptNonce %}
 
 {% block head %}
-    <!--[if !IE 8]><!-->
     <link href="/public/style.css" rel="stylesheet">
-    <!--<![endif]-->
-
-    {# For Internet Explorer 8, you need to compile specific stylesheet #}
-    {# see https://frontend.design-system.service.gov.uk/supporting-ie8/#support-internet-explorer-8 #}
-    <!--[if IE 8]> <link href="/govuk-frontend/all-ie8.css" rel="stylesheet"> <![endif]-->
-
-    {# For older browsers to allow them to recognise HTML5 elements such as `<header>` #}
-    <!--[if lt IE 9]> <script src="/html5-shiv/html5shiv.js"></script> <![endif]-->
 {% endblock %}
 
 {% block pageTitle %}
@@ -103,12 +95,12 @@
 {% endblock %}
 
 {% block bodyEnd %}
-    {% block scripts %}{% endblock %}
-    <script type="text/javascript" src="/public/scripts/application.js" nonce='{{scriptNonce}}'></script>
-    <script type="text/javascript" src="/public/scripts/all.js" nonce='{{scriptNonce}}'></script>
+    {% block scripts %}{% endblock %} 
+    {# any script with type "module" will defer by default. The cookies script should not be deferred, so it is being loaded separately #}
+    <script type="text/javascript" src="/public/scripts/cookies.js" nonce='{{scriptNonce}}'></script>
+    <script type="module" src="/public/scripts/application.js" nonce='{{scriptNonce}}'></script>
+
     <script type="text/javascript" nonce='{{scriptNonce}}'>
-        window
-            .GOVSignIn
-            .appInit("{{gtmId}}", "{{ analyticsCookieDomain }}")
+        window.DI.Cookies("{{gtmId}}", "{{ analyticsCookieDomain }}")
     </script>
 {% endblock %}
