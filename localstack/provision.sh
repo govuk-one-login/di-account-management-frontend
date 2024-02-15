@@ -12,7 +12,7 @@ REGION="eu-west-2"
 # or what ever the hardcoded replacement is
 export BUILD_CLIENT_ID="${MY_ONE_LOGIN_USER_ID:-user_id}"
 export TABLE_NAME=user_services
-export ACTIVITY_LOG_TABLE_NAME=activity_logs
+export ACTIVITY_LOG_TABLE_NAME=activity_log
 
 aws --endpoint-url=$ENDPOINT_URL dynamodb create-table \
     --table-name $TABLE_NAME \

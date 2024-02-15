@@ -101,7 +101,7 @@ Parameters:
     Default: user_services
   ActivityLogStoreTableName:
     Type: String
-    Default: activity_logs
+    Default: activity_log
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
