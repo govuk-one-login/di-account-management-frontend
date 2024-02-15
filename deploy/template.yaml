@@ -358,11 +358,6 @@ Resources:
                   - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
               - Effect: Allow
                 Action:
-                  - "kms:Decrypt"
-                Resource:
-                  - Fn::ImportValue: !Sub "${BackendStackName}-GeneratorKey"
-              - Effect: Allow
-                Action:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
@@ -374,7 +369,6 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
-                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${BackendStackName}/Config/Session/Secret"
               - Effect: Allow
                 Action:
                   - dynamodb:Query
@@ -409,6 +403,8 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
                   - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/GeneratorKey/ID}}"
+                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/WrapperKey/ID}}"
                   - !GetAtt DynamoDBKmsKey.Arn
               - Effect: Allow
                 Action:
@@ -712,11 +708,9 @@ Resources:
             - Name: "AUDIT_QUEUE_DLQ_URL"
               Value: !Ref TxMAPublishErrorDeadLetterQueue
             - Name: "GENERATOR_KEY_ARN"
-              Value: !ImportValue
-                'Fn::Sub': "${BackendStackName}-GeneratorKey"
+              Value: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/GeneratorKey/ID}}"
             - Name: "WRAPPING_KEY_ARN"
-              Value: !ImportValue
-                'Fn::Sub': "${BackendStackName}-WrappingKey"
+              Value: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/WrapperKey/ID}}"
             - Name: "ACCOUNT_ID"
               Value: !Sub "${AWS::AccountId}"
             - Name: "ENVIRONMENT"
