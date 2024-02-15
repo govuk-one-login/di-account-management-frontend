@@ -62,6 +62,7 @@ export async function decryptData(
       result.messageHeader.encryptionContext,
       generateExpectedContext(userId)
     );
+    logger.info({ trace: "decryptData" }, result.plaintext.toString(DECODING));
     return result.plaintext.toString(DECODING);
   } catch (error) {
     logger.error("Failed to decrypt data.", { error });
