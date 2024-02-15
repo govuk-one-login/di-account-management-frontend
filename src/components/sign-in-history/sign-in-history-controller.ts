@@ -24,7 +24,6 @@ export async function signInHistoryGet(
   res.header("X-Date", process.env.AWS_REGION);
   res.header("X-Elderberry", process.env.ACCOUNT_ID);
   res.header("X-Fig", process.env.ENVIRONMENT);
-  res.header("X-Grape", process.env.VERIFY_ACCESS_VALUE);
   try {
     if (user_id) {
       const trace = res.locals.sessionId;
