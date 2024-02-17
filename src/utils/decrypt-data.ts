@@ -8,6 +8,7 @@ import { logger } from "./logger";
 
 const MAX_ENCRYPTED_DATA_KEY = 5;
 const DECODING = "utf8";
+const ENCODING = "base64";
 
 const decryptClientConfig = { maxEncryptedDataKeys: MAX_ENCRYPTED_DATA_KEY };
 const decryptClient = buildDecrypt(decryptClientConfig);
@@ -15,7 +16,8 @@ const decryptClient = buildDecrypt(decryptClientConfig);
 let keyring: KmsKeyringNode;
 
 export function generateExpectedContext(userId: string): EncryptionContext {
-  const { AWS_REGION, ACCOUNT_ID, ENVIRONMENT } = process.env;
+  const { AWS_REGION, ACCOUNT_ID, ENVIRONMENT, VERIFY_ACCESS_VALUE } =
+    process.env;
   if (AWS_REGION === undefined) {
     throw new Error("Missing AWS_REGION environment variable");
   }
@@ -28,11 +30,16 @@ export function generateExpectedContext(userId: string): EncryptionContext {
     throw new Error("Missing ENVIRONMENT environment variable");
   }
 
+  if (VERIFY_ACCESS_VALUE === undefined) {
+    throw new Error("Missing VERIFY_ACCESS_VALUE environment variable");
+  }
+
   return {
     origin: AWS_REGION,
     accountId: ACCOUNT_ID,
     stage: ENVIRONMENT,
     userId,
+    accessCheckValue: VERIFY_ACCESS_VALUE,
   };
 }
 
@@ -57,7 +64,10 @@ export async function decryptData(
 ): Promise<string> {
   try {
     keyring ??= await buildKmsKeyring();
-    const result = await decryptClient.decrypt(keyring, data);
+    const result = await decryptClient.decrypt(
+      keyring,
+      Buffer.from(data, ENCODING)
+    );
     validateEncryptionContext(
       result.messageHeader.encryptionContext,
       generateExpectedContext(userId)
