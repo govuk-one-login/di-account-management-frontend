@@ -64,10 +64,16 @@ export async function decryptData(
 ): Promise<string> {
   try {
     keyring ??= await buildKmsKeyring();
+    logger.debug({ trace: "decryptData", message: "Keyring created", keyring });
     const result = await decryptClient.decrypt(
       keyring,
       Buffer.from(data, ENCODING)
     );
+    logger.debug({
+      trace: "decryptData",
+      message: "Decryption result",
+      result,
+    });
     validateEncryptionContext(
       result.messageHeader.encryptionContext,
       generateExpectedContext(userId)
