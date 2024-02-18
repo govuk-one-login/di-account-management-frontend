@@ -63,6 +63,11 @@ export async function decryptData(
   userId: string
 ): Promise<string> {
   try {
+    logger.debug({
+      trace: "decryptData",
+      message: "uid",
+      userId,
+    });
     keyring ??= await buildKmsKeyring();
     logger.debug({ trace: "decryptData", message: "Keyring created", keyring });
     const result = await decryptClient.decrypt(
@@ -74,11 +79,11 @@ export async function decryptData(
       message: "Decryption result",
       result,
     });
-    validateEncryptionContext(
+    /* validateEncryptionContext(
       result.messageHeader.encryptionContext,
       generateExpectedContext(userId)
-    );
-    logger.info({ trace: "decryptData" }, result.plaintext.toString(DECODING));
+    );*/
+    logger.debug({ trace: "decryptData" }, result.plaintext.toString(DECODING));
     return result.plaintext.toString(DECODING);
   } catch (error) {
     logger.error("Failed to decrypt data.", { error });
