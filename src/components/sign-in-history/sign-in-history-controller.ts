@@ -5,7 +5,10 @@ import {
   generatePagination,
   formatData,
   hasExplanationParagraph,
+  filterAndDecryptActivity,
 } from "../../utils/signInHistory";
+import { HTTP_STATUS_CODES } from "../../app.constants";
+import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
 
 export async function signInHistoryGet(
   req: Request,
@@ -13,28 +16,42 @@ export async function signInHistoryGet(
 ): Promise<void> {
   const { user } = req.session;
   const env = getAppEnv();
-  let activityData: any[] = [];
+  let activityData: ActivityLogEntry[] = [];
   let showExplanation = false;
-  let data: any = [];
   let pagination: any = {};
-  if (user?.subjectId) {
-    const trace = res.locals.sessionId;
-    activityData = await presentSignInHistory(user.subjectId, trace);
-    const pageParameter = req.query?.page;
-    const dataLength = activityData.length;
-    showExplanation = hasExplanationParagraph(activityData);
-    if (dataLength <= activityLogItemsPerPage) {
-      data = formatData(activityData);
-    } else {
-      pagination = generatePagination(dataLength, pageParameter);
-      data = formatData(activityData, pagination.currentPage);
-    }
-  }
+  let FormattedActivityLog: FormattedActivityLog[] = [];
+  let validActivityDataLength = 0;
 
-  res.render("sign-in-history/index.njk", {
-    showExplanation: showExplanation,
-    data: data,
-    env: env,
-    pagination: pagination,
-  });
+  try {
+    if (user && user.subjectId) {
+      const trace = res.locals.sessionId;
+      const userId = user.subjectId;
+      activityData = await presentSignInHistory(userId, trace);
+      const validActivityData: ActivityLogEntry[] =
+        await filterAndDecryptActivity(activityData);
+      if (validActivityData.length > 0) {
+        const pageParameter = req.query?.page;
+        validActivityDataLength = validActivityData.length;
+        pagination =
+          validActivityDataLength > activityLogItemsPerPage
+            ? generatePagination(validActivityDataLength, pageParameter)
+            : { currentPage: 1 };
+        FormattedActivityLog = await formatData(
+          validActivityData,
+          pagination?.currentPage
+        );
+        showExplanation = hasExplanationParagraph(FormattedActivityLog);
+      }
+    }
+
+    res.render("sign-in-history/index.njk", {
+      showExplanation: showExplanation,
+      data: FormattedActivityLog,
+      env: env,
+      pagination: pagination,
+    });
+  } catch (e) {
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+    res.render("common/errors/500.njk");
+  }
 }

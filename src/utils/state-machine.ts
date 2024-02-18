@@ -42,6 +42,7 @@ const amStateMachine = createMachine<AccountManagementEvent>({
     },
     CONFIRMATION: { type: "final" },
   },
+  predictableActionArguments: true,
 });
 
 function getNextState(

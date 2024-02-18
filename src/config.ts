@@ -38,6 +38,10 @@ export function getAppEnv(): string {
   return process.env.APP_ENV || "local";
 }
 
+export function isLocalEnv(): boolean {
+  return getAppEnv() === "local";
+}
+
 export function getGtmId(): string {
   return process.env.GTM_ID;
 }
@@ -76,7 +80,7 @@ export function getBaseUrl(): string {
 }
 
 export function getAwsRegion(): string {
-  return "eu-west-2";
+  return process.env.AWS_REGION ?? "eu-west-2";
 }
 
 export function getKmsKeyId(): string {

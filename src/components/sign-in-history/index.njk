@@ -25,54 +25,41 @@
     current: true if (item == pagination.currentPage) else false
   }), paginationItems) %}
 {% endfor %}
-{% if data.length %}
-  {% for event in data %}
-    {% set contentLocale = ['pages.signInHistory.activities.', event.eventType] | join %}
-    {% set valueHTML %}
-      <p class="govuk-body govuk-!-font-weight-bold">{{event.time}} ({{ 'pages.signInHistory.timeInfo' | translate }})</p>
-      {% if event.visitedServicesIds.length > 1 %}
-        <p class="govuk-body">{{[contentLocale, '.', 'contentMany'] | join | translate }}</p>
-        <ul class="govuk-list govuk-list--bullet">
-          {% for serviceId in event.visitedServicesIds %}
-            {% set serviceName = ['clientRegistry.', env, '.', serviceId, '.header'] | join | translate %}
-            <li>{{ serviceName }}</li>
-          {% endfor %}
-        </ul>
-      {% elif (event.visitedServicesIds.length == 1) %}
-        {% set serviceName = ['clientRegistry.', env, '.', event.visitedServicesIds[0], '.header'] | join | translate %}
-        <p class="govuk-body">{{[contentLocale, '.', 'contentOne'] | join | translate | replace("[serviceName]", serviceName) }}</p>
-      {% endif %}
-    {% endset %}
-    
-    {% set row = {
-      key: {
-        text: [contentLocale, '.', 'title'] | join | translate  
-      },
-      value: {
-        text: valueHTML | safe
-      }
-    } %}
-    {% set signInHistoryList = (signInHistoryList.rows.push(row), signInHistoryList) %}
-  {% endfor %}
-{% endif %}
 
 {% block content %}
-  <div class="govuk-grid-row" id="sign-in-history">
+  <div class="govuk-grid-row" id="sign-in-history" data-test-id="sign-in-history">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.signInHistory.header' | translate }}</h1>
       {% if data.length %}
-        <p class="govuk-body">{{ 'pages.signInHistory.notice' | translate | replace("[link]", contactLink) | safe }}</p>
+        <p class="govuk-body">{{ 'pages.signInHistory.notice' | translate }}</p>
       {% else %}
         {# This should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
         {{ govukInsetText({
           html: 'pages.signInHistory.empty' | translate | replace("[link]", contactLink)
         }) }}
       {% endif %}
-      {{ govukSummaryList(signInHistoryList) }}
+      {% if data.length %}
+        <ul class="sign-in-history__list">
+          {% for event in data %}
+            {% set contentLocale = ['pages.signInHistory.activities.', event.eventType] | join %}
+              <li class="sign-in-history__list-item">
+                <h2 class="govuk-heading-m">{{event.time}} ({{ 'pages.signInHistory.timeInfo' | translate }})</h2>
+                {% if event.clientId %}
+                  {% set serviceName = ['clientRegistry.', env, '.', event.clientId, '.header'] | join | translate %}
+                  <p class="govuk-body">{{[contentLocale, '.', 'contentOne'] | join | translate | replace("[serviceName]", serviceName) }}</p>
+                {% else %}
+                  <p class="govuk-body">{{[contentLocale,'.','fallback'] | join | translate }}</p>
+                {% endif %}
+                <p class="govuk-body"><a class="govuk-link" href="/security/report-suspicious-activity?page={{ pagination.currentPage }}&id={{event.eventId}}">{{ 'pages.signInHistory.report' | translate | replace("[date]", event.time) }}</a></p>
+              </li>
+
+          {% endfor %}
+        </ul>
+      {% endif %}
       {% if showExplanation and not pagination.nextPage %}
         {# if this is the last page of the activity log, show an explanatory paragraph #}
         <p class="govuk-body" data-for-test="activity-log-explainer">{{ 'pages.signInHistory.featureIntro' | translate }}</p>
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
       {% endif %}
       {{ govukPagination({
         attributes: {

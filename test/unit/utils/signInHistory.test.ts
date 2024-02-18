@@ -17,7 +17,9 @@ describe("Sign in History Util", () => {
           user_id: "1234",
           // Thu Nov 25 2032
           timestamp: 1985032269060,
-          truncated: false,
+          client_id: "12345",
+          event_id: "12345",
+          reported_suspicious: false,
         },
       ];
 
@@ -32,7 +34,9 @@ describe("Sign in History Util", () => {
           user_id: "1234",
           // Sun Jan 29 2023
           timestamp: 1675032269060,
-          truncated: false,
+          client_id: "12345",
+          event_id: "12345",
+          reported_suspicious: false,
         },
       ];
 
@@ -42,198 +46,25 @@ describe("Sign in History Util", () => {
 
   describe("format user activity to display", () => {
     it("returns the correct events for the current page", async () => {
-      const longData: ActivityLogEntry[] = [
-        {
+      const createLogEntry = (): ActivityLogEntry => {
+        return {
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "dontshowme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "showme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "showme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "showme",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
-        },
-      ];
+          client_id: "dontshowme",
+          event_id: "12345",
+          reported_suspicious: false,
+        };
+      };
 
-      const formattedData: {
-        eventType: string;
-        visitedServicesIds: [string];
-        time: string;
-      }[] = formatData(longData, 2);
+      const longData: ActivityLogEntry[] = new Array(13)
+        .fill(0)
+        .map(createLogEntry);
 
-      expect(formattedData.length).equal(3);
+      const FormattedActivityLog = await formatData(longData, 2);
+
+      expect(FormattedActivityLog.length).equal(3);
     });
 
     it("takes an array of events and the current page and returns formatted data", async () => {
@@ -243,34 +74,25 @@ describe("Sign in History Util", () => {
           session_id: "asdf",
           user_id: "1234",
           timestamp: 1689210000,
-          activities: [
-            {
-              type: "AUTH_AUTH_CODE_ISSUED",
-              client_id: "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
-              timestamp: 1689210000,
-            },
-          ],
-          truncated: false,
+          client_id: "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
+          event_id: "12345",
+          reported_suspicious: false,
         },
       ];
 
-      const formattedData: {
-        eventType: string;
-        visitedServicesIds: [string];
-        time: string;
-      }[] = formatData(data, 1);
+      const FormattedActivityLog = await formatData(data, 1);
 
-      expect(formattedData[0].eventType).equal("signedIn");
-      expect(formattedData[0].visitedServicesIds[0]).equal(
+      expect(FormattedActivityLog[0].eventType).equal("signedIn");
+      expect(FormattedActivityLog[0].clientId).equal(
         "RqFZ83csmS4Mi4Y7s7ohD9-ekwU"
       );
-      expect(formattedData[0].time).equal("13 July 2023 at 2:00 am");
+      expect(FormattedActivityLog[0].time).equal("13 July 2023 at 2:00 am");
     });
   });
 
   describe("generate a pagination object to render the pagination component", async () => {
     it("returns an empty object if no data is provided", () => {
-      const data: ActivityLogEntry[] = [];
+      const data = [];
       const pagination: any = generatePagination(data.length, 1);
       expect(pagination.currentPage).to.equal(1);
       expect(pagination.items.length).to.equal(0);

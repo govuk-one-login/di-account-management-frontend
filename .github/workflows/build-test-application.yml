@@ -33,7 +33,7 @@ jobs:
         image: localstack/localstack:3.0.0
         env:
           SERVICES: kms,sns,dynamodb,sqs
-          HOSTNAME_EXTERNAL: localstack
+          LOCALSTACK_HOST: localstack
           AWS_DEFAULT_REGION: eu-west-2
           AWS_ACCESS_KEY_ID: na
           AWS_SECRET_ACCESS_KEY: na

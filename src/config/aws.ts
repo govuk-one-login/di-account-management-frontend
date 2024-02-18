@@ -1,7 +1,7 @@
 import { Endpoint } from "aws-sdk";
 import { DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
 import {
-  getAppEnv,
+  isLocalEnv,
   getAwsRegion,
   getKmsKeyId,
   getLocalStackBaseUrl,
@@ -44,7 +44,7 @@ function getLocalStackAWSConfig(): AwsConfig {
 }
 
 export function getSNSConfig(): SnsConfig {
-  if (getAppEnv() === "local") {
+  if (isLocalEnv()) {
     return {
       awsConfig: { ...getLocalStackAWSConfig() },
     };
@@ -64,7 +64,7 @@ export interface SqsConfig {
 }
 
 export function getSQSConfig(): SqsConfig {
-  if (getAppEnv() === "local") {
+  if (isLocalEnv()) {
     return {
       awsConfig: { ...getLocalStackAWSConfig() },
       sqsClientConfig: {
@@ -103,7 +103,7 @@ export const sqsClient = (() => {
 })();
 
 export function getAWSConfig(): AwsConfig {
-  if (getAppEnv() === "local") {
+  if (isLocalEnv()) {
     return getLocalStackAWSConfig();
   }
 
@@ -113,7 +113,7 @@ export function getAWSConfig(): AwsConfig {
 }
 
 export function getKMSConfig(): KmsConfig {
-  if (getAppEnv() === "local") {
+  if (isLocalEnv()) {
     return getLocalStackKmsConfig();
   }
 
