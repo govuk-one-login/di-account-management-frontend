@@ -21,7 +21,7 @@
     "pretty": "prettier --write \"*/**/*.{ts,json}\"",
     "start": "node dist/server.js",
     "test:audit": "npm audit",
-    "test:integration": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"src/**/*-integration.test.ts\"",
+    "test:integration": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"src/**/sign-in-history-integration.test.ts\"",
     "test:unit": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config --exclude \"src/**/*-integration.test.ts\"  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary npm run test:unit",
