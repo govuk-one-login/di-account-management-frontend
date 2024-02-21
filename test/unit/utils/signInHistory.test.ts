@@ -62,7 +62,7 @@ describe("Sign in History Util", () => {
         .fill(0)
         .map(createLogEntry);
 
-      const FormattedActivityLog = await formatData(longData, 2);
+      const FormattedActivityLog = await formatData(longData, 2, "cy");
 
       expect(FormattedActivityLog.length).equal(3);
     });
@@ -80,7 +80,7 @@ describe("Sign in History Util", () => {
         },
       ];
 
-      const FormattedActivityLog = await formatData(data, 1);
+      const FormattedActivityLog = await formatData(data, 1, "en-GB");
 
       expect(FormattedActivityLog[0].eventType).equal("signedIn");
       expect(FormattedActivityLog[0].clientId).equal(

@@ -47,6 +47,7 @@ describe("Sign in history controller", () => {
           destroy: sandbox.fake(),
         },
         log: { error: sandbox.fake() },
+        i18n: { language: "en"}
       };
       await signInHistoryGet(req as Request, res as Response).then(() => {
         expect(res.render).to.have.been.calledWith(

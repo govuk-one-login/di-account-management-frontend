@@ -40,12 +40,13 @@ const getServices = async (
 
 export const presentYourServices = async (
   subjectId: string,
-  trace: string
+  trace: string,
+  currentLanguage?: string
 ): Promise<YourServices> => {
   const userServices = await getServices(subjectId, trace);
   if (userServices) {
     const userServicesWithPresentableDates = userServices.map((service) =>
-      formatService(service)
+      formatService(service, currentLanguage)
     );
     return {
       accountsList: userServicesWithPresentableDates.filter((service) =>
@@ -80,8 +81,11 @@ export const getAllowedListServices = async (
   }
 };
 
-export const formatService = (service: Service): Service => {
-  const readable_format_date = prettifyDate(service.last_accessed);
+export const formatService = (service: Service, currentLanguage?: string): Service => {
+  const readable_format_date = prettifyDate({
+    dateEpoch: service.last_accessed, 
+    locale: currentLanguage,
+  });
   const isHMRC = hmrcClientIds.includes(service.client_id);
   return {
     client_id: service.client_id,

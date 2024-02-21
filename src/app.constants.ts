@@ -132,6 +132,15 @@ export enum LOCALE {
   CY = "cy",
 }
 
+export interface LanguageCodes {
+  en: 'en-GB',
+  cy: 'cy-CY'
+}
+export const LANGUAGE_CODES: LanguageCodes = {
+  en: "en-GB",
+  cy: "cy-CY",
+}
+
 export const LOG_MESSAGES = {
   ATTEMPTING_TO_DESTROY_SESSION: "Attempting to destroy session",
   GS_COOKIE_NOT_IN_REQUEST: "gs cookie not in request.",

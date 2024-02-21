@@ -17,7 +17,7 @@ describe("YourService Util", () => {
         last_accessed_readable_format: undefined,
       };
 
-      const formattedService: Service = formatService(serviceFromDb);
+      const formattedService: Service = formatService(serviceFromDb, "en");
 
       expect(formattedService.client_id).equal("a_client_id");
       expect(formattedService.count_successful_logins).equal(1);
