@@ -3,6 +3,8 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% set pageTitleName = pageTitle %}
 {% set hideAccountNavigation = hideAccountNavigation %}
+{% set contentId = contentId%}
+{% set taxonomyLevel2 = taxonomyLevel2 %}
 
 {% block pageContent %}
 
@@ -25,5 +27,5 @@
     "href": "/manage-your-account"
 }) }}
 {% endif %}
-
+{{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:taxonomyLevel2, contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}

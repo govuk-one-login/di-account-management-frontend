@@ -3,10 +3,23 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
+
+{% set oplValues = {
+    changeEmail: { contentId: "e00e882b-f54a-40d3-ac84-85737424471c", taxonomyLevel2: 'change email' },
+    changePassword: { contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412", taxonomyLevel2: 'change password' },
+    changePhoneNumber: { contentId: "2f5f174d-c650-4b28-96cf-365f4fb17af1", taxonomyLevel2: 'change phone number' },
+    deleteAccount: { contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349", taxonomyLevel2: 'delete account' }
+} %}
+
+{% set contentId = oplValues[requestType].contentId if oplValues[requestType] else "undefined" %}
+{% set taxonomyLevel2Value = oplValues[requestType].taxonomyLevel2 if oplValues[requestType] else "undefined" %}
+
 {% if requestType == 'changePassword' %}
     {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
+   
 {%  else %}
     {% set pageTitleName = 'pages.enterPassword.title' | translate %}
+   
 {% endif %}
 
 {% set backLink = "/manage-your-account" %}
@@ -14,43 +27,27 @@
 {% block pageContent %}
 {% include "common/errors/errorSummary.njk" %}
 
-    <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{header}}</h1>
+{% if requestType == 'changeEmail' %}
+    {% include 'enter-password/_change-email.njk' %}
+    {% set pageTitleName ='pages.enterPassword.changeEmail.header' | translate%}
+{% endif %}
 
-    <form action="/enter-password" method="post" novalidate>
+{% if requestType == 'changePassword' %}
+    {% include 'enter-password/_change-password.njk' %}
+{% endif %}
 
-        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-        <input type="hidden" name="requestType" value="{{requestType}}"/>
+{% if requestType == 'changePhoneNumber' %}
+    {% include 'enter-password/_change-phone-number.njk' %}
+    {% set pageTitleName = 'pages.enterPassword.changePhoneNumber.header' | translate %}
+{% endif %}
 
-        <p class="govuk-body">{{paragraph}}</p>
-
-        {{ govukInputWithShowPassword({
-            label: 'pages.enterPassword.password.label' | translate,
-            id: "password",
-            errors: errors,
-            showSettings: {
-                show: 'general.showPassword.show' | translate,
-                hide: 'general.showPassword.hide' | translate,
-                showFullText: 'general.showPassword.showFullText' | translate,
-                hideFullText: 'general.showPassword.hideFullText' | translate,
-                announceShown: 'general.showPassword.announceShown' | translate,
-                announceHidden: 'general.showPassword.announceHidden' | translate
-            }
-        })}}
-
-        {{ govukButton({
-        "text": button_text|default('general.continue.label' | translate, true),
-        "type": "Submit",
-        "preventDoubleClick": true
-        }) }}
-
-        <p class="govuk-body">
-            <a href="/manage-your-account" class="govuk-link" rel="noreferrer noopener">{{backlinkText}}</a>
-        </p>
-
-    </form>
-
+{% if requestType == 'deleteAccount' %}
+    {% include 'enter-password/_delete-account.njk' %}
+    {% set pageTitleName = 'pages.enterPassword.deleteAccount.header' | translate %}
+{% endif %}
 {% endblock %}
 
 {% block scripts %}
     <script type="text/javascript" src="/public/scripts/showPassword.js"></script>
+    {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:taxonomyLevel2Value, contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}
