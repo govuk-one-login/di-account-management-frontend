@@ -6,7 +6,7 @@
   "license": "ISC",
   "scripts": {
     "build-ts": "tsc",
-    "build": "npm run build-sass && npm run build-ts && npm run copy-assets && npm run minfiy-build-js",
+    "build": "npm run build-sass && npm run build-ts && npm run copy-assets && npm run build-js:analytics && npm run minfiy-build-js",
     "build-dev": "npm run build-sass && npm run build-ts && npm run copy-assets",
     "build-sass": "rm -rf dist/public/style.css && sass --load-path=node_modules/govuk-frontend/govuk --no-source-map src/assets/scss/application.scss dist/public/style.css --style compressed",
     "build-js:analytics": "cp node_modules/@govuk-one-login/one-login-analytics/lib/analytics.js dist/public/scripts",
