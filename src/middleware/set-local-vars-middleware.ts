@@ -4,6 +4,10 @@ import {
   getAuthFrontEndUrl,
   getGtmId,
   getYourAccountUrl,
+  googleAnalytics4GtmContainerId,
+  universalAnalyticsGtmContainerId,
+  googleAnalytics4Disabled,
+  universalAnalyticsDisabled,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
@@ -22,6 +26,10 @@ export function setLocalVarsMiddleware(
   res.locals.accountHome = PATH_DATA.YOUR_SERVICES.url;
   res.locals.accountSecurity = PATH_DATA.SECURITY.url;
   res.locals.accountSignOut = PATH_DATA.SIGN_OUT.url;
+  res.locals.ga4ContainerId = googleAnalytics4GtmContainerId();
+  res.locals.uaContainerId = universalAnalyticsGtmContainerId();
+  res.locals.isGa4Disabled = googleAnalytics4Disabled();
+  res.locals.isUaDisabled = universalAnalyticsDisabled();
 
   const sessionIds = getSessionIdsFrom(req);
   res.locals.sessionId = sessionIds.sessionId;
