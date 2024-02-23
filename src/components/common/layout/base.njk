@@ -127,4 +127,9 @@
         }
       {% endif %}
     </script>
+    <script type="text/javascript" nonce='{{scriptNonce}}'>
+    window
+      .DI
+      .appInit({uaContainerId: '{{uaContainerId}}', analyticsCookieDomain: '{{analyticsCookieDomain}}', isGa4Enabled: {{isGa4Enabled}}, ga4ContainerId: '{{ga4ContainerId}}'})
+  </script>
 {% endblock %}
