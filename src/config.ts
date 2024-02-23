@@ -252,6 +252,6 @@ export function googleAnalytics4Disabled(): boolean {
   return ga4Disabled === "true";
 }
 export function universalAnalyticsDisabled(): boolean {
-  const uaDisabled = process.env.GA4_DISABLED;
+  const uaDisabled = process.env.UA_DISABLED;
   return uaDisabled === "true";
 }
