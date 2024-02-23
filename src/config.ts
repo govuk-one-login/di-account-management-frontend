@@ -238,3 +238,20 @@ export function showContactEmergencyMessage(): boolean {
 export function getContactEmailServiceUrl(): string {
   return process.env.CONTACT_EMAIL_SERVICE_URL;
 }
+
+export function googleAnalytics4GtmContainerId(): string {
+  return process.env.GOOGLE_ANALYTICS_4_GTM_CONTAINER_ID;
+}
+
+export function universalAnalyticsGtmContainerId(): string {
+  return process.env.UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID;
+}
+
+export function googleAnalytics4Disabled(): boolean {
+  const ga4Disabled = process.env.GA4_DISABLED;
+  return ga4Disabled === "true";
+}
+export function universalAnalyticsDisabled(): boolean {
+  const uaDisabled = process.env.GA4_DISABLED;
+  return uaDisabled === "true";
+}
