@@ -15,7 +15,7 @@
       actions: {
         items: [
           {
-            href: "/enter-password?type=changeEmail",
+            href: "/enter-password?type=changeEmail&edit=true",
             text: 'general.change' | translate,
             visuallyHiddenText: 'pages.security.accountDetails.summaryList.email' | translate
           }
@@ -33,7 +33,7 @@
       actions: {
         items: [
           {
-            href: "/enter-password?type=changePassword",
+            href: "/enter-password?type=changePassword&edit=true",
             text: 'general.change' | translate,
             visuallyHiddenText: 'pages.security.accountDetails.summaryList.password' | translate
           }
@@ -57,7 +57,7 @@ set mfaSummaryList = {
       items: [
         {
           attributes: {"data-test-id": "change-phone-number"},
-          href: "/enter-password?type=changePhoneNumber",
+          href: "/enter-password?type=changePhoneNumber&edit=true",
           text: 'general.change' | translate,
           visuallyHiddenText: 'pages.security.mfaSection.summaryList.phoneNumber.hiddenText' | translate
         }
@@ -107,4 +107,5 @@ set mfaSummaryList = {
       </div>
     </div>
   </div>
+   {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:"pages.security.title" | translate, taxonomyLevel1: "", taxonomyLevel2:"", contentId:"002",loggedInStatus:true,dynamic:true})}}
 {% endblock %}
