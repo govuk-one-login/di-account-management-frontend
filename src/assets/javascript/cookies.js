@@ -216,7 +216,7 @@ var cookies = function (trackingId, analyticsCookieDomain) {
           journey: "account management",
         },
       },
-      "/enter-password?type=changeEmail": generateJourneySession(
+      "/enter-password?type=changeEmail&edit=true": generateJourneySession(
         "change email",
         "start"
       ),
@@ -226,10 +226,8 @@ var cookies = function (trackingId, analyticsCookieDomain) {
         "change email",
         "end"
       ),
-      "/enter-password?type=changePhoneNumber": generateJourneySession(
-        "change phone number",
-        "start"
-      ),
+      "/enter-password?type=changePhoneNumber&edit=true":
+        generateJourneySession("change phone number", "start"),
       "/change-phone-number": generateJourneySession(
         "change phone number",
         "middle"
@@ -242,7 +240,7 @@ var cookies = function (trackingId, analyticsCookieDomain) {
         "change phone number",
         "end"
       ),
-      "/enter-password?type=changePassword": generateJourneySession(
+      "/enter-password?type=changePassword&edit=true": generateJourneySession(
         "change password",
         "start"
       ),
