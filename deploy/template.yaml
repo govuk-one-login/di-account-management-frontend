@@ -161,8 +161,8 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
-      GA4_DISABLED: "false"
-      UA_DISABLED: "true"
+      GA4DISABLED: "false"
+      UADISABLED: "true"
 
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
