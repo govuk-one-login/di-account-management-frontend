@@ -31,7 +31,7 @@ aws --endpoint-url=http://localhost:4566 dynamodb put-item \
                 "N": "4"
               },
               "client_id": {
-                "S": "gov.uk"
+                "S": "gov-uk"
               },
               "last_accessed": {
                 "N": "1666169856"
@@ -47,10 +47,42 @@ aws --endpoint-url=http://localhost:4566 dynamodb put-item \
                 "N": "4"
               },
               "client_id": {
-                "S": "cqGoT1LYLsjn-iwGcDTzamckhZU"
+                "S": "connectFamilies"
               },
               "last_accessed": {
                 "N": "1666169856"
+              },
+              "last_accessed_pretty": {
+                "S": "20 January 1970"
+              }
+            }
+          },
+          {
+            "M": {
+              "count_successful_logins": {
+                "N": "4"
+              },
+              "client_id": {
+                "S": "hmrc"
+              },
+              "last_accessed": {
+                "N": "1696969856"
+              },
+              "last_accessed_pretty": {
+                "S": "20 January 1970"
+              }
+            }
+          },
+          {
+            "M": {
+              "count_successful_logins": {
+                "N": "4"
+              },
+              "client_id": {
+                "S": "veteransCard"
+              },
+              "last_accessed": {
+                "N": "1699969996"
               },
               "last_accessed_pretty": {
                 "S": "20 January 1970"

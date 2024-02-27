@@ -693,6 +693,14 @@
         "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
         "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "mQDXGO7gWdK7V28v82nVcEGuacY": {
+        "header": "Gwasanaeth a weithredir gan Gyllid a Thollau EF (CThEF)",
+        "hint_text": "Er enghraifft gwasanaethau am dreth, gofal plant, neu bensiynau'r wladwriaeth.",
+        "paragraph1": "Ar hyn o bryd, ni all GOV.UK One Login ddangos i chi pa wasanaeth CThEF rydych wedi'i ddefnyddio.",
+        "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
+        "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
       }
     },
     "integration": {
@@ -798,6 +806,14 @@
         "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
         "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "mQDXGO7gWdK7V28v82nVcEGuacY": {
+        "header": "Gwasanaeth a weithredir gan Gyllid a Thollau EF (CThEF)",
+        "hint_text": "Er enghraifft gwasanaethau am dreth, gofal plant, neu bensiynau'r wladwriaeth.",
+        "paragraph1": "Ar hyn o bryd, ni all GOV.UK One Login ddangos i chi pa wasanaeth CThEF rydych wedi'i ddefnyddio.",
+        "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
+        "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
       }
     },
     "staging": {
@@ -903,6 +919,14 @@
         "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
         "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "Gwasanaeth a weithredir gan Gyllid a Thollau EF (CThEF)",
+        "hint_text": "Er enghraifft gwasanaethau am dreth, gofal plant, neu bensiynau'r wladwriaeth.",
+        "paragraph1": "Ar hyn o bryd, ni all GOV.UK One Login ddangos i chi pa wasanaeth CThEF rydych wedi'i ddefnyddio.",
+        "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
+        "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
       }
     },
     "build": {
@@ -1008,8 +1032,15 @@
         "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
         "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "Gwasanaeth a weithredir gan Gyllid a Thollau EF (CThEF)",
+        "hint_text": "Er enghraifft gwasanaethau am dreth, gofal plant, neu bensiynau'r wladwriaeth.",
+        "paragraph1": "Ar hyn o bryd, ni all GOV.UK One Login ddangos i chi pa wasanaeth CThEF rydych wedi'i ddefnyddio.",
+        "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
+        "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
       }
-
     },
     "dev": {
       "gov-uk": {
@@ -1114,6 +1145,14 @@
         "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
         "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "Gwasanaeth a weithredir gan Gyllid a Thollau EF (CThEF)",
+        "hint_text": "Er enghraifft gwasanaethau am dreth, gofal plant, neu bensiynau'r wladwriaeth.",
+        "paragraph1": "Ar hyn o bryd, ni all GOV.UK One Login ddangos i chi pa wasanaeth CThEF rydych wedi'i ddefnyddio.",
+        "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
+        "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
       }
     },
     "local": {
@@ -1219,6 +1258,14 @@
         "description": "Hyfforddiant ar ddatblygiad plant, gan gynnwys cyngor ar gefnogi datblygiad plant yn eich lleoliad blynyddoedd cynnar.",
         "link_text": "Ewch i'ch cyfrif hyfforddiant datblygiad plant blynyddoedd cynnar",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "Gwasanaeth a weithredir gan Gyllid a Thollau EF (CThEF)",
+        "hint_text": "Er enghraifft gwasanaethau am dreth, gofal plant, neu bensiynau'r wladwriaeth.",
+        "paragraph1": "Ar hyn o bryd, ni all GOV.UK One Login ddangos i chi pa wasanaeth CThEF rydych wedi'i ddefnyddio.",
+        "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
+        "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
       }
     }
   }
