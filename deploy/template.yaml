@@ -159,6 +159,11 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
+      GA4_DISABLED: "false"
+      UA_DISABLED: "true"
+
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
       NODEENV: "production"
@@ -764,6 +769,34 @@ Resources:
                       dynatraceSecretArn,
                     ]
                   - ":DT_CONNECTION_POINT::"
+            - Name: "UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  UNIVERSALANALYTICSGTMCONTAINERID,
+                ]
+            - Name: "GOOGLE_ANALYTICS_4_GTM_CONTAINER_ID"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  GOOGLEANALYTICS4GTMCONTAINERID,
+                ]
+            - Name: "GA4_DISABLED"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  GA4DISABLED,
+                ]
+            - Name: "UA_DISABLED"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  UADISABLED,
+                ]
 
       Cpu: 1024
       Memory: 4096
