@@ -5,8 +5,10 @@
 
 {% if requestType == 'changePassword' %}
     {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
+    {% set contentId = '003' %}
 {%  else %}
     {% set pageTitleName = 'pages.enterPassword.title' | translate %}
+    {% set contentId = '004' %}
 {% endif %}
 
 {% set backLink = "/manage-your-account" %}
@@ -16,6 +18,8 @@
 
 {% if requestType == 'changeEmail' %}
     {% include 'enter-password/_change-email.njk' %}
+    {% set contentId = '005' %}
+    {% set pageTitleName ='pages.enterPassword.changeEmail.header' | translate%}
 {% endif %}
 
 {% if requestType == 'changePassword' %}
@@ -24,13 +28,18 @@
 
 {% if requestType == 'changePhoneNumber' %}
     {% include 'enter-password/_change-phone-number.njk' %}
+    {% set contentId = '006' %}
+    {% set pageTitleName = 'pages.enterPassword.changePhoneNumber.header' | translate %}
 {% endif %}
 
 {% if requestType == 'deleteAccount' %}
     {% include 'enter-password/_delete-account.njk' %}
+    {% set contentId = '007' %}
+    {% set pageTitleName = 'pages.enterPassword.deleteAccount.header' | translate %}
 {% endif %}
 {% endblock %}
 
 {% block scripts %}
     <script type="text/javascript" src="/public/scripts/showPassword.js"></script>
+    {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "", taxonomyLevel2:"", contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}
