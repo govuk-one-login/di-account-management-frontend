@@ -144,6 +144,11 @@ export const getAllowedAccountListClientIDs: string[] = [
   "childDevelopmentTraining",
 ];
 
+export const hmrcClientIds: string[] = [
+  "mQDXGO7gWdK7V28v82nVcEGuacY",
+  "hmrc",
+]
+
 export const getAllowedServiceListClientIDs: string[] = [
   "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
   "XwwVDyl5oJKtK0DVsuw3sICWkPU",
@@ -157,6 +162,7 @@ export const getAllowedServiceListClientIDs: string[] = [
   "mortgageDeed",
   "zFeCxrwpLCUHFm-C4_CztwWtLfQ",
   "veteransCard",
+  ...hmrcClientIds
 ];
 
 function getProtocol(): string {

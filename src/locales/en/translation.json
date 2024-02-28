@@ -695,6 +695,14 @@
         "description": "Training on child development, including advice on supporting child development in your early years setting.",
         "link_text": "Go to your early years child development training account",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "mQDXGO7gWdK7V28v82nVcEGuacY": {
+        "header": "A service run by HM Revenue and Customs (HMRC)",
+        "hint_text": "For example services about tax, childcare, or state pensions.",
+        "paragraph1": "At the moment, GOV.UK One Login cannot show you which HMRC service you’ve used.",
+        "paragraph2": "We’re working to make this possible.",
+        "link_text": "Find the HMRC service you need",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
       }
     },
     "integration": {
@@ -800,6 +808,14 @@
         "description": "Training on child development, including advice on supporting child development in your early years setting.",
         "link_text": "Go to your early years child development training account",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "mQDXGO7gWdK7V28v82nVcEGuacY": {
+        "header": "A service run by HM Revenue and Customs (HMRC)",
+        "hint_text": "For example services about tax, childcare, or state pensions.",
+        "paragraph1": "At the moment, GOV.UK One Login cannot show you which HMRC service you’ve used.",
+        "paragraph2": "We’re working to make this possible.",
+        "link_text": "Find the HMRC service you need",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
       }
     },
     "staging": {
@@ -905,6 +921,14 @@
         "description": "Training on child development, including advice on supporting child development in your early years setting.",
         "link_text": "Go to your early years child development training account",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "A service run by HM Revenue and Customs (HMRC)",
+        "hint_text": "For example services about tax, childcare, or state pensions.",
+        "paragraph1": "At the moment, GOV.UK One Login cannot show you which HMRC service you’ve used.",
+        "paragraph2": "We’re working to make this possible.",
+        "link_text": "Find the HMRC service you need",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
       }
     },
     "build": {
@@ -1010,6 +1034,14 @@
         "description": "Training on child development, including advice on supporting child development in your early years setting.",
         "link_text": "Go to your early years child development training account",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "A service run by HM Revenue and Customs (HMRC)",
+        "hint_text": "For example services about tax, childcare, or state pensions.",
+        "paragraph1": "At the moment, GOV.UK One Login cannot show you which HMRC service you’ve used.",
+        "paragraph2": "We’re working to make this possible.",
+        "link_text": "Find the HMRC service you need",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
       }
     },
     "dev": {
@@ -1115,6 +1147,14 @@
         "description": "Training on child development, including advice on supporting child development in your early years setting.",
         "link_text": "Go to your early years child development training account",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "A service run by HM Revenue and Customs (HMRC)",
+        "hint_text": "For example services about tax, childcare, or state pensions.",
+        "paragraph1": "At the moment, GOV.UK One Login cannot show you which HMRC service you’ve used.",
+        "paragraph2": "We’re working to make this possible.",
+        "link_text": "Find the HMRC service you need",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
       }
     },
     "local": {
@@ -1220,6 +1260,14 @@
         "description": "Training on child development, including advice on supporting child development in your early years setting.",
         "link_text": "Go to your early years child development training account",
         "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "A service run by HM Revenue and Customs (HMRC)",
+        "hint_text": "For example services about tax, childcare, or state pensions.",
+        "paragraph1": "At the moment, GOV.UK One Login cannot show you which HMRC service you’ve used.",
+        "paragraph2": "We’re working to make this possible.",
+        "link_text": "Find the HMRC service you need",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
       }
     }
   }

@@ -4,6 +4,7 @@ import {
   getDynamoServiceStoreTableName,
   getAllowedAccountListClientIDs,
   getAllowedServiceListClientIDs,
+  hmrcClientIds,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
@@ -81,11 +82,13 @@ export const getAllowedListServices = async (
 
 export const formatService = (service: Service): Service => {
   const readable_format_date = prettifyDate(service.last_accessed);
+  const isHMRC = hmrcClientIds.includes(service.client_id);
   return {
     client_id: service.client_id,
     count_successful_logins: service.count_successful_logins,
     last_accessed: service.last_accessed,
     last_accessed_readable_format: readable_format_date,
+    isHMRC: isHMRC,
   };
 };
 
