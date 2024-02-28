@@ -32,8 +32,6 @@ export async function activityHistoryGet(
       pagination = generatePagination(dataLength, pageParameter);
       data = formatData(activityData, pagination.currentPage);
     }
-
-    logger.info(`activityData has ${activityData.length}`);
   } else {
     logger.error("user_id missing from session");
   }

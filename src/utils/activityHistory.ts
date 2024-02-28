@@ -102,9 +102,7 @@ export const formatEvent = (
   newRow.reportedSuspicious = row.reported_suspicious;
   newRow.reportSuspiciousActivityUrl = `${
     PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url
-  }?event=${row.event_id}&reported=${row.reported_suspicious}${
-    currentPage ? "page=" + currentPage : ""
-  }`;
+  }?event=${row.event_id}${currentPage ? "page=" + currentPage : ""}`;
   newRow.time = prettifyDate(Number(row["timestamp"]), {
     month: "long",
     day: "numeric",

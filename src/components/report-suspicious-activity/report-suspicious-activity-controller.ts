@@ -25,30 +25,11 @@ export async function reportSuspiciousActivityGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  let alreadyReported;
   try {
     assert.ok(
       req.query.event !== undefined && req.query.event !== "",
       "mandatory query parameter 'event' missing from request"
     );
-    assert.ok(
-      req.query.reported !== undefined && req.query.reported !== "",
-      "mandatory query parameter 'reported' missing from request"
-    );
-    try {
-      assert.strictEqual(req.query.reported.toString(), "true");
-      alreadyReported = true;
-    } catch (err) {
-      try {
-        assert.strictEqual(req.query.reported.toString(), "false");
-        alreadyReported = false;
-      } catch (err) {
-        req.log.error(
-          `Query parameter "reported" was <${req.query.reported}> but expected "true" or "false" `
-        );
-        return next();
-      }
-    }
   } catch (err) {
     req.log.error(err.message);
     return next();
@@ -68,10 +49,6 @@ export async function reportSuspiciousActivityGet(
     eventDetails = DynamoDB.Converter.unmarshall(
       response.Items[0]
     ) as ActivityLogEntry;
-    assert.ok(
-      eventDetails.reported_suspicious === alreadyReported,
-      `event showed reported_suspicious as ${eventDetails.reported_suspicious} but request param reported was ${alreadyReported}`
-    );
   } catch (err) {
     req.log.error(err.message);
     return next(err);
@@ -79,7 +56,7 @@ export async function reportSuspiciousActivityGet(
 
   const formattedEventDetails = formatEvent(eventDetails);
 
-  const additionalData = alreadyReported
+  const additionalData = eventDetails.reported_suspicious
     ? {
         reportNumber: formattedEventDetails.reportNumber,
         contactUrl: PATH_DATA.CONTACT.url,
@@ -95,7 +72,7 @@ export async function reportSuspiciousActivityGet(
     email: req.session.user.email,
     eventId: req.query.event,
     reportSuspiciousActivityUrl: PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url,
-    alreadyReported: alreadyReported,
+    alreadyReported: eventDetails.reported_suspicious,
   };
 
   res.render("report-suspicious-activity/index.njk", {
@@ -112,7 +89,7 @@ export async function reportSuspiciousActivityPost(
 
   logger.info(
     { trace: res.locals.trace },
-    "TBD Send event to SNS to trigger back processing."
+    "TBD Send event to SNS to trigger backend processing."
   );
 
   res.render("report-suspicious-activity/success.njk", {
