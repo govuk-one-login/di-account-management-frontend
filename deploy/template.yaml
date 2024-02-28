@@ -369,6 +369,11 @@ Resources:
                   - Fn::ImportValue: !Sub "${BackendStackName}-GeneratorKey"
               - Effect: Allow
                 Action:
+                  - "sns:Publish"
+                Resource:
+                  - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SuspiciousActivity"
+              - Effect: Allow
+                Action:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
@@ -660,6 +665,8 @@ Resources:
                 !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL]
             - Name: "DELETE_TOPIC_ARN"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/DeleteTopic/ARN}}"
+            - Name: "SUSPICIOUS_ACTIVITY_TOPIC_ARN"
+              Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/SuspiciousActivity/ARN}}"
             - Name: "SERVICE_STORE_TABLE_NAME"
               Value: !Ref ServiceStoreTableName
             - Name: "ACTIVITY_LOG_STORE_TABLE_NAME"

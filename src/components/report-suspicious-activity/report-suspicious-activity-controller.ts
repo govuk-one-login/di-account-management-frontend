@@ -4,10 +4,12 @@ import { PATH_DATA } from "../../app.constants";
 import { getAppEnv, getDynamoActivityLogStoreTableName } from "../../config";
 import { DynamoDB } from "aws-sdk";
 import { dynamoDBService } from "../../utils/dynamo";
+import { getSNSSuspicousActivityTopic } from "../../config";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
 import assert from "node:assert";
 import { formatActivityLogs } from "../../utils/activityHistory";
 import { decryptData } from "../../utils/decrypt-data";
+import { snsService } from "../../utils/sns";
 
 const activityLogDynamoDBRequest = (
   subjectId: string,
@@ -20,6 +22,39 @@ const activityLogDynamoDBRequest = (
     ":event_id": { S: eventId },
   },
 });
+
+interface ReportSuspiciousActivityParams {
+  user_id: string;
+  event_id: string;
+  email: string;
+  persistent_session_id: string;
+  session_id: string;
+  reported_suspicious_time: number;
+  topic_arn?: string;
+}
+
+const publishToSuspiciousActivityTopic = async function ({
+  user_id,
+  event_id,
+  email,
+  persistent_session_id,
+  session_id,
+  reported_suspicious_time,
+  topic_arn = getSNSSuspicousActivityTopic(),
+}: ReportSuspiciousActivityParams): Promise<void> {
+  const sns = snsService();
+  await sns.publish(
+    topic_arn,
+    JSON.stringify({
+      user_id,
+      email,
+      event_id,
+      persistent_session_id,
+      session_id,
+      reported_suspicious_time
+    })
+  );
+};
 
 export async function reportSuspiciousActivityGet(
   req: Request,
@@ -94,11 +129,30 @@ export async function reportSuspiciousActivityGet(
 
 export async function reportSuspiciousActivityPost(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   const page = req.body.page;
 
-  req.log.info("TBD Send event to SNS to trigger back processing.");
+  try {
+    assert(req.session.user_id, "user_id not found in session");
+    assert(req.session.user.email, "email not found in session");
+    assert(req.body.event_id, "event_id not found in request body");
+    assert(res.locals.persistentSessionId, "persistentSessionId not found in response locals")
+    assert(res.locals.sessionId, "sessionId not found in response locals")
+
+    await publishToSuspiciousActivityTopic({
+      user_id: req.session.user_id,
+      email: req.session.user.email,
+      event_id: req.body.event_id,
+      persistent_session_id: res.locals.persistentSessionId,
+      session_id: res.locals.sessionId,
+      reported_suspicious_time: new Date().getTime(),
+    }); 
+  } catch(err) {
+    req.log.error(err.message);
+    return next(err);
+  }
 
   res.render("report-suspicious-activity/success.njk", {
     backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${page}`,

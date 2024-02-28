@@ -7,10 +7,11 @@ import { Request, Response } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
 import { expect } from "chai";
 import * as dynamo from "../../../utils/dynamo";
+import * as sns from "../../../utils/sns";
 import { DynamoDBService } from "../../../utils/types";
 import { DynamoDB } from "aws-sdk";
 import { logger } from "../../../utils/logger";
-import { AwsConfig } from "src/config/aws";
+import { AwsConfig } from "../../../config/aws";
 
 describe("report suspicious activity controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -25,27 +26,34 @@ describe("report suspicious activity controller", () => {
     [awsConfig?: AwsConfig],
     DynamoDBService
   >;
+  let snsPublishSpy : sinon.SinonSpy;
+  let clock: sinon.SinonFakeTimers;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     loggerSpy = sinon.spy(logger, "info");
     errorLoggerSpy = sinon.spy(logger, "error");
+    clock = sinon.useFakeTimers(new Date(101))
 
     req = {
       query: { event: "event-id", reported: "false" },
       session: {
+        user_id: 'user-id',
         user: {
           email: "test@email.moc",
         },
       } as any,
       log: logger,
       body: {
+        event_id: 'event-id',
         page: "",
       },
     };
     res = {
       locals: {
         trace: "trace-id",
+        persistentSessionId: "persistent-session-id",
+        sessionId: "session-id",
       },
       render: sandbox.fake(),
     };
@@ -72,6 +80,12 @@ describe("report suspicious activity controller", () => {
     };
     dynamoDBServiceStub = sinon.stub(dynamo, "dynamoDBService");
     dynamoDBServiceStub.returns(mockDynamoDBService);
+
+    snsPublishSpy = sinon.spy();
+    sinon.stub(sns, "snsService").returns({
+      publish: snsPublishSpy,
+    });
+
   });
 
   afterEach(() => {
@@ -79,6 +93,7 @@ describe("report suspicious activity controller", () => {
     sinon.restore();
     loggerSpy.restore();
     errorLoggerSpy.restore();
+    clock.restore();
   });
 
   it("Report activity you do not recognise", async () => {
@@ -173,7 +188,7 @@ describe("report suspicious activity controller", () => {
       req.body.page = "1";
 
       // Act
-      await reportSuspiciousActivityPost(req as Request, res as Response);
+      await reportSuspiciousActivityPost(req as Request, res as Response, () => {});
 
       // Assert
       expect(res.render).to.have.been.calledWith(
@@ -186,9 +201,20 @@ describe("report suspicious activity controller", () => {
         }
       );
 
-      expect(loggerSpy).to.have.calledWith(
-        "TBD Send event to SNS to trigger back processing."
-      );
+      const snsCall = snsPublishSpy.getCalls()[0];
+      const [topic_arn, message] = snsCall.args;
+
+      expect(topic_arn).to.equal(process.env.SUSPICIOUS_ACTIVITY_TOPIC_ARN);
+      expect(JSON.parse(message)).to.deep.equal({
+          "user_id":"user-id",
+          "email":"test@email.moc",
+          "event_id":"event-id",
+          "persistent_session_id":"persistent-session-id",
+          "session_id":"session-id",
+          "reported_suspicious_time":101
+        })
     });
   });
 });
+
+
