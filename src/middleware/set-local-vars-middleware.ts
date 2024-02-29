@@ -3,7 +3,9 @@ import {
   getAnalyticsCookieDomain,
   getAuthFrontEndUrl,
   getGtmId,
+  getGtmIdGa4,
   getYourAccountUrl,
+  supportGa4,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
@@ -15,6 +17,8 @@ export function setLocalVarsMiddleware(
   next: NextFunction
 ): void {
   res.locals.gtmId = getGtmId();
+  res.locals.gtmIdGa4 = getGtmIdGa4();
+  res.locals.supportGa4 = supportGa4();
   res.locals.scriptNonce = generateNonce();
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();

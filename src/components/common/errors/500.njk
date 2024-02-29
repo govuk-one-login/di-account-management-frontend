@@ -10,3 +10,8 @@
     </div>
   </div>
 {% endblock %}
+
+{% block bodyEnd %}
+  <script type="text/javascript" nonce='{{scriptNonce}}'>window.DI = window.DI || {};window.DI.httpStatusCode = 500</script>
+  {{ super() }}
+{% endblock %}

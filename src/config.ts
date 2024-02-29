@@ -42,6 +42,10 @@ export function getGtmId(): string {
   return process.env.GTM_ID;
 }
 
+export function getGtmIdGa4(): string {
+  return process.env.GTM_ID_2;
+}
+
 export function getSessionExpiry(): number {
   return Number(process.env.SESSION_EXPIRY);
 }
@@ -173,6 +177,10 @@ export const activityLogItemsPerPage = 10;
 
 export function supportActivityLog(): boolean {
   return process.env.SUPPORT_ACTIVITY_LOG === "1";
+}
+
+export function supportGa4(): boolean {
+  return process.env.SUPPORT_GA4 === "1";
 }
 
 export function getDynamoActivityLogStoreTableName(): string {
