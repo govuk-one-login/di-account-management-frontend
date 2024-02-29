@@ -451,3 +451,14 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   --sa-message-count-x-position: -17%;
   --sa-message-count-y-position: -20%;
 }
+
+.sign-in-history__list {
+  list-style: none;
+  padding: 0;
+  margin: govuk-spacing(4) 0;
+}
+
+.sign-in-history__list-item {
+  border-bottom: 1px solid $govuk-border-colour;
+  @include govuk-responsive-padding(4, "top");
+}

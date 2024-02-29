@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     node: true,
+    mocha: true,
   },
   root: true,
   parser: "@typescript-eslint/parser",
@@ -8,7 +9,7 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "prettier",
   ],
   rules: {
     "@typescript-eslint/no-var-requires": 0,

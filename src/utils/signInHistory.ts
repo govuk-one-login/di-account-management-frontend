@@ -4,9 +4,14 @@ import {
   getDynamoActivityLogStoreTableName,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
-import { ActivityLogEntry, allowedTxmaEvents } from "./types";
+import {
+  ActivityLogEntry,
+  allowedTxmaEvents,
+  FormattedActivityLog,
+} from "./types";
 import pino from "pino";
 import { dynamoDBService } from "./dynamo";
+import { decryptData } from "./decrypt-data";
 
 // TODO should be in a config somewhere I suppose.
 // Should be generated using Date.now() whenever a launch date is agreed upon
@@ -97,28 +102,27 @@ export const generatePagination = (dataLength: number, page: any): [] => {
   return pagination;
 };
 
-export const formatData = (
+export const formatData = async (
   data: ActivityLogEntry[],
-  currentPage?: number
-): [] => {
-  const curr = currentPage || 1;
-  const formattedData: any = [];
-  const indexStart = (curr - 1) * activityLogItemsPerPage;
+  currentPage: number = 1
+): Promise<FormattedActivityLog[]> => {
+  const indexStart = (currentPage - 1) * activityLogItemsPerPage;
   const indexEnd = indexStart + activityLogItemsPerPage;
 
-  // only format and return activity data for the current page
-  for (let i = indexStart; i < indexEnd; i++) {
-    const newRow: any = {};
-    const row = data[i];
-    if (!row) break;
+  const FormattedActivityLog: FormattedActivityLog[] = [];
 
-    newRow.eventType = allowedTxmaEvents.includes(row.event_type)
-      ? "signedIn"
-      : null;
+  for (let i = indexStart; i < indexEnd && i < data.length; i++) {
+    const entry = data[i];
+    const {
+      user_id,
+      timestamp,
+      client_id,
+      event_id,
+      reported_suspicious,
+      session_id,
+    } = entry;
 
-    if (!newRow.eventType) continue;
-
-    newRow.time = prettifyDate(Number(row["timestamp"]), {
+    const timeFormatted = prettifyDate(Number(timestamp), {
       month: "long",
       day: "numeric",
       year: "numeric",
@@ -128,57 +132,75 @@ export const formatData = (
       timeZone: "GB",
     });
 
-    newRow.visitedServices =
-      row.activities?.length &&
-      row.activities.filter((activity: any) =>
-        allowedTxmaEvents.includes(activity.type)
-      );
-    newRow.visitedServicesIds = newRow.visitedServices?.map(
-      (obj: any) => obj["client_id"]
-    );
-
-    formattedData.push(newRow);
+    FormattedActivityLog.push({
+      userId: user_id,
+      time: timeFormatted,
+      clientId: client_id,
+      eventId: event_id,
+      eventType: "signedIn",
+      reportedSuspicious: reported_suspicious,
+      sessionId: session_id,
+    });
   }
 
-  return formattedData;
+  return FormattedActivityLog;
 };
 
 const activityLogDynamoDBRequest = (
-  subjectId: string
+  user_id: string
 ): DynamoDB.Types.QueryInput => ({
   TableName: getDynamoActivityLogStoreTableName(),
   KeyConditionExpression: "user_id = :user_id",
   ExpressionAttributeValues: {
-    ":user_id": { S: subjectId },
+    ":user_id": { S: user_id },
   },
   ScanIndexForward: false, // Set to 'true' for ascending order
 });
 
 const getActivityLogEntry = async (
-  subjectId: string,
+  user_id: string,
   trace: string
 ): Promise<ActivityLogEntry[]> => {
   const logger = pino();
 
   try {
     const response = await dynamoDBService().queryItem(
-      activityLogDynamoDBRequest(subjectId)
+      activityLogDynamoDBRequest(user_id)
     );
-    const unmarshalledItems = response.Items?.map((item) =>
+    return response.Items?.map((item) =>
       DynamoDB.Converter.unmarshall(item)
     ) as ActivityLogEntry[];
-    return unmarshalledItems;
   } catch (err) {
     logger.error({ trace: trace }, err);
-    return [];
   }
 };
 
+export async function filterAndDecryptActivity(
+  data: ActivityLogEntry[]
+): Promise<ActivityLogEntry[]> {
+  const filteredData: ActivityLogEntry[] = [];
+
+  for (const item of data) {
+    if (!item.user_id || !item.event_type) {
+      continue;
+    }
+    let eventType = item.event_type;
+
+    eventType = await decryptData(item.event_type, item.user_id);
+
+    if (allowedTxmaEvents.includes(eventType)) {
+      filteredData.push({ ...item, event_type: eventType });
+    }
+  }
+
+  return filteredData;
+}
+
 export const presentSignInHistory = async (
-  subjectId: string,
+  user_id: string,
   trace: string
 ): Promise<ActivityLogEntry[]> => {
-  const activityLogEntry = await getActivityLogEntry(subjectId, trace);
+  const activityLogEntry = await getActivityLogEntry(user_id, trace);
   if (activityLogEntry) {
     return activityLogEntry;
   } else {

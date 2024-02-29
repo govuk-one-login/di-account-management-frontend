@@ -102,11 +102,6 @@ Parameters:
   ActivityLogStoreTableName:
     Type: String
     Default: activity_logs
-  CodeSigningConfigArn:
-    Type: String
-    Description: >
-      The ARN of the Code Signing Config to use, provided by the deployment pipeline
-    Default: "none"
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
@@ -123,7 +118,6 @@ Conditions:
   UseStubServices: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
-  UseCodeSigning: !Not [!Equals [none, !Ref CodeSigningConfigArn]]
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, staging]
@@ -364,6 +358,11 @@ Resources:
                   - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
               - Effect: Allow
                 Action:
+                  - "kms:Decrypt"
+                Resource:
+                  - Fn::ImportValue: !Sub "${BackendStackName}-GeneratorKey"
+              - Effect: Allow
+                Action:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
@@ -375,6 +374,7 @@ Resources:
                 Resource:
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
                   - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
+                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${BackendStackName}/Config/Session/Secret"
               - Effect: Allow
                 Action:
                   - dynamodb:Query
@@ -711,6 +711,18 @@ Resources:
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
             - Name: "AUDIT_QUEUE_DLQ_URL"
               Value: !Ref TxMAPublishErrorDeadLetterQueue
+            - Name: "GENERATOR_KEY_ARN"
+              Value: !ImportValue
+                'Fn::Sub': "${BackendStackName}-GeneratorKey"
+            - Name: "WRAPPING_KEY_ARN"
+              Value: !ImportValue
+                'Fn::Sub': "${BackendStackName}-WrappingKey"
+            - Name: "ACCOUNT_ID"
+              Value: !Sub "${AWS::AccountId}"
+            - Name: "ENVIRONMENT"
+              Value: !Ref Environment
+            - Name: "VERIFY_ACCESS_VALUE"
+              Value: !Sub "{{resolve:secretsmanager:/${BackendStackName}/Config/Storage/VerificationSecret}}"
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join

@@ -10,11 +10,12 @@ services:
     environment:
       - SERVICES=kms,sns,dynamodb,sqs
       - HOSTNAME_EXTERNAL=localhost
-      - DEBUG=0
+      - DEBUG=${DEBUG:-0}
       - KMS_PROVIDER=local-kms
       - AWS_ACCESS_KEY_ID=na
       - AWS_SECRET_ACCESS_KEY=na
       - MY_ONE_LOGIN_USER_ID=${MY_ONE_LOGIN_USER_ID}
+      - AWS_DEFAULT_REGION=eu-west-2
     volumes:
       - ./seed.yaml:/init/seed.yaml
       - ./localstack/provision.sh:/etc/localstack/init/ready.d/init-aws.sh
@@ -50,10 +51,14 @@ services:
       - ACTIVITY_LOG_STORE_TABLE_NAME=${ACTIVITY_LOG_STORE_TABLE_NAME}
       - SESSION_STORE_TABLE_NAME=${SESSION_STORE_TABLE_NAME}
       - SUPPORT_ACTIVITY_LOG=${SUPPORT_ACTIVITY_LOG}
-      - DEBUG=express-session
       - LOCALSTACK_HOSTNAME=localstack
-      - AWS_REGION=eu-west-2
+      - AWS_REGION=${AWS_REGION}
       - AUDIT_QUEUE_URL=http://localstack:4566/audit-events
+      - GENERATOR_KEY=${GENERATOR_KEY}
+      - WRAPPING_KEY=${WRAPPING_KEY}
+      - ACCOUNT_ID=${ACCOUNT_ID}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - VERIFY_ACCESS_VALUE=${VERIFY_ACCESS_VALUE}
     restart: on-failure
     depends_on:
       localstack:
