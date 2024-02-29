@@ -3,12 +3,18 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set contentId %}
-   {{ "003" if requestType == 'changeEmail' }} 
-   {{ "004" if requestType == 'changePassword' }} 
-   {{ "005" if requestType == 'changePhoneNumber' }} 
-   {{ "006" if requestType == 'deleteAccount' }}    
-{% endset %}
+{% set contentIds  = {
+    changeEmail: "003",
+    changePassword: "004",
+    changePhoneNumber: "005",
+    deleteAccount:"006"
+} %}
+
+{% if contentIds[requestType] %}
+    {% set contentId = contentIds[requestType] %}
+{% else %}
+    {% set contentId = "undefined" %}
+{% endif %}
 
 {% if requestType == 'changePassword' %}
     {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
@@ -34,7 +40,6 @@
 
 {% if requestType == 'changePhoneNumber' %}
     {% include 'enter-password/_change-phone-number.njk' %}
-    {% set contentId = '006' %}
     {% set pageTitleName = 'pages.enterPassword.changePhoneNumber.header' | translate %}
 {% endif %}
 
