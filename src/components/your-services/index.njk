@@ -6,6 +6,16 @@
 {% set showSecondaryHeadings = servicesList.length and accountsList.length %}
 {% set serviceHeadingLevel =  "h3" if showSecondaryHeadings else "h2" %}
 
+{% if not (servicesList.length or accountsList.length) %}
+    {% set contentId = "886900f6-178f-41e7-9051-c8428cca86dd" %}
+{% elif accountsList.length %}
+    {% set contentId = "74c08523-6bce-41da-bcdc-179d5e3784c8" %}
+{% elif servicesList.length %}
+    {% set contentId = "bfb16754-2768-47c9-a338-21405bc6a98a" %}
+{% else %}
+    {% set contentId = "04566d1b-d791-4e2a-9154-26787fb60516" %}
+{% endif %}
+
 {% block content %}
   <div class="govuk-grid-row" id="your-services">
     <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
@@ -97,5 +107,5 @@
       </div>
     </div>
   </div>
-   {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "", taxonomyLevel2:"", contentId:"001",loggedInStatus:true,dynamic:true})}}
+   {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"home", contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}

@@ -3,18 +3,16 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set contentIds  = {
-    changeEmail: "003",
-    changePassword: "004",
-    changePhoneNumber: "005",
-    deleteAccount:"006"
+
+{% set oplValues = {
+    changeEmail: { contentId: "e00e882b-f54a-40d3-ac84-85737424471c", taxonomyLevel2: 'change email' },
+    changePassword: { contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412", taxonomyLevel2: 'change password' },
+    changePhoneNumber: { contentId: "2f5f174d-c650-4b28-96cf-365f4fb17af1", taxonomyLevel2: 'change phone number' },
+    deleteAccount: { contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349", taxonomyLevel2: 'delete account' }
 } %}
 
-{% if contentIds[requestType] %}
-    {% set contentId = contentIds[requestType] %}
-{% else %}
-    {% set contentId = "undefined" %}
-{% endif %}
+{% set contentId = oplValues[requestType].contentId if oplValues[requestType] else "undefined" %}
+{% set taxonomyLevel2Value = oplValues[requestType].taxonomyLevel2 if oplValues[requestType] else "undefined" %}
 
 {% if requestType == 'changePassword' %}
     {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
@@ -51,5 +49,5 @@
 
 {% block scripts %}
     <script type="text/javascript" src="/public/scripts/showPassword.js"></script>
-    {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "", taxonomyLevel2:"", contentId:contentId,loggedInStatus:true,dynamic:true})}}
+    {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:taxonomyLevel2Value, contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}
