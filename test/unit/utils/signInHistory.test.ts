@@ -3,47 +3,10 @@ import { describe } from "mocha";
 import {
   formatData,
   generatePagination,
-  hasExplanationParagraph,
-} from "../../../src/utils/signInHistory";
+} from "../../../src/utils/activityHistory";
 import type { ActivityLogEntry } from "../../../src/utils/types";
 
 describe("Sign in History Util", () => {
-  describe("show a paragraph explaining the feature where appropriate", () => {
-    it("flag is false when the earliest event in the log is newer than feature launch date", async () => {
-      const data: ActivityLogEntry[] = [
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          // Thu Nov 25 2032
-          timestamp: 1985032269060,
-          client_id: "12345",
-          event_id: "12345",
-          reported_suspicious: false,
-        },
-      ];
-
-      expect(hasExplanationParagraph(data)).equal(false);
-    });
-
-    it("flag is true when the earliest event in the log is older than feature launch date", async () => {
-      const data: ActivityLogEntry[] = [
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          // Sun Jan 29 2023
-          timestamp: 1675032269060,
-          client_id: "12345",
-          event_id: "12345",
-          reported_suspicious: false,
-        },
-      ];
-
-      expect(hasExplanationParagraph(data)).equal(true);
-    });
-  });
-
   describe("format user activity to display", () => {
     it("returns the correct events for the current page", async () => {
       const createLogEntry = (): ActivityLogEntry => {
@@ -55,6 +18,7 @@ describe("Sign in History Util", () => {
           client_id: "dontshowme",
           event_id: "12345",
           reported_suspicious: false,
+          truncated: false,
         };
       };
 
@@ -77,6 +41,7 @@ describe("Sign in History Util", () => {
           client_id: "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
           event_id: "12345",
           reported_suspicious: false,
+          truncated: false,
         },
       ];
 
@@ -92,7 +57,7 @@ describe("Sign in History Util", () => {
 
   describe("generate a pagination object to render the pagination component", async () => {
     it("returns an empty object if no data is provided", () => {
-      const data = [];
+      const data: ActivityLogEntry[] = [];
       const pagination: any = generatePagination(data.length, 1);
       expect(pagination.currentPage).to.equal(1);
       expect(pagination.items.length).to.equal(0);

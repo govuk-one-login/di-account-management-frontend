@@ -10,6 +10,7 @@ services:
     environment:
       - SERVICES=kms,sns,dynamodb,sqs
       - HOSTNAME_EXTERNAL=localhost
+      - DYNAMODB_SHARE_DB=1                                       # Removes regions and allows NoSQL Workbench to work.
       - DEBUG=${DEBUG:-0}
       - KMS_PROVIDER=local-kms
       - AWS_ACCESS_KEY_ID=na
@@ -51,6 +52,7 @@ services:
       - ACTIVITY_LOG_STORE_TABLE_NAME=${ACTIVITY_LOG_STORE_TABLE_NAME}
       - SESSION_STORE_TABLE_NAME=${SESSION_STORE_TABLE_NAME}
       - SUPPORT_ACTIVITY_LOG=${SUPPORT_ACTIVITY_LOG}
+      - DEBUG=express-session
       - LOCALSTACK_HOSTNAME=localstack
       - AWS_REGION=${AWS_REGION}
       - AUDIT_QUEUE_URL=http://localstack:4566/audit-events

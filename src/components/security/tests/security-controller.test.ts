@@ -38,7 +38,7 @@ describe("security controller", () => {
         phoneNumber: "7898",
         isPhoneNumberVerified: true,
         supportActivityLog: true,
-        activityLogUrl: "/security/sign-in-history",
+        activityLogUrl: "/activity-history",
       });
     });
   });

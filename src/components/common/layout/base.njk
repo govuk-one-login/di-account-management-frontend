@@ -51,7 +51,23 @@
             html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback")
         }) if not hidePhaseBanner}}
         {% if backLink %}
-            <a href="{{backLink}}" class="govuk-back-link">{{'general.back' | translate}}</a>
+          {% if backLinkJS %}
+            <script type="text/javascript" nonce='{{scriptNonce}}'>
+              function handleBackLink(e) {
+                var referrer = new URL(document.referrer).hostname;
+
+                if (referrer === document.location.hostname && window.history.length > 2) {
+                  event.preventDefault();
+                  window.history.back();
+                }
+              }
+            </script>
+          {% endif %}
+
+          <a href="{{backLink}}" class="govuk-back-link" {% if backLinkJS -%}onclick='handleBackLink(event)'{%- endif -%}>
+            {{ backLinkText }}
+            {{'general.back' | translate if not backLinkText}}
+          </a>
         {% endif %}
         {% block beforeContent %}{% endblock %}
         {% if languageToggle %}

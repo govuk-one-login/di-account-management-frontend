@@ -29,7 +29,7 @@ import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
 import { serverErrorHandler } from "./handlers/internal-server-error-handler";
 import { csrfMiddleware } from "./middleware/csrf-middleware";
 import { securityRouter } from "./components/security/security-routes";
-import { signInHistoryRouter } from "./components/sign-in-history/sign-in-history-routes";
+import { activityHistoryRouter } from "./components/activity-history/activity-history-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
 import { ENVIRONMENT_NAME } from "./app.constants";
@@ -59,6 +59,7 @@ import { contactRouter } from "./components/contact-govuk-one-login/contact-govu
 import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
+import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -158,7 +159,8 @@ async function createApp(): Promise<express.Application> {
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
   if (supportActivityLog()) {
-    app.use(signInHistoryRouter);
+    app.use(activityHistoryRouter);
+    app.use(reportSuspiciousActivityRouter);
   }
   if (supportTriagePage()) {
     app.use(contactRouter);
