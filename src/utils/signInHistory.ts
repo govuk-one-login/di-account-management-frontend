@@ -104,7 +104,8 @@ export const generatePagination = (dataLength: number, page: any): [] => {
 
 export const formatData = async (
   data: ActivityLogEntry[],
-  currentPage: number = 1
+  currentPage: number = 1,
+  currentLanguage?: string
 ): Promise<FormattedActivityLog[]> => {
   const indexStart = (currentPage - 1) * activityLogItemsPerPage;
   const indexEnd = indexStart + activityLogItemsPerPage;
@@ -122,15 +123,19 @@ export const formatData = async (
       session_id,
     } = entry;
 
-    const timeFormatted = prettifyDate(Number(timestamp), {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hourCycle: "h12",
-      timeZone: "GB",
-    });
+    const timeFormatted = prettifyDate({
+      dateEpoch: Number(timestamp), 
+      options: {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hourCycle: "h12",
+        timeZone: "GB",
+    },
+    locale: currentLanguage
+  });
 
     FormattedActivityLog.push({
       userId: user_id,

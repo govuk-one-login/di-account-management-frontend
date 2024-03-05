@@ -38,7 +38,8 @@ export async function signInHistoryGet(
             : { currentPage: 1 };
         FormattedActivityLog = await formatData(
           validActivityData,
-          pagination?.currentPage
+          pagination?.currentPage,
+          req.i18n.language
         );
         showExplanation = hasExplanationParagraph(FormattedActivityLog);
       }
