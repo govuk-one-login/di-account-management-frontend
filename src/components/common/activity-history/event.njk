@@ -1,0 +1,10 @@
+
+{% set contentLocale = ['pages.activityHistory.activities.', event.eventType] | join %}
+{% set eventId = event.visitedServiceId %}
+{%- if (eventId == "ol") -%}
+  <h2 class="govuk-heading-s govuk-!-margin-bottom-1">{{ [contentLocale, '.', eventId, '.header'] | join | translate }}</h2>
+  <p class="govuk-body govuk-hint">{{[contentLocale, '.', eventId, '.hint'] | join | translate}}</p>
+{%- else -%}
+  <h2 class="govuk-heading-s">{{ ['clientRegistry.', env, '.', eventId, '.header'] | join | translate }}</h2>
+{%- endif -%}
+<p class="govuk-body">{{event.time}} ({{ 'pages.activityHistory.timeInfo' | translate }})</p>

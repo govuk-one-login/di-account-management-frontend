@@ -57,6 +57,7 @@ export async function activityHistoryGet(
       pagination: pagination,
       backLink: backLink,
       changePasswordLink: PATH_DATA.SECURITY.url,
+      contactLink: PATH_DATA.CONTACT.url
     });
   } catch (e) {
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
