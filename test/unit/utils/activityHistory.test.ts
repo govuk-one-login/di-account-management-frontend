@@ -1,12 +1,12 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import {
-  formatData,
+  formatActivityLogs,
   generatePagination,
 } from "../../../src/utils/activityHistory";
 import type { ActivityLogEntry } from "../../../src/utils/types";
 
-describe("Sign in History Util", () => {
+describe("Activity History Util", () => {
   describe("format user activity to display", () => {
     it("returns the correct events for the current page", async () => {
       const createLogEntry = (): ActivityLogEntry => {
@@ -26,9 +26,14 @@ describe("Sign in History Util", () => {
         .fill(0)
         .map(createLogEntry);
 
-      const FormattedActivityLog = await formatData(longData, 2, "cy");
+      const formattedActivityLogs = formatActivityLogs(
+        longData,
+        "test",
+        2,
+        "cy"
+      );
 
-      expect(FormattedActivityLog.length).equal(3);
+      expect(formattedActivityLogs.length).equal(3);
     });
 
     it("takes an array of events and the current page and returns formatted data", async () => {
@@ -45,13 +50,18 @@ describe("Sign in History Util", () => {
         },
       ];
 
-      const FormattedActivityLog = await formatData(data, 1, "en-GB");
+      const formattedActivityLogs = formatActivityLogs(
+        data,
+        "test",
+        1,
+        "en-GB"
+      );
 
-      expect(FormattedActivityLog[0].eventType).equal("signedIn");
-      expect(FormattedActivityLog[0].clientId).equal(
+      expect(formattedActivityLogs[0].eventType).equal("signedIn");
+      expect(formattedActivityLogs[0].clientId).equal(
         "RqFZ83csmS4Mi4Y7s7ohD9-ekwU"
       );
-      expect(FormattedActivityLog[0].time).equal("13 July 2023 at 2:00 am");
+      expect(formattedActivityLogs[0].time).equal("13 July 2023 at 2:00 am");
     });
   });
 

@@ -6,8 +6,8 @@ import { DynamoDB } from "aws-sdk";
 import { dynamoDBService } from "../../utils/dynamo";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
 import assert from "node:assert";
-import { logger } from "../../utils/logger";
-import { formatData } from "../../utils/activityHistory";
+import { formatActivityLogs } from "../../utils/activityHistory";
+import { decryptData } from "../../utils/decrypt-data";
 
 const activityLogDynamoDBRequest = (
   subjectId: string,
@@ -36,7 +36,8 @@ export async function reportSuspiciousActivityGet(
     return next();
   }
 
-  let eventDetails: ActivityLogEntry;
+  let activityLog: ActivityLogEntry;
+
   try {
     const response = await dynamoDBService().queryItem(
       activityLogDynamoDBRequest(req.session.user_id, req.query.event as string)
@@ -47,7 +48,7 @@ export async function reportSuspiciousActivityGet(
       );
       return next();
     }
-    eventDetails = DynamoDB.Converter.unmarshall(
+    activityLog = DynamoDB.Converter.unmarshall(
       response.Items[0]
     ) as ActivityLogEntry;
   } catch (err) {
@@ -55,28 +56,24 @@ export async function reportSuspiciousActivityGet(
     return next(err);
   }
 
-  logger.debug("Calling formatEvent");
-
-  const wrapper: ActivityLogEntry[] = [eventDetails];
-
-  const arrayOfFormattedLogs: FormattedActivityLog[] = await formatData(
-    wrapper,
-    1
+  activityLog.event_type = await decryptData(
+    activityLog.event_type,
+    activityLog.user_id,
+    res.locals.trace
   );
 
-  const formattedEventDetails = arrayOfFormattedLogs[0];
+  const formattedActivityLogs: FormattedActivityLog = formatActivityLogs(
+    [activityLog],
+    res.locals.trace
+  )[0];
 
-  logger.debug(
-    `reported suspicious: ${formattedEventDetails?.reportedSuspicious}::${formattedEventDetails?.reportNumber}::${formattedEventDetails?.reportedSuspiciousTime}`
-  );
-
-  const additionalData = formattedEventDetails?.reportedSuspicious
+  const activityLogDetails = formattedActivityLogs?.reportedSuspicious
     ? {
-        reportNumber: formattedEventDetails?.reportNumber,
+        reportNumber: formattedActivityLogs?.reportNumber,
         contactUrl: PATH_DATA.CONTACT.url,
-        eventReportedTime: formattedEventDetails?.reportedSuspiciousTime,
+        eventReportedTime: formattedActivityLogs?.reportedSuspiciousTime,
       }
-    : { event: formattedEventDetails, env: getAppEnv() };
+    : { event: formattedActivityLogs, env: getAppEnv() };
 
   const data = {
     page: req.query.page,
@@ -86,12 +83,12 @@ export async function reportSuspiciousActivityGet(
     email: req.session.user.email,
     eventId: req.query.event,
     reportSuspiciousActivityUrl: PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url,
-    alreadyReported: formattedEventDetails?.reportedSuspicious,
+    alreadyReported: formattedActivityLogs?.reportedSuspicious,
   };
 
   res.render("report-suspicious-activity/index.njk", {
     ...data,
-    ...additionalData,
+    ...activityLogDetails,
   });
 }
 

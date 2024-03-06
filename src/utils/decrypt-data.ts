@@ -64,7 +64,8 @@ export function validateEncryptionContext(
 
 export async function decryptData(
   data: string,
-  userId: string
+  userId: string,
+  traceId: string
 ): Promise<string> {
   try {
     logger.debug({
@@ -83,7 +84,10 @@ export async function decryptData(
     );
     return result.plaintext.toString(DECODING);
   } catch (error) {
-    logger.error({ ...error, trace: userId });
+    logger.error(
+      { err: error, trace: traceId },
+      "Could not decrypt data, returning original data and not throwing an error."
+    );
     return data;
   }
 }

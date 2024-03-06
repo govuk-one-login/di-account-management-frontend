@@ -4,7 +4,7 @@ import { PATH_DATA } from "../../app.constants";
 import {
   presentActivityHistory,
   generatePagination,
-  formatData,
+  formatActivityLogs,
   filterAndDecryptActivity,
 } from "../../utils/activityHistory";
 import { HTTP_STATUS_CODES } from "../../app.constants";
@@ -29,17 +29,21 @@ export async function activityHistoryGet(
       const pageParameter = req.query?.page;
 
       const validActivityData: ActivityLogEntry[] =
-        await filterAndDecryptActivity(activityData);
+        await filterAndDecryptActivity(activityData, res.locals.trace);
 
       if (validActivityData.length <= activityLogItemsPerPage) {
-        formattedActivityLog = await formatData(validActivityData);
+        formattedActivityLog = formatActivityLogs(
+          validActivityData,
+          res.locals.trace
+        );
       } else {
         pagination = generatePagination(
           validActivityData.length,
           pageParameter
         );
-        formattedActivityLog = await formatData(
+        formattedActivityLog = formatActivityLogs(
           validActivityData,
+          res.locals.trace,
           pagination.currentPage
         );
       }
