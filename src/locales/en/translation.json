@@ -711,13 +711,13 @@
         "header": "Manage family support services and accounts",
         "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
         "link_text": "Go to your manage family support services account",
-        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Welcome"
       },
       "cqGoT1LYLsjn-iwGcDTzamckhZU": {
         "header": "Connect families to support",
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
-        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+        "link_href": "https://connect-families-to-support.education.gov.uk/ProfessionalReferral/Search"
       },
       "2nAxHa72OqhE6eKymHZIx-sV3vI": {
         "header": "Apprenticeship provider and assessment register",
@@ -824,13 +824,13 @@
         "header": "Manage family support services and accounts",
         "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
         "link_text": "Go to your manage family support services account",
-        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Welcome"
       },
       "cqGoT1LYLsjn-iwGcDTzamckhZU": {
         "header": "Connect families to support",
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
-        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+        "link_href": "https://connect-families-to-support.education.gov.uk/ProfessionalReferral/Search"
       },
       "2nAxHa72OqhE6eKymHZIx-sV3vI": {
         "header": "Apprenticeship provider and assessment register",
@@ -937,13 +937,13 @@
         "header": "Manage family support services and accounts",
         "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
         "link_text": "Go to your manage family support services account",
-        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Welcome"
       },
       "connectFamilies": {
         "header": "Connect families to support",
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
-        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+        "link_href": "https://connect-families-to-support.education.gov.uk/ProfessionalReferral/Search"
       },
       "apar": {
         "header": "Apprenticeship provider and assessment register",
@@ -1050,13 +1050,13 @@
         "header": "Manage family support services and accounts",
         "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
         "link_text": "Go to your manage family support services account",
-        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Welcome"
       },
       "connectFamilies": {
         "header": "Connect families to support",
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
-        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+        "link_href": "https://connect-families-to-support.education.gov.uk/ProfessionalReferral/Search"
       },
       "apar": {
         "header": "Apprenticeship provider and assessment register",
@@ -1163,13 +1163,13 @@
         "header": "Manage family support services and accounts",
         "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
         "link_text": "Go to your manage family support services account",
-        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Welcome"
       },
       "connectFamilies": {
         "header": "Connect families to support",
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
-        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+        "link_href": "https://connect-families-to-support.education.gov.uk/ProfessionalReferral/Search"
       },
       "apar": {
         "header": "Apprenticeship provider and assessment register",
@@ -1276,13 +1276,13 @@
         "header": "Manage family support services and accounts",
         "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
         "link_text": "Go to your manage family support services account",
-        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Account/login-callback"
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Welcome"
       },
       "connectFamilies": {
         "header": "Connect families to support",
         "description": "Find local support services for children, young people, parents and carers.",
         "link_text": "Go to your connect families to support account",
-        "link_href": "https://www.connect-families-to-support.education.gov.uk/Account/login-callback"
+        "link_href": "https://connect-families-to-support.education.gov.uk/ProfessionalReferral/Search"
       },
       "apar": {
         "header": "Apprenticeship provider and assessment register",
