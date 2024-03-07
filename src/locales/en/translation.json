@@ -489,7 +489,7 @@
       "title": "Are you sure you want to delete your GOV.UK One Login?",
       "header": "Are you sure you want to delete your GOV.UK One Login?",
       "paragraph1": "This will permanently delete the sign in details for your GOV.UK One Login.",
-      "paragraph2": "You will no longer be able to sign in to use:",
+      "paragraph2": "You will no longer be able to use your GOV.UK One Login to access:",
       "paragraph3": "This will also delete your GOV.UK email subscriptions.",
       "paragraph4a": "It will not delete the personal information held by services you’ve used with your GOV.UK One Login.",
       "paragraph4b": "It will not delete the personal information held by services you’ve used.",

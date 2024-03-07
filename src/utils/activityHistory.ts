@@ -92,28 +92,35 @@ export const generatePagination = (dataLength: number, page: any): [] => {
   return pagination;
 };
 
-export const formatEvent = (
-  row: ActivityLogEntry,
+export const formatActivityLog = (
+  activityLogEntry: ActivityLogEntry,
+  trace: string,
   currentLanguage?: string
 ): FormattedActivityLog => {
-  const newRow: FormattedActivityLog = {} as FormattedActivityLog;
-  newRow.eventType = allowedTxmaEvents.includes(row.event_type)
+  const formattedActivityLog: FormattedActivityLog = {} as FormattedActivityLog;
+  formattedActivityLog.eventType = allowedTxmaEvents.includes(
+    activityLogEntry.event_type
+  )
     ? "signedIn"
     : null;
 
-  if (!newRow.eventType) return;
-  newRow.eventId = row.event_id;
-  newRow.sessionId = row.session_id;
-  newRow.clientId = row.client_id;
-  logger.debug(`Reported suspicious in formatEvent ${row.reported_suspicious}`);
-  newRow.reportedSuspicious = row.reported_suspicious;
-  logger.debug(
-    `Reported suspicious in newRow.reportedSuspicious ${newRow.reportedSuspicious}`
-  );
-  newRow.reportSuspiciousActivityUrl = `${PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url}?event=${row.event_id}`;
+  if (!formattedActivityLog.eventType) {
+    logger.debug(
+      { trace: trace },
+      `Ignoring activity log as event type ${formattedActivityLog.eventType} is not displayed by Activity history.`
+    );
+    return;
+  }
 
-  newRow.time = prettifyDate({
-    dateEpoch: Number(row["timestamp"]),
+  formattedActivityLog.eventId = activityLogEntry.event_id;
+  formattedActivityLog.sessionId = activityLogEntry.session_id;
+  formattedActivityLog.clientId = activityLogEntry.client_id;
+  formattedActivityLog.reportedSuspicious =
+    activityLogEntry.reported_suspicious;
+  formattedActivityLog.reportSuspiciousActivityUrl = `${PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url}?event=${activityLogEntry.event_id}`;
+
+  formattedActivityLog.time = prettifyDate({
+    dateEpoch: Number(activityLogEntry["timestamp"]),
     options: {
       month: "long",
       day: "numeric",
@@ -126,13 +133,13 @@ export const formatEvent = (
     locale: currentLanguage,
   });
 
-  newRow.visitedService = row.client_id;
-  newRow.visitedServiceId = row.client_id;
-  newRow.reportNumber = row.zendesk_ticket_number;
+  formattedActivityLog.visitedService = activityLogEntry.client_id;
+  formattedActivityLog.visitedServiceId = activityLogEntry.client_id;
+  formattedActivityLog.reportNumber = activityLogEntry.zendesk_ticket_number;
 
-  if (row["reported_suspicious_time"]) {
-    newRow.reportedSuspiciousTime = prettifyDate({
-      dateEpoch: Number(row["reported_suspicious_time"]),
+  if (activityLogEntry["reported_suspicious_time"]) {
+    formattedActivityLog.reportedSuspiciousTime = prettifyDate({
+      dateEpoch: Number(activityLogEntry["reported_suspicious_time"]),
       options: {
         month: "long",
         day: "numeric",
@@ -141,16 +148,15 @@ export const formatEvent = (
     });
   }
 
-  logger.debug({ row: newRow }, "New row: ");
-
-  return newRow;
+  return formattedActivityLog;
 };
 
-export const formatData = async (
-  data: ActivityLogEntry[],
+export const formatActivityLogs = (
+  activityLogEntries: ActivityLogEntry[],
+  trace: string,
   currentPage?: number,
   currentLanguage?: string
-): Promise<FormattedActivityLog[]> => {
+): FormattedActivityLog[] => {
   const curr = currentPage || 1;
   const formattedData: FormattedActivityLog[] = [];
   const indexStart = (curr - 1) * activityLogItemsPerPage;
@@ -158,9 +164,10 @@ export const formatData = async (
 
   // only format and return activity data for the current page
   for (let i = indexStart; i < indexEnd; i++) {
-    if (!data[i]) break;
-    const row: FormattedActivityLog = await formatEvent(
-      data[i],
+    if (!activityLogEntries[i]) break;
+    const row: FormattedActivityLog = formatActivityLog(
+      activityLogEntries[i],
+      trace,
       currentLanguage
     );
     if (row) formattedData.push(row);
@@ -201,24 +208,29 @@ const getActivityLogEntry = async (
 };
 
 export async function filterAndDecryptActivity(
-  data: ActivityLogEntry[]
+  activityLogs: ActivityLogEntry[],
+  trace: string
 ): Promise<ActivityLogEntry[]> {
-  const filteredData: ActivityLogEntry[] = [];
+  const filteredActivityLogs: ActivityLogEntry[] = [];
 
-  for (const item of data) {
-    if (!item.user_id || !item.event_type) {
+  for (const activityLog of activityLogs) {
+    if (!activityLog.user_id || !activityLog.event_type) {
       continue;
     }
-    let eventType = item.event_type;
+    let eventType = activityLog.event_type;
 
-    eventType = await decryptData(item.event_type, item.user_id);
+    eventType = await decryptData(
+      activityLog.event_type,
+      activityLog.user_id,
+      trace
+    );
 
     if (allowedTxmaEvents.includes(eventType)) {
-      filteredData.push({ ...item, event_type: eventType });
+      filteredActivityLogs.push({ ...activityLog, event_type: eventType });
     }
   }
 
-  return filteredData;
+  return filteredActivityLogs;
 }
 
 export const presentActivityHistory = async (
