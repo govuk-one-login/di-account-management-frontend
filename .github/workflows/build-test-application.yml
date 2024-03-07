@@ -67,6 +67,8 @@ jobs:
 
       - name: Run unit tests
         run: npm run test:unit
+        env:
+          SUSPICIOUS_ACTIVITY_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:SuspiciousActivityTopicArn
 
       - name: Run integration tests
         run: npm run test:integration
@@ -84,3 +86,4 @@ jobs:
       SESSION_SECRET: secret
       SESSION_EXPIRY: 3600000
       SESSION_STORE_TABLE_NAME: account-mgmt-frontend-SessionStore
+

@@ -257,3 +257,9 @@ aws --endpoint-url $ENDPOINT_URL dynamodb update-time-to-live \
 
 aws sqs --endpoint-url $ENDPOINT_URL create-queue --queue-name audit-events \
   --region $REGION
+
+aws sns --endpoint-url $ENDPOINT_URL create-topic --name SuspiciousActivityTopicArn\
+  --region $REGION
+
+aws sns --endpoint-url $ENDPOINT_URL create-topic --name DeleteAccountTopicArn\
+  --region $REGION
