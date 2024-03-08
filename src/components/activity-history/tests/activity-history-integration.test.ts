@@ -42,6 +42,16 @@ describe("Integration:: Activity history", () => {
     await request(app).get(url).expect(404);
   });
 
+  it("should redirect if the user does not have hmrc services on the list", async () => {
+    const app = await appWithMiddlewareSetup([], {
+      hideActivityLog: false,
+      hasHmrcService: false,
+    });
+    const response = await request(app).get(url);
+    expect(response.status).to.equal(302);
+    expect(response.header.location).to.equal(PATH_DATA.SECURITY.url);
+  });
+
   it("should display without pagination when data is less than activityLogItemsPerPage", async () => {
     const dataShort = [
       {
@@ -71,92 +81,15 @@ describe("Integration:: Activity history", () => {
   });
 
   it("should display with pagination when data is more than activityLogItemsPerPage", async () => {
-    const dataLong = [
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1689210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1699210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1689210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1699210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1689210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1699210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1689210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1699210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1689210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1699210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1689210000",
-        truncated: false,
-      },
-      {
-        event_type: "AUTH_AUTH_CODE_ISSUED",
-        session_id: "asdf",
-        user_id: "string",
-        timestamp: "1699210000",
-        truncated: false,
-      },
-    ];
+    const event = {
+      event_type: "AUTH_AUTH_CODE_ISSUED",
+      session_id: "asdf",
+      user_id: "string",
+      timestamp: "1699210000",
+      truncated: false,
+    };
+
+    const dataLong = new Array(12).fill(event);
     const app = await appWithMiddlewareSetup(dataLong);
     await request(app)
       .get(url)
@@ -198,6 +131,8 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
   const showActivityLog = !config?.hideActivityLog;
+  const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
+
   const activity = data || [
     {
       event_type: "signed-in",
@@ -250,5 +185,10 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
     return showActivityLog;
   });
+
+  sandbox
+    .stub(checkAllowedServicesList, "hasHmrcService")
+    .resolves(config?.hasHmrcService ?? true);
+
   return await require("../../../app").createApp();
 };

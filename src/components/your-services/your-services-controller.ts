@@ -8,18 +8,23 @@ export async function yourServicesGet(
 ): Promise<void> {
   const { user } = req.session;
   const env = getAppEnv();
+  let data;
+
   if (user && user.subjectId) {
     const trace = res.locals.sessionId;
-    const serviceData = await presentYourServices(user.subjectId, trace, req.i18n.language);
-    const data = {
+    const serviceData = await presentYourServices(
+      user.subjectId,
+      trace,
+      req.i18n.language
+    );
+    data = {
       email: req.session.user.email,
       accountsList: serviceData.accountsList,
       servicesList: serviceData.servicesList,
       env: env,
     };
-
-    res.render("your-services/index.njk", data);
   } else {
-    res.render("your-services/index.njk", { email: user.email, env: env });
+    data = { email: user.email, env: env };
   }
+  res.render("your-services/index.njk", data);
 }
