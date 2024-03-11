@@ -132,8 +132,6 @@ export async function reportSuspiciousActivityPost(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const page = req.body.page;
-
   try {
     assert(req.session.user_id, "user_id not found in session");
     assert(req.session.user.email, "email not found in session");
@@ -154,7 +152,9 @@ export async function reportSuspiciousActivityPost(
     return next(err);
   }
 
-  res.redirect(PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done?page=" + page); 
+  const pageUrlParam = req.body.page ? `?page=${req.body.page}` : "";
+
+  res.redirect(PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done" + pageUrlParam); 
 }
 
 export async function reportSuspiciousActivityConfirmation(req: Request, res: Response): Promise<void> {
