@@ -34,7 +34,9 @@ export async function activityHistoryGet(
       if (validActivityData.length <= activityLogItemsPerPage) {
         formattedActivityLog = formatActivityLogs(
           validActivityData,
-          res.locals.trace
+          res.locals.trace,
+          undefined,
+          req.i18n?.language
         );
       } else {
         pagination = generatePagination(
@@ -44,7 +46,8 @@ export async function activityHistoryGet(
         formattedActivityLog = formatActivityLogs(
           validActivityData,
           res.locals.trace,
-          pagination.currentPage
+          pagination.currentPage,
+          req.i18n?.language
         );
       }
     } else {
