@@ -95,7 +95,8 @@ export const generatePagination = (dataLength: number, page: any): [] => {
 export const formatActivityLog = (
   activityLogEntry: ActivityLogEntry,
   trace: string,
-  currentLanguage?: string
+  currentLanguage?: string,
+  pageNumber?: number
 ): FormattedActivityLog => {
   const formattedActivityLog: FormattedActivityLog = {} as FormattedActivityLog;
   formattedActivityLog.eventType = allowedTxmaEvents.includes(
@@ -117,7 +118,7 @@ export const formatActivityLog = (
   formattedActivityLog.clientId = activityLogEntry.client_id;
   formattedActivityLog.reportedSuspicious =
     activityLogEntry.reported_suspicious;
-  formattedActivityLog.reportSuspiciousActivityUrl = `${PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url}?event=${activityLogEntry.event_id}`;
+  formattedActivityLog.reportSuspiciousActivityUrl = `${PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url}?event=${activityLogEntry.event_id}&page=${pageNumber || 1}`;
 
   formattedActivityLog.time = prettifyDate({
     dateEpoch: Number(activityLogEntry["timestamp"]),
@@ -168,7 +169,8 @@ export const formatActivityLogs = (
     const row: FormattedActivityLog = formatActivityLog(
       activityLogEntries[i],
       trace,
-      currentLanguage
+      currentLanguage,
+      currentPage
     );
     if (row) formattedData.push(row);
   }
