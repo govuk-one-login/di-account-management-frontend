@@ -56,6 +56,7 @@ describe("report suspicious activity controller", () => {
         sessionId: "session-id",
       },
       render: sandbox.fake(),
+      redirect: sandbox.fake(),
     };
     next = sandbox.fake();
     dynamodbQueryOutput = {
@@ -191,15 +192,7 @@ describe("report suspicious activity controller", () => {
       await reportSuspiciousActivityPost(req as Request, res as Response, () => {});
 
       // Assert
-      expect(res.render).to.have.been.calledWith(
-        "report-suspicious-activity/success.njk",
-        {
-          backLink: "/activity-history?page=1",
-          email: "test@email.moc",
-          contactLink: sinon.match.any,
-          changePasswordLink: sinon.match.any,
-        }
-      );
+      expect(res.redirect).to.have.been.calledWith("/activity-history/report-activity/done?page=1");
 
       const snsCall = snsPublishSpy.getCalls()[0];
       const [topic_arn, message] = snsCall.args;
