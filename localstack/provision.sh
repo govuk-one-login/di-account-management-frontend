@@ -14,6 +14,24 @@ export BUILD_CLIENT_ID="${MY_ONE_LOGIN_USER_ID:-user_id}"
 export TABLE_NAME=user_services
 export ACTIVITY_LOG_TABLE_NAME=activity_log
 
+# Set the AWS region
+export REGION="${AWS_DEFAULT_REGION:-eu-west-2}"
+
+# Generate the first key
+OUTPUT_GENERATOR=$(awslocal kms create-key --region $REGION)
+GENERATOR_KEY_ARN=$(echo "$OUTPUT_GENERATOR" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['Arn'])")
+echo "$GENERATOR_KEY_ARN" > /tmp/keys/GENERATOR_KEY_ARN
+
+# Generate the second key
+OUTPUT_WRAPPING=$(awslocal kms create-key --region $REGION)
+WRAPPING_KEY_ARN=$(echo "$OUTPUT_WRAPPING" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['Arn'])")
+echo "$WRAPPING_KEY_ARN" > /tmp/keys/WRAPPING_KEY_ARN
+
+# Generate the third key
+OUTPUT_LOCAL_KEY_ID=$(awslocal kms create-key --region $REGION --description "RSA key with 2048 bits" --key-usage SIGN_VERIFY --customer-master-key-spec RSA_2048)
+LOCAL_KEY_ID=$(echo "$OUTPUT_LOCAL_KEY_ID" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['KeyId'])")
+echo "$LOCAL_KEY_ID" > /tmp/keys/LOCAL_KEY_ID
+
 aws --endpoint-url=$ENDPOINT_URL dynamodb create-table \
     --table-name $TABLE_NAME \
     --attribute-definitions AttributeName=user_id,AttributeType=S \
@@ -263,3 +281,59 @@ aws sns --endpoint-url $ENDPOINT_URL create-topic --name SuspiciousActivityTopic
 
 aws sns --endpoint-url $ENDPOINT_URL create-topic --name DeleteAccountTopicArn\
   --region $REGION
+
+# Example state machine
+aws stepfunctions --endpoint-url $ENDPOINT_URL create-state-machine \
+    --region eu-west-2 \
+    --name "ExampleStateMachine" \
+    --type "STANDARD" \
+    --role-arn "arn" \
+    --definition '
+{
+  "Comment": "Example StepFunction",
+  "StartAt": "FirstState",
+  "States": {
+    "FirstState": {
+      "Type": "Pass",
+      "Result": "Hello, world!",
+      "End": true
+    }
+    }
+}
+'
+# SNS Topic used by CloudWatch Alarms when they are activated
+aws sns --endpoint-url $ENDPOINT_URL create-topic --name SlackAlarmTopic --region $REGION
+
+# Cloudwatch alarm for state machine execution failures
+aws cloudwatch put-metric-alarm \
+    --endpoint-url http://localhost:4566 \
+    --region eu-west-2 \
+    --alarm-name ReportSuspiciousActivityStepFunctionExecutionFailure \
+    --alarm-description "Alarm for failures executing the report suspicious activity workflow" \
+    --namespace AWS/States \
+    --metric-name ExecutionFailed \
+    --period 300 \
+    --evaluation-periods 1 \
+    --threshold 1 \
+    --comparison-operator GreaterThanThreshold \
+    --dimensions Name=StateMachineArn,Value=arn:aws:states:eu-west-2:000000000000:stateMachine:ExampleStateMachine \
+    --alarm-actions arn:aws:sns:eu-west-2:000000000000:SlackAlarmTopic
+
+# SQS Queue listening to the SNS alarm topic which from which messages can be received to view the alarm details
+aws sqs --endpoint-url $ENDPOINT_URL create-queue --queue-name slack-alerts --region $REGION
+
+# Subscribe the slack-alerts SQS queue to the SlackAlarmTopic SNS topic
+aws sns --endpoint-url $ENDPOINT_URL subscribe \
+  --region eu-west-2 \
+  --topic-arn arn:aws:sns:eu-west-2:000000000000:SlackAlarmTopic \
+  --protocol sqs \
+  --notification-endpoint arn:aws:sqs:eu-west-2:000000000000:slack-alerts
+
+# View alarm details
+# awslocal cloudwatch describe-alarms --alarm-names ReportSuspiciousActivityStepFunctionExecutionFailure --region=eu-west-2
+
+# Change the state of the alarm
+# awslocal cloudwatch set-alarm-state --state-reason "Threshold crossed" --alarm-name ReportSuspiciousActivityStepFunctionExecutionFailure --state-value ALARM --region eu-west-2
+
+# Get the alarms from the SQS queue
+# awslocal sqs receive-message --queue-url http://sqs.eu-west-2.localhost.localstack.cloud:4566/000000000000/slack-alerts

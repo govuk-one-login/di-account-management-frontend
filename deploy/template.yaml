@@ -1741,7 +1741,6 @@ Resources:
 
   # 4xx Status Code
   ApiGateway4xxStatusAlarm:
-    Condition: IsNotDevelopment
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGateway4xxStatusAlarm"
@@ -1788,7 +1787,6 @@ Resources:
 
   # 5xx Status Code
   ApiGateway5xxStatusAlarm:
-    Condition: IsNotDevelopment
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGateway5xxStatusAlarm"
@@ -1835,7 +1833,6 @@ Resources:
 
   # Latency
   ApiGatewayLatencyAlarm:
-    Condition: IsNotDevelopment
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGatewayLatencyAlarm"
