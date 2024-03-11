@@ -154,8 +154,12 @@ export async function reportSuspiciousActivityPost(
     return next(err);
   }
 
+  res.redirect(PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done?page=" + page); 
+}
+
+export async function reportSuspiciousActivityConfirmation(req: Request, res: Response): Promise<void> {
   res.render("report-suspicious-activity/success.njk", {
-    backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${page}`,
+    backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${req.query.page || 1}`,
     email: req.session.user.email,
     contactLink: PATH_DATA.CONTACT.url,
     changePasswordLink: PATH_DATA.SECURITY.url,
