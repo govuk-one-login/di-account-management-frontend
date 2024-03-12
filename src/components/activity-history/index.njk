@@ -2,22 +2,11 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% set pageTitleName = 'pages.activityHistory.title' | translate %}
-{% set contactLink = "https://signin.account.gov.uk/contact-us-questions?theme=something_else&referer=" %}
 {% set paginationItems = [] %}
 {% if pagination.items and pagination.currentPage %}
   {% set pageTitleName = [pageTitleName, " - ", 'pages.activityHistory.page' | translate | replace("[pageNumber]", pagination.currentPage)] | join %}
 {% endif %}
 {% set backLinkJS = true %}
-
-{# takes a service ID and location of the content in the translation file. Returns service names #}
-{%- macro setServiceName(serviceId, contentLocale) -%}
-  {%- if (serviceId == "ol" or serviceId == "hmrc") -%}
-    {%- set serviceName = [contentLocale, '.', serviceId] | join | translate -%}
-  {%- else -%}
-    {%- set serviceName = ['clientRegistry.', env, '.', serviceId, '.header'] | join | translate -%}
-  {%- endif -%}
-  {{ serviceName }}
-{%- endmacro -%}
 
 {# set up data structure for pagination #}
 {% for item in pagination.items %}
@@ -33,6 +22,7 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.activityHistory.header' | translate }}</h1>
       {% if data.length %} 
+        <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
         <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
       {% else %}
         {# Fallback in case there is no activity history – this should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
@@ -44,11 +34,8 @@
       {% if data.length %}
         <ul class="activity-history__list">
           {%- for event in data -%}
-            {% set contentLocale = ['pages.activityHistory.activities.', event.eventType] | join %}
             <li class="activity-history__list-item">
-              <h2 class="govuk-heading-s">{{event.time}} ({{ 'pages.activityHistory.timeInfo' | translate }})</h2>
-                {% set serviceName = setServiceName(event.visitedServiceId, contentLocale) %}
-                <p class="govuk-body">{{[contentLocale, '.', 'contentOne'] | join | translate | replace("[serviceName]", serviceName) }}</p>
+              {% include "common/activity-history/event.njk" %}
 
               {# if the activity has already been reported, display "Activity reported on [time]" link #}
               {# if the activity has not already been reported, display "Report activity from [time]" link #}
@@ -64,7 +51,7 @@
         </ul>
       {% endif %}
 
-      {% if not pagination.nextPage %}
+      {% if data.length and not pagination.nextPage %}
         {# if this is the last page of the activity log, show an explanatory paragraph #}
         {# the paragraph details when GOVUK One Login started showing activity history #}
         <p class="govuk-body" data-for-test="activity-log-explainer">{{ 'pages.activityHistory.featureIntro' | translate }}</p>

@@ -168,25 +168,74 @@
         "info": "Bydd hyn yn dileu eich GOV.UK One Login yn barhaol. Ni fyddwch bellach yn gallu cael mynediad i'r gwasanaethau rydych wedi'u defnyddio gydag ef."
       },
       "activityHistory": {
-        "heading": "Hanes mewngofnodi",
-        "link": "Gweld eich hanes mewngofnodi",
-        "info": "Gweld pan rydych wedi mewngofnodi i'ch GOV.UK One Login a pha wasanaethau rydych wedi ymweld â hwy."
+        "heading": "Hanes gweithgaredd",
+        "link": "Gweld eich hanes gweithgaredd",
+        "info": "Gweld beth rydych chi wedi ymweld â gyda’ch GOV.UK One Login a phryd."
       }
     },
     "activityHistory": {
-      "title": "Hanes mewngofnodi",
-      "header": "Hanes mewngofnodi",
+      "title": "Hanes gweithgaredd",
+      "header": "Hanes gweithgaredd",
       "page": "Tudalen [pageNumber]",
-      "empty": "There is a problem showing your sign in history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">report it</a>.",
-      "notice": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod, <a class=\"govuk-link\" href=\"[link]\">cysylltwch â ni</a>.",
-      "timeInfo": "amser yn y DU",
-      "featureIntro": "Dechreuodd GOV.UK One Login ddangos gweithgaredd mewngofnodi ar [date].",
+      "explanation": "Gweld beth rydych chi wedi ymweld â gyda’ch GOV.UK One Login a phryd.",
+      "empty": "Mae problem dangos hanes eich gweithgaredd ar hyn o bryd. Gallwch roi cynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[link]\">cysylltwch â'r tîm GOV.UK One Login </a>.",
+      "notice": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod, rhowch wybod amdano a <a class=\"govuk-link\" href=\"[changePassword]\"> newidiwch eich cyfrinair</a>.",
+      "timeInfo": "Amser y DU",
+      "featureIntro": " Dechreuodd GOV.UK One Login gofnodi hanes gweithgaredd ar [date].",
+      "report": "Adrodd am weithgaredd o [time]",
+      "reported": "Adroddwyd gweithgaredd ar [time]",
       "activities": {
         "signedIn": {
-          "title": "Wedi mewngofnodi",
-          "contentOne": "Gwnaethoch ymweld â [serviceName].",
-          "contentMany": "Gwnaethoch ymweld â:"
+          "ol": {
+            "header": "Eich GOV.UK One Login",
+            "hint": " Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'"
+          }
         }
+      }
+    },
+    "reportSuspiciousActivity": {
+      "title": "Adrodd am weithgaredd nad ydych yn ei adnabod",
+      "header": "Adrodd am weithgaredd nad ydych yn ei adnabod",
+      "intro": "Rydych wedi ymweld â:",
+      "submitButtonText": "Adrodd am y gweithgaredd hwn",
+      "paragraph1": "Os nad ydych yn adnabod y gweithgaredd hwn, rhowch wybod i'r tîm GOV.UK One Login.",
+      "paragraph2": "Mae e-bost cadarnhau gyda rhif eich adroddiad wedi'i anfon at <strong>[email]</strong>.",
+      "success": {
+        "title": "Rydych wedi adrodd am weithgaredd nad ydych yn ei adnabod",
+        "header": "Rydych wedi adrodd am weithgaredd nad ydych yn ei adnabod",
+        "backLinkText": "Yn ôl i hanes gweithgaredd",
+        "paragraph": "Diolch am adrodd am y gweithgaredd hwn. Mae e-bost cadarnhau gyda rhif eich adroddiad wedi'i anfon at <strong>[email]</strong>.",
+        "section1": {
+          "heading": "Newid eich cyfrinair",
+          "paragraph1": "<a class=\"govuk-link\" href=\"[changePasswordHref]\">Newidiwch eich cyfrinair</a> os nad ydych wedi gwneud hyn eisoes.",
+          "paragraph2": "Newid eich cyfrinair yw'r ffordd orau i gadw'ch GOV.UK One Login yn ddiogel.",
+          "paragraph3": " Rydym yn argymell eich bod yn:",
+          "listItem1": "creu cyfrinair diogel a chofiadwy, er enghraifft trwy ddefnyddio 3 gair ar hap",
+          "listItem2": "defnyddio cyfrinair gwahanol i'r un a ddefnyddiwch i fewngofnodi i'ch e-bost"
+        },
+        "section2": {
+          "heading": "Beth sy'n digwydd nesaf",
+          "paragraph1": "Bydd y tîm GOV.UK One Login yn ymchwilio i'ch adroddiad.",
+          "paragraph2": "Byddwn ond yn anfon e-bost atoch eto os oes angen i chi wneud rhywbeth i helpu i amddiffyn eich GOV.UK One Login.",
+          "paragraph3": "Byddwn bob amser yn cynnwys eich rhif adroddiad pan fyddwn yn anfon e-bost atoch."
+        },
+        "section3": {
+          "heading": "Os ydych angen cysylltu â ni",
+          "paragraph1": "Gallwch <a class=\"govuk-link\" href=\"[contactHref]\" target=\"_blank\">gysylltu â'r tîm GOV.UK One Login (agor mewn tab newydd)</a>.",
+          "paragraph2": "Bydd angen i chi ddyfynnu rhif eich adroddiad pan fyddwch yn cysylltu â ni. Gallwch ddod o hyd iddo yn yr e-bost cadarnhau rydym newydd ei anfon atoch."
+        }
+      },
+      "alreadyReported": {
+        "title": "Rydych eisoes wedi adrodd am y gweithgaredd hwn",
+        "header": "Rydych eisoes wedi adrodd am y gweithgaredd hwn",
+        "paragraph": "Rydych wedi adrodd am hyn ar [date].",
+        "paragraph2": "Rhif yr adroddiad yw <strong>[reportNumber]</strong>.",
+        "noReportNo": "Fe gewch e-bost cadarnhau gyda rhif eich adroddiad.",
+        "contact": {
+          "heading": "Os oes angen i chi gysylltu â ni",
+          "paragraph1": "Gallwch <a class=\"govuk-link\" href=\"[contactHref]\" target=\"_blank\">gysylltu â'r tîm GOV.UK One Login (agor mewn tab newydd)</a>.",
+          "paragraph2": "Bydd angen i chi ddyfynnu rhif eich adroddiad pan fyddwch yn cysylltu â ni."
+       }
       }
     },
     "yourServices": {

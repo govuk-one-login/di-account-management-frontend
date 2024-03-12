@@ -170,14 +170,15 @@
       "activityHistory": {
         "heading": "Activity history",
         "link": "See your activity history",
-        "info": "See when you’ve signed in to your GOV.UK One Login and what services you visited."
+        "info": "See what you’ve visited with your GOV.UK One Login and when."
       }
     },
     "activityHistory": {
       "title": "Activity history",
       "header": "Activity history",
       "page": "Page [pageNumber]",
-      "empty": "There is a problem showing your sign in history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">report it</a>.",
+      "explanation": "See what you’ve visited with your GOV.UK One Login and when.",
+      "empty": "There is a problem showing your activity history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">contact the GOV.UK One Login team</a>.",
       "notice": "If you see something you do not recognise, report it and <a class=\"govuk-link\" href=\"[changePassword]\"> change your password</a>.",
       "timeInfo": "UK time",
       "featureIntro": "GOV.UK One Login started recording activity history on [date].",
@@ -185,25 +186,20 @@
       "reported": "Activity reported on [time]",
       "activities": {
         "signedIn": {
-          "contentOne": "You visited [serviceName].",
-          "contentMany": "You visited:",
-          "fallback": "You visited your GOV.UK One Login home.",
-          "hmrc": "a service run by HM Revenue and Customs (HMRC)",
-          "ol": "your GOV.UK One Login home"
+          "ol": {
+            "header": "Your GOV.UK One Login",
+            "hint": "This includes ‘Security’ and ‘Your services’"
+          }
         }
       }
     },
     "reportSuspiciousActivity": {
       "title": "Report activity you do not recognise",
       "header": "Report activity you do not recognise",
-      "intro": "Report activity for the GOV.UK One Login team to investigate.",
-      "issueType": {
-        "title": "What do you want to report?",
-        "hint": "Select all that apply.",
-        "option1": "Time or date",
-        "option2": "Services you visited"
-      },
-      "submitButtonText": "Report",
+      "intro": "You visited:",
+      "submitButtonText": "Report this activity",
+      "paragraph1": "If you do not recognise this activity, report it to the GOV.UK One Login team.",
+      "paragraph2": "A confirmation email with your report number will be sent to <strong>[email]</strong>.",
       "success": {
         "title": "You’ve reported activity you do not recognise",
         "header": "You’ve reported activity you do not recognise",
@@ -220,7 +216,8 @@
         "section2": {
           "heading": "What happens next",
           "paragraph1": "The GOV.UK One Login team will investigate your report.",
-          "paragraph2": "We’ll only email you again if you need to do something to help protect your GOV.UK One Login. We’ll always include your report number when we email you."
+          "paragraph2": "We’ll only email you again if you need to do something to help protect your GOV.UK One Login.",
+          "paragraph3": "We’ll always include your report number when we email you."
         },
         "section3": {
           "heading": "If you need to contact us",
@@ -231,9 +228,9 @@
       "alreadyReported": {
         "title": "You’ve already reported this activity",
         "header": "You’ve already reported this activity",
-        "paragraph": "You reported this on <strong>[date]</strong>.",
+        "paragraph": "You reported this on [date].",
         "paragraph2": "The report number is <strong>[reportNumber]</strong>.",
-        "noReportNo": "We’ve sent you a confirmation email with your report number.",
+        "noReportNo": "You'll get a confirmation email with your report number.",
         "contact": {
           "heading": "If you need to contact us",
           "paragraph1": "You can <a class=\"govuk-link\" href=\"[contactHref]\" target=\"_blank\">contact the GOV.UK One Login team (opens in a new tab)</a>.",
