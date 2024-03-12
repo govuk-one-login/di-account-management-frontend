@@ -4,7 +4,7 @@ volumes:
 services:
   localstack:
     container_name: localstack
-    image: localstack/localstack:latest
+    image: localstack/localstack:3
     ports:
       - "4566:4566"
       - "4510-4559:4510-4559"  # external services port range
