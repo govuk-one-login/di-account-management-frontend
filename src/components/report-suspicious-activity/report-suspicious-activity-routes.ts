@@ -2,6 +2,7 @@ import * as express from "express";
 import {
   reportSuspiciousActivityGet,
   reportSuspiciousActivityPost,
+  reportSuspiciousActivityConfirmation,
 } from "./report-suspicious-activity-controller";
 import { PATH_DATA } from "../../app.constants";
 import { asyncHandler } from "../../utils/async";
@@ -21,6 +22,12 @@ router.post(
   requiresAuthMiddleware,
   refreshTokenMiddleware(),
   asyncHandler(reportSuspiciousActivityPost)
+);
+
+router.get(
+  PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done",
+  requiresAuthMiddleware,
+  reportSuspiciousActivityConfirmation
 );
 
 export { router as reportSuspiciousActivityRouter };
