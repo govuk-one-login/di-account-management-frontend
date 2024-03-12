@@ -1,25 +1,26 @@
 version: "3.8"
-
+volumes:
+  aws-keys-volume:
 services:
   localstack:
     container_name: localstack
-    image: localstack/localstack:1.3.1
+    image: localstack/localstack:3
     ports:
       - "4566:4566"
-      - "4569:4569"
+      - "4510-4559:4510-4559"  # external services port range
     environment:
-      - SERVICES=kms,sns,dynamodb,sqs
+      - SERVICES=kms,sns,dynamodb,sqs,stepfunctions,cloudwatch
       - HOSTNAME_EXTERNAL=localhost
       - DYNAMODB_SHARE_DB=1                                       # Removes regions and allows NoSQL Workbench to work.
       - DEBUG=${DEBUG:-0}
-      - KMS_PROVIDER=local-kms
       - AWS_ACCESS_KEY_ID=na
       - AWS_SECRET_ACCESS_KEY=na
       - MY_ONE_LOGIN_USER_ID=${MY_ONE_LOGIN_USER_ID}
       - AWS_DEFAULT_REGION=eu-west-2
     volumes:
-      - ./seed.yaml:/init/seed.yaml
       - ./localstack/provision.sh:/etc/localstack/init/ready.d/init-aws.sh
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - aws-keys-volume:/tmp/keys
 
   account-management-frontend:
     container_name: account-management-frontend
@@ -32,6 +33,7 @@ services:
       - "9229:9229"
     volumes:
       - ./:/app
+      - aws-keys-volume:/tmp/keys
     environment:
       - AUTH_FRONTEND_URL=${AUTH_FRONTEND_URL}
       - API_BASE_URL=${API_BASE_URL}

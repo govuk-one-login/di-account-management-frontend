@@ -24,7 +24,7 @@ See [One Login home developer notes](https://team-manual.account.gov.uk/teams/ho
 We can run the Account Management frontend locally using our OIDC and Account Management API stubs deployed to the dev or build environment.
 This means we don't need to register a new client with the Authentication team for each of us.
 
-### Configure environment variables
+### Configure application environment variables file
 
 Create a copy of the `.env.sample` file and rename it `.env`.
 Ask another team member for the client ID and add that to your `.env` file.
