@@ -119,6 +119,19 @@ export function getServiceDomain(): string {
   return process.env.SERVICE_DOMAIN ?? "";
 }
 
+const DBS_PROD: string = "Dw7Cxas8W7O2usHMHok95elKDRU";
+const DBS_NON_PROD: string = "dbs";
+const AAS_PROD: string = "dVrdJ7aemrvR0YlX7lDRaXnz0mE";
+const AAS_NON_PROD: string = "aas";
+const APAR_PROD: string = "2nAxHa72OqhE6eKymHZIx-sV3vI";
+const APAR_NON_PROD: string = "apar";
+const VETERANS_CARD_PROD: string = "zFeCxrwpLCUHFm-C4_CztwWtLfQ";
+const VETERANS_CARD_NON_PROD: string = "veteransCard";
+const FIND_AND_APPLY_FOR_A_GRANT_PROD: string = "tya4DoMpw_B7FK5YvuMAj3asc0A";
+const FIND_AND_APPLY_FOR_A_GRANT_NON_PROD: string = "findAndApplyForAGrant";
+const DVSA_PROD: string = "oLciSn5b6-cqcJjzgMMwCw1moD8";
+const DVSA_NON_PROD: string = "vehicleOperatorLicense";
+
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
   "ZL0kvRBP5xMy5OwONj8ARLPyuko",
@@ -127,7 +140,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "TGygWFxGDNn8ItyaecWCopqIX3s",
   "pDqO7_Hu-pq5wam5I4MlURXrv5k",
   "x3F_Iu0LgqJpegY5ni0QSB0uezw",
-  "tya4DoMpw_B7FK5YvuMAj3asc0A",
+  FIND_AND_APPLY_FOR_A_GRANT_PROD,
+  FIND_AND_APPLY_FOR_A_GRANT_NON_PROD,
   "bGAwNKM0XvnxCAuDQ_rMhhP3dxM",
   "gov-uk",
   "lite",
@@ -142,35 +156,50 @@ export const getAllowedAccountListClientIDs: string[] = [
   "manageFamilySupport",
   "zbNToJPcre4BXEap0na8kOjniKg",
   "connectFamilies",
-  "2nAxHa72OqhE6eKymHZIx-sV3vI",
-  "apar",
-  "dVrdJ7aemrvR0YlX7lDRaXnz0mE",
-  "aas",
+  APAR_PROD,
+  APAR_NON_PROD,
+  AAS_PROD,
+  AAS_NON_PROD,
   "FakIq5aYsHQ02dBOc6XwyA1wRRs",
   "gbis",
   "txsGLvMYYCPaWPZRq2L7XxEnyro",
   "childDevelopmentTraining",
 ];
 
-export const hmrcClientIds: string[] = [
-  "mQDXGO7gWdK7V28v82nVcEGuacY",
-  "hmrc",
-]
+export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
+
+export const rsaAllowList: string[] = [
+  ...hmrcClientIds,
+  DBS_PROD,
+  DBS_NON_PROD,
+  AAS_PROD,
+  AAS_NON_PROD,
+  APAR_PROD,
+  APAR_NON_PROD,
+  VETERANS_CARD_PROD,
+  VETERANS_CARD_NON_PROD,
+  FIND_AND_APPLY_FOR_A_GRANT_PROD,
+  FIND_AND_APPLY_FOR_A_GRANT_NON_PROD,
+  DVSA_PROD,
+  DVSA_NON_PROD,
+];
 
 export const getAllowedServiceListClientIDs: string[] = [
   "RqFZ83csmS4Mi4Y7s7ohD9-ekwU",
   "XwwVDyl5oJKtK0DVsuw3sICWkPU",
-  "Dw7Cxas8W7O2usHMHok95elKDRU",
-  "oLciSn5b6-cqcJjzgMMwCw1moD8",
+  DBS_PROD,
+  DVSA_PROD,
   "LUIZbIuJ_xVZxwhkNAApcO4O_6o",
   "VsAkrtMBzAosSveAv4xsuUDyiSs",
   "socialWorkEngland",
-  "dbs",
-  "vehicleOperatorLicense",
+  DBS_NON_PROD,
+  DVSA_NON_PROD,
   "mortgageDeed",
-  "zFeCxrwpLCUHFm-C4_CztwWtLfQ",
-  "veteransCard",
-  ...hmrcClientIds
+  VETERANS_CARD_PROD,
+  VETERANS_CARD_NON_PROD,
+  FIND_AND_APPLY_FOR_A_GRANT_PROD,
+  FIND_AND_APPLY_FOR_A_GRANT_NON_PROD,
+  ...hmrcClientIds,
 ];
 
 function getProtocol(): string {

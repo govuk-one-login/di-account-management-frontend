@@ -45,7 +45,7 @@ describe("Integration:: Activity history", () => {
   it("should redirect if the user does not have hmrc services on the list", async () => {
     const app = await appWithMiddlewareSetup([], {
       hideActivityLog: false,
-      hasHmrcService: false,
+      hasAllowedRSAServices: false,
     });
     const response = await request(app).get(url);
     expect(response.status).to.equal(302);
@@ -187,8 +187,8 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   });
 
   sandbox
-    .stub(checkAllowedServicesList, "hasHmrcService")
-    .resolves(config?.hasHmrcService ?? true);
+    .stub(checkAllowedServicesList, "hasAllowedRSAServices")
+    .resolves(config?.hasAllowedRSAServices ?? true);
 
   return await require("../../../app").createApp();
 };
