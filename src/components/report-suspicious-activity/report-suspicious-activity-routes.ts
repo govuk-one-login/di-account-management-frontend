@@ -8,14 +8,14 @@ import { PATH_DATA } from "../../app.constants";
 import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
-import { checkAllowedServicesList } from "../../middleware/check-allowed-services-list";
+import { checkRSAAllowedServicesList } from "../../middleware/check-allowed-services-list";
 
 const router = express.Router();
 
 router.get(
   PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url,
   requiresAuthMiddleware,
-  checkAllowedServicesList,
+  checkRSAAllowedServicesList,
   reportSuspiciousActivityGet
 );
 
@@ -23,14 +23,14 @@ router.post(
   PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done",
   requiresAuthMiddleware,
   refreshTokenMiddleware(),
-  checkAllowedServicesList,
+  checkRSAAllowedServicesList,
   asyncHandler(reportSuspiciousActivityPost)
 );
 
 router.get(
   PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done",
   requiresAuthMiddleware,
-  checkAllowedServicesList,
+  checkRSAAllowedServicesList,
   reportSuspiciousActivityConfirmation
 );
 

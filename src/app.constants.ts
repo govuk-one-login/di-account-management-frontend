@@ -151,6 +151,7 @@ export const LOG_MESSAGES = {
     `Malformed gs cookie contained: ${details}`,
   EVENT_SENT_SUCCESSFULLY: (queue: string, messageId: string): string =>
     `Event sent to ${queue} with message id ${messageId}`,
+  ILLEGAL_ATTEMPT_TO_ACCESS_RSA: "An attempt to access RSA without having visited one of the allowed services was made.",
 };
 
 export const ERROR_MESSAGES = {

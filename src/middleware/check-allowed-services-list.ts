@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { hmrcClientIds } from "../config";
+import { hmrcClientIds, rsaAllowList } from "../config";
 import { getServices } from "../utils/yourServices";
-import { PATH_DATA } from "../app.constants";
+import { LOG_MESSAGES, PATH_DATA } from "../app.constants";
 import type { Service } from "../utils/types";
 
 const findClientInServices = (
@@ -23,14 +23,26 @@ export const hasHmrcService = async (
   return userServices && findClientInServices(hmrcClientIds, userServices);
 };
 
-export async function checkAllowedServicesList(
+export const hasAllowedRSAServices = async (
+  req: Request,
+  res: Response
+): Promise<boolean> => {
+  const { user } = req.session;
+  const { trace } = res.locals;
+
+  const userServices = await getServices(user.subjectId, trace);
+  return userServices && findClientInServices(rsaAllowList, userServices);
+};
+
+export async function checkRSAAllowedServicesList(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  if (await hasHmrcService(req, res)) {
+  if (await hasAllowedRSAServices(req, res)) {
     next();
   } else {
+    req.log.info({trace: res.locals.trace}, LOG_MESSAGES.ILLEGAL_ATTEMPT_TO_ACCESS_RSA);
     res.redirect(PATH_DATA.SECURITY.url);
   }
 }

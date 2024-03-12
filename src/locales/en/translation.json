@@ -805,6 +805,12 @@
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       },
+      "tya4DoMpw_B7FK5YvuMAj3asc0A": {
+        "header": "Find and apply for a grant",
+        "description": "Search and apply for government grant funding",
+        "link_text": "Go to your grants account",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
+      },
       "bGAwNKM0XvnxCAuDQ_rMhhP3dxM": {
         "header": "Criminal injuries compensation",
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
@@ -917,6 +923,12 @@
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "findAndApplyForAGrant": {
+        "header": "Find and apply for a grant",
+        "description": "Search and apply for government grant funding",
+        "link_text": "Go to your grants account",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       },
       "criminalInjuriesCompensation": {
         "header": "Criminal injuries compensation",
@@ -1031,6 +1043,12 @@
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       },
+      "findAndApplyForAGrant": {
+        "header": "Find and apply for a grant",
+        "description": "Search and apply for government grant funding",
+        "link_text": "Go to your grants account",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
+      },
       "criminalInjuriesCompensation": {
         "header": "Criminal injuries compensation",
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
@@ -1144,6 +1162,12 @@
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       },
+      "findAndApplyForAGrant": {
+        "header": "Find and apply for a grant",
+        "description": "Search and apply for government grant funding",
+        "link_text": "Go to your grants account",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
+      },
       "criminalInjuriesCompensation": {
         "header": "Criminal injuries compensation",
         "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
@@ -1256,6 +1280,12 @@
         "description": "Manage your apprentices, training providers, recruitment and funding.",
         "link_text": "Go to your apprenticeship service account",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "findAndApplyForAGrant": {
+        "header": "Find and apply for a grant",
+        "description": "Search and apply for government grant funding",
+        "link_text": "Go to your grants account",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       },
       "criminalInjuriesCompensation": {
         "header": "Criminal injuries compensation",
