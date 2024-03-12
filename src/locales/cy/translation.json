@@ -181,7 +181,7 @@
       "empty": "Mae problem dangos hanes eich gweithgaredd ar hyn o bryd. Gallwch roi cynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[link]\">cysylltwch â'r tîm GOV.UK One Login </a>.",
       "notice": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod, rhowch wybod amdano a <a class=\"govuk-link\" href=\"[changePassword]\"> newidiwch eich cyfrinair</a>.",
       "timeInfo": "Amser y DU",
-      "featureIntro": " Dechreuodd GOV.UK One Login gofnodi hanes gweithgaredd ar [date].",
+      "featureIntro": "Dechreuodd GOV.UK One Login gofnodi hanes gweithgaredd ar 12 Mawrth 2024.",
       "report": "Adrodd am weithgaredd o [time]",
       "reported": "Adroddwyd gweithgaredd ar [time]",
       "activities": {

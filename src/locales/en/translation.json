@@ -181,7 +181,7 @@
       "empty": "There is a problem showing your activity history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">contact the GOV.UK One Login team</a>.",
       "notice": "If you see something you do not recognise, report it and <a class=\"govuk-link\" href=\"[changePassword]\"> change your password</a>.",
       "timeInfo": "UK time",
-      "featureIntro": "GOV.UK One Login started recording activity history on [date].",
+      "featureIntro": "GOV.UK One Login started recording activity history on 12 March 2024.",
       "report": "Report activity from [time]",
       "reported": "Activity reported on [time]",
       "activities": {
