@@ -30,6 +30,7 @@ router.post(
 router.get(
   PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done",
   requiresAuthMiddleware,
+  checkAllowedServicesList,
   reportSuspiciousActivityConfirmation
 );
 
