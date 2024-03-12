@@ -22,7 +22,7 @@ const serviceStoreDynamoDBRequest = (
 const unmarshallDynamoData = (dynamoDBResponse: DynamoDB.Types.AttributeMap) =>
   DynamoDB.Converter.unmarshall(dynamoDBResponse);
 
-const getServices = async (
+export const getServices = async (
   subjectId: string,
   trace: string
 ): Promise<Service[]> => {
@@ -49,11 +49,13 @@ export const presentYourServices = async (
       formatService(service, currentLanguage)
     );
     return {
-      accountsList: userServicesWithPresentableDates.filter((service) =>
-        getAllowedAccountListClientIDs.includes(service.client_id)
+      accountsList: filterServicesBasedOnClientIDs(
+        userServicesWithPresentableDates,
+        getAllowedAccountListClientIDs
       ),
-      servicesList: userServicesWithPresentableDates.filter((service) =>
-        getAllowedServiceListClientIDs.includes(service.client_id)
+      servicesList: filterServicesBasedOnClientIDs(
+        userServicesWithPresentableDates,
+        getAllowedServiceListClientIDs
       ),
     };
   } else {
@@ -62,6 +64,13 @@ export const presentYourServices = async (
       servicesList: [],
     };
   }
+};
+
+const filterServicesBasedOnClientIDs = (
+  services: Service[],
+  clientIDs: string[]
+): Service[] => {
+  return services.filter(({ client_id }) => clientIDs.includes(client_id));
 };
 
 export const getAllowedListServices = async (
@@ -81,9 +90,12 @@ export const getAllowedListServices = async (
   }
 };
 
-export const formatService = (service: Service, currentLanguage?: string): Service => {
+export const formatService = (
+  service: Service,
+  currentLanguage?: string
+): Service => {
   const readable_format_date = prettifyDate({
-    dateEpoch: service.last_accessed, 
+    dateEpoch: service.last_accessed,
     locale: currentLanguage,
   });
   const isHMRC = hmrcClientIds.includes(service.client_id);

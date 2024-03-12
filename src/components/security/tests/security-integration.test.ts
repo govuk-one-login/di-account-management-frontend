@@ -40,7 +40,7 @@ describe("Integration:: security", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(testComponent('mfa-summary-list')).text()).to.contains(
+        expect($(testComponent("mfa-summary-list")).text()).to.contains(
           TEST_USER_PHONE_NUMBER.slice(-4)
         );
       });
@@ -63,32 +63,45 @@ describe("Integration:: security", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(testComponent('change-phone-number')).length).to.equal(0);
+        expect($(testComponent("change-phone-number")).length).to.equal(0);
       });
   });
 
   it("should display link to activity log when supportActivityLog is true", async () => {
-    const app = await appWithMiddlewareSetup({supportActivityLog: true});
+    const app = await appWithMiddlewareSetup({ supportActivityLog: true });
     await request(app)
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(testComponent('activity-log-section')).length).to.equal(1);
+        expect($(testComponent("activity-log-section")).length).to.equal(1);
       });
   });
 
+  it("should not display link to activity log when supportActivityLog is true and hasHmrcService is false", async () => {
+    const app = await appWithMiddlewareSetup({
+      supportActivityLog: true,
+      hasHmrcService: false,
+    });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("activity-log-section")).length).to.equal(0);
+      });
+  });
 
   it("should not display link to activity log when supportActivityLog is false", async () => {
     const app = await appWithMiddlewareSetup();
-      await request(app)
-        .get(url)
-        .expect(function (res) {
-          const $ = cheerio.load(res.text);
-          expect(res.status).to.equal(200);
-          expect($(testComponent('activity-log-section')).length).to.equal(0);
-        });
-    });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("activity-log-section")).length).to.equal(0);
+      });
+  });
 });
 
 const appWithMiddlewareSetup = async (config: any = {}) => {
@@ -98,6 +111,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   const sandbox = sinon.createSandbox();
   const oidc = require("../../../utils/oidc");
   const configFuncs = require("../../../config");
+  const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
 
   sandbox
     .stub(sessionMiddleware, "requiresAuthMiddleware")
@@ -118,12 +132,15 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     return new Promise((resolve) => {
       resolve({});
     });
-  });    
-  
-  sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-    return config.supportActivityLog
   });
 
-  return await require("../../../app").createApp();
+  sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+    return config.supportActivityLog;
+  });
 
+  sandbox
+    .stub(checkAllowedServicesList, "hasHmrcService")
+    .resolves(config?.hasHmrcService ?? true);
+
+  return await require("../../../app").createApp();
 };
