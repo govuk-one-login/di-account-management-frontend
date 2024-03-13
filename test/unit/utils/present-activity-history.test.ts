@@ -47,4 +47,19 @@ describe("presentActivityHistory", () => {
 
     expect(history.length).to.eq(2);
   });
+
+  it("sorts the history in descending order by timestamp", async () => {
+    const oldest = activityLogEntry;
+    const newest = activityLogEntry;
+    newest.timestamp = oldest.timestamp - 1000;
+
+    // oldest first - opposite to what we need
+    getActivityLogEntryStub.resolves([oldest, newest]);
+
+    const history = await presentActivityHistory(subjectId, trace);
+
+    expect(history.length).to.eq(2);
+    // expecting newest item first in the list
+    expect(history[0].timestamp).to.eq(newest.timestamp);
+  });
 });
