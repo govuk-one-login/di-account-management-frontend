@@ -131,6 +131,9 @@ const FIND_AND_APPLY_FOR_A_GRANT_PROD: string = "tya4DoMpw_B7FK5YvuMAj3asc0A";
 const FIND_AND_APPLY_FOR_A_GRANT_NON_PROD: string = "findAndApplyForAGrant";
 const DVSA_PROD: string = "oLciSn5b6-cqcJjzgMMwCw1moD8";
 const DVSA_NON_PROD: string = "vehicleOperatorLicense";
+const STUB_RP_PROD: string = 'Y6YaRZ9bjCwS6HxaB34zvRhZJgBQyryT';
+const STUB_RP_INTEGRATION: string = 'cVCXupm3pykG8OJV0foZFAOtVeT3gukI';
+const STUB_RP_STAGING: string = '8u21cESiFjAcO4IUC6H3ANNgkmu4MpH8';
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -182,6 +185,9 @@ export const rsaAllowList: string[] = [
   FIND_AND_APPLY_FOR_A_GRANT_NON_PROD,
   DVSA_PROD,
   DVSA_NON_PROD,
+  STUB_RP_INTEGRATION,
+  STUB_RP_PROD,
+  STUB_RP_STAGING
 ];
 
 export const getAllowedServiceListClientIDs: string[] = [
