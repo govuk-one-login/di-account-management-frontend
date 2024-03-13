@@ -186,7 +186,7 @@
       "reported": "Adroddwyd gweithgaredd ar [time]",
       "activities": {
         "signedIn": {
-          "ol": {
+          "oneLoginHome": {
             "header": "Eich GOV.UK One Login",
             "hint": " Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'"
           }

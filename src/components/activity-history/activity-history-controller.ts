@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { getAppEnv, activityLogItemsPerPage } from "../../config";
+import {
+  getAppEnv,
+  activityLogItemsPerPage,
+  getOIDCClientId,
+} from "../../config";
 import { PATH_DATA } from "../../app.constants";
 import {
   presentActivityHistory,
@@ -60,7 +64,8 @@ export async function activityHistoryGet(
       pagination: pagination,
       backLink: backLink,
       changePasswordLink: PATH_DATA.SECURITY.url,
-      contactLink: PATH_DATA.CONTACT.url
+      contactLink: PATH_DATA.CONTACT.url,
+      homeClientId: getOIDCClientId(),
     });
   } catch (e) {
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
