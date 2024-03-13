@@ -20,6 +20,7 @@ export REGION="${AWS_DEFAULT_REGION:-eu-west-2}"
 mkdir ./tmp/keys
 
 if [ -n "$RUNNING_OUTSIDE_DOCKER" ]; then
+  echo "Running outside docker"
   # Generate the first key
   OUTPUT_GENERATOR=$(aws --endpoint-url=$ENDPOINT_URL kms create-key --region $REGION)
   GENERATOR_KEY_ARN=$(echo "$OUTPUT_GENERATOR" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['Arn'])")
@@ -35,6 +36,7 @@ if [ -n "$RUNNING_OUTSIDE_DOCKER" ]; then
   LOCAL_KEY_ID=$(echo "$OUTPUT_LOCAL_KEY_ID" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['KeyId'])")
   echo "$LOCAL_KEY_ID" > ./tmp/keys/LOCAL_KEY_ID
 else
+  echo "Running inside docker"
   # Generate the first key
   OUTPUT_GENERATOR=$(aws --endpoint-url=$ENDPOINT_URL kms create-key --region $REGION)
   GENERATOR_KEY_ARN=$(echo "$OUTPUT_GENERATOR" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['Arn'])")
