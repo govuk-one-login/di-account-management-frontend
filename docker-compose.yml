@@ -20,6 +20,8 @@ services:
     volumes:
       - ./seed.yaml:/init/seed.yaml
       - ./localstack/provision.sh:/etc/localstack/init/ready.d/init-aws.sh
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - ./tmp/keys:/tmp/keys
 
   account-management-frontend:
     container_name: account-management-frontend

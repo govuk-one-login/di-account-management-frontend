@@ -14,6 +14,41 @@ export BUILD_CLIENT_ID="${MY_ONE_LOGIN_USER_ID:-user_id}"
 export TABLE_NAME=user_services
 export ACTIVITY_LOG_TABLE_NAME=activity_log
 
+# Set the AWS region
+export REGION="${AWS_DEFAULT_REGION:-eu-west-2}"
+
+if [ -n "$RUNNING_OUTSIDE_DOCKER" ]; then
+  # Generate the first key
+  OUTPUT_GENERATOR=$(aws --endpoint-url=$ENDPOINT_URL kms create-key --region $REGION)
+  GENERATOR_KEY_ARN=$(echo "$OUTPUT_GENERATOR" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['Arn'])")
+  echo "$GENERATOR_KEY_ARN" > ./tmp/keys/GENERATOR_KEY_ARN
+
+  # Generate the second key
+  OUTPUT_WRAPPING=$(aws --endpoint-url=$ENDPOINT_URL kms create-key --region $REGION)
+  WRAPPING_KEY_ARN=$(echo "$OUTPUT_WRAPPING" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['Arn'])")
+  echo "$WRAPPING_KEY_ARN" > ./tmp/keys/WRAPPING_KEY_ARN
+
+  # Generate the third key
+  OUTPUT_LOCAL_KEY_ID=$(aws --endpoint-url=$ENDPOINT_URL kms create-key --region $REGION --description "RSA key with 2048 bits" --key-usage SIGN_VERIFY --customer-master-key-spec RSA_2048)
+  LOCAL_KEY_ID=$(echo "$OUTPUT_LOCAL_KEY_ID" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['KeyId'])")
+  echo "$LOCAL_KEY_ID" > ./tmp/keys/LOCAL_KEY_ID
+else
+  # Generate the first key
+  OUTPUT_GENERATOR=$(aws --endpoint-url=$ENDPOINT_URL kms create-key --region $REGION)
+  GENERATOR_KEY_ARN=$(echo "$OUTPUT_GENERATOR" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['Arn'])")
+  echo "$GENERATOR_KEY_ARN" > /tmp/keys/GENERATOR_KEY_ARN
+
+  # Generate the second key
+  OUTPUT_WRAPPING=$(aws --endpoint-url=$ENDPOINT_URL kms create-key --region $REGION)
+  WRAPPING_KEY_ARN=$(echo "$OUTPUT_WRAPPING" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['Arn'])")
+  echo "$WRAPPING_KEY_ARN" > /tmp/keys/WRAPPING_KEY_ARN
+
+  # Generate the third key
+  OUTPUT_LOCAL_KEY_ID=$(aws --endpoint-url=$ENDPOINT_URL kms create-key --region $REGION --description "RSA key with 2048 bits" --key-usage SIGN_VERIFY --customer-master-key-spec RSA_2048)
+  LOCAL_KEY_ID=$(echo "$OUTPUT_LOCAL_KEY_ID" | python3 -c "import sys, json; print(json.load(sys.stdin)['KeyMetadata']['KeyId'])")
+  echo "$LOCAL_KEY_ID" > /tmp/keys/LOCAL_KEY_ID
+fi
+
 aws --endpoint-url=$ENDPOINT_URL dynamodb create-table \
     --table-name $TABLE_NAME \
     --attribute-definitions AttributeName=user_id,AttributeType=S \

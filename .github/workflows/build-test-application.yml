@@ -32,7 +32,7 @@ jobs:
       localstack:
         image: localstack/localstack:3.0.0
         env:
-          SERVICES: kms,sns,dynamodb,sqs
+          SERVICES: kms,sns,dynamodb,sqs,stepfunctions,cloudwatch
           LOCALSTACK_HOST: localstack
           AWS_DEFAULT_REGION: eu-west-2
           AWS_ACCESS_KEY_ID: na
@@ -50,6 +50,7 @@ jobs:
           AWS_DEFAULT_REGION: eu-west-2
           AWS_ACCESS_KEY_ID: na
           AWS_SECRET_ACCESS_KEY: na
+          RUNNING_OUTSIDE_DOCKER: true
         run: ./localstack/provision.sh
 
         shell: bash
