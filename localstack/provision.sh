@@ -17,7 +17,7 @@ export ACTIVITY_LOG_TABLE_NAME=activity_log
 # Set the AWS region
 export REGION="${AWS_DEFAULT_REGION:-eu-west-2}"
 
-mkdir /tmp/keys
+mkdir ./tmp/keys
 
 if [ -n "$RUNNING_OUTSIDE_DOCKER" ]; then
   # Generate the first key
