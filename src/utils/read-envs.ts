@@ -7,8 +7,6 @@ export const readEnvVar = (filename: string): string => {
     const keyValue = fs
       .readFileSync(path.join(keysDir, filename), "utf8")
       .trim();
-    // eslint-disable-next-line no-console
-    console.log(filename, keyValue);
     return keyValue;
   } catch (error) {
     // eslint-disable-next-line no-console
