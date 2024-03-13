@@ -186,7 +186,7 @@
       "reported": "Activity reported on [time]",
       "activities": {
         "signedIn": {
-          "ol": {
+          "oneLoginHome": {
             "header": "Your GOV.UK One Login",
             "hint": "This includes ‘Security’ and ‘Your services’"
           }

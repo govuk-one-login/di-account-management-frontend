@@ -22,12 +22,19 @@ describe("Activity history controller", () => {
   describe("sign in history get", () => {
     sandbox = sinon.createSandbox();
     const activityHistory = require("../../../utils/activityHistory");
+    const config = require("../../../config");
     it("should render the sign in history page with data", async () => {
       sandbox.stub(activityHistory, "presentActivityHistory").callsFake(() => {
         return new Promise((resolve) => {
           resolve([]);
         });
       });
+
+      const clientId = "clientId";
+      sandbox.stub(config, "getOIDCClientId").callsFake(() => {
+        return clientId;
+      });
+
       const req: any = {
         app: {
           locals: {
@@ -47,7 +54,7 @@ describe("Activity history controller", () => {
           destroy: sandbox.fake(),
         },
         log: { error: sandbox.fake(), info: sandbox.fake() },
-        i18n: { language: "en"}
+        i18n: { language: "en" },
       };
       await activityHistoryGet(req as Request, res as Response).then(() => {
         expect(res.render).to.have.been.calledWith(
@@ -58,11 +65,11 @@ describe("Activity history controller", () => {
             pagination: {},
             backLink: PATH_DATA.SECURITY.url,
             changePasswordLink: PATH_DATA.SECURITY.url,
-            contactLink: PATH_DATA.CONTACT.url
+            contactLink: PATH_DATA.CONTACT.url,
+            homeClientId: clientId,
           }
         );
       });
     });
   });
 });
-
