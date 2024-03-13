@@ -212,7 +212,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk"
-      SUPPORTACTIVITYLOG: "0"
+      SUPPORTACTIVITYLOG: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
@@ -726,10 +726,10 @@ Resources:
               Value: !Ref TxMAPublishErrorDeadLetterQueue
             - Name: "GENERATOR_KEY_ARN"
               Value: !ImportValue
-                'Fn::Sub': "${BackendStackName}-GeneratorKey"
+                "Fn::Sub": "${BackendStackName}-GeneratorKey"
             - Name: "WRAPPING_KEY_ARN"
               Value: !ImportValue
-                'Fn::Sub': "${BackendStackName}-WrappingKey"
+                "Fn::Sub": "${BackendStackName}-WrappingKey"
             - Name: "ACCOUNT_ID"
               Value: !Sub "${AWS::AccountId}"
             - Name: "ENVIRONMENT"
