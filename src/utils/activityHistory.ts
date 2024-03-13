@@ -181,11 +181,11 @@ const activityLogDynamoDBRequest = (
   user_id: string
 ): DynamoDB.Types.QueryInput => ({
   TableName: getDynamoActivityLogStoreTableName(),
+  IndexName: "TimestampSLI",
   KeyConditionExpression: "user_id = :user_id",
   ExpressionAttributeValues: {
     ":user_id": { S: user_id },
-  },
-  ScanIndexForward: false, // Set to 'true' for ascending order
+  }
 });
 
 const getActivityLogEntry = async (

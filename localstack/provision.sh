@@ -107,6 +107,7 @@ aws --endpoint-url=http://localhost:4566 \
           AttributeName=user_id,AttributeType=S \
           AttributeName=event_id,AttributeType=S \
           AttributeName=session_id,AttributeType=S \
+          AttributeName=timestamp,AttributeType=N \
     --key-schema \
         AttributeName=user_id,KeyType=HASH \
         AttributeName=event_id,KeyType=RANGE \
@@ -123,6 +124,18 @@ aws --endpoint-url=http://localhost:4566 \
         ]' \
     --provisioned-throughput \
         ReadCapacityUnits=1,WriteCapacityUnits=1 \
+    --local-secondary-indexes \
+      '[
+        {
+          "IndexName": "TimestampSLI",
+          "KeySchema": [
+            {"AttributeName": "user_id", "KeyType": "HASH"},
+            {"AttributeName": "timestamp", "KeyType": "RANGE"}
+          ],
+          "Projection": {"ProjectionType": "ALL"}
+        }
+      ]
+      ' \
     --region eu-west-2
 
 npm install -g uuid
