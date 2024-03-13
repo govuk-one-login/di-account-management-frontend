@@ -1,5 +1,4 @@
 version: "3.8"
-
 services:
   localstack:
     container_name: localstack
@@ -34,6 +33,7 @@ services:
       - "9229:9229"
     volumes:
       - ./:/app
+      - ./tmp/keys:/tmp/keys
     environment:
       - AUTH_FRONTEND_URL=${AUTH_FRONTEND_URL}
       - API_BASE_URL=${API_BASE_URL}
