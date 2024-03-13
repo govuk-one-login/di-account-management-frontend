@@ -9,7 +9,7 @@
 # the background.
 #
 # Anticipated use cases are:
-# * local developers running the script be placing it inside a docker container in
+# * local developers running the script by placing it inside a docker container in
 #   the location stated above with the file name that localstack looks for when
 #   starting up.
 # * in a GitHub action step where it will be run directly in a process where localstack
