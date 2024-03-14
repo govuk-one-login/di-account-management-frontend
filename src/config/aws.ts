@@ -7,9 +7,10 @@ import {
   getLocalStackBaseUrl,
 } from "../config";
 import { SQSClient, SQSClientConfig } from "@aws-sdk/client-sqs";
+import { readEnvVar } from "../utils/read-envs";
 
 //refer to seed.yaml
-const LOCAL_KEY_ID = "ff275b92-0def-4dfc-b0f6-87c96b26c6c7";
+const LOCAL_KEY_ID = readEnvVar("LOCAL_KEY_ID");
 
 export interface KmsConfig {
   awsConfig: AwsConfig;

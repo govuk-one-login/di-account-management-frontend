@@ -1,5 +1,4 @@
 version: "3.8"
-
 services:
   localstack:
     container_name: localstack
@@ -20,6 +19,8 @@ services:
     volumes:
       - ./seed.yaml:/init/seed.yaml
       - ./localstack/provision.sh:/etc/localstack/init/ready.d/init-aws.sh
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - ./tmp/keys:/tmp/keys
 
   account-management-frontend:
     container_name: account-management-frontend
@@ -32,6 +33,7 @@ services:
       - "9229:9229"
     volumes:
       - ./:/app
+      - ./tmp/keys:/tmp/keys
     environment:
       - AUTH_FRONTEND_URL=${AUTH_FRONTEND_URL}
       - API_BASE_URL=${API_BASE_URL}
