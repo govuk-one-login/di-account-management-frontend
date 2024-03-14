@@ -13,6 +13,21 @@ import { dynamoDBService } from "./dynamo";
 import { decryptData } from "./decrypt-data";
 import { PATH_DATA } from "../app.constants";
 import { logger } from "./logger";
+import {
+  getOIDCClientId,
+  getAllowedAccountListClientIDs,
+  hmrcClientIds,
+  getAllowedServiceListClientIDs,
+  ONE_LOGIN_HOME_NON_PROD,
+} from "../config";
+
+const servicesWithContent: string[] = [
+  ONE_LOGIN_HOME_NON_PROD,
+  getOIDCClientId(),
+  ...hmrcClientIds,
+  ...getAllowedAccountListClientIDs,
+  ...getAllowedServiceListClientIDs,
+];
 
 export const generatePagination = (dataLength: number, page: any): [] => {
   const pagination: any = {
@@ -218,7 +233,14 @@ export async function filterAndDecryptActivity(
   const filteredActivityLogs: ActivityLogEntry[] = [];
 
   for (const activityLog of activityLogs) {
-    if (!activityLog.user_id || !activityLog.event_type) {
+    if (
+      !activityLog.user_id ||
+      !activityLog.event_type ||
+      !activityLog.client_id
+    ) {
+      continue;
+    }
+    if (!servicesWithContent.includes(activityLog.client_id)) {
       continue;
     }
     let eventType = activityLog.event_type;

@@ -134,6 +134,7 @@ const DVSA_NON_PROD: string = "vehicleOperatorLicense";
 const STUB_RP_PROD: string = 'Y6YaRZ9bjCwS6HxaB34zvRhZJgBQyryT';
 const STUB_RP_INTEGRATION: string = 'cVCXupm3pykG8OJV0foZFAOtVeT3gukI';
 const STUB_RP_STAGING: string = '8u21cESiFjAcO4IUC6H3ANNgkmu4MpH8';
+export const ONE_LOGIN_HOME_NON_PROD: string = "oneLoginHome";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
