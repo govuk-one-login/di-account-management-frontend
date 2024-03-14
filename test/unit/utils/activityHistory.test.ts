@@ -3,25 +3,27 @@ import { describe } from "mocha";
 import {
   formatActivityLogs,
   generatePagination,
+  filterAndDecryptActivity,
 } from "../../../src/utils/activityHistory";
 import type { ActivityLogEntry } from "../../../src/utils/types";
+import { stub, SinonStub } from "sinon";
+
+const createLogEntry = (shouldDisplay: boolean = true): ActivityLogEntry => {
+  return {
+    event_type: "AUTH_AUTH_CODE_ISSUED",
+    session_id: "asdf",
+    user_id: "1234",
+    timestamp: 1689210000,
+    client_id: shouldDisplay ? "vehicleOperatorLicense" : "dontshowme",
+    event_id: "12345",
+    reported_suspicious: false,
+    truncated: false,
+  };
+};
 
 describe("Activity History Util", () => {
   describe("format user activity to display", () => {
     it("returns the correct events for the current page", async () => {
-      const createLogEntry = (): ActivityLogEntry => {
-        return {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "1234",
-          timestamp: 1689210000,
-          client_id: "dontshowme",
-          event_id: "12345",
-          reported_suspicious: false,
-          truncated: false,
-        };
-      };
-
       const longData: ActivityLogEntry[] = new Array(13)
         .fill(0)
         .map(createLogEntry);
@@ -131,6 +133,42 @@ describe("Activity History Util", () => {
       expect(paginationInvalid3.currentPage).equal(1);
       expect(paginationInvalid3.nextPage).equal(2);
       expect(paginationInvalid3.previousPage).equal(undefined);
+    });
+  });
+
+  describe("filterAndDecryptActivity", () => {
+    const decryptDataModule = require("../../../src/utils/decrypt-data");
+    let decryptDataStub: SinonStub;
+
+    const trace = "trace";
+
+    beforeEach(() => {
+      decryptDataStub = stub(decryptDataModule, "decryptData");
+      decryptDataStub.callsFake((eventType: string) => {
+        return eventType;
+      });
+    });
+
+    afterEach(() => {
+      decryptDataStub.restore();
+    });
+
+    it("doesn't filter out items with client IDs on the allow list", async () => {
+      const activityLogs = [createLogEntry(), createLogEntry()];
+      const filtered = await filterAndDecryptActivity(activityLogs, trace);
+
+      expect(filtered.length).to.eq(activityLogs.length);
+    });
+
+    it("filters out items with client IDs that aren't on the allow list", async () => {
+      const activityLogs = [
+        createLogEntry(),
+        createLogEntry(false),
+        createLogEntry(),
+      ];
+      const filtered = await filterAndDecryptActivity(activityLogs, trace);
+
+      expect(filtered.length).to.eq(activityLogs.length - 1);
     });
   });
 });

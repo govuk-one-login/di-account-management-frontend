@@ -60,6 +60,7 @@ describe("Integration:: Activity history", () => {
         user_id: "string",
         timestamp: "1689210000",
         truncated: false,
+        client_id: "vehicleOperatorLicense",
       },
       {
         event_type: "AUTH_AUTH_CODE_ISSUED",
@@ -67,6 +68,7 @@ describe("Integration:: Activity history", () => {
         user_id: "string",
         timestamp: "1699210000",
         truncated: false,
+        client_id: "vehicleOperatorLicense",
       },
     ];
     const app = await appWithMiddlewareSetup(dataShort);
@@ -87,6 +89,7 @@ describe("Integration:: Activity history", () => {
       user_id: "string",
       timestamp: "1699210000",
       truncated: false,
+      client_id: "vehicleOperatorLicense",
     };
 
     const dataLong = new Array(12).fill(event);
