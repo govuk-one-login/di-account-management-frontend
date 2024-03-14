@@ -18,9 +18,11 @@ import {
   getAllowedAccountListClientIDs,
   hmrcClientIds,
   getAllowedServiceListClientIDs,
+  ONE_LOGIN_HOME_NON_PROD,
 } from "../config";
 
 const servicesWithContent: string[] = [
+  ONE_LOGIN_HOME_NON_PROD,
   getOIDCClientId(),
   ...hmrcClientIds,
   ...getAllowedAccountListClientIDs,
