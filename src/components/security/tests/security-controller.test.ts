@@ -26,8 +26,10 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
-      const hasHmrcServiceStub = require("../../../middleware/check-allowed-services-list");
-      sandbox.stub(hasHmrcServiceStub, "hasHmrcService").resolves(true);
+      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(true);
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -43,13 +45,13 @@ describe("security controller", () => {
         activityLogUrl: "/activity-history",
       });
     });
-    it("should render security view without activity log", async () => {
+    it("should render security view without activity log when the feature flag is off", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return false;
       });
-      const hasHmrcServiceStub = require("../../../middleware/check-allowed-services-list");
-      sandbox.stub(hasHmrcServiceStub, "hasHmrcService").resolves(true);
+      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox.stub(allowedServicesModule, "hasHmrcService").resolves(true);
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -62,6 +64,54 @@ describe("security controller", () => {
         phoneNumber: "7898",
         isPhoneNumberVerified: true,
         supportActivityLog: false,
+        activityLogUrl: "/activity-history",
+      });
+    });
+    it("should render security view without activity log when the user doesn't have a supported service", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true;
+      });
+      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(false);
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        isPhoneNumberVerified: true,
+      } as any;
+      await securityGet(req as Request, res as Response);
+
+      expect(res.render).to.have.calledWith("security/index.njk", {
+        email: "test@test.com",
+        phoneNumber: "7898",
+        isPhoneNumberVerified: true,
+        supportActivityLog: false,
+        activityLogUrl: "/activity-history",
+      });
+    });
+    it("should render security view with activity log when the user has a supported service and the feature flag is on", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true;
+      });
+      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(true);
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        isPhoneNumberVerified: true,
+      } as any;
+      await securityGet(req as Request, res as Response);
+
+      expect(res.render).to.have.calledWith("security/index.njk", {
+        email: "test@test.com",
+        phoneNumber: "7898",
+        isPhoneNumberVerified: true,
+        supportActivityLog: true,
         activityLogUrl: "/activity-history",
       });
     });

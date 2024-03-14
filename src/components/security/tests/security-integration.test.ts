@@ -78,10 +78,10 @@ describe("Integration:: security", () => {
       });
   });
 
-  it("should not display link to activity log when supportActivityLog is true and hasHmrcService is false", async () => {
+  it("should not display link to activity log when supportActivityLog is true and hasAllowedRSAServices is false", async () => {
     const app = await appWithMiddlewareSetup({
       supportActivityLog: true,
-      hasHmrcService: false,
+      hasAllowedRSAServices: false,
     });
     await request(app)
       .get(url)
@@ -139,8 +139,8 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   });
 
   sandbox
-    .stub(checkAllowedServicesList, "hasHmrcService")
-    .resolves(config?.hasHmrcService ?? true);
+    .stub(checkAllowedServicesList, "hasAllowedRSAServices")
+    .resolves(config?.hasAllowedRSAServices ?? true);
 
   return await require("../../../app").createApp();
 };
