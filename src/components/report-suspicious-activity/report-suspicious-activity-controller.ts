@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PATH_DATA } from "../../app.constants";
 // import { formatEvent } from "../../utils/activityHistory";
-import { getAppEnv, getDynamoActivityLogStoreTableName } from "../../config";
+import { getAppEnv, getDynamoActivityLogStoreTableName, getOIDCClientId } from "../../config";
 import { DynamoDB } from "aws-sdk";
 import { dynamoDBService } from "../../utils/dynamo";
 import { getSNSSuspicousActivityTopic } from "../../config";
@@ -121,6 +121,7 @@ export async function reportSuspiciousActivityGet(
     eventId: req.query.event,
     reportSuspiciousActivityUrl: PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url,
     alreadyReported: formattedActivityLogs?.reportedSuspicious,
+    homeClientId: getOIDCClientId()
   };
 
   res.render("report-suspicious-activity/index.njk", {
