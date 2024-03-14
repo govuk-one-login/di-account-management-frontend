@@ -99,7 +99,7 @@ Parameters:
   ServiceStoreTableName:
     Type: String
     Default: user_services
-  ActivityLogStoreTableName:
+  ActivityLogTableName:
     Type: String
     Default: activity_log
   CodeSigningConfigArn:
@@ -392,7 +392,7 @@ Resources:
                   - dynamodb:GetItem
                 Resource:
                   - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
-                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ActivityLogStoreTableName}"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ActivityLogTableName}"
               - Effect: Allow
                 Action:
                   - dynamodb:DescribeTable
@@ -670,7 +670,7 @@ Resources:
             - Name: "SERVICE_STORE_TABLE_NAME"
               Value: !Ref ServiceStoreTableName
             - Name: "ACTIVITY_LOG_STORE_TABLE_NAME"
-              Value: !Ref ActivityLogStoreTableName
+              Value: !Ref ActivityLogTableName
             - Name: "SUPPORT_TRIAGE_PAGE"
               Value:
                 !FindInMap [
