@@ -118,7 +118,9 @@ export const formatActivityLog = (
   formattedActivityLog.clientId = activityLogEntry.client_id;
   formattedActivityLog.reportedSuspicious =
     activityLogEntry.reported_suspicious;
-  formattedActivityLog.reportSuspiciousActivityUrl = `${PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url}?event=${activityLogEntry.event_id}&page=${pageNumber || 1}`;
+  formattedActivityLog.reportSuspiciousActivityUrl = `${
+    PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url
+  }?event=${activityLogEntry.event_id}&page=${pageNumber || 1}`;
 
   formattedActivityLog.time = prettifyDate({
     dateEpoch: Number(activityLogEntry["timestamp"]),
@@ -188,7 +190,7 @@ const activityLogDynamoDBRequest = (
   ScanIndexForward: false, // Set to 'true' for ascending order
 });
 
-const getActivityLogEntry = async (
+export const getActivityLogEntry = async (
   user_id: string,
   trace: string
 ): Promise<ActivityLogEntry[]> => {
@@ -234,15 +236,3 @@ export async function filterAndDecryptActivity(
 
   return filteredActivityLogs;
 }
-
-export const presentActivityHistory = async (
-  subjectId: string,
-  trace: string
-): Promise<ActivityLogEntry[]> => {
-  const activityLogEntry = await getActivityLogEntry(subjectId, trace);
-  if (activityLogEntry) {
-    return activityLogEntry;
-  } else {
-    return [];
-  }
-};

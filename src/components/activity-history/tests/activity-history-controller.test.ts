@@ -21,14 +21,16 @@ describe("Activity history controller", () => {
 
   describe("sign in history get", () => {
     sandbox = sinon.createSandbox();
-    const activityHistory = require("../../../utils/activityHistory");
     const config = require("../../../config");
+    const presentActivityHistoryModule = require("../../../utils/present-activity-history");
     it("should render the sign in history page with data", async () => {
-      sandbox.stub(activityHistory, "presentActivityHistory").callsFake(() => {
-        return new Promise((resolve) => {
-          resolve([]);
+      sandbox
+        .stub(presentActivityHistoryModule, "presentActivityHistory")
+        .callsFake(() => {
+          return new Promise((resolve) => {
+            resolve([]);
+          });
         });
-      });
 
       const clientId = "clientId";
       sandbox.stub(config, "getOIDCClientId").callsFake(() => {
