@@ -174,18 +174,6 @@ export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
 
 export const rsaAllowList: string[] = [
   ...hmrcClientIds,
-  DBS_PROD,
-  DBS_NON_PROD,
-  AAS_PROD,
-  AAS_NON_PROD,
-  APAR_PROD,
-  APAR_NON_PROD,
-  VETERANS_CARD_PROD,
-  VETERANS_CARD_NON_PROD,
-  FIND_AND_APPLY_FOR_A_GRANT_PROD,
-  FIND_AND_APPLY_FOR_A_GRANT_NON_PROD,
-  DVSA_PROD,
-  DVSA_NON_PROD,
   STUB_RP_INTEGRATION,
   STUB_RP_PROD,
   STUB_RP_STAGING
