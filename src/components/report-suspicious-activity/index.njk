@@ -13,9 +13,6 @@
     {% if reportNumber %}
       <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.paragraph2' | translate | safe | replace("[reportNumber]", reportNumber)}}</p>
 
-      <h2 class="govuk-heading-m">{{ 'pages.reportSuspiciousActivity.alreadyReported.contact.heading' | translate }}</h2>
-      <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.contact.paragraph1' | translate | safe | replace("[contactHref]", contactUrl)}}</p>
-      <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.contact.paragraph2' | translate }}</p>
     {% else %}
       {# account for the possibility of users re-visiting the report page soon after reporting an event, before a report number is known #}
       <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.noReportNo' | translate }}</p>
