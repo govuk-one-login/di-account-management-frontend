@@ -13,7 +13,6 @@ import {
 } from "./config/helmet";
 import helmet from "helmet";
 import session from "express-session";
-import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
