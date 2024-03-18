@@ -3,6 +3,7 @@ import * as nunjucks from "nunjucks";
 import { Environment } from "nunjucks";
 import i18next, { TFunction } from "i18next";
 import { PATH_DATA } from "../app.constants";
+import addLanguageParam from "@govuk-one-login/frontend-language-toggle";
 import { safeTranslate } from "../utils/safeTranslate";
 
 export function configureNunjucks(
@@ -22,14 +23,7 @@ export function configureNunjucks(
     return safeTranslate(translate, key, this.ctx.i18n.language, options);
   });
 
-  nunjucksEnv.addFilter(
-    "addLanguageParam",
-    function (url: string, language: string, base: string) {
-      const parsedUrl = new URL(url, base);
-      parsedUrl.searchParams.set("lng", language);
-      return parsedUrl.pathname + parsedUrl.search;
-    }
-  );
+  nunjucksEnv.addGlobal("addLanguageParam", addLanguageParam);
 
   nunjucksEnv.addFilter("getPath", function (route: string) {
     if (!PATH_DATA[route]) {

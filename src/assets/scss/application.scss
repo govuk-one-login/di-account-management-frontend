@@ -27,6 +27,9 @@ $govuk-new-link-styles: true;
 @import "components/radios/radios";
 // end Design System component imports
 
+// language toggle component import
+@import "../../../node_modules/@govuk-one-login/frontend-language-toggle/stylesheet/styles";
+
 .information-box {
   margin-bottom: govuk-spacing(4);
   padding: govuk-spacing(3);
@@ -388,46 +391,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   @include govuk-font($size: 48, $weight: bold);
 }
 
-.language-select {
-  margin: govuk-spacing(2) 0;
-
-  &::after {
-    content: "";
-    display: block;
-    clear: both;
-  }
-}
-
-.language-select__list {
-  border-bottom: 1px solid $govuk-border-colour;
-  margin-bottom: 0;
-  float: right;
-  text-align: right;
-  @include govuk-media-query($until: tablet) {
-    float: none;
-    text-align: left;
-  }
-}
-
-.language-select__link {
-  padding: govuk-spacing(1);
-}
-
-.language-select__list-item {
-  @include govuk-font($size: 16);
-  display: inline-block;
-  margin-right: 0;
-  border-bottom: 0;
-}
-
-.language-select__list-item [aria-current] {
-  padding: govuk-spacing(1);
-}
-
-.language-select__list-item + .language-select__list-item::before {
-  content: "|";
-  color: $govuk-border-colour;
-}
 
 .launch-webchat-link {
   margin: 0;
