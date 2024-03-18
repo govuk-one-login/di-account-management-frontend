@@ -45,12 +45,7 @@
       "welsh": "Cymraeg"
     },
     "languageToggle": {
-      "en": {
-        "linkText": "English"
-      },
-      "cy": {
-        "linkText": "Cymraeg"
-      }
+      "ariaLabel": "Dewis iaith"
     },
     "continue": {
       "label": "Parhau"

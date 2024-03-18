@@ -60,10 +60,12 @@ import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
+import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
   path.resolve("node_modules/govuk-frontend/"),
+  path.resolve("node_modules/@govuk-one-login/"),
 ];
 
 async function createApp(): Promise<express.Application> {
@@ -112,6 +114,8 @@ async function createApp(): Promise<express.Application> {
   } else {
     app.use(helmet(helmetConfiguration));
   }
+
+  app.use(languageToggleMiddleware);
 
   const sessionStore = getSessionStore({ session: session });
   app.use(
