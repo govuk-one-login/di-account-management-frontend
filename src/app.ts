@@ -143,7 +143,6 @@ async function createApp(): Promise<express.Application> {
 
   app.post("*", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
-  app.use(setHtmlLangMiddleware);
 
   app.use(securityRouter);
   app.use(yourServicesRouter);
