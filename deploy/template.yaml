@@ -234,7 +234,7 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.publishing.service.gov.uk"
-      SUPPORTACTIVITYLOG: "0"
+      SUPPORTACTIVITYLOG: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
