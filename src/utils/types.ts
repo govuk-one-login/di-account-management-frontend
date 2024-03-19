@@ -13,7 +13,7 @@ export interface Service {
   count_successful_logins: number;
   last_accessed: number;
   last_accessed_readable_format: string;
-  isHMRC?: boolean;
+  hasDetailedCard?: boolean;
 }
 
 export interface YourServices {
