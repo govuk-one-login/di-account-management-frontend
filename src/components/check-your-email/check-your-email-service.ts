@@ -2,20 +2,23 @@ import { getRequestConfig, Http, http } from "../../utils/http";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { CheckYourEmailServiceInterface } from "./types";
 import { AxiosResponse } from "axios";
-import { UpdateInformationInput, UpdateInformationSessionValues } from "../../utils/types";
+import {
+  UpdateInformationInput,
+  UpdateInformationSessionValues,
+} from "../../utils/types";
 
 export function checkYourEmailService(
   axios: Http = http
 ): CheckYourEmailServiceInterface {
   const updateEmail = async function (
-    updateInput : UpdateInformationInput,
-    sessionDetails: UpdateInformationSessionValues,
+    updateInput: UpdateInformationInput,
+    sessionDetails: UpdateInformationSessionValues
   ): Promise<boolean> {
     const { status }: AxiosResponse = await axios.client.post(
       API_ENDPOINTS.UPDATE_EMAIL,
       {
-        existingEmailAddress : updateInput.email,
-        replacementEmailAddress : updateInput.updatedValue,
+        existingEmailAddress: updateInput.email,
+        replacementEmailAddress: updateInput.updatedValue,
         otp: updateInput.otp,
       },
       getRequestConfig(

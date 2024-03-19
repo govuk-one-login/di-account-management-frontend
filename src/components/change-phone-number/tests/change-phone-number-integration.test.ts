@@ -111,7 +111,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('phoneNumber-error')).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).to.contains(
           "Enter a UK mobile phone number"
         );
       })
@@ -129,7 +129,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('phoneNumber-error')).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).to.contains(
           "Enter a UK mobile phone number"
         );
       })
@@ -147,7 +147,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('phoneNumber-error')).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).to.contains(
           "Enter a UK mobile phone number using only numbers or the + symbol"
         );
       })
@@ -165,7 +165,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('phoneNumber-error')).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).to.contains(
           "Enter a UK mobile phone number, like 07700 900000"
         );
       })
@@ -183,7 +183,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('phoneNumber-error')).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).to.contains(
           "Enter a UK mobile phone number, like 07700 900000"
         );
       })
@@ -277,10 +277,10 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('internationalPhoneNumber-error')).text()).to.contains(
-          "Enter a mobile phone number"
-        );
-        expect($(testComponent('phoneNumber-error')).text()).to.contains("");
+        expect(
+          $(testComponent("internationalPhoneNumber-error")).text()
+        ).to.contains("Enter a mobile phone number");
+        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400, done);
   });
@@ -302,10 +302,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('internationalPhoneNumber-error')).text()).to.contains(
+        expect(
+          $(testComponent("internationalPhoneNumber-error")).text()
+        ).to.contains(
           "You’re already using that phone number. Enter a different phone number."
         );
-        expect($(testComponent('phoneNumber-error')).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400, done);
   });
@@ -326,7 +328,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('phoneNumber-error')).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).to.contains(
           "You’re already using that phone number. Enter a different phone number."
         );
       })
@@ -345,10 +347,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('internationalPhoneNumber-error')).text()).to.contains(
+        expect(
+          $(testComponent("internationalPhoneNumber-error")).text()
+        ).to.contains(
           "Enter a mobile phone number in the correct format, including the country code"
         );
-        expect($(testComponent('phoneNumber-error')).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400, done);
   });
@@ -365,10 +369,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('internationalPhoneNumber-error')).text()).to.contains(
+        expect(
+          $(testComponent("internationalPhoneNumber-error")).text()
+        ).to.contains(
           "Enter a mobile phone number using only numbers or the + symbol"
         );
-        expect($(testComponent('phoneNumber-error')).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400, done);
   });
@@ -385,10 +391,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('internationalPhoneNumber-error')).text()).to.contains(
+        expect(
+          $(testComponent("internationalPhoneNumber-error")).text()
+        ).to.contains(
           "Enter a mobile phone number in the correct format, including the country code"
         );
-        expect($(testComponent('phoneNumber-error')).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400, done);
   });
@@ -405,10 +413,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent('internationalPhoneNumber-error')).text()).to.contains(
+        expect(
+          $(testComponent("internationalPhoneNumber-error")).text()
+        ).to.contains(
           "Enter a mobile phone number in the correct format, including the country code"
         );
-        expect($(testComponent('phoneNumber-error')).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400, done);
   });

@@ -42,7 +42,10 @@ export async function checkRSAAllowedServicesList(
   if (await hasAllowedRSAServices(req, res)) {
     next();
   } else {
-    req.log.info({trace: res.locals.trace}, LOG_MESSAGES.ILLEGAL_ATTEMPT_TO_ACCESS_RSA);
+    req.log.info(
+      { trace: res.locals.trace },
+      LOG_MESSAGES.ILLEGAL_ATTEMPT_TO_ACCESS_RSA
+    );
     res.redirect(PATH_DATA.SECURITY.url);
   }
 }

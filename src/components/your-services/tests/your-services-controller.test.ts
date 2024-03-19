@@ -30,7 +30,7 @@ describe("your services controller", () => {
         destroy: sandbox.fake(),
       },
       log: { error: sandbox.fake() },
-      i18n: { language: "en"},
+      i18n: { language: "en" },
     };
   }
 

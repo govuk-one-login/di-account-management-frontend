@@ -4,7 +4,11 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { oidcAuthCallbackGet } from "../call-back-controller";
-import { HTTP_STATUS_CODES, PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants";
+import {
+  HTTP_STATUS_CODES,
+  PATH_DATA,
+  VECTORS_OF_TRUST,
+} from "../../../app.constants";
 import { ClientAssertionServiceInterface } from "../../../utils/types";
 
 describe("callback controller", () => {
@@ -111,7 +115,10 @@ describe("callback controller", () => {
     });
 
     it("response status code should be 403 when access denied error occurs", async () => {
-      req.oidc.callbackParams = sandbox.fake.returns({"error":"access_denied","state":"m0H_2VvrhKR0qA"});
+      req.oidc.callbackParams = sandbox.fake.returns({
+        error: "access_denied",
+        state: "m0H_2VvrhKR0qA",
+      });
       const fakeService: ClientAssertionServiceInterface = {
         generateAssertionJwt: sandbox.fake.returns("testassert"),
       };

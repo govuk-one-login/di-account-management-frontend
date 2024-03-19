@@ -3,7 +3,7 @@ import { PATH_DATA } from "../../app.constants";
 
 import {
   resendPhoneCodeGet,
-  resendPhoneCodePost
+  resendPhoneCodePost,
 } from "./resend-phone-code-controller";
 import { asyncHandler } from "../../utils/async";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";

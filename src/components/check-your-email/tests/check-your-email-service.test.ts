@@ -4,7 +4,10 @@ import { checkYourEmailService } from "../check-your-email-service";
 import { expect } from "chai";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
 import { getApiBaseUrl } from "../../../config";
-import { UpdateInformationInput, UpdateInformationSessionValues } from "../../../utils/types";
+import {
+  UpdateInformationInput,
+  UpdateInformationSessionValues,
+} from "../../../utils/types";
 
 const baseUrl = getApiBaseUrl();
 
@@ -44,22 +47,23 @@ describe("checkYourEmailService", () => {
       })
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
-    const updateInput : UpdateInformationInput = {
+    const updateInput: UpdateInformationInput = {
       email: existingEmailAddress,
       updatedValue: replacementEmailAddress,
-      otp
+      otp,
     };
 
-    const sessionDetails : UpdateInformationSessionValues = {
+    const sessionDetails: UpdateInformationSessionValues = {
       accessToken,
       sourceIp,
       sessionId,
       persistentSessionId,
-      userLanguage
+      userLanguage,
     };
 
     const emailUpdated = await checkYourEmailService().updateEmail(
-      updateInput, sessionDetails
+      updateInput,
+      sessionDetails
     );
 
     expect(emailUpdated).to.be.true;

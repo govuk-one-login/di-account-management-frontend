@@ -7,13 +7,13 @@ export function snsService(config: SnsConfig = getSNSConfig()): SnsService {
     topic_arn: string,
     message: string
   ): Promise<SNS.Types.PublishResponse> {
-    const sns = new SNS(config.awsConfig)
+    const sns = new SNS(config.awsConfig);
 
     const request: SNS.PublishInput = {
       TopicArn: topic_arn,
       Message: message,
     };
-    
+
     return await sns.publish(request).promise();
   };
   return {

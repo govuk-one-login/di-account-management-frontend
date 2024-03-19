@@ -134,13 +134,13 @@ export enum LOCALE {
 }
 
 export interface LanguageCodes {
-  en: 'en-GB',
-  cy: 'cy-CY'
+  en: "en-GB";
+  cy: "cy-CY";
 }
 export const LANGUAGE_CODES: LanguageCodes = {
   en: "en-GB",
   cy: "cy-CY",
-}
+};
 
 export const LOG_MESSAGES = {
   ATTEMPTING_TO_DESTROY_SESSION: "Attempting to destroy session",
@@ -151,7 +151,8 @@ export const LOG_MESSAGES = {
     `Malformed gs cookie contained: ${details}`,
   EVENT_SENT_SUCCESSFULLY: (queue: string, messageId: string): string =>
     `Event sent to ${queue} with message id ${messageId}`,
-  ILLEGAL_ATTEMPT_TO_ACCESS_RSA: "An attempt to access RSA without having visited one of the allowed services was made.",
+  ILLEGAL_ATTEMPT_TO_ACCESS_RSA:
+    "An attempt to access RSA without having visited one of the allowed services was made.",
 };
 
 export const ERROR_MESSAGES = {

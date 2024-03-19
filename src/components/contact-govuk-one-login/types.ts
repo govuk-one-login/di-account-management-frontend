@@ -1,7 +1,5 @@
 export interface EventServiceInterface {
-  send: (
-    data: Event,
-  ) => void;
+  send: (data: Event) => void;
 }
 
 export interface Event {

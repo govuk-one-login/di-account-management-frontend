@@ -17,7 +17,7 @@ const TEMPLATE_NAME = "resend-phone-code/index.njk";
 export function resendPhoneCodeGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, {
     phoneNumberRedacted: redactPhoneNumber(req.session.user.newPhoneNumber),
-    phoneNumber: req.session.user.newPhoneNumber
+    phoneNumber: req.session.user.newPhoneNumber,
   });
 }
 
