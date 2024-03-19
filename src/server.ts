@@ -1,7 +1,6 @@
 import { createApp } from "./app";
 import { logger } from "./utils/logger";
 
-
 const port: number | string = process.env.PORT || 6001;
 
 (async () => {
@@ -18,4 +17,3 @@ const port: number | string = process.env.PORT || 6001;
 })().catch((ex) => {
   logger.error(`Server failed to create app ${ex.message}`);
 });
-

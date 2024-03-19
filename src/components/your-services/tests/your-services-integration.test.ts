@@ -33,51 +33,68 @@ describe("Integration:: your services", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(testComponent('empty-state')).length).to.not.equal(0);
+        expect($(testComponent("empty-state")).length).to.not.equal(0);
       });
   });
 
   it("should display accounts without a section heading when only accounts but not services have been added", async () => {
-    const app = await appWithMiddlewareSetup({hasAccounts: true});
+    const app = await appWithMiddlewareSetup({ hasAccounts: true });
     await request(app)
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(`h2${testComponent('accounts-heading')}`).length).to.equal(0);
-        expect($(`h2${testComponent('account-card-heading')}`).length).to.not.equal(0);
+        expect($(`h2${testComponent("accounts-heading")}`).length).to.equal(0);
+        expect(
+          $(`h2${testComponent("account-card-heading")}`).length
+        ).to.not.equal(0);
       });
   });
 
   it("should display services without a section heading when only services but not accounts have been added", async () => {
-    const app = await appWithMiddlewareSetup({hasServices: true});
+    const app = await appWithMiddlewareSetup({ hasServices: true });
     await request(app)
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(`h2${testComponent('services-heading')}`).length).to.equal(0);
-        expect($(`h2${testComponent('service-card-heading')}`).length).to.not.equal(0);
+        expect($(`h2${testComponent("services-heading")}`).length).to.equal(0);
+        expect(
+          $(`h2${testComponent("service-card-heading")}`).length
+        ).to.not.equal(0);
       });
   });
 
-
   it("should display services and accounts with section headings when both services and accounts have been added", async () => {
-    const app = await appWithMiddlewareSetup({hasAccounts: true, hasServices: true});
+    const app = await appWithMiddlewareSetup({
+      hasAccounts: true,
+      hasServices: true,
+    });
     await request(app)
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect($(`h3${testComponent('account-card-heading')}`).length).to.not.equal(0);
-        expect($(`h3${testComponent('service-card-heading')}`).length).to.not.equal(0);
-        expect($(`h2${testComponent('services-heading')}`).length).to.not.equal(0);
-        expect($(`h2${testComponent('accounts-heading')}`).length).to.not.equal(0);
+        expect(
+          $(`h3${testComponent("account-card-heading")}`).length
+        ).to.not.equal(0);
+        expect(
+          $(`h3${testComponent("service-card-heading")}`).length
+        ).to.not.equal(0);
+        expect($(`h2${testComponent("services-heading")}`).length).to.not.equal(
+          0
+        );
+        expect($(`h2${testComponent("accounts-heading")}`).length).to.not.equal(
+          0
+        );
       });
   });
 });
 
-const appWithMiddlewareSetup = async (data?: {hasAccounts?: boolean, hasServices?: boolean}) => {
+const appWithMiddlewareSetup = async (data?: {
+  hasAccounts?: boolean;
+  hasServices?: boolean;
+}) => {
   decache("../../../app");
   decache("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
@@ -94,23 +111,31 @@ const appWithMiddlewareSetup = async (data?: {hasAccounts?: boolean, hasServices
       req.session.user = DEFAULT_USER_SESSION;
       next();
     });
-  
-  sandbox.stub(yourServices, "presentYourServices").callsFake(function() {
+
+  sandbox.stub(yourServices, "presentYourServices").callsFake(function () {
     return {
-      accountsList: accounts ? [{
-        client_id: "gov-uk",
-        count_successful_logins: "1",
-        last_accessed: "",
-        last_accessed_readable_format: "",
-      }] : [],
-      servicesList: services ? [{
-        client_id: "dbs",
-        count_successful_logins: "1",
-        last_accessed: "",
-        last_accessed_readable_format: "",
-      }] : [],
+      accountsList: accounts
+        ? [
+            {
+              client_id: "gov-uk",
+              count_successful_logins: "1",
+              last_accessed: "",
+              last_accessed_readable_format: "",
+            },
+          ]
+        : [],
+      servicesList: services
+        ? [
+            {
+              client_id: "dbs",
+              count_successful_logins: "1",
+              last_accessed: "",
+              last_accessed_readable_format: "",
+            },
+          ]
+        : [],
     };
-  })
+  });
   sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
     return new Promise((resolve) => {
       resolve({});

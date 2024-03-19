@@ -3,7 +3,8 @@ import {
   EventServiceInterface,
   EventNameType,
   AuditEvent,
-  Event, CurrentTimeDescriptor,
+  Event,
+  CurrentTimeDescriptor,
 } from "./types";
 import { SqsService } from "../utils/types";
 import { sqsService } from "../utils/sqs";
@@ -44,7 +45,6 @@ export function eventService(
   const isSignedIn = (session: Session): boolean =>
     session.user?.isAuthenticated || false;
 
-
   /**
    * A function for calculating and returning an object containing the current timestamp.
    *
@@ -57,7 +57,6 @@ export function eventService(
       seconds: Math.floor(date.valueOf() / 1000),
     };
   }
-
 
   const buildAuditEvent = (
     req: Request,

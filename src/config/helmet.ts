@@ -47,9 +47,9 @@ export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
       defaultSrc: ["'self'"],
       styleSrc: [
         (req: Request, res: Response): string =>
-        `'nonce-${res.locals.scriptNonce}'`,
-        "'self'", 
-        "https://*.smartagent.app", 
+          `'nonce-${res.locals.scriptNonce}'`,
+        "'self'",
+        "https://*.smartagent.app",
       ],
       scriptSrc: [
         "'self'",
@@ -69,7 +69,7 @@ export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
         "data:",
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
-        "https://*.s3.eu-west-2.amazonaws.com"
+        "https://*.s3.eu-west-2.amazonaws.com",
       ],
       objectSrc: ["'none'"],
       connectSrc: [

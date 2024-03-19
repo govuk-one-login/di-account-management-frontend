@@ -67,8 +67,10 @@ describe("Middleware", () => {
       expect(res.locals).to.not.have.property("contactUsLinkUrl");
       outboundContactUsLinksMiddleware(req, res, next);
       expect(res.locals).to.have.property("contactUsLinkUrl");
-      expect(res.locals.contactUsLinkUrl).to.equal("https://home.account.gov.uk/contact-gov-uk-one-login?" +
-        "fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fcontact-gov-uk-one-login");
+      expect(res.locals.contactUsLinkUrl).to.equal(
+        "https://home.account.gov.uk/contact-gov-uk-one-login?" +
+          "fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fcontact-gov-uk-one-login"
+      );
     });
   });
 

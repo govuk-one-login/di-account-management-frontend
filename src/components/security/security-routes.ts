@@ -5,10 +5,6 @@ import { requiresAuthMiddleware } from "../../middleware/requires-auth-middlewar
 
 const router = express.Router();
 
-router.get(
-  PATH_DATA.SECURITY.url,
-  requiresAuthMiddleware,
-  securityGet
-);
+router.get(PATH_DATA.SECURITY.url, requiresAuthMiddleware, securityGet);
 
 export { router as securityRouter };
