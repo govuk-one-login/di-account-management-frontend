@@ -159,12 +159,11 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "false"
       UADISABLED: "true"
-
-      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -187,6 +186,10 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
+      GA4DISABLED: "false"
+      UADISABLED: "false"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -253,6 +256,10 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
+      GA4DISABLED: "false"
+      UADISABLED: "false"
 
 Resources:
   #
