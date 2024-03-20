@@ -99,7 +99,7 @@
     "@types/i18next-fs-backend": "^1.0.1",
     "@types/mocha": "^10.0.1",
     "@types/node": "^16.7.13",
-    "@types/nunjucks": "^3.2.3",
+    "@types/nunjucks": "^3.2.6",
     "@types/pino": "^7.0.5",
     "@types/pino-http": "^5.8.4",
     "@types/pino-pretty": "^4.7.1",

@@ -3,8 +3,11 @@ import { describe } from "mocha";
 import { sinon } from "../../utils/test-utils";
 import * as nunjucks from "nunjucks";
 import express from "express";
-import i18next from "i18next";
+import i18next, { TFunction } from "i18next";
 import { configureNunjucks } from "../../../src/config/nunjucks";
+import { SinonStub } from "sinon";
+
+type MyStubType = TFunction & SinonStub;
 
 describe("configureNunjucks Filters", () => {
   let app: express.Application;
@@ -19,7 +22,9 @@ describe("configureNunjucks Filters", () => {
 
   describe("translate filter", () => {
     it("should translate based on i18n language", () => {
-      const fixedTStub = sinon.stub().returns("translated_value");
+      const fixedTStub = sinon
+        .stub()
+        .returns("translated_value") as unknown as MyStubType;
       sinon.stub(i18next, "getFixedT").returns(fixedTStub);
 
       const translateFilter = nunjucksEnv.getFilter("translate");
