@@ -1573,9 +1573,29 @@ Resources:
               Bool:
                 "aws:SecureTransport": true
 
+
   #
   # CloudFront Distribution
   #
+
+  CloudFrontFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+         FunctionCode: |
+            function handler(event) {
+                var response = event.response;
+
+                if (response.headers['content-type'] === 'application/octet-stream') {
+                    response.headers['content-type'] = 'text/html';
+                }
+
+                return response;
+            }
+         FunctionConfig:
+              Comment: "Function to allow HTML pages to be displayed"
+              Runtime: cloudfront-js-1.0
+         Name: SetContentTypeFunction
+
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -1587,6 +1607,13 @@ Resources:
         CNAMEs:
           - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
         Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: !Sub /4xx-errors-${BackendStackName}/customError.html
+          - ErrorCode: 503
+            ResponseCode: 200
+            ResponsePagePath: !Sub /4xx-errors-${BackendStackName}/customError.html
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -1621,6 +1648,10 @@ Resources:
               OriginReadTimeout: 30
               OriginSSLProtocols:
                 - TLSv1.2
+          - DomainName: !Sub "{{resolve:ssm:/${BackendStackName}/S3/CustomErrorPage/DomainName}}"
+            Id: S3Origin
+            S3OriginConfig:
+              OriginAccessIdentity: ""
         ViewerCertificate:
           AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
           MinimumProtocolVersion: TLSv1.2_2021
