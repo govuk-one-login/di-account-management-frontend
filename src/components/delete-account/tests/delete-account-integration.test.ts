@@ -149,9 +149,8 @@ describe("Integration:: delete account", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("no-services-content")).text()).to.not.be.empty;
-        expect(
-          $(testComponent("govuk-email-subscription-info")).text()
-        ).to.be.empty;
+        expect($(testComponent("govuk-email-subscription-info")).text()).to.be
+          .empty;
         expect($(testComponent("service-list-item")).text()).to.be.empty;
       })
       .expect(200, done);
@@ -164,9 +163,8 @@ describe("Integration:: delete account", () => {
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(
-          $(testComponent("govuk-email-subscription-info")).text()
-        ).to.not.be.empty;
+        expect($(testComponent("govuk-email-subscription-info")).text()).to.not
+          .be.empty;
         expect($(testComponent("service-list-item")).text()).to.not.be.empty;
       })
       .expect(200, done);
@@ -180,9 +178,8 @@ describe("Integration:: delete account", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("service-list-item")).text()).to.not.be.empty;
-        expect(
-          $(testComponent("govuk-email-subscription-info")).text()
-        ).to.be.empty;
+        expect($(testComponent("govuk-email-subscription-info")).text()).to.be
+          .empty;
       })
       .expect(200, done);
   });

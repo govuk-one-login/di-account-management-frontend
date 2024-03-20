@@ -113,14 +113,16 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   const configFuncs = require("../../../config");
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
 
-  sandbox
-    .stub(sessionMiddleware, "requiresAuthMiddleware")
-    .callsFake(function (req: any, res: any, next: any): void {
-      req.session.user = config.customUserSession
-        ? config.customUserSession
-        : DEFAULT_USER_SESSION;
-      next();
-    });
+  sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
+    req: any,
+    res: any,
+    next: any
+  ): void {
+    req.session.user = config.customUserSession
+      ? config.customUserSession
+      : DEFAULT_USER_SESSION;
+    next();
+  });
 
   sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
     return new Promise((resolve) => {

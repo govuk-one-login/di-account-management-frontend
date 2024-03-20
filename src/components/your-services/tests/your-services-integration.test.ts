@@ -105,12 +105,14 @@ const appWithMiddlewareSetup = async (data?: {
   const accounts = params.hasAccounts || false;
   const services = params.hasServices || false;
 
-  sandbox
-    .stub(sessionMiddleware, "requiresAuthMiddleware")
-    .callsFake(function (req: any, res: any, next: any): void {
-      req.session.user = DEFAULT_USER_SESSION;
-      next();
-    });
+  sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
+    req: any,
+    res: any,
+    next: any
+  ): void {
+    req.session.user = DEFAULT_USER_SESSION;
+    next();
+  });
 
   sandbox.stub(yourServices, "presentYourServices").callsFake(function () {
     return {
