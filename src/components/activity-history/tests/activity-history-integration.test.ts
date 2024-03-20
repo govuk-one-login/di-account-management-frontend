@@ -160,12 +160,14 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
     },
   ];
 
-  sandbox
-    .stub(sessionMiddleware, "requiresAuthMiddleware")
-    .callsFake(function (req: any, res: any, next: any): void {
-      req.session.user = DEFAULT_USER_SESSION;
-      next();
-    });
+  sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
+    req: any,
+    res: any,
+    next: any
+  ): void {
+    req.session.user = DEFAULT_USER_SESSION;
+    next();
+  });
 
   sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
     return new Promise((resolve) => {
