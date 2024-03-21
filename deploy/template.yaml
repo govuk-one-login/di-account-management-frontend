@@ -748,34 +748,6 @@ Resources:
               Value: !Ref Environment
             - Name: "VERIFY_ACCESS_VALUE"
               Value: !Sub "{{resolve:secretsmanager:/${BackendStackName}/Config/Storage/VerificationSecret}}"
-          Secrets:
-            - Name: DT_TENANT
-              ValueFrom: !Join
-                - ""
-                - - !FindInMap [
-                      EnvironmentVariables,
-                      !Ref Environment,
-                      dynatraceSecretArn,
-                    ]
-                  - ":DT_TENANT::"
-            - Name: DT_TENANTTOKEN
-              ValueFrom: !Join
-                - ""
-                - - !FindInMap [
-                      EnvironmentVariables,
-                      !Ref Environment,
-                      dynatraceSecretArn,
-                    ]
-                  - ":DT_TENANTTOKEN::"
-            - Name: DT_CONNECTION_POINT
-              ValueFrom: !Join
-                - ""
-                - - !FindInMap [
-                      EnvironmentVariables,
-                      !Ref Environment,
-                      dynatraceSecretArn,
-                    ]
-                  - ":DT_CONNECTION_POINT::"
             - Name: "UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID"
               Value:
                 !FindInMap [
@@ -804,6 +776,34 @@ Resources:
                   !Ref Environment,
                   UADISABLED,
                 ]
+          Secrets:
+            - Name: DT_TENANT
+              ValueFrom: !Join
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_TENANT::"
+            - Name: DT_TENANTTOKEN
+              ValueFrom: !Join
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_TENANTTOKEN::"
+            - Name: DT_CONNECTION_POINT
+              ValueFrom: !Join
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_CONNECTION_POINT::"
 
       Cpu: 1024
       Memory: 4096
