@@ -1,6 +1,6 @@
 import { Client } from "openid-client";
 import { User } from "../../src/types";
-import { QueryParameters } from "../../src/app.constants";
+import { QueryParameters, MfaMethod } from "../../src/app.constants";
 
 declare module "express-session" {
   interface Session {
@@ -14,6 +14,7 @@ declare module "express-session" {
     referenceCodeOwningSessionId?: string;
     queryParameters?: QueryParameters;
     sessionId?: string;
+    mfaMethods?: MfaMethod[];
   }
 }
 declare module "express-serve-static-core" {

@@ -189,6 +189,14 @@ export interface QueryParameters {
   theme?: string;
 }
 
+export interface MfaMethod {
+  mfaIdentifier: number;
+  priorityIdentifier: "PRIMARY" | "SECONDARY";
+  mfaMethodType: "SMS" | "AUTH_APP";
+  endPoint: string;
+  methodVerified: boolean;
+}
+
 export const MISSING_APP_SESSION_ID_SPECIAL_CASE = "No app session ID";
 export const MISSING_SESSION_ID_SPECIAL_CASE = "No session ID";
 export const MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE =
