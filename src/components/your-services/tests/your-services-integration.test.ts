@@ -89,11 +89,43 @@ describe("Integration:: your services", () => {
         );
       });
   });
+
+  it("should display long service card for detailed card service", async () => {
+    const app = await appWithMiddlewareSetup({
+      hasAccounts: true,
+      hasServices: true,
+      hasHMRC: true,
+    });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("service-card-long")).length).to.not.equal(0);
+        expect($(testComponent("service-card-short")).length).to.equal(0);
+      });
+  });
+
+  it("should display short service card for non-detailed card services", async () => {
+    const app = await appWithMiddlewareSetup({
+      hasAccounts: true,
+      hasServices: true,
+    });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("service-card-short")).length).to.not.equal(0);
+        expect($(testComponent("service-card-long")).length).to.equal(0);
+      });
+  });
 });
 
 const appWithMiddlewareSetup = async (data?: {
   hasAccounts?: boolean;
   hasServices?: boolean;
+  hasHMRC?: boolean;
 }) => {
   decache("../../../app");
   decache("../../../middleware/requires-auth-middleware");
@@ -102,8 +134,35 @@ const appWithMiddlewareSetup = async (data?: {
   const yourServices = require("../../../utils/yourServices");
   const oidc = require("../../../utils/oidc");
   const params = data || {};
+  const hasHMRC = params.hasHMRC || false;
   const accounts = params.hasAccounts || false;
   const services = params.hasServices || false;
+  const serviceList = hasHMRC
+    ? [
+        {
+          client_id: "hmrc",
+          count_successful_logins: "1",
+          last_accessed: "",
+          last_accessed_readable_format: "",
+          hasDetailedCard: true,
+        },
+      ]
+    : [
+        {
+          client_id: "dbs",
+          count_successful_logins: "1",
+          last_accessed: "",
+          last_accessed_readable_format: "",
+        },
+      ];
+  const accountsList = [
+    {
+      client_id: "gov-uk",
+      count_successful_logins: "1",
+      last_accessed: "",
+      last_accessed_readable_format: "",
+    },
+  ];
 
   sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
     req: any,
@@ -116,26 +175,8 @@ const appWithMiddlewareSetup = async (data?: {
 
   sandbox.stub(yourServices, "presentYourServices").callsFake(function () {
     return {
-      accountsList: accounts
-        ? [
-            {
-              client_id: "gov-uk",
-              count_successful_logins: "1",
-              last_accessed: "",
-              last_accessed_readable_format: "",
-            },
-          ]
-        : [],
-      servicesList: services
-        ? [
-            {
-              client_id: "dbs",
-              count_successful_logins: "1",
-              last_accessed: "",
-              last_accessed_readable_format: "",
-            },
-          ]
-        : [],
+      accountsList: accounts ? accountsList : [],
+      servicesList: services ? serviceList : [],
     };
   });
   sandbox.stub(oidc, "getOIDCClient").callsFake(() => {

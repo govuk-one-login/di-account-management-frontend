@@ -14,7 +14,7 @@ describe("YourService Util", () => {
         client_id: "a_client_id",
         count_successful_logins: 1,
         last_accessed: dateEpochInSeconds,
-        last_accessed_readable_format: undefined,
+        last_accessed_readable_format: "1673356836",
       };
 
       const formattedService: Service = formatService(serviceFromDb, "en");
@@ -24,6 +24,20 @@ describe("YourService Util", () => {
       expect(formattedService.last_accessed_readable_format).equal(
         "10 January 2023"
       );
+    });
+
+    it("format service object with hasDetailedCard if service is hmrc", async () => {
+      const dateEpochInSeconds = 1673358736;
+      const serviceFromDb: Service = {
+        client_id: "hmrc",
+        count_successful_logins: 1,
+        last_accessed: dateEpochInSeconds,
+        last_accessed_readable_format: "1673356836",
+      };
+
+      const formattedService: Service = formatService(serviceFromDb, "en");
+
+      expect(formattedService.hasDetailedCard).equal(true);
     });
   });
 
