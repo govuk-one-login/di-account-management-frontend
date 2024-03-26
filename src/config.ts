@@ -247,11 +247,9 @@ export function universalAnalyticsGtmContainerId(): string {
   return process.env.UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID;
 }
 
-export function googleAnalytics4Disabled(): boolean {
-  const ga4Disabled = process.env.GA4_DISABLED;
-  return ga4Disabled === "true";
+export function googleAnalytics4Disabled(): string {
+  return process.env.GA4_DISABLED || "true"
 }
-export function universalAnalyticsDisabled(): boolean {
-  const uaDisabled = process.env.UA_DISABLED;
-  return uaDisabled === "true";
+export function universalAnalyticsDisabled(): string {
+  return process.env.UA_DISABLED || "false"
 }
