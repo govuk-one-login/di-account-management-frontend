@@ -160,6 +160,10 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
+      GA4DISABLED: "false"
+      UADISABLED: "true"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -182,6 +186,10 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
+      GA4DISABLED: "false"
+      UADISABLED: "false"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -248,6 +256,10 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
+      GA4DISABLED: "false"
+      UADISABLED: "false"
 
 Resources:
   #
@@ -736,6 +748,34 @@ Resources:
               Value: !Ref Environment
             - Name: "VERIFY_ACCESS_VALUE"
               Value: !Sub "{{resolve:secretsmanager:/${BackendStackName}/Config/Storage/VerificationSecret}}"
+            - Name: "UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  UNIVERSALANALYTICSGTMCONTAINERID,
+                ]
+            - Name: "GOOGLE_ANALYTICS_4_GTM_CONTAINER_ID"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  GOOGLEANALYTICS4GTMCONTAINERID,
+                ]
+            - Name: "GA4_DISABLED"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  GA4DISABLED,
+                ]
+            - Name: "UA_DISABLED"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  UADISABLED,
+                ]
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join
