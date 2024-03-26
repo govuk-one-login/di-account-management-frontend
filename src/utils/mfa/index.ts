@@ -1,7 +1,8 @@
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../app.constants";
-import { logger } from "./logger";
-import { getRequestConfig, http } from "./http";
+import { HTTP_STATUS_CODES, METHOD_MANAGEMENT_API } from "../../app.constants";
+import { logger } from "../logger";
+import { getRequestConfig, Http } from "../http";
 import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
+import { getMfaServiceUrl } from "../../config";
 
 async function mfa(
   accessToken: string,
@@ -10,32 +11,53 @@ async function mfa(
   sessionId: string,
   persistentSessionId: string
 ): Promise<MfaMethod[]> {
+  let data: MfaMethod[] = [];
   try {
-    const { status, data } = await http.client.post<MfaMethod[]>(
-      API_ENDPOINTS.MFA_RETRIEVE,
-      {
-        email,
-      },
-      getRequestConfig(
-        accessToken,
-        [
-          HTTP_STATUS_CODES.NOT_FOUND,
-          HTTP_STATUS_CODES.BAD_REQUEST,
-          HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-        ],
-        sourceIp,
-        persistentSessionId,
-        sessionId
-      )
+    const response = await postRequest(
+      accessToken,
+      email,
+      sourceIp,
+      sessionId,
+      persistentSessionId
     );
-    if (status === HTTP_STATUS_CODES.OK) {
-      return data;
+
+    if (response.status === HTTP_STATUS_CODES.OK) {
+      data = response.data;
     }
-    return [];
   } catch (err) {
     errorHandler(err, sessionId);
-    return [];
   }
+  return data;
+}
+
+async function postRequest(
+  accessToken: string,
+  email: string,
+  sourceIp: string,
+  sessionId: string,
+  persistentSessionId: string,
+  http: Http = new Http(getMfaServiceUrl())
+): Promise<{
+  status: number;
+  data: MfaMethod[];
+}> {
+  return http.client.post<MfaMethod[]>(
+    METHOD_MANAGEMENT_API.MFA_RETRIEVE,
+    {
+      email,
+    },
+    getRequestConfig(
+      accessToken,
+      [
+        HTTP_STATUS_CODES.NOT_FOUND,
+        HTTP_STATUS_CODES.BAD_REQUEST,
+        HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      ],
+      sourceIp,
+      persistentSessionId,
+      sessionId
+    )
+  );
 }
 
 function errorHandler(error: any, trace: string): void {

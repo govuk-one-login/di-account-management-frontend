@@ -238,3 +238,7 @@ export function showContactEmergencyMessage(): boolean {
 export function getContactEmailServiceUrl(): string {
   return process.env.CONTACT_EMAIL_SERVICE_URL;
 }
+
+export function getMfaServiceUrl(): string {
+  return process.env.METHOD_MANAGEMENT_BASE_URL;
+}

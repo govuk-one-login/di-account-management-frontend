@@ -2,7 +2,7 @@ import { Client } from "openid-client";
 import { User } from "../../src/types";
 import { QueryParameters } from "../../src/app.constants";
 
-import { MfaMethod } from "../../src/utils/types";
+import { MfaMethod } from "../../src/utils/mfa/types";
 
 declare module "express-session" {
   interface Session {

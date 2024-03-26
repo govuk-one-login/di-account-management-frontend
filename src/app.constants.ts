@@ -105,7 +105,10 @@ export const API_ENDPOINTS = {
   UPDATE_EMAIL: "/update-email",
   UPDATE_PHONE_NUMBER: "/update-phone-number",
   ALPHA_GOV_ACCOUNT: "/api/oidc-users/",
-  MFA_RETRIEVE: "/mfa-methods/retrieve",
+};
+
+export const METHOD_MANAGEMENT_API = {
+  MFA_RETRIEVE: "/v1/mfa-methods/retrieve",
 };
 
 export enum NOTIFICATION_TYPE {

@@ -1,19 +1,23 @@
+import sinon from "sinon";
 import { expect } from "chai";
 import { describe } from "mocha";
-import mfa from "../../../src/utils/mfa";
-import { http } from "../http";
 import { logger } from "../logger";
+import * as httpModule from "../http";
+import mfa from "../../../src/utils/mfa";
 import { HTTP_STATUS_CODES } from "../../app.constants";
-import sinon from "sinon";
 
 describe("MFA Function", () => {
-  let postStub: sinon.SinonStub;
   let loggerStub: sinon.SinonStub;
+  let httpInstance: sinon.SinonStubbedInstance<any>;
 
   beforeEach(() => {
-    postStub = sinon.stub(http.client, "post");
-
     loggerStub = sinon.stub(logger, "error");
+    httpInstance = {
+      client: {
+        post: sinon.stub(),
+      },
+    };
+    sinon.stub(httpModule, "Http").returns(httpInstance);
   });
 
   afterEach(() => {
@@ -22,7 +26,10 @@ describe("MFA Function", () => {
 
   it("should return MFA methods on success", async () => {
     const mfaMethods = ["SMS", "EMAIL"];
-    postStub.resolves({ status: HTTP_STATUS_CODES.OK, data: mfaMethods });
+    httpInstance.client.post.resolves({
+      status: HTTP_STATUS_CODES.OK,
+      data: mfaMethods,
+    });
 
     const result = await mfa(
       "accessToken",
@@ -32,11 +39,14 @@ describe("MFA Function", () => {
       "persistentSessionId"
     );
     expect(result).to.deep.equal(mfaMethods);
-    expect(postStub.calledOnce).to.be.true;
+    expect(httpInstance.client.post.calledOnce).to.be.true;
+    expect(loggerStub.called).to.be.false;
   });
 
   it("should return an empty array when the status is not OK", async () => {
-    postStub.resolves({ status: HTTP_STATUS_CODES.BAD_REQUEST });
+    httpInstance.client.post.resolves({
+      status: HTTP_STATUS_CODES.BAD_REQUEST,
+    });
 
     const result = await mfa(
       "accessToken",
@@ -46,11 +56,11 @@ describe("MFA Function", () => {
       "persistentSessionId"
     );
     expect(result).to.deep.equal([]);
-    expect(postStub.calledOnce).to.be.true;
+    expect(httpInstance.client.post.calledOnce).to.be.true;
   });
 
   it("should log an error and return an empty array on exception", async () => {
-    postStub.rejects(new Error("Network error"));
+    httpInstance.client.post.rejects(new Error("Network error"));
 
     const result = await mfa(
       "accessToken",
@@ -72,7 +82,7 @@ describe("MFA Function", () => {
       title: "Validation Failed",
       errors: [{ detail: "Email is required." }],
     };
-    postStub.rejects({
+    httpInstance.client.post.rejects({
       response: {
         status: HTTP_STATUS_CODES.BAD_REQUEST,
         data: validationProblem,
@@ -99,7 +109,7 @@ describe("MFA Function", () => {
     const validationProblem = {
       title: "General validation error",
     };
-    postStub.rejects({
+    httpInstance.client.post.rejects({
       response: {
         status: HTTP_STATUS_CODES.BAD_REQUEST,
         data: validationProblem,
@@ -127,7 +137,7 @@ describe("MFA Function", () => {
       detail: "Not Found",
       extension: { error: { code: 1056 } },
     };
-    postStub.rejects({
+    httpInstance.client.post.rejects({
       response: { status: HTTP_STATUS_CODES.NOT_FOUND, data: problemDetail },
     });
 
@@ -154,7 +164,7 @@ describe("MFA Function", () => {
   });
 
   it("should log a generic error message for errors without a response status", async () => {
-    postStub.rejects(new Error("Network Error"));
+    httpInstance.client.post.rejects(new Error("Network Error"));
 
     await mfa(
       "accessToken",
@@ -177,7 +187,7 @@ describe("MFA Function", () => {
       message: "Unexpected error occurred",
     };
 
-    postStub.rejects({
+    httpInstance.client.post.rejects({
       response: { status: HTTP_STATUS_CODES.FORBIDDEN, data: unexpectedError },
     });
 
