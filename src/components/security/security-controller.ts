@@ -54,6 +54,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
     };
   });
 
+  console.log(mfaMethods[0].actions);
   const data = {
     email,
     supportActivityLog: supportActivityLogFlag && hasHmrc,
