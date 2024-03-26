@@ -163,7 +163,7 @@ Mappings:
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "false"
-      UADISABLED: "true"
+      UADISABLED: "false"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
