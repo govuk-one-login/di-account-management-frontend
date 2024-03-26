@@ -110,10 +110,9 @@
     {% block scripts %}{% endblock %}
     <script type="text/javascript" src="/public/scripts/application.js" nonce='{{scriptNonce}}'></script>
     <script type="text/javascript" src="/public/scripts/all.js" nonce='{{scriptNonce}}'></script>
+    <script type="text/javascript" src="/public/scripts/analytics.js" nonce='{{scriptNonce}}'></script>
     <script type="text/javascript" nonce='{{scriptNonce}}'>
-      window
-          .GOVSignIn
-          .appInit("{{gtmId}}", "{{ analyticsCookieDomain }}")
+
       {% if backLinkJS %}
         var backLink = document.querySelector('.js-back-link');
         if (backLink) {
@@ -128,11 +127,9 @@
         }
       {% endif %}
     </script>
-    <script type="text/javascript" src="/public/scripts/analytics.js" nonce='{{scriptNonce}}'></script>
     <script type="text/javascript" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
-    window
-      .DI
-      .appInit({
+    if (window.DI) {
+      window.DI.appInit({
         ga4ContainerId: "{{ga4ContainerId}}",
         uaContainerId: "{{uaContainerId}}"
       }, {
@@ -140,5 +137,8 @@
         disableUaTracking: {{isUaDisabled}},
         cookieDomain: "{{analyticsCookieDomain}}"
       });
+    }
+
+
   </script>
 {% endblock %}
