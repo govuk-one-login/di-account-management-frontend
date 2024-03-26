@@ -4,20 +4,61 @@ import { PATH_DATA } from "../../app.constants";
 import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list";
 
 export async function securityGet(req: Request, res: Response): Promise<void> {
-  const { email, phoneNumber, isPhoneNumberVerified } = req.session.user;
-  const phoneNumberLastFourDigits = phoneNumber ? phoneNumber.slice(-4) : null;
+  const { email } = req.session.user;
 
   const supportActivityLogFlag = supportActivityLog();
+
   const hasHmrc = await hasAllowedRSAServices(req, res);
 
   const activityLogUrl = PATH_DATA.SIGN_IN_HISTORY.url;
 
+  const mfaMethods = (req.session.mfaMethods || []).map((method) => {
+    let key: string,
+      value: string,
+      actions = {};
+
+    if (method.mfaMethodType === "SMS") {
+      const phoneNumber = method.endPoint ? method.endPoint.slice(-4) : null;
+      key = req.t("pages.security.mfaSection.summaryList.phoneNumber.title");
+      value = req
+        .t("pages.security.mfaSection.summaryList.phoneNumber.value")
+        .replace("[phoneNumber]", phoneNumber);
+      actions = {
+        items: [
+          {
+            attributes: { "data-test-id": "change-phone-number" },
+            href: "/enter-password?type=changePhoneNumber",
+            text: req.t("general.change"),
+            visuallyHiddenText: req.t(
+              "pages.security.mfaSection.summaryList.app.hiddenText"
+            ),
+          },
+        ],
+      };
+    } else if (method.mfaMethodType === "AUTH_APP") {
+      key = req.t("pages.security.mfaSection.summaryList.app.title");
+      value = req.t("pages.security.mfaSection.summaryList.app.value");
+    } else {
+      throw new Error(`Unexpected mfaMethodType: ${method.mfaMethodType}`);
+    }
+
+    return {
+      classes: "govuk-summary-list__row--no-border",
+      key: {
+        text: key,
+      },
+      value: {
+        text: value,
+      },
+      actions: actions,
+    };
+  });
+
   const data = {
     email,
-    phoneNumber: phoneNumberLastFourDigits,
-    isPhoneNumberVerified,
     supportActivityLog: supportActivityLogFlag && hasHmrc,
     activityLogUrl,
+    mfaMethods,
   };
 
   res.render("security/index.njk", data);
