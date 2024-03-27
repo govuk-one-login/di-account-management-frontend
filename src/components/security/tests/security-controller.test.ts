@@ -181,7 +181,34 @@ describe("security controller", () => {
         ],
       });
     });
-    it('show throw an error when the mfaMethodType is not "SMS" or "AUTH_APP"', async () => {
+    it("throws an error when the mfaMethodType is undefined", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true;
+      });
+      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(false);
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        isPhoneNumberVerified: true,
+      } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "PRIMARY",
+          endPoint: "xxxxxxx7898",
+          methodVerified: true,
+        },
+      ] as any;
+
+      expect(
+        securityGet(req as Request, res as Response)
+      ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: undefined");
+    });
+    it("throws an error when the mfaMethodType is not unknown", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
