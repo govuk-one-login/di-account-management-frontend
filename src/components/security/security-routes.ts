@@ -3,7 +3,7 @@ import { securityGet } from "./security-controller";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { legacyMfaMethodsMiddleware } from "../../middleware/mfa-methods-legacy";
-import { mfaMethodMiddleware } from "src/middleware/mfa-method-middleware";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
