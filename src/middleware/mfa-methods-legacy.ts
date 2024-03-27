@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { supportMfaPage } from "src/config";
+import { supportMfaPage } from "../config";
 
 export function legacyMfaMethodsMiddleware(
   req: Request,
