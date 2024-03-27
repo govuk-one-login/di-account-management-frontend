@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { supportActivityLog } from "../../config";
 import { PATH_DATA } from "../../app.constants";
 import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list";
+import { getLastNDigits } from "../../utils/phone-number";
 
 export async function securityGet(req: Request, res: Response): Promise<void> {
   const { email } = req.session.user;
@@ -18,7 +19,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
       actions = {};
 
     if (method.mfaMethodType === "SMS") {
-      const phoneNumber = method.endPoint ? method.endPoint.slice(-4) : null;
+      const phoneNumber = getLastNDigits(method.endPoint, 4)
       key = req.t("pages.security.mfaSection.summaryList.phoneNumber.title");
       value = req
         .t("pages.security.mfaSection.summaryList.phoneNumber.value")

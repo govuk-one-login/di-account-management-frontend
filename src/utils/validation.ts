@@ -1,5 +1,6 @@
 import { Response, Request } from "express";
 import { HTTP_STATUS_CODES } from "../app.constants";
+
 import { Error } from "./types";
 
 export const isObjectEmpty = (obj: Record<string, unknown>): boolean => {

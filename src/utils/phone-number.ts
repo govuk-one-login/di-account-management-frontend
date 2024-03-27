@@ -45,3 +45,10 @@ export function lengthInRangeWithoutSpaces(
   const length = value.replace(/\s+/g, "").length;
   return length >= min && length <= max;
 }
+
+export function getLastNDigits(phoneNumber: string, n: number): string {
+  if (!phoneNumber || n < 1) {
+    return "";
+  }
+  return phoneNumber.slice(-n);
+}

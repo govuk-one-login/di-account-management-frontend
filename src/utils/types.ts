@@ -1,4 +1,4 @@
-import { KMS, SNS, DynamoDB } from "aws-sdk";
+import { DynamoDB, KMS, SNS } from "aws-sdk";
 
 type ClientId = string;
 type UrnFdnSub = string;
