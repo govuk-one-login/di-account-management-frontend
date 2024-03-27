@@ -1,17 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { ERROR_MESSAGES } from "../app.constants";
 import mfa from "../utils/mfa";
-import { supportMfaPage } from "../config";
 
 export async function mfaMethodMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  if (!supportMfaPage()) {
-    return next();
-  }
-  delete req.session.mfaMethods;
   try {
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
@@ -22,9 +17,7 @@ export async function mfaMethodMiddleware(
       res.locals.sessionId,
       res.locals.persistentSessionId
     );
-    req.session.mfaMethods = {
-      ...response,
-    };
+    req.session.mfaMethods = [...response];
     next();
   } catch (e) {
     req.log.info(
