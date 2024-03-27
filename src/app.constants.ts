@@ -107,6 +107,10 @@ export const API_ENDPOINTS = {
   ALPHA_GOV_ACCOUNT: "/api/oidc-users/",
 };
 
+export const METHOD_MANAGEMENT_API = {
+  MFA_RETRIEVE: "/v1/mfa-methods/retrieve",
+};
+
 export enum NOTIFICATION_TYPE {
   VERIFY_EMAIL = "VERIFY_EMAIL",
   VERIFY_PHONE_NUMBER = "VERIFY_PHONE_NUMBER",
@@ -164,6 +168,7 @@ export const ERROR_MESSAGES = {
   REDACTED_EVENT: (details: string): string => `Redacted event: ${details}`,
   FAILED_TO_SEND_TO_TXMA: "Failed to send to TxMA",
   FAILED_SEND_TO_TXMA_DLQ: "Failed to send to TxMA DLQ.",
+  FAILED_MFA_RETRIEVE_CALL: "Failed to call mfa methods API",
 };
 
 export const ERROR_CODES = {
@@ -187,14 +192,6 @@ export interface QueryParameters {
   appSessionId?: string;
   appErrorCode?: string;
   theme?: string;
-}
-
-export interface MfaMethod {
-  mfaIdentifier: number;
-  priorityIdentifier: "PRIMARY" | "SECONDARY";
-  mfaMethodType: "SMS" | "AUTH_APP";
-  endPoint: string;
-  methodVerified: boolean;
 }
 
 export const MISSING_APP_SESSION_ID_SPECIAL_CASE = "No app session ID";

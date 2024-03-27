@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { ValidationError, validationResult } from "express-validator";
 import { isObjectEmpty, renderBadRequest } from "../utils/validation";
-import { Error } from "src/utils/types";
+
+import { Error } from "../utils/types";
 
 export function validationErrorFormatter(error: ValidationError): Error {
   switch (error.type) {

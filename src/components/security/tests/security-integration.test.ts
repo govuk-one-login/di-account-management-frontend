@@ -6,6 +6,7 @@ import * as cheerio from "cheerio";
 import * as nock from "nock";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
+import { getLastNDigits } from "../../../utils/phone-number";
 
 const { url } = PATH_DATA.SECURITY;
 const TEST_USER_EMAIL = "test@test.com";
@@ -35,13 +36,14 @@ describe("Integration:: security", () => {
 
   it("should display a redacted phone number when one is available", async () => {
     const app = await appWithMiddlewareSetup();
+    const phoneNumberLastFourDigits = getLastNDigits(TEST_USER_PHONE_NUMBER, 4);
     await request(app)
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
         expect($(testComponent("mfa-summary-list")).text()).to.contains(
-          TEST_USER_PHONE_NUMBER.slice(-4)
+          phoneNumberLastFourDigits
         );
       });
   });
@@ -112,6 +114,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   const oidc = require("../../../utils/oidc");
   const configFuncs = require("../../../config");
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
+  const mfa = require("../../../utils/mfa");
 
   sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
     req: any,
@@ -143,6 +146,16 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   sandbox
     .stub(checkAllowedServicesList, "hasAllowedRSAServices")
     .resolves(config?.hasAllowedRSAServices ?? true);
+
+  sandbox.stub(mfa, "default").resolves([
+    {
+      mfaIdentifier: 123456,
+      priorityIdentifier: "PRIMARY",
+      mfaMethodType: "AUTH_APP",
+      endPoint: "http://mock-endpoint",
+      methodVerified: true,
+    },
+  ]);
 
   return await require("../../../app").createApp();
 };

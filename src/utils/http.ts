@@ -5,7 +5,7 @@ import axios, {
   AxiosResponse,
   RawAxiosRequestHeaders,
 } from "axios";
-import { ApiResponseResult } from "../utils/types";
+import { ApiResponseResult } from "./types";
 import { getApiBaseUrl } from "../config";
 import { HTTP_STATUS_CODES } from "../app.constants";
 import { ApiError } from "./errors";
