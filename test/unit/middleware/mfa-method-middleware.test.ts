@@ -3,6 +3,7 @@ import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
 import { sinon } from "../../utils/test-utils";
 import * as mfa from "../../../src/utils/mfa";
+import * as config from "../../../src/config";
 import { mfaMethodMiddleware } from "../../../src/middleware/mfa-method-middleware";
 import { ERROR_MESSAGES } from "../../../src/app.constants";
 
@@ -12,12 +13,17 @@ describe("mfaMethodMiddleware", () => {
   let res: Partial<Response>;
   let next: NextFunction;
   let mfaStub: sinon.SinonStub;
+  let shouldReturnFalse = false;
+  let supportMfaPageStub: sinon.SinonStub;
   const info: sinon.SinonSpy = sinon.spy();
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     next = sinon.fake();
     mfaStub = sinon.stub(mfa, "default");
+    supportMfaPageStub = sinon
+      .stub(config, "supportMfaPage")
+      .callsFake(() => !shouldReturnFalse);
     req = {
       body: {},
       query: {},
@@ -40,13 +46,21 @@ describe("mfaMethodMiddleware", () => {
   });
 
   afterEach(() => {
+    supportMfaPageStub.restore();
     mfaStub.restore();
     sandbox.restore();
+  });
+
+  it("should not run if supportMfaPage is off", async () => {
+    shouldReturnFalse = true;
+    await mfaMethodMiddleware(req as Request, res as Response, next);
+    expect(req.session.mfaMethods).not.to.exist;
   });
 
   it("should set mfaMethods in session on successful retrieval", async () => {
     res.locals.sessionId = "sessionId";
     res.locals.persistentSessionId = "persistentSessionId";
+    shouldReturnFalse = false;
 
     mfaStub.resolves([
       {
@@ -66,6 +80,7 @@ describe("mfaMethodMiddleware", () => {
   it("should continue to next middleware when mfa retrieval fails", async () => {
     res.locals.sessionId = "sessionId";
     res.locals.persistentSessionId = "persistentSessionId";
+    shouldReturnFalse = false;
 
     mfaStub.rejects();
 
