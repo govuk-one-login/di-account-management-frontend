@@ -181,6 +181,34 @@ describe("security controller", () => {
         ],
       });
     });
+    it('show throw an error when the mfaMethodType is not "SMS" or "AUTH_APP"', async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true;
+      });
+      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(false);
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        isPhoneNumberVerified: true,
+      } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "PRIMARY",
+          mfaMethodType: "INVALID",
+          endPoint: "xxxxxxx7898",
+          methodVerified: true,
+        },
+      ] as any;
+
+      expect(
+        securityGet(req as Request, res as Response)
+      ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: INVALID");
+    });
     it("should render security view with activity log when the user has a supported service and the feature flag is on", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
