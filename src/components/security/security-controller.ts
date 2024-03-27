@@ -13,47 +13,51 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
 
   const activityLogUrl = PATH_DATA.SIGN_IN_HISTORY.url;
 
-  const mfaMethods = (req.session.mfaMethods || []).map((method) => {
-    let key: string,
-      value: string,
-      actions = {};
+  const mfaMethods = Array.isArray(req.session.mfaMethods)
+    ? req.session.mfaMethods.map((method) => {
+        let key: string,
+          value: string,
+          actions = {};
 
-    if (method.mfaMethodType === "SMS") {
-      const phoneNumber = getLastNDigits(method.endPoint, 4);
-      key = req.t("pages.security.mfaSection.summaryList.phoneNumber.title");
-      value = req
-        .t("pages.security.mfaSection.summaryList.phoneNumber.value")
-        .replace("[phoneNumber]", phoneNumber);
-      actions = {
-        items: [
-          {
-            attributes: { "data-test-id": "change-phone-number" },
-            href: "/enter-password?type=changePhoneNumber",
-            text: req.t("general.change"),
-            visuallyHiddenText: req.t(
-              "pages.security.mfaSection.summaryList.app.hiddenText"
-            ),
+        if (method.mfaMethodType === "SMS") {
+          const phoneNumber = getLastNDigits(method.endPoint, 4);
+          key = req.t(
+            "pages.security.mfaSection.summaryList.phoneNumber.title"
+          );
+          value = req
+            .t("pages.security.mfaSection.summaryList.phoneNumber.value")
+            .replace("[phoneNumber]", phoneNumber);
+          actions = {
+            items: [
+              {
+                attributes: { "data-test-id": "change-phone-number" },
+                href: "/enter-password?type=changePhoneNumber",
+                text: req.t("general.change"),
+                visuallyHiddenText: req.t(
+                  "pages.security.mfaSection.summaryList.app.hiddenText"
+                ),
+              },
+            ],
+          };
+        } else if (method.mfaMethodType === "AUTH_APP") {
+          key = req.t("pages.security.mfaSection.summaryList.app.title");
+          value = req.t("pages.security.mfaSection.summaryList.app.value");
+        } else {
+          throw new Error(`Unexpected mfaMethodType: ${method.mfaMethodType}`);
+        }
+
+        return {
+          classes: "govuk-summary-list__row--no-border",
+          key: {
+            text: key,
           },
-        ],
-      };
-    } else if (method.mfaMethodType === "AUTH_APP") {
-      key = req.t("pages.security.mfaSection.summaryList.app.title");
-      value = req.t("pages.security.mfaSection.summaryList.app.value");
-    } else {
-      throw new Error(`Unexpected mfaMethodType: ${method.mfaMethodType}`);
-    }
-
-    return {
-      classes: "govuk-summary-list__row--no-border",
-      key: {
-        text: key,
-      },
-      value: {
-        text: value,
-      },
-      actions: actions,
-    };
-  });
+          value: {
+            text: value,
+          },
+          actions: actions,
+        };
+      })
+    : [];
 
   const data = {
     email,

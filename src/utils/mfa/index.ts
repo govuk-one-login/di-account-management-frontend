@@ -48,11 +48,7 @@ async function postRequest(
     },
     getRequestConfig(
       accessToken,
-      [
-        HTTP_STATUS_CODES.NOT_FOUND,
-        HTTP_STATUS_CODES.BAD_REQUEST,
-        HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-      ],
+      null,
       sourceIp,
       persistentSessionId,
       sessionId
