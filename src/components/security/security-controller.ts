@@ -19,7 +19,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
       actions = {};
 
     if (method.mfaMethodType === "SMS") {
-      const phoneNumber = getLastNDigits(method.endPoint, 4)
+      const phoneNumber = getLastNDigits(method.endPoint, 4);
       key = req.t("pages.security.mfaSection.summaryList.phoneNumber.title");
       value = req
         .t("pages.security.mfaSection.summaryList.phoneNumber.value")
