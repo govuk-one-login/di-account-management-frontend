@@ -1,10 +1,14 @@
 import { NextFunction, Response, Request } from "express";
+import { supportMfaPage } from "src/config";
 
-export function mfaMethodsMiddleware(
+export function legacyMfaMethodsMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
+  if (supportMfaPage()) {
+    return next();
+  }
   if (req.session.user.isPhoneNumberVerified) {
     req.session.mfaMethods = [
       {
