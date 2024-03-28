@@ -12,7 +12,7 @@ describe("security controller", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    req = { body: {}, session: { user: {} } as any };
+    req = { body: {}, session: { user: {} } as any, t: (k) => k };
     res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
   });
 
@@ -35,14 +35,44 @@ describe("security controller", () => {
         phoneNumber: "xxxxxxx7898",
         isPhoneNumberVerified: true,
       } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "PRIMARY",
+          mfaMethodType: "SMS",
+          endPoint: "xxxxxxx7898",
+          methodVerified: true,
+        },
+      ] as any;
+
       await securityGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
-        phoneNumber: "7898",
-        isPhoneNumberVerified: true,
         supportActivityLog: true,
         activityLogUrl: "/activity-history",
+        mfaMethods: [
+          {
+            classes: "govuk-summary-list__row--no-border",
+            key: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
+            },
+            value: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
+            },
+            actions: {
+              items: [
+                {
+                  attributes: { "data-test-id": "change-phone-number" },
+                  href: "/enter-password?type=changePhoneNumber",
+                  text: "general.change",
+                  visuallyHiddenText:
+                    "pages.security.mfaSection.summaryList.app.hiddenText",
+                },
+              ],
+            },
+          },
+        ],
       });
     });
     it("should render security view without activity log when the feature flag is off", async () => {
@@ -57,14 +87,44 @@ describe("security controller", () => {
         phoneNumber: "xxxxxxx7898",
         isPhoneNumberVerified: true,
       } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "PRIMARY",
+          mfaMethodType: "SMS",
+          endPoint: "xxxxxxx7898",
+          methodVerified: true,
+        },
+      ] as any;
+
       await securityGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
-        phoneNumber: "7898",
-        isPhoneNumberVerified: true,
         supportActivityLog: false,
         activityLogUrl: "/activity-history",
+        mfaMethods: [
+          {
+            classes: "govuk-summary-list__row--no-border",
+            key: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
+            },
+            value: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
+            },
+            actions: {
+              items: [
+                {
+                  attributes: { "data-test-id": "change-phone-number" },
+                  href: "/enter-password?type=changePhoneNumber",
+                  text: "general.change",
+                  visuallyHiddenText:
+                    "pages.security.mfaSection.summaryList.app.hiddenText",
+                },
+              ],
+            },
+          },
+        ],
       });
     });
     it("should render security view without activity log when the user doesn't have a supported service", async () => {
@@ -81,15 +141,100 @@ describe("security controller", () => {
         phoneNumber: "xxxxxxx7898",
         isPhoneNumberVerified: true,
       } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "PRIMARY",
+          mfaMethodType: "SMS",
+          endPoint: "xxxxxxx7898",
+          methodVerified: true,
+        },
+      ] as any;
+
       await securityGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
-        phoneNumber: "7898",
-        isPhoneNumberVerified: true,
         supportActivityLog: false,
         activityLogUrl: "/activity-history",
+        mfaMethods: [
+          {
+            classes: "govuk-summary-list__row--no-border",
+            key: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
+            },
+            value: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
+            },
+            actions: {
+              items: [
+                {
+                  attributes: { "data-test-id": "change-phone-number" },
+                  href: "/enter-password?type=changePhoneNumber",
+                  text: "general.change",
+                  visuallyHiddenText:
+                    "pages.security.mfaSection.summaryList.app.hiddenText",
+                },
+              ],
+            },
+          },
+        ],
       });
+    });
+    it("throws an error when the mfaMethodType is undefined", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true;
+      });
+      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(false);
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        isPhoneNumberVerified: true,
+      } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "PRIMARY",
+          endPoint: "xxxxxxx7898",
+          methodVerified: true,
+        },
+      ] as any;
+
+      expect(
+        securityGet(req as Request, res as Response)
+      ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: undefined");
+    });
+    it("throws an error when the mfaMethodType is not unknown", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true;
+      });
+      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(false);
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        isPhoneNumberVerified: true,
+      } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "PRIMARY",
+          mfaMethodType: "INVALID",
+          endPoint: "xxxxxxx7898",
+          methodVerified: true,
+        },
+      ] as any;
+
+      expect(
+        securityGet(req as Request, res as Response)
+      ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: INVALID");
     });
     it("should render security view with activity log when the user has a supported service and the feature flag is on", async () => {
       const configFuncs = require("../../../config");
@@ -105,14 +250,44 @@ describe("security controller", () => {
         phoneNumber: "xxxxxxx7898",
         isPhoneNumberVerified: true,
       } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "PRIMARY",
+          mfaMethodType: "SMS",
+          endPoint: "xxxxxxx7898",
+          methodVerified: true,
+        },
+      ] as any;
+
       await securityGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
-        phoneNumber: "7898",
-        isPhoneNumberVerified: true,
         supportActivityLog: true,
         activityLogUrl: "/activity-history",
+        mfaMethods: [
+          {
+            classes: "govuk-summary-list__row--no-border",
+            key: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
+            },
+            value: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
+            },
+            actions: {
+              items: [
+                {
+                  attributes: { "data-test-id": "change-phone-number" },
+                  href: "/enter-password?type=changePhoneNumber",
+                  text: "general.change",
+                  visuallyHiddenText:
+                    "pages.security.mfaSection.summaryList.app.hiddenText",
+                },
+              ],
+            },
+          },
+        ],
       });
     });
   });

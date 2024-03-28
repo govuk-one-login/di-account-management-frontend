@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
-import { HTTP_STATUS_CODES, OIDC_ERRORS, PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
+import {
+  HTTP_STATUS_CODES,
+  OIDC_ERRORS,
+  PATH_DATA,
+  VECTORS_OF_TRUST,
+} from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";

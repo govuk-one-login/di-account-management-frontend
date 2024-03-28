@@ -51,7 +51,7 @@ describe("logout controller", () => {
 
     req.session.destroy = sandbox.fake();
 
-      logoutPost(req, res);
+    logoutPost(req, res);
 
     expect(req.session.destroy).to.have.been.calledOnce;
     expect(res.mockCookies.lo).to.equal("true");

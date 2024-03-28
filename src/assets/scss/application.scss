@@ -176,6 +176,10 @@ $govuk-new-link-styles: true;
   }
 }
 
+.govuk-header__link--homepage {
+  margin-right: govuk-spacing(4);
+}
+
 .account-navigation {
   background-color: govuk-colour("light-grey");
   border-bottom: 1px solid $govuk-border-colour;

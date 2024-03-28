@@ -159,6 +159,7 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      SUPPORTMETHODMANAGEMENT: "1"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
@@ -185,6 +186,7 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      SUPPORTMETHODMANAGEMENT: "1"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
@@ -211,6 +213,7 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      SUPPORTMETHODMANAGEMENT: "1"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     integration:
       NODEENV: "production"
@@ -232,6 +235,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
+      SUPPORTMETHODMANAGEMENT: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     production:
@@ -254,6 +258,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
+      SUPPORTMETHODMANAGEMENT: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
@@ -731,6 +736,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   CONTACTEMAILSERVICEURL,
+                ]
+            - Name: "SUPPORT_METHOD_MANAGEMENT"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTMETHODMANAGEMENT,
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"

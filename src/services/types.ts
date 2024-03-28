@@ -1,7 +1,7 @@
 import { EVENT_NAME } from "../app.constants";
 import { Request, Response } from "express";
 
-export type EventNameType = typeof EVENT_NAME[keyof typeof EVENT_NAME];
+export type EventNameType = (typeof EVENT_NAME)[keyof typeof EVENT_NAME];
 export interface EventServiceInterface {
   buildAuditEvent: (
     req: Request,

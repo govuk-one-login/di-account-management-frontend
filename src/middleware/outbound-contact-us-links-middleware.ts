@@ -25,7 +25,9 @@ export function outboundContactUsLinksMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  let contactUsLinkUrl = `${req.protocol}://${req.get("host")}${PATH_DATA.CONTACT.url}`;
+  let contactUsLinkUrl = `${req.protocol}://${req.get("host")}${
+    PATH_DATA.CONTACT.url
+  }`;
   const fromUrl = buildUrlFromRequest(req);
 
   contactUsLinkUrl = appendFromUrlWhenTriagePageUrl(contactUsLinkUrl, fromUrl);

@@ -11,20 +11,15 @@ router.get(
   redirectToSecurity
 );
 
-router.get(PATH_DATA.SECURITY_TXT.url, (_, res) => (
-    res.redirect(302, WELL_KNOWN_FILES.SECURITY_TEXT_URL)
-  )
+router.get(PATH_DATA.SECURITY_TXT.url, (_, res) =>
+  res.redirect(302, WELL_KNOWN_FILES.SECURITY_TEXT_URL)
 );
 
-router.get(PATH_DATA.THANKS_TXT.url, (_, res) => (
-    res.redirect(302, WELL_KNOWN_FILES.THANKS_TEXT_URL)
-  )
+router.get(PATH_DATA.THANKS_TXT.url, (_, res) =>
+  res.redirect(302, WELL_KNOWN_FILES.THANKS_TEXT_URL)
 );
 
-function redirectToSecurity(
-  req: Request,
-  res: Response
-) {
+function redirectToSecurity(req: Request, res: Response) {
   return res.redirect(PATH_DATA.SECURITY.url);
 }
 
