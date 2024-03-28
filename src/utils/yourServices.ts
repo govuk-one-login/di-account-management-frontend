@@ -98,13 +98,13 @@ export const formatService = (
     dateEpoch: service.last_accessed,
     locale: currentLanguage,
   });
-  const isHMRC = hmrcClientIds.includes(service.client_id);
+  const hasDetailedCard = hmrcClientIds.includes(service.client_id);
   return {
     client_id: service.client_id,
     count_successful_logins: service.count_successful_logins,
     last_accessed: service.last_accessed,
     last_accessed_readable_format: readable_format_date,
-    isHMRC: isHMRC,
+    hasDetailedCard: hasDetailedCard,
   };
 };
 

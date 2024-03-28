@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { isTokenExpired, clientAssertionGenerator } from "../utils/oidc";
 import { ExpressRouteFunc } from "../types";
 import { ClientAssertionServiceInterface } from "../utils/types";
+import { retryableFunction } from "../utils/retryableFunction";
 
 export function refreshTokenMiddleware(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()
@@ -10,23 +11,28 @@ export function refreshTokenMiddleware(
     const accessToken = req.session.user.tokens.accessToken;
 
     if (isTokenExpired(accessToken)) {
-      const clientAssertion = await service.generateAssertionJwt(
-        req.oidc.metadata.client_id,
-        req.oidc.issuer.metadata.token_endpoint
-      );
+      try {
+        const clientAssertion = await service.generateAssertionJwt(
+          req.oidc.metadata.client_id,
+          req.oidc.issuer.metadata.token_endpoint
+        );
 
-      const tokenSet = await req.oidc.refresh(
-        req.session.user.tokens.refreshToken,
-        {
-          exchangeBody: {
-            client_assertion_type:
-              "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-            client_assertion: clientAssertion,
+        const tokenSet = await retryableFunction(req.oidc.refresh, [
+          req.session.user.tokens.refreshToken,
+          {
+            exchangeBody: {
+              client_assertion_type:
+                "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+              client_assertion: clientAssertion,
+            },
           },
-        }
-      );
-      req.session.user.tokens.accessToken = tokenSet.access_token;
-      req.session.user.tokens.refreshToken = tokenSet.refresh_token;
+        ]);
+        req.session.user.tokens.accessToken = tokenSet.access_token;
+        req.session.user.tokens.refreshToken = tokenSet.refresh_token;
+      } catch (err) {
+        req.log.error(err.message);
+        return next(err);
+      }
     }
 
     next();

@@ -107,6 +107,10 @@ export const API_ENDPOINTS = {
   ALPHA_GOV_ACCOUNT: "/api/oidc-users/",
 };
 
+export const METHOD_MANAGEMENT_API = {
+  MFA_RETRIEVE: "/v1/mfa-methods/retrieve",
+};
+
 export enum NOTIFICATION_TYPE {
   VERIFY_EMAIL = "VERIFY_EMAIL",
   VERIFY_PHONE_NUMBER = "VERIFY_PHONE_NUMBER",
@@ -134,13 +138,13 @@ export enum LOCALE {
 }
 
 export interface LanguageCodes {
-  en: 'en-GB',
-  cy: 'cy-CY'
+  en: "en-GB";
+  cy: "cy-CY";
 }
 export const LANGUAGE_CODES: LanguageCodes = {
   en: "en-GB",
   cy: "cy-CY",
-}
+};
 
 export const LOG_MESSAGES = {
   ATTEMPTING_TO_DESTROY_SESSION: "Attempting to destroy session",
@@ -151,7 +155,8 @@ export const LOG_MESSAGES = {
     `Malformed gs cookie contained: ${details}`,
   EVENT_SENT_SUCCESSFULLY: (queue: string, messageId: string): string =>
     `Event sent to ${queue} with message id ${messageId}`,
-  ILLEGAL_ATTEMPT_TO_ACCESS_RSA: "An attempt to access RSA without having visited one of the allowed services was made.",
+  ILLEGAL_ATTEMPT_TO_ACCESS_RSA:
+    "An attempt to access RSA without having visited one of the allowed services was made.",
 };
 
 export const ERROR_MESSAGES = {
@@ -163,6 +168,7 @@ export const ERROR_MESSAGES = {
   REDACTED_EVENT: (details: string): string => `Redacted event: ${details}`,
   FAILED_TO_SEND_TO_TXMA: "Failed to send to TxMA",
   FAILED_SEND_TO_TXMA_DLQ: "Failed to send to TxMA DLQ.",
+  FAILED_MFA_RETRIEVE_CALL: "Failed to call mfa methods API",
 };
 
 export const ERROR_CODES = {

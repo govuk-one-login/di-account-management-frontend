@@ -8,9 +8,9 @@ export function getCSRFCookieOptions(isProdEnv: boolean): CookieOptions {
 }
 
 export function getSessionCookieOptions(
-    isProdEnv: boolean,
-    expiry: number,
-    secret: string
+  isProdEnv: boolean,
+  expiry: number,
+  secret: string
 ): any {
   return {
     name: "ams",

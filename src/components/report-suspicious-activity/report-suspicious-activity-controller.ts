@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { PATH_DATA } from "../../app.constants";
 // import { formatEvent } from "../../utils/activityHistory";
-import { getAppEnv, getDynamoActivityLogStoreTableName, getOIDCClientId } from "../../config";
+import {
+  getAppEnv,
+  getDynamoActivityLogStoreTableName,
+  getOIDCClientId,
+} from "../../config";
 import { DynamoDB } from "aws-sdk";
 import { dynamoDBService } from "../../utils/dynamo";
 import { getSNSSuspicousActivityTopic } from "../../config";
@@ -51,7 +55,7 @@ const publishToSuspiciousActivityTopic = async function ({
       event_id,
       persistent_session_id,
       session_id,
-      reported_suspicious_time
+      reported_suspicious_time,
     })
   );
 };
@@ -121,7 +125,7 @@ export async function reportSuspiciousActivityGet(
     eventId: req.query.event,
     reportSuspiciousActivityUrl: PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url,
     alreadyReported: formattedActivityLogs?.reportedSuspicious,
-    homeClientId: getOIDCClientId()
+    homeClientId: getOIDCClientId(),
   };
 
   res.render("report-suspicious-activity/index.njk", {
@@ -139,8 +143,11 @@ export async function reportSuspiciousActivityPost(
     assert(req.session.user_id, "user_id not found in session");
     assert(req.session.user.email, "email not found in session");
     assert(req.body.event_id, "event_id not found in request body");
-    assert(res.locals.persistentSessionId, "persistentSessionId not found in response locals")
-    assert(res.locals.sessionId, "sessionId not found in response locals")
+    assert(
+      res.locals.persistentSessionId,
+      "persistentSessionId not found in response locals"
+    );
+    assert(res.locals.sessionId, "sessionId not found in response locals");
 
     await publishToSuspiciousActivityTopic({
       user_id: req.session.user_id,
@@ -149,18 +156,23 @@ export async function reportSuspiciousActivityPost(
       persistent_session_id: res.locals.persistentSessionId,
       session_id: res.locals.sessionId,
       reported_suspicious_time: new Date().getTime(),
-    }); 
-  } catch(err) {
+    });
+  } catch (err) {
     req.log.error(err.message);
     return next(err);
   }
 
   const pageUrlParam = req.body.page ? `?page=${req.body.page}` : "";
 
-  res.redirect(PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done" + pageUrlParam); 
+  res.redirect(
+    PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done" + pageUrlParam
+  );
 }
 
-export async function reportSuspiciousActivityConfirmation(req: Request, res: Response): Promise<void> {
+export async function reportSuspiciousActivityConfirmation(
+  req: Request,
+  res: Response
+): Promise<void> {
   res.render("report-suspicious-activity/success.njk", {
     backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${req.query.page || 1}`,
     email: req.session.user.email,

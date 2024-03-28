@@ -148,6 +148,7 @@
           },
           "app": {
             "title": "Authenticator app",
+            "value": "",
             "hiddenText": "Authenticator app"
           }
         }

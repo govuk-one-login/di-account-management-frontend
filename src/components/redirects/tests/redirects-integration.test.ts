@@ -22,7 +22,8 @@ describe("Integration::redirects", () => {
 
   describe("security.txt", async () => {
     it("302 redirects to cabinet office security.txt", (done) => {
-      request(app).get(PATH_DATA.SECURITY_TXT.url)
+      request(app)
+        .get(PATH_DATA.SECURITY_TXT.url)
         .expect("Location", WELL_KNOWN_FILES.SECURITY_TEXT_URL)
         .expect(302, done());
     });
@@ -30,7 +31,8 @@ describe("Integration::redirects", () => {
 
   describe("thanks.txt", async () => {
     it("302 redirects to cabinet office thanks.txt", (done) => {
-      request(app).get(PATH_DATA.THANKS_TXT.url)
+      request(app)
+        .get(PATH_DATA.THANKS_TXT.url)
         .expect("Location", WELL_KNOWN_FILES.THANKS_TEXT_URL)
         .expect(302, done());
     });

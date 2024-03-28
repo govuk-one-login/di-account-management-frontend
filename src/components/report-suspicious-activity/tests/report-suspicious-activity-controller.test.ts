@@ -26,26 +26,26 @@ describe("report suspicious activity controller", () => {
     [awsConfig?: AwsConfig],
     DynamoDBService
   >;
-  let snsPublishSpy : sinon.SinonSpy;
+  let snsPublishSpy: sinon.SinonSpy;
   let clock: sinon.SinonFakeTimers;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     loggerSpy = sinon.spy(logger, "info");
     errorLoggerSpy = sinon.spy(logger, "error");
-    clock = sinon.useFakeTimers(new Date(101))
+    clock = sinon.useFakeTimers(new Date(101));
 
     req = {
       query: { event: "event-id", reported: "false" },
       session: {
-        user_id: 'user-id',
+        user_id: "user-id",
         user: {
           email: "test@email.moc",
         },
       } as any,
       log: logger,
       body: {
-        event_id: 'event-id',
+        event_id: "event-id",
         page: "",
       },
     };
@@ -86,7 +86,6 @@ describe("report suspicious activity controller", () => {
     sinon.stub(sns, "snsService").returns({
       publish: snsPublishSpy,
     });
-
   });
 
   afterEach(() => {
@@ -189,25 +188,29 @@ describe("report suspicious activity controller", () => {
       req.body.page = "1";
 
       // Act
-      await reportSuspiciousActivityPost(req as Request, res as Response, () => {});
+      await reportSuspiciousActivityPost(
+        req as Request,
+        res as Response,
+        () => {}
+      );
 
       // Assert
-      expect(res.redirect).to.have.been.calledWith("/activity-history/report-activity/done?page=1");
+      expect(res.redirect).to.have.been.calledWith(
+        "/activity-history/report-activity/done?page=1"
+      );
 
       const snsCall = snsPublishSpy.getCalls()[0];
       const [topic_arn, message] = snsCall.args;
 
       expect(topic_arn).to.equal(process.env.SUSPICIOUS_ACTIVITY_TOPIC_ARN);
       expect(JSON.parse(message)).to.deep.equal({
-          "user_id":"user-id",
-          "email":"test@email.moc",
-          "event_id":"event-id",
-          "persistent_session_id":"persistent-session-id",
-          "session_id":"session-id",
-          "reported_suspicious_time":101
-        })
+        user_id: "user-id",
+        email: "test@email.moc",
+        event_id: "event-id",
+        persistent_session_id: "persistent-session-id",
+        session_id: "session-id",
+        reported_suspicious_time: 101,
+      });
     });
   });
 });
-
-

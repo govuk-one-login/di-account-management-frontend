@@ -45,25 +45,7 @@
 set mfaSummaryList = {
   classes:"govuk-summary-list--security",
   attributes: {"data-test-id": "mfa-summary-list"},
-  rows: [{
-    classes: 'govuk-summary-list__row--no-border',
-    key: {
-      text: 'pages.security.mfaSection.summaryList.phoneNumber.title' | translate
-    },
-    value: {
-      text: 'pages.security.mfaSection.summaryList.phoneNumber.value' | translate | replace("[phoneNumber]", phoneNumber)
-    },
-    actions: {
-      items: [
-        {
-          attributes: {"data-test-id": "change-phone-number"},
-          href: "/enter-password?type=changePhoneNumber",
-          text: 'general.change' | translate,
-          visuallyHiddenText: 'pages.security.mfaSection.summaryList.phoneNumber.hiddenText' | translate
-        }
-      ]
-    }
-  }]
+  rows: mfaMethods 
 }
 %}
 
@@ -83,14 +65,8 @@ set mfaSummaryList = {
           <h2 class="govuk-heading-m">{{ 'pages.security.mfaSection.heading' | translate }}</h2>
           <p class="govuk-body">{{ 'pages.security.mfaSection.paragraph' | translate }}</p>
         </div>
-        {% if isPhoneNumberVerified %}
+        {% if mfaMethods | length > 0 %}
           {{ govukSummaryList(mfaSummaryList) }}
-        {% else %}
-          {# there is not the option to change authenticator app yet so doing this instead of using summary list #}
-          <p class="govuk-body govuk-!-font-weight-bold govuk-!-padding-top-4"> 
-            <span class="govuk-visually-hidden">{{ 'pages.security.mfaSection.heading' | translate }}: </span>
-            {{ 'pages.security.mfaSection.summaryList.app.title' | translate }}
-          </p>
         {% endif %}
       </div>
       {% if supportActivityLog %}

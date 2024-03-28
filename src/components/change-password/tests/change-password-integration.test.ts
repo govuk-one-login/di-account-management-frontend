@@ -108,10 +108,10 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent('password-error')).text()).to.contains(
+        expect($(testComponent("password-error")).text()).to.contains(
           "Enter your new password"
         );
-        expect($(testComponent('confirm-password-error')).text()).to.contains(
+        expect($(testComponent("confirm-password-error")).text()).to.contains(
           "Re-type your new password"
         );
       })
@@ -130,7 +130,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent('confirm-password-error')).text()).to.contains(
+        expect($(testComponent("confirm-password-error")).text()).to.contains(
           "Enter the same password in both fields"
         );
       })
@@ -149,7 +149,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent('password-error')).text()).to.contains(
+        expect($(testComponent("password-error")).text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -168,7 +168,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent('password-error')).text()).to.contains(
+        expect($(testComponent("password-error")).text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -192,7 +192,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent('password-error')).text()).to.contains(
+        expect($(testComponent("password-error")).text()).to.contains(
           "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers"
         );
       })
@@ -211,7 +211,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent('password-error')).text()).to.contains(
+        expect($(testComponent("password-error")).text()).to.contains(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -235,7 +235,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent('password-error')).text()).to.contains(
+        expect($(testComponent("password-error")).text()).to.contains(
           "You are already using that password. Enter a different password"
         );
       })
@@ -259,7 +259,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent('error-heading')).text()).to.not.be.empty;
+        expect($(testComponent("error-heading")).text()).to.not.be.empty;
       })
       .expect(500, done);
   });

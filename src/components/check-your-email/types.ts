@@ -1,8 +1,11 @@
-import { UpdateInformationInput, UpdateInformationSessionValues } from "../../utils/types";
+import {
+  UpdateInformationInput,
+  UpdateInformationSessionValues,
+} from "../../utils/types";
 
 export interface CheckYourEmailServiceInterface {
   updateEmail: (
-    updateInput : UpdateInformationInput,
-    sessionDetails: UpdateInformationSessionValues,
+    updateInput: UpdateInformationInput,
+    sessionDetails: UpdateInformationSessionValues
   ) => Promise<boolean>;
 }
