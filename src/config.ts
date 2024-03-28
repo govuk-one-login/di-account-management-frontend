@@ -237,6 +237,20 @@ export function getContactEmailServiceUrl(): string {
   return process.env.CONTACT_EMAIL_SERVICE_URL;
 }
 
+export function googleAnalytics4GtmContainerId(): string {
+  return process.env.GOOGLE_ANALYTICS_4_GTM_CONTAINER_ID;
+}
+
+export function universalAnalyticsGtmContainerId(): string {
+  return process.env.UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID;
+}
+
+export function googleAnalytics4Disabled(): string {
+  return process.env.GA4_DISABLED || "true";
+}
+export function universalAnalyticsDisabled(): string {
+  return process.env.UA_DISABLED || "false";
+}
 export function getMfaServiceUrl(): string {
   return process.env.METHOD_MANAGEMENT_BASE_URL;
 }
