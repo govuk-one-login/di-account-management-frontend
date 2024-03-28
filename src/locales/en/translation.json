@@ -550,6 +550,7 @@
     "contact": {
       "title": "Contact GOV.UK One Login",
       "header": "Contact GOV.UK One Login",
+      "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
         "paragraphs": [
