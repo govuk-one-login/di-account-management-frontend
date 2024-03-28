@@ -159,6 +159,7 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
+      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "1"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
@@ -182,7 +183,8 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
-      SUPPORTMETHODMANAGEMENT: "1"
+      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.build.account.gov.uk"
+      SUPPORTMETHODMANAGEMENT: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     staging:
       NODEENV: "production"
@@ -205,7 +207,8 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
-      SUPPORTMETHODMANAGEMENT: "1"
+      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.staging.account.gov.uk"
+      SUPPORTMETHODMANAGEMENT: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     integration:
       NODEENV: "production"
@@ -227,6 +230,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
+      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.integration.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
@@ -250,6 +254,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
+      METHODMANAGEMENTBASEURL: ""
       SUPPORTMETHODMANAGEMENT: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
@@ -731,6 +736,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTMETHODMANAGEMENT,
+                ]
+            - Name: "METHOD_MANAGEMENT_BASE_URL"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  METHODMANAGEMENTBASEURL,
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
