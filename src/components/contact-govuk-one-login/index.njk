@@ -6,13 +6,13 @@
 {% set languageToggle = true %}
 {% set secondaryContactMethodEnabled = contactPhoneEnabled or contactWebchatEnabled %}
 
-{% if contactWebchatEnabled %}
-  {% block head %} 
-    {{ super() }}
+{% block head %} 
+  {{ super() }}
+  {% if contactWebchatEnabled %}
     <link rel="stylesheet" nonce="{{scriptNonce}}" href="https://fonts.cdnfonts.com/css/rubik">
     <link rel="stylesheet" nonce="{{scriptNonce}}" href="{{webchatSource}}/css/loader.css">
-  {% endblock %}
-{% endif %}
+  {% endif %}
+{% endblock %}
 
 {% set emailBlock %}
   <section>
@@ -77,7 +77,6 @@
 {# START page content #}
 
 {% block pageContent %}
-
 <h1 class="govuk-heading-xl">{{'pages.contact.header' | translate}}</h1>
 
 {% if not showContactGuidance and not contactWebchatEnabled and not contactPhoneEnabled %}
@@ -146,7 +145,7 @@
 {% endif %}
 
 {% if contactWebchatEnabled %}
-  <script id="smartagent" type="module" defer 
+  <script id="smartagent" type="module" defer
     src="{{ webchatSource }}/loader/main.js" 
     data-company="hgsgds" data-brand="hgsgds"
     nonce="{{ nonce }}">
@@ -155,12 +154,24 @@
     var launchWebchatButton = document.querySelector("[data-launch-webchat]");
 
     launchWebchatButton.addEventListener("click", function() {
-      if (window._sa) {
-        window._sa.openChat();
-          const webchat = document.querySelector("iframe.sa-chat-iframe");
-          if (webchat) {
-            webchat.focus();
-          }
+      const webchatWindow = document.querySelector(".sa-chat-slideout");
+      if (window._sa && webchatWindow) {
+        try {
+          window._sa.toggleChat();
+          // setTimeout is only necessary here because the toggleChat() function uses setTimeout when setting focus and toggling the isOpen state
+          setTimeout(() => {
+            if (window._sa.isOpen()) {
+              // when the webchat is opened using the "Use webchat" button, move focus to the first focusable element in the window
+              webchatWindow.querySelector('button').focus();
+            } else {
+              // when the webchat is closed using the "Use webchat" button, move focus back to the "Use webchat" button
+              launchWebchatButton.focus();
+            }
+          },0)
+        }
+        catch(err) {
+          console.error(err);
+        }
       }
     });
 
@@ -188,4 +199,5 @@
     }, 10000)
   </script>
 {% endif %}
+
 {% endblock %}
