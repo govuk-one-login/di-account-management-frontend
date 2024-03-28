@@ -192,8 +192,6 @@ export const getAllowedServiceListClientIDs: string[] = [
   "mortgageDeed",
   VETERANS_CARD_PROD,
   VETERANS_CARD_NON_PROD,
-  FIND_AND_APPLY_FOR_A_GRANT_PROD,
-  FIND_AND_APPLY_FOR_A_GRANT_NON_PROD,
   ...hmrcClientIds,
 ];
 
