@@ -246,10 +246,10 @@ export function universalAnalyticsGtmContainerId(): string {
 }
 
 export function googleAnalytics4Disabled(): string {
-  return process.env.GA4_DISABLED || "true"
+  return process.env.GA4_DISABLED || "true";
 }
 export function universalAnalyticsDisabled(): string {
-  return process.env.UA_DISABLED || "false"
+  return process.env.UA_DISABLED || "false";
 }
 export function getMfaServiceUrl(): string {
   return process.env.METHOD_MANAGEMENT_BASE_URL;
