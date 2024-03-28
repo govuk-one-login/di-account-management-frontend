@@ -8,7 +8,7 @@
     "build-ts": "tsc",
     "build": "npm run build-sass && npm run build-ts && npm run copy-assets && npm run minfiy-build-js",
     "build-dev": "npm run build-sass && npm run build-ts && npm run copy-assets",
-    "build-sass": "rm -rf dist/public/style.css && sass --load-path=node_modules/govuk-frontend/govuk --no-source-map src/assets/scss/application.scss dist/public/style.css --style compressed",
+    "build-sass": "rm -rf dist/public/style.css dist/public/language-toggle.css  && sass --load-path=node_modules/govuk-frontend/govuk --no-source-map src/assets/scss/application.scss:dist/public/style.css node_modules/@govuk-one-login/one-login-language-toggle/stylesheet/styles.css:dist/public/language-toggle.css --style compressed",
     "clean": "rm -rf dist node_modules logs.json",
     "clean-modules": "rm -rf node_modules",
     "concat-client-js": "mkdir -p dist/public/scripts && uglifyjs src/assets/javascript/cookies.js src/assets/javascript/application.js -o dist/public/scripts/application.js -b",
@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "@aws-crypto/client-node": "^4.0.0",
+    "@govuk-one-login/one-login-language-toggle": "^2.0.0",
     "@aws-sdk/client-dynamodb": "^3.540.0",
     "@aws-sdk/client-sqs": "^3.540.0",
     "@aws-sdk/util-dynamodb": "^3.540.0",

@@ -13,7 +13,6 @@ import {
 } from "./config/helmet";
 import helmet from "helmet";
 import session from "express-session";
-import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
@@ -60,10 +59,12 @@ import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
+import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
   path.resolve("node_modules/govuk-frontend/"),
+  path.resolve("node_modules/@govuk-one-login/"),
 ];
 
 async function createApp(): Promise<express.Application> {
@@ -113,6 +114,8 @@ async function createApp(): Promise<express.Application> {
     app.use(helmet(helmetConfiguration));
   }
 
+  app.use(languageToggleMiddleware);
+
   const sessionStore = getSessionStore({ session: session });
   app.use(
     session({
@@ -139,7 +142,6 @@ async function createApp(): Promise<express.Application> {
 
   app.post("*", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
-  app.use(setHtmlLangMiddleware);
 
   app.use(securityRouter);
   app.use(yourServicesRouter);
