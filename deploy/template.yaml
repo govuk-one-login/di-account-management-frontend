@@ -750,10 +750,10 @@ Resources:
               Value: !Ref TxMAPublishErrorDeadLetterQueue
             - Name: "GENERATOR_KEY_ARN"
               Value: !ImportValue
-                'Fn::Sub': "${BackendStackName}-GeneratorKey"
+                "Fn::Sub": "${BackendStackName}-GeneratorKey"
             - Name: "WRAPPING_KEY_ARN"
               Value: !ImportValue
-                'Fn::Sub': "${BackendStackName}-WrappingKey"
+                "Fn::Sub": "${BackendStackName}-WrappingKey"
             - Name: "ACCOUNT_ID"
               Value: !Sub "${AWS::AccountId}"
             - Name: "ENVIRONMENT"
@@ -1089,7 +1089,7 @@ Resources:
       HealthCheckPort: !Ref ContainerPort
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
-      HealthCheckIntervalSeconds: 30
+      HealthCheckIntervalSeconds: 15
       Port: !Ref ContainerPort
       Protocol: HTTP
       ProtocolVersion: HTTP1
