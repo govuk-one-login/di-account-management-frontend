@@ -244,3 +244,7 @@ export function getMfaServiceUrl(): string {
 export function supportMfaPage(): boolean {
   return process.env.SUPPORT_METHOD_MANAGEMENT === "1";
 }
+
+export function supportMfaUpsell(): boolean {
+  return process.env.SUPPORT_MFA_UPSELL === "1";
+}

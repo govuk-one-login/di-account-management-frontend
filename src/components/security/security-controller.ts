@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { supportActivityLog } from "../../config";
+import { supportActivityLog, supportMfaUpsell } from "../../config";
 import { PATH_DATA } from "../../app.constants";
 import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list";
 import { getLastNDigits } from "../../utils/phone-number";
@@ -59,11 +59,21 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
       })
     : [];
 
+  const hasAuthAppMethod = req.session.mfaMethods?.some((method) => {
+    return method.mfaMethodType === "AUTH_APP";
+  });
+
+  const showAdditionalMethodUpsell =
+    supportMfaUpsell() &&
+    req.session.mfaMethods.length === 1 &&
+    !hasAuthAppMethod;
+
   const data = {
     email,
     supportActivityLog: supportActivityLogFlag && hasHmrc,
     activityLogUrl,
     mfaMethods,
+    showAdditionalMethodUpsell,
   };
 
   res.render("security/index.njk", data);

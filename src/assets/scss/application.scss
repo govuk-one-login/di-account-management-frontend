@@ -62,6 +62,18 @@ $govuk-new-link-styles: true;
   border-bottom: 1px solid $govuk-border-colour;
 }
 
+.summary-list-container__upsell {
+  border-top: 1px solid $govuk-border-colour;
+  padding-top: govuk-spacing(3);
+}
+
+.summary-list-container__upsell__cta {
+  border-top: 1px solid $govuk-border-colour;
+  padding-top: govuk-spacing(3);
+  display: flex;
+  justify-content: space-between;
+}
+
 .govuk-summary-list--security {
   margin-bottom: 0;
 }
