@@ -154,10 +154,10 @@ Mappings:
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://dev-chat-loader.smartagent.app"
-      SUPPORTWEBCHATCONTACT: "0"
+      SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
-      SHOWCONTACTEMERGENCYMESSAGE: "1"
+      SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk"
@@ -167,6 +167,7 @@ Mappings:
       GA4DISABLED: "false"
       UADISABLED: "false"
       SUPPORTCHANGEMFA: "1"
+      ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -192,6 +193,7 @@ Mappings:
       SUPPORTMETHODMANAGEMENT: "0"
       SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
+      ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "false"
@@ -225,6 +227,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
       GA4DISABLED: "true"
       UADISABLED: "true"
+      ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -254,6 +257,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
       GA4DISABLED: "true"
       UADISABLED: "true"
+      ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -283,6 +287,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "false"
       UADISABLED: "false"
+      ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
 
 Resources:
   #
@@ -812,6 +817,13 @@ Resources:
             - Name: "UA_DISABLED"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, UADISABLED]
+            - Name: "ACCESSIBILITY_STATEMENT_URL"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  ACCESSIBILITYSTATEMENTURL,
+                ]
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join

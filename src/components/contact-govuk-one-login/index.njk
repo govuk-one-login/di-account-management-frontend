@@ -8,6 +8,13 @@
 {% set webchatLang = "welsh" if language == "cy" else "hgsgds" %}
 {% set hideTitleProductName = true %}
 
+{% macro openingHoursBlock(openingHours) %}
+  <ul class="govuk-list govuk-list--bullet">
+    <li>{{openingHours[0]}}</li>
+    <li>{{openingHours[1]}}</li>
+  </ul>
+{% endmacro %}
+
 {% block head %}
   {{ super() }}
   <meta name="description" content="{{'pages.contact.metaDescription' | translate }}">
@@ -70,9 +77,11 @@
       html: insetTextHtml
     }) }}
 
-    {% for paragraph in phoneParagraphs2 %}
-      <p class="govuk-body">{{ paragraph | safe | replace('[callChargesLinkHref]', 'pages.contact.section3.phone.callChargesLinkHref' | translate ) }}</p>
-    {% endfor %}
+    <p class="govuk-body">{{'pages.contact.section3.phone.paragraph2' | translate }}</p>
+    {{ openingHoursBlock('pages.contact.section3.phone.openingHours' | translate({ returnObjects: true })) }}
+    <p class="govuk-body"><a class="govuk-link" href="https://www.gov.uk/call-charges">{{'pages.contact.section3.phone.callChargesLinkText' | translate }}</a></p>
+
+    <p class="govuk-body"></p>
   </section>
 {% endset %}
 
@@ -118,14 +127,30 @@
     <h2 class="govuk-heading-l">{% if secondaryContactMethodEnabled %}{{'pages.contact.section3.headingMany' | translate}}{% else %}{{'pages.contact.section3.headingOne' | translate }}{% endif %}</h2>
     {% if contactWebchatEnabled %}
       <section>
-        {% set webchatParagraphs =  'pages.contact.section3.webchat.paragraphs' | translate({ returnObjects: true }) %}
+        {% set webchatParagraphs =  'pages.contact.section3.webchat.paragraphs1' | translate({ returnObjects: true }) %}
 
         <h3 class="govuk-heading-m">{{'pages.contact.section3.webchat.heading' | translate}}</h3>
 
         {% for paragraph in webchatParagraphs %}
           <p class="govuk-body">{{ paragraph | safe  }}</p>
         {% endfor %}
+
+        {{ openingHoursBlock('pages.contact.section3.webchat.openingHours' | translate({ returnObjects: true })) }}
+
+        <p class="govuk-body">{{'pages.contact.section3.webchat.paragraph2' | translate}}</p>
         <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
+
+        {% set accessibilityTextHtml %}
+          {% set insetTextParagraphs =  'pages.contact.section3.webchat.accessibility-statement.insetText.paragraphs'  | translate({ returnObjects: true }) %}
+          {% for paragraph in insetTextParagraphs %}
+            <p class="govuk-body">{{ paragraph | safe | replace('[accessibilityStatementLinkHref]', accessibilityStatementUrl )  }}</p>
+          {% endfor %}
+        {% endset %}
+
+        {{ govukInsetText({
+          html: accessibilityTextHtml
+        }) }}
+
       </section>
     {% endif %}
 
