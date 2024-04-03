@@ -10,6 +10,7 @@ import { UnsecuredJWT } from "jose";
 import { getBaseUrl } from "../../../config";
 import { Service } from "../../../utils/types";
 import { SinonStub } from "sinon";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;
@@ -184,11 +185,12 @@ describe("Integration:: delete account", () => {
       .expect(200, done);
   });
 
-  it("post should return error when csrf not present", (done) => {
-    request(app)
-      .post(PATH_DATA.DELETE_ACCOUNT.url)
-      .type("form")
-      .expect(500, done);
+  it("post redirect to your services when csrf not present", async () => {
+    await checkFailedCSRFValidationBehaviour(
+      app,
+      PATH_DATA.DELETE_ACCOUNT.url,
+      null
+    );
   });
 
   it("post should redirect to end session endpoint", (done) => {

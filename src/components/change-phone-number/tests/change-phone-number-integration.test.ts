@@ -11,6 +11,7 @@ import {
   PATH_DATA,
 } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: change phone number", () => {
   let sandbox: sinon.SinonSandbox;
@@ -90,14 +91,14 @@ describe("Integration:: change phone number", () => {
     request(app).get(PATH_DATA.CHANGE_PHONE_NUMBER.url).expect(200, done);
   });
 
-  it("should return error when csrf not present", (done) => {
-    request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .send({
+  it("should redirect to your services when csrf not present", async () => {
+    await checkFailedCSRFValidationBehaviour(
+      app,
+      PATH_DATA.CHANGE_PHONE_NUMBER.url,
+      {
         phoneNumber: "123456789",
-      })
-      .expect(500, done);
+      }
+    );
   });
 
   it("should return validation error when uk phone number not entered", (done) => {

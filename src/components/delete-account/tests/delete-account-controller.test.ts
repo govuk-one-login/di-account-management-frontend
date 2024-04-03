@@ -7,7 +7,6 @@ import {
   deleteAccountPost,
 } from "../delete-account-controller";
 import { DeleteAccountServiceInterface } from "../types";
-import { destroyUserSessions } from "../../../utils/session-store";
 import { getAppEnv } from "../../../config";
 import { Service } from "../../../utils/types";
 
@@ -142,7 +141,7 @@ describe("delete account controller", () => {
         expect(fakeService.publishToDeleteTopic).to.have.been.calledOnce;
         expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
         expect(res.redirect).to.have.been.calledWith("logout-url");
-        expect(destroyUserSessions).to.have.been.calledWith(
+        expect(sessionStore.destroyUserSessions).to.have.been.calledWith(
           "public-subject-id"
         );
       });

@@ -62,6 +62,7 @@ import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
 import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-routes";
+import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -175,10 +176,11 @@ async function createApp(): Promise<express.Application> {
   // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy
   app.use(redirectsRouter);
+  app.use(pageNotFoundHandler);
 
+  app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
-  app.use(pageNotFoundHandler);
 
   return app;
 }
