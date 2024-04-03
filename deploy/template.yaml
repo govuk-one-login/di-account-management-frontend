@@ -161,6 +161,7 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "1"
+      SUPPORTMFAUPSELL: "1"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
       NODEENV: "production"
@@ -185,6 +186,7 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.build.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
+      SUPPORTMFAUPSELL: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     staging:
       NODEENV: "production"
@@ -209,6 +211,7 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.staging.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
+      SUPPORTMFAUPSELL: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     integration:
       NODEENV: "production"
@@ -232,6 +235,7 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.integration.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
+      SUPPORTMFAUPSELL: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     production:
@@ -256,6 +260,7 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: ""
       SUPPORTMETHODMANAGEMENT: "0"
+      SUPPORTMFAUPSELL: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
 
@@ -736,6 +741,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTMETHODMANAGEMENT,
+                ]
+            - Name: "SUPPORT_MFA_UPSELL"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTMFAUPSELL,
                 ]
             - Name: "METHOD_MANAGEMENT_BASE_URL"
               Value:
