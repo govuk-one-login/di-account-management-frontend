@@ -6,9 +6,11 @@
 {% set languageToggle = true %}
 {% set secondaryContactMethodEnabled = contactPhoneEnabled or contactWebchatEnabled %}
 {% set webchatLang = "welsh" if language == "cy" else "hgsgds" %}
+{% set hideTitleProductName = true %}
 
 {% block head %} 
   {{ super() }}
+  <meta name="description" content="{{'pages.contact.metaDescription' | translate }}">
   {% if contactWebchatEnabled %}
     <link rel="stylesheet" nonce="{{scriptNonce}}" href="https://fonts.cdnfonts.com/css/rubik">
     <link rel="stylesheet" nonce="{{scriptNonce}}" href="{{webchatSource}}/css/loader.css">

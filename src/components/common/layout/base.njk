@@ -20,16 +20,13 @@
 {% endblock %}
 
 {% block pageTitle %}
-    {% if error or errors %}
-        {{ 'general.errorTitlePrefix' | translate }}
-        -
-    {% endif %}
-    {% if pageTitleName %}
+    {%- if error or errors %} {{ 'general.errorTitlePrefix' | translate }} - {% endif -%}
+    {%- if pageTitleName -%}
         {{ pageTitleName }}
-        -
-    {% endif %}
-    {{ 'general.serviceNameTitle' | translate }}
-{% endblock %}
+        {%- if not hideTitleProductName %} - {% endif -%}
+    {% endif -%}
+    {{ 'general.serviceNameTitle' | translate if not hideTitleProductName}}
+{%- endblock %}
 
 {% block bodyStart %}
     {% include 'common/layout/banner.njk' %}
