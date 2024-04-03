@@ -356,6 +356,10 @@
               "href": "https://www.gov.uk/guidance/find-government-grants"
             },
             {
+              "text": "Find and use an API from the Department for Education",
+              "href": "https://beta-find-and-use-an-api.education.gov.uk"
+            },
+            {
               "text": "GOV.UK email subscriptions",
               "href": "https://www.gov.uk/email/manage?from=your-services"
             },
@@ -830,6 +834,12 @@
         "paragraph2": "We’re working to make this possible.",
         "link_text": "Find the HMRC service you need",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
+      },
+      "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
+        "header": "Find and use an API from the Department for Education",
+        "description": "Find and use a Department for Education API to connect to their digital services.",
+        "link_text": "Go to your DfE API account",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "integration": {
@@ -961,6 +971,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your repay and manage benefit money you owe account",
         "link_href": "https://idt-rmd-stub.idt.pdu-dev.hcs-eks.dwpcloud.uk/landing?source=your-services"
+      },
+      "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
+        "header": "Find and use an API from the Department for Education",
+        "description": "Find and use a Department for Education API to connect to their digital services.",
+        "link_text": "Go to your DfE API account",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "staging": {
@@ -1080,6 +1096,12 @@
         "paragraph2": "We’re working to make this possible.",
         "link_text": "Find the HMRC service you need",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Find and use an API from the Department for Education",
+        "description": "Find and use a Department for Education API to connect to their digital services.",
+        "link_text": "Go to your DfE find and use an API account",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "build": {
@@ -1199,6 +1221,12 @@
         "paragraph2": "We’re working to make this possible.",
         "link_text": "Find the HMRC service you need",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Find and use an API from the Department for Education",
+        "description": "Find and use a Department for Education API to connect to their digital services.",
+        "link_text": "Go to your DfE API account",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "dev": {
@@ -1318,6 +1346,12 @@
         "paragraph2": "We’re working to make this possible.",
         "link_text": "Find the HMRC service you need",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Find and use an API from the Department for Education",
+        "description": "Find and use a Department for Education API to connect to their digital services.",
+        "link_text": "Go to your DfE API account",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "local": {
@@ -1437,6 +1471,12 @@
         "paragraph2": "We’re working to make this possible.",
         "link_text": "Find the HMRC service you need",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Find and use an API from the Department for Education",
+        "description": "Find and use a Department for Education API to connect to their digital services.",
+        "link_text": "Go to your DfE API account",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     }
   }
