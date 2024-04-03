@@ -596,12 +596,24 @@
         "headingMany": "Ffyrdd o gysylltu â ni",
         "webchat": {
           "heading": "Gwesgwrs",
-          "paragraphs": [
-            "Gofynnwch i gynorthwyydd digidol GOV.UK One Login i ddod o hyd i wybodaeth i'ch helpu chi neu sgwrsiwch ag ymgynghorydd.",
-            "Nid yw ein gwesgwrs yn gwbl hygyrch eto. Rydym yn gweithio i'w wella.Gallwch ddarganfod mwy am <a class=\"govuk-link\" href=\"link-to-statement\">ein datganiad hygyrchedd</a>.",
-            "Oriau agor: <br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm"
+          "paragraphs1": [
+            "Cael help gan gynorthwyydd digidol GOV.UK One Login neu sgwrs gydag ymgynghorydd.",
+            "Efallai y gofynnir i chi am eich cod cyfeirio pan fyddwch yn siarad â ni.",
+            "Gallwch sgwrsio'n fyw gyda chynghorydd ar:"
           ],
-          "linkText": "Defnyddio gwesgwrs"
+          "openingHours": [
+            "Dydd Llun i ddydd Gwener, 8am i 8pm",
+            "penwythnosau a gwyliau cyhoeddus, 9am i 5.30pm"
+          ],
+          "paragraph2": "The digital assistant is always available",
+          "linkText": "Defnyddio gwesgwrs",
+          "accessibility-statement": {
+            "insetText":{
+              "paragraphs": [
+                "Darllenwch ein <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy\">datganiad hygyrchedd</a> i gael gwybod am broblemau hygyrchedd hysbys gyda'n gwesgwrs. "
+              ]
+            }
+          }
         },
         "phone": {
           "heading": "Ffôn",
@@ -614,11 +626,12 @@
               "Y tu allan i'r DU:<br><strong>+44 208 629 0008</strong>"
             ]
           },
-          "paragraphs2": [
-            "Oriau agor:<br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm",
-            "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Darganfyddwch fwy am gostau galwadau</a>"
+          "paragraph2": "You can call us on:",
+          "openingHours": [
+            "Dydd Llun i ddydd Gwener, 8am i 8pm",
+            "Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm"
           ],
-          "callChargesLinkHref": "https://www.gov.uk/call-charges",
+          "callChargesLinkText": "Darganfyddwch fwy am gostau galwadau",
           "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\">cwblhewch y ffurflen gyswllt</a>."
         },
         "email": {
@@ -626,7 +639,7 @@
           "paragraphs": [
             "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Cwblhewch y ffurflen gyswllt</a>  i ofyn am help.",
             "Byddwn yn ateb drwy e-bost o fewn 2 ddiwrnod gwaith.",
-            "Oriau agor:<br>Dydd Llun i ddydd Gwener, 8am i 8pm <br>Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm"
+            "Byddwn yn ymateb yn ystod oriau swyddfa:<br>Dydd Llun i ddydd Gwener, 9:30am i 5:30pm"
           ]
         }
       },

@@ -644,7 +644,7 @@
       },
       "refCodeBlock": {
         "paragraphsWebchat": [
-          "If you contact us by phone or use webchat, you'll be asked for a reference code.",
+          "If you call or use webchat to contact the GOV.UK One Login team, you will be asked for a reference code.",
           "This code helps us to see where you may be having a problem."
         ],
         "paragraphsNoWebchat": [
@@ -658,27 +658,40 @@
         "headingMany": "Ways to contact us",
         "webchat": {
           "heading": "Webchat",
-          "paragraphs": [
-            "Ask GOV.UK One Login's digital assistant to find information to help you or chat with an advisor.",
-            "Our webchat is not yet fully accessible. Find out <a class=\"govuk-link\" href=\"link-to-statement\">more about the limitations and how we're working to fix this</a>.",
-            "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm"
+          "paragraphs1": [
+            "Get help from GOV.UK One Login’s digital assistant or chat with an advisor.",
+            "You might be asked for your reference code when you chat to us.",
+            "You can chat live with an advisor on:"
           ],
-          "linkText": "Use webchat"
+          "openingHours": [
+            "Monday to Friday, 8am to 8pm",
+            "weekends and public holidays, 9am to 5.30pm"
+          ],
+          "paragraph2": "The digital assistant is always available.",
+          "linkText": "Use webchat",
+          "accessibility-statement": {
+            "insetText":{
+              "paragraphs": [
+                "Read our <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en\">accessibility statement</a> to find out about known accessibility problems with our webchat."
+              ]
+            }
+          }
         },
         "phone": {
           "heading": "Phone",
           "paragraphs": ["You'll need your reference code when you call."],
           "insetText": {
             "paragraphs": [
-              "From the UK:<br><strong>0300 373 9020</strong>",
-              "Outside the UK:<br><strong>+44 208 629 0008</strong>"
+              "<strong>From the UK:</strong><br>0300 373 9020",
+              "<strong>Outside the UK:</strong><br>+44 208 629 0008"
             ]
           },
-          "paragraphs2": [
-            "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm",
-            "<a class=\"govuk-link\" href=\"[callChargesLinkHref]\">Find out about call charges</a>"
+          "paragraph2": "You can call us on:",
+          "openingHours": [
+            "Monday to Friday, 8am to 8pm",
+            "weekends and public holidays, 9am to 5.30pm"
           ],
-          "callChargesLinkHref": "https://www.gov.uk/call-charges",
+          "callChargesLinkText": "Find out about call charges",
           "waitingTimeWarning": "There are currently long waiting times on the phone. If your call is not urgent, try again later or <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\">fill in the contact form</a>."
         },
         "email": {
@@ -686,7 +699,7 @@
           "paragraphs": [
             "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Fill in the contact form</a> to ask for help.",
             "We’ll reply by email within 2 days.",
-            "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm"
+            "We’ll respond during office hours:<br>Monday to Friday, 9:30am to 5:30pm"
           ]
         }
       },

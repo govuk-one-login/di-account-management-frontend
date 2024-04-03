@@ -67,6 +67,8 @@ describe("Contact GOV.UK One Login controller", () => {
     process.env.SUPPORT_WEBCHAT_CONTACT = "1";
     process.env.CONTACT_EMAIL_SERVICE_URL =
       "https://signin.account.gov.uk/contact-us";
+    process.env.ACCESSIBILITY_STATEMENT_URL =
+      "https://signin.account.gov.uk/accessibility-statement";
     process.env.WEBCHAT_SOURCE_URL = "https://example.com";
     process.env.AUDIT_QUEUE_URL = "http://localhost:4566";
   });
@@ -81,6 +83,7 @@ describe("Contact GOV.UK One Login controller", () => {
     delete process.env.SUPPORT_WEBCHAT_CONTACT;
     delete process.env.CONTACT_EMAIL_SERVICE_URL;
     delete process.env.WEBCHAT_SOURCE_URL;
+    delete process.env.ACCESSIBILITY_STATEMENT_URL;
   });
 
   describe("contactGet", () => {
@@ -102,6 +105,8 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
+        accessibilityStatementUrl:
+          "https://signin.account.gov.uk/accessibility-statement",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,
@@ -134,6 +139,8 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: false,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
+        accessibilityStatementUrl:
+          "https://signin.account.gov.uk/accessibility-statement",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,
@@ -163,6 +170,8 @@ describe("Contact GOV.UK One Login controller", () => {
       // query data should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
+        accessibilityStatementUrl:
+          "https://signin.account.gov.uk/accessibility-statement",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -203,6 +212,8 @@ describe("Contact GOV.UK One Login controller", () => {
       // invalid query data not should be passed to the page render
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
+        accessibilityStatementUrl:
+          "https://signin.account.gov.uk/accessibility-statement",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -235,6 +246,8 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
+        accessibilityStatementUrl:
+          "https://signin.account.gov.uk/accessibility-statement",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -272,6 +285,8 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
+        accessibilityStatementUrl:
+          "https://signin.account.gov.uk/accessibility-statement",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactGuidance: true,
@@ -302,6 +317,8 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
+        accessibilityStatementUrl:
+          "https://signin.account.gov.uk/accessibility-statement",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,
@@ -327,6 +344,8 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: false,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
+        accessibilityStatementUrl:
+          "https://signin.account.gov.uk/accessibility-statement",
         webchatSource: "https://example.com",
         currentUrl: baseUrl,
         baseUrl,

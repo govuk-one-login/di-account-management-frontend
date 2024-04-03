@@ -8,6 +8,7 @@ import {
   showContactEmergencyMessage,
   supportPhoneContact,
   supportWebchatContact,
+  getAccessibilityStatementUrl,
 } from "../../config";
 import { EVENT_NAME, PATH_DATA } from "../../app.constants";
 
@@ -59,6 +60,7 @@ const render = (req: Request, res: Response): void => {
     showSignOut: isAuthenticated && !isLoggedOut,
     referenceCode,
     contactEmailServiceUrl: PATH_DATA.TRACK_AND_REDIRECT.url,
+    accessibilityStatementUrl: getAccessibilityStatementUrl(),
     webchatSource: getWebchatUrl(),
     currentUrl: originalUrl,
     baseUrl,
