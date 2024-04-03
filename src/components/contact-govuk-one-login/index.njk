@@ -5,6 +5,7 @@
 {% set hideAccountNavigation = true %}
 {% set languageToggle = true %}
 {% set secondaryContactMethodEnabled = contactPhoneEnabled or contactWebchatEnabled %}
+{% set webchatLang = "welsh" if language == "cy" else "hgsgds" %}
 
 {% block head %} 
   {{ super() }}
@@ -147,9 +148,10 @@
 {% if contactWebchatEnabled %}
   <script id="smartagent" type="module" defer
     src="{{ webchatSource }}/loader/main.js" 
-    data-company="hgsgds" data-brand="hgsgds"
+    data-company="hgsgds" facia="{{webchatLang}}"
     nonce="{{ nonce }}">
   </script>
+
   <script type="text/javascript" nonce='{{scriptNonce}}'>
     var launchWebchatButton = document.querySelector("[data-launch-webchat]");
 
