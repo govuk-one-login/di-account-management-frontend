@@ -73,6 +73,7 @@ describe("security controller", () => {
             },
           },
         ],
+        showAdditionalMethodUpsell: true,
       });
     });
     it("should render security view without activity log when the feature flag is off", async () => {
@@ -125,6 +126,7 @@ describe("security controller", () => {
             },
           },
         ],
+        showAdditionalMethodUpsell: true,
       });
     });
     it("should render security view without activity log when the user doesn't have a supported service", async () => {
@@ -179,6 +181,7 @@ describe("security controller", () => {
             },
           },
         ],
+        showAdditionalMethodUpsell: true,
       });
     });
     it("throws an error when the mfaMethodType is undefined", async () => {
@@ -288,6 +291,7 @@ describe("security controller", () => {
             },
           },
         ],
+        showAdditionalMethodUpsell: true,
       });
     });
   });
