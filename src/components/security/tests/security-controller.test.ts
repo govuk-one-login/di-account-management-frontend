@@ -84,6 +84,9 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return false;
       });
+      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+        return true;
+      });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
       sandbox.stub(allowedServicesModule, "hasHmrcService").resolves(true);
       req.session.user = {
@@ -135,6 +138,9 @@ describe("security controller", () => {
     it("should render security view without activity log when the user doesn't have a supported service", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true;
+      });
+      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -192,6 +198,9 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
+      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+        return true;
+      });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
@@ -217,6 +226,9 @@ describe("security controller", () => {
     it("throws an error when the mfaMethodType is not unknown", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
+        return true;
+      });
+      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -247,6 +259,10 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
+      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+        return true;
+      });
+
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
