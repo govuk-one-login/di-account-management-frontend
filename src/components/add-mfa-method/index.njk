@@ -1,0 +1,50 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% block pageContent %}
+    <form action="/add-mfa-method" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    {{ govukRadios({
+       name: "addMfaMethod",
+       fieldset: {
+           legend: {
+             text: "Add another way to get security codes",
+             isPageHeading: true,
+             classes: "govuk-fieldset__legend--l"
+           }
+        },
+        items: [
+            {
+                value: "sms",
+                text: "Back-up phone number",
+                hint: {
+                    text: "Get a text message to a different mobile phone"
+                }
+            },
+            {
+                value: "app",
+                text: "Authenticator app for smartphone, tablet or computer"
+            }
+        ]
+       }) 
+    }}
+
+    {{ govukDetails({
+      summaryText: "What is an authenticator app?",
+      html: "<p>An authenticator app creates a security code that helps confirm it's you when you sign in.</p>
+<p>You can use an authenticator app on your smartphone, tablet or desktop computer.
+Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer.</p>"
+    }) }}
+
+    {{ govukButton({
+      text: "Continue"
+    }) }}
+    </form>
+
+    <p class="govuk-body">
+        <a href="/security" class="govuk-link">I do not want to add another way to get security codes</a>
+    </p>
+{% endblock pageContent %}
