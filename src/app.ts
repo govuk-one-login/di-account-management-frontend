@@ -21,6 +21,7 @@ import {
   getSessionExpiry,
   getSessionSecret,
   supportActivityLog,
+  supportMfaUpsell,
   supportTriagePage,
   supportWebchatContact,
 } from "./config";
@@ -166,7 +167,9 @@ async function createApp(): Promise<express.Application> {
   if (supportTriagePage()) {
     app.use(contactRouter);
   }
-  app.use(addMfaMethodRouter);
+  if (supportMfaUpsell()) {
+    app.use(addMfaMethodRouter);
+  }
   app.use(trackAndRedirectRouter);
 
   // Router for all previously used URLs, that we want to redirect on
