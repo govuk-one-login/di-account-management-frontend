@@ -26,6 +26,9 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
+      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+        return true;
+      });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
