@@ -4,6 +4,20 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% macro passwordForm(header, paragraph, backlinkText) %}
+
+{% endmacro %}
+
+{% if requestType == 'changePassword' %}
+    {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
+{%  else %}
+    {% set pageTitleName = 'pages.enterPassword.title' | translate %}
+{% endif %}
+
+{% set backLink = "/manage-your-account" %}
+
+{% block pageContent %}
+{% include "common/errors/errorSummary.njk" %}
+
     <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{header}}</h1>
 
     <form action="/enter-password" method="post" novalidate>
@@ -38,58 +52,6 @@
         </p>
 
     </form>
-{% endmacro %}
-
-{% if requestType == 'changePassword' %}
-    {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
-{%  else %}
-    {% set pageTitleName = 'pages.enterPassword.title' | translate %}
-{% endif %}
-
-{% set backLink = "/manage-your-account" %}
-
-{% block pageContent %}
-{% include "common/errors/errorSummary.njk" %}
-
-{% if requestType == 'changeEmail' %}
-    {{ passwordForm(
-        'pages.enterPassword.changeEmail.title' | translate, 
-        'pages.enterPassword.changeEmail.paragraph' | translate, 
-        'pages.enterPassword.changeEmail.backLink' | translate) 
-    }}
-{% endif %}
-
-{% if requestType == 'changePassword' %}
-    {{ passwordForm(
-        'pages.enterPassword.changePassword.title' | translate, 
-        'pages.enterPassword.changePassword.paragraph' | translate, 
-        'pages.enterPassword.changePassword.backLink' | translate) 
-    }}
-{% endif %}
-
-{% if requestType == 'changePhoneNumber' %}
-    {{ passwordForm(
-        'pages.enterPassword.changePhoneNumber.title' | translate, 
-        'pages.enterPassword.changePhoneNumber.paragraph' | translate, 
-        'pages.enterPassword.changePhoneNumber.backLink' | translate) 
-    }}
-{% endif %}
-
-{% if requestType == 'deleteAccount' %}
-    {{ passwordForm(
-        'pages.enterPassword.deleteAccount.title' | translate, 
-        'pages.enterPassword.deleteAccount.paragraph' | translate, 
-        'pages.enterPassword.deleteAccount.backLink' | translate) 
-    }}
-{% endif %}
-
-{% if requestType == 'addMfaMethod' %}
-    {{ passwordForm(
-        'pages.enterPassword.addMfaMethod.title' | translate, 
-        'pages.enterPassword.addMfaMethod.paragraph' | translate, 
-        'pages.enterPassword.addMfaMethod.backLink' | translate) 
-    }}
-{% endif %}
 
 {% endblock %}
 

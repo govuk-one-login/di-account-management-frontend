@@ -20,6 +20,7 @@ export function addMfaMethodPost(
 
   if (addMfaMethod === "app") {
     res.redirect(PATH_DATA.ADD_MFA_METHOD_APP.url);
+    return;
   }
 
   req.log.error(`unknown addMfaMethod: ${addMfaMethod}`);

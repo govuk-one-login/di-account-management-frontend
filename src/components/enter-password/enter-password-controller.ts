@@ -23,6 +23,14 @@ const REDIRECT_PATHS: { [key: string]: string } = {
   addMfaMethod: PATH_DATA.ADD_MFA_METHOD.url,
 };
 
+const getStringsForForm = (req: Request, requestType: string) => {
+  return {
+    header: req.t(`pages.enterPassword.${requestType}.header`),
+    paragraph: req.t(`pages.enterPassword.${requestType}.paragraph`),
+    backLinkText: req.t(`pages.enterPassword.${requestType}.backLink`),
+  };
+};
+
 export function enterPasswordGet(req: Request, res: Response): void {
   const requestType = req.query.type as UserJourney;
 
@@ -32,7 +40,10 @@ export function enterPasswordGet(req: Request, res: Response): void {
 
   req.session.user.state[requestType] = getInitialState();
 
-  res.render(`enter-password/index.njk`, { requestType });
+  res.render(`enter-password/index.njk`, {
+    requestType,
+    ...getStringsForForm(req, requestType),
+  });
 }
 
 export function enterPasswordPost(
