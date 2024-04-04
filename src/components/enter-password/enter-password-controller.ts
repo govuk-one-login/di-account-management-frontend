@@ -20,6 +20,7 @@ const REDIRECT_PATHS: { [key: string]: string } = {
   changePassword: PATH_DATA.CHANGE_PASSWORD.url,
   changePhoneNumber: PATH_DATA.CHANGE_PHONE_NUMBER.url,
   deleteAccount: PATH_DATA.DELETE_ACCOUNT.url,
+  addMfaMethod: PATH_DATA.ADD_MFA_METHOD.url,
 };
 
 export function enterPasswordGet(req: Request, res: Response): void {

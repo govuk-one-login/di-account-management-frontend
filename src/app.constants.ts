@@ -11,6 +11,7 @@ export const PATH_DATA: {
   SECURITY: { url: "/security" },
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
+  ADD_MFA_METHOD: { url: "/add-mfa-method" },
   CHANGE_EMAIL: {
     url: "/change-email",
     event: "VERIFY_CODE_SENT",
