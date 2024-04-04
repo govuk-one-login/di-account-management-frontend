@@ -156,6 +156,13 @@
             "value": "",
             "hiddenText": "Authenticator app"
           }
+        },
+        "upsell": {
+          "heading": "Your back-up method",
+          "paragraph": "We recommend you add one more way to get security codes. This can be another phone number or an authenticator app.",
+          "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes your usual way.",
+          "link": "Add a back-up method",
+          "badge": "Not Added"
         }
       },
       "manageEmailSubscriptions": {

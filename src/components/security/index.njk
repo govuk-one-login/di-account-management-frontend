@@ -68,6 +68,17 @@ set mfaSummaryList = {
         {% if mfaMethods | length > 0 %}
           {{ govukSummaryList(mfaSummaryList) }}
         {% endif %}
+        {% if showAdditionalMethodUpsell %}
+          <div class="summary-list-container__upsell">
+            <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.upsell.heading' | translate }}</h3>
+            <p class="govuk-body">{{ 'pages.security.mfaSection.upsell.paragraph' | translate }}</p>
+            <p class="govuk-body">{{ 'pages.security.mfaSection.upsell.paragraph2' | translate }}</p>
+            <div class="govuk-body summary-list-container__upsell__cta">
+              <a href="/enter-password?type=changePhoneNumber" class="govuk-link">{{ 'pages.security.mfaSection.upsell.link' | translate }}</a>
+              <span class='govuk-tag govuk-tag--pink'>{{ 'pages.security.mfaSection.upsell.badge' | translate }}</span>
+            </div>
+          </div>
+        {% endif %}
       </div>
       {% if supportActivityLog %}
         <div class="summary-list-container" data-test-id="activity-log-section">
