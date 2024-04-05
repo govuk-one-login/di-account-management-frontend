@@ -44,6 +44,7 @@ export function checkYourEmailPost(
       sessionId: res.locals.sessionId,
       persistentSessionId: res.locals.persistentSessionId,
       userLanguage: xss(req.cookies.lng as string),
+      clientSessionId: res.locals.clientSessionId,
     };
 
     const isEmailUpdated = await service.updateEmail(

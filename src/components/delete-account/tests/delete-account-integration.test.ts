@@ -117,7 +117,7 @@ describe("Integration:: delete account", () => {
 
     request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
-      .end((err, res) => {
+      .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];

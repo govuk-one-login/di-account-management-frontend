@@ -4,6 +4,8 @@ import { enterPasswordService } from "../enter-password-service";
 import { expect } from "chai";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
 import { getApiBaseUrl } from "../../../config";
+import { describe } from "mocha";
+import { CLIENT_SESSION_ID } from "../../../../test/utils/builders";
 
 const baseUrl = getApiBaseUrl();
 
@@ -45,7 +47,8 @@ describe("enterPasswordService", () => {
       passowrd,
       sourceIp,
       sessionId,
-      persistentSessionId
+      persistentSessionId,
+      CLIENT_SESSION_ID
     );
 
     expect(isAuthenticated).to.be.true;

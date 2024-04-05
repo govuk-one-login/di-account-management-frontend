@@ -8,6 +8,7 @@ import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 
 describe("Integration:: check your phone", () => {
   let sandbox: sinon.SinonSandbox;
@@ -70,7 +71,9 @@ describe("Integration:: check your phone", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"];
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
       });
   });
 
@@ -97,8 +100,8 @@ describe("Integration:: check your phone", () => {
     );
   });
 
-  it("should return validation error when code not entered", (done) => {
-    request(app)
+  it("should return validation error when code not entered", async () => {
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
       .set("Cookie", cookies)
@@ -112,11 +115,11 @@ describe("Integration:: check your phone", () => {
           "Enter the security code"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when code is less than 6 characters", (done) => {
-    request(app)
+  it("should return validation error when code is less than 6 characters", async () => {
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
       .set("Cookie", cookies)
@@ -130,11 +133,11 @@ describe("Integration:: check your phone", () => {
           "Enter the security code using only 6 digits"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when code is greater than 6 characters", (done) => {
-    request(app)
+  it("should return validation error when code is greater than 6 characters", async () => {
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
       .set("Cookie", cookies)
@@ -148,11 +151,11 @@ describe("Integration:: check your phone", () => {
           "Enter the security code using only 6 digits"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when code entered contains letters", (done) => {
-    request(app)
+  it("should return validation error when code entered contains letters", async () => {
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
       .set("Cookie", cookies)
@@ -166,13 +169,19 @@ describe("Integration:: check your phone", () => {
           "Enter the security code using only 6 digits"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should redirect to /create-password when valid code entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.UPDATE_PHONE_NUMBER).once().reply(204);
+  it("should redirect to /create-password when valid code entered", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_PHONE_NUMBER)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(204);
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
       .set("Cookie", cookies)
@@ -181,13 +190,19 @@ describe("Integration:: check your phone", () => {
         code: "123456",
       })
       .expect("Location", PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url)
-      .expect(302, done);
+      .expect(302);
   });
 
-  it("should return validation error when incorrect code entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.UPDATE_PHONE_NUMBER).once().reply(400, {});
+  it("should return validation error when incorrect code entered", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_PHONE_NUMBER)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(400, {});
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
       .set("Cookie", cookies)
@@ -201,6 +216,6 @@ describe("Integration:: check your phone", () => {
           "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 });

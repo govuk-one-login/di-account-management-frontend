@@ -4,7 +4,8 @@ export interface DeleteAccountServiceInterface {
     email: string,
     sourceIp: string,
     sessionId: string,
-    persistentSessionId: string
+    persistentSessionId: string,
+    clientSessionId: string
   ) => Promise<boolean>;
   publishToDeleteTopic: (
     user_id: string,

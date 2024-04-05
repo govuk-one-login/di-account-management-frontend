@@ -1,34 +1,46 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-
 import { changeEmailGet, changeEmailPost } from "../change-email-controller";
 import { ChangeEmailServiceInterface } from "../types";
-import { getInitialState } from "../../../utils/state-machine";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
+import {
+  CLIENT_SESSION_ID,
+  CURRENT_EMAIL,
+  ENGLISH,
+  NEW_EMAIL,
+  PERSISTENT_SESSION_ID,
+  RequestBuilder,
+  ResponseBuilder,
+  SESSION_ID,
+  SOURCE_IP,
+  TOKEN,
+} from "../../../../test/utils/builders";
 
 describe("change email controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  let fakeService: ChangeEmailServiceInterface;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    req = new RequestBuilder()
+      .withBody({ email: NEW_EMAIL })
+      .withTimestampT(sandbox.fake())
+      .build();
 
-    req = {
-      body: {},
-      session: { user: {} } as any,
-      cookies: { lng: "en" },
-      i18n: { language: "en" },
-      t: sandbox.fake(),
-    };
-    res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      locals: {},
-      status: sandbox.fake(),
+    res = new ResponseBuilder()
+      .withRender(sandbox.fake())
+      .withRedirect(sandbox.fake(() => {}))
+      .withStatus(sandbox.fake())
+      .build();
+
+    fakeService = {
+      sendCodeVerificationNotification: sandbox.fake.returns(
+        true as unknown as Promise<boolean>
+      ),
     };
   });
 
@@ -38,48 +50,44 @@ describe("change email controller", () => {
 
   describe("changeEmailGet", () => {
     it("should render enter new email", () => {
+      // Act
       changeEmailGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("change-email/index.njk");
+      // Assert
+      expect(res.render).to.have.been.calledWith("change-email/index.njk");
     });
   });
 
   describe("changeEmailPost", () => {
     it("should redirect to /check-your-email on submit", async () => {
-      const fakeService: ChangeEmailServiceInterface = {
-        sendCodeVerificationNotification: sandbox.fake.resolves(true),
-      };
-
-      req.body.email = "test@test.com";
-      req.session.user = {
-        tokens: { accessToken: "token" } as any,
-        email: "test@dl.com",
-        state: { changeEmail: getInitialState() },
-      } as any;
-      req.cookies.lng = "en";
-
+      // Act
       await changeEmailPost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.sendCodeVerificationNotification).to.have.been
-        .calledOnce;
+      // Assert
+      expect(fakeService.sendCodeVerificationNotification).calledOnce;
+      expect(
+        fakeService.sendCodeVerificationNotification
+      ).to.have.been.calledWithExactly(
+        TOKEN,
+        NEW_EMAIL,
+        SOURCE_IP,
+        SESSION_ID,
+        PERSISTENT_SESSION_ID,
+        ENGLISH,
+        CLIENT_SESSION_ID
+      );
       expect(res.redirect).to.have.calledWith("/check-your-email");
     });
 
-    it("should render bad request", async () => {
-      const fakeService: ChangeEmailServiceInterface = {
-        sendCodeVerificationNotification: sandbox.fake.resolves(true),
-      };
+    it("rejects request to change email to existing email address as bad request", async () => {
+      // Arrange
+      req.body = { email: CURRENT_EMAIL };
 
-      req.body.email = "test@test.com";
-      req.session.user = {
-        tokens: { accessToken: "token" },
-        email: "test@test.com",
-        state: { changeEmail: getInitialState() },
-      } as any;
-      req.cookies.lng = "en";
-
+      // Act
       await changeEmailPost(fakeService)(req as Request, res as Response);
-      expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+
+      // Assert
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
   });
 });

@@ -8,6 +8,7 @@ import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 
 describe("Integration:: change password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -69,7 +70,9 @@ describe("Integration:: change password", () => {
       .get(PATH_DATA.CHANGE_PASSWORD.url)
       .then((res) => {
         const $ = load(res.text);
-        cookies = res.headers["set-cookie"];
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
         token = $("[name=_csrf]").val();
       });
   });
@@ -87,7 +90,7 @@ describe("Integration:: change password", () => {
     request(app).get(PATH_DATA.CHANGE_PASSWORD.url).expect(200, done);
   });
 
-  it("should return error when csrf not present", async () => {
+  it("should redirect to Your services when csrf not present", async () => {
     await checkFailedCSRFValidationBehaviour(
       app,
       PATH_DATA.CHANGE_PASSWORD.url,
@@ -97,8 +100,8 @@ describe("Integration:: change password", () => {
     );
   });
 
-  it("should return validation error when password not entered", (done) => {
-    request(app)
+  it("should return validation error when password not entered", async () => {
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -116,11 +119,11 @@ describe("Integration:: change password", () => {
           "Re-type your new password"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when passwords don't match", (done) => {
-    request(app)
+  it("should return validation error when passwords don't match", async () => {
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -135,11 +138,11 @@ describe("Integration:: change password", () => {
           "Enter the same password in both fields"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when password less than 8 characters", (done) => {
-    request(app)
+  it("should return validation error when password less than 8 characters", async () => {
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -154,11 +157,11 @@ describe("Integration:: change password", () => {
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when password is all numeric", (done) => {
-    request(app)
+  it("should return validation error when password is all numeric", async () => {
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -173,16 +176,19 @@ describe("Integration:: change password", () => {
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when password is amongst most common passwords", (done) => {
+  it("should return validation error when password is amongst most common passwords", async () => {
+    // Arrange
     nock(baseApi)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
       .post(API_ENDPOINTS.UPDATE_PASSWORD)
       .once()
       .reply(400, { code: 1040 });
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -197,11 +203,11 @@ describe("Integration:: change password", () => {
           "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when password is all letters", (done) => {
-    request(app)
+  it("should return validation error when password is all letters", async () => {
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -216,16 +222,19 @@ describe("Integration:: change password", () => {
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return error when new password is the same as existing password", (done) => {
+  it("should return error when new password is the same as existing password", async () => {
+    // Arrange
     nock(baseApi)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
       .post(API_ENDPOINTS.UPDATE_PASSWORD)
       .once()
       .reply(400, { code: 1024 });
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -240,16 +249,19 @@ describe("Integration:: change password", () => {
           "You are already using that password. Enter a different password"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should throw error when 400 is returned from API", (done) => {
+  it("should throw error when 400 is returned from API", async () => {
+    // Arrange
     nock(baseApi)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
       .post(API_ENDPOINTS.UPDATE_PASSWORD)
       .once()
       .reply(400, { code: 1000 });
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -262,13 +274,19 @@ describe("Integration:: change password", () => {
         const $ = load(res.text);
         expect($(testComponent("error-heading")).text()).to.not.be.empty;
       })
-      .expect(500, done);
+      .expect(500);
   });
 
-  it("should redirect to enter phone number when valid password entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.UPDATE_PASSWORD).once().reply(204);
+  it("should redirect to enter phone number when valid password entered", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_PASSWORD)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(204);
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -278,6 +296,6 @@ describe("Integration:: change password", () => {
         "confirm-password": "action-1",
       })
       .expect("Location", PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url)
-      .expect(302, done);
+      .expect(302);
   });
 });

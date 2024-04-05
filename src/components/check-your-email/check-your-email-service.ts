@@ -27,7 +27,8 @@ export function checkYourEmailService(
         sessionDetails.sourceIp,
         sessionDetails.persistentSessionId,
         sessionDetails.sessionId,
-        sessionDetails.userLanguage
+        sessionDetails.userLanguage,
+        sessionDetails.clientSessionId
       )
     );
 

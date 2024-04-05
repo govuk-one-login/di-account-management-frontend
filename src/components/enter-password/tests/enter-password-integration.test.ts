@@ -8,6 +8,7 @@ import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 
 describe("Integration::enter password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -79,7 +80,9 @@ describe("Integration::enter password", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"];
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
       });
   });
 
@@ -102,8 +105,8 @@ describe("Integration::enter password", () => {
     });
   });
 
-  it("should return validation error when password not entered", (done) => {
-    request(app)
+  it("should return validation error when password not entered", async () => {
+    await request(app)
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
@@ -118,13 +121,19 @@ describe("Integration::enter password", () => {
           "Enter your password"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when password is incorrect", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(401);
+  it("should return validation error when password is incorrect", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(401);
 
-    request(app)
+    // Act
+    await request(app)
       .post(ENDPOINT)
       .query({ type: "changeEmail" })
       .type("form")
@@ -140,13 +149,19 @@ describe("Integration::enter password", () => {
           "Enter the correct password"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should redirect to change email when authenticated", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(204);
+  it("should redirect to change email when authenticated", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(204);
 
-    request(app)
+    // Act
+    await request(app)
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
@@ -156,13 +171,19 @@ describe("Integration::enter password", () => {
         requestType: "changeEmail",
       })
       .expect("Location", PATH_DATA.CHANGE_EMAIL.url)
-      .expect(302, done);
+      .expect(302);
   });
 
-  it("should redirect to change password when authenticated", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(204);
+  it("should redirect to change password when authenticated", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(204);
 
-    request(app)
+    // Act
+    await request(app)
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
@@ -172,13 +193,19 @@ describe("Integration::enter password", () => {
         requestType: "changePassword",
       })
       .expect("Location", PATH_DATA.CHANGE_PASSWORD.url)
-      .expect(302, done);
+      .expect(302);
   });
 
-  it("should redirect to change phone number when authenticated", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(204);
+  it("should redirect to change phone number when authenticated", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(204);
 
-    request(app)
+    // Act
+    await request(app)
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
@@ -188,13 +215,19 @@ describe("Integration::enter password", () => {
         requestType: "changePhoneNumber",
       })
       .expect("Location", PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .expect(302, done);
+      .expect(302);
   });
 
-  it("should redirect to delete account when authenticated", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.AUTHENTICATE).once().reply(204);
+  it("should redirect to delete account when authenticated", async () => {
+    // arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(204);
 
-    request(app)
+    // Act
+    await request(app)
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
@@ -204,6 +237,6 @@ describe("Integration::enter password", () => {
         requestType: "deleteAccount",
       })
       .expect("Location", PATH_DATA.DELETE_ACCOUNT.url)
-      .expect(302, done);
+      .expect(302);
   });
 });

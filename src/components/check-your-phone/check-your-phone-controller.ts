@@ -43,6 +43,7 @@ export function checkYourPhonePost(
       sessionId: res.locals.sessionId,
       persistentSessionId: res.locals.persistentSessionId,
       userLanguage: xss(req.cookies.lng as string),
+      clientSessionId: res.locals.clientSessionId,
     };
 
     const isPhoneNumberUpdated = await service.updatePhoneNumber(
