@@ -1,0 +1,37 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% block pageContent %}
+    <form action="/add-mfa-method" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    {{ govukRadios({
+       name: "addMfaMethod",
+       fieldset: {
+          legend: {
+            text: "pages.addMfaMethod.title" | translate,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+       },
+       items: mfaMethods
+       }) 
+    }}
+
+    {{ govukDetails({
+        summaryText: "pages.addMfaMethod.app.help.title" | translate,
+        html: helpText
+        }) 
+    }}
+
+    {{ govukButton({
+      text: "pages.addMfaMethod.continue" | translate
+    }) }}
+    </form>
+
+    <p class="govuk-body">
+        <a href="/security" class="govuk-link">{{ "pages.addMfaMethod.backLink" | translate }}</a>
+    </p>
+{% endblock pageContent %}

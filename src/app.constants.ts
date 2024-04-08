@@ -11,6 +11,9 @@ export const PATH_DATA: {
   SECURITY: { url: "/security" },
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
+  ADD_MFA_METHOD: { url: "/add-mfa-method" },
+  ADD_MFA_METHOD_APP: { url: "/add-mfa-method-app" },
+  ADD_MFA_METHOD_SMS: { url: "/add-mfa-method-sms" },
   CHANGE_EMAIL: {
     url: "/change-email",
     event: "VERIFY_CODE_SENT",
@@ -88,6 +91,17 @@ export const PATH_DATA: {
   },
   TRACK_AND_REDIRECT: {
     url: "/track-and-redirect",
+  },
+};
+
+export const MFA_METHODS = {
+  SMS: {
+    type: "sms",
+    path: PATH_DATA.ADD_MFA_METHOD_SMS,
+  },
+  APP: {
+    type: "app",
+    path: PATH_DATA.ADD_MFA_METHOD_APP,
   },
 };
 

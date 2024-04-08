@@ -26,7 +26,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
-      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -84,7 +84,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return false;
       });
-      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -140,7 +140,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
-      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -198,7 +198,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
-      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -228,7 +228,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
-      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -259,7 +259,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
         return true;
       });
-      sandbox.stub(configFuncs, "supportMfaUpsell").callsFake(() => {
+      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
         return true;
       });
 

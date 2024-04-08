@@ -21,6 +21,7 @@ import {
   getSessionExpiry,
   getSessionSecret,
   supportActivityLog,
+  supportChangeMfa,
   supportTriagePage,
   supportWebchatContact,
 } from "./config";
@@ -60,6 +61,7 @@ import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
+import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -164,6 +166,9 @@ async function createApp(): Promise<express.Application> {
   }
   if (supportTriagePage()) {
     app.use(contactRouter);
+  }
+  if (supportChangeMfa()) {
+    app.use(addMfaMethodRouter);
   }
   app.use(trackAndRedirectRouter);
 

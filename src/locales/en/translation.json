@@ -181,6 +181,24 @@
         "info": "See what you’ve visited with your GOV.UK One Login and when."
       }
     },
+    "addMfaMethod": {
+      "title": "Add another way to get security codes",
+      "sms": {
+        "title": "Backup phone number",
+        "hint": "Get a text message to a different mobile phone"
+      },
+      "app": {
+        "title": "Authenticator app for smartphone, tablet or computer",
+        "hint": "",
+        "help": {
+          "title": "What is an authenticator app?",
+          "text1": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
+          "text2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer."
+        }
+      },
+      "backLink": "I do not want to add another way to get security codes",
+      "continue": "Continue"
+    }, 
     "activityHistory": {
       "title": "Activity history",
       "header": "Activity history",
@@ -368,6 +386,11 @@
           "required": "Enter your password",
           "incorrectPassword": "Enter the correct password"
         }
+      },
+      "addMfaMethod": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can manage how you get your security codes",
+        "backLink": "Back"
       }
     },
     "changeEmail": {

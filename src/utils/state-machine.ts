@@ -5,6 +5,7 @@ enum UserJourney {
   ChangePassword = "changePassword",
   ChangePhoneNumber = "changePhoneNumber",
   DeleteAccount = "deleteAccount",
+  AddMfaMethod = "addMFAMethod",
 }
 
 type AccountManagementEvent =
