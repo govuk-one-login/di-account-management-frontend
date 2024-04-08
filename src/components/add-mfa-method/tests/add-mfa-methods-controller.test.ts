@@ -26,7 +26,7 @@ describe("addMfaMethodPost", () => {
     sandbox.restore();
   });
 
-  it("should return 400 status code when addMfaMethod is 'sms'", () => {
+  it("should return an error if the user tries to add a SMS number (feature not complete yet)", () => {
     req.body.addMfaMethod = "sms";
 
     addMfaMethodPost(req as Request, res as Response, next);
@@ -37,7 +37,7 @@ describe("addMfaMethodPost", () => {
     expect(next).to.not.have.been.called;
   });
 
-  it("should redirect to the app MFA method page when addMfaMethod is 'app'", () => {
+  it("should take the user to the add auth app page when the user selects that option", () => {
     req.body.addMfaMethod = "app";
 
     addMfaMethodPost(req as Request, res as Response, next);
