@@ -11,7 +11,7 @@
        name: "addMfaMethod",
        fieldset: {
            legend: {
-             text: "Add another way to get security codes",
+             text: "pages.addMfaMethod.title" | translate,
              isPageHeading: true,
              classes: "govuk-fieldset__legend--l"
            }
@@ -19,26 +19,25 @@
         items: [
             {
                 value: "sms",
-                text: "Back-up phone number",
+                text: "pages.addMfaMethod.sms.title" | translate,
                 hint: {
-                    text: "Get a text message to a different mobile phone"
+                    text: "pages.addMfaMethod.sms.hint" | translate
                 },
                 checked: true
             },
             {
                 value: "app",
-                text: "Authenticator app for smartphone, tablet or computer"
+                text: "pages.addMfaMethod.app.title" | translate
             }
         ]
        }) 
     }}
 
     {{ govukDetails({
-      summaryText: "What is an authenticator app?",
-      html: "<p>An authenticator app creates a security code that helps confirm it's you when you sign in.</p>
-<p>You can use an authenticator app on your smartphone, tablet or desktop computer.
-Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer.</p>"
-    }) }}
+        summaryText: "What is an authenticator app?",
+        html: helpText
+        }) 
+    }}
 
     {{ govukButton({
       text: "Continue"
