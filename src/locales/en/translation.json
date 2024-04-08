@@ -194,7 +194,8 @@
           "text1": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
           "text2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer."
         }
-      }
+      },
+      "backLink": "I do not want to add another way to get security codes"
     }, 
     "activityHistory": {
       "title": "Activity history",
