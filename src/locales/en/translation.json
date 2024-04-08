@@ -195,7 +195,8 @@
           "text2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer."
         }
       },
-      "backLink": "I do not want to add another way to get security codes"
+      "backLink": "I do not want to add another way to get security codes",
+      "continue": "Continue"
     }, 
     "activityHistory": {
       "title": "Activity history",
