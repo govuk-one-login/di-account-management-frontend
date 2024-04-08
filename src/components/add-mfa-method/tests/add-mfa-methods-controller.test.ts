@@ -26,15 +26,14 @@ describe("addMfaMethodPost", () => {
     sandbox.restore();
   });
 
-  it("should return an error if the user tries to add a SMS number (feature not complete yet)", () => {
+  it("should take the use to the add backup phone number page when that option is selected", () => {
     req.body.addMfaMethod = "sms";
 
     addMfaMethodPost(req as Request, res as Response, next);
 
-    expect(res.status).to.have.been.calledWith(400);
-    expect(res.end).to.have.been.called;
-    expect(res.redirect).to.not.have.been.called;
-    expect(next).to.not.have.been.called;
+    expect(res.redirect).to.have.been.calledWith(
+      PATH_DATA.ADD_MFA_METHOD_SMS.url
+    );
   });
 
   it("should take the user to the add auth app page when the user selects that option", () => {
@@ -45,9 +44,6 @@ describe("addMfaMethodPost", () => {
     expect(res.redirect).to.have.been.calledWith(
       PATH_DATA.ADD_MFA_METHOD_APP.url
     );
-    expect(res.status).to.not.have.been.called;
-    expect(res.end).to.not.have.been.called;
-    expect(next).to.not.have.been.called;
   });
 
   it("should call next with an error when addMfaMethod is unknown", () => {
