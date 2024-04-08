@@ -1,12 +1,24 @@
 import { Request, Response, NextFunction } from "express";
 import { MFA_METHODS } from "../../app.constants";
 
+type MfaMethods = keyof typeof MFA_METHODS;
+
 export function addMfaMethodGet(req: Request, res: Response): void {
   const helpText = `<p>${req.t("pages.addMfaMethod.app.help.text1")}</p><p>${req.t("pages.addMfaMethod.app.help.text2")}</p>`;
-  res.render(`add-mfa-method/index.njk`, { helpText });
-}
 
-type MfaMethods = keyof typeof MFA_METHODS;
+  const mfaMethods = Object.keys(MFA_METHODS).map((key, index) => {
+    const method = MFA_METHODS[key as MfaMethods];
+    return {
+      value: method.type,
+      text: req.t(`pages.addMfaMethod.${method.type}.title`),
+      hint: {
+        text: req.t(`pages.addMfaMethod.${method.type}.hint`),
+      },
+      checked: index === 0,
+    };
+  });
+  res.render(`add-mfa-method/index.njk`, { helpText, mfaMethods });
+}
 
 export function addMfaMethodPost(
   req: Request,

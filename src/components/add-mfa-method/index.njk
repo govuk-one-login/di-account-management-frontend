@@ -10,26 +10,13 @@
     {{ govukRadios({
        name: "addMfaMethod",
        fieldset: {
-           legend: {
-             text: "pages.addMfaMethod.title" | translate,
-             isPageHeading: true,
-             classes: "govuk-fieldset__legend--l"
-           }
-        },
-        items: [
-            {
-                value: "sms",
-                text: "pages.addMfaMethod.sms.title" | translate,
-                hint: {
-                    text: "pages.addMfaMethod.sms.hint" | translate
-                },
-                checked: true
-            },
-            {
-                value: "app",
-                text: "pages.addMfaMethod.app.title" | translate
-            }
-        ]
+          legend: {
+            text: "pages.addMfaMethod.title" | translate,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+       },
+       items: mfaMethods
        }) 
     }}
 
@@ -40,7 +27,7 @@
     }}
 
     {{ govukButton({
-      text: "pages.addMfaMethod.continue" | translate,
+      text: "pages.addMfaMethod.continue" | translate
     }) }}
     </form>
 
