@@ -39,3 +39,7 @@ export function addMfaMethodPost(
   res.redirect(MFA_METHODS[method as MfaMethods].path.url);
   res.end();
 }
+
+export function addMfaAppMethodGet(req: Request, res: Response): void {
+  res.render("add-mfa-method/add-app.njk");
+}
