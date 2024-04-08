@@ -21,7 +21,7 @@ import {
   getSessionExpiry,
   getSessionSecret,
   supportActivityLog,
-  supportMfaUpsell,
+  supportChangeMfa,
   supportTriagePage,
   supportWebchatContact,
 } from "./config";
@@ -167,7 +167,7 @@ async function createApp(): Promise<express.Application> {
   if (supportTriagePage()) {
     app.use(contactRouter);
   }
-  if (supportMfaUpsell()) {
+  if (supportChangeMfa()) {
     app.use(addMfaMethodRouter);
   }
   app.use(trackAndRedirectRouter);

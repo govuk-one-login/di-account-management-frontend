@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { supportActivityLog, supportMfaUpsell } from "../../config";
+import { supportActivityLog, supportChangeMfa } from "../../config";
 import { PATH_DATA } from "../../app.constants";
 import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list";
 import { getLastNDigits } from "../../utils/phone-number";
@@ -64,7 +64,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
   });
 
   const showAdditionalMethodUpsell =
-    supportMfaUpsell() &&
+    supportChangeMfa() &&
     req.session.mfaMethods.length === 1 &&
     !hasAuthAppMethod;
 

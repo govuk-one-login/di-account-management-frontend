@@ -161,7 +161,7 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "1"
-      SUPPORTMFAUPSELL: "1"
+      SUPPORTCHANGEMFA: "1"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     build:
       NODEENV: "production"
@@ -186,7 +186,7 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.build.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
-      SUPPORTMFAUPSELL: "0"
+      SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     staging:
       NODEENV: "production"
@@ -211,7 +211,7 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.staging.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
-      SUPPORTMFAUPSELL: "0"
+      SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     integration:
       NODEENV: "production"
@@ -235,7 +235,7 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.integration.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
-      SUPPORTMFAUPSELL: "0"
+      SUPPORTCHANGEMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
     production:
@@ -260,7 +260,7 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: ""
       SUPPORTMETHODMANAGEMENT: "0"
-      SUPPORTMFAUPSELL: "0"
+      SUPPORTCHANGEMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
 
@@ -742,12 +742,12 @@ Resources:
                   !Ref Environment,
                   SUPPORTMETHODMANAGEMENT,
                 ]
-            - Name: "SUPPORT_MFA_UPSELL"
+            - Name: "SUPPORT_CHANGE_MFA"
               Value:
                 !FindInMap [
                   EnvironmentVariables,
                   !Ref Environment,
-                  SUPPORTMFAUPSELL,
+                  SUPPORTCHANGEMFA,
                 ]
             - Name: "METHOD_MANAGEMENT_BASE_URL"
               Value:
