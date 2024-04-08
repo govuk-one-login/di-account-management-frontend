@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import sinon, { SinonSandbox } from "sinon";
 import { addMfaMethodPost } from "../add-mfa-methods-controller";
 import { PATH_DATA } from "../../../app.constants";
-import { ErrorReason } from "aws-sdk/clients/iotdeviceadvisor";
 
 describe("addMfaMethodPost", () => {
   let sandbox: SinonSandbox;
