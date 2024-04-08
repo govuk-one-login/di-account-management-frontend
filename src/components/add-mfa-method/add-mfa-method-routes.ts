@@ -1,6 +1,6 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../..//middleware/requires-auth-middleware";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import {
   addMfaMethodGet,
   addMfaMethodPost,
