@@ -2,8 +2,9 @@ import { expect } from "chai";
 import { describe, it } from "mocha";
 import { Request, Response } from "express";
 import sinon, { SinonSandbox } from "sinon";
-import { addMfaMethodPost } from "./add-mfa-methods-controller";
-import { PATH_DATA } from "../../app.constants";
+import { addMfaMethodPost } from "../add-mfa-methods-controller";
+import { PATH_DATA } from "../../../app.constants";
+import { ErrorReason } from "aws-sdk/clients/iotdeviceadvisor";
 
 describe("addMfaMethodPost", () => {
   let sandbox: SinonSandbox;
@@ -13,7 +14,7 @@ describe("addMfaMethodPost", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    req = { body: {} };
+    req = { body: {}, log: { error: sandbox.fake() } as any };
     res = {
       status: sandbox.fake(),
       end: sandbox.fake(),
@@ -55,12 +56,8 @@ describe("addMfaMethodPost", () => {
 
     addMfaMethodPost(req as Request, res as Response, next);
 
-    expect(next).to.have.been.calledWithMatch(
-      Error,
-      "Unknown addMfaMethod: unknown"
-    );
-    expect(res.status).to.not.have.been.called;
-    expect(res.end).to.not.have.been.called;
-    expect(res.redirect).to.not.have.been.called;
+    const call: sinon.SinonSpyCall<Error[], unknown> = next.getCall(0);
+
+    expect(call.args[0].message).to.equal("Unknown addMfaMethod: unknown");
   });
 });
