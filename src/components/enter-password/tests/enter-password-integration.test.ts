@@ -7,6 +7,7 @@ import * as cheerio from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration::enter password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -72,10 +73,10 @@ describe("Integration::enter password", () => {
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
-    request(app)
+    await request(app)
       .get(ENDPOINT)
       .query({ type: "changeEmail" })
-      .end((err, res) => {
+      .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];
@@ -95,14 +96,10 @@ describe("Integration::enter password", () => {
     request(app).get(ENDPOINT).query({ type: "changeEmail" }).expect(200, done);
   });
 
-  it("should return error when csrf not present", (done) => {
-    request(app)
-      .post(ENDPOINT)
-      .type("form")
-      .send({
-        password: "password",
-      })
-      .expect(500, done);
+  it("should redirect to your services when csrf not present", async () => {
+    await checkFailedCSRFValidationBehaviour(app, ENDPOINT, {
+      password: "password",
+    });
   });
 
   it("should return validation error when password not entered", (done) => {

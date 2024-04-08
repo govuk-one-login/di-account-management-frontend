@@ -5,6 +5,7 @@ import nock = require("nock");
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: request phone code", () => {
   let sandbox: sinon.SinonSandbox;
@@ -60,7 +61,7 @@ describe("Integration:: request phone code", () => {
 
     app = await require("../../../app").createApp();
 
-    request(app).get(PATH_DATA.RESEND_PHONE_CODE.url);
+    await request(app).get(PATH_DATA.RESEND_PHONE_CODE.url);
   });
 
   beforeEach(() => {
@@ -76,13 +77,13 @@ describe("Integration:: request phone code", () => {
     request(app).get(PATH_DATA.RESEND_PHONE_CODE.url).expect(200, done);
   });
 
-  it("should return error when csrf not present", (done) => {
-    request(app)
-      .post(PATH_DATA.RESEND_PHONE_CODE.url)
-      .type("form")
-      .send({
+  it("should redirect to your services when csrf not present", async () => {
+    await checkFailedCSRFValidationBehaviour(
+      app,
+      PATH_DATA.RESEND_PHONE_CODE.url,
+      {
         phoneNumber: "07839490040",
-      })
-      .expect(500, done);
+      }
+    );
   });
 });

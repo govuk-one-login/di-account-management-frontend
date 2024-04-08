@@ -7,6 +7,7 @@ import * as cheerio from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: check your phone", () => {
   let sandbox: sinon.SinonSandbox;
@@ -64,9 +65,9 @@ describe("Integration:: check your phone", () => {
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .end((err, res) => {
+      .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];
@@ -86,14 +87,14 @@ describe("Integration:: check your phone", () => {
     request(app).get(PATH_DATA.CHECK_YOUR_PHONE.url).expect(200, done);
   });
 
-  it("should return error when csrf not present", (done) => {
-    request(app)
-      .post(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .type("form")
-      .send({
+  it("should redirect to your services when csrf not present", async () => {
+    await checkFailedCSRFValidationBehaviour(
+      app,
+      PATH_DATA.CHECK_YOUR_PHONE.url,
+      {
         code: "123456",
-      })
-      .expect(500, done);
+      }
+    );
   });
 
   it("should return validation error when code not entered", (done) => {

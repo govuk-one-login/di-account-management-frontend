@@ -70,9 +70,9 @@ describe("Integration:: change email", () => {
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.CHANGE_EMAIL.url)
-      .end((err, res) => {
+      .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];
@@ -92,14 +92,15 @@ describe("Integration:: change email", () => {
     request(app).get(PATH_DATA.CHANGE_EMAIL.url).expect(200, done);
   });
 
-  it("should return error when csrf not present", (done) => {
-    request(app)
+  it("should redirect to your services when csrf not present", async () => {
+    const response = await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .send({
         email: "123456",
       })
-      .expect(500, done);
+      .expect(302);
+    expect(response.header["location"]).to.equal("/your-services");
   });
 
   it("should return validation error when email not entered", (done) => {

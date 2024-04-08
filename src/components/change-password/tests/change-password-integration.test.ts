@@ -7,6 +7,7 @@ import { load } from "cheerio";
 import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: change password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -64,12 +65,12 @@ describe("Integration:: change password", () => {
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.CHANGE_PASSWORD.url)
-      .end((err, res) => {
+      .then((res) => {
         const $ = load(res.text);
-        token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];
+        token = $("[name=_csrf]").val();
       });
   });
 
@@ -86,14 +87,14 @@ describe("Integration:: change password", () => {
     request(app).get(PATH_DATA.CHANGE_PASSWORD.url).expect(200, done);
   });
 
-  it("should return error when csrf not present", (done) => {
-    request(app)
-      .post(PATH_DATA.CHANGE_PASSWORD.url)
-      .type("form")
-      .send({
+  it("should return error when csrf not present", async () => {
+    await checkFailedCSRFValidationBehaviour(
+      app,
+      PATH_DATA.CHANGE_PASSWORD.url,
+      {
         password: "test@test.com",
-      })
-      .expect(500, done);
+      }
+    );
   });
 
   it("should return validation error when password not entered", (done) => {
