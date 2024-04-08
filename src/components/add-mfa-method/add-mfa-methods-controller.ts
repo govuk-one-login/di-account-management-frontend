@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { PATH_DATA, MFA_METHODS } from "../../app.constants";
-import { mfaMethodMiddleware } from "src/middleware/mfa-method-middleware";
+import { MFA_METHODS } from "../../app.constants";
 
 export function addMfaMethodGet(req: Request, res: Response): void {
   const helpText = `<p>${req.t("pages.addMfaMethod.app.help.text1")}</p><p>${req.t("pages.addMfaMethod.app.help.text2")}</p>`;
