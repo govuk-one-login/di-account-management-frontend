@@ -15,6 +15,19 @@ Clones the repository to the `your_folder_name` directory.
 
 ## Developer notes
 
+### Pre-commit
+
+This repository uses [pre-commit](https://pre-commit.com/) to run linting on all staged files before they're committed.
+Install & setup pre-commit by running:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+When you make your first commit, pre-commit will fetch and install the hook configuration.
+This may take a few minutes but won't need to be repeated for future commits.
+
 ### Logging with a trace id
 
 See [One Login home developer notes](https://team-manual.account.gov.uk/teams/home-team/) in our section of the DI Manual.
