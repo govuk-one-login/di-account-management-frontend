@@ -43,10 +43,6 @@ export function addMfaMethodPost(
     return next(new Error(`Unknown addMfaMethod: ${addMfaMethod}`));
   }
 
-  if (MFA_METHODS[method as MfaMethods].type === "app") {
-    req.session.user.authAppSecret = generateMfaSecret();
-  }
-
   res.redirect(MFA_METHODS[method as MfaMethods].path.url);
   res.end();
 }
@@ -58,17 +54,19 @@ async function renderMfaMethodAppPage(
   errors: any
 ): Promise<void> {
   try {
-    assert(req.session.user.authAppSecret, "authAppSecret not set in session");
     assert(req.session.user.email, "email not set in session");
 
+    const authAppSecret = req.body.authAppSecret || generateMfaSecret();
+
     const qrCodeText = generateQRCodeValue(
-      req.session.user.authAppSecret,
+      authAppSecret,
       req.session.user.email,
       "GOV.UK One Login"
     );
 
     const qrCode = await QRCode.toDataURL(qrCodeText);
     return res.render("add-mfa-method/add-app.njk", {
+      authAppSecret,
       qrCode,
       errors: errors || {},
     });
@@ -92,12 +90,9 @@ export async function addMfaAppMethodPost(
   next: NextFunction
 ): Promise<void> {
   try {
-    assert(req.session.user.authAppSecret, "authAppSecret not set in session");
-
-    const authAppSecret = req.session.user.authAppSecret;
-    const { code } = req.body;
-
+    const { code, authAppSecret } = req.body;
     const isValid = verifyMfaCode(authAppSecret, code);
+    console.log(code, authAppSecret);
 
     if (!isValid) {
       return renderMfaMethodAppPage(req, res, next, {

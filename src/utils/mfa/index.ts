@@ -3,33 +3,12 @@ import { logger } from "../logger";
 import { getRequestConfig, Http } from "../http";
 import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
 import { getMfaServiceUrl } from "../../config";
-import {
-  authenticatorGenerateSecret,
-  HashAlgorithms,
-  KeyEncodings,
-  keyuri,
-  Strategy,
-  totpCreateHmacKey,
-  totpCheck,
-} from "@otplib/core";
-import { createDigest } from "@otplib/plugin-crypto";
-import * as base32EncDec from "@otplib/plugin-base32-enc-dec";
-import crypto from "crypto";
+import { authenticator } from "otplib";
 import { ENVIRONMENT_NAME } from "../../app.constants";
 import { getAppEnv } from "../../config";
 
-function createRandomBytes(size: number, encoding: KeyEncodings): string {
-  return crypto.randomBytes(size).toString(encoding);
-}
-
 export function generateMfaSecret(): string {
-  const options = {
-    createRandomBytes,
-    encoding: KeyEncodings.HEX,
-    keyEncoder: base32EncDec.keyEncoder,
-    keyDecoder: base32EncDec.keyDecoder,
-  };
-  return authenticatorGenerateSecret(20, options);
+  return authenticator.generateSecret(20);
 }
 
 export function generateQRCodeValue(
@@ -41,31 +20,11 @@ export function generateQRCodeValue(
     getAppEnv() === ENVIRONMENT_NAME.PROD
       ? issuerName
       : `${issuerName} - ${getAppEnv()}`;
-  return keyuri({
-    accountName: email,
-    secret: secret,
-    algorithm: HashAlgorithms.SHA1,
-    digits: 6,
-    step: 30,
-    issuer: issuer,
-    type: Strategy.TOTP,
-  });
+  return authenticator.keyuri(email, issuer, secret);
 }
 
 export function verifyMfaCode(secret: string, code: string): boolean {
-  return totpCheck(code, secret, {
-    algorithm: HashAlgorithms.SHA1,
-    createDigest,
-    createHmacKey: totpCreateHmacKey,
-    digits: 6,
-    encoding: KeyEncodings.HEX,
-    epoch: 0,
-    step: 30,
-    window: 0,
-    keyEncoder: base32EncDec.keyEncoder,
-    keyDecoder: base32EncDec.keyDecoder,
-    createRandomBytes,
-  });
+  return authenticator.check(code, secret);
 }
 
 async function mfa(
