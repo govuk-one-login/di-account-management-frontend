@@ -5,6 +5,7 @@ import {
   addMfaMethodGet,
   addMfaMethodPost,
   addMfaAppMethodGet,
+  addMfaAppMethodPost,
 } from "./add-mfa-methods-controller";
 
 const router = express.Router();
@@ -25,6 +26,12 @@ router.get(
   PATH_DATA.ADD_MFA_METHOD_APP.url,
   requiresAuthMiddleware,
   addMfaAppMethodGet
+);
+
+router.post(
+  PATH_DATA.ADD_MFA_METHOD_APP.url,
+  requiresAuthMiddleware,
+  addMfaAppMethodPost
 );
 
 export { router as addMfaMethodRouter };

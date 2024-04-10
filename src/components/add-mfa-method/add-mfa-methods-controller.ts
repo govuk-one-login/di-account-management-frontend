@@ -1,5 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { MFA_METHODS } from "../../app.constants";
+import {
+  generateMfaSecret,
+  generateQRCodeValue,
+  verifyMfaCode,
+} from "../../utils/mfa";
+import QRCode from "qrcode";
+import assert from "node:assert";
 
 type MfaMethods = keyof typeof MFA_METHODS;
 
@@ -36,10 +43,71 @@ export function addMfaMethodPost(
     return next(new Error(`Unknown addMfaMethod: ${addMfaMethod}`));
   }
 
+  if (MFA_METHODS[method as MfaMethods].type === "app") {
+    req.session.user.authAppSecret = generateMfaSecret();
+  }
+
   res.redirect(MFA_METHODS[method as MfaMethods].path.url);
   res.end();
 }
 
-export function addMfaAppMethodGet(req: Request, res: Response): void {
-  res.render("add-mfa-method/add-app.njk");
+async function renderMfaMethodAppPage(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  errors: any
+): Promise<void> {
+  try {
+    assert(req.session.user.authAppSecret, "authAppSecret not set in session");
+    assert(req.session.user.email, "email not set in session");
+
+    const qrCodeText = generateQRCodeValue(
+      req.session.user.authAppSecret,
+      req.session.user.email,
+      "GOV.UK One Login"
+    );
+
+    const qrCode = await QRCode.toDataURL(qrCodeText);
+    return res.render("add-mfa-method/add-app.njk", {
+      qrCode,
+      errors: errors || {},
+    });
+  } catch (e) {
+    req.log.error(e);
+    return next(e);
+  }
+}
+
+export async function addMfaAppMethodGet(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  return renderMfaMethodAppPage(req, res, next, {});
+}
+
+export async function addMfaAppMethodPost(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    assert(req.session.user.authAppSecret, "authAppSecret not set in session");
+
+    const authAppSecret = req.session.user.authAppSecret;
+    const { code } = req.body;
+
+    const isValid = verifyMfaCode(authAppSecret, code);
+
+    if (!isValid) {
+      return renderMfaMethodAppPage(req, res, next, {
+        code: { text: "Invalid code" },
+      });
+    }
+
+    res.send({ isValid });
+  } catch (e) {
+    req.log.error(e);
+    return next(e);
+  }
 }

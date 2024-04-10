@@ -1,5 +1,37 @@
 {% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block pageContent %}
-add app
-{% endblock pageContent %
+    <form method="post" action="{{ "ADD_MFA_METHOD_APP" | getPath }}">
+      <p class="govuk-body">
+        <img id="qr-code" src="{{qrCode}}" alt="QR Code Image">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+      </p>
+        {{ govukInput({
+          label: {
+          text: 'pages.setupAuthenticatorApp.code.label' | translate
+          },
+          hint: {
+              text: 'pages.setupAuthenticatorApp.code.hintText' | translate
+          },
+          classes: "govuk-input--width-10 govuk-!-font-weight-bold",
+          id: "code",
+          name: "code",
+          inputmode: "numeric",
+          spellcheck: false,
+          autocomplete: "one-time-code",
+          errorMessage: {
+            text: errors['code'].text
+          } if (errors['code'])
+          })
+        }}
+
+        {{ govukButton({
+          "text": "general.continue.label" | translate,
+          "type": "Submit",
+          "preventDoubleClick": true
+        }) }}
+
+    </form>
+{% endblock pageContent %}

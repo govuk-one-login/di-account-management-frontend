@@ -2,6 +2,7 @@ import express from "express";
 import * as nunjucks from "nunjucks";
 import i18next, { DefaultNamespace, TFunction } from "i18next";
 import { Environment } from "nunjucks";
+import { PATH_DATA } from "../app.constants";
 
 export function configureNunjucks(
   app: express.Application,
@@ -28,6 +29,13 @@ export function configureNunjucks(
       return parsedUrl.pathname + parsedUrl.search;
     }
   );
+
+  nunjucksEnv.addFilter("getPath", function (route: string) {
+    if (!PATH_DATA[route]) {
+      throw new Error(`Unknown route: ${route}`);
+    }
+    return PATH_DATA[route].url;
+  });
 
   return nunjucksEnv;
 }
