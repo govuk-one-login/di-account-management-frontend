@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { MFA_METHODS, PATH_DATA } from "../../app.constants";
+import { HTTP_STATUS_CODES, MFA_METHODS, PATH_DATA } from "../../app.constants";
 import {
+  addMfaMethod,
   generateMfaSecret,
   generateQRCodeValue,
   verifyMfaCode,
@@ -93,12 +94,34 @@ export async function addMfaAppMethodPost(
 ): Promise<void> {
   try {
     const { code, authAppSecret } = req.body;
+
+    assert(code, "code not set in body");
+    assert(authAppSecret, "authAppSecret not set in body");
+
     const isValid = verifyMfaCode(authAppSecret, code);
 
     if (!isValid) {
       return renderMfaMethodAppPage(req, res, next, {
         code: { text: "Invalid code" },
       });
+    }
+
+    const { status } = await addMfaMethod({
+      email: req.session.user.email,
+      otp: code,
+      credential: authAppSecret,
+      mfaMethod: {
+        priorityIdentifier: "SECONDARY",
+        mfaMethodType: "AUTH_APP",
+      },
+      accessToken: req.session.user.tokens.accessToken,
+      sourceIp: req.ip,
+      sessionId: req.session.id,
+      persistentSessionId: res.locals.persistentSessionId,
+    });
+
+    if (status !== HTTP_STATUS_CODES.OK) {
+      throw Error(`Failed to add MFA method, response status: ${status}`);
     }
 
     return res.render("common/confirmation-page/confirmation.njk", {
