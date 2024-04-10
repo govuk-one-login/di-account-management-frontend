@@ -1,0 +1,6 @@
+{% extends "common/layout/base-page.njk" %}
+{% block pageContent %}
+    <h1 class='govuk-heading-xl'>{{ heading }}</h1>
+    <p class='govuk-body'>{{ message }}</p>
+    <p><a href='{{ backLink }}'>{{ backLinkText }}</a></p>
+{% endblock %}

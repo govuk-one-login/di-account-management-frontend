@@ -181,6 +181,11 @@
         "info": "See what you’ve visited with your GOV.UK One Login and when."
       }
     },
+    "confirmAddMfaMethod": {
+      "heading": "You've added another way to get security codes",
+      "message": "If your usual way to get security codes is not available, you can get a code from this authenticator app instead",
+      "backLinkText": "Back to security"
+    },
     "addMfaMethod": {
       "title": "Add another way to get security codes",
       "sms": {
@@ -199,6 +204,27 @@
       "backLink": "I do not want to add another way to get security codes",
       "continue": "Continue"
     }, 
+    "addMfaMethodApp": {
+      "title": "Set up an authenticator app",
+      "step1": {
+        "text": "1. Open your authenticator app on your smartphone, tablet, or computer.",
+        "hintTitle": "I don't have an authenticator app",
+        "hintText": "<p>You can download an authenticator app for your smartphone or tablet from your app store.</p><p>If you don't have a smartphone or tablet, search online for an authenticator app for your computer.</p><p>You can use any authenticator app.</p>"
+      },
+      "step2": {
+        "text": "2. Use your authenticator app to scan the QR code.",
+        "hintTitle": "I cannot scan the QR code",
+        "hintText": "<p>You can enter the secret key into your authenticator app manually.</p><p>Secret Key:<br/><strong>[secretKey]</strong></p><p>Some authenticator apps call the secret key a 'code'.</p>"
+      },
+      "step3": {
+        "text": "3. The authenticator app will show a security code."
+      },
+      "step4": {
+        "text": "4. Enter the security code.",
+        "label": "Security code",
+        "hint": "This is the 6-digit code shown in your authenticator app"
+      }
+    },
     "activityHistory": {
       "title": "Activity history",
       "header": "Activity history",

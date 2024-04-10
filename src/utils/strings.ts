@@ -42,3 +42,10 @@ export function zeroPad(input: string, length: number): string {
   const pad = "0".repeat(length);
   return (pad + input).slice(-length);
 }
+
+export function splitSecretKeyIntoFragments(secretKey: string): string[] {
+  if (secretKey.length > 0) {
+    return secretKey.match(/\w{1,4}/g);
+  }
+  return [];
+}

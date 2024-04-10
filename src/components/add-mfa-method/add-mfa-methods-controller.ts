@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { MFA_METHODS } from "../../app.constants";
+import { MFA_METHODS, PATH_DATA } from "../../app.constants";
 import {
   generateMfaSecret,
   generateQRCodeValue,
@@ -7,6 +7,7 @@ import {
 } from "../../utils/mfa";
 import QRCode from "qrcode";
 import assert from "node:assert";
+import { splitSecretKeyIntoFragments } from "../../utils/strings";
 
 type MfaMethods = keyof typeof MFA_METHODS;
 
@@ -68,6 +69,7 @@ async function renderMfaMethodAppPage(
     return res.render("add-mfa-method/add-app.njk", {
       authAppSecret,
       qrCode,
+      formattedSecret: splitSecretKeyIntoFragments(authAppSecret).join(" "),
       errors: errors || {},
     });
   } catch (e) {
@@ -92,13 +94,19 @@ export async function addMfaAppMethodPost(
   try {
     const { code, authAppSecret } = req.body;
     const isValid = verifyMfaCode(authAppSecret, code);
-    console.log(code, authAppSecret);
 
     if (!isValid) {
       return renderMfaMethodAppPage(req, res, next, {
         code: { text: "Invalid code" },
       });
     }
+
+    return res.render("common/confirmation-page/confirmation.njk", {
+      heading: req.t("pages.confirmAddMfaMethod.heading"),
+      message: req.t("pages.confirmAddMfaMethod.message"),
+      backLinkText: req.t("pages.confirmAddMfaMethod.backLinkText"),
+      backLink: PATH_DATA.SECURITY.url,
+    });
 
     res.send({ isValid });
   } catch (e) {
