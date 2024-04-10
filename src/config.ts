@@ -135,6 +135,8 @@ const STUB_RP_PROD: string = "5Vfplamzln0AoarlnX5CX4UTqyh59xfA";
 const STUB_RP_INTEGRATION: string = "gjWNvoLYietMjeaOE6Zoww533u18ZUfr";
 const STUB_RP_STAGING: string = "3NKFv679oYlMdyrhKErrTGbzBy2h8rrd";
 export const ONE_LOGIN_HOME_NON_PROD: string = "oneLoginHome";
+const DWP_INTEGRATION: string = "sqae3L7gOdizeRqFMw_KCDlhcyg";
+const DWP_LOCAL_DEV_INTEGRATION: string = "iOf3hyG7eymusbSUS6LgFeQ7AtU";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -168,6 +170,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "gbis",
   "txsGLvMYYCPaWPZRq2L7XxEnyro",
   "childDevelopmentTraining",
+  DWP_INTEGRATION,
+  DWP_LOCAL_DEV_INTEGRATION,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
