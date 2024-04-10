@@ -107,8 +107,6 @@ export async function addMfaAppMethodPost(
       backLinkText: req.t("pages.confirmAddMfaMethod.backLinkText"),
       backLink: PATH_DATA.SECURITY.url,
     });
-
-    res.send({ isValid });
   } catch (e) {
     req.log.error(e);
     return next(e);
