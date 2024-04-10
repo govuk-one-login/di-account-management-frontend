@@ -198,7 +198,7 @@
       },
       "backLink": "I do not want to add another way to get security codes",
       "continue": "Continue"
-    }, 
+    },
     "activityHistory": {
       "title": "Activity history",
       "header": "Activity history",
@@ -583,23 +583,25 @@
       "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
-        "paragraphs": [
-          "Read our guidance if you're having a problem with:"
-        ],
+        "paragraphs": ["Read our guidance if you're having a problem with:"],
         "links": [
           {
             "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app",
             "text": "Using the GOV.UK ID Check app"
-          },{
+          },
+          {
             "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions",
             "text": "Proving your identity with GOV.UK One Login by answering security questions"
-          },{
+          },
+          {
             "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login",
             "text": "Changing the sign in details for your GOV.UK One Login"
-          },{
+          },
+          {
             "href": "https://www.gov.uk/guidance/getting-a-security-code-for-govuk-one-login",
             "text": "Getting a security code for GOV.UK One Login"
-          }, {
+          },
+          {
             "href": "https://www.gov.uk/guidance/deleting-your-govuk-one-login",
             "text": "Deleting your GOV.UK One Login"
           }
@@ -629,14 +631,12 @@
             "Our webchat is not yet fully accessible. Find out <a class=\"govuk-link\" href=\"link-to-statement\">more about the limitations and how we're working to fix this</a>.",
             "Opening times:<br>Monday to Friday, 8am to 8pm <br>Weekends and public holidays, 9am to 5.30pm"
           ],
-          "linkText":"Use webchat"
+          "linkText": "Use webchat"
         },
         "phone": {
           "heading": "Phone",
-          "paragraphs": [
-            "You'll need your reference code when you call."
-          ],
-          "insetText":{
+          "paragraphs": ["You'll need your reference code when you call."],
+          "insetText": {
             "paragraphs": [
               "From the UK:<br><strong>0300 373 9020</strong>",
               "Outside the UK:<br><strong>+44 208 629 0008</strong>"
@@ -903,6 +903,18 @@
         "paragraph2": "We’re working to make this possible.",
         "link_text": "Find the HMRC service you need",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
+      },
+      "iOf3hyG7eymusbSUS6LgFeQ7AtU": {
+        "header": "Repay and manage benefit money you owe",
+        "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
+        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "sqae3L7gOdizeRqFMw_KCDlhcyg": {
+        "header": "Repay and manage benefit money you owe",
+        "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
+        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_href": "https://idt-rmd-stub.idt.pdu-dev.hcs-eks.dwpcloud.uk/landing?source=your-services"
       }
     },
     "staging": {
