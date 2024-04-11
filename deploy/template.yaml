@@ -269,7 +269,7 @@ Mappings:
       SERVICEDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "0"
+      WEBCHATSOURCEURL: "https://chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "0"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
@@ -808,18 +808,10 @@ Resources:
                 ]
             - Name: "GA4_DISABLED"
               Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  GA4DISABLED,
-                ]
+                !FindInMap [EnvironmentVariables, !Ref Environment, GA4DISABLED]
             - Name: "UA_DISABLED"
               Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  UADISABLED,
-                ]
+                !FindInMap [EnvironmentVariables, !Ref Environment, UADISABLED]
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join
