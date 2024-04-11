@@ -1,6 +1,10 @@
 {% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
 {% block pageContent %}
-    <h1 class='govuk-heading-xl'>{{ heading }}</h1>
+    {{ govukPanel({
+        titleText: heading
+    }) }}
     <p class='govuk-body'>{{ message }}</p>
     <p><a href='{{ backLink }}'>{{ backLinkText }}</a></p>
 {% endblock %}
