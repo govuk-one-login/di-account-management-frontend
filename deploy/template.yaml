@@ -221,6 +221,10 @@ Mappings:
       SUPPORTMETHODMANAGEMENT: "0"
       SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "TBD"
+      GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
+      GA4DISABLED: "true"
+      UADISABLED: "true"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -246,6 +250,10 @@ Mappings:
       SUPPORTCHANGEMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "TBD"
+      GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
+      GA4DISABLED: "true"
+      UADISABLED: "true"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
