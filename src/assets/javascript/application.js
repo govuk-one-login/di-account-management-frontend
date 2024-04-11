@@ -21,18 +21,19 @@ function initChangePhoneNumber() {
 }
 initChangePhoneNumber();
 
+
+window.DI = window.DI || {};
+window.DI.analyticsUa = window.DI.analyticsUa || {};
 (function (w) {
   "use strict";
-  function appInit(trackingId, analyticsCookieDomain) {
+
+  function appInit() {
     window.GOVUKFrontend.initAll();
 
-    var cookies = window.GOVSignIn.Cookies(trackingId, analyticsCookieDomain);
-
-    if (cookies.hasConsentForAnalytics()) {
+    var cookies = window.GOVSignIn.Cookies();
+    if (window.DI.analyticsGa4.cookie.hasConsentForAnalytics()) {
       cookies.initAnalytics();
     }
-
-    cookies.cookieBannerInit();
   }
 
   if (w.GOVSignIn && w.GOVSignIn.Modules && w.GOVSignIn.Modules.ShowPassword) {
@@ -45,5 +46,6 @@ initChangePhoneNumber();
     }
   }
 
-  w.GOVSignIn.appInit = appInit;
+  w.DI.analyticsUa.init = appInit;
 })(window);
+  
