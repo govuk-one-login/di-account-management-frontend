@@ -38,11 +38,11 @@ describe("updateSessionMiddleware", () => {
   });
 
   it("should set session.queryParameters.fromURL if it's a valid URL", () => {
-    mockRequest.query.fromURL = "https://valid-url.com";
+    mockRequest.query.fromURL = "https://valid-url.com/";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
     expect(mockRequest.session.queryParameters.fromURL).to.equal(
-      "https://valid-url.com"
+      "https://valid-url.com/"
     );
     expect(loggerErrorSpy.notCalled).to.be.true;
   });
@@ -51,14 +51,20 @@ describe("updateSessionMiddleware", () => {
     mockRequest.query.theme = "hEllo***";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
-    expect(loggerErrorSpy.calledOnce).to.be.true;
+    expect(loggerErrorSpy.calledTwice).to.be.true;
   });
 
   it("should log an error for invalid fromURL", () => {
     mockRequest.query.fromURL = "invalid-url";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
-
-    expect(loggerErrorSpy.calledOnce).to.be.true;
+    expect(loggerErrorSpy).to.be.calledWith(
+      { url: "invalid-url" },
+      "TypeError [ERR_INVALID_URL]: Invalid URL"
+    );
+    expect(loggerErrorSpy).to.be.calledWith(
+      { trace: mockResponse.locals.sessionId },
+      "fromURL in request query for contact-govuk-one-login page did not pass validation"
+    );
     expect(mockRequest.session.queryParameters.fromURL).to.be.undefined;
   });
 
