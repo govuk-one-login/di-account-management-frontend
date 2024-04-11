@@ -99,6 +99,7 @@ describe("addMfaAppMethodGet", () => {
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
       errors: {},
+      errorList: [],
     });
   });
 
@@ -134,7 +135,7 @@ describe("addMfaAppMethodPost", () => {
   it("should send the request to add mfaMethod", async () => {
     const req = {
       body: {
-        code: "1234",
+        code: "123456",
         authAppSecret: "A".repeat(20),
       },
       session: {
@@ -174,7 +175,7 @@ describe("addMfaAppMethodPost", () => {
 
     expect(addMfaMethod).to.have.been.calledWith({
       email: "test@test.com",
-      otp: "1234",
+      otp: "123456",
       credential: "AAAAAAAAAAAAAAAAAAAA",
       mfaMethod: { priorityIdentifier: "SECONDARY", mfaMethodType: "AUTH_APP" },
       accessToken: "token",
@@ -197,7 +198,7 @@ describe("addMfaAppMethodPost", () => {
   it("should render an error if the code is invalid", async () => {
     const req = {
       body: {
-        code: "1234",
+        code: "123456",
         authAppSecret: "A".repeat(20),
       },
       session: {
