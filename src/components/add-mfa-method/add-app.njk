@@ -2,8 +2,13 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block pageContent %}
+    {{ govukErrorSummary({
+        errorList: errorList,
+        titleText: "general.errorSummaryTitle" | translate
+    }) if errorList|length > 0}}
     <h1 class="govuk-heading-xl">{{ 'pages.addMfaMethodApp.title' | translate }}</h1>
     <ol class="govuk-list govuk-list">
         <li>

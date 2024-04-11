@@ -12,7 +12,6 @@ import { getMfaServiceUrl } from "../../config";
 import { authenticator } from "otplib";
 import { ENVIRONMENT_NAME } from "../../app.constants";
 import { getAppEnv } from "../../config";
-import { status } from "aws-sdk/clients/iotfleetwise";
 
 export function generateMfaSecret(): string {
   return authenticator.generateSecret(20);

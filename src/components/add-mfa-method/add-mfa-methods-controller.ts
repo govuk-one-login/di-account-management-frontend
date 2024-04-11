@@ -9,6 +9,7 @@ import {
 import QRCode from "qrcode";
 import assert from "node:assert";
 import { splitSecretKeyIntoFragments } from "../../utils/strings";
+import { formatValidationError } from "../../utils/validation";
 
 type MfaMethods = keyof typeof MFA_METHODS;
 
@@ -71,6 +72,12 @@ async function renderMfaMethodAppPage(
       authAppSecret,
       qrCode,
       formattedSecret: splitSecretKeyIntoFragments(authAppSecret).join(" "),
+      errorList: Object.keys(errors || {}).map((key) => {
+        return {
+          text: errors[key].text,
+          href: `#${key}`,
+        };
+      }),
       errors: errors || {},
     });
   } catch (e) {
@@ -95,15 +102,44 @@ export async function addMfaAppMethodPost(
   try {
     const { code, authAppSecret } = req.body;
 
-    assert(code, "code not set in body");
     assert(authAppSecret, "authAppSecret not set in body");
+
+    if (!code) {
+      return renderMfaMethodAppPage(
+        req,
+        res,
+        next,
+        formatValidationError(
+          "code",
+          req.t("pages.addMfaMethodApp.errors.required")
+        )
+      );
+    }
+
+    if (code.length !== 6) {
+      return renderMfaMethodAppPage(
+        req,
+        res,
+        next,
+        formatValidationError(
+          "code",
+          req.t("pages.addMfaMethodApp.errors.maxLength")
+        )
+      );
+    }
 
     const isValid = verifyMfaCode(authAppSecret, code);
 
     if (!isValid) {
-      return renderMfaMethodAppPage(req, res, next, {
-        code: { text: "Invalid code" },
-      });
+      return renderMfaMethodAppPage(
+        req,
+        res,
+        next,
+        formatValidationError(
+          "code",
+          req.t("pages.addMfaMethodApp.errors.invalidCode")
+        )
+      );
     }
 
     const { status } = await addMfaMethod({

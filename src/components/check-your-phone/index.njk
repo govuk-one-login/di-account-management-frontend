@@ -9,7 +9,10 @@
 
 {% block pageContent %}
 
-    {% include "common/errors/errorSummary.njk" %}
+    {{ govukErrorSummary({
+        errorList: errors,
+        titleText: 'pages.checkYourPhone.errorSummary.title' | translate
+    })}
 
     <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.checkYourPhone.header' | translate}}</h1>
     {{ govukInsetText({
