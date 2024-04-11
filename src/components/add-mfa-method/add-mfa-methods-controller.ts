@@ -54,7 +54,7 @@ async function renderMfaMethodAppPage(
   req: Request,
   res: Response,
   next: NextFunction,
-  errors: any
+  errors: ReturnType<typeof formatValidationError>
 ): Promise<void> {
   try {
     assert(req.session.user.email, "email not set in session");
