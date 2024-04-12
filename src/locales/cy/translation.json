@@ -632,7 +632,7 @@
             "Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm"
           ],
           "callChargesLinkText": "Darganfyddwch fwy am gostau galwadau",
-          "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\">cwblhewch y ffurflen gyswllt</a>."
+          "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">cwblhewch y ffurflen gyswllt</a>."
         },
         "email": {
           "heading": "E-bost",

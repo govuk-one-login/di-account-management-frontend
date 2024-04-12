@@ -203,7 +203,7 @@
       },
       "backLink": "I do not want to add another way to get security codes",
       "continue": "Continue"
-    }, 
+    },
     "addMfaMethodApp": {
       "title": "Set up an authenticator app",
       "step1": {
@@ -692,7 +692,7 @@
             "weekends and public holidays, 9am to 5.30pm"
           ],
           "callChargesLinkText": "Find out about call charges",
-          "waitingTimeWarning": "There are currently long waiting times on the phone. If your call is not urgent, try again later or <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\">fill in the contact form</a>."
+          "waitingTimeWarning": "There are currently long waiting times on the phone. If your call is not urgent, try again later or <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">fill in the contact form</a>."
         },
         "email": {
           "heading": "Email",
