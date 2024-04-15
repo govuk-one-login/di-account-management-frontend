@@ -50,6 +50,7 @@ export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
           `'nonce-${res.locals.scriptNonce}'`,
         "'self'",
         "https://*.smartagent.app",
+        "https://fonts.cdnfonts.com",
       ],
       scriptSrc: [
         "'self'",
