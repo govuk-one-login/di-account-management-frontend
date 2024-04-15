@@ -60,7 +60,7 @@
     "@aws-sdk/client-dynamodb": "^3.554.0",
     "@aws-sdk/client-sqs": "^3.554.0",
     "@aws-sdk/util-dynamodb": "^3.554.0",
-    "@govuk-one-login/one-login-analytics": "^0.0.10",
+    "@govuk-one-login/one-login-analytics": "^1.0.2",
     "aws-sdk": "2.1599.0",
     "axios": "^1.6.8",
     "base64url": "3.0.1",
