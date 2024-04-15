@@ -24,7 +24,11 @@ describe("update confirmation controller", () => {
       session: { user: { state: {} }, destroy: sandbox.fake() } as any,
       t: sandbox.fake.returns("translated-string"),
     };
-    res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
+    res = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
+      locals: {},
+    };
   });
 
   afterEach(() => {

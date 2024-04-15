@@ -19,7 +19,7 @@ describe("session expired controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       locals: {},
       status: sandbox.fake(),
     };

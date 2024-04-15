@@ -13,7 +13,7 @@ describe("sanitize-request-middleware", () => {
     sandbox = sinon.createSandbox();
     req = { body: {} };
     res = {};
-    next = sandbox.fake();
+    next = sandbox.fake(() => {});
   });
 
   afterEach(() => {

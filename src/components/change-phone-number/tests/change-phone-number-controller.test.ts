@@ -28,7 +28,7 @@ describe("change phone number controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       locals: {},
       status: sandbox.fake(),
     };
@@ -49,7 +49,7 @@ describe("change phone number controller", () => {
   describe("changePhoneNumberPost", () => {
     it("should redirect to /phone-number-updated-confirmation page", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.returns({
+        sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: true,
         }),
       };
@@ -66,7 +66,7 @@ describe("change phone number controller", () => {
 
     it("should return validation error when same UK number", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.returns({
+        sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: false,
           code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
         }),
@@ -83,7 +83,7 @@ describe("change phone number controller", () => {
 
     it("should return validation error when same international number", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.returns({
+        sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: false,
           code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
         }),
@@ -101,7 +101,7 @@ describe("change phone number controller", () => {
 
     it("should redirect to /phone-number-updated-confirmation when success with valid international number", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.returns({
+        sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: true,
         }),
       };
