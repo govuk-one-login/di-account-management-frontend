@@ -37,7 +37,11 @@ describe("your services controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
+    res = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
+      locals: {},
+    };
   });
 
   afterEach(() => {

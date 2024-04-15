@@ -27,7 +27,7 @@ describe("check your email controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       status: sandbox.fake(),
       locals: {},
     };
@@ -53,7 +53,7 @@ describe("check your email controller", () => {
   describe("resendEmailCodePost", () => {
     it("should redirect to /check-your-email when get security code is executed", async () => {
       const fakeService: ChangeEmailServiceInterface = {
-        sendCodeVerificationNotification: sandbox.fake.returns(true),
+        sendCodeVerificationNotification: sandbox.fake.resolves(true),
       };
 
       req.session.user = {

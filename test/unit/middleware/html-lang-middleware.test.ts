@@ -16,7 +16,7 @@ describe("HTML-lang middleware", () => {
       i18n: { language: "en" } as any,
     };
     res = { locals: {} };
-    next = sandbox.fake();
+    next = sandbox.fake(() => {});
   });
 
   afterEach(() => {

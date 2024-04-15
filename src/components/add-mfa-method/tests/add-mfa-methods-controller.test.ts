@@ -13,12 +13,27 @@ describe("addMfaMethodPost", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    const endFake = sandbox.fake(
+      (chunk?: any, encoding?: any, cb?: () => void) => {
+        if (typeof chunk === "function") {
+          // Called as end(cb)
+          chunk();
+        } else if (typeof encoding === "function") {
+          // Called as end(chunk, cb)
+          encoding();
+        } else if (cb) {
+          // Called as end(chunk, encoding, cb)
+          cb();
+        }
+        return {} as Response; // You should return a proper type here, matching your test environment needs
+      }
+    );
     req = { body: {}, log: { error: sandbox.fake() } as any };
     res = {
       status: sandbox.fake(),
-      end: sandbox.fake(),
-      redirect: sandbox.fake(),
-    };
+      redirect: sandbox.fake(() => {}),
+      end: endFake,
+    } as Partial<Response>;
     next = sinon.spy();
   });
 

@@ -26,7 +26,7 @@ describe("change email controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       locals: {},
       status: sandbox.fake(),
     };
@@ -47,7 +47,7 @@ describe("change email controller", () => {
   describe("changeEmailPost", () => {
     it("should redirect to /check-your-email on submit", async () => {
       const fakeService: ChangeEmailServiceInterface = {
-        sendCodeVerificationNotification: sandbox.fake.returns(true),
+        sendCodeVerificationNotification: sandbox.fake.resolves(true),
       };
 
       req.body.email = "test@test.com";
@@ -67,7 +67,7 @@ describe("change email controller", () => {
 
     it("should render bad request", async () => {
       const fakeService: ChangeEmailServiceInterface = {
-        sendCodeVerificationNotification: sandbox.fake.returns(true),
+        sendCodeVerificationNotification: sandbox.fake.resolves(true),
       };
 
       req.body.email = "test@test.com";
