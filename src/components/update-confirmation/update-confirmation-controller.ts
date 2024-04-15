@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { redactPhoneNumber } from "../../utils/strings";
+import { PATH_DATA } from "../../app.constants";
 
 const oplValues = {
   updateEmailConfirmation: {
@@ -77,5 +78,18 @@ export function deleteAccountConfirmationGet(
     summaryText: req.t("pages.deleteAccountConfirmation.summaryText"),
     showGovUKButton: true,
     hideAccountNavigation: true,
+  });
+}
+
+export async function addMfaAppMethodConfirmationGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  return res.render("common/confirmation-page/confirmation.njk", {
+    pageTitleName: req.t("pages.confirmAddMfaMethod.title"),
+    heading: req.t("pages.confirmAddMfaMethod.heading"),
+    message: req.t("pages.confirmAddMfaMethod.message"),
+    backLinkText: req.t("pages.confirmAddMfaMethod.backLinkText"),
+    backLink: PATH_DATA.SECURITY.url,
   });
 }

@@ -62,6 +62,7 @@ import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
 import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-routes";
+import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
 import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 
 const APP_VIEWS = [
@@ -170,6 +171,7 @@ async function createApp(): Promise<express.Application> {
   }
   if (supportChangeMfa()) {
     app.use(addMfaMethodRouter);
+    app.use(addMfaMethodAppRouter);
   }
   app.use(trackAndRedirectRouter);
 
