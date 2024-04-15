@@ -33,7 +33,7 @@ describe("change password controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       locals: {},
       status: sandbox.fake(),
     };
@@ -54,7 +54,11 @@ describe("change password controller", () => {
   describe("changePasswordPost", () => {
     it("should redirect to /password-updated-confirmation page", async () => {
       const fakeService: ChangePasswordServiceInterface = {
-        updatePassword: sandbox.fake.returns({ success: true }),
+        updatePassword: sandbox.fake.resolves({
+          success: true,
+          code: 200,
+          message: "",
+        }),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -69,9 +73,10 @@ describe("change password controller", () => {
     });
     it("should render bad request when password are same ", async () => {
       const fakeService: ChangePasswordServiceInterface = {
-        updatePassword: sandbox.fake.returns({
+        updatePassword: sandbox.fake.resolves({
           success: false,
           code: ERROR_CODES.NEW_PASSWORD_SAME_AS_EXISTING,
+          message: "",
         }),
       };
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -82,9 +87,10 @@ describe("change password controller", () => {
 
     it("should render bad request when password is common ", async () => {
       const fakeService: ChangePasswordServiceInterface = {
-        updatePassword: sandbox.fake.returns({
+        updatePassword: sandbox.fake.resolves({
           success: false,
           code: ERROR_CODES.PASSWORD_IS_COMMON,
+          message: "",
         }),
       };
       req.session.user.tokens = { accessToken: "token" } as any;

@@ -27,7 +27,7 @@ describe("resend phone code controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       status: sandbox.fake(),
       locals: {},
     };
@@ -54,7 +54,7 @@ describe("resend phone code controller", () => {
   describe("resendPhoneCodePost", () => {
     it("should redirect to /check-your-phone when Get security code is clicked", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.returns({
+        sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: true,
         }),
       };

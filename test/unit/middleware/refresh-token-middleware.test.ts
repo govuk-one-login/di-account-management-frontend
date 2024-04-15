@@ -29,7 +29,7 @@ describe("Refresh token middleware", () => {
     };
 
     const res: any = { locals: {}, redirect: sinon.fake() };
-    const nextFunction: NextFunction = sinon.fake();
+    const nextFunction: NextFunction = sinon.fake(() => {});
 
     const fakeService: ClientAssertionServiceInterface = {
       generateAssertionJwt: sinon.fake(),
@@ -64,7 +64,7 @@ describe("Refresh token middleware", () => {
     };
 
     const res: any = { locals: {}, redirect: sinon.fake() };
-    const nextFunction: NextFunction = sinon.fake();
+    const nextFunction: NextFunction = sinon.fake(() => {});
 
     await refreshTokenMiddleware(fakeService)(req, res, nextFunction);
 

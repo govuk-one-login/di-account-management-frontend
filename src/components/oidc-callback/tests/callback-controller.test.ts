@@ -46,7 +46,7 @@ describe("callback controller", () => {
     res = {
       render: sandbox.fake(),
       status: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       cookie: sandbox.fake(),
       locals: {},
     };
@@ -59,7 +59,7 @@ describe("callback controller", () => {
   describe("oidcAuthCallbackGet", () => {
     it("should redirect to /manage-your-account", async () => {
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.returns("testassert"),
+        generateAssertionJwt: sandbox.fake.resolves("testassert"),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
@@ -71,7 +71,7 @@ describe("callback controller", () => {
       req.query.cookie_consent = "accept";
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.returns("testassert"),
+        generateAssertionJwt: sandbox.fake.resolves("testassert"),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
@@ -85,7 +85,7 @@ describe("callback controller", () => {
       req.query._ga = "2.172053219.3232.1636392870-444224.1635165988";
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.returns("testassert"),
+        generateAssertionJwt: sandbox.fake.resolves("testassert"),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
@@ -98,15 +98,25 @@ describe("callback controller", () => {
     });
 
     it("should redirect to /start when not medium level auth", async () => {
-      req.oidc.callback = sandbox.fake.returns({
+      req.oidc.callback = sandbox.fake.resolves({
         accessToken: "accessToken",
         idToken: "idtoken",
         claims: () => {
-          return { vot: VECTORS_OF_TRUST.LOW };
+          return {
+            vot: VECTORS_OF_TRUST.LOW,
+            aud: "",
+            exp: 123,
+            iat: 456,
+            iss: "iss",
+            sub: "sub",
+          };
+        },
+        expired: function (): boolean {
+          throw new Error("Function not implemented.");
         },
       });
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.returns("testassert"),
+        generateAssertionJwt: sandbox.fake.resolves("testassert"),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
@@ -120,7 +130,7 @@ describe("callback controller", () => {
         state: "m0H_2VvrhKR0qA",
       });
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.returns("testassert"),
+        generateAssertionJwt: sandbox.fake.resolves("testassert"),
       };
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
       expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.FORBIDDEN);

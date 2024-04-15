@@ -20,7 +20,7 @@ describe("Requires auth middleware", () => {
     };
 
     const res: any = { locals: {}, redirect: sinon.fake() };
-    const nextFunction: NextFunction = sinon.fake();
+    const nextFunction: NextFunction = sinon.fake(() => {});
 
     requiresAuthMiddleware(req, res, nextFunction);
 
@@ -39,7 +39,7 @@ describe("Requires auth middleware", () => {
     };
 
     const res: any = { locals: {}, redirect: sinon.fake() };
-    const nextFunction: NextFunction = sinon.fake();
+    const nextFunction: NextFunction = sinon.fake(() => {});
 
     requiresAuthMiddleware(req, res, nextFunction);
 
@@ -56,7 +56,7 @@ describe("Requires auth middleware", () => {
       },
     };
     const res: any = { locals: {}, redirect: sinon.fake() };
-    const nextFunction: NextFunction = sinon.fake();
+    const nextFunction: NextFunction = sinon.fake(() => {});
 
     requiresAuthMiddleware(req, res, nextFunction);
 
@@ -78,7 +78,7 @@ describe("Requires auth middleware", () => {
       redirect: sinon.fake(),
       cookie: sinon.fake(),
     };
-    const nextFunction: NextFunction = sinon.fake();
+    const nextFunction: NextFunction = sinon.fake(() => {});
 
     requiresAuthMiddleware(req, res, nextFunction);
 
@@ -106,7 +106,7 @@ describe("Requires auth middleware", () => {
         this.mockCookies[name] = value;
       },
     };
-    const nextFunction: NextFunction = sinon.fake();
+    const nextFunction: NextFunction = sinon.fake(() => {});
 
     requiresAuthMiddleware(req, res, nextFunction);
 
@@ -134,11 +134,11 @@ it("should redirect to Log in page", () => {
 
   const res: Partial<Response> = {
     render: sandbox.fake(),
-    redirect: sandbox.fake(),
+    redirect: sandbox.fake(() => {}),
     locals: {},
   };
 
-  const nextFunction: NextFunction = sandbox.fake();
+  const nextFunction: NextFunction = sandbox.fake(() => {});
   requiresAuthMiddleware(req as Request, res as Response, nextFunction);
   expect(res.redirect).to.have.called;
   expect(req.oidc.authorizationUrl).to.have.been.calledOnce;

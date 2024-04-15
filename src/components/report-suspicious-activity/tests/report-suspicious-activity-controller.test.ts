@@ -56,9 +56,9 @@ describe("report suspicious activity controller", () => {
         sessionId: "session-id",
       },
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
     };
-    next = sandbox.fake();
+    next = sandbox.fake(() => {});
     dynamodbQueryOutput = {
       Items: [
         {

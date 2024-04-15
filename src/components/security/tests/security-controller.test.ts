@@ -13,7 +13,11 @@ describe("security controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     req = { body: {}, session: { user: {} } as any, t: (k) => k };
-    res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
+    res = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
+      locals: {},
+    };
   });
 
   afterEach(() => {
