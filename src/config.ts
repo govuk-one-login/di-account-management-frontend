@@ -119,6 +119,10 @@ export function getServiceDomain(): string {
   return process.env.SERVICE_DOMAIN ?? "";
 }
 
+export function getAccessibilityStatementUrl(): string {
+  return process.env.ACCESSIBILITY_STATEMENT_URL;
+}
+
 const DBS_PROD: string = "Dw7Cxas8W7O2usHMHok95elKDRU";
 const DBS_NON_PROD: string = "dbs";
 const AAS_PROD: string = "dVrdJ7aemrvR0YlX7lDRaXnz0mE";
