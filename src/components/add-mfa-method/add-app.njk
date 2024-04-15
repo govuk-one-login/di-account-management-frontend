@@ -1,0 +1,66 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% block pageContent %}
+    {{ govukErrorSummary({
+        errorList: errorList,
+        titleText: "general.errorSummaryTitle" | translate
+    }) if errorList|length > 0}}
+    <h1 class="govuk-heading-xl">{{ 'pages.addMfaMethodApp.title' | translate }}</h1>
+    <ol class="govuk-list govuk-list">
+        <li>
+            <p>{{ 'pages.addMfaMethodApp.step1.text' | translate }}</p>
+            <p>{{ govukDetails({
+                summaryText: "pages.addMfaMethodApp.step1.hintTitle" | translate,
+                html: "pages.addMfaMethodApp.step1.hintText" | translate | safe
+                }) 
+            }}</p>
+        </li>
+        <li>
+            <p>{{ 'pages.addMfaMethodApp.step2.text' | translate }}</p>
+            <img id="qr-code" src="{{qrCode}}" alt="QR Code Image">
+            <p>{{ govukDetails({
+                summaryText: "pages.addMfaMethodApp.step2.hintTitle" | translate,
+                html: "pages.addMfaMethodApp.step2.hintText" | translate | safe | replace ("[secretKey]", formattedSecret)
+            }) }}</p>
+        </li>
+        <li>
+            {{ 'pages.addMfaMethodApp.step3.text' | translate }}
+        </li>
+        <li>
+            <form method="post" action="{{ "ADD_MFA_METHOD_APP" | getPath }}">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                <input type="hidden" name="authAppSecret" value="{{authAppSecret}}"/>
+                <p>{{ 'pages.addMfaMethodApp.step4.text' | translate }}</p>
+
+                <p>{{ govukInput({
+                label: {
+                text: 'pages.addMfaMethodApp.step4.label' | translate
+                },
+                hint: {
+                    text: 'pages.addMfaMethodApp.step4.hint' | translate
+                },
+                classes: "govuk-input--width-10 govuk-!-font-weight-bold",
+                id: "code",
+                name: "code",
+                inputmode: "numeric",
+                spellcheck: false,
+                autocomplete: "one-time-code",
+                errorMessage: {
+                    text: errors['code'].text
+                } if (errors['code'])
+                })
+                }}</p>
+
+                {{ govukButton({
+                "text": "general.continue.label" | translate,
+                "type": "Submit",
+                "preventDoubleClick": true
+                }) }}
+            </form>
+        </li>
+    </ol>
+{% endblock pageContent %}

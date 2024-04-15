@@ -5,7 +5,7 @@
 
 
 {% block pageContent %}
-    <form action="/add-mfa-method" method="post">
+    <form action="{{ "ADD_MFA_METHOD" | getPath }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
     {{ govukRadios({
        name: "addMfaMethod",
@@ -32,6 +32,6 @@
     </form>
 
     <p class="govuk-body">
-        <a href="/security" class="govuk-link">{{ "pages.addMfaMethod.backLink" | translate }}</a>
+        <a href="{{ "SECURITY" | getPath }}" class="govuk-link">{{ "pages.addMfaMethod.backLink" | translate }}</a>
     </p>
 {% endblock pageContent %}

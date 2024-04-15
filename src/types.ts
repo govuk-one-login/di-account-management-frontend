@@ -43,4 +43,5 @@ export interface User {
   tokens?: UserTokens;
   isAuthenticated: boolean;
   state?: UserState;
+  authAppSecret?: string;
 }
