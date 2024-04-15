@@ -130,6 +130,9 @@ export async function reportSuspiciousActivityGet(
     reportSuspiciousActivityUrl: PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url,
     alreadyReported: formattedActivityLogs?.reportedSuspicious,
     homeClientId: getOIDCClientId(),
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   };
 
   res.render("report-suspicious-activity/index.njk", {
@@ -183,5 +186,8 @@ export async function reportSuspiciousActivityConfirmation(
     email: req.session.user.email,
     contactLink: PATH_DATA.CONTACT.url,
     changePasswordLink: PATH_DATA.SECURITY.url,
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }

@@ -18,6 +18,9 @@ export function resendPhoneCodeGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, {
     phoneNumberRedacted: redactPhoneNumber(req.session.user.newPhoneNumber),
     phoneNumber: req.session.user.newPhoneNumber,
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 

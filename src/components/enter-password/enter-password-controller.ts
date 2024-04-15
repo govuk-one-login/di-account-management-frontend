@@ -69,6 +69,9 @@ export function enterPasswordGet(req: Request, res: Response): void {
     requestType,
     ...getStringsForForm(req, requestType),
     oplValues: OPL_VALUES[requestType] || {},
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 

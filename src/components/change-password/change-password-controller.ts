@@ -14,7 +14,11 @@ import xss from "xss";
 const changePasswordTemplate = "change-password/index.njk";
 
 export function changePasswordGet(req: Request, res: Response): void {
-  res.render(changePasswordTemplate);
+  res.render(changePasswordTemplate, {
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
+  });
 }
 
 export function changePasswordPost(

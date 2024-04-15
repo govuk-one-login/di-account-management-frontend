@@ -74,7 +74,6 @@ describe("Integration:: change email", () => {
     });
 
     app = await require("../../../app").createApp();
-    baseApi = process.env.AM_API_BASE_URL;
 
     await request(app)
       .get(PATH_DATA.CHANGE_EMAIL.url)
@@ -86,6 +85,7 @@ describe("Integration:: change email", () => {
           `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
         );
       });
+    baseApi = process.env.AM_API_BASE_URL;
   });
 
   beforeEach(() => {

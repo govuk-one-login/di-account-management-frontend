@@ -10,6 +10,12 @@ import {
 } from "../resend-email-code-controller";
 import { ChangeEmailServiceInterface } from "../../change-email/types";
 import { getInitialState } from "../../../utils/state-machine";
+import {
+  ENGLISH,
+  NEW_EMAIL,
+  ORIGINAL_URL,
+  RequestBuilder,
+} from "../../../../test/utils/builders";
 
 describe("check your email controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -39,13 +45,18 @@ describe("check your email controller", () => {
 
   describe("resendEmailCodeGet", () => {
     it("should render resend email code view", () => {
-      req.session.user = {
-        newEmailAddress: "test@test.com",
-      } as any;
+      // Arrange
+      req = new RequestBuilder().build();
+
+      // Act
       resendEmailCodeGet(req as Request, res as Response);
 
+      // Assert
       expect(res.render).to.have.calledWith("resend-email-code/index.njk", {
-        emailAddress: "test@test.com",
+        emailAddress: NEW_EMAIL,
+        language: ENGLISH,
+        currentUrl: ORIGINAL_URL,
+        baseUrl: "https://www.gov.uk",
       });
     });
   });

@@ -21,6 +21,9 @@ const TEMPLATE_NAME = "check-your-email/index.njk";
 export function checkYourEmailGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, {
     email: req.session.user.newEmailAddress,
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 

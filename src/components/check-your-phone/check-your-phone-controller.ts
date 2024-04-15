@@ -22,6 +22,9 @@ export function checkYourPhoneGet(req: Request, res: Response): void {
     phoneNumber: redactPhoneNumber(req.session.user.newPhoneNumber),
     resendCodeLink: PATH_DATA.RESEND_PHONE_CODE.url,
     changePhoneNumberLink: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 

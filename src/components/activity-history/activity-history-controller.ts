@@ -66,6 +66,9 @@ export async function activityHistoryGet(
       changePasswordLink: PATH_DATA.SECURITY.url,
       contactLink: PATH_DATA.CONTACT.url,
       homeClientId: getOIDCClientId(),
+      language: req.language,
+      currentUrl: req.originalUrl,
+      baseUrl: req.protocol + "://" + req.hostname,
     });
   } catch (e) {
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);

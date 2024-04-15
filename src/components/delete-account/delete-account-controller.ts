@@ -29,6 +29,9 @@ export async function deleteAccountGet(
       hasGovUkEmailSubscription: hasGovUkEmailSubscription,
       services: services,
       env: env,
+      language: req.language,
+      currentUrl: req.originalUrl,
+      baseUrl: req.protocol + "://" + req.hostname,
     };
     res.render("delete-account/index.njk", data);
   } else {

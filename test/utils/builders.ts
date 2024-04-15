@@ -11,6 +11,10 @@ export const ENGLISH: string = "en";
 export const SESSION_ID = "sessionid";
 export const PERSISTENT_SESSION_ID = "persistentsessionid";
 export const CLIENT_SESSION_ID = "clientsessionid";
+export const ORIGINAL_URL: string = "https://www.gov.uk";
+export const PROTOCOL: string = "https";
+export const HOST_NAME: string = "www.gov.uk";
+export const PHONE_NUMBER: string = "xxxxxxx7898";
 
 export class RequestBuilder {
   private body: object | null = null;
@@ -21,15 +25,36 @@ export class RequestBuilder {
         idToken: "",
         refreshToken: "",
       },
+      newEmailAddress: NEW_EMAIL,
       email: CURRENT_EMAIL,
+      phoneNumber: PHONE_NUMBER,
+      isPhoneNumberVerified: true,
       state: { changeEmail: getInitialState() },
       isAuthenticated: false,
+      subjectId: "testuser",
     },
+    mfaMethods: [
+      {
+        mfaIdentifier: 1,
+        priorityIdentifier: "PRIMARY",
+        mfaMethodType: "SMS",
+        endPoint: "xxxxxxx7898",
+        methodVerified: true,
+      },
+    ],
   } as any;
   private cookies: object = { lng: ENGLISH };
   private ip: string = SOURCE_IP;
   private i18n: object = { language: ENGLISH };
-  private t: () => void;
+  private _t: string;
+  private language: string = "en";
+  private originalUrl: string = ORIGINAL_URL;
+  private protocol: string = PROTOCOL;
+  private hostname: string = HOST_NAME;
+
+  t(arg: string): string {
+    return (this._t = arg);
+  }
 
   withBody(body: object): RequestBuilder {
     this.body = body;
@@ -56,13 +81,33 @@ export class RequestBuilder {
     return this;
   }
 
-  withTimestampT(func: () => void): RequestBuilder {
+  withTimestampT(func: () => string): RequestBuilder {
     this.t = func;
     return this;
   }
 
   withIp(ip: string): RequestBuilder {
     this.ip = ip;
+    return this;
+  }
+
+  withLanguage(language: string): RequestBuilder {
+    this.language = language;
+    return this;
+  }
+
+  withOriginalUrl(originalUrl: string): RequestBuilder {
+    this.originalUrl = originalUrl;
+    return this;
+  }
+
+  withProtocol(protocol: string): RequestBuilder {
+    this.protocol = protocol;
+    return this;
+  }
+
+  withHostName(hostName: string): RequestBuilder {
+    this.hostname = hostName;
     return this;
   }
 
@@ -74,7 +119,12 @@ export class RequestBuilder {
       i18n: this.i18n,
       t: this.t as any,
       ip: this.ip,
-    };
+      language: this.language,
+      originalUrl: this.originalUrl,
+      protocol: this.protocol,
+      hostname: this.hostname,
+      log: this.body,
+    } as any;
   }
 }
 

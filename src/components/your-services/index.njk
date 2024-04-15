@@ -5,6 +5,7 @@
 {% set activeNav = 'your-services' %}
 {% set showSecondaryHeadings = servicesList.length and accountsList.length %}
 {% set serviceHeadingLevel =  "h3" if showSecondaryHeadings else "h2" %}
+{% set languageToggle = true %}
 
 {% if not (servicesList.length or accountsList.length) %}
     {% set contentId = "886900f6-178f-41e7-9051-c8428cca86dd" %}

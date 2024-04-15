@@ -15,6 +15,9 @@ const TEMPLATE_NAME = "resend-email-code/index.njk";
 export function resendEmailCodeGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, {
     emailAddress: req.session.user.newEmailAddress,
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 

@@ -11,8 +11,15 @@ import { changeEmailService } from "./change-email-service";
 import xss from "xss";
 
 const TEMPLATE_NAME = "change-email/index.njk";
-export function changeEmailGet(req: Request, res: Response): void {
-  return res.render(TEMPLATE_NAME);
+export async function changeEmailGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  return res.render(TEMPLATE_NAME, {
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
+  });
 }
 
 function badRequest(req: Request, res: Response, errorMessage: string) {
@@ -54,7 +61,6 @@ export function changeEmailPost(
         req.session.user.state.changeEmail.value,
         "VERIFY_CODE_SENT"
       );
-
       return res.redirect(PATH_DATA.CHECK_YOUR_EMAIL.url);
     }
 

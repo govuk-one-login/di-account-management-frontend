@@ -36,5 +36,7 @@ export function renderBadRequest(
     errorList: uniqueErrorList,
     ...req.body,
     language: req.i18n.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }

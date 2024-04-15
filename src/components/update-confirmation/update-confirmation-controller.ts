@@ -32,6 +32,9 @@ export function updateEmailConfirmationGet(req: Request, res: Response): void {
     summaryText: req
       .t("pages.updateEmailConfirmation.summaryText")
       .replace("[email]", req.session.user.email),
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 
@@ -46,6 +49,9 @@ export function updatePasswordConfirmationGet(
     taxonomyLevel2: oplValues.updatePasswordConfirmation.taxonomyLevel2,
     pageTitle: req.t("pages.updatePasswordConfirmation.title"),
     panelText: req.t("pages.updatePasswordConfirmation.panelText"),
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 
@@ -63,6 +69,9 @@ export function updatePhoneNumberConfirmationGet(
     summaryText: req
       .t("pages.updatePhoneNumberConfirmation.summaryText")
       .replace("[mobile]", redactPhoneNumber(req.session.user.phoneNumber)),
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 
@@ -78,6 +87,9 @@ export function deleteAccountConfirmationGet(
     summaryText: req.t("pages.deleteAccountConfirmation.summaryText"),
     showGovUKButton: true,
     hideAccountNavigation: true,
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   });
 }
 

@@ -57,6 +57,10 @@ describe("Activity history controller", () => {
         },
         log: { error: sandbox.fake(), info: sandbox.fake() },
         i18n: { language: "en" },
+        language: "en",
+        originalUrl: "https://www.gov.uk",
+        protocol: "https",
+        hostname: "www.gov.uk",
       };
       await activityHistoryGet(req as Request, res as Response).then(() => {
         expect(res.render).to.have.been.calledWith(
@@ -69,6 +73,9 @@ describe("Activity history controller", () => {
             changePasswordLink: PATH_DATA.SECURITY.url,
             contactLink: PATH_DATA.CONTACT.url,
             homeClientId: clientId,
+            language: "en",
+            currentUrl: "https://www.gov.uk",
+            baseUrl: "https://www.gov.uk",
           }
         );
       });

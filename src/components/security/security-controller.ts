@@ -74,6 +74,9 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
     activityLogUrl,
     mfaMethods,
     showAdditionalMethodUpsell,
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
   };
 
   res.render("security/index.njk", data);

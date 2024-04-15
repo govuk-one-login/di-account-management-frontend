@@ -6,34 +6,16 @@ import { Request, Response } from "express";
 
 import { yourServicesGet } from "../your-services-controller";
 import { getAppEnv } from "../../../config";
+import {
+  CURRENT_EMAIL,
+  ENGLISH,
+  ORIGINAL_URL,
+  RequestBuilder,
+} from "../../../../test/utils/builders";
 describe("your services controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  const TEST_SUBJECT_ID = "testSubjectId";
-  function validRequest(): any {
-    return {
-      app: {
-        locals: {
-          sessionStore: {
-            destroy: sandbox.fake(),
-          },
-          subjectSessionIndexService: {
-            removeSession: sandbox.fake(),
-            getSessions: sandbox.stub().resolves(["session-1", "session-2"]),
-          },
-        },
-      },
-      body: {},
-      session: {
-        user: { subjectId: TEST_SUBJECT_ID, email: "test@test.com" },
-        destroy: sandbox.fake(),
-      },
-      log: { error: sandbox.fake() },
-      i18n: { language: "en" },
-    };
-  }
-
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
@@ -50,13 +32,16 @@ describe("your services controller", () => {
 
   describe("yourServicesGet", () => {
     it("should render your services page with data", async () => {
-      req = validRequest();
+      req = new RequestBuilder().build();
       await yourServicesGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith("your-services/index.njk", {
-        email: "test@test.com",
+        email: CURRENT_EMAIL,
         accountsList: [],
         servicesList: [],
         env: getAppEnv(),
+        language: ENGLISH,
+        currentUrl: ORIGINAL_URL,
+        baseUrl: "https://www.gov.uk",
       });
     });
 

@@ -15,7 +15,11 @@ import xss from "xss";
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
-  res.render("change-phone-number/index.njk");
+  res.render("change-phone-number/index.njk", {
+    language: req.language,
+    currentUrl: req.originalUrl,
+    baseUrl: req.protocol + "://" + req.hostname,
+  });
 }
 
 export function changePhoneNumberPost(

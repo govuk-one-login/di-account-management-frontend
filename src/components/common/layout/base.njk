@@ -48,6 +48,9 @@
             },
             html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback")
         }) if not hidePhaseBanner}}
+        {% if languageToggle %}
+            {% include 'common/layout/languageToggle.njk' %}
+        {% endif %}
         {% if backLink %}
           <a href="{{backLink}}" class="govuk-back-link js-back-link">
             {{ backLinkText }}
@@ -55,9 +58,6 @@
           </a>
         {% endif %}
         {% block beforeContent %}{% endblock %}
-        {% if languageToggle %}
-            {% include 'common/layout/languageToggle.njk' %}
-        {% endif %}
         <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main" {% if mainLang %} lang="{{ mainLang }}" {% endif %}>
             {% block content %}{% endblock %}
         </main>

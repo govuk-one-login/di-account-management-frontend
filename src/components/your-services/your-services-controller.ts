@@ -22,6 +22,9 @@ export async function yourServicesGet(
       accountsList: serviceData.accountsList,
       servicesList: serviceData.servicesList,
       env: env,
+      language: req.language,
+      currentUrl: req.originalUrl,
+      baseUrl: req.protocol + "://" + req.hostname,
     };
   } else {
     data = { email: user.email, env: env };
