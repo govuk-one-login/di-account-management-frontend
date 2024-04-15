@@ -23,6 +23,31 @@ const REDIRECT_PATHS: { [key: string]: string } = {
   addMfaMethod: PATH_DATA.ADD_MFA_METHOD.url,
 };
 
+const OPL_VALUES: {
+  [key: string]: { contentId: string; taxonomyLevel2: string };
+} = {
+  changeEmail: {
+    contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
+    taxonomyLevel2: "change email",
+  },
+  changePassword: {
+    contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412",
+    taxonomyLevel2: "change password",
+  },
+  changePhoneNumber: {
+    contentId: "2f5f174d-c650-4b28-96cf-365f4fb17af1",
+    taxonomyLevel2: "change phone number",
+  },
+  deleteAccount: {
+    contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349",
+    taxonomyLevel2: "delete account",
+  },
+  addMfaMethod: {
+    contentId: "375aa101-7bd6-43c2-ac39-19c864b49882",
+    taxonomyLevel2: "add mfa method",
+  },
+};
+
 const getStringsForForm = (req: Request, requestType: string) => {
   return {
     header: req.t(`pages.enterPassword.${requestType}.header`),
@@ -43,6 +68,7 @@ export function enterPasswordGet(req: Request, res: Response): void {
   res.render(`enter-password/index.njk`, {
     requestType,
     ...getStringsForForm(req, requestType),
+    oplValues: OPL_VALUES[requestType] || {},
   });
 }
 

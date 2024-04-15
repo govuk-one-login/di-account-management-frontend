@@ -1,8 +1,81 @@
 import { HTTP_STATUS_CODES, METHOD_MANAGEMENT_API } from "../../app.constants";
 import { logger } from "../logger";
 import { getRequestConfig, Http } from "../http";
-import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
+import {
+  MfaMethod,
+  MfaMethodType,
+  PriorityIdentifier,
+  ProblemDetail,
+  ValidationProblem,
+} from "./types";
 import { getMfaServiceUrl } from "../../config";
+import { authenticator } from "otplib";
+import { ENVIRONMENT_NAME } from "../../app.constants";
+import { getAppEnv } from "../../config";
+
+export function generateMfaSecret(): string {
+  return authenticator.generateSecret(20);
+}
+
+export function generateQRCodeValue(
+  secret: string,
+  email: string,
+  issuerName: string
+): string {
+  const issuer =
+    getAppEnv() === ENVIRONMENT_NAME.PROD
+      ? issuerName
+      : `${issuerName} - ${getAppEnv()}`;
+  return authenticator.keyuri(email, issuer, secret);
+}
+
+export function verifyMfaCode(secret: string, code: string): boolean {
+  return authenticator.check(code, secret);
+}
+
+export function addMfaMethod({
+  email,
+  otp,
+  credential,
+  mfaMethod,
+  accessToken,
+  sourceIp,
+  sessionId,
+  persistentSessionId,
+}: {
+  email: string;
+  otp: string;
+  credential: string;
+  mfaMethod: {
+    priorityIdentifier: PriorityIdentifier;
+    mfaMethodType: MfaMethodType;
+  };
+  accessToken: string;
+  sourceIp: string;
+  sessionId: string;
+  persistentSessionId: string;
+}): Promise<{
+  status: number;
+  data: MfaMethod;
+}> {
+  const http = new Http(getMfaServiceUrl());
+  return http.client.post<MfaMethod>(
+    METHOD_MANAGEMENT_API.MFA_METHODS_ADD,
+    {
+      email,
+      otp,
+      credential,
+      mfaMethod,
+    },
+    getRequestConfig(
+      accessToken,
+      null,
+      sourceIp,
+      persistentSessionId,
+      sessionId
+    )
+  );
+}
 
 async function mfa(
   accessToken: string,

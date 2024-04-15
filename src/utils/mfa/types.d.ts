@@ -1,7 +1,10 @@
+export type PriorityIdentifier = "PRIMARY" | "SECONDARY";
+export type MfaMethodType = "SMS" | "AUTH_APP";
+
 export interface MfaMethod {
   mfaIdentifier: number;
-  priorityIdentifier: "PRIMARY" | "SECONDARY";
-  mfaMethodType: "SMS" | "AUTH_APP";
+  priorityIdentifier: PriorityIdentifier;
+  mfaMethodType: MfaMethodType;
   endPoint: string;
   methodVerified: boolean;
 }
