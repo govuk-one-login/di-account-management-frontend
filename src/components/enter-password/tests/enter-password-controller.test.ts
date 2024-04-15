@@ -37,7 +37,7 @@ describe("enter password controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       locals: {},
       status: sandbox.fake(),
     };
@@ -66,7 +66,7 @@ describe("enter password controller", () => {
   describe("enterPasswordPost", () => {
     it("should redirect to change-email when the password is correct", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.returns(true),
+        authenticated: sandbox.fake.resolves(true),
       };
 
       req.session.user = {
@@ -86,7 +86,7 @@ describe("enter password controller", () => {
 
     it("should bad request when user credentials are incorrect", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.returns(false),
+        authenticated: sandbox.fake.resolves(false),
       };
 
       req.session.user = {

@@ -26,7 +26,7 @@ describe("check your phone controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       status: sandbox.fake(),
       locals: {},
     };
@@ -47,7 +47,7 @@ describe("check your phone controller", () => {
   describe("checkYourPhonePost", () => {
     it("should redirect to /phone-number-updated-confirmation when valid code entered", async () => {
       const fakeService: CheckYourPhoneServiceInterface = {
-        updatePhoneNumber: sandbox.fake.returns(true),
+        updatePhoneNumber: sandbox.fake.resolves(true),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -63,7 +63,7 @@ describe("check your phone controller", () => {
 
     it("should return error when invalid code entered", async () => {
       const fakeService: CheckYourPhoneServiceInterface = {
-        updatePhoneNumber: sandbox.fake.returns(false),
+        updatePhoneNumber: sandbox.fake.resolves(false),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;

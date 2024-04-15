@@ -45,7 +45,11 @@ describe("delete account controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
+    res = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
+      locals: {},
+    };
   });
 
   afterEach(() => {
@@ -121,7 +125,7 @@ describe("delete account controller", () => {
       it("should redirect to deletion confirmed page", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {
-          deleteAccount: sandbox.fake.returns(true),
+          deleteAccount: sandbox.fake.resolves(true),
           publishToDeleteTopic: sandbox.fake(),
         };
 

@@ -28,7 +28,7 @@ describe("check your email controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       status: sandbox.fake(),
       locals: {},
     };
@@ -49,7 +49,7 @@ describe("check your email controller", () => {
   describe("checkYourEmailPost", () => {
     it("should redirect to /email-updated-confirmation when valid code entered", async () => {
       const fakeService: CheckYourEmailServiceInterface = {
-        updateEmail: sandbox.fake.returns(true),
+        updateEmail: sandbox.fake.resolves(true),
       };
 
       const fakePublishingService: GovUkPublishingServiceInterface = {
@@ -74,7 +74,7 @@ describe("check your email controller", () => {
 
     it("should return error when invalid code entered", async () => {
       const fakeService: CheckYourEmailServiceInterface = {
-        updateEmail: sandbox.fake.returns(false),
+        updateEmail: sandbox.fake.resolves(false),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;

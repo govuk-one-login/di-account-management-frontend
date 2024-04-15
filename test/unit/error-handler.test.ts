@@ -18,9 +18,9 @@ describe("Error handlers", () => {
     res = {
       render: sandbox.fake(),
       status: sandbox.fake(),
-      redirect: sandbox.fake(),
-    } as Partial<Response>;
-    next = sandbox.fake();
+      redirect: sandbox.fake(() => {}),
+    };
+    next = sandbox.fake(() => {});
   });
 
   afterEach(() => {

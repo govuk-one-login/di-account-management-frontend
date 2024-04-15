@@ -46,7 +46,7 @@ describe("Contact GOV.UK One Login controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       locals: {
         sessionId: "sessionId",
         persistentSessionId: "persistentSessionId",

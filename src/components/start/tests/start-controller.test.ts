@@ -18,7 +18,11 @@ describe("start controller", () => {
       session: { user: sinon.fake() } as any,
       oidc: { authorizationUrl: sandbox.fake(), metadata: {} as any } as any,
     };
-    res = { render: sandbox.fake(), redirect: sandbox.fake(), locals: {} };
+    res = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
+      locals: {},
+    };
   });
 
   afterEach(() => {

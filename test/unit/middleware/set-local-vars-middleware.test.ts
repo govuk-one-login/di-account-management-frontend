@@ -16,8 +16,12 @@ describe("set-local-vars-middleware", () => {
       session: {} as any,
       cookies: {} as any,
     };
-    res = { status: sandbox.stub(), locals: {}, redirect: sandbox.fake() };
-    next = sandbox.fake();
+    res = {
+      status: sandbox.stub(),
+      locals: {},
+      redirect: sandbox.fake(() => {}),
+    };
+    next = sandbox.fake(() => {});
   });
 
   afterEach(() => {

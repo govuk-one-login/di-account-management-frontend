@@ -16,7 +16,7 @@ describe("mfaMethodMiddleware", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    next = sinon.fake();
+    next = sinon.fake(() => {});
     mfaStub = sinon.stub(mfa, "default");
 
     req = {
@@ -35,7 +35,7 @@ describe("mfaMethodMiddleware", () => {
     };
     res = {
       render: sinon.fake(),
-      redirect: sinon.fake(),
+      redirect: sandbox.fake(() => {}),
       locals: { trace: {} },
     };
   });

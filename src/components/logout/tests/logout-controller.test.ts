@@ -26,7 +26,7 @@ describe("logout controller", () => {
     };
     res = {
       render: sandbox.fake(),
-      redirect: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
       locals: {
         sessionId: "session-id",
         trace: TEST_TRACE_ID,
