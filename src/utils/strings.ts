@@ -36,7 +36,7 @@ export function isValidUrl(urlString: string | undefined): boolean {
       url.hostname === "127.0.0.1"
     );
   } catch (e) {
-    logger.error({ url: urlString }, e.toString());
+    logger.warn({ url: urlString }, e.toString());
     return false;
   }
 }

@@ -16,7 +16,7 @@ const copySafeQueryParamToSession = (
     if (isSafeString(queryParams[paramName] as string)) {
       session.queryParameters[paramName] = queryParams[paramName] as string;
     } else {
-      logger.error(
+      logger.warn(
         { trace: sessionId },
         `${paramName} in request query for contact-govuk-one-login page did not pass validation`
       );
@@ -38,7 +38,7 @@ export const updateSessionMiddleware = (
   if (validatedURL) {
     session.queryParameters.fromURL = new URL(fromURL).toString();
   } else {
-    logger.error(
+    logger.warn(
       { trace: trace },
       "fromURL in request query for contact-govuk-one-login page did not pass validation"
     );

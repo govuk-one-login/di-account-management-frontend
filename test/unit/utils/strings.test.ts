@@ -67,7 +67,7 @@ describe("string-helpers", () => {
   });
 
   describe("isValidUrl", () => {
-    let loggerErrorSpy: sinon.SinonSpy;
+    let loggerWarnSpy: sinon.SinonSpy;
     // Optional: Utility function to generate test URLs
     function generateTestUrls(
       baseUrl: string,
@@ -83,11 +83,11 @@ describe("string-helpers", () => {
     }
 
     beforeEach(() => {
-      loggerErrorSpy = sinon.spy(logger, "error");
+      loggerWarnSpy = sinon.spy(logger, "warn");
     });
 
     afterEach(() => {
-      loggerErrorSpy.restore();
+      loggerWarnSpy.restore();
     });
 
     it("should return true if valid", () => {
@@ -97,7 +97,7 @@ describe("string-helpers", () => {
       expect(isValidUrl("https://home.account.gov.uk/security")).to.be.true;
       expect(isValidUrl("https://home.account.gov.uk/security?foo=bar&bar=foo"))
         .to.be.true;
-      expect(loggerErrorSpy).to.be.callCount(2);
+      expect(loggerWarnSpy).to.be.callCount(2);
     });
 
     it("should return false if url is invalid", () => {
@@ -106,7 +106,7 @@ describe("string-helpers", () => {
       expect(isValidUrl("qwerty")).to.be.false;
       expect(isValidUrl("qwerty.gov.&^")).to.be.false;
       expect(isValidUrl("https:///home.account.gov.uk")).to.be.true;
-      expect(loggerErrorSpy).to.be.callCount(3);
+      expect(loggerWarnSpy).to.be.callCount(3);
     });
 
     it("should return true if string is safe is invalid", () => {
@@ -116,7 +116,7 @@ describe("string-helpers", () => {
       expect(isValidUrl("qwerty.gov.&^")).to.be.false;
       expect(isValidUrl("https:///home.account.gov.uk")).to.be.true;
       expect(isValidUrl("http://localhost:6001")).to.be.false;
-      expect(loggerErrorSpy).to.be.callCount(3);
+      expect(loggerWarnSpy).to.be.callCount(3);
     });
 
     const testUrls = generateTestUrls("https://www.example.com?start=1", 3);
