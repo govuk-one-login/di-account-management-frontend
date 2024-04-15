@@ -168,19 +168,25 @@ describe("addMfaAppMethodPost", () => {
       render: sinon.fake(),
     };
     const next = sinon.spy();
-    const addMfaMethod = sinon.fake.returns({
-      status: 200,
-      data: {
-        endPoint: "endPoint",
-        mfaIdentifier: 1,
-        methodVerified: true,
-        mfaMethodType: "AUTH_APP",
-        priorityIdentifier: "SECONDARY",
-      },
-    });
+    const addMfaMethod = sinon.fake.returns(
+      Promise.resolve({
+        status: 200,
+        data: {
+          endPoint: "endPoint",
+          mfaIdentifier: 1,
+          methodVerified: true,
+          mfaMethodType: "AUTH_APP",
+          priorityIdentifier: "SECONDARY",
+        },
+      })
+    );
 
     sandbox.replace(mfaModule, "verifyMfaCode", () => true);
-    sandbox.replace(mfaModule, "addMfaMethod", addMfaMethod);
+    sandbox.replace(
+      mfaModule,
+      "addMfaMethod",
+      addMfaMethod as typeof mfaModule.addMfaMethod
+    );
 
     await addMfaAppMethodPost(
       req as unknown as Request,
