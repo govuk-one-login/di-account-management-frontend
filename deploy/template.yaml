@@ -896,7 +896,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/ecs/${AWS::StackName}/server"
-      RetentionInDays: 1
+      RetentionInDays: 30
       KmsKeyId: !GetAtt LoggingKmsKey.Arn
 
   TaskLogGroupCSLSSubscription:
@@ -1483,7 +1483,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/apigateway/${AWS::StackName}/access"
-      RetentionInDays: 1
+      RetentionInDays: 30
       KmsKeyId: !GetAtt LoggingKmsKey.Arn
       Tags:
         - Key: Product
