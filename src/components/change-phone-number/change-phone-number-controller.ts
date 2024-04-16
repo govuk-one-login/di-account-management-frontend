@@ -42,7 +42,8 @@ export function changePhoneNumberPost(
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId,
-      xss(req.cookies.lng as string)
+      xss(req.cookies.lng as string),
+      res.locals.clientSessionId
     );
 
     if (response.success) {

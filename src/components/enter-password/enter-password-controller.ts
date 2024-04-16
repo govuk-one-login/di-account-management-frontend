@@ -86,7 +86,8 @@ export function enterPasswordPost(
       req.body["password"],
       req.ip,
       res.locals.sessionId,
-      res.locals.persistentSessionId
+      res.locals.persistentSessionId,
+      res.locals.clientSessionId
     );
 
     if (isAuthenticated) {

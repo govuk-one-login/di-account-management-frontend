@@ -2,6 +2,7 @@ import nock from "nock";
 import { sinon } from "../../../../test/utils/test-utils";
 import { changeEmailService } from "../change-email-service";
 import { expect } from "chai";
+import { describe } from "mocha";
 import {
   API_ENDPOINTS,
   NOTIFICATION_TYPE,
@@ -28,6 +29,7 @@ describe("changeEmailService", () => {
     const sessionId = "session-123";
     const persistentSessionId = "persistentsession123";
     const userLanguage = "en";
+    const clientSessionId: string = "clientsessionid";
 
     nock(baseUrl, {
       reqheaders: {
@@ -51,7 +53,8 @@ describe("changeEmailService", () => {
         sourceIp,
         sessionId,
         persistentSessionId,
-        userLanguage
+        userLanguage,
+        clientSessionId
       );
 
     expect(sendCodeVerificationNotification).to.true;

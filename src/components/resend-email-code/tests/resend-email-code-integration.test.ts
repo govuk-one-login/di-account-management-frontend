@@ -3,13 +3,24 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import {
+  API_ENDPOINTS,
+  NOTIFICATION_TYPE,
+  PATH_DATA,
+} from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import cheerio from "cheerio";
+import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
+import { expect } from "chai";
 
 describe("Integration:: request email code", () => {
+  let token: string | string[];
+  let cookies: string;
   let sandbox: sinon.SinonSandbox;
   let app: any;
+  let baseApi: string;
+
   const TEST_SUBJECT_ID = "jkduasd";
 
   before(async () => {
@@ -22,6 +33,7 @@ describe("Integration:: request email code", () => {
       .callsFake(function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
+          newEmailAddress: "new@test.com",
           phoneNumber: "07839490040",
           subjectId: TEST_SUBJECT_ID,
           isAuthenticated: true,
@@ -60,8 +72,17 @@ describe("Integration:: request email code", () => {
     });
 
     app = await require("../../../app").createApp();
+    baseApi = process.env.AM_API_BASE_URL;
 
-    await request(app).get(PATH_DATA.RESEND_EMAIL_CODE.url);
+    await request(app)
+      .get(PATH_DATA.RESEND_EMAIL_CODE.url)
+      .then((res) => {
+        const $ = cheerio.load(res.text);
+        token = $("[name=_csrf]").val();
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
+      });
   });
 
   beforeEach(() => {
@@ -85,5 +106,40 @@ describe("Integration:: request email code", () => {
         code: "123456",
       }
     );
+  });
+
+  it("should resend email when submitted", async () => {
+    // Arrange
+    let receivedEmail: string;
+    nock(baseApi)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .post(API_ENDPOINTS.SEND_NOTIFICATION, {
+        email: "new@test.com",
+        notificationType: "VERIFY_EMAIL",
+      })
+      .reply(
+        204,
+        (
+          uri,
+          requestBody: {
+            email: string;
+            notificationType: NOTIFICATION_TYPE.VERIFY_EMAIL;
+          }
+        ) => {
+          receivedEmail = requestBody.email;
+          return {};
+        }
+      );
+
+    // Act
+    await request(app)
+      .post(PATH_DATA.RESEND_EMAIL_CODE.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({ _csrf: token })
+      .expect(302);
+
+    // Assert
+    expect(receivedEmail).to.equal("new@test.com");
   });
 });

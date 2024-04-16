@@ -15,7 +15,8 @@ export function changeEmailService(
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string,
-    userLanguage: string
+    userLanguage: string,
+    clientSessionId: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.SEND_NOTIFICATION,
@@ -29,7 +30,8 @@ export function changeEmailService(
         sourceIp,
         persistentSessionId,
         sessionId,
-        userLanguage
+        userLanguage,
+        clientSessionId
       )
     );
 

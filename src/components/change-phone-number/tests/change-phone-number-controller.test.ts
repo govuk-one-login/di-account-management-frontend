@@ -10,6 +10,17 @@ import {
   changePhoneNumberGet,
   changePhoneNumberPost,
 } from "../change-phone-number-controller";
+import {
+  CLIENT_SESSION_ID,
+  CURRENT_EMAIL,
+  ENGLISH,
+  PERSISTENT_SESSION_ID,
+  RequestBuilder,
+  ResponseBuilder,
+  SESSION_ID,
+  SOURCE_IP,
+  TOKEN,
+} from "../../../../test/utils/builders";
 
 describe("change phone number controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -19,19 +30,17 @@ describe("change phone number controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = {
-      body: {},
-      session: { user: { state: { changePhoneNumber: {} } } } as any,
-      cookies: { lng: "en" },
-      i18n: { language: "" },
-      t: sandbox.fake(),
-    };
-    res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      locals: {},
-      status: sandbox.fake(),
-    };
+    req = new RequestBuilder()
+      .withBody({})
+      .withSessionUserState({ changePhoneNumber: {} })
+      .withTimestampT(sandbox.fake())
+      .build();
+
+    res = new ResponseBuilder()
+      .withRender(sandbox.fake())
+      .withRedirect(sandbox.fake(() => {}))
+      .withStatus(sandbox.fake())
+      .build();
   });
 
   afterEach(() => {
@@ -40,81 +49,134 @@ describe("change phone number controller", () => {
 
   describe("changePhoneNumberGet", () => {
     it("should render change phone number page", () => {
+      // Act
       changePhoneNumberGet(req as Request, res as Response);
 
+      // Assert
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
   });
 
   describe("changePhoneNumberPost", () => {
     it("should redirect to /phone-number-updated-confirmation page", async () => {
+      // Arrange
       const fakeService: ChangePhoneNumberServiceInterface = {
         sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: true,
         }),
       };
-
-      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "12345678991";
 
+      // Act
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
+      // Assert
       expect(fakeService.sendPhoneVerificationNotification).to.have.been
         .calledOnce;
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).to.have.been.calledWithExactly(
+        TOKEN,
+        CURRENT_EMAIL,
+        "12345678991",
+        SOURCE_IP,
+        SESSION_ID,
+        PERSISTENT_SESSION_ID,
+        ENGLISH,
+        CLIENT_SESSION_ID
+      );
       expect(res.redirect).to.have.calledWith(PATH_DATA.CHECK_YOUR_PHONE.url);
     });
 
     it("should return validation error when same UK number", async () => {
+      // Arrange
       const fakeService: ChangePhoneNumberServiceInterface = {
         sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: false,
           code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
         }),
       };
-
       req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "12345678991";
 
+      // Act
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
+      // Assert
       expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).to.have.been.calledWithExactly(
+        TOKEN,
+        CURRENT_EMAIL,
+        "12345678991",
+        SOURCE_IP,
+        SESSION_ID,
+        PERSISTENT_SESSION_ID,
+        ENGLISH,
+        CLIENT_SESSION_ID
+      );
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
 
     it("should return validation error when same international number", async () => {
+      // Arrange
       const fakeService: ChangePhoneNumberServiceInterface = {
         sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: false,
           code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
         }),
       };
-
-      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "12345678991";
       req.body.hasInternationalPhoneNumber = true;
 
+      // Act
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
+      // Assert
       expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).to.have.been.calledWithExactly(
+        TOKEN,
+        CURRENT_EMAIL,
+        "12345678991",
+        SOURCE_IP,
+        SESSION_ID,
+        PERSISTENT_SESSION_ID,
+        ENGLISH,
+        CLIENT_SESSION_ID
+      );
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
 
     it("should redirect to /phone-number-updated-confirmation when success with valid international number", async () => {
+      // Arrange
       const fakeService: ChangePhoneNumberServiceInterface = {
         sendPhoneVerificationNotification: sandbox.fake.resolves({
           success: true,
         }),
       };
-
-      res.locals.sessionId = "123456-djjad";
-      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "+33645453322";
-      req.session.user.email = "test@test.com";
 
+      // Act
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
+      // Assert
       expect(fakeService.sendPhoneVerificationNotification).to.have.been
         .calledOnce;
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).to.have.been.calledWithExactly(
+        TOKEN,
+        CURRENT_EMAIL,
+        "+33645453322",
+        SOURCE_IP,
+        SESSION_ID,
+        PERSISTENT_SESSION_ID,
+        ENGLISH,
+        CLIENT_SESSION_ID
+      );
       expect(res.redirect).to.have.calledWith(PATH_DATA.CHECK_YOUR_PHONE.url);
     });
   });

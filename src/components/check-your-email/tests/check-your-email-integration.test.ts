@@ -7,6 +7,7 @@ import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 
 describe("Integration:: check your email", () => {
   let sandbox: sinon.SinonSandbox;
@@ -73,7 +74,9 @@ describe("Integration:: check your email", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"];
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
       });
   });
 
@@ -100,8 +103,8 @@ describe("Integration:: check your email", () => {
     );
   });
 
-  it("should return validation error when code not entered", (done) => {
-    request(app)
+  it("should return validation error when code not entered", async () => {
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -113,11 +116,11 @@ describe("Integration:: check your email", () => {
         const $ = cheerio.load(res.text);
         expect($("#code-error").text()).to.contains("Enter the security code");
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when code is less than 6 characters", (done) => {
-    request(app)
+  it("should return validation error when code is less than 6 characters", async () => {
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -131,11 +134,11 @@ describe("Integration:: check your email", () => {
           "Enter the security code using only 6 digits"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when code is greater than 6 characters", (done) => {
-    request(app)
+  it("should return validation error when code is greater than 6 characters", async () => {
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -149,11 +152,11 @@ describe("Integration:: check your email", () => {
           "Enter the security code using only 6 digits"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when code entered contains letters", (done) => {
-    request(app)
+  it("should return validation error when code entered contains letters", async () => {
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -167,17 +170,24 @@ describe("Integration:: check your email", () => {
           "Enter the security code using only 6 digits"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should redirect to /email-updated-confirmation when valid code entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.UPDATE_EMAIL).once().reply(204);
+  it("should redirect to /email-updated-confirmation when valid code entered", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_EMAIL)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(204);
     nock(govUkPublishingBaseApi)
       .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
       .once()
       .reply(200);
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -186,13 +196,19 @@ describe("Integration:: check your email", () => {
         code: "123456",
       })
       .expect("Location", PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url)
-      .expect(302, done);
+      .expect(302);
   });
 
-  it("should return validation error when incorrect code entered", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.UPDATE_EMAIL).once().reply(400, {});
+  it("should return validation error when incorrect code entered", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_EMAIL)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(400, {});
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -206,6 +222,6 @@ describe("Integration:: check your email", () => {
           "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 });

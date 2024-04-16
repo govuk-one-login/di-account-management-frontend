@@ -26,7 +26,8 @@ export function checkYourPhoneService(
         sessionDetails.sourceIp,
         sessionDetails.persistentSessionId,
         sessionDetails.sessionId,
-        sessionDetails.userLanguage
+        sessionDetails.userLanguage,
+        sessionDetails.clientSessionId
       )
     );
 

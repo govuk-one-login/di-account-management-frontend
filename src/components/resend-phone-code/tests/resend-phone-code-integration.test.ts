@@ -3,13 +3,26 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import cheerio from "cheerio";
+import {
+  CLIENT_SESSION_ID,
+  CURRENT_EMAIL,
+  SESSION_ID,
+} from "../../../../test/utils/builders";
+import { expect } from "chai";
+
+const PHONE_NUMBER = "07839490040";
 
 describe("Integration:: request phone code", () => {
+  let token: string | string[];
+  let cookies: string;
   let sandbox: sinon.SinonSandbox;
   let app: any;
+  let baseApi: string;
+
   const TEST_SUBJECT_ID = "jkduasd";
 
   before(async () => {
@@ -21,12 +34,12 @@ describe("Integration:: request phone code", () => {
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
         req.session.user = {
-          email: "test@test.com",
-          phoneNumber: "07839490040",
+          email: CURRENT_EMAIL,
+          phoneNumber: PHONE_NUMBER,
           subjectId: TEST_SUBJECT_ID,
           isAuthenticated: true,
           state: {
-            changeEmail: {
+            changePhoneNumber: {
               value: "CHANGE_VALUE",
               events: ["VALUE_UPDATED", "VERIFY_CODE_SENT"],
             },
@@ -60,8 +73,17 @@ describe("Integration:: request phone code", () => {
     });
 
     app = await require("../../../app").createApp();
+    baseApi = process.env.AM_API_BASE_URL;
 
-    await request(app).get(PATH_DATA.RESEND_PHONE_CODE.url);
+    await request(app)
+      .get(PATH_DATA.RESEND_PHONE_CODE.url)
+      .then((res) => {
+        const $ = cheerio.load(res.text);
+        token = $("[name=_csrf]").val();
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
+      });
   });
 
   beforeEach(() => {
@@ -82,8 +104,43 @@ describe("Integration:: request phone code", () => {
       app,
       PATH_DATA.RESEND_PHONE_CODE.url,
       {
-        phoneNumber: "07839490040",
+        phoneNumber: PHONE_NUMBER,
       }
     );
+  });
+
+  it("should resend the phone code", async () => {
+    let phoneNumberRequestedToChangeTo: string;
+    // Arrange
+    nock(baseApi)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .post(API_ENDPOINTS.SEND_NOTIFICATION, {
+        email: CURRENT_EMAIL,
+        phoneNumber: PHONE_NUMBER,
+        notificationType: "VERIFY_PHONE_NUMBER",
+      })
+      .reply(
+        204,
+        (
+          uri,
+          requestBody: {
+            email: string;
+            phoneNumber: string;
+            notificationType: "VERIFY_PHONE_NUMBER";
+          }
+        ) => {
+          phoneNumberRequestedToChangeTo = requestBody.phoneNumber;
+        }
+      );
+
+    // Act
+    await request(app)
+      .post(PATH_DATA.RESEND_PHONE_CODE.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({ _csrf: token, phoneNumber: PHONE_NUMBER })
+      .expect(302);
+
+    expect(phoneNumberRequestedToChangeTo).to.equal(PHONE_NUMBER);
   });
 });

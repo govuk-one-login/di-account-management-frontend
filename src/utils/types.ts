@@ -118,6 +118,7 @@ export interface UpdateInformationSessionValues {
   sessionId: string;
   persistentSessionId: string;
   userLanguage: string;
+  clientSessionId: string;
 }
 
 export const allowedTxmaEvents: Array<string> = [

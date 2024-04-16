@@ -18,7 +18,8 @@ export function changePasswordService(
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string,
-    userLanguage: string
+    userLanguage: string,
+    clientSessionId: string
   ): Promise<ApiResponseResult> {
     const response = await axios.client.post<ApiResponse>(
       API_ENDPOINTS.UPDATE_PASSWORD,
@@ -32,7 +33,8 @@ export function changePasswordService(
         sourceIp,
         persistentSessionId,
         sessionId,
-        userLanguage
+        userLanguage,
+        clientSessionId
       )
     );
     return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);

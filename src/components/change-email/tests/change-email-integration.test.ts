@@ -11,6 +11,8 @@ import {
   PATH_DATA,
 } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
+import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: change email", () => {
   let sandbox: sinon.SinonSandbox;
@@ -18,6 +20,9 @@ describe("Integration:: change email", () => {
   let cookies: string;
   let app: any;
   let baseApi: string;
+  let oidc: { getOIDCClient: any };
+  let oidcgetJWKS: { getJWKS: any };
+
   const TEST_SUBJECT_ID = "jkduasd";
 
   before(async () => {
@@ -54,14 +59,15 @@ describe("Integration:: change email", () => {
         next();
       });
 
-    const oidc = require("../../../utils/oidc");
+    oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
       return new Promise((resolve) => {
         resolve({});
       });
     });
 
-    sandbox.stub(oidc, "getJWKS").callsFake(() => {
+    oidcgetJWKS = require("../../../utils/oidc");
+    sandbox.stub(oidcgetJWKS, "getJWKS").callsFake(() => {
       return new Promise((resolve) => {
         resolve({});
       });
@@ -72,10 +78,13 @@ describe("Integration:: change email", () => {
 
     await request(app)
       .get(PATH_DATA.CHANGE_EMAIL.url)
+      .query({ type: "changeEmail" })
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"];
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
       });
   });
 
@@ -92,19 +101,14 @@ describe("Integration:: change email", () => {
     request(app).get(PATH_DATA.CHANGE_EMAIL.url).expect(200, done);
   });
 
-  it("should redirect to your services when csrf not present", async () => {
-    const response = await request(app)
-      .post(PATH_DATA.CHANGE_EMAIL.url)
-      .type("form")
-      .send({
-        email: "123456",
-      })
-      .expect(302);
-    expect(response.header["location"]).to.equal("/your-services");
+  it("should redirect to Your services when csrf not present", async () => {
+    await checkFailedCSRFValidationBehaviour(app, PATH_DATA.CHANGE_EMAIL.url, {
+      email: "123456",
+    });
   });
 
-  it("should return validation error when email not entered", (done) => {
-    request(app)
+  it("should return validation error when email not entered", async () => {
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -118,11 +122,11 @@ describe("Integration:: change email", () => {
           "Enter your email address"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when invalid email entered", (done) => {
-    request(app)
+  it("should return validation error when invalid email entered", async () => {
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -136,11 +140,11 @@ describe("Integration:: change email", () => {
           "Enter an email address in the correct format, like name@example.com"
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when same email used", (done) => {
-    request(app)
+  it("should return validation error when same email used", async () => {
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -154,12 +158,19 @@ describe("Integration:: change email", () => {
           "You are already using that email address. Enter a different email address."
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should return validation error when same email used by another user", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(400, {});
-    request(app)
+  it("should return validation error when same email used by another user", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.SEND_NOTIFICATION)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(400, {});
+
+    // Act
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -173,13 +184,19 @@ describe("Integration:: change email", () => {
           "There’s already a GOV.UK One Login using that email address. Enter a different email address."
         );
       })
-      .expect(400, done);
+      .expect(400);
   });
 
-  it("should redirect to /check-your-email when valid email", (done) => {
-    nock(baseApi).post(API_ENDPOINTS.SEND_NOTIFICATION).once().reply(204, {});
+  it("should redirect to /check-your-email when valid email", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.SEND_NOTIFICATION)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(204, {});
 
-    request(app)
+    // Act
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -188,19 +205,24 @@ describe("Integration:: change email", () => {
         email: "test1@test.com",
       })
       .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url)
-      .expect(302, done);
+      .expect(302);
   });
 
   describe("Email Normalization Tests", () => {
     let receivedEmail: string;
 
-    const setupTest = (
+    const performTest = async (
       inputEmail: string,
       expectedNormalisedEmail: string,
       done: Done
     ) => {
+      // Arrange
       nock(baseApi)
-        .post(API_ENDPOINTS.SEND_NOTIFICATION)
+        .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+        .post(API_ENDPOINTS.SEND_NOTIFICATION, {
+          email: expectedNormalisedEmail,
+          notificationType: "VERIFY_EMAIL",
+        })
         .reply(
           204,
           (
@@ -215,7 +237,8 @@ describe("Integration:: change email", () => {
           }
         );
 
-      request(app)
+      // Act
+      await request(app)
         .post(PATH_DATA.CHANGE_EMAIL.url)
         .type("form")
         .set("Cookie", cookies)
@@ -224,40 +247,39 @@ describe("Integration:: change email", () => {
           email: inputEmail,
         })
         .expect(302)
-        .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url)
-        .end((err) => {
-          if (err) return done(err);
-          expect(receivedEmail).to.equal(expectedNormalisedEmail);
-          done();
-        });
+        .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url);
+
+      // Assert
+      expect(receivedEmail).to.equal(expectedNormalisedEmail);
+      done();
     };
 
     it("should normalise email to all lowercase", (done) => {
-      setupTest("Test@Example.Com", "test@example.com", done);
+      performTest("Test@Example.Com", "test@example.com", done);
     });
 
     it("should normalise Gmail email to lowercase", (done) => {
-      setupTest("Test@Gmail.Com", "test@gmail.com", done);
+      performTest("Test@Gmail.Com", "test@gmail.com", done);
     });
 
     it("should not remove full stops from email", (done) => {
-      setupTest("Test.user@Gmail.Com", "test.user@gmail.com", done);
+      performTest("Test.user@Gmail.Com", "test.user@gmail.com", done);
     });
 
     it("should not remove sub-addresses for gmail accounts", (done) => {
-      setupTest("Test+user@Gmail.Com", "test+user@gmail.com", done);
+      performTest("Test+user@Gmail.Com", "test+user@gmail.com", done);
     });
 
     it("should not remove sub-addresses for outlook accounts", (done) => {
-      setupTest("Test+user@outlook.Com", "test+user@outlook.com", done);
+      performTest("Test+user@outlook.Com", "test+user@outlook.com", done);
     });
 
     it("should not remove sub-addresses for yahoo accounts", (done) => {
-      setupTest("Test+user@icloud.Com", "test+user@icloud.com", done);
+      performTest("Test+user@icloud.Com", "test+user@icloud.com", done);
     });
 
     it("should convert googlemail.com addresses to gmail.com", (done) => {
-      setupTest("Test@googlemail.com", "test@gmail.com", done);
+      performTest("Test@googlemail.com", "test@gmail.com", done);
     });
   });
 });

@@ -15,27 +15,44 @@ import {
   HTTP_STATUS_CODES,
   PATH_DATA,
 } from "../../../app.constants";
+import {
+  CLIENT_SESSION_ID,
+  CURRENT_EMAIL,
+  ENGLISH,
+  PERSISTENT_SESSION_ID,
+  RequestBuilder,
+  ResponseBuilder,
+  SESSION_ID,
+  SOURCE_IP,
+  TOKEN,
+} from "../../../../test/utils/builders";
+import { ApiResponseResult } from "../../../utils/types";
 
 describe("change password controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  let fakeChangePasswordService: ChangePasswordServiceInterface;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = {
-      body: {},
-      session: { user: { state: { changePassword: {} } } } as any,
-      cookies: { lng: "en" },
-      i18n: { language: "en" },
-      t: sandbox.fake(),
-    };
-    res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      locals: {},
-      status: sandbox.fake(),
+    req = new RequestBuilder()
+      .withBody({})
+      .withSessionUserState({ changePassword: {} })
+      .withTimestampT(sandbox.fake())
+      .build();
+
+    res = new ResponseBuilder()
+      .withRender(sandbox.fake())
+      .withRedirect(sandbox.fake(() => {}))
+      .withStatus(sandbox.fake())
+      .build();
+
+    fakeChangePasswordService = {
+      updatePassword: sandbox.fake.returns({
+        success: true,
+      } as unknown as Promise<ApiResponseResult>),
     };
   });
 
@@ -53,40 +70,60 @@ describe("change password controller", () => {
 
   describe("changePasswordPost", () => {
     it("should redirect to /password-updated-confirmation page", async () => {
-      const fakeService: ChangePasswordServiceInterface = {
-        updatePassword: sandbox.fake.resolves({
-          success: true,
-          code: 200,
-          message: "",
-        }),
-      };
-
+      // Arrange
       req.session.user.tokens = { accessToken: "token" } as any;
       req.body.password = "Password1";
 
-      await changePasswordPost(fakeService)(req as Request, res as Response);
+      // Act
+      await changePasswordPost(fakeChangePasswordService)(
+        req as Request,
+        res as Response
+      );
 
-      expect(fakeService.updatePassword).to.have.been.calledOnce;
+      // Assert
+      expect(fakeChangePasswordService.updatePassword).to.have.been.calledOnce;
+      expect(
+        fakeChangePasswordService.updatePassword
+      ).to.have.been.calledWithExactly(
+        TOKEN,
+        CURRENT_EMAIL,
+        "Password1",
+        SOURCE_IP,
+        SESSION_ID,
+        PERSISTENT_SESSION_ID,
+        ENGLISH,
+        CLIENT_SESSION_ID
+      );
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url
       );
     });
+
     it("should render bad request when password are same ", async () => {
-      const fakeService: ChangePasswordServiceInterface = {
+      // Arrange
+      const fakeFailingChangePasswordService: ChangePasswordServiceInterface = {
         updatePassword: sandbox.fake.resolves({
           success: false,
           code: ERROR_CODES.NEW_PASSWORD_SAME_AS_EXISTING,
           message: "",
         }),
       };
-      req.session.user.tokens = { accessToken: "token" } as any;
-      await changePasswordPost(fakeService)(req as Request, res as Response);
 
+      // Act
+      await changePasswordPost(fakeFailingChangePasswordService)(
+        req as Request,
+        res as Response
+      );
+
+      // Assert
+      expect(fakeFailingChangePasswordService.updatePassword).to.have.been
+        .called;
       expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
     it("should render bad request when password is common ", async () => {
-      const fakeService: ChangePasswordServiceInterface = {
+      // Arrange
+      const fakeFailingChangePasswordService: ChangePasswordServiceInterface = {
         updatePassword: sandbox.fake.resolves({
           success: false,
           code: ERROR_CODES.PASSWORD_IS_COMMON,
@@ -94,8 +131,16 @@ describe("change password controller", () => {
         }),
       };
       req.session.user.tokens = { accessToken: "token" } as any;
-      await changePasswordPost(fakeService)(req as Request, res as Response);
 
+      // Act
+      await changePasswordPost(fakeFailingChangePasswordService)(
+        req as Request,
+        res as Response
+      );
+
+      // Assert
+      expect(fakeFailingChangePasswordService.updatePassword).to.have.been
+        .called;
       expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
   });

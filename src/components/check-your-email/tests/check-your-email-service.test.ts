@@ -8,6 +8,8 @@ import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
 } from "../../../utils/types";
+import { describe } from "mocha";
+import { CLIENT_SESSION_ID } from "../../../../test/utils/builders";
 
 const baseUrl = getApiBaseUrl();
 
@@ -59,6 +61,7 @@ describe("checkYourEmailService", () => {
       sessionId,
       persistentSessionId,
       userLanguage,
+      clientSessionId: CLIENT_SESSION_ID,
     };
 
     const emailUpdated = await checkYourEmailService().updateEmail(

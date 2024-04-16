@@ -52,7 +52,8 @@ export function deleteAccountPost(
       email,
       req.ip,
       res.locals.sessionId,
-      res.locals.persistentSessionId
+      res.locals.persistentSessionId,
+      res.locals.clientSessionId
     );
 
     const DeleteTopicARN = getSNSDeleteTopic();
