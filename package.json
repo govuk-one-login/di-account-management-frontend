@@ -31,7 +31,7 @@
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/govuk --watch src/assets/scss/application.scss dist/public/style.css",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "mocha": {
     "diff": true,
@@ -100,8 +100,6 @@
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.12.7",
     "@types/nunjucks": "^3.2.6",
-    "@types/pino": "^7.0.5",
-    "@types/pino-http": "^5.8.4",
     "@types/qrcode": "^1.5.5",
     "@types/sinon": "^17.0.3",
     "@types/sinon-chai": "^3.2.12",
