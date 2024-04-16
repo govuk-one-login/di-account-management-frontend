@@ -30,9 +30,9 @@
     "test:js": "NODE_ENV=development nyc mocha -r dotenv/config \"src/assets/**/*.test.js\"",
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
-    "watch-sass": "sass --load-path=node_modules/govuk-frontend/govuk --watch src/assets/scss/application.scss dist/public/style.css",
     "prepare": "husky || true",
-    "find-missing-trns": "node scripts/missing_cy_trns.ts > missing_cy_trns.html && open missing_cy_trns.html"
+    "find-missing-trns": "node scripts/missing_cy_trns.ts > missing_cy_trns.html && open missing_cy_trns.html",
+    "watch-sass": "sass --load-path=node_modules/govuk-frontend/govuk --watch src/assets/scss/application.scss dist/public/style.css"
   },
   "mocha": {
     "diff": true,
