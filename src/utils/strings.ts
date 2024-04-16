@@ -1,9 +1,6 @@
 import { randomBytes } from "crypto";
-import { ParsedQs } from "qs";
+import { logger } from "./logger";
 
-const urlRegex = new RegExp(
-  "^(http(s)?://)?(www.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\\.[a-z]{2,6}([-a-zA-Z0-9@:%_+.~#?&//=]*)$"
-);
 const lowerAndUpperCaseLettersAndNumbersMax50 = new RegExp(
   "^[a-zA-Z0-9_-]{1,50}$"
 );
@@ -26,13 +23,22 @@ export function generateNonce(): string {
   return randomBytes(16).toString("hex");
 }
 
-export function isValidUrl(
-  url: string | string[] | ParsedQs | ParsedQs[]
-): boolean {
-  if (typeof url !== "string") {
+export function isValidUrl(urlString: string | undefined): boolean {
+  if (!urlString) {
     return false;
   }
-  return urlRegex.test(url);
+
+  try {
+    const url = new URL(urlString);
+    return !(
+      url.hostname === "" ||
+      url.hostname === "localhost" ||
+      url.hostname === "127.0.0.1"
+    );
+  } catch (e) {
+    logger.warn({ url: urlString }, e.toString());
+    return false;
+  }
 }
 
 export function isSafeString(url: string): boolean {

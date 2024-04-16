@@ -7,6 +7,7 @@ import * as nock from "nock";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
 import { getLastNDigits } from "../../../utils/phone-number";
+import { MfaMethod } from "../../../utils/mfa/types";
 
 const { url } = PATH_DATA.SECURITY;
 const TEST_USER_EMAIL = "test@test.com";
@@ -35,7 +36,7 @@ describe("Integration:: security", () => {
   });
 
   it("should display a redacted phone number when one is available", async () => {
-    const app = await appWithMiddlewareSetup();
+    const app = await appWithMiddlewareSetup({ mfaMethodType: "SMS" });
     const phoneNumberLastFourDigits = getLastNDigits(TEST_USER_PHONE_NUMBER, 4);
     await request(app)
       .get(url)
@@ -115,6 +116,22 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   const configFuncs = require("../../../config");
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
   const mfa = require("../../../utils/mfa");
+  const methods: Record<string, MfaMethod> = {
+    SMS: {
+      mfaIdentifier: 1,
+      priorityIdentifier: "PRIMARY",
+      mfaMethodType: "SMS",
+      endPoint: TEST_USER_PHONE_NUMBER,
+      methodVerified: true,
+    },
+    AUTH_APP: {
+      mfaIdentifier: 123456,
+      priorityIdentifier: "PRIMARY",
+      mfaMethodType: "AUTH_APP",
+      endPoint: "http://mock-endpoint",
+      methodVerified: true,
+    },
+  };
 
   sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
     req: any,
@@ -147,15 +164,11 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     .stub(checkAllowedServicesList, "hasAllowedRSAServices")
     .resolves(config?.hasAllowedRSAServices ?? true);
 
-  sandbox.stub(mfa, "default").resolves([
-    {
-      mfaIdentifier: 123456,
-      priorityIdentifier: "PRIMARY",
-      mfaMethodType: "AUTH_APP",
-      endPoint: "http://mock-endpoint",
-      methodVerified: true,
-    },
-  ]);
+  sandbox
+    .stub(mfa, "default")
+    .resolves([
+      methods[config.mfaMethodType ? config.mfaMethodType : "AUTH_APP"],
+    ]);
 
   return await require("../../../app").createApp();
 };

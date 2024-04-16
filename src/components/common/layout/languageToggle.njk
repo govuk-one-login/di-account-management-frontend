@@ -7,7 +7,7 @@
                     <span aria-current="page">{{ translationKey | translate }}</span>
                 {% else %}
                     <a class="govuk-link govuk-link--no-visited-state language-select__link"
-                       lang="{{ lang }}" hreflang="{{ lang }}" href="{{ currentUrl | addLanguageParam(lang, baseUrl) }}">
+                       lang="{{ lang }}" hreflang="{{ lang }}" href="{{ currentUrl | addLanguageParam(lang, baseUrl) }}" rel="nofollow">
                         {{ translationKey | translate }}
                     </a>
                 {% endif %}
