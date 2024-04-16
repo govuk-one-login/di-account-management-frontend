@@ -5,6 +5,7 @@ COPY package-lock.json ./
 COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
+ENV HUSKY=0
 RUN npm install && npm run build && npm run clean-modules && npm install --production=true
 
 FROM node:21.7.3-alpine@sha256:6d0f18a1c67dc218c4af50c21256616286a53c09e500fadf025b6d342e1c90ae as final
