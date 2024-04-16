@@ -15,6 +15,7 @@ import {
   MISSING_USER_ID_SPECIAL_CASE,
 } from "../app.constants";
 import { Session } from "express-session";
+import { getTxmaHeader } from "../utils/txma-header";
 
 export function eventService(
   sqs: SqsService = sqsService()
@@ -66,6 +67,7 @@ export function eventService(
     const { headers, session } = req;
 
     const timestamps = getCurrentTimestamp();
+    const txmaHeader = getTxmaHeader(req, res.locals.trace);
     return {
       timestamp: timestamps.seconds,
       event_timestamp_ms: timestamps.milliseconds,
@@ -87,6 +89,15 @@ export function eventService(
         reference_code: session.referenceCode,
         is_signed_in: isSignedIn(session),
       },
+      ...(txmaHeader !== undefined
+        ? {
+            restricted: {
+              device_information: {
+                encoded: txmaHeader,
+              },
+            },
+          }
+        : {}),
     };
   };
 

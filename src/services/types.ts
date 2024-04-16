@@ -23,7 +23,17 @@ export interface AuditEvent extends Event {
   user: User;
   platform: Platform;
   extensions: Extensions;
+  restricted?: Restricted;
 }
+
+export interface Restricted {
+  device_information?: DeviceInformation;
+}
+
+export interface DeviceInformation {
+  encoded: string;
+}
+
 export interface User {
   session_id: string;
   persistent_session_id: string;
