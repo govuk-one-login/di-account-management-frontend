@@ -16,7 +16,7 @@ const copySafeQueryParamToSession = (
     if (isSafeString(queryParams[paramName] as string)) {
       session.queryParameters[paramName] = queryParams[paramName] as string;
     } else {
-      logger.error(
+      logger.warn(
         { trace: sessionId },
         `${paramName} in request query for contact-govuk-one-login page did not pass validation`
       );
@@ -31,19 +31,17 @@ export const updateSessionMiddleware = (
 ): void => {
   const session = req.session;
   const queryParams = req.query;
-  const { fromURL } = queryParams;
+  const fromURL: string | undefined = req.query.fromURL as string | undefined;
   const trace = res.locals.sessionId;
   session.queryParameters = {};
-
-  if (fromURL) {
-    if (isValidUrl(fromURL)) {
-      session.queryParameters.fromURL = fromURL as string;
-    } else {
-      logger.error(
-        { trace: trace },
-        "fromURL in request query for contact-govuk-one-login page did not pass validation"
-      );
-    }
+  const validatedURL = isValidUrl(fromURL);
+  if (validatedURL) {
+    session.queryParameters.fromURL = new URL(fromURL).toString();
+  } else {
+    logger.warn(
+      { trace: trace },
+      "fromURL in request query for contact-govuk-one-login page did not pass validation"
+    );
   }
 
   copySafeQueryParamToSession(session, queryParams, "theme", trace);

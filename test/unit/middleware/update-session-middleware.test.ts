@@ -11,7 +11,7 @@ describe("updateSessionMiddleware", () => {
   let mockRequest: any;
   let mockResponse: any;
   let nextFunction: sinon.SinonStub;
-  let loggerErrorSpy: sinon.SinonSpy;
+  let loggerWarnSpy: sinon.SinonSpy;
 
   beforeEach(() => {
     // Mock request, response, and next function
@@ -28,37 +28,42 @@ describe("updateSessionMiddleware", () => {
 
     nextFunction = sinon.stub();
 
-    // Spy on logger's error method
-    loggerErrorSpy = sinon.spy(logger, "error");
+    loggerWarnSpy = sinon.spy(logger, "warn");
   });
 
   afterEach(() => {
     // Restore the spied upon methods
-    loggerErrorSpy.restore();
+    loggerWarnSpy.restore();
   });
 
   it("should set session.queryParameters.fromURL if it's a valid URL", () => {
-    mockRequest.query.fromURL = "https://valid-url.com";
+    mockRequest.query.fromURL = "https://valid-url.com/";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
     expect(mockRequest.session.queryParameters.fromURL).to.equal(
-      "https://valid-url.com"
+      "https://valid-url.com/"
     );
-    expect(loggerErrorSpy.notCalled).to.be.true;
+    expect(loggerWarnSpy.notCalled).to.be.true;
   });
 
   it("should not set session.queryParameters.fromURL if the string is not safe", () => {
     mockRequest.query.theme = "hEllo***";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
-    expect(loggerErrorSpy.calledOnce).to.be.true;
+    expect(loggerWarnSpy.calledTwice).to.be.true;
   });
 
-  it("should log an error for invalid fromURL", () => {
+  it("should log a warning for invalid fromURL", () => {
     mockRequest.query.fromURL = "invalid-url";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
-
-    expect(loggerErrorSpy.calledOnce).to.be.true;
+    expect(loggerWarnSpy).to.be.calledWith(
+      { url: "invalid-url" },
+      "TypeError [ERR_INVALID_URL]: Invalid URL"
+    );
+    expect(loggerWarnSpy).to.be.calledWith(
+      { trace: mockResponse.locals.sessionId },
+      "fromURL in request query for contact-govuk-one-login page did not pass validation"
+    );
     expect(mockRequest.session.queryParameters.fromURL).to.be.undefined;
   });
 
