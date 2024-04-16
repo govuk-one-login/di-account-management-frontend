@@ -40,7 +40,7 @@ describe("getTxmaHeader", () => {
 
     const result = getTxmaHeader(request as Request, TRACE);
 
-    expect(result).to.eq("");
+    expect(result).to.be.undefined;
     expect(loggerWarnSpy.calledOnce).to.be.true;
   });
 });
