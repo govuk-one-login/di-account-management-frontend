@@ -134,6 +134,7 @@ describe("eventService", () => {
       expect(result.extensions.app_session_id).to.equal(
         MISSING_APP_SESSION_ID_SPECIAL_CASE
       );
+      expect(result.restricted).to.be.undefined;
     });
   });
 
