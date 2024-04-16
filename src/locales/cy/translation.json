@@ -608,7 +608,7 @@
           "paragraph2": "The digital assistant is always available",
           "linkText": "Defnyddio gwesgwrs",
           "accessibility-statement": {
-            "insetText":{
+            "insetText": {
               "paragraphs": [
                 "Darllenwch ein <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy\">datganiad hygyrchedd</a> i gael gwybod am broblemau hygyrchedd hysbys gyda'n gwesgwrs. "
               ]

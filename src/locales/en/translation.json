@@ -670,7 +670,7 @@
           "paragraph2": "The digital assistant is always available.",
           "linkText": "Use webchat",
           "accessibility-statement": {
-            "insetText":{
+            "insetText": {
               "paragraphs": [
                 "Read our <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en\">accessibility statement</a> to find out about known accessibility problems with our webchat."
               ]
