@@ -64,6 +64,7 @@ import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-r
 import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
 import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
+import { developmentRouter } from "./components/dev/development-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -175,6 +176,9 @@ async function createApp(): Promise<express.Application> {
   if (supportChangeMfa()) {
     app.use(addMfaMethodRouter);
     app.use(addMfaMethodAppRouter);
+  }
+  if (!isProduction) {
+    app.use(developmentRouter);
   }
   app.use(trackAndRedirectRouter);
 

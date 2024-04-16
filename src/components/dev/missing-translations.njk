@@ -1,0 +1,19 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block pageContent %}
+{{ govukTable({
+  caption: "Missing Welsh Translations",
+  captionClasses: "govuk-table__caption--m",
+  firstCellIsHeader: true,
+  head: [
+    {
+      text: "Translation Key"
+    },
+    {
+      text: "English Text"
+    }
+  ],
+  rows: keysOnlyInEn 
+}) }}
+{% endblock %}
