@@ -35,7 +35,7 @@ describe("eventService", () => {
       const mockReq: any = {
         headers: {
           "user-agent": "test-user-agent",
-          "txma-audit-encoded": "test-txma-header",
+          "txma-audit-encoded": btoa("test-txma-header"),
         },
         session: {
           queryParameters: {
@@ -81,7 +81,7 @@ describe("eventService", () => {
         "2024-09-12T00:00:00.000Z"
       );
       expect(result.timestamp).to.equal(1726099200);
-      expect(result.restricted.device_information.encoded).to.equal(
+      expect(atob(result.restricted.device_information.encoded)).to.equal(
         "test-txma-header"
       );
     });
