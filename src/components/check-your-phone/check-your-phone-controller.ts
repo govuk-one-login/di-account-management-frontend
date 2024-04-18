@@ -14,6 +14,7 @@ import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
 } from "../../utils/types";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -44,6 +45,7 @@ export function checkYourPhonePost(
       persistentSessionId: res.locals.persistentSessionId,
       userLanguage: xss(req.cookies.lng as string),
       clientSessionId: res.locals.clientSessionId,
+      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
     };
 
     const isPhoneNumberUpdated = await service.updatePhoneNumber(

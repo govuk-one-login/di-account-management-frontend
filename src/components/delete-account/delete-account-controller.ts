@@ -11,6 +11,7 @@ import {
   getAllowedListServices,
 } from "../../utils/yourServices";
 import { Service } from "../../utils/types";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 export async function deleteAccountGet(
   req: Request,
@@ -53,7 +54,8 @@ export function deleteAccountPost(
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId,
-      res.locals.clientSessionId
+      res.locals.clientSessionId,
+      getTxmaHeader(req, res.locals.trace)
     );
 
     const DeleteTopicARN = getSNSDeleteTopic();

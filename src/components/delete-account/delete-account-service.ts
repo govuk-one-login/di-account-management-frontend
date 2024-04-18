@@ -16,7 +16,8 @@ export function deleteAccountService(
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEncoded: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.DELETE_ACCOUNT,
@@ -29,6 +30,7 @@ export function deleteAccountService(
         persistentSessionId,
         sessionId,
         clientSessionId,
+        txmaAuditEncoded,
       })
     );
     return status === HTTP_STATUS_CODES.NO_CONTENT;
