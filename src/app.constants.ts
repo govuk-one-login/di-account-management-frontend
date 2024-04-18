@@ -1,4 +1,4 @@
-import { UserJourney } from "./utils/state-machine";
+import { AccountManagementEvent, UserJourney } from "./utils/state-machine";
 
 export const PATH_DATA: {
   [key: string]: { url: string; event?: string; type?: UserJourney };
@@ -11,9 +11,26 @@ export const PATH_DATA: {
   SECURITY: { url: "/security" },
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
-  ADD_MFA_METHOD: { url: "/add-mfa-method" },
-  ADD_MFA_METHOD_APP: { url: "/add-mfa-method-app" },
-  ADD_MFA_METHOD_SMS: { url: "/add-mfa-method-sms" },
+  ADD_MFA_METHOD: {
+    url: "/add-mfa-method",
+    event: "SELECTED_APP",
+    type: UserJourney.AddMfaMethod,
+  },
+  ADD_MFA_METHOD_APP: {
+    url: "/add-mfa-method-app",
+    event: "VALUE_UPDATED",
+    type: UserJourney.AddMfaMethod,
+  },
+  ADD_MFA_METHOD_APP_CONFIRMATION: {
+    url: "/add-mfa-method-app-confirmation",
+    event: "CONFIRMATION",
+    type: UserJourney.AddMfaMethod,
+  },
+  ADD_MFA_METHOD_SMS: {
+    url: "/add-mfa-method-sms",
+    event: "VALUE_UPDATED",
+    type: UserJourney.AddMfaMethod,
+  },
   CHANGE_EMAIL: {
     url: "/change-email",
     event: "VERIFY_CODE_SENT",
@@ -98,10 +115,12 @@ export const MFA_METHODS = {
   SMS: {
     type: "sms",
     path: PATH_DATA.ADD_MFA_METHOD_SMS,
+    event: "SELECTED_SMS" as AccountManagementEvent,
   },
   APP: {
     type: "app",
     path: PATH_DATA.ADD_MFA_METHOD_APP,
+    event: "SELECTED_APP" as AccountManagementEvent,
   },
 };
 
@@ -156,6 +175,7 @@ export interface LanguageCodes {
   en: "en-GB";
   cy: "cy-CY";
 }
+
 export const LANGUAGE_CODES: LanguageCodes = {
   en: "en-GB",
   cy: "cy-CY",

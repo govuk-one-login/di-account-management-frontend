@@ -14,6 +14,7 @@ export function validateStateMiddleware(
       pageState.type
     )
   ) {
+    req.log.info(`state exists but no value for ${pageState.type}`);
     req.log.warn(`state exists but no value for ${pageState.type}`);
     return res.redirect(PATH_DATA.YOUR_SERVICES.url);
   }
