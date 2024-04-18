@@ -2,24 +2,24 @@ import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import {
-  addMfaMethodGet,
-  addMfaMethodPost,
-} from "./add-mfa-methods-controller";
+  addMfaAppMethodGet,
+  addMfaAppMethodPost,
+} from "./add-mfa-method-app-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 
 const router = express.Router();
 
 router.get(
-  PATH_DATA.ADD_MFA_METHOD.url,
+  PATH_DATA.ADD_MFA_METHOD_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  addMfaMethodGet
+  addMfaAppMethodGet
 );
 
 router.post(
-  PATH_DATA.ADD_MFA_METHOD.url,
+  PATH_DATA.ADD_MFA_METHOD_APP.url,
   requiresAuthMiddleware,
-  addMfaMethodPost
+  addMfaAppMethodPost
 );
 
-export { router as addMfaMethodRouter };
+export { router as addMfaMethodAppRouter };
