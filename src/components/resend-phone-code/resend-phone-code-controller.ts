@@ -11,6 +11,7 @@ import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
 
@@ -36,7 +37,8 @@ export function resendPhoneCodePost(
       res.locals.sessionId,
       res.locals.persistentSessionId,
       xss(req.cookies.lng as string),
-      res.locals.clientSessionId
+      res.locals.clientSessionId,
+      getTxmaHeader(req, res.locals.trace)
     );
 
     if (response.success) {
