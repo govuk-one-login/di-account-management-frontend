@@ -30,7 +30,7 @@ export function createApiResponse(
 
 export function getRequestConfig({
   token,
-  validationStatues,
+  validationStatuses,
   sourceIp,
   persistentSessionId,
   sessionId,
@@ -39,7 +39,7 @@ export function getRequestConfig({
   txmaAuditEncoded,
 }: {
   token: string;
-  validationStatues?: number[];
+  validationStatuses?: number[];
   sourceIp?: string;
   persistentSessionId?: string;
   sessionId?: string;
@@ -54,9 +54,9 @@ export function getRequestConfig({
     proxy: false,
   };
 
-  if (validationStatues) {
+  if (validationStatuses) {
     config.validateStatus = function (status: number) {
-      return validationStatues.includes(status);
+      return validationStatuses.includes(status);
     };
   }
 

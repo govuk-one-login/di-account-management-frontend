@@ -34,7 +34,7 @@ export function changePhoneNumberService(
       },
       getRequestConfig({
         token: accessToken,
-        validationStatues: [
+        validationStatuses: [
           HTTP_STATUS_CODES.NO_CONTENT,
           HTTP_STATUS_CODES.BAD_REQUEST,
         ],

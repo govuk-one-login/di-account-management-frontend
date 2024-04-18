@@ -22,7 +22,7 @@ export function enterPasswordService(
       },
       getRequestConfig({
         token,
-        validationStatues: [
+        validationStatuses: [
           HTTP_STATUS_CODES.NO_CONTENT,
           HTTP_STATUS_CODES.FORBIDDEN,
           HTTP_STATUS_CODES.UNAUTHORIZED,
