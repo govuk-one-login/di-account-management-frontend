@@ -23,7 +23,8 @@ export function changePhoneNumberService(
     sessionId: string,
     persistentSessionId: string,
     userLanguage: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEncoded: string
   ): Promise<ApiResponseResult> {
     const response = await axios.client.post<ApiResponse>(
       API_ENDPOINTS.SEND_NOTIFICATION,
@@ -43,6 +44,7 @@ export function changePhoneNumberService(
         sessionId,
         userLanguage,
         clientSessionId,
+        txmaAuditEncoded,
       })
     );
     return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);

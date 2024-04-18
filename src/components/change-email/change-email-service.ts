@@ -16,7 +16,8 @@ export function changeEmailService(
     sessionId: string,
     persistentSessionId: string,
     userLanguage: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEncoded: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.SEND_NOTIFICATION,
@@ -35,6 +36,7 @@ export function changeEmailService(
         sessionId,
         userLanguage,
         clientSessionId,
+        txmaAuditEncoded,
       })
     );
 

@@ -9,6 +9,7 @@ export interface ChangePhoneNumberServiceInterface {
     sessionId: string,
     persistentSessionId: string,
     userLanguage: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEncoded: string
   ) => Promise<ApiResponseResult>;
 }

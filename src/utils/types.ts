@@ -119,6 +119,7 @@ export interface UpdateInformationSessionValues {
   persistentSessionId: string;
   userLanguage: string;
   clientSessionId: string;
+  txmaAuditEncoded: string;
 }
 
 export const allowedTxmaEvents: Array<string> = [

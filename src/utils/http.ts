@@ -45,7 +45,7 @@ export function getRequestConfig({
   sessionId?: string;
   userLanguage?: string;
   clientSessionId?: string;
-  txmaAuditEncoded?: string;
+  txmaAuditEncoded: string;
 }): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
     headers: {
