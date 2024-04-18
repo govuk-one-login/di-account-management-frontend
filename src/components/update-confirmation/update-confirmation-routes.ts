@@ -2,6 +2,7 @@ import { PATH_DATA } from "../../app.constants";
 
 import * as express from "express";
 import {
+  addMfaAppMethodConfirmationGet,
   deleteAccountConfirmationGet,
   updateEmailConfirmationGet,
   updatePasswordConfirmationGet,
@@ -33,6 +34,13 @@ router.get(
 router.get(
   PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
   deleteAccountConfirmationGet
+);
+
+router.get(
+  PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  addMfaAppMethodConfirmationGet
 );
 
 export { router as updateConfirmationRouter };

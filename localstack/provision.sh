@@ -352,7 +352,7 @@ create_state_machine() {
       --region eu-west-2 \
       --name "ExampleStateMachine" \
       --type "STANDARD" \
-      --role-arn "arn" \
+      --role-arn "arn:aws:iam::000000000000:role/stepfunctions-role" \
       --definition '
         {
           "Comment": "Example StepFunction",

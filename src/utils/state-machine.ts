@@ -5,14 +5,16 @@ enum UserJourney {
   ChangePassword = "changePassword",
   ChangePhoneNumber = "changePhoneNumber",
   DeleteAccount = "deleteAccount",
-  AddMfaMethod = "addMFAMethod",
+  AddMfaMethod = "addMfaMethod",
 }
 
 type AccountManagementEvent =
   | "VALUE_UPDATED"
   | "VERIFY_CODE_SENT"
   | "AUTHENTICATED"
-  | "RESEND_CODE";
+  | "RESEND_CODE"
+  | "SELECTED_APP"
+  | "SELECTED_SMS";
 
 interface StateAction {
   value: StateValue;
@@ -32,6 +34,18 @@ const amStateMachine = createMachine<AccountManagementEvent>({
       on: {
         VALUE_UPDATED: "CONFIRMATION",
         VERIFY_CODE_SENT: "VERIFY_CODE",
+        SELECTED_APP: "APP",
+        SELECTED_SMS: "SMS",
+      },
+    },
+    APP: {
+      on: {
+        VALUE_UPDATED: "CONFIRMATION",
+      },
+    },
+    SMS: {
+      on: {
+        VALUE_UPDATED: "CONFIRMATION",
       },
     },
     VERIFY_CODE: {
@@ -77,4 +91,5 @@ export {
   UserJourney,
   getInitialState,
   StateAction,
+  AccountManagementEvent,
 };

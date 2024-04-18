@@ -1,15 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { HTTP_STATUS_CODES, MFA_METHODS, PATH_DATA } from "../../app.constants";
-import {
-  addMfaMethod,
-  generateMfaSecret,
-  generateQRCodeValue,
-  verifyMfaCode,
-} from "../../utils/mfa";
-import QRCode from "qrcode";
-import assert from "node:assert";
-import { splitSecretKeyIntoFragments } from "../../utils/strings";
-import { formatValidationError } from "../../utils/validation";
+import { MFA_METHODS } from "../../app.constants";
+import { getNextState } from "../../utils/state-machine";
 
 type MfaMethods = keyof typeof MFA_METHODS;
 
@@ -46,128 +37,12 @@ export function addMfaMethodPost(
     return next(new Error(`Unknown addMfaMethod: ${addMfaMethod}`));
   }
 
-  res.redirect(MFA_METHODS[method as MfaMethods].path.url);
+  const selectedMfaMethod = MFA_METHODS[method as MfaMethods];
+  req.session.user.state.addMfaMethod = getNextState(
+    req.session.user.state.addMfaMethod.value,
+    selectedMfaMethod.event
+  );
+
+  res.redirect(selectedMfaMethod.path.url);
   res.end();
-}
-
-async function renderMfaMethodAppPage(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  errors: ReturnType<typeof formatValidationError>
-): Promise<void> {
-  try {
-    assert(req.session.user.email, "email not set in session");
-
-    const authAppSecret = req.body.authAppSecret || generateMfaSecret();
-
-    const qrCodeText = generateQRCodeValue(
-      authAppSecret,
-      req.session.user.email,
-      "GOV.UK One Login"
-    );
-
-    const qrCode = await QRCode.toDataURL(qrCodeText);
-    return res.render("add-mfa-method/add-app.njk", {
-      authAppSecret,
-      qrCode,
-      formattedSecret: splitSecretKeyIntoFragments(authAppSecret).join(" "),
-      errorList: Object.keys(errors || {}).map((key) => {
-        return {
-          text: errors[key].text,
-          href: `#${key}`,
-        };
-      }),
-      errors: errors || {},
-    });
-  } catch (e) {
-    req.log.error(e);
-    return next(e);
-  }
-}
-
-export async function addMfaAppMethodGet(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  return renderMfaMethodAppPage(req, res, next, {});
-}
-
-export async function addMfaAppMethodPost(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const { code, authAppSecret } = req.body;
-
-    assert(authAppSecret, "authAppSecret not set in body");
-
-    if (!code) {
-      return renderMfaMethodAppPage(
-        req,
-        res,
-        next,
-        formatValidationError(
-          "code",
-          req.t("pages.addMfaMethodApp.errors.required")
-        )
-      );
-    }
-
-    if (code.length !== 6) {
-      return renderMfaMethodAppPage(
-        req,
-        res,
-        next,
-        formatValidationError(
-          "code",
-          req.t("pages.addMfaMethodApp.errors.maxLength")
-        )
-      );
-    }
-
-    const isValid = verifyMfaCode(authAppSecret, code);
-
-    if (!isValid) {
-      return renderMfaMethodAppPage(
-        req,
-        res,
-        next,
-        formatValidationError(
-          "code",
-          req.t("pages.addMfaMethodApp.errors.invalidCode")
-        )
-      );
-    }
-
-    const { status } = await addMfaMethod({
-      email: req.session.user.email,
-      otp: code,
-      credential: authAppSecret,
-      mfaMethod: {
-        priorityIdentifier: "SECONDARY",
-        mfaMethodType: "AUTH_APP",
-      },
-      accessToken: req.session.user.tokens.accessToken,
-      sourceIp: req.ip,
-      sessionId: req.session.id,
-      persistentSessionId: res.locals.persistentSessionId,
-    });
-
-    if (status !== HTTP_STATUS_CODES.OK) {
-      throw Error(`Failed to add MFA method, response status: ${status}`);
-    }
-
-    return res.render("common/confirmation-page/confirmation.njk", {
-      heading: req.t("pages.confirmAddMfaMethod.heading"),
-      message: req.t("pages.confirmAddMfaMethod.message"),
-      backLinkText: req.t("pages.confirmAddMfaMethod.backLinkText"),
-      backLink: PATH_DATA.SECURITY.url,
-    });
-  } catch (e) {
-    req.log.error(e);
-    return next(e);
-  }
 }
