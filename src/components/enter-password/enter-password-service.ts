@@ -20,9 +20,9 @@ export function enterPasswordService(
         email: emailAddress,
         password: password,
       },
-      getRequestConfig(
+      getRequestConfig({
         token,
-        [
+        validationStatues: [
           HTTP_STATUS_CODES.NO_CONTENT,
           HTTP_STATUS_CODES.FORBIDDEN,
           HTTP_STATUS_CODES.UNAUTHORIZED,
@@ -30,9 +30,8 @@ export function enterPasswordService(
         sourceIp,
         persistentSessionId,
         sessionId,
-        null,
-        clientSessionId
-      )
+        clientSessionId,
+      })
     );
     return status === HTTP_STATUS_CODES.NO_CONTENT;
   };

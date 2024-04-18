@@ -27,15 +27,18 @@ export function changePasswordService(
         email,
         newPassword,
       },
-      getRequestConfig(
-        accessToken,
-        [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
+      getRequestConfig({
+        token: accessToken,
+        validationStatues: [
+          HTTP_STATUS_CODES.NO_CONTENT,
+          HTTP_STATUS_CODES.BAD_REQUEST,
+        ],
         sourceIp,
         persistentSessionId,
         sessionId,
         userLanguage,
-        clientSessionId
-      )
+        clientSessionId,
+      })
     );
     return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
   };

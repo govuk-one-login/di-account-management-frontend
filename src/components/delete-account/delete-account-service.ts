@@ -23,14 +23,13 @@ export function deleteAccountService(
       {
         email: email,
       },
-      getRequestConfig(
+      getRequestConfig({
         token,
-        null,
         sourceIp,
         persistentSessionId,
         sessionId,
-        clientSessionId
-      )
+        clientSessionId,
+      })
     );
     return status === HTTP_STATUS_CODES.NO_CONTENT;
   };

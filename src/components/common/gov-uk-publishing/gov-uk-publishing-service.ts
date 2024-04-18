@@ -23,7 +23,9 @@ export function govUkPublishingService(
         has_unconfirmed_email: false,
         legacy_sub: request.legacySubjectId,
       },
-      getRequestConfig(getGovPublishingBaseAPIToken())
+      getRequestConfig({
+        token: getGovPublishingBaseAPIToken(),
+      })
     );
   };
 
@@ -38,7 +40,7 @@ export function govUkPublishingService(
 
     await axios.client.delete<void>(
       deleteUrl,
-      getRequestConfig(getGovPublishingBaseAPIToken())
+      getRequestConfig({ token: getGovPublishingBaseAPIToken() })
     );
   };
 

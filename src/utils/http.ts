@@ -28,15 +28,25 @@ export function createApiResponse(
   };
 }
 
-export function getRequestConfig(
-  token: string,
-  validationStatues?: number[],
-  sourceIp?: string,
-  persistentSessionId?: string,
-  sessionId?: string,
-  userLanguage?: string,
-  clientSessionId?: string
-): AxiosRequestConfig {
+export function getRequestConfig({
+  token,
+  validationStatues,
+  sourceIp,
+  persistentSessionId,
+  sessionId,
+  userLanguage,
+  clientSessionId,
+  txmaAuditEncoded,
+}: {
+  token: string;
+  validationStatues?: number[];
+  sourceIp?: string;
+  persistentSessionId?: string;
+  sessionId?: string;
+  userLanguage?: string;
+  clientSessionId?: string;
+  txmaAuditEncoded?: string;
+}): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -68,6 +78,10 @@ export function getRequestConfig(
 
   if (clientSessionId) {
     config.headers["Client-Session-Id"] = clientSessionId;
+  }
+
+  if (txmaAuditEncoded) {
+    config.headers["txma-audit-encoded"] = txmaAuditEncoded;
   }
 
   return config;
