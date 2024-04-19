@@ -148,6 +148,7 @@ describe("delete account controller", () => {
         expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
         expect(res.redirect).to.have.been.calledWith("logout-url");
         expect(sessionStore.destroyUserSessions).to.have.been.calledWith(
+          req,
           "public-subject-id"
         );
       });

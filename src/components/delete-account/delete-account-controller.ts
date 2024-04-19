@@ -85,7 +85,7 @@ export function deleteAccountPost(
         getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
     });
 
-    await destroyUserSessions(subjectId, req.app.locals.sessionStore);
+    await destroyUserSessions(req, subjectId, req.app.locals.sessionStore);
 
     return res.redirect(logoutUrl);
   };

@@ -182,7 +182,6 @@ export const LANGUAGE_CODES: LanguageCodes = {
 };
 
 export const LOG_MESSAGES = {
-  ATTEMPTING_TO_DESTROY_SESSION: "Attempting to destroy session",
   GS_COOKIE_NOT_IN_REQUEST: "gs cookie not in request.",
   DI_PERSISTENT_SESSION_ID_COOKIE_NOT_IN_REQUEST:
     "di-persistent-session-id cookie not in request.",
