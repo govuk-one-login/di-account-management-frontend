@@ -10,6 +10,7 @@ import {
 } from "../enter-password-controller";
 import { EnterPasswordServiceInterface } from "../types";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -34,6 +35,7 @@ describe("enter password controller", () => {
       t: sandbox.fake(),
       i18n: { language: "" },
       query: {},
+      headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
     };
     res = {
       render: sandbox.fake(),

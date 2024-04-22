@@ -10,6 +10,7 @@ import {
   resendPhoneCodeGet,
   resendPhoneCodePost,
 } from "../resend-phone-code-controller";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 
 describe("resend phone code controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -24,6 +25,7 @@ describe("resend phone code controller", () => {
       session: { user: {} } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
+      headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
     };
     res = {
       render: sandbox.fake(),
