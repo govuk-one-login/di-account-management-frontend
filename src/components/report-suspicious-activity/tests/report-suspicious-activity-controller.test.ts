@@ -183,9 +183,45 @@ describe("report suspicious activity controller", () => {
   });
 
   describe("Submit suspicious activity report", () => {
-    it("should send event to SNS", async () => {
+    it("should send event to SNS with device information", async () => {
       // Arrange
       req.body.page = "1";
+      const TXMA_HEADER_VALUE = "TXMA_HEADER_VALUE";
+      req.headers = {
+        "txma-audit-encoded": TXMA_HEADER_VALUE,
+      };
+
+      // Act
+      await reportSuspiciousActivityPost(
+        req as Request,
+        res as Response,
+        () => {}
+      );
+
+      // Assert
+      expect(res.redirect).to.have.been.calledWith(
+        "/activity-history/report-activity/done?page=1"
+      );
+
+      const snsCall = snsPublishSpy.getCalls()[0];
+      const [topic_arn, message] = snsCall.args;
+
+      expect(topic_arn).to.equal(process.env.SUSPICIOUS_ACTIVITY_TOPIC_ARN);
+      expect(JSON.parse(message)).to.deep.equal({
+        user_id: "user-id",
+        email: "test@email.moc",
+        event_id: "event-id",
+        persistent_session_id: "persistent-session-id",
+        session_id: "session-id",
+        reported_suspicious_time: 101,
+        device_information: TXMA_HEADER_VALUE,
+      });
+    });
+
+    it("should send event to SNS without device information", async () => {
+      // Arrange
+      req.body.page = "1";
+      req.headers = {};
 
       // Act
       await reportSuspiciousActivityPost(

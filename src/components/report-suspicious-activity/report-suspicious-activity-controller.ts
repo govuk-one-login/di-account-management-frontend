@@ -14,6 +14,7 @@ import assert from "node:assert";
 import { formatActivityLogs } from "../../utils/activityHistory";
 import { decryptData } from "../../utils/decrypt-data";
 import { snsService } from "../../utils/sns";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 const activityLogDynamoDBRequest = (
   subjectId: string,
@@ -34,6 +35,7 @@ interface ReportSuspiciousActivityParams {
   persistent_session_id: string;
   session_id: string;
   reported_suspicious_time: number;
+  device_information?: string;
   topic_arn?: string;
 }
 
@@ -44,6 +46,7 @@ const publishToSuspiciousActivityTopic = async function ({
   persistent_session_id,
   session_id,
   reported_suspicious_time,
+  device_information,
   topic_arn = getSNSSuspicousActivityTopic(),
 }: ReportSuspiciousActivityParams): Promise<void> {
   const sns = snsService();
@@ -56,6 +59,7 @@ const publishToSuspiciousActivityTopic = async function ({
       persistent_session_id,
       session_id,
       reported_suspicious_time,
+      device_information,
     })
   );
 };
@@ -156,6 +160,7 @@ export async function reportSuspiciousActivityPost(
       persistent_session_id: res.locals.persistentSessionId,
       session_id: res.locals.sessionId,
       reported_suspicious_time: new Date().getTime(),
+      device_information: getTxmaHeader(req, res.locals.trace),
     });
   } catch (err) {
     req.log.error(err.message);
