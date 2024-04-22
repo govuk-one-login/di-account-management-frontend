@@ -313,7 +313,8 @@
         "paragraph1": "GOV.UK One Login is new. At the moment you can only use it to access some government services.",
 
         "paragraph2": "In the future, you'll be able to use GOV.UK One Login to access all services on GOV.UK.",
-        "paragraph3": "See the <a class=\"govuk-link\" href=\"[servicesLink]\">services you can use with GOV.UK One Login</a>."
+        "paragraph3": "See the <a class=\"govuk-link\" href=\"[serviceListLink]\">services you can use with GOV.UK One Login</a>.",
+        "link": "https://www.gov.uk/using-your-gov-uk-one-login/services"
       }
     },
     "enterPassword": {

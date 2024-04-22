@@ -254,7 +254,8 @@
         "heading": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
         "paragraph1": "Mae GOV.UK One Login yn newydd. Ar hyn o bryd gallwch ond ei ddefnyddio i gael mynediad i rai gwasanaethau'r llywodraeth.",
         "paragraph2": "Yn y dyfodol, byddwch yn gallu defnyddio GOV.UK One Login i gael mynediad i'r holl wasanaethau ar GOV.UK.",
-        "paragraph3": "Gweler y <a class=\"govuk-link\" href=\"[servicesLink]\">gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login</a>."
+        "paragraph3": "Gweler y <a class=\"govuk-link\" href=\"[serviceListLink]\">gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login</a>.",
+        "link": "https://www.gov.uk/defnyddio-eich-gov-uk-one-login/gwasanaethau"
       }
     },
     "enterPassword": {
