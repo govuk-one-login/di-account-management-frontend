@@ -6,7 +6,9 @@ export function validateStateMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  const pageState = Object.values(PATH_DATA).find((key) => key.url === req.url);
+  const pageState = Object.values(PATH_DATA).find((key): boolean =>
+    req.url.startsWith(key.url)
+  );
 
   if (
     !Object.prototype.hasOwnProperty.call(
@@ -14,7 +16,6 @@ export function validateStateMiddleware(
       pageState.type
     )
   ) {
-    req.log.info(`state exists but no value for ${pageState.type}`);
     req.log.warn(`state exists but no value for ${pageState.type}`);
     return res.redirect(PATH_DATA.YOUR_SERVICES.url);
   }
