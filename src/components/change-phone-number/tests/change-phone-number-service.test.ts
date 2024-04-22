@@ -16,6 +16,7 @@ import {
   SESSION_ID,
   SOURCE_IP,
   TOKEN,
+  TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 
 const baseUrl = getApiBaseUrl();
@@ -31,6 +32,7 @@ describe("changePhoneNumberService", () => {
         "di-persistent-session-id": PERSISTENT_SESSION_ID,
         "session-id": SESSION_ID,
         "user-language": ENGLISH,
+        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
       },
     })
       .post(API_ENDPOINTS.SEND_NOTIFICATION, {
@@ -49,7 +51,8 @@ describe("changePhoneNumberService", () => {
         SESSION_ID,
         PERSISTENT_SESSION_ID,
         ENGLISH,
-        CLIENT_SESSION_ID
+        CLIENT_SESSION_ID,
+        TXMA_AUDIT_ENCODED
       );
 
     expect(changePhoneNumberResponse.success).to.be.true;

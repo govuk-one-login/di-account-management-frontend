@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getInitialState } from "../../src/utils/state-machine";
 import { Session, SessionData } from "express-session";
+import { IncomingHttpHeaders } from "http";
 
 export const CURRENT_EMAIL: string = "current-email@dl.com";
 export const NEW_EMAIL: string = "new-email@test.com";
@@ -11,6 +12,8 @@ export const ENGLISH: string = "en";
 export const SESSION_ID = "sessionid";
 export const PERSISTENT_SESSION_ID = "persistentsessionid";
 export const CLIENT_SESSION_ID = "clientsessionid";
+
+export const TXMA_AUDIT_ENCODED = "txma-audit-encoded";
 
 export class RequestBuilder {
   private body: object | null = null;
@@ -29,6 +32,7 @@ export class RequestBuilder {
   private cookies: object = { lng: ENGLISH };
   private ip: string = SOURCE_IP;
   private i18n: object = { language: ENGLISH };
+  private headers: object = {};
   private t: () => void;
 
   withBody(body: object): RequestBuilder {
@@ -48,6 +52,11 @@ export class RequestBuilder {
 
   withCookies(cookies: object): RequestBuilder {
     this.cookies = cookies;
+    return this;
+  }
+
+  withHeaders(headers: object): RequestBuilder {
+    this.headers = headers;
     return this;
   }
 
@@ -72,6 +81,7 @@ export class RequestBuilder {
       session: this.session,
       cookies: this.cookies,
       i18n: this.i18n,
+      headers: this.headers as IncomingHttpHeaders,
       t: this.t as any,
       ip: this.ip,
     };

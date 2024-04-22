@@ -16,6 +16,7 @@ import {
   SESSION_ID,
   SOURCE_IP,
   TOKEN,
+  TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 
 describe("change email controller", () => {
@@ -29,6 +30,7 @@ describe("change email controller", () => {
     req = new RequestBuilder()
       .withBody({ email: NEW_EMAIL })
       .withTimestampT(sandbox.fake())
+      .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
     res = new ResponseBuilder()
@@ -74,7 +76,8 @@ describe("change email controller", () => {
         SESSION_ID,
         PERSISTENT_SESSION_ID,
         ENGLISH,
-        CLIENT_SESSION_ID
+        CLIENT_SESSION_ID,
+        TXMA_AUDIT_ENCODED
       );
       expect(res.redirect).to.have.calledWith("/check-your-email");
     });
