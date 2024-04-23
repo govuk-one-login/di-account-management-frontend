@@ -54,7 +54,8 @@ describe("changeEmailService", () => {
         sessionId,
         persistentSessionId,
         userLanguage,
-        clientSessionId
+        clientSessionId,
+        ""
       );
 
     expect(sendCodeVerificationNotification).to.true;

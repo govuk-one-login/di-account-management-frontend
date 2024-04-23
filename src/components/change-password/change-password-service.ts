@@ -19,7 +19,8 @@ export function changePasswordService(
     sessionId: string,
     persistentSessionId: string,
     userLanguage: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEncoded: string
   ): Promise<ApiResponseResult> {
     const response = await axios.client.post<ApiResponse>(
       API_ENDPOINTS.UPDATE_PASSWORD,
@@ -27,15 +28,19 @@ export function changePasswordService(
         email,
         newPassword,
       },
-      getRequestConfig(
-        accessToken,
-        [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
+      getRequestConfig({
+        token: accessToken,
+        validationStatuses: [
+          HTTP_STATUS_CODES.NO_CONTENT,
+          HTTP_STATUS_CODES.BAD_REQUEST,
+        ],
         sourceIp,
         persistentSessionId,
         sessionId,
         userLanguage,
-        clientSessionId
-      )
+        clientSessionId,
+        txmaAuditEncoded,
+      })
     );
     return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
   };

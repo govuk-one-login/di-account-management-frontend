@@ -26,6 +26,7 @@ describe("check your email controller", () => {
       cookies: { lng: "en" },
       i18n: { language: "en" },
       log: { error: sandbox.fake() },
+      headers: { "txma-audit-encoded": "encoded" },
     } as any;
     res = {
       render: sandbox.fake(),

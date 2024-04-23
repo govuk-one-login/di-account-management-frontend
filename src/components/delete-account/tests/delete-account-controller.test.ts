@@ -9,6 +9,7 @@ import {
 import { DeleteAccountServiceInterface } from "../types";
 import { getAppEnv } from "../../../config";
 import { Service } from "../../../utils/types";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -39,6 +40,7 @@ describe("delete account controller", () => {
         destroy: sandbox.fake(),
       },
       log: { error: sandbox.fake() },
+      headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
     };
   }
 

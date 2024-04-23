@@ -16,7 +16,8 @@ export function changeEmailService(
     sessionId: string,
     persistentSessionId: string,
     userLanguage: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEncoded: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.SEND_NOTIFICATION,
@@ -24,15 +25,19 @@ export function changeEmailService(
         email: email,
         notificationType: NOTIFICATION_TYPE.VERIFY_EMAIL,
       },
-      getRequestConfig(
-        accessToken,
-        [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
+      getRequestConfig({
+        token: accessToken,
+        validationStatuses: [
+          HTTP_STATUS_CODES.NO_CONTENT,
+          HTTP_STATUS_CODES.BAD_REQUEST,
+        ],
         sourceIp,
         persistentSessionId,
         sessionId,
         userLanguage,
-        clientSessionId
-      )
+        clientSessionId,
+        txmaAuditEncoded,
+      })
     );
 
     return status === HTTP_STATUS_CODES.NO_CONTENT;

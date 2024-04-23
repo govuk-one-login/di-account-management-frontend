@@ -20,6 +20,7 @@ import {
   SESSION_ID,
   SOURCE_IP,
   TOKEN,
+  TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 
 describe("change phone number controller", () => {
@@ -34,6 +35,7 @@ describe("change phone number controller", () => {
       .withBody({})
       .withSessionUserState({ changePhoneNumber: {} })
       .withTimestampT(sandbox.fake())
+      .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
     res = new ResponseBuilder()
@@ -83,7 +85,8 @@ describe("change phone number controller", () => {
         SESSION_ID,
         PERSISTENT_SESSION_ID,
         ENGLISH,
-        CLIENT_SESSION_ID
+        CLIENT_SESSION_ID,
+        TXMA_AUDIT_ENCODED
       );
       expect(res.redirect).to.have.calledWith(PATH_DATA.CHECK_YOUR_PHONE.url);
     });
@@ -114,7 +117,8 @@ describe("change phone number controller", () => {
         SESSION_ID,
         PERSISTENT_SESSION_ID,
         ENGLISH,
-        CLIENT_SESSION_ID
+        CLIENT_SESSION_ID,
+        TXMA_AUDIT_ENCODED
       );
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
@@ -145,7 +149,8 @@ describe("change phone number controller", () => {
         SESSION_ID,
         PERSISTENT_SESSION_ID,
         ENGLISH,
-        CLIENT_SESSION_ID
+        CLIENT_SESSION_ID,
+        TXMA_AUDIT_ENCODED
       );
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
@@ -175,7 +180,8 @@ describe("change phone number controller", () => {
         SESSION_ID,
         PERSISTENT_SESSION_ID,
         ENGLISH,
-        CLIENT_SESSION_ID
+        CLIENT_SESSION_ID,
+        TXMA_AUDIT_ENCODED
       );
       expect(res.redirect).to.have.calledWith(PATH_DATA.CHECK_YOUR_PHONE.url);
     });

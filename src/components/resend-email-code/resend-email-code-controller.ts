@@ -9,6 +9,7 @@ import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 const TEMPLATE_NAME = "resend-email-code/index.njk";
 
@@ -45,7 +46,8 @@ export function resendEmailCodePost(
       res.locals.sessionId,
       res.locals.persistentSessionId,
       xss(req.cookies.lng as string),
-      res.locals.clientSessionId
+      res.locals.clientSessionId,
+      getTxmaHeader(req, res.locals.trace)
     );
 
     if (emailSent) {

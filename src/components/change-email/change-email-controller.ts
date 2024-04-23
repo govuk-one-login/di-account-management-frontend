@@ -9,6 +9,7 @@ import {
 import { ChangeEmailServiceInterface } from "./types";
 import { changeEmailService } from "./change-email-service";
 import xss from "xss";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 const TEMPLATE_NAME = "change-email/index.njk";
 export function changeEmailGet(req: Request, res: Response): void {
@@ -44,7 +45,8 @@ export function changeEmailPost(
       res.locals.sessionId,
       res.locals.persistentSessionId,
       xss(req.cookies.lng as string),
-      res.locals.clientSessionId
+      res.locals.clientSessionId,
+      getTxmaHeader(req, res.locals.trace)
     );
 
     if (emailSent) {

@@ -67,13 +67,12 @@ export function addMfaMethod({
       credential,
       mfaMethod,
     },
-    getRequestConfig(
-      accessToken,
-      null,
+    getRequestConfig({
+      token: accessToken,
       sourceIp,
       persistentSessionId,
-      sessionId
-    )
+      sessionId,
+    })
   );
 }
 
@@ -119,13 +118,12 @@ async function postRequest(
     {
       email,
     },
-    getRequestConfig(
-      accessToken,
-      null,
+    getRequestConfig({
+      token: accessToken,
       sourceIp,
       persistentSessionId,
-      sessionId
-    )
+      sessionId,
+    })
   );
 }
 

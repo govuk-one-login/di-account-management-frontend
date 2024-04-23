@@ -12,7 +12,8 @@ export function enterPasswordService(
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEncoded: string
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.AUTHENTICATE,
@@ -20,9 +21,9 @@ export function enterPasswordService(
         email: emailAddress,
         password: password,
       },
-      getRequestConfig(
+      getRequestConfig({
         token,
-        [
+        validationStatuses: [
           HTTP_STATUS_CODES.NO_CONTENT,
           HTTP_STATUS_CODES.FORBIDDEN,
           HTTP_STATUS_CODES.UNAUTHORIZED,
@@ -30,9 +31,9 @@ export function enterPasswordService(
         sourceIp,
         persistentSessionId,
         sessionId,
-        null,
-        clientSessionId
-      )
+        clientSessionId,
+        txmaAuditEncoded,
+      })
     );
     return status === HTTP_STATUS_CODES.NO_CONTENT;
   };

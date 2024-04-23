@@ -21,15 +21,14 @@ export function checkYourEmailService(
         replacementEmailAddress: updateInput.updatedValue,
         otp: updateInput.otp,
       },
-      getRequestConfig(
-        sessionDetails.accessToken,
-        [HTTP_STATUS_CODES.NO_CONTENT, HTTP_STATUS_CODES.BAD_REQUEST],
-        sessionDetails.sourceIp,
-        sessionDetails.persistentSessionId,
-        sessionDetails.sessionId,
-        sessionDetails.userLanguage,
-        sessionDetails.clientSessionId
-      )
+      getRequestConfig({
+        token: sessionDetails.accessToken,
+        validationStatuses: [
+          HTTP_STATUS_CODES.NO_CONTENT,
+          HTTP_STATUS_CODES.BAD_REQUEST,
+        ],
+        ...sessionDetails,
+      })
     );
 
     return status === HTTP_STATUS_CODES.NO_CONTENT;

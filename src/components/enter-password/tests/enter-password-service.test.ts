@@ -5,7 +5,10 @@ import { expect } from "chai";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
 import { getApiBaseUrl } from "../../../config";
 import { describe } from "mocha";
-import { CLIENT_SESSION_ID } from "../../../../test/utils/builders";
+import {
+  CLIENT_SESSION_ID,
+  TXMA_AUDIT_ENCODED,
+} from "../../../../test/utils/builders";
 
 const baseUrl = getApiBaseUrl();
 
@@ -33,6 +36,7 @@ describe("enterPasswordService", () => {
         "x-forwarded-for": sourceIp,
         "di-persistent-session-id": persistentSessionId,
         "session-id": sessionId,
+        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
       },
     })
       .post(API_ENDPOINTS.AUTHENTICATE, {
@@ -48,7 +52,8 @@ describe("enterPasswordService", () => {
       sourceIp,
       sessionId,
       persistentSessionId,
-      CLIENT_SESSION_ID
+      CLIENT_SESSION_ID,
+      TXMA_AUDIT_ENCODED
     );
 
     expect(isAuthenticated).to.be.true;

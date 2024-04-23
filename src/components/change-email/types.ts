@@ -6,6 +6,7 @@ export interface ChangeEmailServiceInterface {
     sessionId: string,
     persistentSessionId: string,
     userLanguage: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEncoded: string
   ) => Promise<boolean>;
 }

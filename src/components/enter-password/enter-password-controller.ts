@@ -12,6 +12,7 @@ import {
   getNextState,
   UserJourney,
 } from "../../utils/state-machine";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -87,7 +88,8 @@ export function enterPasswordPost(
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId,
-      res.locals.clientSessionId
+      res.locals.clientSessionId,
+      getTxmaHeader(req, res.locals.trace)
     );
 
     if (isAuthenticated) {

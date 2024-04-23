@@ -9,6 +9,7 @@ import {
 } from "../check-your-phone-controller";
 import { CheckYourPhoneServiceInterface } from "../types";
 import { PATH_DATA } from "../../../app.constants";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 
 describe("check your phone controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -23,6 +24,7 @@ describe("check your phone controller", () => {
       session: { user: { state: { changePhoneNumber: {} } } } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
+      headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
     };
     res = {
       render: sandbox.fake(),

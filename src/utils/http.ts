@@ -28,15 +28,25 @@ export function createApiResponse(
   };
 }
 
-export function getRequestConfig(
-  token: string,
-  validationStatues?: number[],
-  sourceIp?: string,
-  persistentSessionId?: string,
-  sessionId?: string,
-  userLanguage?: string,
-  clientSessionId?: string
-): AxiosRequestConfig {
+export function getRequestConfig({
+  token,
+  validationStatuses,
+  sourceIp,
+  persistentSessionId,
+  sessionId,
+  userLanguage,
+  clientSessionId,
+  txmaAuditEncoded,
+}: {
+  token: string;
+  validationStatuses?: number[];
+  sourceIp?: string;
+  persistentSessionId?: string;
+  sessionId?: string;
+  userLanguage?: string;
+  clientSessionId?: string;
+  txmaAuditEncoded?: string;
+}): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -44,9 +54,9 @@ export function getRequestConfig(
     proxy: false,
   };
 
-  if (validationStatues) {
+  if (validationStatuses) {
     config.validateStatus = function (status: number) {
-      return validationStatues.includes(status);
+      return validationStatuses.includes(status);
     };
   }
 
@@ -68,6 +78,10 @@ export function getRequestConfig(
 
   if (clientSessionId) {
     config.headers["Client-Session-Id"] = clientSessionId;
+  }
+
+  if (txmaAuditEncoded) {
+    config.headers["txma-audit-encoded"] = txmaAuditEncoded;
   }
 
   return config;

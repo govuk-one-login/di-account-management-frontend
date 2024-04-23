@@ -10,6 +10,7 @@ import {
 } from "../../utils/validation";
 import { BadRequestError } from "../../utils/errors";
 import xss from "xss";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 const changePasswordTemplate = "change-password/index.njk";
 
@@ -33,7 +34,8 @@ export function changePasswordPost(
       res.locals.sessionId,
       res.locals.persistentSessionId,
       xss(req.cookies.lng as string),
-      res.locals.clientSessionId
+      res.locals.clientSessionId,
+      getTxmaHeader(req, res.locals.trace)
     );
 
     if (response.success) {

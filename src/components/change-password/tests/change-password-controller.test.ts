@@ -25,6 +25,7 @@ import {
   SESSION_ID,
   SOURCE_IP,
   TOKEN,
+  TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 import { ApiResponseResult } from "../../../utils/types";
 
@@ -41,6 +42,9 @@ describe("change password controller", () => {
       .withBody({})
       .withSessionUserState({ changePassword: {} })
       .withTimestampT(sandbox.fake())
+      .withHeaders({
+        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+      })
       .build();
 
     res = new ResponseBuilder()
@@ -92,7 +96,8 @@ describe("change password controller", () => {
         SESSION_ID,
         PERSISTENT_SESSION_ID,
         ENGLISH,
-        CLIENT_SESSION_ID
+        CLIENT_SESSION_ID,
+        TXMA_AUDIT_ENCODED
       );
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url

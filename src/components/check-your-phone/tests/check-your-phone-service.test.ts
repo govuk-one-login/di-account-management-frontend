@@ -9,7 +9,10 @@ import {
   UpdateInformationSessionValues,
 } from "../../../utils/types";
 import { describe } from "mocha";
-import { CLIENT_SESSION_ID } from "../../../../test/utils/builders";
+import {
+  CLIENT_SESSION_ID,
+  TXMA_AUDIT_ENCODED,
+} from "../../../../test/utils/builders";
 
 const baseUrl = getApiBaseUrl();
 
@@ -40,6 +43,7 @@ describe("checkYourPhoneService", () => {
         "di-persistent-session-id": persistentSessionId,
         "session-id": sessionId,
         "user-language": userLanguage,
+        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
       },
     })
       .post(API_ENDPOINTS.UPDATE_PHONE_NUMBER, {
@@ -62,6 +66,7 @@ describe("checkYourPhoneService", () => {
       persistentSessionId,
       userLanguage,
       clientSessionId: CLIENT_SESSION_ID,
+      txmaAuditEncoded: TXMA_AUDIT_ENCODED,
     };
 
     const phoneNumberUpdated = await checkYourPhoneService().updatePhoneNumber(

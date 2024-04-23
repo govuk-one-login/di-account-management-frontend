@@ -10,6 +10,7 @@ import {
 } from "../resend-email-code-controller";
 import { ChangeEmailServiceInterface } from "../../change-email/types";
 import { getInitialState } from "../../../utils/state-machine";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 
 describe("check your email controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -24,6 +25,7 @@ describe("check your email controller", () => {
       session: { user: {} } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
+      headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
     };
     res = {
       render: sandbox.fake(),

@@ -9,6 +9,7 @@ export interface ChangePasswordServiceInterface {
     sessionId: string,
     persistentSessionId: string,
     userLanguage: string,
-    clientSessionId: string
+    clientSessionId: string,
+    txmaAuditEnocded: string
   ) => Promise<ApiResponseResult>;
 }
