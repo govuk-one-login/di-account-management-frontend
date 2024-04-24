@@ -65,7 +65,7 @@ export async function globalLogoutPost(
   const token = await verifyLogoutToken(req);
 
   if (token && validateLogoutTokenClaims(token, req)) {
-    await destroyUserSessions(token.sub, req.app.locals.sessionStore);
+    await destroyUserSessions(req, token.sub, req.app.locals.sessionStore);
     res.send(HTTP_STATUS_CODES.OK);
     return;
   }

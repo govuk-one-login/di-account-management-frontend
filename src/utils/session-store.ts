@@ -1,3 +1,4 @@
+import { Request } from "express";
 import {
   DynamoDBClient,
   QueryCommand,
@@ -9,6 +10,7 @@ import { getDBConfig } from "../config/aws";
 import { logger } from "./logger";
 import connect_dynamodb from "connect-dynamodb";
 import { Store } from "express-session";
+import { ERROR_MESSAGES } from "../app.constants";
 
 // the value of the USER_IDENTIFIER_IDX_ATTRIBUTE must match the indexed attribute in SessionsDynamoDB table
 // defined in `../../deploy/template.yaml`.
@@ -58,26 +60,44 @@ async function getSessions(subjectId: string): Promise<string[]> {
   return [];
 }
 
-export async function destroyUserSessions(
+async function deleteAllUserSessionsFromSessionStore(
   subjectId: string,
   sessionStore: Store
-): Promise<void> {
+) {
   const sessionIds = await getSessions(subjectId);
   const destroySessions = sessionIds.map((sessionId) =>
     Promise.resolve(sessionStore.destroy(sessionId))
   );
-  try {
-    const results = await Promise.allSettled(destroySessions);
-    if (results.some((result) => result.status === "rejected")) {
-      logger.warn(
-        `session-store - failed to delete session(s): ${
-          results.filter((result) => result.status === "rejected").length
-        } out of ${results.length} failed`
-      );
+  const results = await Promise.allSettled(destroySessions);
+  if (results.some((result) => result.status === "rejected")) {
+    logger.warn(
+      `session-store - failed to delete session(s): ${
+        results.filter((result) => result.status === "rejected").length
+      } out of ${results.length} failed`
+    );
+  }
+}
+
+async function deleteExpressSession(req: Request) {
+  req.session.destroy((err) => {
+    if (err) {
+      logger.error(ERROR_MESSAGES.FAILED_TO_DESTROY_SESSION(err));
     }
+  });
+}
+
+export async function destroyUserSessions(
+  req: Request,
+  subjectId: string,
+  sessionStore: Store
+): Promise<void> {
+  try {
+    await deleteAllUserSessionsFromSessionStore(subjectId, sessionStore);
   } catch (error: any) {
     logger.error(
       `session-store - failed to delete session(s): ${JSON.stringify(error)}`
     );
+  } finally {
+    await deleteExpressSession(req);
   }
 }

@@ -310,7 +310,7 @@ describe("global logout controller", () => {
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
-      expect(destroyUserSessions).to.have.been.calledWith("123456");
+      expect(destroyUserSessions).to.have.been.calledWith(req, "123456");
     });
   });
 });
