@@ -180,6 +180,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "dfeFindAndUseAnApi",
   "DVUDWXsy0io7wDBH5LA5IEkEH5U",
   "mojPlanYourFuture",
+  "tPCCSyoMaFNbLTt0gEW609h15Uc",
+  "welshFisheriesPermit",
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
