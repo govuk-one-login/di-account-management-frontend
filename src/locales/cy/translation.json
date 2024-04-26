@@ -286,6 +286,10 @@
               "href": "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
             },
             {
+              "text": "Dod o hyd a defnyddio API gan yr Adran Addysg",
+              "href": "https://beta-find-and-use-an-api.education.gov.uk"
+            },
+            {
               "text": "Gwasanaeth asesu prentisiaeth (AAS)",
               "href": "https://assessors.apprenticeships.education.gov.uk/"
             },
@@ -769,6 +773,12 @@
         "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
         "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
+      },
+      "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
+        "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
+        "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
+        "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "integration": {
@@ -894,6 +904,12 @@
         "description": "Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych.",
         "link_text": "Go to your repay and manage benefit money you owe account",
         "link_href": "https://idt-rmd-stub.idt.pdu-dev.hcs-eks.dwpcloud.uk/landing?source=your-services"
+      },
+      "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
+        "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
+        "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
+        "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "staging": {
@@ -1007,6 +1023,12 @@
         "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
         "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
+        "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
+        "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "build": {
@@ -1120,6 +1142,12 @@
         "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
         "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
+        "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
+        "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "dev": {
@@ -1233,6 +1261,12 @@
         "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
         "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
+        "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
+        "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
     "local": {
@@ -1346,6 +1380,12 @@
         "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
         "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
+        "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
+        "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     }
   }

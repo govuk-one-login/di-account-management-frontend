@@ -176,6 +176,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "childDevelopmentTraining",
   DWP_INTEGRATION,
   DWP_LOCAL_DEV_INTEGRATION,
+  "9uEx86ZHEp8ycgdHNqC8VK87E1A",
+  "dfeFindAndUseAnApi",
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
