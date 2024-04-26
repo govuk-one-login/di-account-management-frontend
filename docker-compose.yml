@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   localstack:
     container_name: localstack
@@ -24,8 +23,11 @@ services:
   account-management-frontend:
     container_name: account-management-frontend
     build:
-      context: .
       dockerfile: local.Dockerfile
+      context: .
+      args:
+        - NODE_VERSION
+        - NODE_INDEX_DIGEST
     ports:
       - "6001:6001"
       - "9240:9230"
@@ -67,6 +69,7 @@ services:
       - SUPPORT_METHOD_MANAGEMENT=${SUPPORT_METHOD_MANAGEMENT}
       - SUPPORT_CHANGE_MFA=${SUPPORT_CHANGE_MFA}
       - ACCESSIBILITY_STATEMENT_URL=${ACCESSIBILITY_STATEMENT_URL}
+      - NODE_VERSION=$(cat .nvmrc | tr -cd [:digit:].)
     restart: on-failure
     depends_on:
       localstack:
