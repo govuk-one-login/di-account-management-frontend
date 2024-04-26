@@ -10,12 +10,14 @@ import {
 } from "./check-your-phone-controller";
 import { validateCheckYourPhoneRequest } from "./check-your-phone-validation";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
+import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
 router.get(
   PATH_DATA.CHECK_YOUR_PHONE.url,
   requiresAuthMiddleware,
+  selectMfaMiddleware(),
   validateStateMiddleware,
   checkYourPhoneGet
 );

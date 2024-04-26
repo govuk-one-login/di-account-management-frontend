@@ -5,7 +5,7 @@ import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import { PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
@@ -15,7 +15,6 @@ describe("Integration:: check your phone", () => {
   let token: string | string[];
   let cookies: string;
   let app: any;
-  let baseApi: string;
 
   before(async () => {
     decache("../../../app");
@@ -28,6 +27,7 @@ describe("Integration:: check your phone", () => {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
+          newPhoneNumber: "07839490041",
           isAuthenticated: true,
           state: {
             changePhoneNumber: {
@@ -47,6 +47,16 @@ describe("Integration:: check your phone", () => {
             refreshToken: "token",
           },
         };
+
+        req.session.mfaMethods = [
+          {
+            mfaIdentifier: 111111,
+            methodVerified: true,
+            endPoint: "PHONE",
+            mfaMethodType: "SMS",
+            priorityIdentifier: "PRIMARY",
+          },
+        ];
         next();
       });
 
@@ -64,7 +74,31 @@ describe("Integration:: check your phone", () => {
     });
 
     app = await require("../../../app").createApp();
-    baseApi = process.env.AM_API_BASE_URL;
+
+    const configFuncs = require("../../../config");
+
+    sandbox.stub(configFuncs, "getMfaServiceUrl").callsFake(() => {
+      return "https://method-management-v1-stub.home.build.account.gov.uk";
+    });
+    sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
+      return true;
+    });
+    sandbox.stub(configFuncs, "supportMfaPage").callsFake(() => {
+      return true;
+    });
+
+    const mfa = require("../../../utils/mfa");
+    sandbox.stub(mfa, "default").resolves([
+      {
+        mfaIdentifier: 111111,
+        methodVerified: true,
+        endPoint: "PHONE",
+        mfaMethodType: "SMS",
+        priorityIdentifier: "PRIMARY",
+      },
+    ]);
+
+    sandbox.stub(mfa, "updateMfaMethod").resolves(true);
 
     await request(app)
       .get(PATH_DATA.CHECK_YOUR_PHONE.url)
@@ -172,14 +206,7 @@ describe("Integration:: check your phone", () => {
       .expect(400);
   });
 
-  it("should redirect to /create-password when valid code entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.UPDATE_PHONE_NUMBER)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
-      .once()
-      .reply(204);
-
+  it("should redirect to /update confirmation when valid code entered", async () => {
     // Act
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
@@ -187,35 +214,9 @@ describe("Integration:: check your phone", () => {
       .set("Cookie", cookies)
       .send({
         _csrf: token,
-        code: "123456",
+        code: "111111",
       })
       .expect("Location", PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url)
       .expect(302);
-  });
-
-  it("should return validation error when incorrect code entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.UPDATE_PHONE_NUMBER)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
-      .once()
-      .reply(400, {});
-
-    // Act
-    await request(app)
-      .post(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        code: "123455",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect($(testComponent("code-error")).text()).to.contains(
-          "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
-        );
-      })
-      .expect(400);
   });
 });

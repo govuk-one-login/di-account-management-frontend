@@ -1,4 +1,8 @@
-import { HTTP_STATUS_CODES, METHOD_MANAGEMENT_API } from "../../app.constants";
+import {
+  ENVIRONMENT_NAME,
+  HTTP_STATUS_CODES,
+  METHOD_MANAGEMENT_API,
+} from "../../app.constants";
 import { logger } from "../logger";
 import { getRequestConfig, Http } from "../http";
 import {
@@ -8,10 +12,13 @@ import {
   ProblemDetail,
   ValidationProblem,
 } from "./types";
-import { getMfaServiceUrl } from "../../config";
+import { getAppEnv, getMfaServiceUrl } from "../../config";
 import { authenticator } from "otplib";
-import { ENVIRONMENT_NAME } from "../../app.constants";
-import { getAppEnv } from "../../config";
+import {
+  UpdateInformationInput,
+  UpdateInformationSessionValues,
+} from "../types";
+import { format } from "util";
 
 export function generateMfaSecret(): string {
   return authenticator.generateSecret(20);
@@ -76,7 +83,7 @@ export function addMfaMethod({
   );
 }
 
-async function mfa(
+async function retrieveMfaMethods(
   accessToken: string,
   email: string,
   sourceIp: string,
@@ -97,7 +104,7 @@ async function mfa(
       data = response.data;
     }
   } catch (err) {
-    errorHandler(err, sessionId);
+    errorHandler(err, sessionId, "retrieve from");
   }
   return data;
 }
@@ -127,11 +134,44 @@ async function postRequest(
   );
 }
 
-function errorHandler(error: any, trace: string): void {
+async function putRequest(
+  updateInput: UpdateInformationInput,
+  sessionDetails: UpdateInformationSessionValues,
+  http: Http = new Http(getMfaServiceUrl())
+): Promise<{
+  status: number;
+  data: MfaMethod;
+}> {
+  const response = await http.client.put<MfaMethod>(
+    format(
+      METHOD_MANAGEMENT_API.MFA_METHODS_PUT,
+      updateInput.mfaMethod.mfaIdentifier
+    ),
+    {
+      email: updateInput.email,
+      credential: updateInput.updatedValue,
+      otp: updateInput.otp,
+      mfaMethod: updateInput.mfaMethod,
+    },
+    getRequestConfig({
+      token: sessionDetails.accessToken,
+      validationStatuses: [
+        HTTP_STATUS_CODES.OK,
+        HTTP_STATUS_CODES.NOT_FOUND,
+        HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      ],
+      ...sessionDetails,
+    })
+  );
+
+  return response;
+}
+
+function errorHandler(error: any, trace: string, action: string): void {
   if (!error.response || !error.response.status) {
     logger.error(
       { trace },
-      `Failed to retrieve from MFA endpoint ${error.message}`
+      `Failed to ${action} MFA endpoint ${error.message}`
     );
     return;
   }
@@ -145,13 +185,13 @@ function errorHandler(error: any, trace: string): void {
         validationProblem.errors.forEach((error) => {
           logger.error(
             { trace },
-            `Failed to retrieve from MFA endpoint ${error.detail}`
+            `Failed to ${action} MFA endpoint ${error.detail}`
           );
         });
       } else {
         logger.error(
           { trace },
-          `Failed to retrieve from MFA endpoint ${validationProblem.title}`
+          `Failed to ${action} MFA endpoint ${validationProblem.title}`
         );
       }
       break;
@@ -161,12 +201,12 @@ function errorHandler(error: any, trace: string): void {
       const problemDetail: ProblemDetail = data;
       logger.error(
         { trace },
-        `Failed to retrieve from MFA endpoint - Detail: ${problemDetail.detail}`
+        `Failed to ${action} MFA endpoint - Detail: ${problemDetail.detail}`
       );
       if (problemDetail.extension && problemDetail.extension.error) {
         logger.error(
           { trace },
-          `Failed to retrieve from MFA endpoint - Error code: ${problemDetail.extension.error.code}`
+          `Failed to ${action} MFA endpoint - Error code: ${problemDetail.extension.error.code}`
         );
       }
       break;
@@ -174,9 +214,26 @@ function errorHandler(error: any, trace: string): void {
     default:
       logger.error(
         { trace },
-        `Failed to retrieve from MFA endpoint - Unexpected error: ${error.message}`
+        `Failed to ${action} MFA endpoint - Unexpected error: ${error.message}`
       );
   }
 }
 
-export default mfa;
+export async function updateMfaMethod(
+  updateInput: UpdateInformationInput,
+  sessionDetails: UpdateInformationSessionValues
+): Promise<boolean> {
+  let isUpdated = false;
+  try {
+    const response = await putRequest(updateInput, sessionDetails);
+
+    if (response.status === HTTP_STATUS_CODES.OK) {
+      isUpdated = true;
+    }
+  } catch (err) {
+    errorHandler(err, sessionDetails.sessionId, "update");
+  }
+  return isUpdated;
+}
+
+export default retrieveMfaMethods;
