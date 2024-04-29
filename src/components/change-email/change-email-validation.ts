@@ -19,16 +19,17 @@ export function validateChangeEmailRequest(): ValidationChainFunc {
         });
       })
       .isEmail()
+      .withMessage((value, { req }) => {
+        return req.t("pages.changeEmail.email.validationError.email", {
+          value,
+        });
+      })
+      .bail()
       .normalizeEmail({
         gmail_remove_dots: false,
         gmail_remove_subaddress: false,
         outlookdotcom_remove_subaddress: false,
         icloud_remove_subaddress: false,
-      })
-      .withMessage((value, { req }) => {
-        return req.t("pages.changeEmail.email.validationError.email", {
-          value,
-        });
       }),
     validateBodyMiddleware("change-email/index.njk"),
   ];

@@ -125,6 +125,25 @@ describe("Integration:: change email", () => {
       .expect(400);
   });
 
+  it("should return validation error when email too long", async () => {
+    await request(app)
+      .post(PATH_DATA.CHANGE_EMAIL.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        email:
+          "grbweuiieugbui4bg4gbuiebruiebguirebguirebguirebgiurebgirebuigrbuigrebguierbgrbweuiieugbui4bg4gbuiebruiebguirebguirebguirebgiurebgirebuigrbuigrebguierbgrbweuiieugbui4bg4gbuiebruiebguirebguirebguirebgiurebgirebuigrbuigrebguierbgrbweuiieugbui4bg4gbuiebruiebguirebguirebguirebgiurebgirebuigrbuigrebguierbgrbweuiieugbui4bg4gbuiebruiebguirebguirebguirebgiurebgirebuigrbuigrebguierbgrbweuiieugbui4bg4gbuiebruiebguirebguirebguirebgiurebgirebuigrbuigrebguierbgrbweuiieugbui4bg4gbuiebruiebguirebguirebguirebgiurebgirebuigrbuigrebguierb@gmail.com",
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($(testComponent("email-error")).text()).to.contains(
+          "Email address must be 256 characters or fewer"
+        );
+      })
+      .expect(400);
+  });
+
   it("should return validation error when invalid email entered", async () => {
     await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
