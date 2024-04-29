@@ -838,7 +838,7 @@
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
         "header": "Find and use an API from the Department for Education",
         "description": "Find and use a Department for Education API to connect to their digital services.",
-        "link_text": "Go to your DfE API account",
+        "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
@@ -975,7 +975,7 @@
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
         "header": "Find and use an API from the Department for Education",
         "description": "Find and use a Department for Education API to connect to their digital services.",
-        "link_text": "Go to your DfE API account",
+        "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
@@ -1225,7 +1225,7 @@
       "dfeFindAndUseAnApi": {
         "header": "Find and use an API from the Department for Education",
         "description": "Find and use a Department for Education API to connect to their digital services.",
-        "link_text": "Go to your DfE API account",
+        "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
@@ -1350,7 +1350,7 @@
       "dfeFindAndUseAnApi": {
         "header": "Find and use an API from the Department for Education",
         "description": "Find and use a Department for Education API to connect to their digital services.",
-        "link_text": "Go to your DfE API account",
+        "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     },
@@ -1475,7 +1475,7 @@
       "dfeFindAndUseAnApi": {
         "header": "Find and use an API from the Department for Education",
         "description": "Find and use a Department for Education API to connect to their digital services.",
-        "link_text": "Go to your DfE API account",
+        "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
       }
     }
