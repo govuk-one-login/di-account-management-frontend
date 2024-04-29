@@ -1884,18 +1884,21 @@ Resources:
             Stat: Sum
 
   # 5xx Status Code
+  # Alarm should activate when the number of 5xx errors exceeds 5 in the current 24-hour period.
+  # Sample every 300 seconds (Period) and check the 288 preceeding sample persiods to cover the last 24 hours
+  # 288 * 300 seconds = 86,400 seconds = 24 hours.
   ApiGateway5xxStatusAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGateway5xxStatusAlarm"
-      AlarmDescription: "Trigger the alarm if errorThreshold exceeds 1% with the minimum of 10 invocations in 2 out of the last 5 minutes"
+      AlarmDescription: "Activate when 5 5xx events detected in the last 24 hours.  The Alarm will be raised within 300 seconds of the 5xx being raised."
       ActionsEnabled: true
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 5
-      DatapointsToAlarm: 2
-      Threshold: 1
+      EvaluationPeriods: 288
+      DatapointsToAlarm: 288
+      Threshold: 5
       TreatMissingData: missing
       Metrics:
         - Id: errorThreshold
@@ -1911,7 +1914,7 @@ Resources:
               Dimensions:
                 - Name: ApiId
                   Value: !Ref ApiGateway
-            Period: 60
+            Period: 300
             Stat: Sum
         - Id: errorPercentage
           Label: errorPercentage
@@ -1926,7 +1929,7 @@ Resources:
               Dimensions:
                 - Name: ApiId
                   Value: !Ref ApiGateway
-            Period: 60
+            Period: 300
             Stat: Sum
 
   # Latency
