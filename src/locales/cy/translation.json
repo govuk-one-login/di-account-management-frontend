@@ -253,86 +253,9 @@
       "informationBox": {
         "heading": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
         "paragraph1": "Mae GOV.UK One Login yn newydd. Ar hyn o bryd gallwch ond ei ddefnyddio i gael mynediad i rai gwasanaethau'r llywodraeth.",
-        "details": {
-          "summary": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
-          "paragraph": "Gallwch ddefnyddio GOV.UK One Login gyda:",
-          "listItems": [
-            {
-              "text": "Cofrestr darparwr prentisiaeth ac asesiad",
-              "href": "https://apply.apprenticeships.education.gov.uk/"
-            },
-            {
-              "text": "Cofrestrfa datganiad caethwasiaeth modern",
-              "href": "https://www.gov.uk/guidance/add-your-modern-slavery-statement-to-the-statement-registry"
-            },
-            {
-              "text": "Cyfrif arbenigwr pwnc Ofqual",
-              "href": "https://www.gov.uk/guidance/subject-matter-specialists-for-ofqual"
-            },
-            {
-              "text": "Cysylltu teuluoedd i gymorth",
-              "href": "https://www.connect-families-to-support.education.gov.uk"
-            },
-            {
-              "text": "Darganfod a gwneud cais am grant",
-              "href": "https://www.gov.uk/guidance/find-government-grants"
-            },
-            {
-              "text": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
-              "href": "https://find-a-conformity-assessment-body.service.gov.uk"
-            },
-            {
-              "text": "Digolledau anafiadau troseddol",
-              "href": "https://www.gov.uk/claim-compensation-criminal-injury/make-claim"
-            },
-            {
-              "text": "Dod o hyd a defnyddio API gan yr Adran Addysg",
-              "href": "https://beta-find-and-use-an-api.education.gov.uk"
-            },
-            {
-              "text": "Gwasanaeth asesu prentisiaeth (AAS)",
-              "href": "https://assessors.apprenticeships.education.gov.uk/"
-            },
-            {
-              "text": "Gwneud cais am drwydded gweithredwr cerbyd",
-              "href": "https://www.gov.uk/apply-vehicle-operator-licence"
-            },
-            {
-              "text": "Gwneud cais am Gerdyn Cyn-filwyr Lluoedd Arfog EF",
-              "href": "https://www.gov.uk/veteran-card"
-            },
-            {
-              "text": "Gwneud cais am wiriad DBS sylfaenol",
-              "href": "https://www.gov.uk/gwneud-cais-copi-cofnod-troseddol"
-            },
-            {
-              "text": "Gwneud cais i ddod yn weithiwr cymdeithasol cofrestredig yn Lloegr",
-              "href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
-            },
-            {
-              "text": "Hyfforddiant datblygiad plant blynyddoedd cynnar",
-              "href": "https://child-development-training.education.gov.uk/"
-            },
-            {
-              "text": "Llofnodwch eich gweithred morgais",
-              "href": "https://sign-your-mortgage-deed.landregistry.gov.uk"
-            },
-            {
-              "text": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
-              "href": "https://manage-family-support-services-and-accounts.education.gov.uk"
-            },
-            {
-              "text": "Rheoli prentisiaethau",
-              "href": "https://www.gov.uk/sign-in-apprenticeship-service-account"
-            },
-            {
-              "text": "Tanysgrifiadau e-byst GOV.UK",
-              "href": "https://www.gov.uk/email/manage?from=your-services"
-            }
-          ]
-        },
-        "paragraph2": "Nid yw GOV.UK One Login yn gweithio gyda phob cyfrif neu wasanaeth y llywodraeth hyd yma (er enghraifft Porth y Llywodraeth neu Gredyd Cynhwysol).",
-        "paragraph3": "Yn y dyfodol, byddwch yn gallu defnyddio eich GOV.UK One Login i gael mynediad i holl wasanaethau ar GOV.UK."
+        "paragraph2": "Yn y dyfodol, byddwch yn gallu defnyddio GOV.UK One Login i gael mynediad i'r holl wasanaethau ar GOV.UK.",
+        "paragraph3": "Gweler y <a class=\"govuk-link\" href=\"[serviceListLink]\">gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login</a>.",
+        "link": "https://www.gov.uk/defnyddio-eich-gov-uk-one-login/gwasanaethau"
       }
     },
     "enterPassword": {

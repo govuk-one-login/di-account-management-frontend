@@ -1,10 +1,10 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.yourServices.title' | translate %}
-{% set serviceLinks =  'pages.yourServices.informationBox.details.listItems' | translate({ returnObjects: true }) %}
 {% set activeNav = 'your-services' %}
 {% set showSecondaryHeadings = servicesList.length and accountsList.length %}
 {% set serviceHeadingLevel =  "h3" if showSecondaryHeadings else "h2" %}
+{% set serviceListLink = 'pages.yourServices.informationBox.link' | translate | safe %}
 
 {% if not (servicesList.length or accountsList.length) %}
     {% set contentId = "886900f6-178f-41e7-9051-c8428cca86dd" %}
@@ -27,7 +27,7 @@
       </div>
       {% if not (servicesList.length or accountsList.length) %}
         {# Display an empty state when no accounts nor services have been used #}
-        {# This should be an edge case as the only pathways into the account would be signing up via other services #}
+        {# This should be an edge case as the only pathways into the account would be signing up via other services #} 
       <div class="your-services__card your-services__card--empty" data-test-id="empty-state">
         <div class="your-services__card__content">
           <p class="govuk-body">{{ 'pages.yourServices.empty' | translate }}</p>
@@ -99,12 +99,8 @@
       <div class="information-box">
         <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
         <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph1' | translate }}</p>
-        {{ govukDetails({
-          summaryText: 'pages.yourServices.informationBox.details.summary' | translate,
-          html: detailsHTML
-        }) }}
         <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph2' | translate }}</p>
-        <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph3' | translate }}</p>
+        <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph3' | translate | replace("[serviceListLink]", serviceListLink) | safe}}</p>
       </div>
     </div>
   </div>
