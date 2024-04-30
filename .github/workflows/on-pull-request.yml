@@ -2,6 +2,9 @@
 name: "Validation & Verification checks against Dev instance"
 
 on:
+  merge_group:
+    types:
+      - checks_requested
   pull_request:
     branches:
       - main
