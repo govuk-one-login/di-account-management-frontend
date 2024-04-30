@@ -53,7 +53,7 @@ Create a copy of the seed.yaml.sample, rename it seed.yaml and ask a team member
 
 ### Start the application
 
-Run `NODE_VERSION=$(awk NR==1 .nvmrc) NODE_INDEX_DIGEST=$(awk NR==2 .nvmrc) docker compose up --build` to force a new build of the containers.
+Run `docker compose build && docker compose up` to force a new build of the containers.
 
 To find out if the application has started, open a console window on the docker container and view the logs. If the server has started successfully you will see this message `Server listening on port 6001`.
 
