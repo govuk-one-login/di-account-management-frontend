@@ -133,7 +133,6 @@ Conditions:
     - !Equals [!Ref Environment, dev]
     - !Equals [!Ref Environment, staging]
 
-
 Mappings:
   # see https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
   ElasticLoadBalancerAccountIds:
@@ -227,10 +226,10 @@ Mappings:
       SUPPORTMETHODMANAGEMENT: "0"
       SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
-      UNIVERSALANALYTICSGTMCONTAINERID: "TBD"
-      GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "true"
-      UADISABLED: "true"
+      UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
     integration:
       NODEENV: "production"
@@ -287,9 +286,9 @@ Mappings:
       SUPPORTCHANGEMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
-      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
-      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
-      GA4DISABLED: "false"
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TT5HDKV"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
+      GA4DISABLED: "true"
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
 
