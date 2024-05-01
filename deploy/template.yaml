@@ -286,9 +286,9 @@ Mappings:
       SUPPORTCHANGEMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
-      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
-      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
-      GA4DISABLED: "false"
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TT5HDKV"
+      GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
+      GA4DISABLED: "true"
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
 
