@@ -36,6 +36,21 @@ describe("configureNunjucks Filters", () => {
       expect(result).to.equal("translated_value");
       expect(fixedTStub.calledWith("test_key")).to.be.true;
     });
+    it("should throw an error if translation key does no exist", () => {
+      const fixedTStub = sinon
+        .stub()
+        .returns(undefined) as unknown as MyStubType;
+      sinon.stub(i18next, "getFixedT").returns(fixedTStub);
+
+      const translateFilter = nunjucksEnv.getFilter("translate");
+      const result = translateFilter.call(
+        { ctx: { i18n: { language: "en" } } },
+        "test_key"
+      );
+
+      expect(result).to.equal(undefined);
+      expect(fixedTStub.calledWith("test_key")).to.be.true;
+    });
   });
 
   describe("addLanguageParam filter", () => {

@@ -214,6 +214,7 @@ export const ERROR_CODES = {
 export const ENVIRONMENT_NAME = {
   PROD: "production",
   DEV: "development",
+  TEST: "test",
 };
 
 export const EVENT_NAME = {
