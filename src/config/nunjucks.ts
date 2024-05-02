@@ -19,7 +19,7 @@ export function configureNunjucks(
     const translate: TFunction<"translation", undefined> = i18next.getFixedT(
       this.ctx.i18n.language
     );
-    return safeTranslate(translate, key, options);
+    return safeTranslate(translate, key, this.ctx.i18n.language, options);
   });
 
   nunjucksEnv.addFilter(

@@ -9,6 +9,7 @@ import { safeTranslate } from "../../../src/utils/safeTranslate";
 describe("safeTranslate", () => {
   let translate: sinon.SinonStub<[string, any?], string>;
   let logErrorSpy: sinon.SinonSpy;
+  const requestedLanguage = "cy";
 
   beforeEach(() => {
     translate = sinon.stub();
@@ -26,7 +27,8 @@ describe("safeTranslate", () => {
 
     const result = safeTranslate(
       translate as unknown as TFunction<"translation", undefined>,
-      key
+      key,
+      requestedLanguage
     );
     expect(result).to.equal(translation);
     expect(translate.calledWith(key)).to.be.true;
@@ -43,13 +45,14 @@ describe("safeTranslate", () => {
     const result = safeTranslate(
       translate as unknown as TFunction<"translation", undefined>,
       key,
+      requestedLanguage,
       { lng: "cy" }
     );
     expect(result).to.equal(fallbackTranslation);
     expect(translate.calledTwice).to.be.true;
     expect(
       logErrorSpy.calledWith(
-        `TranslationError: key '${key}' missing for requested language.`
+        `TranslationError: key '${key}' missing for requested '${requestedLanguage}' language.`
       )
     ).to.be.true;
   });
@@ -61,7 +64,8 @@ describe("safeTranslate", () => {
 
     const result = safeTranslate(
       translate as unknown as TFunction<"translation", undefined>,
-      key
+      key,
+      requestedLanguage
     );
     expect(result).to.equal(key);
     expect(
@@ -72,7 +76,7 @@ describe("safeTranslate", () => {
     ).to.be.true;
     expect(
       logErrorSpy.calledWith(
-        `TranslationError: key '${key}' missing for requested language.`
+        `TranslationError: key '${key}' missing for requested '${requestedLanguage}' language.`
       )
     ).to.be.true;
   });

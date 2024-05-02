@@ -7,12 +7,13 @@ export type translateResult = string | TFunctionDetailedResult<string, any>;
 export const safeTranslate = (
   translate: TFunction<"translation", undefined>,
   key: string,
+  requestedLanguage: string,
   options?: Record<string, any>
 ): translateResult => {
   const result: translateResult = translate(key, options);
   if (result === key) {
     logger.error(
-      `TranslationError: key '${key}' missing for requested language.`
+      `TranslationError: key '${key}' missing for requested '${requestedLanguage}' language.`
     );
     return translate(key, {
       ...options,
