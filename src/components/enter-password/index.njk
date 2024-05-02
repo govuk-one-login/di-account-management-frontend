@@ -2,10 +2,13 @@
 {% from "common/show-password/macro.njk" import govukInputWithShowPassword %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% set paragraph = ['pages.enterPassword.', requestType, '.paragraph'] | join | translate %}
+{% set backLinkText = ['pages.enterPassword.', requestType, '.backLink'] | join | translate %}
+{% set header = ['pages.enterPassword.', requestType, '.header'] | join | translate %}
 
 {% if requestType == 'changePassword' %}
     {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
-{%  else %}
+{% else %}
     {% set pageTitleName = 'pages.enterPassword.title' | translate %}
 {% endif %}
 

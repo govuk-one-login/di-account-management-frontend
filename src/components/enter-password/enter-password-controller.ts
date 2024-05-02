@@ -49,14 +49,6 @@ const OPL_VALUES: {
   },
 };
 
-const getStringsForForm = (req: Request, requestType: string) => {
-  return {
-    header: req.t(`pages.enterPassword.${requestType}.header`),
-    paragraph: req.t(`pages.enterPassword.${requestType}.paragraph`),
-    backLinkText: req.t(`pages.enterPassword.${requestType}.backLink`),
-  };
-};
-
 export function enterPasswordGet(req: Request, res: Response): void {
   const requestType = req.query.type as UserJourney;
 
@@ -68,7 +60,6 @@ export function enterPasswordGet(req: Request, res: Response): void {
 
   res.render(`enter-password/index.njk`, {
     requestType,
-    ...getStringsForForm(req, requestType),
     oplValues: OPL_VALUES[requestType] || {},
   });
 }
