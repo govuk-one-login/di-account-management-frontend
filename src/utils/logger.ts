@@ -53,8 +53,10 @@ const ignorePaths = [
   "/healthcheck",
 ];
 
+const loggerHttp = logger as pino.Logger<string>;
+
 const loggerMiddleware = PinoHttp({
-  logger,
+  logger: loggerHttp,
   wrapSerializers: false,
   autoLogging: { ignore: (req) => ignorePaths.includes(req.url) },
   customErrorMessage: function (error, res) {
@@ -64,7 +66,7 @@ const loggerMiddleware = PinoHttp({
     if (res.statusCode === 404) {
       return "resource not found";
     }
-    return `request completed with status code:${res.statusCode}`;
+    return `request completed with status code: ${res.statusCode}`;
   },
   customAttributeKeys: {
     responseTime: "timeTaken",
