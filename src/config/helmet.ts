@@ -1,28 +1,32 @@
-import helmet from "helmet";
+import { HelmetOptions } from "helmet";
 import { Request, Response } from "express";
 // Helmet does not export the config type - This is the way the recommend getting it on GitHub.
-export const helmetConfiguration: Parameters<typeof helmet>[0] = {
+export const helmetConfiguration: HelmetOptions = {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: [
         "'self'",
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         (req: Request, res: Response): string =>
           `'nonce-${res.locals.scriptNonce}'`,
         "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
         "https://www.googletagmanager.com",
-        "https://www.google-analytics.com",
-        "https://ssl.google-analytics.com",
+        "https://*.google-analytics.com",
+        "https://*.analytics.google.com",
       ],
       imgSrc: [
         "'self'",
         "data:",
         "https://www.googletagmanager.com",
-        "https://www.google-analytics.com",
+        "https://*.google-analytics.com",
+        "https://*.analytics.google.com",
       ],
       objectSrc: ["'none'"],
-      connectSrc: ["'self'", "https://www.google-analytics.com"],
+      connectSrc: [
+        "'self'",
+        "https://*.google-analytics.com",
+        "https://*.analytics.google.com",
+      ],
       formAction: ["'self'", "https://*.account.gov.uk"],
     },
   },
@@ -41,7 +45,7 @@ export const helmetConfiguration: Parameters<typeof helmet>[0] = {
   permittedCrossDomainPolicies: false,
 };
 
-export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
+export const webchatHelmetConfiguration: HelmetOptions = {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
@@ -54,13 +58,12 @@ export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
       ],
       scriptSrc: [
         "'self'",
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         (req: Request, res: Response): string =>
           `'nonce-${res.locals.scriptNonce}'`,
         "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
         "https://www.googletagmanager.com",
-        "https://www.google-analytics.com",
-        "https://ssl.google-analytics.com",
+        "https://*.google-analytics.com",
+        "https://*.analytics.google.com",
         "https://*.smartagent.app",
         "'strict-dynamic'",
       ],
@@ -69,13 +72,15 @@ export const webchatHelmetConfiguration: Parameters<typeof helmet>[0] = {
         "'self'",
         "data:",
         "https://www.googletagmanager.com",
-        "https://www.google-analytics.com",
+        "https://*.google-analytics.com",
+        "https://*.analytics.google.com",
         "https://*.s3.eu-west-2.amazonaws.com",
       ],
       objectSrc: ["'none'"],
       connectSrc: [
         "'self'",
-        "https://www.google-analytics.com",
+        "https://*.google-analytics.com",
+        "https://*.analytics.google.com",
         "https://*.smartagent.app",
       ],
       formAction: ["'self'", "https://*.account.gov.uk"],
