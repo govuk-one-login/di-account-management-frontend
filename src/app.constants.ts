@@ -143,6 +143,7 @@ export const API_ENDPOINTS = {
 export const METHOD_MANAGEMENT_API = {
   MFA_RETRIEVE: "/v1/mfa-methods/retrieve",
   MFA_METHODS_ADD: "/v1/mfa-methods",
+  MFA_METHODS_PUT: "/v1/mfa-methods/%s",
 };
 
 export enum NOTIFICATION_TYPE {

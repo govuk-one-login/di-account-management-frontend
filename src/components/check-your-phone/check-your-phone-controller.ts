@@ -15,6 +15,8 @@ import {
   UpdateInformationSessionValues,
 } from "../../utils/types";
 import { getTxmaHeader } from "../../utils/txma-header";
+import { MfaMethod } from "../../utils/mfa/types";
+import { supportChangeMfa } from "../../config";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -48,10 +50,26 @@ export function checkYourPhonePost(
       txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
     };
 
-    const isPhoneNumberUpdated = await service.updatePhoneNumber(
-      updateInput,
-      sessionDetails
-    );
+    let isPhoneNumberUpdated = false;
+    if (supportChangeMfa()) {
+      const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
+        (mfa) => mfa.mfaMethodType === "SMS"
+      );
+      if (smsMFAMethod) {
+        updateInput.mfaMethod = smsMFAMethod;
+        isPhoneNumberUpdated = await service.updatePhoneNumberWithMfaApi(
+          updateInput,
+          sessionDetails
+        );
+      } else {
+        throw Error(`No existing MFA method for: ${email}`);
+      }
+    } else {
+      isPhoneNumberUpdated = await service.updatePhoneNumber(
+        updateInput,
+        sessionDetails
+      );
+    }
 
     if (isPhoneNumberUpdated) {
       req.session.user.phoneNumber = newPhoneNumber;

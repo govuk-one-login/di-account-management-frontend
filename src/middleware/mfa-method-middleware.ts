@@ -1,6 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { ERROR_MESSAGES } from "../app.constants";
-import mfa from "../utils/mfa";
+import retrieveMfaMethods from "../utils/mfa";
+import { getMfaServiceUrl, supportMfaPage } from "../config";
+import { logger } from "../utils/logger";
+import { legacyMfaMethodsMiddleware } from "./mfa-methods-legacy";
 
 export async function mfaMethodMiddleware(
   req: Request,
@@ -10,7 +13,7 @@ export async function mfaMethodMiddleware(
   try {
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
-    const response = await mfa(
+    const response = await retrieveMfaMethods(
       accessToken,
       email,
       req.ip,
@@ -27,3 +30,17 @@ export async function mfaMethodMiddleware(
     next();
   }
 }
+
+const selectMfaMiddleware = (): RequestHandler => {
+  try {
+    const mfaServiceUrl = new URL(getMfaServiceUrl());
+    if (supportMfaPage() && mfaServiceUrl) {
+      return mfaMethodMiddleware;
+    }
+  } catch (e) {
+    logger.error(`selectMfaMiddleware ${e.message}`);
+  }
+  return legacyMfaMethodsMiddleware;
+};
+
+export { selectMfaMiddleware };

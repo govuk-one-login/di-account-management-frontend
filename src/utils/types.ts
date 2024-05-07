@@ -1,4 +1,5 @@
 import { DynamoDB, KMS, SNS } from "aws-sdk";
+import { MfaMethod } from "./mfa/types";
 
 type ClientId = string;
 type UrnFdnSub = string;
@@ -110,6 +111,7 @@ export interface UpdateInformationInput {
   email: string;
   updatedValue: string;
   otp: string;
+  mfaMethod?: MfaMethod;
 }
 
 export interface UpdateInformationSessionValues {
