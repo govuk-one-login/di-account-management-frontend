@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { ERROR_CODES, PATH_DATA } from "../../app.constants";
-import { redactPhoneNumber } from "../../utils/strings";
 import { ExpressRouteFunc } from "../../types";
 import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 import { BadRequestError } from "../../utils/errors";
+import { getLastNDigits } from "../../utils/phone-number";
 import { getNextState } from "../../utils/state-machine";
 import xss from "xss";
 import {
@@ -17,7 +17,7 @@ const TEMPLATE_NAME = "resend-phone-code/index.njk";
 
 export function resendPhoneCodeGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, {
-    phoneNumberRedacted: redactPhoneNumber(req.session.user.newPhoneNumber),
+    phoneNumberRedacted: getLastNDigits(req.session.user.newPhoneNumber, 4),
     phoneNumber: req.session.user.newPhoneNumber,
   });
 }

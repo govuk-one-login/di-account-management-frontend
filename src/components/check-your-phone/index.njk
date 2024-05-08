@@ -13,7 +13,7 @@
 
     <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.checkYourPhone.header' | translate}}</h1>
     {{ govukInsetText({
-        text: 'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber)
+        text: 'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber) | safe
     })}}
 
     <p class="govuk-body">{{'pages.checkYourPhone.info.paragraph' | translate}}</p>
@@ -43,15 +43,15 @@
             <p class="govuk-body">{{'pages.checkYourPhone.details.text' | translate | replace("[resendCodeLink]", resendCodeLink) | replace("[changePhoneNumberLink]", changePhoneNumberLink) | safe }}</p>
         {% endset %}
 
-        {{ govukDetails({
-            summaryText: 'pages.checkYourPhone.details.summaryText' | translate,
-            html: detailsHTML
-        }) }}
-
         {{ govukButton({
             "text": button_text|default("general.continue.label" | translate, true),
             "type": "Submit",
             "preventDoubleClick": true
+        }) }}
+
+        {{ govukDetails({
+            summaryText: 'pages.checkYourPhone.details.summaryText' | translate,
+            html: detailsHTML
         }) }}
     </form>
     {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change phone number", contentId:"fb69b162-9ddb-41db-a8fa-3cca7fea2fa9",loggedInStatus:true,dynamic:true})}}

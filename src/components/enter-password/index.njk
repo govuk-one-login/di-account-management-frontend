@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% set paragraph = ['pages.enterPassword.', requestType, '.paragraph'] | join | translate %}
-{% set backLinkText = ['pages.enterPassword.', requestType, '.backLink'] | join | translate %}
+{% set cancelText = 'pages.enterPassword.cancelText' | translate %}
 {% set header = ['pages.enterPassword.', requestType, '.header'] | join | translate %}
 
 {% if requestType == 'changePassword' %}
@@ -46,10 +46,7 @@
         "preventDoubleClick": true
         }) }}
 
-        <p class="govuk-body">
-            <a href="/manage-your-account" class="govuk-link" rel="noreferrer noopener">{{backlinkText}}</a>
-        </p>
-
+        <p class="govuk-body"> <a href="/manage-your-account" class="govuk-link" rel="noreferrer noopener">{{cancelText}}</a></p>
     </form>
 
 {% endblock %}

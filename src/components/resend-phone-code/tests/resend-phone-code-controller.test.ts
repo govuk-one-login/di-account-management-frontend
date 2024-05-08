@@ -47,7 +47,7 @@ describe("resend phone code controller", () => {
       resendPhoneCodeGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("resend-phone-code/index.njk", {
-        phoneNumberRedacted: "*******1111",
+        phoneNumberRedacted: "1111",
         phoneNumber: "07111111111",
       });
     });

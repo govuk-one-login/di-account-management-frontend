@@ -51,15 +51,15 @@
     </p>
 {% endset %}
 
-{{ govukDetails({
-    summaryText: 'pages.checkYourEmail.details.summaryText' | translate,
-    html: detailsHTML
-}) }}
-
 {{ govukButton({
     "text": button_text|default("general.continue.label" | translate, true),
     "type": "Submit",
     "preventDoubleClick": true
+}) }}
+
+{{ govukDetails({
+    summaryText: 'pages.checkYourEmail.details.summaryText' | translate,
+    html: detailsHTML
 }) }}
 
 </form>

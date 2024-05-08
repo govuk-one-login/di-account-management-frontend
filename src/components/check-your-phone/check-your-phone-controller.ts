@@ -8,7 +8,7 @@ import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
-import { redactPhoneNumber } from "../../utils/strings";
+import { getLastNDigits } from "../../utils/phone-number";
 import xss from "xss";
 import {
   UpdateInformationInput,
@@ -22,7 +22,7 @@ const TEMPLATE_NAME = "check-your-phone/index.njk";
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, {
-    phoneNumber: redactPhoneNumber(req.session.user.newPhoneNumber),
+    phoneNumber: getLastNDigits(req.session.user.newPhoneNumber, 4),
     resendCodeLink: PATH_DATA.RESEND_PHONE_CODE.url,
     changePhoneNumberLink: PATH_DATA.CHANGE_PHONE_NUMBER.url,
   });

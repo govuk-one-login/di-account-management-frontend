@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { redactPhoneNumber } from "../../utils/strings";
 import { ERROR_MESSAGES, PATH_DATA } from "../../app.constants";
 import { clearCookies } from "../../utils/session-store";
 import { logger } from "../../utils/logger";
+import { getLastNDigits } from "../../utils/phone-number";
 
 const oplValues = {
   updateEmailConfirmation: {
@@ -73,7 +73,7 @@ export function updatePhoneNumberConfirmationGet(
     panelText: req.t("pages.updatePhoneNumberConfirmation.panelText"),
     summaryText: req
       .t("pages.updatePhoneNumberConfirmation.summaryText")
-      .replace("[mobile]", redactPhoneNumber(req.session.user.phoneNumber)),
+      .replace("[mobile]", getLastNDigits(req.session.user.phoneNumber, 4)),
   });
 }
 

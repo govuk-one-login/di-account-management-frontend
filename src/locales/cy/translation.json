@@ -14,7 +14,7 @@
     },
     "yes": "Yes",
     "no": "Na",
-    "backToAccountButtonText": "Yn ôl i’r dudalen ddiogelwch",
+    "backToAccountButtonText": "Yn ôl i’r dudalen Ddiogelwch",
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "cookie": {
       "cookieBanner": {
@@ -257,24 +257,20 @@
       "title": "Rhowch eich cyfrinair",
       "changeEmail": {
         "header": "Rhowch eich cyfrinair",
-        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch newid eich cyfeiriad e-bost.",
-        "backLink": "Nid wyf eisiau newid fy nghyfeiriad e-bost"
+        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch newid eich cyfeiriad e-bost."
       },
       "changePassword": {
         "title": "Rhowch eich cyfrinair presennol",
         "header": "Rhowch eich cyfrinair presennol",
-        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch newid eich cyfrinair.",
-        "backLink": "Nid wyf eisiau newid fy nghyfrinair"
+        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch newid eich cyfrinair."
       },
       "changePhoneNumber": {
         "header": "Rhowch eich cyfrinair",
-        "paragraph": "Mae angen i ni wneud yn siwr mai chi yw chi cyn y gallwch newid eich rhif ffôn.",
-        "backLink": "Nid wyf eisiau newid fy rhif ffôn"
+        "paragraph": "Mae angen i ni sicrhau mai chi sydd yna cyn y gallwch reoli sut rydych yn cael codau diogelwch."
       },
       "deleteAccount": {
         "header": "Rhowch eich cyfrinair",
-        "paragraph": "Rydym angen sicrhau mai chi yw chi cyn y gallwch ddileu eich GOV.UK One Login.",
-        "backLink": "Nid wyf eisiau dileu fy GOV.UK One Login"
+        "paragraph": "Rydym angen sicrhau mai chi yw chi cyn y gallwch ddileu eich GOV.UK One Login."
       },
       "password": {
         "label": "Rhowch eich cyfrinair",
@@ -282,7 +278,8 @@
           "required": "Rhowch eich cyfrinair",
           "incorrectPassword": "Rhowch y cyfrinair cywir"
         }
-      }
+      },
+      "cancelText": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
     },
     "changeEmail": {
       "title": "Rhowch eich cyfeiriad e-bost newydd",
@@ -298,7 +295,7 @@
         }
       },
       "dontWantTo": {
-        "changeEmailLinkText": "Nid wyf eisiau newid fy nghyfeiriad e-bost"
+        "changeEmailLinkText": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
       }
     },
     "updateEmailConfirmation": {
@@ -313,7 +310,7 @@
     "updatePhoneNumberConfirmation": {
       "title": "Rydych wedi newid eich rhif ffôn",
       "panelText": "Rydych wedi newid eich rhif ffôn",
-      "summaryText": "Mae eich rhif ffôn wedi cael ei newid i [mobile]."
+      "summaryText": "Byddwn yn anfon codau diogelwch i'ch rhif ffôn sy'n gorffen gyda <strong>[mobile]</strong>."
     },
     "deleteAccountConfirmation": {
       "title": "Rydych wedi dileu eich GOV.UK One Login",
@@ -351,7 +348,7 @@
         "summary": "Sut i greu cyfrinair diogel",
         "text": "Ffordd dda o greu cyfrinair diogel a chofiadwy yw defnyddio 3 gair ar hap. Gallwch ddefnyddio rhifau, symbolau a gofodau."
       },
-      "backLink": "Nid wyf eisiau newid fy nghyfrinair"
+      "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
     },
     "checkYourEmail": {
       "title": "Gwiriwch eich e-bost",
@@ -385,7 +382,7 @@
     "checkYourPhone": {
       "title": "Gwiriwch eich ffôn",
       "header": "Gwiriwch eich ffôn",
-      "text": "Rydym wedi anfon cod i [mobile].",
+      "text": "Rydym wedi anfon cod i'ch rhif ffôn sy'n gorffen gyda <strong>[mobile]</strong>.",
       "info": {
         "paragraph": "Efallai y bydd yn cymryd ychydig funudau i gyrraedd. Bydd y cod yn dod i ben ar ôl 15 munud."
       },
@@ -415,14 +412,14 @@
       "paragraph5": "Os byddwch angen GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
       "details": "Ni fydd dileu eich GOV.UK One Login yn effeithio ar unrhyw gyfrifon eraill y llywodraeth sydd gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.",
       "deleteAccount": "Dileu eich GOV.UK One Login",
-      "doNotDeleteAccount": "Canslo a mynd yn ôl i’r dudalen ddiogelwch"
+      "doNotDeleteAccount": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
     },
     "changePhoneNumber": {
       "title": "Rhowch eich rhif ffôn symudol newydd",
       "header": "Rhowch eich rhif ffôn symudol newydd",
       "info": {
         "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i’r rhif rydych yn ei roi i ni.",
-        "backLink": "Nid wyf eisiau newid fy rhif ffôn"
+        "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
       },
       "ukPhoneNumber": {
         "label": "Rhif ffôn symudol y DU",
@@ -460,7 +457,7 @@
       "continue": "Cael cod diogelwch",
       "message": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd.",
       "phoneNumber": {
-        "insetText": "Byddwn yn anfon cod i: [mobile].",
+        "insetText": "Byddwn yn anfon cod i'ch rhif ffôn sy'n gorffen gyda <strong>[mobile]</strong>.",
         "paragraph": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd."
       },
       "email": {

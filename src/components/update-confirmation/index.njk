@@ -13,7 +13,7 @@
 }) }}
 
 {% if summaryText %}
-<p class="govuk-body">{{summaryText}}</p>
+<p class="govuk-body">{{summaryText | safe }}</p>
 {% endif %}
 
 {% if showGovUKButton %}
