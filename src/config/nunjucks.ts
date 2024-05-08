@@ -1,8 +1,9 @@
 import express from "express";
 import * as nunjucks from "nunjucks";
-import i18next, { DefaultNamespace, TFunction } from "i18next";
 import { Environment } from "nunjucks";
+import i18next, { TFunction } from "i18next";
 import { PATH_DATA } from "../app.constants";
+import { safeTranslate } from "../utils/safeTranslate";
 
 export function configureNunjucks(
   app: express.Application,
@@ -15,10 +16,10 @@ export function configureNunjucks(
   });
 
   nunjucksEnv.addFilter("translate", function (key: string, options?: any) {
-    const translate: TFunction<DefaultNamespace, undefined> = i18next.getFixedT(
+    const translate: TFunction<"translation", undefined> = i18next.getFixedT(
       this.ctx.i18n.language
     );
-    return translate(key, options);
+    return safeTranslate(translate, key, this.ctx.i18n.language, options);
   });
 
   nunjucksEnv.addFilter(
