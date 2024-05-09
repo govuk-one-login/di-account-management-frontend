@@ -98,7 +98,7 @@
     "@types/express-session": "^1.18.0",
     "@types/i18next-fs-backend": "^1.1.5",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.12.10",
+    "@types/node": "^20.12.11",
     "@types/nunjucks": "^3.2.6",
     "@types/qrcode": "^1.5.5",
     "@types/sinon": "^17.0.3",
