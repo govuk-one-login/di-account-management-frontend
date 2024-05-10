@@ -178,6 +178,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   DWP_LOCAL_DEV_INTEGRATION,
   "9uEx86ZHEp8ycgdHNqC8VK87E1A",
   "dfeFindAndUseAnApi",
+  "DVUDWXsy0io7wDBH5LA5IEkEH5U",
+  "mojPlanYourFuture",
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];

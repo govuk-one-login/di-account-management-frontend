@@ -764,6 +764,12 @@
         "description": "Find and use a Department for Education API to connect to their digital services.",
         "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "DVUDWXsy0io7wDBH5LA5IEkEH5U": {
+        "header": "Plan your future",
+        "description": "Access your appointments and information about your probation requirements.",
+        "link_text": "Go to your plan your future account",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "integration": {
@@ -901,6 +907,12 @@
         "description": "Find and use a Department for Education API to connect to their digital services.",
         "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "DVUDWXsy0io7wDBH5LA5IEkEH5U": {
+        "header": "Plan your future",
+        "description": "Access your appointments and information about your probation requirements.",
+        "link_text": "Go to your plan your future account",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "staging": {
@@ -1026,6 +1038,12 @@
         "description": "Find and use a Department for Education API to connect to their digital services.",
         "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Plan your future",
+        "description": "Access your appointments and information about your probation requirements.",
+        "link_text": "Go to your plan your future account",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "build": {
@@ -1151,6 +1169,12 @@
         "description": "Find and use a Department for Education API to connect to their digital services.",
         "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Plan your future",
+        "description": "Access your appointments and information about your probation requirements.",
+        "link_text": "Go to your plan your future account",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "dev": {
@@ -1276,6 +1300,12 @@
         "description": "Find and use a Department for Education API to connect to their digital services.",
         "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Plan your future",
+        "description": "Access your appointments and information about your probation requirements.",
+        "link_text": "Go to your plan your future account",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "local": {
@@ -1401,6 +1431,12 @@
         "description": "Find and use a Department for Education API to connect to their digital services.",
         "link_text": "Go to your DfE find and use an API account",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Plan your future",
+        "description": "Access your appointments and information about your probation requirements.",
+        "link_text": "Go to your plan your future account",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     }
   }
