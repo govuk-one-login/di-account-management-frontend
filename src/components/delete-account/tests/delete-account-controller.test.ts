@@ -14,7 +14,7 @@ import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
-  let res: Partial<Response>;
+  let res: any;
   const TEST_SUBJECT_ID = "testSubjectId";
 
   function validRequest(): any {
@@ -41,6 +41,7 @@ describe("delete account controller", () => {
       },
       log: { error: sandbox.fake() },
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
+      cookies: { _csrf: "dasdasdas", lo: "false", lng: "en", am: "dsadasdasd" },
     };
   }
 
@@ -51,6 +52,7 @@ describe("delete account controller", () => {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       locals: {},
+      clearCookie: sandbox.fake(() => {}),
     };
   });
 
@@ -151,6 +153,20 @@ describe("delete account controller", () => {
           req,
           "public-subject-id"
         );
+      });
+      it("should clear am cookie", async () => {
+        req = validRequest();
+        const fakeService: DeleteAccountServiceInterface = {
+          deleteAccount: sandbox.fake.resolves(true),
+          publishToDeleteTopic: sandbox.fake(),
+        };
+        req.session.user.tokens = { accessToken: "token" } as any;
+        req.oidc = {
+          endSessionUrl: sandbox.fake.returns("logout-url"),
+        } as any;
+
+        await deleteAccountPost(fakeService)(req as Request, res as Response);
+        expect(res.clearCookie).to.have.calledWith("am");
       });
     });
   });

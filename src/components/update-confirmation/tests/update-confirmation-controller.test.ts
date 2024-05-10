@@ -16,13 +16,14 @@ import { PATH_DATA } from "../../../app.constants";
 describe("update confirmation controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
-  let res: Partial<Response>;
+  let res: any;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
     req = {
       body: {},
+      cookies: { _csrf: "dasdasdas", lo: "false", lng: "en", am: "dsadasdasd" },
       session: { user: { state: {} }, destroy: sandbox.fake() } as any,
       t: sandbox.fake.returns("translated-string"),
     };
@@ -30,6 +31,7 @@ describe("update confirmation controller", () => {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       locals: {},
+      clearCookie: sandbox.fake(() => {}),
     };
   });
 
@@ -48,7 +50,8 @@ describe("update confirmation controller", () => {
   describe("updatePasswordConfirmationGet", () => {
     it("should render update password confirmation page", () => {
       updatePasswordConfirmationGet(req as Request, res as Response);
-
+      expect(res.clearCookie).to.have.calledWith("am");
+      expect(req.session.destroy).called;
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
   });
