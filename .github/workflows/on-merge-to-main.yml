@@ -37,7 +37,7 @@ jobs:
     needs: validate_deployment
     steps:
       - name: "Push signed image to ECR, updated SAM template wih image then upload it to the S3 Artifact Bucket"
-        uses: govuk-one-login/devplatform-upload-action-ecr@3d5136bf0722e8b11e1c3e8a09f864a4ab767323 # pin@1.1.0
+        uses: govuk-one-login/devplatform-upload-action-ecr@2670d3fde00e5e9eed187135e853f273763cab02 # pin@1.2.4
         with:
           artifact-bucket-name: ${{ secrets.ARTIFACT_SOURCE_BUCKET_NAME }}
           container-sign-kms-key-arn: ${{ secrets.CONTAINER_SIGN_KMS_KEY }}
