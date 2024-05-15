@@ -129,9 +129,6 @@ Conditions:
       - !Equals [!Ref Environment, staging]
       - !Equals [!Ref Environment, integration]
       - !Equals [!Ref Environment, production]
-  AddFraudHeader: !Or
-    - !Equals [!Ref Environment, dev]
-    - !Equals [!Ref Environment, staging]
 
 Mappings:
   # see https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
@@ -1697,11 +1694,8 @@ Resources:
             !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
           ViewerProtocolPolicy: redirect-to-https
           FunctionAssociations:
-            - !If
-              - AddFraudHeader
-              - EventType: viewer-request
-                FunctionARN: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersFunction"
-              - !Ref "AWS::NoValue"
+            - EventType: viewer-request
+              FunctionARN: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersFunction"
         Enabled: true
         HttpVersion: "http2"
         Logging:
