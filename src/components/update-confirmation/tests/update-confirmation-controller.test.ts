@@ -23,7 +23,6 @@ describe("update confirmation controller", () => {
 
     req = {
       body: {},
-      cookies: { _csrf: "dasdasdas", lo: "false", lng: "en", am: "dsadasdasd" },
       session: { user: { state: {} }, destroy: sandbox.fake() } as any,
       t: sandbox.fake.returns("translated-string"),
     };
@@ -31,7 +30,6 @@ describe("update confirmation controller", () => {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       locals: {},
-      clearCookie: sandbox.fake(() => {}),
     };
   });
 
@@ -49,10 +47,12 @@ describe("update confirmation controller", () => {
 
   describe("updatePasswordConfirmationGet", () => {
     it("should render update password confirmation page", () => {
+      const sessionStore = require("../../../utils/session-store");
+      sandbox.stub(sessionStore, "clearCookies").callsFake(() => {});
       updatePasswordConfirmationGet(req as Request, res as Response);
-      expect(res.clearCookie).to.have.calledWith("am");
       expect(req.session.destroy).called;
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
+      expect(sessionStore.clearCookies).to.have.calledWith(req, res, ["am"]);
     });
   });
 

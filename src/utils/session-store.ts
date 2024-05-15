@@ -108,9 +108,11 @@ export function clearCookies(
   cookieNames: string[]
 ): void {
   if (req.cookies) {
-    for (const cookieName of Object.keys(req.cookies)) {
-      if (cookieNames.includes(cookieName)) {
-        res.clearCookie(cookieName);
+    if (cookieNames) {
+      for (const cookieName of Object.keys(req.cookies)) {
+        if (cookieNames.includes(cookieName)) {
+          res.clearCookie(cookieName);
+        }
       }
     }
   }

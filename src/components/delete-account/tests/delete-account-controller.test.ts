@@ -41,7 +41,6 @@ describe("delete account controller", () => {
       },
       log: { error: sandbox.fake() },
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
-      cookies: { _csrf: "dasdasdas", lo: "false", lng: "en", am: "dsadasdasd" },
     };
   }
 
@@ -52,7 +51,6 @@ describe("delete account controller", () => {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       locals: {},
-      clearCookie: sandbox.fake(() => {}),
     };
   });
 
@@ -164,9 +162,11 @@ describe("delete account controller", () => {
         req.oidc = {
           endSessionUrl: sandbox.fake.returns("logout-url"),
         } as any;
+        const sessionStore = require("../../../utils/session-store");
+        sandbox.stub(sessionStore, "clearCookies").callsFake(() => {});
 
         await deleteAccountPost(fakeService)(req as Request, res as Response);
-        expect(res.clearCookie).to.have.calledWith("am");
+        expect(sessionStore.clearCookies).to.have.calledWith(req, res, ["am"]);
       });
     });
   });
