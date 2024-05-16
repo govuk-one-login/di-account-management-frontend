@@ -21,14 +21,11 @@ jobs:
       - name: Get changes
         id: changed-files
         run: |
-          # Capture changed files in a variable
-          files=$(git diff --name-only HEAD^1 HEAD)
-          # Set environment variable with the list of changed files
-          echo "FILES_CHANGED=$files" >> $GITHUB_ENV
+          echo "::set-output name=files::$(git diff --name-only HEAD^1 HEAD)"
 
       - name: Validate Translation Files
         run: |
-          files_changed="${{ env.FILES_CHANGED }}"
+          files_changed="${{ steps.changed-files.outputs.files }}"
       
           # Check if en/translation.json is changed
           en_changed=$(echo "$files_changed" | grep -q "^src/locales/en/translation.json" && echo "true" || echo "false")
