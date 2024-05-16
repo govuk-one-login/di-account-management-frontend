@@ -129,9 +129,6 @@ Conditions:
       - !Equals [!Ref Environment, staging]
       - !Equals [!Ref Environment, integration]
       - !Equals [!Ref Environment, production]
-  AddFraudHeader: !Or
-    - !Equals [!Ref Environment, dev]
-    - !Equals [!Ref Environment, staging]
 
 Mappings:
   # see https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
@@ -171,6 +168,7 @@ Mappings:
       UADISABLED: "false"
       SUPPORTCHANGEMFA: "1"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
+      LANGUAGETOGGLE: "1"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -201,6 +199,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "false"
       UADISABLED: "false"
+      LANGUAGETOGGLE: "0"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -231,6 +230,7 @@ Mappings:
       GA4DISABLED: "true"
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
+      LANGUAGETOGGLE: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -261,6 +261,7 @@ Mappings:
       GA4DISABLED: "true"
       UADISABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
+      LANGUAGETOGGLE: "1"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -291,6 +292,7 @@ Mappings:
       GA4DISABLED: "true"
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
+      LANGUAGETOGGLE: "0"
 
 Resources:
   #
@@ -826,6 +828,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   ACCESSIBILITYSTATEMENTURL,
+                ]
+            - Name: "LANGUAGE_TOGGLE"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  LANGUAGETOGGLE,
                 ]
           Secrets:
             - Name: DT_TENANT
@@ -1697,11 +1706,8 @@ Resources:
             !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
           ViewerProtocolPolicy: redirect-to-https
           FunctionAssociations:
-            - !If
-              - AddFraudHeader
-              - EventType: viewer-request
-                FunctionARN: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersFunction"
-              - !Ref "AWS::NoValue"
+            - EventType: viewer-request
+              FunctionARN: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersFunction"
         Enabled: true
         HttpVersion: "http2"
         Logging:

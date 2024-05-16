@@ -45,12 +45,7 @@
       "welsh": "Cymraeg"
     },
     "languageToggle": {
-      "en": {
-        "linkText": "English"
-      },
-      "cy": {
-        "linkText": "Cymraeg"
-      }
+      "ariaLabel": "Dewis iaith"
     },
     "continue": {
       "label": "Parhau"
@@ -532,7 +527,7 @@
             "Dydd Llun i ddydd Gwener, 8am i 8pm",
             "penwythnosau a gwyliau cyhoeddus, 9am i 5.30pm"
           ],
-          "paragraph2": "The digital assistant is always available",
+          "paragraph2": "Mae'r cynorthwyydd digidol bob amser ar gael",
           "linkText": "Defnyddio gwesgwrs",
           "accessibility-statement": {
             "insetText": {
@@ -702,6 +697,12 @@
         "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg (DfE) a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
         "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "DVUDWXsy0io7wDBH5LA5IEkEH5U": {
+        "header": "Cynllunio eich dyfodol",
+        "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
+        "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "integration": {
@@ -833,6 +834,12 @@
         "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg (DfE) a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
         "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "DVUDWXsy0io7wDBH5LA5IEkEH5U": {
+        "header": "Cynllunio eich dyfodol",
+        "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
+        "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "staging": {
@@ -952,6 +959,12 @@
         "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg (DfE) a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
         "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Cynllunio eich dyfodol",
+        "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
+        "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "build": {
@@ -1071,6 +1084,12 @@
         "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg (DfE) a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
         "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Cynllunio eich dyfodol",
+        "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
+        "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "dev": {
@@ -1190,6 +1209,12 @@
         "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg (DfE) a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
         "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Cynllunio eich dyfodol",
+        "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
+        "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
     "local": {
@@ -1309,6 +1334,12 @@
         "description": "Darganfyddwch a defnyddiwch API yr Adran Addysg (DfE) a'i defnyddio i gysylltu â'u gwasanaethau digidol.",
         "link_text": "Ewch i'ch cyfrif DfE dod o hyd i a defnyddio API",
         "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Cynllunio eich dyfodol",
+        "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
+        "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     }
   }

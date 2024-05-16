@@ -1,0 +1,57 @@
+name: Check Translations
+
+# Trigger only when changes occur in the locales directory in a PR
+on:
+  pull_request:
+    paths:
+      - 'src/locales/**'  
+
+jobs:
+  check_translation:
+    name: "Check locale language changes"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
+        with:
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          # Fetch the pull request merge commit
+          git fetch origin +refs/pull/${{ github.event.pull_request.number }}/merge
+          # Generate a list of changed files
+          git diff --name-only FETCH_HEAD > changed_files.txt
+  
+      - name: Validate translation files
+        run: |
+          # Read the list of changed files
+          files_changed=$(< changed_files.txt)
+          
+          # Initialize flags
+          en_changed=false
+          cy_changed=false
+          
+          # Check for specific file changes
+          if echo "$files_changed" | grep -q "^src/locales/en/translation.json"; then
+            en_changed=true
+          fi
+          if echo "$files_changed" | grep -q "^src/locales/cy/translation.json"; then
+            cy_changed=true
+          fi
+
+          # Validate changes and provide feedback
+          if [[ "$en_changed" == "true" && "$cy_changed" == "true" ]]; then
+            echo "Both translation files have changed. No action needed."
+          elif [[ "$en_changed" == "true" && "$cy_changed" == "false" ]]; then
+            echo "Only en/translation.json has changed. Please update cy/translation.json."
+            exit 1
+          elif [[ "$en_changed" == "false" && "$cy_changed" == "true" ]]; then
+            echo "Only cy/translation.json has changed. Please update en/translation.json."
+            exit 1
+          else
+            echo "Neither translation file has changed. No action needed."
+          fi

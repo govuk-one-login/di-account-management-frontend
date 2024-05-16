@@ -15,7 +15,15 @@ describe("set-local-vars-middleware", () => {
     req = {
       session: {} as any,
       cookies: {} as any,
-    };
+      headers: {
+        host: "example.com",
+      },
+      get: function (headerName: string) {
+        if (headerName === "host") {
+          return "example.com";
+        }
+      },
+    } as Partial<Request>;
     res = {
       status: sandbox.stub(),
       locals: {},

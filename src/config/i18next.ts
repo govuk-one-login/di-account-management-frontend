@@ -1,12 +1,11 @@
-import { LOCALE } from "../app.constants";
-import { getServiceDomain, supportLanguageCY } from "../config";
+import { ENVIRONMENT_NAME, LOCALE } from "../app.constants";
+import { getNodeEnv, getServiceDomain, supportLanguageCY } from "../config";
+import type { InitOptions } from "i18next/typescript/options";
 
-export function i18nextConfigurationOptions(
-  path: string
-): Record<string, unknown> {
+export function i18nextConfigurationOptions(path: string): InitOptions {
   return {
     debug: false,
-    fallbackLng: LOCALE.EN,
+    fallbackLng: getNodeEnv() === ENVIRONMENT_NAME.TEST ? LOCALE.EN : "",
     preload: [LOCALE.EN],
     supportedLngs: supportLanguageCY() ? [LOCALE.EN, LOCALE.CY] : [LOCALE.EN],
     backend: {

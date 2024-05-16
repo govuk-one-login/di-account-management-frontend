@@ -5,7 +5,7 @@ import { deleteAccountService } from "./delete-account-service";
 import { PATH_DATA } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
 import { getAppEnv, getBaseUrl, getSNSDeleteTopic } from "../../config";
-import { destroyUserSessions } from "../../utils/session-store";
+import { clearCookies, destroyUserSessions } from "../../utils/session-store";
 import {
   containsGovUkPublishingService,
   getAllowedListServices,
@@ -86,6 +86,8 @@ export function deleteAccountPost(
     });
 
     await destroyUserSessions(req, subjectId, req.app.locals.sessionStore);
+
+    clearCookies(req, res, ["am"]);
 
     return res.redirect(logoutUrl);
   };

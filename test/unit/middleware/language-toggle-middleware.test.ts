@@ -2,9 +2,9 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
 import { sinon } from "../../utils/test-utils";
-import { setHtmlLangMiddleware } from "../../../src/middleware/html-lang-middleware";
+import { languageToggleMiddleware } from "../../../src/middleware/language-toggle-middleware";
 
-describe("HTML-lang middleware", () => {
+describe("lang middleware", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
@@ -23,20 +23,24 @@ describe("HTML-lang middleware", () => {
     sandbox.restore();
   });
 
-  describe("setHtmlLangMiddleware", () => {
+  describe("languageToggleMiddleware", () => {
     it("should add language to request locals", () => {
-      setHtmlLangMiddleware(req as Request, res as Response, next);
+      languageToggleMiddleware(req as Request, res as Response, next);
 
       expect(res.locals).to.have.property("htmlLang");
+      expect(res.locals)
+        .to.have.property("showLanguageToggle")
+        .that.equals(process.env.LANGUAGE_TOGGLE === "1");
       expect(next).to.have.been.called;
     });
 
     it("should call next function", () => {
       req = {};
 
-      setHtmlLangMiddleware(req as Request, res as Response, next);
+      languageToggleMiddleware(req as Request, res as Response, next);
 
       expect(res.locals).to.not.have.property("htmlLang");
+      expect(res.locals).to.not.have.property("showLanguageToggle");
       expect(next).to.have.been.called;
     });
   });
