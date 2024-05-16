@@ -22,6 +22,16 @@ jobs:
       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
         with:
           ref: ${{ inputs.gitRef || github.ref }}
+      
+      - name: List current directory contents
+        run: ls -l
+
+      - name: Process files changed in the current commit
+        run: |
+          changedFiles=$(git diff --name-only HEAD^)
+          for file in $changedFiles; do
+            echo "Processing file: $file"
+          done
 
       - name: Determine File Changes
         id: file_changes
