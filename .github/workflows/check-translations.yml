@@ -5,7 +5,7 @@ name: Check Translations
 on:
   push:
     branches:
-      - main 
+      - '*' 
   workflow_call:
     inputs:
       gitRef:
@@ -26,8 +26,8 @@ jobs:
 
       - name: Check translations
         run: |
-          changed_en=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }} | grep '^src/locales/en/translation.json$' || true)
-          changed_cy=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }} | grep '^src/locales/cy/translation.json$' || true)
+          changed_en=$(git diff --name-only ${GITHUB_BASE_REF}...${GITHUB_HEAD_REF} | grep '^src/locales/en/translation.json$' || true)
+          changed_cy=$(git diff --name-only ${GITHUB_BASE_REF}...${GITHUB_HEAD_REF} | grep '^src/locales/cy/translation.json$' || true)
 
           if [[ -n "$changed_en" && -z "$changed_cy" ]]; then
             echo "Error: Changes to 'src/locales/en/translation.json' detected without corresponding changes to 'src/locales/cy/translation.json'"
