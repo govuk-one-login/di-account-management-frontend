@@ -19,17 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Debug Information
-        run: |
-          echo "Base Branch: ${{ github.base_ref }}"
-          echo "Head Branch: ${{ github.head_ref }}"
-          echo "Base SHA: ${{ github.base_sha }}"
-          echo "Head SHA: ${{ github.sha }}"
-
       - name: Checkout code
-        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ inputs.gitRef || github.ref }}
 
       - name: Check translations
         run: |
@@ -48,6 +41,9 @@ jobs:
             echo "Error: 'src/locales/cy/translation.json' file not found"
             exit 1
           fi
+
+          # Get commit SHA of the head (pull request) branch
+          head_sha=$(git rev-parse "${{ github.head_ref }}")
         
           # Check for changes in translation files
           changed_en=$(git diff --name-only ${{ github.base_ref }}...${{ github.head_ref }} -- "$en_translation_file")
