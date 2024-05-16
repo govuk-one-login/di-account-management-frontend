@@ -5,8 +5,6 @@ name: Check Translations
 on:
   pull_request:
     types: [opened, synchronize]
-    paths:
-      - 'src/locales/'
 
 jobs:
   check_translation:
