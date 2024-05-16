@@ -15,11 +15,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
-        with:
-          ref: ${{ inputs.gitRef || github.ref }}
+        uses: actions/checkout@v2
 
-      - name: Check translations
+      - name: Check file locations exist
         run: |
           # Set paths for translation files
           en_translation_file="src/locales/en/translation.json"
@@ -27,18 +25,22 @@ jobs:
 
           # Check if 'en_translation_file' exists and has changes
           if [ -f "$en_translation_file" ]; then
-            changed_en=$(git diff --name-only HEAD^ -- "$en_translation_file")
+            changed_en=$(git diff --name-only "${{ github.base_ref }}..${{ github.sha }}" -- "$en_translation_file")
           else
+            echo "EN Path not found"
             changed_en=""
           fi
 
           # Check if 'cy_translation_file' exists and has changes
           if [ -f "$cy_translation_file" ]; then
-            changed_cy=$(git diff --name-only HEAD^ -- "$cy_translation_file")
+            changed_cy=$(git diff --name-only "${{ github.base_ref }}..${{ github.sha }}" -- "$cy_translation_file")
           else
+            echo "CY Path not found"
             changed_cy=""
           fi
 
+      - name: Check changes to locale files
+        run: |
           # Check if changes are detected in one locale without corresponding changes in the other
           if [[ -n "$changed_en" && -z "$changed_cy" ]]; then
             echo "Error: Changes to 'src/locales/en/translation.json' detected without corresponding changes to 'src/locales/cy/translation.json'"
@@ -46,4 +48,3 @@ jobs:
           elif [[ -n "$changed_cy" && -z "$changed_en" ]]; then
             echo "Error: Changes to 'src/locales/cy/translation.json' detected without corresponding changes to 'src/locales/en/translation.json'"
             exit 1
-          fi
