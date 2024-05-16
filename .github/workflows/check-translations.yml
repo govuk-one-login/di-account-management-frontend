@@ -26,6 +26,6 @@ jobs:
           if echo "$files_changed" | grep -q "^src/locales/en/translation.json" && echo "$files_changed" | grep -q "^src/locales/cy/translation.json"; then
             echo "Both translation files have changed."
           else
-            echo "Only one of the translation files has changed or neither has changed."
+            echo "Only one of the translation files has changed. Please update other locales if required."
             exit 1
           fi
