@@ -1,15 +1,10 @@
 name: Check Translations
 
+# Trigger only when changes occur in the locales directory in a PR
 on:
   pull_request:
     paths:
-      - 'src/locales/**'  # Trigger only when changes occur in the locales directory
-  workflow_call:
-    inputs:
-      gitRef:
-        required: false
-        type: string
-        default: ${{ github.ref }}
+      - 'src/locales/**'  
 
 jobs:
   check_translation:
@@ -21,15 +16,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
 
-      - name: List changed files
+      - name: Get changed files
         id: changed-files
-        run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changed_files.txt
+        uses: tj-actions/changed-files@v44
 
       - name: Validate Translation Files
         run: |
-          changed_files=$(cat changed_files.txt)
-          if echo "$changed_files" | grep -q "^src/locales/en/translation.json" && echo "$changed_files" | grep -q "^src/locales/cy/translation.json"; then
+          files_changed="${{ steps.changed-files.outputs.files }}"
+          if echo "$files_changed" | grep -q "^src/locales/en/translation.json" && echo "$files_changed" | grep -q "^src/locales/cy/translation.json"; then
             echo "Both translation files have changed."
           else
             echo "Only one of the translation files has changed or neither has changed."
