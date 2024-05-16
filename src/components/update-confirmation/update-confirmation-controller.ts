@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { redactPhoneNumber } from "../../utils/strings";
-import { PATH_DATA } from "../../app.constants";
+import { ERROR_MESSAGES, PATH_DATA } from "../../app.constants";
+import { clearCookies } from "../../utils/session-store";
+import { logger } from "../../utils/logger";
 
 const oplValues = {
   updateEmailConfirmation: {
@@ -40,6 +42,15 @@ export function updatePasswordConfirmationGet(
   res: Response
 ): void {
   delete req.session.user.state.changePassword;
+  clearCookies(req, res, ["am"]);
+
+  if (req.session) {
+    req.session.destroy((error) => {
+      if (error) {
+        logger.error(ERROR_MESSAGES.FAILED_TO_DESTROY_SESSION(error));
+      }
+    });
+  }
 
   res.render("update-confirmation/index.njk", {
     contentId: oplValues.updatePasswordConfirmation.contentId,

@@ -16,7 +16,7 @@ import { PATH_DATA } from "../../../app.constants";
 describe("update confirmation controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
-  let res: Partial<Response>;
+  let res: any;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -47,9 +47,12 @@ describe("update confirmation controller", () => {
 
   describe("updatePasswordConfirmationGet", () => {
     it("should render update password confirmation page", () => {
+      const sessionStore = require("../../../utils/session-store");
+      sandbox.stub(sessionStore, "clearCookies").callsFake(() => {});
       updatePasswordConfirmationGet(req as Request, res as Response);
-
+      expect(req.session.destroy).called;
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
+      expect(sessionStore.clearCookies).to.have.calledWith(req, res, ["am"]);
     });
   });
 
