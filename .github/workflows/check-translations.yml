@@ -26,9 +26,27 @@ jobs:
 
       - name: Check translations
         run: |
-          changed_en=$(git diff --name-only ${GITHUB_BASE_REF}...${GITHUB_HEAD_REF} | grep '^src/locales/en/translation.json$' || true)
-          changed_cy=$(git diff --name-only ${GITHUB_BASE_REF}...${GITHUB_HEAD_REF} | grep '^src/locales/cy/translation.json$' || true)
+          # Set paths for translation files
+          en_translation_file="src/locales/en/translation.json"
+          cy_translation_file="src/locales/cy/translation.json"
+          
+          # Check if 'en_translation_file' exists
+          if [ ! -f "$en_translation_file" ]; then
+            echo "Error: 'src/locales/en/translation.json' file not found"
+            exit 1
+          fi
 
+          # Check if 'cy_translation_file' exists
+          if [ ! -f "$cy_translation_file" ]; then
+            echo "Error: 'src/locales/cy/translation.json' file not found"
+            exit 1
+          fi
+        
+          # Check for changes in translation files
+          changed_en=$(git diff --name-only ${{ github.base_ref }}...${{ github.head_ref }} -- "$en_translation_file")
+          changed_cy=$(git diff --name-only ${{ github.base_ref }}...${{ github.head_ref }} -- "$cy_translation_file")
+
+          # Display error if changes are detected in one file without corresponding changes in the other file
           if [[ -n "$changed_en" && -z "$changed_cy" ]]; then
             echo "Error: Changes to 'src/locales/en/translation.json' detected without corresponding changes to 'src/locales/cy/translation.json'"
             exit 1
