@@ -1,17 +1,28 @@
 name: Check Translations
 
+# Triggered when:
+# - a change in either the en or cy locale translation json is pushed to main without changing the other locale.
 on:
-  pull_request:
+  push:
     branches:
       - main 
+  workflow_call:
+    inputs:
+      gitRef:
+        required: false
+        type: string
+        default: ${{ github.ref }}
 
 jobs:
-  check:
+  check_translation:
+    name: "Check locale language changes"
     runs-on: ubuntu-latest
-
+    timeout-minutes: 15
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.gitRef || github.ref }}
 
       - name: Check translations
         run: |
