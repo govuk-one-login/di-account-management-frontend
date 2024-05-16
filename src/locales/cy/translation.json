@@ -1345,10 +1345,10 @@
         "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
         "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
-      }, 
+      },
       "test": {
         "test": "test"
-      } 
+      }
     }
   }
 }
