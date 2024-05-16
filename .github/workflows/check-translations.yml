@@ -1,0 +1,27 @@
+name: Check Translations
+
+on:
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check translations
+        run: |
+          changed_en=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }} | grep '^src/locales/en/translation.json$' || true)
+          changed_cy=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }} | grep '^src/locales/cy/translation.json$' || true)
+
+          if [[ -n "$changed_en" && -z "$changed_cy" ]]; then
+            echo "Error: Changes to 'src/locales/en/translation.json' detected without corresponding changes to 'src/locales/cy/translation.json'"
+            exit 1
+          elif [[ -z "$changed_en" && -n "$changed_cy" ]]; then
+            echo "Error: Changes to 'src/locales/cy/translation.json' detected without corresponding changes to 'src/locales/en/translation.json'"
+            exit 1
+          fi
