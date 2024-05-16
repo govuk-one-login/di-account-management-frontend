@@ -1,11 +1,12 @@
 name: Check Translations
 
 # Triggered when:
-# - a change in either the en or cy locale translation json is detected in a PR.
+# - a PR to any branch has changes in the locales path.
 on:
   pull_request:
-    branches:
-      - '*'
+    types: [opened, synchronize]
+    paths:
+      - 'src/locales/'
 
 jobs:
   check_translation:
@@ -14,37 +15,21 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Check file locations exist
+      - name: Determine File Changes
+        id: file_changes
         run: |
-          # Set paths for translation files
-          en_translation_file="src/locales/en/translation.json"
-          cy_translation_file="src/locales/cy/translation.json"
+          # Get list of files changed in the PR
+          echo "::set-output name=files::$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})"
 
-          # Check if 'en_translation_file' exists and has changes
-          if [ -f "$en_translation_file" ]; then
-            changed_en=$(git diff --name-only "${{ github.base_ref }}..${{ github.sha }}" -- "$en_translation_file")
-          else
-            echo "EN Path not found"
-            changed_en=""
-          fi
-
-          # Check if 'cy_translation_file' exists and has changes
-          if [ -f "$cy_translation_file" ]; then
-            changed_cy=$(git diff --name-only "${{ github.base_ref }}..${{ github.sha }}" -- "$cy_translation_file")
-          else
-            echo "CY Path not found"
-            changed_cy=""
-          fi
-
-      - name: Check changes to locale files
+      - name: Validate Translation Files
         run: |
-          # Check if changes are detected in one locale without corresponding changes in the other
-          if [[ -n "$changed_en" && -z "$changed_cy" ]]; then
-            echo "Error: Changes to 'src/locales/en/translation.json' detected without corresponding changes to 'src/locales/cy/translation.json'"
+          files_changed="${{ steps.file_changes.outputs.files }}"
+          if (echo "$files_changed" | grep -q "^src/locales/en/translation.json") && (echo "$files_changed" | grep -q "^src/locales/cy/translation.json"); then
+            echo "Both translation files have changed."
+          else
+            echo "Only one of the translation files has changed or neither has changed."
             exit 1
-          elif [[ -n "$changed_cy" && -z "$changed_en" ]]; then
-            echo "Error: Changes to 'src/locales/cy/translation.json' detected without corresponding changes to 'src/locales/en/translation.json'"
-            exit 1
+          fi
