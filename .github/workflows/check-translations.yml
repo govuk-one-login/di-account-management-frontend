@@ -21,7 +21,8 @@ jobs:
       - name: Get changes
         id: changed-files
         run: |
-          echo "files=$(git diff --name-only HEAD^1 HEAD)" >> $GITHUB_OUTPUT
+          FILES_ENCODED=$(echo -n $(git diff --name-only HEAD^1 HEAD) | base64)
+          echo "files=$FILES_ENCODED" >> $GITHUB_OUTPUT
 
       - name: Validate Translation Files
         run: |
