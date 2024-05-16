@@ -23,9 +23,22 @@ jobs:
       - name: Validate Translation Files
         run: |
           files_changed="${{ steps.changed-files.outputs.files }}"
-          if echo "$files_changed" | grep -q "^src/locales/en/translation.json" && echo "$files_changed" | grep -q "^src/locales/cy/translation.json"; then
-            echo "Both translation files have changed."
-          else
-            echo "Only one of the translation files has changed. Please update other locales if required."
+      
+          # Check if en/translation.json is changed
+          en_changed=$(echo "$files_changed" | grep -q "^src/locales/en/translation.json" && echo "true" || echo "false")
+      
+          # Check if cy/translation.json is changed
+          cy_changed=$(echo "$files_changed" | grep -q "^src/locales/cy/translation.json" && echo "true" || echo "false")
+      
+          # Validate based on changes
+          if [[ "$en_changed" == "true" && "$cy_changed" == "true" ]]; then
+            echo "Both translation files have changed. No action needed."
+          elif [[ "$en_changed" == "true" && "$cy_changed" == "false" ]]; then
+            echo "Only en/translation.json has changed. Please update cy/translation.json."
             exit 1
+          elif [[ "$en_changed" == "false" && "$cy_changed" == "true" ]]; then
+            echo "Only cy/translation.json has changed. Please update en/translation.json."
+            exit 1
+          else
+            echo "Neither translation file has changed. No action needed."
           fi
