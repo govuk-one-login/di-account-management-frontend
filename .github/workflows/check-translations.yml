@@ -5,6 +5,12 @@ name: Check Translations
 on:
   pull_request:
     types: [opened, synchronize]
+  workflow_call:
+    inputs:
+      gitRef:
+        required: false
+        type: string
+        default: ${{ github.ref }}
 
 jobs:
   check_translation:
