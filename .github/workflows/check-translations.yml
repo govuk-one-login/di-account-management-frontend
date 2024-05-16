@@ -4,7 +4,7 @@ name: Check Translations
 # - a PR to any branch has changes in the locales path.
 on:
   pull_request:
-    types: [opened, synchronize]
+    branches: "*"
   workflow_call:
     inputs:
       gitRef:
