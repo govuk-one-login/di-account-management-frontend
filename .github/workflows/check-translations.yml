@@ -19,10 +19,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Debug Information
+        run: |
+          echo "Base Branch: ${{ github.base_ref }}"
+          echo "Head Branch: ${{ github.head_ref }}"
+          echo "Base SHA: ${{ github.base_sha }}"
+          echo "Head SHA: ${{ github.sha }}"
+
       - name: Checkout code
         uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
         with:
-          ref: ${{ github.base_ref }}
+          ref: ${{ github.head_ref }}
 
       - name: Check translations
         run: |
