@@ -1,23 +1,18 @@
 name: Check Translations
 
 # Triggered when:
-# - a change in either the en or cy locale translation json is pushed to main without changing the other locale.
+# - a change in either the en or cy locale translation json is detected in a PR.
 on:
-  push:
+  pull_request:
     branches:
-      - '*' 
-  workflow_call:
-    inputs:
-      gitRef:
-        required: false
-        type: string
-        default: ${{ github.ref }}
+      - '*'
 
 jobs:
   check_translation:
     name: "Check locale language changes"
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
     steps:
       - name: Checkout code
         uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
@@ -29,31 +24,26 @@ jobs:
           # Set paths for translation files
           en_translation_file="src/locales/en/translation.json"
           cy_translation_file="src/locales/cy/translation.json"
-          
-          # Check if 'en_translation_file' exists
-          if [ ! -f "$en_translation_file" ]; then
-            echo "Error: 'src/locales/en/translation.json' file not found"
-            exit 1
+
+          # Check if 'en_translation_file' exists and has changes
+          if [ -f "$en_translation_file" ]; then
+            changed_en=$(git diff --name-only HEAD^ -- "$en_translation_file")
+          else
+            changed_en=""
           fi
 
-          # Check if 'cy_translation_file' exists
-          if [ ! -f "$cy_translation_file" ]; then
-            echo "Error: 'src/locales/cy/translation.json' file not found"
-            exit 1
+          # Check if 'cy_translation_file' exists and has changes
+          if [ -f "$cy_translation_file" ]; then
+            changed_cy=$(git diff --name-only HEAD^ -- "$cy_translation_file")
+          else
+            changed_cy=""
           fi
 
-          # Get commit SHA of the head (pull request) branch
-          head_sha=$(git rev-parse "${{ github.head_ref }}")
-        
-          # Check for changes in translation files
-          changed_en=$(git diff --name-only ${{ github.base_ref }}...${{ github.head_ref }} -- "$en_translation_file")
-          changed_cy=$(git diff --name-only ${{ github.base_ref }}...${{ github.head_ref }} -- "$cy_translation_file")
-
-          # Display error if changes are detected in one file without corresponding changes in the other file
+          # Check if changes are detected in one locale without corresponding changes in the other
           if [[ -n "$changed_en" && -z "$changed_cy" ]]; then
             echo "Error: Changes to 'src/locales/en/translation.json' detected without corresponding changes to 'src/locales/cy/translation.json'"
             exit 1
-          elif [[ -z "$changed_en" && -n "$changed_cy" ]]; then
+          elif [[ -n "$changed_cy" && -z "$changed_en" ]]; then
             echo "Error: Changes to 'src/locales/cy/translation.json' detected without corresponding changes to 'src/locales/en/translation.json'"
             exit 1
           fi

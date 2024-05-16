@@ -35,8 +35,3 @@ jobs:
     uses: ./.github/workflows/validate-sam-template-dev.yml
     secrets: inherit
     needs: validate_container
-
-  check_translations:
-    name: Checks if locale file was changed to remind possible changes in other locale
-    uses: ./.github/workflows/check-translations.yml
-    secrets: inherit
