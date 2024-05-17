@@ -230,7 +230,7 @@ Mappings:
       GA4DISABLED: "true"
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
-      LANGUAGETOGGLE: 0
+      LANGUAGETOGGLE: 1
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -261,7 +261,7 @@ Mappings:
       GA4DISABLED: "true"
       UADISABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
-      LANGUAGETOGGLE: 0
+      LANGUAGETOGGLE: 1
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
