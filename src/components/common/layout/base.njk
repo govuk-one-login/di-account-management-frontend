@@ -2,6 +2,7 @@
 {% from "common/ga4-opl/macro.njk" import ga4OnPageLoad %}
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "frontend-language-toggle/macro.njk" import languageSelect %}
 {%- set headerClasses -%}
 {%- if not hideAccountNavigation -%} govuk-header--with-account-navigation {%- endif -%}
 {%- if showSignOut -%} govuk-header--right-align-nav {%- endif -%}
@@ -48,6 +49,25 @@
             },
             html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback")
         }) if not hidePhaseBanner}}
+        {% if showLanguageToggle %}
+          {{ languageSelect({
+            ariaLabel: 'general.languageToggle.ariaLabel' | translate,
+            url: currentUrl,
+            activeLanguage: htmlLang,
+            languages: [
+            { 
+              code: 'en',
+              text: 'English',
+              visuallyHidden: 'Change to English'
+            },
+            {
+              code:'cy',
+              text: 'Cymraeg',
+              visuallyHidden: 'Newid yr iaith ir Gymraeg'
+            }]
+          })
+          }}
+        {% endif %}       
         {% if backLink %}
           <a href="{{backLink}}" class="govuk-back-link js-back-link">
             {{ backLinkText }}
@@ -55,9 +75,7 @@
           </a>
         {% endif %}
         {% block beforeContent %}{% endblock %}
-        {% if languageToggle %}
-            {% include 'common/layout/languageToggle.njk' %}
-        {% endif %}
+
         <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main" {% if mainLang %} lang="{{ mainLang }}" {% endif %}>
             {% block content %}{% endblock %}
         </main>

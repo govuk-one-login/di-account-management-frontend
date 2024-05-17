@@ -43,7 +43,7 @@ const logUserVisitsContactPage = (event: AuditEvent, trace: string) => {
 };
 
 const render = (req: Request, res: Response): void => {
-  const { originalUrl, language, protocol, hostname } = req;
+  const { language, protocol, hostname } = req;
   const baseUrl = protocol + "://" + hostname;
   const isAuthenticated = req.session.user?.isAuthenticated;
   let isLoggedOut = req.cookies?.lo;
@@ -62,7 +62,6 @@ const render = (req: Request, res: Response): void => {
     contactEmailServiceUrl: PATH_DATA.TRACK_AND_REDIRECT.url,
     accessibilityStatementUrl: getAccessibilityStatementUrl(),
     webchatSource: getWebchatUrl(),
-    currentUrl: originalUrl,
     baseUrl,
     language,
     nonce: res.locals.scriptNonce,

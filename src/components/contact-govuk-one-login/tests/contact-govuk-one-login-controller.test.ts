@@ -108,7 +108,6 @@ describe("Contact GOV.UK One Login controller", () => {
         accessibilityStatementUrl:
           "https://signin.account.gov.uk/accessibility-statement",
         webchatSource: "https://example.com",
-        currentUrl: baseUrl,
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
@@ -142,7 +141,6 @@ describe("Contact GOV.UK One Login controller", () => {
         accessibilityStatementUrl:
           "https://signin.account.gov.uk/accessibility-statement",
         webchatSource: "https://example.com",
-        currentUrl: baseUrl,
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
@@ -179,7 +177,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        currentUrl: baseUrl,
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
@@ -221,7 +218,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        currentUrl: baseUrl,
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
@@ -255,7 +251,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        currentUrl: baseUrl,
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
@@ -294,7 +289,6 @@ describe("Contact GOV.UK One Login controller", () => {
         showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
-        currentUrl: baseUrl,
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
@@ -320,7 +314,6 @@ describe("Contact GOV.UK One Login controller", () => {
         accessibilityStatementUrl:
           "https://signin.account.gov.uk/accessibility-statement",
         webchatSource: "https://example.com",
-        currentUrl: baseUrl,
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
@@ -347,7 +340,6 @@ describe("Contact GOV.UK One Login controller", () => {
         accessibilityStatementUrl:
           "https://signin.account.gov.uk/accessibility-statement",
         webchatSource: "https://example.com",
-        currentUrl: baseUrl,
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,

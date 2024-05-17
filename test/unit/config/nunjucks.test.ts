@@ -9,7 +9,7 @@ import { SinonStub } from "sinon";
 
 type MyStubType = TFunction & SinonStub;
 
-describe("configureNunjucks Filters", () => {
+describe("configureNunjucks", () => {
   let app: express.Application;
   let nunjucksEnv: nunjucks.Environment;
 
@@ -50,51 +50,6 @@ describe("configureNunjucks Filters", () => {
 
       expect(result).to.equal(undefined);
       expect(fixedTStub.calledWith("test_key")).to.be.true;
-    });
-  });
-
-  describe("addLanguageParam filter", () => {
-    let addLanguageParamFilter: (
-      url: string,
-      language: string,
-      base: string
-    ) => string;
-
-    beforeEach(() => {
-      addLanguageParamFilter = nunjucksEnv.getFilter("addLanguageParam");
-    });
-
-    it("should add language parameter to URL without any existing parameters", () => {
-      const result = addLanguageParamFilter(
-        "http://example.com/path",
-        "en",
-        "http://example.com/"
-      );
-      expect(result).to.equal("/path?lng=en");
-    });
-
-    it("should add language parameter to URL with existing parameters", () => {
-      const result = addLanguageParamFilter(
-        "http://example.com/path?param1=value1&param2=value2",
-        "en",
-        "http://example.com/"
-      );
-      expect(result).to.include("/path?");
-      expect(result).to.include("param1=value1");
-      expect(result).to.include("param2=value2");
-      expect(result).to.include("lng=en");
-    });
-
-    it("should not duplicate the language parameter in URL", () => {
-      const result = addLanguageParamFilter(
-        "http://example.com/path?lng=fr&param=value",
-        "en",
-        "http://example.com/"
-      );
-      expect(result).to.include("/path?");
-      expect(result).to.include("param=value");
-      expect(result).to.include("lng=en");
-      expect(result.split("lng=").length - 1).to.equal(1); // ensures 'lng' parameter appears only once
     });
   });
 

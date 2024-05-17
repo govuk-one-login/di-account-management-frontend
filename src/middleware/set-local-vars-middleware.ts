@@ -12,6 +12,7 @@ import {
 import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
 import { getSessionIdsFrom } from "../utils/session-ids";
+import { getCurrentUrl } from "../utils/language-toggle";
 
 export function setLocalVarsMiddleware(
   req: Request,
@@ -30,6 +31,7 @@ export function setLocalVarsMiddleware(
   res.locals.uaContainerId = universalAnalyticsGtmContainerId();
   res.locals.isGa4Disabled = googleAnalytics4Disabled();
   res.locals.isUaDisabled = universalAnalyticsDisabled();
+  res.locals.currentUrl = getCurrentUrl(req);
 
   const sessionIds = getSessionIdsFrom(req);
   res.locals.sessionId = sessionIds.sessionId;

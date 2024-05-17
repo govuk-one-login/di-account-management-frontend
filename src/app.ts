@@ -13,7 +13,6 @@ import {
 } from "./config/helmet";
 import helmet from "helmet";
 import session from "express-session";
-import { setHtmlLangMiddleware } from "./middleware/html-lang-middleware";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
@@ -64,10 +63,12 @@ import { reportSuspiciousActivityRouter } from "./components/report-suspicious-a
 import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-routes";
 import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
 import { csrfErrorHandler } from "./handlers/csrf-error-handler";
+import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
   path.resolve("node_modules/govuk-frontend/"),
+  path.resolve("node_modules/@govuk-one-login/"),
 ];
 
 async function createApp(): Promise<express.Application> {
@@ -99,6 +100,7 @@ async function createApp(): Promise<express.Application> {
 
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
+
   app.use(noCacheMiddleware);
 
   await i18next
@@ -116,6 +118,8 @@ async function createApp(): Promise<express.Application> {
   } else {
     app.use(helmet(helmetConfiguration));
   }
+
+  app.use(languageToggleMiddleware);
 
   const sessionStore = getSessionStore({ session: session });
   app.use(
@@ -143,7 +147,6 @@ async function createApp(): Promise<express.Application> {
 
   app.post("*", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
-  app.use(setHtmlLangMiddleware);
 
   app.use(securityRouter);
   app.use(yourServicesRouter);

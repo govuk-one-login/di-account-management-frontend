@@ -45,12 +45,7 @@
       "welsh": "Cymraeg (Welsh)"
     },
     "languageToggle": {
-      "en": {
-        "linkText": "English"
-      },
-      "cy": {
-        "linkText": "Cymraeg"
-      }
+      "ariaLabel": "Choose Language"
     },
     "continue": {
       "label": "Continue"
