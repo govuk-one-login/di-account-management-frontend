@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { PATH_DATA } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import {
   formatValidationError,
   renderBadRequest,
@@ -54,7 +54,7 @@ export function changeEmailPost(
 
       req.session.user.state.changeEmail = getNextState(
         req.session.user.state.changeEmail.value,
-        "VERIFY_CODE_SENT"
+        EventType.VerifyCodeSent
       );
 
       return res.redirect(PATH_DATA.CHECK_YOUR_EMAIL.url);

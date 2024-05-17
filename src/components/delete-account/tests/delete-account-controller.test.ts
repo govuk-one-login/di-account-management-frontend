@@ -134,6 +134,7 @@ describe("delete account controller", () => {
         req.session.user.email = "test@test.com";
         req.session.user.subjectId = "public-subject-id";
         req.session.user.tokens = { accessToken: "token" } as any;
+        req.session.user.state.deleteAccount.value = "CHANGE_VALUE";
         req.oidc = {
           endSessionUrl: sandbox.fake.returns("logout-url"),
         } as any;
@@ -151,6 +152,7 @@ describe("delete account controller", () => {
           req,
           "public-subject-id"
         );
+        sessionStore.destroyUserSessions.restore();
       });
       it("should clear am cookie", async () => {
         req = validRequest();
@@ -159,6 +161,7 @@ describe("delete account controller", () => {
           publishToDeleteTopic: sandbox.fake(),
         };
         req.session.user.tokens = { accessToken: "token" } as any;
+        req.session.user.state.deleteAccount.value = "CHANGE_VALUE";
         req.oidc = {
           endSessionUrl: sandbox.fake.returns("logout-url"),
         } as any;

@@ -3,7 +3,7 @@ import { ERROR_CODES, PATH_DATA } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ChangePhoneNumberServiceInterface } from "./types";
 import { changePhoneNumberService } from "./change-phone-number-service";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import {
   formatValidationError,
   renderBadRequest,
@@ -53,7 +53,7 @@ export function changePhoneNumberPost(
 
       req.session.user.state.changePhoneNumber = getNextState(
         req.session.user.state.changePhoneNumber.value,
-        "VERIFY_CODE_SENT"
+        EventType.VerifyCodeSent
       );
 
       return res.redirect(PATH_DATA.CHECK_YOUR_PHONE.url);

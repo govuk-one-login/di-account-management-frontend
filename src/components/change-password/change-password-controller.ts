@@ -3,7 +3,7 @@ import { ExpressRouteFunc } from "../../types";
 import { PATH_DATA, ERROR_CODES } from "../../app.constants";
 import { ChangePasswordServiceInterface } from "./types";
 import { changePasswordService } from "./change-password-service";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import {
   renderBadRequest,
   formatValidationError,
@@ -41,7 +41,7 @@ export function changePasswordPost(
     if (response.success) {
       req.session.user.state.changePassword = getNextState(
         req.session.user.state.changePassword.value,
-        "VALUE_UPDATED"
+        EventType.ValueUpdated
       );
 
       return res.redirect(PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url);

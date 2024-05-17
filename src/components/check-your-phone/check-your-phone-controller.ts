@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ExpressRouteFunc } from "../../types";
 import { PATH_DATA } from "../../app.constants";
 import { CheckYourPhoneServiceInterface } from "./types";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import { checkYourPhoneService } from "./check-your-phone-service";
 import {
   formatValidationError,
@@ -65,7 +65,7 @@ export function checkYourPhonePost(
 
       req.session.user.state.changePhoneNumber = getNextState(
         req.session.user.state.changePhoneNumber.value,
-        "VALUE_UPDATED"
+        EventType.ValueUpdated
       );
 
       return res.redirect(PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url);
@@ -83,7 +83,7 @@ export function checkYourPhonePost(
 export function requestNewOTPCodeGet(req: Request, res: Response): void {
   req.session.user.state.changePhoneNumber = getNextState(
     req.session.user.state.changePhoneNumber.value,
-    "RESEND_CODE"
+    EventType.ResendCode
   );
 
   return res.redirect(PATH_DATA.CHANGE_PHONE_NUMBER.url);

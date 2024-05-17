@@ -3,7 +3,7 @@ import { PATH_DATA } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ChangeAuthenticatorAppServiceInterface } from "./types";
 import { changeAuthenticatorAppService } from "./change-authenticator-app-service";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import { formatValidationError } from "../../utils/validation";
 import { verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
@@ -89,7 +89,7 @@ export function changeAuthenticatorAppPost(
 
       req.session.user.state.changeAuthenticatorApp = getNextState(
         req.session.user.state.changeAuthenticatorApp.value,
-        "VALUE_UPDATED"
+        EventType.ValueUpdated
       );
 
       return res.redirect(PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url);

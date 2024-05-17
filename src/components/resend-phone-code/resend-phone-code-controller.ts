@@ -5,7 +5,7 @@ import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types"
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 import { BadRequestError } from "../../utils/errors";
 import { getLastNDigits } from "../../utils/phone-number";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import xss from "xss";
 import {
   formatValidationError,
@@ -46,7 +46,7 @@ export function resendPhoneCodePost(
 
       req.session.user.state.changePhoneNumber = getNextState(
         req.session.user.state.changePhoneNumber.value,
-        "VERIFY_CODE_SENT"
+        EventType.VerifyCodeSent
       );
 
       return res.redirect(PATH_DATA.CHECK_YOUR_PHONE.url);

@@ -23,7 +23,7 @@ describe("check your phone controller", () => {
     req = {
       body: {},
       session: {
-        user: { state: { changePhoneNumber: {} } },
+        user: { state: { changePhoneNumber: { value: "CHANGE_VALUE" } } },
         mfaMethods: [
           {
             mfaIdentifier: 111111,
@@ -67,6 +67,7 @@ describe("check your phone controller", () => {
 
       req.session.user.tokens = { accessToken: "token" } as any;
       req.body.code = "123456";
+      req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
@@ -103,6 +104,7 @@ describe("check your phone controller", () => {
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
+      req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";

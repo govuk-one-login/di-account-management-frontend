@@ -3,7 +3,7 @@ import { ExpressRouteFunc } from "../../types";
 import { DeleteAccountServiceInterface } from "./types";
 import { deleteAccountService } from "./delete-account-service";
 import { PATH_DATA } from "../../app.constants";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import { getAppEnv, getBaseUrl, getSNSDeleteTopic } from "../../config";
 import { clearCookies, destroyUserSessions } from "../../utils/session-store";
 import {
@@ -76,7 +76,7 @@ export function deleteAccountPost(
 
     req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,
-      "VALUE_UPDATED"
+      EventType.ValueUpdated
     );
 
     const logoutUrl = req.oidc.endSessionUrl({

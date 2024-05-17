@@ -9,6 +9,7 @@ import {
   addMfaMethodGet,
 } from "../add-mfa-methods-controller";
 import { PATH_DATA } from "../../../app.constants";
+import { EventType } from "../../../utils/state-machine";
 
 describe("addMfaMethodGet", () => {
   let sandbox: sinon.SinonSandbox;
@@ -20,10 +21,13 @@ describe("addMfaMethodGet", () => {
 
     req = {
       body: {},
-      session: { user: { state: { addMfaMethod: ["AUTHENTICATED"] } } } as any,
+      session: {
+        user: { state: { addMfaMethod: { value: EventType.Authenticated } } },
+      } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
       t: sandbox.fake(),
+      log: { error: sandbox.fake() },
     };
     res = {
       render: sandbox.fake(),
@@ -70,7 +74,9 @@ describe("addMfaMethodPost", () => {
     req = {
       body: {},
       log: { error: sandbox.fake() } as any,
-      session: { user: { state: { addMfaMethod: ["SELECT_APP"] } } } as any,
+      session: {
+        user: { state: { addMfaMethod: { value: "SMS" } } },
+      } as any,
     };
     res = {
       status: sandbox.fake(),

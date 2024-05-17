@@ -1,7 +1,7 @@
-import { AccountManagementEvent, UserJourney } from "./utils/state-machine";
+import { EventType, UserJourney } from "./utils/state-machine";
 
 export const PATH_DATA: {
-  [key: string]: { url: string; event?: string; type?: UserJourney };
+  [key: string]: { url: string; event?: EventType; type?: UserJourney };
 } = {
   CONTACT: { url: "/contact-gov-uk-one-login" },
   SIGN_IN_HISTORY: { url: "/activity-history" },
@@ -13,92 +13,92 @@ export const PATH_DATA: {
   ENTER_PASSWORD: { url: "/enter-password" },
   ADD_MFA_METHOD: {
     url: "/add-mfa-method",
-    event: "SELECTED_APP",
+    event: EventType.SelectedApp,
     type: UserJourney.AddMfaMethod,
   },
   ADD_MFA_METHOD_APP: {
     url: "/add-mfa-method-app",
-    event: "VALUE_UPDATED",
+    event: EventType.ValueUpdated,
     type: UserJourney.AddMfaMethod,
   },
   ADD_MFA_METHOD_APP_CONFIRMATION: {
     url: "/add-mfa-method-app-confirmation",
-    event: "CONFIRMATION",
+    event: EventType.Confirmation,
     type: UserJourney.AddMfaMethod,
   },
   ADD_MFA_METHOD_SMS: {
     url: "/add-mfa-method-sms",
-    event: "VALUE_UPDATED",
+    event: EventType.ValueUpdated,
     type: UserJourney.AddMfaMethod,
   },
   CHANGE_EMAIL: {
     url: "/change-email",
-    event: "VERIFY_CODE_SENT",
+    event: EventType.VerifyCodeSent,
     type: UserJourney.ChangeEmail,
   },
   CHECK_YOUR_EMAIL: {
     url: "/check-your-email",
-    event: "VALUE_UPDATED",
+    event: EventType.ValueUpdated,
     type: UserJourney.ChangeEmail,
   },
   REQUEST_NEW_CODE_EMAIL: {
     url: "/request-new-email-code",
-    event: "RESEND_CODE",
+    event: EventType.ResendCode,
     type: UserJourney.ChangeEmail,
   },
   EMAIL_UPDATED_CONFIRMATION: {
     url: "/email-updated-confirmation",
-    event: "CONFIRMATION",
+    event: EventType.Confirmation,
     type: UserJourney.ChangeEmail,
   },
   CHANGE_PASSWORD: {
     url: "/change-password",
-    event: "VALUE_UPDATED",
+    event: EventType.ValueUpdated,
     type: UserJourney.ChangePassword,
   },
   PASSWORD_UPDATED_CONFIRMATION: {
     url: "/password-updated-confirmation",
-    event: "CONFIRMATION",
+    event: EventType.Confirmation,
     type: UserJourney.ChangePassword,
   },
   CHANGE_PHONE_NUMBER: {
     url: "/change-phone-number",
-    event: "VERIFY_CODE_SENT",
+    event: EventType.VerifyCodeSent,
     type: UserJourney.ChangePhoneNumber,
   },
   CHANGE_AUTHENTICATOR_APP: {
     url: "/change-authenticator-app",
-    event: "VALUE_UPDATED",
+    event: EventType.ValueUpdated,
     type: UserJourney.ChangeAuthenticatorApp,
   },
   CHECK_YOUR_PHONE: {
     url: "/check-your-phone",
-    event: "VALUE_UPDATED",
+    event: EventType.ValueUpdated,
     type: UserJourney.ChangePhoneNumber,
   },
   REQUEST_NEW_CODE_OTP: {
     url: "/request-new-opt-code",
-    event: "RESEND_CODE",
+    event: EventType.ResendCode,
     type: UserJourney.ChangePhoneNumber,
   },
   PHONE_NUMBER_UPDATED_CONFIRMATION: {
     url: "/phone-number-updated-confirmation",
-    event: "CONFIRMATION",
+    event: EventType.Confirmation,
     type: UserJourney.ChangePhoneNumber,
   },
   AUTHENTICATOR_APP_UPDATED_CONFIRMATION: {
     url: "/authenticator-app-updated-confirmation",
-    event: "CONFIRMATION",
+    event: EventType.Confirmation,
     type: UserJourney.ChangeAuthenticatorApp,
   },
   DELETE_ACCOUNT: {
     url: "/delete-account",
-    event: "VALUE_UPDATED",
+    event: EventType.ValueUpdated,
     type: UserJourney.DeleteAccount,
   },
   ACCOUNT_DELETED_CONFIRMATION: {
     url: "/account-deleted-confirmation",
-    event: "CONFIRMATION",
+    event: EventType.Confirmation,
     type: UserJourney.DeleteAccount,
   },
   AUTH_CALLBACK: { url: "/auth/callback" },
@@ -125,12 +125,12 @@ export const MFA_METHODS = {
   SMS: {
     type: "sms",
     path: PATH_DATA.ADD_MFA_METHOD_SMS,
-    event: "SELECTED_SMS" as AccountManagementEvent,
+    event: EventType.SelectedSms,
   },
   APP: {
     type: "app",
     path: PATH_DATA.ADD_MFA_METHOD_APP,
-    event: "SELECTED_APP" as AccountManagementEvent,
+    event: EventType.SelectedApp,
   },
 };
 

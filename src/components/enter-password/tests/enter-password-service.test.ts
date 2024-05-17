@@ -19,7 +19,7 @@ describe("enterPasswordService", () => {
   });
   afterEach(() => {
     sandbox.restore();
-    nock.cleanAll;
+    nock.cleanAll();
   });
 
   it("Check if Authenticated  ", async () => {

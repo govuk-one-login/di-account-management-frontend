@@ -8,6 +8,7 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import {
+  EventType,
   getInitialState,
   getNextState,
   UserJourney,
@@ -87,7 +88,7 @@ export function enterPasswordPost(
     if (isAuthenticated) {
       req.session.user.state[requestType] = getNextState(
         req.session.user.state[requestType].value,
-        "AUTHENTICATED"
+        EventType.Authenticated
       );
 
       return res.redirect(REDIRECT_PATHS[requestType]);

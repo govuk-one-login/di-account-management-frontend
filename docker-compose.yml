@@ -2,16 +2,15 @@ version: "3.8"
 services:
   localstack:
     container_name: localstack
-    image: localstack/localstack:1.3.1
+    image: localstack/localstack:3.0.0
     ports:
       - "4566:4566"
       - "4569:4569"
     environment:
-      - SERVICES=kms,sns,dynamodb,sqs
-      - HOSTNAME_EXTERNAL=localhost
+      - SERVICES=kms,sns,dynamodb,sqs,stepfunctions
+      - LOCALSTACK_HOST=localhost
       - DYNAMODB_SHARE_DB=1                                       # Removes regions and allows NoSQL Workbench to work.
       - DEBUG=${DEBUG:-0}
-      - KMS_PROVIDER=local-kms
       - AWS_ACCESS_KEY_ID=na
       - AWS_SECRET_ACCESS_KEY=na
       - MY_ONE_LOGIN_USER_ID=${MY_ONE_LOGIN_USER_ID}

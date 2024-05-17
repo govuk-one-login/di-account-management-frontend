@@ -20,7 +20,7 @@ import {
 
 import { GetKeyFunction } from "jose/dist/types/types";
 import { logger } from "../../../utils/logger";
-import { destroyUserSessions } from "../../../utils/session-store";
+import * as SessionStore from "../../../utils/session-store";
 
 describe("global logout controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -29,6 +29,7 @@ describe("global logout controller", () => {
   let issuerJWKS: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
   let keySet: GenerateKeyPairResult;
   let loggerSpy: sinon.SinonSpy;
+  let destroyUserSessionsSpy: sinon.SinonSpy;
 
   const validIssuer = "urn:example:issuer";
   const validAudience = "urn:example:audience";
@@ -99,10 +100,13 @@ describe("global logout controller", () => {
     };
 
     loggerSpy = sandbox.spy(logger, "error");
+    destroyUserSessionsSpy = sandbox.spy(SessionStore, "destroyUserSessions");
   });
 
   afterEach(async () => {
     sandbox.restore();
+    loggerSpy.restore();
+    destroyUserSessionsSpy.restore();
   });
 
   describe("globalLogoutPost", async () => {
@@ -304,13 +308,10 @@ describe("global logout controller", () => {
     it("should return 200 if logout_token is present and valid", async () => {
       req = validRequest(await generateValidToken(validLogoutToken));
 
-      const sessionStore = require("../../../utils/session-store");
-      sandbox.stub(sessionStore, "destroyUserSessions").resolves();
-
       await globalLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
-      expect(destroyUserSessions).to.have.been.calledWith(req, "123456");
+      expect(destroyUserSessionsSpy).to.have.been.calledWith(req, "123456");
     });
   });
 });

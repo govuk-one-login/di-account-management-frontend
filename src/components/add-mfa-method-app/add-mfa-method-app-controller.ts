@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { addMfaMethod, verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
 import { formatValidationError } from "../../utils/validation";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import { renderMfaMethodPage } from "../common/mfa";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
@@ -93,9 +93,8 @@ export async function addMfaAppMethodPost(
 
     req.session.user.state.addMfaMethod = getNextState(
       req.session.user.state.addMfaMethod.value,
-      "VALUE_UPDATED"
+      EventType.ValueUpdated
     );
-
     return res.redirect(PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url);
   } catch (e) {
     req.log.error(e);

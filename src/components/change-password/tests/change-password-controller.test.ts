@@ -76,6 +76,7 @@ describe("change password controller", () => {
     it("should redirect to /password-updated-confirmation page", async () => {
       // Arrange
       req.session.user.tokens = { accessToken: "token" } as any;
+      req.session.user.state.changePassword.value = "CHANGE_VALUE";
       req.body.password = "Password1";
 
       // Act
