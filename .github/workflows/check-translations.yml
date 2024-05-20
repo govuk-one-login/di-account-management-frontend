@@ -25,6 +25,8 @@ jobs:
           git fetch origin +refs/pull/${{ github.event.pull_request.number }}/merge
           # Generate a list of changed files
           git diff --name-only FETCH_HEAD > changed_files.txt
+          # Print the list of changed files
+          cat changed_files.txt
   
       - name: Validate translation files
         run: |
