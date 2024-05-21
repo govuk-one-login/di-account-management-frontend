@@ -6,52 +6,51 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% set pageTitleName = 'pages.changePhoneNumber.title' | translate %}
 {% block content %}
+  {% include "common/errors/errorSummary.njk" %}
 
-{% include "common/errors/errorSummary.njk" %}
+  <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.changePhoneNumber.header' |
+    translate}}</h1>
 
-<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.changePhoneNumber.header' |
-  translate}}</h1>
+  <form action="/change-phone-number" method="post" novalidate>
 
-<form action="/change-phone-number" method="post" novalidate>
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
 
-  <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+    <p class="govuk-body">{{'pages.changePhoneNumber.info.paragraph1' | translate }}</p>
 
-  <p class="govuk-body">{{'pages.changePhoneNumber.info.paragraph1' | translate}}</p>
-
-  {{ govukInput({
-  label: {
-  text: 'pages.changePhoneNumber.ukPhoneNumber.label' | translate
-  },
-  classes: "govuk-!-width-two-thirds",
-  id: "phoneNumber",
-  name: "phoneNumber",
-  type: "tel",
-  autocomplete: "tel",
-  errorMessage: {
-    attributes: { "data-test-id": "phoneNumber-error"},
-    text: errors['phoneNumber'].text
-  } if (errors['phoneNumber'])})
-  }}
-
-  {% set internationalNumberHtml %}
     {{ govukInput({
-      id: "internationalPhoneNumber",
-      name: "internationalPhoneNumber",
+      label: {
+      text: 'pages.changePhoneNumber.ukPhoneNumber.label' | translate
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "phoneNumber",
+      name: "phoneNumber",
       type: "tel",
       autocomplete: "tel",
-      classes: "govuk-!-width-two-thirds",
-      label: {
-        text: 'pages.changePhoneNumber.internationalPhoneNumber.label' | translate
-      },
-      hint: {
-        text: 'pages.changePhoneNumber.internationalPhoneNumber.hint' | translate
-      },
       errorMessage: {
-        attributes: { "data-test-id": "internationalPhoneNumber-error"},
-        text: errors['internationalPhoneNumber'].text
-      } if (errors['internationalPhoneNumber'])
-    }) }}
-  {% endset -%}
+        attributes: { "data-test-id": "phoneNumber-error"},
+        text: errors['phoneNumber'].text
+      } if (errors['phoneNumber'])})
+    }}
+
+    {% set internationalNumberHtml %}
+      {{ govukInput({
+        id: "internationalPhoneNumber",
+        name: "internationalPhoneNumber",
+        type: "tel",
+        autocomplete: "tel",
+        classes: "govuk-!-width-two-thirds",
+        label: {
+          text: 'pages.changePhoneNumber.internationalPhoneNumber.label' | translate
+        },
+        hint: {
+          text: 'pages.changePhoneNumber.internationalPhoneNumber.hint' | translate
+        },
+        errorMessage: {
+          attributes: { "data-test-id": "internationalPhoneNumber-error"},
+          text: errors['internationalPhoneNumber'].text
+        } if (errors['internationalPhoneNumber'])
+      }) }}
+    {% endset -%}
 
     {{ govukCheckboxes({
       items: [
@@ -68,18 +67,15 @@
       ]
     }) }}
 
+    {{ govukButton({
+      "text": button_text|default('general.continue.label' | translate, true),
+      "type": "Submit",
+      "preventDoubleClick": true
+    }) }}
+  </form>
 
-
-  {{ govukButton({
-  "text": button_text|default('general.continue.label' | translate, true),
-  "type": "Submit",
-  "preventDoubleClick": true
-  }) }}
-
-</form>
-
-<a href="/manage-your-account" class="govuk-link govuk-body">
+  <a href="/manage-your-account" class="govuk-link govuk-body">
     {{'pages.changePhoneNumber.info.backLink' | translate}}
-</a>
-{{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change phone number", contentId:"39a31338-cadc-4e09-a74d-bd9f0dd68d2f",loggedInStatus:true,dynamic:true})}}
+  </a>
+  {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change phone number", contentId:"39a31338-cadc-4e09-a74d-bd9f0dd68d2f",loggedInStatus:true,dynamic:true})}}
 {% endblock %}

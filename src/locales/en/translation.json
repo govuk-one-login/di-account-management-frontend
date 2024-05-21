@@ -14,7 +14,7 @@
     },
     "yes": "Yes",
     "no": "No",
-    "backToAccountButtonText": "Back to security",
+    "backToAccountButtonText": "Back to Security",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "cookie": {
       "cookieBanner": {
@@ -306,7 +306,6 @@
       "informationBox": {
         "heading": "Services you can use with GOV.UK One Login",
         "paragraph1": "GOV.UK One Login is new. At the moment you can only use it to access some government services.",
-
         "paragraph2": "In the future, you'll be able to use GOV.UK One Login to access all services on GOV.UK.",
         "paragraph3": "See the <a class=\"govuk-link\" href=\"[serviceListLink]\">services you can use with GOV.UK One Login</a>.",
         "link": "https://www.gov.uk/using-your-gov-uk-one-login/services"
@@ -316,24 +315,20 @@
       "title": "Enter your password",
       "changeEmail": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can change your email address.",
-        "backLink": "I do not want to change my email address"
+        "paragraph": "We need to make sure it’s you before you can change your email address."
       },
       "changePassword": {
         "title": "Enter your current password",
         "header": "Enter your current password",
-        "paragraph": "We need to make sure it’s you before you can change your password.",
-        "backLink": "I do not want to change my password"
+        "paragraph": "We need to make sure it’s you before you can change your password."
       },
       "changePhoneNumber": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can change your phone number.",
-        "backLink": "I do not want to change my phone number"
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "deleteAccount": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can delete your GOV.UK One Login.",
-        "backLink": "I do not want to delete my GOV.UK One Login"
+        "paragraph": "We need to make sure it’s you before you can delete your GOV.UK One Login."
       },
       "password": {
         "label": "Enter your password",
@@ -344,9 +339,9 @@
       },
       "addMfaMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can manage how you get your security codes",
-        "backLink": "Back"
-      }
+        "paragraph": "We need to make sure it’s you before you can manage how you get your security codes"
+      },
+      "cancelText" : "Cancel and go back to Security"
     },
     "changeEmail": {
       "title": "Enter your new email address",
@@ -362,7 +357,7 @@
         }
       },
       "dontWantTo": {
-        "changeEmailLinkText": "I do not want to change my email address"
+        "changeEmailLinkText": "Cancel and go back to Security"
       }
     },
     "updateEmailConfirmation": {
@@ -377,7 +372,7 @@
     "updatePhoneNumberConfirmation": {
       "title": "You’ve changed your phone number",
       "panelText": "You’ve changed your phone number",
-      "summaryText": "Your phone number has been changed to [mobile]."
+      "summaryText": "We’ll send security codes to your phone number ending with <strong>[mobile]</strong>."
     },
     "deleteAccountConfirmation": {
       "title": "You’ve deleted your GOV.UK One Login",
@@ -415,7 +410,7 @@
         "summary": "How to create a secure password",
         "text": "A good way to create a secure and memorable password is to use 3 random words. You can use numbers, symbols and spaces."
       },
-      "backLink": "I do not want to change my password"
+      "backLink": "Cancel and go back to Security"
     },
     "checkYourEmail": {
       "title": "Check your email",
@@ -449,9 +444,9 @@
     "checkYourPhone": {
       "title": "Check your phone",
       "header": "Check your phone",
-      "text": "We have sent a code to [mobile].",
+      "text": "We have sent a code to your phone number ending with <strong>[mobile]</strong>",
       "info": {
-        "paragraph": "It might take a few minutes to arrive. The code will expire after  15 minutes."
+        "paragraph": "It might take a few minutes to arrive. The code will expire after 15 minutes."
       },
       "details": {
         "summaryText": "Problems with the code",
@@ -479,14 +474,14 @@
       "paragraph5": "If you need a GOV.UK One Login in the future, you’ll have to create a new one.",
       "details": "Deleting your GOV.UK One Login will not affect any other government accounts you may have, such as Government Gateway or Universal Credit.",
       "deleteAccount": "Delete your GOV.UK One Login",
-      "doNotDeleteAccount": "Cancel and go back to security"
+      "doNotDeleteAccount": "Cancel and go back to Security"
     },
     "changePhoneNumber": {
       "title": "Enter your new mobile phone number",
       "header": "Enter your new mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
-        "backLink": "I do not want to change my phone number"
+        "backLink": "Cancel and go back to Security"
       },
       "ukPhoneNumber": {
         "label": "UK mobile phone number",
@@ -524,7 +519,7 @@
       "continue": "Get security code",
       "message": "Text messages can sometimes take a few minutes to arrive.",
       "phoneNumber": {
-        "insetText": "We will send a code to [mobile]",
+        "insetText": "We will send a code to your phone number ending with <strong>[mobile]</strong>",
         "paragraph": "Text messages can sometimes take a few minutes to arrive."
       },
       "email": {

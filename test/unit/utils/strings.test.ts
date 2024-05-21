@@ -5,7 +5,6 @@ import {
   containsNumbersOnly,
   isSafeString,
   isValidUrl,
-  redactPhoneNumber,
   zeroPad,
 } from "../../../src/utils/strings";
 import { sinon } from "../../utils/test-utils";
@@ -49,20 +48,6 @@ describe("string-helpers", () => {
 
     it("should return true when string contains numeric characters only", () => {
       expect(containsNumbersOnly("123456")).to.equal(true);
-    });
-  });
-
-  describe("obfuscatePhoneNumber", () => {
-    it("should return obfuscated phone number when valid uk phone number", () => {
-      expect(redactPhoneNumber("07700900796")).to.equal("*******0796");
-    });
-
-    it("should return obfuscated phone number when valid international phone number", () => {
-      expect(redactPhoneNumber("+330645453322")).to.equal("*********3322");
-    });
-
-    it("should return undefined when phone number is is empty", () => {
-      expect(redactPhoneNumber("")).to.equal(undefined);
     });
   });
 
