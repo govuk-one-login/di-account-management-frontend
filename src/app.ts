@@ -64,6 +64,8 @@ import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-r
 import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
 import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
+import { logger } from "./utils/logger";
+import { safeTranslate } from "./utils/safeTranslate";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -118,6 +120,14 @@ async function createApp(): Promise<express.Application> {
   } else {
     app.use(helmet(helmetConfiguration));
   }
+
+  app.use((req, res, next) => {
+    const translate = req.t.bind(req);
+    req.t = (key: string): string => {
+      return safeTranslate(translate, key, req.language, {}) as string;
+    };
+    next();
+  });
 
   app.use(languageToggleMiddleware);
 
