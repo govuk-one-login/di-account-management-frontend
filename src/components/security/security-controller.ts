@@ -42,6 +42,19 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
         } else if (method.mfaMethodType === "AUTH_APP") {
           key = req.t("pages.security.mfaSection.summaryList.app.title");
           value = req.t("pages.security.mfaSection.summaryList.app.value");
+
+          actions = {
+            items: [
+              {
+                attributes: { "data-test-id": "change-authenticator-app" },
+                href: "/enter-password?type=changeAuthenticatorApp",
+                text: req.t("general.change"),
+                visuallyHiddenText: req.t(
+                  "pages.security.mfaSection.summaryList.app.hiddenText"
+                ),
+              },
+            ],
+          };
         } else {
           throw new Error(`Unexpected mfaMethodType: ${method.mfaMethodType}`);
         }

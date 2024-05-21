@@ -148,7 +148,7 @@
           },
           "app": {
             "title": "Authenticator app",
-            "value": "",
+            "value": "Change authenticator app",
             "hiddenText": "Authenticator app"
           }
         },
@@ -326,6 +326,11 @@
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
+      "changeAuthenticatorApp": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can change your authenticator app.",
+        "backLink": "I do not want to change my authenticator app"
+      },
       "deleteAccount": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can delete your GOV.UK One Login."
@@ -373,6 +378,11 @@
       "title": "You’ve changed your phone number",
       "panelText": "You’ve changed your phone number",
       "summaryText": "We’ll send security codes to your phone number ending with <strong>[mobile]</strong>."
+    },
+    "updateAuthenticatorAppConfirmation": {
+      "title": "You’ve changed your authenticator app",
+      "panelText": "You’ve changed your authenticator app",
+      "summaryText": "Your authenticator app has been changed."
     },
     "deleteAccountConfirmation": {
       "title": "You’ve deleted your GOV.UK One Login",
@@ -502,6 +512,32 @@
           "plusNumericOnly": "Enter a mobile phone number using only numbers or the + symbol",
           "internationalFormat": "Enter a mobile phone number in the correct format, including the country code"
         }
+      }
+    },
+    "changeAuthenticatorApp": {
+      "title": "Change your authenticator app",
+      "step1": {
+        "text": "1. Open your authenticator app on your smartphone, tablet, or computer.",
+        "hintTitle": "I don't have an authenticator app",
+        "hintText": "<p>You can download an authenticator app for your smartphone or tablet from your app store.</p><p>If you don't have a smartphone or tablet, search online for an authenticator app for your computer.</p><p>You can use any authenticator app.</p>"
+      },
+      "step2": {
+        "text": "2. Use your authenticator app to scan the QR code.",
+        "hintTitle": "I cannot scan the QR code",
+        "hintText": "<p>You can enter the secret key into your authenticator app manually.</p><p>Secret Key:<br/><strong>[secretKey]</strong></p><p>Some authenticator apps call the secret key a 'code'.</p>"
+      },
+      "step3": {
+        "text": "3. The authenticator app will show a security code."
+      },
+      "step4": {
+        "text": "4. Enter the security code.",
+        "label": "Security code",
+        "hint": "This is the 6-digit code shown in your authenticator app"
+      },
+      "errors": {
+        "invalidCode": "The security code you entered is not correct. Try entering it again or wait for your authenticator app to give you a new code",
+        "required": "Enter the security code shown in your authenticator app",
+        "maxLength": "Enter the security code using 6 digits"
       }
     },
     "signedOut": {

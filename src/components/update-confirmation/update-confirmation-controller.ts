@@ -77,6 +77,19 @@ export function updatePhoneNumberConfirmationGet(
   });
 }
 
+export function updateAuthenticatorAppConfirmationGet(
+  req: Request,
+  res: Response
+): void {
+  delete req.session.user.state.changeAuthenticatorApp;
+
+  res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.updateAuthenticatorAppConfirmation.title"),
+    panelText: req.t("pages.updateAuthenticatorAppConfirmation.panelText"),
+    summaryText: req.t("pages.updateAuthenticatorAppConfirmation.summaryText"),
+  });
+}
+
 export function deleteAccountConfirmationGet(
   req: Request,
   res: Response
