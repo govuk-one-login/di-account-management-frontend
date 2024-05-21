@@ -64,7 +64,6 @@ import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-r
 import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
 import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
-import { logger } from "./utils/logger";
 import { safeTranslate } from "./utils/safeTranslate";
 
 const APP_VIEWS = [
