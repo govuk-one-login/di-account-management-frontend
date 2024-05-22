@@ -700,6 +700,12 @@
         "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
         "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "tPCCSyoMaFNbLTt0gEW609h15Uc": {
+        "header": "Rheoli trwyddedau pysgota a datganiadau dalfeydd yng Nghymru",
+        "description": "Gwneud cais am drwydded bysgota a chyflwyno eich datganiadau dalfeydd yng Nghymru.",
+        "link_text": "Ewch i’ch cyfrif trwyddedau pysgota a datganiadau dalfeydd",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "integration": {
@@ -837,6 +843,12 @@
         "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
         "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "tPCCSyoMaFNbLTt0gEW609h15Uc": {
+        "header": "Rheoli trwyddedau pysgota a datganiadau dalfeydd yng Nghymru",
+        "description": "Gwneud cais am drwydded bysgota a chyflwyno eich datganiadau dalfeydd yng Nghymru.",
+        "link_text": "Ewch i’ch cyfrif trwyddedau pysgota a datganiadau dalfeydd",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "staging": {
@@ -962,6 +974,12 @@
         "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
         "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Rheoli trwyddedau pysgota a datganiadau dalfeydd yng Nghymru",
+        "description": "Gwneud cais am drwydded bysgota a chyflwyno eich datganiadau dalfeydd yng Nghymru.",
+        "link_text": "Ewch i’ch cyfrif trwyddedau pysgota a datganiadau dalfeydd",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "build": {
@@ -1087,6 +1105,12 @@
         "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
         "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Rheoli trwyddedau pysgota a datganiadau dalfeydd yng Nghymru",
+        "description": "Gwneud cais am drwydded bysgota a chyflwyno eich datganiadau dalfeydd yng Nghymru.",
+        "link_text": "Ewch i’ch cyfrif trwyddedau pysgota a datganiadau dalfeydd",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "dev": {
@@ -1212,6 +1236,12 @@
         "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
         "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Rheoli trwyddedau pysgota a datganiadau dalfeydd yng Nghymru",
+        "description": "Gwneud cais am drwydded bysgota a chyflwyno eich datganiadau dalfeydd yng Nghymru.",
+        "link_text": "Ewch i’ch cyfrif trwyddedau pysgota a datganiadau dalfeydd",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "local": {
@@ -1337,6 +1367,12 @@
         "description": "Cael mynediad i'ch apwyntiadau a gwybodaeth am eich gofynion prawf.",
         "link_text": "Ewch i'ch cyfrif cynllunio eich dyfodol",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Rheoli trwyddedau pysgota a datganiadau dalfeydd yng Nghymru",
+        "description": "Gwneud cais am drwydded bysgota a chyflwyno eich datganiadau dalfeydd yng Nghymru.",
+        "link_text": "Ewch i’ch cyfrif trwyddedau pysgota a datganiadau dalfeydd",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     }
   }

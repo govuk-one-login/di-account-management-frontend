@@ -341,7 +341,7 @@
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get your security codes"
       },
-      "cancelText" : "Cancel and go back to Security"
+      "cancelText": "Cancel and go back to Security"
     },
     "changeEmail": {
       "title": "Enter your new email address",
@@ -760,6 +760,12 @@
         "description": "Access your appointments and information about your probation requirements.",
         "link_text": "Go to your plan your future account",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "tPCCSyoMaFNbLTt0gEW609h15Uc": {
+        "header": "Manage fishing permits and catch returns in Wales",
+        "description": "Apply for a fishing permit and submit your catch returns in Wales.",
+        "link_text": "Go to your fishing permits and catch returns account",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "integration": {
@@ -905,6 +911,12 @@
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
       }
     },
+    "tPCCSyoMaFNbLTt0gEW609h15Uc": {
+      "header": "Manage fishing permits and catch returns in Wales",
+      "description": "Apply for a fishing permit and submit your catch returns in Wales.",
+      "link_text": "Go to your fishing permits and catch returns account",
+      "link_href": "https://fishingpermitsandcatches.service.gov.wales"
+    },
     "staging": {
       "gov-uk": {
         "header": "GOV.UK email subscriptions",
@@ -1034,6 +1046,12 @@
         "description": "Access your appointments and information about your probation requirements.",
         "link_text": "Go to your plan your future account",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Manage fishing permits and catch returns in Wales",
+        "description": "Apply for a fishing permit and submit your catch returns in Wales.",
+        "link_text": "Go to your fishing permits and catch returns account",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "build": {
@@ -1165,6 +1183,12 @@
         "description": "Access your appointments and information about your probation requirements.",
         "link_text": "Go to your plan your future account",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Manage fishing permits and catch returns in Wales",
+        "description": "Apply for a fishing permit and submit your catch returns in Wales.",
+        "link_text": "Go to your fishing permits and catch returns account",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "dev": {
@@ -1296,6 +1320,12 @@
         "description": "Access your appointments and information about your probation requirements.",
         "link_text": "Go to your plan your future account",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Manage fishing permits and catch returns in Wales",
+        "description": "Apply for a fishing permit and submit your catch returns in Wales.",
+        "link_text": "Go to your fishing permits and catch returns account",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     },
     "local": {
@@ -1427,6 +1457,12 @@
         "description": "Access your appointments and information about your probation requirements.",
         "link_text": "Go to your plan your future account",
         "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Manage fishing permits and catch returns in Wales",
+        "description": "Apply for a fishing permit and submit your catch returns in Wales.",
+        "link_text": "Go to your fishing permits and catch returns account",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       }
     }
   }
