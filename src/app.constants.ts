@@ -87,7 +87,7 @@ export const PATH_DATA: {
     type: UserJourney.ChangePhoneNumber,
   },
   AUTHENTICATOR_APP_UPDATED_CONFIRMATION: {
-    url: "/authenticator-app-updated-confirmation",
+    url: "/change-auth-app-confirmation",
     event: EventType.Confirmation,
     type: UserJourney.ChangeAuthenticatorApp,
   },

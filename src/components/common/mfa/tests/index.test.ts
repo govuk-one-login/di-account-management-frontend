@@ -66,6 +66,7 @@ describe("render mfa page", () => {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
+      errors: {},
       errorList: [],
     });
   });
@@ -115,6 +116,12 @@ describe("render mfa page", () => {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
+      errors: {
+        code: {
+          text: "pages.renderUpdateAuthAppPage.errors.maxLength",
+          href: "#code",
+        },
+      },
       errorList: [
         {
           text: "pages.renderUpdateAuthAppPage.errors.maxLength",

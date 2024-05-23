@@ -10,6 +10,7 @@ import assert from "node:assert";
 import { MfaMethod } from "../../utils/mfa/types";
 import { generateSessionDetails, renderMfaMethodPage } from "../common/mfa";
 import { UpdateInformationInput } from "../../utils/types";
+import { containsNumbersOnly } from "../../utils/strings";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
 
@@ -18,13 +19,7 @@ export async function changeAuthenticatorAppGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderMfaMethodPage(
-    CHANGE_AUTHENTICATOR_APP_TEMPLATE,
-    req,
-    res,
-    next,
-    {}
-  );
+  return renderMfaMethodPage(CHANGE_AUTHENTICATOR_APP_TEMPLATE, req, res, next);
 }
 
 export function changeAuthenticatorAppPost(
@@ -35,6 +30,19 @@ export function changeAuthenticatorAppPost(
 
     assert(authAppSecret, "authAppSecret not set in body");
 
+    if (!containsNumbersOnly(code)) {
+      return renderMfaMethodPage(
+        CHANGE_AUTHENTICATOR_APP_TEMPLATE,
+        req,
+        res,
+        next,
+        formatValidationError(
+          "code",
+          req.t("pages.addMfaMethodApp.errors.invalidFormat")
+        )
+      );
+    }
+
     if (code.length !== 6) {
       return renderMfaMethodPage(
         CHANGE_AUTHENTICATOR_APP_TEMPLATE,
@@ -43,7 +51,7 @@ export function changeAuthenticatorAppPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.renderUpdateAuthAppPage.errors.maxLength")
+          req.t("pages.addMfaMethodApp.errors.maxLength")
         )
       );
     }
@@ -56,7 +64,7 @@ export function changeAuthenticatorAppPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.changeAuthenticatorApp.errors.invalidCode")
+          req.t("pages.addMfaMethodApp.errors.invalidCode")
         )
       );
     }
