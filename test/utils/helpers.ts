@@ -1,13 +1,12 @@
 import { Session } from "express-session";
-import { NextFunction, Request, Response } from "express";
-import { Middleware } from "express-validator/src/base";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 
 export function testComponent(componentId: string): string {
   return `[data-test-id='${componentId}']`;
 }
 export function mockSessionMiddleware(
   sessionData: Partial<Session>
-): Middleware {
+): RequestHandler {
   return function (req: Request, res: Response, next: NextFunction) {
     req.session = sessionData as Session;
     next();
