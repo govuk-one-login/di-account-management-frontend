@@ -8,11 +8,8 @@ import { formatValidationError } from "../../utils/validation";
 import { verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
 import { MfaMethod } from "../../utils/mfa/types";
-import {
-  generateSessionDetails,
-  generateUpdateInformationInput,
-  renderMfaMethodPage,
-} from "../common/mfa";
+import { generateSessionDetails, renderMfaMethodPage } from "../common/mfa";
+import { UpdateInformationInput } from "../../utils/types";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
 
@@ -66,11 +63,12 @@ export function changeAuthenticatorAppPost(
 
     const { email } = req.session.user;
 
-    const updateInput = await generateUpdateInformationInput(
+    const updateInput: UpdateInformationInput = {
       email,
-      authAppSecret,
-      code
-    );
+      updatedValue: authAppSecret,
+      otp: code,
+    };
+
     const sessionDetails = await generateSessionDetails(req, res);
     let isAuthenticatorAppUpdated = false;
     const authAppMFAMethod: MfaMethod = req.session.mfaMethods.find(
