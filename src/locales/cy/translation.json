@@ -520,10 +520,7 @@
             "Efallai y gofynnir i chi am eich cod cyfeirio pan fyddwch yn siarad â ni.",
             "Gallwch sgwrsio'n fyw gyda chynghorydd ar:"
           ],
-          "openingHours": [
-            "Dydd Llun i ddydd Gwener, 8am i 8pm",
-            "penwythnosau a gwyliau cyhoeddus, 9am i 5.30pm"
-          ],
+          "openingHours": "Dydd Llun i ddydd Gwener, 8am i 8pm",
           "paragraph2": "Mae'r cynorthwyydd digidol bob amser ar gael",
           "linkText": "Defnyddio gwesgwrs",
           "accessibility-statement": {
@@ -546,10 +543,7 @@
             ]
           },
           "paragraph2": "You can call us on:",
-          "openingHours": [
-            "Dydd Llun i ddydd Gwener, 8am i 8pm",
-            "Penwythnosau a gwyliau cyhoeddus, 9am i 5:30pm"
-          ],
+          "openingHours": "Dydd Llun i ddydd Gwener, 8am i 8pm",
           "callChargesLinkText": "Darganfyddwch fwy am gostau galwadau",
           "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">cwblhewch y ffurflen gyswllt</a>."
         },
