@@ -5,66 +5,29 @@ import { ChangeAuthenticatorAppServiceInterface } from "./types";
 import { changeAuthenticatorAppService } from "./change-authenticator-app-service";
 import { getNextState } from "../../utils/state-machine";
 import { formatValidationError } from "../../utils/validation";
-import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
-import {
-  generateMfaSecret,
-  generateQRCodeValue,
-  verifyMfaCode,
-} from "../../utils/mfa";
+import { verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
-import QRCode from "qrcode";
-import { splitSecretKeyIntoFragments } from "../../utils/strings";
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../utils/types";
 import { MfaMethod } from "../../utils/mfa/types";
+import {
+  generateSessionDetails,
+  generateUpdateInformationInput,
+  renderMfaMethodPage,
+} from "../common/mfa";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
-
-async function renderUpdateAuthAppPage(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  errors: ReturnType<typeof formatValidationError>
-): Promise<void> {
-  try {
-    assert(req.session.user.email, "email not set in session");
-
-    const authAppSecret = req.body.authAppSecret || generateMfaSecret();
-
-    const qrCodeText = generateQRCodeValue(
-      authAppSecret,
-      req.session.user.email,
-      "GOV.UK One Login"
-    );
-
-    const qrCode = await QRCode.toDataURL(qrCodeText);
-
-    return res.render(CHANGE_AUTHENTICATOR_APP_TEMPLATE, {
-      authAppSecret,
-      qrCode,
-      formattedSecret: splitSecretKeyIntoFragments(authAppSecret).join(" "),
-      errorList: Object.keys(errors || {}).map((key) => {
-        return {
-          text: errors[key].text,
-          href: `#${key}`,
-        };
-      }),
-    });
-  } catch (e) {
-    req.log.error(e);
-    return next(e);
-  }
-}
 
 export async function changeAuthenticatorAppGet(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderUpdateAuthAppPage(req, res, next, {});
+  return renderMfaMethodPage(
+    CHANGE_AUTHENTICATOR_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    {}
+  );
 }
 
 export function changeAuthenticatorAppPost(
@@ -76,7 +39,8 @@ export function changeAuthenticatorAppPost(
     assert(authAppSecret, "authAppSecret not set in body");
 
     if (code.length !== 6) {
-      return renderUpdateAuthAppPage(
+      return renderMfaMethodPage(
+        CHANGE_AUTHENTICATOR_APP_TEMPLATE,
         req,
         res,
         next,
@@ -87,10 +51,9 @@ export function changeAuthenticatorAppPost(
       );
     }
 
-    const isValid = verifyMfaCode(authAppSecret, code);
-
-    if (!isValid) {
-      return renderUpdateAuthAppPage(
+    if (!verifyMfaCode(authAppSecret, code)) {
+      return renderMfaMethodPage(
+        CHANGE_AUTHENTICATOR_APP_TEMPLATE,
         req,
         res,
         next,
@@ -103,22 +66,12 @@ export function changeAuthenticatorAppPost(
 
     const { email } = req.session.user;
 
-    const updateInput: UpdateInformationInput = {
+    const updateInput = await generateUpdateInformationInput(
       email,
-      updatedValue: authAppSecret,
-      otp: code,
-    };
-
-    const sessionDetails: UpdateInformationSessionValues = {
-      accessToken: req.session.user.tokens.accessToken,
-      sourceIp: req.ip,
-      sessionId: res.locals.sessionId,
-      persistentSessionId: res.locals.persistentSessionId,
-      userLanguage: xss(req.cookies.lng as string),
-      clientSessionId: res.locals.clientSessionId,
-      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-    };
-
+      authAppSecret,
+      code
+    );
+    const sessionDetails = await generateSessionDetails(req, res);
     let isAuthenticatorAppUpdated = false;
     const authAppMFAMethod: MfaMethod = req.session.mfaMethods.find(
       (mfa) => mfa.mfaMethodType === "AUTH_APP"

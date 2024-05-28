@@ -9,14 +9,10 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { getLastNDigits } from "../../utils/phone-number";
-import xss from "xss";
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../utils/types";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { UpdateInformationInput } from "../../utils/types";
 import { MfaMethod } from "../../utils/mfa/types";
 import { supportChangeMfa } from "../../config";
+import { generateSessionDetails } from "../common/mfa";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -40,15 +36,7 @@ export function checkYourPhonePost(
       otp: req.body["code"],
     };
 
-    const sessionDetails: UpdateInformationSessionValues = {
-      accessToken: req.session.user.tokens.accessToken,
-      sourceIp: req.ip,
-      sessionId: res.locals.sessionId,
-      persistentSessionId: res.locals.persistentSessionId,
-      userLanguage: xss(req.cookies.lng as string),
-      clientSessionId: res.locals.clientSessionId,
-      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-    };
+    const sessionDetails = await generateSessionDetails(req, res);
 
     let isPhoneNumberUpdated = false;
     if (supportChangeMfa()) {
