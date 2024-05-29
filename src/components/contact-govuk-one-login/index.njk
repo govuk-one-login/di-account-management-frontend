@@ -7,13 +7,6 @@
 {% set webchatLang = "welsh" if language == "cy" else "hgsgds" %}
 {% set hideTitleProductName = true %}
 
-{% macro openingHoursBlock(openingHours) %}
-  <ul class="govuk-list govuk-list--bullet">
-    <li>{{openingHours[0]}}</li>
-    <li>{{openingHours[1]}}</li>
-  </ul>
-{% endmacro %}
-
 {% block head %}
   {{ super() }}
   <meta name="description" content="{{'pages.contact.metaDescription' | translate }}">
@@ -77,7 +70,9 @@
     }) }}
 
     <p class="govuk-body">{{'pages.contact.section3.phone.paragraph2' | translate }}</p>
-    {{ openingHoursBlock('pages.contact.section3.phone.openingHours' | translate({ returnObjects: true })) }}
+    <ul class="govuk-list govuk-list--bullet">
+      <li>{{'pages.contact.section3.phone.openingHours' | translate }}</li>
+    </ul>
     <p class="govuk-body"><a class="govuk-link" href="https://www.gov.uk/call-charges">{{'pages.contact.section3.phone.callChargesLinkText' | translate }}</a></p>
 
     <p class="govuk-body"></p>
@@ -134,8 +129,9 @@
           <p class="govuk-body">{{ paragraph | safe  }}</p>
         {% endfor %}
 
-        {{ openingHoursBlock('pages.contact.section3.webchat.openingHours' | translate({ returnObjects: true })) }}
-
+        <ul class="govuk-list govuk-list--bullet">
+          <li>{{'pages.contact.section3.webchat.openingHours' | translate }}</li>
+        </ul>
         <p class="govuk-body">{{'pages.contact.section3.webchat.paragraph2' | translate}}</p>
         <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
 
