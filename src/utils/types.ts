@@ -109,7 +109,7 @@ export interface Error {
 
 export interface UpdateInformationInput {
   email: string;
-  updatedValue: string;
+  updatedValue?: string;
   otp: string;
   mfaMethod?: MfaMethod;
 }

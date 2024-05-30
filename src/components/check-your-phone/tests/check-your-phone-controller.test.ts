@@ -104,10 +104,23 @@ describe("check your phone controller", () => {
 
       req.session.user.tokens = { accessToken: "token" } as any;
       req.body.code = "123456";
+      req.session.user.newPhoneNumber = "07111111111";
+      req.session.user.email = "test@test.com";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
       expect(fakeService.updatePhoneNumberWithMfaApi).to.have.been.calledOnce;
+      expect(fakeService.updatePhoneNumberWithMfaApi).to.have.calledWith({
+        email: "test@test.com",
+        otp: "123456",
+        mfaMethod: {
+          mfaIdentifier: 111111,
+          methodVerified: true,
+          endPoint: "07111111111",
+          mfaMethodType: "SMS",
+          priorityIdentifier: "PRIMARY",
+        },
+      });
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
       );
