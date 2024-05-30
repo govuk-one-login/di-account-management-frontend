@@ -4,6 +4,7 @@ enum UserJourney {
   ChangeEmail = "changeEmail",
   ChangePassword = "changePassword",
   ChangePhoneNumber = "changePhoneNumber",
+  ChangeAuthenticatorApp = "changeAuthenticatorApp",
   DeleteAccount = "deleteAccount",
   AddMfaMethod = "addMfaMethod",
 }

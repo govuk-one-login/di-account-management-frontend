@@ -44,6 +44,7 @@ import { updateConfirmationRouter } from "./components/update-confirmation/updat
 import { changePasswordRouter } from "./components/change-password/change-password-routes";
 import { checkYourEmailRouter } from "./components/check-your-email/check-your-email-routes";
 import { changePhoneNumberRouter } from "./components/change-phone-number/change-phone-number-routes";
+import { changeAuthenticatorAppRouter } from "./components/change-authenticator-app/change-authenticator-app-routes";
 import { deleteAccountRouter } from "./components/delete-account/delete-account-routes";
 import { checkYourPhoneRouter } from "./components/check-your-phone/check-your-phone-routes";
 import { noCacheMiddleware } from "./middleware/no-cache-middleware";
@@ -184,6 +185,7 @@ async function createApp(): Promise<express.Application> {
   if (supportChangeMfa()) {
     app.use(addMfaMethodRouter);
     app.use(addMfaMethodAppRouter);
+    app.use(changeAuthenticatorAppRouter);
   }
   app.use(trackAndRedirectRouter);
 

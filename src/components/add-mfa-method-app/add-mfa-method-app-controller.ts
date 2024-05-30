@@ -1,58 +1,25 @@
 import { Request, Response, NextFunction } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
-import {
-  addMfaMethod,
-  generateMfaSecret,
-  generateQRCodeValue,
-  verifyMfaCode,
-} from "../../utils/mfa";
-import QRCode from "qrcode";
+import { addMfaMethod, verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
-import { splitSecretKeyIntoFragments } from "../../utils/strings";
 import { formatValidationError } from "../../utils/validation";
 import { getNextState } from "../../utils/state-machine";
+import { renderMfaMethodPage } from "../common/mfa";
 
-async function renderMfaMethodAppPage(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  errors: ReturnType<typeof formatValidationError>
-): Promise<void> {
-  try {
-    assert(req.session.user.email, "email not set in session");
-
-    const authAppSecret = req.body.authAppSecret || generateMfaSecret();
-
-    const qrCodeText = generateQRCodeValue(
-      authAppSecret,
-      req.session.user.email,
-      "GOV.UK One Login"
-    );
-
-    const qrCode = await QRCode.toDataURL(qrCodeText);
-    return res.render("add-mfa-method-app/index.njk", {
-      authAppSecret,
-      qrCode,
-      formattedSecret: splitSecretKeyIntoFragments(authAppSecret).join(" "),
-      errorList: Object.keys(errors || {}).map((key) => {
-        return {
-          text: errors[key].text,
-          href: `#${key}`,
-        };
-      }),
-    });
-  } catch (e) {
-    req.log.error(e);
-    return next(e);
-  }
-}
+const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
 export async function addMfaAppMethodGet(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderMfaMethodAppPage(req, res, next, {});
+  return renderMfaMethodPage(
+    ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    {}
+  );
 }
 
 export async function addMfaAppMethodPost(
@@ -66,7 +33,8 @@ export async function addMfaAppMethodPost(
     assert(authAppSecret, "authAppSecret not set in body");
 
     if (!code) {
-      return renderMfaMethodAppPage(
+      return renderMfaMethodPage(
+        ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
         req,
         res,
         next,
@@ -78,7 +46,8 @@ export async function addMfaAppMethodPost(
     }
 
     if (code.length !== 6) {
-      return renderMfaMethodAppPage(
+      return renderMfaMethodPage(
+        ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
         req,
         res,
         next,
@@ -92,7 +61,8 @@ export async function addMfaAppMethodPost(
     const isValid = verifyMfaCode(authAppSecret, code);
 
     if (!isValid) {
-      return renderMfaMethodAppPage(
+      return renderMfaMethodPage(
+        ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
         req,
         res,
         next,

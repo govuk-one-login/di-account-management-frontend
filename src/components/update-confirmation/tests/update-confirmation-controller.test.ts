@@ -10,6 +10,7 @@ import {
   updateEmailConfirmationGet,
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
+  updateAuthenticatorAppConfirmationGet,
 } from "../update-confirmation-controller";
 import { PATH_DATA } from "../../../app.constants";
 
@@ -59,6 +60,14 @@ describe("update confirmation controller", () => {
   describe("updatePhoneNumberConfirmationGet", () => {
     it("should render update phone number page", () => {
       updatePhoneNumberConfirmationGet(req as Request, res as Response);
+
+      expect(res.render).to.have.calledWith("update-confirmation/index.njk");
+    });
+  });
+
+  describe("updateAuthenticatorAppConfirmationGet", () => {
+    it("should render update authenticator app page", () => {
+      updateAuthenticatorAppConfirmationGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });

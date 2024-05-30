@@ -4,6 +4,7 @@ import * as express from "express";
 import {
   addMfaAppMethodConfirmationGet,
   deleteAccountConfirmationGet,
+  updateAuthenticatorAppConfirmationGet,
   updateEmailConfirmationGet,
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
@@ -30,6 +31,12 @@ router.get(
   requiresAuthMiddleware,
   validateStateMiddleware,
   updatePhoneNumberConfirmationGet
+);
+router.get(
+  PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  updateAuthenticatorAppConfirmationGet
 );
 router.get(
   PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,

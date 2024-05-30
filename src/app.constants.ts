@@ -66,6 +66,11 @@ export const PATH_DATA: {
     event: "VERIFY_CODE_SENT",
     type: UserJourney.ChangePhoneNumber,
   },
+  CHANGE_AUTHENTICATOR_APP: {
+    url: "/change-authenticator-app",
+    event: "VALUE_UPDATED",
+    type: UserJourney.ChangeAuthenticatorApp,
+  },
   CHECK_YOUR_PHONE: {
     url: "/check-your-phone",
     event: "VALUE_UPDATED",
@@ -80,6 +85,11 @@ export const PATH_DATA: {
     url: "/phone-number-updated-confirmation",
     event: "CONFIRMATION",
     type: UserJourney.ChangePhoneNumber,
+  },
+  AUTHENTICATOR_APP_UPDATED_CONFIRMATION: {
+    url: "/authenticator-app-updated-confirmation",
+    event: "CONFIRMATION",
+    type: UserJourney.ChangeAuthenticatorApp,
   },
   DELETE_ACCOUNT: {
     url: "/delete-account",
