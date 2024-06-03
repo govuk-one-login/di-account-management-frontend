@@ -3,6 +3,7 @@ import { User } from "../../src/types";
 import { QueryParameters } from "../../src/app.constants";
 
 import { MfaMethod } from "../../src/utils/mfa/types";
+import { logger } from "../../src/utils/logger";
 
 declare module "express-session" {
   interface Session {
@@ -29,6 +30,7 @@ declare module "express-serve-static-core" {
     csrfToken?: () => string;
     oidc?: Client;
     issuerJWKS?: any;
+    log: logger;
   }
 }
 interface Cookie {

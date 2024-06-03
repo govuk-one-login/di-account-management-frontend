@@ -74,7 +74,7 @@ describe("enter password controller", () => {
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
-        state: { changeEmail: {} },
+        state: { changeEmail: { value: "CHANGE_VALUE" } },
         tokens: { accessToken: "token" },
       } as any;
 

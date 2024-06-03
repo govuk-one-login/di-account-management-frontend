@@ -68,6 +68,7 @@ describe("change phone number controller", () => {
         }),
       };
       req.body.phoneNumber = "12345678991";
+      req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
 
       // Act
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
@@ -163,7 +164,7 @@ describe("change phone number controller", () => {
         }),
       };
       req.body.phoneNumber = "+33645453322";
-
+      req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       // Act
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 

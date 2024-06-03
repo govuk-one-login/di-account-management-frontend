@@ -142,6 +142,7 @@ describe("change authenticator app controller", () => {
         updateAuthenticatorApp: sandbox.fake.resolves(true),
       };
       req.session.user.tokens = { accessToken: "token" } as any;
+      req.session.user.state.changeAuthenticatorApp.value = "CHANGE_VALUE";
       req.session.mfaMethods = [
         {
           mfaIdentifier: 111111,

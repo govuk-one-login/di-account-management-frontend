@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ExpressRouteFunc } from "../../types";
 import xss from "xss";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import { PATH_DATA } from "../../app.constants";
 import { ChangeEmailServiceInterface } from "../change-email/types";
 import { changeEmailService } from "../change-email/change-email-service";
@@ -55,7 +55,7 @@ export function resendEmailCodePost(
 
       req.session.user.state.changeEmail = getNextState(
         req.session.user.state.changeEmail.value,
-        "VERIFY_CODE_SENT"
+        EventType.VerifyCodeSent
       );
 
       return res.redirect(PATH_DATA.CHECK_YOUR_EMAIL.url);

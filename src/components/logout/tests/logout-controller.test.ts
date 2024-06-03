@@ -55,12 +55,12 @@ describe("logout controller", () => {
       sessionStore,
       "destroyUserSessions"
     );
-
     await logoutPost(req, res);
 
     expect(res.mockCookies.lo).to.equal("true");
     expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
     expect(res.redirect).to.have.called;
     expect(destroyUserSessionsStub.called);
+    destroyUserSessionsStub.restore();
   });
 });

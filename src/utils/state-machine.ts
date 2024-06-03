@@ -1,4 +1,10 @@
-import { createMachine, EventType, StateValue } from "xstate";
+import {
+  AnyMachineSnapshot,
+  createActor,
+  createMachine,
+  getNextSnapshot,
+  StateValue,
+} from "xstate";
 
 enum UserJourney {
   ChangeEmail = "changeEmail",
@@ -9,88 +15,112 @@ enum UserJourney {
   AddMfaMethod = "addMfaMethod",
 }
 
-type AccountManagementEvent =
-  | "VALUE_UPDATED"
-  | "VERIFY_CODE_SENT"
-  | "AUTHENTICATED"
-  | "RESEND_CODE"
-  | "SELECTED_APP"
-  | "SELECTED_SMS";
+enum EventType {
+  Authenticated = "AUTHENTICATED",
+  ValueUpdated = "VALUE_UPDATED",
+  VerifyCodeSent = "VERIFY_CODE_SENT",
+  SelectedApp = "SELECTED_APP",
+  SelectedSms = "SELECTED_SMS",
+  ResendCode = "RESEND_CODE",
+  Confirmation = "CONFIRMATION",
+}
+
+type Event = { type: EventType };
 
 interface StateAction {
   value: StateValue;
   events: EventType[];
 }
 
-const amStateMachine = createMachine<AccountManagementEvent>({
+export const amStateMachine = createMachine({
+  types: {
+    context: {} as object,
+    events: {} as Event,
+  },
+  context: {},
   id: "AM",
   initial: "AUTHENTICATE",
   states: {
     AUTHENTICATE: {
       on: {
-        AUTHENTICATED: "CHANGE_VALUE",
+        AUTHENTICATED: {
+          target: "CHANGE_VALUE",
+        },
       },
     },
     CHANGE_VALUE: {
       on: {
-        VALUE_UPDATED: "CONFIRMATION",
-        VERIFY_CODE_SENT: "VERIFY_CODE",
-        SELECTED_APP: "APP",
-        SELECTED_SMS: "SMS",
+        VALUE_UPDATED: {
+          target: "CONFIRMATION",
+        },
+        VERIFY_CODE_SENT: {
+          target: "VERIFY_CODE",
+        },
+        SELECTED_APP: {
+          target: "APP",
+        },
+        SELECTED_SMS: {
+          target: "SMS",
+        },
+      },
+    },
+    CONFIRMATION: {
+      type: "final",
+    },
+    VERIFY_CODE: {
+      on: {
+        VALUE_UPDATED: {
+          target: "CONFIRMATION",
+        },
+        RESEND_CODE: {
+          target: "CHANGE_VALUE",
+        },
+        VERIFY_CODE_SENT: {
+          target: "CHANGE_VALUE",
+        },
       },
     },
     APP: {
       on: {
-        VALUE_UPDATED: "CONFIRMATION",
+        VALUE_UPDATED: {
+          target: "CONFIRMATION",
+        },
       },
     },
     SMS: {
       on: {
-        VALUE_UPDATED: "CONFIRMATION",
+        VALUE_UPDATED: {
+          target: "CONFIRMATION",
+        },
       },
     },
-    VERIFY_CODE: {
-      on: {
-        VALUE_UPDATED: "CONFIRMATION",
-        RESEND_CODE: "CHANGE_VALUE",
-        VERIFY_CODE_SENT: "CHANGE_VALUE",
-      },
-    },
-    CONFIRMATION: { type: "final" },
   },
-  predictableActionArguments: true,
 });
 
-function getNextState(
-  from: StateValue,
-  to: AccountManagementEvent
-): StateAction {
-  const t = amStateMachine.transition(from, to);
+function getNextEvents(snapshot: AnyMachineSnapshot) {
+  return [...new Set([...snapshot._nodes.flatMap((sn) => sn.ownEvents)])];
+}
+
+function getNextState(from: StateValue, to: EventType): StateAction {
+  const t = getNextSnapshot(
+    amStateMachine,
+    amStateMachine.resolveState({ value: from, context: {} }),
+    { type: to }
+  );
   return {
     value: t.value,
-    events: t.nextEvents,
+    events: getNextEvents(t),
   };
 }
 
 function getInitialState(): StateAction {
+  const actor = createActor(amStateMachine);
+  const initialState = actor.getSnapshot();
+
   return {
-    value: amStateMachine.initialState.value,
-    events: amStateMachine.initialState.nextEvents,
+    value: initialState.value,
+    events: getNextEvents(initialState),
   };
 }
 
-function canTransition(
-  currentState: StateValue,
-  event: AccountManagementEvent
-): boolean {
-  return !!amStateMachine.transition(currentState, event).changed;
-}
-
-export {
-  getNextState,
-  canTransition,
-  UserJourney,
-  getInitialState,
-  StateAction,
-  AccountManagementEvent,
-};
+export { UserJourney, EventType, StateAction, getNextState, getInitialState };

@@ -15,7 +15,7 @@ export function requiresAuthMiddleware(
     { trace: res.locals.trace },
     `isAuthenticated = ${isAuthenticated} , isLoggedOut = ${isLoggedOut}`
   );
-  // if there is no session then should create a session and redirect to auth to sign in
+  // if there is no session, then should create a session and redirect to auth to sign in
   if (isAuthenticated === undefined) {
     redirectToLogIn(req, res);
   } else if (!isAuthenticated && isLoggedOut == "true") {

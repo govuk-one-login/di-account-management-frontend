@@ -91,7 +91,7 @@ describe("addMfaAppMethodPost", () => {
         user: {
           email: "test@test.com",
           tokens: { accessToken: "token" },
-          state: { addMfaMethod: ["VALUE_UPDATED"] },
+          state: { addMfaMethod: { value: "APP" } },
         },
       },
       log: { error: sinon.fake() },

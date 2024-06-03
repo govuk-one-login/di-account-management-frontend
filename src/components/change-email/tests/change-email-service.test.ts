@@ -19,7 +19,7 @@ describe("changeEmailService", () => {
   });
   afterEach(() => {
     sandbox.restore();
-    nock.cleanAll;
+    nock.cleanAll();
   });
 
   it("send Code verification Notification", async () => {

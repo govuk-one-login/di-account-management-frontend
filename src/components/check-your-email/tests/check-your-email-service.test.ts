@@ -23,7 +23,7 @@ describe("checkYourEmailService", () => {
   });
   afterEach(() => {
     sandbox.restore();
-    nock.cleanAll;
+    nock.cleanAll();
   });
 
   it("update the email ", async () => {

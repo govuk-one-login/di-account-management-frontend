@@ -22,7 +22,9 @@ describe("check your email controller", () => {
 
     req = {
       body: {},
-      session: { user: { state: { changeEmail: {} } } } as any,
+      session: {
+        user: { state: { changeEmail: { value: "CHANGE_VALUE" } } },
+      } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
       log: { error: sandbox.fake() },

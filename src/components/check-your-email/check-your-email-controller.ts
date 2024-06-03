@@ -7,7 +7,7 @@ import {
 } from "../../utils/validation";
 import { checkYourEmailService } from "./check-your-email-service";
 import { CheckYourEmailServiceInterface } from "./types";
-import { getNextState } from "../../utils/state-machine";
+import { EventType, getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 import xss from "xss";
@@ -72,7 +72,7 @@ export function checkYourEmailPost(
 
       req.session.user.state.changeEmail = getNextState(
         req.session.user.state.changeEmail.value,
-        "VALUE_UPDATED"
+        EventType.ValueUpdated
       );
 
       return res.redirect(PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url);
@@ -90,7 +90,7 @@ export function checkYourEmailPost(
 export function requestNewCodeGet(req: Request, res: Response): void {
   req.session.user.state.changeEmail = getNextState(
     req.session.user.state.changeEmail.value,
-    "RESEND_CODE"
+    EventType.ResendCode
   );
 
   return res.redirect(PATH_DATA.CHANGE_EMAIL.url);
