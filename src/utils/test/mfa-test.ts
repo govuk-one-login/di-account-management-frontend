@@ -215,7 +215,7 @@ describe("MFA Function", () => {
     ).to.be.true;
   });
 
-  it("should return true on success when mfa method is updated successfully", async () => {
+  it("should return true on success when SMS mfa method is updated successfully", async () => {
     const accessToken = "1234";
     const email = "something@test.com";
     const phoneNumber = "11111111111";
@@ -228,15 +228,59 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: "PHONE",
+      endPoint: phoneNumber,
       mfaMethodType: "SMS",
       priorityIdentifier: "PRIMARY",
     };
 
     const updateInput: UpdateInformationInput = {
       email,
-      updatedValue: phoneNumber,
       otp,
+      mfaMethod,
+    };
+
+    const sessionDetails: UpdateInformationSessionValues = {
+      accessToken,
+      sourceIp,
+      sessionId,
+      persistentSessionId,
+      userLanguage,
+      clientSessionId: clientSessionId,
+      txmaAuditEncoded: txmaAuditEncoded,
+    };
+
+    httpInstance.client.put.resolves({
+      status: HTTP_STATUS_CODES.OK,
+      data: mfaMethod,
+    });
+
+    const result = await updateMfaMethod(updateInput, sessionDetails);
+    expect(result).to.be.true;
+    expect(httpInstance.client.put.calledOnce).to.be.true;
+    expect(loggerStub.called).to.be.false;
+  });
+
+  it("should return true on success when auth mfa method is updated successfully", async () => {
+    const accessToken = "1234";
+    const email = "something@test.com";
+    const sourceIp = "0.0.0.0";
+    const sessionId = "session-123";
+    const persistentSessionId = "persistentsession123";
+    const userLanguage = "en";
+    const code = "qrcode";
+    const authAppSecret = "A".repeat(20);
+
+    const mfaMethod: MfaMethod = {
+      mfaIdentifier: 111111,
+      methodVerified: true,
+      mfaMethodType: "AUTH_APP",
+      priorityIdentifier: "PRIMARY",
+    };
+
+    const updateInput: UpdateInformationInput = {
+      email,
+      updatedValue: authAppSecret,
+      otp: code,
       mfaMethod,
     };
 
@@ -317,7 +361,7 @@ describe("MFA Function", () => {
     expect(
       loggerStub.calledWith(
         sinon.match.has("trace", "session-123"),
-        sinon.match(/Failed to update MFA method - Detail/)
+        sinon.match(/Failed to update MFA endpoint/)
       )
     ).to.be.true;
   });
@@ -371,7 +415,7 @@ describe("MFA Function", () => {
     expect(
       loggerStub.calledWith(
         sinon.match.has("trace", "session-123"),
-        sinon.match(/Failed to update MFA method - Detail/)
+        sinon.match(/Failed to update MFA endpoint/)
       )
     ).to.be.true;
   });

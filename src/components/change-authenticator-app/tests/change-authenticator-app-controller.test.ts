@@ -112,7 +112,6 @@ describe("change authenticator app controller", () => {
           mfaIdentifier: 2,
           priorityIdentifier: "SECONDARY",
           mfaMethodType: "AUTH_APP",
-          endPoint: "",
           methodVerified: true,
         },
       ];
@@ -155,7 +154,6 @@ describe("change authenticator app controller", () => {
           mfaIdentifier: 2,
           priorityIdentifier: "SECONDARY",
           mfaMethodType: "AUTH_APP",
-          endPoint: "",
           methodVerified: true,
         },
       ];

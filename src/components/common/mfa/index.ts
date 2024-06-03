@@ -4,10 +4,7 @@ import assert from "node:assert";
 import { generateMfaSecret, generateQRCodeValue } from "../../../utils/mfa";
 import QRCode from "qrcode";
 import { splitSecretKeyIntoFragments } from "../../../utils/strings";
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../../utils/types";
+import { UpdateInformationSessionValues } from "../../../utils/types";
 import xss from "xss";
 import { getTxmaHeader } from "../../../utils/txma-header";
 
@@ -61,17 +58,4 @@ export async function generateSessionDetails(
     txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
   };
   return sessionDetails;
-}
-
-export async function generateUpdateInformationInput(
-  email: string,
-  updatedValue: any,
-  otp: any
-): Promise<UpdateInformationInput> {
-  const updateInput: UpdateInformationInput = {
-    email,
-    updatedValue: updatedValue,
-    otp: otp,
-  };
-  return updateInput;
 }

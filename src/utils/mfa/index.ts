@@ -229,6 +229,12 @@ export async function updateMfaMethod(
 
     if (response.status === HTTP_STATUS_CODES.OK) {
       isUpdated = true;
+    } else {
+      errorHandler(
+        new Error("MFA Method Not Found"),
+        sessionDetails.sessionId,
+        "update"
+      );
     }
   } catch (err) {
     errorHandler(err, sessionDetails.sessionId, "update");

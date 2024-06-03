@@ -132,6 +132,14 @@ var cookies = function () {
         "delete account",
         "end"
       ),
+      "/change-authenticator-app": generateJourneySession(
+        "change authenticator app",
+        "middle"
+      ),
+      "/authenticator-app-updated-confirmation": generateJourneySession(
+        "change authenticator app",
+        "end"
+      ),
     };
 
     return JOURNEY_DATA_LAYER_PATHS[url];

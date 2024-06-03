@@ -32,7 +32,6 @@ export function checkYourPhonePost(
 
     const updateInput: UpdateInformationInput = {
       email,
-      updatedValue: newPhoneNumber,
       otp: req.body["code"],
     };
 
@@ -44,6 +43,7 @@ export function checkYourPhonePost(
         (mfa) => mfa.mfaMethodType === "SMS"
       );
       if (smsMFAMethod) {
+        smsMFAMethod.endPoint = newPhoneNumber;
         updateInput.mfaMethod = smsMFAMethod;
         isPhoneNumberUpdated = await service.updatePhoneNumberWithMfaApi(
           updateInput,

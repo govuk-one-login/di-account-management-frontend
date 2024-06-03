@@ -5,7 +5,7 @@ export interface MfaMethod {
   mfaIdentifier: number;
   priorityIdentifier: PriorityIdentifier;
   mfaMethodType: MfaMethodType;
-  endPoint: string;
+  endPoint?: string;
   methodVerified: boolean;
 }
 
