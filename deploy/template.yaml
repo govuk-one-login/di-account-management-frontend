@@ -199,7 +199,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "false"
       UADISABLED: "false"
-      LANGUAGETOGGLE: "0"
+      LANGUAGETOGGLE: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -292,7 +292,7 @@ Mappings:
       GA4DISABLED: "true"
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
-      LANGUAGETOGGLE: "0"
+      LANGUAGETOGGLE: "1"
 
 Resources:
   #
