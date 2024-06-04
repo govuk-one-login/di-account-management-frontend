@@ -42,7 +42,6 @@
 
 {% set phoneBlock %}
   {% set phoneParagraphs1 = 'pages.contact.section3.phone.paragraphs' | translate({ returnObjects: true }) %}
-  {% set phoneParagraphs2 = 'pages.contact.section3.phone.paragraphs2' | translate({ returnObjects: true }) %}
   {% set insetTextHtml %}
     {% set insetTextParagraphs =  'pages.contact.section3.phone.insetText.paragraphs' | translate({ returnObjects: true }) %}
     {% for paragraph in insetTextParagraphs %}
@@ -70,12 +69,8 @@
     }) }}
 
     <p class="govuk-body">{{'pages.contact.section3.phone.paragraph2' | translate }}</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>{{'pages.contact.section3.phone.openingHours' | translate }}</li>
-    </ul>
-    <p class="govuk-body"><a class="govuk-link" href="https://www.gov.uk/call-charges">{{'pages.contact.section3.phone.callChargesLinkText' | translate }}</a></p>
 
-    <p class="govuk-body"></p>
+    <p class="govuk-body"><a class="govuk-link" href="https://www.gov.uk/call-charges">{{'pages.contact.section3.phone.callChargesLinkText' | translate }}</a></p>
   </section>
 {% endset %}
 
@@ -123,16 +118,12 @@
       <section>
         {% set webchatParagraphs =  'pages.contact.section3.webchat.paragraphs1' | translate({ returnObjects: true }) %}
 
-        <h3 class="govuk-heading-m">{{'pages.contact.section3.webchat.heading' | translate}}</h3>
+        <h3 class="govuk-heading-m">{{'pages.contact.section3.webchat.heading' | translate }}</h3>
 
         {% for paragraph in webchatParagraphs %}
-          <p class="govuk-body">{{ paragraph | safe  }}</p>
+          <p class="govuk-body">{{ paragraph }}</p>
         {% endfor %}
 
-        <ul class="govuk-list govuk-list--bullet">
-          <li>{{'pages.contact.section3.webchat.openingHours' | translate }}</li>
-        </ul>
-        <p class="govuk-body">{{'pages.contact.section3.webchat.paragraph2' | translate}}</p>
         <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
 
         {% set accessibilityTextHtml %}

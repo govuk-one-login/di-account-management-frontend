@@ -518,10 +518,9 @@
           "paragraphs1": [
             "Cael help gan gynorthwyydd digidol GOV.UK One Login neu sgwrs gydag ymgynghorydd.",
             "Efallai y gofynnir i chi am eich cod cyfeirio pan fyddwch yn siarad â ni.",
-            "Gallwch sgwrsio'n fyw gyda chynghorydd ar:"
+            "Gallwch sgwrsio'n fyw gydag ymgynghorydd o ddydd Llun i ddydd Gwener, 8am i 8pm.",
+            "Mae'r cynorthwyydd digidol bob amser ar gael."
           ],
-          "openingHours": "Dydd Llun i ddydd Gwener, 8am i 8pm",
-          "paragraph2": "Mae'r cynorthwyydd digidol bob amser ar gael",
           "linkText": "Defnyddio gwesgwrs",
           "accessibility-statement": {
             "insetText": {
@@ -542,8 +541,7 @@
               "Y tu allan i'r DU:<br><strong>+44 208 629 0008</strong>"
             ]
           },
-          "paragraph2": "You can call us on:",
-          "openingHours": "Dydd Llun i ddydd Gwener, 8am i 8pm",
+          "paragraph2": "Gallwch ein ffonio o ddydd Llun i ddydd Gwener, 8am i 8pm.",
           "callChargesLinkText": "Darganfyddwch fwy am gostau galwadau",
           "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">cwblhewch y ffurflen gyswllt</a>."
         },
