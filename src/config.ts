@@ -182,6 +182,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "mojPlanYourFuture",
   "tPCCSyoMaFNbLTt0gEW609h15Uc",
   "welshFisheriesPermit",
+  "Gk-D7WMvytB44Nze7oEC5KcThQZ4yl7sAA",
+  "iaa",
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
