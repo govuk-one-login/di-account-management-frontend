@@ -72,14 +72,8 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
       })
     : [];
 
-  const hasAuthAppMethod = req.session.mfaMethods?.some((method) => {
-    return method.mfaMethodType === "AUTH_APP";
-  });
-
   const showAdditionalMethodUpsell =
-    supportChangeMfa() &&
-    req.session.mfaMethods.length === 1 &&
-    !hasAuthAppMethod;
+    supportChangeMfa() && req.session.mfaMethods.length === 1;
 
   const data = {
     email,

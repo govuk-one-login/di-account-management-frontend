@@ -181,6 +181,7 @@
       "heading": "You've added another way to get security codes",
       "message": "If your usual way to get security codes is not available, you can get a code from this authenticator app instead",
       "backLinkText": "Back to security"
+      
     },
     "addMfaMethod": {
       "title": "Add another way to get security codes",
@@ -198,7 +199,14 @@
         }
       },
       "backLink": "I do not want to add another way to get security codes",
-      "continue": "Continue"
+      "continue": "Continue",
+      "backup": {
+        "title": "Add a back-up method",
+        "sms": {
+          "message": "You can get security codes by text message as you back-up method",
+          "button": "Add a mobile phone number"
+        }
+      }
     },
     "addMfaMethodApp": {
       "title": "Set up an authenticator app",

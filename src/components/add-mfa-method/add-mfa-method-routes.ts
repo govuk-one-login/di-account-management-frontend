@@ -6,12 +6,14 @@ import {
   addMfaMethodPost,
 } from "./add-mfa-methods-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
 router.get(
   PATH_DATA.ADD_MFA_METHOD.url,
   requiresAuthMiddleware,
+  selectMfaMiddleware(),
   validateStateMiddleware,
   addMfaMethodGet
 );
