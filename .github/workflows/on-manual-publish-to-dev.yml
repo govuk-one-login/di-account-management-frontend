@@ -72,6 +72,12 @@ jobs:
         id: datetime
         run: echo "date=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
 
+      - name: Set Node.js version and digest
+        id: node-vars
+        run: |
+          echo "NODE_VERSION=$(awk 'NR==1' .nvmrc)" >> $GITHUB_ENV
+          echo "NODE_INDEX_DIGEST=$(awk 'NR==2' .nvmrc)" >> $GITHUB_ENV
+
       - name: Set up AWS creds
         uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # pin@v1-node16
         with:
@@ -94,9 +100,12 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
+          NODE_VERSION: ${{ env.NODE_VERSION }}
+          NODE_INDEX_DIGEST: ${{ env.NODE_INDEX_DIGEST }}
         run: |
-          
-          docker build --build-arg NODE_VERSION=$(awk NR==1 .nvmrc) --build-arg NODE_INDEX_DIGEST=$(awk NR==2 .nvmrc) -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA .
+          echo "NODE_VERSION = $NODE_VERSION"
+          echo "NODE_INDEX_DIGEST = $NODE_INDEX_DIGEST"
+          docker build --build-arg NODE_VERSION=$NODE_VERSION --build-arg NODE_INDEX_DIGEST=$NODE_INDEX_DIGEST -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA
 
       - name: Upload SAM Template to Bucket
