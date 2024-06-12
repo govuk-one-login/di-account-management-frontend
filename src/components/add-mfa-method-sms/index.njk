@@ -2,6 +2,7 @@
 
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitleName = 'pages.addMfaMethodSms.step1.title' | translate %}
 {% block content %}
@@ -55,6 +56,12 @@
           checked: hasInternationalPhoneNumber === 'true'
         }
       ]
+    }) }}
+
+    {{ govukButton({
+      "text": button_text|default('general.continue.label' | translate, true),
+      "type": "Submit",
+      "preventDoubleClick": true
     }) }}
     </form>
 {% endblock content %}

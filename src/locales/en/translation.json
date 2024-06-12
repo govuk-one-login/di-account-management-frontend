@@ -242,10 +242,10 @@
         "intl_mobile_phone_number": "Mobile phone number",
         "intl_mobile_phone_number_hint": "Include the country code, for example +33 for France"
       },
-      "step2": {
+      "confirm": {
         "title": "Add back-up phone number",
         "heading": "You've added a back-up method for getting security codes",
-        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending in <string>[phone]</strong> instead",
+        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending in <string>[mobile]</strong> instead",
         "backLink": "Back to Security"
       }
     },

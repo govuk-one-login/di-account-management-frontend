@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PATH_DATA } from "../../app.constants";
+import { getLastNDigits } from "../../utils/phone-number";
 
 export async function addMfaSmsMethodGet(
   req: Request,
@@ -23,7 +24,9 @@ export async function addMfaAppMethodConfirmationGet(
   return res.render("common/confirmation-page/confirmation.njk", {
     pageTitleName: req.t("pages.addMfaMethodSms.confirm.title"),
     heading: req.t("pages.addMfaMethodSms.confirm.heading"),
-    message: req.t("pages.addMfaMethodSms.confirm.message"),
+    message: req
+      .t("pages.addMfaMethodSms.confirm.message")
+      .replace("[mobile]", getLastNDigits(req.session.user.phoneNumber, 4)),
     backLinkText: req.t("pages.addMfaMethodSms.confirm.backLink"),
     backLink: PATH_DATA.SECURITY.url,
   });
