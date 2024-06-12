@@ -36,17 +36,8 @@ jobs:
     timeout-minutes: 60
     needs: validate_deployment
     steps:
-      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
-      - name: Set Node.js version and digest
-        id: vars
-        run: |
-          echo "NODE_VERSION=$(awk 'NR==1' .nvmrc)" >> $GITHUB_ENV
-          echo "NODE_INDEX_DIGEST=$(awk 'NR==2' .nvmrc)" >> $GITHUB_ENV
       - name: "Push signed image to ECR, updated SAM template wih image then upload it to the S3 Artifact Bucket"
         uses: govuk-one-login/devplatform-upload-action-ecr@2670d3fde00e5e9eed187135e853f273763cab02 # pin@1.2.4
-        env:
-          NODE_VERSION: ${{ env.NODE_VERSION }}
-          NODE_INDEX_DIGEST: ${{ env.NODE_INDEX_DIGEST }}
         with:
           artifact-bucket-name: ${{ secrets.ARTIFACT_SOURCE_BUCKET_NAME }}
           container-sign-kms-key-arn: ${{ secrets.CONTAINER_SIGN_KMS_KEY }}
