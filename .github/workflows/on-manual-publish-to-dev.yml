@@ -96,7 +96,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
         run: |
           
-          docker build --build-arg NODE_VERSION=$(awk NR==1 .nvmrc) --build-arg NODE_INDEX_DIGEST=$(awk NR==2 .nvmrc) -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA
 
       - name: Upload SAM Template to Bucket
