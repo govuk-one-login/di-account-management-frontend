@@ -31,6 +31,11 @@ export const PATH_DATA: {
     event: EventType.ValueUpdated,
     type: UserJourney.AddMfaMethod,
   },
+  ADD_MFA_METHOD_SMS_CONFIRMATION: {
+    url: "/add-mfa-method-sms-confirmation",
+    event: EventType.Confirmation,
+    type: UserJourney.AddMfaMethod,
+  },
   CHANGE_EMAIL: {
     url: "/change-email",
     event: EventType.VerifyCodeSent,

@@ -1,0 +1,60 @@
+{% extends "common/layout/base.njk" %}
+
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitleName = 'pages.addMfaMethodSms.step1.title' | translate %}
+{% block content %}
+    {% include "common/errors/errorSummary.njk" %}
+    <h1 class="govuk-heading-xl">{{ 'pages.addMfaMethodSms.step1.title' | translate }}</h1>
+    <p class='govuk-body'>{{ 'pages.addMfaMethodSms.step1.message' | translate }}</p>
+    <form action="{{ "ADD_MFA_METHOD_SMS" | getPath }}" method="post">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
+    {{ govukInput({ 
+        id: "ukPhoneNumber",
+        name: "ukPhoneNumber",
+        type: "tel",
+        label: {
+            text: "pages.addMfaMethodSms.step1.uk_mobile" | translate
+        },
+        errorMessage: {
+            text: errors['phoneNumber'].text
+        } if (errors['phoneNumber'])
+    })}}
+
+    {% set internationalNumberHtml %}
+      {{ govukInput({
+        id: "internationalPhoneNumber",
+        name: "internationalPhoneNumber",
+        type: "tel",
+        autocomplete: "tel",
+        label: {
+          text: 'pages.addMfaMethodSms.step1.intl_mobile_phone_number' | translate
+        },
+        hint: {
+          text: 'pages.addMfaMethodSms.step1.intl_mobile_phone_number_hint' | translate
+        },
+        errorMessage: {
+          attributes: { "data-test-id": "internationalPhoneNumber-error"},
+          text: errors['internationalPhoneNumber'].text
+        } if (errors['internationalPhoneNumber'])
+      }) }}
+    {% endset -%}
+
+    {{ govukCheckboxes({
+      items: [
+        {
+          value: "true",
+          id: "hasInternationalPhoneNumber",
+          name: "hasInternationalPhoneNumber",
+          text: 'pages.addMfaMethodSms.step1.no_uk_mobile' | translate,
+          conditional: {
+            html: internationalNumberHtml
+          },
+          checked: hasInternationalPhoneNumber === 'true'
+        }
+      ]
+    }) }}
+    </form>
+{% endblock content %}

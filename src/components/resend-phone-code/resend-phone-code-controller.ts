@@ -49,7 +49,7 @@ export function resendPhoneCodePost(
         EventType.VerifyCodeSent
       );
 
-      return res.redirect(PATH_DATA.CHECK_YOUR_PHONE.url);
+      return res.redirect(`PATH_DATA.CHECK_YOUR_PHONE.url?intent=resendCode`);
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {

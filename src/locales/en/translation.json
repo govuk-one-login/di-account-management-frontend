@@ -233,6 +233,22 @@
         "maxLength": "Enter the security code using 6 digits"
       }
     },
+    "addMfaMethodSms": {
+      "step1": {
+        "title": "Enter your new mobile phone number",
+        "message": "We will send a 6 digit security code to the number you give us",
+        "uk_mobile": "UK moble phone number",
+        "no_uk_mobile": "I do not have a UK mobile number",
+        "intl_mobile_phone_number": "Mobile phone number",
+        "intl_mobile_phone_number_hint": "Include the country code, for example +33 for France"
+      },
+      "step2": {
+        "title": "Add back-up phone number",
+        "heading": "You've added a back-up method for getting security codes",
+        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending in <string>[phone]</strong> instead",
+        "backLink": "Back to Security"
+      }
+    },
     "activityHistory": {
       "title": "Activity history",
       "header": "Activity history",
