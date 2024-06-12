@@ -13,7 +13,7 @@ export async function addMfaSmsMethodPost(
   res: Response
 ): Promise<void> {
   //TODO do something with this
-  res.redirect(`PATH_DATA.CHECK_YOUR_PHONE.url?intent=addMfaMethod`);
+  res.redirect(`${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addMfaMethod`);
 }
 
 export async function addMfaAppMethodConfirmationGet(

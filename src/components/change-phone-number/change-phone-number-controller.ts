@@ -57,7 +57,7 @@ export function changePhoneNumberPost(
       );
 
       return res.redirect(
-        `PATH_DATA.CHECK_YOUR_PHONE.url?intent=changePhoneNumber`
+        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
       );
     }
 

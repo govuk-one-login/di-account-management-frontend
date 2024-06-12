@@ -19,6 +19,7 @@ export function resendPhoneCodeGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, {
     phoneNumberRedacted: getLastNDigits(req.session.user.newPhoneNumber, 4),
     phoneNumber: req.session.user.newPhoneNumber,
+    intent: req.query.intent,
   });
 }
 
@@ -28,6 +29,7 @@ export function resendPhoneCodePost(
   return async function (req: Request, res: Response) {
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
+    const intent = req.body.intent;
     const newPhoneNumber = req.body.phoneNumber;
     const response = await service.sendPhoneVerificationNotification(
       accessToken,
@@ -49,7 +51,7 @@ export function resendPhoneCodePost(
         EventType.VerifyCodeSent
       );
 
-      return res.redirect(`PATH_DATA.CHECK_YOUR_PHONE.url?intent=resendCode`);
+      return res.redirect(`${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${intent}`);
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
