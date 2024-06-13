@@ -89,7 +89,9 @@ describe("change phone number controller", () => {
         CLIENT_SESSION_ID,
         TXMA_AUDIT_ENCODED
       );
-      expect(res.redirect).to.have.calledWith(PATH_DATA.CHECK_YOUR_PHONE.url);
+      expect(res.redirect).to.have.calledWith(
+        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
+      );
     });
 
     it("should return validation error when same UK number", async () => {
@@ -184,7 +186,9 @@ describe("change phone number controller", () => {
         CLIENT_SESSION_ID,
         TXMA_AUDIT_ENCODED
       );
-      expect(res.redirect).to.have.calledWith(PATH_DATA.CHECK_YOUR_PHONE.url);
+      expect(res.redirect).to.have.calledWith(
+        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
+      );
     });
   });
 });

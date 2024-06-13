@@ -26,6 +26,7 @@ describe("resend phone code controller", () => {
       cookies: { lng: "en" },
       i18n: { language: "en" },
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
+      query: { intent: "changePhoneNumber" },
     };
     res = {
       render: sandbox.fake(),
@@ -49,6 +50,7 @@ describe("resend phone code controller", () => {
       expect(res.render).to.have.calledWith("resend-phone-code/index.njk", {
         phoneNumberRedacted: "1111",
         phoneNumber: "07111111111",
+        intent: "changePhoneNumber",
       });
     });
   });
@@ -64,6 +66,7 @@ describe("resend phone code controller", () => {
       res.locals.sessionId = "123456-djjad";
       req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "+33645453322";
+      req.body.intent = "changePhoneNumber";
       req.session.user.email = "test@test.com";
       req.session.user.state = { changePhoneNumber: getInitialState() };
 
@@ -71,7 +74,9 @@ describe("resend phone code controller", () => {
 
       expect(fakeService.sendPhoneVerificationNotification).to.have.been
         .calledOnce;
-      expect(res.redirect).to.have.calledWith("/check-your-phone");
+      expect(res.redirect).to.have.calledWith(
+        "/check-your-phone?intent=changePhoneNumber"
+      );
     });
   });
 });

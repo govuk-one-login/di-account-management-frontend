@@ -20,6 +20,7 @@ describe("validate state middleware", () => {
 
     req = {
       url: "/add-mfa-method",
+      path: "/add-mfa-method",
       body: {},
       query: {},
       session: {
