@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import csurf from "csurf";
 import { loggerMiddleware } from "./utils/logger.js";
 import { sanitizeRequestMiddleware } from "./middleware/sanitize-request-middleware.js";
-import i18nextMiddleware from "i18next-http-middleware";
+import * as i18nextMiddleware from "i18next-http-middleware";
 import * as path from "path";
 import { configureNunjucks } from "./config/nunjucks.js";
 import { i18nextConfigurationOptions } from "./config/i18next.js";
