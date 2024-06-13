@@ -1,5 +1,5 @@
-import pino from "pino";
-import PinoHttp from "pino-http";
+import { pino } from "pino";
+import { pinoHttp } from "pino-http";
 import { getLogLevel } from "../config.js";
 
 const logger = pino({
@@ -55,7 +55,7 @@ const ignorePaths = [
 
 const loggerHttp = logger as pino.Logger<string>;
 
-const loggerMiddleware = PinoHttp({
+const loggerMiddleware = pinoHttp({
   logger: loggerHttp,
   wrapSerializers: false,
   autoLogging: { ignore: (req) => ignorePaths.includes(req.url) },

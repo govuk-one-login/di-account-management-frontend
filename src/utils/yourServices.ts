@@ -8,7 +8,7 @@ import {
 } from "../config.js";
 import { prettifyDate } from "./prettifyDate.js";
 import type { YourServices, Service } from "./types.js";
-import pino from "pino";
+import { logger } from "../utils/logger.js";
 
 const serviceStoreDynamoDBRequest = (
   subjectId: string
@@ -26,7 +26,6 @@ export const getServices = async (
   subjectId: string,
   trace: string
 ): Promise<Service[]> => {
-  const logger = pino();
   try {
     const response = await dynamoDBService().getItem(
       serviceStoreDynamoDBRequest(subjectId)
