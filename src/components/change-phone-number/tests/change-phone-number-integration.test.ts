@@ -211,7 +211,7 @@ describe("Integration:: change phone number", () => {
         _csrf: token,
         phoneNumber: "07738394991",
       })
-      .expect("Location", "/check-your-phone")
+      .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
   });
 
@@ -232,7 +232,7 @@ describe("Integration:: change phone number", () => {
         _csrf: token,
         phoneNumber: "+447738394991",
       })
-      .expect("Location", "/check-your-phone")
+      .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
   });
 
@@ -253,7 +253,7 @@ describe("Integration:: change phone number", () => {
         _csrf: token,
         phoneNumber: "447738394991",
       })
-      .expect("Location", "/check-your-phone")
+      .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
   });
 
@@ -274,7 +274,7 @@ describe("Integration:: change phone number", () => {
         _csrf: token,
         phoneNumber: "4407738394991",
       })
-      .expect("Location", "/check-your-phone")
+      .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
   });
 
@@ -295,7 +295,7 @@ describe("Integration:: change phone number", () => {
         _csrf: token,
         phoneNumber: "+4407738394991",
       })
-      .expect("Location", "/check-your-phone")
+      .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
   });
 
