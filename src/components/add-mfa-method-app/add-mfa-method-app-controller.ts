@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
-import { addMfaMethod, verifyMfaCode } from "../../utils/mfa";
+import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants.js";
+import { addMfaMethod, verifyMfaCode } from "../../utils/mfa/index.js";
 import assert from "node:assert";
-import { formatValidationError } from "../../utils/validation";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { renderMfaMethodPage } from "../common/mfa";
+import { formatValidationError } from "../../utils/validation.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { renderMfaMethodPage } from "../common/mfa/index.js";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 

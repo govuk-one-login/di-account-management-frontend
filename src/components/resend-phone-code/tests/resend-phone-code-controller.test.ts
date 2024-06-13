@@ -1,16 +1,16 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
-import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
-import { getInitialState } from "../../../utils/state-machine";
+import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types.js";
+import { getInitialState } from "../../../utils/state-machine.js";
 
 import {
   resendPhoneCodeGet,
   resendPhoneCodePost,
-} from "../resend-phone-code-controller";
-import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+} from "../resend-phone-code-controller.js";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders.js";
 
 describe("resend phone code controller", () => {
   let sandbox: sinon.SinonSandbox;

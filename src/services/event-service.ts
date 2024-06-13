@@ -5,17 +5,17 @@ import {
   AuditEvent,
   Event,
   CurrentTimeDescriptor,
-} from "./types";
-import { SqsService } from "../utils/types";
-import { sqsService } from "../utils/sqs";
+} from "./types.js";
+import { SqsService } from "../utils/types.js";
+import { sqsService } from "../utils/sqs.js";
 import {
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
   MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
   MISSING_SESSION_ID_SPECIAL_CASE,
   MISSING_USER_ID_SPECIAL_CASE,
-} from "../app.constants";
+} from "../app.constants.js";
 import { Session } from "express-session";
-import { getTxmaHeader } from "../utils/txma-header";
+import { getTxmaHeader } from "../utils/txma-header.js";
 
 export function eventService(
   sqs: SqsService = sqsService()

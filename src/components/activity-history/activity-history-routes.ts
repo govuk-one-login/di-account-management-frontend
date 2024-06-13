@@ -1,8 +1,8 @@
 import * as express from "express";
-import { activityHistoryGet } from "./activity-history-controller";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { checkRSAAllowedServicesList } from "../../middleware/check-allowed-services-list";
+import { activityHistoryGet } from "./activity-history-controller.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { checkRSAAllowedServicesList } from "../../middleware/check-allowed-services-list.js";
 
 const router = express.Router();
 

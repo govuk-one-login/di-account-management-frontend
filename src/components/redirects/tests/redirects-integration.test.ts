@@ -1,7 +1,7 @@
 import request from "supertest";
 import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
-import { PATH_DATA, WELL_KNOWN_FILES } from "../../../app.constants";
+import { sinon } from "../../../../test/utils/test-utils.js";
+import { PATH_DATA, WELL_KNOWN_FILES } from "../../../app.constants.js";
 import decache from "decache";
 
 describe("Integration::redirects", () => {

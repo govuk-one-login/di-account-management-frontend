@@ -5,10 +5,10 @@ import {
   OIDC_ERRORS,
   PATH_DATA,
   VECTORS_OF_TRUST,
-} from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { ClientAssertionServiceInterface } from "../../utils/types";
-import { clientAssertionGenerator } from "../../utils/oidc";
+} from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { ClientAssertionServiceInterface } from "../../utils/types.js";
+import { clientAssertionGenerator } from "../../utils/oidc.js";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 

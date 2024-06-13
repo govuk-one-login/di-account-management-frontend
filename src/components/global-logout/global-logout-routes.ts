@@ -1,7 +1,7 @@
 import * as express from "express";
-import { globalLogoutPost } from "./global-logout-controller";
-import { PATH_DATA } from "../../app.constants";
-import { asyncHandler } from "../../utils/async";
+import { globalLogoutPost } from "./global-logout-controller.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { asyncHandler } from "../../utils/async.js";
 
 const router = express.Router();
 

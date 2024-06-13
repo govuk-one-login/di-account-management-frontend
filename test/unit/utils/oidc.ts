@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { isTokenExpired } from "../../../src/utils/oidc";
+import { isTokenExpired } from "../../../src/utils/oidc.js";
 import { UnsecuredJWT } from "jose";
 
 describe("oidc", () => {

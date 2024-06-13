@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { describe } from "mocha";
 import sinon from "sinon";
-import { logger } from "../logger";
+import { logger } from "../logger.js";
 
 import { expect } from "chai";
 import {
@@ -9,9 +9,9 @@ import {
   LOG_MESSAGES,
   PERSISTENT_SESSION_ID_UNKNOWN,
   SESSION_ID_UNKNOWN,
-} from "../../app.constants";
+} from "../../app.constants.js";
 
-import { getSessionIdsFrom } from "../session-ids";
+import { getSessionIdsFrom } from "../session-ids.js";
 
 describe("Session Ids Util Tests", () => {
   describe("Extract session ids from Request", () => {

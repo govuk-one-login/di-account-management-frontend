@@ -1,11 +1,11 @@
 import request from "supertest";
 import { describe } from "mocha";
-import { sinon, expect } from "../../../../test/utils/test-utils";
-import { testComponent } from "../../../../test/utils/helpers";
+import { sinon, expect } from "../../../../test/utils/test-utils.js";
+import { testComponent } from "../../../../test/utils/helpers.js";
 import * as cheerio from "cheerio";
 import * as nock from "nock";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA } from "../../../app.constants.js";
 
 const { url } = PATH_DATA.SIGN_IN_HISTORY;
 

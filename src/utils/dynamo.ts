@@ -1,6 +1,6 @@
 import { DynamoDB } from "aws-sdk";
-import { DynamoDBService } from "./types";
-import { getAWSConfig, AwsConfig } from "../config/aws";
+import { DynamoDBService } from "./types.js";
+import { getAWSConfig, AwsConfig } from "../config/aws.js";
 
 export function dynamoDBService(
   awsConfig: AwsConfig = getAWSConfig()

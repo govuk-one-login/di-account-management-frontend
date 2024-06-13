@@ -5,9 +5,9 @@ import {
   getAwsRegion,
   getKmsKeyId,
   getLocalStackBaseUrl,
-} from "../config";
+} from "../config.js";
 import { SQSClient, SQSClientConfig } from "@aws-sdk/client-sqs";
-import { readEnvVar } from "../utils/read-envs";
+import { readEnvVar } from "../utils/read-envs.js";
 
 //refer to seed.yaml
 const LOCAL_KEY_ID = readEnvVar("LOCAL_KEY_ID");

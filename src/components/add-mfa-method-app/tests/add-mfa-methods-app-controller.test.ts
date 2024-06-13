@@ -2,14 +2,14 @@ import { expect } from "chai";
 import { describe, it } from "mocha";
 import { Request, Response } from "express";
 import { SinonSandbox } from "sinon";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 
 import {
   addMfaAppMethodGet,
   addMfaAppMethodPost,
 } from "../add-mfa-method-app-controller";
-import { PATH_DATA } from "../../../app.constants";
-import * as mfaModule from "../../../utils/mfa";
+import { PATH_DATA } from "../../../app.constants.js";
+import * as mfaModule from "../../../utils/mfa/index.js";
 import QRCode from "qrcode";
 
 describe("addMfaAppMethodGet", () => {

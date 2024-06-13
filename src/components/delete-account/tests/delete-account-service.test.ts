@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { SnsService } from "../../../utils/types";
-import { sinon } from "../../../../test/utils/test-utils";
-import { http } from "../../../utils/http";
+import { SnsService } from "../../../utils/types.js";
+import { sinon } from "../../../../test/utils/test-utils.js";
+import { http } from "../../../utils/http.js";
 
 import { deleteAccountService } from "../delete-account-service";
 

@@ -1,10 +1,10 @@
-import { OIDCConfig } from "../types";
+import { OIDCConfig } from "../types.js";
 import {
   getBaseUrl,
   getOIDCApiDiscoveryUrl,
   getOIDCClientId,
   getOIDCClientScopes,
-} from "../config";
+} from "../config.js";
 
 export function getOIDCConfig(): OIDCConfig {
   return {

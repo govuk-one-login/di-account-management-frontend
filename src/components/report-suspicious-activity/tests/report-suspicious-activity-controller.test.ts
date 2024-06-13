@@ -2,16 +2,16 @@ import { describe } from "mocha";
 import {
   reportSuspiciousActivityGet,
   reportSuspiciousActivityPost,
-} from "../report-suspicious-activity-controller";
+} from "../report-suspicious-activity-controller.js";
 import { Request, Response } from "express";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { expect } from "chai";
-import * as dynamo from "../../../utils/dynamo";
-import * as sns from "../../../utils/sns";
-import { DynamoDBService } from "../../../utils/types";
+import * as dynamo from "../../../utils/dynamo.js";
+import * as sns from "../../../utils/sns.js";
+import { DynamoDBService } from "../../../utils/types.js";
 import { DynamoDB } from "aws-sdk";
-import { logger } from "../../../utils/logger";
-import { AwsConfig } from "../../../config/aws";
+import { logger } from "../../../utils/logger.js";
+import { AwsConfig } from "../../../config/aws.js";
 
 describe("report suspicious activity controller", () => {
   let sandbox: sinon.SinonSandbox;

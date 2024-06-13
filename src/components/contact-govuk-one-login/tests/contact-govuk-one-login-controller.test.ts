@@ -1,15 +1,15 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import { Request, Response } from "express";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { contactGet } from "../contact-govuk-one-login-controller";
-import { logger } from "../../../utils/logger";
+import { logger } from "../../../utils/logger.js";
 import * as reference from "../../../utils/referenceCode";
 import { SinonStub, stub } from "sinon";
 import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { I18NextRequest } from "i18next-http-middleware";
-import { AuditEvent } from "../../../services/types";
-import { MISSING_APP_SESSION_ID_SPECIAL_CASE } from "../../../app.constants";
+import { AuditEvent } from "../../../services/types.js";
+import { MISSING_APP_SESSION_ID_SPECIAL_CASE } from "../../../app.constants.js";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";

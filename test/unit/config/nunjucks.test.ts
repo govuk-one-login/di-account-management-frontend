@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils";
+import { sinon } from "../../utils/test-utils.js";
 import * as nunjucks from "nunjucks";
 import express from "express";
 import i18next, { TFunction } from "i18next";
-import { configureNunjucks } from "../../../src/config/nunjucks";
+import { configureNunjucks } from "../../../src/config/nunjucks.js";
 import { SinonStub } from "sinon";
 
 type MyStubType = TFunction & SinonStub;

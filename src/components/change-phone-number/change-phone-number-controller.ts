@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { ERROR_CODES, PATH_DATA } from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { ChangePhoneNumberServiceInterface } from "./types";
-import { changePhoneNumberService } from "./change-phone-number-service";
-import { EventType, getNextState } from "../../utils/state-machine";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { ChangePhoneNumberServiceInterface } from "./types.js";
+import { changePhoneNumberService } from "./change-phone-number-service.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { convertInternationalPhoneNumberToE164Format } from "../../utils/phone-number";
-import { BadRequestError } from "../../utils/errors";
+} from "../../utils/validation.js";
+import { convertInternationalPhoneNumberToE164Format } from "../../utils/phone-number.js";
+import { BadRequestError } from "../../utils/errors.js";
 import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 

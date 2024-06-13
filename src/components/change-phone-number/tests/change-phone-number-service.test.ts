@@ -5,8 +5,8 @@ import {
   API_ENDPOINTS,
   HTTP_STATUS_CODES,
   NOTIFICATION_TYPE,
-} from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
+} from "../../../app.constants.js";
+import { getApiBaseUrl } from "../../../config.js";
 import { describe } from "mocha";
 import {
   CLIENT_SESSION_ID,
@@ -17,7 +17,7 @@ import {
   SOURCE_IP,
   TOKEN,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
+} from "../../../../test/utils/builders.js";
 
 const baseUrl = getApiBaseUrl();
 

@@ -3,8 +3,8 @@ import { describe } from "mocha";
 import {
   formatService,
   containsGovUkPublishingService,
-} from "../../../src/utils/yourServices";
-import type { Service } from "../../../src/utils/types";
+} from "../../../src/utils/yourServices.js";
+import type { Service } from "../../../src/utils/types.js";
 
 describe("YourService Util", () => {
   describe("format service information to diplay", () => {

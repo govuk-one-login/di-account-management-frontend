@@ -1,14 +1,14 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 
 import {
   resendPhoneCodeGet,
   resendPhoneCodePost,
-} from "./resend-phone-code-controller";
-import { asyncHandler } from "../../utils/async";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { validateChangePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
+} from "./resend-phone-code-controller.js";
+import { asyncHandler } from "../../utils/async.js";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { validateChangePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation.js";
 
 const router = express.Router();
 

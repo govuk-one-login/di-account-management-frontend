@@ -1,5 +1,5 @@
 import { describe } from "mocha";
-import { redact } from "../redact";
+import { redact } from "../redact.js";
 import { expect } from "chai";
 
 describe("Redact tests", (): void => {

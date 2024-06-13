@@ -1,16 +1,16 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA } from "../../../app.constants.js";
 import {
   checkYourEmailGet,
   checkYourEmailPost,
 } from "../check-your-email-controller";
-import { CheckYourEmailServiceInterface } from "../types";
-import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
+import { CheckYourEmailServiceInterface } from "../types.js";
+import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types.js";
 
 describe("check your email controller", () => {
   let sandbox: sinon.SinonSandbox;

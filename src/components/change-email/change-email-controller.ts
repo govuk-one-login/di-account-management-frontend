@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { EventType, getNextState } from "../../utils/state-machine";
+import { PATH_DATA } from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { ChangeEmailServiceInterface } from "./types";
-import { changeEmailService } from "./change-email-service";
+} from "../../utils/validation.js";
+import { ChangeEmailServiceInterface } from "./types.js";
+import { changeEmailService } from "./change-email-service.js";
 import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 
 const TEMPLATE_NAME = "change-email/index.njk";
 export function changeEmailGet(req: Request, res: Response): void {

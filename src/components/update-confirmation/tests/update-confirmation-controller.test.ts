@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { describe, it } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 
 import {
@@ -11,8 +11,8 @@ import {
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
   updateAuthenticatorAppConfirmationGet,
-} from "../update-confirmation-controller";
-import { PATH_DATA } from "../../../app.constants";
+} from "../update-confirmation-controller.js";
+import { PATH_DATA } from "../../../app.constants.js";
 
 describe("update confirmation controller", () => {
   let sandbox: sinon.SinonSandbox;

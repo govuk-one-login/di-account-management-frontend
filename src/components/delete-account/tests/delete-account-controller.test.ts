@@ -1,15 +1,15 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 import {
   deleteAccountGet,
   deleteAccountPost,
 } from "../delete-account-controller";
-import { DeleteAccountServiceInterface } from "../types";
-import { getAppEnv } from "../../../config";
-import { Service } from "../../../utils/types";
-import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+import { DeleteAccountServiceInterface } from "../types.js";
+import { getAppEnv } from "../../../config.js";
+import { Service } from "../../../utils/types.js";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders.js";
 
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;

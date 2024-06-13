@@ -1,6 +1,6 @@
-import { getRequestConfig, http, Http } from "../../utils/http";
-import { EnterPasswordServiceInterface } from "./types";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
+import { getRequestConfig, http, Http } from "../../utils/http.js";
+import { EnterPasswordServiceInterface } from "./types.js";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
 
 export function enterPasswordService(
   axios: Http = http

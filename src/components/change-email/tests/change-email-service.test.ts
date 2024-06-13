@@ -1,5 +1,5 @@
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { changeEmailService } from "../change-email-service";
 import { expect } from "chai";
 import { describe } from "mocha";
@@ -7,8 +7,8 @@ import {
   API_ENDPOINTS,
   NOTIFICATION_TYPE,
   HTTP_STATUS_CODES,
-} from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
+} from "../../../app.constants.js";
+import { getApiBaseUrl } from "../../../config.js";
 
 const baseUrl = getApiBaseUrl();
 

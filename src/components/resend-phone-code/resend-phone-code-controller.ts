@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { ERROR_CODES, PATH_DATA } from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
-import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
-import { BadRequestError } from "../../utils/errors";
-import { getLastNDigits } from "../../utils/phone-number";
-import { EventType, getNextState } from "../../utils/state-machine";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types.js";
+import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service.js";
+import { BadRequestError } from "../../utils/errors.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
 import xss from "xss";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { getTxmaHeader } from "../../utils/txma-header";
+} from "../../utils/validation.js";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
 

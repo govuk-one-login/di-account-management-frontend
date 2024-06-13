@@ -1,15 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { ChangeAuthenticatorAppServiceInterface } from "./types";
-import { changeAuthenticatorAppService } from "./change-authenticator-app-service";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { formatValidationError } from "../../utils/validation";
-import { verifyMfaCode } from "../../utils/mfa";
+import { PATH_DATA } from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { ChangeAuthenticatorAppServiceInterface } from "./types.js";
+import { changeAuthenticatorAppService } from "./change-authenticator-app-service.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { formatValidationError } from "../../utils/validation.js";
+import { verifyMfaCode } from "../../utils/mfa/index.js";
 import assert from "node:assert";
-import { MfaMethod } from "../../utils/mfa/types";
-import { generateSessionDetails, renderMfaMethodPage } from "../common/mfa";
-import { UpdateInformationInput } from "../../utils/types";
+import { MfaMethod } from "../../utils/mfa/types.js";
+import {
+  generateSessionDetails,
+  renderMfaMethodPage,
+} from "../common/mfa/index.js";
+import { UpdateInformationInput } from "../../utils/types.js";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
 

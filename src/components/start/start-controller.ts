@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { generators } from "openid-client";
-import { VECTORS_OF_TRUST } from "../../app.constants";
+import { VECTORS_OF_TRUST } from "../../app.constants.js";
 
 export async function startGet(req: Request, res: Response): Promise<void> {
   req.session.nonce = generators.nonce(15);

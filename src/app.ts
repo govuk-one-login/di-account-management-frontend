@@ -1,16 +1,16 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import csurf from "csurf";
-import { loggerMiddleware } from "./utils/logger";
-import { sanitizeRequestMiddleware } from "./middleware/sanitize-request-middleware";
+import { loggerMiddleware } from "./utils/logger.js";
+import { sanitizeRequestMiddleware } from "./middleware/sanitize-request-middleware.js";
 import i18nextMiddleware from "i18next-http-middleware";
 import * as path from "path";
-import { configureNunjucks } from "./config/nunjucks";
-import { i18nextConfigurationOptions } from "./config/i18next";
+import { configureNunjucks } from "./config/nunjucks.js";
+import { i18nextConfigurationOptions } from "./config/i18next.js";
 import {
   helmetConfiguration,
   webchatHelmetConfiguration,
-} from "./config/helmet";
+} from "./config/helmet.js";
 import helmet from "helmet";
 import session from "express-session";
 import i18next from "i18next";
@@ -23,49 +23,52 @@ import {
   supportChangeMfa,
   supportTriagePage,
   supportWebchatContact,
-} from "./config";
-import { logErrorMiddleware } from "./middleware/log-error-middleware";
-import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
-import { serverErrorHandler } from "./handlers/internal-server-error-handler";
-import { csrfMiddleware } from "./middleware/csrf-middleware";
-import { securityRouter } from "./components/security/security-routes";
-import { activityHistoryRouter } from "./components/activity-history/activity-history-routes";
-import { yourServicesRouter } from "./components/your-services/your-services-routes";
-import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
-import { ENVIRONMENT_NAME } from "./app.constants";
-import { startRouter } from "./components/start/start-routes";
-import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
-import { authMiddleware } from "./middleware/auth-middleware";
-import { logoutRouter } from "./components/logout/logout-routes";
-import { getOIDCConfig } from "./config/oidc";
-import { enterPasswordRouter } from "./components/enter-password/enter-password-routes";
-import { changeEmailRouter } from "./components/change-email/change-email-routes";
-import { updateConfirmationRouter } from "./components/update-confirmation/update-confirmation-routes";
-import { changePasswordRouter } from "./components/change-password/change-password-routes";
-import { checkYourEmailRouter } from "./components/check-your-email/check-your-email-routes";
-import { changePhoneNumberRouter } from "./components/change-phone-number/change-phone-number-routes";
-import { changeAuthenticatorAppRouter } from "./components/change-authenticator-app/change-authenticator-app-routes";
-import { deleteAccountRouter } from "./components/delete-account/delete-account-routes";
-import { checkYourPhoneRouter } from "./components/check-your-phone/check-your-phone-routes";
-import { noCacheMiddleware } from "./middleware/no-cache-middleware";
-import { sessionExpiredRouter } from "./components/session-expired/session-expired-routes";
-import { signedOutRouter } from "./components/signed-out/signed-out-routes";
-import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
-import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
-import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
-import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
-import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
-import { redirectsRouter } from "./components/redirects/redirects-routes";
-import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes";
-import { getSessionStore } from "./utils/session-store";
-import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
-import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
-import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
-import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-routes";
-import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
-import { csrfErrorHandler } from "./handlers/csrf-error-handler";
-import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
-import { safeTranslate } from "./utils/safeTranslate";
+} from "./config.js";
+import { logErrorMiddleware } from "./middleware/log-error-middleware.js";
+import { pageNotFoundHandler } from "./handlers/page-not-found-handler.js";
+import { serverErrorHandler } from "./handlers/internal-server-error-handler.js";
+import { csrfMiddleware } from "./middleware/csrf-middleware.js";
+import { securityRouter } from "./components/security/security-routes.js";
+import { activityHistoryRouter } from "./components/activity-history/activity-history-routes.js";
+import { yourServicesRouter } from "./components/your-services/your-services-routes.js";
+import {
+  getCSRFCookieOptions,
+  getSessionCookieOptions,
+} from "./config/cookie.js";
+import { ENVIRONMENT_NAME } from "./app.constants.js";
+import { startRouter } from "./components/start/start-routes.js";
+import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes.js";
+import { authMiddleware } from "./middleware/auth-middleware.js";
+import { logoutRouter } from "./components/logout/logout-routes.js";
+import { getOIDCConfig } from "./config/oidc.js";
+import { enterPasswordRouter } from "./components/enter-password/enter-password-routes.js";
+import { changeEmailRouter } from "./components/change-email/change-email-routes.js";
+import { updateConfirmationRouter } from "./components/update-confirmation/update-confirmation-routes.js";
+import { changePasswordRouter } from "./components/change-password/change-password-routes.js";
+import { checkYourEmailRouter } from "./components/check-your-email/check-your-email-routes.js";
+import { changePhoneNumberRouter } from "./components/change-phone-number/change-phone-number-routes.js";
+import { changeAuthenticatorAppRouter } from "./components/change-authenticator-app/change-authenticator-app-routes.js";
+import { deleteAccountRouter } from "./components/delete-account/delete-account-routes.js";
+import { checkYourPhoneRouter } from "./components/check-your-phone/check-your-phone-routes.js";
+import { noCacheMiddleware } from "./middleware/no-cache-middleware.js";
+import { sessionExpiredRouter } from "./components/session-expired/session-expired-routes.js";
+import { signedOutRouter } from "./components/signed-out/signed-out-routes.js";
+import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware.js";
+import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes.js";
+import { globalLogoutRouter } from "./components/global-logout/global-logout-routes.js";
+import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes.js";
+import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes.js";
+import { redirectsRouter } from "./components/redirects/redirects-routes.js";
+import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes.js";
+import { getSessionStore } from "./utils/session-store.js";
+import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware.js";
+import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route.js";
+import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes.js";
+import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-routes.js";
+import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes.js";
+import { csrfErrorHandler } from "./handlers/csrf-error-handler.js";
+import { languageToggleMiddleware } from "./middleware/language-toggle-middleware.js";
+import { safeTranslate } from "./utils/safeTranslate.js";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),

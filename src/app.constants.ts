@@ -1,4 +1,4 @@
-import { EventType, UserJourney } from "./utils/state-machine";
+import { EventType, UserJourney } from "./utils/state-machine.js";
 
 export const PATH_DATA: {
   [key: string]: { url: string; event?: EventType; type?: UserJourney };

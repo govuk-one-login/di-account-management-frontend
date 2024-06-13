@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 
-import { yourServicesGet } from "../your-services-controller";
-import { getAppEnv } from "../../../config";
+import { yourServicesGet } from "../your-services-controller.js";
+import { getAppEnv } from "../../../config.js";
 describe("your services controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;

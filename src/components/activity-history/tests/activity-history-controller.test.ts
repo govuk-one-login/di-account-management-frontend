@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../../app.constants";
-import { activityHistoryGet } from "../activity-history-controller";
-import { getAppEnv } from "../../../config";
+import { PATH_DATA } from "../../../app.constants.js";
+import { activityHistoryGet } from "../activity-history-controller.js";
+import { getAppEnv } from "../../../config.js";
 describe("Activity history controller", () => {
   let sandbox: sinon.SinonSandbox;
   let res: Partial<Response>;

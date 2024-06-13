@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { logger } from "../../utils/logger";
-import { eventService } from "../../services/event-service";
-import { AuditEvent } from "../../services/types";
+import { logger } from "../../utils/logger.js";
+import { eventService } from "../../services/event-service.js";
+import { AuditEvent } from "../../services/types.js";
 import {
   getWebchatUrl,
   showContactGuidance,
@@ -9,8 +9,8 @@ import {
   supportPhoneContact,
   supportWebchatContact,
   getAccessibilityStatementUrl,
-} from "../../config";
-import { EVENT_NAME, PATH_DATA } from "../../app.constants";
+} from "../../config.js";
+import { EVENT_NAME, PATH_DATA } from "../../app.constants.js";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 

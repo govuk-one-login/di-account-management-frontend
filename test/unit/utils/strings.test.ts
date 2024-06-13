@@ -6,9 +6,9 @@ import {
   isSafeString,
   isValidUrl,
   zeroPad,
-} from "../../../src/utils/strings";
+} from "../../../src/utils/strings.js";
 import { sinon } from "../../utils/test-utils";
-import { logger } from "../../../src/utils/logger";
+import { logger } from "../../../src/utils/logger.js";
 
 describe("string-helpers", () => {
   describe("containsNumber", () => {

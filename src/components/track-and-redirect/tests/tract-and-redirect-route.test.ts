@@ -2,12 +2,12 @@ import express from "express";
 import { expect } from "chai";
 import { describe } from "mocha";
 import supertest from "supertest";
-import * as eventServiceModule from "../../../services/event-service";
-import { trackAndRedirectRouter } from "../track-and-redirect-route";
-import * as trackAndRedirectController from "../track-and-redirect-controller";
-import { PATH_DATA } from "../../../app.constants";
-import { sinon } from "../../../../test/utils/test-utils";
-import { mockSessionMiddleware } from "../../../../test/utils/helpers";
+import * as eventServiceModule from "../../../services/event-service.js";
+import { trackAndRedirectRouter } from "../track-and-redirect-route.js";
+import * as trackAndRedirectController from "../track-and-redirect-controller.js";
+import { PATH_DATA } from "../../../app.constants.js";
+import { sinon } from "../../../../test/utils/test-utils.js";
+import { mockSessionMiddleware } from "../../../../test/utils/helpers.js";
 
 describe("trackAndRedirectRouter", () => {
   let app: express.Express;

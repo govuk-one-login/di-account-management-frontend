@@ -1,13 +1,13 @@
 import { DynamoDB } from "aws-sdk";
-import { dynamoDBService } from "./dynamo";
+import { dynamoDBService } from "./dynamo.js";
 import {
   getDynamoServiceStoreTableName,
   getAllowedAccountListClientIDs,
   getAllowedServiceListClientIDs,
   hmrcClientIds,
-} from "../config";
-import { prettifyDate } from "./prettifyDate";
-import type { YourServices, Service } from "./types";
+} from "../config.js";
+import { prettifyDate } from "./prettifyDate.js";
+import type { YourServices, Service } from "./types.js";
 import pino from "pino";
 
 const serviceStoreDynamoDBRequest = (

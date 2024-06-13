@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import sinon, { SinonStub } from "sinon";
-import { retryableFunction } from "../retryableFunction";
+import { retryableFunction } from "../retryableFunction.js";
 import { errors } from "openid-client";
 import { IncomingMessage } from "http";
 

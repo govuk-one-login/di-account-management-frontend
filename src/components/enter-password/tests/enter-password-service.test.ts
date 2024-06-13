@@ -1,14 +1,14 @@
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
-import { enterPasswordService } from "../enter-password-service";
+import { sinon } from "../../../../test/utils/test-utils.js";
+import { enterPasswordService } from "../enter-password-service.js";
 import { expect } from "chai";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants.js";
+import { getApiBaseUrl } from "../../../config.js";
 import { describe } from "mocha";
 import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
+} from "../../../../test/utils/builders.js";
 
 const baseUrl = getApiBaseUrl();
 

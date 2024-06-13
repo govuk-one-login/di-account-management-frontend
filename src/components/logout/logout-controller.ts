@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { destroyUserSessions } from "../../utils/session-store";
+import { destroyUserSessions } from "../../utils/session-store.js";
 
 export async function logoutPost(req: Request, res: Response): Promise<void> {
   const idToken = req.session.user.tokens.idToken;

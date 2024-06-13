@@ -1,7 +1,7 @@
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../../utils/types";
+} from "../../utils/types.js";
 
 export interface ChangeAuthenticatorAppServiceInterface {
   updateAuthenticatorApp: (

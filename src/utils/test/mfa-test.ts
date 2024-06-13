@@ -1,15 +1,15 @@
 import sinon from "sinon";
 import { expect } from "chai";
 import { describe } from "mocha";
-import { logger } from "../logger";
-import * as httpModule from "../http";
-import retrieveMfaMethods, { updateMfaMethod } from "../../../src/utils/mfa";
-import { HTTP_STATUS_CODES } from "../../app.constants";
-import { MfaMethod } from "../mfa/types";
+import { logger } from "../logger.js";
+import * as httpModule from "../http.js";
+import retrieveMfaMethods, { updateMfaMethod } from "../mfa/index.js";
+import { HTTP_STATUS_CODES } from "../../app.constants.js";
+import { MfaMethod } from "../mfa/types.js";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../types";
+} from "../types.js";
 
 describe("MFA Function", () => {
   let loggerStub: sinon.SinonStub;

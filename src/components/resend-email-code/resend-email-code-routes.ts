@@ -1,13 +1,13 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 
 import {
   resendEmailCodeGet,
   resendEmailCodePost,
-} from "./resend-email-code-controller";
-import { asyncHandler } from "../../utils/async";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+} from "./resend-email-code-controller.js";
+import { asyncHandler } from "../../utils/async.js";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 
 const router = express.Router();
 

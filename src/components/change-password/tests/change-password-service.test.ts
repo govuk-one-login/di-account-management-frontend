@@ -1,9 +1,9 @@
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { changePasswordService } from "../change-password-service";
 import { expect } from "chai";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants.js";
+import { getApiBaseUrl } from "../../../config.js";
 import { describe } from "mocha";
 import {
   CLIENT_SESSION_ID,
@@ -14,7 +14,7 @@ import {
   SOURCE_IP,
   TOKEN,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
+} from "../../../../test/utils/builders.js";
 
 const baseUrl = getApiBaseUrl();
 

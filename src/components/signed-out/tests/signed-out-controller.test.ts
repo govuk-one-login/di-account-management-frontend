@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
-import { signedOutGet } from "../signed-out-controller";
+import { signedOutGet } from "../signed-out-controller.js";
 
 describe("signed out controller", () => {
   let sandbox: sinon.SinonSandbox;

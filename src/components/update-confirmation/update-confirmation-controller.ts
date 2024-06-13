@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { ERROR_MESSAGES, PATH_DATA } from "../../app.constants";
-import { clearCookies } from "../../utils/session-store";
-import { logger } from "../../utils/logger";
-import { getLastNDigits } from "../../utils/phone-number";
+import { ERROR_MESSAGES, PATH_DATA } from "../../app.constants.js";
+import { clearCookies } from "../../utils/session-store.js";
+import { logger } from "../../utils/logger.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
 
 const oplValues = {
   updateEmailConfirmation: {

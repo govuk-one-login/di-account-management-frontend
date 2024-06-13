@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { supportActivityLog, supportChangeMfa } from "../../config";
-import { PATH_DATA } from "../../app.constants";
-import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list";
-import { getLastNDigits } from "../../utils/phone-number";
+import { supportActivityLog, supportChangeMfa } from "../../config.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
 
 export async function securityGet(req: Request, res: Response): Promise<void> {
   const { email } = req.session.user;

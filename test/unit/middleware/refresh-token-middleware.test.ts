@@ -2,9 +2,9 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction } from "express";
 import { sinon } from "../../utils/test-utils";
-import { refreshTokenMiddleware } from "../../../src/middleware/refresh-token-middleware";
+import { refreshTokenMiddleware } from "../../../src/middleware/refresh-token-middleware.js";
 import { UnsecuredJWT } from "jose";
-import { ClientAssertionServiceInterface } from "../../../src/utils/types";
+import { ClientAssertionServiceInterface } from "../../../src/utils/types.js";
 import { ClientMetadata, Issuer } from "openid-client";
 
 function createAccessToken(expiry = 1600711538) {

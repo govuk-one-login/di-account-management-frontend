@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 import { changeEmailGet, changeEmailPost } from "../change-email-controller";
-import { ChangeEmailServiceInterface } from "../types";
-import { HTTP_STATUS_CODES } from "../../../app.constants";
+import { ChangeEmailServiceInterface } from "../types.js";
+import { HTTP_STATUS_CODES } from "../../../app.constants.js";
 import {
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
@@ -17,7 +17,7 @@ import {
   SOURCE_IP,
   TOKEN,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
+} from "../../../../test/utils/builders.js";
 
 describe("change email controller", () => {
   let sandbox: sinon.SinonSandbox;

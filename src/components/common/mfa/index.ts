@@ -1,12 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import { formatValidationError } from "../../../utils/validation";
+import { formatValidationError } from "../../../utils/validation.js";
 import assert from "node:assert";
-import { generateMfaSecret, generateQRCodeValue } from "../../../utils/mfa";
+import {
+  generateMfaSecret,
+  generateQRCodeValue,
+} from "../../../utils/mfa/index.js";
 import QRCode from "qrcode";
-import { splitSecretKeyIntoFragments } from "../../../utils/strings";
-import { UpdateInformationSessionValues } from "../../../utils/types";
+import { splitSecretKeyIntoFragments } from "../../../utils/strings.js";
+import { UpdateInformationSessionValues } from "../../../utils/types.js";
 import xss from "xss";
-import { getTxmaHeader } from "../../../utils/txma-header";
+import { getTxmaHeader } from "../../../utils/txma-header.js";
 
 export async function renderMfaMethodPage(
   templateFile: string,

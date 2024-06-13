@@ -1,16 +1,16 @@
 import request from "supertest";
 import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
-import { testComponent } from "../../../../test/utils/helpers";
-import nock = require("nock");
+import { expect, sinon } from "../../../../test/utils/test-utils.js";
+import { testComponent } from "../../../../test/utils/helpers.js";
+import nock from "nock";
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { getBaseUrl } from "../../../config";
-import { Service } from "../../../utils/types";
+import { getBaseUrl } from "../../../config.js";
+import { Service } from "../../../utils/types.js";
 import { SinonStub } from "sinon";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
 
 describe("Integration:: delete account", () => {
   let sandbox: sinon.SinonSandbox;

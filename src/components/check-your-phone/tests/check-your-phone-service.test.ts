@@ -1,19 +1,19 @@
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
-import { checkYourPhoneService } from "../check-your-phone-service";
+import { sinon } from "../../../../test/utils/test-utils.js";
+import { checkYourPhoneService } from "../check-your-phone-service.js";
 import { expect } from "chai";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants.js";
+import { getApiBaseUrl } from "../../../config.js";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../../../utils/types";
+} from "../../../utils/types.js";
 import { describe } from "mocha";
 import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
-import { MfaMethod } from "../../../utils/mfa/types";
+} from "../../../../test/utils/builders.js";
+import { MfaMethod } from "../../../utils/mfa/types.js";
 import * as mfaModule from "../../../utils/mfa";
 
 const baseUrl = getApiBaseUrl();

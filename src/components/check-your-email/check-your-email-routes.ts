@@ -1,15 +1,15 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   checkYourEmailGet,
   checkYourEmailPost,
   requestNewCodeGet,
-} from "./check-your-email-controller";
-import { validateCheckYourEmailRequest } from "./check-your-email-validation";
-import { asyncHandler } from "../../utils/async";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
+} from "./check-your-email-controller.js";
+import { validateCheckYourEmailRequest } from "./check-your-email-validation.js";
+import { asyncHandler } from "../../utils/async.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware.js";
 
 const router = express.Router();
 

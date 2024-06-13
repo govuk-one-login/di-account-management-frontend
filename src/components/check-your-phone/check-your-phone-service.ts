@@ -1,11 +1,11 @@
-import { getRequestConfig, Http, http } from "../../utils/http";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
-import { CheckYourPhoneServiceInterface } from "./types";
+import { getRequestConfig, Http, http } from "../../utils/http.js";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
+import { CheckYourPhoneServiceInterface } from "./types.js";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../../utils/types";
-import { updateMfaMethod } from "../../utils/mfa";
+} from "../../utils/types.js";
+import { updateMfaMethod } from "../../utils/mfa/index.js";
 
 export function checkYourPhoneService(
   axios: Http = http

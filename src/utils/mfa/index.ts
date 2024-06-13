@@ -2,22 +2,22 @@ import {
   ENVIRONMENT_NAME,
   HTTP_STATUS_CODES,
   METHOD_MANAGEMENT_API,
-} from "../../app.constants";
-import { logger } from "../logger";
-import { getRequestConfig, Http } from "../http";
+} from "../../app.constants.js";
+import { logger } from "../logger.js";
+import { getRequestConfig, Http } from "../http.js";
 import {
   MfaMethod,
   MfaMethodType,
   PriorityIdentifier,
   ProblemDetail,
   ValidationProblem,
-} from "./types";
-import { getAppEnv, getMfaServiceUrl } from "../../config";
+} from "./types.js";
+import { getAppEnv, getMfaServiceUrl } from "../../config.js";
 import { authenticator } from "otplib";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../types";
+} from "../types.js";
 import { format } from "util";
 
 export function generateMfaSecret(): string {

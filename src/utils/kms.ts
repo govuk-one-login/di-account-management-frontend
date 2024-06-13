@@ -1,6 +1,6 @@
 import { KMS } from "aws-sdk";
-import { KmsService } from "./types";
-import { getKMSConfig, KmsConfig } from "../config/aws";
+import { KmsService } from "./types.js";
+import { getKMSConfig, KmsConfig } from "../config/aws.js";
 
 export function kmsService(config: KmsConfig = getKMSConfig()): KmsService {
   const sign = async function (

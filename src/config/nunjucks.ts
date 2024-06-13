@@ -2,9 +2,9 @@ import express from "express";
 import * as nunjucks from "nunjucks";
 import { Environment } from "nunjucks";
 import i18next, { TFunction } from "i18next";
-import { PATH_DATA } from "../app.constants";
+import { PATH_DATA } from "../app.constants.js";
 import addLanguageParam from "@govuk-one-login/frontend-language-toggle";
-import { safeTranslate } from "../utils/safeTranslate";
+import { safeTranslate } from "../utils/safeTranslate.js";
 
 export function configureNunjucks(
   app: express.Application,

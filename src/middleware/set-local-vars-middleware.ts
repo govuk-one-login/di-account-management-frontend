@@ -8,11 +8,11 @@ import {
   universalAnalyticsGtmContainerId,
   googleAnalytics4Disabled,
   universalAnalyticsDisabled,
-} from "../config";
-import { generateNonce } from "../utils/strings";
-import { PATH_DATA } from "../app.constants";
-import { getSessionIdsFrom } from "../utils/session-ids";
-import { getCurrentUrl } from "../utils/language-toggle";
+} from "../config.js";
+import { generateNonce } from "../utils/strings.js";
+import { PATH_DATA } from "../app.constants.js";
+import { getSessionIdsFrom } from "../utils/session-ids.js";
+import { getCurrentUrl } from "../utils/language-toggle.js";
 
 export function setLocalVarsMiddleware(
   req: Request,

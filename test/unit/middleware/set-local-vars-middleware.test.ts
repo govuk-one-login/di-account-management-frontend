@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { expect, sinon } from "../../utils/test-utils";
+import { expect, sinon } from "../../utils/test-utils.js";
 import { describe } from "mocha";
-import { setLocalVarsMiddleware } from "../../../src/middleware/set-local-vars-middleware";
-import { PERSISTENT_SESSION_ID_UNKNOWN } from "../../../src/app.constants";
+import { setLocalVarsMiddleware } from "../../../src/middleware/set-local-vars-middleware.js";
+import { PERSISTENT_SESSION_ID_UNKNOWN } from "../../../src/app.constants.js";
 
 describe("set-local-vars-middleware", () => {
   let sandbox: sinon.SinonSandbox;

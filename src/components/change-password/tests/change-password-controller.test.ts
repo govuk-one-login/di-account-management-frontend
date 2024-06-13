@@ -1,20 +1,20 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 
 import {
   changePasswordGet,
   changePasswordPost,
 } from "../change-password-controller";
-import { ChangePasswordServiceInterface } from "../types";
+import { ChangePasswordServiceInterface } from "../types.js";
 
 import {
   ERROR_CODES,
   HTTP_STATUS_CODES,
   PATH_DATA,
-} from "../../../app.constants";
+} from "../../../app.constants.js";
 import {
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
@@ -26,8 +26,8 @@ import {
   SOURCE_IP,
   TOKEN,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
-import { ApiResponseResult } from "../../../utils/types";
+} from "../../../../test/utils/builders.js";
+import { ApiResponseResult } from "../../../utils/types.js";
 
 describe("change password controller", () => {
   let sandbox: sinon.SinonSandbox;

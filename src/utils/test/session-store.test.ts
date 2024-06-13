@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { describe } from "mocha";
 import sinon from "sinon";
-import { clearCookies } from "../session-store";
+import { clearCookies } from "../session-store.js";
 import { expect } from "chai";
 
 describe("Session Store Util Tests", () => {

@@ -7,7 +7,7 @@ import {
   appendFromUrlWhenTriagePageUrl,
   buildUrlFromRequest,
   outboundContactUsLinksMiddleware,
-} from "../../../src/middleware/outbound-contact-us-links-middleware";
+} from "../../../src/middleware/outbound-contact-us-links-middleware.js";
 
 chai.use(sinonChai);
 

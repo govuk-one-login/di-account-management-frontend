@@ -1,9 +1,9 @@
 import * as express from "express";
-import { EVENT_NAME, PATH_DATA } from "../../app.constants";
+import { EVENT_NAME, PATH_DATA } from "../../app.constants.js";
 
-import { eventService } from "../../services/event-service";
-import { buildContactEmailServiceUrl } from "./track-and-redirect-controller";
-import { logger } from "../../utils/logger";
+import { eventService } from "../../services/event-service.js";
+import { buildContactEmailServiceUrl } from "./track-and-redirect-controller.js";
+import { logger } from "../../utils/logger.js";
 
 const router = express.Router();
 router.get(PATH_DATA.TRACK_AND_REDIRECT.url, (req, res) => {

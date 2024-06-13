@@ -1,6 +1,6 @@
 import { SNS } from "aws-sdk";
-import { SnsService } from "./types";
-import { getSNSConfig, SnsConfig } from "../config/aws";
+import { SnsService } from "./types.js";
+import { getSNSConfig, SnsConfig } from "../config/aws.js";
 
 export function snsService(config: SnsConfig = getSNSConfig()): SnsService {
   const publish = async function (

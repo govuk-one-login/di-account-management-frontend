@@ -1,7 +1,7 @@
 import * as express from "express";
-import { logoutPost } from "./logout-controller";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+import { logoutPost } from "./logout-controller.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 
 const router = express.Router();
 

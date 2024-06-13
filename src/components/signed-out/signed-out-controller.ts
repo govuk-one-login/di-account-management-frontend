@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 
 export function signedOutGet(_req: Request, res: Response): void {
   res.status(401);

@@ -1,5 +1,5 @@
 import { KmsKeyringNode } from "@aws-crypto/client-node";
-import buildKmsKeyring from "../kms-keyring-builder";
+import buildKmsKeyring from "../kms-keyring-builder.js";
 import { expect } from "chai";
 
 const exampleArn =

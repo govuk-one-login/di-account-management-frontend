@@ -1,9 +1,9 @@
 import { Client } from "openid-client";
-import { User } from "../../src/types";
-import { QueryParameters } from "../../src/app.constants";
+import { User } from "../../src/types.js";
+import { QueryParameters } from "../../src/app.constants.js";
 
-import { MfaMethod } from "../../src/utils/mfa/types";
-import { logger } from "../../src/utils/logger";
+import { MfaMethod } from "../../src/utils/mfa/types.js";
+import { logger } from "../../src/utils/logger.js";
 
 declare module "express-session" {
   interface Session {

@@ -2,24 +2,24 @@ import { DynamoDB } from "aws-sdk";
 import {
   activityLogItemsPerPage,
   getDynamoActivityLogStoreTableName,
-} from "../config";
-import { prettifyDate } from "./prettifyDate";
+} from "../config.js";
+import { prettifyDate } from "./prettifyDate.js";
 import {
   ActivityLogEntry,
   allowedTxmaEvents,
   FormattedActivityLog,
-} from "./types";
-import { dynamoDBService } from "./dynamo";
-import { decryptData } from "./decrypt-data";
-import { PATH_DATA } from "../app.constants";
-import { logger } from "./logger";
+} from "./types.js";
+import { dynamoDBService } from "./dynamo.js";
+import { decryptData } from "./decrypt-data.js";
+import { PATH_DATA } from "../app.constants.js";
+import { logger } from "./logger.js";
 import {
   getOIDCClientId,
   getAllowedAccountListClientIDs,
   hmrcClientIds,
   getAllowedServiceListClientIDs,
   ONE_LOGIN_HOME_NON_PROD,
-} from "../config";
+} from "../config.js";
 
 const servicesWithContent: string[] = [
   ONE_LOGIN_HOME_NON_PROD,

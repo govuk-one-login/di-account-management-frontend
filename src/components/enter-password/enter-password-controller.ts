@@ -1,19 +1,19 @@
 import { Request, Response } from "express";
-import { EnterPasswordServiceInterface } from "./types";
-import { enterPasswordService } from "./enter-password-service";
-import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA } from "../../app.constants";
+import { EnterPasswordServiceInterface } from "./types.js";
+import { enterPasswordService } from "./enter-password-service.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
+} from "../../utils/validation.js";
 import {
   EventType,
   getInitialState,
   getNextState,
   UserJourney,
-} from "../../utils/state-machine";
-import { getTxmaHeader } from "../../utils/txma-header";
+} from "../../utils/state-machine.js";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 
 const TEMPLATE = "enter-password/index.njk";
 

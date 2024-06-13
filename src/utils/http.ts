@@ -5,10 +5,10 @@ import axios, {
   AxiosResponse,
   RawAxiosRequestHeaders,
 } from "axios";
-import { ApiResponseResult } from "./types";
-import { getApiBaseUrl } from "../config";
-import { HTTP_STATUS_CODES } from "../app.constants";
-import { ApiError } from "./errors";
+import { ApiResponseResult } from "./types.js";
+import { getApiBaseUrl } from "../config.js";
+import { HTTP_STATUS_CODES } from "../app.constants.js";
+import { ApiError } from "./errors.js";
 
 const headers: RawAxiosRequestHeaders = {
   Accept: "application/json",

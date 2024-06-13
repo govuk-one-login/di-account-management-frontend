@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { logger } from "./logger";
+import { logger } from "./logger.js";
 
 export function getTxmaHeader(req: Request, trace: string): string | undefined {
   if (req.headers["txma-audit-encoded"]) {

@@ -5,8 +5,8 @@ import {
   PERSISTENT_SESSION_ID_UNKNOWN,
   SESSION_ID_UNKNOWN,
   LOG_MESSAGES,
-} from "../app.constants";
-import { logger } from "./logger";
+} from "../app.constants.js";
+import { logger } from "./logger.js";
 
 interface SessionIds {
   sessionId: string;

@@ -1,14 +1,14 @@
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 
 import * as express from "express";
 import {
   deleteAccountGet,
   deleteAccountPost,
-} from "./delete-account-controller";
-import { asyncHandler } from "../../utils/async";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
+} from "./delete-account-controller.js";
+import { asyncHandler } from "../../utils/async.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware.js";
 
 const router = express.Router();
 

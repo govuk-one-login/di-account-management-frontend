@@ -3,14 +3,14 @@ import {
   getRequestConfig,
   Http,
   http,
-} from "../../utils/http";
+} from "../../utils/http.js";
 import {
   API_ENDPOINTS,
   HTTP_STATUS_CODES,
   NOTIFICATION_TYPE,
-} from "../../app.constants";
-import { ChangePhoneNumberServiceInterface } from "./types";
-import { ApiResponse, ApiResponseResult } from "../../utils/types";
+} from "../../app.constants.js";
+import { ChangePhoneNumberServiceInterface } from "./types.js";
+import { ApiResponse, ApiResponseResult } from "../../utils/types.js";
 
 export function changePhoneNumberService(
   axios: Http = http

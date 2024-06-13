@@ -2,14 +2,14 @@ import { expect } from "chai";
 import { describe, it } from "mocha";
 import { Request, Response } from "express";
 import { SinonSandbox } from "sinon";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 
 import {
   addMfaMethodPost,
   addMfaMethodGet,
 } from "../add-mfa-methods-controller";
-import { PATH_DATA } from "../../../app.constants";
-import { EventType } from "../../../utils/state-machine";
+import { PATH_DATA } from "../../../app.constants.js";
+import { EventType } from "../../../utils/state-machine.js";
 
 describe("addMfaMethodGet", () => {
   let sandbox: sinon.SinonSandbox;

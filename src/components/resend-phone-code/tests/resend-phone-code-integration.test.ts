@@ -1,17 +1,17 @@
 import request from "supertest";
 import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
-import nock = require("nock");
+import { sinon } from "../../../../test/utils/test-utils.js";
+import nock from "nock";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
 import cheerio from "cheerio";
 import {
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
   SESSION_ID,
-} from "../../../../test/utils/builders";
+} from "../../../../test/utils/builders.js";
 import { expect } from "chai";
 
 const PHONE_NUMBER = "07839490040";

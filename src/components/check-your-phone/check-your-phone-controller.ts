@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA } from "../../app.constants";
-import { CheckYourPhoneServiceInterface } from "./types";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { checkYourPhoneService } from "./check-your-phone-service";
+import { ExpressRouteFunc } from "../../types.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { CheckYourPhoneServiceInterface } from "./types.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { checkYourPhoneService } from "./check-your-phone-service.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { getLastNDigits } from "../../utils/phone-number";
-import { UpdateInformationInput } from "../../utils/types";
-import { MfaMethod } from "../../utils/mfa/types";
-import { supportChangeMfa } from "../../config";
-import { generateSessionDetails } from "../common/mfa";
+} from "../../utils/validation.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
+import { UpdateInformationInput } from "../../utils/types.js";
+import { MfaMethod } from "../../utils/mfa/types.js";
+import { supportChangeMfa } from "../../config.js";
+import { generateSessionDetails } from "../common/mfa/index.js";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 

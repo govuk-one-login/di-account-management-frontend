@@ -1,4 +1,4 @@
-import { zeroPad } from "./strings";
+import { zeroPad } from "./strings.js";
 
 const REFERENCE_CODE_LENGTH = 6;
 

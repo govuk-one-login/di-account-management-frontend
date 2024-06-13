@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { presentYourServices } from "../../utils/yourServices";
-import { getAppEnv } from "../../config";
+import { presentYourServices } from "../../utils/yourServices.js";
+import { getAppEnv } from "../../config.js";
 
 export async function yourServicesGet(
   req: Request,

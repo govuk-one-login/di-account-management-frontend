@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
-import { startGet } from "../start-controller";
+import { startGet } from "../start-controller.js";
 
 describe("start controller", () => {
   let sandbox: sinon.SinonSandbox;

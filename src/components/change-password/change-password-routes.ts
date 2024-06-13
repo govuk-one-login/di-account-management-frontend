@@ -1,14 +1,14 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   changePasswordGet,
   changePasswordPost,
-} from "./change-password-controller";
-import { validateChangePasswordRequest } from "./change-password-validation";
-import { asyncHandler } from "../../utils/async";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
+} from "./change-password-controller.js";
+import { validateChangePasswordRequest } from "./change-password-validation.js";
+import { asyncHandler } from "../../utils/async.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware.js";
 
 const router = express.Router();
 

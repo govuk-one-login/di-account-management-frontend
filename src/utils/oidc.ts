@@ -1,8 +1,8 @@
 import { Issuer, Client, custom, generators } from "openid-client";
-import { OIDCConfig } from "../types";
+import { OIDCConfig } from "../types.js";
 import memoize from "fast-memoize";
-import { ClientAssertionServiceInterface, KmsService } from "./types";
-import { kmsService } from "./kms";
+import { ClientAssertionServiceInterface, KmsService } from "./types.js";
+import { kmsService } from "./kms.js";
 import base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";

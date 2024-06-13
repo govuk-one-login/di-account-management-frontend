@@ -1,13 +1,13 @@
 import request from "supertest";
 import { describe } from "mocha";
-import { sinon, expect } from "../../../../test/utils/test-utils";
-import { testComponent } from "../../../../test/utils/helpers";
+import { sinon, expect } from "../../../../test/utils/test-utils.js";
+import { testComponent } from "../../../../test/utils/helpers.js";
 import * as cheerio from "cheerio";
 import * as nock from "nock";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
-import { getLastNDigits } from "../../../utils/phone-number";
-import { MfaMethod } from "../../../utils/mfa/types";
+import { PATH_DATA } from "../../../app.constants.js";
+import { getLastNDigits } from "../../../utils/phone-number.js";
+import { MfaMethod } from "../../../utils/mfa/types.js";
 
 const { url } = PATH_DATA.SECURITY;
 const TEST_USER_EMAIL = "test@test.com";

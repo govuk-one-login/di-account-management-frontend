@@ -3,10 +3,10 @@ import {
   Http,
   http,
   createApiResponse,
-} from "../../utils/http";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
-import { ChangePasswordServiceInterface } from "./types";
-import { ApiResponse, ApiResponseResult } from "../../utils/types";
+} from "../../utils/http.js";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
+import { ChangePasswordServiceInterface } from "./types.js";
+import { ApiResponse, ApiResponseResult } from "../../utils/types.js";
 
 export function changePasswordService(
   axios: Http = http

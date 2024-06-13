@@ -1,17 +1,20 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
-import { DeleteAccountServiceInterface } from "./types";
-import { deleteAccountService } from "./delete-account-service";
-import { PATH_DATA } from "../../app.constants";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { getAppEnv, getBaseUrl, getSNSDeleteTopic } from "../../config";
-import { clearCookies, destroyUserSessions } from "../../utils/session-store";
+import { ExpressRouteFunc } from "../../types.js";
+import { DeleteAccountServiceInterface } from "./types.js";
+import { deleteAccountService } from "./delete-account-service.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { getAppEnv, getBaseUrl, getSNSDeleteTopic } from "../../config.js";
+import {
+  clearCookies,
+  destroyUserSessions,
+} from "../../utils/session-store.js";
 import {
   containsGovUkPublishingService,
   getAllowedListServices,
-} from "../../utils/yourServices";
-import { Service } from "../../utils/types";
-import { getTxmaHeader } from "../../utils/txma-header";
+} from "../../utils/yourServices.js";
+import { Service } from "../../utils/types.js";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 
 export async function deleteAccountGet(
   req: Request,

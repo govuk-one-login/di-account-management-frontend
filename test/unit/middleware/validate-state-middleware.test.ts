@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
-import { sinon } from "../../utils/test-utils";
-import * as mfa from "../../../src/utils/mfa";
-import { validateStateMiddleware } from "../../../src/middleware/validate-state-middleware";
+import { sinon } from "../../utils/test-utils.js";
+import * as mfa from "../../../src/utils/mfa/index.js";
+import { validateStateMiddleware } from "../../../src/middleware/validate-state-middleware.js";
 
 describe("validate state middleware", () => {
   let sandbox: sinon.SinonSandbox;

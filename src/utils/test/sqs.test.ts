@@ -1,16 +1,16 @@
 import { describe } from "mocha";
-import { SqsService } from "../types";
-import { AuditEvent } from "../../services/types";
-import { sqsService } from "../sqs";
+import { SqsService } from "../types.js";
+import { AuditEvent } from "../../services/types.js";
+import { sqsService } from "../sqs.js";
 import { SQSClient, SendMessageCommandOutput } from "@aws-sdk/client-sqs";
 import sinon from "sinon";
 import { SinonStub, stub } from "sinon";
 import chai from "chai";
 import sinonChai from "sinon-chai";
-import { logger } from "../logger";
-import * as redact from "../redact";
+import { logger } from "../logger.js";
+import * as redact from "../redact.js";
 import chaiAsPromised from "chai-as-promised";
-import { ERROR_MESSAGES, LOG_MESSAGES } from "../../app.constants";
+import { ERROR_MESSAGES, LOG_MESSAGES } from "../../app.constants.js";
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);

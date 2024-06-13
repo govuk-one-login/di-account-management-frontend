@@ -1,9 +1,9 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import { ERROR_MESSAGES } from "../app.constants";
-import retrieveMfaMethods from "../utils/mfa";
-import { getMfaServiceUrl, supportMfaPage } from "../config";
-import { logger } from "../utils/logger";
-import { legacyMfaMethodsMiddleware } from "./mfa-methods-legacy";
+import { ERROR_MESSAGES } from "../app.constants.js";
+import retrieveMfaMethods from "../utils/mfa/index.js";
+import { getMfaServiceUrl, supportMfaPage } from "../config.js";
+import { logger } from "../utils/logger.js";
+import { legacyMfaMethodsMiddleware } from "./mfa-methods-legacy.js";
 
 export async function mfaMethodMiddleware(
   req: Request,

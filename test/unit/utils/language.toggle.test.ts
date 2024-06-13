@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { getCurrentUrl } from "../../../src/utils/language-toggle";
+import { getCurrentUrl } from "../../../src/utils/language-toggle.js";
 import { Request } from "express";
 
 describe("getCurrentUrl", () => {

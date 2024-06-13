@@ -4,8 +4,8 @@ import {
   formatActivityLogs,
   generatePagination,
   filterAndDecryptActivity,
-} from "../../../src/utils/activityHistory";
-import type { ActivityLogEntry } from "../../../src/utils/types";
+} from "../../../src/utils/activityHistory.js";
+import type { ActivityLogEntry } from "../../../src/utils/types.js";
 import { stub, SinonStub } from "sinon";
 
 const createLogEntry = (shouldDisplay: boolean = true): ActivityLogEntry => {

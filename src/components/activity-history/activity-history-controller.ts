@@ -3,17 +3,17 @@ import {
   getAppEnv,
   activityLogItemsPerPage,
   getOIDCClientId,
-} from "../../config";
-import { PATH_DATA } from "../../app.constants";
+} from "../../config.js";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   generatePagination,
   formatActivityLogs,
   filterAndDecryptActivity,
-} from "../../utils/activityHistory";
-import { presentActivityHistory } from "../../utils/present-activity-history";
-import { HTTP_STATUS_CODES } from "../../app.constants";
-import { logger } from "../../utils/logger";
-import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
+} from "../../utils/activityHistory.js";
+import { presentActivityHistory } from "../../utils/present-activity-history.js";
+import { HTTP_STATUS_CODES } from "../../app.constants.js";
+import { logger } from "../../utils/logger.js";
+import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types.js";
 
 export async function activityHistoryGet(
   req: Request,

@@ -1,16 +1,16 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 
 import {
   enterPasswordGet,
   enterPasswordPost,
 } from "../enter-password-controller";
-import { EnterPasswordServiceInterface } from "../types";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
-import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+import { EnterPasswordServiceInterface } from "../types.js";
+import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants.js";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders.js";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;

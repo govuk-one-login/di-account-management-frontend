@@ -1,4 +1,4 @@
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 
 import * as express from "express";
 import {
@@ -8,9 +8,9 @@ import {
   updateEmailConfirmationGet,
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
-} from "./update-confirmation-controller";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+} from "./update-confirmation-controller.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
 
 const router = express.Router();
 

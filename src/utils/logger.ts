@@ -1,6 +1,6 @@
 import pino from "pino";
 import PinoHttp from "pino-http";
-import { getLogLevel } from "../config";
+import { getLogLevel } from "../config.js";
 
 const logger = pino({
   name: "di-account-management-frontend",

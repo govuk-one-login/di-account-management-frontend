@@ -1,7 +1,7 @@
 import request from "supertest";
 import { describe, Done } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
-import { testComponent } from "../../../../test/utils/helpers";
+import { expect, sinon } from "../../../../test/utils/test-utils.js";
+import { testComponent } from "../../../../test/utils/helpers.js";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
@@ -9,10 +9,13 @@ import {
   API_ENDPOINTS,
   NOTIFICATION_TYPE,
   PATH_DATA,
-} from "../../../app.constants";
+} from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import {
+  CLIENT_SESSION_ID,
+  SESSION_ID,
+} from "../../../../test/utils/builders.js";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
 
 describe("Integration:: change email", () => {
   let sandbox: sinon.SinonSandbox;

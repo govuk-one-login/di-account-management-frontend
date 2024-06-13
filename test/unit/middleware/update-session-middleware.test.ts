@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils";
-import { updateSessionMiddleware } from "../../../src/middleware/update-session-middleware";
-import { logger } from "../../../src/utils/logger";
+import { sinon } from "../../utils/test-utils.js";
+import { updateSessionMiddleware } from "../../../src/middleware/update-session-middleware.js";
+import { logger } from "../../../src/utils/logger.js";
 
 const CURRENT_GS_SESSION_ID = "session-id";
 const REFERENCE_CODE = "reference-code";

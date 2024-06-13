@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
-import { HTTP_STATUS_CODES } from "../../../app.constants";
-import { globalLogoutPost } from "../global-logout-controller";
+import { HTTP_STATUS_CODES } from "../../../app.constants.js";
+import { globalLogoutPost } from "../global-logout-controller.js";
 
 import {
   createLocalJWKSet,
@@ -18,9 +18,9 @@ import {
   UnsecuredJWT,
 } from "jose";
 
-import { GetKeyFunction } from "jose/dist/types/types";
-import { logger } from "../../../utils/logger";
-import * as SessionStore from "../../../utils/session-store";
+import { GetKeyFunction } from "jose/dist/types/types.js";
+import { logger } from "../../../utils/logger.js";
+import * as SessionStore from "../../../utils/session-store.js";
 
 describe("global logout controller", () => {
   let sandbox: sinon.SinonSandbox;

@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import * as sessionStore from "../../../utils/session-store";
-import { sinon } from "../../../../test/utils/test-utils";
-import { logoutPost } from "../logout-controller";
-import { logger } from "../../../utils/logger";
+import * as sessionStore from "../../../utils/session-store.js";
+import { sinon } from "../../../../test/utils/test-utils.js";
+import { logoutPost } from "../logout-controller.js";
+import { logger } from "../../../utils/logger.js";
 
 const TEST_TRACE_ID = "trace-id";
 

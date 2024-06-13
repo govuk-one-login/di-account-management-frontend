@@ -1,5 +1,5 @@
 import { DynamoDB, KMS, SNS } from "aws-sdk";
-import { MfaMethod } from "./mfa/types";
+import { MfaMethod } from "./mfa/types.js";
 
 type ClientId = string;
 type UrnFdnSub = string;

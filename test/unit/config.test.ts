@@ -4,7 +4,7 @@ import { describe } from "mocha";
 import {
   getAllowedAccountListClientIDs,
   getAllowedServiceListClientIDs,
-} from "../../src/config";
+} from "../../src/config.js";
 
 describe("config", () => {
   describe("Service configuration", () => {

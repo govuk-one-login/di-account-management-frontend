@@ -1,17 +1,17 @@
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { changeAuthenticatorAppService } from "../change-authenticator-app-service";
 import { expect } from "chai";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../../../utils/types";
+} from "../../../utils/types.js";
 import { describe } from "mocha";
 import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
-import { MfaMethod } from "../../../utils/mfa/types";
+} from "../../../../test/utils/builders.js";
+import { MfaMethod } from "../../../utils/mfa/types.js";
 import * as mfaModule from "../../../utils/mfa";
 
 describe("changeAuthenticatorAppService", () => {

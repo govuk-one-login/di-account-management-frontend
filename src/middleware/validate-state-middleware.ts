@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { PATH_DATA } from "../app.constants";
+import { PATH_DATA } from "../app.constants.js";
 
 export function validateStateMiddleware(
   req: Request,

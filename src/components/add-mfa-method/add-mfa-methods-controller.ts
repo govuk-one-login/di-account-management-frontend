@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { MFA_METHODS } from "../../app.constants";
-import { getNextState } from "../../utils/state-machine";
+import { MFA_METHODS } from "../../app.constants.js";
+import { getNextState } from "../../utils/state-machine.js";
 
 type MfaMethods = keyof typeof MFA_METHODS;
 

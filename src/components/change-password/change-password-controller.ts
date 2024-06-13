@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA, ERROR_CODES } from "../../app.constants";
-import { ChangePasswordServiceInterface } from "./types";
-import { changePasswordService } from "./change-password-service";
-import { EventType, getNextState } from "../../utils/state-machine";
+import { ExpressRouteFunc } from "../../types.js";
+import { PATH_DATA, ERROR_CODES } from "../../app.constants.js";
+import { ChangePasswordServiceInterface } from "./types.js";
+import { changePasswordService } from "./change-password-service.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
 import {
   renderBadRequest,
   formatValidationError,
-} from "../../utils/validation";
-import { BadRequestError } from "../../utils/errors";
+} from "../../utils/validation.js";
+import { BadRequestError } from "../../utils/errors.js";
 import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 
 const changePasswordTemplate = "change-password/index.njk";
 

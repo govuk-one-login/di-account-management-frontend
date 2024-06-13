@@ -1,5 +1,5 @@
-import { ENVIRONMENT_NAME, LOCALE } from "../app.constants";
-import { getNodeEnv, getServiceDomain, supportLanguageCY } from "../config";
+import { ENVIRONMENT_NAME, LOCALE } from "../app.constants.js";
+import { getNodeEnv, getServiceDomain, supportLanguageCY } from "../config.js";
 import type { InitOptions } from "i18next/typescript/options";
 
 export function i18nextConfigurationOptions(path: string): InitOptions {

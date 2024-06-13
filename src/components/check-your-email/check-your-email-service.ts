@@ -1,11 +1,11 @@
-import { getRequestConfig, Http, http } from "../../utils/http";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
-import { CheckYourEmailServiceInterface } from "./types";
+import { getRequestConfig, Http, http } from "../../utils/http.js";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
+import { CheckYourEmailServiceInterface } from "./types.js";
 import { AxiosResponse } from "axios";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../../utils/types";
+} from "../../utils/types.js";
 
 export function checkYourEmailService(
   axios: Http = http

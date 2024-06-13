@@ -1,9 +1,9 @@
-import { ChangeAuthenticatorAppServiceInterface } from "./types";
+import { ChangeAuthenticatorAppServiceInterface } from "./types.js";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../../utils/types";
-import { updateMfaMethod } from "../../utils/mfa";
+} from "../../utils/types.js";
+import { updateMfaMethod } from "../../utils/mfa/index.js";
 
 export function changeAuthenticatorAppService(): ChangeAuthenticatorAppServiceInterface {
   const updateAuthenticatorApp = async function (

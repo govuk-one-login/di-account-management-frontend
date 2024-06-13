@@ -1,21 +1,21 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA } from "../../app.constants";
+import { ExpressRouteFunc } from "../../types.js";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { checkYourEmailService } from "./check-your-email-service";
-import { CheckYourEmailServiceInterface } from "./types";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
-import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
+} from "../../utils/validation.js";
+import { checkYourEmailService } from "./check-your-email-service.js";
+import { CheckYourEmailServiceInterface } from "./types.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types.js";
+import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service.js";
 import xss from "xss";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
-} from "../../utils/types";
-import { getTxmaHeader } from "../../utils/txma-header";
+} from "../../utils/types.js";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
 

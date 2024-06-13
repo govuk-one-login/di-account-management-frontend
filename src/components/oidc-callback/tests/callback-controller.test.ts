@@ -1,15 +1,15 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
-import { oidcAuthCallbackGet } from "../call-back-controller";
+import { oidcAuthCallbackGet } from "../call-back-controller.js";
 import {
   HTTP_STATUS_CODES,
   PATH_DATA,
   VECTORS_OF_TRUST,
-} from "../../../app.constants";
-import { ClientAssertionServiceInterface } from "../../../utils/types";
+} from "../../../app.constants.js";
+import { ClientAssertionServiceInterface } from "../../../utils/types.js";
 
 describe("callback controller", () => {
   let sandbox: sinon.SinonSandbox;

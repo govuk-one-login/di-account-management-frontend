@@ -5,9 +5,9 @@ import { describe } from "mocha";
 import {
   generateExpectedContext,
   validateEncryptionContext,
-} from "../decrypt-data";
-import { logger } from "../logger";
-import * as getHashedAccessCheckValueModule from "../get-access-check-value";
+} from "../decrypt-data.js";
+import { logger } from "../logger.js";
+import * as getHashedAccessCheckValueModule from "../get-access-check-value.js";
 
 chai.use(chaiAsPromised);
 

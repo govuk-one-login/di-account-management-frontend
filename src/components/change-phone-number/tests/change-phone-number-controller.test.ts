@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 
-import { ChangePhoneNumberServiceInterface } from "../types";
-import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
+import { ChangePhoneNumberServiceInterface } from "../types.js";
+import { ERROR_CODES, PATH_DATA } from "../../../app.constants.js";
 import {
   changePhoneNumberGet,
   changePhoneNumberPost,
@@ -21,7 +21,7 @@ import {
   SOURCE_IP,
   TOKEN,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
+} from "../../../../test/utils/builders.js";
 
 describe("change phone number controller", () => {
   let sandbox: sinon.SinonSandbox;

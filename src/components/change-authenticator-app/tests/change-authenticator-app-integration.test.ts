@@ -1,12 +1,15 @@
 import request from "supertest";
 import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
+import {
+  CLIENT_SESSION_ID,
+  SESSION_ID,
+} from "../../../../test/utils/builders.js";
 import * as mfaModule from "../../../utils/mfa";
 
 describe("Integration:: change authenticator app", () => {

@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { HTTP_STATUS_CODES } from "../../app.constants";
-import { LogoutToken } from "./types";
+import { HTTP_STATUS_CODES } from "../../app.constants.js";
+import { LogoutToken } from "./types.js";
 import { jwtVerify } from "jose";
 import {
   getLogoutTokenMaxAge,
   getTokenValidationClockSkew,
-} from "../../config";
-import { destroyUserSessions } from "../../utils/session-store";
+} from "../../config.js";
+import { destroyUserSessions } from "../../utils/session-store.js";
 
 const BACK_CHANNEL_LOGOUT_EVENT =
   "http://schemas.openid.net/event/backchannel-logout";

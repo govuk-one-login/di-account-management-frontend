@@ -1,15 +1,15 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 import {
   checkYourPhoneGet,
   checkYourPhonePost,
 } from "../check-your-phone-controller";
-import { CheckYourPhoneServiceInterface } from "../types";
-import { PATH_DATA } from "../../../app.constants";
-import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+import { CheckYourPhoneServiceInterface } from "../types.js";
+import { PATH_DATA } from "../../../app.constants.js";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders.js";
 
 describe("check your phone controller", () => {
   let sandbox: sinon.SinonSandbox;

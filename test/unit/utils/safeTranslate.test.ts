@@ -2,9 +2,9 @@ import { expect } from "chai";
 import { describe, it } from "mocha";
 import sinon from "sinon";
 import { TFunction } from "i18next";
-import { logger } from "../../../src/utils/logger";
+import { logger } from "../../../src/utils/logger.js";
 
-import { safeTranslate } from "../../../src/utils/safeTranslate";
+import { safeTranslate } from "../../../src/utils/safeTranslate.js";
 
 describe("safeTranslate", () => {
   let translate: sinon.SinonStub<[string, any?], string>;

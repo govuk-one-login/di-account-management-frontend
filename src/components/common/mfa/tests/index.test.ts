@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../../test/utils/test-utils";
+import { sinon } from "../../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 import * as mfaModule from "../../../../utils/mfa";
 import QRCode from "qrcode";
@@ -10,8 +10,8 @@ import {
   RequestBuilder,
   ResponseBuilder,
   TXMA_AUDIT_ENCODED,
-} from "../../../../../test/utils/builders";
-import { formatValidationError } from "../../../../utils/validation";
+} from "../../../../../test/utils/builders.js";
+import { formatValidationError } from "../../../../utils/validation.js";
 
 describe("render mfa page", () => {
   let sandbox: sinon.SinonSandbox;

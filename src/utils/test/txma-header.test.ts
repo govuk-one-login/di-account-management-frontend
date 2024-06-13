@@ -3,8 +3,8 @@ import { expect } from "chai";
 import { Request } from "express";
 import { spy, SinonSpy } from "sinon";
 
-import { logger } from "../../utils/logger";
-import { getTxmaHeader } from "../txma-header";
+import { logger } from "../../utils/logger.js";
+import { getTxmaHeader } from "../txma-header.js";
 
 describe("getTxmaHeader", () => {
   const TRACE = "trace";

@@ -1,20 +1,20 @@
 import { Request, Response, NextFunction } from "express";
-import { PATH_DATA } from "../../app.constants";
-// import { formatEvent } from "../../utils/activityHistory";
+import { PATH_DATA } from "../../app.constants.js";
+// import { formatEvent } from "../../utils/activityHistory.js";
 import {
   getAppEnv,
   getDynamoActivityLogStoreTableName,
   getOIDCClientId,
-} from "../../config";
+} from "../../config.js";
 import { DynamoDB } from "aws-sdk";
-import { dynamoDBService } from "../../utils/dynamo";
-import { getSNSSuspicousActivityTopic } from "../../config";
-import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
+import { dynamoDBService } from "../../utils/dynamo.js";
+import { getSNSSuspicousActivityTopic } from "../../config.js";
+import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types.js";
 import assert from "node:assert";
-import { formatActivityLogs } from "../../utils/activityHistory";
-import { decryptData } from "../../utils/decrypt-data";
-import { snsService } from "../../utils/sns";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { formatActivityLogs } from "../../utils/activityHistory.js";
+import { decryptData } from "../../utils/decrypt-data.js";
+import { snsService } from "../../utils/sns.js";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 
 const activityLogDynamoDBRequest = (
   subjectId: string,

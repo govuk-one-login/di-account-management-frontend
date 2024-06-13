@@ -1,4 +1,4 @@
-import { logger } from "./logger";
+import { logger } from "./logger.js";
 import { errors } from "openid-client";
 
 const RETRYABLE_ERRORS = [500, 502, 503, 504, 408, 429];

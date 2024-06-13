@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { isTokenExpired, clientAssertionGenerator } from "../utils/oidc";
-import { ExpressRouteFunc } from "../types";
-import { ClientAssertionServiceInterface } from "../utils/types";
-import { retryableFunction } from "../utils/retryableFunction";
+import { isTokenExpired, clientAssertionGenerator } from "../utils/oidc.js";
+import { ExpressRouteFunc } from "../types.js";
+import { ClientAssertionServiceInterface } from "../utils/types.js";
+import { retryableFunction } from "../utils/retryableFunction.js";
 
 export function refreshTokenMiddleware(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()

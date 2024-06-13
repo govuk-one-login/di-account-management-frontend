@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getInitialState } from "../../src/utils/state-machine";
+import { getInitialState } from "../../src/utils/state-machine.js";
 import { Session, SessionData } from "express-session";
 import { IncomingHttpHeaders } from "http";
 

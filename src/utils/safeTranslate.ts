@@ -1,6 +1,6 @@
 import { TFunction, TFunctionDetailedResult } from "i18next";
-import { logger } from "./logger";
-import { LOCALE } from "../app.constants";
+import { logger } from "./logger.js";
+import { LOCALE } from "../app.constants.js";
 
 export type translateResult = string | TFunctionDetailedResult<string, any>;
 

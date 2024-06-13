@@ -1,20 +1,20 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 
-import { ChangeAuthenticatorAppServiceInterface } from "../types";
-import { PATH_DATA } from "../../../app.constants";
+import { ChangeAuthenticatorAppServiceInterface } from "../types.js";
+import { PATH_DATA } from "../../../app.constants.js";
 import {
   changeAuthenticatorAppGet,
   changeAuthenticatorAppPost,
-} from "../change-authenticator-app-controller";
+} from "../change-authenticator-app-controller.js";
 import {
   RequestBuilder,
   ResponseBuilder,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
+} from "../../../../test/utils/builders.js";
 import * as mfaModule from "../../../utils/mfa";
 import QRCode from "qrcode";
 

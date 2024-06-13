@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { describe } from "mocha";
-import { getLastNDigits } from "../phone-number";
+import { getLastNDigits } from "../phone-number.js";
 describe("getLastNDigits", () => {
   it("should return last n digits", () => {
     const phoneNumber = "1234567890";

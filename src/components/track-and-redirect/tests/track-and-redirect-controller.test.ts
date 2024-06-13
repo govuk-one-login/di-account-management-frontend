@@ -1,13 +1,13 @@
 import {
   buildContactEmailServiceUrl,
   ExpectedParams,
-} from "../track-and-redirect-controller";
+} from "../track-and-redirect-controller.js";
 import { Request, Response } from "express";
 import { expect } from "chai";
 import { describe } from "mocha";
 import sinon from "sinon";
-import { logger } from "../../../utils/logger";
-import * as config from "../../../config";
+import { logger } from "../../../utils/logger.js";
+import * as config from "../../../config.js";
 
 describe("buildContactEmailServiceUrl", () => {
   let req: Partial<Request>;

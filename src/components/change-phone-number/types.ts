@@ -1,4 +1,4 @@
-import { ApiResponseResult } from "../../utils/types";
+import { ApiResponseResult } from "../../utils/types.js";
 
 export interface ChangePhoneNumberServiceInterface {
   sendPhoneVerificationNotification: (

@@ -1,13 +1,13 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   enterPasswordPost,
   enterPasswordGet,
-} from "./enter-password-controller";
-import { asyncHandler } from "../../utils/async";
-import { validateEnterPasswordRequest } from "./enter-password-validation";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
+} from "./enter-password-controller.js";
+import { asyncHandler } from "../../utils/async.js";
+import { validateEnterPasswordRequest } from "./enter-password-validation.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware.js";
 
 const router = express.Router();
 

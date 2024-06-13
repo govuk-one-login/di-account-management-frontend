@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { generators } from "openid-client";
-import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants";
-import { logger } from "../utils/logger";
+import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants.js";
+import { logger } from "../utils/logger.js";
 
 export function requiresAuthMiddleware(
   req: Request,

@@ -1,7 +1,7 @@
 import "express-session";
 import { NextFunction, Request, Response } from "express";
 import { ValidationChain } from "express-validator";
-import { StateAction, UserJourney } from "./utils/state-machine";
+import { StateAction, UserJourney } from "./utils/state-machine.js";
 
 export interface OIDCConfig {
   idp_url: string;

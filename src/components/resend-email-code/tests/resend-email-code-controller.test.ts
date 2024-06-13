@@ -1,16 +1,16 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { sinon } from "../../../../test/utils/test-utils";
+import { sinon } from "../../../../test/utils/test-utils.js";
 import { Request, Response } from "express";
 
 import {
   resendEmailCodeGet,
   resendEmailCodePost,
-} from "../resend-email-code-controller";
-import { ChangeEmailServiceInterface } from "../../change-email/types";
-import { getInitialState } from "../../../utils/state-machine";
-import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+} from "../resend-email-code-controller.js";
+import { ChangeEmailServiceInterface } from "../../change-email/types.js";
+import { getInitialState } from "../../../utils/state-machine.js";
+import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders.js";
 
 describe("check your email controller", () => {
   let sandbox: sinon.SinonSandbox;
