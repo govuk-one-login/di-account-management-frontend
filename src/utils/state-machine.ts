@@ -89,8 +89,8 @@ export const amStateMachine = createMachine({
     },
     SMS: {
       on: {
-        VALUE_UPDATED: {
-          target: "CONFIRMATION",
+        VERIFY_CODE_SENT: {
+          target: "VERIFY_CODE",
         },
       },
     },
@@ -107,6 +107,7 @@ function getNextState(from: StateValue, to: EventType): StateAction {
     amStateMachine.resolveState({ value: from, context: {} }),
     { type: to }
   );
+  console.log("next state", t);
   return {
     value: t.value,
     events: getNextEvents(t),
