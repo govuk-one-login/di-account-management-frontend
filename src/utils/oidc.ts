@@ -3,7 +3,6 @@ import { OIDCConfig } from "../types.js";
 import memoize from "memoizee";
 import { ClientAssertionServiceInterface, KmsService } from "./types.js";
 import { kmsService } from "./kms.js";
-import base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
 
@@ -72,8 +71,8 @@ function clientAssertionGenerator(
     };
 
     const token_components = {
-      header: base64url.encode(JSON.stringify(headers)),
-      payload: base64url.encode(JSON.stringify(payload)),
+      header: Buffer.from(JSON.stringify(headers)).toString("base64url"),
+      payload: Buffer.from(JSON.stringify(payload)).toString("base64url"),
     };
 
     const message = Buffer.from(
