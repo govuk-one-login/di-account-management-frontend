@@ -86,8 +86,6 @@ export function enterPasswordPost(
     );
 
     if (isAuthenticated) {
-      console.log("authed");
-
       req.session.user.state[requestType] = getNextState(
         req.session.user.state[requestType].value,
         EventType.Authenticated

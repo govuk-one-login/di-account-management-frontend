@@ -41,18 +41,25 @@ export function checkYourPhonePost(
 
     let isPhoneNumberUpdated = false;
     if (supportChangeMfa()) {
-      const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
-        (mfa) => mfa.mfaMethodType === "SMS"
-      );
-      if (smsMFAMethod) {
-        smsMFAMethod.endPoint = newPhoneNumber;
-        updateInput.mfaMethod = smsMFAMethod;
-        isPhoneNumberUpdated = await service.updatePhoneNumberWithMfaApi(
-          updateInput,
-          sessionDetails
+      if (intent === "changePhoneNumber") {
+        const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
+          (mfa) => mfa.mfaMethodType === "SMS"
         );
+        if (smsMFAMethod) {
+          smsMFAMethod.endPoint = newPhoneNumber;
+          updateInput.mfaMethod = smsMFAMethod;
+          isPhoneNumberUpdated = await service.updatePhoneNumberWithMfaApi(
+            updateInput,
+            sessionDetails
+          );
+        } else {
+          throw Error(`No existing MFA method for: ${email}`);
+        }
+      } else if (intent === "addMfaMethod") {
+        // TODO add MFA method here
+        isPhoneNumberUpdated = true;
       } else {
-        throw Error(`No existing MFA method for: ${email}`);
+        throw Error(`Unknown phone verification intent ${intent}`);
       }
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(

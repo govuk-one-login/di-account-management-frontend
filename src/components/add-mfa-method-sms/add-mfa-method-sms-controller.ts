@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { PATH_DATA } from "../../app.constants";
-import { getLastNDigits } from "../../utils/phone-number";
+import {
+  convertInternationalPhoneNumberToE164Format,
+  getLastNDigits,
+} from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 
 export async function addMfaSmsMethodGet(
@@ -15,10 +18,16 @@ export async function addMfaSmsMethodPost(
   res: Response
 ): Promise<void> {
   //TODO do something with this
-  req.session.user.state.addMfaMethod = getNextState(
+  req.session.user.state.changePhoneNumber = getNextState(
     req.session.user.state.addMfaMethod.value,
     EventType.VerifyCodeSent
   );
+
+  req.session.user.newPhoneNumber = req.body.hasInternationalPhoneNumber
+    ? convertInternationalPhoneNumberToE164Format(
+        req.body.internationalPhoneNumber
+      )
+    : req.body.ukPhoneNumber;
 
   res.redirect(`${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addMfaMethod`);
 }

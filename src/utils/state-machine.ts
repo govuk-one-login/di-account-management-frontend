@@ -107,7 +107,6 @@ function getNextState(from: StateValue, to: EventType): StateAction {
     amStateMachine.resolveState({ value: from, context: {} }),
     { type: to }
   );
-  console.log("next state", t);
   return {
     value: t.value,
     events: getNextEvents(t),
