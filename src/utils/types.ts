@@ -1,4 +1,4 @@
-import { DynamoDB, KMS, SNS } from "aws-sdk";
+import * as aws from "aws-sdk";
 import { MfaMethod } from "./mfa/types.js";
 
 type ClientId = string;
@@ -23,7 +23,7 @@ export interface YourServices {
 }
 
 export interface KmsService {
-  sign: (payload: string) => Promise<KMS.Types.SignResponse>;
+  sign: (payload: string) => Promise<aws.KMS.Types.SignResponse>;
 }
 
 export interface ActivityLogEntry {
@@ -58,7 +58,7 @@ export interface SnsService {
   publish: (
     topic_arn: string,
     message: string
-  ) => Promise<SNS.Types.PublishResponse>;
+  ) => Promise<aws.SNS.Types.PublishResponse>;
 }
 
 export interface SqsService {
@@ -67,11 +67,11 @@ export interface SqsService {
 
 export interface DynamoDBService {
   getItem: (
-    getCommand: DynamoDB.Types.GetItemInput
-  ) => Promise<DynamoDB.Types.GetItemOutput>;
+    getCommand: aws.DynamoDB.Types.GetItemInput
+  ) => Promise<aws.DynamoDB.Types.GetItemOutput>;
   queryItem: (
-    queryCommand: DynamoDB.Types.QueryInput
-  ) => Promise<DynamoDB.Types.QueryOutput>;
+    queryCommand: aws.DynamoDB.Types.QueryInput
+  ) => Promise<aws.DynamoDB.Types.QueryOutput>;
 }
 
 export interface AwsConfig {

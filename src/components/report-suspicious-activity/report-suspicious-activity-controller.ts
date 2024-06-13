@@ -6,7 +6,7 @@ import {
   getDynamoActivityLogStoreTableName,
   getOIDCClientId,
 } from "../../config.js";
-import { DynamoDB } from "aws-sdk";
+import * as aws from "aws-sdk";
 import { dynamoDBService } from "../../utils/dynamo.js";
 import { getSNSSuspicousActivityTopic } from "../../config.js";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types.js";
@@ -19,7 +19,7 @@ import { getTxmaHeader } from "../../utils/txma-header.js";
 const activityLogDynamoDBRequest = (
   subjectId: string,
   eventId: string
-): DynamoDB.Types.QueryInput => ({
+): aws.DynamoDB.Types.QueryInput => ({
   TableName: getDynamoActivityLogStoreTableName(),
   KeyConditionExpression: "user_id = :user_id AND event_id = :event_id ",
   ExpressionAttributeValues: {
@@ -91,7 +91,7 @@ export async function reportSuspiciousActivityGet(
       );
       return next();
     }
-    activityLog = DynamoDB.Converter.unmarshall(
+    activityLog = aws.DynamoDB.Converter.unmarshall(
       response.Items[0]
     ) as ActivityLogEntry;
   } catch (err) {

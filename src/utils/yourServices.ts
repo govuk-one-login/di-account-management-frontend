@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import * as aws from "aws-sdk";
 import { dynamoDBService } from "./dynamo.js";
 import {
   getDynamoServiceStoreTableName,
@@ -12,15 +12,16 @@ import { logger } from "../utils/logger.js";
 
 const serviceStoreDynamoDBRequest = (
   subjectId: string
-): DynamoDB.Types.GetItemInput => ({
+): aws.DynamoDB.Types.GetItemInput => ({
   TableName: getDynamoServiceStoreTableName(),
   Key: {
     user_id: { S: subjectId },
   },
 });
 
-const unmarshallDynamoData = (dynamoDBResponse: DynamoDB.Types.AttributeMap) =>
-  DynamoDB.Converter.unmarshall(dynamoDBResponse);
+const unmarshallDynamoData = (
+  dynamoDBResponse: aws.DynamoDB.Types.AttributeMap
+) => aws.DynamoDB.Converter.unmarshall(dynamoDBResponse);
 
 export const getServices = async (
   subjectId: string,

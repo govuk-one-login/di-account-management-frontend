@@ -1,4 +1,4 @@
-import { Endpoint } from "aws-sdk";
+import * as aws from "aws-sdk";
 import { DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
 import {
   isLocalEnv,
@@ -22,7 +22,7 @@ export interface SnsConfig {
 }
 
 export interface AwsConfig {
-  endpoint?: Endpoint;
+  endpoint?: aws.Endpoint;
   accessKeyId?: string;
   secretAccessKey?: string;
   region: string;
@@ -37,7 +37,7 @@ function getLocalStackKmsConfig() {
 
 function getLocalStackAWSConfig(): AwsConfig {
   return {
-    endpoint: new Endpoint(getLocalStackBaseUrl()),
+    endpoint: new aws.Endpoint(getLocalStackBaseUrl()),
     accessKeyId: "na",
     secretAccessKey: "na",
     region: getAwsRegion(),

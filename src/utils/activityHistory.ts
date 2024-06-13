@@ -1,4 +1,4 @@
-import { DynamoDB } from "aws-sdk";
+import * as aws from "aws-sdk";
 import {
   activityLogItemsPerPage,
   getDynamoActivityLogStoreTableName,
@@ -196,7 +196,7 @@ export const formatActivityLogs = (
 
 const activityLogDynamoDBRequest = (
   user_id: string
-): DynamoDB.Types.QueryInput => ({
+): aws.DynamoDB.Types.QueryInput => ({
   TableName: getDynamoActivityLogStoreTableName(),
   KeyConditionExpression: "user_id = :user_id",
   ExpressionAttributeValues: {
@@ -214,7 +214,7 @@ export const getActivityLogEntry = async (
       activityLogDynamoDBRequest(user_id)
     );
     const unmarshalledItems = response.Items?.map((item) =>
-      DynamoDB.Converter.unmarshall(item)
+      aws.DynamoDB.Converter.unmarshall(item)
     ) as ActivityLogEntry[];
     return unmarshalledItems;
   } catch (err) {

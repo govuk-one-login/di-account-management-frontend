@@ -9,7 +9,7 @@ import { expect } from "chai";
 import * as dynamo from "../../../utils/dynamo.js";
 import * as sns from "../../../utils/sns.js";
 import { DynamoDBService } from "../../../utils/types.js";
-import { DynamoDB } from "aws-sdk";
+import * as aws from "aws-sdk";
 import { logger } from "../../../utils/logger.js";
 import { AwsConfig } from "../../../config/aws.js";
 
@@ -18,7 +18,7 @@ describe("report suspicious activity controller", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: any;
-  let dynamodbQueryOutput: DynamoDB.Types.QueryOutput;
+  let dynamodbQueryOutput: aws.DynamoDB.Types.QueryOutput;
   let loggerSpy: sinon.SinonSpy;
   let errorLoggerSpy: sinon.SinonSpy;
   let mockDynamoDBService: DynamoDBService;
@@ -72,10 +72,10 @@ describe("report suspicious activity controller", () => {
       ],
     };
     mockDynamoDBService = {
-      getItem(): Promise<DynamoDB.GetItemOutput> {
+      getItem(): Promise<aws.DynamoDB.GetItemOutput> {
         return Promise.resolve(undefined);
       },
-      queryItem(): Promise<DynamoDB.Types.QueryOutput> {
+      queryItem(): Promise<aws.DynamoDB.Types.QueryOutput> {
         return Promise.resolve(dynamodbQueryOutput);
       },
     };
@@ -163,10 +163,10 @@ describe("report suspicious activity controller", () => {
     it("activity log can't be retrieved for this user", async () => {
       // Arrange
       mockDynamoDBService = {
-        getItem(): Promise<DynamoDB.GetItemOutput> {
+        getItem(): Promise<aws.DynamoDB.GetItemOutput> {
           throw new Error("DynamoDB error");
         },
-        queryItem(): Promise<DynamoDB.Types.QueryOutput> {
+        queryItem(): Promise<aws.DynamoDB.Types.QueryOutput> {
           throw new Error("DynamoDB error");
         },
       };
