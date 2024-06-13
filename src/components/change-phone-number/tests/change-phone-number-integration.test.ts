@@ -481,7 +481,7 @@ describe("Integration:: change phone number", () => {
         hasInternationalPhoneNumber: true,
         internationalPhoneNumber: "+33645453322",
       })
-      .expect("Location", "/check-your-phone")
+      .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
   });
 

@@ -215,6 +215,7 @@ describe("Integration:: check your phone", () => {
       .send({
         _csrf: token,
         code: "111111",
+        intent: "changePhoneNumber",
       })
       .expect("Location", PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url)
       .expect(302);
