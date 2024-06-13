@@ -10,7 +10,7 @@ import {
 import { addMfaSmsMethodPost } from "../add-mfa-method-sms-controller";
 import { PATH_DATA } from "../../../app.constants";
 
-describe.only("add sms mfa method controller", () => {
+describe("add sms mfa method controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
