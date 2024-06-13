@@ -39,7 +39,6 @@ describe.only("add sms mfa method controller", () => {
 
   it("should redirect the user to the check phone page", () => {
     req.body.ukPhoneNumber = "1234";
-    console.log(req);
     addMfaSmsMethodPost(req as Request, res as Response);
     expect(redirect).to.be.calledWith(
       `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addMfaMethod`
