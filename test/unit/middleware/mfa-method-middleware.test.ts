@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
-import { sinon } from "../../utils/test-utils";
+import { sinon } from "../../utils/test-utils.js";
 import * as mfa from "../../../src/utils/mfa/index.js";
 import { mfaMethodMiddleware } from "../../../src/middleware/mfa-method-middleware.js";
 import { ERROR_MESSAGES } from "../../../src/app.constants.js";

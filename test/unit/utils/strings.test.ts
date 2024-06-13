@@ -7,7 +7,7 @@ import {
   isValidUrl,
   zeroPad,
 } from "../../../src/utils/strings.js";
-import { sinon } from "../../utils/test-utils";
+import { sinon } from "../../utils/test-utils.js";
 import { logger } from "../../../src/utils/logger.js";
 
 describe("string-helpers", () => {

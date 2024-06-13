@@ -1,5 +1,5 @@
 import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils";
+import { sinon } from "../../utils/test-utils.js";
 import chai, { expect } from "chai";
 import { Request, Response } from "express";
 import sinonChai from "sinon-chai";

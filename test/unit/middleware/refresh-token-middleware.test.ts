@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction } from "express";
-import { sinon } from "../../utils/test-utils";
+import { sinon } from "../../utils/test-utils.js";
 import { refreshTokenMiddleware } from "../../../src/middleware/refresh-token-middleware.js";
 import { UnsecuredJWT } from "jose";
 import { ClientAssertionServiceInterface } from "../../../src/utils/types.js";
