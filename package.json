@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "license": "ISC",
+  "type": "module",
   "scripts": {
     "build-ts": "tsc",
     "build": "npm run build-sass && npm run build-ts && npm run copy-assets && npm run build-js:analytics && npm run minfiy-build-js",
