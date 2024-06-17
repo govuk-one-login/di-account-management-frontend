@@ -618,7 +618,7 @@
           "accessibility-statement": {
             "insetText": {
               "paragraphs": [
-                "Our webchat is not fully accessible yet - we’re working to improve it. You can find out <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en\">more about the limitations and how we’re fixing them.</a>"
+                "Our webchat is not fully accessible yet - we’re working to improve it. You can find out <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en#webchat-accessibility\">more about the limitations and how we’re fixing them.</a>"
               ]
             }
           }
