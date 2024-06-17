@@ -618,7 +618,7 @@
           "accessibility-statement": {
             "insetText": {
               "paragraphs": [
-                "Read our <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en\">accessibility statement</a> to find out about known accessibility problems with our webchat."
+                "Our webchat is not fully accessible yet - we’re working to improve it. You can find out <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en\">more about the limitations and how we’re fixing them.</a>"
               ]
             }
           }

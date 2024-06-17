@@ -525,7 +525,7 @@
           "accessibility-statement": {
             "insetText": {
               "paragraphs": [
-                "Darllenwch ein <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy\">datganiad hygyrchedd</a> i gael gwybod am broblemau hygyrchedd hysbys gyda'n gwesgwrs. "
+                "Nid yw ein gwe-sgwrs yn gwbl hygyrch eto - rydym yn gweithio i’w wella. Gallwch ddarganfod <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy\">mwy am y cyfyngiadau a sut rydym yn eu cywiro.</a>"
               ]
             }
           }
