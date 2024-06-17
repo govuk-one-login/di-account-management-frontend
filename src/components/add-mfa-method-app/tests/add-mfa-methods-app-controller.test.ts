@@ -47,7 +47,8 @@ describe("addMfaAppMethodGet", () => {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
-      errorList: [],
+      errors: undefined,
+      errorList: undefined,
     });
   });
 

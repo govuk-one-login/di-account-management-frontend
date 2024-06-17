@@ -268,12 +268,19 @@ export function universalAnalyticsGtmContainerId(): string {
 export function googleAnalytics4Disabled(): string {
   return process.env.GA4_DISABLED || "true";
 }
+
 export function universalAnalyticsDisabled(): string {
   return process.env.UA_DISABLED || "false";
 }
+
 export function getMfaServiceUrl(): string {
   return process.env.METHOD_MANAGEMENT_BASE_URL;
 }
+
 export function supportChangeMfa(): boolean {
   return process.env.SUPPORT_CHANGE_MFA === "1";
+}
+
+export function supportAddBackupMfa(): boolean {
+  return process.env.SUPPORT_ADD_BACKUP_MFA === "1";
 }

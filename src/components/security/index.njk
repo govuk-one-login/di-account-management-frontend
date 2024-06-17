@@ -57,31 +57,74 @@ set mfaSummaryList = {
       <h1 class="govuk-heading-xl">{{ 'pages.security.header' | translate }}</h1>
 
       <div class="summary-list-container">
-        <div class="summary-list-container__context">
+        <div class="summary-list-container__content">
           <h2 class="govuk-heading-m">{{ 'pages.security.accountDetails.heading' | translate }}</h2>
         </div>
         {{ govukSummaryList(accountDetailsSummaryList) }}
       </div>
-      <div class="summary-list-container">
-        <div class="summary-list-container__context">
-          <h2 class="govuk-heading-m">{{ 'pages.security.mfaSection.heading' | translate }}</h2>
-          <p class="govuk-body">{{ 'pages.security.mfaSection.paragraph' | translate }}</p>
-        </div>
-        {% if mfaMethods | length > 0 %}
-          {{ govukSummaryList(mfaSummaryList) }}
-        {% endif %}
-        {% if showAdditionalMethodUpsell %}
-          <div class="summary-list-container__upsell">
-            <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.upsell.heading' | translate }}</h3>
-            <p class="govuk-body">{{ 'pages.security.mfaSection.upsell.paragraph' | translate }}</p>
-            <p class="govuk-body">{{ 'pages.security.mfaSection.upsell.paragraph2' | translate }}</p>
-            <div class="govuk-body summary-list-container__upsell__cta">
-              <a href="/enter-password?type=addMfaMethod" class="govuk-link">{{ 'pages.security.mfaSection.upsell.link' | translate }}</a>
-              <span class='govuk-tag govuk-tag--pink'>{{ 'pages.security.mfaSection.upsell.badge' | translate }}</span>
-            </div>
+      {% if supportChangeMfa %}
+        {# if changing authenticator app is supported, show the new design #}
+        <div class="summary-list-container">
+          <div class="summary-list-container__content">
+            <h2 class="govuk-heading-m">{{ 'pages.security.mfaSection.supportChangeMfa.heading' | translate }}</h2>
           </div>
-        {% endif %}
-      </div>
+          {% if mfaMethods | length > 0 %}
+            {% set foundPrimary = false %}
+            {% set foundSecondary = false %}
+            {% for method in mfaMethods %} 
+              {% if (method.priorityIdentifier == "PRIMARY") and not foundPrimary %}
+                {# display existing primary method with options to change the method or use a different type #}
+                <div class="summary-list-container__content">
+                  <h2 class="govuk-heading-s">{{'pages.security.mfaSection.supportChangeMfa.defaultMethod.heading' | translate }}</h2>
+                  <p class="govuk-body">{{ method.text }}</p>
+                  <p class="govuk-body"><a href="{{ method.linkHref }}" class="govuk-link"> {{ method.linkText }}</a></p>
+                  {% if canChangeTypeofPrimary %}
+                  <p class="govuk-body"><a href="/not-visible-yet" class="govuk-link"> {{ ['pages.security.mfaSection.supportChangeMfa.defaultMethod.change'] | join | translate }}</a></p>
+                  {% endif %}
+                </div>
+                {% set foundPrimary = true %}
+              {% endif %}
+            {% endfor %}
+
+            {% if supportAddBackupMfa %}
+              {# backup mfa block has two states #}
+              <div class="summary-list-container__content">
+                <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.supportChangeMfa.backup.heading' | translate }}</h3>
+                {% for method in mfaMethods %} 
+                  {% if (method.priorityIdentifier == "SECONDARY") and not foundSecondary %}
+                    {# 1: backup method exists => display backup method block with options to change backup method or switch primary and backup #}
+                    <p class="govuk-body">{{ method.text }}</p>
+                    <p class="govuk-body"><a href="/switch-methods" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.switchLink' | translate }}</a></p>
+                    <p class="govuk-body"><a href="/remove-method" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.removeLink' | translate }}</a></p>
+                    {% set foundSecondary = true %}
+                  {% endif %}
+                {% endfor %}
+                {% if not foundSecondary %}
+                  {# 2: backup method does not exist => display option to add a new backup method #}
+                  <p class="govuk-body">{{ 'pages.security.mfaSection.supportChangeMfa.backup.paragraph' | translate }}</p>
+                  <p class="govuk-body">{{ 'pages.security.mfaSection.supportChangeMfa.backup.paragraph2' | translate }}</p>
+                  <p class="govuk-body">
+                    <a href="/enter-password?type=addMfaMethod" class="govuk-link">{{ 'pages.security.mfaSection.supportChangeMfa.backup.link' | translate }}</a>
+                  </p>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endif %}
+
+        </div>
+      {% else %}
+        {# if changing authenticator app is not supported, show the old design #}
+        <div class="summary-list-container">
+          <div class="summary-list-container__content">
+            <h2 class="govuk-heading-m">{{ 'pages.security.mfaSection.heading' | translate }}</h2>
+            <p class="govuk-body">{{ 'pages.security.mfaSection.paragraph' | translate }}</p>
+          </div>
+          {% if mfaMethods | length > 0 %}
+            {{ govukSummaryList(mfaSummaryList) }}
+          {% endif %}
+        </div>
+      {% endif %}
+
       {% if supportActivityLog %}
         <div class="summary-list-container" data-test-id="activity-log-section">
           <h2 class="govuk-heading-m">{{ 'pages.security.activityHistory.heading' | translate }}</h2>
@@ -96,5 +139,5 @@ set mfaSummaryList = {
       </div>
     </div>
   </div>
-   {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:"pages.security.title" | translate, taxonomyLevel1: "accounts", taxonomyLevel2:"home", contentId:contentId,loggedInStatus:true,dynamic:true})}}
+  {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:"pages.security.title" | translate, taxonomyLevel1: "accounts", taxonomyLevel2:"home", contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}

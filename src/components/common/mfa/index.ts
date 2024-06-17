@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { formatValidationError } from "../../../utils/validation";
+import {
+  formatValidationError,
+  generateErrorList,
+} from "../../../utils/validation";
 import assert from "node:assert";
 import { generateMfaSecret, generateQRCodeValue } from "../../../utils/mfa";
 import QRCode from "qrcode";
@@ -13,7 +16,7 @@ export async function renderMfaMethodPage(
   req: Request,
   res: Response,
   next: NextFunction,
-  errors: ReturnType<typeof formatValidationError>
+  errors?: ReturnType<typeof formatValidationError>
 ): Promise<void> {
   try {
     assert(req.session.user.email, "email not set in session");
@@ -31,12 +34,8 @@ export async function renderMfaMethodPage(
       authAppSecret,
       qrCode,
       formattedSecret: splitSecretKeyIntoFragments(authAppSecret).join(" "),
-      errorList: Object.keys(errors || {}).map((key) => {
-        return {
-          text: errors[key].text,
-          href: `#${key}`,
-        };
-      }),
+      errors,
+      errorList: generateErrorList(errors),
     });
   } catch (e) {
     req.log.error(e);

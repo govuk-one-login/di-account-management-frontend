@@ -62,20 +62,14 @@ $govuk-new-link-styles: true;
   }
 }
 
-.summary-list-container__context {
-  border-bottom: 1px solid $govuk-border-colour;
-}
+.summary-list-container__content {
+  &:not(:last-child) {
+    border-bottom: 1px solid $govuk-border-colour;
+  }
 
-.summary-list-container__upsell {
-  border-top: 1px solid $govuk-border-colour;
-  padding-top: govuk-spacing(3);
-}
-
-.summary-list-container__upsell__cta {
-  border-top: 1px solid $govuk-border-colour;
-  padding-top: govuk-spacing(3);
-  display: flex;
-  justify-content: space-between;
+  &:not(:first-child) {
+    @include govuk-responsive-margin(4, "top");
+  }
 }
 
 .govuk-summary-list--security {
