@@ -1,0 +1,68 @@
+name: Update .nvmrc
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Dockerfile'
+    types: [opened, synchronize]
+
+jobs:
+  update-nvmrc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4.1.7
+        with:
+          fetch-depth: 0
+      - name: Set up git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: Extract Node.js version from Dockerfile
+        id: extract_version
+        run: |
+          VERSION=$(grep -m 1 -oP 'FROM node:\K[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)
+          VERSION=$(echo $VERSION | tr -d '\n\r')
+          echo "NODE_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Read current .nvmrc version
+        id: read_nvmrc
+        run: |
+          if [ -f .nvmrc ]; then
+            CURRENT_VERSION=$(cat .nvmrc | tr -d '\n\r')
+            echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          else
+            echo "CURRENT_VERSION=" >> $GITHUB_ENV
+          fi
+
+      - name: Check if versions are different
+        id: check_diff
+        run: |
+          if [ "$NODE_VERSION" = "$CURRENT_VERSION" ]; then
+            echo "Versions are the same. No update needed."
+            echo "create_pr=false" >> $GITHUB_ENV
+          else
+            echo "Versions are different. Update needed."
+            echo "create_pr=true" >> $GITHUB_ENV
+          fi
+
+      - name: Update .nvmrc if update is needed
+        if: env.create_pr == 'true'
+        run: |
+          echo "$NODE_VERSION" > .nvmrc
+          git add .nvmrc
+
+      - name: Create pull request if update is needed
+        if: env.create_pr == 'true'
+        uses: peter-evans/create-pull-request@4383ba9ef00dba2e170ae6fe3eb477b6b0eafa65 # pin@v6.0.5
+        with:
+          token: ${{ secrets.DEV_PAT_NVMRC_ACTION }}
+          commit-message: "Update .nvmrc to Node.js version ${{ env.NODE_VERSION }}"
+          title: "Update .nvmrc to Node.js version ${{ env.NODE_VERSION }}"
+          body: "This PR updates .nvmrc to Node.js version ${{ env.NODE_VERSION }}"
+          branch: create-pull-request/nvmrc-update
+          base: main
+          signoff: true
+          draft: false
