@@ -1,0 +1,53 @@
+name: Update Dependabot PRs
+
+on:
+  pull_request:
+    branches:
+      - 'dependabot/docker/**'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # pin@v4.1.7
+      - name: Set up git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: Extract Node.js version from Dockerfile
+        id: extract_version
+        run: |
+          VERSION=$(grep -m 1 -oP 'FROM node:\K[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)
+          VERSION=$(echo $VERSION | tr -d '\n\r')
+          echo "NODE_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Read current .nvmrc version
+        id: read_nvmrc
+        run: |
+          if [ -f .nvmrc ]; then
+            CURRENT_VERSION=$(cat .nvmrc | tr -d '\n\r')
+            echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          else
+            echo "CURRENT_VERSION=" >> $GITHUB_ENV
+          fi
+
+      - name: Check if versions are different
+        id: check_diff
+        run: |
+          if [ "$NODE_VERSION" = "$CURRENT_VERSION" ]; then
+            echo "Versions are the same. No update needed."
+            echo "create_pr=false" >> $GITHUB_ENV
+          else
+            echo "Versions are different. Update needed."
+            echo "create_pr=true" >> $GITHUB_ENV
+          fi
+
+      - name: Update .nvmrc if update is needed
+        if: env.create_pr == 'true'
+        run: |
+          echo "$NODE_VERSION" > .nvmrc
+          git add .nvmrc
+          git commit -m "Updated .nvmrc"
+          git push
