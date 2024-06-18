@@ -56,7 +56,9 @@ export function changePhoneNumberPost(
         EventType.VerifyCodeSent
       );
 
-      return res.redirect(PATH_DATA.CHECK_YOUR_PHONE.url);
+      return res.redirect(
+        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
+      );
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {

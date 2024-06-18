@@ -28,8 +28,13 @@ export const PATH_DATA: {
   },
   ADD_MFA_METHOD_SMS: {
     url: "/add-mfa-method-sms",
-    event: EventType.ValueUpdated,
+    event: EventType.VerifyCodeSent,
     type: UserJourney.AddMfaMethod,
+  },
+  ADD_MFA_METHOD_SMS_CONFIRMATION: {
+    url: "/add-mfa-method-sms-confirmation",
+    event: EventType.Confirmation,
+    type: UserJourney.ChangePhoneNumber,
   },
   CHANGE_EMAIL: {
     url: "/change-email",

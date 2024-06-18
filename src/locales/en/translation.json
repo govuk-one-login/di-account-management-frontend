@@ -214,7 +214,14 @@
         }
       },
       "backLink": "I do not want to add another way to get security codes",
-      "continue": "Continue"
+      "continue": "Continue",
+      "backup": {
+        "title": "Add a back-up method",
+        "sms": {
+          "message": "You can get security codes by text message as you back-up method",
+          "button": "Add a mobile phone number"
+        }
+      }
     },
     "addMfaMethodApp": {
       "title": "Set up an authenticator app",
@@ -247,6 +254,22 @@
         "invalidFormat": "Enter the security code using only numbers"
       },
       "cancel": "Cancel and go back to Security"
+    },
+    "addMfaMethodSms": {
+      "step1": {
+        "title": "Enter your new mobile phone number",
+        "message": "We will send a 6 digit security code to the number you give us",
+        "uk_mobile": "UK moble phone number",
+        "no_uk_mobile": "I do not have a UK mobile number",
+        "intl_mobile_phone_number": "Mobile phone number",
+        "intl_mobile_phone_number_hint": "Include the country code, for example +33 for France"
+      },
+      "confirm": {
+        "title": "Add back-up phone number",
+        "heading": "You've added a back-up method for getting security codes",
+        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending in [mobile] instead",
+        "backLink": "Back to Security"
+      }
     },
     "activityHistory": {
       "title": "Activity history",

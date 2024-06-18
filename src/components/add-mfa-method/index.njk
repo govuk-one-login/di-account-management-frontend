@@ -7,28 +7,35 @@
 {% block pageContent %}
     <form action="{{ "ADD_MFA_METHOD" | getPath }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-    {{ govukRadios({
-       name: "addMfaMethod",
-       fieldset: {
-          legend: {
-            text: "pages.addMfaMethod.title" | translate,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-       },
-       items: mfaMethods
-       }) 
-    }}
-
-    {{ govukDetails({
-        summaryText: "pages.addMfaMethod.app.help.title" | translate,
-        html: helpText
+    {% if showSingleMethod %}
+      <input type="hidden" name="addMfaMethod" value="{{ addMfaMethod }}" />
+      <h1 class="govuk-heading-l">{{ "pages.addMfaMethod.backup.title" | translate }}</h1>
+      <p class="govuk-body">{{ message }}</p>
+      <button type="submit" class="govuk-button" data-module="govuk-button">{{ addMethodButtonLabel }}</button>
+    {% else %}
+      {{ govukRadios({
+        name: "addMfaMethod",
+        fieldset: {
+            legend: {
+              text: "pages.addMfaMethod.title" | translate,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+        },
+        items: mfaMethods
         }) 
-    }}
+      }}
 
-    {{ govukButton({
-      text: "pages.addMfaMethod.continue" | translate
-    }) }}
+      {{ govukDetails({
+          summaryText: "pages.addMfaMethod.app.help.title" | translate,
+          html: helpText
+          }) 
+      }}
+
+      {{ govukButton({
+        text: "pages.addMfaMethod.continue" | translate
+      }) }}
+    {% endif %}
     </form>
 
     <p class="govuk-body">

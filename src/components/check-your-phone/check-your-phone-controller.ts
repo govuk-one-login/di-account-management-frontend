@@ -19,8 +19,9 @@ const TEMPLATE_NAME = "check-your-phone/index.njk";
 export function checkYourPhoneGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, {
     phoneNumber: getLastNDigits(req.session.user.newPhoneNumber, 4),
-    resendCodeLink: PATH_DATA.RESEND_PHONE_CODE.url,
+    resendCodeLink: `${PATH_DATA.RESEND_PHONE_CODE.url}?intent=${req.query.intent}`,
     changePhoneNumberLink: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+    intent: req.query.intent,
   });
 }
 
@@ -29,6 +30,7 @@ export function checkYourPhonePost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const { email, newPhoneNumber } = req.session.user;
+    const intent = req.body.intent;
 
     const updateInput: UpdateInformationInput = {
       email,
@@ -39,18 +41,25 @@ export function checkYourPhonePost(
 
     let isPhoneNumberUpdated = false;
     if (supportChangeMfa()) {
-      const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
-        (mfa) => mfa.mfaMethodType === "SMS"
-      );
-      if (smsMFAMethod) {
-        smsMFAMethod.endPoint = newPhoneNumber;
-        updateInput.mfaMethod = smsMFAMethod;
-        isPhoneNumberUpdated = await service.updatePhoneNumberWithMfaApi(
-          updateInput,
-          sessionDetails
+      if (intent === "changePhoneNumber") {
+        const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
+          (mfa) => mfa.mfaMethodType === "SMS"
         );
+        if (smsMFAMethod) {
+          smsMFAMethod.endPoint = newPhoneNumber;
+          updateInput.mfaMethod = smsMFAMethod;
+          isPhoneNumberUpdated = await service.updatePhoneNumberWithMfaApi(
+            updateInput,
+            sessionDetails
+          );
+        } else {
+          throw Error(`No existing MFA method for: ${email}`);
+        }
+      } else if (intent === "addMfaMethod") {
+        // TODO add MFA method here
+        isPhoneNumberUpdated = true;
       } else {
-        throw Error(`No existing MFA method for: ${email}`);
+        throw Error(`Unknown phone verification intent ${intent}`);
       }
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(
@@ -68,6 +77,9 @@ export function checkYourPhonePost(
         EventType.ValueUpdated
       );
 
+      if (intent === "addMfaMethod") {
+        return res.redirect(PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url);
+      }
       return res.redirect(PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url);
     }
 

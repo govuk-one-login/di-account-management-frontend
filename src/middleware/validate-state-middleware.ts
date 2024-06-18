@@ -6,7 +6,9 @@ export function validateStateMiddleware(
   res: Response,
   next: NextFunction
 ): void {
-  const pageState = Object.values(PATH_DATA).find((key) => key.url === req.url);
+  const pageState = Object.values(PATH_DATA).find(
+    (key) => key.url === req.path
+  );
 
   if (
     !Object.prototype.hasOwnProperty.call(

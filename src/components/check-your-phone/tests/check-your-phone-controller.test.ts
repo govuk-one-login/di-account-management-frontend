@@ -37,6 +37,7 @@ describe("check your phone controller", () => {
       cookies: { lng: "en" },
       i18n: { language: "en" },
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
+      query: { intent: "changePhoneNumber" },
     };
     res = {
       render: sandbox.fake(),
@@ -106,6 +107,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
+      req.body.intent = "changePhoneNumber";
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
 

@@ -8,6 +8,7 @@
     <form action="/resend-phone-code" method="post" novalidate="novalidate">
       <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
       <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
+      <input type="hidden" name="intent" value="{{intent}}"/>
 
       <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.resendMfaCode.header' | translate}}</h1>
 

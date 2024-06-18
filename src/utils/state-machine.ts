@@ -89,8 +89,8 @@ export const amStateMachine = createMachine({
     },
     SMS: {
       on: {
-        VALUE_UPDATED: {
-          target: "CONFIRMATION",
+        VERIFY_CODE_SENT: {
+          target: "VERIFY_CODE",
         },
       },
     },

@@ -95,7 +95,7 @@ describe("state-machine", () => {
     it("should move state from CHANGE_VALUE state to SMS state when SELECTED_SMS action event ", () => {
       const nextState = getNextState("CHANGE_VALUE", EventType.SelectedSms);
       expect(nextState.value).to.equal("SMS");
-      expect(nextState.events).to.all.members([EventType.ValueUpdated]);
+      expect(nextState.events).to.all.members([EventType.VerifyCodeSent]);
     });
 
     it("should move state from APP state to CONFIRMATION state when VALUE_UPDATED action event ", () => {

@@ -24,6 +24,7 @@
          {# These fields are needed when the page is re-rendered once an error has occurred #}
         <input type="hidden" name="resendCodeLink" value="{{resendCodeLink}}"/>
         <input type="hidden" name="changePhoneNumberLink" value="{{changePhoneNumberLink}}"/>
+        <input type="hidden" name="intent" value="{{intent}}"/>
         {{ govukInput({
             label: {
                 text: 'pages.checkYourPhone.code.label' | translate
