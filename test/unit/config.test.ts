@@ -1,6 +1,3 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
 import {
   getAllowedAccountListClientIDs,
   getAllowedServiceListClientIDs,
@@ -13,7 +10,7 @@ describe("config", () => {
         getAllowedAccountListClientIDs.filter((service) =>
           getAllowedServiceListClientIDs.includes(service)
         ).length
-      ).to.eq(0);
+      ).toEqual(0);
     });
 
     it("should have no services in the other services list that are in the accounts list", () => {
@@ -21,7 +18,7 @@ describe("config", () => {
         getAllowedServiceListClientIDs.filter((service) =>
           getAllowedAccountListClientIDs.includes(service)
         ).length
-      ).to.eq(0);
+      ).toEqual(0);
     });
   });
 });
