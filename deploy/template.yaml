@@ -262,7 +262,7 @@ Mappings:
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "TBD"
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
-      GA4DISABLED: "true"
+      GA4DISABLED: "false"
       UADISABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
@@ -294,7 +294,7 @@ Mappings:
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TT5HDKV"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
-      GA4DISABLED: "true"
+      GA4DISABLED: "false"
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
