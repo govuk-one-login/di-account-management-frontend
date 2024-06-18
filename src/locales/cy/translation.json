@@ -501,7 +501,7 @@
       },
       "refCodeBlock": {
         "paragraphsWebchat": [
-          "Os ydych yn ffonio neu'n defnyddio gwesgwrs i gysylltu â'r tîm GOV.UK  One Login, gofynnir i chi am god cyfeirinod.",
+          "Os ydych yn ffonio neu'n defnyddio gwe-sgwrs i gysylltu â'r tîm GOV.UK  One Login, gofynnir i chi am god cyfeirinod.",
           "Mae'r cod hwn yn ein helpu i weld lle y gallech fod yn cael problem."
         ],
         "paragraphsNoWebchat": [
@@ -514,14 +514,14 @@
         "headingOne": "Sut i gysylltu â ni",
         "headingMany": "Ffyrdd o gysylltu â ni",
         "webchat": {
-          "heading": "Gwesgwrs",
+          "heading": "Gwe-sgwrs",
           "paragraphs1": [
             "Cael help gan gynorthwyydd digidol GOV.UK One Login neu sgwrs gydag ymgynghorydd.",
             "Efallai y gofynnir i chi am eich cod cyfeirio pan fyddwch yn siarad â ni.",
             "Gallwch sgwrsio'n fyw gydag ymgynghorydd o ddydd Llun i ddydd Gwener, 8am i 8pm.",
             "Mae'r cynorthwyydd digidol bob amser ar gael."
           ],
-          "linkText": "Defnyddio gwesgwrs",
+          "linkText": "Defnyddio gwe-sgwrs",
           "accessibility-statement": {
             "insetText": {
               "paragraphs": [
