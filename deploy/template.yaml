@@ -166,6 +166,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "false"
       UADISABLED: "false"
+      SUPPORTADDBACKUPMFA: "0"
       SUPPORTCHANGEMFA: "1"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
@@ -192,6 +193,7 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.build.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
+      SUPPORTADDBACKUPMFA: "0"
       SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
@@ -223,6 +225,7 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.staging.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
+      SUPPORTADDBACKUPMFA: "0"
       SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
@@ -246,13 +249,14 @@ Mappings:
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app"
+      WEBCHATSOURCEURL: "https://chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.integration.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
+      SUPPORTADDBACKUPMFA: "0"
       SUPPORTCHANGEMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
@@ -285,6 +289,7 @@ Mappings:
       METHODMANAGEMENTBASEURL: ""
       SUPPORTMETHODMANAGEMENT: "0"
       SUPPORTCHANGEMFA: "0"
+      SUPPORTADDBACKUPMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TT5HDKV"
@@ -778,6 +783,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTCHANGEMFA,
+                ]
+            - Name: "SUPPORT_ADD_BACKUP_MFA"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTADDBACKUPMFA,
                 ]
             - Name: "METHOD_MANAGEMENT_BASE_URL"
               Value:

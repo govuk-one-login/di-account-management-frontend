@@ -33,6 +33,9 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
         return true;
       });
+      sandbox.stub(configFuncs, "supportAddBackupMfa").callsFake(() => {
+        return true;
+      });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
@@ -60,27 +63,16 @@ describe("security controller", () => {
         activityLogUrl: "/activity-history",
         mfaMethods: [
           {
-            classes: "govuk-summary-list__row--no-border",
-            key: {
-              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
-            },
-            value: {
-              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
-            },
-            actions: {
-              items: [
-                {
-                  attributes: { "data-test-id": "change-phone-number" },
-                  href: "/enter-password?type=changePhoneNumber",
-                  text: "general.change",
-                  visuallyHiddenText:
-                    "pages.security.mfaSection.summaryList.app.hiddenText",
-                },
-              ],
-            },
+            text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title",
+            linkHref: "/enter-password?type=changePhoneNumber",
+            linkText:
+              "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
+            priorityIdentifier: "PRIMARY",
           },
         ],
-        showAdditionalMethodUpsell: true,
+        supportChangeMfa: true,
+        supportAddBackupMfa: true,
+        canChangeTypeofPrimary: true,
       });
     });
     it("should render security view without activity log when the feature flag is off", async () => {
@@ -89,6 +81,9 @@ describe("security controller", () => {
         return false;
       });
       sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
+        return true;
+      });
+      sandbox.stub(configFuncs, "supportAddBackupMfa").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -116,27 +111,16 @@ describe("security controller", () => {
         activityLogUrl: "/activity-history",
         mfaMethods: [
           {
-            classes: "govuk-summary-list__row--no-border",
-            key: {
-              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
-            },
-            value: {
-              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
-            },
-            actions: {
-              items: [
-                {
-                  attributes: { "data-test-id": "change-phone-number" },
-                  href: "/enter-password?type=changePhoneNumber",
-                  text: "general.change",
-                  visuallyHiddenText:
-                    "pages.security.mfaSection.summaryList.app.hiddenText",
-                },
-              ],
-            },
+            text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title",
+            linkHref: "/enter-password?type=changePhoneNumber",
+            linkText:
+              "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
+            priorityIdentifier: "PRIMARY",
           },
         ],
-        showAdditionalMethodUpsell: true,
+        supportChangeMfa: true,
+        supportAddBackupMfa: true,
+        canChangeTypeofPrimary: true,
       });
     });
     it("should render security view without activity log when the user doesn't have a supported service", async () => {
@@ -145,6 +129,9 @@ describe("security controller", () => {
         return true;
       });
       sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
+        return true;
+      });
+      sandbox.stub(configFuncs, "supportAddBackupMfa").callsFake(() => {
         return true;
       });
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
@@ -174,27 +161,16 @@ describe("security controller", () => {
         activityLogUrl: "/activity-history",
         mfaMethods: [
           {
-            classes: "govuk-summary-list__row--no-border",
-            key: {
-              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
-            },
-            value: {
-              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
-            },
-            actions: {
-              items: [
-                {
-                  attributes: { "data-test-id": "change-phone-number" },
-                  href: "/enter-password?type=changePhoneNumber",
-                  text: "general.change",
-                  visuallyHiddenText:
-                    "pages.security.mfaSection.summaryList.app.hiddenText",
-                },
-              ],
-            },
+            text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title",
+            linkHref: "/enter-password?type=changePhoneNumber",
+            linkText:
+              "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
+            priorityIdentifier: "PRIMARY",
           },
         ],
-        showAdditionalMethodUpsell: true,
+        supportChangeMfa: true,
+        supportAddBackupMfa: true,
+        canChangeTypeofPrimary: true,
       });
     });
     it("throws an error when the mfaMethodType is undefined", async () => {
@@ -266,6 +242,9 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
         return true;
       });
+      sandbox.stub(configFuncs, "supportAddBackupMfa").callsFake(() => {
+        return true;
+      });
 
       const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
       sandbox
@@ -294,27 +273,16 @@ describe("security controller", () => {
         activityLogUrl: "/activity-history",
         mfaMethods: [
           {
-            classes: "govuk-summary-list__row--no-border",
-            key: {
-              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
-            },
-            value: {
-              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
-            },
-            actions: {
-              items: [
-                {
-                  attributes: { "data-test-id": "change-phone-number" },
-                  href: "/enter-password?type=changePhoneNumber",
-                  text: "general.change",
-                  visuallyHiddenText:
-                    "pages.security.mfaSection.summaryList.app.hiddenText",
-                },
-              ],
-            },
+            text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title",
+            linkHref: "/enter-password?type=changePhoneNumber",
+            linkText:
+              "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
+            priorityIdentifier: "PRIMARY",
           },
         ],
-        showAdditionalMethodUpsell: true,
+        supportChangeMfa: true,
+        supportAddBackupMfa: true,
+        canChangeTypeofPrimary: true,
       });
     });
   });

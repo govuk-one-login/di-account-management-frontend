@@ -152,12 +152,28 @@
             "hiddenText": "Authenticator app"
           }
         },
-        "upsell": {
-          "heading": "Your back-up method",
-          "paragraph": "We recommend you add one more way to get security codes. This can be another phone number or an authenticator app.",
-          "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes your usual way.",
-          "link": "Add a back-up method",
-          "badge": "Not Added"
+        "supportChangeMfa": {
+          "heading": "How you get security codes to sign in",
+          "defaultMethod": {
+            "heading": "Your default method",
+            "phoneNumber": {
+              "title": "Text message to your phone number ending with [phoneNumber]",
+              "change": "Change phone number"
+            },
+            "app": {
+              "title": "Authenticator app",
+              "change": "Change authenticator app"
+            },
+            "change": "Use a different default method"
+          },
+          "backup": {
+            "heading": "Your back-up method",
+            "paragraph": "We recommend you add a back-up method for getting security codes.",
+            "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes using your default method.",
+            "link": "Add a back-up method",
+            "removeLink": "Remove back-up method",
+            "switchLink": "Switch back-up and default methods"
+          }
         }
       },
       "manageEmailSubscriptions": {
@@ -212,7 +228,11 @@
       "step1": {
         "text": "1. Open your authenticator app on your smartphone, tablet, or computer.",
         "hintTitle": "I don't have an authenticator app",
-        "hintText": "<p>You can download an authenticator app for your smartphone or tablet from your app store.</p><p>If you don't have a smartphone or tablet, search online for an authenticator app for your computer.</p><p>You can use any authenticator app.</p>"
+        "hintText": [
+          "You can download an authenticator app for your smartphone or tablet from your app store.",
+          "If you don't have a smartphone or tablet, search online for an authenticator app for your computer",
+          "You can use any authenticator app."
+        ]
       },
       "step2": {
         "text": "2. Use your authenticator app to scan the QR code.",
@@ -230,8 +250,10 @@
       "errors": {
         "invalidCode": "The security code you entered is not correct. Try entering it again or wait for your authenticator app to give you a new code",
         "required": "Enter the security code shown in your authenticator app",
-        "maxLength": "Enter the security code using 6 digits"
-      }
+        "maxLength": "Enter the security code using only 6 digits",
+        "invalidFormat": "Enter the security code using only numbers"
+      },
+      "cancel": "Cancel and go back to Security"
     },
     "addMfaMethodSms": {
       "step1": {
@@ -349,11 +371,6 @@
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
-      "changeAuthenticatorApp": {
-        "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can change your authenticator app.",
-        "backLink": "I do not want to change my authenticator app"
-      },
       "deleteAccount": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can delete your GOV.UK One Login."
@@ -368,6 +385,10 @@
       "addMfaMethod": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get your security codes"
+      },
+      "changeAuthenticatorApp": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes"
       },
       "cancelText": "Cancel and go back to Security"
     },
@@ -405,7 +426,7 @@
     "updateAuthenticatorAppConfirmation": {
       "title": "You’ve changed your authenticator app",
       "panelText": "You’ve changed your authenticator app",
-      "summaryText": "Your authenticator app has been changed."
+      "summaryText": "We’ll send security codes to your new authenticator app."
     },
     "deleteAccountConfirmation": {
       "title": "You’ve deleted your GOV.UK One Login",
@@ -537,32 +558,6 @@
         }
       }
     },
-    "changeAuthenticatorApp": {
-      "title": "Change your authenticator app",
-      "step1": {
-        "text": "1. Open your authenticator app on your smartphone, tablet, or computer.",
-        "hintTitle": "I don't have an authenticator app",
-        "hintText": "<p>You can download an authenticator app for your smartphone or tablet from your app store.</p><p>If you don't have a smartphone or tablet, search online for an authenticator app for your computer.</p><p>You can use any authenticator app.</p>"
-      },
-      "step2": {
-        "text": "2. Use your authenticator app to scan the QR code.",
-        "hintTitle": "I cannot scan the QR code",
-        "hintText": "<p>You can enter the secret key into your authenticator app manually.</p><p>Secret Key:<br/><strong>[secretKey]</strong></p><p>Some authenticator apps call the secret key a 'code'.</p>"
-      },
-      "step3": {
-        "text": "3. The authenticator app will show a security code."
-      },
-      "step4": {
-        "text": "4. Enter the security code.",
-        "label": "Security code",
-        "hint": "This is the 6-digit code shown in your authenticator app"
-      },
-      "errors": {
-        "invalidCode": "The security code you entered is not correct. Try entering it again or wait for your authenticator app to give you a new code",
-        "required": "Enter the security code shown in your authenticator app",
-        "maxLength": "Enter the security code using 6 digits"
-      }
-    },
     "signedOut": {
       "title": "You have signed out",
       "header": "You have signed out",
@@ -646,7 +641,7 @@
           "accessibility-statement": {
             "insetText": {
               "paragraphs": [
-                "Read our <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en\">accessibility statement</a> to find out about known accessibility problems with our webchat."
+                "Our webchat is not fully accessible yet - we’re working to improve it. You can find out <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en#webchat-accessibility\">more about the limitations and how we’re fixing them.</a>"
               ]
             }
           }
@@ -819,9 +814,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "Gk-D7WMvytB44Nze7oEC5KcThQZ4yl7sAA": {
-        "header": "Immigration Advice Authority (IAA)",
+        "header": "Register of immigration advisors",
         "description": "Authorise and register an immigration adviser or organisation.",
-        "link_text": "Go to your Immigration Advice Authority (IAA) account",
+        "link_text": "Go to your Register of immigration advisors account",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -974,9 +969,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "Gk-D7WMvytB44Nze7oEC5KcThQZ4yl7sAA": {
-        "header": "Immigration Advice Authority (IAA)",
+        "header": "Register of immigration advisors",
         "description": "Authorise and register an immigration adviser or organisation.",
-        "link_text": "Go to your Immigration Advice Authority (IAA) account",
+        "link_text": "Go to your Register of immigration advisors account",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -1117,9 +1112,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "iaa": {
-        "header": "Immigration Advice Authority (IAA)",
+        "header": "Register of immigration advisors",
         "description": "Authorise and register an immigration adviser or organisation.",
-        "link_text": "Go to your Immigration Advice Authority (IAA) account",
+        "link_text": "Go to your Register of immigration advisors account",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -1260,9 +1255,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "iaa": {
-        "header": "Immigration Advice Authority (IAA)",
+        "header": "Register of immigration advisors",
         "description": "Authorise and register an immigration adviser or organisation.",
-        "link_text": "Go to your Immigration Advice Authority (IAA) account",
+        "link_text": "Go to your Register of immigration advisors account",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -1403,9 +1398,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "iaa": {
-        "header": "Immigration Advice Authority (IAA)",
+        "header": "Register of immigration advisors",
         "description": "Authorise and register an immigration adviser or organisation.",
-        "link_text": "Go to your Immigration Advice Authority (IAA) account",
+        "link_text": "Go to your Register of immigration advisors account",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -1546,9 +1541,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "iaa": {
-        "header": "Immigration Advice Authority (IAA)",
+        "header": "Register of immigration advisors",
         "description": "Authorise and register an immigration adviser or organisation.",
-        "link_text": "Go to your Immigration Advice Authority (IAA) account",
+        "link_text": "Go to your Register of immigration advisors account",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     }

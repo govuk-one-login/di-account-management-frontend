@@ -19,6 +19,15 @@ export function formatValidationError(
   return error;
 }
 
+export function generateErrorList(errors: { [k: string]: Error }): Error[] {
+  if (!errors) return;
+  const errorValues = Object.values(errors);
+  const uniqueErrorList = [
+    ...new Map(errorValues.map((error) => [error.text, error])).values(),
+  ];
+  return uniqueErrorList;
+}
+
 export function renderBadRequest(
   res: Response,
   req: Request,
@@ -27,13 +36,9 @@ export function renderBadRequest(
 ): void {
   res.status(HTTP_STATUS_CODES.BAD_REQUEST);
 
-  const errorValues = Object.values(errors);
-  const uniqueErrorList = [
-    ...new Map(errorValues.map((error) => [error.text, error])).values(),
-  ];
   res.render(template, {
     errors,
-    errorList: uniqueErrorList,
+    errorList: generateErrorList(errors),
     ...req.body,
     language: req.i18n.language,
   });

@@ -13,13 +13,7 @@ export async function addMfaAppMethodGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderMfaMethodPage(
-    ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
-    req,
-    res,
-    next,
-    {}
-  );
+  return renderMfaMethodPage(ADD_MFA_METHOD_AUTH_APP_TEMPLATE, req, res, next);
 }
 
 export async function addMfaAppMethodPost(

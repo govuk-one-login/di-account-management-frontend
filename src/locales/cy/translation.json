@@ -501,7 +501,7 @@
       },
       "refCodeBlock": {
         "paragraphsWebchat": [
-          "Os ydych yn ffonio neu'n defnyddio gwesgwrs i gysylltu â'r tîm GOV.UK  One Login, gofynnir i chi am god cyfeirinod.",
+          "Os ydych yn ffonio neu'n defnyddio gwe-sgwrs i gysylltu â'r tîm GOV.UK  One Login, gofynnir i chi am god cyfeirinod.",
           "Mae'r cod hwn yn ein helpu i weld lle y gallech fod yn cael problem."
         ],
         "paragraphsNoWebchat": [
@@ -514,18 +514,18 @@
         "headingOne": "Sut i gysylltu â ni",
         "headingMany": "Ffyrdd o gysylltu â ni",
         "webchat": {
-          "heading": "Gwesgwrs",
+          "heading": "Gwe-sgwrs",
           "paragraphs1": [
             "Cael help gan gynorthwyydd digidol GOV.UK One Login neu sgwrs gydag ymgynghorydd.",
             "Efallai y gofynnir i chi am eich cod cyfeirio pan fyddwch yn siarad â ni.",
             "Gallwch sgwrsio'n fyw gydag ymgynghorydd o ddydd Llun i ddydd Gwener, 8am i 8pm.",
             "Mae'r cynorthwyydd digidol bob amser ar gael."
           ],
-          "linkText": "Defnyddio gwesgwrs",
+          "linkText": "Defnyddio gwe-sgwrs",
           "accessibility-statement": {
             "insetText": {
               "paragraphs": [
-                "Darllenwch ein <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy\">datganiad hygyrchedd</a> i gael gwybod am broblemau hygyrchedd hysbys gyda'n gwesgwrs. "
+                "Nid yw ein gwe-sgwrs yn gwbl hygyrch eto - rydym yn gweithio i’w wella. Gallwch ddarganfod <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy#webchat-accessibility\">mwy am y cyfyngiadau a sut rydym yn eu cywiro.</a>"
               ]
             }
           }
@@ -700,9 +700,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "Gk-D7WMvytB44Nze7oEC5KcThQZ4yl7sAA": {
-        "header": "Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "header": "Cofrestr o ymgynghorwyr mewnfudo",
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
-        "link_text": "Ewch i'ch cyfrif Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -849,9 +849,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "Gk-D7WMvytB44Nze7oEC5KcThQZ4yl7sAA": {
-        "header": "Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "header": "Cofrestr o ymgynghorwyr mewnfudo",
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
-        "link_text": "Ewch i'ch cyfrif Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -986,9 +986,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "iaa": {
-        "header": "Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "header": "Cofrestr o ymgynghorwyr mewnfudo",
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
-        "link_text": "Ewch i'ch cyfrif Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -1123,9 +1123,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "iaa": {
-        "header": "Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "header": "Cofrestr o ymgynghorwyr mewnfudo",
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
-        "link_text": "Ewch i'ch cyfrif Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -1260,9 +1260,9 @@
         "link_href": "https://fishingpermitsandcatches.service.gov.wales"
       },
       "iaa": {
-        "header": "Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "header": "Cofrestr o ymgynghorwyr mewnfudo",
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
-        "link_text": "Ewch i'ch cyfrif Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     },
@@ -1399,7 +1399,7 @@
       "iaa": {
         "header": "Awdurdod Cyngor ar Fewnfudo (IAA)",
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
-        "link_text": "Ewch i'ch cyfrif Awdurdod Cyngor ar Fewnfudo (IAA)",
+        "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
       }
     }
