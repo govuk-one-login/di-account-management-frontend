@@ -1,11 +1,13 @@
-import { Issuer, Client, custom, generators } from "openid-client";
+import { Client, custom, generators, Issuer } from "openid-client";
 import { OIDCConfig } from "../types";
 import memoize from "fast-memoize";
 import { ClientAssertionServiceInterface, KmsService } from "./types";
 import { kmsService } from "./kms";
 import base64url from "base64url";
+import { createRemoteJWKSet, decodeJwt } from "jose";
 import random = generators.random;
-import { decodeJwt, createRemoteJWKSet } from "jose";
+
+const { toBase64 } = require("@aws-sdk/util-base64-browser");
 
 custom.setHttpOptionsDefaults({
   timeout: 20000,
@@ -61,7 +63,6 @@ function clientAssertionGenerator(
       alg: "RS512",
       typ: "JWT",
     };
-
     const payload = {
       iss: clientId,
       sub: clientId,
@@ -87,7 +88,7 @@ function clientAssertionGenerator(
       "." +
       token_components.payload +
       "." +
-      sig.Signature.toString("base64")
+      toBase64(sig.Signature.toString())
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
         .replace(/=/g, "")
