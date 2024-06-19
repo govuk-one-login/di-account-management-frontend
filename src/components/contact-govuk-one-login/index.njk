@@ -35,7 +35,7 @@
   {% endfor %}
 
   <p class="govuk-body contact-reference">
-    {{'pages.contact.refCodeBlock.refCode' | translate}}
+    {{ 'pages.contact.refCodeBlock.refCode' | translate }}
     <strong class="contact-reference__code">{{ referenceCode }}</strong>
   </p>
 {% endset %}
@@ -127,10 +127,7 @@
         <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
 
         {% set accessibilityTextHtml %}
-          {% set insetTextParagraphs =  'pages.contact.section3.webchat.accessibility-statement.insetText.paragraphs'  | translate({ returnObjects: true }) %}
-          {% for paragraph in insetTextParagraphs %}
-            <p class="govuk-body">{{ paragraph | safe | replace('[accessibilityStatementLinkHref]', accessibilityStatementUrl )  }}</p>
-          {% endfor %}
+          <p class="govuk-body">{{ 'pages.contact.section3.webchat.accessibilityStatementParagraph' | translate | safe | replace('[accessibilityStatementLinkHref]', accessibilityStatementUrl )  }}</p>
         {% endset %}
 
         {{ govukInsetText({

@@ -522,13 +522,7 @@
             "Mae'r cynorthwyydd digidol bob amser ar gael."
           ],
           "linkText": "Defnyddio gwe-sgwrs",
-          "accessibility-statement": {
-            "insetText": {
-              "paragraphs": [
-                "Nid yw ein gwe-sgwrs yn gwbl hygyrch eto - rydym yn gweithio i’w wella. Gallwch ddarganfod <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy#webchat-accessibility\">mwy am y cyfyngiadau a sut rydym yn eu cywiro.</a>"
-              ]
-            }
-          }
+          "accessibilityStatementParagraph": "Nid yw ein gwe-sgwrs yn gwbl hygyrch eto — rydym yn gweithio i’w wella. Gallwch ddarganfod <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy#webchat-accessibility\">mwy am y cyfyngiadau a sut rydym yn eu cywiro</a>."
         },
         "phone": {
           "heading": "Ffôn",
