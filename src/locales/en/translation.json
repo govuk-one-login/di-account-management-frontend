@@ -638,13 +638,7 @@
             "The digital assistant is always available."
           ],
           "linkText": "Use webchat",
-          "accessibility-statement": {
-            "insetText": {
-              "paragraphs": [
-                "Our webchat is not fully accessible yet - we’re working to improve it. You can find out <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en#webchat-accessibility\">more about the limitations and how we’re fixing them.</a>"
-              ]
-            }
-          }
+          "accessibilityStatementParagraph": "Our webchat is not fully accessible yet — we’re working to improve it. You can find out <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en#webchat-accessibility\">more about the limitations and how we’re fixing them</a>."
         },
         "phone": {
           "heading": "Phone",
