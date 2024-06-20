@@ -64,6 +64,7 @@ describe("check your phone controller", () => {
       const fakeService: CheckYourPhoneServiceInterface = {
         updatePhoneNumber: sandbox.fake.resolves(true),
         updatePhoneNumberWithMfaApi: sandbox.fake.resolves(true),
+        addMfaMethodService: sandbox.fake.resolves(true),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -82,6 +83,7 @@ describe("check your phone controller", () => {
       const fakeService: CheckYourPhoneServiceInterface = {
         updatePhoneNumber: sandbox.fake.resolves(false),
         updatePhoneNumberWithMfaApi: sandbox.fake.resolves(false),
+        addMfaMethodService: sandbox.fake.resolves(false),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -102,6 +104,7 @@ describe("check your phone controller", () => {
       const fakeService: CheckYourPhoneServiceInterface = {
         updatePhoneNumber: sandbox.fake.resolves(true),
         updatePhoneNumberWithMfaApi: sandbox.fake.resolves(true),
+        addMfaMethodService: sandbox.fake.resolves(true),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;

@@ -259,7 +259,7 @@
       "step1": {
         "title": "Enter your new mobile phone number",
         "message": "We will send a 6 digit security code to the number you give us",
-        "uk_mobile": "UK moble phone number",
+        "uk_mobile": "UK mobile phone number",
         "no_uk_mobile": "I do not have a UK mobile number",
         "intl_mobile_phone_number": "Mobile phone number",
         "intl_mobile_phone_number_hint": "Include the country code, for example +33 for France"

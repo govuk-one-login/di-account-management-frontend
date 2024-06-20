@@ -109,6 +109,7 @@ export interface Error {
 
 export interface UpdateInformationInput {
   email: string;
+  credential?: string;
   updatedValue?: string;
   otp: string;
   mfaMethod?: MfaMethod;

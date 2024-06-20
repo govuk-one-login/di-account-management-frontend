@@ -9,6 +9,7 @@ import {
 } from "../../../../test/utils/builders";
 import { addMfaSmsMethodPost } from "../add-mfa-method-sms-controller";
 import { PATH_DATA } from "../../../app.constants";
+import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 
 describe("add sms mfa method controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -37,9 +38,14 @@ describe("add sms mfa method controller", () => {
     sandbox.restore();
   });
 
-  it("should redirect the user to the check phone page", () => {
+  it("should redirect the user to the check phone page", async () => {
+    const fakeService: ChangePhoneNumberServiceInterface = {
+      sendPhoneVerificationNotification: sandbox.fake.resolves({
+        success: true,
+      }),
+    };
     req.body.ukPhoneNumber = "1234";
-    addMfaSmsMethodPost(req as Request, res as Response);
+    await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
     expect(redirect).to.be.calledWith(
       `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addMfaMethod`
     );
