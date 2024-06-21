@@ -698,6 +698,12 @@
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
         "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
+      },
+      "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ": {
+        "header": "Ymweld â rhywun yn y carchar",
+        "description": "Trefnu i ymweld â rhywun yn y carchar.",
+        "link_text": "Ewch i'ch cyfrif ymweld â rhywun yn y carchar",
+        "link_href": "https://prison-visits.service.justice.gov.uk/"
       }
     },
     "integration": {
@@ -847,6 +853,12 @@
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
         "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
+      },
+      "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ": {
+        "header": "Ymweld â rhywun yn y carchar",
+        "description": "Trefnu i ymweld â rhywun yn y carchar.",
+        "link_text": "Ewch i'ch cyfrif ymweld â rhywun yn y carchar",
+        "link_href": "https://prison-visits.service.justice.gov.uk/"
       }
     },
     "staging": {
@@ -984,6 +996,12 @@
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
         "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
+      },
+      "prisonVisits": {
+        "header": "Ymweld â rhywun yn y carchar",
+        "description": "Trefnu i ymweld â rhywun yn y carchar.",
+        "link_text": "Ewch i'ch cyfrif ymweld â rhywun yn y carchar",
+        "link_href": "https://prison-visits.service.justice.gov.uk/"
       }
     },
     "build": {
@@ -1121,6 +1139,12 @@
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
         "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
+      },
+      "prisonVisits": {
+        "header": "Ymweld â rhywun yn y carchar",
+        "description": "Trefnu i ymweld â rhywun yn y carchar.",
+        "link_text": "Ewch i'ch cyfrif ymweld â rhywun yn y carchar",
+        "link_href": "https://prison-visits.service.justice.gov.uk/"
       }
     },
     "dev": {
@@ -1258,6 +1282,12 @@
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
         "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
+      },
+      "prisonVisits": {
+        "header": "Ymweld â rhywun yn y carchar",
+        "description": "Trefnu i ymweld â rhywun yn y carchar.",
+        "link_text": "Ewch i'ch cyfrif ymweld â rhywun yn y carchar",
+        "link_href": "https://prison-visits.service.justice.gov.uk/"
       }
     },
     "local": {
@@ -1395,6 +1425,12 @@
         "description": "Awdurdodi a chofrestru ymgynghorydd neu sefydliad mewnfudo.",
         "link_text": "Ewch i'ch cyfrif Cofrestr o gynghorwyr mewnfudo",
         "link_href": "https://portal.oisc.gov.uk/"
+      },
+      "prisonVisits": {
+        "header": "Ymweld â rhywun yn y carchar",
+        "description": "Trefnu i ymweld â rhywun yn y carchar.",
+        "link_text": "Ewch i'ch cyfrif ymweld â rhywun yn y carchar",
+        "link_href": "https://prison-visits.service.justice.gov.uk/"
       }
     }
   }

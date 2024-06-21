@@ -141,6 +141,8 @@ const STUB_RP_STAGING: string = "3NKFv679oYlMdyrhKErrTGbzBy2h8rrd";
 export const ONE_LOGIN_HOME_NON_PROD: string = "oneLoginHome";
 const DWP_INTEGRATION: string = "sqae3L7gOdizeRqFMw_KCDlhcyg";
 const DWP_LOCAL_DEV_INTEGRATION: string = "iOf3hyG7eymusbSUS6LgFeQ7AtU";
+const PRISON_VISITS_PROD: string = "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ";
+const PRISON_VISITS_NON_PROD: string = "prisonVisits";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -184,6 +186,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "welshFisheriesPermit",
   "Gk-D7WMvytB44Nze7oEC5KcThQZ4yl7sAA",
   "iaa",
+  PRISON_VISITS_PROD,
+  PRISON_VISITS_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
