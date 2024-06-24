@@ -30,7 +30,7 @@ describe("check your phone controller", () => {
             methodVerified: true,
             endPoint: "PHONE",
             mfaMethodType: "SMS",
-            priorityIdentifier: "PRIMARY",
+            priorityIdentifier: "DEFAULT",
           },
         ],
       } as any,
@@ -122,7 +122,7 @@ describe("check your phone controller", () => {
           methodVerified: true,
           endPoint: "07111111111",
           mfaMethodType: "SMS",
-          priorityIdentifier: "PRIMARY",
+          priorityIdentifier: "DEFAULT",
         },
       });
       expect(res.redirect).to.have.calledWith(

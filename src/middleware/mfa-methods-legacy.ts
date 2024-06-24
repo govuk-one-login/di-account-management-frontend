@@ -9,7 +9,7 @@ export function legacyMfaMethodsMiddleware(
     req.session.mfaMethods = [
       {
         mfaIdentifier: 1,
-        priorityIdentifier: "PRIMARY",
+        priorityIdentifier: "DEFAULT",
         mfaMethodType: "SMS",
         endPoint: req.session.user.phoneNumber,
         methodVerified: true,
@@ -19,7 +19,7 @@ export function legacyMfaMethodsMiddleware(
     req.session.mfaMethods = [
       {
         mfaIdentifier: 1,
-        priorityIdentifier: "PRIMARY",
+        priorityIdentifier: "DEFAULT",
         mfaMethodType: "AUTH_APP",
         endPoint: "Authenticator app",
         methodVerified: true,

@@ -48,7 +48,7 @@ describe("security controller", () => {
       req.session.mfaMethods = [
         {
           mfaIdentifier: 1,
-          priorityIdentifier: "PRIMARY",
+          priorityIdentifier: "DEFAULT",
           mfaMethodType: "SMS",
           endPoint: "xxxxxxx7898",
           methodVerified: true,
@@ -67,7 +67,7 @@ describe("security controller", () => {
             linkHref: "/enter-password?type=changePhoneNumber",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
-            priorityIdentifier: "PRIMARY",
+            priorityIdentifier: "DEFAULT",
           },
         ],
         supportChangeMfa: true,
@@ -96,7 +96,7 @@ describe("security controller", () => {
       req.session.mfaMethods = [
         {
           mfaIdentifier: 1,
-          priorityIdentifier: "PRIMARY",
+          priorityIdentifier: "DEFAULT",
           mfaMethodType: "SMS",
           endPoint: "xxxxxxx7898",
           methodVerified: true,
@@ -115,7 +115,7 @@ describe("security controller", () => {
             linkHref: "/enter-password?type=changePhoneNumber",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
-            priorityIdentifier: "PRIMARY",
+            priorityIdentifier: "DEFAULT",
           },
         ],
         supportChangeMfa: true,
@@ -146,7 +146,7 @@ describe("security controller", () => {
       req.session.mfaMethods = [
         {
           mfaIdentifier: 1,
-          priorityIdentifier: "PRIMARY",
+          priorityIdentifier: "DEFAULT",
           mfaMethodType: "SMS",
           endPoint: "xxxxxxx7898",
           methodVerified: true,
@@ -165,7 +165,7 @@ describe("security controller", () => {
             linkHref: "/enter-password?type=changePhoneNumber",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
-            priorityIdentifier: "PRIMARY",
+            priorityIdentifier: "DEFAULT",
           },
         ],
         supportChangeMfa: true,
@@ -193,7 +193,7 @@ describe("security controller", () => {
       req.session.mfaMethods = [
         {
           mfaIdentifier: 1,
-          priorityIdentifier: "PRIMARY",
+          priorityIdentifier: "DEFAULT",
           endPoint: "xxxxxxx7898",
           methodVerified: true,
         },
@@ -223,7 +223,7 @@ describe("security controller", () => {
       req.session.mfaMethods = [
         {
           mfaIdentifier: 1,
-          priorityIdentifier: "PRIMARY",
+          priorityIdentifier: "DEFAULT",
           mfaMethodType: "INVALID",
           endPoint: "xxxxxxx7898",
           methodVerified: true,
@@ -258,7 +258,7 @@ describe("security controller", () => {
       req.session.mfaMethods = [
         {
           mfaIdentifier: 1,
-          priorityIdentifier: "PRIMARY",
+          priorityIdentifier: "DEFAULT",
           mfaMethodType: "SMS",
           endPoint: "xxxxxxx7898",
           methodVerified: true,
@@ -277,7 +277,7 @@ describe("security controller", () => {
             linkHref: "/enter-password?type=changePhoneNumber",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
-            priorityIdentifier: "PRIMARY",
+            priorityIdentifier: "DEFAULT",
           },
         ],
         supportChangeMfa: true,

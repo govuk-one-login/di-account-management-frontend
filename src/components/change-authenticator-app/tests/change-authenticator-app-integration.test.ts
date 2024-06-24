@@ -55,11 +55,11 @@ describe("Integration:: change authenticator app", () => {
             methodVerified: true,
             endPoint: "PHONE",
             mfaMethodType: "SMS",
-            priorityIdentifier: "PRIMARY",
+            priorityIdentifier: "DEFAULT",
           },
           {
             mfaIdentifier: 2,
-            priorityIdentifier: "SECONDARY",
+            priorityIdentifier: "BACKUP",
             mfaMethodType: "AUTH_APP",
             methodVerified: true,
           },

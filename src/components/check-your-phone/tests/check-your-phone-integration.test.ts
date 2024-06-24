@@ -54,7 +54,7 @@ describe("Integration:: check your phone", () => {
             methodVerified: true,
             endPoint: "PHONE",
             mfaMethodType: "SMS",
-            priorityIdentifier: "PRIMARY",
+            priorityIdentifier: "DEFAULT",
           },
         ];
         next();
@@ -94,7 +94,7 @@ describe("Integration:: check your phone", () => {
         methodVerified: true,
         endPoint: "PHONE",
         mfaMethodType: "SMS",
-        priorityIdentifier: "PRIMARY",
+        priorityIdentifier: "DEFAULT",
       },
     ]);
 

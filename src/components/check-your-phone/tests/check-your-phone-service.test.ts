@@ -96,7 +96,7 @@ describe("checkYourPhoneService", () => {
       methodVerified: true,
       endPoint: "PHONE",
       mfaMethodType: "SMS",
-      priorityIdentifier: "PRIMARY",
+      priorityIdentifier: "DEFAULT",
     };
 
     const updateMfaMethod = sinon.fake.returns(Promise.resolve(true));
