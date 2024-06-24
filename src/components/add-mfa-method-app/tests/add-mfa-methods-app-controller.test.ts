@@ -114,7 +114,7 @@ describe("addMfaAppMethodPost", () => {
           mfaIdentifier: 1,
           methodVerified: true,
           mfaMethodType: "AUTH_APP",
-          priorityIdentifier: "SECONDARY",
+          priorityIdentifier: "BACKUP",
         },
       })
     );
@@ -136,7 +136,7 @@ describe("addMfaAppMethodPost", () => {
       email: "test@test.com",
       otp: "123456",
       credential: "AAAAAAAAAAAAAAAAAAAA",
-      mfaMethod: { priorityIdentifier: "SECONDARY", mfaMethodType: "AUTH_APP" },
+      mfaMethod: { priorityIdentifier: "BACKUP", mfaMethodType: "AUTH_APP" },
       accessToken: "token",
       sourceIp: "127.0.0.1",
       sessionId: "session_id",

@@ -228,8 +228,10 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: phoneNumber,
-      mfaMethodType: "SMS",
+      method: {
+        endPoint: phoneNumber,
+        mfaMethodType: "SMS",
+      },
       priorityIdentifier: "DEFAULT",
     };
 
@@ -273,7 +275,9 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      mfaMethodType: "AUTH_APP",
+      method: {
+        mfaMethodType: "AUTH_APP",
+      },
       priorityIdentifier: "DEFAULT",
     };
 
@@ -318,8 +322,10 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: "PHONE",
-      mfaMethodType: "SMS",
+      method: {
+        endPoint: "PHONE",
+        mfaMethodType: "SMS",
+      },
       priorityIdentifier: "DEFAULT",
     };
 
@@ -379,8 +385,10 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: "PHONE",
-      mfaMethodType: "SMS",
+      method: {
+        endPoint: "PHONE",
+        mfaMethodType: "SMS",
+      },
       priorityIdentifier: "DEFAULT",
     };
 

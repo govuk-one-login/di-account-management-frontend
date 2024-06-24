@@ -7,7 +7,7 @@ export interface MfaMethod {
   method: {
     mfaMethodType: MfaMethodType;
     endPoint?: string;
-  }
+  };
   methodVerified: boolean;
 }
 

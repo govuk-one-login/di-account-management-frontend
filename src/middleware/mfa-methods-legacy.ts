@@ -10,8 +10,10 @@ export function legacyMfaMethodsMiddleware(
       {
         mfaIdentifier: 1,
         priorityIdentifier: "DEFAULT",
-        mfaMethodType: "SMS",
-        endPoint: req.session.user.phoneNumber,
+        method: {
+          mfaMethodType: "SMS",
+          endPoint: req.session.user.phoneNumber,
+        },
         methodVerified: true,
       },
     ];
@@ -20,8 +22,10 @@ export function legacyMfaMethodsMiddleware(
       {
         mfaIdentifier: 1,
         priorityIdentifier: "DEFAULT",
-        mfaMethodType: "AUTH_APP",
-        endPoint: "Authenticator app",
+        method: {
+          mfaMethodType: "AUTH_APP",
+          endPoint: "Authenticator app",
+        },
         methodVerified: true,
       },
     ];

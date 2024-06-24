@@ -72,7 +72,7 @@ export async function addMfaAppMethodPost(
       otp: code,
       credential: authAppSecret,
       mfaMethod: {
-        priorityIdentifier: "SECONDARY",
+        priorityIdentifier: "BACKUP",
         mfaMethodType: "AUTH_APP",
       },
       accessToken: req.session.user.tokens.accessToken,
