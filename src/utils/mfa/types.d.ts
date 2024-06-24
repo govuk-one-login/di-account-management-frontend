@@ -4,8 +4,10 @@ export type MfaMethodType = "SMS" | "AUTH_APP";
 export interface MfaMethod {
   mfaIdentifier: number;
   priorityIdentifier: PriorityIdentifier;
-  mfaMethodType: MfaMethodType;
-  endPoint?: string;
+  method: {
+    mfaMethodType: MfaMethodType;
+    endPoint?: string;
+  }
   methodVerified: boolean;
 }
 

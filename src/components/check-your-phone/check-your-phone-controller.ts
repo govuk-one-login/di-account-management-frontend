@@ -43,10 +43,10 @@ export function checkYourPhonePost(
     if (supportChangeMfa()) {
       if (intent === "changePhoneNumber") {
         const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
-          (mfa) => mfa.mfaMethodType === "SMS"
+          (mfa) => mfa.method.mfaMethodType === "SMS"
         );
         if (smsMFAMethod) {
-          smsMFAMethod.endPoint = newPhoneNumber;
+          smsMFAMethod.method.endPoint = newPhoneNumber;
           updateInput.mfaMethod = smsMFAMethod;
           isPhoneNumberUpdated = await service.updatePhoneNumberWithMfaApi(
             updateInput,
