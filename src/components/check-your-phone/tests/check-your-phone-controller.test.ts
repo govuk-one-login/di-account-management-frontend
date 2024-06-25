@@ -28,8 +28,10 @@ describe("check your phone controller", () => {
           {
             mfaIdentifier: 111111,
             methodVerified: true,
-            endPoint: "PHONE",
-            mfaMethodType: "SMS",
+            method: {
+              endPoint: "PHONE",
+              mfaMethodType: "SMS",
+            },
             priorityIdentifier: "DEFAULT",
           },
         ],
