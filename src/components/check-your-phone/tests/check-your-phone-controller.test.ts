@@ -120,8 +120,10 @@ describe("check your phone controller", () => {
         mfaMethod: {
           mfaIdentifier: 111111,
           methodVerified: true,
-          endPoint: "07111111111",
-          mfaMethodType: "SMS",
+          method: {
+            endPoint: "07111111111",
+            mfaMethodType: "SMS",
+          },
           priorityIdentifier: "DEFAULT",
         },
       });
