@@ -105,14 +105,18 @@ describe("change authenticator app controller", () => {
         {
           mfaIdentifier: 111111,
           methodVerified: true,
-          endPoint: "PHONE",
-          mfaMethodType: "SMS",
+          method: {
+            mfaMethodType: "SMS",
+            endPoint: "PHONE",
+          },
           priorityIdentifier: "DEFAULT",
         },
         {
           mfaIdentifier: 2,
           priorityIdentifier: "BACKUP",
-          mfaMethodType: "AUTH_APP",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
           methodVerified: true,
         },
       ];
@@ -148,14 +152,18 @@ describe("change authenticator app controller", () => {
         {
           mfaIdentifier: 111111,
           methodVerified: true,
-          endPoint: "PHONE",
-          mfaMethodType: "SMS",
+          method: {
+            endPoint: "PHONE",
+            mfaMethodType: "SMS",
+          },
           priorityIdentifier: "DEFAULT",
         },
         {
           mfaIdentifier: 2,
           priorityIdentifier: "BACKUP",
-          mfaMethodType: "AUTH_APP",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
           methodVerified: true,
         },
       ];

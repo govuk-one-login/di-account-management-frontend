@@ -113,7 +113,9 @@ describe("addMfaAppMethodPost", () => {
           endPoint: "endPoint",
           mfaIdentifier: 1,
           methodVerified: true,
-          mfaMethodType: "AUTH_APP",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
           priorityIdentifier: "BACKUP",
         },
       })

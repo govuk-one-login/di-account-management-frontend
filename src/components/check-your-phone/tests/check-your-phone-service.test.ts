@@ -94,8 +94,10 @@ describe("checkYourPhoneService", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: "PHONE",
-      mfaMethodType: "SMS",
+      method: {
+        endPoint: "PHONE",
+        mfaMethodType: "SMS",
+      },
       priorityIdentifier: "DEFAULT",
     };
 
