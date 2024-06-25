@@ -49,8 +49,10 @@ describe("security controller", () => {
         {
           mfaIdentifier: 1,
           priorityIdentifier: "DEFAULT",
-          mfaMethodType: "SMS",
-          endPoint: "xxxxxxx7898",
+          method: {
+            mfaMethodType: "SMS",
+            endPoint: "xxxxxxx7898",
+          },
           methodVerified: true,
         },
       ] as any;
@@ -97,8 +99,10 @@ describe("security controller", () => {
         {
           mfaIdentifier: 1,
           priorityIdentifier: "DEFAULT",
-          mfaMethodType: "SMS",
-          endPoint: "xxxxxxx7898",
+          method: {
+            mfaMethodType: "SMS",
+            endPoint: "xxxxxxx7898",
+          },
           methodVerified: true,
         },
       ] as any;
@@ -147,8 +151,10 @@ describe("security controller", () => {
         {
           mfaIdentifier: 1,
           priorityIdentifier: "DEFAULT",
-          mfaMethodType: "SMS",
-          endPoint: "xxxxxxx7898",
+          method: {
+            mfaMethodType: "SMS",
+            endPoint: "xxxxxxx7898",
+          },
           methodVerified: true,
         },
       ] as any;
@@ -194,7 +200,10 @@ describe("security controller", () => {
         {
           mfaIdentifier: 1,
           priorityIdentifier: "DEFAULT",
-          endPoint: "xxxxxxx7898",
+          method: {
+            mfaMethodType: "SMS",
+            endPoint: "xxxxxxx7898",
+          },
           methodVerified: true,
         },
       ] as any;
@@ -224,8 +233,10 @@ describe("security controller", () => {
         {
           mfaIdentifier: 1,
           priorityIdentifier: "DEFAULT",
-          mfaMethodType: "INVALID",
-          endPoint: "xxxxxxx7898",
+          method: {
+            mfaMethodType: "INVALID",
+            endPoint: "xxxxxxx7898",
+          },
           methodVerified: true,
         },
       ] as any;
@@ -259,8 +270,10 @@ describe("security controller", () => {
         {
           mfaIdentifier: 1,
           priorityIdentifier: "DEFAULT",
-          mfaMethodType: "SMS",
-          endPoint: "xxxxxxx7898",
+          method: {
+            mfaMethodType: "SMS",
+            endPoint: "xxxxxxx7898",
+          },
           methodVerified: true,
         },
       ] as any;
