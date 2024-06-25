@@ -83,6 +83,9 @@ describe("addMfaAppMethodPost", () => {
 
   it("should redirect to add mfa app confirmation page", async () => {
     const req = {
+      headers: {
+        "txma-audit-encoded": "txma-audit-encoded",
+      },
       body: {
         code: "123456",
         authAppSecret: "A".repeat(20),
@@ -98,10 +101,15 @@ describe("addMfaAppMethodPost", () => {
       log: { error: sinon.fake() },
       ip: "127.0.0.1",
       t: (t: string) => t,
+      cookies: {
+        lng: "en",
+      },
     };
     const res = {
       locals: {
         persistentSessionId: "persistentSessionId",
+        clientSessionId: "clientSessionId",
+        trace: "trace",
       },
       redirect: sandbox.fake(() => {}),
     };
@@ -132,16 +140,26 @@ describe("addMfaAppMethodPost", () => {
       next
     );
 
-    expect(addMfaMethod).to.have.been.calledWith({
-      email: "test@test.com",
-      otp: "123456",
-      credential: "AAAAAAAAAAAAAAAAAAAA",
-      mfaMethod: { priorityIdentifier: "SECONDARY", mfaMethodType: "AUTH_APP" },
-      accessToken: "token",
-      sourceIp: "127.0.0.1",
-      sessionId: "session_id",
-      persistentSessionId: "persistentSessionId",
-    });
+    expect(addMfaMethod).to.have.been.calledWith(
+      {
+        email: "test@test.com",
+        otp: "123456",
+        credential: "AAAAAAAAAAAAAAAAAAAA",
+        mfaMethod: {
+          priorityIdentifier: "SECONDARY",
+          mfaMethodType: "AUTH_APP",
+        },
+      },
+      {
+        accessToken: "token",
+        sourceIp: "127.0.0.1",
+        sessionId: "session_id",
+        persistentSessionId: "persistentSessionId",
+        userLanguage: "en",
+        clientSessionId: "clientSessionId",
+        txmaAuditEncoded: "txma-audit-encoded",
+      }
+    );
 
     expect(res.redirect).to.have.been.calledWith(
       PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url

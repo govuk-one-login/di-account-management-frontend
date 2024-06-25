@@ -7,6 +7,7 @@ import {
   addMfaSmsMethodGet,
   addMfaSmsMethodPost,
 } from "./add-mfa-method-sms-controller";
+import { asyncHandler } from "../../utils/async";
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.post(
   PATH_DATA.ADD_MFA_METHOD_SMS.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  addMfaSmsMethodPost
+  asyncHandler(addMfaSmsMethodPost())
 );
 
 router.get(

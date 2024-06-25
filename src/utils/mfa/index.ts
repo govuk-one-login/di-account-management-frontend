@@ -5,13 +5,7 @@ import {
 } from "../../app.constants";
 import { logger } from "../logger";
 import { getRequestConfig, Http } from "../http";
-import {
-  MfaMethod,
-  MfaMethodType,
-  PriorityIdentifier,
-  ProblemDetail,
-  ValidationProblem,
-} from "./types";
+import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
 import { getAppEnv, getMfaServiceUrl } from "../../config";
 import { authenticator } from "otplib";
 import {
@@ -40,40 +34,19 @@ export function verifyMfaCode(secret: string, code: string): boolean {
   return authenticator.check(code, secret);
 }
 
-export function addMfaMethod({
-  email,
-  otp,
-  credential,
-  mfaMethod,
-  accessToken,
-  sourceIp,
-  sessionId,
-  persistentSessionId,
-}: {
-  email: string;
-  otp: string;
-  credential: string;
-  mfaMethod: {
-    priorityIdentifier: PriorityIdentifier;
-    mfaMethodType: MfaMethodType;
-  };
-  accessToken: string;
-  sourceIp: string;
-  sessionId: string;
-  persistentSessionId: string;
-}): Promise<{
+export function addMfaMethod(
+  updateInput: UpdateInformationInput,
+  sessionDetails: UpdateInformationSessionValues
+): Promise<{
   status: number;
   data: MfaMethod;
 }> {
   const http = new Http(getMfaServiceUrl());
+  const { accessToken, sourceIp, persistentSessionId, sessionId } =
+    sessionDetails;
   return http.client.post<MfaMethod>(
     METHOD_MANAGEMENT_API.MFA_METHODS_ADD,
-    {
-      email,
-      otp,
-      credential,
-      mfaMethod,
-    },
+    updateInput,
     getRequestConfig({
       token: accessToken,
       sourceIp,
@@ -142,7 +115,7 @@ async function putRequest(
   status: number;
   data: MfaMethod;
 }> {
-  const response = await http.client.put<MfaMethod>(
+  return await http.client.put<MfaMethod>(
     format(
       METHOD_MANAGEMENT_API.MFA_METHODS_PUT,
       updateInput.mfaMethod.mfaIdentifier
@@ -163,8 +136,6 @@ async function putRequest(
       ...sessionDetails,
     })
   );
-
-  return response;
 }
 
 function errorHandler(error: any, trace: string, action: string): void {
@@ -238,6 +209,29 @@ export async function updateMfaMethod(
     }
   } catch (err) {
     errorHandler(err, sessionDetails.sessionId, "update");
+  }
+  return isUpdated;
+}
+
+export async function createOrUpdateMfaMethod(
+  updateInput: UpdateInformationInput,
+  sessionDetails: UpdateInformationSessionValues
+): Promise<boolean> {
+  let isUpdated = false;
+  try {
+    const response = await addMfaMethod(updateInput, sessionDetails);
+
+    if (response.status === HTTP_STATUS_CODES.OK) {
+      isUpdated = true;
+    } else {
+      errorHandler(
+        new Error("MFA Method Not Found"),
+        sessionDetails.sessionId,
+        "create"
+      );
+    }
+  } catch (err) {
+    errorHandler(err, sessionDetails.sessionId, "create");
   }
   return isUpdated;
 }

@@ -166,7 +166,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4DISABLED: "false"
       UADISABLED: "false"
-      SUPPORTADDBACKUPMFA: "0"
+      SUPPORTADDBACKUPMFA: "1"
       SUPPORTCHANGEMFA: "1"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
