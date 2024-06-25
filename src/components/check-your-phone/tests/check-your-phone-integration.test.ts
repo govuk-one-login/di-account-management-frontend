@@ -52,8 +52,10 @@ describe("Integration:: check your phone", () => {
           {
             mfaIdentifier: 111111,
             methodVerified: true,
-            endPoint: "PHONE",
-            mfaMethodType: "SMS",
+            method: {
+              endPoint: "PHONE",
+              mfaMethodType: "SMS",
+            },
             priorityIdentifier: "DEFAULT",
           },
         ];
