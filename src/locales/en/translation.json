@@ -608,6 +608,10 @@
           {
             "href": "https://www.gov.uk/guidance/deleting-your-govuk-one-login",
             "text": "Deleting your GOV.UK One Login"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/what-to-do-about-unexpected-messages-from-govuk-one-login",
+            "text": "An unexpected email, text message or phone call about your GOV.UK One Login"
           }
         ],
         "guidance-for-helpers": "If you're having trouble using GOV.UK One Login by yourself, you can get help from someone you know and trust. Find out <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login\">what the person who helps you can and cannot do</a>."

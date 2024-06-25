@@ -492,6 +492,10 @@
           {
             "href": "https://www.gov.uk/guidance/deleting-your-govuk-one-login.cy",
             "text": "Dileu eich GOV.UK One Login"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/what-to-do-about-unexpected-messages-from-govuk-one-login.cy",
+            "text": "E-bost, neges destun neu alwad ffôn annisgwyl am eich GOV.UK One Login"
           }
         ],
         "guidance-for-helpers": "Os ydych yn cael trafferth defnyddio GOV.UK One Login ar eich pen eich hun, gallwch gael help gan rywun rydych yn ei adnabod ac yn ymddiried ynddynt. Darganfyddwch <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login.cy\",>beth gall ac na all y person sy'n eich helpu ei wneud</a>."
