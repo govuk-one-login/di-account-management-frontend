@@ -1,4 +1,4 @@
-# test to trigger action
+# test to trigger action 2
 FROM node:22.3.0-alpine@sha256:dfd61407706dee667f08be1bb079d2f2c6643f69ed5d2abe5c180b5e6cd1733a as builder
 ENV HUSKY=0
 WORKDIR /app
