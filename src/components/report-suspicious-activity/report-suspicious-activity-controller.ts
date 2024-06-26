@@ -1,12 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { PATH_DATA } from "../../app.constants";
-// import { formatEvent } from "../../utils/activityHistory";
 import {
   getAppEnv,
   getDynamoActivityLogStoreTableName,
   getOIDCClientId,
 } from "../../config";
-import { DynamoDB } from "aws-sdk";
+import { QueryCommand } from "@aws-sdk/client-dynamodb";
 import { dynamoDBService } from "../../utils/dynamo";
 import { getSNSSuspicousActivityTopic } from "../../config";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
@@ -15,18 +14,22 @@ import { formatActivityLogs } from "../../utils/activityHistory";
 import { decryptData } from "../../utils/decrypt-data";
 import { snsService } from "../../utils/sns";
 import { getTxmaHeader } from "../../utils/txma-header";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 
 const activityLogDynamoDBRequest = (
   subjectId: string,
   eventId: string
-): DynamoDB.Types.QueryInput => ({
-  TableName: getDynamoActivityLogStoreTableName(),
-  KeyConditionExpression: "user_id = :user_id AND event_id = :event_id ",
-  ExpressionAttributeValues: {
-    ":user_id": { S: subjectId },
-    ":event_id": { S: eventId },
-  },
-});
+): QueryCommand => {
+  const params = {
+    TableName: getDynamoActivityLogStoreTableName(),
+    KeyConditionExpression: "user_id = :user_id AND event_id = :event_id ",
+    ExpressionAttributeValues: {
+      ":user_id": { S: subjectId },
+      ":event_id": { S: eventId },
+    },
+  };
+  return new QueryCommand(params);
+};
 
 interface ReportSuspiciousActivityParams {
   user_id: string;
@@ -91,9 +94,7 @@ export async function reportSuspiciousActivityGet(
       );
       return next();
     }
-    activityLog = DynamoDB.Converter.unmarshall(
-      response.Items[0]
-    ) as ActivityLogEntry;
+    activityLog = unmarshall(response.Items[0]) as ActivityLogEntry;
   } catch (err) {
     req.log.error(err.message);
     return next(err);
