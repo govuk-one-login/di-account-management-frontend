@@ -1,3 +1,4 @@
+import { Endpoint } from "aws-sdk";
 import { DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
 import {
   isLocalEnv,
@@ -20,14 +21,10 @@ export interface SnsConfig {
   awsConfig: AwsConfig;
 }
 
-export interface Credentials {
+export interface AwsConfig {
+  endpoint?: Endpoint;
   accessKeyId?: string;
   secretAccessKey?: string;
-}
-
-export interface AwsConfig {
-  endpoint?: string;
-  credentials?: Credentials;
   region: string;
 }
 
@@ -40,11 +37,9 @@ function getLocalStackKmsConfig() {
 
 function getLocalStackAWSConfig(): AwsConfig {
   return {
-    endpoint: getLocalStackBaseUrl(),
-    credentials: {
-      accessKeyId: "na",
-      secretAccessKey: "na",
-    },
+    endpoint: new Endpoint(getLocalStackBaseUrl()),
+    accessKeyId: "na",
+    secretAccessKey: "na",
     region: getAwsRegion(),
   };
 }
@@ -136,15 +131,15 @@ export function getDBConfig(
 ): DynamoDBClientConfig {
   const dbConfig: any = {};
 
-  if (config.credentials?.accessKeyId || config.credentials?.secretAccessKey) {
+  if (config.accessKeyId || config.secretAccessKey) {
     dbConfig.credentials = {
-      accessKeyId: config.credentials.accessKeyId || "",
-      secretAccessKey: config.credentials.secretAccessKey || "",
+      accessKeyId: config.accessKeyId || "",
+      secretAccessKey: config.secretAccessKey || "",
     };
   }
 
   if (config.endpoint) {
-    dbConfig.endpoint = config.endpoint;
+    dbConfig.endpoint = `${config.endpoint.protocol}//${config.endpoint.host}`;
   }
 
   if (config.region) {
