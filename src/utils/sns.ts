@@ -1,8 +1,4 @@
-import {
-  PublishCommand,
-  PublishCommandOutput,
-  SNSClient,
-} from "@aws-sdk/client-sns";
+import { SNS } from "aws-sdk";
 import { SnsService } from "./types";
 import { getSNSConfig, SnsConfig } from "../config/aws";
 
@@ -10,15 +6,15 @@ export function snsService(config: SnsConfig = getSNSConfig()): SnsService {
   const publish = async function (
     topic_arn: string,
     message: string
-  ): Promise<PublishCommandOutput> {
-    const client = new SNSClient(config.awsConfig as any);
+  ): Promise<SNS.Types.PublishResponse> {
+    const sns = new SNS(config.awsConfig);
 
-    const params = {
+    const request: SNS.PublishInput = {
       TopicArn: topic_arn,
       Message: message,
     };
-    const request: PublishCommand = new PublishCommand(params);
-    return await client.send(request);
+
+    return await sns.publish(request).promise();
   };
   return {
     publish,

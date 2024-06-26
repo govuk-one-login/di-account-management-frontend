@@ -9,10 +9,7 @@ import { expect } from "chai";
 import * as dynamo from "../../../utils/dynamo";
 import * as sns from "../../../utils/sns";
 import { DynamoDBService } from "../../../utils/types";
-import {
-  GetItemCommandOutput,
-  QueryCommandOutput,
-} from "@aws-sdk/client-dynamodb";
+import { DynamoDB } from "aws-sdk";
 import { logger } from "../../../utils/logger";
 import { AwsConfig } from "../../../config/aws";
 
@@ -21,7 +18,7 @@ describe("report suspicious activity controller", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: any;
-  let dynamodbQueryOutput: QueryCommandOutput;
+  let dynamodbQueryOutput: DynamoDB.Types.QueryOutput;
   let loggerSpy: sinon.SinonSpy;
   let errorLoggerSpy: sinon.SinonSpy;
   let mockDynamoDBService: DynamoDBService;
@@ -63,7 +60,6 @@ describe("report suspicious activity controller", () => {
     };
     next = sandbox.fake(() => {});
     dynamodbQueryOutput = {
-      $metadata: undefined,
       Items: [
         {
           event_id: { S: "event-id" },
@@ -76,10 +72,10 @@ describe("report suspicious activity controller", () => {
       ],
     };
     mockDynamoDBService = {
-      getItem(): Promise<GetItemCommandOutput> {
+      getItem(): Promise<DynamoDB.GetItemOutput> {
         return Promise.resolve(undefined);
       },
-      queryItem(): Promise<QueryCommandOutput> {
+      queryItem(): Promise<DynamoDB.Types.QueryOutput> {
         return Promise.resolve(dynamodbQueryOutput);
       },
     };
@@ -112,7 +108,6 @@ describe("report suspicious activity controller", () => {
     // Arrange
     req.query = { event: "event-id", reported: "true" };
     dynamodbQueryOutput = {
-      $metadata: undefined,
       Items: [
         {
           event_id: { S: "event-id" },
@@ -155,7 +150,7 @@ describe("report suspicious activity controller", () => {
   describe("Sorry, there is a problem with the service", () => {
     it("event param can't be found for this user", async () => {
       // Arrange
-      dynamodbQueryOutput = { $metadata: undefined, Items: [] };
+      dynamodbQueryOutput = { Items: [] };
       req.query = { event: "event-id", reported: "false" };
 
       // Act
@@ -168,10 +163,10 @@ describe("report suspicious activity controller", () => {
     it("activity log can't be retrieved for this user", async () => {
       // Arrange
       mockDynamoDBService = {
-        getItem(): Promise<GetItemCommandOutput> {
+        getItem(): Promise<DynamoDB.GetItemOutput> {
           throw new Error("DynamoDB error");
         },
-        queryItem(): Promise<QueryCommandOutput> {
+        queryItem(): Promise<DynamoDB.Types.QueryOutput> {
           throw new Error("DynamoDB error");
         },
       };
