@@ -58,7 +58,7 @@ describe("updateSessionMiddleware", () => {
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
     expect(loggerWarnSpy).to.be.calledWith(
       { url: "invalid-url" },
-      "TypeError [ERR_INVALID_URL]: Invalid URL"
+      "TypeError: Invalid URL"
     );
     expect(loggerWarnSpy).to.be.calledWith(
       { trace: mockResponse.locals.sessionId },
