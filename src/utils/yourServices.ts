@@ -1,6 +1,5 @@
-import { AttributeValue, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDB } from "aws-sdk";
 import { dynamoDBService } from "./dynamo";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   getDynamoServiceStoreTableName,
   getAllowedAccountListClientIDs,
@@ -11,19 +10,17 @@ import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
 import pino from "pino";
 
-const serviceStoreDynamoDBRequest = (subjectId: string): GetItemCommand => {
-  const param = {
-    TableName: getDynamoServiceStoreTableName(),
-    Key: {
-      user_id: { S: subjectId },
-    },
-  };
-  return new GetItemCommand(param);
-};
+const serviceStoreDynamoDBRequest = (
+  subjectId: string
+): DynamoDB.Types.GetItemInput => ({
+  TableName: getDynamoServiceStoreTableName(),
+  Key: {
+    user_id: { S: subjectId },
+  },
+});
 
-const unmarshallDynamoData = (
-  dynamoDBResponse: Record<string, AttributeValue>
-) => unmarshall(dynamoDBResponse);
+const unmarshallDynamoData = (dynamoDBResponse: DynamoDB.Types.AttributeMap) =>
+  DynamoDB.Converter.unmarshall(dynamoDBResponse);
 
 export const getServices = async (
   subjectId: string,
@@ -34,8 +31,7 @@ export const getServices = async (
     const response = await dynamoDBService().getItem(
       serviceStoreDynamoDBRequest(subjectId)
     );
-    const services = unmarshallDynamoData(response["Item"]).services;
-    return services;
+    return unmarshallDynamoData(response["Item"]).services;
   } catch (err) {
     logger.error({ trace: trace }, err);
     return [];

@@ -1,13 +1,5 @@
-import {
-  GetItemCommand,
-  QueryCommand,
-  QueryCommandOutput,
-} from "@aws-sdk/client-dynamodb";
-
-import { SignCommandOutput } from "@aws-sdk/client-kms";
-import { PublishCommandOutput } from "@aws-sdk/client-sns";
+import { DynamoDB, KMS, SNS } from "aws-sdk";
 import { MfaMethod } from "./mfa/types";
-import { GetCommandOutput } from "@aws-sdk/lib-dynamodb";
 
 type ClientId = string;
 type UrnFdnSub = string;
@@ -31,7 +23,7 @@ export interface YourServices {
 }
 
 export interface KmsService {
-  sign: (payload: string) => Promise<SignCommandOutput>;
+  sign: (payload: string) => Promise<KMS.Types.SignResponse>;
 }
 
 export interface ActivityLogEntry {
@@ -66,7 +58,7 @@ export interface SnsService {
   publish: (
     topic_arn: string,
     message: string
-  ) => Promise<PublishCommandOutput>;
+  ) => Promise<SNS.Types.PublishResponse>;
 }
 
 export interface SqsService {
@@ -74,8 +66,12 @@ export interface SqsService {
 }
 
 export interface DynamoDBService {
-  getItem: (getCommand: GetItemCommand) => Promise<GetCommandOutput>;
-  queryItem: (queryCommand: QueryCommand) => Promise<QueryCommandOutput>;
+  getItem: (
+    getCommand: DynamoDB.Types.GetItemInput
+  ) => Promise<DynamoDB.Types.GetItemOutput>;
+  queryItem: (
+    queryCommand: DynamoDB.Types.QueryInput
+  ) => Promise<DynamoDB.Types.QueryOutput>;
 }
 
 export interface AwsConfig {
