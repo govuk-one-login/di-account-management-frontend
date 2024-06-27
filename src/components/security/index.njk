@@ -43,7 +43,7 @@
       }
     }
 ]} %}
-{% 
+{%
 set mfaSummaryList = {
   classes:"govuk-summary-list--security",
   attributes: {"data-test-id": "mfa-summary-list"},
@@ -71,10 +71,10 @@ set mfaSummaryList = {
           {% if mfaMethods | length > 0 %}
             {% set foundPrimary = false %}
             {% set foundSecondary = false %}
-            {% for method in mfaMethods %} 
+            {% for method in mfaMethods %}
               {% if (method.priorityIdentifier == "PRIMARY") and not foundPrimary %}
                 {# display existing primary method with options to change the method or use a different type #}
-                <div class="summary-list-container__content">
+                <div class="summary-list-container__content" data-test-id="mfa-summary-list">
                   <h2 class="govuk-heading-s">{{'pages.security.mfaSection.supportChangeMfa.defaultMethod.heading' | translate }}</h2>
                   <p class="govuk-body">{{ method.text }}</p>
                   <p class="govuk-body"><a href="{{ method.linkHref }}" class="govuk-link"> {{ method.linkText }}</a></p>
@@ -90,7 +90,7 @@ set mfaSummaryList = {
               {# backup mfa block has two states #}
               <div class="summary-list-container__content">
                 <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.supportChangeMfa.backup.heading' | translate }}</h3>
-                {% for method in mfaMethods %} 
+                {% for method in mfaMethods %}
                   {% if (method.priorityIdentifier == "SECONDARY") and not foundSecondary %}
                     {# 1: backup method exists => display backup method block with options to change backup method or switch primary and backup #}
                     <p class="govuk-body">{{ method.text }}</p>
