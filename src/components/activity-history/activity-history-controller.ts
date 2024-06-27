@@ -58,8 +58,6 @@ export async function activityHistoryGet(
       logger.error("user_id missing from session");
     }
 
-    console.log("activity logs", formattedActivityLog);
-
     res.render("activity-history/index.njk", {
       data: formattedActivityLog,
       env: env,
