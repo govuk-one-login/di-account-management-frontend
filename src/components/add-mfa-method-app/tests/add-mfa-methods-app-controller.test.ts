@@ -149,7 +149,9 @@ describe("addMfaAppMethodPost", () => {
         credential: "AAAAAAAAAAAAAAAAAAAA",
         mfaMethod: {
           priorityIdentifier: "BACKUP",
-          mfaMethodType: "AUTH_APP",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
         },
       },
       {
