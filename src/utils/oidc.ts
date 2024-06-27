@@ -82,16 +82,13 @@ function clientAssertionGenerator(
 
     const sig = await kms.sign(message);
 
-    const base64Signature = Buffer.from(sig.Signature).toString('base64');
+    const base64Signature = Buffer.from(sig.Signature).toString("base64");
     return (
       token_components.header +
       "." +
       token_components.payload +
       "." +
-      base64Signature
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=/g, "")
+      base64Signature.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "")
     );
   };
 
