@@ -5,6 +5,7 @@ import assert from "node:assert";
 import { formatValidationError } from "../../utils/validation";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { renderMfaMethodPage } from "../common/mfa";
+import { getTxmaHeader } from "../../utils/txma-header";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
@@ -67,19 +68,26 @@ export async function addMfaAppMethodPost(
       );
     }
 
-    const { status } = await addMfaMethod({
-      email: req.session.user.email,
-      otp: code,
-      credential: authAppSecret,
-      mfaMethod: {
-        priorityIdentifier: "BACKUP",
-        mfaMethodType: "AUTH_APP",
+    const { status } = await addMfaMethod(
+      {
+        email: req.session.user.email,
+        otp: code,
+        credential: authAppSecret,
+        mfaMethod: {
+          priorityIdentifier: "BACKUP",
+          mfaMethodType: "AUTH_APP",
+        },
       },
-      accessToken: req.session.user.tokens.accessToken,
-      sourceIp: req.ip,
-      sessionId: req.session.id,
-      persistentSessionId: res.locals.persistentSessionId,
-    });
+      {
+        accessToken: req.session.user.tokens.accessToken,
+        sourceIp: req.ip,
+        sessionId: req.session.id,
+        persistentSessionId: res.locals.persistentSessionId,
+        userLanguage: req.cookies.lng as string,
+        clientSessionId: res.locals.clientSessionId,
+        txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+      }
+    );
 
     if (status !== HTTP_STATUS_CODES.OK) {
       throw Error(`Failed to add MFA method, response status: ${status}`);

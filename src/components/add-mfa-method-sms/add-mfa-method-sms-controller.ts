@@ -1,10 +1,21 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants";
 import {
   convertInternationalPhoneNumberToE164Format,
   getLastNDigits,
 } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
+import xss from "xss";
+import { getTxmaHeader } from "../../utils/txma-header";
+import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
+import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
+import {
+  formatValidationError,
+  renderBadRequest,
+} from "../../utils/validation";
+import { BadRequestError } from "../../utils/errors";
+
+const CHANGE_PHONE_NUMBER_TEMPLATE = "add-mfa-method-sms/index.njk";
 
 export async function addMfaSmsMethodGet(
   req: Request,
@@ -12,24 +23,65 @@ export async function addMfaSmsMethodGet(
 ): Promise<void> {
   res.render("add-mfa-method-sms/index.njk");
 }
+export function addMfaSmsMethodPost(
+  service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
+) {
+  return async function (req: Request, res: Response): Promise<void> {
+    const { email } = req.session.user;
+    const { accessToken } = req.session.user.tokens;
+    const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
+    let newPhoneNumber;
 
-export async function addMfaSmsMethodPost(
-  req: Request,
-  res: Response
-): Promise<void> {
-  //TODO do something with this
-  req.session.user.state.changePhoneNumber = getNextState(
-    req.session.user.state.addMfaMethod.value,
-    EventType.VerifyCodeSent
-  );
-
-  req.session.user.newPhoneNumber = req.body.hasInternationalPhoneNumber
-    ? convertInternationalPhoneNumberToE164Format(
+    if (hasInternationalPhoneNumber === "true") {
+      newPhoneNumber = convertInternationalPhoneNumberToE164Format(
         req.body.internationalPhoneNumber
-      )
-    : req.body.ukPhoneNumber;
+      );
+    } else {
+      newPhoneNumber = req.body.ukPhoneNumber;
+    }
 
-  res.redirect(`${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addMfaMethod`);
+    const response = await service.sendPhoneVerificationNotification(
+      accessToken,
+      email,
+      newPhoneNumber,
+      req.ip,
+      res.locals.sessionId,
+      res.locals.persistentSessionId,
+      xss(req.cookies.lng as string),
+      res.locals.clientSessionId,
+      getTxmaHeader(req, res.locals.trace)
+    );
+
+    if (response.success) {
+      req.session.user.newPhoneNumber = newPhoneNumber;
+
+      req.session.user.state.changePhoneNumber = getNextState(
+        req.session.user.state.addMfaMethod.value,
+        EventType.VerifyCodeSent
+      );
+
+      return res.redirect(
+        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addMfaMethod`
+      );
+    }
+
+    if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
+      const href: string =
+        hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true"
+          ? "internationalPhoneNumber"
+          : "phoneNumber";
+
+      const error = formatValidationError(
+        href,
+        req.t(
+          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
+        )
+      );
+      return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);
+    } else {
+      throw new BadRequestError(response.message, response.code);
+    }
+  };
 }
 
 export async function addMfaAppMethodConfirmationGet(

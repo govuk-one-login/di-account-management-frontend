@@ -56,8 +56,26 @@ export function checkYourPhonePost(
           throw Error(`No existing MFA method for: ${email}`);
         }
       } else if (intent === "addMfaMethod") {
-        // TODO add MFA method here
-        isPhoneNumberUpdated = true;
+        const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
+          (mfa) => mfa.priorityIdentifier === "PRIMARY"
+        );
+        if (smsMFAMethod) {
+          smsMFAMethod.endPoint = newPhoneNumber;
+          updateInput.credential = "no-credentials";
+          updateInput.mfaMethod = {
+            ...smsMFAMethod,
+            mfaIdentifier: smsMFAMethod.mfaIdentifier + 1,
+            priorityIdentifier: "SECONDARY",
+            mfaMethodType:
+              smsMFAMethod.mfaMethodType === "SMS" ? "AUTH_APP" : "SMS",
+            endPoint: newPhoneNumber,
+            methodVerified: true,
+          };
+          isPhoneNumberUpdated = await service.addMfaMethodService(
+            updateInput,
+            sessionDetails
+          );
+        }
       } else {
         throw Error(`Unknown phone verification intent ${intent}`);
       }

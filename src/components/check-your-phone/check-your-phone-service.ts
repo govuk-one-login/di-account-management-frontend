@@ -5,7 +5,7 @@ import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
 } from "../../utils/types";
-import { updateMfaMethod } from "../../utils/mfa";
+import { createOrUpdateMfaMethod, updateMfaMethod } from "../../utils/mfa";
 
 export function checkYourPhoneService(
   axios: Http = http
@@ -41,8 +41,16 @@ export function checkYourPhoneService(
     return updateMfaMethod(updateInput, sessionDetails);
   };
 
+  const addMfaMethodService = async function (
+    updateInput: UpdateInformationInput,
+    sessionDetails: UpdateInformationSessionValues
+  ): Promise<boolean> {
+    return createOrUpdateMfaMethod(updateInput, sessionDetails);
+  };
+
   return {
     updatePhoneNumber,
     updatePhoneNumberWithMfaApi,
+    addMfaMethodService,
   };
 }
