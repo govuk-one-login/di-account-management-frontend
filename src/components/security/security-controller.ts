@@ -21,11 +21,11 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
 
   if (supportChangeMfa()) {
     mfaMethods = Array.isArray(req.session.mfaMethods)
-      ? req.session.mfaMethods.map((method) => {
+      ? req.session.mfaMethods.map((mfaMethod) => {
           let text: string, linkText: string, linkHref: string;
 
-          if (method.method.mfaMethodType === "SMS") {
-            const phoneNumber = getLastNDigits(method.method.endPoint, 4);
+          if (mfaMethod.method.mfaMethodType === "SMS") {
+            const phoneNumber = getLastNDigits(mfaMethod.method.endPoint, 4);
             text = req
               .t(
                 "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title"
@@ -35,7 +35,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change"
             );
             linkHref = `${PATH_DATA.ENTER_PASSWORD.url}?type=changePhoneNumber`;
-          } else if (method.method.mfaMethodType === "AUTH_APP") {
+          } else if (mfaMethod.method.mfaMethodType === "AUTH_APP") {
             text = req.t(
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.title"
             );
@@ -45,7 +45,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             linkHref = `${PATH_DATA.ENTER_PASSWORD.url}?type=changeAuthenticatorApp`;
           } else {
             throw new Error(
-              `Unexpected mfaMethodType: ${method.method.mfaMethodType}`
+              `Unexpected mfaMethodType: ${mfaMethod.method.mfaMethodType}`
             );
           }
 
@@ -53,7 +53,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             text,
             linkHref,
             linkText,
-            priorityIdentifier: method.priorityIdentifier,
+            priorityIdentifier: mfaMethod.priorityIdentifier,
           };
         })
       : [];
