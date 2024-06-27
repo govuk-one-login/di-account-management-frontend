@@ -34,6 +34,7 @@ export function checkYourPhonePost(
 
     const updateInput: UpdateInformationInput = {
       email,
+      updatedValue: newPhoneNumber,
       otp: req.body["code"],
     };
 

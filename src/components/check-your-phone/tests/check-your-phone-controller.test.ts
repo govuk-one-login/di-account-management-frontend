@@ -119,6 +119,7 @@ describe("check your phone controller", () => {
       expect(fakeService.updatePhoneNumberWithMfaApi).to.have.been.calledOnce;
       expect(fakeService.updatePhoneNumberWithMfaApi).to.have.calledWith({
         email: "test@test.com",
+        updatedValue: "07111111111",
         otp: "123456",
         mfaMethod: {
           mfaIdentifier: 111111,
