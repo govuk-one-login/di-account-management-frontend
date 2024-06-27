@@ -7,4 +7,5 @@
 {%- else -%}
   <h2 class="govuk-heading-s">{{ ['clientRegistry.', env, '.', eventId, '.header'] | join | translate }}</h2>
 {%- endif -%}
+{{event.sessionId}}
 <p class="govuk-body">{{event.time}} ({{ 'pages.activityHistory.timeInfo' | translate }})</p>

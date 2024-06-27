@@ -135,7 +135,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
 
   const data = {
     email,
-    supportActivityLog: supportActivityLogFlag && hasHmrc,
+    supportActivityLog: supportActivityLogFlag,
     activityLogUrl,
     mfaMethods,
     supportChangeMfa: supportChangeMfa(),

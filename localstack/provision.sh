@@ -198,7 +198,8 @@ create_and_populate_activity_log_table() {
   i=1
   while [ $i -le 50 ]; do
     # Generate a unique session_id and event_id for each item
-    SESSION_ID="session_${i}"
+    sesh=$((1 + $RANDOM % 7))
+    SESSION_ID="session_${sesh}"
     EVENT_ID=$(uuid)
 
     # Adjust the timestamp to simulate different times

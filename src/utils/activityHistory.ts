@@ -8,6 +8,7 @@ import {
   ActivityLogEntry,
   allowedTxmaEvents,
   FormattedActivityLog,
+  GroupedActivityLogs,
 } from "./types";
 import { dynamoDBService } from "./dynamo";
 import { decryptData } from "./decrypt-data";
@@ -20,6 +21,7 @@ import {
   getAllowedServiceListClientIDs,
   ONE_LOGIN_HOME_NON_PROD,
 } from "../config";
+import { Format } from "aws-sdk/clients/cloudfront";
 
 const servicesWithContent: string[] = [
   ONE_LOGIN_HOME_NON_PROD,
@@ -151,6 +153,7 @@ export const formatActivityLog = (
     locale: currentLanguage,
   });
 
+  formattedActivityLog.timestamp = activityLogEntry.timestamp;
   formattedActivityLog.visitedService = activityLogEntry.client_id;
   formattedActivityLog.visitedServiceId = activityLogEntry.client_id;
   formattedActivityLog.reportNumber = activityLogEntry.zendesk_ticket_number;
@@ -174,25 +177,38 @@ export const formatActivityLogs = (
   trace: string,
   currentPage?: number,
   currentLanguage?: string
-): FormattedActivityLog[] => {
+): FormattedActivityLog[][] => {
   const curr = currentPage || 1;
-  const formattedData: FormattedActivityLog[] = [];
   const indexStart = (curr - 1) * activityLogItemsPerPage;
   const indexEnd = indexStart + activityLogItemsPerPage;
 
-  // only format and return activity data for the current page
-  for (let i = indexStart; i < indexEnd; i++) {
-    if (!activityLogEntries[i]) break;
-    const row: FormattedActivityLog = formatActivityLog(
-      activityLogEntries[i],
-      trace,
-      currentLanguage,
-      currentPage
-    );
-    if (row) formattedData.push(row);
-  }
-  return formattedData;
+  // put all items into groups
+  const groupedEntries = activityLogEntries.reduce(
+    (output: GroupedActivityLogs, entry: ActivityLogEntry) => {
+      output[entry.session_id] = output[entry.session_id] || [];
+      output[entry.session_id].push({
+        ...formatActivityLog(entry, trace, currentLanguage, currentPage),
+      });
+      return output;
+    },
+    {}
+  );
+
+  // create an array of arrays, sorted by the timestamp of the earliest item in the sub array
+  const sortedGroups = Object.entries(groupedEntries)
+    .map(([_, sessions]) => {
+      return sessions;
+    })
+    .sort((first, second) => {
+      return (
+        second[second.length - 1].timestamp - first[first.length - 1].timestamp
+      );
+    });
+
+  return sortedGroups;
 };
+
+// convert grouped items into
 
 const activityLogDynamoDBRequest = (
   user_id: string

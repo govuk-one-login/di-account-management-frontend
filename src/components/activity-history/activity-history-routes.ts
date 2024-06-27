@@ -9,7 +9,7 @@ const router = express.Router();
 router.get(
   PATH_DATA.SIGN_IN_HISTORY.url,
   requiresAuthMiddleware,
-  checkRSAAllowedServicesList,
+  //checkRSAAllowedServicesList,
   activityHistoryGet
 );
 

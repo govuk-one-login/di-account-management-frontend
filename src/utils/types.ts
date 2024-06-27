@@ -52,6 +52,11 @@ export interface FormattedActivityLog {
   visitedServiceId?: string;
   reportNumber?: string;
   reportedSuspiciousTime?: string;
+  timestamp?: number;
+}
+
+export interface GroupedActivityLogs {
+  [key: string]: FormattedActivityLog[];
 }
 
 export interface SnsService {

@@ -24,7 +24,7 @@ export async function activityHistoryGet(
   let activityData: ActivityLogEntry[] = [];
   let pagination: any = {};
   const backLink = PATH_DATA.SECURITY.url;
-  let formattedActivityLog: FormattedActivityLog[] = [];
+  let formattedActivityLog: FormattedActivityLog[][] = [];
 
   try {
     if (user?.subjectId) {
@@ -57,6 +57,8 @@ export async function activityHistoryGet(
     } else {
       logger.error("user_id missing from session");
     }
+
+    console.log("activity logs", formattedActivityLog);
 
     res.render("activity-history/index.njk", {
       data: formattedActivityLog,
