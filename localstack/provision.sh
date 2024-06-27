@@ -227,7 +227,7 @@ create_and_populate_activity_log_table() {
           "user_id": {"S": "'"$BUILD_CLIENT_ID"'"},
           "timestamp": {"N": "'$TIMESTAMP'"},
           "session_id": {"S": "'$SESSION_ID'"},
-          "client_id": {"S": "vehicleOperatorLicense"},
+          "client_id": {"S": "dbs"},
           "event_type": {"S": "AUTH_AUTH_CODE_ISSUED"},
           "event_id": {"S": "'$EVENT_ID'"},
           "reported_suspicious": {"BOOL": false}
@@ -240,7 +240,7 @@ create_and_populate_activity_log_table() {
           "user_id": {"S": "'"$BUILD_CLIENT_ID"'"},
           "timestamp": {"N": "'$TIMESTAMP'"},
           "session_id": {"S": "'$SESSION_ID'"},
-          "client_id": {"S": "vehicleOperatorLicense"},
+          "client_id": {"S": "mortgageDeed"},
           "event_type": {"S": "AUTH_AUTH_CODE_ISSUED"},
           "event_id": {"S": "'$EVENT_ID'"},
           "reported_suspicious": {"BOOL": true}
@@ -253,7 +253,7 @@ create_and_populate_activity_log_table() {
           "user_id": {"S": "'"$BUILD_CLIENT_ID"'"},
           "timestamp": {"N": "'$TIMESTAMP'"},
           "session_id": {"S": "'$SESSION_ID'"},
-          "client_id": {"S": "vehicleOperatorLicense"},
+          "client_id": {"S": "modernSlavery"},
           "event_type": {"S": "AUTH_AUTH_CODE_ISSUED"},
           "event_id": {"S": "'$EVENT_ID'"},
           "reported_suspicious": {"BOOL": true},
@@ -267,7 +267,7 @@ create_and_populate_activity_log_table() {
           "user_id": {"S": "'"$BUILD_CLIENT_ID"'"},
           "timestamp": {"N": "'$TIMESTAMP'"},
           "session_id": {"S": "'$SESSION_ID'"},
-          "client_id": {"S": "vehicleOperatorLicense"},
+          "client_id": {"S": "ofqual"},
           "event_type": {"S": "AUTH_AUTH_CODE_ISSUED"},
           "event_id": {"S": "'$EVENT_ID'"},
           "reported_suspicious": {"BOOL": true},
@@ -289,6 +289,24 @@ create_and_populate_activity_log_table() {
 
     i=$((i + 1))
   done
+
+  activity_log='
+        {
+          "user_id": {"S": "'"$BUILD_CLIENT_ID"'"},
+          "timestamp": {"N": "'$(date +"%s")'"},
+          "session_id": {"S": "single_session"},
+          "client_id": {"S": "ofqual"},
+          "event_type": {"S": "AUTH_AUTH_CODE_ISSUED"},
+          "event_id": {"S": "'$(uuid)'"},
+          "reported_suspicious": {"BOOL": true},
+          "reported_suspicious_time": {"N": "'$(date +"%s")'"},
+          "zendesk_ticket_number": {"S": "ZEN-1234"}
+        }'
+
+  aws --endpoint-url=$ENDPOINT_URL dynamodb put-item  \
+        --table-name $ACTIVITY_LOG_TABLE_NAME \
+        --region "$REGION" \
+        --item "$activity_log"
 }
 
 # Creates account-mgmt-frontend infra dependencies

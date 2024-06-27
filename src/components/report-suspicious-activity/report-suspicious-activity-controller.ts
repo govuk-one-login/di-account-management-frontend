@@ -110,7 +110,7 @@ export async function reportSuspiciousActivityGet(
     res.locals.trace,
     undefined,
     req.i18n?.language
-  )[0];
+  )[0][0];
 
   const activityLogDetails = formattedActivityLogs?.reportedSuspicious
     ? {

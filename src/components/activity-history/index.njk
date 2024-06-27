@@ -33,23 +33,28 @@
 
       {% if data %}
         <ul class="activity-history__list">
-          {%- for session in data %}
-            <h1>SESSION</h1>
-            {%- for event in session -%}
+          {%- for session in data -%}
+            <h2 class="govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-0">{{session[session.length-1].time}}</h2>
               <li class="activity-history__list-item">
-                {% include "common/activity-history/event.njk" %}
-
-                {# if the activity has already been reported, display "Activity reported on [time]" link #}
-                {# if the activity has not already been reported, display "Report activity from [time]" link #}
+                {% if session.length === 1 %}
+                  <p class='govuk-body'>You visited {{ ['clientRegistry.', env, '.', session[0].visitedServiceId, '.header'] | join | translate }}</p>
+                {% else %}
+                  <p class='govuk-body'>You visited
+                    <ul class='govuk-list govuk-list--bullet'>
+                      {%- for event in session -%}
+                      <li>{{ ['clientRegistry.', env, '.', event.visitedServiceId, '.header'] | join | translate }}</li>
+                      {%- endfor -%}
+                    </ul>
+                  </p>
+                {% endif %}
                 <p class="govuk-body"><a class="govuk-link" href="{{event.reportSuspiciousActivityUrl}}">
-                  {%- if event.reportedSuspicious -%}
-                  {{ 'pages.activityHistory.reported' | translate | replace("[time]", event.reportedSuspiciousTime) }}
+                  {%- if session[0].reportedSuspicious -%}
+                  {{ 'pages.activityHistory.reported' | translate | replace("[time]", session[0].reportedSuspiciousTime) }}
                   {%- else -%}
-                  {{ 'pages.activityHistory.report' | translate | replace("[time]", event.time) }}
+                  {{ 'pages.activityHistory.report' | translate | replace("[time]", session[0].time) }}
                   {%- endif -%}
                 </a></p>
               </li>
-            {%- endfor -%}
           {%- endfor -%}
         </ul>
       {% endif %}
