@@ -243,15 +243,14 @@
         "text": "3. The authenticator app will show a security code."
       },
       "step4": {
-        "text": "4. Enter the security code.",
-        "label": "Security code",
+        "text": "4. Enter the code.",
         "hint": "This is the 6-digit code shown in your authenticator app"
       },
       "errors": {
-        "invalidCode": "The security code you entered is not correct. Try entering it again or wait for your authenticator app to give you a new code",
-        "required": "Enter the security code shown in your authenticator app",
-        "maxLength": "Enter the security code using only 6 digits",
-        "invalidFormat": "Enter the security code using only numbers"
+        "invalidCode": "The code you entered is not correct, check your authenticator app and try again",
+        "required": "Enter the code shown in your authenticator app",
+        "maxLength": "Enter the code using only 6 digits",
+        "invalidFormat": "Enter the code using only numbers"
       },
       "cancel": "Cancel and go back to Security"
     },
@@ -485,13 +484,13 @@
         "paragraph3": "The code will expire after 15 minutes."
       },
       "code": {
-        "label": "Enter the 6 digit security code",
+        "label": "Enter the 6 digit code",
         "validationError": {
-          "required": "Enter the security code",
-          "maxLength": "Enter the security code using only 6 digits",
-          "minLength": "Enter the security code using only 6 digits",
-          "invalidFormat": "Enter the security code using only 6 digits",
-          "invalidCode": "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
+          "required": "Enter the code",
+          "maxLength": "Enter the code using only 6 digits",
+          "minLength": "Enter the code using only 6 digits",
+          "invalidFormat": "Enter the code using only 6 digits",
+          "invalidCode": "The code you entered is not correct, or may have expired, try entering it again or request a new code."
         }
       }
     },
@@ -507,13 +506,13 @@
         "text": "We can <a class=\"govuk-link\" href=\"[resendCodeLink]\">send the code again</a> or you can <a class=\"govuk-link\" href=\"[changePhoneNumberLink]\">use a different phone number</a>."
       },
       "code": {
-        "label": "Enter the 6 digit security code",
+        "label": "Enter the 6 digit code",
         "validationError": {
-          "required": "Enter the security code",
-          "maxLength": "Enter the security code using only 6 digits",
-          "minLength": "Enter the security code using only 6 digits",
-          "invalidFormat": "Enter the security code using only 6 digits",
-          "invalidCode": "The security code you entered is not correct, or may have expired, try entering it again or request a new security code."
+          "required": "Enter the code",
+          "maxLength": "Enter the code using only 6 digits",
+          "minLength": "Enter the code using only 6 digits",
+          "invalidFormat": "Enter the code using only 6 digits",
+          "invalidCode": "The code you entered is not correct, or may have expired, try entering it again or request a new code."
         }
       }
     },

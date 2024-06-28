@@ -369,13 +369,13 @@
         "paragraph3": "Bydd y cod yn dod i ben ar ôl 15 munud."
       },
       "code": {
-        "label": "Rhowch y cod diogelwch 6 digid",
+        "label": "Rhowch y cod 6 digid",
         "validationError": {
-          "required": "Rhowch y cod diogelwch",
-          "maxLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
-          "minLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
-          "invalidFormat": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
-          "invalidCode": "Nid yw’r cod diogelwch rydych wedi’i roi i mewn yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi i mewn eto neu ofyn am god diogelwch newydd."
+          "required": "Rhowch y cod",
+          "maxLength": "Rhowch y cod gan ddefnyddio dim ond 6 digid",
+          "minLength": "Rhowch y cod gan ddefnyddio dim ond 6 digid",
+          "invalidFormat": "Rhowch y cod gan ddefnyddio dim ond 6 digid",
+          "invalidCode": "Nid yw’r cod a roddwyd gennych yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi eto neu ofyn am god newydd."
         }
       }
     },
@@ -391,13 +391,13 @@
         "text": "Gallwn <a class=\"govuk-link\" href=\"[resendCodeLink]\">anfon y cod eto</a> neu gallwch <a class=\"govuk-link\" href=\"[changePhoneNumberLink]\">ddefnyddio rhif ffôn gwahanol</a>."
       },
       "code": {
-        "label": "Rhowch y cod diogelwch 6 digid",
+        "label": "Rhowch y cod 6 digid",
         "validationError": {
-          "required": "Rhowch y cod diogelwch",
-          "maxLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
-          "minLength": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
-          "invalidFormat": "Rhowch y cod diogelwch gan ddefnyddio 6 digid yn unig",
-          "invalidCode": "Nid yw’r cod diogelwch rydych wedi’i roi i mewn yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi i mewn eto neu ofyn am god diogelwch newydd."
+          "required": "Rhowch y cod",
+          "maxLength": "Rhowch y cod gan ddefnyddio dim ond 6 digid",
+          "minLength": "Rhowch y cod gan ddefnyddio dim ond 6 digid",
+          "invalidFormat": "Rhowch y cod gan ddefnyddio dim ond 6 digid",
+          "invalidCode": "Nid yw’r cod a roddwyd gennych yn gywir, neu efallai ei fod wedi dod i ben, ceisiwch ei roi eto neu ofyn am god newydd."
         }
       }
     },

@@ -146,7 +146,7 @@ describe("Integration:: check your phone", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("code-error")).text()).to.contains(
-          "Enter the security code"
+          "Enter the code"
         );
       })
       .expect(400);
@@ -164,7 +164,7 @@ describe("Integration:: check your phone", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("code-error")).text()).to.contains(
-          "Enter the security code using only 6 digits"
+          "Enter the code using only 6 digits"
         );
       })
       .expect(400);
@@ -182,7 +182,7 @@ describe("Integration:: check your phone", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("code-error")).text()).to.contains(
-          "Enter the security code using only 6 digits"
+          "Enter the code using only 6 digits"
         );
       })
       .expect(400);
@@ -200,7 +200,7 @@ describe("Integration:: check your phone", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("code-error")).text()).to.contains(
-          "Enter the security code using only 6 digits"
+          "Enter the code using only 6 digits"
         );
       })
       .expect(400);
