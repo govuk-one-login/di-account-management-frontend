@@ -34,7 +34,6 @@ export function checkYourPhonePost(
 
     const updateInput: UpdateInformationInput = {
       email,
-      updatedValue: newPhoneNumber,
       otp: req.body["code"],
     };
 
@@ -54,6 +53,7 @@ export function checkYourPhonePost(
             sessionDetails
           );
         } else {
+          // TODO: Confirm with UCD which error we should display
           throw Error(`No existing MFA method for: ${email}`);
         }
       } else if (intent === "addMfaMethod") {
@@ -82,11 +82,12 @@ export function checkYourPhonePost(
           );
         }
       } else {
+        // TODO: Confirm with UCD which error we should display
         throw Error(`Unknown phone verification intent ${intent}`);
       }
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(
-        updateInput,
+        { ...updateInput, updatedValue: newPhoneNumber },
         sessionDetails
       );
     }
