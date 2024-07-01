@@ -110,7 +110,6 @@ Parameters:
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
-  IsDevelopment: !Equals [!Ref Environment, dev]
   IsNotDevelopment: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, staging]
@@ -1743,7 +1742,7 @@ Resources:
         WebACLId: !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
         CacheBehaviors:
           - !If
-            - IsDevelopment
+            - IsNotDevelopment
             - PathPattern: "/assets/*"
               AllowedMethods:
                 - GET
@@ -1755,7 +1754,7 @@ Resources:
               MinTTL: 0
             - !Ref "AWS::NoValue"
           - !If
-            - IsDevelopment
+            - IsNotDevelopment
             - PathPattern: "/public/*"
               AllowedMethods:
                 - GET
