@@ -110,6 +110,7 @@ Parameters:
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
+  IsDevelopment: !Equals [!Ref Environment, dev]
   IsNotDevelopment: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, staging]
@@ -1691,7 +1692,6 @@ Resources:
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
-    DependsOn: CloudFrontLogsBucket
     Properties:
       DistributionConfig:
         Aliases:
@@ -1741,6 +1741,31 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         WebACLId: !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
+        CacheBehaviors:
+          - !If
+            - IsDevelopment
+            - PathPattern: "/assets/*"
+              AllowedMethods:
+                - GET
+                - HEAD
+              CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6 # Managed-CachingOptimized policy
+              Compress: true
+              TargetOriginId: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+              ViewerProtocolPolicy: redirect-to-https
+              MinTTL: 0
+            - !Ref "AWS::NoValue"
+          - !If
+            - IsDevelopment
+            - PathPattern: "/public/*"
+              AllowedMethods:
+                - GET
+                - HEAD
+              CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6 # Managed-CachingOptimized policy
+              Compress: true
+              TargetOriginId: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+              ViewerProtocolPolicy: redirect-to-https
+              MinTTL: 0
+            - !Ref "AWS::NoValue"
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-CloudFrontDistribution"
