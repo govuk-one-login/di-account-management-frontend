@@ -21,11 +21,11 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
 
   if (supportChangeMfa()) {
     mfaMethods = Array.isArray(req.session.mfaMethods)
-      ? req.session.mfaMethods.map((method) => {
+      ? req.session.mfaMethods.map((mfaMethod) => {
           let text: string, linkText: string, linkHref: string;
 
-          if (method.mfaMethodType === "SMS") {
-            const phoneNumber = getLastNDigits(method.endPoint, 4);
+          if (mfaMethod.method.mfaMethodType === "SMS") {
+            const phoneNumber = getLastNDigits(mfaMethod.method.endPoint, 4);
             text = req
               .t(
                 "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title"
@@ -35,7 +35,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change"
             );
             linkHref = `${PATH_DATA.ENTER_PASSWORD.url}?type=changePhoneNumber`;
-          } else if (method.mfaMethodType === "AUTH_APP") {
+          } else if (mfaMethod.method.mfaMethodType === "AUTH_APP") {
             text = req.t(
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.title"
             );
@@ -45,7 +45,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             linkHref = `${PATH_DATA.ENTER_PASSWORD.url}?type=changeAuthenticatorApp`;
           } else {
             throw new Error(
-              `Unexpected mfaMethodType: ${method.mfaMethodType}`
+              `Unexpected mfaMethodType: ${mfaMethod.method.mfaMethodType}`
             );
           }
 
@@ -53,7 +53,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             text,
             linkHref,
             linkText,
-            priorityIdentifier: method.priorityIdentifier,
+            priorityIdentifier: mfaMethod.priorityIdentifier,
           };
         })
       : [];
@@ -64,8 +64,8 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             value: string,
             actions = {};
 
-          if (method.mfaMethodType === "SMS") {
-            const phoneNumber = getLastNDigits(method.endPoint, 4);
+          if (method.method.mfaMethodType === "SMS") {
+            const phoneNumber = getLastNDigits(method.method.endPoint, 4);
             key = req.t(
               "pages.security.mfaSection.summaryList.phoneNumber.title"
             );
@@ -84,7 +84,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
                 },
               ],
             };
-          } else if (method.mfaMethodType === "AUTH_APP") {
+          } else if (method.method.mfaMethodType === "AUTH_APP") {
             key = req.t("pages.security.mfaSection.summaryList.app.title");
             value = req.t("pages.security.mfaSection.summaryList.app.value");
 
@@ -102,7 +102,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             };
           } else {
             throw new Error(
-              `Unexpected mfaMethodType: ${method.mfaMethodType}`
+              `Unexpected mfaMethodType: ${method.method.mfaMethodType}`
             );
           }
 
@@ -125,11 +125,13 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
     ? supportChangeMfa() &&
       req.session.mfaMethods.length > 1 &&
       req.session.mfaMethods.find(
-        (m) => m.mfaMethodType === "SMS" && m.priorityIdentifier === "PRIMARY"
+        (m) =>
+          m.method.mfaMethodType === "SMS" && m.priorityIdentifier === "DEFAULT"
       ) &&
       req.session.mfaMethods.find(
         (m) =>
-          m.mfaMethodType === "AUTH_APP" && m.priorityIdentifier === "SECONDARY"
+          m.method.mfaMethodType === "AUTH_APP" &&
+          m.priorityIdentifier === "BACKUP"
       )
     : false;
 

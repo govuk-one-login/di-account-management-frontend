@@ -38,9 +38,11 @@ describe("changeAuthenticatorAppService", () => {
 
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 2,
-      priorityIdentifier: "SECONDARY",
-      mfaMethodType: "AUTH_APP",
-      endPoint: "1Password",
+      priorityIdentifier: "BACKUP",
+      method: {
+        mfaMethodType: "AUTH_APP",
+        endPoint: "1Password",
+      },
       methodVerified: true,
     };
 

@@ -52,7 +52,7 @@ describe("mfaMethodMiddleware", () => {
     mfaStub.resolves([
       {
         mfaIdentifier: 123456,
-        priorityIdentifier: "PRIMARY",
+        priorityIdentifier: "DEFAULT",
         mfaMethodType: "AUTH_APP",
         endPoint: "http://mock-endpoint",
         methodVerified: true,

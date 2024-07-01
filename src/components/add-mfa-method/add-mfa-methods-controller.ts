@@ -19,7 +19,7 @@ export function addMfaMethodGet(req: Request, res: Response): void {
   }
 
   if (userMethods.length === 1) {
-    if (userMethods[0].mfaMethodType === "AUTH_APP") {
+    if (userMethods[0].method.mfaMethodType === "AUTH_APP") {
       res.render(ADD_METHOD_TEMPLATE, {
         mfaMethods: [],
         message: req.t("pages.addMfaMethod.backup.sms.message"),

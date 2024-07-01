@@ -74,8 +74,10 @@ export async function addMfaAppMethodPost(
         otp: code,
         credential: authAppSecret,
         mfaMethod: {
-          priorityIdentifier: "SECONDARY",
-          mfaMethodType: "AUTH_APP",
+          priorityIdentifier: "BACKUP",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
         },
       },
       {
