@@ -44,10 +44,10 @@ export function checkYourPhonePost(
     if (supportChangeMfa()) {
       if (intent === "changePhoneNumber") {
         const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
-          (mfa) => mfa.mfaMethodType === "SMS"
+          (mfa) => mfa.method.mfaMethodType === "SMS"
         );
         if (smsMFAMethod) {
-          smsMFAMethod.endPoint = newPhoneNumber;
+          smsMFAMethod.method.endPoint = newPhoneNumber;
           updateInput.mfaMethod = smsMFAMethod;
           isPhoneNumberUpdated = await service.updatePhoneNumberWithMfaApi(
             updateInput,
@@ -58,18 +58,22 @@ export function checkYourPhonePost(
         }
       } else if (intent === "addMfaMethod") {
         const smsMFAMethod: MfaMethod = req.session.mfaMethods.find(
-          (mfa) => mfa.priorityIdentifier === "PRIMARY"
+          (mfa) => mfa.priorityIdentifier === "DEFAULT"
         );
         if (smsMFAMethod) {
-          smsMFAMethod.endPoint = newPhoneNumber;
+          smsMFAMethod.method.endPoint = newPhoneNumber;
           updateInput.credential = "no-credentials";
           updateInput.mfaMethod = {
             ...smsMFAMethod,
             mfaIdentifier: smsMFAMethod.mfaIdentifier + 1,
-            priorityIdentifier: "SECONDARY",
-            mfaMethodType:
-              smsMFAMethod.mfaMethodType === "SMS" ? "AUTH_APP" : "SMS",
-            endPoint: newPhoneNumber,
+            priorityIdentifier: "BACKUP",
+            method: {
+              mfaMethodType:
+                smsMFAMethod.method.mfaMethodType === "SMS"
+                  ? "AUTH_APP"
+                  : "SMS",
+              endPoint: newPhoneNumber,
+            },
             methodVerified: true,
           };
           isPhoneNumberUpdated = await service.addMfaMethodService(

@@ -80,7 +80,7 @@ export function changeAuthenticatorAppPost(
     const sessionDetails = await generateSessionDetails(req, res);
     let isAuthenticatorAppUpdated = false;
     const authAppMFAMethod: MfaMethod = req.session.mfaMethods.find(
-      (mfa) => mfa.mfaMethodType === "AUTH_APP"
+      (mfa) => mfa.method.mfaMethodType === "AUTH_APP"
     );
     if (authAppMFAMethod) {
       updateInput.mfaMethod = authAppMFAMethod;

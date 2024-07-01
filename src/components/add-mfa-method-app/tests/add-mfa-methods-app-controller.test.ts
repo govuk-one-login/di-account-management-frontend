@@ -121,8 +121,10 @@ describe("addMfaAppMethodPost", () => {
           endPoint: "endPoint",
           mfaIdentifier: 1,
           methodVerified: true,
-          mfaMethodType: "AUTH_APP",
-          priorityIdentifier: "SECONDARY",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
+          priorityIdentifier: "BACKUP",
         },
       })
     );
@@ -146,8 +148,10 @@ describe("addMfaAppMethodPost", () => {
         otp: "123456",
         credential: "AAAAAAAAAAAAAAAAAAAA",
         mfaMethod: {
-          priorityIdentifier: "SECONDARY",
-          mfaMethodType: "AUTH_APP",
+          priorityIdentifier: "BACKUP",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
         },
       },
       {

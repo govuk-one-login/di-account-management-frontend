@@ -94,9 +94,11 @@ describe("checkYourPhoneService", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: "PHONE",
-      mfaMethodType: "SMS",
-      priorityIdentifier: "PRIMARY",
+      method: {
+        endPoint: "PHONE",
+        mfaMethodType: "SMS",
+      },
+      priorityIdentifier: "DEFAULT",
     };
 
     const updateMfaMethod = sinon.fake.returns(Promise.resolve(true));

@@ -228,9 +228,11 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: phoneNumber,
-      mfaMethodType: "SMS",
-      priorityIdentifier: "PRIMARY",
+      method: {
+        endPoint: phoneNumber,
+        mfaMethodType: "SMS",
+      },
+      priorityIdentifier: "DEFAULT",
     };
 
     const updateInput: UpdateInformationInput = {
@@ -273,8 +275,10 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      mfaMethodType: "AUTH_APP",
-      priorityIdentifier: "PRIMARY",
+      method: {
+        mfaMethodType: "AUTH_APP",
+      },
+      priorityIdentifier: "DEFAULT",
     };
 
     const updateInput: UpdateInformationInput = {
@@ -318,9 +322,11 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: "PHONE",
-      mfaMethodType: "SMS",
-      priorityIdentifier: "PRIMARY",
+      method: {
+        endPoint: "PHONE",
+        mfaMethodType: "SMS",
+      },
+      priorityIdentifier: "DEFAULT",
     };
 
     const updateInput: UpdateInformationInput = {
@@ -379,9 +385,11 @@ describe("MFA Function", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: 111111,
       methodVerified: true,
-      endPoint: "PHONE",
-      mfaMethodType: "SMS",
-      priorityIdentifier: "PRIMARY",
+      method: {
+        endPoint: "PHONE",
+        mfaMethodType: "SMS",
+      },
+      priorityIdentifier: "DEFAULT",
     };
 
     const updateInput: UpdateInformationInput = {
