@@ -1,4 +1,5 @@
-import { DynamoDB } from "aws-sdk";
+import { QueryCommand } from "@aws-sdk/client-dynamodb";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   activityLogItemsPerPage,
   getDynamoActivityLogStoreTableName,
@@ -194,16 +195,17 @@ export const formatActivityLogs = (
   return formattedData;
 };
 
-const activityLogDynamoDBRequest = (
-  user_id: string
-): DynamoDB.Types.QueryInput => ({
-  TableName: getDynamoActivityLogStoreTableName(),
-  KeyConditionExpression: "user_id = :user_id",
-  ExpressionAttributeValues: {
-    ":user_id": { S: user_id },
-  },
-  ScanIndexForward: false, // Set to 'true' for ascending order
-});
+const activityLogDynamoDBRequest = (user_id: string): QueryCommand => {
+  const param = {
+    TableName: getDynamoActivityLogStoreTableName(),
+    KeyConditionExpression: "user_id = :user_id",
+    ExpressionAttributeValues: {
+      ":user_id": { S: user_id },
+    },
+    ScanIndexForward: false, // Set to 'true' for ascending order
+  };
+  return new QueryCommand(param);
+};
 
 export const getActivityLogEntry = async (
   user_id: string,
@@ -213,8 +215,8 @@ export const getActivityLogEntry = async (
     const response = await dynamoDBService().queryItem(
       activityLogDynamoDBRequest(user_id)
     );
-    const unmarshalledItems = response.Items?.map((item) =>
-      DynamoDB.Converter.unmarshall(item)
+    const unmarshalledItems = response.Items?.map((item: any) =>
+      unmarshall(item)
     ) as ActivityLogEntry[];
     return unmarshalledItems;
   } catch (err) {

@@ -1,21 +1,25 @@
-import { KMS } from "aws-sdk";
+import {
+  KMSClient,
+  MessageType,
+  SignCommand,
+  SignCommandOutput,
+  SigningAlgorithmSpec,
+} from "@aws-sdk/client-kms";
 import { KmsService } from "./types";
 import { getKMSConfig, KmsConfig } from "../config/aws";
 
 export function kmsService(config: KmsConfig = getKMSConfig()): KmsService {
-  const sign = async function (
-    payload: string
-  ): Promise<KMS.Types.SignResponse> {
-    const kms = new KMS(config.awsConfig);
+  const sign = async function (payload: string): Promise<SignCommandOutput> {
+    const client = new KMSClient(config.awsConfig as any);
 
-    const request: KMS.SignRequest = {
+    const params = {
       KeyId: config.kmsKeyId,
-      Message: payload,
-      SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512",
-      MessageType: "RAW",
+      Message: Buffer.from(payload),
+      MessageType: MessageType.RAW,
+      SigningAlgorithm: SigningAlgorithmSpec.RSASSA_PKCS1_V1_5_SHA_512,
     };
-
-    return await kms.sign(request).promise();
+    const request: SignCommand = new SignCommand(params);
+    return await client.send(request);
   };
 
   return {
