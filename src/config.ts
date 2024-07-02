@@ -143,6 +143,8 @@ const DWP_INTEGRATION: string = "sqae3L7gOdizeRqFMw_KCDlhcyg";
 const DWP_LOCAL_DEV_INTEGRATION: string = "iOf3hyG7eymusbSUS6LgFeQ7AtU";
 const PRISON_VISITS_PROD: string = "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ";
 const PRISON_VISITS_NON_PROD: string = "prisonVisits";
+const ATE_CAPITAL_PROD: string = "S1hl5G31dSsMYqPaOuiRVOLhBX0";
+const ATE_CAPITAL_NON_PROD: string = "ate";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -188,6 +190,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   "iaa",
   PRISON_VISITS_PROD,
   PRISON_VISITS_NON_PROD,
+  ATE_CAPITAL_PROD,
+  ATE_CAPITAL_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
