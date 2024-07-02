@@ -10,6 +10,10 @@ import {
 import { CheckYourPhoneServiceInterface } from "../types";
 import { PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+import {
+  INTENT_ADD_MFA_METHOD,
+  INTENT_CHANGE_PHONE_NUMBER,
+} from "../../check-your-email/types";
 
 describe("check your phone controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -40,7 +44,7 @@ describe("check your phone controller", () => {
       cookies: { lng: "en" },
       i18n: { language: "en" },
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
-      query: { intent: "changePhoneNumber" },
+      query: { intent: INTENT_CHANGE_PHONE_NUMBER },
     };
     res = {
       render: sandbox.fake(),
@@ -105,7 +109,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
-      req.body.intent = "changePhoneNumber";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
       req.session.mfaMethods[0].method.mfaMethodType = "UNKNOWN" as any;
@@ -123,7 +127,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
-      req.body.intent = "changePhoneNumber";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
 
@@ -150,7 +154,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
-      req.body.intent = "changePhoneNumber";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
 
@@ -182,7 +186,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
-      req.body.intent = "addMfaMethod";
+      req.body.intent = INTENT_ADD_MFA_METHOD;
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
 
