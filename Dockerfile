@@ -1,4 +1,4 @@
-FROM node:22.3.0-alpine@sha256:415f3219943ef82fa45988acdaa7df05a0b52cabd3502095c59d34cbe28c1bc1 as builder
+FROM node:22.4.0-alpine@sha256:6fa9da622cb8350243700b15ed9b2b848f6631d00284761c1c9671239b268864 as builder
 ENV HUSKY=0
 WORKDIR /app
 COPY package.json ./
@@ -8,7 +8,7 @@ COPY ./src ./src
 COPY ./@types ./@types
 RUN npm install && npm run build && npm run clean-modules && npm install --production=true
 
-FROM node:22.3.0-alpine@sha256:415f3219943ef82fa45988acdaa7df05a0b52cabd3502095c59d34cbe28c1bc1 as final
+FROM node:22.4.0-alpine@sha256:6fa9da622cb8350243700b15ed9b2b848f6631d00284761c1c9671239b268864 as final
 WORKDIR /app
 COPY --chown=node:node --from=builder /app/package*.json ./
 COPY --chown=node:node --from=builder /app/node_modules/ node_modules
