@@ -827,6 +827,12 @@
         "description": "Review and update your travel capital schemes.",
         "link_text": "Go to your travel capital schemes account",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "CCdLjqwGtpAA1Td2CrNHT1yFbqa": {
+        "header": "Find an apprenticeship",
+        "description": "Search and apply for apprenticeships in England.",
+        "link_text": "Go to your account to search for an apprenticeship",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "integration": {
@@ -994,6 +1000,12 @@
         "description": "Review and update your travel capital schemes.",
         "link_text": "Go to your travel capital schemes account",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "CCdLjqwGtpAA1Td2CrNHT1yFbqa": {
+        "header": "Find an apprenticeship",
+        "description": "Search and apply for apprenticeships in England.",
+        "link_text": "Go to your account to search for an apprenticeship",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "staging": {
@@ -1149,6 +1161,12 @@
         "description": "Review and update your travel capital schemes.",
         "link_text": "Go to your travel capital schemes account",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Find an apprenticeship",
+        "description": "Search and apply for apprenticeships in England.",
+        "link_text": "Go to your account to search for an apprenticeship",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "build": {
@@ -1304,6 +1322,12 @@
         "description": "Review and update your travel capital schemes.",
         "link_text": "Go to your travel capital schemes account",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Find an apprenticeship",
+        "description": "Search and apply for apprenticeships in England.",
+        "link_text": "Go to your account to search for an apprenticeship",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "dev": {
@@ -1459,6 +1483,12 @@
         "description": "Review and update your travel capital schemes.",
         "link_text": "Go to your travel capital schemes account",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Find an apprenticeship",
+        "description": "Search and apply for apprenticeships in England.",
+        "link_text": "Go to your account to search for an apprenticeship",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "local": {
@@ -1614,6 +1644,12 @@
         "description": "Review and update your travel capital schemes.",
         "link_text": "Go to your travel capital schemes account",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Find an apprenticeship",
+        "description": "Search and apply for apprenticeships in England.",
+        "link_text": "Go to your account to search for an apprenticeship",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     }
   }
