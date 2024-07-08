@@ -59,7 +59,7 @@ Parameters:
   AlertingStackName:
     Description: The name of the stack that defines the Alerting resources
     Type: String
-    Default: platform-alerting
+    Default: build-notifications
   BackendStackName:
     Description: The name of the backend stack
     Type: String
@@ -1862,7 +1862,8 @@ Resources:
       AlarmDescription: "Trigger the alarm if errorThreshold exceeds 1% with the minimum of 10 invocations in 2 out of the last 5 minutes"
       ActionsEnabled: false
       AlarmActions:
-        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+        - !ImportValue
+          "Fn::Sub": "${AlertingStackName}-BuildNotificationTopicArn"
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 5
       DatapointsToAlarm: 2
@@ -1911,7 +1912,8 @@ Resources:
       AlarmDescription: "Activate when 5 5xx events detected in the last 24 hours.  The Alarm will be raised within 300 seconds of the 5xx being raised."
       ActionsEnabled: true
       AlarmActions:
-        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+        - !ImportValue
+          "Fn::Sub": "${AlertingStackName}-BuildNotificationTopicArn"
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 288
       DatapointsToAlarm: 288
@@ -1957,7 +1959,8 @@ Resources:
       AlarmDescription: "Trigger the alarm if response latency exceeds 2.5 seconds with the minimum of 10 invocations in 2 out of the last 5 minutes"
       ActionsEnabled: false
       AlarmActions:
-        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/LowAlertNotificationTopic/ARN}}"
+        - !ImportValue
+          "Fn::Sub": "${AlertingStackName}-BuildNotificationTopicArn"
       ComparisonOperator: GreaterThanThreshold
       EvaluationPeriods: 5
       DatapointsToAlarm: 2
