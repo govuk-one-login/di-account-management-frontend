@@ -714,6 +714,12 @@
         "description": "Adolygu a diweddaru eich cynlluniau cyfalaf teithio.",
         "link_text": "Ewch i'ch cyfrif cynlluniau cyfalaf teithio",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "CCdLjqwGtpAA1Td2CrNHT1yFbqa": {
+        "header": "Dod o Hyd i Brentisiaeth",
+        "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
+        "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "integration": {
@@ -875,6 +881,12 @@
         "description": "Adolygu a diweddaru eich cynlluniau cyfalaf teithio.",
         "link_text": "Ewch i'ch cyfrif cynlluniau cyfalaf teithio",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "CCdLjqwGtpAA1Td2CrNHT1yFbqa": {
+        "header": "Dod o Hyd i Brentisiaeth",
+        "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
+        "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "staging": {
@@ -1024,6 +1036,12 @@
         "description": "Adolygu a diweddaru eich cynlluniau cyfalaf teithio.",
         "link_text": "Ewch i'ch cyfrif cynlluniau cyfalaf teithio",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Dod o Hyd i Brentisiaeth",
+        "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
+        "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "build": {
@@ -1173,6 +1191,12 @@
         "description": "Adolygu a diweddaru eich cynlluniau cyfalaf teithio.",
         "link_text": "Ewch i'ch cyfrif cynlluniau cyfalaf teithio",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Dod o Hyd i Brentisiaeth",
+        "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
+        "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "dev": {
@@ -1322,6 +1346,12 @@
         "description": "Adolygu a diweddaru eich cynlluniau cyfalaf teithio.",
         "link_text": "Ewch i'ch cyfrif cynlluniau cyfalaf teithio",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Dod o Hyd i Brentisiaeth",
+        "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
+        "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     },
     "local": {
@@ -1471,6 +1501,12 @@
         "description": "Adolygu a diweddaru eich cynlluniau cyfalaf teithio.",
         "link_text": "Ewch i'ch cyfrif cynlluniau cyfalaf teithio",
         "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Dod o Hyd i Brentisiaeth",
+        "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
+        "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       }
     }
   }

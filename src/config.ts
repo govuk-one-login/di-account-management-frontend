@@ -145,6 +145,8 @@ const PRISON_VISITS_PROD: string = "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ";
 const PRISON_VISITS_NON_PROD: string = "prisonVisits";
 const ATE_CAPITAL_PROD: string = "S1hl5G31dSsMYqPaOuiRVOLhBX0";
 const ATE_CAPITAL_NON_PROD: string = "ate";
+const FAA_PROD: string = "CCdLjqwGtpAA1Td2CrNHT1yFbqa";
+const FAA_NON_PROD: string = "faa";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -192,6 +194,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   PRISON_VISITS_NON_PROD,
   ATE_CAPITAL_PROD,
   ATE_CAPITAL_NON_PROD,
+  FAA_PROD,
+  FAA_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
