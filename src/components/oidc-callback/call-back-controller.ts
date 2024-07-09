@@ -68,7 +68,6 @@ export function oidcAuthCallbackGet(
     } else {
       redirectUri = PATH_DATA.YOUR_SERVICES.url;
     }
-    logger.info(`Assertion is: ${JSON.stringify(clientAssertion)}`);
     const tokenResponse: TokenSet = await req.oidc.callback(
       req.oidc.metadata.redirect_uris[0],
       queryParams,
@@ -81,8 +80,6 @@ export function oidcAuthCallbackGet(
         },
       }
     );
-
-    logger.info(`Token response is: ${JSON.stringify(tokenResponse)}`);
 
     const vot = tokenResponse.claims().vot;
 
