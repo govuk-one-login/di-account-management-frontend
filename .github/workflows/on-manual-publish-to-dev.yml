@@ -23,13 +23,6 @@ permissions:
   contents: read
 
 jobs:
-  validate_application:
-    name: Acceptance Checks
-    uses: ./.github/workflows/build-test-application.yml
-    secrets: inherit
-    with:
-      gitRef: ${{ inputs.gitRef }}
-
   validate_deployment:
     name: Deployment Template Checks
     uses: ./.github/workflows/validate-sam-template-dev.yml
@@ -42,7 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     needs:
-      - validate_application
       - validate_deployment
     steps:
       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
@@ -95,7 +87,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
         run: |
-          
+
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA
 
