@@ -9,7 +9,6 @@ import {
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
-import { logger } from "../../utils/logger";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
