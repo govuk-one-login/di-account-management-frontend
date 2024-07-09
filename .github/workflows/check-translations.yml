@@ -4,7 +4,7 @@ name: Check Translations
 on:
   pull_request:
     paths:
-      - 'src/locales/**'  
+      - "src/locales/**"
 
 jobs:
   check_translation:
@@ -27,16 +27,16 @@ jobs:
           git diff --name-only FETCH_HEAD > changed_files.txt
           # Print the list of changed files
           cat changed_files.txt
-  
+
       - name: Validate translation files
         run: |
           # Read the list of changed files
           files_changed=$(< changed_files.txt)
-          
+
           # Initialize flags
           en_changed=false
           cy_changed=false
-          
+
           # Check for specific file changes
           if echo "$files_changed" | grep -q "^src/locales/en/translation.json"; then
             en_changed=true
