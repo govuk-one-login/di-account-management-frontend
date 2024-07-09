@@ -9,3 +9,10 @@ export interface CheckYourEmailServiceInterface {
     sessionDetails: UpdateInformationSessionValues
   ) => Promise<boolean>;
 }
+
+export const INTENT_CHANGE_PHONE_NUMBER = "changePhoneNumber";
+export const INTENT_ADD_MFA_METHOD = "addMfaMethod";
+
+export type Intent =
+  | typeof INTENT_CHANGE_PHONE_NUMBER
+  | typeof INTENT_ADD_MFA_METHOD;
