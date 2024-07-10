@@ -6,43 +6,26 @@ Description: >-
   use the CloudFrontDistributionEndpoint URL exported by this stack.
   The ingress route in summary is:
   CloudFront -> WAF -> API Gateway -> VPC link -> Private ALB -> ECS Fargate
-Transform:
-  - AWS::Serverless-2016-10-31
-
-# Must deploy the container on it's own first, having a successful cluster/container spun up
-# Then only do we configure the blue/green deployment on the second run, not making any infrastructure related changes
-
-#  - AWS::CodeDeployBlueGreen
-#
-#Hooks:
-#  CodeDeployBlueGreenHook:
-#    Properties:
-#      TrafficRoutingConfig:
-#        Type: TimeBasedCanary
-#        TimeBasedCanary:
-#          StepPercentage: 15
-#          BakeTimeMins: 5
-#      Applications:
-#        - Target:
-#            Type: AWS::ECS::Service
-#            LogicalID: ContainerService
-#          ECSAttributes:
-#            TaskDefinitions:
-#              - BlueTaskDefinition
-#              - GreenTaskDefinition
-#            TaskSets:
-#              - BlueTaskSet
-#              - GreenTaskSet
-#            TrafficRouting:
-#              ProdTrafficRoute:
-#                Type: AWS::ElasticLoadBalancingV2::Listener
-#                LogicalID: ApplicationLoadBalancerListenerHTTPS
-#              TargetGroups:
-#                - ApplicationLoadBalancerTargetGroupBlue
-#                - ApplicationLoadBalancerTargetGroupGreen
-#    Type: AWS::CodeDeploy::BlueGreen
 
 Parameters:
+  ECSClusterMaxCapacity:
+    Description: The maximum capacity of the ECS Cluster Auto Scaling Target
+    Type: Number
+    Default: 6
+  VpcStackName:
+    Description: >
+      The name of the stack that defines the VPC in which this container will run.
+    Type: String
+  CodeSigningConfigArn:
+    Type: String
+    Description: >
+      The ARN of the Code Signing Config to use, provided by the deployment pipeline.
+    Default: "none"
+  PermissionsBoundary:
+    Description: >
+      The ARN of the permissions boundary to apply when creating IAM roles.
+    Type: String
+    Default: none
   Environment:
     Description: The name of the environment to deploy to
     Type: String
@@ -53,9 +36,20 @@ Parameters:
       - "integration"
       - "production"
     Default: dev
-  VpcStackName:
-    Description: The name of the stack that defines the VPC in which this container will run.
+  NotificationTopicArn:
+    Description: "The ARN of the SNS topic used for notifications"
+    Type: "String"
+    Default: "none"
+  ELB4XXAlarmMetric:
+    Description: >
+      Metric to be monitored by ELB4XXAlarm. This enables alarm
+      to monitor for 4XX errors originated from the Target Group
+      OR the Application Load Balancer.
     Type: String
+    Default: HTTPCode_Target_4XX_Count
+    AllowedValues:
+      - HTTPCode_Target_4XX_Count
+      - HTTPCode_ELB_4XX_Count
   AlertingStackName:
     Description: The name of the stack that defines the Alerting resources
     Type: String
@@ -72,10 +66,6 @@ Parameters:
     Description: The port on which the container is running
     Type: Number
     Default: 6001
-  ECSClusterMaxCapacity:
-    Description: The maximum capacity of the ECS Cluster Auto Scaling Target
-    Type: Number
-    Default: 6
   ProductTagValue:
     Description: Value for the Product Tag
     Type: String
@@ -92,38 +82,47 @@ Parameters:
     Description: Value for the System Tag
     Type: String
     Default: Accounts
-  PermissionsBoundary:
-    Description: The ARN of the permissions boundary to apply when creating IAM roles
-    Type: String
-    Default: none
   ServiceStoreTableName:
     Type: String
     Default: user_services
   ActivityLogTableName:
     Type: String
     Default: activity_log
-  CodeSigningConfigArn:
+  DeploymentStrategy:
+    Description: "Predefined deployment configuration for ECS application"
     Type: String
-    Description: >
-      The ARN of the Code Signing Config to use, provided by the deployment pipeline
-    Default: "none"
+    Default: "None"
+    AllowedValues:
+      - None
+      - CodeDeployDefault.ECSCanary10Percent5Minutes
+      - CodeDeployDefault.ECSCanary10Percent15Minutes
+      - CodeDeployDefault.ECSAllAtOnce
+      - ECSCanary50Percent5Minutes
 
 Conditions:
-  IsProduction: !Equals [!Ref Environment, production]
-  IsNotDevelopment: !Or
-    - !Equals [!Ref Environment, build]
-    - !Equals [!Ref Environment, staging]
-    - !Equals [!Ref Environment, integration]
-    - !Equals [!Ref Environment, production]
+  UseCodeSigning:
+    Fn::Not:
+      - Fn::Equals:
+          - !Ref CodeSigningConfigArn
+          - "none"
+
   UsePermissionsBoundary:
     Fn::Not:
       - Fn::Equals:
           - !Ref PermissionsBoundary
           - "none"
+
+  UseAlarmActions:
+    Fn::Not:
+      - Fn::Equals:
+          - !Ref NotificationTopicArn
+          - "none"
+
+  IsProduction: !Equals [!Ref Environment, production]
+
   UseStubServices: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
-  UseCodeSigning: !Not [!Equals [none, !Ref CodeSigningConfigArn]]
   UseCloudFrontCaching: !Equals [!Ref Environment, staging]
   ExportLogsToSplunk:
     Fn::Or:
@@ -131,8 +130,12 @@ Conditions:
       - !Equals [!Ref Environment, integration]
       - !Equals [!Ref Environment, production]
 
+  UseCanaryDeployment:
+    !Or # TODO: Replace with Prod and Integration when tests in Dev complete
+    - !Equals [!Ref Environment, dev]
+    - !Equals [!Ref Environment, dev]
+
 Mappings:
-  # see https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
   ElasticLoadBalancerAccountIds:
     eu-west-2:
       AccountId: 652711504416
@@ -302,7 +305,7 @@ Mappings:
 
 Resources:
   #
-  # ECS Service
+  # Fargate Cluster
   #
 
   ECSCluster:
@@ -320,222 +323,62 @@ Resources:
         - Name: containerInsights
           Value: enabled
       Tags:
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
         - Key: Name
           Value: !Sub "${AWS::StackName}-ECSCluster"
-        - Key: Owner
-          Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-    DependsOn: ApplicationLoadBalancerListenerHTTPS
-
-  ExecutionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: !Sub "${AWS::StackName}-ExecutionRole"
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ecs-tasks.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      ManagedPolicyArns:
-        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-      Policies:
-        - PolicyName: PullImage
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "logs:CreateLogStream"
-                  - "logs:PutLogEvents"
-                Resource:
-                  - !GetAtt TaskLogGroup.Arn
-                  - !Sub "${TaskLogGroup.Arn}:*"
-        - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - secretsmanager:GetSecretValue
-                  - secretsmanager:ListSecrets
-                Resource:
-                  - arn:aws:secretsmanager:eu-west-2:216552277552:secret:*
-              - Effect: Allow
-                Action:
-                  - kms:Decrypt
-                Resource:
-                  - arn:aws:kms:eu-west-2:216552277552:key/*
-      PermissionsBoundary: !If
-        - UsePermissionsBoundary
-        - !Ref PermissionsBoundary
-        - !Ref AWS::NoValue
-      Tags:
+        - Key: Service
+          Value: ci/cd
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
           Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ExecutionRole"
         - Key: Owner
           Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-
-  TaskRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: !Sub "${AWS::StackName}-TaskRole"
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ecs-tasks.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Policies:
-        - PolicyName: !Sub "${AWS::StackName}-TaskRolePolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "sns:Publish"
-                Resource:
-                  - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
-              - Effect: Allow
-                Action:
-                  - "kms:Decrypt"
-                Resource:
-                  - Fn::ImportValue: !Sub "${BackendStackName}-GeneratorKey"
-              - Effect: Allow
-                Action:
-                  - "sns:Publish"
-                Resource:
-                  - !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SuspiciousActivity"
-              - Effect: Allow
-                Action:
-                  - "ssm:GetParameters"
-                Resource:
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${BackendStackName}/SNS/DeleteTopic/ARN"
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${StubsStackName}/Stub/AccountManagement/Endpoint"
-              - Effect: Allow
-                Action:
-                  - "secretsmanager:GetSecretValue"
-                Resource:
-                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
-                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
-                  - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${BackendStackName}/Config/Session/Secret"
-              - Effect: Allow
-                Action:
-                  - dynamodb:Query
-                  - dynamodb:GetItem
-                Resource:
-                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
-                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ActivityLogTableName}"
-              - Effect: Allow
-                Action:
-                  - dynamodb:DescribeTable
-                  - dynamodb:GetItem
-                  - dynamodb:PutItem
-                  - dynamodb:DeleteItem
-                  - dynamodb:Query
-                  - dynamodb:Scan
-                  - dynamodb:UpdateItem
-                Resource:
-                  - !GetAtt SessionsDynamoDB.Arn
-                  - !Sub "${SessionsDynamoDB.Arn}/index/users-sessions"
-              - Effect: Allow
-                Action:
-                  - "kms:Sign"
-                  - "kms:GetPublicKey"
-                Resource: !Join
-                  - ""
-                  - - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/"
-                    - !Sub "{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
-              - Effect: Allow
-                Action:
-                  - "kms:GenerateDataKey*"
-                  - "kms:Decrypt"
-                Resource:
-                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
-                  - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
-                  - !GetAtt DynamoDBKmsKey.Arn
-              - Effect: Allow
-                Action:
-                  - kms:Decrypt
-                  - kms:GenerateDataKey*
-                  - kms:ReEncrypt*
-                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/KMS/AuditQueueKey/ARN}}"
-              - Effect: Allow
-                Action: sqs:SendMessage
-                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/ARN}}"
-        - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "secretsmanager:GetSecretValue"
-                Resource:
-                  - !Sub "arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables"
-                  - !Sub "arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables"
-              - Effect: Allow
-                Action:
-                  - "kms:Decrypt"
-                Resource:
-                  - !Sub "arn:aws:kms:eu-west-2:216552277552:key/*"
-
-      PermissionsBoundary: !If
-        - UsePermissionsBoundary
-        - !Ref PermissionsBoundary
-        - !Ref AWS::NoValue
-      Tags:
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-TaskRole"
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-
-  ECSClusterNameParameter:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Description: !Sub "The name of the ${AWS::StackName} ECS cluster"
-      Name: !Sub "/${AWS::StackName}/ECS/Cluster"
-      Type: String
-      Value: !Ref ECSCluster
-      Tags:
-        Product: !Ref ProductTagValue
-        System: !Ref SystemTagValue
-        Environment: !Ref Environment
-        Owner: !Ref OwnerTagValue
-        Source: !Ref SourceTagValue
 
   ContainerService:
     Type: AWS::ECS::Service
     Properties:
       Cluster: !Ref ECSCluster
+      DeploymentConfiguration: !If
+        - UseCanaryDeployment
+        - !Ref AWS::NoValue
+        - MaximumPercent: 500
+          MinimumHealthyPercent: 50
+          DeploymentCircuitBreaker:
+            Enable: true
+            Rollback: true
       DeploymentController:
-        Type: EXTERNAL
+        Type: !If
+          - UseCanaryDeployment
+          - CODE_DEPLOY
+          - ECS
       PropagateTags: SERVICE
+      CapacityProviderStrategy:
+        - CapacityProvider: !If [IsProduction, "FARGATE", "FARGATE_SPOT"]
+          Weight: 1
+      LoadBalancers:
+        - ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
+          ContainerPort: !Ref ContainerPort
+          TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - !GetAtt ContainerServiceSecurityGroup.GroupId
+          Subnets:
+            - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
+            - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
+      # TODO: Required due to 2 stage deployment of Canary Deployment, switch to step 2 after successful deployment and remove step 1.
+      # Step 1
+      TaskDefinition: !Ref TaskDefinition
+      # Step 2
+      # TaskDefinition: !If
+      #   - UseCanaryDeployment
+      #   - !Ref AWS::NoValue
+      #   - !Ref TaskDefinition
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
@@ -550,6 +393,133 @@ Resources:
         - Key: Source
           Value: !Ref SourceTagValue
     DependsOn: ApplicationLoadBalancerListenerHTTPS
+
+  ContainerAutoScalingTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: !Ref ECSClusterMaxCapacity
+      MinCapacity: 3
+      ResourceId: !Join
+        - "/"
+        - - "service"
+          - !Ref ECSCluster
+          - !GetAtt ContainerService.Name
+      RoleARN: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+
+  ContainerAutoScalingPolicy:
+    DependsOn: ContainerAutoScalingTarget
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: containerAutoScalingPolicy
+      PolicyType: TargetTrackingScaling
+      ResourceId: !Join
+        - "/"
+        - - "service"
+          - !Ref ECSCluster
+          - !GetAtt ContainerService.Name
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        TargetValue: 50
+        ScaleInCooldown: 420
+        ScaleOutCooldown: 60
+
+  ECSStepScaleOutPolicy:
+    DependsOn: ContainerAutoScalingTarget
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: ECSStepScalingOutPolicy
+      PolicyType: StepScaling
+      ResourceId: !Join
+        - "/"
+        - - "service"
+          - !Ref ECSCluster
+          - !GetAtt ContainerService.Name
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 120
+        MinAdjustmentMagnitude: 5
+        StepAdjustments:
+          - MetricIntervalLowerBound: 20
+            MetricIntervalUpperBound: 30
+            ScalingAdjustment: 200
+          - MetricIntervalLowerBound: 30
+            MetricIntervalUpperBound: 35
+            ScalingAdjustment: 300
+          - MetricIntervalLowerBound: 35
+            ScalingAdjustment: 500
+
+  ECSStepScaleInPolicy:
+    DependsOn: ContainerAutoScalingTarget
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: ECSStepScalingInPolicy
+      PolicyType: StepScaling
+      ResourceId: !Join
+        - "/"
+        - - "service"
+          - !Ref ECSCluster
+          - !GetAtt ContainerService.Name
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 420
+        StepAdjustments:
+          - MetricIntervalUpperBound: -40
+            ScalingAdjustment: -50
+
+  ECSStepScaleOutAlarm:
+    DependsOn: ContainerAutoScalingTarget
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ECSStepScaleOutPolicy
+      AlarmDescription: "ECSClusterOver60PercentCPU"
+      ComparisonOperator: "GreaterThanThreshold"
+      DatapointsToAlarm: "2"
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSCluster
+        - Name: ServiceName
+          Value: !GetAtt ContainerService.Name
+      Unit: "Percent"
+      EvaluationPeriods: "2"
+      MetricName: "CPUUtilization"
+      Namespace: "AWS/ECS"
+      Statistic: "Average"
+      Period: "60"
+      Threshold: "60"
+
+  ECSStepScaleInAlarm:
+    DependsOn: ContainerAutoScalingTarget
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ECSStepScaleInPolicy
+      AlarmDescription: "ECSClusterUnder60PercentCPU"
+      ComparisonOperator: "LessThanThreshold"
+      DatapointsToAlarm: "5"
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSCluster
+        - Name: ServiceName
+          Value: !GetAtt ContainerService.Name
+      Unit: "Percent"
+      EvaluationPeriods: "5"
+      MetricName: "CPUUtilization"
+      Namespace: "AWS/ECS"
+      Statistic: "Average"
+      Period: "60"
+      Threshold: "60"
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -577,39 +547,93 @@ Resources:
       VpcId:
         Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ContainerServiceSecurityGroup"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: SourceTagValue
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
           Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ContainerServiceSecurityGroup"
         - Key: Owner
           Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
+
+  ECSClusterNameParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: !Sub "The name of the ${AWS::StackName} ECS cluster"
+      Name: !Sub "/${AWS::StackName}/ECS/Cluster"
+      Type: String
+      Value: !Ref ECSCluster
+      Tags:
+        Product: !Ref ProductTagValue
+        System: !Ref SystemTagValue
+        Environment: !Ref Environment
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
 
   #
   # Fargate tasks
   #
 
-  BlueTaskDefinition:
+  TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        - Essential: true
+        - Name: !Sub "${AWS::StackName}-TaskDefinition"
           Image: "CONTAINER-IMAGE-PLACEHOLDER"
-          Name: !Sub "${AWS::StackName}-BlueTaskDefinition"
           PortMappings:
             - ContainerPort: !Ref ContainerPort
               Protocol: tcp
+          Essential: true
           LogConfiguration:
             LogDriver: awslogs
             Options:
               awslogs-group: !Ref TaskLogGroup
               awslogs-region: !Ref AWS::Region
+              awslogs-create-group: "true"
               awslogs-stream-prefix: "ecs"
+          # TODO: Enable
+          HealthCheck:
+            Command:
+              - "CMD-SHELL"
+              - !Sub "curl -f http://localhost:${ContainerPort}/healthcheck || exit 1"
+            Interval: 30
+            Timeout: 5
+            Retries: 3
+            StartPeriod: 60
+          Secrets:
+            - Name: DT_TENANT
+              ValueFrom: !Join
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_TENANT::"
+            - Name: DT_TENANTTOKEN
+              ValueFrom: !Join
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_TENANTTOKEN::"
+            - Name: DT_CONNECTION_POINT
+              ValueFrom: !Join
+                - ""
+                - - !FindInMap [
+                      EnvironmentVariables,
+                      !Ref Environment,
+                      dynatraceSecretArn,
+                    ]
+                  - ":DT_CONNECTION_POINT::"
           Environment:
             - Name: "NODE_ENV"
               Value:
@@ -849,157 +873,198 @@ Resources:
                   !Ref Environment,
                   LANGUAGETOGGLE,
                 ]
-          Secrets:
-            - Name: DT_TENANT
-              ValueFrom: !Join
-                - ""
-                - - !FindInMap [
-                      EnvironmentVariables,
-                      !Ref Environment,
-                      dynatraceSecretArn,
-                    ]
-                  - ":DT_TENANT::"
-            - Name: DT_TENANTTOKEN
-              ValueFrom: !Join
-                - ""
-                - - !FindInMap [
-                      EnvironmentVariables,
-                      !Ref Environment,
-                      dynatraceSecretArn,
-                    ]
-                  - ":DT_TENANTTOKEN::"
-            - Name: DT_CONNECTION_POINT
-              ValueFrom: !Join
-                - ""
-                - - !FindInMap [
-                      EnvironmentVariables,
-                      !Ref Environment,
-                      dynatraceSecretArn,
-                    ]
-                  - ":DT_CONNECTION_POINT::"
-
       Cpu: 1024
       Memory: 4096
-      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
       TaskRoleArn: !GetAtt TaskRole.Arn
-      Family: !Sub "${AWS::StackName}-BlueTaskDefinition"
+      Family: !Sub "${AWS::StackName}-server"
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
       Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-TaskDefinition"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: !Ref SourceTagValue
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
           Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-BlueTaskDefinition"
         - Key: Owner
           Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-    DependsOn: SessionSecret
 
-  TxMAPublishErrorDeadLetterQueue:
-    Type: AWS::SQS::Queue
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
     Properties:
-      MessageRetentionPeriod: 1209600
-      KmsMasterKeyId: !GetAtt QueueKmsKey.Arn
-
-  QueueKmsKey:
-    Type: AWS::KMS::Key
-    Properties:
-      EnableKeyRotation: true
-      KeyPolicy:
+      RoleName: !Sub "${AWS::StackName}-TaskExecutionRole"
+      AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
-              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
-            Action: kms:*
-            Resource:
-              - "*"
-
-  QueueKmsKeyAlias:
-    Type: AWS::KMS::Alias
-    Properties:
-      AliasName: !Sub "alias/${AWS::StackName}/${Environment}/QueueKmsKey"
-      TargetKeyId: !Ref QueueKmsKey
-
-  TaskLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub "/ecs/${AWS::StackName}/server"
-      RetentionInDays: 30
-      KmsKeyId: !GetAtt LoggingKmsKey.Arn
-
-  TaskLogGroupCSLSSubscription:
-    Condition: ExportLogsToSplunk
-    Type: AWS::Logs::SubscriptionFilter
-    Properties:
-      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
-      FilterPattern: ""
-      LogGroupName: !Ref TaskLogGroup
-
-  SessionSecret:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      Name: !Sub "/${AWS::StackName}/Config/Session/Secret"
-      Description: !Sub Random password for the ${AWS::StackName} session secret
-      GenerateSecretString:
-        ExcludeLowercase: false
-        ExcludeNumbers: false
-        ExcludePunctuation: true
-        ExcludeUppercase: false
-        IncludeSpace: false
-        RequireEachIncludedType: true
-        PasswordLength: 32
-      KmsKeyId: !GetAtt SecretsKmsKey.Arn
+              Service: ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+      Policies:
+        - PolicyName: CreateLogGroup
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:PutLogEvents
+                Resource:
+                  - !GetAtt TaskLogGroup.Arn
+                  - !Sub "${TaskLogGroup.Arn}:*"
+        - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:ListSecrets # pragma: allowlist secret
+                  - secretsmanager:GetSecretValue # pragma: allowlist secret
+                Resource:
+                  - arn:aws:secretsmanager:eu-west-2:216552277552:secret:* # pragma: allowlist secret
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                Resource:
+                  - arn:aws:kms:eu-west-2:216552277552:key/*
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
       Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-TaskExecutionRole"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: SourceTagValue
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
           Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-SessionSecret"
         - Key: Owner
           Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
 
-  SecretsKmsKey:
-    Type: AWS::KMS::Key
+  TaskRole:
+    Type: AWS::IAM::Role
     Properties:
-      Description: !Sub "KMS key used to protect secrets data in ${AWS::StackName}"
-      Enabled: true
-      EnableKeyRotation: true
-      KeyPolicy:
-        Version: 2012-10-17
+      RoleName: !Sub "${AWS::StackName}-TaskRole"
+      AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
             Principal:
-              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+              Service: ecs-tasks.amazonaws.com
             Action:
-              - kms:*
-            Resource: "*"
-          - Effect: Allow
-            Principal:
-              Service: !Sub "secretsmanager.amazonaws.com"
-            Action:
-              - "kms:Encrypt*"
-              - "kms:Decrypt*"
-              - "kms:ReEncrypt*"
-              - "kms:GenerateDataKey*"
-              - "kms:Describe*"
-            Resource: "*"
-            Condition:
-              ArnLike:
-                aws:SourceArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${AWS::StackName}/Config/Session/Secret"
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub "${AWS::StackName}-TaskRolePolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "sns:Publish"
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
+              - Effect: Allow
+                Action:
+                  - "kms:Decrypt"
+                Resource:
+                  - Fn::ImportValue: !Sub "${BackendStackName}-GeneratorKey"
+              - Effect: Allow
+                Action:
+                  - "sns:Publish"
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:SuspiciousActivity"
+              - Effect: Allow
+                Action:
+                  - "ssm:GetParameters"
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
+                  - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${BackendStackName}/SNS/DeleteTopic/ARN"
+                  - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${StubsStackName}/Stub/AccountManagement/Endpoint"
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetSecretValue"
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Publishing/API/Key"
+                  - !Sub "arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:/${AWS::StackName}/Config/Session/Secret"
+                  - !Sub "arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${BackendStackName}/Config/Session/Secret"
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                  - dynamodb:GetItem
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
+                  - !Sub "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ActivityLogTableName}"
+              - Effect: Allow
+                Action:
+                  - dynamodb:DescribeTable
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:UpdateItem
+                Resource:
+                  - !GetAtt SessionsDynamoDB.Arn
+                  - !Sub "${SessionsDynamoDB.Arn}/index/users-sessions"
+              - Effect: Allow
+                Action:
+                  - "kms:Sign"
+                  - "kms:GetPublicKey"
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
+              - Effect: Allow
+                Action:
+                  - "kms:GenerateDataKey*"
+                  - "kms:Decrypt"
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/SnsKmsKey/ID}}"
+                  - !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${BackendStackName}/KMS/DatabaseKmsKey/ID}}"
+                  - !GetAtt DynamoDBKmsKey.Arn
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                  - kms:GenerateDataKey*
+                  - kms:ReEncrypt*
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/KMS/AuditQueueKey/ARN}}"
+              - Effect: Allow
+                Action: sqs:SendMessage
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/ARN}}"
+        - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetSecretValue"
+                Resource:
+                  - "arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables"
+                  - "arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables"
+              - Effect: Allow
+                Action:
+                  - "kms:Decrypt"
+                Resource:
+                  - "arn:aws:kms:eu-west-2:216552277552:key/*"
+
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
@@ -1008,17 +1073,11 @@ Resources:
         - Key: Environment
           Value: !Ref Environment
         - Key: Name
-          Value: !Sub "${AWS::StackName}-SecretsKmsKey"
+          Value: !Sub "${AWS::StackName}-TaskRole"
         - Key: Owner
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-
-  SecretsKmsKeyAlias:
-    Type: AWS::KMS::Alias
-    Properties:
-      AliasName: !Sub "alias/${AWS::StackName}-SecretsKmsKey"
-      TargetKeyId: !GetAtt SecretsKmsKey.Arn
 
   #
   # API Gateway
@@ -1030,12 +1089,13 @@ Resources:
       Name: !Sub "${AWS::StackName}-Api"
       ProtocolType: HTTP
       Tags:
+        Name: !Sub "${AWS::StackName}-ApiGateway"
+        Service: ci/cd
+        Source: !Ref SourceTagValue
         Product: !Ref ProductTagValue
         System: !Ref SystemTagValue
         Environment: !Ref Environment
-        Name: !Sub "${AWS::StackName}-ApiGateway"
         Owner: !Ref OwnerTagValue
-        Source: !Ref SourceTagValue
 
   ApiGatewayIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -1087,52 +1147,13 @@ Resources:
           }
         DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
       Tags:
-        Product: !Ref ProductTagValue
-        System: !Ref SystemTagValue
-        Environment: !Ref Environment
         Name: !Sub "${AWS::StackName}-ApiDefaultStage"
-        Owner: !Ref OwnerTagValue
+        Service: ci/cd
         Source: !Ref SourceTagValue
-
-  #
-  # App domain
-  #
-
-  AppFrontCustomDomain:
-    Type: AWS::ApiGatewayV2::DomainName
-    Properties:
-      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-      DomainNameConfigurations:
-        - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Home/ARN}}"
-          EndpointType: REGIONAL
-          SecurityPolicy: TLS_1_2
-      Tags:
         Product: !Ref ProductTagValue
         System: !Ref SystemTagValue
         Environment: !Ref Environment
         Owner: !Ref OwnerTagValue
-        Source: !Ref SourceTagValue
-
-  AppFrontApiRecord:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      Name: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-      Type: A
-      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
-      AliasTarget:
-        DNSName: !GetAtt CloudFrontDistribution.DomainName
-        # see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
-        HostedZoneId: "Z2FDTNDATAQYW2"
-        EvaluateTargetHealth: false
-
-  AppFrontApiMapping:
-    Type: AWS::ApiGatewayV2::ApiMapping
-    Properties:
-      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-      ApiId: !Ref ApiGateway
-      Stage: !Ref ApiDefaultStage
-    DependsOn:
-      - AppFrontCustomDomain
 
   #
   # Load balancing
@@ -1150,29 +1171,31 @@ Resources:
         - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
       LoadBalancerAttributes:
         - Key: access_logs.s3.enabled
-          Value: true
+          Value: "true"
         - Key: access_logs.s3.bucket
           Value: !Ref AccessLogsBucket
         - Key: routing.http.drop_invalid_header_fields.enabled
-          Value: true
+          Value: "true"
         - Key: deletion_protection.enabled
           Value: true
         - !Ref AWS::NoValue
       Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancer"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: !Ref SourceTagValue
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
           Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancer"
         - Key: Owner
           Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
 
-  ApplicationLoadBalancerTargetGroupBlue:
+  ApplicationLoadBalancerTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckPort: !Ref ContainerPort
@@ -1185,25 +1208,27 @@ Resources:
       Matcher:
         HttpCode: "200"
       TargetType: ip
-      UnhealthyThresholdCount: 2
       VpcId:
         Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+      UnhealthyThresholdCount: 2
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "5"
       Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroup"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: !Ref SourceTagValue
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
           Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroupBlue"
         - Key: Owner
           Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
 
   ApplicationLoadBalancerTargetGroupGreen:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -1211,38 +1236,58 @@ Resources:
       HealthCheckPort: !Ref ContainerPort
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
-      HealthCheckIntervalSeconds: 30
+      HealthCheckIntervalSeconds: 15
       Port: !Ref ContainerPort
       Protocol: HTTP
       ProtocolVersion: HTTP1
       Matcher:
         HttpCode: "200"
       TargetType: ip
-      UnhealthyThresholdCount: 2
       VpcId:
         Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+      UnhealthyThresholdCount: 2
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
           Value: "5"
       Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroupGreen"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: !Ref SourceTagValue
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
           Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroupGreen"
         - Key: Owner
           Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
+
+  ApplicationLoadBalancerListenerHTTP:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: redirect
+          RedirectConfig:
+            Port: 443
+            Protocol: HTTPS
+            StatusCode: HTTP_301
+      LoadBalancerArn:
+        Ref: ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+    Metadata:
+      SamResourceId: ApplicationLoadBalancerListenerHTTP
 
   ApplicationLoadBalancerListenerHTTPS:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
+      # checkov:skip=CKV_AWS_2:Certificate generation must be resolved before the listener can use HTTPS.
+      # checkov:skip=CKV_AWS_103:The load balancer cannot use TLS v1.2 until HTTPS is enabled.
       DefaultActions:
-        - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
+        - TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroup
           Type: forward
       LoadBalancerArn: !Ref ApplicationLoadBalancer
       Port: 443
@@ -1250,73 +1295,6 @@ Resources:
       Certificates:
         - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Home/ARN}}"
       SslPolicy: "ELBSecurityPolicy-FS-1-2-Res-2020-10"
-
-  ApplicationLoadBalancerListenerHTTP:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      # checkov:skip=CKV_AWS_2: Ignored as this is only redirects HTTP to HTTPS.
-      # checkov:skip=CKV_AWS_103: Ignored as only redirects HTTP to HTTPS.
-      DefaultActions:
-        - Type: redirect
-          RedirectConfig:
-            Port: 443
-            Protocol: HTTPS
-            StatusCode: HTTP_301
-      LoadBalancerArn: !Ref ApplicationLoadBalancer
-      Port: 80
-      Protocol: HTTP
-
-  ApplicationLoadBalancerListenerRuleRobots:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      Actions:
-        - Type: fixed-response
-          FixedResponseConfig:
-            ContentType: text/plain
-            MessageBody: >
-              "user-agent: *"
-              "disallow: /"
-            StatusCode: 200
-      Conditions:
-        - Field: path-pattern
-          PathPatternConfig:
-            Values:
-              - "/robots.txt"
-      ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
-      Priority: 10
-
-  BlueTaskSet:
-    Type: AWS::ECS::TaskSet
-    Properties:
-      Cluster: !Ref ECSCluster
-      LaunchType: FARGATE
-      NetworkConfiguration:
-        AwsVpcConfiguration:
-          AssignPublicIp: DISABLED
-          SecurityGroups:
-            - !GetAtt ContainerServiceSecurityGroup.GroupId
-          Subnets:
-            - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
-            - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
-      PlatformVersion: 1.4.0
-      Scale:
-        Unit: PERCENT
-        Value: 100
-      Service: !Ref ContainerService
-      TaskDefinition: !Ref BlueTaskDefinition
-      LoadBalancers:
-        - ContainerName: !Sub "${AWS::StackName}-BlueTaskDefinition"
-          ContainerPort: !Ref ContainerPort
-          TargetGroupArn: !Ref ApplicationLoadBalancerTargetGroupBlue
-
-  PrimaryTaskSet:
-    Type: AWS::ECS::PrimaryTaskSet
-    Properties:
-      Cluster: !Ref ECSCluster
-      Service: !Ref ContainerService
-      TaskSetId: !GetAtt
-        - BlueTaskSet
-        - Id
 
   ApplicationLoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -1338,18 +1316,20 @@ Resources:
       VpcId:
         Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerSecurityGroup"
+        - Key: Service
+          Value: ci/cd
+        - Key: Source
+          Value: !Ref SourceTagValue
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
           Value: !Ref SystemTagValue
         - Key: Environment
           Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerSecurityGroup"
         - Key: Owner
           Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
 
   ApplicationLoadBalancerSecurityGroupIngressHTTP:
     Type: AWS::EC2::SecurityGroupIngress
@@ -1381,136 +1361,192 @@ Resources:
       FromPort: !Ref ContainerPort
       ToPort: !Ref ContainerPort
 
+  ApplicationLoadBalancerListenerRuleRobots:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: fixed-response
+          FixedResponseConfig:
+            ContentType: text/plain
+            MessageBody: >
+              "user-agent: *"
+              "disallow: /"
+            StatusCode: 200
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - "/robots.txt"
+      ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
+      Priority: 10
+
   #
-  # Autoscaling
+  # ECS Alarms
   #
 
-  ECSAutoScalingTarget:
-    Type: AWS::ApplicationAutoScaling::ScalableTarget
-    Properties:
-      MaxCapacity: !Ref ECSClusterMaxCapacity
-      MinCapacity: 3
-      ResourceId: !Join
-        - "/"
-        - - "service"
-          - !Ref ECSCluster
-          - !GetAtt ContainerService.Name
-      RoleARN: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
-
-  ECSAutoScalingPolicy:
-    DependsOn: ECSAutoScalingTarget
-    Type: AWS::ApplicationAutoScaling::ScalingPolicy
-    Properties:
-      PolicyName: ECSAutoScalingPolicy
-      PolicyType: TargetTrackingScaling
-      ResourceId: !Join
-        - "/"
-        - - "service"
-          - !Ref ECSCluster
-          - !GetAtt ContainerService.Name
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
-      TargetTrackingScalingPolicyConfiguration:
-        PredefinedMetricSpecification:
-          PredefinedMetricType: ECSServiceAverageCPUUtilization
-        TargetValue: 50
-        ScaleInCooldown: 420
-        ScaleOutCooldown: 60
-
-  ECSStepScaleOutPolicy:
-    DependsOn: ECSAutoScalingTarget
-    Type: AWS::ApplicationAutoScaling::ScalingPolicy
-    Properties:
-      PolicyName: ECSStepScalingOutPolicy
-      PolicyType: StepScaling
-      ResourceId: !Join
-        - "/"
-        - - "service"
-          - !Ref ECSCluster
-          - !GetAtt ContainerService.Name
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
-      StepScalingPolicyConfiguration:
-        AdjustmentType: PercentChangeInCapacity
-        Cooldown: 120
-        MinAdjustmentMagnitude: 5
-        StepAdjustments:
-          - MetricIntervalLowerBound: 20
-            MetricIntervalUpperBound: 30
-            ScalingAdjustment: 200
-          - MetricIntervalLowerBound: 30
-            MetricIntervalUpperBound: 35
-            ScalingAdjustment: 300
-          - MetricIntervalLowerBound: 35
-            ScalingAdjustment: 500
-
-  ECSStepScaleInPolicy:
-    DependsOn: ECSAutoScalingTarget
-    Type: AWS::ApplicationAutoScaling::ScalingPolicy
-    Properties:
-      PolicyName: ECSStepScalingInPolicy
-      PolicyType: StepScaling
-      ResourceId: !Join
-        - "/"
-        - - "service"
-          - !Ref ECSCluster
-          - !GetAtt ContainerService.Name
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
-      StepScalingPolicyConfiguration:
-        AdjustmentType: PercentChangeInCapacity
-        Cooldown: 420
-        StepAdjustments:
-          - MetricIntervalUpperBound: -40
-            ScalingAdjustment: -50
-
-  ECSStepScaleOutAlarm:
-    DependsOn: ECSAutoScalingTarget
+  ELB5XX10PercentAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      ActionsEnabled: true
-      AlarmActions:
-        - !Ref ECSStepScaleOutPolicy
-      AlarmDescription: "ECSClusterOver60PercentCPU"
-      ComparisonOperator: "GreaterThanThreshold"
-      DatapointsToAlarm: "2"
-      Dimensions:
-        - Name: ClusterName
-          Value: !Ref ECSCluster
-        - Name: ServiceName
-          Value: !GetAtt ContainerService.Name
-      Unit: "Percent"
-      EvaluationPeriods: "2"
-      MetricName: "CPUUtilization"
-      Namespace: "AWS/ECS"
-      Statistic: "Average"
-      Period: "60"
-      Threshold: "60"
+      AlarmDescription: >
+        The number of HTTP 5XX server error codes that originate from the load balancer is greater than 10% of all traffic.
+        This count does not include any response codes generated by the targets.
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: missing
+      Metrics:
+        - Id: e1
+          Label: ErrorPercent
+          ReturnData: true
+          Expression: (m1/m2)*100
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApplicationELB
+              MetricName: HTTPCode_ELB_5XX_Count
+              Dimensions:
+                - Name: LoadBalancer
+                  Value: !Ref ApplicationLoadBalancer
+            Period: 60
+            Stat: Sum
+        - Id: m2
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApplicationELB
+              MetricName: RequestCount
+              Dimensions:
+                - Name: LoadBalancer
+                  Value: !Ref ApplicationLoadBalancer
+            Period: 60
+            Stat: Sum
 
-  ECSStepScaleInAlarm:
-    DependsOn: ECSAutoScalingTarget
+  ELB5XXAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      ActionsEnabled: true
-      AlarmActions:
-        - !Ref ECSStepScaleInPolicy
-      AlarmDescription: "ECSClusterUnder60PercentCPU"
-      ComparisonOperator: "LessThanThreshold"
-      DatapointsToAlarm: "5"
+      AlarmDescription: >
+        The number of HTTP 5XX server error codes that originate from the load balancer.
+        This count does not include any response codes generated by the targets.
+      MetricName: HTTPCode_ELB_5XX_Count
+      Namespace: AWS/ApplicationELB
+      Statistic: Sum
       Dimensions:
-        - Name: ClusterName
-          Value: !Ref ECSCluster
-        - Name: ServiceName
-          Value: !GetAtt ContainerService.Name
-      Unit: "Percent"
-      EvaluationPeriods: "5"
-      MetricName: "CPUUtilization"
-      Namespace: "AWS/ECS"
-      Statistic: "Average"
-      Period: "60"
-      Threshold: "60"
+        - Name: LoadBalancer
+          Value: !Ref ApplicationLoadBalancer
+      Period: 60
+      EvaluationPeriods: 2
+      DatapointsToAlarm: 2
+      Threshold: 2
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+  ELB4XXAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: >
+        The number of HTTP 4XX server error codes that originate from the load balancer.
+        This count does not include any response codes generated by the targets.
+      MetricName: !Ref ELB4XXAlarmMetric
+      Namespace: AWS/ApplicationELB
+      Statistic: Sum
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !Ref ApplicationLoadBalancer
+      Period: 60
+      EvaluationPeriods: 2
+      DatapointsToAlarm: 2
+      Threshold: 2
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+  #
+  # Anomaly detection
+  #
+
+  ELB4XXAnomalyDetector:
+    Type: AWS::CloudWatch::AnomalyDetector
+    Properties:
+      MetricName: HTTPCode_ELB_4XX_Count
+      Namespace: AWS/ApplicationELB
+      Stat: Sum
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+
+  ELB5XXAnomalyDetector:
+    Type: AWS::CloudWatch::AnomalyDetector
+    Properties:
+      MetricName: HTTPCode_ELB_5XX_Count
+      Namespace: AWS/ApplicationELB
+      Stat: Sum
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+
+  ELB4XXAnomalyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: >
+        Based on anomaly detection, the number of HTTP 4XX server error codes that
+        originate from the load balancer. This count does not include any response
+        codes generated by the targets.
+      AlarmActions: !If
+        - UseAlarmActions
+        - - !Ref NotificationTopicArn
+        - []
+      EvaluationPeriods: 2
+      DatapointsToAlarm: 2
+      ThresholdMetricId: ad1
+      ComparisonOperator: GreaterThanUpperThreshold
+      TreatMissingData: notBreaching
+      Metrics:
+        - Id: ad1
+          ReturnData: true
+          Expression: ANOMALY_DETECTION_BAND(m1, 2)
+        - Id: m1
+          ReturnData: true
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApplicationELB
+              MetricName: HTTPCode_ELB_4XX_Count
+              Dimensions:
+                - Name: LoadBalancer
+                  Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+            Period: 60
+            Stat: Sum
+
+  ELB5XXAnomalyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: >
+        Based on anomaly detection, the number of HTTP 5XX server error codes that originate from the load balancer.
+        This count does not include any response codes generated by the targets.
+      AlarmActions: !If
+        - UseAlarmActions
+        - - !Ref NotificationTopicArn
+        - []
+      EvaluationPeriods: 2
+      DatapointsToAlarm: 2
+      ThresholdMetricId: ad2
+      ComparisonOperator: GreaterThanUpperThreshold
+      TreatMissingData: notBreaching
+      Metrics:
+        - Id: ad2
+          ReturnData: true
+          Expression: ANOMALY_DETECTION_BAND(m2, 2)
+        - Id: m2
+          ReturnData: true
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApplicationELB
+              MetricName: HTTPCode_ELB_5XX_Count
+              Dimensions:
+                - Name: LoadBalancer
+                  Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+            Period: 60
+            Stat: Sum
 
   #
   # Logging
@@ -1518,6 +1554,8 @@ Resources:
 
   ApiGatewayAccessLogGroup:
     Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
       LogGroupName: !Sub "/apigateway/${AWS::StackName}/access"
       RetentionInDays: 30
@@ -1535,62 +1573,6 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-
-  ApiGatewayAccessLogGroupCSLSSubscription:
-    Condition: ExportLogsToSplunk
-    Type: AWS::Logs::SubscriptionFilter
-    Properties:
-      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
-      FilterPattern: ""
-      LogGroupName: !Ref ApiGatewayAccessLogGroup
-
-  LoggingKmsKey:
-    Type: AWS::KMS::Key
-    Properties:
-      EnableKeyRotation: true
-      KeyPolicy:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
-            Action:
-              - kms:*
-            Resource: "*"
-          - Effect: Allow
-            Principal:
-              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
-            Action:
-              - "kms:Encrypt*"
-              - "kms:Decrypt*"
-              - "kms:ReEncrypt*"
-              - "kms:GenerateDataKey*"
-              - "kms:Describe*"
-            Resource: "*"
-            Condition:
-              ArnLike:
-                "kms:EncryptionContext:aws:logs:arn":
-                  - !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/ecs/${AWS::StackName}/server"
-                  - !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/apigateway/${AWS::StackName}/access"
-      Tags:
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-LoggingKmsKey"
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-
-  LoggingKmsKeyAlias:
-    Type: AWS::KMS::Alias
-    Properties:
-      AliasName: !Sub "alias/${AWS::StackName}-LoggingKmsKey"
-      TargetKeyId: !GetAtt LoggingKmsKey.Arn
 
   AccessLogsBucket:
     Type: AWS::S3::Bucket
@@ -1647,7 +1629,7 @@ Resources:
             Effect: Allow
             Principal:
               AWS: !Sub
-                - "arn:aws:iam::${ElbAccountId}:root"
+                - "arn:${AWS::Partition}:iam::${ElbAccountId}:root"
                 - ElbAccountId:
                     !FindInMap [
                       ElasticLoadBalancerAccountIds,
@@ -1685,6 +1667,340 @@ Resources:
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
                 "aws:SecureTransport": true
+
+  ApiGatewayAccessLogGroupCSLSSubscription:
+    Condition: ExportLogsToSplunk
+    Type: AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
+      FilterPattern: ""
+      LogGroupName: !Ref ApiGatewayAccessLogGroup
+
+  #
+  # Fargate Task Extra
+  #
+
+  TaskLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/ecs/${AWS::StackName}/server"
+      RetentionInDays: 30
+      KmsKeyId: !GetAtt LoggingKmsKey.Arn
+
+  SessionSecret:
+    Type: AWS::SecretsManager::Secret
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Name: !Sub "/${AWS::StackName}/Config/Session/Secret"
+      Description: !Sub Random password for the ${AWS::StackName} session secret
+      GenerateSecretString:
+        ExcludeLowercase: false
+        ExcludeNumbers: false
+        ExcludePunctuation: true
+        ExcludeUppercase: false
+        IncludeSpace: false
+        RequireEachIncludedType: true
+        PasswordLength: 32
+      KmsKeyId: !GetAtt SecretsKmsKey.Arn
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-SessionSecret"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  SecretsKmsKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Description: !Sub "KMS key used to protect secrets data in ${AWS::StackName}"
+      Enabled: true
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action:
+              - kms:*
+            Resource: "*"
+          - Effect: Allow
+            Principal:
+              Service: "secretsmanager.amazonaws.com"
+            Action:
+              - "kms:Encrypt*"
+              - "kms:Decrypt*"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:Describe*"
+            Resource: "*"
+            Condition:
+              ArnLike:
+                aws:SourceArn: !Sub "arn:${AWS::Partition}:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${AWS::StackName}/Config/Session/Secret"
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-SecretsKmsKey"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  SecretsKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-SecretsKmsKey"
+      TargetKeyId: !GetAtt SecretsKmsKey.Arn
+
+  TxMAPublishErrorDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      MessageRetentionPeriod: 1209600
+      KmsMasterKeyId: !GetAtt QueueKmsKey.Arn
+
+  QueueKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:root
+            Action: kms:*
+            Resource:
+              - "*"
+
+  QueueKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}/${Environment}/QueueKmsKey"
+      TargetKeyId: !Ref QueueKmsKey
+
+  TaskLogGroupCSLSSubscription:
+    Condition: ExportLogsToSplunk
+    Type: AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
+      FilterPattern: ""
+      LogGroupName: !Ref TaskLogGroup
+
+  #
+  # Logging
+  #
+
+  LoggingKmsKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action:
+              - kms:*
+            Resource: "*"
+          - Effect: Allow
+            Principal:
+              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
+            Action:
+              - "kms:Encrypt*"
+              - "kms:Decrypt*"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:Describe*"
+            Resource: "*"
+            Condition:
+              ArnLike:
+                "kms:EncryptionContext:aws:logs:arn":
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/ecs/${AWS::StackName}/server"
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/apigateway/${AWS::StackName}/access"
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-LoggingKmsKey"
+        - Key: service
+          Value: ci/cd
+        - Key: Source
+          Value: !Ref SourceTagValue
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+
+  LoggingKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-LoggingKmsKey"
+      TargetKeyId: !GetAtt LoggingKmsKey.Arn
+
+  #
+  # DynamoDB
+  #
+
+  SessionsDynamoDB:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      TableName: !Sub ${AWS::StackName}-SessionStore
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "user_id" # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      TimeToLiveSpecification:
+        AttributeName: "expires"
+        Enabled: true
+      BillingMode: PAY_PER_REQUEST
+      ContributorInsightsSpecification:
+        Enabled: true
+      # checkov:skip=CKV_AWS_28: Ignored enable Dynamodb point in time recovery as it is only a short-term cache
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      GlobalSecondaryIndexes:
+        - IndexName: "users-sessions" # must match index name in ../src/utils/session-store.ts
+          KeySchema:
+            - AttributeName: "user_id" # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: KEYS_ONLY
+      SSESpecification:
+        KMSMasterKeyId: !Ref DynamoDBKmsKey
+        SSEEnabled: true
+        SSEType: KMS
+      TableClass: STANDARD
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+        - Key: CheckovRulesToSkip
+          Value: CKV_AWS_28
+
+  DynamoDBKmsKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Description: !Sub "KMS key used to protect DynamoDB data in ${AWS::StackName}"
+      Enabled: true
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action:
+              - kms:*
+            Resource: "*"
+          - Effect: Allow
+            Principal:
+              Service: dynamodb.amazonaws.com
+            Action:
+              - kms:Encrypt*
+              - kms:Decrypt*
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+              - kms:Describe*
+            Resource: !Sub "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${AWS::StackName}-SessionStore"
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-DynamoDBKmsKey"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  # What are these KeyAlias used for?
+  DynamoDBKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-DynamoDBKmsKey"
+      TargetKeyId: !GetAtt DynamoDBKmsKey.Arn
+
+  #
+  # App domain
+  #
+
+  AppFrontCustomDomain:
+    Type: AWS::ApiGatewayV2::DomainName
+    Properties:
+      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+      DomainNameConfigurations:
+        - CertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/HostedZone/Certificate/Home/ARN}}"
+          EndpointType: REGIONAL
+          SecurityPolicy: TLS_1_2
+      Tags:
+        Product: !Ref ProductTagValue
+        System: !Ref SystemTagValue
+        Environment: !Ref Environment
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
+
+  AppFrontApiRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+      Type: A
+      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        # see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
+        HostedZoneId: "Z2FDTNDATAQYW2"
+        EvaluateTargetHealth: false
+
+  AppFrontApiMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Properties:
+      DomainName: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+      ApiId: !Ref ApiGateway
+      Stage: !Ref ApiDefaultStage
+    DependsOn:
+      - AppFrontCustomDomain
 
   #
   # CloudFront Distribution
@@ -2031,6 +2347,7 @@ Resources:
                   Value: !Ref ApiGateway
             Period: 60
             Stat: Maximum
+
   #
   # CloudWatch Dashboard
   #
@@ -2224,8 +2541,8 @@ Resources:
                "title": " ALB Target Health Check",
                "region": "${AWS::Region}",
                "metrics": [
-                 [ "AWS/ApplicationELB", "HealthyHostCount", "TargetGroup","${ApplicationLoadBalancerTargetGroupBlue.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
-                 [ "AWS/ApplicationELB", "UnHealthyHostCount","TargetGroup","${ApplicationLoadBalancerTargetGroupBlue.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
+                 [ "AWS/ApplicationELB", "HealthyHostCount", "TargetGroup","${ApplicationLoadBalancerTargetGroup.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ],
+                 [ "AWS/ApplicationELB", "UnHealthyHostCount","TargetGroup","${ApplicationLoadBalancerTargetGroup.TargetGroupFullName}", "LoadBalancer", "${ApplicationLoadBalancer.LoadBalancerFullName}" ]
                ],
                "view": "timeSeries",
                "stacked": false,
@@ -2296,108 +2613,41 @@ Resources:
       DashboardName: !Sub "${AWS::StackName}-AMF"
 
   #
-  # DynamoDB
+  # Canary Deployment
   #
 
-  SessionsDynamoDB:
-    Type: AWS::DynamoDB::Table
+  ECSCanaryDeploymentStack:
+    Type: AWS::CloudFormation::Stack
+    Condition: UseCanaryDeployment
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
-      TableName: !Sub ${AWS::StackName}-SessionStore
-      AttributeDefinitions:
-        - AttributeName: "id"
-          AttributeType: "S"
-        - AttributeName: "user_id" # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
-          AttributeType: "S"
-      KeySchema:
-        - AttributeName: "id"
-          KeyType: "HASH"
-      TimeToLiveSpecification:
-        AttributeName: "expires"
-        Enabled: true
-      BillingMode: PAY_PER_REQUEST
-      ContributorInsightsSpecification:
-        Enabled: true
-      # checkov:skip=CKV_AWS_28: Ignored enable Dynamodb point in time recovery as it is only a short-term cache
-      PointInTimeRecoverySpecification:
-        PointInTimeRecoveryEnabled: false
-      GlobalSecondaryIndexes:
-        - IndexName: "users-sessions" # must match index name in ../src/utils/session-store.ts
-          KeySchema:
-            - AttributeName: "user_id" # must match USER_IDENTIFIER_IDX_ATTRIBUTE in ../src/utils/session-store.ts
-              KeyType: "HASH"
-          Projection:
-            ProjectionType: KEYS_ONLY
-      SSESpecification:
-        KMSMasterKeyId: !Ref DynamoDBKmsKey
-        SSEEnabled: true
-        SSEType: KMS
-      TableClass: STANDARD
-      Tags:
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-        - Key: CheckovRulesToSkip
-          Value: CKV_AWS_28
-
-  DynamoDBKmsKey:
-    Type: AWS::KMS::Key
-    Properties:
-      Description: !Sub "KMS key used to protect DynamoDB data in ${AWS::StackName}"
-      Enabled: true
-      EnableKeyRotation: true
-      KeyPolicy:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
-            Action:
-              - kms:*
-            Resource: "*"
-          - Effect: Allow
-            Principal:
-              Service: dynamodb.amazonaws.com
-            Action:
-              - kms:Encrypt*
-              - kms:Decrypt*
-              - kms:ReEncrypt*
-              - kms:GenerateDataKey*
-              - kms:Describe*
-            Resource: !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${AWS::StackName}-SessionStore"
-      Tags:
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-DynamoDBKmsKey"
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-
-  DynamoDBKmsKeyAlias:
-    Type: AWS::KMS::Alias
-    Properties:
-      AliasName: !Sub "alias/${AWS::StackName}-DynamoDBKmsKey"
-      TargetKeyId: !GetAtt DynamoDBKmsKey.Arn
-
-  #
-  # Outputs
-  #
+      TemplateURL: https://template-storage-templatebucket-1upzyw6v9cs42.s3.amazonaws.com/ecs-canary-deployment/template.yaml
+      Parameters:
+        VpcId: !Sub ${VpcStackName}-VpcId
+        PermissionsBoundary:
+          Fn::ImportValue: !Sub "${AWS::StackName}-ECSCanaryPermissionsBoundaryArn"
+        CodeSigningConfigArn: !If
+          - UseCodeSigning
+          - !Ref CodeSigningConfigArn
+          - !Ref AWS::NoValue
+        ECSClusterName: !Ref ECSCluster
+        ECSServiceName: !GetAtt ContainerService.Name
+        TargetGroupName: !GetAtt ApplicationLoadBalancerTargetGroup.TargetGroupName
+        GreenTargetGroupName: !GetAtt ApplicationLoadBalancerTargetGroupGreen.TargetGroupName
+        LoadBalancerListenerARN: !Ref ApplicationLoadBalancerListenerHTTPS
+        ECSServiceTaskDefinition: !Ref TaskDefinition
+        DeploymentStrategy: !Ref DeploymentStrategy
+        ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
+        ContainerPort: !Ref ContainerPort
+        CloudWatchAlarms: !Sub
+          - "${ELB5XXAlarm},${ELB4XXAnomalyAlarm}"
+          - ELB5XXAlarm: !Ref ELB5XXAlarm
+            ELB4XXAnomalyAlarm: !Ref ELB4XXAnomalyAlarm
 
 Outputs:
   ApiGatewayEndpoint:
-    Description: The URL for the application's API Gateway.
+    Description: The base URI for this application.
     Value: !GetAtt ApiGateway.ApiEndpoint
   CloudFrontDistributionEndpoint:
     Description: The Application URL.
