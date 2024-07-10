@@ -9,7 +9,6 @@ import {
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
-import { logger } from "../../utils/logger";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
@@ -68,7 +67,6 @@ export function oidcAuthCallbackGet(
     } else {
       redirectUri = PATH_DATA.YOUR_SERVICES.url;
     }
-    logger.info(`Assertion is: ${JSON.stringify(clientAssertion)}`);
     const tokenResponse: TokenSet = await req.oidc.callback(
       req.oidc.metadata.redirect_uris[0],
       queryParams,
@@ -81,8 +79,6 @@ export function oidcAuthCallbackGet(
         },
       }
     );
-
-    logger.info(`Token response is: ${JSON.stringify(tokenResponse)}`);
 
     const vot = tokenResponse.claims().vot;
 
