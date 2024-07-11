@@ -370,7 +370,7 @@ Resources:
             - !GetAtt ContainerServiceSecurityGroup.GroupId
           Subnets:
             - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
-            - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
+            - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
       # TODO: Required due to 2 stage deployment of Canary Deployment, switch to step 2 after successful deployment and remove step 1.
       # Step 1
       TaskDefinition: !Ref TaskDefinition
@@ -597,7 +597,6 @@ Resources:
               awslogs-region: !Ref AWS::Region
               awslogs-create-group: "true"
               awslogs-stream-prefix: "ecs"
-          # TODO: Enable
           HealthCheck:
             Command:
               - "CMD-SHELL"
