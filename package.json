@@ -29,7 +29,8 @@
     "test:js": "NODE_ENV=development nyc mocha -r dotenv/config \"src/assets/**/*.test.js\"",
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
-    "watch-sass": "sass --load-path=node_modules/govuk-frontend/govuk --watch src/assets/scss/application.scss dist/public/style.css"
+    "watch-sass": "sass --load-path=node_modules/govuk-frontend/govuk --watch src/assets/scss/application.scss dist/public/style.css",
+    "prepare": "husky install"
   },
   "mocha": {
     "diff": true,
@@ -113,6 +114,8 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-mocha": "^10.4.3",
     "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
     "mocha": "10.6.0",
     "nock": "^13.5.4",
     "nodemon": "3.1.4",
@@ -129,5 +132,12 @@
   "resolutions": {
     "minimist": "1.2.6",
     "json5": "2.2.3"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx,json,css,scss,md,yaml}": [
+      "npx prettier --write",
+      "npx eslint --fix"
+    ],
+    "*.{ts,js}": "eslint --cache --fix"
   }
 }
