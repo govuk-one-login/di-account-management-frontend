@@ -8,102 +8,10 @@
   "arrowParens": "always",
   "overrides": [
     {
-      "files": "*.java",
-      "options": {
-        "tabWidth": 4,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.scss",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.erb",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.njk",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.html",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.css",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": ["*.cjs", "*.js", "*.mjs", "*.ts"],
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.json",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.py",
-      "options": {
-        "tabWidth": 4,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.rb",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.sh",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": ["*.yml", "*.yaml"],
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
       "files": "Makefile",
       "options": {
         "useTabs": true
       }
-    },
-    {
-      "files": "Gemfile",
-      "options": {}
-    },
-    {
-      "files": "**/vendor/**/*",
-      "options": {}
     }
   ]
 }
