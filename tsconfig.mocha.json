@@ -11,16 +11,8 @@
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
-    "typeRoots": [
-      "@types",
-      "/node_modules/@types"
-    ],
+    "typeRoots": ["@types", "/node_modules/@types"],
     "types": ["mocha"]
   },
-  "exclude": [
-    "test",
-    "coverage",
-    "src/components/**/tests"
-  ]
+  "exclude": ["test", "coverage", "src/components/**/tests"]
 }
-

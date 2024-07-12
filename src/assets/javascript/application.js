@@ -1,4 +1,4 @@
-var onIntNumberSelected = function(intPhoneNumberCheckbox, phoneNumberInput) {
+var onIntNumberSelected = function (intPhoneNumberCheckbox, phoneNumberInput) {
   if (intPhoneNumberCheckbox.checked) {
     phoneNumberInput.value = "";
     phoneNumberInput.disabled = true;
@@ -10,17 +10,21 @@ var onIntNumberSelected = function(intPhoneNumberCheckbox, phoneNumberInput) {
 };
 
 function initChangePhoneNumber() {
-  var phoneNumberInput = document.querySelector('#phoneNumber');
+  var phoneNumberInput = document.querySelector("#phoneNumber");
   if (phoneNumberInput) {
-    var intPhoneNumberCheckbox = document.querySelector('#hasInternationalPhoneNumber');
-    intPhoneNumberCheckbox.addEventListener("click", function(event) {
+    var intPhoneNumberCheckbox = document.querySelector(
+      "#hasInternationalPhoneNumber"
+    );
+    intPhoneNumberCheckbox.addEventListener("click", function (event) {
       onIntNumberSelected(event.currentTarget, phoneNumberInput);
     });
-    window.addEventListener("load", onIntNumberSelected(intPhoneNumberCheckbox, phoneNumberInput));
+    window.addEventListener(
+      "load",
+      onIntNumberSelected(intPhoneNumberCheckbox, phoneNumberInput)
+    );
   }
 }
 initChangePhoneNumber();
-
 
 window.DI = window.DI || {};
 window.DI.analyticsUa = window.DI.analyticsUa || {};
@@ -48,4 +52,3 @@ window.DI.analyticsUa = window.DI.analyticsUa || {};
 
   w.DI.analyticsUa.init = appInit;
 })(window);
-  
