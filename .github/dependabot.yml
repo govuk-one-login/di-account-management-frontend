@@ -37,3 +37,7 @@ updates:
       - dependencies
     commit-message:
       prefix: BAU
+    ignore:
+      - dependency-name: "node"
+        update-types:
+          - "version-update:semver-major"
