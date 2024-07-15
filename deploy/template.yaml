@@ -107,6 +107,10 @@ Parameters:
     Description: >
       The ARN of the Code Signing Config to use, provided by the deployment pipeline
     Default: "none"
+  CodePipelineName:
+    Type: String
+    Description: "Name of the CodePipeline to monitor"
+    Default: account-mgmt-frontend-pipeline
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
@@ -1888,6 +1892,81 @@ Resources:
                 "aws:SourceAccount": !Ref AWS::AccountId
               Bool:
                 "aws:SecureTransport": true
+
+  CloudWatchEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventPattern:
+        source:
+          - aws.codepipeline
+        detail-type:
+          - "CodePipeline Pipeline Execution State Change"
+        detail:
+          state:
+            - SUCCEEDED
+          pipeline: !ImportValue PipelineName
+      Targets:
+        - Arn: !GetAtt InvalidateCacheFunction.Arn
+          Id: InvalidateCacheFunction
+
+  InvalidateCacheDLQ:
+    Type: AWS::SQS::Queue
+
+  # Lambda Function to Invalidate Cache
+  InvalidateCacheFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          def handler(event, context):
+              client = boto3.client('cloudfront')
+              distribution_id = event['distribution_id']
+              invalidation = client.create_invalidation(
+                  DistributionId=distribution_id,
+                  InvalidationBatch={
+                      'Paths': {
+                          'Quantity': 1,
+                          'Items': ['/*']
+                      },
+                      'CallerReference': str(context.aws_request_id)
+                  }
+              )
+              return invalidation
+      Runtime: python3.8
+      DeadLetterConfig:
+        TargetArn: !GetAtt InvalidateCacheDLQ.Arn
+      VpcConfig:
+        SubnetIds:
+          - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
+          - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
+        SecurityGroupIds:
+          - !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
+      ReservedConcurrentExecutions: 5
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CloudFrontInvalidationPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudfront:CreateInvalidation
+                Resource: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${!GetAtt CloudFrontDistribution.id}
 
   #
   # Metrics and Alarms
