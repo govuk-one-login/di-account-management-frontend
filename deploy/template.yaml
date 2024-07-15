@@ -124,6 +124,7 @@ Conditions:
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
   UseCodeSigning: !Not [!Equals [none, !Ref CodeSigningConfigArn]]
+  UseCloudFrontCaching: !Equals [!Ref Environment, staging]
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, staging]
@@ -1691,7 +1692,6 @@ Resources:
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
-    DependsOn: CloudFrontLogsBucket
     Properties:
       DistributionConfig:
         Aliases:
@@ -1701,13 +1701,7 @@ Resources:
         Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
         DefaultCacheBehavior:
           AllowedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
-            - PUT
-            - PATCH
-            - POST
-            - DELETE
+            ["GET", "HEAD", "OPTIONS", "PUT", "PATCH", "POST", "DELETE"]
           # CachingDisabled managed cache policy id
           # see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
           CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
@@ -1741,6 +1735,35 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         WebACLId: !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
+        CacheBehaviors:
+          - !If
+            - UseCloudFrontCaching
+            - PathPattern: "/assets/*"
+              AllowedMethods:
+                - GET
+                - HEAD
+              CachePolicyId: !Ref FrontendCachePolicy
+              Compress: true
+              TargetOriginId:
+                !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+              OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
+              ViewerProtocolPolicy: redirect-to-https
+              MinTTL: 0
+            - !Ref "AWS::NoValue"
+          - !If
+            - UseCloudFrontCaching
+            - PathPattern: "/public/*"
+              AllowedMethods:
+                - GET
+                - HEAD
+              CachePolicyId: !Ref FrontendCachePolicy
+              Compress: true
+              TargetOriginId:
+                !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+              OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
+              ViewerProtocolPolicy: redirect-to-https
+              MinTTL: 0
+            - !Ref "AWS::NoValue"
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-CloudFrontDistribution"
@@ -1767,6 +1790,24 @@ Resources:
         Name: !Sub "${AWS::StackName}-OriginRequestPolicy"
         QueryStringsConfig:
           QueryStringBehavior: all
+
+  FrontendCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: FrontendCachePolicy
+        DefaultTTL: 60
+        MaxTTL: 86400
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
 
   CloudFrontLogsBucket:
     Type: AWS::S3::Bucket
