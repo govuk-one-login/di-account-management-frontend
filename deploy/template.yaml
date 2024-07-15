@@ -68,6 +68,10 @@ Parameters:
     Description: The name of the stubs stack
     Type: String
     Default: account-mgmt-stubs
+  PipelineStackName:
+    Type: String
+    Description: The name of the pipeline stack
+    Default: account-mgmt-frontend-pipeline
   ContainerPort:
     Description: The port on which the container is running
     Type: Number
@@ -107,10 +111,6 @@ Parameters:
     Description: >
       The ARN of the Code Signing Config to use, provided by the deployment pipeline
     Default: "none"
-  CodePipelineName:
-    Type: String
-    Description: "Name of the CodePipeline to monitor"
-    Default: account-mgmt-frontend-pipeline
 
 Conditions:
   IsProduction: !Equals [!Ref Environment, production]
@@ -1904,7 +1904,8 @@ Resources:
         detail:
           state:
             - SUCCEEDED
-          pipeline: !ImportValue PipelineName
+          pipeline: !ImportValue:
+            - !Sub "${PipelineStackName}-PipelineName"
       Targets:
         - Arn: !GetAtt InvalidateCacheFunction.Arn
           Id: InvalidateCacheFunction
