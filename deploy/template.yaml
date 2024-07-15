@@ -1904,8 +1904,8 @@ Resources:
         detail:
           state:
             - SUCCEEDED
-          pipeline: !ImportValue:
-            - !Sub "${PipelineStackName}-PipelineName"
+          pipeline:
+            - Fn::ImportValue: !Sub "${PipelineStackName}-PipelineName"
       Targets:
         - Arn: !GetAtt InvalidateCacheFunction.Arn
           Id: InvalidateCacheFunction
