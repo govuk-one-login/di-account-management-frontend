@@ -147,6 +147,8 @@ const ATE_CAPITAL_PROD: string = "S1hl5G31dSsMYqPaOuiRVOLhBX0";
 const ATE_CAPITAL_NON_PROD: string = "ate";
 const FAA_PROD: string = "CCdLjqwGtpAA1Td2CrNHT1yFbqa";
 const FAA_NON_PROD: string = "faa";
+const DRIVING_MEDICAL_CONDITION_PROD: string = "iJNgycwBNEWGQvkuiLxOdVmVzG9";
+const DRIVING_MEDICAL_CONDITION_NON_PROD: string = "drivingMedicalCondition";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -221,6 +223,8 @@ export const getAllowedServiceListClientIDs: string[] = [
   VETERANS_CARD_PROD,
   VETERANS_CARD_NON_PROD,
   ...hmrcClientIds,
+  DRIVING_MEDICAL_CONDITION_PROD,
+  DRIVING_MEDICAL_CONDITION_NON_PROD,
 ];
 
 function getProtocol(): string {

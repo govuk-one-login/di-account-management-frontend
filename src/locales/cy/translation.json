@@ -724,6 +724,11 @@
         "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "iJNgycwBNEWGQvkuiLxOdVmVzG9": {
+        "header": "Gyrru gyda chyflwr iechyd",
+        "link_text": "Gyrru gyda chyflwr iechyd",
+        "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
       }
     },
     "integration": {
@@ -891,6 +896,11 @@
         "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "iJNgycwBNEWGQvkuiLxOdVmVzG9": {
+        "header": "Gyrru gyda chyflwr iechyd",
+        "link_text": "Gyrru gyda chyflwr iechyd",
+        "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
       }
     },
     "staging": {
@@ -1046,6 +1056,11 @@
         "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "drivingMedicalCondition": {
+        "header": "Gyrru gyda chyflwr iechyd",
+        "link_text": "Gyrru gyda chyflwr iechyd",
+        "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
       }
     },
     "build": {
@@ -1201,6 +1216,11 @@
         "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "drivingMedicalCondition": {
+        "header": "Gyrru gyda chyflwr iechyd",
+        "link_text": "Gyrru gyda chyflwr iechyd",
+        "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
       }
     },
     "dev": {
@@ -1356,6 +1376,11 @@
         "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "drivingMedicalCondition": {
+        "header": "Gyrru gyda chyflwr iechyd",
+        "link_text": "Gyrru gyda chyflwr iechyd",
+        "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
       }
     },
     "local": {
@@ -1511,6 +1536,11 @@
         "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "drivingMedicalCondition": {
+        "header": "Gyrru gyda chyflwr iechyd",
+        "link_text": "Gyrru gyda chyflwr iechyd",
+        "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
       }
     }
   }
