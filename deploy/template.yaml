@@ -98,6 +98,7 @@ Parameters:
       - CodeDeployDefault.ECSCanary10Percent15Minutes
       - CodeDeployDefault.ECSAllAtOnce
       - ECSCanary50Percent5Minutes
+      - ECSLinear10PercentEvery3Minutes
 
 Conditions:
   UseCodeSigning:
