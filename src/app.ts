@@ -191,8 +191,8 @@ async function createApp(): Promise<express.Application> {
     app.use(addMfaMethodSmsRouter);
     app.use(deleteMfaMethodRouter);
     app.use(changeDefaultMethodRouter);
+    app.use(changeAuthenticatorAppRouter);
   }
-  app.use(changeAuthenticatorAppRouter);
   app.use(trackAndRedirectRouter);
 
   // Router for all previously used URLs, that we want to redirect on
