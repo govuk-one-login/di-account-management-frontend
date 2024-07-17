@@ -25,6 +25,7 @@ Having the account management app live on `account.gov.uk` makes it unique among
 We will migrate ownership of the Account management app without compromising on the programme secuirty model and access controls. As such we'll shift the application to run in a GOV.UK account team AWS account, and then migrate traffic. Access to the app will be governed by GOV.UK Account team permissions and the team will gain no unnecessary access to Authentication team resources.
 
 These accounts will be:
+
 - `di-account-build`
 - `di-account-staging`
 - `di-account-integration`

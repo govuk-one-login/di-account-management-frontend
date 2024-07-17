@@ -1,6 +1,7 @@
 # Reading "Services you have used" Data from the account store into the App
 
 ## Summary
+
 - We will use the AWS SDK to retrieve data directly from the Account User service store
 - We have decided to NOT use AWS API Gateway
 - We have decided to NOT place a lambda between the dynamo and the account management application
@@ -35,9 +36,11 @@ The express application, running in Fargate, would then query using an HTTP API.
 ![Architecture diagram showing dynamo, connected to a lambda and API gateway](./images/2022-reading-data-out-rejected-api-gateway.png)
 
 Pros:
+
 - Applications can make requests for data in HTTP, abstracted from implementation.
 
 Cons:
+
 - More components and complication than alternatives
 
 We rejected this option. Deciding the benefits did not outweigh the complexity.
@@ -55,6 +58,7 @@ Meaning we could more easily refactor this section if we wished to replace our c
 We rejected this option as replacing our frontends is not planned work. We could add in this lambda at a later date when a need arose.
 
 ## Consequence
+
 - This application and the data store will need to be within the same AWS Account
 - We must add the @aws-sdk into as a dependency of this application
 - Core functionality uses the @aws-sdk and not a platform agnostic HTTP API

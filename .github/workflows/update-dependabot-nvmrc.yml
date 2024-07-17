@@ -3,7 +3,7 @@ name: Update Dependabot PRs
 on:
   pull_request:
     branches:
-      - 'dependabot/**'
+      - "dependabot/**"
   workflow_dispatch:
 
 jobs:

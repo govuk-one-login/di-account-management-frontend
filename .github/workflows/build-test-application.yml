@@ -88,4 +88,3 @@ jobs:
       SESSION_SECRET: secret
       SESSION_EXPIRY: 3600000
       SESSION_STORE_TABLE_NAME: account-mgmt-frontend-SessionStore
-

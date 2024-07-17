@@ -220,7 +220,8 @@ $nav-link-padding-left: $nav-link-padding - 2;
 $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
 /* Combined styles for buttons */
-.account-header-navigation__button, .account-navigation__button {
+.account-header-navigation__button,
+.account-navigation__button {
   border: 0 none;
   cursor: pointer;
   background-color: transparent;
@@ -384,7 +385,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   margin: govuk-spacing(2) 0;
   @include govuk-font($size: 48, $weight: bold);
 }
-
 
 .launch-webchat-link {
   margin: 0;
