@@ -51,16 +51,6 @@ export class RequestBuilder {
     return this;
   }
 
-  addMfaMethod(method: MfaMethod): RequestBuilder {
-    if (!this.session) {
-      throw Error("add session to request builder");
-    }
-
-    this.session.mfaMethods = this.session.mfaMethods || [];
-    this.session.mfaMethods.push(method);
-    return this;
-  }
-
   withCookies(cookies: object): RequestBuilder {
     this.cookies = cookies;
     return this;
