@@ -40,7 +40,7 @@ export async function deleteMfaMethodPost(
     return;
   }
 
-  removeMfaMethod(
+  await removeMfaMethod(
     methodToRemove.mfaIdentifier,
     await generateSessionDetails(req, res)
   );
