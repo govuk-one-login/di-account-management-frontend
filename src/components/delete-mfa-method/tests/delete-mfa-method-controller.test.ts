@@ -8,7 +8,7 @@ import * as mfa from "../../../utils/mfa";
 import * as mfaCommon from "../../common/mfa";
 import { UpdateInformationSessionValues } from "../../../utils/types";
 
-describe.only("delete mfa method controller", () => {
+describe("delete mfa method controller", () => {
   let sandbox: sinon.SinonSandbox;
 
   const statusFn = sinon.spy();
