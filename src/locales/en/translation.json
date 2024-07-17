@@ -147,9 +147,7 @@
             "hiddenText": "Phone number"
           },
           "app": {
-            "title": "Authenticator app",
-            "value": "Change authenticator app",
-            "hiddenText": "Authenticator app"
+            "title": "Authenticator app"
           }
         },
         "supportChangeMfa": {
