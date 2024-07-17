@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getInitialState } from "../../src/utils/state-machine";
 import { Session, SessionData } from "express-session";
 import { IncomingHttpHeaders } from "http";
+import { MfaMethod } from "../../src/utils/mfa/types";
 
 export const CURRENT_EMAIL: string = "current-email@dl.com";
 export const NEW_EMAIL: string = "new-email@test.com";
@@ -47,6 +48,16 @@ export class RequestBuilder {
 
   withSessionUserState(state: object): RequestBuilder {
     this.session.user.state = state;
+    return this;
+  }
+
+  addMfaMethod(method: MfaMethod): RequestBuilder {
+    if (!this.session) {
+      throw Error("add session to request builder");
+    }
+
+    this.session.mfaMethods = this.session.mfaMethods || [];
+    this.session.mfaMethods.push(method);
     return this;
   }
 

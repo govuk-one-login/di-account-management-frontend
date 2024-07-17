@@ -3,7 +3,6 @@ import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { removeMfaMethod } from "../../utils/mfa";
-import { getTxmaHeader } from "../../utils/txma-header";
 import { generateSessionDetails } from "../common/mfa";
 
 export async function deleteMfaMethodGet(
