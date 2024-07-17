@@ -26,6 +26,7 @@ describe("state-machine", () => {
         EventType.VerifyCodeSent,
         EventType.SelectedApp,
         EventType.SelectedSms,
+        EventType.RemoveBackup,
       ]);
     });
 
@@ -63,6 +64,7 @@ describe("state-machine", () => {
         EventType.VerifyCodeSent,
         EventType.SelectedApp,
         EventType.SelectedSms,
+        EventType.RemoveBackup,
       ]);
     });
 
@@ -83,6 +85,7 @@ describe("state-machine", () => {
         EventType.VerifyCodeSent,
         EventType.SelectedApp,
         EventType.SelectedSms,
+        EventType.RemoveBackup,
       ]);
     });
 
