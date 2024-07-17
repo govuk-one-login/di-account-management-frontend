@@ -56,6 +56,25 @@ export function addMfaMethod(
   );
 }
 
+export async function removeMfaMethod(
+  mfaIdentifier: string,
+  sessionDetails: UpdateInformationSessionValues
+): Promise<void> {
+  const http = new Http(getMfaServiceUrl());
+  const { accessToken, sourceIp, persistentSessionId, sessionId } =
+    sessionDetails;
+
+  return http.client.delete(
+    format(METHOD_MANAGEMENT_API.MFA_METHODS_DELETE, mfaIdentifier),
+    getRequestConfig({
+      token: accessToken,
+      sourceIp,
+      persistentSessionId,
+      sessionId,
+    })
+  );
+}
+
 async function retrieveMfaMethods(
   accessToken: string,
   email: string,
