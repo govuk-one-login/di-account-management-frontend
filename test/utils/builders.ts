@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { getInitialState } from "../../src/utils/state-machine";
 import { Session, SessionData } from "express-session";
 import { IncomingHttpHeaders } from "http";
-import { MfaMethod } from "../../src/utils/mfa/types";
 
 export const CURRENT_EMAIL: string = "current-email@dl.com";
 export const NEW_EMAIL: string = "new-email@test.com";
