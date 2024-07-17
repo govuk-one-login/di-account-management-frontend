@@ -57,7 +57,7 @@ export function addMfaMethod(
 }
 
 export async function removeMfaMethod(
-  mfaIdentifier: string,
+  mfaIdentifier: string | number,
   sessionDetails: UpdateInformationSessionValues
 ): Promise<void> {
   const http = new Http(getMfaServiceUrl());
