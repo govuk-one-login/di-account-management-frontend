@@ -117,3 +117,34 @@ export async function addMfaAppMethodConfirmationGet(
     backLink: PATH_DATA.SECURITY.url,
   });
 }
+
+export async function removeMfaMethodConfirmationGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  let message = req.t("pages.removeBackupMethod.confirm.message_unknown");
+  const removedMethod = (req.session.removedMfaMethods || []).find((m) => {
+    return "" + m.mfaIdentifier == req.query.id;
+  });
+
+  if (removedMethod?.method.mfaMethodType === "AUTH_APP") {
+    message = req.t("pages.removeBackupMethod.confirm.message_app");
+  }
+
+  if (removedMethod?.method.mfaMethodType === "SMS") {
+    message = req
+      .t("pages.removeBackupMethod.confirm.message_sms")
+      .replace(
+        "[phoneNumber]",
+        getLastNDigits(removedMethod.method.endPoint, 4)
+      );
+  }
+
+  return res.render("common/confirmation-page/confirmation.njk", {
+    pageTitleName: req.t("pages.removeBackupMethod.confirm.title"),
+    heading: req.t("pages.removeBackupMethod.confirm.heading"),
+    message: message,
+    backLinkText: req.t("pages.removeBackupMethod.backLinkText"),
+    backLink: PATH_DATA.SECURITY.url,
+  });
+}
