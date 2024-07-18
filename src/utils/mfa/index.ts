@@ -46,7 +46,16 @@ export function addMfaMethod(
     sessionDetails;
   return http.client.post<MfaMethod>(
     METHOD_MANAGEMENT_API.MFA_METHODS_ADD,
-    updateInput,
+    {
+      email: updateInput.email,
+      credential: updateInput.credential,
+      otp: updateInput.otp,
+      mfaMethod: {
+        priorityIdentifier: updateInput.mfaMethod.priorityIdentifier,
+        mfaMethodType: updateInput.mfaMethod.method.mfaMethodType,
+      },
+      methodVerified: updateInput.mfaMethod.methodVerified,
+    },
     getRequestConfig({
       token: accessToken,
       sourceIp,
