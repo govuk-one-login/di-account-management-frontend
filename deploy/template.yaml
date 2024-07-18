@@ -1900,14 +1900,14 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGateway4xxStatusAlarm"
-      AlarmDescription: "Trigger the alarm if errorThreshold exceeds 1% with the minimum of 10 invocations in 2 out of the last 5 minutes"
-      ActionsEnabled: false
+      AlarmDescription: "Trigger the alarm when more than 5% of total requests are getting 4xx errors"
+      ActionsEnabled: true
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 5
-      DatapointsToAlarm: 2
-      Threshold: 1
+      DatapointsToAlarm: 5
+      Threshold: 0.05
       TreatMissingData: missing
       Metrics:
         - Id: errorThreshold

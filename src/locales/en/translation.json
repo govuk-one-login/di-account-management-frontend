@@ -147,9 +147,7 @@
             "hiddenText": "Phone number"
           },
           "app": {
-            "title": "Authenticator app",
-            "value": "Change authenticator app",
-            "hiddenText": "Authenticator app"
+            "title": "Authenticator app"
           }
         },
         "supportChangeMfa": {
@@ -591,6 +589,10 @@
           {
             "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app",
             "text": "Using the GOV.UK ID Check app"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/linking-the-govuk-id-check-app-to-govuk",
+            "text": "Linking the GOV.UK ID Check app to GOV.UK"
           },
           {
             "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions",
