@@ -63,7 +63,6 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
           let key: string,
             value: string,
             actions = {};
-
           if (method.method.mfaMethodType === "SMS") {
             const phoneNumber = getLastNDigits(method.method.endPoint, 4);
             key = req.t(
@@ -86,20 +85,6 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             };
           } else if (method.method.mfaMethodType === "AUTH_APP") {
             key = req.t("pages.security.mfaSection.summaryList.app.title");
-            value = req.t("pages.security.mfaSection.summaryList.app.value");
-
-            actions = {
-              items: [
-                {
-                  attributes: { "data-test-id": "change-authenticator-app" },
-                  href: `${PATH_DATA.ENTER_PASSWORD.url}?type=changeAuthenticatorApp`,
-                  text: req.t("general.change"),
-                  visuallyHiddenText: req.t(
-                    "pages.security.mfaSection.summaryList.app.hiddenText"
-                  ),
-                },
-              ],
-            };
           } else {
             throw new Error(
               `Unexpected mfaMethodType: ${method.method.mfaMethodType}`
@@ -107,6 +92,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
           }
 
           return {
+            type: method.method.mfaMethodType,
             classes: "govuk-summary-list__row--no-border",
             key: {
               text: key,
