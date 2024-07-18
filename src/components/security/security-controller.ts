@@ -7,6 +7,7 @@ import {
 import { PATH_DATA } from "../../app.constants";
 import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list";
 import { getLastNDigits } from "../../utils/phone-number";
+import isUserLoggedIn from "../../utils/isUserLoggedIn";
 
 export async function securityGet(req: Request, res: Response): Promise<void> {
   const { email } = req.session.user;
@@ -126,6 +127,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
     supportActivityLog: supportActivityLogFlag && hasHmrc,
     activityLogUrl,
     mfaMethods,
+    showSignOut: isUserLoggedIn(req),
     supportChangeMfa: supportChangeMfa(),
     supportAddBackupMfa: supportAddBackupMfa(),
     canChangeTypeofPrimary: !denyChangeTypeofPrimary,

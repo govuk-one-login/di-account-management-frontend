@@ -1,4 +1,4 @@
-{% set active = activeNav if activeNav else "security" %}
+{% set active = activeNav %}
 {% set navigationItems = [
   {
     active: true if (active == "your-services") else false,
@@ -17,12 +17,14 @@
                 <li class="account-navigation__list-item {{ 'account-navigation__list-item--active' if item.active else '' }}">
                     <a class="account-navigation__link" href="{{ item.href }}">{{ item.text }}</a></li>
             {% endfor %}
-            <li class="account-navigation__list-item">
-                <form action="{{ accountSignOut }}" method="post">
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-                    <button class="account-navigation__button" type="submit"><span class="account-navigation__button-content">{{ 'general.header.signOutLink' | translate }}</span></button>
-                </form>
-            </li>
+            {% if showSignOut %}
+                <li class="account-navigation__list-item">
+                    <form action="{{ accountSignOut }}" method="post">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                        <button class="account-navigation__button" type="submit"><span class="account-navigation__button-content">{{ 'general.header.signOutLink' | translate }}</span></button>
+                    </form>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

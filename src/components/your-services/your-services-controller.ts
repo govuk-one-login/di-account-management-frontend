@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { presentYourServices } from "../../utils/yourServices";
 import { getAppEnv } from "../../config";
+import isUserLoggedIn from "../../utils/isUserLoggedIn";
 
 export async function yourServicesGet(
   req: Request,
@@ -26,5 +27,8 @@ export async function yourServicesGet(
   } else {
     data = { email: user.email, env: env };
   }
-  res.render("your-services/index.njk", data);
+  res.render("your-services/index.njk", {
+    ...data,
+    showSignOut: isUserLoggedIn(req),
+  });
 }

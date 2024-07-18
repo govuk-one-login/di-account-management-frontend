@@ -1,6 +1,7 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% set pageTitleName = 'pages.security.title' | translate %}
+{% set activeNav = 'security' %}
 
 {% set contentId = "06b3a091-8595-45b7-832a-1b5f3632ad2e" if isPhoneNumberVerified else "caaccf0a-1dd3-441c-af20-01925c8f9cba" %}
 

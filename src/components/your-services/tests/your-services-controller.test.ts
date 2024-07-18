@@ -57,6 +57,7 @@ describe("your services controller", () => {
         accountsList: [],
         servicesList: [],
         env: getAppEnv(),
+        showSignOut: false,
       });
     });
 
@@ -73,6 +74,7 @@ describe("your services controller", () => {
       expect(res.render).to.have.calledWith("your-services/index.njk", {
         email: "test@test.com",
         env: getAppEnv(),
+        showSignOut: false,
       });
     });
   });

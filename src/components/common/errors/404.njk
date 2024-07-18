@@ -9,11 +9,11 @@
       <p class="govuk-body">{{'error.error404.content.paragraph1' | translate }}</p>
       <p class="govuk-body">{{'error.error404.content.paragraph2' | translate }}</p>
       {{ govukButton({
-          "text": button_text|default('error.error404.content.govUKHomepageButtonText' | translate, true),
+          "text": button_text|default('error.error404.content.homepageButtonText' | translate, true),
           "type": "Submit",
-          "href": 'error.error404.content.govUKHomepageButtonHref' | translate
+          "href": homepageButtonLink
           }) }}
     </div>
   </div>
-  {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"404",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"undefined", contentId:"undefined",loggedInStatus:true,dynamic:true})}}
+  {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"404",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"undefined", contentId:"undefined",loggedInStatus:showSignOut,dynamic:true})}}
 {% endblock %}
