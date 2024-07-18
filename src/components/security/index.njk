@@ -43,13 +43,6 @@
       }
     }
 ]} %}
-{%
-set mfaSummaryList = {
-  classes:"govuk-summary-list--security",
-  attributes: {"data-test-id": "mfa-summary-list"},
-  rows: mfaMethods
-}
-%}
 
 {% block content %}
   <div class="govuk-grid-row" id="your-account">
@@ -120,8 +113,25 @@ set mfaSummaryList = {
             <p class="govuk-body">{{ 'pages.security.mfaSection.paragraph' | translate }}</p>
           </div>
           {% if mfaMethods | length > 0 %}
-            {{ govukSummaryList(mfaSummaryList) }}
+            {% for method in mfaMethods %}
+              {% if method.type == "SMS" %}
+                {%
+                  set mfaSummaryList = {
+                    classes:"govuk-summary-list--security",
+                    attributes: {"data-test-id": "mfa-summary-list"},
+                    rows: [method]
+                  }
+                %}
+                {{ govukSummaryList(mfaSummaryList)}}
+              {% elif method.type == "AUTH_APP" %}
+                <div class="summary-list-container__content">
+                  {# if mfa method management is not supported, the auth app method is READ ONLY #}
+                  <p class="govuk-body"><strong>{{ method.key.text }}</strong></p>
+                </div>
+              {% endif %}
+            {% endfor %}
           {% endif %}
+
         </div>
       {% endif %}
 
