@@ -12,6 +12,12 @@ export interface MfaMethod {
   smsPhoneNumber?: string;
 }
 
+export interface AddMfaMethod {
+  mfaIdentifier?: number;
+  priorityIdentifier: PriorityIdentifier;
+  mfaMethodType: MfaMethodType;
+}
+
 export interface ProblemDetail {
   type?: string;
   /** @example MFA Method could not be updated. */
