@@ -372,14 +372,10 @@ Resources:
           Subnets:
             - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
             - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
-      # TODO: Required due to 2 stage deployment of Canary Deployment, switch to step 2 after successful deployment and remove step 1.
-      # Step 1
-      TaskDefinition: !Ref TaskDefinition
-      # Step 2
-      # TaskDefinition: !If
-      #   - UseCanaryDeployment
-      #   - !Ref AWS::NoValue
-      #   - !Ref TaskDefinition
+      TaskDefinition: !If
+        - UseCanaryDeployment
+        - !Ref AWS::NoValue
+        - !Ref TaskDefinition
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
