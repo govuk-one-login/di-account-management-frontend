@@ -9,6 +9,7 @@ import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
 import { getAppEnv, getMfaServiceUrl } from "../../config";
 import { authenticator } from "otplib";
 import {
+  AddMFAMethodInput,
   UpdateInformationInput,
   UpdateInformationSessionValues,
 } from "../types";
@@ -44,9 +45,19 @@ export function addMfaMethod(
   const http = new Http(getMfaServiceUrl());
   const { accessToken, sourceIp, persistentSessionId, sessionId } =
     sessionDetails;
+  const addInput: AddMFAMethodInput = {
+    email: updateInput.email,
+    credential: updateInput.credential,
+    otp: updateInput.otp,
+    mfaMethod: {
+      priorityIdentifier: updateInput.mfaMethod.priorityIdentifier,
+      mfaMethodType: updateInput.mfaMethod.method.mfaMethodType,
+    },
+    methodVerified: updateInput.mfaMethod.methodVerified,
+  };
   return http.client.post<MfaMethod>(
     METHOD_MANAGEMENT_API.MFA_METHODS_ADD,
-    updateInput,
+    addInput,
     getRequestConfig({
       token: accessToken,
       sourceIp,
