@@ -13,6 +13,7 @@ enum UserJourney {
   ChangeAuthenticatorApp = "changeAuthenticatorApp",
   DeleteAccount = "deleteAccount",
   AddMfaMethod = "addMfaMethod",
+  RemoveMfaMethod = "removeMfaMethod",
 }
 
 enum EventType {
@@ -23,6 +24,7 @@ enum EventType {
   SelectedSms = "SELECTED_SMS",
   ResendCode = "RESEND_CODE",
   Confirmation = "CONFIRMATION",
+  RemoveBackup = "REMOVE_BACKUP",
 }
 
 type Event = { type: EventType };
@@ -61,6 +63,9 @@ export const amStateMachine = createMachine({
         },
         SELECTED_SMS: {
           target: "SMS",
+        },
+        REMOVE_BACKUP: {
+          target: "CONFIRMATION",
         },
       },
     },

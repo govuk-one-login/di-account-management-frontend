@@ -88,7 +88,7 @@
                     {# 1: backup method exists => display backup method block with options to change backup method or switch primary and backup #}
                     <p class="govuk-body">{{ method.text }}</p>
                     <p class="govuk-body"><a href="/switch-methods" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.switchLink' | translate }}</a></p>
-                    <p class="govuk-body"><a href="/remove-method" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.removeLink' | translate }}</a></p>
+                    <p class="govuk-body"><a href="/enter-password?type=removeMfaMethod" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.removeLink' | translate }}</a></p>
                     {% set foundSecondary = true %}
                   {% endif %}
                 {% endfor %}

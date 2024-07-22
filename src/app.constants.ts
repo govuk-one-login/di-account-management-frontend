@@ -36,6 +36,16 @@ export const PATH_DATA: {
     event: EventType.Confirmation,
     type: UserJourney.ChangePhoneNumber,
   },
+  DELETE_MFA_METHOD: {
+    url: "/remove-method",
+    event: EventType.RemoveBackup,
+    type: UserJourney.RemoveMfaMethod,
+  },
+  DELETE_MFA_METHOD_CONFIRMATION: {
+    url: "/remove-backup-confirmation",
+    event: EventType.Confirmation,
+    type: UserJourney.RemoveMfaMethod,
+  },
   CHANGE_EMAIL: {
     url: "/change-email",
     event: EventType.VerifyCodeSent,
@@ -159,6 +169,7 @@ export const METHOD_MANAGEMENT_API = {
   MFA_RETRIEVE: "/v1/mfa-methods/retrieve",
   MFA_METHODS_ADD: "/v1/mfa-methods",
   MFA_METHODS_PUT: "/v1/mfa-methods/%s",
+  MFA_METHODS_DELETE: "/v1/mfa-methods/%s",
 };
 
 export enum NOTIFICATION_TYPE {

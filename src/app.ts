@@ -67,6 +67,7 @@ import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
 import { safeTranslate } from "./utils/safeTranslate";
 import { addMfaMethodSmsRouter } from "./components/add-mfa-method-sms/add-mfa-method-sms-routes";
+import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa-method-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -187,6 +188,7 @@ async function createApp(): Promise<express.Application> {
     app.use(addMfaMethodRouter);
     app.use(addMfaMethodAppRouter);
     app.use(addMfaMethodSmsRouter);
+    app.use(deleteMfaMethodRouter);
   }
   app.use(changeAuthenticatorAppRouter);
   app.use(trackAndRedirectRouter);

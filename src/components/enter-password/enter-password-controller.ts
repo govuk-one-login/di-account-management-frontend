@@ -24,6 +24,7 @@ const REDIRECT_PATHS: { [key: string]: string } = {
   changeAuthenticatorApp: PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
   deleteAccount: PATH_DATA.DELETE_ACCOUNT.url,
   addMfaMethod: PATH_DATA.ADD_MFA_METHOD.url,
+  removeMfaMethod: PATH_DATA.DELETE_MFA_METHOD.url,
 };
 
 const OPL_VALUES: {
@@ -48,6 +49,10 @@ const OPL_VALUES: {
   addMfaMethod: {
     contentId: "375aa101-7bd6-43c2-ac39-19c864b49882",
     taxonomyLevel2: "add mfa method",
+  },
+  removeMfaMethod: {
+    contentId: "375aa101-7bd6-43c2-ac39-19c864b49844",
+    taxonomyLevel2: "remove backup mfa",
   },
 };
 

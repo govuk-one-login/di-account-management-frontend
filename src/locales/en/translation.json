@@ -268,6 +268,21 @@
         "backLink": "Back to Security"
       }
     },
+    "removeBackupMethod": {
+      "title": "Remove your back-up method for getting security codes",
+      "paragraph": "This will delete your back-up method for getting security codes.",
+      "sms": "We'll no longer send security codes by text message to your phone number ending in <strong>[phoneNumber]</strong>",
+      "app": "We'll no longer send security codes to your authenticator app",
+      "button": "Remove back-up method",
+      "backLinkText": "Back to security",
+      "confirm": {
+        "title": "You've removed your back-up method for getting security codes",
+        "heading": "You've removed your back-up method for getting security codes",
+        "message_app": "You'll no longer get security codes to your authenticator app",
+        "message_sms": "You'll no longer get security codes to your phone number ending [phoneNumber]",
+        "message_unknown": "You'll no longer get security codes to your backup method"
+      }
+    },
     "activityHistory": {
       "title": "Activity history",
       "header": "Activity history",
@@ -386,6 +401,10 @@
       "changeAuthenticatorApp": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes"
+      },
+      "removeMfaMethod": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it's you before you can manage how you get security codes"
       },
       "cancelText": "Cancel and go back to Security"
     },

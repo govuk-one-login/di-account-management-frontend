@@ -8,6 +8,7 @@ import {
   updateEmailConfirmationGet,
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
+  removeMfaMethodConfirmationGet,
 } from "./update-confirmation-controller";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
@@ -48,6 +49,13 @@ router.get(
   requiresAuthMiddleware,
   validateStateMiddleware,
   addMfaAppMethodConfirmationGet
+);
+
+router.get(
+  PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  removeMfaMethodConfirmationGet
 );
 
 export { router as updateConfirmationRouter };
