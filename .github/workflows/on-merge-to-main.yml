@@ -4,7 +4,7 @@ name: "Verify & Publish"
 on:
   push:
     branches:
-      - main
+      - OLH-1953-set-up-canary-deployments-for-the-frontend-deploy-pipeline-second-stage
   workflow_dispatch:
 
 permissions:
