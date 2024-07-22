@@ -17,18 +17,19 @@ import { getTxmaHeader } from "../../utils/txma-header";
 
 const TEMPLATE = "enter-password/index.njk";
 
-const REDIRECT_PATHS: { [key: string]: string } = {
-  changeEmail: PATH_DATA.CHANGE_EMAIL.url,
-  changePassword: PATH_DATA.CHANGE_PASSWORD.url,
-  changePhoneNumber: PATH_DATA.CHANGE_PHONE_NUMBER.url,
-  changeAuthenticatorApp: PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
-  deleteAccount: PATH_DATA.DELETE_ACCOUNT.url,
-  addMfaMethod: PATH_DATA.ADD_MFA_METHOD.url,
-  removeMfaMethod: PATH_DATA.DELETE_MFA_METHOD.url,
+const REDIRECT_PATHS: { [key in UserJourney]: string } = {
+  [UserJourney.ChangeEmail]: PATH_DATA.CHANGE_EMAIL.url,
+  [UserJourney.ChangePassword]: PATH_DATA.CHANGE_PASSWORD.url,
+  [UserJourney.ChangePhoneNumber]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+  [UserJourney.ChangeAuthenticatorApp]: PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
+  [UserJourney.DeleteAccount]: PATH_DATA.DELETE_ACCOUNT.url,
+  [UserJourney.AddMfaMethod]: PATH_DATA.ADD_MFA_METHOD.url,
+  [UserJourney.RemoveMfaMethod]: PATH_DATA.DELETE_MFA_METHOD.url,
+  [UserJourney.SwitchBackupMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
 };
 
 const OPL_VALUES: {
-  [key: string]: { contentId: string; taxonomyLevel2: string };
+  [key in UserJourney]: { contentId: string; taxonomyLevel2: string };
 } = {
   changeEmail: {
     contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
@@ -53,6 +54,14 @@ const OPL_VALUES: {
   removeMfaMethod: {
     contentId: "375aa101-7bd6-43c2-ac39-19c864b49844",
     taxonomyLevel2: "remove backup mfa",
+  },
+  changeAuthenticatorApp: {
+    contentId: "9f21527b-59ec-4de3-99e7-babd5846e8de",
+    taxonomyLevel2: "change auth app",
+  },
+  switchBackupMethod: {
+    contentId: "313fb160-5961-4f53-b3b9-72d2f961cc2d",
+    taxonomyLevel2: "switch backup method",
   },
 };
 
