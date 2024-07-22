@@ -601,6 +601,14 @@
         "paragraph": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder."
       }
     },
+    "changeDefaultMethod": {
+      "title": "Switch your back-up and default methods",
+      "newDefaultApp": "Your default method for getting secrity codes will be using your authenticator app.",
+      "newDefaultSms": "Your default method for getting security codes will be text message to your phone number ending in <strong>[phoneNumber]</strong>",
+      "newBackupApp": "Your authenticator app will become your back-up method",
+      "newBackupSms": "Your back-up method will be a text message to your phone number ending in <strong>[phoneNumber]</strong>",
+      "button": "Switch methods"
+    },
     "contact": {
       "title": "Contact GOV.UK One Login",
       "header": "Contact GOV.UK One Login",
