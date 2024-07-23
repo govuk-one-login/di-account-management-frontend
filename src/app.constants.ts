@@ -59,6 +59,12 @@ export const PATH_DATA: {
   CHANGE_DEFAULT_METHOD: {
     url: "/switch-method",
     type: UserJourney.SwitchBackupMethod,
+    event: EventType.ValueUpdated,
+  },
+  CHANGE_DEFAULT_METHOD_CONFIRMATION: {
+    url: "/switch-method-confirm",
+    type: UserJourney.SwitchBackupMethod,
+    event: EventType.Confirmation,
   },
   REQUEST_NEW_CODE_EMAIL: {
     url: "/request-new-email-code",

@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
-import { HTTP_STATUS_CODES } from "../../app.constants";
+import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
+import { EventType, getNextState } from "../../utils/state-machine";
+import { changeDefaultMfaMethod } from "../../utils/mfa";
+import { generateSessionDetails } from "../common/mfa";
 
 export async function changeDefaultMfaMethodGet(
   req: Request,
@@ -55,4 +58,29 @@ export async function changeDefaultMfaMethodGet(
 export async function changeDefaultMfaMethodPost(
   req: Request,
   res: Response
-): Promise<void> {}
+): Promise<void> {
+  const { newDefault } = req.body;
+
+  const newDefaultMethod = req.session.mfaMethods.find(
+    (m) => m.mfaIdentifier == newDefault
+  );
+
+  if (!newDefaultMethod) {
+    res.status(HTTP_STATUS_CODES.NOT_FOUND);
+    return;
+  }
+
+  await changeDefaultMfaMethod(
+    newDefaultMethod.mfaIdentifier,
+    await generateSessionDetails(req, res)
+  );
+
+  req.session.user.state.switchBackupMethod = getNextState(
+    req.session.user.state.switchBackupMethod.value,
+    EventType.ValueUpdated
+  );
+
+  req.session.newDefaultMfaMethodId = newDefaultMethod.mfaIdentifier;
+
+  res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
+}

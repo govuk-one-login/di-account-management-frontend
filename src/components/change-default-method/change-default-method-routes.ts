@@ -6,6 +6,7 @@ import {
   changeDefaultMfaMethodPost,
 } from "./change-default-method-controller";
 import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 
 const router = express.Router();
 
@@ -13,12 +14,15 @@ router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   requiresAuthMiddleware,
   selectMfaMiddleware(),
+  validateStateMiddleware,
   changeDefaultMfaMethodGet
 );
 
 router.post(
   PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   requiresAuthMiddleware,
+  selectMfaMiddleware(),
+  validateStateMiddleware,
   changeDefaultMfaMethodPost
 );
 
