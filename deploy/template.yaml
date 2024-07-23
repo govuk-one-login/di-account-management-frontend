@@ -8,10 +8,6 @@ Description: >-
   CloudFront -> WAF -> API Gateway -> VPC link -> Private ALB -> ECS Fargate
 
 Parameters:
-  ECSClusterMaxCapacity:
-    Description: The maximum capacity of the ECS Cluster Auto Scaling Target
-    Type: Number
-    Default: 6
   VpcStackName:
     Description: >
       The name of the stack that defines the VPC in which this container will run.
@@ -144,6 +140,32 @@ Mappings:
   ElasticLoadBalancerAccountIds:
     eu-west-2:
       AccountId: 652711504416
+  Container:
+    dev:
+      CPU: 1024
+      Memory: 4096
+      MinCapacity: 3
+      MaxCapacity: 6
+    build:
+      CPU: 1024
+      Memory: 4096
+      MinCapacity: 3
+      MaxCapacity: 6
+    staging:
+      CPU: 1024
+      Memory: 4096
+      MinCapacity: 3
+      MaxCapacity: 6
+    integration:
+      CPU: 1024
+      Memory: 4096
+      MinCapacity: 3
+      MaxCapacity: 6
+    production:
+      CPU: 1024
+      Memory: 4096
+      MinCapacity: 3
+      MaxCapacity: 6
   EnvironmentVariables:
     ### These environment variables are referenced further down the file.
     ### Please ensure that any variables defined for an environment are defined for _all_ environments.
@@ -398,8 +420,8 @@ Resources:
   ContainerAutoScalingTarget:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
-      MaxCapacity: !Ref ECSClusterMaxCapacity
-      MinCapacity: 3
+      MaxCapacity: !FindInMap [Container, !Ref Environment, MaxCapacity]
+      MinCapacity: !FindInMap [Container, !Ref Environment, MinCapacity]
       ResourceId: !Join
         - "/"
         - - "service"
@@ -873,8 +895,8 @@ Resources:
                   !Ref Environment,
                   LANGUAGETOGGLE,
                 ]
-      Cpu: 1024
-      Memory: 4096
+      Cpu: !FindInMap [Container, !Ref Environment, CPU]
+      Memory: !FindInMap [Container, !Ref Environment, CPU]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
       TaskRoleArn: !GetAtt TaskRole.Arn
       Family: !Sub "${AWS::StackName}-server"
