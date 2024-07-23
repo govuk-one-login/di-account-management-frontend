@@ -124,7 +124,11 @@ Conditions:
   UseStubServices: !Or
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
-  UseCloudFrontCaching: !Equals [!Ref Environment, staging]
+
+  UseCloudFrontCaching: !Or
+    - !Equals [!Ref Environment, staging]
+    - !Equals [!Ref Environment, build]
+
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, staging]
