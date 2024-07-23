@@ -4,6 +4,7 @@ import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { changeDefaultMfaMethod } from "../../utils/mfa";
 import { generateSessionDetails } from "../common/mfa";
+import { logger } from "../../utils/logger";
 
 export async function changeDefaultMfaMethodGet(
   req: Request,
@@ -70,10 +71,16 @@ export async function changeDefaultMfaMethodPost(
     return;
   }
 
-  await changeDefaultMfaMethod(
-    newDefaultMethod.mfaIdentifier,
-    await generateSessionDetails(req, res)
-  );
+  try {
+    await changeDefaultMfaMethod(
+      newDefaultMethod.mfaIdentifier,
+      await generateSessionDetails(req, res)
+    );
+  } catch (e) {
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+    logger.error("error updating default MFA method", e.message);
+    return;
+  }
 
   req.session.user.state.switchBackupMethod = getNextState(
     req.session.user.state.switchBackupMethod.value,
