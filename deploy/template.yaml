@@ -147,10 +147,10 @@ Mappings:
       MinCapacity: 3
       MaxCapacity: 6
     build:
-      CPU: 1024
+      CPU: 2048
       Memory: 4096
-      MinCapacity: 3
-      MaxCapacity: 6
+      MinCapacity: 8
+      MaxCapacity: 12
     staging:
       CPU: 1024
       Memory: 4096
