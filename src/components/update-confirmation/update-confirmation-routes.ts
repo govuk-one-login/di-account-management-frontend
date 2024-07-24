@@ -9,9 +9,11 @@ import {
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
   removeMfaMethodConfirmationGet,
+  changeDefaultMfaMethodConfirmationGet,
 } from "./update-confirmation-controller";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
@@ -56,6 +58,14 @@ router.get(
   requiresAuthMiddleware,
   validateStateMiddleware,
   removeMfaMethodConfirmationGet
+);
+
+router.get(
+  PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url,
+  requiresAuthMiddleware,
+  selectMfaMiddleware(),
+  validateStateMiddleware,
+  changeDefaultMfaMethodConfirmationGet
 );
 
 export { router as updateConfirmationRouter };

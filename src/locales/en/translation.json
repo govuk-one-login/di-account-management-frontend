@@ -279,7 +279,7 @@
         "title": "You've removed your back-up method for getting security codes",
         "heading": "You've removed your back-up method for getting security codes",
         "message_app": "You'll no longer get security codes to your authenticator app",
-        "message_sms": "You'll no longer get security codes to your phone number ending [phoneNumber]",
+        "message_sms": "You'll no longer get security codes to your phone number ending <strong>[phoneNumber]</strong>",
         "message_unknown": "You'll no longer get security codes to your backup method"
       }
     },
@@ -386,6 +386,10 @@
       "deleteAccount": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can delete your GOV.UK One Login."
+      },
+      "switchBackupMethod": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "password": {
         "label": "Enter your password",
@@ -595,6 +599,21 @@
       "email": {
         "recipientMessage": "We will send a code to: ",
         "paragraph": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder."
+      }
+    },
+    "changeDefaultMethod": {
+      "title": "Switch your back-up and default methods",
+      "newDefaultApp": "Your default method for getting secrity codes will be using your authenticator app.",
+      "newDefaultSms": "Your default method for getting security codes will be text message to your phone number ending in <strong>[phoneNumber]</strong>",
+      "newBackupApp": "Your authenticator app will become your back-up method",
+      "newBackupSms": "Your back-up method will be a text message to your phone number ending in <strong>[phoneNumber]</strong>",
+      "button": "Switch methods",
+      "confirm": {
+        "title": "Switch security codes",
+        "heading": "You've switched your back-up and default methods for getting security codes",
+        "backLinkText": "Back to Security",
+        "messageSms": "We'll send security codes to your phone number ending in <strong>[phoneNumber]</strong>",
+        "messageApp": "You'll use your authenticator app to get security codes to sign in"
       }
     },
     "contact": {

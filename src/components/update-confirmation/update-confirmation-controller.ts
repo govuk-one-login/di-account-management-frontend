@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { ERROR_MESSAGES, PATH_DATA } from "../../app.constants";
+import {
+  ERROR_MESSAGES,
+  HTTP_STATUS_CODES,
+  PATH_DATA,
+} from "../../app.constants";
 import { clearCookies } from "../../utils/session-store";
 import { logger } from "../../utils/logger";
 import { getLastNDigits } from "../../utils/phone-number";
@@ -145,6 +149,42 @@ export async function removeMfaMethodConfirmationGet(
     heading: req.t("pages.removeBackupMethod.confirm.heading"),
     message: message,
     backLinkText: req.t("pages.removeBackupMethod.backLinkText"),
+    backLink: PATH_DATA.SECURITY.url,
+  });
+}
+
+export async function changeDefaultMfaMethodConfirmationGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const defaultMethod = req.session.mfaMethods.find(
+    (m) => m.mfaIdentifier == req.session.newDefaultMfaMethodId
+  );
+
+  if (!defaultMethod) {
+    res.status(HTTP_STATUS_CODES.NOT_FOUND);
+    logger.error(
+      `unable to find MfaMethod with id ${req.session.newDefaultMfaMethodId}`
+    );
+    return;
+  }
+
+  const phoneNumber =
+    defaultMethod.method.mfaMethodType === "SMS"
+      ? getLastNDigits(defaultMethod.method.endPoint, 4)
+      : null;
+
+  const message = phoneNumber
+    ? req
+        .t("pages.changeDefaultMethod.confirm.messageSms")
+        .replace("[phoneNumber]", phoneNumber)
+    : req.t("pages.changeDefaultMethod.confirm.messageApp");
+
+  return res.render("common/confirmation-page/confirmation.njk", {
+    pageTitleName: req.t("pages.changeDefaultMethod.confirm.title"),
+    heading: req.t("pages.changeDefaultMethod.confirm.heading"),
+    message: message,
+    backLinkText: req.t("pages.changeDefaultMethod.confirm.backLinkText"),
     backLink: PATH_DATA.SECURITY.url,
   });
 }
