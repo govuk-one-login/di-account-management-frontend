@@ -11,6 +11,7 @@ import {
   getAccessibilityStatementUrl,
 } from "../../config";
 import { EVENT_NAME, PATH_DATA } from "../../app.constants";
+import isUserLoggedIn from "../../utils/isUserLoggedIn";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
@@ -45,11 +46,6 @@ const logUserVisitsContactPage = (event: AuditEvent, trace: string) => {
 const render = (req: Request, res: Response): void => {
   const { language, protocol, hostname } = req;
   const baseUrl = protocol + "://" + hostname;
-  const isAuthenticated = req.session.user?.isAuthenticated;
-  let isLoggedOut = req.cookies?.lo;
-  if (typeof isLoggedOut === "string") {
-    isLoggedOut = JSON.parse(isLoggedOut);
-  }
   const referenceCode = req.session.referenceCode;
 
   const data = {
@@ -57,7 +53,7 @@ const render = (req: Request, res: Response): void => {
     contactPhoneEnabled: supportPhoneContact(),
     showContactGuidance: showContactGuidance(),
     showContactEmergencyMessage: showContactEmergencyMessage(),
-    showSignOut: isAuthenticated && !isLoggedOut,
+    showSignOut: isUserLoggedIn(req),
     referenceCode,
     contactEmailServiceUrl: PATH_DATA.TRACK_AND_REDIRECT.url,
     accessibilityStatementUrl: getAccessibilityStatementUrl(),

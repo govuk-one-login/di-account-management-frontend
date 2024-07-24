@@ -14,6 +14,7 @@ import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
 import { getSessionIdsFrom } from "../utils/session-ids";
 import { getCurrentUrl } from "../utils/language-toggle";
+import isUserLoggedIn from "../utils/isUserLoggedIn";
 
 export function setLocalVarsMiddleware(
   req: Request,
@@ -34,6 +35,7 @@ export function setLocalVarsMiddleware(
   res.locals.isGa4Disabled = googleAnalytics4Disabled();
   res.locals.isUaDisabled = universalAnalyticsDisabled();
   res.locals.currentUrl = getCurrentUrl(req);
+  res.locals.isUserLoggedIn = isUserLoggedIn(req);
 
   const sessionIds = getSessionIdsFrom(req);
   res.locals.sessionId = sessionIds.sessionId;
