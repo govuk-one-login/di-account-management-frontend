@@ -4,7 +4,7 @@
     "resolveJsonModule": true,
     "target": "es2020",
     "noImplicitAny": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "skipLibCheck": true,
     "typeRoots": ["@types", "node_modules/@types"],
     "types": ["node", "jest"]
