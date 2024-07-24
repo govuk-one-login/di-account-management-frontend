@@ -6,7 +6,8 @@ import {
   afterEach,
 } from "@jest/globals";
 import { defineFeature, loadFeature } from "jest-cucumber";
-import { launch, Page, Browser, HTTPResponse } from "puppeteer";
+import { Page, Browser, HTTPResponse } from "puppeteer";
+import { launchBrowser } from "../utils/launch";
 
 const feature = loadFeature("./tests/features/contact-govuk-one-login.feature");
 
@@ -18,7 +19,7 @@ defineFeature(feature, (test) => {
   let page: Page;
 
   beforeAll(async () => {
-    browser = await launch();
+    browser = await launchBrowser();
   });
 
   afterAll(async () => {

@@ -113,6 +113,18 @@ docker exec -it account-management-frontend /bin/sh
 # npm run test:integration
 ```
 
+### Post-deploy tests
+
+The post-deploy tests are written with Jest, [jest-cucumber](https://www.npmjs.com/package/jest-cucumber) and [Puppeteer](https://pptr.dev/).
+
+You can run the tests in Docker:
+
+```bash
+cd post-deploy-tests
+docker build -t frontend-post-deploy-tests .
+docker run -t frontend-post-deploy-tests
+```
+
 ### Restarting the app
 
 You can restart the app by running `docker compose down` and then `docker compose up`.
