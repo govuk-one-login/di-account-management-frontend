@@ -7,7 +7,7 @@ import * as mfa from "../../../utils/mfa";
 import * as mfaCommon from "../../common/mfa";
 import { UpdateInformationSessionValues } from "../../../utils/types";
 
-describe.only("change default method", () => {
+describe("change default method", () => {
   let sandbox: sinon.SinonSandbox;
 
   const statusFn = sinon.spy();
