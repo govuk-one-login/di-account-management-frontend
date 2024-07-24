@@ -896,7 +896,7 @@ Resources:
                   LANGUAGETOGGLE,
                 ]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
-      Memory: !FindInMap [Container, !Ref Environment, CPU]
+      Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
       TaskRoleArn: !GetAtt TaskRole.Arn
       Family: !Sub "${AWS::StackName}-server"
