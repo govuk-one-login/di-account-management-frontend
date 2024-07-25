@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "target": "es2020",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "typeRoots": ["@types", "node_modules/@types"],
+    "types": ["node", "jest"]
+  }
+}

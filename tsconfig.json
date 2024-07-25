@@ -13,5 +13,10 @@
     "baseUrl": ".",
     "typeRoots": ["@types", "/node_modules/@types"]
   },
-  "exclude": ["test", "coverage", "src/components/**/tests"]
+  "exclude": [
+    "test",
+    "coverage",
+    "src/components/**/tests",
+    "post-deploy-tests"
+  ]
 }
