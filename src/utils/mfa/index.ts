@@ -40,6 +40,7 @@ export function getApiClient(
   req: Request,
   res: Response
 ): Class2FAManagementApi {
+  const http = new Http(getMfaServiceUrl());
   const client = new Class2FAManagementApi(
     new Configuration({
       baseOptions: getRequestConfig({
@@ -49,7 +50,8 @@ export function getApiClient(
         sessionId: res.locals.sessionId,
       }),
     }),
-    getMfaServiceUrl()
+    null,
+    http.client
   );
   return client;
 }
