@@ -5,15 +5,16 @@ import {
 } from "../../app.constants";
 import { logger } from "../logger";
 import { getRequestConfig, Http } from "../http";
-import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
+import { ProblemDetail, ValidationProblem } from "./types";
 import { getAppEnv, getMfaServiceUrl } from "../../config";
 import { authenticator } from "otplib";
+import { Class2FAManagementApi, MfaMethod, Configuration } from "./api.ts";
 import {
-  AddMFAMethodInput,
   UpdateInformationInput,
   UpdateInformationSessionValues,
 } from "../types";
 import { format } from "util";
+import { Request, Response } from "express";
 
 export function generateMfaSecret(): string {
   return authenticator.generateSecret(20);
@@ -35,36 +36,22 @@ export function verifyMfaCode(secret: string, code: string): boolean {
   return authenticator.check(code, secret);
 }
 
-export function addMfaMethod(
-  updateInput: UpdateInformationInput,
-  sessionDetails: UpdateInformationSessionValues
-): Promise<{
-  status: number;
-  data: MfaMethod;
-}> {
-  const http = new Http(getMfaServiceUrl());
-  const { accessToken, sourceIp, persistentSessionId, sessionId } =
-    sessionDetails;
-  const addInput: AddMFAMethodInput = {
-    email: updateInput.email,
-    credential: updateInput.credential,
-    otp: updateInput.otp,
-    mfaMethod: {
-      priorityIdentifier: updateInput.mfaMethod.priorityIdentifier,
-      mfaMethodType: updateInput.mfaMethod.method.mfaMethodType,
-    },
-    methodVerified: updateInput.mfaMethod.methodVerified,
-  };
-  return http.client.post<MfaMethod>(
-    METHOD_MANAGEMENT_API.MFA_METHODS_ADD,
-    addInput,
-    getRequestConfig({
-      token: accessToken,
-      sourceIp,
-      persistentSessionId,
-      sessionId,
-    })
+export function getApiClient(
+  req: Request,
+  res: Response
+): Class2FAManagementApi {
+  const client = new Class2FAManagementApi(
+    new Configuration({
+      baseOptions: getRequestConfig({
+        token: req.session.user.tokens.accessToken,
+        sourceIp: req.ip,
+        persistentSessionId: res.locals.persistentSessionId,
+        sessionId: res.locals.sessionId,
+      }),
+    }),
+    getMfaServiceUrl()
   );
+  return client;
 }
 
 export async function changeDefaultMfaMethod(
@@ -263,29 +250,6 @@ export async function updateMfaMethod(
     }
   } catch (err) {
     errorHandler(err, sessionDetails.sessionId, "update");
-  }
-  return isUpdated;
-}
-
-export async function createOrUpdateMfaMethod(
-  updateInput: UpdateInformationInput,
-  sessionDetails: UpdateInformationSessionValues
-): Promise<boolean> {
-  let isUpdated = false;
-  try {
-    const response = await addMfaMethod(updateInput, sessionDetails);
-
-    if (response.status === HTTP_STATUS_CODES.OK) {
-      isUpdated = true;
-    } else {
-      errorHandler(
-        new Error("MFA Method Not Found"),
-        sessionDetails.sessionId,
-        "create"
-      );
-    }
-  } catch (err) {
-    errorHandler(err, sessionDetails.sessionId, "create");
   }
   return isUpdated;
 }

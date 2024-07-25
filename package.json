@@ -30,7 +30,8 @@
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/govuk --watch src/assets/scss/application.scss dist/public/style.css",
-    "prepare": "husky || true"
+    "prepare": "husky || true",
+    "openapi": "openapi-generator generate -i ../openapi-specs/auth/method-management-api.yaml"
   },
   "mocha": {
     "diff": true,
@@ -86,6 +87,7 @@
     "xstate": "^5.15.0"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.4",
     "@types/chai": "^4.3.6",
     "@types/chai-as-promised": "^7.1.8",
     "@types/cheerio": "^0.22.35",
