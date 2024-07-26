@@ -1,7 +1,6 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% set pageTitleName = 'pages.security.title' | translate %}
-
 {% set contentId = "06b3a091-8595-45b7-832a-1b5f3632ad2e" if isPhoneNumberVerified else "caaccf0a-1dd3-441c-af20-01925c8f9cba" %}
 
 {% set accountDetailsSummaryList = {
@@ -17,7 +16,7 @@
       actions: {
         items: [
           {
-            href: "/enter-password?type=changeEmail&edit=true",
+            href: enterPasswordUrl + "&type=changeEmail&edit=true",
             text: 'general.change' | translate,
             visuallyHiddenText: 'pages.security.accountDetails.summaryList.email' | translate
           }
@@ -35,7 +34,7 @@
       actions: {
         items: [
           {
-            href: "/enter-password?type=changePassword&edit=true",
+            href: enterPasswordUrl + "&type=changePassword&edit=true",
             text: 'general.change' | translate,
             visuallyHiddenText: 'pages.security.accountDetails.summaryList.password' | translate
           }
@@ -87,8 +86,8 @@
                   {% if (method.priorityIdentifier == "BACKUP") and not foundSecondary %}
                     {# 1: backup method exists => display backup method block with options to change backup method or switch primary and backup #}
                     <p class="govuk-body">{{ method.text }}</p>
-                    <p class="govuk-body"><a href="/enter-password?type=switchBackupMethod" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.switchLink' | translate }}</a></p>
-                    <p class="govuk-body"><a href="/enter-password?type=removeMfaMethod" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.removeLink' | translate }}</a></p>
+                    <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=switchBackupMethod" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.switchLink' | translate }}</a></p>
+                    <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=removeMfaMethod" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.removeLink' | translate }}</a></p>
                     {% set foundSecondary = true %}
                   {% endif %}
                 {% endfor %}
@@ -97,7 +96,7 @@
                   <p class="govuk-body">{{ 'pages.security.mfaSection.supportChangeMfa.backup.paragraph' | translate }}</p>
                   <p class="govuk-body">{{ 'pages.security.mfaSection.supportChangeMfa.backup.paragraph2' | translate }}</p>
                   <p class="govuk-body">
-                    <a href="/enter-password?type=addMfaMethod" class="govuk-link">{{ 'pages.security.mfaSection.supportChangeMfa.backup.link' | translate }}</a>
+                    <a href="{{enterPasswordUrl}}&type=addMfaMethod" class="govuk-link">{{ 'pages.security.mfaSection.supportChangeMfa.backup.link' | translate }}</a>
                   </p>
                 {% endif %}
               </div>
@@ -145,7 +144,7 @@
       <div class="summary-list-container">
         <h2 class="govuk-heading-m">{{ 'pages.security.deleteAccount.heading' | translate }}</h2>
         <p class="govuk-body">{{ 'pages.security.deleteAccount.info' | translate }}</p>
-        <p class="govuk-body"><a href="/enter-password?type=deleteAccount" class="govuk-link">{{ 'pages.security.deleteAccount.link' | translate }}</a></p>
+        <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=deleteAccount" class="govuk-link">{{ 'pages.security.deleteAccount.link' | translate }}</a></p>
       </div>
     </div>
   </div>

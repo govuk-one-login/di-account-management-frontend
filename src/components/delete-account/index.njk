@@ -6,7 +6,7 @@
 {% set pageTitleName = 'pages.deleteAccount.title' | translate %}
 {% set contentId = "0768fa94-3a7a-4f19-8bf5-a1d5afa49023" if services.length else "7c0ae794-46ba-4abd-bf23-ebd70782a96b" %}
 
-{% block pageContent%}
+{% block pageContent %}
 
 {% include "common/errors/errorSummary.njk" %}
 
@@ -18,10 +18,8 @@
   <p class="govuk-body">{{ 'pages.deleteAccount.paragraph2' | translate }}</p>
   <ul class="govuk-list govuk-list--bullet">
     {% for service in services %}
-
       {% set locale = ['clientRegistry.', env, '.', service.client_id, '.'] | join %}
         <li data-test-id="service-list-item">{{ [locale, 'header'] | join | translate }}</li>
-
     {% endfor %}
     </ul>
     {% if hasGovUkEmailSubscription %}
@@ -35,25 +33,26 @@
   {% endif %}
   <p class="govuk-body">{{ 'pages.deleteAccount.paragraph5' | translate }}</p>
 
-{{ govukInsetText({
-  text: 'pages.deleteAccount.details' | translate
-}) }}
+  {{ govukInsetText({
+    text: 'pages.deleteAccount.details' | translate
+  }) }}
 
-<form action="/delete-account" method="post" novalidate>
+<form action="{{'DELETE_ACCOUNT' | getPath }}" method="post" novalidate>
+  <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+  <input type="hidden" name="fromSecurity" value="{{fromSecurity}}"/>
 
-<input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-
-{{ govukButton({
-  text: 'pages.deleteAccount.deleteAccount' | translate,
-  classes: "govuk-button--warning",
-  "type": "Submit",
-  "preventDoubleClick": true
-}) }}
-
+  {{ govukButton({
+    text: 'pages.deleteAccount.deleteAccount' | translate,
+    classes: "govuk-button--warning",
+    "type": "Submit",
+    "preventDoubleClick": true
+  }) }}
 </form>
 
-<a href="/manage-your-account" class="govuk-link govuk-body">
+{% if fromSecurity %}
+  <a href="/manage-your-account" class="govuk-link govuk-body">
     {{ 'pages.deleteAccount.doNotDeleteAccount' | translate }}
-</a>
+  </a>
+{% endif %}
 {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"delete account", contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}

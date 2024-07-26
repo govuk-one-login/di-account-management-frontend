@@ -63,10 +63,11 @@ describe("security controller", () => {
         email: "test@test.com",
         supportActivityLog: true,
         activityLogUrl: "/activity-history",
+        enterPasswordUrl: "/enter-password?from=security",
         mfaMethods: [
           {
             text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title",
-            linkHref: "/enter-password?type=changePhoneNumber",
+            linkHref: "/enter-password?from=security&type=changePhoneNumber",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
             priorityIdentifier: "DEFAULT",
@@ -113,10 +114,11 @@ describe("security controller", () => {
         email: "test@test.com",
         supportActivityLog: false,
         activityLogUrl: "/activity-history",
+        enterPasswordUrl: "/enter-password?from=security",
         mfaMethods: [
           {
             text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title",
-            linkHref: "/enter-password?type=changePhoneNumber",
+            linkHref: "/enter-password?from=security&type=changePhoneNumber",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
             priorityIdentifier: "DEFAULT",
@@ -165,10 +167,11 @@ describe("security controller", () => {
         email: "test@test.com",
         supportActivityLog: false,
         activityLogUrl: "/activity-history",
+        enterPasswordUrl: "/enter-password?from=security",
         mfaMethods: [
           {
             text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title",
-            linkHref: "/enter-password?type=changePhoneNumber",
+            linkHref: "/enter-password?from=security&type=changePhoneNumber",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
             priorityIdentifier: "DEFAULT",
@@ -284,10 +287,11 @@ describe("security controller", () => {
         email: "test@test.com",
         supportActivityLog: true,
         activityLogUrl: "/activity-history",
+        enterPasswordUrl: "/enter-password?from=security",
         mfaMethods: [
           {
             text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title",
-            linkHref: "/enter-password?type=changePhoneNumber",
+            linkHref: "/enter-password?from=security&type=changePhoneNumber",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change",
             priorityIdentifier: "DEFAULT",
