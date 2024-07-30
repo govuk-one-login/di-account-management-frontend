@@ -23,12 +23,14 @@ router.get(
 router.get(
   PATH_DATA.REQUEST_NEW_CODE_EMAIL.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   requestNewCodeGet
 );
 
 router.post(
   PATH_DATA.CHECK_YOUR_EMAIL.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   validateCheckYourEmailRequest(),
   refreshTokenMiddleware(),
   asyncHandler(checkYourEmailPost())
