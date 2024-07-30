@@ -10,7 +10,7 @@ import { getLastNDigits } from "../../utils/phone-number";
 
 export async function securityGet(req: Request, res: Response): Promise<void> {
   const { email } = req.session.user;
-
+  const enterPasswordUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=security`;
   const supportActivityLogFlag = supportActivityLog();
 
   const hasHmrc = await hasAllowedRSAServices(req, res);
@@ -34,7 +34,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             linkText = req.t(
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change"
             );
-            linkHref = `${PATH_DATA.ENTER_PASSWORD.url}?type=changePhoneNumber`;
+            linkHref = `${enterPasswordUrl}&type=changePhoneNumber`;
           } else if (mfaMethod.method.mfaMethodType === "AUTH_APP") {
             text = req.t(
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.title"
@@ -42,7 +42,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
             linkText = req.t(
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.change"
             );
-            linkHref = `${PATH_DATA.ENTER_PASSWORD.url}?type=changeAuthenticatorApp`;
+            linkHref = `${enterPasswordUrl}&type=changeAuthenticatorApp`;
           } else {
             throw new Error(
               `Unexpected mfaMethodType: ${mfaMethod.method.mfaMethodType}`
@@ -75,7 +75,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
               items: [
                 {
                   attributes: { "data-test-id": "change-phone-number" },
-                  href: `${PATH_DATA.ENTER_PASSWORD.url}?type=changePhoneNumber`,
+                  href: `${enterPasswordUrl}&type=changePhoneNumber`,
                   text: req.t("general.change"),
                   visuallyHiddenText: req.t(
                     "pages.security.mfaSection.summaryList.app.hiddenText"
@@ -125,6 +125,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
     email,
     supportActivityLog: supportActivityLogFlag && hasHmrc,
     activityLogUrl,
+    enterPasswordUrl,
     mfaMethods,
     supportChangeMfa: supportChangeMfa(),
     supportAddBackupMfa: supportAddBackupMfa(),
