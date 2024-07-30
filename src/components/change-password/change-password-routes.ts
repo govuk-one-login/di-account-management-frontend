@@ -22,6 +22,7 @@ router.get(
 router.post(
   PATH_DATA.CHANGE_PASSWORD.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   validateChangePasswordRequest(),
   refreshTokenMiddleware(),
   asyncHandler(changePasswordPost())

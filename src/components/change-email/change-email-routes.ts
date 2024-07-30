@@ -19,6 +19,7 @@ router.get(
 router.post(
   PATH_DATA.CHANGE_EMAIL.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   validateChangeEmailRequest(),
   refreshTokenMiddleware(),
   asyncHandler(changeEmailPost())
