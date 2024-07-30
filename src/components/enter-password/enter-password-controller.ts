@@ -76,6 +76,7 @@ export function enterPasswordGet(req: Request, res: Response): void {
 
   res.render(`enter-password/index.njk`, {
     requestType,
+    fromSecurity: req.query.from == "security",
     oplValues: OPL_VALUES[requestType] || {},
   });
 }

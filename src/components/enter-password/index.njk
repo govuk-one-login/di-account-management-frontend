@@ -7,22 +7,24 @@
 {% set header = ['pages.enterPassword.', requestType, '.header'] | join | translate %}
 
 {% if requestType == 'changePassword' %}
-    {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
+  {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
 {% else %}
-    {% set pageTitleName = 'pages.enterPassword.title' | translate %}
+  {% set pageTitleName = 'pages.enterPassword.title' | translate %}
 {% endif %}
-
-{% set backLink = "/manage-your-account" %}
+{% if fromSecurity %}
+  {% set backLink = "/manage-your-account" %}
+{% endif %}
 
 {% block pageContent %}
 {% include "common/errors/errorSummary.njk" %}
 
     <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{header}}</h1>
 
-    <form action="/enter-password" method="post" novalidate>
+    <form action="{{'ENTER_PASSWORD' | getPath }}" method="post" novalidate>
 
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
         <input type="hidden" name="requestType" value="{{requestType}}"/>
+        <input type="hidden" name="fromSecurity" value="{{fromSecurity}}"/>
 
         <p class="govuk-body">{{paragraph}}</p>
 
@@ -45,8 +47,9 @@
         "type": "Submit",
         "preventDoubleClick": true
         }) }}
-
+        {% if fromSecurity %}
         <p class="govuk-body"> <a href="/manage-your-account" class="govuk-link" rel="noreferrer noopener">{{cancelText}}</a></p>
+        {% endif %}
     </form>
 
 {% endblock %}
