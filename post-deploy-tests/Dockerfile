@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install curl gnupg -y \
 
 # We don't need the standalone Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV AWS_PAGER=""
 
 COPY . .
 
