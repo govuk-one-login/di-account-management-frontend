@@ -103,7 +103,7 @@
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^7.17.0",
     "@typescript-eslint/parser": "^7.17.0",
-    "chai": "^4.4.1",
+    "chai": "^4.5.0",
     "chai-as-promised": "^7.1.2",
     "cheerio": "^1.0.0-rc.12",
     "concurrently": "^8.2.2",
