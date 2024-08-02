@@ -874,6 +874,12 @@
         "link_text": "Go to your account to search for an apprenticeship",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       },
+      "sdlgbEirK30fvgbrf0C78XY60qN": {
+        "header": "PDP Connect",
+        "description": "Connect and manage pension data in PDP Connect.",
+        "link_text": "Go to your PDP Connect account",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
       "iJNgycwBNEWGQvkuiLxOdVmVzG9": {
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
@@ -1052,6 +1058,12 @@
         "link_text": "Go to your account to search for an apprenticeship",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       },
+      "sdlgbEirK30fvgbrf0C78XY60qN": {
+        "header": "PDP Connect",
+        "description": "Connect and manage pension data in PDP Connect.",
+        "link_text": "Go to your PDP Connect account",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
       "iJNgycwBNEWGQvkuiLxOdVmVzG9": {
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
@@ -1217,6 +1229,12 @@
         "description": "Search and apply for apprenticeships in England.",
         "link_text": "Go to your account to search for an apprenticeship",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Connect and manage pension data in PDP Connect.",
+        "link_text": "Go to your PDP Connect account",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
       },
       "drivingMedicalCondition": {
         "header": "Driving with a medical condition",
@@ -1384,6 +1402,12 @@
         "link_text": "Go to your account to search for an apprenticeship",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Connect and manage pension data in PDP Connect.",
+        "link_text": "Go to your PDP Connect account",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
       "drivingMedicalCondition": {
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
@@ -1550,6 +1574,12 @@
         "link_text": "Go to your account to search for an apprenticeship",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Connect and manage pension data in PDP Connect.",
+        "link_text": "Go to your PDP Connect account",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
       "drivingMedicalCondition": {
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
@@ -1715,6 +1745,12 @@
         "description": "Search and apply for apprenticeships in England.",
         "link_text": "Go to your account to search for an apprenticeship",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Connect and manage pension data in PDP Connect.",
+        "link_text": "Go to your PDP Connect account",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
       },
       "drivingMedicalCondition": {
         "header": "Driving with a medical condition",

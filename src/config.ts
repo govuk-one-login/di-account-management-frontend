@@ -149,6 +149,8 @@ const FAA_PROD: string = "CCdLjqwGtpAA1Td2CrNHT1yFbqa";
 const FAA_NON_PROD: string = "faa";
 const DRIVING_MEDICAL_CONDITION_PROD: string = "iJNgycwBNEWGQvkuiLxOdVmVzG9";
 const DRIVING_MEDICAL_CONDITION_NON_PROD: string = "drivingMedicalCondition";
+const PDP_CONNECT_PROD: string = "sdlgbEirK30fvgbrf0C78XY60qN";
+const PDP_CONNECT_NON_PROD: string = "PDPConnect";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -198,6 +200,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   ATE_CAPITAL_NON_PROD,
   FAA_PROD,
   FAA_NON_PROD,
+  PDP_CONNECT_NON_PROD,
+  PDP_CONNECT_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];

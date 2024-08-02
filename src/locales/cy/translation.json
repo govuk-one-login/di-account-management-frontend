@@ -725,6 +725,12 @@
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       },
+      "sdlgbEirK30fvgbrf0C78XY60qN": {
+        "header": "PDP Connect",
+        "description": "Cysylltu a rheoli data pensiwn yn PDP Connect.",
+        "link_text": "Ewch i'ch cyfrif PDP Connect",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
       "iJNgycwBNEWGQvkuiLxOdVmVzG9": {
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
@@ -897,6 +903,12 @@
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       },
+      "sdlgbEirK30fvgbrf0C78XY60qN": {
+        "header": "PDP Connect",
+        "description": "Cysylltu a rheoli data pensiwn yn PDP Connect.",
+        "link_text": "Ewch i'ch cyfrif PDP Connect",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
       "iJNgycwBNEWGQvkuiLxOdVmVzG9": {
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
@@ -1056,6 +1068,12 @@
         "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Cysylltu a rheoli data pensiwn yn PDP Connect.",
+        "link_text": "Ewch i'ch cyfrif PDP Connect",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
       },
       "drivingMedicalCondition": {
         "header": "Gyrru gyda chyflwr iechyd",
@@ -1217,6 +1235,12 @@
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Cysylltu a rheoli data pensiwn yn PDP Connect.",
+        "link_text": "Ewch i'ch cyfrif PDP Connect",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
       "drivingMedicalCondition": {
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
@@ -1377,6 +1401,12 @@
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
       },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Cysylltu a rheoli data pensiwn yn PDP Connect.",
+        "link_text": "Ewch i'ch cyfrif PDP Connect",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
       "drivingMedicalCondition": {
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
@@ -1536,6 +1566,12 @@
         "description": "Chwilio a gwneud cais am brentisiaethau yn Lloegr.",
         "link_text": "Ewch i'ch cyfrif i chwilio am brentisiaeth",
         "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Cysylltu a rheoli data pensiwn yn PDP Connect.",
+        "link_text": "Ewch i'ch cyfrif PDP Connect",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
       },
       "drivingMedicalCondition": {
         "header": "Gyrru gyda chyflwr iechyd",
