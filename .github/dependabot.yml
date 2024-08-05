@@ -41,3 +41,45 @@ updates:
       - dependency-name: "node"
         update-types:
           - "version-update:semver-major"
+
+  - package-ecosystem: "npm"
+    directory: "/post-deploy-tests"
+    schedule:
+      interval: daily
+      time: "03:00"
+    target-branch: main
+    labels:
+      - dependabot
+      - dependencies
+    ignore:
+      - dependency-name: "node"
+        versions: ["17.x", "18.x", "19.x"]
+    commit-message:
+      prefix: BAU
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: docker
+    directory: "/post-deploy-tests"
+    schedule:
+      interval: daily
+      time: "03:00"
+    target-branch: main
+    labels:
+      - dependabot
+      - dependencies
+    commit-message:
+      prefix: BAU
+    ignore:
+      - dependency-name: "node"
+        update-types:
+          - "version-update:semver-major"
