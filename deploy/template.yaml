@@ -2398,9 +2398,9 @@ Resources:
         DeploymentStrategy: !Ref DeploymentStrategy
         ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
         ContainerPort: !Ref ContainerPort
-        CloudWatchAlarms:
-          - !Sub "${ELB5XX10PercentAlarm}"
-          - ELB5XX10PercentAlarm
+        CloudWatchAlarms: !Sub
+          - "${ELB5XX10PercentAlarm}"
+          - ELB5XX10PercentAlarm: !Ref ELB5XX10PercentAlarm
 
 Outputs:
   ApiGatewayEndpoint:
