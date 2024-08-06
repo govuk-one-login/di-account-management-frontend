@@ -121,8 +121,8 @@ Conditions:
       - !Equals [!Ref Environment, production]
 
   UseCanaryDeployment: !Or
-    - !Equals [!Ref Environment, dev]
-    - !Equals [!Ref Environment, dev]
+    - !Equals [!Ref Environment, production]
+    - !Equals [!Ref Environment, integration]
 
 Mappings:
   ElasticLoadBalancerAccountIds:
@@ -2383,7 +2383,7 @@ Resources:
         GreenTargetGroupName: !GetAtt ApplicationLoadBalancerTargetGroupGreen.TargetGroupName
         LoadBalancerListenerARN: !Ref ApplicationLoadBalancerListenerHTTPS
         ECSServiceTaskDefinition: !Ref TaskDefinition
-        DeploymentStrategy: ECSLinear10PercentEvery3Minutes
+        DeploymentStrategy: CodeDeployDefault.ECSLinear10PercentEvery3Minutes
         ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
         ContainerPort: !Ref ContainerPort
         CloudWatchAlarms: !Sub
