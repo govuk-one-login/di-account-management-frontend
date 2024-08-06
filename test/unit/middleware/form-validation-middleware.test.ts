@@ -29,16 +29,17 @@ describe("HTML Lang middleware", () => {
   describe("validationErrorFormatter", () => {
     it("should format error message", () => {
       const error = {
+        type: "field",
+        path: "path",
         location: "body",
         msg: "error message",
-        param: "param",
-      };
+      } as any;
 
       const formattedError = validationErrorFormatter(error);
 
       expect(formattedError).to.be.eql({
         text: error.msg,
-        href: `#${error.param}`,
+        href: `#${error.path}`,
       });
     });
   });

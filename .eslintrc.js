@@ -21,11 +21,28 @@ module.exports = {
         allowArgumentsExplicitlyTypedAsAny: true,
       },
     ],
-    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        vars: "all",
+        args: "after-used",
+        ignoreRestSiblings: true,
+        caughtErrors: "none", // Add this line to ignore unused variables in catch blocks
+      },
+    ],
     "padding-line-between-statements": [
       "error",
       { blankLine: "any", prev: "*", next: "*" },
     ],
     "mocha/no-exclusive-tests": "error",
   },
+  overrides: [
+    {
+      files: ["**/*.test.ts", "**/*.spec.ts"], // Adapt this pattern to your test files, if necessary
+      rules: {
+        "@typescript-eslint/no-unused-expressions": "off",
+        "@typescript-eslint/no-require-imports": "off",
+      },
+    },
+  ],
 };
