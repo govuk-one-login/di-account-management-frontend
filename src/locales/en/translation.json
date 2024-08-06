@@ -884,6 +884,12 @@
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "DduaLZl49t9hHADHyzJBmEwvbsw": {
+        "header": "Use a lasting power of attorney",
+        "description": "Share details of a lasting power of attorney",
+        "link_text": "Go to your lasting power of attorney dashboard",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "integration": {
@@ -1068,6 +1074,12 @@
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "DduaLZl49t9hHADHyzJBmEwvbsw": {
+        "header": "Use a lasting power of attorney",
+        "description": "Share details of a lasting power of attorney.",
+        "link_text": "Go to your lasting power of attorney dashboard",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "staging": {
@@ -1240,6 +1252,12 @@
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Use a lasting power of attorney",
+        "description": "Share details of a lasting power of attorney.",
+        "link_text": "Go to your lasting power of attorney dashboard",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "build": {
@@ -1412,6 +1430,12 @@
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Use a lasting power of attorney",
+        "description": "Share details of a lasting power of attorney.",
+        "link_text": "Go to your lasting power of attorney dashboard",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "dev": {
@@ -1584,6 +1608,12 @@
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Use a lasting power of attorney",
+        "description": "Share details of a lasting power of attorney.",
+        "link_text": "Go to your lasting power of attorney dashboard",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "local": {
@@ -1756,6 +1786,12 @@
         "header": "Driving with a medical condition",
         "link_text": "Driving with a medical condition",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Use a lasting power of attorney",
+        "description": "Share details of a lasting power of attorney.",
+        "link_text": "Go to your lasting power of attorney dashboard",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     }
   }
