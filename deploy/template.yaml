@@ -386,11 +386,10 @@ Resources:
           Subnets:
             - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
             - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
-      # TaskDefinition: !If
-      #   - UseCanaryDeployment
-      #   - !Ref AWS::NoValue
-      #   - !Ref TaskDefinition
-      TaskDefinition: !Ref TaskDefinition
+      TaskDefinition: !If
+        - UseCanaryDeployment
+        - !Ref AWS::NoValue
+        - !Ref TaskDefinition
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
