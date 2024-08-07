@@ -1345,7 +1345,7 @@ Resources:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
-      CidrIp: 0.0.0.0/0
+      CidrIp: 10.0.0.0/16
       Description: Allows HTTP traffic from anyone on port 80
       IpProtocol: tcp
       FromPort: 80
@@ -1355,7 +1355,7 @@ Resources:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !GetAtt ApplicationLoadBalancerSecurityGroup.GroupId
-      CidrIp: 0.0.0.0/0
+      CidrIp: 10.0.0.0/16
       Description: Allows HTTPS traffic from anyone on port 443
       IpProtocol: tcp
       FromPort: 443
@@ -2138,7 +2138,6 @@ Resources:
   CloudFrontLogsBucket:
     Type: AWS::S3::Bucket
     Properties:
-      # checkov:skip=CKV_AWS_18:This is the access logs bucket. It should not log itself.
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerPreferred
@@ -2162,6 +2161,8 @@ Resources:
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
+      LoggingConfiguration:
+        DestinationBucketName: !Ref AccessLogsBucket
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
@@ -2233,7 +2234,7 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 5
       DatapointsToAlarm: 5
-      Threshold: 0.05
+      Threshold: 5
       TreatMissingData: missing
       Metrics:
         - Id: errorThreshold
