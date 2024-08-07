@@ -729,6 +729,12 @@
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "DduaLZl49t9hHADHyzJBmEwvbsw": {
+        "header": "Defnyddio pwer atwrnai parhaus",
+        "description": "Rhannu manylion pwer atwrnai parhaus.",
+        "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "integration": {
@@ -901,6 +907,12 @@
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "DduaLZl49t9hHADHyzJBmEwvbsw": {
+        "header": "Defnyddio pwer atwrnai parhaus",
+        "description": "Rhannu manylion pwer atwrnai parhaus.",
+        "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "staging": {
@@ -1061,6 +1073,12 @@
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Defnyddio pwer atwrnai parhaus",
+        "description": "Rhannu manylion pwer atwrnai parhaus.",
+        "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "build": {
@@ -1221,6 +1239,12 @@
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Defnyddio pwer atwrnai parhaus",
+        "description": "Rhannu manylion pwer atwrnai parhaus.",
+        "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "dev": {
@@ -1381,6 +1405,12 @@
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Defnyddio pwer atwrnai parhaus",
+        "description": "Rhannu manylion pwer atwrnai parhaus.",
+        "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     },
     "local": {
@@ -1541,6 +1571,12 @@
         "header": "Gyrru gyda chyflwr iechyd",
         "link_text": "Gyrru gyda chyflwr iechyd",
         "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Defnyddio pwer atwrnai parhaus",
+        "description": "Rhannu manylion pwer atwrnai parhaus.",
+        "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       }
     }
   }

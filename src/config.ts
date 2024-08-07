@@ -149,6 +149,10 @@ const FAA_PROD: string = "CCdLjqwGtpAA1Td2CrNHT1yFbqa";
 const FAA_NON_PROD: string = "faa";
 const DRIVING_MEDICAL_CONDITION_PROD: string = "iJNgycwBNEWGQvkuiLxOdVmVzG9";
 const DRIVING_MEDICAL_CONDITION_NON_PROD: string = "drivingMedicalCondition";
+const USE_LASTING_POWER_OF_ATTORNEY_PROD: string =
+  "DduaLZl49t9hHADHyzJBmEwvbsw";
+const USE_LASTING_POWER_OF_ATTORNEY_NON_PROD: string =
+  "useLastingPowerOfAttorney";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -198,6 +202,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   ATE_CAPITAL_NON_PROD,
   FAA_PROD,
   FAA_NON_PROD,
+  USE_LASTING_POWER_OF_ATTORNEY_PROD,
+  USE_LASTING_POWER_OF_ATTORNEY_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
