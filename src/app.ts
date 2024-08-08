@@ -69,6 +69,7 @@ import { safeTranslate } from "./utils/safeTranslate";
 import { addMfaMethodSmsRouter } from "./components/add-mfa-method-sms/add-mfa-method-sms-routes";
 import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa-method-routes";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
+import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -167,6 +168,7 @@ async function createApp(): Promise<express.Application> {
   app.use(startRouter);
   app.use(logoutRouter);
   app.use(enterPasswordRouter);
+  app.use(isUserLoggedInMiddleware);
   app.use(changeEmailRouter);
   app.use(updateConfirmationRouter);
   app.use(changePasswordRouter);
