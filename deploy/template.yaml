@@ -357,19 +357,8 @@ Resources:
     Type: AWS::ECS::Service
     Properties:
       Cluster: !Ref ECSCluster
-      DeploymentConfiguration: !If
-        - UseCanaryDeployment
-        - !Ref AWS::NoValue
-        - MaximumPercent: 500
-          MinimumHealthyPercent: 50
-          DeploymentCircuitBreaker:
-            Enable: true
-            Rollback: true
       DeploymentController:
-        Type: !If
-          - UseCanaryDeployment
-          - CODE_DEPLOY
-          - ECS
+        Type: CODE_DEPLOY
       PropagateTags: SERVICE
       CapacityProviderStrategy:
         - CapacityProvider: !If [IsProduction, "FARGATE", "FARGATE_SPOT"]
@@ -386,10 +375,11 @@ Resources:
           Subnets:
             - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
             - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
-      TaskDefinition: !If
-        - UseCanaryDeployment
-        - !Ref AWS::NoValue
-        - !Ref TaskDefinition
+      TaskDefinition: !Ref TaskDefinition
+      # TaskDefinition: !If
+      #   - UseCanaryDeployment
+      #   - !Ref AWS::NoValue
+      #   - !Ref TaskDefinition
       Tags:
         - Key: Product
           Value: !Ref ProductTagValue
@@ -2364,7 +2354,6 @@ Resources:
 
   ECSCanaryDeploymentStack:
     Type: AWS::CloudFormation::Stack
-    Condition: UseCanaryDeployment
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
@@ -2383,7 +2372,10 @@ Resources:
         GreenTargetGroupName: !GetAtt ApplicationLoadBalancerTargetGroupGreen.TargetGroupName
         LoadBalancerListenerARN: !Ref ApplicationLoadBalancerListenerHTTPS
         ECSServiceTaskDefinition: !Ref TaskDefinition
-        DeploymentStrategy: CodeDeployDefault.ECSLinear10PercentEvery3Minutes
+        DeploymentStrategy: !If
+          - UseCanaryDeployment
+          - "CodeDeployDefault.ECSLinear10PercentEvery3Minutes"
+          - "CodeDeployDefault.ECSAllAtOnce"
         ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
         ContainerPort: !Ref ContainerPort
         CloudWatchAlarms: !Sub
