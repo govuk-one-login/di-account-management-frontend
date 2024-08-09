@@ -12,6 +12,7 @@ import { getLastNDigits } from "../../utils/phone-number";
 import { UpdateInformationInput } from "../../utils/types";
 import { supportChangeMfa } from "../../config";
 import { generateSessionDetails } from "../common/mfa";
+import { getApiClient } from "../../utils/mfa";
 import {
   Intent,
   INTENT_ADD_MFA_METHOD,
@@ -50,6 +51,7 @@ export function checkYourPhonePost(
         updateInput,
         sessionDetails,
         req,
+        res,
         service,
         res.locals.trace
       );
@@ -80,6 +82,7 @@ async function handleMfaChange(
   updateInput: UpdateInformationInput,
   sessionDetails: any,
   req: Request,
+  res: Response,
   service: CheckYourPhoneServiceInterface,
   trace: string
 ): Promise<boolean> {
@@ -93,14 +96,7 @@ async function handleMfaChange(
       trace
     );
   } else if (intent === INTENT_ADD_MFA_METHOD) {
-    return handleAddMfaMethod(
-      newPhoneNumber,
-      updateInput,
-      sessionDetails,
-      req,
-      service,
-      trace
-    );
+    return handleAddMfaMethod(newPhoneNumber, req, res, trace);
   } else {
     logger.error({ err: `Unknown phone verification intent ${intent}`, trace });
   }
@@ -134,12 +130,11 @@ async function handleChangePhoneNumber(
 
 async function handleAddMfaMethod(
   newPhoneNumber: string,
-  updateInput: UpdateInformationInput,
-  sessionDetails: any,
   req: Request,
-  service: CheckYourPhoneServiceInterface,
+  res: Response,
   trace: string
 ): Promise<boolean> {
+  const client = getApiClient(req, res);
   const smsMFAMethod = req.session.mfaMethods.find(
     (mfa) => mfa.priorityIdentifier === "DEFAULT"
   );
@@ -151,20 +146,19 @@ async function handleAddMfaMethod(
     return false;
   }
   try {
-    smsMFAMethod.method.endPoint = newPhoneNumber;
-    updateInput.credential = "no-credentials";
-    updateInput.mfaMethod = {
-      ...smsMFAMethod,
-      mfaIdentifier: smsMFAMethod.mfaIdentifier + 1,
-      priorityIdentifier: "BACKUP",
-      method: {
+    console.log("creating");
+    const response = await client.mfaMethodCreate({
+      credential: "no-credentials",
+      email: "",
+      otp: "",
+      mfaMethod: {
+        priorityIdentifier: "BACKUP",
         mfaMethodType:
           smsMFAMethod.method.mfaMethodType === "SMS" ? "AUTH_APP" : "SMS",
         endPoint: newPhoneNumber,
       },
-      methodVerified: true,
-    };
-    return await service.addMfaMethodService(updateInput, sessionDetails);
+    });
+    return response.status === 200;
   } catch (error) {
     logger.error({
       err: `No existing MFA method in handleAddMfaMethod: ${error.message} `,

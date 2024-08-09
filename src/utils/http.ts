@@ -102,6 +102,8 @@ export class Http {
   private static handleError(error: AxiosError) {
     let apiError: ApiError;
 
+    console.log(error);
+
     if (error.response && error.response.data) {
       apiError = new ApiError(
         error.message,
