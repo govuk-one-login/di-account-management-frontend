@@ -2,7 +2,7 @@ import express from "express";
 import * as nunjucks from "nunjucks";
 import { Environment } from "nunjucks";
 import i18next, { TFunction } from "i18next";
-import { PATH_DATA } from "../app.constants";
+import { LOCALE, PATH_DATA } from "../app.constants";
 import addLanguageParam from "@govuk-one-login/frontend-language-toggle";
 import { safeTranslate } from "../utils/safeTranslate";
 
@@ -17,10 +17,12 @@ export function configureNunjucks(
   });
 
   nunjucksEnv.addFilter("translate", function (key: string, options?: any) {
-    const translate: TFunction<"translation", undefined> = i18next.getFixedT(
-      this.ctx.i18n.language
-    );
-    return safeTranslate(translate, key, this.ctx.i18n.language, options);
+    const currentLanguage = this.ctx?.i18n?.language
+      ? this.ctx.i18n.language
+      : LOCALE.EN;
+    const translate: TFunction<"translation", undefined> =
+      i18next.getFixedT(currentLanguage);
+    return safeTranslate(translate, key, currentLanguage, options);
   });
 
   nunjucksEnv.addGlobal("addLanguageParam", addLanguageParam);
