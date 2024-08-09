@@ -101,8 +101,8 @@
       "content": {
         "paragraph1": "Os ydych wedi teipio’r cyfeiriad gwe, edrychwch i weld ei fod yn gywir.",
         "paragraph2": "Os ydych wedi gludo’r cyfeiriad gwe, edrychwch i weld eich bod wedi copïo’r cyfeiriad cyfan.",
-        "signInUserButtonText": "Ewch i'ch GOV.UK One Login",
-        "signOutUserButtonText": "Mewngofnodi i GOV.UK One Login"
+        "govUKHomepageButtonHref": "https://www.gov.uk/",
+        "govUKHomepageButtonText": "Ewch i hafan GOV.UK"
       }
     },
     "error500": {

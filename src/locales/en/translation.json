@@ -101,8 +101,8 @@
       "content": {
         "paragraph1": "If you typed the web address, check it is correct.",
         "paragraph2": "If you pasted the web address, check you copied the entire address.",
-        "signInUserButtonText": "Go to your GOV.UK One Login",
-        "signOutUserButtonText": "Sign in to GOV.UK One Login"
+        "govUKHomepageButtonHref": "https://www.gov.uk/",
+        "govUKHomepageButtonText": "Go to the GOV.UK homepage"
       }
     },
     "error500": {
