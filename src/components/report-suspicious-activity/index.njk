@@ -41,5 +41,6 @@
         "preventDoubleClick": true
       }) }}
     </form>
-{% endif %}
+  {% endif %}
+  {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"activity", contentId:"0252c1d4-c233-48c1-bf4b-a5b124ed8ec2",loggedInStatus:true,dynamic:true})}}
 {% endblock %}
