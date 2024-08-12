@@ -32,7 +32,8 @@ export function renderBadRequest(
   res: Response,
   req: Request,
   template: string,
-  errors: { [k: string]: Error }
+  errors: { [k: string]: Error },
+  options?: object
 ): void {
   res.status(HTTP_STATUS_CODES.BAD_REQUEST);
 
@@ -40,6 +41,7 @@ export function renderBadRequest(
     errors,
     errorList: generateErrorList(errors),
     ...req.body,
+    ...options,
     language: req.i18n.language,
   });
 }

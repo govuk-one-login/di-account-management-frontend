@@ -197,7 +197,7 @@
       "backLinkText": "Back to security"
     },
     "addMfaMethod": {
-      "title": "Add another way to get security codes",
+      "title": "Choose a back-up method",
       "sms": {
         "title": "Backup phone number",
         "hint": "Get a text message to a different mobile phone"
@@ -219,6 +219,9 @@
           "message": "You can get security codes by text message as you back-up method",
           "button": "Add a mobile phone number"
         }
+      },
+      "errors": {
+        "required": "Select a way to get security codes"
       }
     },
     "addMfaMethodApp": {

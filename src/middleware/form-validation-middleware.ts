@@ -20,14 +20,14 @@ export function validationErrorFormatter(error: ValidationError): Error {
   }
 }
 
-export function validateBodyMiddleware(template: string) {
+export function validateBodyMiddleware(template: string, options?: object) {
   return (req: Request, res: Response, next: NextFunction): any => {
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)
       .mapped();
 
     if (!isObjectEmpty(errors)) {
-      return renderBadRequest(res, req, template, errors);
+      return renderBadRequest(res, req, template, errors, options);
     }
     next();
   };
