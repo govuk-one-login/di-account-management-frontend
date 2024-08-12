@@ -95,7 +95,7 @@
     "@types/express-session": "^1.18.0",
     "@types/i18next-fs-backend": "^1.1.5",
     "@types/mocha": "^10.0.7",
-    "@types/node": "^22.1.0",
+    "@types/node": "^22.2.0",
     "@types/nunjucks": "^3.2.6",
     "@types/qrcode": "^1.5.5",
     "@types/sinon": "^17.0.3",
@@ -116,7 +116,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "husky": "^9.1.4",
     "lint-staged": "^15.2.8",
-    "mocha": "10.7.0",
+    "mocha": "10.7.3",
     "nock": "^13.5.4",
     "nodemon": "3.1.4",
     "nyc": "^17.0.0",
@@ -127,7 +127,7 @@
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
-    "uglify-js": "^3.19.1"
+    "uglify-js": "^3.19.2"
   },
   "resolutions": {
     "minimist": "1.2.6",
