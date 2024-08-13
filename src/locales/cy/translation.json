@@ -863,9 +863,15 @@
       },
       "sqae3L7gOdizeRqFMw_KCDlhcyg": {
         "header": "Repay and manage benefit money you owe",
-        "description": "Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych.",
+        "description": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych.",
         "link_text": "Go to your repay and manage benefit money you owe account",
-        "link_href": "https://idt-rmd-stub.idt.pdu-dev.hcs-eks.dwpcloud.uk/landing?source=your-services"
+        "link_href": "https://repay-my-debt.services.aks-test-ext.np.az.dwpcloud.uk/oidv-sign-in"
+      },
+      "RtE7mP5yzCrdthst1kuVHS1SsSw": {
+        "header": "Repay and manage benefit money you owe",
+        "description": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych.",
+        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_href": "https://repay-my-debt.services.aks-test-ext.np.az.dwpcloud.uk/oidv-sign-in"
       },
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
         "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
