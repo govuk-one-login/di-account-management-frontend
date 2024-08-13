@@ -15,6 +15,7 @@ enum UserJourney {
   AddMfaMethod = "addMfaMethod",
   RemoveMfaMethod = "removeMfaMethod",
   SwitchBackupMethod = "switchBackupMethod",
+  ChangeDefaultMethod = "changeDefaultMethod",
 }
 
 enum EventType {

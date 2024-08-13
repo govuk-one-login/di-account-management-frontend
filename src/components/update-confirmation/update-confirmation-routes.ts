@@ -61,7 +61,7 @@ router.get(
 );
 
 router.get(
-  PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url,
+  PATH_DATA.SWITCH_BACKUP_METHOD_CONFIRMATION.url,
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,

@@ -18,7 +18,7 @@
         <p class="govuk-body">{{ 'pages.changeDefaultMethod.newBackupSms' | translate | safe | replace("[phoneNumber]", currentDefault.phoneNumber) }}</p>
     {% endif %}
 
-    <form action="{{ 'CHANGE_DEFAULT_METHOD' | getPath }}" method="post">
+    <form action="{{ 'SWITCH_BACKUP_METHOD' | getPath }}" method="post">
         <input type='hidden' name='_csrf' value="{{csrfToken}}" />
         <input type='hidden' name='newBackup' value="{{currentDefault.mfaIdentifier}}" />
         <input type='hidden' name='newDefault' value="{{currentBackup.mfaIdentifier}}" />

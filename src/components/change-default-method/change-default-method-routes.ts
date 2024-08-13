@@ -11,7 +11,7 @@ import { validateStateMiddleware } from "../../middleware/validate-state-middlew
 const router = express.Router();
 
 router.get(
-  PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+  PATH_DATA.SWITCH_BACKUP_METHOD.url,
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
@@ -19,7 +19,7 @@ router.get(
 );
 
 router.post(
-  PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+  PATH_DATA.SWITCH_BACKUP_METHOD.url,
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,

@@ -89,5 +89,5 @@ export async function changeDefaultMfaMethodPost(
 
   req.session.newDefaultMfaMethodId = newDefaultMethod.mfaIdentifier;
 
-  res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
+  res.redirect(PATH_DATA.SWITCH_BACKUP_METHOD_CONFIRMATION.url);
 }
