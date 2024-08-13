@@ -66,6 +66,16 @@ export const PATH_DATA: {
     type: UserJourney.SwitchBackupMethod,
     event: EventType.Confirmation,
   },
+  CHANGE_DEFAULT_METHOD: {
+    url: "/change-default-method",
+    type: UserJourney.ChangeDefaultMethod,
+    event: EventType.ValueUpdated,
+  },
+  CHANGE_DEFAULT_METHOD_CONFIRMATION: {
+    url: "/change-default-method-confirmation",
+    type: UserJourney.ChangeDefaultMethod,
+    event: EventType.Confirmation,
+  },
   REQUEST_NEW_CODE_EMAIL: {
     url: "/request-new-email-code",
     event: EventType.ResendCode,
