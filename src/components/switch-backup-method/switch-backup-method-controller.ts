@@ -6,7 +6,7 @@ import { changeDefaultMfaMethod } from "../../utils/mfa";
 import { generateSessionDetails } from "../common/mfa";
 import { logger } from "../../utils/logger";
 
-export async function changeDefaultMfaMethodGet(
+export async function switchBackupMfaMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
@@ -44,7 +44,7 @@ export async function changeDefaultMfaMethodGet(
     );
   }
 
-  res.render("change-default-method/index.njk", {
+  res.render("switch-backup-method/index.njk", {
     currentBackup: {
       ...currentBackupMethod,
       phoneNumber: currentBackupPhoneNumber,
@@ -56,7 +56,7 @@ export async function changeDefaultMfaMethodGet(
   });
 }
 
-export async function changeDefaultMfaMethodPost(
+export async function switchBackupMfaMethodPost(
   req: Request,
   res: Response
 ): Promise<void> {

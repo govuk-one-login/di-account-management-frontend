@@ -2,9 +2,9 @@ import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import {
-  changeDefaultMfaMethodGet,
-  changeDefaultMfaMethodPost,
-} from "./change-default-method-controller";
+  switchBackupMfaMethodGet,
+  switchBackupMfaMethodPost,
+} from "./switch-backup-method-controller";
 import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 
@@ -15,7 +15,7 @@ router.get(
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
-  changeDefaultMfaMethodGet
+  switchBackupMfaMethodGet
 );
 
 router.post(
@@ -23,7 +23,7 @@ router.post(
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
-  changeDefaultMfaMethodPost
+  switchBackupMfaMethodPost
 );
 
-export { router as changeDefaultMethodRouter };
+export { router as switchBackupMethodRouter };

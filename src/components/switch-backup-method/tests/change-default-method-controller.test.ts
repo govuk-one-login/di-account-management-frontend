@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 
-import { changeDefaultMfaMethodPost } from "../change-default-method-controller";
+import { switchBackupMfaMethodPost } from "../switch-backup-method-controller";
 import * as mfa from "../../../utils/mfa";
 import * as mfaCommon from "../../common/mfa";
 import { UpdateInformationSessionValues } from "../../../utils/types";
@@ -59,7 +59,7 @@ describe("change default method", () => {
     const res = generateResponse();
 
     //@ts-expect-error req and res aren't valid objects since they are mocked
-    await changeDefaultMfaMethodPost(req as Request, res as Response);
+    await switchBackupMfaMethodPost(req as Request, res as Response);
 
     expect(changeFn).to.be.calledWith(1);
     expect(redirectFn).to.be.calledWith("/switch-method-confirm");
