@@ -65,6 +65,18 @@ describe("change default method controller", () => {
         phoneNumber: "5678",
       });
     });
+
+    it("should return 404 if there is no default method", async () => {
+      //@ts-expect-error in test
+      req.session = { mfaMethods: [] };
+
+      changeDefaultMethodGet(
+        req as unknown as Request,
+        res as unknown as Response
+      );
+
+      expect(res.status).to.be.calledWith(404);
+    });
   });
 
   describe("changeDefaultMethodMfaPost", async () => {
@@ -81,6 +93,61 @@ describe("change default method controller", () => {
 
       expect(res.redirect).to.be.calledWith(
         PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
+      );
+    });
+
+    it("should return error if there is no code entered", async () => {
+      //@ts-expect-error in test
+      req.body.code = null;
+      const next = sinon.spy();
+      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+
+      await changeDefaultMethodAppPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        next
+      );
+
+      expect(res.render).to.be.calledWithMatch(
+        "change-default-method/change-to-app.njk",
+        sinon.match.hasNested("errors.code.href", "#code")
+      );
+    });
+
+    it("should return an erorr if the code is less than 6 chars", async () => {
+      //@ts-expect-error in test
+      req.body.code = "1234";
+      const next = sinon.spy();
+      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+
+      await changeDefaultMethodAppPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        next
+      );
+
+      expect(res.render).to.be.calledWithMatch(
+        "change-default-method/change-to-app.njk",
+        sinon.match.hasNested("errors.code.href", "#code")
+      );
+    });
+
+    it("should return an erorr if the code is entered wrong", async () => {
+      const next = sinon.spy();
+      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", () => false);
+
+      await changeDefaultMethodAppPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        next
+      );
+
+      expect(res.render).to.be.calledWithMatch(
+        "change-default-method/change-to-app.njk",
+        sinon.match.hasNested("errors.code.href", "#code")
       );
     });
   });
