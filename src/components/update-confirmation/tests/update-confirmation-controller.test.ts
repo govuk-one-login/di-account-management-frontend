@@ -148,4 +148,12 @@ describe("addMfaMethodAppConfirmationGet", () => {
       }
     );
   });
+
+  it("should throw 404 if there is no default method", () => {
+    req.session = {
+      mfaMethods: [],
+    };
+    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+    expect(res.status).to.be.calledWith(404);
+  });
 });
