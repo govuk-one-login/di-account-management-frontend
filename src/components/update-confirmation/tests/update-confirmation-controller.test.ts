@@ -11,12 +11,13 @@ import {
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
   updateAuthenticatorAppConfirmationGet,
+  changeDefaultMethodConfirmationGet,
 } from "../update-confirmation-controller";
 import { PATH_DATA } from "../../../app.constants";
 
 describe("update confirmation controller", () => {
   let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request>;
+  let req: any;
   let res: any;
 
   beforeEach(() => {
@@ -84,7 +85,7 @@ describe("update confirmation controller", () => {
 
 describe("addMfaMethodAppConfirmationGet", () => {
   let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request>;
+  let req: any;
   let res: Partial<Response>;
 
   beforeEach(() => {
@@ -117,6 +118,32 @@ describe("addMfaMethodAppConfirmationGet", () => {
         heading: "pages.confirmAddMfaMethod.heading",
         message: "pages.confirmAddMfaMethod.message",
         backLinkText: "pages.confirmAddMfaMethod.backLinkText",
+        backLink: PATH_DATA.SECURITY.url,
+      }
+    );
+  });
+
+  it.only("should render change default app confimration page", () => {
+    req.session = {
+      mfaMethods: [
+        {
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "AUTH_APP",
+            endPoint: "12345678",
+          },
+        },
+      ],
+    };
+    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).to.be.calledWith(
+      "common/confirmation-page/confirmation.njk",
+      {
+        pageTitleName: "pages.changeDefaultMethod.confirmation.title",
+        heading: "pages.changeDefaultMethod.confirmation.heading",
+        message: "pages.changeDefaultMethod.confirmation.app",
+        backLinkText: "pages.changeDefaultMethod.confirmation.back",
         backLink: PATH_DATA.SECURITY.url,
       }
     );
