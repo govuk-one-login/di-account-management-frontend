@@ -1,21 +1,21 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% block pageContent %}
-    <h1 class="govuk-heading-xl">{{ 'pages.changeDefaultMethod.title' | translate }}</h1>
+    <h1 class="govuk-heading-xl">{{ 'pages.switchBackupMethod.title' | translate }}</h1>
     {% if currentBackup.method.mfaMethodType == "AUTH_APP" %}
-        <p class='govuk-body'>{{ 'pages.changeDefaultMethod.newDefaultApp' | translate }}</p>
+        <p class='govuk-body'>{{ 'pages.switchBackupMethod.newDefaultApp' | translate }}</p>
     {% endif %}
 
     {% if currentBackup.method.mfaMethodType == "SMS" %}
-        <p class='govuk-body'>{{ 'pages.changeDefaultMethod.newDefaultSms' | translate | safe | replace("[phoneNumber]", currentBackup.phoneNumber) }}</p>
+        <p class='govuk-body'>{{ 'pages.switchBackupMethod.newDefaultSms' | translate | safe | replace("[phoneNumber]", currentBackup.phoneNumber) }}</p>
     {% endif %}
 
     {% if currentDefault.method.mfaMethodType == "AUTH_APP" %}
-        <p class='govuk-body'>{{ 'pages.changeDefaultMethod.newBackupApp' | translate }}</p>
+        <p class='govuk-body'>{{ 'pages.switchBackupMethod.newBackupApp' | translate }}</p>
     {% endif %}
 
     {% if currentDefault.method.mfaMethodType == "SMS"%}
-        <p class="govuk-body">{{ 'pages.changeDefaultMethod.newBackupSms' | translate | safe | replace("[phoneNumber]", currentDefault.phoneNumber) }}</p>
+        <p class="govuk-body">{{ 'pages.switchBackupMethod.newBackupSms' | translate | safe | replace("[phoneNumber]", currentDefault.phoneNumber) }}</p>
     {% endif %}
 
     <form action="{{ 'SWITCH_BACKUP_METHOD' | getPath }}" method="post">
@@ -23,7 +23,7 @@
         <input type='hidden' name='newBackup' value="{{currentDefault.mfaIdentifier}}" />
         <input type='hidden' name='newDefault' value="{{currentBackup.mfaIdentifier}}" />
         {{ govukButton({
-          "text": button_text|default('pages.changeDefaultMethod.button' | translate, true),
+          "text": button_text|default('pages.switchBackupMethod.button' | translate, true),
           "type": "Submit",
           "preventDoubleClick": true
         }) }}

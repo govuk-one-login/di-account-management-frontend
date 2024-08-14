@@ -69,6 +69,7 @@ import { safeTranslate } from "./utils/safeTranslate";
 import { addMfaMethodSmsRouter } from "./components/add-mfa-method-sms/add-mfa-method-sms-routes";
 import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa-method-routes";
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method";
+import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -192,6 +193,7 @@ async function createApp(): Promise<express.Application> {
     app.use(deleteMfaMethodRouter);
     app.use(switchBackupMethodRouter);
     app.use(changeAuthenticatorAppRouter);
+    app.use(changeDefaultMethodRouter);
   }
   app.use(trackAndRedirectRouter);
 

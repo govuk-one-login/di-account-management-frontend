@@ -71,6 +71,11 @@ export const PATH_DATA: {
     type: UserJourney.ChangeDefaultMethod,
     event: EventType.ValueUpdated,
   },
+  CHANGE_DEFAULT_METHOD_APP: {
+    url: "/change-default-method-app",
+    type: UserJourney.ChangeDefaultMethod,
+    event: EventType.ValueUpdated,
+  },
   CHANGE_DEFAULT_METHOD_CONFIRMATION: {
     url: "/change-default-method-confirmation",
     type: UserJourney.ChangeDefaultMethod,

@@ -176,15 +176,42 @@ export async function changeDefaultMfaMethodConfirmationGet(
 
   const message = phoneNumber
     ? req
-        .t("pages.changeDefaultMethod.confirm.messageSms")
+        .t("pages.switchBackupMethod.confirm.messageSms")
         .replace("[phoneNumber]", phoneNumber)
-    : req.t("pages.changeDefaultMethod.confirm.messageApp");
+    : req.t("pages.switchBackupMethod.confirm.messageApp");
 
   return res.render("common/confirmation-page/confirmation.njk", {
-    pageTitleName: req.t("pages.changeDefaultMethod.confirm.title"),
-    heading: req.t("pages.changeDefaultMethod.confirm.heading"),
+    pageTitleName: req.t("pages.switchBackupMethod.confirm.title"),
+    heading: req.t("pages.switchBackupMethod.confirm.heading"),
     message: message,
-    backLinkText: req.t("pages.changeDefaultMethod.confirm.backLinkText"),
+    backLinkText: req.t("pages.switchBackupMethod.confirm.backLinkText"),
+    backLink: PATH_DATA.SECURITY.url,
+  });
+}
+
+export async function changeDefaultMethodConfirmationGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const defaultMethod = req.session.mfaMethods.find(
+    (m) => m.priorityIdentifier === "DEFAULT"
+  );
+
+  if (!defaultMethod) {
+    res.status(HTTP_STATUS_CODES.NOT_FOUND);
+    return;
+  }
+
+  const message =
+    defaultMethod.method.mfaMethodType === "AUTH_APP"
+      ? req.t("pages.changeDefaultMethod.confirmation.app")
+      : "";
+
+  return res.render("common/confirmation-page/confirmation.njk", {
+    pageTitleName: req.t("pages.changeDefaultMethod.confirmation.title"),
+    heading: req.t("pages.changeDefaultMethod.confirmation.heading"),
+    message,
+    backLinkText: req.t("pages.changeDefaultMethod.confirmation.back"),
     backLink: PATH_DATA.SECURITY.url,
   });
 }

@@ -1,0 +1,11 @@
+{% extends "common/layout/base-page.njk" %}
+
+{% block pageContent %}
+        <h1 class="govuk-heading-l">{{ "pages.changeDefaultMethod.title" | translate }}</h1>
+
+        {% if currentMethodType == "SMS" %}
+          <p class="govuk-body">{{ "pages.changeDefaultMethod.currentIsPhone" | translate | safe | replace("[phoneNumber]", phoneNumber) }}</p>
+          <p class="govuk-body">{{ "pages.changeDefaultMethod.switchToApp" | translate }}</p>
+          <a href='{{ "CHANGE_DEFAULT_METHOD_APP" | getPath }}' class="govuk-button" data-module="govuk-button">{{ "pages.changeDefaultMethod.setUpAppButton" | translate }}</a>
+        {% endif %}
+    </form>{% endblock pageContent %}

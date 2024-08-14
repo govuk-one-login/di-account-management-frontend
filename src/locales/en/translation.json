@@ -410,6 +410,10 @@
         "header": "Enter your password",
         "paragraph": "We need to make sure it's you before you can manage how you get security codes"
       },
+      "changeDefaultMethod": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it's you before you can manage how you get security codes"
+      },
       "cancelText": "Cancel and go back to Security"
     },
     "changeEmail": {
@@ -537,6 +541,19 @@
         }
       }
     },
+    "changeDefaultMethod": {
+      "title": "Use a different default method",
+      "currentIsPhone": "Your default method for getting security codes is currently by text message to your phone number ending with <strong>[phoneNumber]</strong>",
+      "switchToApp": "You can use an authenticator app instead",
+      "setUpAppButton": "Set up an authenticator app",
+      "cancelButton": "Cancel and go back to Security",
+      "confirmation": {
+        "title": "Change default method",
+        "heading": "You've changed your default method for getting security codes",
+        "app": "Your default method for getting security codes is now your authenticator app",
+        "back": "Back to Security"
+      }
+    },
     "deleteAccount": {
       "title": "Are you sure you want to delete your GOV.UK One Login?",
       "header": "Are you sure you want to delete your GOV.UK One Login?",
@@ -601,7 +618,7 @@
         "paragraph": "Your email might take a few minutes to arrive. If you do not get an email, check your spam folder."
       }
     },
-    "changeDefaultMethod": {
+    "switchBackupMethod": {
       "title": "Switch your back-up and default methods",
       "newDefaultApp": "Your default method for getting secrity codes will be using your authenticator app.",
       "newDefaultSms": "Your default method for getting security codes will be text message to your phone number ending in <strong>[phoneNumber]</strong>",

@@ -10,6 +10,7 @@ import {
   updatePhoneNumberConfirmationGet,
   removeMfaMethodConfirmationGet,
   changeDefaultMfaMethodConfirmationGet,
+  changeDefaultMethodConfirmationGet,
 } from "./update-confirmation-controller";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
@@ -66,6 +67,14 @@ router.get(
   selectMfaMiddleware(),
   validateStateMiddleware,
   changeDefaultMfaMethodConfirmationGet
+);
+
+router.get(
+  PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url,
+  requiresAuthMiddleware,
+  selectMfaMiddleware(),
+  validateStateMiddleware,
+  changeDefaultMethodConfirmationGet
 );
 
 export { router as updateConfirmationRouter };
