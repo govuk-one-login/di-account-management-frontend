@@ -42,7 +42,7 @@ describe("change default method controller", () => {
     sandbox.restore();
   });
 
-  describe.only("changeDefaultMethodGet", async () => {
+  describe("changeDefaultMethodGet", async () => {
     it("should correctly render the page", async () => {
       //@ts-expect-error in test
       req.session = {
