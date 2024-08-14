@@ -6,7 +6,7 @@ import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 import {
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
