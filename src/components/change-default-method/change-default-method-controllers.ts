@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { getLastNDigits } from "../../utils/phone-number";
-import { renderMfaMethodPage } from "../common/mfa";
+import { generateSessionDetails, renderMfaMethodPage } from "../common/mfa";
 import { updateMfaMethod, verifyMfaCode } from "../../utils/mfa";
 import { EventType, getNextState } from "../../utils/state-machine";
 import assert from "node:assert";
 import { formatValidationError } from "../../utils/validation";
 import { PATH_DATA } from "../../app.constants";
+import { UpdateInformationInput } from "../../utils/types";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 
@@ -91,7 +92,20 @@ export async function changeDefaultMethodAppPost(
     );
   }
 
-  //TODO make the API call
+  const updateInput: UpdateInformationInput = {
+    otp: code,
+    credential: authAppSecret,
+    mfaMethod: {
+      priorityIdentifier: "DEFAULT",
+      method: {
+        mfaMethodType: "AUTH_APP",
+      },
+    },
+    email: "",
+  };
+
+  const sessionDetails = await generateSessionDetails(req, res);
+  await updateMfaMethod(updateInput, sessionDetails);
 
   req.session.user.state.changeDefaultMethod = getNextState(
     req.session.user.state.changeDefaultMethod.value,
