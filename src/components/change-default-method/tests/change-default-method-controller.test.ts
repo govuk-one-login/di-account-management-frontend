@@ -4,7 +4,10 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 
-import { changeDefaultMethodAppPost } from "../change-default-method-controllers";
+import {
+  changeDefaultMethodAppPost,
+  changeDefaultMethodGet,
+} from "../change-default-method-controllers";
 import {
   RequestBuilder,
   ResponseBuilder,
@@ -15,7 +18,7 @@ import { PATH_DATA } from "../../../app.constants";
 
 describe("change default method controller", () => {
   let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request>;
+  let req: object;
   let res: Partial<Response>;
 
   beforeEach(() => {
@@ -37,6 +40,31 @@ describe("change default method controller", () => {
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  describe.only("changeDefaultMethodGet", async () => {
+    it("should correctly render the page", async () => {
+      //@ts-expect-error in test
+      req.session = {
+        mfaMethods: [
+          {
+            priorityIdentifier: "DEFAULT",
+            method: {
+              mfaMethodType: "SMS",
+              endPoint: "12345678",
+            },
+          },
+        ],
+      };
+      changeDefaultMethodGet(
+        req as unknown as Request,
+        res as unknown as Response
+      );
+      expect(res.render).to.be.calledWith("change-default-method/index.njk", {
+        currentMethodType: "SMS",
+        phoneNumber: "5678",
+      });
+    });
   });
 
   describe("changeDefaultMethodMfaPost", async () => {
