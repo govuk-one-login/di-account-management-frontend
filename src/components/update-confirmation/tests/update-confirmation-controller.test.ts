@@ -149,6 +149,32 @@ describe("addMfaMethodAppConfirmationGet", () => {
     );
   });
 
+  it("should render change default app confimration page", () => {
+    req.session = {
+      mfaMethods: [
+        {
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "SMS",
+            endPoint: "12345678",
+          },
+        },
+      ],
+    };
+    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).to.be.calledWith(
+      "common/confirmation-page/confirmation.njk",
+      {
+        pageTitleName: "pages.changeDefaultMethod.confirmation.title",
+        heading: "pages.changeDefaultMethod.confirmation.heading",
+        message: "",
+        backLinkText: "pages.changeDefaultMethod.confirmation.back",
+        backLink: PATH_DATA.SECURITY.url,
+      }
+    );
+  });
+
   it("should throw 404 if there is no default method", () => {
     req.session = {
       mfaMethods: [],
