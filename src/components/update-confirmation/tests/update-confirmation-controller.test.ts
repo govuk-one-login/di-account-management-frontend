@@ -123,7 +123,7 @@ describe("addMfaMethodAppConfirmationGet", () => {
     );
   });
 
-  it.only("should render change default app confimration page", () => {
+  it("should render change default app confimration page", () => {
     req.session = {
       mfaMethods: [
         {
