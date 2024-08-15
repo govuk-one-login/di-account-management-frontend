@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { getLastNDigits } from "../../utils/phone-number";
-import { generateSessionDetails, renderMfaMethodPage } from "../common/mfa";
+import {
+  generateSessionDetails,
+  handleMfaMethodPage,
+  renderMfaMethodPage,
+} from "../common/mfa";
 import { updateMfaMethod, verifyMfaCode } from "../../utils/mfa";
 import { EventType, getNextState } from "../../utils/state-machine";
 import assert from "node:assert";
@@ -47,70 +51,29 @@ export async function changeDefaultMethodAppPost(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const { code, authAppSecret } = req.body;
+  return handleMfaMethodPage(ADD_APP_TEMPLATE, req, res, next, async () => {
+    const { code, authAppSecret } = req.body;
 
-  assert(authAppSecret, "authAppSecret not set in body");
-
-  if (!code) {
-    return renderMfaMethodPage(
-      ADD_APP_TEMPLATE,
-      req,
-      res,
-      next,
-      formatValidationError(
-        "code",
-        req.t("pages.addMfaMethodApp.errors.required")
-      )
-    );
-  }
-
-  if (code.length !== 6) {
-    return renderMfaMethodPage(
-      ADD_APP_TEMPLATE,
-      req,
-      res,
-      next,
-      formatValidationError(
-        "code",
-        req.t("pages.addMfaMethodApp.errors.maxLength")
-      )
-    );
-  }
-
-  const isValid = verifyMfaCode(authAppSecret, code);
-
-  if (!isValid) {
-    return renderMfaMethodPage(
-      ADD_APP_TEMPLATE,
-      req,
-      res,
-      next,
-      formatValidationError(
-        "code",
-        req.t("pages.addMfaMethodApp.errors.invalidCode")
-      )
-    );
-  }
-
-  const updateInput: UpdateInformationInput = {
-    otp: code,
-    credential: authAppSecret,
-    mfaMethod: {
-      priorityIdentifier: "DEFAULT",
-      method: {
-        mfaMethodType: "AUTH_APP",
+    const updateInput: UpdateInformationInput = {
+      otp: code,
+      credential: authAppSecret,
+      mfaMethod: {
+        priorityIdentifier: "DEFAULT",
+        method: {
+          mfaMethodType: "AUTH_APP",
+        },
       },
-    },
-    email: "",
-  };
+      email: "",
+    };
 
-  const sessionDetails = await generateSessionDetails(req, res);
-  await updateMfaMethod(updateInput, sessionDetails);
+    const sessionDetails = await generateSessionDetails(req, res);
+    await updateMfaMethod(updateInput, sessionDetails);
 
-  req.session.user.state.changeDefaultMethod = getNextState(
-    req.session.user.state.changeDefaultMethod.value,
-    EventType.ValueUpdated
-  );
+    req.session.user.state.changeDefaultMethod = getNextState(
+      req.session.user.state.changeDefaultMethod.value,
+      EventType.ValueUpdated
+    );
 
-  res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
+    res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
+  });
 }

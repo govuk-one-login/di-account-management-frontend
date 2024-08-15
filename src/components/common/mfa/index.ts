@@ -4,7 +4,11 @@ import {
   generateErrorList,
 } from "../../../utils/validation";
 import assert from "node:assert";
-import { generateMfaSecret, generateQRCodeValue } from "../../../utils/mfa";
+import {
+  generateMfaSecret,
+  generateQRCodeValue,
+  verifyMfaCode,
+} from "../../../utils/mfa";
 import QRCode from "qrcode";
 import { splitSecretKeyIntoFragments } from "../../../utils/strings";
 import { UpdateInformationSessionValues } from "../../../utils/types";
@@ -41,6 +45,61 @@ export async function renderMfaMethodPage(
     req.log.error(e);
     return next(e);
   }
+}
+
+export async function handleMfaMethodPage(
+  templateFile: string,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  onSuccess: () => any
+): Promise<void> {
+  const { code, authAppSecret } = req.body;
+
+  assert(authAppSecret, "authAppSecret not set in body");
+
+  if (!code) {
+    return renderMfaMethodPage(
+      templateFile,
+      req,
+      res,
+      next,
+      formatValidationError(
+        "code",
+        req.t("pages.addMfaMethodApp.errors.required")
+      )
+    );
+  }
+
+  if (code.length !== 6) {
+    return renderMfaMethodPage(
+      templateFile,
+      req,
+      res,
+      next,
+      formatValidationError(
+        "code",
+        req.t("pages.addMfaMethodApp.errors.maxLength")
+      )
+    );
+  }
+
+  const isValid = verifyMfaCode(authAppSecret, code);
+
+  if (!isValid) {
+    return renderMfaMethodPage(
+      templateFile,
+      req,
+      res,
+      next,
+      formatValidationError(
+        "code",
+        req.t("pages.addMfaMethodApp.errors.invalidCode")
+      )
+    );
+  }
+
+  return onSuccess();
 }
 
 export async function generateSessionDetails(
