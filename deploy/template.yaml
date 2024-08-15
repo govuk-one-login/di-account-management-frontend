@@ -2120,7 +2120,6 @@ Resources:
             HeaderBehavior: whitelist
             Headers:
               - CloudFront-Viewer-Country
-              - CloudFront-Viewer-JA3-Fingerprint
           QueryStringsConfig:
             QueryStringBehavior: none
           EnableAcceptEncodingBrotli: true
