@@ -5,10 +5,8 @@ import {
   handleMfaMethodPage,
   renderMfaMethodPage,
 } from "../common/mfa";
-import { updateMfaMethod, verifyMfaCode } from "../../utils/mfa";
+import { updateMfaMethod } from "../../utils/mfa";
 import { EventType, getNextState } from "../../utils/state-machine";
-import assert from "node:assert";
-import { formatValidationError } from "../../utils/validation";
 import { PATH_DATA } from "../../app.constants";
 import { UpdateInformationInput } from "../../utils/types";
 
