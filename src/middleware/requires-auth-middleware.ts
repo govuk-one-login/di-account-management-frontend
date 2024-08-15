@@ -23,6 +23,7 @@ export function requiresAuthMiddleware(
   } else if (!isAuthenticated) {
     return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
   } else {
+    res.locals.isUserLoggedIn = true;
     res.cookie("lo", "false");
     next();
   }

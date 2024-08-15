@@ -167,8 +167,8 @@ async function createApp(): Promise<express.Application> {
   app.use(oidcAuthCallbackRouter);
   app.use(startRouter);
   app.use(logoutRouter);
-  app.use(enterPasswordRouter);
   app.use(isUserLoggedInMiddleware);
+  app.use(enterPasswordRouter);
   app.use(changeEmailRouter);
   app.use(updateConfirmationRouter);
   app.use(changePasswordRouter);
