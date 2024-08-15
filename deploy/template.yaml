@@ -2114,7 +2114,10 @@ Resources:
           CookiesConfig:
             CookieBehavior: none
           HeadersConfig:
-            HeaderBehavior: none
+            HeaderBehavior: whitelist
+            Headers:
+              - CloudFront-Viewer-Country
+              - Cloudfront-viewer-ja3-fingerprint
           QueryStringsConfig:
             QueryStringBehavior: none
           EnableAcceptEncodingBrotli: true
