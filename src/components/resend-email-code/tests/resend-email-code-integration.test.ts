@@ -10,7 +10,7 @@ import {
 } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 import { expect } from "chai";
 

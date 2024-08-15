@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-
-const createDOMPurify = require("dompurify");
-const { JSDOM } = require("jsdom");
+import { JSDOM } from "jsdom";
+import DOMPurify from "dompurify";
 
 const window = new JSDOM("").window;
-const DOMPurify = createDOMPurify(window);
+const purify = DOMPurify(window);
 
 export function sanitizeRequestMiddleware(
   req: Request,
@@ -13,9 +12,11 @@ export function sanitizeRequestMiddleware(
 ): void {
   if (req.body) {
     Object.keys(req.body).forEach((formParameter) => {
-      req.body[formParameter] = DOMPurify.sanitize(req.body[formParameter], {
-        ALLOWED_TAGS: [],
-      }).trim();
+      req.body[formParameter] = purify
+        .sanitize(req.body[formParameter], {
+          ALLOWED_TAGS: [],
+        })
+        .trim();
     });
   }
 

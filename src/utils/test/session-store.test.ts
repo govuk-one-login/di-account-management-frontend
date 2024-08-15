@@ -58,7 +58,7 @@ describe("Session Store Util Tests", () => {
       let errorOccurred = false;
       try {
         clearCookies(req as Request, res as Response, null);
-      } catch (error) {
+      } catch (e) {
         errorOccurred = true;
       }
       expect(errorOccurred).to.be.false;
