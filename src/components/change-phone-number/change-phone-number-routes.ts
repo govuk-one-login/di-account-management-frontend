@@ -1,6 +1,6 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
-import { validateChangePhoneNumberRequest } from "./change-phone-number-validation";
+import { validatePhoneNumberRequest } from "./change-phone-number-validation";
 import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import {
@@ -22,7 +22,7 @@ router.get(
 router.post(
   PATH_DATA.CHANGE_PHONE_NUMBER.url,
   requiresAuthMiddleware,
-  validateChangePhoneNumberRequest(),
+  validatePhoneNumberRequest("change-phone-number/index.njk"),
   refreshTokenMiddleware(),
   asyncHandler(changePhoneNumberPost())
 );

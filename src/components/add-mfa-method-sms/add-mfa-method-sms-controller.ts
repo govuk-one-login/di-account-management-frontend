@@ -37,7 +37,7 @@ export function addMfaSmsMethodPost(
         req.body.internationalPhoneNumber
       );
     } else {
-      newPhoneNumber = req.body.ukPhoneNumber;
+      newPhoneNumber = req.body.phoneNumber;
     }
 
     const response = await service.sendPhoneVerificationNotification(
