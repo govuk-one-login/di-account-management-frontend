@@ -1,29 +1,38 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import {
-  changeDefaultMfaMethodGet,
-  changeDefaultMfaMethodPost,
-} from "./change-default-method-controller";
-import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import {
+  changeDefaultMethodAppGet,
+  changeDefaultMethodAppPost,
+  changeDefaultMethodGet,
+} from "./change-default-method-controllers";
+import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
 router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   requiresAuthMiddleware,
-  selectMfaMiddleware(),
   validateStateMiddleware,
-  changeDefaultMfaMethodGet
+  selectMfaMiddleware(),
+  changeDefaultMethodGet
+);
+
+router.get(
+  PATH_DATA.CHANGE_DEFAULT_METHOD_APP.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  selectMfaMiddleware(),
+  changeDefaultMethodAppGet
 );
 
 router.post(
-  PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+  PATH_DATA.CHANGE_DEFAULT_METHOD_APP.url,
   requiresAuthMiddleware,
-  selectMfaMiddleware(),
   validateStateMiddleware,
-  changeDefaultMfaMethodPost
+  selectMfaMiddleware(),
+  changeDefaultMethodAppPost
 );
 
 export { router as changeDefaultMethodRouter };

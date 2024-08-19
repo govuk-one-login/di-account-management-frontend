@@ -1,31 +1,11 @@
 {% extends "common/layout/base-page.njk" %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
+
 {% block pageContent %}
-    <h1 class="govuk-heading-xl">{{ 'pages.changeDefaultMethod.title' | translate }}</h1>
-    {% if currentBackup.method.mfaMethodType == "AUTH_APP" %}
-        <p class='govuk-body'>{{ 'pages.changeDefaultMethod.newDefaultApp' | translate }}</p>
-    {% endif %}
+        <h1 class="govuk-heading-l">{{ "pages.changeDefaultMethod.title" | translate }}</h1>
 
-    {% if currentBackup.method.mfaMethodType == "SMS" %}
-        <p class='govuk-body'>{{ 'pages.changeDefaultMethod.newDefaultSms' | translate | safe | replace("[phoneNumber]", currentBackup.phoneNumber) }}</p>
-    {% endif %}
-
-    {% if currentDefault.method.mfaMethodType == "AUTH_APP" %}
-        <p class='govuk-body'>{{ 'pages.changeDefaultMethod.newBackupApp' | translate }}</p>
-    {% endif %}
-
-    {% if currentDefault.method.mfaMethodType == "SMS"%}
-        <p class="govuk-body">{{ 'pages.changeDefaultMethod.newBackupSms' | translate | safe | replace("[phoneNumber]", currentDefault.phoneNumber) }}</p>
-    {% endif %}
-
-    <form action="{{ 'CHANGE_DEFAULT_METHOD' | getPath }}" method="post">
-        <input type='hidden' name='_csrf' value="{{csrfToken}}" />
-        <input type='hidden' name='newBackup' value="{{currentDefault.mfaIdentifier}}" />
-        <input type='hidden' name='newDefault' value="{{currentBackup.mfaIdentifier}}" />
-        {{ govukButton({
-          "text": button_text|default('pages.changeDefaultMethod.button' | translate, true),
-          "type": "Submit",
-          "preventDoubleClick": true
-        }) }}
-    </form>
-{% endblock %}
+        {% if currentMethodType == "SMS" %}
+          <p class="govuk-body">{{ "pages.changeDefaultMethod.currentIsPhone" | translate | safe | replace("[phoneNumber]", phoneNumber) }}</p>
+          <p class="govuk-body">{{ "pages.changeDefaultMethod.switchToApp" | translate }}</p>
+          <a href='{{ "CHANGE_DEFAULT_METHOD_APP" | getPath }}' class="govuk-button" data-module="govuk-button">{{ "pages.changeDefaultMethod.setUpAppButton" | translate }}</a>
+        {% endif %}
+    </form>{% endblock pageContent %}

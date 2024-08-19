@@ -11,12 +11,13 @@ import {
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
   updateAuthenticatorAppConfirmationGet,
+  changeDefaultMethodConfirmationGet,
 } from "../update-confirmation-controller";
 import { PATH_DATA } from "../../../app.constants";
 
 describe("update confirmation controller", () => {
   let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request>;
+  let req: any;
   let res: any;
 
   beforeEach(() => {
@@ -84,7 +85,7 @@ describe("update confirmation controller", () => {
 
 describe("addMfaMethodAppConfirmationGet", () => {
   let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request>;
+  let req: any;
   let res: Partial<Response>;
 
   beforeEach(() => {
@@ -120,5 +121,65 @@ describe("addMfaMethodAppConfirmationGet", () => {
         backLink: PATH_DATA.SECURITY.url,
       }
     );
+  });
+
+  it("should render change default app confimration page", () => {
+    req.session = {
+      mfaMethods: [
+        {
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "AUTH_APP",
+            endPoint: "12345678",
+          },
+        },
+      ],
+    };
+    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).to.be.calledWith(
+      "common/confirmation-page/confirmation.njk",
+      {
+        pageTitleName: "pages.changeDefaultMethod.confirmation.title",
+        heading: "pages.changeDefaultMethod.confirmation.heading",
+        message: "pages.changeDefaultMethod.confirmation.app",
+        backLinkText: "pages.changeDefaultMethod.confirmation.back",
+        backLink: PATH_DATA.SECURITY.url,
+      }
+    );
+  });
+
+  it("should render change default app confimration page", () => {
+    req.session = {
+      mfaMethods: [
+        {
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "SMS",
+            endPoint: "12345678",
+          },
+        },
+      ],
+    };
+    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).to.be.calledWith(
+      "common/confirmation-page/confirmation.njk",
+      {
+        pageTitleName: "pages.changeDefaultMethod.confirmation.title",
+        heading: "pages.changeDefaultMethod.confirmation.heading",
+        message: "",
+        backLinkText: "pages.changeDefaultMethod.confirmation.back",
+        backLink: PATH_DATA.SECURITY.url,
+      }
+    );
+  });
+
+  it("should throw 404 if there is no default method", () => {
+    req.session = {
+      mfaMethods: [],
+    };
+    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+    expect(res.status).to.be.calledWith(404);
   });
 });

@@ -25,7 +25,8 @@ const REDIRECT_PATHS: { [key in UserJourney]: string } = {
   [UserJourney.DeleteAccount]: PATH_DATA.DELETE_ACCOUNT.url,
   [UserJourney.AddMfaMethod]: PATH_DATA.ADD_MFA_METHOD.url,
   [UserJourney.RemoveMfaMethod]: PATH_DATA.DELETE_MFA_METHOD.url,
-  [UserJourney.SwitchBackupMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+  [UserJourney.SwitchBackupMethod]: PATH_DATA.SWITCH_BACKUP_METHOD.url,
+  [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
 };
 
 const OPL_VALUES: {
@@ -62,6 +63,10 @@ const OPL_VALUES: {
   switchBackupMethod: {
     contentId: "313fb160-5961-4f53-b3b9-72d2f961cc2d",
     taxonomyLevel2: "switch backup method",
+  },
+  changeDefaultMethod: {
+    contentId: "244e4f6f-23bb-489b-9e08-3fb8a44734db",
+    taxonomyLevel2: "change default method",
   },
 };
 

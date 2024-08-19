@@ -1,67 +1,154 @@
 import { expect } from "chai";
 import { describe } from "mocha";
+
 import { sinon } from "../../../../test/utils/test-utils";
+import { Request, Response } from "express";
 
-import { changeDefaultMfaMethodPost } from "../change-default-method-controller";
-import * as mfa from "../../../utils/mfa";
-import * as mfaCommon from "../../common/mfa";
-import { UpdateInformationSessionValues } from "../../../utils/types";
+import {
+  changeDefaultMethodAppPost,
+  changeDefaultMethodGet,
+} from "../change-default-method-controllers";
+import {
+  RequestBuilder,
+  ResponseBuilder,
+  TXMA_AUDIT_ENCODED,
+} from "../../../../test/utils/builders";
+import * as mfaModule from "../../../utils/mfa";
+import { PATH_DATA } from "../../../app.constants";
 
-describe("change default method", () => {
+describe("change default method controller", () => {
   let sandbox: sinon.SinonSandbox;
-
-  const statusFn = sinon.spy();
-  const redirectFn = sinon.spy();
-  const changeFn = sinon.spy();
-
-  const generateRequest = (id: string) => {
-    return {
-      session: {
-        mfaMethods: [
-          {
-            mfaIdentifier: 1,
-            priorityIdentifier: "BACKUP",
-          },
-        ],
-        user: {
-          state: {
-            switchBackupMethod: {
-              value: "CHANGE_VALUE",
-            },
-          },
-        },
-      },
-      body: { newDefault: id },
-    };
-  };
-  const generateResponse = () => {
-    return {
-      status: statusFn,
-      session: {},
-      redirect: redirectFn,
-    };
-  };
+  let req: object;
+  let res: Partial<Response>;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    sandbox.replace(mfa, "changeDefaultMfaMethod", changeFn);
-    sandbox.replace(mfaCommon, "generateSessionDetails", () => {
-      return Promise.resolve({} as UpdateInformationSessionValues);
-    });
+
+    req = new RequestBuilder()
+      .withBody({ code: "123456", authAppSecret: "A".repeat(20) })
+      .withSessionUserState({ changeDefaultMethod: { value: "APP" } })
+      .withTimestampT(sandbox.fake())
+      .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+      .build();
+
+    res = new ResponseBuilder()
+      .withRender(sandbox.fake())
+      .withRedirect(sandbox.fake(() => {}))
+      .withStatus(sandbox.fake())
+      .build();
   });
 
   afterEach(() => {
     sandbox.restore();
   });
 
-  it("should change the DEFAULT MFA method", async () => {
-    const req = generateRequest("1");
-    const res = generateResponse();
+  describe("changeDefaultMethodGet", async () => {
+    it("should correctly render the page", async () => {
+      //@ts-expect-error in test
+      req.session = {
+        mfaMethods: [
+          {
+            priorityIdentifier: "DEFAULT",
+            method: {
+              mfaMethodType: "SMS",
+              endPoint: "12345678",
+            },
+          },
+        ],
+      };
+      changeDefaultMethodGet(
+        req as unknown as Request,
+        res as unknown as Response
+      );
+      expect(res.render).to.be.calledWith("change-default-method/index.njk", {
+        currentMethodType: "SMS",
+        phoneNumber: "5678",
+      });
+    });
 
-    //@ts-expect-error req and res aren't valid objects since they are mocked
-    await changeDefaultMfaMethodPost(req as Request, res as Response);
+    it("should return 404 if there is no default method", async () => {
+      //@ts-expect-error in test
+      req.session = { mfaMethods: [] };
 
-    expect(changeFn).to.be.calledWith(1);
-    expect(redirectFn).to.be.calledWith("/switch-method-confirm");
+      changeDefaultMethodGet(
+        req as unknown as Request,
+        res as unknown as Response
+      );
+
+      expect(res.status).to.be.calledWith(404);
+    });
+  });
+
+  describe("changeDefaultMethodMfaPost", async () => {
+    it("should redirect to confirmation page", async () => {
+      const next = sinon.spy();
+      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+
+      await changeDefaultMethodAppPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        next
+      );
+
+      expect(res.redirect).to.be.calledWith(
+        PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
+      );
+    });
+
+    it("should return error if there is no code entered", async () => {
+      //@ts-expect-error in test
+      req.body.code = null;
+      const next = sinon.spy();
+      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+
+      await changeDefaultMethodAppPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        next
+      );
+
+      expect(res.render).to.be.calledWithMatch(
+        "change-default-method/change-to-app.njk",
+        sinon.match.hasNested("errors.code.href", "#code")
+      );
+    });
+
+    it("should return an erorr if the code is less than 6 chars", async () => {
+      //@ts-expect-error in test
+      req.body.code = "1234";
+      const next = sinon.spy();
+      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+
+      await changeDefaultMethodAppPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        next
+      );
+
+      expect(res.render).to.be.calledWithMatch(
+        "change-default-method/change-to-app.njk",
+        sinon.match.hasNested("errors.code.href", "#code")
+      );
+    });
+
+    it("should return an erorr if the code is entered wrong", async () => {
+      const next = sinon.spy();
+      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", () => false);
+
+      await changeDefaultMethodAppPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        next
+      );
+
+      expect(res.render).to.be.calledWithMatch(
+        "change-default-method/change-to-app.njk",
+        sinon.match.hasNested("errors.code.href", "#code")
+      );
+    });
   });
 });

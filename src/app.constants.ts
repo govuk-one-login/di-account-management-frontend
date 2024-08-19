@@ -56,14 +56,29 @@ export const PATH_DATA: {
     event: EventType.ValueUpdated,
     type: UserJourney.ChangeEmail,
   },
-  CHANGE_DEFAULT_METHOD: {
+  SWITCH_BACKUP_METHOD: {
     url: "/switch-method",
     type: UserJourney.SwitchBackupMethod,
     event: EventType.ValueUpdated,
   },
-  CHANGE_DEFAULT_METHOD_CONFIRMATION: {
+  SWITCH_BACKUP_METHOD_CONFIRMATION: {
     url: "/switch-method-confirm",
     type: UserJourney.SwitchBackupMethod,
+    event: EventType.Confirmation,
+  },
+  CHANGE_DEFAULT_METHOD: {
+    url: "/change-default-method",
+    type: UserJourney.ChangeDefaultMethod,
+    event: EventType.ValueUpdated,
+  },
+  CHANGE_DEFAULT_METHOD_APP: {
+    url: "/change-default-method-app",
+    type: UserJourney.ChangeDefaultMethod,
+    event: EventType.ValueUpdated,
+  },
+  CHANGE_DEFAULT_METHOD_CONFIRMATION: {
+    url: "/change-default-method-confirmation",
+    type: UserJourney.ChangeDefaultMethod,
     event: EventType.Confirmation,
   },
   REQUEST_NEW_CODE_EMAIL: {

@@ -71,7 +71,7 @@
                   <p class="govuk-body">{{ method.text }}</p>
                   <p class="govuk-body"><a href="{{ method.linkHref }}" class="govuk-link"> {{ method.linkText }}</a></p>
                   {% if canChangeTypeofPrimary %}
-                  <p class="govuk-body"><a href="/not-visible-yet" class="govuk-link"> {{ ['pages.security.mfaSection.supportChangeMfa.defaultMethod.change'] | join | translate }}</a></p>
+                  <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=changeDefaultMethod" class="govuk-link"> {{ ['pages.security.mfaSection.supportChangeMfa.defaultMethod.change'] | join | translate }}</a></p>
                   {% endif %}
                 </div>
                 {% set foundPrimary = true %}
