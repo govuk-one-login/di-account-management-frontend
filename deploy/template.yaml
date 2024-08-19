@@ -2097,7 +2097,10 @@ Resources:
         CookiesConfig:
           CookieBehavior: all
         HeadersConfig:
-          HeaderBehavior: allViewer
+          HeaderBehavior: allViewerAndWhitelistCloudFront
+          Headers:
+            - CloudFront-Viewer-Country
+            - CloudFront-Viewer-JA3-Fingerprint
         Name: !Sub "${AWS::StackName}-OriginRequestPolicy"
         QueryStringsConfig:
           QueryStringBehavior: all
@@ -2114,7 +2117,9 @@ Resources:
           CookiesConfig:
             CookieBehavior: none
           HeadersConfig:
-            HeaderBehavior: none
+            HeaderBehavior: whitelist
+            Headers:
+              - CloudFront-Viewer-Country
           QueryStringsConfig:
             QueryStringBehavior: none
           EnableAcceptEncodingBrotli: true
