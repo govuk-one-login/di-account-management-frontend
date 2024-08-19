@@ -33,7 +33,11 @@ describe("addMfaMethodGet", () => {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       locals: {},
-      status: sandbox.fake(),
+      status: sandbox.stub().returnsThis() as sinon.SinonStub<
+        [number],
+        Response
+      >,
+      end: sandbox.stub().returnsThis(),
     };
   });
 
@@ -45,6 +49,87 @@ describe("addMfaMethodGet", () => {
     addMfaMethodGet(req as Request, res as Response);
 
     expect(res.render).to.have.calledWith("add-mfa-method/index.njk");
+  });
+  it("should handle a single mfa method", () => {
+    req.session.mfaMethods = [
+      {
+        mfaIdentifier: 111111,
+        methodVerified: true,
+        method: {
+          endPoint: "PHONE",
+          mfaMethodType: "AUTH_APP",
+        },
+        priorityIdentifier: "DEFAULT",
+      },
+    ];
+    addMfaMethodGet(req as Request, res as Response);
+
+    expect(res.render).to.have.calledWith("add-mfa-method/index.njk", {
+      mfaMethods: [],
+      showSingleMethod: true,
+    });
+  });
+  it("should handle two mfa methods", () => {
+    req.session.mfaMethods = [
+      {
+        mfaIdentifier: 111111,
+        methodVerified: true,
+        method: {
+          endPoint: "PHONE",
+          mfaMethodType: "SMS",
+        },
+        priorityIdentifier: "DEFAULT",
+      },
+      {
+        mfaIdentifier: 2222,
+        methodVerified: true,
+        method: {
+          endPoint: "PHONE",
+          mfaMethodType: "SMS",
+        },
+        priorityIdentifier: "BACKUP",
+      },
+    ];
+    addMfaMethodGet(req as Request, res as Response);
+
+    expect(res.render).to.have.calledWith("add-mfa-method/index.njk", {
+      mfaMethods: req.session.mfaMethods,
+    });
+  });
+
+  it("should handle mor than two mfa methods", () => {
+    req.session.mfaMethods = [
+      {
+        mfaIdentifier: 111111,
+        methodVerified: true,
+        method: {
+          endPoint: "PHONE",
+          mfaMethodType: "SMS",
+        },
+        priorityIdentifier: "DEFAULT",
+      },
+      {
+        mfaIdentifier: 22222,
+        methodVerified: true,
+        method: {
+          endPoint: "PHONE",
+          mfaMethodType: "SMS",
+        },
+        priorityIdentifier: "BACKUP",
+      },
+      {
+        mfaIdentifier: 33333,
+        methodVerified: true,
+        method: {
+          endPoint: "PHONE",
+          mfaMethodType: "SMS",
+        },
+        priorityIdentifier: "BACKUP",
+      },
+    ];
+    addMfaMethodGet(req as Request, res as Response);
+
+    expect(res.status).to.have.calledWith(500);
   });
 });
 
