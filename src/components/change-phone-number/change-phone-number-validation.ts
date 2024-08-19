@@ -8,7 +8,7 @@ import {
   lengthInRangeWithoutSpaces,
 } from "../../utils/phone-number";
 
-export function validateChangePhoneNumberRequest(): ValidationChainFunc {
+export function validatePhoneNumberRequest(path: string): ValidationChainFunc {
   return [
     body("phoneNumber")
       .if(body("hasInternationalPhoneNumber").not().equals("true"))
@@ -89,6 +89,6 @@ export function validateChangePhoneNumberRequest(): ValidationChainFunc {
         }
         return true;
       }),
-    validateBodyMiddleware("change-phone-number/index.njk"),
+    validateBodyMiddleware(path),
   ];
 }
