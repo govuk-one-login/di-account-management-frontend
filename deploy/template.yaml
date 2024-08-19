@@ -1366,6 +1366,7 @@ Resources:
             MessageBody: >
               "user-agent: *"
               "disallow: /"
+              "allow: /contact-gov-uk-one-login"
             StatusCode: 200
       Conditions:
         - Field: path-pattern
