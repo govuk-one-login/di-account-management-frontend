@@ -189,6 +189,7 @@ Mappings:
       SUPPORTCHANGEMFA: "1"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
+      DTRUMURL: ""
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -221,6 +222,7 @@ Mappings:
       GA4DISABLED: "false"
       UADISABLED: "false"
       LANGUAGETOGGLE: "1"
+      DTRUMURL: ""
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -253,6 +255,7 @@ Mappings:
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
+      DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/e87dc9cd0e7082fb_complete.js"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -285,6 +288,7 @@ Mappings:
       UADISABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
+      DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/416cd438acc3a6f_complete.js"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -317,6 +321,7 @@ Mappings:
       UADISABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
+      DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf04188tda/b9835209cd235d3a_complete.js"
 
 Resources:
   #
@@ -868,6 +873,9 @@ Resources:
                   !Ref Environment,
                   LANGUAGETOGGLE,
                 ]
+            - Name: "DT_RUM_URL"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, DTRUMURL]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn

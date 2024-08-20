@@ -9,6 +9,10 @@
 {%- endset-%}
 
 {% block head %}
+    {# Dynatrace RUM snippet #}
+    {% if dynatraceRumUrl %}
+    <script src='{{ dynatraceRumUrl }}' crossorigin="anonymous" nonce='{{ scriptNonce }}'></script>
+    {% endif %}
     <!--[if !IE 8]><!-->
     <link href="/public/style.css" rel="stylesheet">
     <!--<![endif]-->

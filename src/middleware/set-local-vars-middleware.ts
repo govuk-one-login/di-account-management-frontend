@@ -8,6 +8,7 @@ import {
   universalAnalyticsGtmContainerId,
   googleAnalytics4Disabled,
   universalAnalyticsDisabled,
+  getDtRumUrl,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
@@ -19,6 +20,7 @@ export function setLocalVarsMiddleware(
   res: Response,
   next: NextFunction
 ): void {
+  res.locals.dynatraceRumUrl = getDtRumUrl();
   res.locals.gtmId = getGtmId();
   res.locals.scriptNonce = generateNonce();
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
