@@ -125,7 +125,11 @@
           <p class="govuk-body">{{ paragraph }}</p>
         {% endfor %}
 
-        <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
+        <p class="govuk-body">
+          <noscript>Webchat requires Javascript to be enabled in your browser</noscript>
+          <span data-webchat-loading>Loading webchat...</span>
+          <button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button>
+        </p>
 
         {% set accessibilityTextHtml %}
           <p class="govuk-body">{{ 'pages.contact.section3.webchat.accessibilityStatementParagraph' | translate | safe | replace('[accessibilityStatementLinkHref]', accessibilityStatementUrl )  }}</p>
@@ -166,6 +170,7 @@
 
   <script type="text/javascript" nonce='{{scriptNonce}}'>
     var launchWebchatButton = document.querySelector("[data-launch-webchat]");
+    var webchatLoading = document.querySelector("[data-webchat-loading]");
 
     launchWebchatButton.addEventListener("click", function() {
       const webchatWindow = document.querySelector(".sa-chat-slideout");
@@ -208,9 +213,10 @@
     // this checks whether "saEvents" is available every 200ms 
     var webchatInterval = setInterval(waitForSaEvents, 200);
     var cancelInterval = setTimeout(function(){
+      webchatLoading.innerText = "Error loading webchat"
       // if webchat events still unavailable after 10s, clear the interval
       clearInterval(webchatInterval);
-    }, 10000)
+    }, 3000)
   </script>
 {% endif %}
 {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"contact gov uk", contentId:"dbd37b91-5d9e-419e-b6e4-1ea5b40a99f6",loggedInStatus:true,dynamic:true})}}
