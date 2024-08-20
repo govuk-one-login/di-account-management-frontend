@@ -1,0 +1,80 @@
+{% extends "common/layout/base.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set pageTitleName = 'pages.changePhoneNumber.title' | translate %}
+
+{% block content %}
+  {% include "common/errors/errorSummary.njk" %}
+
+  <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.changePhoneNumber.header' |
+    translate}}</h1>
+
+  <form action="{{ formAction }}" method="post" novalidate>
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+    <p class="govuk-body">{{'pages.changePhoneNumber.info.paragraph1' | translate }}</p>
+
+    {{ govukInput({
+      label: {
+      text: 'pages.changePhoneNumber.ukPhoneNumber.label' | translate
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "phoneNumber",
+      name: "phoneNumber",
+      type: "tel",
+      autocomplete: "tel",
+      errorMessage: {
+        attributes: { "data-test-id": "phoneNumber-error"},
+        text: errors['phoneNumber'].text
+      } if (errors['phoneNumber'])})
+    }}
+
+    {% set internationalNumberHtml %}
+      {{ govukInput({
+        id: "internationalPhoneNumber",
+        name: "internationalPhoneNumber",
+        type: "tel",
+        autocomplete: "tel",
+        classes: "govuk-!-width-two-thirds",
+        label: {
+          text: 'pages.changePhoneNumber.internationalPhoneNumber.label' | translate
+        },
+        hint: {
+          text: 'pages.changePhoneNumber.internationalPhoneNumber.hint' | translate
+        },
+        errorMessage: {
+          attributes: { "data-test-id": "internationalPhoneNumber-error"},
+          text: errors['internationalPhoneNumber'].text
+        } if (errors['internationalPhoneNumber'])
+      }) }}
+    {% endset -%}
+
+    {{ govukCheckboxes({
+      items: [
+        {
+          value: "true",
+          id: "hasInternationalPhoneNumber",
+          name: "hasInternationalPhoneNumber",
+          text: 'pages.changePhoneNumber.internationalPhoneNumber.checkBoxLabel' | translate,
+          conditional: {
+            html: internationalNumberHtml
+          },
+          checked: hasInternationalPhoneNumber === 'true'
+        }
+      ]
+    }) }}
+
+    {{ govukButton({
+      "text": button_text|default('general.continue.label' | translate, true),
+      "type": "Submit",
+      "preventDoubleClick": true
+    }) }}
+  </form>
+
+  <a href="{{"SECURITY" | getPath}}" class="govuk-link govuk-body">
+    {{'pages.changePhoneNumber.info.backLink' | translate}}
+  </a>
+  {{ ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change phone number", contentId:contentId,loggedInStatus:true,dynamic:true })}}
+{% endblock %}
