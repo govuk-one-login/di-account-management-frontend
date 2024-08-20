@@ -29,7 +29,7 @@ export async function changeDefaultMethodGet(
     currentMethodType: defaultMethod.method.mfaMethodType,
     phoneNumber:
       defaultMethod.method.mfaMethodType === "SMS"
-        ? getLastNDigits(defaultMethod.method.endPoint, 4)
+        ? getLastNDigits(defaultMethod.method.phoneNumber, 4)
         : null,
   };
 

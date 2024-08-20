@@ -51,7 +51,7 @@ describe("security controller", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "SMS",
-            endPoint: "xxxxxxx7898",
+            PhoneNumber: "xxxxxxx7898",
           },
           methodVerified: true,
         },
@@ -102,7 +102,7 @@ describe("security controller", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "SMS",
-            endPoint: "xxxxxxx7898",
+            phoneNumber: "xxxxxxx7898",
           },
           methodVerified: true,
         },
@@ -155,7 +155,7 @@ describe("security controller", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "SMS",
-            endPoint: "xxxxxxx7898",
+            PhoneNumber: "xxxxxxx7898",
           },
           methodVerified: true,
         },
@@ -205,7 +205,7 @@ describe("security controller", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "SMS",
-            endPoint: "xxxxxxx7898",
+            PhoneNumber: "xxxxxxx7898",
           },
           methodVerified: true,
         },
@@ -238,7 +238,7 @@ describe("security controller", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "INVALID",
-            endPoint: "xxxxxxx7898",
+            PhoneNumber: "xxxxxxx7898",
           },
           methodVerified: true,
         },
@@ -275,7 +275,7 @@ describe("security controller", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "SMS",
-            endPoint: "xxxxxxx7898",
+            PhoneNumber: "xxxxxxx7898",
           },
           methodVerified: true,
         },

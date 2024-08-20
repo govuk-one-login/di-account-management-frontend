@@ -118,7 +118,6 @@ describe("addMfaAppMethodPost", () => {
       Promise.resolve({
         status: 200,
         data: {
-          endPoint: "endPoint",
           mfaIdentifier: 1,
           methodVerified: true,
           method: {

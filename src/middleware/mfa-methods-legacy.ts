@@ -12,7 +12,7 @@ export function legacyMfaMethodsMiddleware(
         priorityIdentifier: "DEFAULT",
         method: {
           mfaMethodType: "SMS",
-          endPoint: req.session.user.phoneNumber,
+          phoneNumber: req.session.user.phoneNumber,
         },
         methodVerified: true,
       },
@@ -24,7 +24,7 @@ export function legacyMfaMethodsMiddleware(
         priorityIdentifier: "DEFAULT",
         method: {
           mfaMethodType: "AUTH_APP",
-          endPoint: "Authenticator app",
+          credential: "ABC",
         },
         methodVerified: true,
       },

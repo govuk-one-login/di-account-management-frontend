@@ -1,13 +1,9 @@
 export type PriorityIdentifier = "DEFAULT" | "BACKUP";
-export type MfaMethodType = "SMS" | "AUTH_APP";
 
 export interface MfaMethod {
   mfaIdentifier?: number;
   priorityIdentifier: PriorityIdentifier;
-  method: {
-    mfaMethodType: MfaMethodType;
-    endPoint?: string;
-  };
+  method: smsMethod | authAppMethod;
   methodVerified?: boolean;
   smsPhoneNumber?: string;
 }
@@ -16,6 +12,16 @@ export interface AddMfaMethod {
   mfaIdentifier?: number;
   priorityIdentifier: PriorityIdentifier;
   mfaMethodType: MfaMethodType;
+}
+
+interface smsMethod {
+  mfaMethodType: "SMS";
+  phoneNumber?: string;
+}
+
+interface authAppMethod {
+  mfaMethodType: "AUTH_APP";
+  credential?: string;
 }
 
 export interface ProblemDetail {

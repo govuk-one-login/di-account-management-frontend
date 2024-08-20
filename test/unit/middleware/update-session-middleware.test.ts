@@ -56,10 +56,7 @@ describe("updateSessionMiddleware", () => {
   it("should log a warning for invalid fromURL", () => {
     mockRequest.query.fromURL = "invalid-url";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
-    expect(loggerWarnSpy).to.be.calledWith(
-      { url: "invalid-url" },
-      "TypeError: Invalid URL"
-    );
+    expect(loggerWarnSpy).to.be.calledWith({ url: "invalid-url" });
     expect(loggerWarnSpy).to.be.calledWith(
       { trace: mockResponse.locals.sessionId },
       "fromURL in request query for contact-govuk-one-login page did not pass validation"

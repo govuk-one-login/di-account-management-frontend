@@ -107,7 +107,7 @@ describe("change authenticator app controller", () => {
           methodVerified: true,
           method: {
             mfaMethodType: "SMS",
-            endPoint: "PHONE",
+            phoneNumber: "070",
           },
           priorityIdentifier: "DEFAULT",
         },
@@ -116,6 +116,7 @@ describe("change authenticator app controller", () => {
           priorityIdentifier: "BACKUP",
           method: {
             mfaMethodType: "AUTH_APP",
+            credential: "ABC",
           },
           methodVerified: true,
         },
@@ -153,8 +154,8 @@ describe("change authenticator app controller", () => {
           mfaIdentifier: 111111,
           methodVerified: true,
           method: {
-            endPoint: "PHONE",
             mfaMethodType: "SMS",
+            phoneNumber: "070",
           },
           priorityIdentifier: "DEFAULT",
         },
@@ -163,6 +164,7 @@ describe("change authenticator app controller", () => {
           priorityIdentifier: "BACKUP",
           method: {
             mfaMethodType: "AUTH_APP",
+            credential: "ABC",
           },
           methodVerified: true,
         },

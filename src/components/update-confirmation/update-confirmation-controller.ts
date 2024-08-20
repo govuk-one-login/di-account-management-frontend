@@ -140,7 +140,7 @@ export async function removeMfaMethodConfirmationGet(
       .t("pages.removeBackupMethod.confirm.message_sms")
       .replace(
         "[phoneNumber]",
-        getLastNDigits(removedMethod.method.endPoint, 4)
+        getLastNDigits(removedMethod.method.phoneNumber, 4)
       );
   }
 
@@ -171,7 +171,7 @@ export async function changeDefaultMfaMethodConfirmationGet(
 
   const phoneNumber =
     defaultMethod.method.mfaMethodType === "SMS"
-      ? getLastNDigits(defaultMethod.method.endPoint, 4)
+      ? getLastNDigits(defaultMethod.method.phoneNumber, 4)
       : null;
 
   const message = phoneNumber

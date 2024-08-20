@@ -22,7 +22,7 @@ export async function switchBackupMfaMethodGet(
 
   if (currentBackupMethod.method.mfaMethodType === "SMS") {
     currentBackupPhoneNumber = getLastNDigits(
-      currentBackupMethod.method.endPoint,
+      currentBackupMethod.method.phoneNumber,
       4
     );
   }
@@ -39,7 +39,7 @@ export async function switchBackupMfaMethodGet(
 
   if (currentDefaultMethod.method.mfaMethodType === "SMS") {
     currentDefaultPhoneNumber = getLastNDigits(
-      currentDefaultMethod.method.endPoint,
+      currentDefaultMethod.method.phoneNumber,
       4
     );
   }

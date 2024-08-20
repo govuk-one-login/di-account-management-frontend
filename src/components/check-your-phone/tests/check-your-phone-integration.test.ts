@@ -53,7 +53,7 @@ describe("Integration:: check your phone", () => {
             mfaIdentifier: 111111,
             methodVerified: true,
             method: {
-              endPoint: "PHONE",
+              phoneNumber: "070",
               mfaMethodType: "SMS",
             },
             priorityIdentifier: "DEFAULT",
@@ -94,7 +94,7 @@ describe("Integration:: check your phone", () => {
       {
         mfaIdentifier: 111111,
         methodVerified: true,
-        endPoint: "PHONE",
+        phoneNumber: "070",
         mfaMethodType: "SMS",
         priorityIdentifier: "DEFAULT",
       },

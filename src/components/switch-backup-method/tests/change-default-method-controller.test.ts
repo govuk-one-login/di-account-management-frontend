@@ -38,7 +38,7 @@ describe("change default method", () => {
         priorityIdentifier: "DEFAULT",
         method: {
           mfaMethodType: "SMS",
-          endPoint: "12345678",
+          phoneNumber: "12345678",
         },
       });
     }

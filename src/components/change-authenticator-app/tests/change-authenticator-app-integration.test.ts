@@ -118,7 +118,7 @@ describe("Integration:: change authenticator app", () => {
           {
             mfaIdentifier: 111111,
             methodVerified: true,
-            endPoint: "PHONE",
+            phoneNumber: "070",
             mfaMethodType: "SMS",
             priorityIdentifier: "DEFAULT",
           },

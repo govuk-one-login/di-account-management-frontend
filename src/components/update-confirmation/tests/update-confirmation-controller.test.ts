@@ -130,7 +130,7 @@ describe("addMfaMethodAppConfirmationGet", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "AUTH_APP",
-            endPoint: "12345678",
+            credential: "ABC",
           },
         },
       ],
@@ -156,7 +156,7 @@ describe("addMfaMethodAppConfirmationGet", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "SMS",
-            endPoint: "12345678",
+            phoneNumber: "070",
           },
         },
       ],
