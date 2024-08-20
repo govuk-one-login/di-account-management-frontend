@@ -311,6 +311,6 @@ export function supportAddBackupMfa(): boolean {
   return process.env.SUPPORT_ADD_BACKUP_MFA === "1";
 }
 
-export function getDtRumUrl(): boolean {
+export function getDtRumUrl(): string {
   return process.env.DT_RUM_URL;
 }
