@@ -153,24 +153,22 @@ async function handleAddMfaMethod(
     return false;
   }
 
-  if (defaultMfaMethod.method.mfaMethodType !== "SMS") {
-    return false;
-  }
-
   try {
-    defaultMfaMethod.method.phoneNumber = newPhoneNumber;
-    updateInput.credential = "no-credentials";
-    updateInput.mfaMethod = {
-      ...defaultMfaMethod,
-      mfaIdentifier: defaultMfaMethod.mfaIdentifier + 1,
-      priorityIdentifier: "BACKUP",
-      method: {
-        mfaMethodType: defaultMfaMethod.method.mfaMethodType,
-        phoneNumber: newPhoneNumber,
-      },
-      methodVerified: true,
-    };
-    return await service.addMfaMethodService(updateInput, sessionDetails);
+    if (defaultMfaMethod.method.mfaMethodType === "SMS") {
+      defaultMfaMethod.method.phoneNumber = newPhoneNumber;
+      updateInput.credential = "no-credentials";
+      updateInput.mfaMethod = {
+        ...defaultMfaMethod,
+        mfaIdentifier: defaultMfaMethod.mfaIdentifier + 1,
+        priorityIdentifier: "BACKUP",
+        method: {
+          mfaMethodType: defaultMfaMethod.method.mfaMethodType,
+          phoneNumber: newPhoneNumber,
+        },
+        methodVerified: true,
+      };
+      return await service.addMfaMethodService(updateInput, sessionDetails);
+    }
   } catch (error) {
     logger.error({
       err: `No existing MFA method in handleAddMfaMethod: ${error.message} `,
@@ -201,6 +199,5 @@ export function requestNewOTPCodeGet(req: Request, res: Response): void {
     req.session.user.state.changePhoneNumber.value,
     EventType.ResendCode
   );
-
   return res.redirect(PATH_DATA.CHANGE_PHONE_NUMBER.url);
 }
