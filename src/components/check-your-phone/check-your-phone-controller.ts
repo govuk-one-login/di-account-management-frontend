@@ -117,6 +117,7 @@ async function handleChangePhoneNumber(
   const smsMFAMethod = req.session.mfaMethods.find(
     (mfa) => mfa.method.mfaMethodType === "SMS"
   );
+
   if (smsMFAMethod && smsMFAMethod.method.mfaMethodType === "SMS") {
     smsMFAMethod.method.phoneNumber = newPhoneNumber;
     updateInput.mfaMethod = smsMFAMethod;
@@ -140,32 +141,36 @@ async function handleAddMfaMethod(
   service: CheckYourPhoneServiceInterface,
   trace: string
 ): Promise<boolean> {
-  const defaulMfaMethod = req.session.mfaMethods.find(
+  const defaultMfaMethod = req.session.mfaMethods.find(
     (mfa) => mfa.priorityIdentifier === "DEFAULT"
   );
-  if (!defaulMfaMethod) {
+
+  if (!defaultMfaMethod) {
     logger.error({
       err: "No existing DEFAULT MFA method in handleAddMfaMethod",
       trace,
     });
     return false;
   }
+
+  if (defaultMfaMethod.method.mfaMethodType !== "SMS") {
+    return false;
+  }
+
   try {
-    if (defaulMfaMethod.method.mfaMethodType === "SMS") {
-      defaulMfaMethod.method.phoneNumber = newPhoneNumber;
-      updateInput.credential = "no-credentials";
-      updateInput.mfaMethod = {
-        ...defaulMfaMethod,
-        mfaIdentifier: defaulMfaMethod.mfaIdentifier + 1,
-        priorityIdentifier: "BACKUP",
-        method: {
-          mfaMethodType: defaulMfaMethod.method.mfaMethodType,
-          phoneNumber: newPhoneNumber,
-        },
-        methodVerified: true,
-      };
-      return await service.addMfaMethodService(updateInput, sessionDetails);
-    }
+    defaultMfaMethod.method.phoneNumber = newPhoneNumber;
+    updateInput.credential = "no-credentials";
+    updateInput.mfaMethod = {
+      ...defaultMfaMethod,
+      mfaIdentifier: defaultMfaMethod.mfaIdentifier + 1,
+      priorityIdentifier: "BACKUP",
+      method: {
+        mfaMethodType: defaultMfaMethod.method.mfaMethodType,
+        phoneNumber: newPhoneNumber,
+      },
+      methodVerified: true,
+    };
+    return await service.addMfaMethodService(updateInput, sessionDetails);
   } catch (error) {
     logger.error({
       err: `No existing MFA method in handleAddMfaMethod: ${error.message} `,
