@@ -31,7 +31,12 @@ describe("check your phone controller", () => {
       body: {},
       t: sandbox.fake(),
       session: {
-        user: { state: { changePhoneNumber: { value: "CHANGE_VALUE" } } },
+        user: {
+          state: {
+            changePhoneNumber: { value: "CHANGE_VALUE" },
+            changeDefaultMethod: { value: "CHANGE_VALUE" },
+          },
+        },
         mfaMethods: [
           {
             mfaIdentifier: 111111,
@@ -88,6 +93,20 @@ describe("check your phone controller", () => {
       expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
+      );
+    });
+
+    it("should redirect to change default method confirmation when valid code entered", async () => {
+      req.session.user.tokens = { accessToken: "token" } as any;
+      req.body.code = "123456";
+      req.session.user.state.changeDefaultMethod.value = "CHANGE_VALUE";
+      req.body.intent = "changeDefaultMethod";
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
+      expect(res.redirect).to.have.calledWith(
+        PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
       );
     });
 
