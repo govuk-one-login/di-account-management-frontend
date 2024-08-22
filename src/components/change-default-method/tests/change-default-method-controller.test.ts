@@ -19,7 +19,7 @@ import * as mfaModule from "../../../utils/mfa";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 
-describe.only("change default method controller", () => {
+describe("change default method controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: object;
   let res: Partial<Response>;
