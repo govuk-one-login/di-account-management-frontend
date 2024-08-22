@@ -120,7 +120,6 @@ async function handleChangeDefaultMethod(
   req: Request
 ): Promise<boolean> {
   const updateInput: UpdateInformationInput = {
-    updateInput: {},
     email: req.session.user.email,
     otp: "",
     mfaMethod: {
