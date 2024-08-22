@@ -221,16 +221,10 @@ function getRedirectUrl(intent: Intent): string {
   if (intent === INTENT_ADD_MFA_METHOD) {
     return PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url;
   }
-  if (intent === INTENT_CHANGE_PHONE_NUMBER) {
-    return PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url;
-  }
   if (intent === INTENT_CHANGE_DEFAULT_METHOD) {
     return PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url;
   }
-  logger.error({
-    err: `Unknown intent in getRedirectUrl: ${intent}`,
-  });
-  throw Error(`Uknown intent ${intent}`);
+  return PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url;
 }
 
 function getUserJourney(intent: Intent): UserJourney {
