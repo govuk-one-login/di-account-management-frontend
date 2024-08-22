@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc, User } from "../../types";
+import { ExpressRouteFunc } from "../../types";
 import { PATH_DATA } from "../../app.constants";
 import { CheckYourPhoneServiceInterface } from "./types";
 import {
