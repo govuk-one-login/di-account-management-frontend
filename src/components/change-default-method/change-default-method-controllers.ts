@@ -66,11 +66,7 @@ export async function changeDefaultMethodSmsGet(
 export function changeDefaultMethodSmsPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
-  return async function (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  return async function (req: Request, res: Response): Promise<void> {
     const {
       hasInternationalPhoneNumber,
       internationalPhoneNumber,

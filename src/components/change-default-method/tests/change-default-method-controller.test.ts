@@ -7,6 +7,8 @@ import { Request, Response } from "express";
 import {
   changeDefaultMethodAppPost,
   changeDefaultMethodGet,
+  changeDefaultMethodSmsGet,
+  changeDefaultMethodSmsPost,
 } from "../change-default-method-controllers";
 import {
   RequestBuilder,
@@ -14,9 +16,10 @@ import {
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 import * as mfaModule from "../../../utils/mfa";
-import { PATH_DATA } from "../../../app.constants";
+import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
+import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 
-describe("change default method controller", () => {
+describe.only("change default method controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: object;
   let res: Partial<Response>;
@@ -148,6 +151,52 @@ describe("change default method controller", () => {
       expect(res.render).to.be.calledWithMatch(
         "change-default-method/change-to-app.njk",
         sinon.match.hasNested("errors.code.href", "#code")
+      );
+    });
+  });
+
+  describe("changeDefaultMethodSmsGet", () => {
+    it("should render the sms page correctly", async () => {
+      await changeDefaultMethodSmsGet(
+        req as unknown as Request,
+        res as unknown as Response
+      );
+      expect(res.render).to.be.calledWith("common/sms/add-sms.njk");
+    });
+  });
+
+  describe("changeDefaultMethodSmsPost", () => {
+    it("should send phone verification number correctly", async () => {
+      const serviceMock: ChangePhoneNumberServiceInterface = {
+        sendPhoneVerificationNotification: sinon.stub().returns({
+          success: true,
+        }),
+      };
+
+      const handler = changeDefaultMethodSmsPost(serviceMock);
+
+      await handler(req as unknown as Request, res as unknown as Response);
+
+      expect(res.redirect).to.be.calledWith(
+        "/check-your-phone?intent=changeDefaultMethod"
+      );
+    });
+
+    it("should show an error if the user tries to use the same number", async () => {
+      const serviceMock: ChangePhoneNumberServiceInterface = {
+        sendPhoneVerificationNotification: sinon.stub().returns({
+          success: false,
+          code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
+        }),
+      };
+
+      const handler = changeDefaultMethodSmsPost(serviceMock);
+
+      await handler(req as unknown as Request, res as unknown as Response);
+
+      expect(res.render).to.be.calledWithMatch(
+        "common/sms/add-sms.njk",
+        sinon.match.hasNested("errors.phoneNumber.href", "#phoneNumber")
       );
     });
   });
