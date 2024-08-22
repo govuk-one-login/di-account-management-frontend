@@ -1,6 +1,6 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% set activeNav = '404' %}
+{% set activeNav = null %}
 {% set pageTitleName = 'error.error404.title' | translate %}
 {% if isUserLoggedIn %}
   {% set buttonText = button_text | default('error.error404.content.signInUserButtonText' | translate, true) %}
@@ -16,7 +16,6 @@
       <p class="govuk-body">{{'error.error404.content.paragraph2' | translate }}</p>
       {{ govukButton({
           "text": buttonText,
-          "type": "Submit",
           "href": accountHome
           }) }}
     </div>
