@@ -6,8 +6,12 @@ import {
   changeDefaultMethodAppGet,
   changeDefaultMethodAppPost,
   changeDefaultMethodGet,
+  changeDefaultMethodSmsGet,
+  changeDefaultMethodSmsPost,
 } from "./change-default-method-controllers";
 import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
+import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
+import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 
 const router = express.Router();
 
@@ -33,6 +37,23 @@ router.post(
   validateStateMiddleware,
   selectMfaMiddleware(),
   changeDefaultMethodAppPost
+);
+
+router.get(
+  PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  selectMfaMiddleware(),
+  changeDefaultMethodSmsGet
+);
+
+router.post(
+  PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  validatePhoneNumberRequest("change-default-method/change-to-sms.njk"),
+  selectMfaMiddleware(),
+  changeDefaultMethodSmsPost(changePhoneNumberService())
 );
 
 export { router as changeDefaultMethodRouter };

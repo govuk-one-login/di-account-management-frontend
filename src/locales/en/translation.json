@@ -548,6 +548,9 @@
       "title": "Use a different default method",
       "currentIsPhone": "Your default method for getting security codes is currently by text message to your phone number ending with <strong>[phoneNumber]</strong>",
       "switchToApp": "You can use an authenticator app instead",
+      "currentIsApp": "Your default method for getting security codes is currently using your authenticator app",
+      "switchToPhone": "You can get codes by text message instead.",
+      "setUpPhoneButton": "Add a mobile phone number",
       "setUpAppButton": "Set up an authenticator app",
       "cancelButton": "Cancel and go back to Security",
       "confirmation": {

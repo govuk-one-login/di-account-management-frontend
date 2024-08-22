@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
+import { ExpressRouteFunc, User } from "../../types";
 import { PATH_DATA } from "../../app.constants";
 import { CheckYourPhoneServiceInterface } from "./types";
-import { EventType, getNextState } from "../../utils/state-machine";
+import {
+  EventType,
+  getNextState,
+  UserJourney,
+} from "../../utils/state-machine";
 import { checkYourPhoneService } from "./check-your-phone-service";
 import {
   formatValidationError,
@@ -15,9 +19,11 @@ import { generateSessionDetails } from "../common/mfa";
 import {
   Intent,
   INTENT_ADD_MFA_METHOD,
+  INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../check-your-email/types";
 import { logger } from "../../utils/logger";
+import { updateMfaMethod } from "../../utils/mfa";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -61,7 +67,7 @@ export function checkYourPhonePost(
     }
 
     if (isPhoneNumberUpdated) {
-      updateSessionUser(req, newPhoneNumber);
+      updateSessionUser(req, newPhoneNumber, getUserJourney(intent));
       return res.redirect(getRedirectUrl(intent));
     }
 
@@ -101,9 +107,34 @@ async function handleMfaChange(
       service,
       trace
     );
+  } else if (intent === INTENT_CHANGE_DEFAULT_METHOD) {
+    return handleChangeDefaultMethod(newPhoneNumber, sessionDetails, req);
   } else {
     logger.error({ err: `Unknown phone verification intent ${intent}`, trace });
   }
+}
+
+async function handleChangeDefaultMethod(
+  newPhoneNumber: string,
+  sessionDetails: any,
+  req: Request
+): Promise<boolean> {
+  const updateInput: UpdateInformationInput = {
+    updateInput: "",
+    email: req.session.user.email,
+    otp: "",
+    mfaMethod: {
+      method: {
+        mfaMethodType: "SMS",
+        endPoint: newPhoneNumber,
+      },
+      priorityIdentifier: "DEFAULT",
+      methodVerified: true,
+    },
+  };
+  await updateMfaMethod(updateInput, sessionDetails);
+
+  return true;
 }
 
 async function handleChangePhoneNumber(
@@ -174,11 +205,15 @@ async function handleAddMfaMethod(
   return false;
 }
 
-function updateSessionUser(req: Request, newPhoneNumber: string): void {
+function updateSessionUser(
+  req: Request,
+  newPhoneNumber: string,
+  state: UserJourney = UserJourney.ChangePhoneNumber
+): void {
   req.session.user.phoneNumber = newPhoneNumber;
   delete req.session.user.newPhoneNumber;
-  req.session.user.state.changePhoneNumber = getNextState(
-    req.session.user.state.changePhoneNumber.value,
+  req.session.user.state[state] = getNextState(
+    req.session.user.state[state].value,
     EventType.ValueUpdated
   );
 }
@@ -187,7 +222,23 @@ function getRedirectUrl(intent: Intent): string {
   if (intent === INTENT_ADD_MFA_METHOD) {
     return PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url;
   }
-  return PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url;
+  if (intent === INTENT_CHANGE_PHONE_NUMBER) {
+    return PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url;
+  }
+  if (intent === INTENT_CHANGE_DEFAULT_METHOD) {
+    return PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url;
+  }
+  logger.error({
+    err: `Unknown intent in getRedirectUrl: ${intent}`,
+  });
+  throw Error(`Uknown intent ${intent}`);
+}
+
+function getUserJourney(intent: Intent): UserJourney {
+  if (intent === "changeDefaultMethod") {
+    return UserJourney.ChangeDefaultMethod;
+  }
+  return UserJourney.ChangePhoneNumber;
 }
 
 export function requestNewOTPCodeGet(req: Request, res: Response): void {
