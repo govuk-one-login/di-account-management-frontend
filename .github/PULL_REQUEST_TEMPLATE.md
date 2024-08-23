@@ -33,17 +33,20 @@
 
 ### Testing
 
-<!-- Design updates should be signed off by a UCD person prior to the PR being open for dev review -->
-<!-- Delete if changes do NOT include any design updates -->
-- [ ] Design updates have been signed off by a member of the UCD team
-
-<!-- Delete if changes do NOT include any analytics updates -->
-- [ ] Analytics updates have been signed off by a PA
-
 <!-- When working with feature flags, features that are flagged off should not be made available in production -->
 <!-- Delete if changes do NOT include any feature flags -->
 - [ ] Automated test coverage includes features that are flagged off
 
+### Sign-offs
+
+<!-- Design updates should be signed off by a UCD person prior to the PR being open for dev review -->
+<!-- Delete if changes do NOT include any design updates -->
+- [ ] Design updates have been signed off by a member of the UCD team
+<!-- Delete if changes do NOT include any analytics updates -->
+- [ ] Analytics updates have been signed off by a PA
+
+
 ## How to review
+
 <!-- Provide a summary of any testing you've done -->
 <!-- Describe any non-standard steps to review this work, or highlight any areas that you'd like the reviewer's opinion on -->
