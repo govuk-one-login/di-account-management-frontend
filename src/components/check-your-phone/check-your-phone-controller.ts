@@ -125,7 +125,7 @@ async function handleChangeDefaultMethod(
     mfaMethod: {
       method: {
         mfaMethodType: "SMS",
-        endPoint: newPhoneNumber,
+        phoneNumber: newPhoneNumber,
       },
       priorityIdentifier: "DEFAULT",
       methodVerified: true,
