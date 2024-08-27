@@ -8,4 +8,10 @@
           <p class="govuk-body">{{ "pages.changeDefaultMethod.switchToApp" | translate }}</p>
           <a href='{{ "CHANGE_DEFAULT_METHOD_APP" | getPath }}' class="govuk-button" data-module="govuk-button">{{ "pages.changeDefaultMethod.setUpAppButton" | translate }}</a>
         {% endif %}
+
+        {% if currentMethodType == "AUTH_APP" %}
+          <p class="govuk-body">{{ "pages.changeDefaultMethod.currentIsApp" | translate }}</p>
+          <p class="govuk-body">{{ "pages.changeDefaultMethod.switchToPhone" | translate }}</p>
+          <a href='{{ "CHANGE_DEFAULT_METHOD_SMS" | getPath }}' class="govuk-button" data-module="govuk-button">{{ "pages.changeDefaultMethod.setUpPhoneButton" | translate }}</a>
+        {% endif %}
     </form>{% endblock pageContent %}

@@ -15,6 +15,7 @@ import {
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../../check-your-email/types";
 import { logger } from "../../../utils/logger";
+import * as config from "../../../config";
 
 describe("check your phone controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -31,7 +32,12 @@ describe("check your phone controller", () => {
       body: {},
       t: sandbox.fake(),
       session: {
-        user: { state: { changePhoneNumber: { value: "CHANGE_VALUE" } } },
+        user: {
+          state: {
+            changePhoneNumber: { value: "CHANGE_VALUE" },
+            changeDefaultMethod: { value: "CHANGE_VALUE" },
+          },
+        },
         mfaMethods: [
           {
             mfaIdentifier: 111111,
@@ -88,6 +94,19 @@ describe("check your phone controller", () => {
       expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
+      );
+    });
+
+    it("should redirect to change default method confirmation when valid code entered", async () => {
+      sandbox.replace(config, "supportChangeMfa", () => true);
+      req.session.user.tokens = { accessToken: "token" } as any;
+      req.body.intent = "changeDefaultMethod";
+      req.session.user.state.changeDefaultMethod.value = "CHANGE_VALUE";
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(
+        PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
       );
     });
 

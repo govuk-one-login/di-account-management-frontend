@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { getLastNDigits } from "../../utils/phone-number";
+import {
+  convertInternationalPhoneNumberToE164Format,
+  getLastNDigits,
+} from "../../utils/phone-number";
 import {
   generateSessionDetails,
   handleMfaMethodPage,
@@ -7,8 +10,17 @@ import {
 } from "../common/mfa";
 import { updateMfaMethod } from "../../utils/mfa";
 import { EventType, getNextState } from "../../utils/state-machine";
-import { PATH_DATA } from "../../app.constants";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants";
 import { UpdateInformationInput } from "../../utils/types";
+import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
+import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
+import xss from "xss";
+import { getTxmaHeader } from "../../utils/txma-header";
+import {
+  formatValidationError,
+  renderBadRequest,
+} from "../../utils/validation";
+import { BadRequestError } from "../../utils/errors";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 
@@ -42,6 +54,72 @@ export async function changeDefaultMethodAppGet(
   next: NextFunction
 ): Promise<void> {
   return renderMfaMethodPage(ADD_APP_TEMPLATE, req, res, next);
+}
+
+export async function changeDefaultMethodSmsGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  return res.render("common/sms/add-sms.njk");
+}
+
+export function changeDefaultMethodSmsPost(
+  service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
+) {
+  return async function (req: Request, res: Response): Promise<void> {
+    const {
+      hasInternationalPhoneNumber,
+      internationalPhoneNumber,
+      phoneNumber,
+    } = req.body;
+    const { accessToken } = req.session.user.tokens;
+    const { email } = req.session.user;
+    const newPhoneNumber =
+      hasInternationalPhoneNumber === "true"
+        ? convertInternationalPhoneNumberToE164Format(internationalPhoneNumber)
+        : phoneNumber;
+
+    const response = await service.sendPhoneVerificationNotification(
+      accessToken,
+      email,
+      newPhoneNumber,
+      req.ip,
+      res.locals.sessionId,
+      res.locals.persistentSessionId,
+      xss(req.cookies.lng as string),
+      res.locals.clientSessionId,
+      getTxmaHeader(req, res.locals.trace)
+    );
+
+    if (response.success) {
+      req.session.user.newPhoneNumber = newPhoneNumber;
+
+      req.session.user.state.changePhoneNumber = getNextState(
+        req.session.user.state.changeDefaultMethod.value,
+        EventType.VerifyCodeSent
+      );
+
+      return res.redirect(
+        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changeDefaultMethod`
+      );
+    }
+    if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
+      const href: string =
+        hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true"
+          ? "internationalPhoneNumber"
+          : "phoneNumber";
+
+      const error = formatValidationError(
+        href,
+        req.t(
+          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
+        )
+      );
+      return renderBadRequest(res, req, "common/sms/add-sms.njk", error);
+    } else {
+      throw new BadRequestError(response.message, response.code);
+    }
+  };
 }
 
 export async function changeDefaultMethodAppPost(
