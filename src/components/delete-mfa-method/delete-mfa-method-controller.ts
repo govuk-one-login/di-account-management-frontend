@@ -20,7 +20,7 @@ export async function deleteMfaMethodGet(
   }
 
   if (backupMethod.method.mfaMethodType === "SMS") {
-    phoneNumber = getLastNDigits(backupMethod.method.endPoint, 4);
+    phoneNumber = getLastNDigits(backupMethod.method.phoneNumber, 4);
   }
 
   res.render("delete-mfa-method/index.njk", { ...backupMethod, phoneNumber });

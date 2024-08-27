@@ -54,7 +54,7 @@ describe("mfaMethodMiddleware", () => {
         mfaIdentifier: 123456,
         priorityIdentifier: "DEFAULT",
         mfaMethodType: "AUTH_APP",
-        endPoint: "http://mock-endpoint",
+        credential: "http://mock-endpoint",
         methodVerified: true,
       },
     ]);

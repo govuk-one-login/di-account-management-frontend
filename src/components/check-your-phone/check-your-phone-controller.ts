@@ -147,8 +147,9 @@ async function handleChangePhoneNumber(
   const smsMFAMethod = req.session.mfaMethods.find(
     (mfa) => mfa.method.mfaMethodType === "SMS"
   );
-  if (smsMFAMethod) {
-    smsMFAMethod.method.endPoint = newPhoneNumber;
+
+  if (smsMFAMethod && smsMFAMethod.method.mfaMethodType === "SMS") {
+    smsMFAMethod.method.phoneNumber = newPhoneNumber;
     updateInput.mfaMethod = smsMFAMethod;
     return await service.updatePhoneNumberWithMfaApi(
       updateInput,
@@ -170,31 +171,34 @@ async function handleAddMfaMethod(
   service: CheckYourPhoneServiceInterface,
   trace: string
 ): Promise<boolean> {
-  const smsMFAMethod = req.session.mfaMethods.find(
+  const defaultMfaMethod = req.session.mfaMethods.find(
     (mfa) => mfa.priorityIdentifier === "DEFAULT"
   );
-  if (!smsMFAMethod) {
+
+  if (!defaultMfaMethod) {
     logger.error({
       err: "No existing DEFAULT MFA method in handleAddMfaMethod",
       trace,
     });
     return false;
   }
+
   try {
-    smsMFAMethod.method.endPoint = newPhoneNumber;
-    updateInput.credential = "no-credentials";
-    updateInput.mfaMethod = {
-      ...smsMFAMethod,
-      mfaIdentifier: smsMFAMethod.mfaIdentifier + 1,
-      priorityIdentifier: "BACKUP",
-      method: {
-        mfaMethodType:
-          smsMFAMethod.method.mfaMethodType === "SMS" ? "AUTH_APP" : "SMS",
-        endPoint: newPhoneNumber,
-      },
-      methodVerified: true,
-    };
-    return await service.addMfaMethodService(updateInput, sessionDetails);
+    if (defaultMfaMethod.method.mfaMethodType === "SMS") {
+      defaultMfaMethod.method.phoneNumber = newPhoneNumber;
+      updateInput.credential = "no-credentials";
+      updateInput.mfaMethod = {
+        ...defaultMfaMethod,
+        mfaIdentifier: defaultMfaMethod.mfaIdentifier + 1,
+        priorityIdentifier: "BACKUP",
+        method: {
+          mfaMethodType: defaultMfaMethod.method.mfaMethodType,
+          phoneNumber: newPhoneNumber,
+        },
+        methodVerified: true,
+      };
+      return await service.addMfaMethodService(updateInput, sessionDetails);
+    }
   } catch (error) {
     logger.error({
       err: `No existing MFA method in handleAddMfaMethod: ${error.message} `,
@@ -239,6 +243,5 @@ export function requestNewOTPCodeGet(req: Request, res: Response): void {
     req.session.user.state.changePhoneNumber.value,
     EventType.ResendCode
   );
-
   return res.redirect(PATH_DATA.CHANGE_PHONE_NUMBER.url);
 }

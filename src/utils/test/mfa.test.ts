@@ -229,7 +229,7 @@ describe("MFA Function", () => {
       mfaIdentifier: 111111,
       methodVerified: true,
       method: {
-        endPoint: phoneNumber,
+        phoneNumber: phoneNumber,
         mfaMethodType: "SMS",
       },
       priorityIdentifier: "DEFAULT",
@@ -323,8 +323,8 @@ describe("MFA Function", () => {
       mfaIdentifier: 111111,
       methodVerified: true,
       method: {
-        endPoint: "PHONE",
         mfaMethodType: "SMS",
+        phoneNumber: "070",
       },
       priorityIdentifier: "DEFAULT",
     };
@@ -386,8 +386,8 @@ describe("MFA Function", () => {
       mfaIdentifier: 111111,
       methodVerified: true,
       method: {
-        endPoint: "PHONE",
         mfaMethodType: "SMS",
+        phoneNumber: "070",
       },
       priorityIdentifier: "DEFAULT",
     };

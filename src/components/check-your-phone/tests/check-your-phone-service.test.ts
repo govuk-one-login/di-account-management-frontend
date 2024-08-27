@@ -95,8 +95,8 @@ describe("checkYourPhoneService", () => {
       mfaIdentifier: 111111,
       methodVerified: true,
       method: {
-        endPoint: "PHONE",
         mfaMethodType: "SMS",
+        phoneNumber: "PHONE",
       },
       priorityIdentifier: "DEFAULT",
     };
