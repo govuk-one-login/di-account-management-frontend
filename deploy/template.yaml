@@ -2010,6 +2010,94 @@ Resources:
   # CloudFront Distribution
   #
 
+  CloudFrontDistributionTest:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+        CNAMEs:
+          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+        Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
+        DefaultCacheBehavior:
+          AllowedMethods:
+            ["GET", "HEAD", "OPTIONS", "PUT", "PATCH", "POST", "DELETE"]
+          # CachingDisabled managed cache policy id
+          # see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+          OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
+          Compress: false
+          MinTTL: 0
+          TargetOriginId:
+            !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+          ViewerProtocolPolicy: redirect-to-https
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersFunction"
+        Enabled: true
+        HttpVersion: "http2"
+        Logging:
+          Bucket: !Sub "${CloudFrontLogsBucket}.s3.amazonaws.com"
+        Origins:
+          - ConnectionAttempts: 3
+            ConnectionTimeout: 10
+            DomainName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
+            Id: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+            CustomOriginConfig:
+              HTTPSPort: 443
+              OriginKeepaliveTimeout: 5
+              OriginProtocolPolicy: https-only
+              OriginReadTimeout: 30
+              OriginSSLProtocols:
+                - TLSv1.2
+        ViewerCertificate:
+          AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
+          MinimumProtocolVersion: TLSv1.2_2021
+          SslSupportMethod: sni-only
+        WebACLId: !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
+        CacheBehaviors:
+          - !If
+            - UseCloudFrontCaching
+            - PathPattern: "/assets/*"
+              AllowedMethods:
+                - GET
+                - HEAD
+              CachePolicyId: !Ref FrontendCachePolicy
+              Compress: true
+              TargetOriginId:
+                !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+              OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
+              ViewerProtocolPolicy: redirect-to-https
+              MinTTL: 0
+            - !Ref "AWS::NoValue"
+          - !If
+            - UseCloudFrontCaching
+            - PathPattern: "/public/*"
+              AllowedMethods:
+                - GET
+                - HEAD
+              CachePolicyId: !Ref FrontendCachePolicy
+              Compress: true
+              TargetOriginId:
+                !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+              OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
+              ViewerProtocolPolicy: redirect-to-https
+              MinTTL: 0
+            - !Ref "AWS::NoValue"
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-CloudFrontDistributionTest"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
