@@ -37,7 +37,7 @@ describe("check your phone controller", () => {
             mfaIdentifier: 111111,
             methodVerified: true,
             method: {
-              endPoint: "PHONE",
+              phoneNumber: "070",
               mfaMethodType: "SMS",
             },
             priorityIdentifier: "DEFAULT",
@@ -174,8 +174,8 @@ describe("check your phone controller", () => {
           mfaIdentifier: 111111,
           methodVerified: true,
           method: {
-            endPoint: "07111111111",
             mfaMethodType: "SMS",
+            phoneNumber: "07111111111",
           },
           priorityIdentifier: "DEFAULT",
         },
@@ -207,8 +207,8 @@ describe("check your phone controller", () => {
           mfaIdentifier: 111112,
           methodVerified: true,
           method: {
-            endPoint: "07111111111",
-            mfaMethodType: "AUTH_APP",
+            mfaMethodType: "SMS",
+            phoneNumber: "07111111111",
           },
           priorityIdentifier: "BACKUP",
         },

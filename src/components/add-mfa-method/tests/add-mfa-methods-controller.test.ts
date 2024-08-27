@@ -56,7 +56,7 @@ describe("addMfaMethodGet", () => {
         mfaIdentifier: 111111,
         methodVerified: true,
         method: {
-          endPoint: "PHONE",
+          credential: "ABC",
           mfaMethodType: "AUTH_APP",
         },
         priorityIdentifier: "DEFAULT",
@@ -75,7 +75,7 @@ describe("addMfaMethodGet", () => {
         mfaIdentifier: 111111,
         methodVerified: true,
         method: {
-          endPoint: "PHONE",
+          phoneNumber: "070",
           mfaMethodType: "SMS",
         },
         priorityIdentifier: "DEFAULT",
@@ -84,7 +84,7 @@ describe("addMfaMethodGet", () => {
         mfaIdentifier: 2222,
         methodVerified: true,
         method: {
-          endPoint: "PHONE",
+          phoneNumber: "070",
           mfaMethodType: "SMS",
         },
         priorityIdentifier: "BACKUP",
@@ -103,7 +103,7 @@ describe("addMfaMethodGet", () => {
         mfaIdentifier: 111111,
         methodVerified: true,
         method: {
-          endPoint: "PHONE",
+          phoneNumber: "070",
           mfaMethodType: "SMS",
         },
         priorityIdentifier: "DEFAULT",
@@ -112,7 +112,7 @@ describe("addMfaMethodGet", () => {
         mfaIdentifier: 22222,
         methodVerified: true,
         method: {
-          endPoint: "PHONE",
+          phoneNumber: "070",
           mfaMethodType: "SMS",
         },
         priorityIdentifier: "BACKUP",
@@ -121,7 +121,7 @@ describe("addMfaMethodGet", () => {
         mfaIdentifier: 33333,
         methodVerified: true,
         method: {
-          endPoint: "PHONE",
+          phoneNumber: "070",
           mfaMethodType: "SMS",
         },
         priorityIdentifier: "BACKUP",

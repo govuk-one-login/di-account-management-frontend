@@ -122,7 +122,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
       priorityIdentifier: "DEFAULT",
       method: {
         mfaMethodType: "SMS",
-        endPoint: TEST_USER_PHONE_NUMBER,
+        phoneNumber: TEST_USER_PHONE_NUMBER,
       },
       methodVerified: true,
     },
@@ -131,7 +131,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
       priorityIdentifier: "DEFAULT",
       method: {
         mfaMethodType: "AUTH_APP",
-        endPoint: "http://mock-endpoint",
+        credential: "http://mock-endpoint",
       },
       methodVerified: true,
     },

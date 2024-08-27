@@ -41,7 +41,7 @@ describe("changeAuthenticatorAppService", () => {
       priorityIdentifier: "BACKUP",
       method: {
         mfaMethodType: "AUTH_APP",
-        endPoint: "1Password",
+        credential: "ABC",
       },
       methodVerified: true,
     };
