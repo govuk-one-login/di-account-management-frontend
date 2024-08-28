@@ -1,16 +1,22 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
+import tsEslint from "typescript-eslint";
 import mochaPlugin from "eslint-plugin-mocha";
 import eslintConfigPrettier from "eslint-config-prettier";
+import tsEslintParser from "@typescript-eslint/parser";
 
 export default [
   { files: ["**/*.{js,mjs,cjs,ts}"] },
-  { languageOptions: { globals: globals.browser } },
+  {
+    languageOptions: {
+      globals: globals.browser,
+      parser: tsEslintParser,
+    },
+  },
   pluginJs.configs.recommended,
   mochaPlugin.configs.flat.recommended,
-  ...tseslint.configs.recommended,
-  ...tseslint.configs.stylistic,
+  ...tsEslint.configs.recommended,
+  ...tsEslint.configs.stylistic,
   {
     ignores: [
       "*.d.ts",
@@ -45,7 +51,7 @@ export default [
   },
   {
     plugins: {
-      tseslint,
+      tsEslint,
     },
     files: ["**/*.test.ts", "**/*.test.js"],
     rules: {
