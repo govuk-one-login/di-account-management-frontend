@@ -105,6 +105,11 @@ async function createApp(): Promise<express.Application> {
     express.static(path.resolve("node_modules/govuk-frontend/govuk/assets"))
   );
 
+  app.get(
+    "/robots.txt",
+    express.static(path.join(__dirname, "public", "robots.txt"))
+  );
+
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 
