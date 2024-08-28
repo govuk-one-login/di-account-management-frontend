@@ -12,6 +12,7 @@ export default [
   ...tseslint.configs.recommended,
   {
     ignores: [
+      "*.d.ts",
       "node_modules",
       "dist",
       "functional-output",
