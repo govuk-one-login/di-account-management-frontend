@@ -43,7 +43,7 @@
 
 {% block header %}
     {% include 'common/layout/header.njk' %}
-    {% if not hideAccountNavigation %}
+    {% if not hideAccountNavigation and isUserLoggedIn %}
       {% include 'common/layout/navigation.njk' %}
     {% endif %}
 {% endblock %}

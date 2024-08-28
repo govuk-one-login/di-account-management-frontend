@@ -70,6 +70,7 @@ import { addMfaMethodSmsRouter } from "./components/add-mfa-method-sms/add-mfa-m
 import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa-method-routes";
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
+import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -167,6 +168,7 @@ async function createApp(): Promise<express.Application> {
   app.use(oidcAuthCallbackRouter);
   app.use(startRouter);
   app.use(logoutRouter);
+  app.use(isUserLoggedInMiddleware);
   app.use(enterPasswordRouter);
   app.use(changeEmailRouter);
   app.use(updateConfirmationRouter);
