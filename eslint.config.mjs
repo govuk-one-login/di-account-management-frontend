@@ -2,6 +2,7 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import mochaPlugin from "eslint-plugin-mocha";
+import eslintConfigPrettier from "eslint-config-prettier";
 
 export default [
   { files: ["**/*.{js,mjs,cjs,ts}"] },
@@ -50,4 +51,5 @@ export default [
       "@typescript-eslint/no-unused-expressions": "off",
     },
   },
+  eslintConfigPrettier,
 ];
