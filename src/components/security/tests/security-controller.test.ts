@@ -78,6 +78,7 @@ describe("security controller", () => {
         canChangeTypeofPrimary: true,
       });
     });
+
     it("should render security view without activity log when the feature flag is off", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
@@ -129,6 +130,7 @@ describe("security controller", () => {
         canChangeTypeofPrimary: true,
       });
     });
+
     it("should render security view without activity log when the user doesn't have a supported service", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
@@ -182,6 +184,7 @@ describe("security controller", () => {
         canChangeTypeofPrimary: true,
       });
     });
+
     it("throws an error when the mfaMethodType is undefined", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
@@ -215,6 +218,7 @@ describe("security controller", () => {
         securityGet(req as Request, res as Response)
       ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: undefined");
     });
+
     it("throws an error when the mfaMethodType is not unknown", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
@@ -248,6 +252,7 @@ describe("security controller", () => {
         securityGet(req as Request, res as Response)
       ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: INVALID");
     });
+
     it("should render security view with activity log when the user has a supported service and the feature flag is on", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {

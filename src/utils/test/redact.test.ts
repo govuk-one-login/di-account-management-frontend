@@ -25,6 +25,7 @@ describe("Redact tests", (): void => {
     const resultAsObject: any = JSON.parse(result);
     expect(resultAsObject["name"]).to.equal("REDACTED");
   });
+
   it("Redacts multiple fields with the same name from a JSON document.", (): void => {
     // Arrange
     const json: string = `
@@ -49,6 +50,7 @@ describe("Redact tests", (): void => {
     expect(resultAsObject["name"]).to.equal("REDACTED");
     expect(resultAsObject["address"]["name"]).to.equal("REDACTED");
   });
+
   it("Redacts multiple fields with different names from a JSON document.", (): void => {
     // Arrange
     const json: string = `
@@ -72,6 +74,7 @@ describe("Redact tests", (): void => {
     expect(resultAsObject["name"]).to.equal("REDACTED");
     expect(resultAsObject["address"]["house"]).to.equal("REDACTED");
   });
+
   it("Redacts multiple fields from a list of names from a JSON document.", (): void => {
     // Arrange
     const json: string = `
@@ -97,6 +100,7 @@ describe("Redact tests", (): void => {
     expect(resultAsObject["address"]["name"]).to.equal("REDACTED");
     expect(resultAsObject["address"]["town"]).to.equal("REDACTED");
   });
+
   it("Does not redact objects.", (): void => {
     // Arrange
     const json: string = `

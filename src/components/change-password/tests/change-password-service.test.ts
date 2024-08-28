@@ -20,9 +20,11 @@ const baseUrl = getApiBaseUrl();
 
 describe("changePasswordService", () => {
   let sandbox: sinon.SinonSandbox;
+
   beforeEach(() => {
     sandbox = sinon.createSandbox();
   });
+
   afterEach(() => {
     sandbox.restore();
     nock.cleanAll();

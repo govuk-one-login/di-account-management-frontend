@@ -36,6 +36,7 @@ describe("configureNunjucks", () => {
       expect(result).to.equal("translated_value");
       expect(fixedTStub.calledWith("test_key")).to.be.true;
     });
+
     it("should translate based on default language", () => {
       const fixedTStub = sinon
         .stub()
@@ -48,6 +49,7 @@ describe("configureNunjucks", () => {
       expect(result).to.equal("translated_value");
       expect(fixedTStub.calledWith("test_key")).to.be.true;
     });
+
     it("should throw an error if translation key does no exist", () => {
       const fixedTStub = sinon
         .stub()

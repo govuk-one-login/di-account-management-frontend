@@ -20,9 +20,11 @@ const baseUrl = getApiBaseUrl();
 
 describe("checkYourPhoneService", () => {
   let sandbox: sinon.SinonSandbox;
+
   beforeEach(() => {
     sandbox = sinon.createSandbox();
   });
+
   afterEach(() => {
     sandbox.restore();
     nock.cleanAll();

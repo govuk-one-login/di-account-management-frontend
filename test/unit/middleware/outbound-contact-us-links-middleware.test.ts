@@ -63,6 +63,7 @@ describe("Middleware", () => {
       outboundContactUsLinksMiddleware(req, res, next);
       expect(res.locals).to.have.property("contactUsLinkUrl");
     });
+
     it("should set `res.locals.contactUsLinkUrl correct value`", () => {
       expect(res.locals).to.not.have.property("contactUsLinkUrl");
       outboundContactUsLinksMiddleware(req, res, next);

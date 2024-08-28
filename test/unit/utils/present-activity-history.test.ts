@@ -22,6 +22,7 @@ describe("presentActivityHistory", () => {
   const trace = "trace";
 
   const activityHistoryModule = require("../../../src/utils/activityHistory");
+
   beforeEach(() => {
     getActivityLogEntryStub = stub(
       activityHistoryModule,
@@ -32,6 +33,7 @@ describe("presentActivityHistory", () => {
   afterEach(() => {
     getActivityLogEntryStub.restore();
   });
+
   it("returns an empty list when there is no history", async () => {
     getActivityLogEntryStub.resolves([]);
 

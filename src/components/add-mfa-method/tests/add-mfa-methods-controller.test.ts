@@ -50,6 +50,7 @@ describe("addMfaMethodGet", () => {
 
     expect(res.render).to.have.calledWith("add-mfa-method/index.njk");
   });
+
   it("should handle a single mfa method", () => {
     req.session.mfaMethods = [
       {
@@ -69,6 +70,7 @@ describe("addMfaMethodGet", () => {
       showSingleMethod: true,
     });
   });
+
   it("should handle two mfa methods", () => {
     req.session.mfaMethods = [
       {

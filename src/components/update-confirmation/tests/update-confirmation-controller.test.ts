@@ -123,7 +123,7 @@ describe("addMfaMethodAppConfirmationGet", () => {
     );
   });
 
-  it("should render change default app confimration page", () => {
+  it("should render change default app confirmation page for AUTH_APP", () => {
     req.session = {
       mfaMethods: [
         {
@@ -149,7 +149,7 @@ describe("addMfaMethodAppConfirmationGet", () => {
     );
   });
 
-  it("should render change default app confimration page", () => {
+  it("should render change default app confirmation page for SMS", () => {
     req.session = {
       mfaMethods: [
         {
