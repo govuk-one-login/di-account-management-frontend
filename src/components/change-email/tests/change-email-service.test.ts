@@ -31,7 +31,7 @@ describe("changeEmailService", () => {
     const sessionId = "session-123";
     const persistentSessionId = "persistentsession123";
     const userLanguage = "en";
-    const clientSessionId: string = "clientsessionid";
+    const clientSessionId = "clientsessionid";
 
     nock(baseUrl, {
       reqheaders: {

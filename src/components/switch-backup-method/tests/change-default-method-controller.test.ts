@@ -17,11 +17,7 @@ describe("change default method", () => {
   const redirectFn = sinon.spy();
   const changeFn = sinon.spy();
 
-  const generateRequest = (
-    id: string,
-    noBackup: boolean = true,
-    noDefault: boolean = true
-  ) => {
+  const generateRequest = (id: string, noBackup = true, noDefault = true) => {
     const mfaMethods: any[] = [];
     if (!noBackup) {
       mfaMethods.push({

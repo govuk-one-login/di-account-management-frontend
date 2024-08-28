@@ -1,8 +1,9 @@
 import { EventType, UserJourney } from "./utils/state-machine";
 
-export const PATH_DATA: {
-  [key: string]: { url: string; event?: EventType; type?: UserJourney };
-} = {
+export const PATH_DATA: Record<
+  string,
+  { url: string; event?: EventType; type?: UserJourney }
+> = {
   CONTACT: { url: "/contact-gov-uk-one-login" },
   SIGN_IN_HISTORY: { url: "/activity-history" },
   REPORT_SUSPICIOUS_ACTIVITY: { url: "/activity-history/report-activity" },

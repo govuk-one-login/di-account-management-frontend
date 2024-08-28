@@ -10,6 +10,7 @@ export default [
   pluginJs.configs.recommended,
   mochaPlugin.configs.flat.recommended,
   ...tseslint.configs.recommended,
+  ...tseslint.configs.stylistic,
   {
     ignores: [
       "*.d.ts",

@@ -137,7 +137,7 @@ export interface UpdateInformationSessionValues {
   txmaAuditEncoded: string;
 }
 
-export const allowedTxmaEvents: Array<string> = [
+export const allowedTxmaEvents: string[] = [
   "AUTH_AUTH_CODE_ISSUED",
   "AUTH_IPV_AUTHORISATION_REQUESTED",
 ];

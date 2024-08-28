@@ -3,11 +3,11 @@ import { getInitialState } from "../../src/utils/state-machine";
 import { Session, SessionData } from "express-session";
 import { IncomingHttpHeaders } from "http";
 
-export const CURRENT_EMAIL: string = "current-email@dl.com";
-export const NEW_EMAIL: string = "new-email@test.com";
-export const TOKEN: string = "token";
-export const SOURCE_IP: string = "sourceip";
-export const ENGLISH: string = "en";
+export const CURRENT_EMAIL = "current-email@dl.com";
+export const NEW_EMAIL = "new-email@test.com";
+export const TOKEN = "token";
+export const SOURCE_IP = "sourceip";
+export const ENGLISH = "en";
 
 export const SESSION_ID = "sessionid";
 export const PERSISTENT_SESSION_ID = "persistentsessionid";

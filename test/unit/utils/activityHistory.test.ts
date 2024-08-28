@@ -8,7 +8,7 @@ import {
 import type { ActivityLogEntry } from "../../../src/utils/types";
 import { stub, SinonStub } from "sinon";
 
-const createLogEntry = (shouldDisplay: boolean = true): ActivityLogEntry => {
+const createLogEntry = (shouldDisplay = true): ActivityLogEntry => {
   return {
     event_type: "AUTH_AUTH_CODE_ISSUED",
     session_id: "asdf",

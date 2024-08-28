@@ -29,7 +29,9 @@ enum EventType {
   RemoveBackup = "REMOVE_BACKUP",
 }
 
-type Event = { type: EventType };
+interface Event {
+  type: EventType;
+}
 
 interface StateAction {
   value: StateValue;

@@ -10,8 +10,8 @@ export const isObjectEmpty = (obj: Record<string, unknown>): boolean => {
 export function formatValidationError(
   key: string,
   validationMessage: string
-): { [k: string]: Error } {
-  const error: { [k: string]: Error } = {};
+): Record<string, Error> {
+  const error: Record<string, Error> = {};
   error[key] = {
     text: validationMessage,
     href: `#${key}`,
@@ -19,7 +19,7 @@ export function formatValidationError(
   return error;
 }
 
-export function generateErrorList(errors: { [k: string]: Error }): Error[] {
+export function generateErrorList(errors: Record<string, Error>): Error[] {
   if (!errors) return;
   const errorValues = Object.values(errors);
   const uniqueErrorList = [
@@ -32,7 +32,7 @@ export function renderBadRequest(
   res: Response,
   req: Request,
   template: string,
-  errors: { [k: string]: Error },
+  errors: Record<string, Error>,
   options?: object
 ): void {
   res.status(HTTP_STATUS_CODES.BAD_REQUEST);

@@ -123,39 +123,37 @@ export function getAccessibilityStatementUrl(): string {
   return process.env.ACCESSIBILITY_STATEMENT_URL;
 }
 
-const DBS_PROD: string = "Dw7Cxas8W7O2usHMHok95elKDRU";
-const DBS_NON_PROD: string = "dbs";
-const AAS_PROD: string = "dVrdJ7aemrvR0YlX7lDRaXnz0mE";
-const AAS_NON_PROD: string = "aas";
-const APAR_PROD: string = "2nAxHa72OqhE6eKymHZIx-sV3vI";
-const APAR_NON_PROD: string = "apar";
-const VETERANS_CARD_PROD: string = "zFeCxrwpLCUHFm-C4_CztwWtLfQ";
-const VETERANS_CARD_NON_PROD: string = "veteransCard";
-const FIND_AND_APPLY_FOR_A_GRANT_PROD: string = "tya4DoMpw_B7FK5YvuMAj3asc0A";
-const FIND_AND_APPLY_FOR_A_GRANT_NON_PROD: string = "findAndApplyForAGrant";
-const DVSA_PROD: string = "oLciSn5b6-cqcJjzgMMwCw1moD8";
-const DVSA_NON_PROD: string = "vehicleOperatorLicense";
-const STUB_RP_PROD: string = "5Vfplamzln0AoarlnX5CX4UTqyh59xfA";
-const STUB_RP_INTEGRATION: string = "gjWNvoLYietMjeaOE6Zoww533u18ZUfr";
-const STUB_RP_STAGING: string = "3NKFv679oYlMdyrhKErrTGbzBy2h8rrd";
-export const ONE_LOGIN_HOME_NON_PROD: string = "oneLoginHome";
-const DWP_INTEGRATION: string = "sqae3L7gOdizeRqFMw_KCDlhcyg";
-const DWP_INTEGRATION_2: string = "RtE7mP5yzCrdthst1kuVHS1SsSw";
-const DWP_LOCAL_DEV_INTEGRATION: string = "iOf3hyG7eymusbSUS6LgFeQ7AtU";
-const PRISON_VISITS_PROD: string = "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ";
-const PRISON_VISITS_NON_PROD: string = "prisonVisits";
-const ATE_CAPITAL_PROD: string = "S1hl5G31dSsMYqPaOuiRVOLhBX0";
-const ATE_CAPITAL_NON_PROD: string = "ate";
-const FAA_PROD: string = "CCdLjqwGtpAA1Td2CrNHT1yFbqa";
-const FAA_NON_PROD: string = "faa";
-const DRIVING_MEDICAL_CONDITION_PROD: string = "iJNgycwBNEWGQvkuiLxOdVmVzG9";
-const DRIVING_MEDICAL_CONDITION_NON_PROD: string = "drivingMedicalCondition";
-const USE_LASTING_POWER_OF_ATTORNEY_PROD: string =
-  "DduaLZl49t9hHADHyzJBmEwvbsw";
-const USE_LASTING_POWER_OF_ATTORNEY_NON_PROD: string =
-  "useLastingPowerOfAttorney";
-const PDP_CONNECT_PROD: string = "sdlgbEirK30fvgbrf0C78XY60qN";
-const PDP_CONNECT_NON_PROD: string = "PDPConnect";
+const DBS_PROD = "Dw7Cxas8W7O2usHMHok95elKDRU";
+const DBS_NON_PROD = "dbs";
+const AAS_PROD = "dVrdJ7aemrvR0YlX7lDRaXnz0mE";
+const AAS_NON_PROD = "aas";
+const APAR_PROD = "2nAxHa72OqhE6eKymHZIx-sV3vI";
+const APAR_NON_PROD = "apar";
+const VETERANS_CARD_PROD = "zFeCxrwpLCUHFm-C4_CztwWtLfQ";
+const VETERANS_CARD_NON_PROD = "veteransCard";
+const FIND_AND_APPLY_FOR_A_GRANT_PROD = "tya4DoMpw_B7FK5YvuMAj3asc0A";
+const FIND_AND_APPLY_FOR_A_GRANT_NON_PROD = "findAndApplyForAGrant";
+const DVSA_PROD = "oLciSn5b6-cqcJjzgMMwCw1moD8";
+const DVSA_NON_PROD = "vehicleOperatorLicense";
+const STUB_RP_PROD = "5Vfplamzln0AoarlnX5CX4UTqyh59xfA";
+const STUB_RP_INTEGRATION = "gjWNvoLYietMjeaOE6Zoww533u18ZUfr";
+const STUB_RP_STAGING = "3NKFv679oYlMdyrhKErrTGbzBy2h8rrd";
+export const ONE_LOGIN_HOME_NON_PROD = "oneLoginHome";
+const DWP_INTEGRATION = "sqae3L7gOdizeRqFMw_KCDlhcyg";
+const DWP_INTEGRATION_2 = "RtE7mP5yzCrdthst1kuVHS1SsSw";
+const DWP_LOCAL_DEV_INTEGRATION = "iOf3hyG7eymusbSUS6LgFeQ7AtU";
+const PRISON_VISITS_PROD = "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ";
+const PRISON_VISITS_NON_PROD = "prisonVisits";
+const ATE_CAPITAL_PROD = "S1hl5G31dSsMYqPaOuiRVOLhBX0";
+const ATE_CAPITAL_NON_PROD = "ate";
+const FAA_PROD = "CCdLjqwGtpAA1Td2CrNHT1yFbqa";
+const FAA_NON_PROD = "faa";
+const DRIVING_MEDICAL_CONDITION_PROD = "iJNgycwBNEWGQvkuiLxOdVmVzG9";
+const DRIVING_MEDICAL_CONDITION_NON_PROD = "drivingMedicalCondition";
+const USE_LASTING_POWER_OF_ATTORNEY_PROD = "DduaLZl49t9hHADHyzJBmEwvbsw";
+const USE_LASTING_POWER_OF_ATTORNEY_NON_PROD = "useLastingPowerOfAttorney";
+const PDP_CONNECT_PROD = "sdlgbEirK30fvgbrf0C78XY60qN";
+const PDP_CONNECT_NON_PROD = "PDPConnect";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",

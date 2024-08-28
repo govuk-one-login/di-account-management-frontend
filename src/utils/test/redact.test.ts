@@ -5,7 +5,7 @@ import { expect } from "chai";
 describe("Redact tests", (): void => {
   it("Redacts a field from a JSON document.", (): void => {
     // Arrange
-    const json: string = `
+    const json = `
       {
         "name": "John Doe",
         "age": 42,
@@ -28,7 +28,7 @@ describe("Redact tests", (): void => {
 
   it("Redacts multiple fields with the same name from a JSON document.", (): void => {
     // Arrange
-    const json: string = `
+    const json = `
       {
         "name": "John Doe",
         "age": 42,
@@ -53,7 +53,7 @@ describe("Redact tests", (): void => {
 
   it("Redacts multiple fields with different names from a JSON document.", (): void => {
     // Arrange
-    const json: string = `
+    const json = `
       {
         "name": "John Doe",
         "age": 42,
@@ -77,7 +77,7 @@ describe("Redact tests", (): void => {
 
   it("Redacts multiple fields from a list of names from a JSON document.", (): void => {
     // Arrange
-    const json: string = `
+    const json = `
       {
         "name": "John Doe",
         "age": 42,
@@ -103,7 +103,7 @@ describe("Redact tests", (): void => {
 
   it("Does not redact objects.", (): void => {
     // Arrange
-    const json: string = `
+    const json = `
       {
         "name": "John Doe",
         "age": 42,

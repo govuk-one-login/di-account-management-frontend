@@ -54,10 +54,7 @@ describe("string-helpers", () => {
   describe("isValidUrl", () => {
     let loggerWarnSpy: sinon.SinonSpy;
     // Optional: Utility function to generate test URLs
-    function generateTestUrls(
-      baseUrl: string,
-      iterations: number = 5
-    ): string[] {
+    function generateTestUrls(baseUrl: string, iterations = 5): string[] {
       const urls: string[] = [baseUrl];
       for (let i = 1; i <= iterations; i++) {
         const url = new URL(urls[i - 1]);
