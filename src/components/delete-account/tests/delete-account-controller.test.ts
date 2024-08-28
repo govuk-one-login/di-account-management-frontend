@@ -59,7 +59,8 @@ describe("delete account controller", () => {
   });
 
   describe("deleteAccountGet", () => {
-    describe("deleteAccountGetWithoutSubjectId", () => {
+    it("deleteAccountGetWithoutSubjectId", () => {
+      // eslint-disable-next-line mocha/no-nested-tests
       it("should render delete account page", () => {
         const req: any = {
           body: {},
@@ -76,7 +77,8 @@ describe("delete account controller", () => {
       });
     });
 
-    describe("deleteAccountGetWithoutServices", () => {
+    it("deleteAccountGetWithoutServices", () => {
+      // eslint-disable-next-line mocha/no-identical-title,mocha/no-nested-tests
       it("should render delete account page", () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
@@ -94,7 +96,7 @@ describe("delete account controller", () => {
       });
     });
 
-    describe("deleteAccountGetWithServices", () => {
+    it("deleteAccountGetWithServices", () => {
       const serviceList: Service[] = [
         {
           client_id: "client_id",
@@ -104,6 +106,7 @@ describe("delete account controller", () => {
         },
       ];
 
+      // eslint-disable-next-line mocha/no-nested-tests
       it("should render the delete account page with list of services used", () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
