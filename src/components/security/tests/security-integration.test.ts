@@ -50,7 +50,6 @@ describe("Integration:: security", () => {
   });
 
   it("should not attempt to display phone number when none is known", async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { isPhoneNumberVerified, ...nonIsPhoneVerifiedSessionProperties } =
       DEFAULT_USER_SESSION;
 
