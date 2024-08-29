@@ -145,6 +145,7 @@ describe("phone-number", () => {
       );
     });
   });
+
   describe("test international uk mobile numbers", () => {
     it("should return true with valid uk mobile domestic", () => {
       expect(containsUKMobileNumber("07911123456")).to.equal(true);

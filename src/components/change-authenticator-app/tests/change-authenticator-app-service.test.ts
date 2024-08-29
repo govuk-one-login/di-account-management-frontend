@@ -16,9 +16,11 @@ import * as mfaModule from "../../../utils/mfa";
 
 describe("changeAuthenticatorAppService", () => {
   let sandbox: sinon.SinonSandbox;
+
   beforeEach(() => {
     sandbox = sinon.createSandbox();
   });
+
   afterEach(() => {
     sandbox.restore();
     nock.cleanAll();

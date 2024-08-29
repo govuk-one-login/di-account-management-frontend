@@ -18,7 +18,7 @@
     "dev": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run watch-node\"",
     "dummy-server": "node dev-app.js",
     "depcheck": "depcheck",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.js",
+    "lint": "eslint .",
     "minfiy-build-js": "uglifyjs dist/public/scripts/application.js -o dist/public/scripts/application.js -c -m && uglifyjs dist/public/scripts/all.js -o dist/public/scripts/all.js -c -m && uglifyjs dist/public/scripts/showPassword.js -o dist/public/scripts/showPassword.js -c -m",
     "start": "node dist/server.js",
     "test:audit": "npm audit",
@@ -86,6 +86,7 @@
     "xstate": "^5.17.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.9.1",
     "@types/chai": "^4.3.6",
     "@types/chai-as-promised": "^7.1.8",
     "@types/cheerio": "^0.22.35",
@@ -116,6 +117,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-mocha": "^10.5.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
     "husky": "^9.1.5",
     "lint-staged": "^15.2.9",
     "mocha": "10.7.3",
@@ -129,6 +131,7 @@
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
+    "typescript-eslint": "^8.3.0",
     "uglify-js": "^3.19.2"
   },
   "resolutions": {

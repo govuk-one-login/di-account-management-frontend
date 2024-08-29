@@ -31,6 +31,7 @@ describe("getTxmaHeader", () => {
     expect(result).to.eq(TXMA_HEADER_VALUE);
     expect(loggerWarnSpy.notCalled).to.be.true;
   });
+
   it("returns an empty string when the header is not present", () => {
     const request: Partial<Request> = {
       headers: {

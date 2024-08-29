@@ -49,6 +49,7 @@ describe("set-local-vars-middleware", () => {
       expect(res.locals.persistentSessionId).to.equal("psid123456xyz");
       expect(next).to.be.calledOnce;
     });
+
     it("should not have persistent session id on response when no cookie present", () => {
       req.cookies = {
         cookies_preferences_set:

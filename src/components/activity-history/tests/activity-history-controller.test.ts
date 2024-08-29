@@ -23,6 +23,7 @@ describe("Activity history controller", () => {
     sandbox = sinon.createSandbox();
     const config = require("../../../config");
     const presentActivityHistoryModule = require("../../../utils/present-activity-history");
+
     it("should render the sign in history page with data", async () => {
       sandbox
         .stub(presentActivityHistoryModule, "presentActivityHistory")

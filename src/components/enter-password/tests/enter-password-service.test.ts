@@ -14,9 +14,11 @@ const baseUrl = getApiBaseUrl();
 
 describe("enterPasswordService", () => {
   let sandbox: sinon.SinonSandbox;
+
   beforeEach(() => {
     sandbox = sinon.createSandbox();
   });
+
   afterEach(() => {
     sandbox.restore();
     nock.cleanAll();

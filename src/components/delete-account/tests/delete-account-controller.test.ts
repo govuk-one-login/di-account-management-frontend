@@ -60,6 +60,7 @@ describe("delete account controller", () => {
 
   describe("deleteAccountGet", () => {
     it("deleteAccountGetWithoutSubjectId", () => {
+      // eslint-disable-next-line mocha/no-nested-tests
       it("should render delete account page", () => {
         const req: any = {
           body: {},
@@ -77,6 +78,7 @@ describe("delete account controller", () => {
     });
 
     it("deleteAccountGetWithoutServices", () => {
+      // eslint-disable-next-line mocha/no-identical-title,mocha/no-nested-tests
       it("should render delete account page", () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
@@ -104,6 +106,7 @@ describe("delete account controller", () => {
         },
       ];
 
+      // eslint-disable-next-line mocha/no-nested-tests
       it("should render the delete account page with list of services used", () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
@@ -154,6 +157,7 @@ describe("delete account controller", () => {
         );
         sessionStore.destroyUserSessions.restore();
       });
+
       it("should clear am cookie", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {

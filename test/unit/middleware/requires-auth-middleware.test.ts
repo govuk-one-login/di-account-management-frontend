@@ -113,34 +113,34 @@ describe("Requires auth middleware", () => {
     expect(nextFunction).to.have.been.calledOnce;
     expect(res.mockCookies.lo).to.equal("false");
   });
-});
 
-it("should redirect to Log in page", () => {
-  const sandbox: sinon.SinonSandbox = sinon.createSandbox();
-  const req: Partial<Request> = {
-    body: {},
-    query: {},
-    session: { user: { isAuthenticated: undefined } as any } as any,
-    url: "/test_url",
-    oidc: {
-      authorizationUrl: sandbox.spy(),
-      metadata: {
-        scopes: "openid",
-        redirect_uris: ["url"],
-        client_id: "test-client",
-      },
-    } as any, // Bypass type checking for this part,
-  };
+  it("should redirect to Log in page", () => {
+    const sandbox: sinon.SinonSandbox = sinon.createSandbox();
+    const req: Partial<Request> = {
+      body: {},
+      query: {},
+      session: { user: { isAuthenticated: undefined } as any } as any,
+      url: "/test_url",
+      oidc: {
+        authorizationUrl: sandbox.spy(),
+        metadata: {
+          scopes: "openid",
+          redirect_uris: ["url"],
+          client_id: "test-client",
+        },
+      } as any, // Bypass type checking for this part,
+    };
 
-  const res: Partial<Response> = {
-    render: sandbox.fake(),
-    redirect: sandbox.fake(() => {}),
-    locals: {},
-  };
+    const res: Partial<Response> = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
+      locals: {},
+    };
 
-  const nextFunction: NextFunction = sandbox.fake(() => {});
-  requiresAuthMiddleware(req as Request, res as Response, nextFunction);
-  expect(res.redirect).to.have.called;
-  expect(req.oidc.authorizationUrl).to.have.been.calledOnce;
-  sandbox.restore();
+    const nextFunction: NextFunction = sandbox.fake(() => {});
+    requiresAuthMiddleware(req as Request, res as Response, nextFunction);
+    expect(res.redirect).to.have.called;
+    expect(req.oidc.authorizationUrl).to.have.been.calledOnce;
+    sandbox.restore();
+  });
 });

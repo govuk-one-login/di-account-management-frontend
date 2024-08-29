@@ -22,9 +22,11 @@ describe("eventService", () => {
 
   describe("buildAuditEvent", () => {
     let clock: SinonFakeTimers;
+
     beforeEach(() => {
       clock = sinon.useFakeTimers(new Date(Date.UTC(2023, 20, 12)));
     });
+
     afterEach(() => {
       clock.restore();
     });

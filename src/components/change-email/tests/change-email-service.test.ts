@@ -14,9 +14,11 @@ const baseUrl = getApiBaseUrl();
 
 describe("changeEmailService", () => {
   let sandbox: sinon.SinonSandbox;
+
   beforeEach(() => {
     sandbox = sinon.createSandbox();
   });
+
   afterEach(() => {
     sandbox.restore();
     nock.cleanAll();
@@ -29,7 +31,7 @@ describe("changeEmailService", () => {
     const sessionId = "session-123";
     const persistentSessionId = "persistentsession123";
     const userLanguage = "en";
-    const clientSessionId: string = "clientsessionid";
+    const clientSessionId = "clientsessionid";
 
     nock(baseUrl, {
       reqheaders: {
