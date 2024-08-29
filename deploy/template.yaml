@@ -2110,6 +2110,7 @@ Resources:
           Headers:
             - CloudFront-Viewer-Country
             - CloudFront-Viewer-JA3-Fingerprint
+            - CloudFront-Viewer-Address
         Name: !Sub "${AWS::StackName}-OriginRequestPolicy"
         QueryStringsConfig:
           QueryStringBehavior: all
@@ -2129,6 +2130,7 @@ Resources:
             HeaderBehavior: whitelist
             Headers:
               - CloudFront-Viewer-Country
+              - CloudFront-Viewer-Address
           QueryStringsConfig:
             QueryStringBehavior: none
           EnableAcceptEncodingBrotli: true
