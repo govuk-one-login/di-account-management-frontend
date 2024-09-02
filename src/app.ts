@@ -107,6 +107,10 @@ async function createApp(): Promise<express.Application> {
 
   app.get(
     "/robots.txt",
+    (req, res, next) => {
+      console.log("we are in the robots.txt handler");
+      next();
+    },
     express.static(path.join(__dirname, "public", "robots.txt"))
   );
 
