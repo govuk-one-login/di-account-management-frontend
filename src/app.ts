@@ -105,7 +105,7 @@ async function createApp(): Promise<express.Application> {
     express.static(path.resolve("node_modules/govuk-frontend/govuk/assets"))
   );
 
-  app.get(
+  app.use(
     "/robots.txt",
     (req, res, next) => {
       console.log("we are in the robots.txt handler");
