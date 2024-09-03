@@ -105,14 +105,11 @@ async function createApp(): Promise<express.Application> {
     express.static(path.resolve("node_modules/govuk-frontend/govuk/assets"))
   );
 
-  app.use(
-    "/robots.txt",
-    (req, res, next) => {
-      console.log("we are in the robots.txt handler");
-      next();
-    },
-    express.static(path.join(__dirname, "public", "robots.txt"))
-  );
+  app.get("/robots.txt", (req, res) => {
+    res.send(`user-agent: *
+    disallow: /
+    allow: /contact-gov-uk-one-login`);
+  });
 
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
