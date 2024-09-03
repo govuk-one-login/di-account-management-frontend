@@ -71,6 +71,7 @@ import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
+import { robotsTxtRouter } from "./components/robots-txt/robots-txt-controller";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -104,12 +105,6 @@ async function createApp(): Promise<express.Application> {
     "/assets",
     express.static(path.resolve("node_modules/govuk-frontend/govuk/assets"))
   );
-
-  app.get("/robots.txt", (req, res) => {
-    res.send(`user-agent: *
-    disallow: /
-    allow: /contact-gov-uk-one-login`);
-  });
 
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
@@ -213,6 +208,7 @@ async function createApp(): Promise<express.Application> {
   app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
+  app.use(robotsTxtRouter);
 
   return app;
 }
