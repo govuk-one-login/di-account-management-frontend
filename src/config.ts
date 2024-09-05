@@ -154,6 +154,8 @@ const USE_LASTING_POWER_OF_ATTORNEY_PROD = "DduaLZl49t9hHADHyzJBmEwvbsw";
 const USE_LASTING_POWER_OF_ATTORNEY_NON_PROD = "useLastingPowerOfAttorney";
 const PDP_CONNECT_PROD = "sdlgbEirK30fvgbrf0C78XY60qN";
 const PDP_CONNECT_NON_PROD = "PDPConnect";
+const DFE_CLAIM_ADDITIONAL_PAYMENTS = "IJ_TuVEgIqAWT2mCe9b5uocMyNs";
+const DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD = "dfeClaimAdditionalPayments";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -208,6 +210,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   USE_LASTING_POWER_OF_ATTORNEY_NON_PROD,
   PDP_CONNECT_NON_PROD,
   PDP_CONNECT_PROD,
+  DFE_CLAIM_ADDITIONAL_PAYMENTS,
+  DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];

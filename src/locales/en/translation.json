@@ -1300,7 +1300,7 @@
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
-      "claimAdditionalPaymentsTeaching": {
+      "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
         "description": "Start or continue an application to claim an incentive payment in schools or further education.",
         "link_text": "Go to your additional payments for teaching claim",
@@ -1484,7 +1484,7 @@
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
-      "claimAdditionalPaymentsTeaching": {
+      "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
         "description": "Start or continue an application to claim an incentive payment in schools or further education.",
         "link_text": "Go to your additional payments for teaching claim",
@@ -1668,7 +1668,7 @@
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
-      "claimAdditionalPaymentsTeaching": {
+      "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
         "description": "Start or continue an application to claim an incentive payment in schools or further education.",
         "link_text": "Go to your additional payments for teaching claim",
@@ -1852,7 +1852,7 @@
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
-      "claimAdditionalPaymentsTeaching": {
+      "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
         "description": "Start or continue an application to claim an incentive payment in schools or further education.",
         "link_text": "Go to your additional payments for teaching claim",
