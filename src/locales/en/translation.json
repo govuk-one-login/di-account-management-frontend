@@ -913,6 +913,12 @@
         "description": "Share details of a lasting power of attorney",
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
+        "header": "Claim additional payments for teaching",
+        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
+        "link_text": "Go to your additional payments for teaching claim",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
       }
     },
     "integration": {
@@ -1109,6 +1115,12 @@
         "description": "Share details of a lasting power of attorney.",
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
+        "header": "Claim additional payments for teaching",
+        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
+        "link_text": "Go to your additional payments for teaching claim",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
       }
     },
     "staging": {
@@ -1287,6 +1299,12 @@
         "description": "Share details of a lasting power of attorney.",
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "claimAdditionalPaymentsTeaching": {
+        "header": "Claim additional payments for teaching",
+        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
+        "link_text": "Go to your additional payments for teaching claim",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
       }
     },
     "build": {
@@ -1465,6 +1483,12 @@
         "description": "Share details of a lasting power of attorney.",
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "claimAdditionalPaymentsTeaching": {
+        "header": "Claim additional payments for teaching",
+        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
+        "link_text": "Go to your additional payments for teaching claim",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
       }
     },
     "dev": {
@@ -1643,6 +1667,12 @@
         "description": "Share details of a lasting power of attorney.",
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "claimAdditionalPaymentsTeaching": {
+        "header": "Claim additional payments for teaching",
+        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
+        "link_text": "Go to your additional payments for teaching claim",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
       }
     },
     "local": {
@@ -1821,6 +1851,12 @@
         "description": "Share details of a lasting power of attorney.",
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "claimAdditionalPaymentsTeaching": {
+        "header": "Claim additional payments for teaching",
+        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
+        "link_text": "Go to your additional payments for teaching claim",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
       }
     }
   }
