@@ -210,8 +210,6 @@ export const getAllowedAccountListClientIDs: string[] = [
   USE_LASTING_POWER_OF_ATTORNEY_NON_PROD,
   PDP_CONNECT_NON_PROD,
   PDP_CONNECT_PROD,
-  DFE_CLAIM_ADDITIONAL_PAYMENTS,
-  DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
@@ -239,6 +237,8 @@ export const getAllowedServiceListClientIDs: string[] = [
   ...hmrcClientIds,
   DRIVING_MEDICAL_CONDITION_PROD,
   DRIVING_MEDICAL_CONDITION_NON_PROD,
+  DFE_CLAIM_ADDITIONAL_PAYMENTS,
+  DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD,
 ];
 
 function getProtocol(): string {
