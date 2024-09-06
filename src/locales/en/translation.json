@@ -916,9 +916,8 @@
       },
       "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
         "header": "Claim additional payments for teaching",
-        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
-        "link_text": "Go to your additional payments for teaching claim",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Claim additional payments for teaching",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "integration": {
@@ -1118,9 +1117,8 @@
       },
       "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
         "header": "Claim additional payments for teaching",
-        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
-        "link_text": "Go to your additional payments for teaching claim",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Claim additional payments for teaching",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "staging": {
@@ -1302,9 +1300,8 @@
       },
       "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
-        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
-        "link_text": "Go to your additional payments for teaching claim",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Claim additional payments for teaching",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "build": {
@@ -1486,9 +1483,8 @@
       },
       "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
-        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
-        "link_text": "Go to your additional payments for teaching claim",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Claim additional payments for teaching",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "dev": {
@@ -1670,9 +1666,8 @@
       },
       "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
-        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
-        "link_text": "Go to your additional payments for teaching claim",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Claim additional payments for teaching",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "local": {
@@ -1854,9 +1849,8 @@
       },
       "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
-        "description": "Start or continue an application to claim an incentive payment in schools or further education.",
-        "link_text": "Go to your additional payments for teaching claim",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Claim additional payments for teaching",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     }
   }

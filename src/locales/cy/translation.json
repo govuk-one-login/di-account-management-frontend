@@ -744,9 +744,8 @@
       },
       "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
-        "description": "Dechrau neu barhau cais i hawlio taliad cymhelliant mewn ysgolion neu addysg bellach.",
-        "link_text": "Ewch i'ch cais taliadau ychwanegol ar gyfer dysgu",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "integration": {
@@ -940,9 +939,8 @@
       },
       "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
-        "description": "Dechrau neu barhau cais i hawlio taliad cymhelliant mewn ysgolion neu addysg bellach.",
-        "link_text": "Ewch i'ch cais taliadau ychwanegol ar gyfer dysgu",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "staging": {
@@ -1118,9 +1116,8 @@
       },
       "dfeClaimAdditionalPayments": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
-        "description": "Dechrau neu barhau cais i hawlio taliad cymhelliant mewn ysgolion neu addysg bellach.",
-        "link_text": "Ewch i'ch cais taliadau ychwanegol ar gyfer dysgu",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "build": {
@@ -1296,9 +1293,8 @@
       },
       "dfeClaimAdditionalPayments": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
-        "description": "Dechrau neu barhau cais i hawlio taliad cymhelliant mewn ysgolion neu addysg bellach.",
-        "link_text": "Ewch i'ch cais taliadau ychwanegol ar gyfer dysgu",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "dev": {
@@ -1474,9 +1470,8 @@
       },
       "dfeClaimAdditionalPayments": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
-        "description": "Dechrau neu barhau cais i hawlio taliad cymhelliant mewn ysgolion neu addysg bellach.",
-        "link_text": "Ewch i'ch cais taliadau ychwanegol ar gyfer dysgu",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     },
     "local": {
@@ -1652,9 +1647,8 @@
       },
       "dfeClaimAdditionalPayments": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
-        "description": "Dechrau neu barhau cais i hawlio taliad cymhelliant mewn ysgolion neu addysg bellach.",
-        "link_text": "Ewch i'ch cais taliadau ychwanegol ar gyfer dysgu",
-        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details "
+        "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
       }
     }
   }
