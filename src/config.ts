@@ -154,6 +154,8 @@ const USE_LASTING_POWER_OF_ATTORNEY_PROD = "DduaLZl49t9hHADHyzJBmEwvbsw";
 const USE_LASTING_POWER_OF_ATTORNEY_NON_PROD = "useLastingPowerOfAttorney";
 const PDP_CONNECT_PROD = "sdlgbEirK30fvgbrf0C78XY60qN";
 const PDP_CONNECT_NON_PROD = "PDPConnect";
+const DFE_CLAIM_ADDITIONAL_PAYMENTS = "IJ_TuVEgIqAWT2mCe9b5uocMyNs";
+const DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD = "dfeClaimAdditionalPayments";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -235,6 +237,8 @@ export const getAllowedServiceListClientIDs: string[] = [
   ...hmrcClientIds,
   DRIVING_MEDICAL_CONDITION_PROD,
   DRIVING_MEDICAL_CONDITION_NON_PROD,
+  DFE_CLAIM_ADDITIONAL_PAYMENTS,
+  DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD,
 ];
 
 function getProtocol(): string {
