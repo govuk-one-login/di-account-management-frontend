@@ -398,19 +398,19 @@
       },
       "addMfaMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can manage how you get your security codes"
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "changeAuthenticatorApp": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "removeMfaMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
       },
       "changeDefaultMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
       },
       "cancelText": "Cancel and go back to Security"
     },
