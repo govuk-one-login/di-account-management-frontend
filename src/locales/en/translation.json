@@ -202,7 +202,7 @@
     "addMfaMethod": {
       "title": "Choose a back-up method",
       "sms": {
-        "title": "Backup phone number",
+        "title": "Back-up phone number",
         "hint": "Get a text message to a different mobile phone"
       },
       "app": {
@@ -214,7 +214,7 @@
           "text2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer."
         }
       },
-      "backLink": "I do not want to add another way to get security codes",
+      "backLink": "Cancel and go back to Security",
       "continue": "Continue",
       "backup": {
         "title": "Add a back-up method",

@@ -1,13 +1,10 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import {
-  addMfaMethodGet,
-  addMfaMethodPost,
-} from "./add-mfa-methods-controller";
+import { chooseBackupGet, chooseBackupPost } from "./choose-backup-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
-import { validateAddMfaMethodRequest } from "./add-mfa-mehod-validation";
+import { validateChooseBackupRequest } from "./choose-backup-validation";
 
 const router = express.Router();
 
@@ -16,14 +13,14 @@ router.get(
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
-  addMfaMethodGet
+  chooseBackupGet
 );
 
 router.post(
   PATH_DATA.ADD_MFA_METHOD.url,
   requiresAuthMiddleware,
-  ...validateAddMfaMethodRequest(),
-  addMfaMethodPost
+  ...validateChooseBackupRequest(),
+  chooseBackupPost
 );
 
-export { router as addMfaMethodRouter };
+export { router as chooseBackupRouter };

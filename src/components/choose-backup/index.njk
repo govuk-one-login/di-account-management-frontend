@@ -11,12 +11,13 @@
 {% set smsItem = {
     value: 'sms',
     text: 'pages.addMfaMethod.sms.title' | translate,
-    hint: 'pages.addMfaMethod.sms.hint' | translate
+    hint: { 
+        text: 'pages.addMfaMethod.sms.hint' | translate
+    }
 } %}
 {% set appItem = {
     value: 'app',
-    text: 'pages.addMfaMethod.app.title' | translate,
-    hint: 'pages.addMfaMethod.app.hint' | translate
+    text: 'pages.addMfaMethod.app.title' | translate
 } %}
 
 {% if showSingleMethod %}
