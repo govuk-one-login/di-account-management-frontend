@@ -130,30 +130,30 @@ Mappings:
       AccountId: 652711504416
   Container:
     dev:
-      CPU: 1024
-      Memory: 2048
-      MinCapacity: 3
-      MaxCapacity: 30
+      CPU: 2048
+      Memory: 4096
+      MinCapacity: 2
+      MaxCapacity: 12
     build:
-      CPU: 1024
-      Memory: 2048
-      MinCapacity: 3
-      MaxCapacity: 30
+      CPU: 2048
+      Memory: 4096
+      MinCapacity: 2
+      MaxCapacity: 12
     staging:
-      CPU: 1024
-      Memory: 2048
-      MinCapacity: 3
-      MaxCapacity: 30
+      CPU: 2048
+      Memory: 4096
+      MinCapacity: 2
+      MaxCapacity: 12
     integration:
-      CPU: 1024
-      Memory: 2048
-      MinCapacity: 3
-      MaxCapacity: 30
+      CPU: 2048
+      Memory: 4096
+      MinCapacity: 2
+      MaxCapacity: 12
     production:
-      CPU: 1024
-      Memory: 2048
-      MinCapacity: 3
-      MaxCapacity: 30
+      CPU: 2048
+      Memory: 4096
+      MinCapacity: 2
+      MaxCapacity: 12
   EnvironmentVariables:
     ### These environment variables are referenced further down the file.
     ### Please ensure that any variables defined for an environment are defined for _all_ environments.
@@ -424,16 +424,18 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 120
-        MinAdjustmentMagnitude: 5
+        Cooldown: 60
         StepAdjustments:
           - MetricIntervalLowerBound: 20
+            MetricIntervalUpperBound: 25
+            ScalingAdjustment: 100
+          - MetricIntervalLowerBound: 25
             MetricIntervalUpperBound: 30
             ScalingAdjustment: 200
           - MetricIntervalLowerBound: 30
-            MetricIntervalUpperBound: 35
+            MetricIntervalUpperBound: 40
             ScalingAdjustment: 300
-          - MetricIntervalLowerBound: 35
+          - MetricIntervalLowerBound: 40
             ScalingAdjustment: 500
 
   ECSStepScaleInPolicy:
@@ -451,9 +453,9 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 420
+        Cooldown: 180
         StepAdjustments:
-          - MetricIntervalUpperBound: -40
+          - MetricIntervalUpperBound: 10
             ScalingAdjustment: -50
 
   ECSStepScaleOutAlarm:
@@ -463,21 +465,21 @@ Resources:
       ActionsEnabled: true
       AlarmActions:
         - !Ref ECSStepScaleOutPolicy
-      AlarmDescription: "ECSClusterOver60PercentCPU"
+      AlarmDescription: "ECSClusterOver25PercentCPU"
       ComparisonOperator: "GreaterThanThreshold"
-      DatapointsToAlarm: "2"
+      DatapointsToAlarm: "1"
       Dimensions:
         - Name: ClusterName
           Value: !Ref ECSCluster
         - Name: ServiceName
           Value: !GetAtt ContainerService.Name
       Unit: "Percent"
-      EvaluationPeriods: "2"
+      EvaluationPeriods: "1"
       MetricName: "CPUUtilization"
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "60"
+      Threshold: "25"
 
   ECSStepScaleInAlarm:
     DependsOn: ContainerAutoScalingTarget
@@ -500,7 +502,7 @@ Resources:
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "60"
+      Threshold: "10"
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
