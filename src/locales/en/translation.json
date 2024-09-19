@@ -918,7 +918,7 @@
         "header": "Find and update company information",
         "description": "View and update your company information, for example, filing history and registered office address.",
         "link_text": "Go to Companies House",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "integration": {
@@ -1125,7 +1125,7 @@
         "header": "Find and update company information",
         "description": "View and update your company information, for example, filing history and registered office address.",
         "link_text": "Go to Companies House",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "staging": {
@@ -1314,7 +1314,7 @@
         "header": "Find and update company information",
         "description": "View and update your company information, for example, filing history and registered office address.",
         "link_text": "Go to Companies House",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "build": {
@@ -1503,7 +1503,7 @@
         "header": "Find and update company information",
         "description": "View and update your company information, for example, filing history and registered office address.",
         "link_text": "Go to Companies House",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "dev": {
@@ -1692,7 +1692,7 @@
         "header": "Find and update company information",
         "description": "View and update your company information, for example, filing history and registered office address.",
         "link_text": "Go to Companies House",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "local": {
@@ -1881,7 +1881,7 @@
         "header": "Find and update company information",
         "description": "View and update your company information, for example, filing history and registered office address.",
         "link_text": "Go to Companies House",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     }
   }
