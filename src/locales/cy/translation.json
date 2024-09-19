@@ -751,7 +751,7 @@
         "header": "Dod o hyd i a diweddaru gwybodaeth cwmni",
         "description": "Gweld a diweddaru gwybodaeth eich cwmni, er enghraifft, hanes ffeilio a chyfeiriad swyddfa gofrestredig.",
         "link_text": "Ewch i Dŷ'r Cwmnïau",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "integration": {
@@ -952,7 +952,7 @@
         "header": "Dod o hyd i a diweddaru gwybodaeth cwmni",
         "description": "Gweld a diweddaru gwybodaeth eich cwmni, er enghraifft, hanes ffeilio a chyfeiriad swyddfa gofrestredig.",
         "link_text": "Ewch i Dŷ'r Cwmnïau",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "staging": {
@@ -1135,7 +1135,7 @@
         "header": "Dod o hyd i a diweddaru gwybodaeth cwmni",
         "description": "Gweld a diweddaru gwybodaeth eich cwmni, er enghraifft, hanes ffeilio a chyfeiriad swyddfa gofrestredig.",
         "link_text": "Ewch i Dŷ'r Cwmnïau",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "build": {
@@ -1318,7 +1318,7 @@
         "header": "Dod o hyd i a diweddaru gwybodaeth cwmni",
         "description": "Gweld a diweddaru gwybodaeth eich cwmni, er enghraifft, hanes ffeilio a chyfeiriad swyddfa gofrestredig.",
         "link_text": "Ewch i Dŷ'r Cwmnïau",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "dev": {
@@ -1501,7 +1501,7 @@
         "header": "Dod o hyd i a diweddaru gwybodaeth cwmni",
         "description": "Gweld a diweddaru gwybodaeth eich cwmni, er enghraifft, hanes ffeilio a chyfeiriad swyddfa gofrestredig.",
         "link_text": "Ewch i Dŷ'r Cwmnïau",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     },
     "local": {
@@ -1684,7 +1684,7 @@
         "header": "Dod o hyd i a diweddaru gwybodaeth cwmni",
         "description": "Gweld a diweddaru gwybodaeth eich cwmni, er enghraifft, hanes ffeilio a chyfeiriad swyddfa gofrestredig.",
         "link_text": "Ewch i Dŷ'r Cwmnïau",
-        "link_href": "https://identity.company-information.service.gov.uk/user/account"
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
       }
     }
   }
