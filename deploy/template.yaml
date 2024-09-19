@@ -455,7 +455,7 @@ Resources:
         AdjustmentType: PercentChangeInCapacity
         Cooldown: 180
         StepAdjustments:
-          - MetricIntervalUpperBound: 20
+          - MetricIntervalUpperBound: -20
             ScalingAdjustment: -25
 
   ECSStepScaleOutAlarm:
