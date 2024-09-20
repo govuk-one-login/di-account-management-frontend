@@ -262,23 +262,23 @@
       "confirm": {
         "title": "Add back-up phone number",
         "heading": "You've added a back-up method for getting security codes",
-        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending in [mobile] instead",
+        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with [mobile] instead.",
         "backLink": "Back to Security"
       }
     },
     "removeBackupMethod": {
       "title": "Remove your back-up method for getting security codes",
       "paragraph": "This will delete your back-up method for getting security codes.",
-      "sms": "We'll no longer send security codes by text message to your phone number ending in <strong>[phoneNumber]</strong>",
-      "app": "We'll no longer send security codes to your authenticator app",
+      "sms": "We'll no longer send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
+      "app": "We'll no longer send security codes to your authenticator app.",
       "button": "Remove back-up method",
       "backLinkText": "Back to security",
       "confirm": {
         "title": "You've removed your back-up method for getting security codes",
-        "heading": "You've removed your back-up method for getting security codes",
-        "message_app": "You'll no longer get security codes to your authenticator app",
-        "message_sms": "You'll no longer get security codes to your phone number ending <strong>[phoneNumber]</strong>",
-        "message_unknown": "You'll no longer get security codes to your backup method"
+        "heading": "You've removed your back-up method for getting security codes.",
+        "message_app": "You'll no longer get security codes to your authenticator app.",
+        "message_sms": "You'll no longer get security codes to your phone number ending <strong>[phoneNumber]</strong>.",
+        "message_unknown": "You'll no longer get security codes to your backup method."
       }
     },
     "activityHistory": {
@@ -520,7 +520,7 @@
     "checkYourPhone": {
       "title": "Check your phone",
       "header": "Check your phone",
-      "text": "We have sent a code to your phone number ending with <strong>[mobile]</strong>",
+      "text": "We have sent a code to your phone number ending with <strong>[mobile]</strong>.",
       "info": {
         "paragraph": "It might take a few minutes to arrive. The code will expire after 15 minutes."
       },
@@ -541,7 +541,7 @@
     },
     "changeDefaultMethod": {
       "title": "Use a different default method",
-      "currentIsPhone": "Your default method for getting security codes is currently by text message to your phone number ending with <strong>[phoneNumber]</strong>",
+      "currentIsPhone": "Your default method for getting security codes is currently by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "switchToApp": "You can use an authenticator app instead",
       "currentIsApp": "Your default method for getting security codes is currently using your authenticator app",
       "switchToPhone": "You can get codes by text message instead.",
@@ -551,7 +551,7 @@
       "confirmation": {
         "title": "Change default method",
         "heading": "You've changed your default method for getting security codes",
-        "app": "Your default method for getting security codes is now your authenticator app",
+        "app": "Your default method for getting security codes is now your authenticator app.",
         "back": "Back to Security"
       }
     },
@@ -611,7 +611,7 @@
       "continue": "Get security code",
       "message": "Text messages can sometimes take a few minutes to arrive.",
       "phoneNumber": {
-        "insetText": "We will send a code to your phone number ending with <strong>[mobile]</strong>",
+        "insetText": "We will send a code to your phone number ending with <strong>[mobile]</strong>.",
         "paragraph": "Text messages can sometimes take a few minutes to arrive."
       },
       "email": {
@@ -622,16 +622,16 @@
     "switchBackupMethod": {
       "title": "Switch your back-up and default methods",
       "newDefaultApp": "Your default method for getting secrity codes will be using your authenticator app.",
-      "newDefaultSms": "Your default method for getting security codes will be text message to your phone number ending in <strong>[phoneNumber]</strong>",
-      "newBackupApp": "Your authenticator app will become your back-up method",
-      "newBackupSms": "Your back-up method will be a text message to your phone number ending in <strong>[phoneNumber]</strong>",
+      "newDefaultSms": "Your default method for getting security codes will be text messages to your phone number ending with <strong>[phoneNumber]</strong>.",
+      "newBackupApp": "Your authenticator app will become your back-up method.",
+      "newBackupSms": "Your back-up method will be a text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "button": "Switch methods",
       "confirm": {
         "title": "Switch security codes",
         "heading": "You've switched your back-up and default methods for getting security codes",
         "backLinkText": "Back to Security",
-        "messageSms": "We'll send security codes to your phone number ending in <strong>[phoneNumber]</strong>",
-        "messageApp": "You'll use your authenticator app to get security codes to sign in"
+        "messageSms": "We'll send security codes to your phone number ending with <strong>[phoneNumber]</strong>.",
+        "messageApp": "You'll use your authenticator app to get security codes to sign in."
       }
     },
     "contact": {
