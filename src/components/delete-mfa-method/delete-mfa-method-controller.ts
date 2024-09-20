@@ -51,7 +51,5 @@ export async function deleteMfaMethodPost(
 
   req.session.removedMfaMethods = [methodToRemove];
 
-  res.redirect(
-    `${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}?id=${methodToRemove.mfaIdentifier}`
-  );
+  res.redirect(`${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}`);
 }
