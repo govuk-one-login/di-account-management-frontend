@@ -63,7 +63,7 @@ describe("delete mfa method controller", () => {
     await deleteMfaMethodPost(req as Request, res as Response);
 
     expect(removeFn).to.be.calledWith(1);
-    expect(redirectFn).to.be.calledWith("/remove-backup-confirmation?id=1");
+    expect(redirectFn).to.be.calledWith("/remove-backup-confirmation");
   });
 
   it("should return a 404 if a non existant method is tried", async () => {
