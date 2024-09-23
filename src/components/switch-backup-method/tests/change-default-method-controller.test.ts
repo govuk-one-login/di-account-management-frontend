@@ -103,7 +103,7 @@ describe("change default method", () => {
       await switchBackupMfaMethodPost(req as Request, res as Response);
 
       expect(changeFn).to.be.calledWith(1);
-      expect(redirectFn).to.be.calledWith("/switch-method-confirm");
+      expect(redirectFn).to.be.calledWith("/switch-methods-confirmation");
     });
 
     it("should return a 404 if the new defualt method doesn't exist", async () => {
