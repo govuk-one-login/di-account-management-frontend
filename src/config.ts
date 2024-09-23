@@ -142,6 +142,7 @@ export const ONE_LOGIN_HOME_NON_PROD = "oneLoginHome";
 const DWP_INTEGRATION = "sqae3L7gOdizeRqFMw_KCDlhcyg";
 const DWP_INTEGRATION_2 = "RtE7mP5yzCrdthst1kuVHS1SsSw";
 const DWP_LOCAL_DEV_INTEGRATION = "iOf3hyG7eymusbSUS6LgFeQ7AtU";
+const DWP_NON_PROD = "dwpBenefitOwed";
 const PRISON_VISITS_PROD = "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ";
 const PRISON_VISITS_NON_PROD = "prisonVisits";
 const ATE_CAPITAL_PROD = "S1hl5G31dSsMYqPaOuiRVOLhBX0";
@@ -195,6 +196,7 @@ export const getAllowedAccountListClientIDs: string[] = [
   DWP_INTEGRATION,
   DWP_INTEGRATION_2,
   DWP_LOCAL_DEV_INTEGRATION,
+  DWP_NON_PROD,
   "9uEx86ZHEp8ycgdHNqC8VK87E1A",
   "dfeFindAndUseAnApi",
   "DVUDWXsy0io7wDBH5LA5IEkEH5U",
