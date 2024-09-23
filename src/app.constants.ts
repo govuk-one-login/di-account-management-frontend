@@ -23,7 +23,7 @@ export const PATH_DATA: Record<
     type: UserJourney.AddMfaMethod,
   },
   ADD_MFA_METHOD_APP_CONFIRMATION: {
-    url: "/add-mfa-method-app-confirmation",
+    url: "/backup-auth-app-confirmation",
     event: EventType.Confirmation,
     type: UserJourney.AddMfaMethod,
   },
@@ -33,7 +33,7 @@ export const PATH_DATA: Record<
     type: UserJourney.AddMfaMethod,
   },
   ADD_MFA_METHOD_SMS_CONFIRMATION: {
-    url: "/add-mfa-method-sms-confirmation",
+    url: "/backup-text-message-confirmation",
     event: EventType.Confirmation,
     type: UserJourney.ChangePhoneNumber,
   },
@@ -63,7 +63,7 @@ export const PATH_DATA: Record<
     event: EventType.ValueUpdated,
   },
   SWITCH_BACKUP_METHOD_CONFIRMATION: {
-    url: "/switch-method-confirm",
+    url: "/switch-methods-confirmation",
     type: UserJourney.SwitchBackupMethod,
     event: EventType.Confirmation,
   },

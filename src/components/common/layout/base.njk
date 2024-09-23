@@ -75,12 +75,14 @@
           })
           }}
         {% endif %}
+        {% block backLinkBlock %}
         {% if backLink %}
           <a href="{{backLink}}" class="govuk-back-link js-back-link">
             {{ backLinkText }}
             {{'general.back' | translate if not backLinkText}}
           </a>
         {% endif %}
+        {% endblock %}
         {% block beforeContent %}{% endblock %}
 
         <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main" {% if mainLang %} lang="{{ mainLang }}" {% endif %}>
