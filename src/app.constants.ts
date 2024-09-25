@@ -18,7 +18,7 @@ export const PATH_DATA: Record<
     type: UserJourney.AddMfaMethod,
   },
   ADD_MFA_METHOD_APP: {
-    url: "/add-mfa-method-app",
+    url: "/set-up-auth-app",
     event: EventType.ValueUpdated,
     type: UserJourney.AddMfaMethod,
   },
