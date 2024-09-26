@@ -134,7 +134,9 @@
         "heading": "Eich manylion mewngofnodi",
         "summaryList": {
           "email": "Cyfeiriad e-bost",
-          "password": "Cyfrinair"
+          "password": "Cyfrinair",
+          "changeEmail": "Newid cyfeiriad e-bost",
+          "changePassword": "Newid cyfrinair"
         }
       },
       "mfaSection": {
