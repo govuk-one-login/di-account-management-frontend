@@ -91,6 +91,7 @@ async function createApp(): Promise<express.Application> {
   app.use(outboundContactUsLinksMiddleware);
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+
   app.use(cookieParser());
   app.use(setLocalVarsMiddleware);
   app.use(loggerMiddleware);
@@ -106,8 +107,8 @@ async function createApp(): Promise<express.Application> {
     "/assets",
     express.static(path.resolve("node_modules/govuk-frontend/govuk/assets"))
   );
-  app.use("/public", express.static(path.join(__dirname, "public")));
 
+  app.use("/public", express.static(path.join(__dirname, "public")));
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 
   app.use(noCacheMiddleware);
@@ -120,8 +121,8 @@ async function createApp(): Promise<express.Application> {
         path.join(__dirname, "locales/{{lng}}/{{ns}}.json")
       )
     );
-  app.use(i18nextMiddleware.handle(i18next));
 
+  app.use(i18nextMiddleware.handle(i18next));
   if (supportWebchatContact()) {
     app.use(helmet(webchatHelmetConfiguration));
   } else {
@@ -135,6 +136,7 @@ async function createApp(): Promise<express.Application> {
     };
     next();
   });
+
   app.use(languageToggleMiddleware);
 
   const sessionStore = getSessionStore({ session: session });
@@ -153,12 +155,14 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
+
   app.locals.sessionStore = sessionStore;
 
   app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
   app.use(globalLogoutRouter);
   app.use(csurf({ cookie: getCSRFCookieOptions(isProduction) }));
+
   app.post("*", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
 
@@ -199,6 +203,7 @@ async function createApp(): Promise<express.Application> {
   }
   app.use(trackAndRedirectRouter);
 
+  // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy
   app.use(redirectsRouter);
   app.use(pageNotFoundHandler);
