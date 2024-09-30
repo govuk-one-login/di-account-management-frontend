@@ -752,6 +752,12 @@
         "description": "Gweld a diweddaru gwybodaeth eich cwmni, er enghraifft, hanes ffeilio a chyfeiriad swyddfa gofrestredig.",
         "link_text": "Ewch i Dŷ'r Cwmnïau",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
+      },
+      "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Mynd i'ch cyfrif gwneud cais am drwydded fewnforio",
+        "link_href": "https://www.gov.uk/guidance/import-controls"
       }
     },
     "integration": {
@@ -953,6 +959,12 @@
         "description": "Gweld a diweddaru gwybodaeth eich cwmni, er enghraifft, hanes ffeilio a chyfeiriad swyddfa gofrestredig.",
         "link_text": "Ewch i Dŷ'r Cwmnïau",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
+      },
+      "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Mynd i'ch cyfrif gwneud cais am drwydded fewnforio",
+        "link_href": "https://www.gov.uk/guidance/import-controls"
       }
     },
     "staging": {
@@ -1142,6 +1154,12 @@
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Mynd i'ch cyfrif gwneud cais am drwydded fewnforio",
+        "link_href": "https://www.gov.uk/guidance/import-controls"
       }
     },
     "build": {
@@ -1331,6 +1349,12 @@
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Mynd i'ch cyfrif gwneud cais am drwydded fewnforio",
+        "link_href": "https://www.gov.uk/guidance/import-controls"
       }
     },
     "dev": {
@@ -1520,6 +1544,12 @@
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Mynd i'ch cyfrif gwneud cais am drwydded fewnforio",
+        "link_href": "https://www.gov.uk/guidance/import-controls"
       }
     },
     "local": {
@@ -1709,6 +1739,12 @@
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Mynd i'ch cyfrif gwneud cais am drwydded fewnforio",
+        "link_href": "https://www.gov.uk/guidance/import-controls"
       }
     }
   }
