@@ -131,29 +131,29 @@ Mappings:
   Container:
     dev:
       CPU: 1024
-      Memory: 4096
-      MinCapacity: 3
-      MaxCapacity: 6
+      Memory: 2048
+      MinCapacity: 4
+      MaxCapacity: 50
     build:
-      CPU: 2048
-      Memory: 4096
-      MinCapacity: 8
-      MaxCapacity: 12
+      CPU: 1024
+      Memory: 2048
+      MinCapacity: 4
+      MaxCapacity: 50
     staging:
       CPU: 1024
-      Memory: 4096
-      MinCapacity: 3
-      MaxCapacity: 6
+      Memory: 2048
+      MinCapacity: 4
+      MaxCapacity: 50
     integration:
       CPU: 1024
-      Memory: 4096
-      MinCapacity: 3
-      MaxCapacity: 6
+      Memory: 2048
+      MinCapacity: 4
+      MaxCapacity: 50
     production:
       CPU: 1024
-      Memory: 4096
-      MinCapacity: 3
-      MaxCapacity: 6
+      Memory: 2048
+      MinCapacity: 4
+      MaxCapacity: 50
   EnvironmentVariables:
     ### These environment variables are referenced further down the file.
     ### Please ensure that any variables defined for an environment are defined for _all_ environments.
@@ -409,26 +409,6 @@ Resources:
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
 
-  ContainerAutoScalingPolicy:
-    DependsOn: ContainerAutoScalingTarget
-    Type: AWS::ApplicationAutoScaling::ScalingPolicy
-    Properties:
-      PolicyName: containerAutoScalingPolicy
-      PolicyType: TargetTrackingScaling
-      ResourceId: !Join
-        - "/"
-        - - "service"
-          - !Ref ECSCluster
-          - !GetAtt ContainerService.Name
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
-      TargetTrackingScalingPolicyConfiguration:
-        PredefinedMetricSpecification:
-          PredefinedMetricType: ECSServiceAverageCPUUtilization
-        TargetValue: 50
-        ScaleInCooldown: 420
-        ScaleOutCooldown: 60
-
   ECSStepScaleOutPolicy:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
@@ -445,16 +425,15 @@ Resources:
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
         Cooldown: 120
-        MinAdjustmentMagnitude: 5
-        StepAdjustments:
-          - MetricIntervalLowerBound: 20
-            MetricIntervalUpperBound: 30
+        StepAdjustments: # Bounds are calculated based on difference from alarm threshold
+          - MetricIntervalLowerBound: 0
+            MetricIntervalUpperBound: 10
+            ScalingAdjustment: 100
+          - MetricIntervalLowerBound: 10
+            MetricIntervalUpperBound: 20
             ScalingAdjustment: 200
-          - MetricIntervalLowerBound: 30
-            MetricIntervalUpperBound: 35
+          - MetricIntervalLowerBound: 20
             ScalingAdjustment: 300
-          - MetricIntervalLowerBound: 35
-            ScalingAdjustment: 500
 
   ECSStepScaleInPolicy:
     DependsOn: ContainerAutoScalingTarget
@@ -471,8 +450,14 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 420
-        StepAdjustments:
+        Cooldown: 120
+        StepAdjustments: # Bounds are calculated based on difference from alarm threshold
+          - MetricIntervalLowerBound: -20
+            MetricIntervalUpperBound: 0
+            ScalingAdjustment: -10
+          - MetricIntervalLowerBound: -40
+            MetricIntervalUpperBound: -20
+            ScalingAdjustment: -25
           - MetricIntervalUpperBound: -40
             ScalingAdjustment: -50
 
@@ -483,21 +468,21 @@ Resources:
       ActionsEnabled: true
       AlarmActions:
         - !Ref ECSStepScaleOutPolicy
-      AlarmDescription: "ECSClusterOver60PercentCPU"
+      AlarmDescription: "ECSClusterOver70PercentCPU"
       ComparisonOperator: "GreaterThanThreshold"
-      DatapointsToAlarm: "2"
+      DatapointsToAlarm: "1"
       Dimensions:
         - Name: ClusterName
           Value: !Ref ECSCluster
         - Name: ServiceName
           Value: !GetAtt ContainerService.Name
       Unit: "Percent"
-      EvaluationPeriods: "2"
+      EvaluationPeriods: "1"
       MetricName: "CPUUtilization"
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "60"
+      Threshold: "70"
 
   ECSStepScaleInAlarm:
     DependsOn: ContainerAutoScalingTarget
@@ -602,9 +587,9 @@ Resources:
             Command:
               - "CMD-SHELL"
               - !Sub "curl -f http://localhost:${ContainerPort}/healthcheck || exit 1"
-            Interval: 30
-            Timeout: 5
-            Retries: 3
+            Interval: 40
+            Timeout: 10
+            Retries: 5
             StartPeriod: 60
           Secrets:
             - Name: DT_TENANT
