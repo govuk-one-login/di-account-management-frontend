@@ -15,7 +15,6 @@ import helmet from "helmet";
 import session from "express-session";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
-import overloadProtection from "overload-protection";
 import {
   getNodeEnv,
   getSessionExpiry,
@@ -72,6 +71,7 @@ import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
+import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -85,10 +85,9 @@ async function createApp(): Promise<express.Application> {
 
   app.enable("trust proxy");
 
-  // Apply the overload protection middleware
-  applyOverloadProtection(app, isProduction);
+  const protection = applyOverloadProtection(isProduction);
+  app.use(protection);
 
-  // Middleware configuration
   app.use(outboundContactUsLinksMiddleware);
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
@@ -103,20 +102,16 @@ async function createApp(): Promise<express.Application> {
     next();
   });
 
-  // Static file handling
   app.use(
     "/assets",
     express.static(path.resolve("node_modules/govuk-frontend/govuk/assets"))
   );
   app.use("/public", express.static(path.join(__dirname, "public")));
 
-  // View engine setup
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 
-  // Disable caching for certain routes
   app.use(noCacheMiddleware);
 
-  // Internationalization (i18n) setup
   await i18next
     .use(Backend)
     .use(i18nextMiddleware.LanguageDetector)
@@ -127,14 +122,12 @@ async function createApp(): Promise<express.Application> {
     );
   app.use(i18nextMiddleware.handle(i18next));
 
-  // Helmet security configuration
   if (supportWebchatContact()) {
     app.use(helmet(webchatHelmetConfiguration));
   } else {
     app.use(helmet(helmetConfiguration));
   }
 
-  // Translation middleware with error safety for missing keys
   app.use((req, res, next) => {
     const translate = req.t.bind(req);
     req.t = (key: string): string => {
@@ -144,7 +137,6 @@ async function createApp(): Promise<express.Application> {
   });
   app.use(languageToggleMiddleware);
 
-  // Session setup
   const sessionStore = getSessionStore({ session: session });
   app.use(
     session({
@@ -163,7 +155,6 @@ async function createApp(): Promise<express.Application> {
   );
   app.locals.sessionStore = sessionStore;
 
-  // Application routes
   app.use(healthcheckRouter);
   app.use(authMiddleware(getOIDCConfig()));
   app.use(globalLogoutRouter);
@@ -171,7 +162,6 @@ async function createApp(): Promise<express.Application> {
   app.post("*", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
 
-  // Additional routes
   app.use(securityRouter);
   app.use(yourServicesRouter);
   app.use(oidcAuthCallbackRouter);
@@ -191,7 +181,6 @@ async function createApp(): Promise<express.Application> {
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
 
-  // Optional feature support
   if (supportActivityLog()) {
     app.use(activityHistoryRouter);
     app.use(reportSuspiciousActivityRouter);
@@ -210,36 +199,15 @@ async function createApp(): Promise<express.Application> {
   }
   app.use(trackAndRedirectRouter);
 
-  // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy
   app.use(redirectsRouter);
   app.use(pageNotFoundHandler);
 
-  // Error handling
   app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
 
   return app;
-}
-
-function applyOverloadProtection(
-  app: express.Application,
-  isProduction: boolean
-) {
-  const protection = overloadProtection("express", {
-    production: isProduction,
-    clientRetrySecs: 1,
-    sampleInterval: 5,
-    maxEventLoopDelay: 42,
-    maxHeapUsedBytes: 0,
-    maxRssBytes: 0,
-    errorPropagationMode: false,
-    logging: false,
-    logStatsOnReq: false,
-  });
-
-  app.use(protection);
 }
 
 export { createApp };
