@@ -71,6 +71,7 @@ import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
+import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -84,8 +85,10 @@ async function createApp(): Promise<express.Application> {
 
   app.enable("trust proxy");
 
-  app.use(outboundContactUsLinksMiddleware);
+  const protection = applyOverloadProtection(isProduction);
+  app.use(protection);
 
+  app.use(outboundContactUsLinksMiddleware);
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
@@ -181,6 +184,7 @@ async function createApp(): Promise<express.Application> {
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
+
   if (supportActivityLog()) {
     app.use(activityHistoryRouter);
     app.use(reportSuspiciousActivityRouter);
