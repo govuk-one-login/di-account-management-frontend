@@ -921,7 +921,7 @@
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your apply for an import licence account",
-        "link_href": "https://www.gov.uk/guidance/import-controls"
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "integration": {
@@ -1134,7 +1134,7 @@
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your apply for an import licence account",
-        "link_href": "https://www.gov.uk/guidance/import-controls"
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "staging": {
@@ -1335,7 +1335,7 @@
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your apply for an import licence account",
-        "link_href": "https://www.gov.uk/guidance/import-controls"
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "build": {
@@ -1536,7 +1536,7 @@
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your apply for an import licence account",
-        "link_href": "https://www.gov.uk/guidance/import-controls"
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "dev": {
@@ -1737,7 +1737,7 @@
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your apply for an import licence account",
-        "link_href": "https://www.gov.uk/guidance/import-controls"
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "local": {
@@ -1938,7 +1938,7 @@
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your apply for an import licence account",
-        "link_href": "https://www.gov.uk/guidance/import-controls"
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     }
   }
