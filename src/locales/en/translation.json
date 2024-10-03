@@ -134,7 +134,9 @@
         "heading": "Your sign in details",
         "summaryList": {
           "email": "Email address",
-          "password": "Password"
+          "password": "Password",
+          "changeEmail": "Change email address",
+          "changePassword": "Change password"
         }
       },
       "mfaSection": {
@@ -166,6 +168,7 @@
           },
           "backup": {
             "heading": "Your back-up method",
+            "headingNoBackup": "Add back-up method",
             "paragraph": "We recommend you add a back-up method for getting security codes.",
             "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes using your default method.",
             "link": "Add a back-up method",
@@ -395,19 +398,19 @@
       },
       "addMfaMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can manage how you get your security codes"
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "changeAuthenticatorApp": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "removeMfaMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
       },
       "changeDefaultMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
       },
       "cancelText": "Cancel and go back to Security"
     },
