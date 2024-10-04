@@ -2,8 +2,8 @@ import { expect } from "chai";
 import request from "supertest";
 import express from "express";
 import { describe } from "mocha";
-import { createApp } from "../../src/app";
-import { PATH_DATA } from "../../src/app.constants";
+import { createApp } from "../../../src/app";
+import { PATH_DATA } from "../../../src/app.constants";
 
 let app: express.Application;
 
