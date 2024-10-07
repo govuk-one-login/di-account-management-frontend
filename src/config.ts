@@ -160,6 +160,8 @@ const DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD = "dfeClaimAdditionalPayments";
 const COMPANY_HOUSE_ACCOUNTS_PROD = "Hp9xO0Wda9EcI_2IO8OGeYJyrT0";
 const COMPANY_HOUSE_ACCOUNTS_INTEGRATION = "VdmfAXiINT9wpUsGO_vVnPEbsAE";
 const COMPANY_HOUSE_ACCOUNTS_NON_PROD = "companyHouseAccounts";
+const DBT_APPLY_EXPORT_CERT = "Xj93G5rMO2CsouiG8DJf36siQRk";
+const DBT_APPLY_EXPORT_CERT_NON_PROD = "dbtApplyForAnExportCertificate";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -218,6 +220,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   COMPANY_HOUSE_ACCOUNTS_NON_PROD,
   COMPANY_HOUSE_ACCOUNTS_INTEGRATION,
   COMPANY_HOUSE_ACCOUNTS_PROD,
+  DBT_APPLY_EXPORT_CERT,
+  DBT_APPLY_EXPORT_CERT_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
