@@ -160,6 +160,8 @@ const DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD = "dfeClaimAdditionalPayments";
 const COMPANY_HOUSE_ACCOUNTS_PROD = "Hp9xO0Wda9EcI_2IO8OGeYJyrT0";
 const COMPANY_HOUSE_ACCOUNTS_INTEGRATION = "VdmfAXiINT9wpUsGO_vVnPEbsAE";
 const COMPANY_HOUSE_ACCOUNTS_NON_PROD = "companyHouseAccounts";
+const HMPO_CANCEL_PASSPORT = "l6GFmD8ndn7afVcm6SqAHlM8IVM";
+const HMPO_CANCEL_PASSPORT_NON_PROD = "hmpoCancelPassport";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -218,6 +220,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   COMPANY_HOUSE_ACCOUNTS_NON_PROD,
   COMPANY_HOUSE_ACCOUNTS_INTEGRATION,
   COMPANY_HOUSE_ACCOUNTS_PROD,
+  HMPO_CANCEL_PASSPORT,
+  HMPO_CANCEL_PASSPORT_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
