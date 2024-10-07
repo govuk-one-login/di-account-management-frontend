@@ -9,7 +9,7 @@
     "warning": "Warning",
     "errorSummaryTitle": "There is a problem",
     "phaseBanner": {
-      "tag": "beta",
+      "tag": "Beta",
       "text": "This is a new service – your <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">feedback (opens in new tab)</a> will help us to improve it."
     },
     "yes": "Yes",
@@ -134,7 +134,9 @@
         "heading": "Your sign in details",
         "summaryList": {
           "email": "Email address",
-          "password": "Password"
+          "password": "Password",
+          "changeEmail": "Change email address",
+          "changePassword": "Change password"
         }
       },
       "mfaSection": {
@@ -166,6 +168,7 @@
           },
           "backup": {
             "heading": "Your back-up method",
+            "headingNoBackup": "Add back-up method",
             "paragraph": "We recommend you add a back-up method for getting security codes.",
             "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes using your default method.",
             "link": "Add a back-up method",
@@ -395,19 +398,19 @@
       },
       "addMfaMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can manage how you get your security codes"
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "changeAuthenticatorApp": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "removeMfaMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
       },
       "changeDefaultMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes"
+        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
       },
       "cancelText": "Cancel and go back to Security"
     },
@@ -1045,19 +1048,19 @@
       "iOf3hyG7eymusbSUS6LgFeQ7AtU": {
         "header": "Repay and manage benefit money you owe",
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
-        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
       "sqae3L7gOdizeRqFMw_KCDlhcyg": {
         "header": "Repay and manage benefit money you owe",
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
-        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "https://repay-my-debt.services.aks-test-ext.np.az.dwpcloud.uk/oidv-sign-in"
       },
       "RtE7mP5yzCrdthst1kuVHS1SsSw": {
         "header": "Repay and manage benefit money you owe",
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
-        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "https://repay-my-debt.services.aks-test-ext.np.az.dwpcloud.uk/oidv-sign-in"
       },
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
@@ -1328,7 +1331,7 @@
       "dwpBenefitOwed": {
         "header": "Repay and manage benefit money you owe",
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
-        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
       "dbtApplyForAnImportLicense": {
@@ -1529,7 +1532,7 @@
       "dwpBenefitOwed": {
         "header": "Repay and manage benefit money you owe",
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
-        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
       "dbtApplyForAnImportLicense": {
@@ -1730,7 +1733,7 @@
       "dwpBenefitOwed": {
         "header": "Repay and manage benefit money you owe",
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
-        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
       "dbtApplyForAnImportLicense": {
@@ -1931,7 +1934,7 @@
       "dwpBenefitOwed": {
         "header": "Repay and manage benefit money you owe",
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
-        "link_text": "Go to your repay and manage benefit money you owe account",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
       "dbtApplyForAnImportLicense": {
