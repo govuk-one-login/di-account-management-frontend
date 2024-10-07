@@ -924,9 +924,9 @@
         "link_href": "https://www.gov.uk/guidance/import-controls"
       },
       "Xj93G5rMO2CsouiG8DJf36siQRk": {
-        "header": "Gwneud cais am dystysgrif allforio",
-        "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
-        "link_text": "Ewch i'ch cyfrif gwneud cais am dystysgrif allforio",
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       }
     },
@@ -1143,9 +1143,9 @@
         "link_href": "https://www.gov.uk/guidance/import-controls"
       },
       "Xj93G5rMO2CsouiG8DJf36siQRk": {
-        "header": "Gwneud cais am dystysgrif allforio",
-        "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
-        "link_text": "Ewch i'ch cyfrif gwneud cais am dystysgrif allforio",
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       }
     },
@@ -1352,7 +1352,7 @@
       "dbtApplyForAnExportCertificate": {
         "header": "Apply for an export certificate",
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
-        "link_text": "Go to your apply for an export certificate account",
+        "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       }
     },
@@ -1559,7 +1559,7 @@
       "dbtApplyForAnExportCertificate": {
         "header": "Apply for an export certificate",
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
-        "link_text": "Go to your apply for an export certificate account",
+        "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       }
     },
@@ -1766,7 +1766,7 @@
       "dbtApplyForAnExportCertificate": {
         "header": "Apply for an export certificate",
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
-        "link_text": "Go to your apply for an export certificate account",
+        "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       }
     },
@@ -1973,7 +1973,7 @@
       "dbtApplyForAnExportCertificate": {
         "header": "Apply for an export certificate",
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
-        "link_text": "Go to your apply for an export certificate account",
+        "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       }
     }
