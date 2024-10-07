@@ -13,16 +13,8 @@
     {% if dynatraceRumUrl %}
     <script src='{{ dynatraceRumUrl }}' crossorigin="anonymous" nonce='{{ scriptNonce }}'></script>
     {% endif %}
-    <!--[if !IE 8]><!-->
     <link href="/public/style.css" rel="stylesheet">
-    <!--<![endif]-->
 
-    {# For Internet Explorer 8, you need to compile specific stylesheet #}
-    {# see https://frontend.design-system.service.gov.uk/supporting-ie8/#support-internet-explorer-8 #}
-    <!--[if IE 8]> <link href="/govuk-frontend/all-ie8.css" rel="stylesheet"> <![endif]-->
-
-    {# For older browsers to allow them to recognise HTML5 elements such as `<header>` #}
-    <!--[if lt IE 9]> <script src="/html5-shiv/html5shiv.js"></script> <![endif]-->
     {% if not allowCrawl %}
     <meta name="robots" content="noindex">
     {% endif %}
@@ -132,8 +124,14 @@
 
 {% block bodyEnd %}
     {% block scripts %}{% endblock %}
+    <script type="module" src="/public/scripts/govuk-frontend.min.js" {% if scriptNonce %} nonce="{{ scriptNonce }}"{% endif %}></script>
+
+    <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
+      import { initAll } from '/public/scripts/govuk-frontend.min.js'
+      initAll()
+    </script>
+
     <script type="text/javascript" src="/public/scripts/application.js" nonce='{{scriptNonce}}'></script>
-    <script type="text/javascript" src="/public/scripts/all.js" nonce='{{scriptNonce}}'></script>
     <script type="text/javascript" src="/public/scripts/analytics.js" nonce='{{scriptNonce}}'></script>
     <script type="text/javascript" nonce='{{scriptNonce}}'>
 
@@ -163,7 +161,5 @@
         isDataSensitive: true
       });
     }
-
-
   </script>
 {% endblock %}

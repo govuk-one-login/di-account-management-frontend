@@ -55,9 +55,8 @@
 {% endblock %}
 
 {% block scripts %}
+    <script type="text/javascript" src="/public/scripts/showPassword.js" nonce='{{ scriptNonce }}'></script>
     {% set contentId = oplValues[requestType].contentId if oplValues[requestType] else "undefined" %}
     {% set taxonomyLevel2Value = oplValues[requestType].taxonomyLevel2 if oplValues[requestType] else "undefined" %}
-
-    <script type="text/javascript" src="/public/scripts/showPassword.js" nonce='{{ scriptNonce }}'></script>
     {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:taxonomyLevel2Value, contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}
