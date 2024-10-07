@@ -919,6 +919,12 @@
         "description": "View and update your company information, for example, filing history and registered office address.",
         "link_text": "Go to Companies House",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
       }
     },
     "integration": {
@@ -1126,6 +1132,12 @@
         "description": "View and update your company information, for example, filing history and registered office address.",
         "link_text": "Go to Companies House",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
       }
     },
     "staging": {
@@ -1321,6 +1333,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
       }
     },
     "build": {
@@ -1516,6 +1534,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
       }
     },
     "dev": {
@@ -1711,6 +1735,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
       }
     },
     "local": {
@@ -1906,6 +1936,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
       }
     }
   }
