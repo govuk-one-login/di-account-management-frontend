@@ -162,6 +162,8 @@ const COMPANY_HOUSE_ACCOUNTS_INTEGRATION = "VdmfAXiINT9wpUsGO_vVnPEbsAE";
 const COMPANY_HOUSE_ACCOUNTS_NON_PROD = "companyHouseAccounts";
 const DBT_APPLY_FOR_AN_IMPORT = "gSKx5snZtYsQWSQZRoKI2oV-7lQ";
 const DBT_APPLY_FOR_AN_IMPORT_NON_PROD = "dbtApplyForAnImportLicense";
+const CMAD_PROD = "Q2tqV5C1nGXFVMUcnpqbOUTrZuw";
+const CMAD_NON_PROD = "CMAD";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -222,6 +224,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   COMPANY_HOUSE_ACCOUNTS_PROD,
   DBT_APPLY_FOR_AN_IMPORT,
   DBT_APPLY_FOR_AN_IMPORT_NON_PROD,
+  CMAD_PROD,
+  CMAD_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];

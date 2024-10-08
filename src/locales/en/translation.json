@@ -909,6 +909,12 @@
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
+      "Q2tqV5C1nGXFVMUcnpqbOUTrZuw": {
+        "header": "Confirm my apprenticeship details (CMAD)",
+        "description": "Check and confirm your apprenticeship details.",
+        "link_text": "Go to your account to confirm your apprenticeship",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
       "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
         "header": "Claim additional payments for teaching",
         "link_text": "Claim additional payments for teaching",
@@ -1122,6 +1128,12 @@
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
+      "Q2tqV5C1nGXFVMUcnpqbOUTrZuw": {
+        "header": "Confirm my apprenticeship details (CMAD)",
+        "description": "Check and confirm your apprenticeship details.",
+        "link_text": "Go to your account to confirm your apprenticeship",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
       "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
         "header": "Claim additional payments for teaching",
         "link_text": "Claim additional payments for teaching",
@@ -1316,6 +1328,12 @@
         "description": "Share details of a lasting power of attorney.",
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "CMAD": {
+        "header": "Confirm my apprenticeship details (CMAD)",
+        "description": "Check and confirm your apprenticeship details.",
+        "link_text": "Go to your account to confirm your apprenticeship",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
       },
       "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
@@ -1518,6 +1536,12 @@
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
+      "CMAD": {
+        "header": "Confirm my apprenticeship details (CMAD)",
+        "description": "Check and confirm your apprenticeship details.",
+        "link_text": "Go to your account to confirm your apprenticeship",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
       "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
         "link_text": "Claim additional payments for teaching",
@@ -1719,6 +1743,12 @@
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
+      "CMAD": {
+        "header": "Confirm my apprenticeship details (CMAD)",
+        "description": "Check and confirm your apprenticeship details.",
+        "link_text": "Go to your account to confirm your apprenticeship",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
       "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
         "link_text": "Claim additional payments for teaching",
@@ -1919,6 +1949,12 @@
         "description": "Share details of a lasting power of attorney.",
         "link_text": "Go to your lasting power of attorney dashboard",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "CMAD": {
+        "header": "Confirm my apprenticeship details (CMAD)",
+        "description": "Check and confirm your apprenticeship details.",
+        "link_text": "Go to your account to confirm your apprenticeship",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
       },
       "dfeClaimAdditionalPayments": {
         "header": "Claim additional payments for teaching",
