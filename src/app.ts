@@ -61,7 +61,7 @@ import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
-import { addMfaMethodRouter } from "./components/add-mfa-method/add-mfa-method-routes";
+import { chooseBackupRouter } from "./components/choose-backup/choose-backup-routes";
 import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
 import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
@@ -193,7 +193,7 @@ async function createApp(): Promise<express.Application> {
     app.use(contactRouter);
   }
   if (supportChangeMfa()) {
-    app.use(addMfaMethodRouter);
+    app.use(chooseBackupRouter);
     app.use(addMfaMethodAppRouter);
     app.use(addMfaMethodSmsRouter);
     app.use(deleteMfaMethodRouter);
