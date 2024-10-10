@@ -931,6 +931,12 @@
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
+        "header": "Apply for an import licence",
+        "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
+        "link_text": "Go to your import licence account",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "integration": {
@@ -1150,6 +1156,12 @@
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
+        "header": "Apply for an import licence",
+        "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
+        "link_text": "Go to your import licence account",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "staging": {
@@ -1357,6 +1369,12 @@
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Apply for an import licence",
+        "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
+        "link_text": "Go to your import licence account",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "build": {
@@ -1564,6 +1582,12 @@
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Apply for an import licence",
+        "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
+        "link_text": "Go to your import licence account",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "dev": {
@@ -1771,6 +1795,12 @@
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Apply for an import licence",
+        "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
+        "link_text": "Go to your import licence account",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "local": {
@@ -1978,6 +2008,12 @@
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Apply for an import licence",
+        "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
+        "link_text": "Go to your import licence account",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     }
   }
