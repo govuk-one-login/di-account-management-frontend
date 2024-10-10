@@ -564,12 +564,6 @@
           "I ddarganfod pa wybodaeth rydym yn ei gadw pan fyddwch yn cysylltu â ni a sut rydym yn ei defnyddio, gweler <a href=\"https://signin.account.gov.uk/privacy-notice\" class=\"govuk-link\">hysbysiad preifatrwydd GOV.UK One Login</a>"
         ]
       }
-    },
-    "9fduJ6KAE8WwCb1VCKp788BC8mM": {
-      "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
-      "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
-      "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
-      "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
     }
   },
   "clientRegistry": {
@@ -635,6 +629,12 @@
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
         "link_text": "Ewch i’ch cyfrif digolledion anafiadau troseddol",
         "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "9fduJ6KAE8WwCb1VCKp788BC8mM": {
+        "header": "Darganfod corff asesu cydymffurfiaeth marchnad y DU",
+        "description": "Rheoli cyrff asesu cydymffurfiaeth ar y gofrestr.",
+        "link_text": "Ewch i'ch cyfrif corff asesu cydymffurfiaeth",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
       },
       "zbNToJPcre4BXEap0na8kOjniKg": {
         "header": "Rheoli gwasanaethau a chyfrifon cymorth i deuluoedd",
@@ -766,6 +766,12 @@
         "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
         "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
         "link_href": "https://dogsindex.defra.gov.uk"
+      },
+      "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "integration": {
@@ -979,6 +985,12 @@
         "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
         "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
         "link_href": "https://dogsindex.defra.gov.uk"
+      },
+      "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "staging": {
@@ -1180,6 +1192,12 @@
         "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
         "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
         "link_href": "https://dogsindex.defra.gov.uk"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "build": {
@@ -1381,6 +1399,12 @@
         "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
         "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
         "link_href": "https://dogsindex.defra.gov.uk"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "dev": {
@@ -1582,6 +1606,12 @@
         "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
         "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
         "link_href": "https://dogsindex.defra.gov.uk"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     },
     "local": {
@@ -1783,6 +1813,12 @@
         "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
         "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
         "link_href": "https://dogsindex.defra.gov.uk"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Gwneud cais am drwydded fewnforio",
+        "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
+        "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
       }
     }
   }
