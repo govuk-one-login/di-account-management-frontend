@@ -926,6 +926,12 @@
         "link_text": "Go to Companies House",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
+      "Xj93G5rMO2CsouiG8DJf36siQRk": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
@@ -1145,6 +1151,12 @@
         "link_text": "Go to Companies House",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
+      "Xj93G5rMO2CsouiG8DJf36siQRk": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
@@ -1351,6 +1363,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
       "dbtApplyForAnImportLicense": {
         "header": "Apply for an import licence",
@@ -1559,6 +1577,12 @@
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "dbtApplyForAnImportLicense": {
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
@@ -1766,6 +1790,12 @@
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "dbtApplyForAnImportLicense": {
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
@@ -1972,6 +2002,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
       "dbtApplyForAnImportLicense": {
         "header": "Apply for an import licence",
