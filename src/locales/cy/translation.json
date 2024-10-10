@@ -761,6 +761,12 @@
         "link_text": "Ewch i Dŷ'r Cwmnïau",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
+      "u6cETcTbDeT5PZaRRvUskHQeZq8": {
+        "header": "Mynegai cŵn peryglus",
+        "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
+        "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
       "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
         "header": "Gwneud cais am drwydded fewnforio",
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
@@ -974,6 +980,12 @@
         "link_text": "Ewch i Dŷ'r Cwmnïau",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
+      "u6cETcTbDeT5PZaRRvUskHQeZq8": {
+        "header": "Mynegai cŵn peryglus",
+        "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
+        "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
       "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
         "header": "Gwneud cais am drwydded fewnforio",
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
@@ -1174,6 +1186,12 @@
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Mynegai cŵn peryglus",
+        "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
+        "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
+        "link_href": "https://dogsindex.defra.gov.uk"
       },
       "dbtApplyForAnImportLicense": {
         "header": "Gwneud cais am drwydded fewnforio",
@@ -1376,6 +1394,12 @@
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
+      "defraDangerousDogsIndex": {
+        "header": "Mynegai cŵn peryglus",
+        "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
+        "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
       "dbtApplyForAnImportLicense": {
         "header": "Gwneud cais am drwydded fewnforio",
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
@@ -1577,6 +1601,12 @@
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
+      "defraDangerousDogsIndex": {
+        "header": "Mynegai cŵn peryglus",
+        "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
+        "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
       "dbtApplyForAnImportLicense": {
         "header": "Gwneud cais am drwydded fewnforio",
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
@@ -1777,6 +1807,12 @@
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Mynegai cŵn peryglus",
+        "description": "Chwilio'r Mynegai cŵn peryglus am gŵn neu berchnogion i weld eu manylion a'u statws eithrio.",
+        "link_text": "Ewch i'ch cyfrif Mynegai Cŵn Peryglus",
+        "link_href": "https://dogsindex.defra.gov.uk"
       },
       "dbtApplyForAnImportLicense": {
         "header": "Gwneud cais am drwydded fewnforio",
