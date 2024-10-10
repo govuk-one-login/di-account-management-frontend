@@ -744,6 +744,12 @@
         "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
+      "Q2tqV5C1nGXFVMUcnpqbOUTrZuw": {
+        "header": "Cadarnhau manylion fy mhrentisiaethau (CMAD)",
+        "description": "Gwirio a chadarnhau eich manylion prentisiaeth.",
+        "link_text": "Ewch i'ch cyfrif i gadarnhau eich prentisiaeth",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
       "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
         "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
@@ -951,6 +957,12 @@
         "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
+      "Q2tqV5C1nGXFVMUcnpqbOUTrZuw": {
+        "header": "Cadarnhau manylion fy mhrentisiaethau (CMAD)",
+        "description": "Gwirio a chadarnhau eich manylion prentisiaeth.",
+        "link_text": "Ewch i'ch cyfrif i gadarnhau eich prentisiaeth",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
       "IJ_TuVEgIqAWT2mCe9b5uocMyNs": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
         "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
@@ -1139,6 +1151,12 @@
         "description": "Rhannu manylion pwer atwrnai parhaus.",
         "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "CMAD": {
+        "header": "Cadarnhau manylion fy mhrentisiaethau (CMAD)",
+        "description": "Gwirio a chadarnhau eich manylion prentisiaeth.",
+        "link_text": "Ewch i'ch cyfrif i gadarnhau eich prentisiaeth",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
       },
       "dfeClaimAdditionalPayments": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
@@ -1335,6 +1353,12 @@
         "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
+      "CMAD": {
+        "header": "Cadarnhau manylion fy mhrentisiaethau (CMAD)",
+        "description": "Gwirio a chadarnhau eich manylion prentisiaeth.",
+        "link_text": "Ewch i'ch cyfrif i gadarnhau eich prentisiaeth",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
       "dfeClaimAdditionalPayments": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
         "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
@@ -1530,6 +1554,12 @@
         "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
       },
+      "CMAD": {
+        "header": "Cadarnhau manylion fy mhrentisiaethau (CMAD)",
+        "description": "Gwirio a chadarnhau eich manylion prentisiaeth.",
+        "link_text": "Ewch i'ch cyfrif i gadarnhau eich prentisiaeth",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
       "dfeClaimAdditionalPayments": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",
         "link_text": "Hawlio taliadau ychwanegol ar gyfer dysgu",
@@ -1724,6 +1754,12 @@
         "description": "Rhannu manylion pwer atwrnai parhaus.",
         "link_text": "Ewch i'ch dangosfwrdd pwer atwrnai parhaus",
         "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "CMAD": {
+        "header": "Cadarnhau manylion fy mhrentisiaethau (CMAD)",
+        "description": "Gwirio a chadarnhau eich manylion prentisiaeth.",
+        "link_text": "Ewch i'ch cyfrif i gadarnhau eich prentisiaeth",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
       },
       "dfeClaimAdditionalPayments": {
         "header": "Hawlio taliadau ychwanegol ar gyfer dysgu",

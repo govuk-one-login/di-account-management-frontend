@@ -162,6 +162,8 @@ const COMPANY_HOUSE_ACCOUNTS_INTEGRATION = "VdmfAXiINT9wpUsGO_vVnPEbsAE";
 const COMPANY_HOUSE_ACCOUNTS_NON_PROD = "companyHouseAccounts";
 const DEFRA_DANGEROUS_DOGS_INDEX = "u6cETcTbDeT5PZaRRvUskHQeZq8";
 const DEFRA_DANGEROUS_DOGS_INDEX_NON_PROD = "defraDangerousDogsIndex";
+const CMAD_PROD = "Q2tqV5C1nGXFVMUcnpqbOUTrZuw";
+const CMAD_NON_PROD = "CMAD";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -222,6 +224,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   COMPANY_HOUSE_ACCOUNTS_PROD,
   DEFRA_DANGEROUS_DOGS_INDEX,
   DEFRA_DANGEROUS_DOGS_INDEX_NON_PROD,
+  CMAD_PROD,
+  CMAD_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];

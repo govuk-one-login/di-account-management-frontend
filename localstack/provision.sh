@@ -122,6 +122,22 @@ create_and_populate_user_services_table() {
                     "N": "4"
                   },
                   "client_id": {
+                    "S": "CMAD"
+                  },
+                  "last_accessed": {
+                    "N": "1688169356"
+                  },
+                  "last_accessed_pretty": {
+                    "S": "20 January 1970"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "count_successful_logins": {
+                    "N": "4"
+                  },
+                  "client_id": {
                     "S": "hmrc"
                   },
                   "last_accessed": {

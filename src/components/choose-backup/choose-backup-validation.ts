@@ -2,7 +2,7 @@ import { body, ValidationChain } from "express-validator";
 import { validateBodyMiddleware } from "../../middleware/form-validation-middleware";
 import { Request, Response, NextFunction } from "express";
 
-export function validateAddMfaMethodRequest(): (
+export function validateChooseBackupRequest(): (
   | ValidationChain
   | ((req: Request, res: Response, next: NextFunction) => void)
 )[] {
@@ -20,7 +20,7 @@ export function validateAddMfaMethodRequest(): (
     const options = {
       mfaMethods: req.session.mfaMethods || [],
     };
-    validateBodyMiddleware("add-mfa-method/index.njk", options)(req, res, next);
+    validateBodyMiddleware("choose-backup/index.njk", options)(req, res, next);
   };
 
   return [addMfaMethodValidation, handleValidationErrors];

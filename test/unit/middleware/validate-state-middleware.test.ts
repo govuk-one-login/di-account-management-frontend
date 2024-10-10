@@ -19,8 +19,8 @@ describe("validate state middleware", () => {
     mfaStub = sinon.stub(mfa, "default");
 
     req = {
-      url: "/add-mfa-method",
-      path: "/add-mfa-method",
+      url: "/choose-backup",
+      path: "/choose-backup",
       body: {},
       query: {},
       session: {

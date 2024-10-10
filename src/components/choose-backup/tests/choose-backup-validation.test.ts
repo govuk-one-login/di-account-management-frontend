@@ -3,7 +3,7 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
-import { validateAddMfaMethodRequest } from "../add-mfa-mehod-validation";
+import { validateChooseBackupRequest } from "../choose-backup-validation";
 import { SinonSpy } from "sinon";
 
 describe("validateAddMfaMethodRequest", () => {
@@ -26,14 +26,14 @@ describe("validateAddMfaMethodRequest", () => {
   });
 
   it("should return an array with two middleware functions", () => {
-    const middlewareArray = validateAddMfaMethodRequest();
+    const middlewareArray = validateChooseBackupRequest();
     expect(middlewareArray).to.be.an("array").with.lengthOf(2);
     expect(middlewareArray[0]).to.be.a("function");
     expect(middlewareArray[1]).to.be.a("function");
   });
 
   it("should validate 'addMfaMethod' field is not empty", async () => {
-    const [validationMiddleware] = validateAddMfaMethodRequest();
+    const [validationMiddleware] = validateChooseBackupRequest();
     req.body.addMfaMethod = ""; // Simulate an empty input
 
     await (validationMiddleware as any)(req, res, next);
@@ -44,7 +44,7 @@ describe("validateAddMfaMethodRequest", () => {
   });
 
   it("should call next() if no validation errors", () => {
-    const [, handleValidationErrors] = validateAddMfaMethodRequest();
+    const [, handleValidationErrors] = validateChooseBackupRequest();
 
     handleValidationErrors(req as Request, res as Response, next);
 

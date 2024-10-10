@@ -13,7 +13,7 @@ export const PATH_DATA: Record<
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
   ADD_MFA_METHOD: {
-    url: "/add-mfa-method",
+    url: "/choose-backup",
     event: EventType.SelectedApp,
     type: UserJourney.AddMfaMethod,
   },
