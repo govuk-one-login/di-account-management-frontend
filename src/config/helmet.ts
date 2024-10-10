@@ -13,6 +13,8 @@ export const helmetConfiguration: HelmetOptions = {
         "https://*.googletagmanager.com",
         "https://*.google-analytics.com",
         "https://*.analytics.google.com",
+        "https://*.ruxit.com",
+        "https://*.dynatrace.com",
       ],
       imgSrc: [
         "'self'",
@@ -28,6 +30,8 @@ export const helmetConfiguration: HelmetOptions = {
         "https://*.google-analytics.com",
         "https://*.analytics.google.com",
         "https://*.g.doubleclick.net",
+        "https://*.ruxit.com",
+        "https://*.dynatrace.com",
       ],
       formAction: ["'self'", "https://*.account.gov.uk"],
     },

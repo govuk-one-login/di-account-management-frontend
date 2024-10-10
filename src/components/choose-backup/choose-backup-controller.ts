@@ -8,7 +8,7 @@ enum MfaMethodType {
   AUTH_APP = "AUTH_APP",
 }
 const MAX_METHODS = 2;
-const ADD_METHOD_TEMPLATE = `add-mfa-method/index.njk`;
+const ADD_METHOD_TEMPLATE = `choose-backup/index.njk`;
 
 function handleMethods(res: Response): void {
   res.status(500).end();
@@ -21,11 +21,11 @@ function handleSingleAuthAppMethod(res: Response): void {
   });
 }
 
-function renderAddMethodTemplate(res: Response, mfaMethods: any[]): void {
+function renderChooseBackupTemplate(res: Response, mfaMethods: any[]): void {
   res.render(ADD_METHOD_TEMPLATE, { mfaMethods });
 }
 
-export function addMfaMethodGet(req: Request, res: Response): void {
+export function chooseBackupGet(req: Request, res: Response): void {
   const mfaMethods = req.session.mfaMethods || [];
 
   if (mfaMethods.length > MAX_METHODS) {
@@ -41,10 +41,10 @@ export function addMfaMethodGet(req: Request, res: Response): void {
     return;
   }
 
-  renderAddMethodTemplate(res, mfaMethods);
+  renderChooseBackupTemplate(res, mfaMethods);
 }
 
-export function addMfaMethodPost(
+export function chooseBackupPost(
   req: Request,
   res: Response,
   next: NextFunction

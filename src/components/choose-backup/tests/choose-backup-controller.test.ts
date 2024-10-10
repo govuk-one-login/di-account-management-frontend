@@ -4,10 +4,7 @@ import { Request, Response } from "express";
 import { SinonSandbox } from "sinon";
 import { sinon } from "../../../../test/utils/test-utils";
 
-import {
-  addMfaMethodPost,
-  addMfaMethodGet,
-} from "../add-mfa-methods-controller";
+import { chooseBackupGet, chooseBackupPost } from "../choose-backup-controller";
 import { PATH_DATA } from "../../../app.constants";
 import { EventType } from "../../../utils/state-machine";
 
@@ -46,9 +43,9 @@ describe("addMfaMethodGet", () => {
   });
 
   it("should add mfa method page", () => {
-    addMfaMethodGet(req as Request, res as Response);
+    chooseBackupGet(req as Request, res as Response);
 
-    expect(res.render).to.have.calledWith("add-mfa-method/index.njk");
+    expect(res.render).to.have.calledWith("choose-backup/index.njk");
   });
 
   it("should handle a single mfa method", () => {
@@ -63,9 +60,9 @@ describe("addMfaMethodGet", () => {
         priorityIdentifier: "DEFAULT",
       },
     ];
-    addMfaMethodGet(req as Request, res as Response);
+    chooseBackupGet(req as Request, res as Response);
 
-    expect(res.render).to.have.calledWith("add-mfa-method/index.njk", {
+    expect(res.render).to.have.calledWith("choose-backup/index.njk", {
       mfaMethods: [],
       showSingleMethod: true,
     });
@@ -92,9 +89,9 @@ describe("addMfaMethodGet", () => {
         priorityIdentifier: "BACKUP",
       },
     ];
-    addMfaMethodGet(req as Request, res as Response);
+    chooseBackupGet(req as Request, res as Response);
 
-    expect(res.render).to.have.calledWith("add-mfa-method/index.njk", {
+    expect(res.render).to.have.calledWith("choose-backup/index.njk", {
       mfaMethods: req.session.mfaMethods,
     });
   });
@@ -129,7 +126,7 @@ describe("addMfaMethodGet", () => {
         priorityIdentifier: "BACKUP",
       },
     ];
-    addMfaMethodGet(req as Request, res as Response);
+    chooseBackupGet(req as Request, res as Response);
 
     expect(res.status).to.have.calledWith(500);
   });
@@ -180,7 +177,7 @@ describe("addMfaMethodPost", () => {
   it("should take the use to the add backup phone number page when that option is selected", () => {
     req.body.addMfaMethod = "sms";
 
-    addMfaMethodPost(req as Request, res as Response, next);
+    chooseBackupPost(req as Request, res as Response, next);
 
     expect(res.redirect).to.have.been.calledWith(
       PATH_DATA.ADD_MFA_METHOD_SMS.url
@@ -190,7 +187,7 @@ describe("addMfaMethodPost", () => {
   it("should take the user to the add auth app page when the user selects that option", () => {
     req.body.addMfaMethod = "app";
 
-    addMfaMethodPost(req as Request, res as Response, next);
+    chooseBackupPost(req as Request, res as Response, next);
 
     expect(res.redirect).to.have.been.calledWith(
       PATH_DATA.ADD_MFA_METHOD_APP.url
@@ -200,7 +197,7 @@ describe("addMfaMethodPost", () => {
   it("should call next with an error when addMfaMethod is unknown", () => {
     req.body.addMfaMethod = "unknown";
 
-    addMfaMethodPost(req as Request, res as Response, next);
+    chooseBackupPost(req as Request, res as Response, next);
 
     const call: sinon.SinonSpyCall<Error[], unknown> = next.getCall(0);
 
