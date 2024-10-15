@@ -932,6 +932,18 @@
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
+      "l6GFmD8ndn7afVcm6SqAHlM8IVM": {
+        "header": "Cancel a lost or stolen passport",
+        "description": "Report a passport as lost or stolen or apply for a replacement.",
+        "link_text": "Go to your cancel a lost or stolen passport account",
+        "link_href": "https://www.loststolenpassport.service.gov.uk/lost-stolen/passport-holder"
+      },
+      "u6cETcTbDeT5PZaRRvUskHQeZq8": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
       "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
@@ -1157,6 +1169,18 @@
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
+      "l6GFmD8ndn7afVcm6SqAHlM8IVM": {
+        "header": "Cancel a lost or stolen passport",
+        "description": "Report a passport as lost or stolen or apply for a replacement.",
+        "link_text": "Go to your cancel a lost or stolen passport account",
+        "link_href": "https://www.loststolenpassport.service.gov.uk/lost-stolen/passport-holder"
+      },
+      "u6cETcTbDeT5PZaRRvUskHQeZq8": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
       "gSKx5snZtYsQWSQZRoKI2oV-7lQ": {
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
@@ -1369,6 +1393,18 @@
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "hmpoCancelPassport": {
+        "header": "Cancel a lost or stolen passport",
+        "description": "Report a passport as lost or stolen or apply for a replacement.",
+        "link_text": "Go to your cancel a lost or stolen passport account",
+        "link_href": "https://www.loststolenpassport.service.gov.uk/lost-stolen/passport-holder"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
       },
       "dbtApplyForAnImportLicense": {
         "header": "Apply for an import licence",
@@ -1583,6 +1619,18 @@
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
+      "hmpoCancelPassport": {
+        "header": "Cancel a lost or stolen passport",
+        "description": "Report a passport as lost or stolen or apply for a replacement.",
+        "link_text": "Go to your cancel a lost or stolen passport account",
+        "link_href": "https://www.loststolenpassport.service.gov.uk/lost-stolen/passport-holder"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
       "dbtApplyForAnImportLicense": {
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
@@ -1796,6 +1844,18 @@
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
+      "hmpoCancelPassport": {
+        "header": "Cancel a lost or stolen passport",
+        "description": "Report a passport as lost or stolen or apply for a replacement.",
+        "link_text": "Go to your cancel a lost or stolen passport account",
+        "link_href": "https://www.loststolenpassport.service.gov.uk/lost-stolen/passport-holder"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
       "dbtApplyForAnImportLicense": {
         "header": "Apply for an import licence",
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
@@ -2008,6 +2068,18 @@
         "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
         "link_text": "Go to your export certificate account",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "hmpoCancelPassport": {
+        "header": "Cancel a lost or stolen passport",
+        "description": "Report a passport as lost or stolen or apply for a replacement.",
+        "link_text": "Go to your cancel a lost or stolen passport account",
+        "link_href": "https://www.loststolenpassport.service.gov.uk/lost-stolen/passport-holder"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
       },
       "dbtApplyForAnImportLicense": {
         "header": "Apply for an import licence",
