@@ -183,8 +183,8 @@ Mappings:
       SUPPORTMETHODMANAGEMENT: "1"
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
-      GA4DISABLED: "false"
-      UADISABLED: "false"
+      GA4ENABLED: "true"
+      UAENABLED: "true"
       SUPPORTADDBACKUPMFA: "1"
       SUPPORTCHANGEMFA: "1"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
@@ -219,8 +219,8 @@ Mappings:
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
-      GA4DISABLED: "false"
-      UADISABLED: "false"
+      GA4ENABLED: "true"
+      UAENABLED: "true"
       LANGUAGETOGGLE: "1"
       DTRUMURL: ""
     staging:
@@ -251,8 +251,8 @@ Mappings:
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
-      GA4DISABLED: "false"
-      UADISABLED: "false"
+      GA4ENABLED: "true"
+      UAENABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/e87dc9cd0e7082fb_complete.js"
@@ -284,8 +284,8 @@ Mappings:
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "TBD"
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
-      GA4DISABLED: "true"
-      UADISABLED: "true"
+      GA4ENABLED: "false"
+      UAENABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/416cd438acc3a6f_complete.js"
@@ -317,8 +317,8 @@ Mappings:
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
       UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TT5HDKV"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
-      GA4DISABLED: "false"
-      UADISABLED: "false"
+      GA4ENABLED: "true"
+      UAENABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf04188tda/b9835209cd235d3a_complete.js"
@@ -842,12 +842,12 @@ Resources:
                   !Ref Environment,
                   GOOGLEANALYTICS4GTMCONTAINERID,
                 ]
-            - Name: "GA4_DISABLED"
+            - Name: "GA4_ENABLED"
               Value:
-                !FindInMap [EnvironmentVariables, !Ref Environment, GA4DISABLED]
-            - Name: "UA_DISABLED"
+                !FindInMap [EnvironmentVariables, !Ref Environment, GA4ENABLED]
+            - Name: "UA_ENABLED"
               Value:
-                !FindInMap [EnvironmentVariables, !Ref Environment, UADISABLED]
+                !FindInMap [EnvironmentVariables, !Ref Environment, UAENABLED]
             - Name: "ACCESSIBILITY_STATEMENT_URL"
               Value:
                 !FindInMap [

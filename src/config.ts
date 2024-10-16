@@ -321,11 +321,11 @@ export function universalAnalyticsGtmContainerId(): string {
   return process.env.UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID;
 }
 
-export function googleAnalytics4Disabled(): string {
+export function googleAnalytics4Enabled(): string {
   return process.env.GA4_DISABLED || "true";
 }
 
-export function universalAnalyticsDisabled(): string {
+export function universalAnalyticsEnabled(): string {
   return process.env.UA_DISABLED || "false";
 }
 
