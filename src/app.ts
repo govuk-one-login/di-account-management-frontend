@@ -72,6 +72,7 @@ import { switchBackupMethodRouter } from "./components/switch-backup-method/swit
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
+import { getOIDCClient } from "./utils/oidc";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -105,7 +106,9 @@ async function createApp(): Promise<express.Application> {
 
   app.use(
     "/assets",
-    express.static(path.resolve("node_modules/govuk-frontend/dist/govuk/assets"))
+    express.static(
+      path.resolve("node_modules/govuk-frontend/dist/govuk/assets")
+    )
   );
 
   app.use("/public", express.static(path.join(__dirname, "public")));
@@ -159,7 +162,10 @@ async function createApp(): Promise<express.Application> {
   app.locals.sessionStore = sessionStore;
 
   app.use(healthcheckRouter);
-  app.use(authMiddleware(getOIDCConfig()));
+
+  const oidcClient = await getOIDCClient(getOIDCConfig());
+  app.use(authMiddleware(oidcClient));
+
   app.use(globalLogoutRouter);
   app.use(csurf({ cookie: getCSRFCookieOptions(isProduction) }));
 
