@@ -1,45 +1,70 @@
-import { Issuer, Client, custom, generators } from "openid-client";
+import { Issuer, Client, custom, generators, BaseClient } from "openid-client";
 import { OIDCConfig } from "../types";
-import memoize from "fast-memoize";
 import { ClientAssertionServiceInterface, KmsService } from "./types";
 import { kmsService } from "./kms";
 import base64url from "base64url";
 import random = generators.random;
-import { decodeJwt, createRemoteJWKSet } from "jose";
+import {
+  decodeJwt,
+  createRemoteJWKSet,
+  FlattenedJWSInput,
+  JSONWebKeySet,
+  JWSHeaderParameters,
+  KeyLike,
+} from "jose";
 
 custom.setHttpOptionsDefaults({
   timeout: 20000,
 });
 
+let issuer: Issuer<BaseClient> = null;
+
 async function getIssuer(discoveryUri: string) {
-  return await Issuer.discover(discoveryUri);
+  if (issuer == null) {
+    issuer = await Issuer.discover(discoveryUri);
+  }
+  return issuer;
 }
 
-const cachedIssuer = memoize(getIssuer);
+let oidcClient: Client = null;
 
 async function getOIDCClient(config: OIDCConfig): Promise<Client> {
-  const issuer = await cachedIssuer(config.idp_url);
-
-  return new issuer.Client({
-    client_id: config.client_id,
-    redirect_uris: [config.callback_url],
-    response_types: ["code"],
-    token_endpoint_auth_method: "none", //allows for a custom client_assertion
-    id_token_signed_response_alg: "ES256",
-    scopes: config.scopes,
-  });
+  const issuer = await getIssuer(config.idp_url);
+  if (oidcClient == null) {
+    oidcClient = new issuer.Client({
+      client_id: config.client_id,
+      redirect_uris: [config.callback_url],
+      response_types: ["code"],
+      token_endpoint_auth_method: "none",
+      id_token_signed_response_alg: "ES256",
+      scopes: config.scopes,
+    });
+  }
+  return oidcClient;
 }
+
+let jwks: {
+  (
+    protectedHeader?: JWSHeaderParameters,
+    token?: FlattenedJWSInput
+  ): Promise<KeyLike>;
+  coolingDown: boolean;
+  fresh: boolean;
+  reloading: boolean;
+  reload: () => Promise<void>;
+  jwks: () => JSONWebKeySet | undefined;
+} = null;
 
 async function getJWKS(config: OIDCConfig) {
-  const issuer = await cachedIssuer(config.idp_url);
-  return createRemoteJWKSet(new URL(issuer.metadata.jwks_uri), {
-    headers: { "User-Agent": '"AccountManagement/1.0.0"' },
-  });
+  const issuer = await getIssuer(config.idp_url);
+
+  if (jwks == null) {
+    jwks = createRemoteJWKSet(new URL(issuer.metadata.jwks_uri), {
+      headers: { "User-Agent": '"AccountManagement/1.0.0"' },
+    });
+  }
+  return jwks;
 }
-
-const cached = memoize(getOIDCClient);
-
-const cachedJwks = memoize(getJWKS);
 
 function isTokenExpired(token: string): boolean {
   const decodedToken = decodeJwt(token);
@@ -97,9 +122,4 @@ function clientAssertionGenerator(
   };
 }
 
-export {
-  cached as getOIDCClient,
-  cachedJwks as getJWKS,
-  isTokenExpired,
-  clientAssertionGenerator,
-};
+export { getOIDCClient, getJWKS, isTokenExpired, clientAssertionGenerator };
