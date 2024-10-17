@@ -88,14 +88,7 @@
         {% endfor %}
       </ul>
       {% endif %}
-      {% set detailsHTML %}
-        <p class="govuk-body">{{ 'pages.yourServices.informationBox.details.paragraph' | translate }}</p>
-         <ul class="govuk-list govuk-list--bullet">
-          {% for serviceLink in serviceLinks %}
-            <li><a class="govuk-link" href="{{ serviceLink["href"] }}">{{ serviceLink["text"] }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endset %}
+
       <div class="information-box">
         <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
         <p class="govuk-body">{{ 'pages.yourServices.informationBox.paragraph1' | translate }}</p>
