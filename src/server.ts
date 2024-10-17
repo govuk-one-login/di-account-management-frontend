@@ -20,8 +20,6 @@ const port: number | string = process.env.PORT || 6001;
       const formattedStack = (stack || [])
         .map((frame: string) => frame.trim())
         .join("\n");
-
-      // Log differently depending on how severe the block is
       if (time > 200) {
         logger.error(
           `Severe Event loop blockage detected! blocked for ${time}ms.\nStack trace:\n${formattedStack}`
@@ -33,8 +31,8 @@ const port: number | string = process.env.PORT || 6001;
       }
     },
     {
-      threshold: 50, // Set threshold to 50ms, feel free to adjust
-      resourcesCap: 10, // Limit to 10 stack frames to avoid too much noise
+      threshold: 50,
+      resourcesCap: 10,
     }
   );
 })().catch((ex) => {
