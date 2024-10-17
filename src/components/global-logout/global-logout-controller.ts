@@ -7,8 +7,8 @@ import {
   getTokenValidationClockSkew,
 } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
-import { getJWKS } from "src/utils/oidc";
-import { getOIDCConfig } from "src/config/oidc";
+import { getJWKS } from "../../utils/oidc";
+import { getOIDCConfig } from "../../config/oidc";
 
 const BACK_CHANNEL_LOGOUT_EVENT =
   "http://schemas.openid.net/event/backchannel-logout";
