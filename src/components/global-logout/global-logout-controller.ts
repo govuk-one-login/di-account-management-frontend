@@ -7,6 +7,8 @@ import {
   getTokenValidationClockSkew,
 } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
+import { getJWKS } from "src/utils/oidc";
+import { getOIDCConfig } from "src/config/oidc";
 
 const BACK_CHANNEL_LOGOUT_EVENT =
   "http://schemas.openid.net/event/backchannel-logout";
@@ -16,7 +18,8 @@ async function verifyLogoutToken(req: Request): Promise<LogoutToken> {
     return undefined;
   }
   try {
-    const token = await jwtVerify(req.body.logout_token, req.issuerJWKS, {
+    const issuerJWKS = await getJWKS(getOIDCConfig());
+    const token = await jwtVerify(req.body.logout_token, issuerJWKS, {
       issuer: req.oidc.issuer.metadata.issuer,
       audience: req.oidc.metadata.client_id,
       maxTokenAge: getLogoutTokenMaxAge(),
