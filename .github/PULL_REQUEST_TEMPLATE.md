@@ -38,7 +38,9 @@
 - [ ] Automated test coverage includes features that are flagged off
 
 ### Sign-offs
-
+<!-- New Node.JS/NPM dependencies need to be approved by a Lead Developer or Lead SRE: https://govukverify.atlassian.net/wiki/spaces/DIWAY/pages/4335697997/Library+approval+process -->
+<!-- Delete if changes do NOT include any new libraries -->
+- [ ] New Node.JS/NPM dependencies have been signed-off by a Lead dev or Lead SRE 
 <!-- Design updates should be signed off by a UCD person prior to the PR being open for dev review -->
 <!-- Delete if changes do NOT include any design updates -->
 - [ ] Design updates have been signed off by a member of the UCD team
