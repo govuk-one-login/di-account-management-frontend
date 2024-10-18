@@ -1,11 +1,11 @@
 import { Issuer, Client, custom, generators } from "openid-client";
 import { OIDCConfig } from "../types";
-import memoize from "fast-memoize";
 import { ClientAssertionServiceInterface, KmsService } from "./types";
 import { kmsService } from "./kms";
 import base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
+import memoize from "fast-memoize";
 
 custom.setHttpOptionsDefaults({
   timeout: 20000,
@@ -30,14 +30,14 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
   });
 }
 
+const cachedOIDCClient = memoize(getOIDCClient);
+
 async function getJWKS(config: OIDCConfig) {
   const issuer = await cachedIssuer(config.idp_url);
   return createRemoteJWKSet(new URL(issuer.metadata.jwks_uri), {
     headers: { "User-Agent": '"AccountManagement/1.0.0"' },
   });
 }
-
-const cached = memoize(getOIDCClient);
 
 const cachedJwks = memoize(getJWKS);
 
@@ -98,8 +98,9 @@ function clientAssertionGenerator(
 }
 
 export {
-  cached as getOIDCClient,
+  cachedOIDCClient as getOIDCClient,
   cachedJwks as getJWKS,
   isTokenExpired,
   clientAssertionGenerator,
+  cachedIssuer as getIssuer,
 };

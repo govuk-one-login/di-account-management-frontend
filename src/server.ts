@@ -1,3 +1,4 @@
+import blockedAt from "blocked-at";
 import { createApp } from "./app";
 import { logger } from "./utils/logger";
 
@@ -14,6 +15,26 @@ const port: number | string = process.env.PORT || 6001;
     });
   server.keepAliveTimeout = 61 * 1000;
   server.headersTimeout = 91 * 1000;
+  blockedAt(
+    (time, stack) => {
+      const formattedStack = (stack || [])
+        .map((frame: string) => frame.trim())
+        .join("\n");
+      if (time > 200) {
+        logger.error(
+          `Severe Event loop blockage detected! blocked for ${time}ms.\nStack trace:\n${formattedStack}`
+        );
+      } else {
+        logger.warn(
+          `Event loop blocked for ${time}ms. Stack trace:\n${formattedStack}`
+        );
+      }
+    },
+    {
+      threshold: 50,
+      resourcesCap: 10,
+    }
+  );
 })().catch((ex) => {
   logger.error(`Server failed to create app ${ex.message}`);
 });
