@@ -24,7 +24,7 @@
     {% endif %}
     {% set emailParagraphs =  'pages.contact.section3.email.paragraphs' | translate({ returnObjects: true }) %}
     {% for paragraph in emailParagraphs %}
-      <p class="govuk-body">{{ paragraph | safe | replace('[emailServiceLinkHref]', contactEmailServiceUrl | translate ) }}</p>
+      <p class="govuk-body">{{ paragraph | safe | replace('[emailServiceLinkHref]', contactEmailServiceUrl ) }}</p>
     {% endfor %}
   </section>
 {% endset %}
