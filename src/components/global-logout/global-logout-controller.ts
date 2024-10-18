@@ -18,8 +18,9 @@ async function verifyLogoutToken(req: Request): Promise<LogoutToken> {
     return undefined;
   }
   try {
-    const issuerJWKS = await getJWKS(getOIDCConfig());
-    const token = await jwtVerify(req.body.logout_token, issuerJWKS, {
+    req.issuerJWKS = await getJWKS(getOIDCConfig());
+
+    const token = await jwtVerify(req.body.logout_token, req.issuerJWKS, {
       issuer: req.oidc.issuer.metadata.issuer,
       audience: req.oidc.metadata.client_id,
       maxTokenAge: getLogoutTokenMaxAge(),
