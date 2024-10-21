@@ -12,6 +12,12 @@ describe("Integration::redirects", () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     sandbox = sinon.createSandbox();
+    const oidc = require("../../../utils/oidc");
+    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+      return new Promise((resolve) => {
+        resolve({});
+      });
+    });
     app = await require("../../../app").createApp();
   });
 
