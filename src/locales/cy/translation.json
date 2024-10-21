@@ -783,6 +783,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "L8SSq5Iz8DstkBgno0Hx5aujelE": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "integration": {
@@ -996,7 +1002,7 @@
         "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
         "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
-    },
+      },
       "l6GFmD8ndn7afVcm6SqAHlM8IVM": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
         "description": "Rhoi gwybod am basbort sydd wedi cael ei golli neu wedi'i ddwyn neu wneud cais am basbort newydd.",
@@ -1014,6 +1020,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "L8SSq5Iz8DstkBgno0Hx5aujelE": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "staging": {
@@ -1215,7 +1227,7 @@
         "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
         "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
-    },
+      },
       "hmpoCancelPassport": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
         "description": "Rhoi gwybod am basbort sydd wedi cael ei golli neu wedi'i ddwyn neu wneud cais am basbort newydd.",
@@ -1233,6 +1245,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "coFindaTender": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "build": {
@@ -1452,6 +1470,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "coFindaTender": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "dev": {
@@ -1671,6 +1695,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "coFindaTender": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "local": {
@@ -1890,6 +1920,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "coFindaTender": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     }
   }

@@ -170,6 +170,8 @@ const DBT_APPLY_FOR_AN_IMPORT = "gSKx5snZtYsQWSQZRoKI2oV-7lQ";
 const DBT_APPLY_FOR_AN_IMPORT_NON_PROD = "dbtApplyForAnImportLicense";
 const CMAD_PROD = "Q2tqV5C1nGXFVMUcnpqbOUTrZuw";
 const CMAD_NON_PROD = "CMAD";
+const CO_FIND_TENDER_PROD = "L8SSq5Iz8DstkBgno0Hx5aujelE";
+const CO_FIND_TENDER_NON_PROD = "coFindaTender";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -238,6 +240,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   DBT_APPLY_FOR_AN_IMPORT_NON_PROD,
   CMAD_PROD,
   CMAD_NON_PROD,
+  CO_FIND_TENDER_PROD,
+  CO_FIND_TENDER_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
