@@ -926,6 +926,12 @@
         "link_text": "Go to Companies House",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
+      "Xj93G5rMO2CsouiG8DJf36siQRk": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "l6GFmD8ndn7afVcm6SqAHlM8IVM": {
         "header": "Cancel a lost or stolen passport",
         "description": "Report a passport as lost or stolen or apply for a replacement.",
@@ -1157,6 +1163,12 @@
         "link_text": "Go to Companies House",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
+      "Xj93G5rMO2CsouiG8DJf36siQRk": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "l6GFmD8ndn7afVcm6SqAHlM8IVM": {
         "header": "Cancel a lost or stolen passport",
         "description": "Report a passport as lost or stolen or apply for a replacement.",
@@ -1375,6 +1387,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
       "hmpoCancelPassport": {
         "header": "Cancel a lost or stolen passport",
@@ -1595,6 +1613,12 @@
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "hmpoCancelPassport": {
         "header": "Cancel a lost or stolen passport",
         "description": "Report a passport as lost or stolen or apply for a replacement.",
@@ -1814,6 +1838,12 @@
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "hmpoCancelPassport": {
         "header": "Cancel a lost or stolen passport",
         "description": "Report a passport as lost or stolen or apply for a replacement.",
@@ -2032,6 +2062,12 @@
         "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
       "hmpoCancelPassport": {
         "header": "Cancel a lost or stolen passport",

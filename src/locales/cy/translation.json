@@ -149,8 +149,7 @@
             "hiddenText": "Rhif ffôn"
           },
           "app": {
-            "title": "Ap dilysydd",
-            "hiddenText": "Ap dilysydd"
+            "title": "Ap dilysydd"
           }
         }
       },
@@ -761,6 +760,12 @@
         "link_text": "Ewch i Dŷ'r Cwmnïau",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
+      "Xj93G5rMO2CsouiG8DJf36siQRk": {
+        "header": "Gwneud cais am dystysgrif allforio",
+        "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
+        "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "l6GFmD8ndn7afVcm6SqAHlM8IVM": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
         "description": "Rhoi gwybod am basbort sydd wedi cael ei golli neu wedi'i ddwyn neu wneud cais am basbort newydd.",
@@ -986,6 +991,12 @@
         "link_text": "Ewch i Dŷ'r Cwmnïau",
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
+      "Xj93G5rMO2CsouiG8DJf36siQRk": {
+        "header": "Gwneud cais am dystysgrif allforio",
+        "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
+        "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+    },
       "l6GFmD8ndn7afVcm6SqAHlM8IVM": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
         "description": "Rhoi gwybod am basbort sydd wedi cael ei golli neu wedi'i ddwyn neu wneud cais am basbort newydd.",
@@ -1199,6 +1210,12 @@
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Gwneud cais am dystysgrif allforio",
+        "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
+        "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+    },
       "hmpoCancelPassport": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
         "description": "Rhoi gwybod am basbort sydd wedi cael ei golli neu wedi'i ddwyn neu wneud cais am basbort newydd.",
@@ -1411,6 +1428,12 @@
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Gwneud cais am dystysgrif allforio",
+        "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
+        "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
       "hmpoCancelPassport": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
@@ -1625,6 +1648,12 @@
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
       },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Gwneud cais am dystysgrif allforio",
+        "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
+        "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
       "hmpoCancelPassport": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
         "description": "Rhoi gwybod am basbort sydd wedi cael ei golli neu wedi'i ddwyn neu wneud cais am basbort newydd.",
@@ -1837,6 +1866,12 @@
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
         "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Gwneud cais am dystysgrif allforio",
+        "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
+        "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
       },
       "hmpoCancelPassport": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
