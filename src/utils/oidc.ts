@@ -30,14 +30,14 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
   });
 }
 
+const cachedOIDCClient = memoize(getOIDCClient);
+
 async function getJWKS(config: OIDCConfig) {
   const issuer = await cachedIssuer(config.idp_url);
   return createRemoteJWKSet(new URL(issuer.metadata.jwks_uri), {
     headers: { "User-Agent": '"AccountManagement/1.0.0"' },
   });
 }
-
-const cached = memoize(getOIDCClient);
 
 const cachedJwks = memoize(getJWKS);
 
@@ -98,8 +98,9 @@ function clientAssertionGenerator(
 }
 
 export {
-  cached as getOIDCClient,
+  cachedOIDCClient as getOIDCClient,
   cachedJwks as getJWKS,
   isTokenExpired,
   clientAssertionGenerator,
+  cachedIssuer as getIssuer,
 };
