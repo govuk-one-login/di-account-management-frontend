@@ -1,7 +1,7 @@
-import express from "express";
+import express, { Application } from "express";
 import cookieParser from "cookie-parser";
 import csurf from "csurf";
-import { loggerMiddleware } from "./utils/logger";
+import { logger, loggerMiddleware } from "./utils/logger";
 import { sanitizeRequestMiddleware } from "./middleware/sanitize-request-middleware";
 import i18nextMiddleware from "i18next-http-middleware";
 import * as path from "path";
@@ -72,6 +72,8 @@ import { switchBackupMethodRouter } from "./components/switch-backup-method/swit
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
+import { Server } from "node:http";
+import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -105,7 +107,9 @@ async function createApp(): Promise<express.Application> {
 
   app.use(
     "/assets",
-    express.static(path.resolve("node_modules/govuk-frontend/dist/govuk/assets"))
+    express.static(
+      path.resolve("node_modules/govuk-frontend/dist/govuk/assets")
+    )
   );
 
   app.use("/public", express.static(path.join(__dirname, "public")));
@@ -215,4 +219,30 @@ async function createApp(): Promise<express.Application> {
   return app;
 }
 
-export { createApp };
+async function startServer(app: Application): Promise<Server> {
+  const port: number | string = process.env.PORT || 3000;
+  let server: Server;
+
+  await new Promise<void>((resolve) => {
+    server = app
+      .listen(port, () => {
+        logger.info(`Server listening on port ${port}`);
+        app.emit("appStarted");
+        resolve();
+      })
+      .on("error", (error: Error) => {
+        logger.error(`Unable to start server because of ${error.message}`);
+      });
+
+    server.keepAliveTimeout = 61 * 1000;
+    server.headersTimeout = 91 * 1000;
+
+    frontendVitalSignsInit(server, {
+      staticPaths: [/^\/assets\/.*/, /^\/public\/.*/],
+    });
+  });
+
+  return server;
+}
+
+export { createApp, startServer };
