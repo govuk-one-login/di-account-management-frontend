@@ -695,7 +695,7 @@
           "paragraphs1": [
             "Get help from GOV.UK One Login’s digital assistant or chat with a member of the support team.",
             "You might be asked for your reference code when you chat to us.",
-            "You can chat live with our support team Monday to Friday, 8am to 8pm.",
+            "You can chat live with our support team Monday to Friday, 8am to 8pm UK time.",
             "The digital assistant is always available."
           ],
           "linkText": "Use webchat",
@@ -710,7 +710,7 @@
               "<strong>Outside the UK:</strong><br>+44 208 629 0008"
             ]
           },
-          "paragraph2": "You can call us Monday to Friday, 8am to 8pm.",
+          "paragraph2": "You can call us Monday to Friday, 8am to 8pm UK time.",
           "callChargesLinkText": "Find out about call charges",
           "waitingTimeWarning": "There are currently long waiting times on the phone. If your call is not urgent, try again later or <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">fill in the contact form</a>."
         },
@@ -719,7 +719,7 @@
           "paragraphs": [
             "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Fill in the contact form</a> to ask for help.",
             "We’ll reply by email within 2 days.",
-            "We’ll respond during office hours:<br>Monday to Friday, 9:30am to 5:30pm"
+            "We’ll respond during office hours:<br>Monday to Friday, 9:30am to 5:30pm UK time"
           ]
         }
       },
