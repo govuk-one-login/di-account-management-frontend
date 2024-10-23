@@ -30,8 +30,6 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
   });
 }
 
-const cachedOIDCClient = memoize(getOIDCClient);
-
 async function getJWKS(config: OIDCConfig) {
   const issuer = await cachedIssuer(config.idp_url);
   return createRemoteJWKSet(new URL(issuer.metadata.jwks_uri), {
@@ -98,7 +96,7 @@ function clientAssertionGenerator(
 }
 
 export {
-  cachedOIDCClient as getOIDCClient,
+  getOIDCClient,
   cachedJwks as getJWKS,
   isTokenExpired,
   clientAssertionGenerator,
