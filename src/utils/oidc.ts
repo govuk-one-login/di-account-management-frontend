@@ -37,8 +37,6 @@ async function getJWKS(config: OIDCConfig) {
   });
 }
 
-const cached = memoize(getOIDCClient);
-
 const cachedJwks = memoize(getJWKS);
 
 function isTokenExpired(token: string): boolean {
@@ -98,8 +96,9 @@ function clientAssertionGenerator(
 }
 
 export {
-  cached as getOIDCClient,
+  getOIDCClient,
   cachedJwks as getJWKS,
   isTokenExpired,
   clientAssertionGenerator,
+  cachedIssuer as getIssuer,
 };
