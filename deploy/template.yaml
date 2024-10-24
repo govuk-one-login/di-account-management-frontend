@@ -409,6 +409,7 @@ Resources:
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
 
+  # Utilising ADR 0140
   ECSStepScaleOutPolicy:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
@@ -424,17 +425,21 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 120
+        Cooldown: 60
+        MinAdjustmentMagnitude: 5
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-          - MetricIntervalLowerBound: 0
-            MetricIntervalUpperBound: 10
+          - MetricIntervalUpperBound: 20 #80%
             ScalingAdjustment: 100
-          - MetricIntervalLowerBound: 10
-            MetricIntervalUpperBound: 20
+          - MetricIntervalLowerBound: 20 #80%
+            MetricIntervalUpperBound: 30 #90%
             ScalingAdjustment: 200
-          - MetricIntervalLowerBound: 20
+          - MetricIntervalLowerBound: 30 #90%
+            MetricIntervalUpperBound: 35 #95%
             ScalingAdjustment: 300
+          - MetricIntervalLowerBound: 35 #95%
+            ScalingAdjustment: 500
 
+  # Utilising ADR 0140
   ECSStepScaleInPolicy:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
@@ -450,17 +455,15 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 120
+        Cooldown: 30
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-          - MetricIntervalLowerBound: -20
-            MetricIntervalUpperBound: 0
+          - MetricIntervalLowerBound: -40 #20%
+            MetricIntervalUpperBound: 0 #60%
             ScalingAdjustment: -10
-          - MetricIntervalLowerBound: -40
-            MetricIntervalUpperBound: -20
-            ScalingAdjustment: -25
-          - MetricIntervalUpperBound: -40
+          - MetricIntervalUpperBound: -40 #20%
             ScalingAdjustment: -50
 
+  # Utilising ADR 0140
   ECSStepScaleOutAlarm:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::CloudWatch::Alarm
@@ -468,22 +471,23 @@ Resources:
       ActionsEnabled: true
       AlarmActions:
         - !Ref ECSStepScaleOutPolicy
-      AlarmDescription: "ECSClusterOver70PercentCPU"
+      AlarmDescription: "ECSClusterOver60PercentCPU"
       ComparisonOperator: "GreaterThanThreshold"
-      DatapointsToAlarm: "1"
+      DatapointsToAlarm: "2"
       Dimensions:
         - Name: ClusterName
           Value: !Ref ECSCluster
         - Name: ServiceName
           Value: !GetAtt ContainerService.Name
       Unit: "Percent"
-      EvaluationPeriods: "1"
+      EvaluationPeriods: "2"
       MetricName: "CPUUtilization"
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "70"
+      Threshold: "60"
 
+  # Utilising ADR 0140
   ECSStepScaleInAlarm:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::CloudWatch::Alarm
@@ -1186,10 +1190,13 @@ Resources:
   ApplicationLoadBalancerTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckPort: !Ref ContainerPort
+      HealthCheckEnabled: TRUE
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
-      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 2
+      HealthCheckIntervalSeconds: 5
+      HealthyThresholdCount: 2
+      HealthCheckPort: !Ref ContainerPort
       Port: !Ref ContainerPort
       Protocol: HTTP
       ProtocolVersion: HTTP1
@@ -1198,10 +1205,9 @@ Resources:
       TargetType: ip
       VpcId:
         Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
-      UnhealthyThresholdCount: 2
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
-          Value: "5"
+          Value: "62"
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroup"
@@ -1236,7 +1242,7 @@ Resources:
       UnhealthyThresholdCount: 2
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
-          Value: "5"
+          Value: "62"
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroupGreen"
