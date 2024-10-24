@@ -1207,7 +1207,7 @@ Resources:
         Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
-          Value: "5"
+          Value: "62"
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroup"
@@ -1242,7 +1242,7 @@ Resources:
       UnhealthyThresholdCount: 2
       TargetGroupAttributes:
         - Key: "deregistration_delay.timeout_seconds"
-          Value: "5"
+          Value: "62"
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-ApplicationLoadBalancerTargetGroupGreen"
