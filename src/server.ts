@@ -25,7 +25,7 @@ const port: number | string = process.env.PORT || 6001;
       // Log differently depending on how severe the block is
       if (time > 200) {
         logger.error(
-          `Severe Event loop blockage detected! Blocked for ${time}ms.\nStack trace:\n${formattedStack}`
+          `Severe Event loop blockage detected! blocked for ${time}ms.\nStack trace:\n${formattedStack}`
         );
       } else {
         logger.warn(
