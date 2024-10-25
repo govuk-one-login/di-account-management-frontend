@@ -185,6 +185,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
       UAENABLED: "true"
+      SELECTTRACKINGENABLED: "true"
       SUPPORTADDBACKUPMFA: "1"
       SUPPORTCHANGEMFA: "1"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
@@ -221,6 +222,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
       UAENABLED: "true"
+      SELECTTRACKINGENABLED: "true"
       LANGUAGETOGGLE: "1"
       DTRUMURL: ""
     staging:
@@ -253,6 +255,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
       UAENABLED: "true"
+      SELECTTRACKINGENABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/e87dc9cd0e7082fb_complete.js"
@@ -286,6 +289,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
       GA4ENABLED: "false"
       UAENABLED: "false"
+      SELECTTRACKINGENABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/416cd438acc3a6f_complete.js"
@@ -319,6 +323,7 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
       GA4ENABLED: "true"
       UAENABLED: "true"
+      SELECTTRACKINGENABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf04188tda/b9835209cd235d3a_complete.js"
@@ -848,6 +853,13 @@ Resources:
             - Name: "UA_ENABLED"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, UAENABLED]
+            - Name: "SELECT_TRACKING_ENABLED"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SELECTTRACKINGENABLED,
+                ]
             - Name: "ACCESSIBILITY_STATEMENT_URL"
               Value:
                 !FindInMap [

@@ -8,6 +8,7 @@ import {
   universalAnalyticsGtmContainerId,
   googleAnalytics4Enabled,
   universalAnalyticsEnabled,
+  selectContentTrackingEnabled,
   getDtRumUrl,
 } from "../config";
 import { generateNonce } from "../utils/strings";
@@ -33,6 +34,7 @@ export function setLocalVarsMiddleware(
   res.locals.uaContainerId = universalAnalyticsGtmContainerId();
   res.locals.isGa4Enabled = googleAnalytics4Enabled();
   res.locals.isUaEnabled = universalAnalyticsEnabled();
+  res.locals.isSelectContentTrackingEnabled = selectContentTrackingEnabled();
   res.locals.currentUrl = getCurrentUrl(req);
 
   const sessionIds = getSessionIdsFrom(req);
