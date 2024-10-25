@@ -7,4 +7,4 @@ sleep 2400
 pkill -f 'clinic doctor'
 
 # Optional: Copy results to S3
-aws s3 cp ./clinic-doctor-results s3://your-bucket-name/clinic-results/ --recursive
+aws s3 cp ./clinic-doctor-results s3://clinic-doctor/clinic-results/ --recursive
