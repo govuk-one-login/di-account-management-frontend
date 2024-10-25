@@ -9,6 +9,7 @@ COPY package-lock.json ./
 COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
+COPY ./shutdown ./shutdown
 
 RUN npm install -g clinic
 
