@@ -9,6 +9,7 @@ COPY package-lock.json ./
 COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
+COPY ./src/shutdown.sh ./src/shutdown.sh
 
 RUN npm install -g clinic
 
@@ -38,5 +39,7 @@ HEALTHCHECK CMD curl --fail http://localhost:6001/healthcheck || exit 1
 USER node
 
 ENTRYPOINT ["tini", "--"]
+
+RUN chmod +x ./src/shutdown.sh
 
 CMD npm run clinic:doctor & ./src/shutdown.sh
