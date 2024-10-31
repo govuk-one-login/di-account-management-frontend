@@ -1,5 +1,4 @@
 import { randomBytes } from "crypto";
-import { promisify } from "util";
 import { logger } from "./logger";
 
 const lowerAndUpperCaseLettersAndNumbersMax50 = new RegExp(
@@ -14,9 +13,8 @@ export function containsNumbersOnly(value: string): boolean {
   return value ? /^\d+$/.test(value) : false;
 }
 
-const asyncRandomBytes = promisify(randomBytes);
-export async function generateNonce(): Promise<string> {
-  return (await asyncRandomBytes(16)).toString("hex");
+export function generateNonce(): string {
+  return randomBytes(16).toString("hex");
 }
 
 export function isValidUrl(urlString: string | undefined): boolean {
