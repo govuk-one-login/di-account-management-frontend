@@ -789,6 +789,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "CVZjwDf4DJROtdPH2vStPXUALrM": {
+        "header": "Swyddi dysgu yn Lloegr",
+        "description": "Chwilio am a gwneud cais am swyddi dysgu, arweinyddiaeth a chymorth addysg.",
+        "link_text": "Ewch i'ch cyfrif Swyddi dysgu",
+        "link_href": "https://teaching-vacancies.service.gov.uk/jobseekers/account"
       }
     },
     "integration": {
@@ -1008,6 +1014,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "CVZjwDf4DJROtdPH2vStPXUALrM": {
+        "header": "Swyddi dysgu yn Lloegr",
+        "description": "Chwilio am a gwneud cais am swyddi dysgu, arweinyddiaeth a chymorth addysg.",
+        "link_text": "Ewch i'ch cyfrif Swyddi dysgu",
+        "link_href": "https://teaching-vacancies.service.gov.uk/jobseekers/account"
       }
     },
     "staging": {
@@ -1227,6 +1239,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "dfeTeacherVacancies": {
+        "header": "Swyddi dysgu yn Lloegr",
+        "description": "Chwilio am a gwneud cais am swyddi dysgu, arweinyddiaeth a chymorth addysg.",
+        "link_text": "Ewch i'ch cyfrif Swyddi dysgu",
+        "link_href": "https://teaching-vacancies.service.gov.uk/jobseekers/account"
       }
     },
     "build": {
@@ -1446,6 +1464,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "dfeTeacherVacancies": {
+        "header": "Swyddi dysgu yn Lloegr",
+        "description": "Chwilio am a gwneud cais am swyddi dysgu, arweinyddiaeth a chymorth addysg.",
+        "link_text": "Ewch i'ch cyfrif Swyddi dysgu",
+        "link_href": "https://teaching-vacancies.service.gov.uk/jobseekers/account"
       }
     },
     "dev": {
@@ -1665,6 +1689,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "dfeTeacherVacancies": {
+        "header": "Swyddi dysgu yn Lloegr",
+        "description": "Chwilio am a gwneud cais am swyddi dysgu, arweinyddiaeth a chymorth addysg.",
+        "link_text": "Ewch i'ch cyfrif Swyddi dysgu",
+        "link_href": "https://teaching-vacancies.service.gov.uk/jobseekers/account"
       }
     },
     "local": {
@@ -1884,6 +1914,12 @@
         "description": "Gwneud cais am drwydded fewnforio ar gyfer ffrwydryn gwrth-bersonél, offer artaith i'w harddangos, drylliau a bwledi.",
         "link_text": "Ewch i'ch cyfrif trwydded mewnforio",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "dfeTeacherVacancies": {
+        "header": "Swyddi dysgu yn Lloegr",
+        "description": "Chwilio am a gwneud cais am swyddi dysgu, arweinyddiaeth a chymorth addysg.",
+        "link_text": "Ewch i'ch cyfrif Swyddi dysgu",
+        "link_href": "https://teaching-vacancies.service.gov.uk/jobseekers/account"
       }
     }
   }
