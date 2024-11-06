@@ -17,7 +17,7 @@ import { getTxmaHeader } from "../../utils/txma-header";
 
 const TEMPLATE = "enter-password/index.njk";
 
-const REDIRECT_PATHS: { [key in UserJourney]: string } = {
+const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeEmail]: PATH_DATA.CHANGE_EMAIL.url,
   [UserJourney.ChangePassword]: PATH_DATA.CHANGE_PASSWORD.url,
   [UserJourney.ChangePhoneNumber]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
@@ -29,9 +29,10 @@ const REDIRECT_PATHS: { [key in UserJourney]: string } = {
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
 };
 
-const OPL_VALUES: {
-  [key in UserJourney]: { contentId: string; taxonomyLevel2: string };
-} = {
+const OPL_VALUES: Record<
+  UserJourney,
+  { contentId: string; taxonomyLevel2: string }
+> = {
   changeEmail: {
     contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
     taxonomyLevel2: "change email",

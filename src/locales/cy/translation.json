@@ -149,8 +149,7 @@
             "hiddenText": "Rhif ffôn"
           },
           "app": {
-            "title": "Ap dilysydd",
-            "hiddenText": "Ap dilysydd"
+            "title": "Ap dilysydd"
           }
         }
       },
@@ -528,7 +527,7 @@
           "paragraphs1": [
             "Cael help gan gynorthwyydd digidol GOV.UK One Login neu sgwrsio gydag aelod o'r tîm cymorth.",
             "Efallai y gofynnir i chi am eich cod cyfeirio pan fyddwch yn siarad â ni.",
-            "Gallwch sgwrsio'n fyw gyda'n tîm cymorth o ddydd Llun i ddydd Gwener, 8am i 8pm.",
+            "Gallwch sgwrsio'n fyw gyda'n tîm cymorth o ddydd Llun i ddydd Gwener, 8am i 8pm amser y DU.",
             "Mae'r cynorthwyydd digidol bob amser ar gael."
           ],
           "linkText": "Defnyddio gwe-sgwrs",
@@ -545,7 +544,7 @@
               "Y tu allan i'r DU:<br><strong>+44 208 629 0008</strong>"
             ]
           },
-          "paragraph2": "Gallwch ein ffonio o ddydd Llun i ddydd Gwener, 8am i 8pm.",
+          "paragraph2": "Gallwch ein ffonio o ddydd Llun i ddydd Gwener, 8am i 8pm amser y DU.",
           "callChargesLinkText": "Darganfyddwch fwy am gostau galwadau",
           "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">cwblhewch y ffurflen gyswllt</a>."
         },
@@ -554,7 +553,7 @@
           "paragraphs": [
             "<a class=\"govuk-link\" href=\"[emailServiceLinkHref]\">Cwblhewch y ffurflen gyswllt</a>  i ofyn am help.",
             "Byddwn yn ateb drwy e-bost o fewn 2 ddiwrnod gwaith.",
-            "Byddwn yn ymateb yn ystod oriau swyddfa:<br>Dydd Llun i ddydd Gwener, 9:30am i 5:30pm"
+            "Byddwn yn ymateb yn ystod oriau swyddfa:<br>Dydd Llun i ddydd Gwener, 9:30am i 5:30pm amser y DU"
           ]
         }
       },
@@ -684,6 +683,12 @@
         "paragraph2": "Rydym yn gweithio i wneud hyn yn bosibl.",
         "link_text": "Dod o hyd i wasanaeth CThEF rydych ei angen",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs.cy"
+      },
+      "kvGpTatgWm3YqXHbG41eOdDf91k": {
+        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych",
+        "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
+        "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
         "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
@@ -911,10 +916,10 @@
         "link_href": "https://repay-my-debt.services.aks-test-ext.np.az.dwpcloud.uk/oidv-sign-in"
       },
       "RtE7mP5yzCrdthst1kuVHS1SsSw": {
-        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych.",
-        "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP)",
+        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych",
+        "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
-        "link_href": "https://repay-my-debt.services.aks-test-ext.np.az.dwpcloud.uk/oidv-sign-in"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
         "header": "Dod o hyd a defnyddio API gan yr Adran Addysg",
@@ -997,7 +1002,7 @@
         "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
         "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
-    },
+      },
       "l6GFmD8ndn7afVcm6SqAHlM8IVM": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
         "description": "Rhoi gwybod am basbort sydd wedi cael ei golli neu wedi'i ddwyn neu wneud cais am basbort newydd.",
@@ -1206,17 +1211,17 @@
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
       "dwpBenefitOwed": {
-        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych.",
+        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych",
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
-        "link_href": "http://localhost:8000/landing?source=your-services"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "dbtApplyForAnExportCertificate": {
         "header": "Gwneud cais am dystysgrif allforio",
         "description": "Gwneud cais am dystysgrif i allforio colur, erosolau, plaladdwyr neu nwyddau eraill.",
         "link_text": "Ewch i'ch cyfrif tystysgrif allforio",
         "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
-    },
+      },
       "hmpoCancelPassport": {
         "header": "Canslo pasbort sydd wedi cael ei golli neu ei ddwyn",
         "description": "Rhoi gwybod am basbort sydd wedi cael ei golli neu wedi'i ddwyn neu wneud cais am basbort newydd.",
@@ -1425,10 +1430,10 @@
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
       "dwpBenefitOwed": {
-        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych.",
+        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych",
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
-        "link_href": "http://localhost:8000/landing?source=your-services"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "dbtApplyForAnExportCertificate": {
         "header": "Gwneud cais am dystysgrif allforio",
@@ -1644,10 +1649,10 @@
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
       "dwpBenefitOwed": {
-        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych.",
+        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych",
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
-        "link_href": "http://localhost:8000/landing?source=your-services"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "dbtApplyForAnExportCertificate": {
         "header": "Gwneud cais am dystysgrif allforio",
@@ -1863,10 +1868,10 @@
         "link_href": "https://find-and-update.company-information.service.gov.uk/"
       },
       "dwpBenefitOwed": {
-        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych.",
+        "header": "Ad-dalu a rheoli arian budd-dal sy'n ddyledus gennych",
         "description": "Ad-dalu unrhyw arian sy'n ddyledus gennych i'r Adran Gwaith a Phensiynau (DWP).",
         "link_text": "Ewch i Ad-dalu a rheoli arian budd-dal sy’n ddyledus gennych",
-        "link_href": "http://localhost:8000/landing?source=your-services"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "dbtApplyForAnExportCertificate": {
         "header": "Gwneud cais am dystysgrif allforio",

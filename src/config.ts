@@ -139,9 +139,8 @@ const STUB_RP_PROD = "5Vfplamzln0AoarlnX5CX4UTqyh59xfA";
 const STUB_RP_INTEGRATION = "gjWNvoLYietMjeaOE6Zoww533u18ZUfr";
 const STUB_RP_STAGING = "3NKFv679oYlMdyrhKErrTGbzBy2h8rrd";
 export const ONE_LOGIN_HOME_NON_PROD = "oneLoginHome";
-const DWP_INTEGRATION = "sqae3L7gOdizeRqFMw_KCDlhcyg";
-const DWP_INTEGRATION_2 = "RtE7mP5yzCrdthst1kuVHS1SsSw";
-const DWP_LOCAL_DEV_INTEGRATION = "iOf3hyG7eymusbSUS6LgFeQ7AtU";
+const DWP_INTEGRATION = "RtE7mP5yzCrdthst1kuVHS1SsSw";
+const DWP_PROD = "kvGpTatgWm3YqXHbG41eOdDf91k";
 const DWP_NON_PROD = "dwpBenefitOwed";
 const PRISON_VISITS_PROD = "XbPzF-ccO0utCxlifxSyA4Ng0API2XTCQQ";
 const PRISON_VISITS_NON_PROD = "prisonVisits";
@@ -204,8 +203,7 @@ export const getAllowedAccountListClientIDs: string[] = [
   "txsGLvMYYCPaWPZRq2L7XxEnyro",
   "childDevelopmentTraining",
   DWP_INTEGRATION,
-  DWP_INTEGRATION_2,
-  DWP_LOCAL_DEV_INTEGRATION,
+  DWP_PROD,
   DWP_NON_PROD,
   "9uEx86ZHEp8ycgdHNqC8VK87E1A",
   "dfeFindAndUseAnApi",

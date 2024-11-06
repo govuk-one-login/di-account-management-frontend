@@ -76,7 +76,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
                   href: `${enterPasswordUrl}&type=changePhoneNumber`,
                   text: req.t("general.change"),
                   visuallyHiddenText: req.t(
-                    "pages.security.mfaSection.summaryList.app.hiddenText"
+                    "pages.security.mfaSection.summaryList.phoneNumber.hiddenText"
                   ),
                 },
               ],
