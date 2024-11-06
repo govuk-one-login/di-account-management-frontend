@@ -955,6 +955,12 @@
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your import licence account",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "L8SSq5Iz8DstkBgno0Hx5aujelE": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "integration": {
@@ -1192,6 +1198,12 @@
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your import licence account",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "L8SSq5Iz8DstkBgno0Hx5aujelE": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "staging": {
@@ -1417,6 +1429,12 @@
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your import licence account",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "coFindaTender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "build": {
@@ -1642,6 +1660,12 @@
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your import licence account",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "coFindaTender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "dev": {
@@ -1867,6 +1891,12 @@
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your import licence account",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "coFindaTender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     },
     "local": {
@@ -2092,6 +2122,12 @@
         "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
         "link_text": "Go to your import licence account",
         "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "coFindaTender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
       }
     }
   }
