@@ -171,6 +171,8 @@ const CMAD_PROD = "Q2tqV5C1nGXFVMUcnpqbOUTrZuw";
 const CMAD_NON_PROD = "CMAD";
 const DFE_TEACHER_VACANCIES_PROD = "CVZjwDf4DJROtdPH2vStPXUALrM";
 const DFE_TEACHER_VACANCIES_NON_PROD = "dfeTeacherVacancies";
+const OFGEM_LAF_REG_PROD = "eywumu-XiJCz7RHyw4Zv8iTgsuc";
+const OFGEM_LAF_REG_NON_PROD = "ofgemLafReg";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -240,6 +242,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   CMAD_NON_PROD,
   DFE_TEACHER_VACANCIES_PROD,
   DFE_TEACHER_VACANCIES_NON_PROD,
+  OFGEM_LAF_REG_PROD,
+  OFGEM_LAF_REG_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
