@@ -27,9 +27,7 @@ interface UserTokens {
   refreshToken: string;
 }
 
-type UserState = {
-  [key in UserJourney]?: StateAction;
-};
+type UserState = Partial<Record<UserJourney, StateAction>>;
 
 export interface User {
   phoneNumber?: string;

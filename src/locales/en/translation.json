@@ -854,7 +854,7 @@
         "header": "Repay and manage benefit money you owe",
         "description": "Repay any money you owe to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
-        "link_href": "http://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
         "header": "Find and use an API from the Department for Education",
@@ -1081,11 +1081,23 @@
         "link_text": "Find the HMRC service you need",
         "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
       },
+      "iOf3hyG7eymusbSUS6LgFeQ7AtU": {
+        "header": "Repay and manage benefit money you owe",
+        "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
+        "link_href": "http://localhost:8000/landing?source=your-services"
+      },
+      "sqae3L7gOdizeRqFMw_KCDlhcyg": {
+        "header": "Repay and manage benefit money you owe",
+        "description": "Use this service if you need to repay money to the Department for Work and Pensions (DWP).",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
+        "link_href": "https://repay-my-debt.services.aks-test-ext.np.az.dwpcloud.uk/oidv-sign-in"
+      },
       "RtE7mP5yzCrdthst1kuVHS1SsSw": {
         "header": "Repay and manage benefit money you owe",
         "description": "Repay any money you owe to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
-        "link_href": "http://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
         "header": "Find and use an API from the Department for Education",
@@ -1392,7 +1404,7 @@
         "header": "Repay and manage benefit money you owe",
         "description": "Repay any money you owe to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
-        "link_href": "http://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "dbtApplyForAnExportCertificate": {
         "header": "Apply for an export certificate",
@@ -1623,7 +1635,7 @@
         "header": "Repay and manage benefit money you owe",
         "description": "Repay any money you owe to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
-        "link_href": "http://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "dbtApplyForAnExportCertificate": {
         "header": "Apply for an export certificate",
@@ -1854,7 +1866,7 @@
         "header": "Repay and manage benefit money you owe",
         "description": "Repay any money you owe to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
-        "link_href": "http://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "dbtApplyForAnExportCertificate": {
         "header": "Apply for an export certificate",
@@ -2085,7 +2097,7 @@
         "header": "Repay and manage benefit money you owe",
         "description": "Repay any money you owe to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
-        "link_href": "http://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
       },
       "dbtApplyForAnExportCertificate": {
         "header": "Apply for an export certificate",
