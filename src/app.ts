@@ -88,8 +88,10 @@ async function createApp(): Promise<express.Application> {
 
   app.enable("trust proxy");
 
-  const protection = applyOverloadProtection(isProduction);
-  app.use(protection);
+  if (isProduction) {
+    const protect = applyOverloadProtection(isProduction);
+    app.use(protect);
+  }
 
   app.use(outboundContactUsLinksMiddleware);
   app.use(express.json());
