@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import { describe, it, beforeEach, afterEach } from "mocha";
 import {
   clientAssertionGenerator,
@@ -6,7 +5,7 @@ import {
   getJWKS,
   getOIDCClient,
 } from "../../../src/utils/oidc";
-import sinon from "sinon";
+import { sinon, expect } from "../../utils/test-utils";
 import { generators, Issuer } from "openid-client";
 import { OIDCConfig } from "../../../src/types";
 import * as jose from "jose";
