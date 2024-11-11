@@ -201,6 +201,7 @@
           if (event.type === "CHAT_LOADED") {
             // as soon as a CHAT_LOADED event is received from the webchat, make the "Use webchat" toggle visible and stop listening for chat events
             launchWebchatButton.removeAttribute('hidden');
+            webchatLoading.setAttribute('hidden', true)
             clearInterval(webchatInterval);
             clearTimeout(cancelInterval);
           }
