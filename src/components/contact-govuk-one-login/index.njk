@@ -219,7 +219,7 @@
     var webchatInterval = setInterval(waitForSaEvents, 200);
     var cancelInterval = setTimeout(function(){
       webchatLoading.setAttribute('hidden', true)
-      webchatError.removeAttribute('hidden')
+      webchatLoadingError.removeAttribute('hidden')
       // if webchat events still unavailable after 10s, clear the interval
       clearInterval(webchatInterval);
     }, 3000)
