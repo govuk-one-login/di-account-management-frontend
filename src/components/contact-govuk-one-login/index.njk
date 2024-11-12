@@ -126,8 +126,9 @@
         {% endfor %}
 
         <p class="govuk-body">
-          <noscript>Webchat requires Javascript to be enabled in your browser</noscript>
-          <span data-webchat-loading>Loading webchat...</span>
+          <noscript>{{ 'pages.contact.section3.webchatJavascript' | translate }}</noscript>
+          <span data-webchat-loading hidden>{{ 'pages.contact.section3.webchatLoading' | translate }}</span>
+          <span data-webchat-loading-error hidden>{{ 'pages.contact.section3.webchatError' | translate }}</span>
           <button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button>
         </p>
 
@@ -171,6 +172,9 @@
   <script type="text/javascript" nonce='{{scriptNonce}}'>
     var launchWebchatButton = document.querySelector("[data-launch-webchat]");
     var webchatLoading = document.querySelector("[data-webchat-loading]");
+    var webchatLoadingError = document.querySelector("[data-webchat-loading-error]");
+
+    webchatLoading.removeAttribute('hidden')
 
     launchWebchatButton.addEventListener("click", function() {
       const webchatWindow = document.querySelector(".sa-chat-slideout");
@@ -214,7 +218,7 @@
     // this checks whether "saEvents" is available every 200ms 
     var webchatInterval = setInterval(waitForSaEvents, 200);
     var cancelInterval = setTimeout(function(){
-      webchatLoading.innerText = "Error loading webchat"
+      webchatLoading.setAttribute('hidden', true)
       // if webchat events still unavailable after 10s, clear the interval
       clearInterval(webchatInterval);
     }, 3000)

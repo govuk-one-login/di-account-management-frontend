@@ -699,6 +699,9 @@
             "The digital assistant is always available."
           ],
           "linkText": "Use webchat",
+          "webchatLoading": "Loading webchat...",
+          "webchatJavascript": "Javascript must be enabled to use webchat",
+          "webchatError": "There was an error loading webchat",
           "accessibilityStatementParagraph": "Our webchat is not fully accessible yet — we’re working to improve it. You can find out <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en#webchat-accessibility\">more about the limitations and how we’re fixing them</a>."
         },
         "phone": {
