@@ -9,16 +9,17 @@
     {% endif %}
 
     {% if method.mfaMethodType == 'SMS' %}
-      <p class='govuk-body'>{{ "pages.removeBackupMethod.sms" | translate | safe | replace("[phoneNumber]", phoneNumber) }}</p>
+        <p class='govuk-body'>{{ "pages.removeBackupMethod.sms" | translate | safe | replace("[phoneNumber]", phoneNumber) }}</p>
     {% endif %}
 
+     
     <form action="{{ "DELETE_MFA_METHOD" | getPath }}" method="POST">
         <input type="hidden" name="_csrf" value="{{csrfToken}}" />
         <input type="hidden" name="methodId" value="{{mfaIdentifier}}" />
         {{ govukButton({
-          "text": button_text|default('pages.removeBackupMethod.button' | translate, true),
-          "type": "Submit",
-          "preventDoubleClick": true
+        "text": button_text|default('pages.removeBackupMethod.button' | translate, true),
+        "type": "Submit",
+        "preventDoubleClick": true
         }) }}
     </div>
 {% endblock %}

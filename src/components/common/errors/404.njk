@@ -15,10 +15,9 @@
       <p class="govuk-body">{{'error.error404.content.paragraph1' | translate }}</p>
       <p class="govuk-body">{{'error.error404.content.paragraph2' | translate }}</p>
       {{ govukButton({
-        "text": buttonText,
-        "href": accountHome,
-        "attributes": {"data-nav": true,"data-link": accountHome}
-      }) }}
+          "text": buttonText,
+          "href": accountHome
+          }) }}
     </div>
   </div>
   {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"404",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"undefined", contentId:"undefined",loggedInStatus:true,dynamic:true})}}

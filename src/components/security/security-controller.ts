@@ -10,7 +10,7 @@ import { getLastNDigits } from "../../utils/phone-number";
 
 export async function securityGet(req: Request, res: Response): Promise<void> {
   const { email } = req.session.user;
-  const enterPasswordUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=security&edit=true`;
+  const enterPasswordUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=security`;
   const supportActivityLogFlag = supportActivityLog();
 
   const hasHmrc = await hasAllowedRSAServices(req, res);
