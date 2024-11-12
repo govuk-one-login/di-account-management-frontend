@@ -6,8 +6,9 @@ import {
   getYourAccountUrl,
   googleAnalytics4GtmContainerId,
   universalAnalyticsGtmContainerId,
-  googleAnalytics4Disabled,
-  universalAnalyticsDisabled,
+  googleAnalytics4Enabled,
+  universalAnalyticsEnabled,
+  selectContentTrackingEnabled,
   getDtRumUrl,
 } from "../config";
 import { generateNonce } from "../utils/strings";
@@ -31,8 +32,9 @@ export function setLocalVarsMiddleware(
   res.locals.accountSignOut = PATH_DATA.SIGN_OUT.url;
   res.locals.ga4ContainerId = googleAnalytics4GtmContainerId();
   res.locals.uaContainerId = universalAnalyticsGtmContainerId();
-  res.locals.isGa4Disabled = googleAnalytics4Disabled();
-  res.locals.isUaDisabled = universalAnalyticsDisabled();
+  res.locals.isGa4Enabled = googleAnalytics4Enabled();
+  res.locals.isUaEnabled = universalAnalyticsEnabled();
+  res.locals.isSelectContentTrackingEnabled = selectContentTrackingEnabled();
   res.locals.currentUrl = getCurrentUrl(req);
 
   const sessionIds = getSessionIdsFrom(req);
