@@ -32,7 +32,7 @@ import { securityRouter } from "./components/security/security-routes";
 import { activityHistoryRouter } from "./components/activity-history/activity-history-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
-import { ENVIRONMENT_NAME } from "./app.constants";
+import { ENVIRONMENT_NAME, PATH_DATA } from "./app.constants";
 import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
 import { authMiddleware } from "./middleware/auth-middleware";
@@ -92,6 +92,15 @@ async function createApp(): Promise<express.Application> {
     const protect = applyOverloadProtection(isProduction);
     app.use(protect);
   }
+
+  app.use((req, res, next) => {
+    console.log("hello!");
+    res.setHeader(
+      "Reporting-Endpoints",
+      `csp-endpoint="${PATH_DATA.CSP_REPORT_ENDPOINT.url}"`
+    );
+    next();
+  });
 
   app.use(outboundContactUsLinksMiddleware);
   app.use(express.json());
@@ -221,6 +230,11 @@ async function createApp(): Promise<express.Application> {
   app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
+
+  app.post(PATH_DATA.CSP_REPORT_ENDPOINT.url, (req, res) => {
+    console.log("CSP REPORT");
+    console.log(req.body);
+  });
 
   return app;
 }

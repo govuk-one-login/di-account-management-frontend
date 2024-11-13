@@ -165,6 +165,9 @@ export const PATH_DATA: Record<
   TRACK_AND_REDIRECT: {
     url: "/track-and-redirect",
   },
+  CSP_REPORT_ENDPOINT: {
+    url: "/csp-report",
+  },
 };
 
 export const MFA_METHODS = {

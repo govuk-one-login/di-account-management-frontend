@@ -1,5 +1,6 @@
 import { HelmetOptions } from "helmet";
 import { Request, Response } from "express";
+import { PATH_DATA } from "../app.constants";
 // Helmet does not export the config type - This is the way the recommend getting it on GitHub.
 export const helmetConfiguration: HelmetOptions = {
   contentSecurityPolicy: {
@@ -8,7 +9,7 @@ export const helmetConfiguration: HelmetOptions = {
       scriptSrc: [
         "'self'",
         (req: Request, res: Response): string =>
-          `'nonce-${res.locals.scriptNonce}'`,
+          `'nonce-sdfdsf${res.locals.scriptNonce}'`,
         "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
         "https://*.googletagmanager.com",
         "https://*.google-analytics.com",
@@ -34,6 +35,7 @@ export const helmetConfiguration: HelmetOptions = {
         "https://*.dynatrace.com",
       ],
       formAction: ["'self'", "https://*.account.gov.uk"],
+      reportTo: "csp-endpoint",
     },
   },
   dnsPrefetchControl: {
@@ -65,7 +67,7 @@ export const webchatHelmetConfiguration: HelmetOptions = {
       scriptSrc: [
         "'self'",
         (req: Request, res: Response): string =>
-          `'nonce-${res.locals.scriptNonce}'`,
+          `'nonce-sdfsdf${res.locals.scriptNonce}'`,
         "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
         "https://*.googletagmanager.com",
         "https://*.google-analytics.com",
@@ -99,6 +101,7 @@ export const webchatHelmetConfiguration: HelmetOptions = {
       formAction: ["'self'", "https://*.account.gov.uk"],
       mediaSrc: ["'self'", "https://*.s3.eu-west-2.amazonaws.com"],
       frameSrc: ["'self'", "https://*.smartagent.app"],
+      reportTo: "csp-endpoint",
     },
   },
   dnsPrefetchControl: {
