@@ -155,16 +155,10 @@
         ga4ContainerId: "{{ga4ContainerId}}",
         uaContainerId: "{{uaContainerId}}"
       }, {
-        enableGa4Tracking: {{isGa4Enabled}},
-        enableUaTracking: {{isUaEnabled}},
+        disableGa4Tracking: {{isGa4Disabled}},
+        disableUaTracking: {{isUaDisabled}},
         cookieDomain: "{{analyticsCookieDomain}}",
-        isDataSensitive: true,
-        enablePageViewTracking: true,
-        enableFormResponseTracking: true,
-        enableFormChangeTracking: true,
-        enableFormErrorTracking: true,
-        enableNavigationTracking: true,
-        enableSelectContentTracking: {{isSelectContentTrackingEnabled}}
+        isDataSensitive: true
       });
     }
   </script>
