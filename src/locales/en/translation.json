@@ -1103,7 +1103,7 @@
         "header": "Repay and manage benefit money you owe",
         "description": "Repay any money you owe to the Department for Work and Pensions (DWP).",
         "link_text": "Go to your Repay and manage benefit money you owe account",
-        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
+        "link_href": "https://repay-my-debt.services.aks-test-ext.np.az.dwpcloud.uk/oidv-sign-in"
       },
       "9uEx86ZHEp8ycgdHNqC8VK87E1A": {
         "header": "Find and use an API from the Department for Education",
