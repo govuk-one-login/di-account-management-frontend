@@ -801,6 +801,12 @@
         "description": "Llwytho templedi hysbysu datganiad i Ofgem a rheoli eich cyfrifon defnyddwyr.",
         "link_text": "Ewch i'ch cyfrif cofrestr hyblyg",
         "link_href": "https://laf.ofgem.gov.uk/"
+      },
+      "GQzNgSkj3QpmHlPO1kIfbMW1PAw": {
+        "header": "Gwneud cais am statws athro cymwysedig (SAC)",
+        "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
+        "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
+        "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
       }
     },
     "integration": {
@@ -1044,6 +1050,12 @@
         "description": "Llwytho templedi hysbysu datganiad i Ofgem a rheoli eich cyfrifon defnyddwyr.",
         "link_text": "Ewch i'ch cyfrif cofrestr hyblyg",
         "link_href": "https://laf.ofgem.gov.uk/"
+      },
+      "GQzNgSkj3QpmHlPO1kIfbMW1PAw": {
+        "header": "Gwneud cais am statws athro cymwysedig (SAC)",
+        "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
+        "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
+        "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
       }
     },
     "staging": {
@@ -1275,6 +1287,12 @@
         "description": "Llwytho templedi hysbysu datganiad i Ofgem a rheoli eich cyfrifon defnyddwyr.",
         "link_text": "Ewch i'ch cyfrif cofrestr hyblyg",
         "link_href": "https://laf.ofgem.gov.uk/"
+      },
+      "dfeQualifiedTeacherStatus": {
+        "header": "Gwneud cais am statws athro cymwysedig (SAC)",
+        "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
+        "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
+        "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
       }
     },
     "build": {
@@ -1506,6 +1524,12 @@
         "description": "Llwytho templedi hysbysu datganiad i Ofgem a rheoli eich cyfrifon defnyddwyr.",
         "link_text": "Ewch i'ch cyfrif cofrestr hyblyg",
         "link_href": "https://laf.ofgem.gov.uk/"
+      },
+      "dfeQualifiedTeacherStatus": {
+        "header": "Gwneud cais am statws athro cymwysedig (SAC)",
+        "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
+        "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
+        "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
       }
     },
     "dev": {
@@ -1737,6 +1761,12 @@
         "description": "Llwytho templedi hysbysu datganiad i Ofgem a rheoli eich cyfrifon defnyddwyr.",
         "link_text": "Ewch i'ch cyfrif cofrestr hyblyg",
         "link_href": "https://laf.ofgem.gov.uk/"
+      },
+      "dfeQualifiedTeacherStatus": {
+        "header": "Gwneud cais am statws athro cymwysedig (SAC)",
+        "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
+        "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
+        "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
       }
     },
     "local": {
@@ -1968,6 +1998,12 @@
         "description": "Llwytho templedi hysbysu datganiad i Ofgem a rheoli eich cyfrifon defnyddwyr.",
         "link_text": "Ewch i'ch cyfrif cofrestr hyblyg",
         "link_href": "https://laf.ofgem.gov.uk/"
+      },
+      "dfeQualifiedTeacherStatus": {
+        "header": "Gwneud cais am statws athro cymwysedig (SAC)",
+        "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
+        "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
+        "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
       }
     }
   }

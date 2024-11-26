@@ -173,6 +173,8 @@ const DFE_TEACHER_VACANCIES_PROD = "CVZjwDf4DJROtdPH2vStPXUALrM";
 const DFE_TEACHER_VACANCIES_NON_PROD = "dfeTeacherVacancies";
 const OFGEM_LAF_REG_PROD = "eywumu-XiJCz7RHyw4Zv8iTgsuc";
 const OFGEM_LAF_REG_NON_PROD = "ofgemLafReg";
+const DFE_QUALIFIED_TEACHER_STATUS_PROD = "GQzNgSkj3QpmHlPO1kIfbMW1PAw";
+const DFE_QUALIFIED_TEACHER_STATUS_NON_PROD = "dfeQualifiedTeacherStatus";
 
 export const getAllowedAccountListClientIDs: string[] = [
   "LcueBVCnGZw-YFdTZ4S07XbQx7I",
@@ -244,6 +246,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   DFE_TEACHER_VACANCIES_NON_PROD,
   OFGEM_LAF_REG_PROD,
   OFGEM_LAF_REG_NON_PROD,
+  DFE_QUALIFIED_TEACHER_STATUS_PROD,
+  DFE_QUALIFIED_TEACHER_STATUS_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = ["mQDXGO7gWdK7V28v82nVcEGuacY", "hmrc"];
