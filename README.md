@@ -228,27 +228,3 @@ npm run lint
 ```
 
 Checks if the code conforms the linting standards.
-
-### Profiling
-
-> To run the different performance testing tools provided by clinic
-
-Similarly to running the app locally in docker, profiling requires localstack to be running.
-
-```shell script
-npm run build # Required for every code change
-npm run doctor # Diagnose performance issues in your Node.js applications
-npm run flame # Uncovers the bottlenecks and hot paths in your code with flamegraphs
-npm run bubbleprof #observes the async operations of your application, groups them, measures their delays, and draws a map of the delays in your application's async flow
-npm run heap-profiler # Uncovers memory allocations by functions with Flamegraphs.
-```
-
-It is possible to run a performance test scenario against clinic as well.
-
-```shell script
-npm run build # Required for every code change
-NODE_ENV=production clinic doctor -- node -r dotenv/config dist/server.js && echo '\n\nRemember to clean up files in .clinic and node_trace.*.log\n'
-# Open the performance testing repo for OLH and run the k6 script. (NOTE: You may have issues if the test runs for too long depending on which performance tool you are using and your laptops performance.)
-# Wait for the performance test suite to complete.
-# Stop the server.
-```
