@@ -13,6 +13,7 @@ import {
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
 import pino from "pino";
+import { ENVIRONMENT_NAME } from "../app.constants";
 
 const serviceStoreDynamoDBRequest = (subjectId: string): GetItemCommand => {
   const param = {
@@ -130,7 +131,7 @@ export const containsGovUkPublishingService = (
 };
 
 export const getSearchableClientsList = () => {
-  return getAppEnv() === "prod"
+  return getAppEnv() === ENVIRONMENT_NAME.PROD
     ? clientsToShowInSearchProd
     : clientsToShowInSearchNonProd;
 };
