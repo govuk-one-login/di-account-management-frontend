@@ -6,6 +6,9 @@ import {
   getAllowedAccountListClientIDs,
   getAllowedServiceListClientIDs,
   hmrcClientIds,
+  getAppEnv,
+  clientsToShowInSearchProd,
+  clientsToShowInSearchNonProd,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
@@ -124,4 +127,10 @@ export const containsGovUkPublishingService = (
   return serviceList.some((service) => {
     return govUkPublishingClientIds.includes(service.client_id);
   });
+};
+
+export const getSearchableClientsList = () => {
+  return getAppEnv() === "prod"
+    ? clientsToShowInSearchProd
+    : clientsToShowInSearchNonProd;
 };
