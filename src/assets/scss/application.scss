@@ -23,6 +23,7 @@
 @import "components/summary-list/summary-list";
 @import "components/warning-text/warning-text";
 @import "components/radios/radios";
+@import "components/table/index";
 // end Design System component imports
 
 // language toggle component import
@@ -438,7 +439,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 }
 
 // Temporarily over-write the CSS of the Tag with the old style preceding govuk-frontend v5
-// This is to keep the Phase banner cohesive while different parts of One Login upgrade to v5+ 
+// This is to keep the Phase banner cohesive while different parts of One Login upgrade to v5+
 
 .govuk-tag {
   @include govuk-font($size: 16, $weight: bold, $line-height: 1);
@@ -455,7 +456,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   outline: 2px solid transparent;
   outline-offset: -2px;
 
-  // the most important properties for keeping the phase banner looking the same have been !important-ed 
+  // the most important properties for keeping the phase banner looking the same have been !important-ed
   color: govuk-colour("white") !important;
   background-color: govuk-colour("blue") !important;
   letter-spacing: 1px !important;
