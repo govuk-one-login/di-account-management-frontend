@@ -15,14 +15,14 @@ import { PATH_DATA } from "../app.constants";
 import { getSessionIdsFrom } from "../utils/session-ids";
 import { getCurrentUrl } from "../utils/language-toggle";
 
-export function setLocalVarsMiddleware(
+export async function setLocalVarsMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   res.locals.dynatraceRumUrl = getDtRumUrl();
   res.locals.gtmId = getGtmId();
-  res.locals.scriptNonce = generateNonce();
+  res.locals.scriptNonce = await generateNonce();
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
   res.locals.govAccountsUrl = getYourAccountUrl();
