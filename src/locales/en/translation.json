@@ -127,6 +127,9 @@
     }
   },
   "pages": {
+    "searchServices": {
+      "title": "Search Services"
+    },
     "security": {
       "title": "Security",
       "header": "Security",

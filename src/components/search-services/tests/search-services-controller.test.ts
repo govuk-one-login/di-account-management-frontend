@@ -13,12 +13,12 @@ describe("search services controller", () => {
     sandbox = sinon.createSandbox();
     req = {};
     res = {
-      send: sandbox.fake(),
+      render: sandbox.fake(),
     };
   });
 
-  it.only("should return a hello world message", () => {
+  it("should return a hello world message", () => {
     searchServicesGet(req as Request, res as Response);
-    expect(res.send).to.have.calledWith("hello world");
+    expect(res.render).to.have.calledWith("search-services/index.njk");
   });
 });
