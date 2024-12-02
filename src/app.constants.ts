@@ -12,6 +12,7 @@ export const PATH_DATA: Record<
   SECURITY: { url: "/security" },
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
+  SEARCH_SERVICES: { url: "/search-services" },
   ADD_MFA_METHOD: {
     url: "/choose-backup",
     event: EventType.SelectedApp,
