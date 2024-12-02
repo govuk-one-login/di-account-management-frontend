@@ -2284,8 +2284,8 @@ Resources:
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 288
-      DatapointsToAlarm: 288
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
       Threshold: 5
       TreatMissingData: missing
       Metrics:

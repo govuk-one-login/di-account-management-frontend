@@ -26,5 +26,6 @@ export async function yourServicesGet(
   } else {
     data = { email: user.email, env: env };
   }
+  throw Error("Anything");
   res.render("your-services/index.njk", data);
 }
