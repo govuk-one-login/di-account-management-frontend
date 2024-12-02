@@ -339,6 +339,8 @@ export const clientsToShowInSearchProd: string[] = [
   DRIVING_MEDICAL_CONDITION_PROD,
   CRIMINAL_INJURIES_COMPENSATION_PROD,
   FAA_PROD,
+  DFE_TEACHER_VACANCIES_PROD,
+  CMAD_PROD,
 ];
 
 function getProtocol(): string {
