@@ -19,6 +19,6 @@ describe("search services controller", () => {
 
   it("should return a hello world message", () => {
     searchServicesGet(req as Request, res as Response);
-    expect(res.render).to.have.calledWith("search-services/index.njk");
+    expect(res.render).to.have.calledWith("search-services/index.njk", {});
   });
 });
