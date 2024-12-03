@@ -49,3 +49,17 @@ jobs:
           private-docker-login-password: ${{ secrets.DYNATRACE_PAAS_TOKEN }}
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
+      - name: Notify on failure
+        if: ${{ failure() && endsWith(github.ref, 'main') }}
+        id: slack
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "channel_id": "${{ secrets.NOTIFICATION_CHANNEL_ID }}",
+              "github_repo": "${{ github.repository }}",
+              "github_actor": "${{ github.actor }}",
+              "github_workflow": "${{ github.workflow }}"
+            }
