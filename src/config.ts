@@ -200,6 +200,8 @@ const VEHICLE_OPERATOR_LICENSE_PROD = "XwwVDyl5oJKtK0DVsuw3sICWkPU";
 const APPLY_REGISTERED_SOCIAL_WORKER_ENGLAND_PROD =
   "LUIZbIuJ_xVZxwhkNAApcO4O_6o";
 const SIGN_MORTGAGE_DEED_PROD = "VsAkrtMBzAosSveAv4xsuUDyiSs";
+const DFE_QUALIFIED_TEACHER_STATUS_PROD = "GQzNgSkj3QpmHlPO1kIfbMW1PAw";
+const DFE_QUALIFIED_TEACHER_STATUS_NON_PROD = "dfeQualifiedTeacherStatus";
 
 export const getAllowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -271,6 +273,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   DFE_TEACHER_VACANCIES_NON_PROD,
   OFGEM_LAF_REG_PROD,
   OFGEM_LAF_REG_NON_PROD,
+  DFE_QUALIFIED_TEACHER_STATUS_PROD,
+  DFE_QUALIFIED_TEACHER_STATUS_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
