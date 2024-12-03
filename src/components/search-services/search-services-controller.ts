@@ -13,7 +13,7 @@ export function searchServicesGet(req: Request, res: Response): void {
     .split(" ")
     .map(prepareForSearch);
   const services = getSearchableClientsList().filter((service) => {
-    if (!query) return true;
+    if (query.length === 0) return true;
 
     const serviceName = prepareForSearch(
       req.t(`clientRegistry.${getAppEnv()}.${service}.header`)
