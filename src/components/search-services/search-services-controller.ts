@@ -4,17 +4,20 @@ import { getAppEnv } from "../../config";
 
 const TEMPLATE_NAME = "search-services/index.njk";
 
+const prepareForSearch = (q: string): string => {
+  return q.toLowerCase().replace(/[^0-9a-z]/gi, "");
+};
+
 export function searchServicesGet(req: Request, res: Response): void {
-  const query = ((req.query.q || "") as string).split(" ").map((q) => {
-    return q.toLowerCase().replace(/[^0-9a-z]/gi, "");
-  });
+  const query = ((req.query.q || "") as string)
+    .split(" ")
+    .map(prepareForSearch);
   const services = getSearchableClientsList().filter((service) => {
     if (!query) return true;
 
-    const serviceName = req
-      .t(`clientRegistry.${getAppEnv()}.${service}.header`)
-      .toLowerCase()
-      .replace(/[^0-9a-z]/gi, "");
+    const serviceName = prepareForSearch(
+      req.t(`clientRegistry.${getAppEnv()}.${service}.header`)
+    );
 
     for (const q of query) {
       if (serviceName.includes(q)) {
