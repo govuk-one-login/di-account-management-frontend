@@ -1,23 +1,26 @@
-{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/password-input/macro.njk" import govukPasswordInput %}
 
 {% macro govukInputWithShowPassword(settings) %}
-    <div class="govuk-show-password" data-module="show-password" data-disable-form-submit-check="false" data-show-text="{{ settings.showSettings.show }}" data-hide-text="{{ settings.showSettings.hide }}" data-show-full-text="{{ settings.showSettings.showFullText }}" data-hide-full-text="{{ settings.showSettings.hideFullText }}" data-announce-show="{{ settings.showSettings.announceShown }}" data-announce-hide="{{ settings.showSettings.announceHidden }}">
-        {{ govukInput({
-            label: {
-                text: settings.label
-            },
-            classes: "govuk-!-width-two-thirds govuk-password-input",
-            id: settings.id,
-            name: settings.id,
-            type: "password",
-            spellcheck: false,
-            hint: {
-                text: settings.hint
-            } if settings.hint,
-            errorMessage: {
-                text: settings.errors[settings.id].text,
-                attributes: { "data-test-id": settings.id + "-error"}
-            } if (settings.errors[settings.id])})
-        }}
-    </div>
+    {{ govukPasswordInput({
+      label: {
+        text: settings.label
+      },
+      id: settings.id,
+      name: settings.id,
+      type: "password",
+      spellcheck: false,
+      hint: {
+        text: settings.hint
+      } if settings.hint,
+      errorMessage: {
+        text: settings.errors[settings.id].text,
+        attributes: { "data-test-id": settings.id + "-error"}
+      } if (settings.errors[settings.id]),
+      showPasswordText: 'general.showPassword.show' | translate,
+      hidePasswordText: 'general.showPassword.hide' | translate,
+      showPasswordAriaLabelText: settings.showSettings.showFullText,
+      hidePasswordAriaLabelText: settings.showSettings.hideFullText,
+      passwordShownAnnouncementText: settings.showSettings.announceShown,
+      passwordHiddenAnnouncementText: settings.showSettings.announceHidden
+    })}}
 {% endmacro %}
