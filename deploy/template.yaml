@@ -278,6 +278,7 @@ Mappings:
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SUPPORTSEARCHABLELIST: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.integration.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
