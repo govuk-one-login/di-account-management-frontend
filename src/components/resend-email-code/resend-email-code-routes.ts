@@ -8,7 +8,7 @@ import {
 import { asyncHandler } from "../../utils/async";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { globalTryCatch } from "../../utils/global-try-catch";
+import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ router.post(
   PATH_DATA.RESEND_EMAIL_CODE.url,
   requiresAuthMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatch(asyncHandler(resendEmailCodePost()))
+  globalTryCatchAsync(asyncHandler(resendEmailCodePost()))
 );
 
 export { router as resendEmailCodeRouter };

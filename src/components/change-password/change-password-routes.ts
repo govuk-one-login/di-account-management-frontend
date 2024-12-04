@@ -9,7 +9,10 @@ import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
-import { globalTryCatch } from "../../utils/global-try-catch";
+import {
+  globalTryCatchAsync,
+  globalTryCatch,
+} from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -17,7 +20,7 @@ router.get(
   PATH_DATA.CHANGE_PASSWORD.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  changePasswordGet
+  globalTryCatch(changePasswordGet)
 );
 
 router.post(
@@ -26,7 +29,7 @@ router.post(
   validateStateMiddleware,
   validateChangePasswordRequest(),
   refreshTokenMiddleware(),
-  globalTryCatch(asyncHandler(changePasswordPost()))
+  globalTryCatchAsync(asyncHandler(changePasswordPost()))
 );
 
 export { router as changePasswordRouter };

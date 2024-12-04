@@ -6,7 +6,6 @@ import {
   requestNewCodeGet,
 } from "./check-your-email-controller";
 import { validateCheckYourEmailRequest } from "./check-your-email-validation";
-import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
@@ -25,7 +24,7 @@ router.get(
   PATH_DATA.REQUEST_NEW_CODE_EMAIL.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  requestNewCodeGet
+  globalTryCatch(requestNewCodeGet)
 );
 
 router.post(
@@ -34,7 +33,7 @@ router.post(
   validateStateMiddleware,
   validateCheckYourEmailRequest(),
   refreshTokenMiddleware(),
-  globalTryCatch(asyncHandler(checkYourEmailPost()))
+  globalTryCatch(checkYourEmailPost())
 );
 
 export { router as checkYourEmailRouter };

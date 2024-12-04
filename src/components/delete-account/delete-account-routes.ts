@@ -9,7 +9,7 @@ import { asyncHandler } from "../../utils/async";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
-import { globalTryCatch } from "../../utils/global-try-catch";
+import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -17,14 +17,14 @@ router.get(
   PATH_DATA.DELETE_ACCOUNT.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  deleteAccountGet
+  globalTryCatchAsync(deleteAccountGet)
 );
 
 router.post(
   PATH_DATA.DELETE_ACCOUNT.url,
   requiresAuthMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatch(asyncHandler(deleteAccountPost()))
+  globalTryCatchAsync(asyncHandler(deleteAccountPost()))
 );
 
 export { router as deleteAccountRouter };

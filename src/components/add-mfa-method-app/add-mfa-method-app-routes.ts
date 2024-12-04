@@ -6,7 +6,7 @@ import {
   addMfaAppMethodPost,
 } from "./add-mfa-method-app-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { globalTryCatch } from "../../utils/global-try-catch";
+import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -14,13 +14,13 @@ router.get(
   PATH_DATA.ADD_MFA_METHOD_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatch(addMfaAppMethodGet)
+  globalTryCatchAsync(addMfaAppMethodGet)
 );
 
 router.post(
   PATH_DATA.ADD_MFA_METHOD_APP.url,
   requiresAuthMiddleware,
-  globalTryCatch(addMfaAppMethodPost)
+  globalTryCatchAsync(addMfaAppMethodPost)
 );
 
 export { router as addMfaMethodAppRouter };

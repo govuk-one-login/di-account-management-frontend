@@ -12,7 +12,7 @@ import {
 import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
-import { globalTryCatch } from "../../utils/global-try-catch";
+import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.get(
   requiresAuthMiddleware,
   validateStateMiddleware,
   selectMfaMiddleware(),
-  globalTryCatch(changeDefaultMethodGet)
+  globalTryCatchAsync(changeDefaultMethodGet)
 );
 
 router.get(
@@ -29,7 +29,7 @@ router.get(
   requiresAuthMiddleware,
   validateStateMiddleware,
   selectMfaMiddleware(),
-  globalTryCatch(changeDefaultMethodAppGet)
+  globalTryCatchAsync(changeDefaultMethodAppGet)
 );
 
 router.post(
@@ -37,7 +37,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   selectMfaMiddleware(),
-  globalTryCatch(changeDefaultMethodAppPost)
+  globalTryCatchAsync(changeDefaultMethodAppPost)
 );
 
 router.get(
@@ -45,7 +45,7 @@ router.get(
   requiresAuthMiddleware,
   validateStateMiddleware,
   selectMfaMiddleware(),
-  globalTryCatch(changeDefaultMethodSmsGet)
+  globalTryCatchAsync(changeDefaultMethodSmsGet)
 );
 
 router.post(
@@ -54,7 +54,7 @@ router.post(
   validateStateMiddleware,
   validatePhoneNumberRequest("change-default-method/change-to-sms.njk"),
   selectMfaMiddleware(),
-  globalTryCatch(changeDefaultMethodSmsPost(changePhoneNumberService()))
+  globalTryCatchAsync(changeDefaultMethodSmsPost(changePhoneNumberService()))
 );
 
 export { router as changeDefaultMethodRouter };
