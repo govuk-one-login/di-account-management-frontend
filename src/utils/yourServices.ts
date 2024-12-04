@@ -6,10 +6,14 @@ import {
   getAllowedAccountListClientIDs,
   getAllowedServiceListClientIDs,
   hmrcClientIds,
+  getAppEnv,
+  clientsToShowInSearchProd,
+  clientsToShowInSearchNonProd,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
 import pino from "pino";
+import { ENVIRONMENT_NAME } from "../app.constants";
 
 const serviceStoreDynamoDBRequest = (subjectId: string): GetItemCommand => {
   const param = {
@@ -124,4 +128,10 @@ export const containsGovUkPublishingService = (
   return serviceList.some((service) => {
     return govUkPublishingClientIds.includes(service.client_id);
   });
+};
+
+export const getSearchableClientsList = () => {
+  return getAppEnv() === ENVIRONMENT_NAME.PROD
+    ? clientsToShowInSearchProd
+    : clientsToShowInSearchNonProd;
 };
