@@ -2235,15 +2235,15 @@ Resources:
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 5
-      DatapointsToAlarm: 5
-      Threshold: 5
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 20
       TreatMissingData: missing
       Metrics:
         - Id: errorThreshold
           Label: errorThreshold
           ReturnData: true
-          Expression: IF(invocations<10,0,errorPercentage)
+          Expression: errorPercentage
         - Id: invocations
           ReturnData: false
           MetricStat:
@@ -2286,13 +2286,13 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
       DatapointsToAlarm: 1
-      Threshold: 5
+      Threshold: 20
       TreatMissingData: missing
       Metrics:
         - Id: errorThreshold
           Label: errorThreshold
           ReturnData: true
-          Expression: IF(invocations<10,0,errorPercentage)
+          Expression: errorPercentage
         - Id: invocations
           ReturnData: false
           MetricStat:
@@ -2393,8 +2393,10 @@ Resources:
         ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
         ContainerPort: !Ref ContainerPort
         CloudWatchAlarms: !Sub
-          - "${ELB5XX10PercentAlarm}"
+          - "${ELB5XX10PercentAlarm},${ApiGateway5xxStatusAlarm},${ApiGateway4xxStatusAlarm}"
           - ELB5XX10PercentAlarm: !Ref ELB5XX10PercentAlarm
+            ApiGateway5xxStatusAlarm: !Ref ApiGateway5xxStatusAlarm
+            ApiGateway4xxStatusAlarm: !Ref ApiGateway4xxStatusAlarm
 
 Outputs:
   ApiGatewayEndpoint:
