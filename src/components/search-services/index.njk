@@ -1,0 +1,24 @@
+{% extends "common/layout/base.njk" %}
+
+{% set pageTitleName = 'pages.searchServices.title' | translate %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">{{ "pages.searchServices.heading" | translate }}</h1>
+    {% set paragraphs = 'pages.searchServices.paragraphs' | translate({ returnObjects: true }) %}
+    {% for paragraph in paragraphs %}
+        <p class="govuk-body">{{ paragraph }}</p>
+    {% endfor %}
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+            {% for service in services %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
+                        <a class="govuk-link" target="_blank" href="{{ ['clientRegistry.', env, '.', service, '.link_href'] | join | translate }}">
+                            {{ ['clientRegistry.', env, '.', service, '.header'] | join | translate }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

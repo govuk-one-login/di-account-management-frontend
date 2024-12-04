@@ -127,6 +127,14 @@
     }
   },
   "pages": {
+    "searchServices": {
+      "title": "Search Services",
+      "heading": "Services you can use with GOV.UK One Login",
+      "paragraphs": [
+        "You can only use GOV.UK One Login to access some government services.",
+        "In the future, you'll be able to use it to access all services on GOV.UK"
+      ]
+    },
     "security": {
       "title": "Security",
       "header": "Security",
