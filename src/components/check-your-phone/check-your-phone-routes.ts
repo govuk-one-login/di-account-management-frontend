@@ -11,6 +11,7 @@ import {
 import { validateCheckYourPhoneRequest } from "./check-your-phone-validation";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
+import { globalTryCatch } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.post(
   requiresAuthMiddleware,
   validateCheckYourPhoneRequest(),
   refreshTokenMiddleware(),
-  asyncHandler(checkYourPhonePost())
+  globalTryCatch(asyncHandler(checkYourPhonePost()))
 );
 
 router.get(
