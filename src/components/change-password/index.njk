@@ -58,7 +58,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript" src="/public/scripts/showPassword.js" nonce='{{ scriptNonce }}'></script>
     {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change password", contentId:"00ca6657-4139-43fa-979b-0eb3576fa94c",loggedInStatus:true,dynamic:true})}}
 {% endblock %}
 
