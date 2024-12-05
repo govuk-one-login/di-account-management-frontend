@@ -24,7 +24,7 @@ router.post(
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
-  switchBackupMfaMethodPost
+  globalTryCatchAsync(switchBackupMfaMethodPost)
 );
 
 export { router as switchBackupMethodRouter };

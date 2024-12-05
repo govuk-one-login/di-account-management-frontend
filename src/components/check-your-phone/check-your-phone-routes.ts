@@ -23,7 +23,7 @@ router.get(
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
-  globalTryCatchAsync(asyncHandler(checkYourPhoneGet))
+  globalTryCatch(checkYourPhoneGet)
 );
 
 router.post(
