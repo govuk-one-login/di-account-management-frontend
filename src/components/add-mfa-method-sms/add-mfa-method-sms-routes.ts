@@ -9,6 +9,7 @@ import {
 } from "./add-mfa-method-sms-controller";
 import { asyncHandler } from "../../utils/async";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
+import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -24,14 +25,14 @@ router.post(
   requiresAuthMiddleware,
   validatePhoneNumberRequest("add-mfa-method-sms/index.njk"),
   validateStateMiddleware,
-  asyncHandler(addMfaSmsMethodPost())
+  globalTryCatchAsync(asyncHandler(addMfaSmsMethodPost()))
 );
 
 router.get(
   PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  addMfaAppMethodConfirmationGet
+  globalTryCatchAsync(addMfaAppMethodConfirmationGet)
 );
 
 export { router as addMfaMethodSmsRouter };
