@@ -1,8 +1,8 @@
 @import "base";
-@import "core/all";
-@import "utilities/all";
-@import "objects/all";
-@import "overrides/all";
+@import "core/index";
+@import "utilities/index";
+@import "objects/index";
+@import "overrides/index";
 
 // start Design System component imports
 @import "components/back-link/back-link";
@@ -18,11 +18,13 @@
 @import "components/inset-text/inset-text";
 @import "components/pagination/pagination";
 @import "components/panel/panel";
+@import "components/password-input/password-input";
 @import "components/phase-banner/phase-banner";
 @import "components/skip-link/skip-link";
 @import "components/summary-list/summary-list";
 @import "components/warning-text/warning-text";
 @import "components/radios/radios";
+@import "components/table/index";
 // end Design System component imports
 
 // language toggle component import
@@ -86,75 +88,6 @@
       padding-top: govuk-spacing(4);
       padding-bottom: govuk-spacing(4);
     }
-  }
-}
-
-.govuk-show-password__input-wrapper {
-  display: table; // IE fallback
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-
-  @include govuk-media-query($from: mobile) {
-    flex-direction: row;
-  }
-
-  .govuk-input--with-password {
-    display: table-cell;
-
-    &:focus {
-      z-index: 1;
-    }
-
-    &::-ms-reveal {
-      display: none;
-    }
-  }
-}
-
-.govuk-show-password__toggle {
-  @include govuk-font(19);
-  z-index: 0;
-  display: table-cell; // IE fallback
-  padding: govuk-spacing(1) govuk-spacing(3);
-  min-width: 5.5em; // stops the button width jumping when the text changes
-  color: $govuk-link-colour;
-  text-decoration: underline;
-  background: govuk-colour("white");
-  border: solid 2px $govuk-input-border-colour;
-  white-space: nowrap;
-  cursor: pointer;
-
-  @include govuk-media-query($until: mobile) {
-    padding: govuk-spacing(1);
-    width: 100%;
-    margin-top: -2px;
-    white-space: normal;
-  }
-
-  @include govuk-media-query($from: mobile) {
-    margin-left: -2px;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  &:hover {
-    color: $govuk-link-hover-colour;
-    @include govuk-link-hover-decoration;
-  }
-
-  &:focus {
-    z-index: 1;
-    background: $govuk-focus-colour;
-    color: $govuk-focus-text-colour;
-    outline: 0;
-  }
-
-  &:active {
-    z-index: 1;
-    background: govuk-colour("white");
-    border-color: $govuk-focus-colour;
-    color: $govuk-link-active-colour;
   }
 }
 
@@ -438,7 +371,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 }
 
 // Temporarily over-write the CSS of the Tag with the old style preceding govuk-frontend v5
-// This is to keep the Phase banner cohesive while different parts of One Login upgrade to v5+ 
+// This is to keep the Phase banner cohesive while different parts of One Login upgrade to v5+
 
 .govuk-tag {
   @include govuk-font($size: 16, $weight: bold, $line-height: 1);
@@ -455,7 +388,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   outline: 2px solid transparent;
   outline-offset: -2px;
 
-  // the most important properties for keeping the phase banner looking the same have been !important-ed 
+  // the most important properties for keeping the phase banner looking the same have been !important-ed
   color: govuk-colour("white") !important;
   background-color: govuk-colour("blue") !important;
   letter-spacing: 1px !important;

@@ -21,6 +21,7 @@ import {
   getSessionSecret,
   supportActivityLog,
   supportChangeMfa,
+  supportSearchableList,
   supportTriagePage,
   supportWebchatContact,
 } from "./config";
@@ -75,6 +76,7 @@ import { applyOverloadProtection } from "./middleware/overload-protection-middle
 import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
+import { searchServicesRouter } from "./components/search-services/search-services-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -210,6 +212,9 @@ async function createApp(): Promise<express.Application> {
     app.use(switchBackupMethodRouter);
     app.use(changeAuthenticatorAppRouter);
     app.use(changeDefaultMethodRouter);
+  }
+  if (supportSearchableList()) {
+    app.use(searchServicesRouter);
   }
   app.use(trackAndRedirectRouter);
 

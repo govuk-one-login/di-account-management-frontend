@@ -29,17 +29,15 @@
         <p class="govuk-body">{{paragraph}}</p>
 
         {{ govukInputWithShowPassword({
-            label: 'pages.enterPassword.password.label' | translate,
-            id: "password",
-            errors: errors,
-            showSettings: {
-                show: 'general.showPassword.show' | translate,
-                hide: 'general.showPassword.hide' | translate,
-                showFullText: 'general.showPassword.showFullText' | translate,
-                hideFullText: 'general.showPassword.hideFullText' | translate,
-                announceShown: 'general.showPassword.announceShown' | translate,
-                announceHidden: 'general.showPassword.announceHidden' | translate
-            }
+          label: 'pages.enterPassword.password.label' | translate,
+          id: "password",
+          errors: errors,
+          showSettings: {
+            showFullText: 'general.showPassword.showFullText' | translate,
+            hideFullText: 'general.showPassword.hideFullText' | translate,
+            announceShown: 'general.showPassword.announceShown' | translate,
+            announceHidden: 'general.showPassword.announceHidden' | translate
+          }
         })}}
 
         {{ govukButton({
@@ -55,7 +53,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript" src="/public/scripts/showPassword.js" nonce='{{ scriptNonce }}'></script>
     {% set contentId = oplValues[requestType].contentId if oplValues[requestType] else "undefined" %}
     {% set taxonomyLevel2Value = oplValues[requestType].taxonomyLevel2 if oplValues[requestType] else "undefined" %}
     {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:taxonomyLevel2Value, contentId:contentId,loggedInStatus:true,dynamic:true})}}
