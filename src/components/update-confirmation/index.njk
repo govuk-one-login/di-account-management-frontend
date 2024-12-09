@@ -3,7 +3,8 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% set pageTitleName = pageTitle %}
 {% set hideAccountNavigation = hideAccountNavigation %}
-{% set contentId = contentId%}
+{% set govUkLink = "https://www.gov.uk" %}
+{% set contentId = contentId %}
 {% set taxonomyLevel2 = taxonomyLevel2 %}
 
 {% block pageContent %}
@@ -18,13 +19,21 @@
 
 {% if showGovUKButton %}
 {{ govukButton({
-    "text": button_text|default('general.backToGovUKButtonText' | translate, true),
-    "href": "https://www.gov.uk"
+  "text": button_text|default('general.backToGovUKButtonText' | translate, true),
+  "href": govUkLink,
+  "attributes": {
+    "data-nav": true,
+    "data-link": govUkLink
+  }
 }) }}
 {% else %}
 {{ govukButton({
-    "text": button_text|default('general.backToAccountButtonText' | translate, true),
-    "href": "/manage-your-account"
+  "text": button_text|default('general.backToAccountButtonText' | translate, true),
+  "href": YOUR_SERVICES | getPath,
+  "attributes": {
+    "data-nav": true,
+    "data-link": YOUR_SERVICES | getPath
+  }
 }) }}
 {% endif %}
 {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:taxonomyLevel2, contentId:contentId,loggedInStatus:true,dynamic:true})}}

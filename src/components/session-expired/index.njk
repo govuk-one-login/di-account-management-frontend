@@ -18,8 +18,8 @@
 
     {{ govukButton({
         "text": button_text|default('error.timeoutError.content.signInButtonText' | translate, true),
-        "type": "Submit",
-        "href": '/'
+        "href": '/',
+        "attributes": {"data-nav": true,"data-link": "/"}
     }) }}
 
     <p class="govuk-body">
