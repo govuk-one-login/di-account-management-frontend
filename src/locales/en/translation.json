@@ -133,7 +133,12 @@
       "paragraphs": [
         "You can only use GOV.UK One Login to access some government services.",
         "In the future, you'll be able to use it to access all services on GOV.UK"
-      ]
+      ],
+      "searchLabel": "Search",
+      "searchButton": "Search",
+      "oneResult": "1 result",
+      "manyResults": "[count] results",
+      "noResults": "No Results"
     },
     "security": {
       "title": "Security",
