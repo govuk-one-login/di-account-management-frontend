@@ -37,4 +37,4 @@ USER node
 
 ENTRYPOINT ["tini", "--"]
 
-CMD ["npm", "start"]
+CMD ["node", "--trace-sync-io", "npm", "start"] 
