@@ -274,10 +274,11 @@ Mappings:
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "https://chat-loader.smartagent.app"
+      WEBCHATSOURCEURL: "https://uat-chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
+      SUPPORTSEARCHABLELIST: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.integration.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
@@ -2235,14 +2236,14 @@ Resources:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 5
-      DatapointsToAlarm: 5
-      Threshold: 5
+      DatapointsToAlarm: 3
+      Threshold: 20
       TreatMissingData: missing
       Metrics:
         - Id: errorThreshold
           Label: errorThreshold
           ReturnData: true
-          Expression: IF(invocations<10,0,errorPercentage)
+          Expression: errorPercentage
         - Id: invocations
           ReturnData: false
           MetricStat:
@@ -2283,15 +2284,15 @@ Resources:
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 288
-      DatapointsToAlarm: 288
-      Threshold: 5
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 20
       TreatMissingData: missing
       Metrics:
         - Id: errorThreshold
           Label: errorThreshold
           ReturnData: true
-          Expression: IF(invocations<10,0,errorPercentage)
+          Expression: errorPercentage
         - Id: invocations
           ReturnData: false
           MetricStat:

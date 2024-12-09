@@ -69,7 +69,7 @@ import { languageToggleMiddleware } from "./middleware/language-toggle-middlewar
 import { safeTranslate } from "./utils/safeTranslate";
 import { addMfaMethodSmsRouter } from "./components/add-mfa-method-sms/add-mfa-method-sms-routes";
 import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa-method-routes";
-import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method";
+import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method-routes";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";

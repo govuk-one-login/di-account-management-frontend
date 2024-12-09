@@ -4,7 +4,10 @@ window.DI.analyticsUa = window.DI.analyticsUa || {};
 (function (w) {
   "use strict";
 
-  var onIntNumberSelected = function (intPhoneNumberCheckbox, phoneNumberInput) {
+  var onIntNumberSelected = function (
+    intPhoneNumberCheckbox,
+    phoneNumberInput
+  ) {
     if (intPhoneNumberCheckbox.checked) {
       phoneNumberInput.value = "";
       phoneNumberInput.disabled = true;
@@ -14,7 +17,7 @@ window.DI.analyticsUa = window.DI.analyticsUa || {};
       phoneNumberInput.classList.remove("govuk-input--disabled");
     }
   };
-  
+
   function initChangePhoneNumber() {
     var phoneNumberInput = document.querySelector("#phoneNumber");
     if (phoneNumberInput) {
@@ -36,16 +39,6 @@ window.DI.analyticsUa = window.DI.analyticsUa || {};
     var cookies = window.GOVSignIn.Cookies();
     if (window.DI.analyticsGa4.cookie.hasConsentForAnalytics()) {
       cookies.initAnalytics();
-    }
-  }
-
-  if (w.GOVSignIn && w.GOVSignIn.Modules && w.GOVSignIn.Modules.ShowPassword) {
-    var modules = document.querySelectorAll('[data-module="show-password"]');
-
-    for (var i = 0, l = modules.length; i < l; i++) {
-      if (GOVSignIn.Modules.ShowPassword.prototype.init) {
-        new GOVSignIn.Modules.ShowPassword(modules[i]).init();
-      }
     }
   }
 

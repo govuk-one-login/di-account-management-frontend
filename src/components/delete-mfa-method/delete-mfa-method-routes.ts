@@ -7,6 +7,7 @@ import {
   deleteMfaMethodPost,
 } from "./delete-mfa-method-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.get(
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
-  deleteMfaMethodGet
+  globalTryCatchAsync(deleteMfaMethodGet)
 );
 
 router.post(
@@ -23,7 +24,7 @@ router.post(
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
-  deleteMfaMethodPost
+  globalTryCatchAsync(deleteMfaMethodPost)
 );
 
 export { router as deleteMfaMethodRouter };

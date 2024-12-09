@@ -14,35 +14,31 @@
 
 <form action="/change-password" method="post" novalidate>
 
-<input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+  <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
 
-    {{ govukInputWithShowPassword({
-        label: 'pages.changePassword.password.label'  | translate,
-        id: "password",
-        errors: errors,
-        hint: 'pages.changePassword.password.hint'  | translate,
-        showSettings: {
-            show: 'general.showPassword.show' | translate,
-            hide: 'general.showPassword.hide' | translate,
-            showFullText: 'general.showPassword.showFullText' | translate,
-            hideFullText: 'general.showPassword.hideFullText' | translate,
-            announceShown: 'general.showPassword.announceShown' | translate,
-            announceHidden: 'general.showPassword.announceHidden' | translate 
-        }
-    })}}
-    {{ govukInputWithShowPassword({
-        label: 'pages.changePassword.confirmPassword.label' | translate,
-        id: "confirm-password",
-        errors: errors,
-        showSettings: {
-            show: 'general.showPassword.show' | translate,
-            hide: 'general.showPassword.hide' | translate,
-            showFullText: 'pages.changePassword.showRetypedPassword.showFullText' | translate,
-            hideFullText: 'pages.changePassword.showRetypedPassword.hideFullText' | translate,
-            announceShown: 'pages.changePassword.showRetypedPassword.announceShown' | translate,
-            announceHidden: 'pages.changePassword.showRetypedPassword.announceHidden' | translate
-        }
-    })}}
+  {{ govukInputWithShowPassword({
+    label: 'pages.changePassword.password.label' | translate,
+    id: "password",
+    errors: errors,
+    hint: 'pages.changePassword.password.hint' | translate,
+    showSettings: {
+      showFullText: 'general.showPassword.showFullText' | translate,
+      hideFullText: 'general.showPassword.hideFullText' | translate,
+      announceShown: 'general.showPassword.announceShown' | translate,
+      announceHidden: 'general.showPassword.announceHidden' | translate 
+    }
+  })}}
+  {{ govukInputWithShowPassword({
+    label: 'pages.changePassword.confirmPassword.label' | translate,
+    id: "confirm-password",
+    errors: errors,
+    showSettings: {
+      showFullText: 'pages.changePassword.showRetypedPassword.showFullText' | translate,
+      hideFullText: 'pages.changePassword.showRetypedPassword.hideFullText' | translate,
+      announceShown: 'pages.changePassword.showRetypedPassword.announceShown' | translate,
+      announceHidden: 'pages.changePassword.showRetypedPassword.announceHidden' | translate
+    }
+  })}}
 
 {{ govukDetails({
   summaryText: 'pages.changePassword.securePasswordDetails.summary' | translate,
@@ -62,7 +58,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript" src="/public/scripts/showPassword.js" nonce='{{ scriptNonce }}'></script>
     {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change password", contentId:"00ca6657-4139-43fa-979b-0eb3576fa94c",loggedInStatus:true,dynamic:true})}}
 {% endblock %}
 
