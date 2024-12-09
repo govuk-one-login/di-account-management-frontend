@@ -27,17 +27,13 @@
         </form>
     </div>
     
-    <table class="govuk-table">
-        <tbody class="govuk-table__body">
-            {% for service in services %}
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">
-                        <a class="govuk-link" target="_blank" href="{{ ['clientRegistry.', env, '.', service, '.link_href'] | join | translate }}">
-                            {{ ['clientRegistry.', env, '.', service, '.header'] | join | translate }}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <ul class="govuk-list search-results">
+        {% for service in services %}
+            <li>
+                <a class="govuk-link" target="_blank" href="{{ ['clientRegistry.', env, '.', service, '.link_href'] | join | translate }}">
+                    {{ ['clientRegistry.', env, '.', service, '.header'] | join | translate }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
