@@ -29,10 +29,10 @@
 {% else %}
 {{ govukButton({
   "text": button_text|default('general.backToAccountButtonText' | translate, true),
-  "href": YOUR_SERVICES | getPath,
+  "href": "YOUR_SERVICES" | getPath,
   "attributes": {
     "data-nav": true,
-    "data-link": YOUR_SERVICES | getPath
+    "data-link": "YOUR_SERVICES" | getPath
   }
 }) }}
 {% endif %}
