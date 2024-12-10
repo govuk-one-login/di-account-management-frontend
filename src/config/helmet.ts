@@ -76,7 +76,11 @@ export const webchatHelmetConfiguration: HelmetOptions = {
         "https://*.dynatrace.com",
         "'strict-dynamic'",
       ],
-      scriptSrcAttr: ["'self'", "'unsafe-inline'"],
+      scriptSrcAttr: [
+        "'self'",
+        (req: Request, res: Response): string =>
+          `'nonce-${res.locals.scriptNonce}'`,
+      ],
       imgSrc: [
         "'self'",
         "data:",
@@ -95,7 +99,12 @@ export const webchatHelmetConfiguration: HelmetOptions = {
         "https://*.smartagent.app",
         "https://*.ruxit.com",
         "https://*.dynatrace.com",
+        "https://participant.connect.eu-west-2.amazonaws.com",
+        (req: Request, res: Response): string =>
+          `'${res.locals.missionLabWebSocketAddress}'`,
+        "wss://*.transport.connect.eu-west-2.amazonaws.com",
       ],
+      workerSrc: ["blob:"],
       formAction: ["'self'", "https://*.account.gov.uk"],
       mediaSrc: ["'self'", "https://*.s3.eu-west-2.amazonaws.com"],
       frameSrc: ["'self'", "https://*.smartagent.app"],
