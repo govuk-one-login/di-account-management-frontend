@@ -9,6 +9,7 @@ import {
   googleAnalytics4Disabled,
   universalAnalyticsDisabled,
   getDtRumUrl,
+  missionLabsWebSocketAddress,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
@@ -21,6 +22,7 @@ export async function setLocalVarsMiddleware(
   next: NextFunction
 ): Promise<void> {
   res.locals.dynatraceRumUrl = getDtRumUrl();
+  res.locals.missionLabWebSocketAddress = missionLabsWebSocketAddress();
   res.locals.gtmId = getGtmId();
   res.locals.scriptNonce = await generateNonce();
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();

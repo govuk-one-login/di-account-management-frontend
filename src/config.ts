@@ -410,6 +410,10 @@ export function universalAnalyticsGtmContainerId(): string {
   return process.env.UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID;
 }
 
+export function missionLabsWebSocketAddress(): string {
+  return process.env.MISSION_LAB_WEBSOCKET_ADDR;
+}
+
 export function googleAnalytics4Disabled(): string {
   return process.env.GA4_DISABLED || "true";
 }
