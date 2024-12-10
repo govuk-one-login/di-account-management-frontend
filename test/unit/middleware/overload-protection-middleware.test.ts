@@ -45,7 +45,7 @@ function expectedOverloadProtectionConfig(isProduction: boolean) {
     production: isProduction,
     clientRetrySecs: 3,
     sampleInterval: 10,
-    maxEventLoopDelay: 500,
+    maxEventLoopDelay: 1000,
     maxHeapUsedBytes: 0,
     maxRssBytes: 0,
     errorPropagationMode: false,
