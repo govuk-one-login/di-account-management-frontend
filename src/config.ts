@@ -313,6 +313,15 @@ export const clientsToShowInSearchNonProd: string[] = [
   "modernSlavery",
   "apprenticeshipsService",
   "criminalInjuriesCompensation",
+  "ukmcab",
+  "manageFamilySupport",
+  "connectFamilies",
+  "gbis",
+  "childDevelopmentTraining",
+  "dfeFindAndUseAnApi",
+  "mojPlanYourFuture",
+  "welshFisheriesPermit",
+  "iaa",
 ];
 
 export const clientsToShowInSearchProd: string[] = [
