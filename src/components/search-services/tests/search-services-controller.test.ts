@@ -16,6 +16,7 @@ const translations: Record<string, string> = {
 };
 
 const servicesMock = ["govuk", "lite", "ofqual", "slavery", "apprentice"];
+const servicesMockSorted = ["govuk", "lite", "apprentice", "slavery", "ofqual"];
 
 const getRequestMock = (q?: string): Partial<Request> => {
   return {
@@ -42,11 +43,11 @@ describe("search services controller", () => {
     sandbox.restore();
   });
 
-  it("should render with correct parameters", () => {
+  it("should render with correct parameters, and results in correct order", () => {
     searchServicesGet(getRequestMock() as Request, res as Response);
     expect(res.render).to.have.calledWith("search-services/index.njk", {
       env: "test",
-      services: servicesMock,
+      services: servicesMockSorted,
       query: undefined,
       hasSearch: false,
       resultsCount: 5,
