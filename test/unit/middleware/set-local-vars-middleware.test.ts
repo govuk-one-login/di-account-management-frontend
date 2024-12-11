@@ -3,6 +3,7 @@ import { expect, sinon } from "../../utils/test-utils";
 import { describe } from "mocha";
 import { setLocalVarsMiddleware } from "../../../src/middleware/set-local-vars-middleware";
 import { PERSISTENT_SESSION_ID_UNKNOWN } from "../../../src/app.constants";
+import * as nonceModule from "../../../src/utils/strings";
 
 describe("set-local-vars-middleware", () => {
   let sandbox: sinon.SinonSandbox;
@@ -43,9 +44,14 @@ describe("set-local-vars-middleware", () => {
         cookies_preferences_set:
           '{"analytics":false, "gaId":"2.172053219.3232.1636392870-444224.1635165988"}',
       };
+
+      const mockNonce = "mocked-nonce-value";
+      sandbox.stub(nonceModule, "generateNonce").resolves(mockNonce);
+
       await setLocalVarsMiddleware(req as Request, res as Response, next);
 
       expect(res.locals).to.have.property("persistentSessionId");
+      expect(res.locals.scriptNonce).to.equal(mockNonce);
       expect(res.locals.persistentSessionId).to.equal("psid123456xyz");
       expect(next).to.be.calledOnce;
     });
