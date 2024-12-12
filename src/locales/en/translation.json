@@ -986,6 +986,11 @@
         "description": "Eligible teachers who trained outside of England can apply for QTS.",
         "link_text": "Go to your apply for qualified teacher status account",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "CKHfr_Kz84LYFnsP7m6YJBXqBzw": {
+        "header": "Check a family’s eligibility for free school meals",
+        "link_text": "Check a family’s eligibility for free school meals",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "integration": {
@@ -1241,6 +1246,11 @@
         "description": "Eligible teachers who trained outside of England can apply for QTS.",
         "link_text": "Go to your apply for qualified teacher status account",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "CKHfr_Kz84LYFnsP7m6YJBXqBzw": {
+        "header": "Check a family’s eligibility for free school meals",
+        "link_text": "Check a family’s eligibility for free school meals",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "staging": {
@@ -1484,6 +1494,11 @@
         "description": "Eligible teachers who trained outside of England can apply for QTS.",
         "link_text": "Go to your apply for qualified teacher status account",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Check a family’s eligibility for free school meals",
+        "link_text": "Check a family’s eligibility for free school meals",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "build": {
@@ -1727,6 +1742,11 @@
         "description": "Eligible teachers who trained outside of England can apply for QTS.",
         "link_text": "Go to your apply for qualified teacher status account",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Check a family’s eligibility for free school meals",
+        "link_text": "Check a family’s eligibility for free school meals",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "dev": {
@@ -1970,6 +1990,11 @@
         "description": "Eligible teachers who trained outside of England can apply for QTS.",
         "link_text": "Go to your apply for qualified teacher status account",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Check a family’s eligibility for free school meals",
+        "link_text": "Check a family’s eligibility for free school meals",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "local": {
@@ -2213,6 +2238,11 @@
         "description": "Eligible teachers who trained outside of England can apply for QTS.",
         "link_text": "Go to your apply for qualified teacher status account",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Check a family’s eligibility for free school meals",
+        "link_text": "Check a family’s eligibility for free school meals",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     }
   }

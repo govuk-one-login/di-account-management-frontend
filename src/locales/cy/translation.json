@@ -807,6 +807,11 @@
         "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
         "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "CKHfr_Kz84LYFnsP7m6YJBXqBzw": {
+        "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "integration": {
@@ -1056,6 +1061,11 @@
         "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
         "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "CKHfr_Kz84LYFnsP7m6YJBXqBzw": {
+        "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "staging": {
@@ -1293,6 +1303,11 @@
         "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
         "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "build": {
@@ -1530,6 +1545,11 @@
         "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
         "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "dev": {
@@ -1767,6 +1787,11 @@
         "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
         "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     },
     "local": {
@@ -2004,6 +2029,11 @@
         "description": "Gall athrawon cymwys a hyfforddwyd y tu allan i Loegr wneud cais am SAC.",
         "link_text": "Ewch i'ch cyfrif gwneud cais am statws athro cymwysedig",
         "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
       }
     }
   }
