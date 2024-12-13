@@ -996,7 +996,7 @@
         "header": "Find a tender",
         "description": "Publish opportunities so that suppliers can search and apply for them.",
         "link_text": "Go to your Find a tender account",
-        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+        "link_href": "https://supplier-information.private-beta.find-tender.service.gov.uk/"
       },
       "dPIP320ek5A50_12a00U2sEoM0k": {
         "header": "Apply for a licence to provide sanctioned trade services",
@@ -1268,7 +1268,7 @@
         "header": "Find a tender",
         "description": "Publish opportunities so that suppliers can search and apply for them.",
         "link_text": "Go to your Find a tender account",
-        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+        "link_href": "https://supplier-information.private-beta.find-tender.service.gov.uk/"
       },
       "dPIP320ek5A50_12a00U2sEoM0k": {
         "header": "Apply for a licence to provide sanctioned trade services",
@@ -1528,7 +1528,7 @@
         "header": "Find a tender",
         "description": "Publish opportunities so that suppliers can search and apply for them.",
         "link_text": "Go to your Find a tender account",
-        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+        "link_href": "https://supplier-information.private-beta.find-tender.service.gov.uk/"
       },
       "dbTrade": {
         "header": "Apply for a licence to provide sanctioned trade services",
@@ -1788,7 +1788,7 @@
         "header": "Find a tender",
         "description": "Publish opportunities so that suppliers can search and apply for them.",
         "link_text": "Go to your Find a tender account",
-        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+        "link_href": "https://supplier-information.private-beta.find-tender.service.gov.uk/"
       },
       "dbTrade": {
         "header": "Apply for a licence to provide sanctioned trade services",
@@ -2048,7 +2048,7 @@
         "header": "Find a tender",
         "description": "Publish opportunities so that suppliers can search and apply for them.",
         "link_text": "Go to your Find a tender account",
-        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+        "link_href": "https://supplier-information.private-beta.find-tender.service.gov.uk/"
       },
       "dbTrade": {
         "header": "Apply for a licence to provide sanctioned trade services",
@@ -2308,7 +2308,7 @@
         "header": "Find a tender",
         "description": "Publish opportunities so that suppliers can search and apply for them.",
         "link_text": "Go to your Find a tender account",
-        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+        "link_href": "https://supplier-information.private-beta.find-tender.service.gov.uk/"
       },
       "dbTrade": {
         "header": "Apply for a licence to provide sanctioned trade services",
