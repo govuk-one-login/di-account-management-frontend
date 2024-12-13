@@ -169,8 +169,6 @@ const PDP_CONNECT_PROD = "sdlgbEirK30fvgbrf0C78XY60qN";
 const PDP_CONNECT_NON_PROD = "PDPConnect";
 const DFE_CLAIM_ADDITIONAL_PAYMENTS = "IJ_TuVEgIqAWT2mCe9b5uocMyNs";
 const DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD = "dfeClaimAdditionalPayments";
-const CHECK_FAMILY_ELIGIBILITY_PROD = "CKHfr_Kz84LYFnsP7m6YJBXqBzw";
-const CHECK_FAMILY_ELIGIBILITY_NON_PROD = "checkFamilyEligibility";
 const COMPANY_HOUSE_ACCOUNTS_PROD = "Hp9xO0Wda9EcI_2IO8OGeYJyrT0";
 const COMPANY_HOUSE_ACCOUNTS_INTEGRATION = "VdmfAXiINT9wpUsGO_vVnPEbsAE";
 const COMPANY_HOUSE_ACCOUNTS_NON_PROD = "companyHouseAccounts";
@@ -204,6 +202,12 @@ const APPLY_REGISTERED_SOCIAL_WORKER_ENGLAND_PROD =
 const SIGN_MORTGAGE_DEED_PROD = "VsAkrtMBzAosSveAv4xsuUDyiSs";
 const DFE_QUALIFIED_TEACHER_STATUS_PROD = "GQzNgSkj3QpmHlPO1kIfbMW1PAw";
 const DFE_QUALIFIED_TEACHER_STATUS_NON_PROD = "dfeQualifiedTeacherStatus";
+const CHECK_FAMILY_ELIGIBILITY_PROD = "CKHfr_Kz84LYFnsP7m6YJBXqBzw";
+const CHECK_FAMILY_ELIGIBILITY_NON_PROD = "checkFamilyEligibility";
+const FIND_A_TENDER_PROD = "L8SSq5Iz8DstkBgno0Hx5aujelE";
+const FIND_A_TENDER_NON_PROD = "findATender";
+const DB_TRADE_PROD = "dPIP320ek5A50_12a00U2sEoM0k";
+const DB_TRADE_NON_PROD = "dbTrade";
 
 export const getAllowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -277,6 +281,10 @@ export const getAllowedAccountListClientIDs: string[] = [
   OFGEM_LAF_REG_NON_PROD,
   DFE_QUALIFIED_TEACHER_STATUS_PROD,
   DFE_QUALIFIED_TEACHER_STATUS_NON_PROD,
+  FIND_A_TENDER_PROD,
+  FIND_A_TENDER_NON_PROD,
+  DB_TRADE_PROD,
+  DB_TRADE_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
