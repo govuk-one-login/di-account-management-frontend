@@ -991,6 +991,18 @@
         "header": "Check a family’s eligibility for free school meals",
         "link_text": "Check a family’s eligibility for free school meals",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "L8SSq5Iz8DstkBgno0Hx5aujelE": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your Find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dPIP320ek5A50_12a00U2sEoM0k": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "integration": {
@@ -1251,6 +1263,18 @@
         "header": "Check a family’s eligibility for free school meals",
         "link_text": "Check a family’s eligibility for free school meals",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "L8SSq5Iz8DstkBgno0Hx5aujelE": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your Find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dPIP320ek5A50_12a00U2sEoM0k": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "staging": {
@@ -1499,6 +1523,18 @@
         "header": "Check a family’s eligibility for free school meals",
         "link_text": "Check a family’s eligibility for free school meals",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your Find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "build": {
@@ -1747,6 +1783,18 @@
         "header": "Check a family’s eligibility for free school meals",
         "link_text": "Check a family’s eligibility for free school meals",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your Find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "dev": {
@@ -1995,6 +2043,18 @@
         "header": "Check a family’s eligibility for free school meals",
         "link_text": "Check a family’s eligibility for free school meals",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your Find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "local": {
@@ -2243,6 +2303,18 @@
         "header": "Check a family’s eligibility for free school meals",
         "link_text": "Check a family’s eligibility for free school meals",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your Find a tender account",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     }
   }

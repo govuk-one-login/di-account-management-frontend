@@ -812,6 +812,18 @@
         "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "L8SSq5Iz8DstkBgno0Hx5aujelE": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dPIP320ek5A50_12a00U2sEoM0k": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "integration": {
@@ -1066,6 +1078,18 @@
         "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "L8SSq5Iz8DstkBgno0Hx5aujelE": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dPIP320ek5A50_12a00U2sEoM0k": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "staging": {
@@ -1308,6 +1332,18 @@
         "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "build": {
@@ -1550,6 +1586,18 @@
         "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "dev": {
@@ -1792,6 +1840,18 @@
         "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     },
     "local": {
@@ -2034,6 +2094,18 @@
         "header": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_text": "Gwiriwch gymhwysedd teulu i gael prydau ysgol am ddim",
         "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Darganfyddwch dendr",
+        "description": "Cyhoeddi cyfleoedd fel y gall cyflenwyr chwilio a gwneud cais amdanynt.",
+        "link_text": "Ewch i'ch cyfrif Dod o hyd i dendr",
+        "link_href": "https://supplier-information.find-tender.service.gov.uk/organisation-selection"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/account"
       }
     }
   }
