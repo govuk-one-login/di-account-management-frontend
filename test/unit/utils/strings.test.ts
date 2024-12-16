@@ -3,6 +3,7 @@ import { beforeEach, describe } from "mocha";
 import {
   containsNumber,
   containsNumbersOnly,
+  generateNonce,
   isSafeString,
   isValidUrl,
   zeroPad,
@@ -134,6 +135,21 @@ describe("string-helpers", () => {
 
     it("should pad a short string with zeros", () => {
       expect(zeroPad("123", 6)).to.equal("000123");
+    });
+  });
+
+  describe("generateNonce", () => {
+    it("should generate a 32-character hexadecimal nonce", async () => {
+      const nonce = await generateNonce();
+      expect(nonce).to.be.a("string");
+      expect(nonce).to.have.lengthOf(32);
+      expect(nonce).to.match(/^[0-9a-f]+$/);
+    });
+
+    it("should generate unique nonces", async () => {
+      const nonce1 = await generateNonce();
+      const nonce2 = await generateNonce();
+      expect(nonce1).to.not.equal(nonce2);
     });
   });
 });
