@@ -313,6 +313,15 @@ export const clientsToShowInSearchNonProd: string[] = [
   "modernSlavery",
   "apprenticeshipsService",
   "criminalInjuriesCompensation",
+  "ukmcab",
+  "manageFamilySupport",
+  "connectFamilies",
+  "gbis",
+  "childDevelopmentTraining",
+  "dfeFindAndUseAnApi",
+  "mojPlanYourFuture",
+  "welshFisheriesPermit",
+  "iaa",
 ];
 
 export const clientsToShowInSearchProd: string[] = [
@@ -401,12 +410,16 @@ export function universalAnalyticsGtmContainerId(): string {
   return process.env.UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID;
 }
 
-export function googleAnalytics4Disabled(): string {
-  return process.env.GA4_DISABLED || "true";
+export function googleAnalytics4Enabled(): boolean {
+  return process.env.GA4_ENABLED === "true";
 }
 
-export function universalAnalyticsDisabled(): string {
-  return process.env.UA_DISABLED || "false";
+export function universalAnalyticsEnabled(): boolean {
+  return process.env.UA_ENABLED === "true";
+}
+
+export function selectContentTrackingEnabled(): boolean {
+  return process.env.SELECT_TRACKING_ENABLED === "true";
 }
 
 export function getMfaServiceUrl(): string {

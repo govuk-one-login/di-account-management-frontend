@@ -1,4 +1,5 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
+{% set hideAccountNavigation = true %}
 
 {% set pageTitleName = 'pages.searchServices.title' | translate %}
 
@@ -8,17 +9,32 @@
     {% for paragraph in paragraphs %}
         <p class="govuk-body">{{ paragraph }}</p>
     {% endfor %}
-    <table class="govuk-table">
-        <tbody class="govuk-table__body">
-            {% for service in services %}
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">
-                        <a class="govuk-link" target="_blank" href="{{ ['clientRegistry.', env, '.', service, '.link_href'] | join | translate }}">
-                            {{ ['clientRegistry.', env, '.', service, '.header'] | join | translate }}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="govuk-form-group">
+        <form method="get" action="{{ "SEARCH_SERVICES" | getPath }}">
+            <label for="search_box" class="govuk-label govuk-!-font-weight-bold">{{ "pages.searchServices.searchLabel" | translate }}</label>
+            <input id="search_box" class="govuk-input govuk-!-width-three-quarters" name="q" type="search" value="{{query}}" />
+            <button type="submit" class="govuk-button">{{ "pages.searchServices.searchButton" | translate }}</button>
+            {% if hasSearch %} 
+            <p class='govuk-body'>
+                {% if resultsCount === 1 %}
+                    {{ "pages.searchServices.oneResult" | translate }}
+                {% elseif (resultsCount > 0) %}
+                    {{ "pages.searchServices.manyResults" | translate | replace("[count]", resultsCount) }}
+                {% else %}
+                    {{ "pages.searchServices.noResults" | translate }}     
+                {% endif %}
+            </p>
+            {% endif %}
+        </form>
+    </div>
+    
+    <ul class="govuk-list search-results">
+        {% for service in services %}
+            <li>
+                <a class="govuk-link" target="_blank" href="{{ ['clientRegistry.', env, '.', service, '.link_href'] | join | translate }}">
+                    {{ ['clientRegistry.', env, '.', service, '.header'] | join | translate }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
