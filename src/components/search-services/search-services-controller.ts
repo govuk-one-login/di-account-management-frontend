@@ -13,21 +13,28 @@ export function searchServicesGet(req: Request, res: Response): void {
   const query = ((req.query.q || "") as string)
     .split(" ")
     .map(prepareForSearch);
-  const services = getSearchableClientsList().filter((service) => {
-    if (query.length === 0) return true;
+  const services = getSearchableClientsList()
+    .filter((service) => {
+      if (query.length === 0) return true;
 
-    const serviceName = prepareForSearch(
-      req.t(`clientRegistry.${getAppEnv()}.${service}.header`)
-    );
+      const serviceName = prepareForSearch(
+        req.t(`clientRegistry.${getAppEnv()}.${service}.header`)
+      );
 
-    for (const q of query) {
-      if (serviceName.includes(q)) {
-        return true;
+      for (const q of query) {
+        if (serviceName.includes(q)) {
+          return true;
+        }
       }
-    }
 
-    return false;
-  });
+      return false;
+    })
+    .sort((a, b) => {
+      const a_trn = req.t(`clientRegistry.${getAppEnv()}.${a}.header`);
+      const b_trn = req.t(`clientRegistry.${getAppEnv()}.${b}.header`);
+      return a_trn.localeCompare(b_trn, req.language || "en");
+    });
+
   res.render(TEMPLATE_NAME, {
     env: getAppEnv(),
     services,
