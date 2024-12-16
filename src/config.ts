@@ -202,6 +202,10 @@ const APPLY_REGISTERED_SOCIAL_WORKER_ENGLAND_PROD =
 const SIGN_MORTGAGE_DEED_PROD = "VsAkrtMBzAosSveAv4xsuUDyiSs";
 const DFE_QUALIFIED_TEACHER_STATUS_PROD = "GQzNgSkj3QpmHlPO1kIfbMW1PAw";
 const DFE_QUALIFIED_TEACHER_STATUS_NON_PROD = "dfeQualifiedTeacherStatus";
+const CHECK_FAMILY_ELIGIBILITY_PROD = "CKHfr_Kz84LYFnsP7m6YJBXqBzw";
+const CHECK_FAMILY_ELIGIBILITY_NON_PROD = "checkFamilyEligibility";
+const FIND_A_TENDER_PROD = "L8SSq5Iz8DstkBgno0Hx5aujelE";
+const FIND_A_TENDER_NON_PROD = "findATender";
 
 export const getAllowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -275,6 +279,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   OFGEM_LAF_REG_NON_PROD,
   DFE_QUALIFIED_TEACHER_STATUS_PROD,
   DFE_QUALIFIED_TEACHER_STATUS_NON_PROD,
+  FIND_A_TENDER_PROD,
+  FIND_A_TENDER_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
@@ -304,6 +310,8 @@ export const getAllowedServiceListClientIDs: string[] = [
   DRIVING_MEDICAL_CONDITION_NON_PROD,
   DFE_CLAIM_ADDITIONAL_PAYMENTS,
   DFE_CLAIM_ADDITIONAL_PAYMENTS_NON_PROD,
+  CHECK_FAMILY_ELIGIBILITY_PROD,
+  CHECK_FAMILY_ELIGIBILITY_NON_PROD,
 ];
 
 export const clientsToShowInSearchNonProd: string[] = [
