@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getSearchableClientsList } from "../../utils/yourServices";
 import { getAppEnv } from "../../config";
+import isUserLoggedIn from "../../utils/isUserLoggedIn";
 
 const TEMPLATE_NAME = "search-services/index.njk";
 
@@ -33,5 +34,6 @@ export function searchServicesGet(req: Request, res: Response): void {
     query: req.query.q,
     hasSearch: !!req.query.q,
     resultsCount: services.length,
+    showSignOut: isUserLoggedIn(req),
   });
 }
