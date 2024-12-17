@@ -7,7 +7,7 @@ import {
   getTokenValidationClockSkew,
 } from "../../config";
 import { destroyUserSessions } from "../../utils/session-store";
-import { getJWKS } from "../../utils/oidc";
+import { getCachedJWKS } from "../../utils/oidc";
 import { getOIDCConfig } from "../../config/oidc";
 
 const BACK_CHANNEL_LOGOUT_EVENT =
@@ -18,7 +18,7 @@ async function verifyLogoutToken(req: Request): Promise<LogoutToken> {
     return undefined;
   }
   try {
-    req.issuerJWKS = await getJWKS(getOIDCConfig());
+    req.issuerJWKS = await getCachedJWKS(getOIDCConfig());
 
     const token = await jwtVerify(req.body.logout_token, req.issuerJWKS, {
       issuer: req.oidc.issuer.metadata.issuer,

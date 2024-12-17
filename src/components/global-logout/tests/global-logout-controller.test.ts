@@ -90,11 +90,11 @@ describe("global logout controller", () => {
 
     keySet = await generateKeyPair("ES256");
 
-    issuerJWKS = await createLocalJWKSet({
+    issuerJWKS = createLocalJWKSet({
       keys: [await exportJWK(keySet.publicKey)],
     });
 
-    sandbox.stub(oidc, "getJWKS").returns(issuerJWKS);
+    sandbox.stub(oidc, "getCachedJWKS").returns(issuerJWKS);
 
     res = {
       status: sandbox.stub().returnsThis(),
