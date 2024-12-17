@@ -23,7 +23,13 @@ interface SessionStore {
   session: any;
 }
 
+let sessionStoreInstance: Store | null = null;
+
 export function getSessionStore({ session }: SessionStore): Store {
+  if (sessionStoreInstance) {
+    return sessionStoreInstance;
+  }
+
   const DynamoDBStore = connect_dynamodb(session);
   const storeOptions = {
     client: new DynamoDBClient(getDBConfig()),
@@ -34,7 +40,9 @@ export function getSessionStore({ session }: SessionStore): Store {
     skipThrowMissingSpecialKeys: true,
     prefix: PREFIX,
   };
-  return new DynamoDBStore(storeOptions);
+
+  sessionStoreInstance = new DynamoDBStore(storeOptions);
+  return sessionStoreInstance;
 }
 
 async function getSessions(subjectId: string): Promise<string[]> {
