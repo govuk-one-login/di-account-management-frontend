@@ -77,7 +77,6 @@ import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
-import blocked from "blocked-at";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -252,14 +251,6 @@ async function startServer(app: Application): Promise<{
 
     server.keepAliveTimeout = 61 * 1000;
     server.headersTimeout = 91 * 1000;
-
-    blocked(
-      (time, stack) => {
-        logger.warn(`Event loop blocked for ${time}ms, Stack:`);
-        logger.warn(stack);
-      },
-      { threshold: 450 }
-    );
 
     stopVitalSigns = frontendVitalSignsInit(server, {
       staticPaths: [/^\/assets\/.*/, /^\/public\/.*/],

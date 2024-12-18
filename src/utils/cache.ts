@@ -6,14 +6,6 @@ const cache = new LRUCache<string, { data: any; expiresAt: number }>({
   maxAge: 24 * 60 * 60 * 1000,
 });
 
-/**
- * Caches the result of an asynchronous function with a time-based expiration.
- *
- * @param {string} key - The cache key.
- * @param {Function} fn - The asynchronous function to cache.
- * @param {number} [cacheDuration=defaultCacheDuration] - The cache duration in milliseconds.
- * @returns {Promise<any>} The cached result of the function.
- */
 async function cacheWithExpiration<T>(
   key: string,
   fn: () => Promise<T>,
