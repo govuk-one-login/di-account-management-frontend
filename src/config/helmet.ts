@@ -101,7 +101,7 @@ export const webchatHelmetConfiguration: HelmetOptions = {
         "https://*.dynatrace.com",
         "https://participant.connect.eu-west-2.amazonaws.com",
         (req: Request, res: Response): string =>
-          `'${res.locals.missionLabWebSocketAddress}'`,
+          `${res.locals.missionLabWebSocketAddress}`,
         "wss://*.transport.connect.eu-west-2.amazonaws.com",
         " https://api.rollbar.com",
       ],
