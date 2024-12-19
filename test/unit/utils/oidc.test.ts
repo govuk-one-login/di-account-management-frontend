@@ -1,8 +1,8 @@
 import { describe, it, beforeEach, afterEach } from "mocha";
 import {
   clientAssertionGenerator,
-  getIssuer,
-  getJWKS,
+  getCachedIssuer,
+  getCachedJWKS,
   getOIDCClient,
 } from "../../../src/utils/oidc";
 import { sinon, expect } from "../../utils/test-utils";
@@ -85,7 +85,7 @@ describe("OIDC Functions", () => {
       await expect(getOIDCClient(mockConfig)).to.be.rejectedWith(errorMessage);
     });
 
-    it("should memoize OIDC client result", async () => {
+    it("should cache OIDC client result", async () => {
       const memoizeConfig = mockConfig;
       memoizeConfig.idp_url = "https://example.memoize.oidc.com";
       const clientFirstCall = await getOIDCClient(memoizeConfig);
@@ -138,23 +138,24 @@ describe("OIDC Functions", () => {
       sandbox.restore();
     });
 
-    it("should memoize JWKS for valid config", async () => {
+    it("should cache JWKS for valid config", async () => {
       const mockJWKS = {
-        getKey: async () => ({ kid: "test-kid" }),
+        keys: [{ kid: "test-kid" }],
       };
-      mockCreateRemoteJWKSet.returns(mockJWKS);
+      mockCreateRemoteJWKSet.returns({ jwks: async () => mockJWKS });
 
-      const result1 = await getJWKS(config);
+      // First call to getCachedJWKS
+      const result1 = await getCachedJWKS(config);
       expect(result1).to.deep.equal(mockJWKS);
       expect(Issuer.discover).to.have.been.calledOnceWith(config.idp_url);
       expect(mockCreateRemoteJWKSet).to.have.been.calledOnceWith(
         new URL(mockIssuer.metadata.jwks_uri),
         {
-          headers: { "User-Agent": '"AccountManagement/1.0.0"' },
+          headers: { "User-Agent": "AccountManagement/1.0.0" },
         }
       );
 
-      const result2 = await getJWKS(config);
+      const result2 = await getCachedJWKS(config);
       expect(result2).to.deep.equal(mockJWKS);
 
       expect(Issuer.discover).to.have.been.calledOnce;
@@ -163,10 +164,23 @@ describe("OIDC Functions", () => {
 
     it("should throw an error if JWKS creation fails", async () => {
       const errorMessage = "Failed to create JWKS";
-      mockCreateRemoteJWKSet.throws(new Error(errorMessage));
-      const configError = config;
-      configError.idp_url = "https://example.jwk.error.com";
-      await expect(getJWKS(configError)).to.be.rejectedWith(errorMessage);
+      mockCreateRemoteJWKSet.returns({
+        jwks: async () => {
+          throw new Error(errorMessage);
+        },
+      });
+
+      const configError = {
+        ...config,
+        idp_url: "https://example.jwk.error.com",
+      };
+
+      try {
+        await getCachedJWKS(configError);
+        expect.fail("Failed to create JWKS");
+      } catch (error) {
+        expect(error.message).to.equal(errorMessage);
+      }
     });
   });
 
@@ -194,7 +208,7 @@ describe("OIDC Functions", () => {
         "https://example.com/.well-known/openid-configuration";
       discoverStub.resolves(mockIssuer);
 
-      const issuer = await getIssuer(mockDiscoveryUri);
+      const issuer = await getCachedIssuer(mockDiscoveryUri);
 
       expect(discoverStub).to.have.been.calledOnceWith(mockDiscoveryUri);
       expect(issuer).to.equal(mockIssuer);
@@ -206,7 +220,7 @@ describe("OIDC Functions", () => {
       const errorMessage = "Discovery failed";
       discoverStub.rejects(new Error(errorMessage));
 
-      await expect(getIssuer(mockDiscoveryUri)).to.be.rejectedWith(
+      await expect(getCachedIssuer(mockDiscoveryUri)).to.be.rejectedWith(
         errorMessage
       );
     });
@@ -216,8 +230,8 @@ describe("OIDC Functions", () => {
         "https://example.com/memoize/.well-known/openid-configuration";
       discoverStub.resolves(mockIssuer);
 
-      const issuerFirstCall = await getIssuer(mockDiscoveryUri);
-      const issuerSecondCall = await getIssuer(mockDiscoveryUri);
+      const issuerFirstCall = await getCachedIssuer(mockDiscoveryUri);
+      const issuerSecondCall = await getCachedIssuer(mockDiscoveryUri);
 
       expect(discoverStub).to.have.been.calledOnceWith(mockDiscoveryUri);
       expect(issuerFirstCall).to.equal(mockIssuer);

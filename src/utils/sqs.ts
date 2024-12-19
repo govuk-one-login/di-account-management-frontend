@@ -10,7 +10,6 @@ import { redact } from "./redact";
 import { ERROR_MESSAGES, LOG_MESSAGES } from "../app.constants";
 
 const { EVENT_SENT_SUCCESSFULLY } = LOG_MESSAGES;
-
 const {
   QUEUE_URL_MISSING,
   REDACTED_EVENT,
@@ -21,43 +20,43 @@ const {
 
 const FIELDS_REDACTED_FROM_LOG_MESSAGES: string[] = ["user_id"];
 
+const AUDIT_QUEUE_URL = process.env.AUDIT_QUEUE_URL;
+const AUDIT_QUEUE_DLQ_URL = process.env.AUDIT_QUEUE_DLQ_URL;
+
 function buildMessage(
-  queue: string,
+  queueUrl: string,
   messageBody: string,
   trace: string
-): SendMessageRequest {
-  if (queue === null || queue === undefined) {
-    logger.error({ trace: trace }, QUEUE_URL_MISSING);
-    return;
+): SendMessageRequest | null {
+  if (!queueUrl) {
+    logger.error({ trace }, QUEUE_URL_MISSING);
+    return null;
   }
-
   return {
-    QueueUrl: queue,
+    QueueUrl: queueUrl,
     MessageBody: messageBody,
   };
 }
 
-function logRedacted(
-  jsonAsString: string,
-  propertyNames: string[],
-  trace: string
-): void {
+function logRedacted(jsonAsString: string, trace: string): void {
   try {
-    const failedEvent: string = redact(jsonAsString, propertyNames);
-    logger.error({ trace: trace }, REDACTED_EVENT(failedEvent));
+    const failedEvent: string = redact(
+      jsonAsString,
+      FIELDS_REDACTED_FROM_LOG_MESSAGES
+    );
+    logger.error({ trace }, REDACTED_EVENT(failedEvent));
   } catch (err) {
-    logger.error({ trace: trace }, MESSAGE_COULD_NOT_BE_REDACTED(err));
+    logger.error({ trace }, MESSAGE_COULD_NOT_BE_REDACTED(err));
   }
 }
 
 async function sendToQueue(
-  queue: string,
+  queueUrl: string,
   messageBody: string,
   trace: string
 ): Promise<boolean> {
-  const request: SendMessageRequest = buildMessage(queue, messageBody, trace);
-
-  if (request === null || request === undefined) {
+  const request = buildMessage(queueUrl, messageBody, trace);
+  if (!request) {
     return false;
   }
 
@@ -65,16 +64,12 @@ async function sendToQueue(
     const result: SendMessageCommandOutput = await sqsClient
       .getClient()
       .send(new SendMessageCommand(request));
-    logger.info(
-      { trace: trace },
-      EVENT_SENT_SUCCESSFULLY(queue, result.MessageId)
-    );
+    logger.info({ trace }, EVENT_SENT_SUCCESSFULLY(queueUrl, result.MessageId));
     return true;
   } catch (err: any) {
-    logger.error({ trace: trace }, err.toString());
+    logger.error({ trace }, err.toString());
+    return false;
   }
-
-  return false;
 }
 
 function sqsService(): SqsService {
@@ -82,26 +77,18 @@ function sqsService(): SqsService {
     messageBody: string,
     trace: string
   ): Promise<any> {
-    const { AUDIT_QUEUE_URL } = process.env;
-    const messageSent: boolean = await sendToQueue(
-      AUDIT_QUEUE_URL,
-      messageBody,
-      trace
-    );
-
-    if (messageSent == false) {
-      logger.error({ trace: trace }, FAILED_TO_SEND_TO_TXMA);
-      const { AUDIT_QUEUE_DLQ_URL } = process.env;
-      const messageSentToDLQ: boolean = await sendToQueue(
-        AUDIT_QUEUE_DLQ_URL,
-        messageBody,
-        trace
-      );
-      if (messageSentToDLQ == false) {
-        logger.error({ trace: trace }, FAILED_SEND_TO_TXMA_DLQ);
-        logRedacted(messageBody, FIELDS_REDACTED_FROM_LOG_MESSAGES, trace);
-      }
+    if (await sendToQueue(AUDIT_QUEUE_URL, messageBody, trace)) {
+      return;
     }
+
+    logger.error({ trace }, FAILED_TO_SEND_TO_TXMA);
+
+    if (await sendToQueue(AUDIT_QUEUE_DLQ_URL, messageBody, trace)) {
+      return;
+    }
+
+    logger.error({ trace }, FAILED_SEND_TO_TXMA_DLQ);
+    logRedacted(messageBody, trace);
   };
 
   return { send };

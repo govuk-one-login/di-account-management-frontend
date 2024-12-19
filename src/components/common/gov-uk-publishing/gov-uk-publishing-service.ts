@@ -9,9 +9,9 @@ import {
   GovUkNotificationRequest,
 } from "./types";
 
-export function govUkPublishingService(
-  axios: Http = new Http(getGovPublishingBaseAPIUrl())
-): GovUkPublishingServiceInterface {
+const axios: Http = new Http(getGovPublishingBaseAPIUrl());
+
+export function govUkPublishingService(): GovUkPublishingServiceInterface {
   const notifyEmailChanged = async (
     request: GovUkNotificationRequest
   ): Promise<void> => {

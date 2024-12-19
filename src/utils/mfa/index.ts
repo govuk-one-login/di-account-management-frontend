@@ -15,6 +15,9 @@ import {
 } from "../types";
 import { format } from "util";
 
+const mfaServiceUrl = getMfaServiceUrl();
+const http = new Http(mfaServiceUrl);
+
 export function generateMfaSecret(): string {
   return authenticator.generateSecret(20);
 }
@@ -42,7 +45,6 @@ export function addMfaMethod(
   status: number;
   data: MfaMethod;
 }> {
-  const http = new Http(getMfaServiceUrl());
   const { accessToken, sourceIp, persistentSessionId, sessionId } =
     sessionDetails;
   const addInput: AddMFAMethodInput = {
@@ -71,7 +73,6 @@ export async function changeDefaultMfaMethod(
   mfaMethodId: number,
   sessionDetails: UpdateInformationSessionValues
 ): Promise<void> {
-  const http = new Http(getMfaServiceUrl());
   const { accessToken, sourceIp, persistentSessionId, sessionId } =
     sessionDetails;
 
@@ -95,7 +96,6 @@ export async function removeMfaMethod(
   mfaIdentifier: string | number,
   sessionDetails: UpdateInformationSessionValues
 ): Promise<void> {
-  const http = new Http(getMfaServiceUrl());
   const { accessToken, sourceIp, persistentSessionId, sessionId } =
     sessionDetails;
 
@@ -141,8 +141,7 @@ async function postRequest(
   email: string,
   sourceIp: string,
   sessionId: string,
-  persistentSessionId: string,
-  http: Http = new Http(getMfaServiceUrl())
+  persistentSessionId: string
 ): Promise<{
   status: number;
   data: MfaMethod[];
@@ -163,8 +162,7 @@ async function postRequest(
 
 async function putRequest(
   updateInput: UpdateInformationInput,
-  sessionDetails: UpdateInformationSessionValues,
-  http: Http = new Http(getMfaServiceUrl())
+  sessionDetails: UpdateInformationSessionValues
 ): Promise<{
   status: number;
   data: MfaMethod;

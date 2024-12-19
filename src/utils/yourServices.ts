@@ -12,8 +12,8 @@ import {
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
-import pino from "pino";
 import { ENVIRONMENT_NAME } from "../app.constants";
+import { logger } from "./logger";
 
 const serviceStoreDynamoDBRequest = (subjectId: string): GetItemCommand => {
   const param = {
@@ -33,7 +33,6 @@ export const getServices = async (
   subjectId: string,
   trace: string
 ): Promise<Service[]> => {
-  const logger = pino();
   try {
     const response = await dynamoDBService().getItem(
       serviceStoreDynamoDBRequest(subjectId)
@@ -52,33 +51,25 @@ export const presentYourServices = async (
   currentLanguage?: string
 ): Promise<YourServices> => {
   const userServices = await getServices(subjectId, trace);
-  if (userServices) {
-    const userServicesWithPresentableDates = userServices.map((service) =>
-      formatService(service, currentLanguage)
-    );
-    return {
-      accountsList: filterServicesBasedOnClientIDs(
-        userServicesWithPresentableDates,
-        getAllowedAccountListClientIDs
-      ),
-      servicesList: filterServicesBasedOnClientIDs(
-        userServicesWithPresentableDates,
-        getAllowedServiceListClientIDs
-      ),
-    };
-  } else {
-    return {
-      accountsList: [],
-      servicesList: [],
-    };
-  }
-};
+  const accountsList: Service[] = [];
+  const servicesList: Service[] = [];
 
-const filterServicesBasedOnClientIDs = (
-  services: Service[],
-  clientIDs: string[]
-): Service[] => {
-  return services.filter(({ client_id }) => clientIDs.includes(client_id));
+  userServices.forEach((service) => {
+    if (
+      getAllowedAccountListClientIDs.includes(service.client_id) ||
+      getAllowedServiceListClientIDs.includes(service.client_id)
+    ) {
+      const formattedService = formatService(service, currentLanguage);
+      if (getAllowedAccountListClientIDs.includes(service.client_id)) {
+        accountsList.push(formattedService);
+      } else {
+        servicesList.push(formattedService);
+      }
+    }
+  });
+
+  const processedData = { accountsList, servicesList };
+  return processedData;
 };
 
 export const getAllowedListServices = async (
