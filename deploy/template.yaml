@@ -172,7 +172,7 @@ Mappings:
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGSLEVEL: "debug"
       SUPPORTTRIAGEPAGE: "1"
-      WEBCHATSOURCEURL: "https://dev-chat-loader.smartagent.app"
+      WEBCHATSOURCEURL: "https://chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
