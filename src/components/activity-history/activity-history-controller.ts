@@ -4,14 +4,13 @@ import {
   activityLogItemsPerPage,
   getOIDCClientId,
 } from "../../config";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA, HTTP_STATUS_CODES } from "../../app.constants";
 import {
   generatePagination,
   formatActivityLogs,
   filterAndDecryptActivity,
 } from "../../utils/activityHistory";
 import { presentActivityHistory } from "../../utils/present-activity-history";
-import { HTTP_STATUS_CODES } from "../../app.constants";
 import { logger } from "../../utils/logger";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
 

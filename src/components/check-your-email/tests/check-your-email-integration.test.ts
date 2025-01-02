@@ -59,7 +59,7 @@ describe("Integration:: check your email", () => {
       });
     });
 
-    sandbox.stub(oidc, "getJWKS").callsFake(() => {
+    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
       return new Promise((resolve) => {
         resolve({});
       });
