@@ -8,10 +8,11 @@ import {
 import { KmsService } from "./types";
 import { getKMSConfig, KmsConfig } from "../config/aws";
 
-export function kmsService(config: KmsConfig = getKMSConfig()): KmsService {
-  const sign = async function (payload: string): Promise<SignCommandOutput> {
-    const client = new KMSClient(config.awsConfig as any);
+const config: KmsConfig = getKMSConfig();
+const client = new KMSClient(config.awsConfig as any);
 
+export const kmsService: KmsService = {
+  sign: async (payload: string): Promise<SignCommandOutput> => {
     const params = {
       KeyId: config.kmsKeyId,
       Message: Buffer.from(payload),
@@ -20,9 +21,5 @@ export function kmsService(config: KmsConfig = getKMSConfig()): KmsService {
     };
     const request: SignCommand = new SignCommand(params);
     return await client.send(request);
-  };
-
-  return {
-    sign,
-  };
-}
+  },
+};
