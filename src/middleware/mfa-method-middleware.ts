@@ -5,8 +5,6 @@ import { getMfaServiceUrl, supportMfaPage } from "../config";
 import { logger } from "../utils/logger";
 import { legacyMfaMethodsMiddleware } from "./mfa-methods-legacy";
 
-const mfaServiceUrl = new URL(getMfaServiceUrl());
-
 export async function mfaMethodMiddleware(
   req: Request,
   res: Response,
@@ -35,6 +33,7 @@ export async function mfaMethodMiddleware(
 
 const selectMfaMiddleware = (): RequestHandler => {
   try {
+    const mfaServiceUrl = new URL(getMfaServiceUrl());
     if (supportMfaPage() && mfaServiceUrl) {
       return mfaMethodMiddleware;
     }

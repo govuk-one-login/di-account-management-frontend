@@ -9,12 +9,12 @@ export enum ExpectedParams {
   AppErrorCode = "appErrorCode",
 }
 
-const contactEmailServiceUrl = new URL(getContactEmailServiceUrl());
-
 export const buildContactEmailServiceUrl = (
   req: Request,
   res: Response
 ): URL => {
+  const contactEmailServiceUrl = new URL(getContactEmailServiceUrl());
+
   for (const paramValue of Object.values(ExpectedParams)) {
     if (
       req.session.queryParameters[
