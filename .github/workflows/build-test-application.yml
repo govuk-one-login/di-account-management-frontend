@@ -80,9 +80,11 @@ jobs:
       HUSKY: 0
       API_BASE_URL: http://localhost:6000/api
       AM_API_BASE_URL: http://localhost:5000/api
+      AM_YOUR_ACCOUNT_URL: some url
+      CONTACT_EMAIL_SERVICE_URL: http://localhost:1000/api
       GOV_ACCOUNTS_PUBLISHING_API_URL: http://localhost:1000/api
       GOV_ACCOUNTS_PUBLISHING_API_TOKEN: token
-      AM_YOUR_ACCOUNT_URL: some url
+      METHOD_MANAGEMENT_BASE_URL: http://localhost:2000/api
       OIDC_CLIENT_ID: test
       OIDC_CLIENT_SCOPES: openid
       SESSION_SECRET: secret
