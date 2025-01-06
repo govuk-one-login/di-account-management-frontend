@@ -12,13 +12,13 @@ import {
   FlattenedJWSInput,
   generateKeyPair,
   GenerateKeyPairResult,
+  GetKeyFunction,
   JWSHeaderParameters,
   JWTPayload,
   SignJWT,
   UnsecuredJWT,
 } from "jose";
 
-import { GetKeyFunction } from "jose/dist/types/types";
 import { logger } from "../../../utils/logger";
 import * as SessionStore from "../../../utils/session-store";
 
@@ -94,7 +94,7 @@ describe("global logout controller", () => {
       keys: [await exportJWK(keySet.publicKey)],
     });
 
-    sandbox.stub(oidc, "getJWKS").returns(issuerJWKS);
+    sandbox.stub(oidc, "getCachedJWKS").returns(issuerJWKS);
 
     res = {
       status: sandbox.stub().returnsThis(),
