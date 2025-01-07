@@ -106,7 +106,7 @@ describe("OIDC Functions", () => {
     });
   });
 
-  describe("getJWKS", () => {
+  describe("getCachedJWKS", () => {
     let sandbox: sinon.SinonSandbox;
     let mockIssuer: any;
     let mockCreateRemoteJWKSet: sinon.SinonStub;
@@ -169,7 +169,7 @@ describe("OIDC Functions", () => {
     });
   });
 
-  describe("getIssuer", () => {
+  describe("getCachedIssuer", () => {
     let sandbox: sinon.SinonSandbox;
     let discoverStub: sinon.SinonStub;
     let mockIssuer: any;

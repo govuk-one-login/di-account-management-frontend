@@ -12,13 +12,13 @@ import {
   FlattenedJWSInput,
   generateKeyPair,
   GenerateKeyPairResult,
-  GetKeyFunction,
   JWSHeaderParameters,
   JWTPayload,
   SignJWT,
   UnsecuredJWT,
 } from "jose";
 
+import { GetKeyFunction } from "jose/dist/types/types";
 import { logger } from "../../../utils/logger";
 import * as SessionStore from "../../../utils/session-store";
 

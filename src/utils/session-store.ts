@@ -1,23 +1,18 @@
 import { Request, Response } from "express";
-import {
-  DynamoDBClient,
-  QueryCommand,
-  ScalarAttributeType,
-} from "@aws-sdk/client-dynamodb";
+import { QueryCommand, ScalarAttributeType } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { getSessionStoreTableName } from "../config";
-import { getDBConfig } from "../config/aws";
 import { logger } from "./logger";
 import connect_dynamodb from "connect-dynamodb";
 import { Store } from "express-session";
 import { ERROR_MESSAGES } from "../app.constants";
+import { dynamoClient } from "./dynamo";
 
 // the value of the USER_IDENTIFIER_IDX_ATTRIBUTE must match the indexed attribute in SessionsDynamoDB table
 // defined in `../../deploy/template.yaml`.
 const USER_IDENTIFIER_IDX_ATTRIBUTE = "user_id";
 
 const PREFIX = "sess:";
-const ddbClient = new DynamoDBClient(getDBConfig());
 
 interface SessionStore {
   session: any;
@@ -26,7 +21,7 @@ interface SessionStore {
 export function getSessionStore({ session }: SessionStore): Store {
   const DynamoDBStore = connect_dynamodb(session);
   const storeOptions = {
-    client: new DynamoDBClient(getDBConfig()),
+    client: dynamoClient,
     table: getSessionStoreTableName(),
     specialKeys: [
       { name: USER_IDENTIFIER_IDX_ATTRIBUTE, type: ScalarAttributeType.S },
@@ -46,18 +41,19 @@ async function getSessions(subjectId: string): Promise<string[]> {
   };
 
   try {
-    const { Items } = await ddbClient.send(new QueryCommand(params));
-    if (!Items || Items.length < 1) return [];
-    return Items.map((session) => {
-      const id = unmarshall(session).id;
-      return id.startsWith(PREFIX) ? id.substring(PREFIX.length) : id;
-    });
+    const { Items } = await dynamoClient.send(new QueryCommand(params));
+    return (
+      Items?.map((session) => {
+        const id = unmarshall(session).id;
+        return id.startsWith(PREFIX) ? id.substring(PREFIX.length) : id;
+      }) || []
+    );
   } catch (error) {
     logger.error(
       `session-store - failed to get sessions: ${JSON.stringify(error)}`
     );
+    return [];
   }
-  return [];
 }
 
 async function deleteAllUserSessionsFromSessionStore(

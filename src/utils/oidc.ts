@@ -61,52 +61,34 @@ function isTokenExpired(token: string): boolean {
   return decodedToken.exp < next60Seconds.getTime() / 1000;
 }
 
-function clientAssertionGenerator(
-  kms: KmsService = kmsService()
-): ClientAssertionServiceInterface {
-  const generateAssertionJwt = async function (
+const clientAssertionGenerator = (
+  kms: KmsService = kmsService
+): ClientAssertionServiceInterface => ({
+  generateAssertionJwt: async (
     clientId: string,
     tokenEndpointUri: string
-  ): Promise<string> {
-    const headers = {
-      alg: "RS512",
-      typ: "JWT",
-    };
-
+  ): Promise<string> => {
+    const headers = { alg: "RS512", typ: "JWT" };
     const payload = {
       iss: clientId,
       sub: clientId,
       aud: tokenEndpointUri,
-      exp: Math.floor((new Date().getTime() + 5 * 60000) / 1000),
-      iat: Math.floor(new Date().getTime() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 5 * 60, // Expire in 5 minutes
+      iat: Math.floor(Date.now() / 1000),
       jti: random(),
     };
-
-    const token_components = {
-      header: base64url.encode(JSON.stringify(headers)),
-      payload: base64url.encode(JSON.stringify(payload)),
-    };
-
-    const message = Buffer.from(
-      token_components.header + "." + token_components.payload
-    ).toString();
-
+    const encodedHeader = base64url.encode(JSON.stringify(headers));
+    const encodedPayload = base64url.encode(JSON.stringify(payload));
+    const message = `${encodedHeader}.${encodedPayload}`;
     const sig = await kms.sign(message);
-
-    const base64Signature = Buffer.from(sig.Signature).toString("base64");
-    return (
-      token_components.header +
-      "." +
-      token_components.payload +
-      "." +
-      base64Signature.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "")
-    );
-  };
-
-  return {
-    generateAssertionJwt,
-  };
-}
+    const base64Signature = Buffer.from(sig.Signature)
+      .toString("base64")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=/g, "");
+    return `${encodedHeader}.${encodedPayload}.${base64Signature}`;
+  },
+});
 
 export {
   getOIDCClient,
