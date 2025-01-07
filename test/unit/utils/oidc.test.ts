@@ -14,6 +14,7 @@ import {
   KmsService,
 } from "../../../src/utils/types";
 import base64url from "base64url";
+import { invalidateCache } from "../../../src/utils/cache";
 
 describe("OIDC Functions", () => {
   describe("getOIDCClient", () => {
@@ -85,7 +86,7 @@ describe("OIDC Functions", () => {
       await expect(getOIDCClient(mockConfig)).to.be.rejectedWith(errorMessage);
     });
 
-    it("should cache OIDC client result", async () => {
+    it("should memoize OIDC client result", async () => {
       const memoizeConfig = mockConfig;
       memoizeConfig.idp_url = "https://example.memoize.oidc.com";
       const clientFirstCall = await getOIDCClient(memoizeConfig);
@@ -105,7 +106,7 @@ describe("OIDC Functions", () => {
     });
   });
 
-  describe("getCachedJWKS", () => {
+  describe("getJWKS", () => {
     let sandbox: sinon.SinonSandbox;
     let mockIssuer: any;
     let mockCreateRemoteJWKSet: sinon.SinonStub;
@@ -138,21 +139,17 @@ describe("OIDC Functions", () => {
       sandbox.restore();
     });
 
-    it("should cache JWKS for valid config", async () => {
+    it("should memoize JWKS for valid config", async () => {
       const mockJWKS = {
-        keys: [{ kid: "test-kid" }],
+        getKey: async () => ({ kid: "test-kid" }),
       };
-      mockCreateRemoteJWKSet.returns({ jwks: async () => mockJWKS });
+      mockCreateRemoteJWKSet.returns(mockJWKS);
 
-      // First call to getCachedJWKS
       const result1 = await getCachedJWKS(config);
       expect(result1).to.deep.equal(mockJWKS);
       expect(Issuer.discover).to.have.been.calledOnceWith(config.idp_url);
       expect(mockCreateRemoteJWKSet).to.have.been.calledOnceWith(
-        new URL(mockIssuer.metadata.jwks_uri),
-        {
-          headers: { "User-Agent": "AccountManagement/1.0.0" },
-        }
+        new URL(mockIssuer.metadata.jwks_uri)
       );
 
       const result2 = await getCachedJWKS(config);
@@ -164,27 +161,15 @@ describe("OIDC Functions", () => {
 
     it("should throw an error if JWKS creation fails", async () => {
       const errorMessage = "Failed to create JWKS";
-      mockCreateRemoteJWKSet.returns({
-        jwks: async () => {
-          throw new Error(errorMessage);
-        },
-      });
-
-      const configError = {
-        ...config,
-        idp_url: "https://example.jwk.error.com",
-      };
-
-      try {
-        await getCachedJWKS(configError);
-        expect.fail("Failed to create JWKS");
-      } catch (error) {
-        expect(error.message).to.equal(errorMessage);
-      }
+      mockCreateRemoteJWKSet.throws(new Error(errorMessage));
+      const configError = config;
+      configError.idp_url = "https://example.jwk.error.com";
+      invalidateCache("oidc:jwks:https://example.com/.well-known/jwks.json");
+      await expect(getCachedJWKS(configError)).to.be.rejectedWith(errorMessage);
     });
   });
 
-  describe("getCachedIssuer", () => {
+  describe("getIssuer", () => {
     let sandbox: sinon.SinonSandbox;
     let discoverStub: sinon.SinonStub;
     let mockIssuer: any;

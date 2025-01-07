@@ -4,7 +4,7 @@ import { ClientAssertionServiceInterface, KmsService } from "./types";
 import { kmsService } from "./kms";
 import base64url from "base64url";
 import random = generators.random;
-import { decodeJwt, createRemoteJWKSet, JSONWebKeySet } from "jose";
+import { decodeJwt, createRemoteJWKSet } from "jose";
 import { cacheWithExpiration } from "./cache";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
@@ -36,7 +36,7 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
   });
 }
 
-async function getCachedJWKS(config: OIDCConfig): Promise<JSONWebKeySet> {
+async function getCachedJWKS(config: OIDCConfig) {
   const issuer = await getCachedIssuer(config.idp_url);
   const issuerUrl = issuer.metadata.jwks_uri;
   const cacheKey = `oidc:jwks:${issuerUrl.toLowerCase()}`;
@@ -46,7 +46,7 @@ async function getCachedJWKS(config: OIDCConfig): Promise<JSONWebKeySet> {
       const remoteJWKSet = createRemoteJWKSet(new URL(issuerUrl), {
         headers: { "User-Agent": "AccountManagement/1.0.0" },
       });
-      return remoteJWKSet.jwks();
+      return remoteJWKSet;
     },
     jwksRefreshInterval
   );
