@@ -1,8 +1,8 @@
 import { describe, it, beforeEach, afterEach } from "mocha";
 import {
   clientAssertionGenerator,
-  getIssuer,
-  getJWKS,
+  getCachedIssuer,
+  getCachedJWKS,
   getOIDCClient,
 } from "../../../src/utils/oidc";
 import { sinon, expect } from "../../utils/test-utils";
@@ -14,6 +14,7 @@ import {
   KmsService,
 } from "../../../src/utils/types";
 import base64url from "base64url";
+import { invalidateCache } from "../../../src/utils/cache";
 
 describe("OIDC Functions", () => {
   describe("getOIDCClient", () => {
@@ -105,7 +106,7 @@ describe("OIDC Functions", () => {
     });
   });
 
-  describe("getJWKS", () => {
+  describe("getCachedJWKS", () => {
     let sandbox: sinon.SinonSandbox;
     let mockIssuer: any;
     let mockCreateRemoteJWKSet: sinon.SinonStub;
@@ -144,17 +145,14 @@ describe("OIDC Functions", () => {
       };
       mockCreateRemoteJWKSet.returns(mockJWKS);
 
-      const result1 = await getJWKS(config);
+      const result1 = await getCachedJWKS(config);
       expect(result1).to.deep.equal(mockJWKS);
       expect(Issuer.discover).to.have.been.calledOnceWith(config.idp_url);
       expect(mockCreateRemoteJWKSet).to.have.been.calledOnceWith(
-        new URL(mockIssuer.metadata.jwks_uri),
-        {
-          headers: { "User-Agent": '"AccountManagement/1.0.0"' },
-        }
+        new URL(mockIssuer.metadata.jwks_uri)
       );
 
-      const result2 = await getJWKS(config);
+      const result2 = await getCachedJWKS(config);
       expect(result2).to.deep.equal(mockJWKS);
 
       expect(Issuer.discover).to.have.been.calledOnce;
@@ -166,11 +164,12 @@ describe("OIDC Functions", () => {
       mockCreateRemoteJWKSet.throws(new Error(errorMessage));
       const configError = config;
       configError.idp_url = "https://example.jwk.error.com";
-      await expect(getJWKS(configError)).to.be.rejectedWith(errorMessage);
+      invalidateCache("oidc:jwks:https://example.com/.well-known/jwks.json");
+      await expect(getCachedJWKS(configError)).to.be.rejectedWith(errorMessage);
     });
   });
 
-  describe("getIssuer", () => {
+  describe("getCachedIssuer", () => {
     let sandbox: sinon.SinonSandbox;
     let discoverStub: sinon.SinonStub;
     let mockIssuer: any;
@@ -194,7 +193,7 @@ describe("OIDC Functions", () => {
         "https://example.com/.well-known/openid-configuration";
       discoverStub.resolves(mockIssuer);
 
-      const issuer = await getIssuer(mockDiscoveryUri);
+      const issuer = await getCachedIssuer(mockDiscoveryUri);
 
       expect(discoverStub).to.have.been.calledOnceWith(mockDiscoveryUri);
       expect(issuer).to.equal(mockIssuer);
@@ -206,7 +205,7 @@ describe("OIDC Functions", () => {
       const errorMessage = "Discovery failed";
       discoverStub.rejects(new Error(errorMessage));
 
-      await expect(getIssuer(mockDiscoveryUri)).to.be.rejectedWith(
+      await expect(getCachedIssuer(mockDiscoveryUri)).to.be.rejectedWith(
         errorMessage
       );
     });
@@ -216,8 +215,8 @@ describe("OIDC Functions", () => {
         "https://example.com/memoize/.well-known/openid-configuration";
       discoverStub.resolves(mockIssuer);
 
-      const issuerFirstCall = await getIssuer(mockDiscoveryUri);
-      const issuerSecondCall = await getIssuer(mockDiscoveryUri);
+      const issuerFirstCall = await getCachedIssuer(mockDiscoveryUri);
+      const issuerSecondCall = await getCachedIssuer(mockDiscoveryUri);
 
       expect(discoverStub).to.have.been.calledOnceWith(mockDiscoveryUri);
       expect(issuerFirstCall).to.equal(mockIssuer);

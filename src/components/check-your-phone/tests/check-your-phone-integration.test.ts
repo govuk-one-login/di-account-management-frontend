@@ -69,7 +69,7 @@ describe("Integration:: check your phone", () => {
       });
     });
 
-    sandbox.stub(oidc, "getJWKS").callsFake(() => {
+    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
       return new Promise((resolve) => {
         resolve({});
       });

@@ -153,7 +153,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     });
   });
 
-  sandbox.stub(oidc, "getJWKS").callsFake(() => {
+  sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
     return new Promise((resolve) => {
       resolve({});
     });
