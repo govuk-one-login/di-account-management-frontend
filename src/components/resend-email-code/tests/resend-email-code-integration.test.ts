@@ -65,7 +65,7 @@ describe("Integration:: request email code", () => {
       });
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+    sandbox.stub(oidc, "getJWKS").callsFake(() => {
       return new Promise((resolve) => {
         resolve({});
       });
