@@ -1,8 +1,8 @@
 import { describe, it, beforeEach, afterEach } from "mocha";
 import {
   clientAssertionGenerator,
-  getCachedIssuer,
-  getCachedJWKS,
+  getIssuer,
+  getJWKS,
   getOIDCClient,
 } from "../../../src/utils/oidc";
 import { sinon, expect } from "../../utils/test-utils";
@@ -85,7 +85,7 @@ describe("OIDC Functions", () => {
       await expect(getOIDCClient(mockConfig)).to.be.rejectedWith(errorMessage);
     });
 
-    it("should cache OIDC client result", async () => {
+    it("should memoize OIDC client result", async () => {
       const memoizeConfig = mockConfig;
       memoizeConfig.idp_url = "https://example.memoize.oidc.com";
       const clientFirstCall = await getOIDCClient(memoizeConfig);
@@ -105,7 +105,7 @@ describe("OIDC Functions", () => {
     });
   });
 
-  describe("getCachedJWKS", () => {
+  describe("getJWKS", () => {
     let sandbox: sinon.SinonSandbox;
     let mockIssuer: any;
     let mockCreateRemoteJWKSet: sinon.SinonStub;
@@ -138,24 +138,23 @@ describe("OIDC Functions", () => {
       sandbox.restore();
     });
 
-    it("should cache JWKS for valid config", async () => {
+    it("should memoize JWKS for valid config", async () => {
       const mockJWKS = {
-        keys: [{ kid: "test-kid" }],
+        getKey: async () => ({ kid: "test-kid" }),
       };
-      mockCreateRemoteJWKSet.returns({ jwks: async () => mockJWKS });
+      mockCreateRemoteJWKSet.returns(mockJWKS);
 
-      // First call to getCachedJWKS
-      const result1 = await getCachedJWKS(config);
+      const result1 = await getJWKS(config);
       expect(result1).to.deep.equal(mockJWKS);
       expect(Issuer.discover).to.have.been.calledOnceWith(config.idp_url);
       expect(mockCreateRemoteJWKSet).to.have.been.calledOnceWith(
         new URL(mockIssuer.metadata.jwks_uri),
         {
-          headers: { "User-Agent": "AccountManagement/1.0.0" },
+          headers: { "User-Agent": '"AccountManagement/1.0.0"' },
         }
       );
 
-      const result2 = await getCachedJWKS(config);
+      const result2 = await getJWKS(config);
       expect(result2).to.deep.equal(mockJWKS);
 
       expect(Issuer.discover).to.have.been.calledOnce;
@@ -164,27 +163,14 @@ describe("OIDC Functions", () => {
 
     it("should throw an error if JWKS creation fails", async () => {
       const errorMessage = "Failed to create JWKS";
-      mockCreateRemoteJWKSet.returns({
-        jwks: async () => {
-          throw new Error(errorMessage);
-        },
-      });
-
-      const configError = {
-        ...config,
-        idp_url: "https://example.jwk.error.com",
-      };
-
-      try {
-        await getCachedJWKS(configError);
-        expect.fail("Failed to create JWKS");
-      } catch (error) {
-        expect(error.message).to.equal(errorMessage);
-      }
+      mockCreateRemoteJWKSet.throws(new Error(errorMessage));
+      const configError = config;
+      configError.idp_url = "https://example.jwk.error.com";
+      await expect(getJWKS(configError)).to.be.rejectedWith(errorMessage);
     });
   });
 
-  describe("getCachedIssuer", () => {
+  describe("getIssuer", () => {
     let sandbox: sinon.SinonSandbox;
     let discoverStub: sinon.SinonStub;
     let mockIssuer: any;
@@ -208,7 +194,7 @@ describe("OIDC Functions", () => {
         "https://example.com/.well-known/openid-configuration";
       discoverStub.resolves(mockIssuer);
 
-      const issuer = await getCachedIssuer(mockDiscoveryUri);
+      const issuer = await getIssuer(mockDiscoveryUri);
 
       expect(discoverStub).to.have.been.calledOnceWith(mockDiscoveryUri);
       expect(issuer).to.equal(mockIssuer);
@@ -220,7 +206,7 @@ describe("OIDC Functions", () => {
       const errorMessage = "Discovery failed";
       discoverStub.rejects(new Error(errorMessage));
 
-      await expect(getCachedIssuer(mockDiscoveryUri)).to.be.rejectedWith(
+      await expect(getIssuer(mockDiscoveryUri)).to.be.rejectedWith(
         errorMessage
       );
     });
@@ -230,8 +216,8 @@ describe("OIDC Functions", () => {
         "https://example.com/memoize/.well-known/openid-configuration";
       discoverStub.resolves(mockIssuer);
 
-      const issuerFirstCall = await getCachedIssuer(mockDiscoveryUri);
-      const issuerSecondCall = await getCachedIssuer(mockDiscoveryUri);
+      const issuerFirstCall = await getIssuer(mockDiscoveryUri);
+      const issuerSecondCall = await getIssuer(mockDiscoveryUri);
 
       expect(discoverStub).to.have.been.calledOnceWith(mockDiscoveryUri);
       expect(issuerFirstCall).to.equal(mockIssuer);

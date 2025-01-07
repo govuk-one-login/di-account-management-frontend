@@ -21,7 +21,7 @@ describe("Integration:: change email", () => {
   let app: any;
   let baseApi: string;
   let oidc: { getOIDCClient: any };
-  let oidcgetCachedJWKS: { getCachedJWKS: any };
+  let oidcgetJWKS: { getJWKS: any };
 
   const TEST_SUBJECT_ID = "jkduasd";
 
@@ -66,8 +66,8 @@ describe("Integration:: change email", () => {
       });
     });
 
-    oidcgetCachedJWKS = require("../../../utils/oidc");
-    sandbox.stub(oidcgetCachedJWKS, "getCachedJWKS").callsFake(() => {
+    oidcgetJWKS = require("../../../utils/oidc");
+    sandbox.stub(oidcgetJWKS, "getJWKS").callsFake(() => {
       return new Promise((resolve) => {
         resolve({});
       });
