@@ -437,12 +437,12 @@ Resources:
         Cooldown: 30
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
           - MetricIntervalUpperBound: 10 #50%
-            ScalingAdjustment: 50
+            ScalingAdjustment: 30
           - MetricIntervalLowerBound: 10 #50%
             MetricIntervalUpperBound: 30 #70%
-            ScalingAdjustment: 100
+            ScalingAdjustment: 60
           - MetricIntervalLowerBound: 30 #70%
-            ScalingAdjustment: 200
+            ScalingAdjustment: 100
 
   ECSStepScaleInPolicy:
     DependsOn: ContainerAutoScalingTarget
@@ -461,10 +461,13 @@ Resources:
         AdjustmentType: PercentChangeInCapacity
         Cooldown: 30
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-          - MetricIntervalLowerBound: -40 #20%
-            MetricIntervalUpperBound: 0 #60%
+          - MetricIntervalLowerBound: -10 #30%
+            MetricIntervalUpperBound: 0 #40%
             ScalingAdjustment: -10
-          - MetricIntervalUpperBound: -40 #20%
+          - MetricIntervalLowerBound: -20 #20%
+            MetricIntervalUpperBound: -10 #30%
+            ScalingAdjustment: -20
+          - MetricIntervalUpperBound: -20 #30%
             ScalingAdjustment: -50
 
   ECSStepScaleOutAlarm:
