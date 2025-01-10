@@ -36,16 +36,17 @@
           {%- for event in data -%}
             <li class="activity-history__list-item">
               {% include "common/activity-history/event.njk" %}
-
-              {# if the activity has already been reported, display "Activity reported on [time]" link #}
-              {# if the activity has not already been reported, display "Report activity from [time]" link #}
-              <p class="govuk-body"><a class="govuk-link" href="{{event.reportSuspiciousActivityUrl}}">
-                {%- if event.reportedSuspicious -%}
-                {{ 'pages.activityHistory.reported' | translate | replace("[time]", event.reportedSuspiciousTime) }}
-                {%- else -%}
-                {{ 'pages.activityHistory.report' | translate | replace("[time]", event.time) }}
-                {%- endif -%}
-              </a></p>
+              {% if reportSuspiciousActivity %}
+                  {# if the activity has already been reported, display "Activity reported on [time]" link #}
+                  {# if the activity has not already been reported, display "Report activity from [time]" link #}
+                  <p class="govuk-body"><a class="govuk-link" href="{{event.reportSuspiciousActivityUrl}}">
+                    {%- if event.reportedSuspicious -%}
+                    {{ 'pages.activityHistory.reported' | translate | replace("[time]", event.reportedSuspiciousTime) }}
+                    {%- else -%}
+                    {{ 'pages.activityHistory.report' | translate | replace("[time]", event.time) }}
+                    {%- endif -%}
+                  </a></p>
+              {% endif %}
             </li>
           {%- endfor -%}
         </ul>

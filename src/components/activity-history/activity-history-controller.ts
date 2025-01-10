@@ -3,6 +3,7 @@ import {
   getAppEnv,
   activityLogItemsPerPage,
   getOIDCClientId,
+  reportSuspiciousActivity,
 } from "../../config";
 import { PATH_DATA } from "../../app.constants";
 import {
@@ -25,6 +26,7 @@ export async function activityHistoryGet(
   let pagination: any = {};
   const backLink = PATH_DATA.SECURITY.url;
   let formattedActivityLog: FormattedActivityLog[] = [];
+  const reportSuspiciousActivityFlag = reportSuspiciousActivity();
 
   try {
     if (user?.subjectId) {
@@ -60,6 +62,7 @@ export async function activityHistoryGet(
 
     res.render("activity-history/index.njk", {
       data: formattedActivityLog,
+      reportSuspiciousActivity: reportSuspiciousActivityFlag,
       env: env,
       pagination: pagination,
       backLink: backLink,

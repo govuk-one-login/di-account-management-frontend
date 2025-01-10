@@ -5,7 +5,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { PATH_DATA } from "../../../app.constants";
 import { activityHistoryGet } from "../activity-history-controller";
-import { getAppEnv } from "../../../config";
+import { getAppEnv, reportSuspiciousActivity } from "../../../config";
 describe("Activity history controller", () => {
   let sandbox: sinon.SinonSandbox;
   let res: Partial<Response>;
@@ -64,6 +64,7 @@ describe("Activity history controller", () => {
           "activity-history/index.njk",
           {
             env: getAppEnv(),
+            reportSuspiciousActivity: reportSuspiciousActivity(),
             data: [],
             pagination: {},
             backLink: PATH_DATA.SECURITY.url,
