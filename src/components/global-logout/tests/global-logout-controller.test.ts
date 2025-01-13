@@ -94,7 +94,7 @@ describe("global logout controller", () => {
       keys: [await exportJWK(keySet.publicKey)],
     });
 
-    sandbox.stub(oidc, "getJWKS").returns(issuerJWKS);
+    sandbox.stub(oidc, "getCachedJWKS").returns(issuerJWKS);
 
     res = {
       status: sandbox.stub().returnsThis(),
