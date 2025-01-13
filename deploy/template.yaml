@@ -132,28 +132,28 @@ Mappings:
     dev:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 4
-      MaxCapacity: 50
+      MinCapacity: 16
+      MaxCapacity: 100
     build:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 4
-      MaxCapacity: 50
+      MinCapacity: 16
+      MaxCapacity: 100
     staging:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 4
-      MaxCapacity: 50
+      MinCapacity: 16
+      MaxCapacity: 100
     integration:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 4
-      MaxCapacity: 50
+      MinCapacity: 16
+      MaxCapacity: 100
     production:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 4
-      MaxCapacity: 50
+      MinCapacity: 16
+      MaxCapacity: 100
   EnvironmentVariables:
     ### These environment variables are referenced further down the file.
     ### Please ensure that any variables defined for an environment are defined for _all_ environments.
@@ -419,7 +419,6 @@ Resources:
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
 
-  # Utilising ADR 0140
   ECSStepScaleOutPolicy:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
@@ -435,21 +434,16 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 60
-        MinAdjustmentMagnitude: 5
+        Cooldown: 30
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-          - MetricIntervalUpperBound: 20 #80%
+          - MetricIntervalUpperBound: 10 #50%
+            ScalingAdjustment: 30
+          - MetricIntervalLowerBound: 10 #50%
+            MetricIntervalUpperBound: 30 #70%
+            ScalingAdjustment: 60
+          - MetricIntervalLowerBound: 30 #70%
             ScalingAdjustment: 100
-          - MetricIntervalLowerBound: 20 #80%
-            MetricIntervalUpperBound: 30 #90%
-            ScalingAdjustment: 200
-          - MetricIntervalLowerBound: 30 #90%
-            MetricIntervalUpperBound: 35 #95%
-            ScalingAdjustment: 300
-          - MetricIntervalLowerBound: 35 #95%
-            ScalingAdjustment: 500
 
-  # Utilising ADR 0140
   ECSStepScaleInPolicy:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
@@ -467,13 +461,15 @@ Resources:
         AdjustmentType: PercentChangeInCapacity
         Cooldown: 30
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-          - MetricIntervalLowerBound: -40 #20%
-            MetricIntervalUpperBound: 0 #60%
+          - MetricIntervalLowerBound: -10 #30%
+            MetricIntervalUpperBound: 0 #40%
             ScalingAdjustment: -10
-          - MetricIntervalUpperBound: -40 #20%
+          - MetricIntervalLowerBound: -20 #20%
+            MetricIntervalUpperBound: -10 #30%
+            ScalingAdjustment: -20
+          - MetricIntervalUpperBound: -20 #30%
             ScalingAdjustment: -50
 
-  # Utilising ADR 0140
   ECSStepScaleOutAlarm:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::CloudWatch::Alarm
@@ -481,7 +477,7 @@ Resources:
       ActionsEnabled: true
       AlarmActions:
         - !Ref ECSStepScaleOutPolicy
-      AlarmDescription: "ECSClusterOver60PercentCPU"
+      AlarmDescription: "ECSClusterOver40PercentCPU"
       ComparisonOperator: "GreaterThanThreshold"
       DatapointsToAlarm: "2"
       Dimensions:
@@ -495,7 +491,7 @@ Resources:
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "60"
+      Threshold: "40"
 
   # Utilising ADR 0140
   ECSStepScaleInAlarm:
@@ -505,7 +501,7 @@ Resources:
       ActionsEnabled: true
       AlarmActions:
         - !Ref ECSStepScaleInPolicy
-      AlarmDescription: "ECSClusterUnder60PercentCPU"
+      AlarmDescription: "ECSClusterUnder40PercentCPU"
       ComparisonOperator: "LessThanThreshold"
       DatapointsToAlarm: "5"
       Dimensions:
@@ -519,7 +515,7 @@ Resources:
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "60"
+      Threshold: "40"
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
