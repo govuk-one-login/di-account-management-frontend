@@ -1,5 +1,6 @@
 import { describe } from "mocha";
 import {
+  reportSuspiciousActivityConfirmation,
   reportSuspiciousActivityGet,
   reportSuspiciousActivityPost,
 } from "../report-suspicious-activity-controller";
@@ -60,6 +61,7 @@ describe("report suspicious activity controller", () => {
       },
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
+      status: sandbox.fake(),
     };
     next = sandbox.fake(() => {});
     dynamodbQueryOutput = {
@@ -101,6 +103,10 @@ describe("report suspicious activity controller", () => {
   });
 
   it("Report activity you do not recognise", async () => {
+    const configFuncs = require("../../../config");
+    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+      return true;
+    });
     // Act
     await reportSuspiciousActivityGet(req as Request, res as Response, next);
 
@@ -108,7 +114,24 @@ describe("report suspicious activity controller", () => {
     expect(res.render).to.have.been.called;
   });
 
+  it("Should render 404 in GET view when report suspicious activity is false", async () => {
+    const configFuncs = require("../../../config");
+    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+      return false;
+    });
+    // Act
+    await reportSuspiciousActivityGet(req as Request, res as Response, next);
+
+    // Assert
+    expect(res.status).to.have.been.calledOnceWith(404);
+    expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
+  });
+
   it("You've already reported this activity", async () => {
+    const configFuncs = require("../../../config");
+    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+      return true;
+    });
     // Arrange
     req.query = { event: "event-id", reported: "true" };
     dynamodbQueryOutput = {
@@ -138,6 +161,10 @@ describe("report suspicious activity controller", () => {
       it("event path param is missing", async () => {
         // Arrange
         req.query = { reported: "false" };
+        const configFuncs = require("../../../config");
+        sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+          return true;
+        });
 
         // Act
         await reportSuspiciousActivityGet(
@@ -154,6 +181,10 @@ describe("report suspicious activity controller", () => {
 
   describe("Sorry, there is a problem with the service", () => {
     it("event param can't be found for this user", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return true;
+      });
       // Arrange
       dynamodbQueryOutput = { $metadata: undefined, Items: [] };
       req.query = { event: "event-id", reported: "false" };
@@ -166,6 +197,10 @@ describe("report suspicious activity controller", () => {
     });
 
     it("activity log can't be retrieved for this user", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return true;
+      });
       // Arrange
       mockDynamoDBService = {
         getItem(): Promise<GetItemCommandOutput> {
@@ -189,6 +224,10 @@ describe("report suspicious activity controller", () => {
 
   describe("Submit suspicious activity report", () => {
     it("should send event to SNS with device information", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return true;
+      });
       // Arrange
       req.body.page = "1";
       const TXMA_HEADER_VALUE = "TXMA_HEADER_VALUE";
@@ -228,6 +267,11 @@ describe("report suspicious activity controller", () => {
       req.body.page = "1";
       req.headers = {};
 
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return true;
+      });
+
       // Act
       await reportSuspiciousActivityPost(
         req as Request,
@@ -252,6 +296,39 @@ describe("report suspicious activity controller", () => {
         session_id: "session-id",
         reported_suspicious_time: 101,
       });
+    });
+
+    it("Should render 404 in POST view when report suspicious activity is false", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return false;
+      });
+      // Act
+      await reportSuspiciousActivityPost(
+        req as Request,
+        res as Response,
+        () => {}
+      );
+
+      // Assert
+      expect(res.status).to.have.been.calledOnceWith(404);
+      expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
+    });
+
+    it("Should render 404 in CONFIRMATION view when report suspicious activity is false", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return false;
+      });
+      // Act
+      await reportSuspiciousActivityConfirmation(
+        req as Request,
+        res as Response
+      );
+
+      // Assert
+      expect(res.status).to.have.been.calledOnceWith(404);
+      expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
     });
   });
 });
