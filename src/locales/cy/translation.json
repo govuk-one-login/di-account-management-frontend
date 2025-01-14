@@ -824,6 +824,12 @@
         "description": "Llwytho canlyniadau asesu risg amgylcheddol i'w defnyddio ar gyfer asesiadau cyfunol.",
         "link_text": "Ewch i'ch Cyfrif gwasanaeth asesu llygredd aer",
         "link_href": "https://get-an-air-pollution-assessment-archive.service.gov.uk"
+      },
+      "KcKmx2g1GH6ersWFvzMi1bhehq4": {
+        "header": "Eich GOV.UK One Login",
+        "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
+        "link_text": "",
+        "link_href": "https://home.account.gov.uk"
       }
     },
     "integration": {
@@ -1090,6 +1096,12 @@
         "description": "Llwytho canlyniadau asesu risg amgylcheddol i'w defnyddio ar gyfer asesiadau cyfunol.",
         "link_text": "Ewch i'ch Cyfrif gwasanaeth asesu llygredd aer",
         "link_href": "https://get-an-air-pollution-assessment-archive.service.gov.uk"
+      },
+      "Y8xi2wDAaRvWYlEkoExOUZbAPaYyBEhB": {
+        "header": "Eich GOV.UK One Login",
+        "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
+        "link_text": "",
+        "link_href": "https://home.integration.account.gov.uk"
       }
     },
     "staging": {
@@ -1344,6 +1356,12 @@
         "description": "Llwytho canlyniadau asesu risg amgylcheddol i'w defnyddio ar gyfer asesiadau cyfunol.",
         "link_text": "Ewch i'ch Cyfrif gwasanaeth asesu llygredd aer",
         "link_href": "https://register-dev.aerius.uk"
+      },
+      "EMGmY82k-92QSakDl_9keKDFmZY": {
+        "header": "Eich GOV.UK One Login",
+        "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
+        "link_text": "",
+        "link_href": "https://home.staging.account.gov.uk"
       }
     },
     "build": {
@@ -1598,6 +1616,12 @@
         "description": "Llwytho canlyniadau asesu risg amgylcheddol i'w defnyddio ar gyfer asesiadau cyfunol.",
         "link_text": "Ewch i'ch Cyfrif gwasanaeth asesu llygredd aer",
         "link_href": "https://register-dev.aerius.uk"
+      },
+      "oneLoginHome": {
+        "header": "Eich GOV.UK One Login",
+        "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
+        "link_text": "",
+        "link_href": "https://home.build.account.gov.uk"
       }
     },
     "dev": {
@@ -1852,6 +1876,12 @@
         "description": "Llwytho canlyniadau asesu risg amgylcheddol i'w defnyddio ar gyfer asesiadau cyfunol.",
         "link_text": "Ewch i'ch Cyfrif gwasanaeth asesu llygredd aer",
         "link_href": "https://register-dev.aerius.uk"
+      },
+      "oneLoginHome": {
+        "header": "Eich GOV.UK One Login",
+        "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
+        "link_text": "",
+        "link_href": "https://home.dev.account.gov.uk"
       }
     },
     "local": {
@@ -2106,6 +2136,12 @@
         "description": "Llwytho canlyniadau asesu risg amgylcheddol i'w defnyddio ar gyfer asesiadau cyfunol.",
         "link_text": "Ewch i'ch Cyfrif gwasanaeth asesu llygredd aer",
         "link_href": "https://register-dev.aerius.uk"
+      },
+      "oneLoginHome": {
+        "header": "Eich GOV.UK One Login",
+        "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
+        "link_text": "",
+        "link_href": "https://home.dev.account.gov.uk"
       }
     }
   }
