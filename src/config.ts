@@ -206,6 +206,8 @@ const CHECK_FAMILY_ELIGIBILITY_PROD = "CKHfr_Kz84LYFnsP7m6YJBXqBzw";
 const CHECK_FAMILY_ELIGIBILITY_NON_PROD = "checkFamilyEligibility";
 const FIND_A_TENDER_PROD = "L8SSq5Iz8DstkBgno0Hx5aujelE";
 const FIND_A_TENDER_NON_PROD = "findATender";
+const AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD = "glcH6E9VxtnCAPPwBt550zDh22Q";
+const AIR_POLLUTION_ASSESMENT_ARCHIVE_NON_PROD = "airPollutionAssesment";
 
 export const getAllowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -281,6 +283,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   DFE_QUALIFIED_TEACHER_STATUS_NON_PROD,
   FIND_A_TENDER_PROD,
   FIND_A_TENDER_NON_PROD,
+  AIR_POLLUTION_ASSESMENT_ARCHIVE_NON_PROD,
+  AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD,
 ];
 
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
@@ -362,6 +366,7 @@ export const clientsToShowInSearchProd: string[] = [
   FAA_PROD,
   DFE_TEACHER_VACANCIES_PROD,
   CMAD_PROD,
+  AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD,
 ];
 
 function getProtocol(): string {
