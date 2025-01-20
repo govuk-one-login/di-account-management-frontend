@@ -203,7 +203,12 @@
       "activityHistory": {
         "heading": "Activity history",
         "link": "See your activity history",
-        "info": "See what you’ve visited with your GOV.UK One Login and when."
+        "info": "See what you’ve visited with your GOV.UK One Login and when.",
+        "securityNoticeTitle": "If you see something you do not recognise",
+        "securityNoticeContent": [
+          "You should <a target='_blank' href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK Login secure.",
+          "You can also <a target='_blank' href='[reportActivityLink]' class='govuk-link'>report the activity to GOV.UK One Login using phone or webchat (opens in new tab)</a>"
+        ]
       }
     },
     "confirmAddMfaMethod": {
