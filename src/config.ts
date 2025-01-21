@@ -431,6 +431,10 @@ export function googleAnalytics4Enabled(): boolean {
   return process.env.GA4_ENABLED === "true";
 }
 
+export function missionLabsWebSocketAddress(): string {
+  return process.env.MISSION_LAB_WEBSOCKET_ADDR;
+}
+
 export function universalAnalyticsEnabled(): boolean {
   return process.env.UA_ENABLED === "true";
 }

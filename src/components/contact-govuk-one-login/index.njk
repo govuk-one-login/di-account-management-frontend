@@ -161,7 +161,7 @@
   <script id="smartagent" type="module" defer
     src="{{ webchatSource }}/loader/main.js" 
     data-company="hgsgds" facia="{{webchatLang}}"
-    nonce="{{ nonce }}">
+    nonce="{{ scriptNonce }}">
   </script>
 
   <script type="text/javascript" nonce='{{scriptNonce}}'>
@@ -205,7 +205,7 @@
 
     // the webchat script injects other scripts and assets into the page
     // therefore the "saEvents" object is not immediately available to subscribe to
-    // this checks whether "saEvents" is available every 200ms 
+    // this checks whether "saEvents" is available every 200ms
     var webchatInterval = setInterval(waitForSaEvents, 200);
     var cancelInterval = setTimeout(function(){
       // if webchat events still unavailable after 10s, clear the interval
