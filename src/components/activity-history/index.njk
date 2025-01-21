@@ -26,11 +26,11 @@
         <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
         <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
 
-        {% if !reportSuspiciousActivity %}
+        {% if not reportSuspiciousActivity %}
           {{ govukDetails({ 
             summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
-            html: 'pages.activityHistory.securityNoticeContent' | translate | join('</p><p class="govuk-body">') | safe | replace("[reportActivityLink]", "CONTACT" | getPath) | replace("[changePasswordLink]", "CHANGE_PASSWORD" | getPath)
-          }) )}}
+            html: securityNoticeHtml | safe
+          }) }}
         {% endif %}
       {% else %}
         {# Fallback in case there is no activity history – this should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
