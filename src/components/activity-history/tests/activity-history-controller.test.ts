@@ -58,13 +58,15 @@ describe("Activity history controller", () => {
         },
         log: { error: sandbox.fake(), info: sandbox.fake() },
         i18n: { language: "en" },
+        t: (k: string) => k,
       };
       await activityHistoryGet(req as Request, res as Response).then(() => {
-        expect(res.render).to.have.been.calledWith(
+        expect(res.render).to.have.been.calledWithMatch(
           "activity-history/index.njk",
           {
             env: getAppEnv(),
             reportSuspiciousActivity: reportSuspiciousActivity(),
+            securityNoticeHtml: sinon.match.string,
             data: [],
             pagination: {},
             backLink: PATH_DATA.SECURITY.url,

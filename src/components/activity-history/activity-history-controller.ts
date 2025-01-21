@@ -60,9 +60,18 @@ export async function activityHistoryGet(
       logger.error("user_id missing from session");
     }
 
+    const securityNoticeHtml = `
+    <p class="govuk-body">
+      ${req.t("pages.activityHistory.securityNoticeContent1").replace("[changePasswordLink]", PATH_DATA.SECURITY.url)}
+    </p>
+    <p class="govuk-body">
+      ${req.t("pages.activityHistory.securityNoticeContent2").replace("[reportActivityLink]", PATH_DATA.CONTACT.url)}
+    </p>`;
+
     res.render("activity-history/index.njk", {
       data: formattedActivityLog,
       reportSuspiciousActivity: reportSuspiciousActivityFlag,
+      securityNoticeHtml,
       env: env,
       pagination: pagination,
       backLink: backLink,

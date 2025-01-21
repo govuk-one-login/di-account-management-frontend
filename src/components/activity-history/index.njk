@@ -1,6 +1,7 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.activityHistory.title' | translate %}
 {% set paginationItems = [] %}
 {% if pagination.items and pagination.currentPage %}
@@ -24,6 +25,13 @@
       {% if data.length %} 
         <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
         <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
+
+        {% if not reportSuspiciousActivity %}
+          {{ govukDetails({ 
+            summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
+            html: securityNoticeHtml | safe
+          }) }}
+        {% endif %}
       {% else %}
         {# Fallback in case there is no activity history – this should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
         {{ govukInsetText({

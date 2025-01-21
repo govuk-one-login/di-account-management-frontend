@@ -224,7 +224,7 @@ create_and_populate_activity_log_table() {
         ' \
       --region eu-west-2
 
-  npm install -g uuid
+  npm install -g uuid@10.0.0
 
   # Generate 20 activity logs
   i=1
