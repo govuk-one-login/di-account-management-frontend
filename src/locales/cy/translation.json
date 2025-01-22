@@ -830,6 +830,12 @@
         "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
         "link_text": "",
         "link_href": "https://home.account.gov.uk"
+      },
+      "PVTFrS4kgHYHFDqEb5IFanlIfcM": {
+        "header": "Gofyn am wiriad DBS safonol neu uwch",
+        "description": "Gwneud cais am wiriadau DBS safonol ac uwch",
+        "link_text": "Ewch i'ch cyfrif gwirio DBS safonol ac uwch",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "integration": {
@@ -1102,6 +1108,12 @@
         "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
         "link_text": "",
         "link_href": "https://home.integration.account.gov.uk"
+      },
+      "PVTFrS4kgHYHFDqEb5IFanlIfcM": {
+        "header": "Gofyn am wiriad DBS safonol neu uwch",
+        "description": "Gwneud cais am wiriadau DBS safonol ac uwch",
+        "link_text": "Ewch i'ch cyfrif gwirio DBS safonol ac uwch",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "staging": {
@@ -1362,6 +1374,12 @@
         "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
         "link_text": "",
         "link_href": "https://home.staging.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Gofyn am wiriad DBS safonol neu uwch",
+        "description": "Gwneud cais am wiriadau DBS safonol ac uwch",
+        "link_text": "Ewch i'ch cyfrif gwirio DBS safonol ac uwch",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "build": {
@@ -1622,6 +1640,12 @@
         "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
         "link_text": "",
         "link_href": "https://home.build.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Gofyn am wiriad DBS safonol neu uwch",
+        "description": "Gwneud cais am wiriadau DBS safonol ac uwch",
+        "link_text": "Ewch i'ch cyfrif gwirio DBS safonol ac uwch",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "dev": {
@@ -1882,6 +1906,12 @@
         "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
         "link_text": "",
         "link_href": "https://home.dev.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Gofyn am wiriad DBS safonol neu uwch",
+        "description": "Gwneud cais am wiriadau DBS safonol ac uwch",
+        "link_text": "Ewch i'ch cyfrif gwirio DBS safonol ac uwch",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "local": {
@@ -2142,6 +2172,12 @@
         "description": "Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'",
         "link_text": "",
         "link_href": "https://home.dev.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Gofyn am wiriad DBS safonol neu uwch",
+        "description": "Gwneud cais am wiriadau DBS safonol ac uwch",
+        "link_text": "Ewch i'ch cyfrif gwirio DBS safonol ac uwch",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     }
   }
