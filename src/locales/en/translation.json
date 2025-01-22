@@ -1012,6 +1012,12 @@
         "description": "This includes ‘Security’ and ‘Your services’",
         "link_text": "",
         "link_href": "https://home.account.gov.uk"
+      },
+      "PVTFrS4kgHYHFDqEb5IFanlIfcM": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "integration": {
@@ -1290,6 +1296,12 @@
         "description": "This includes ‘Security’ and ‘Your services’",
         "link_text": "",
         "link_href": "https://home.integration.account.gov.uk"
+      },
+      "PVTFrS4kgHYHFDqEb5IFanlIfcM": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "staging": {
@@ -1556,6 +1568,12 @@
         "description": "This includes ‘Security’ and ‘Your services’",
         "link_text": "",
         "link_href": "https://home.staging.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "build": {
@@ -1822,6 +1840,12 @@
         "description": "This includes ‘Security’ and ‘Your services’",
         "link_text": "",
         "link_href": "https://home.build.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "dev": {
@@ -2088,6 +2112,12 @@
         "description": "This includes ‘Security’ and ‘Your services’",
         "link_text": "",
         "link_href": "https://home.dev.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "local": {
@@ -2354,6 +2384,12 @@
         "description": "This includes ‘Security’ and ‘Your services’",
         "link_text": "",
         "link_href": "https://home.dev.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     }
   }
