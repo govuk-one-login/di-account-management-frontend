@@ -656,7 +656,9 @@
       "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
-        "paragraphs": ["Read our guidance if you're having a problem with:"],
+        "paragraphs": [
+          "Read our guidance if you're having a problem with:"
+        ],
         "links": [
           {
             "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app",
@@ -719,7 +721,9 @@
         },
         "phone": {
           "heading": "Phone",
-          "paragraphs": ["You'll need your reference code when you call."],
+          "paragraphs": [
+            "You'll need your reference code when you call."
+          ],
           "insetText": {
             "paragraphs": [
               "<strong>From the UK:</strong><br>0300 373 9020",
@@ -1024,6 +1028,12 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      },
+      "dPIP320ek5A50_12a00U2sEoM0k": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
       }
     },
     "integration": {
@@ -1314,6 +1324,12 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      },
+      "dPIP320ek5A50_12a00U2sEoM0k": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
       }
     },
     "staging": {
@@ -1592,6 +1608,12 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
       }
     },
     "build": {
@@ -1870,6 +1892,12 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
       }
     },
     "dev": {
@@ -2148,6 +2176,12 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
       }
     },
     "local": {
@@ -2426,6 +2460,12 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
       }
     }
   }
