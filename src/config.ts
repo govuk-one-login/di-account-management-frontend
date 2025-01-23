@@ -208,6 +208,8 @@ const FIND_A_TENDER_PROD = "L8SSq5Iz8DstkBgno0Hx5aujelE";
 const FIND_A_TENDER_NON_PROD = "findATender";
 const AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD = "glcH6E9VxtnCAPPwBt550zDh22Q";
 const AIR_POLLUTION_ASSESMENT_ARCHIVE_NON_PROD = "airPollutionAssesment";
+const HOME_OFFICE_SEAS_PROD = "PVTFrS4kgHYHFDqEb5IFanlIfcM";
+const HOME_OFFICE_SEAS_NON_PROD = "homeOfficeSEAS";
 
 export const getAllowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -285,6 +287,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   FIND_A_TENDER_NON_PROD,
   AIR_POLLUTION_ASSESMENT_ARCHIVE_NON_PROD,
   AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD,
+  HOME_OFFICE_SEAS_NON_PROD,
+  HOME_OFFICE_SEAS_PROD,
 ];
 
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
