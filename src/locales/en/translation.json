@@ -656,9 +656,7 @@
       "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
-        "paragraphs": [
-          "Read our guidance if you're having a problem with:"
-        ],
+        "paragraphs": ["Read our guidance if you're having a problem with:"],
         "links": [
           {
             "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app",
@@ -721,9 +719,7 @@
         },
         "phone": {
           "heading": "Phone",
-          "paragraphs": [
-            "You'll need your reference code when you call."
-          ],
+          "paragraphs": ["You'll need your reference code when you call."],
           "insetText": {
             "paragraphs": [
               "<strong>From the UK:</strong><br>0300 373 9020",
@@ -1892,6 +1888,284 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      },
+      "dbTrade": {
+        "header": "Apply for a licence to provide sanctioned trade services",
+        "description": "Start or continue a licence application to provide sanctioned trade services.",
+        "link_text": "Go to your sanctioned trade services account",
+        "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      }
+    },
+    "demo": {
+      "gov-uk": {
+        "header": "GOV.UK email subscriptions",
+        "description": "See and manage the updates you get about GOV.UK pages you’re interested in.",
+        "link_text": "Go to your GOV.UK email subscriptions",
+        "link_href": "https://www.integration.publishing.service.gov.uk/email/manage?from=your-services"
+      },
+      "lite": {
+        "header": "LITE (Licensing for International Trade and Enterprise)",
+        "description": "Apply for or manage export control licences for controlled goods.",
+        "link_text": "Go to your LITE account",
+        "link_href": "https://exporter.lite.private-beta.service.trade.gov.uk/"
+      },
+      "ofqual": {
+        "header": "Ofqual subject matter specialist account",
+        "description": "Apply to give specialist advice to Ofqual.",
+        "link_text": "Go to your Ofqual subject matter specialist account",
+        "link_href": "https://subject-matter-specialists.ofqual.gov.uk/"
+      },
+      "modernSlavery": {
+        "header": "Modern slavery statement registry",
+        "description": "Add or edit the statements that say what your organisation is doing to eliminate modern slavery from its supply chains.",
+        "link_text": "Go to your modern slavery statement registry account",
+        "link_href": "https://modern-slavery-statement-registry.service.gov.uk/manage-organisations"
+      },
+      "dbs": {
+        "header": "Request a basic DBS check",
+        "link_text": "Request a basic DBS check",
+        "link_href": "https://www.gov.uk/request-copy-criminal-record"
+      },
+      "vehicleOperatorLicense": {
+        "header": "Apply for a vehicle operator licence",
+        "link_text": "Apply for a vehicle operator licence",
+        "link_href": "https://www.gov.uk/apply-vehicle-operator-licence"
+      },
+      "socialWorkEngland": {
+        "header": "Apply to become a registered social worker in England",
+        "link_text": "Apply to become a registered social worker in England",
+        "link_href": "https://www.socialworkengland.org.uk/registration/apply-for-registration"
+      },
+      "mortgageDeed": {
+        "header": "Sign your mortgage deed",
+        "link_text": "Sign your mortgage deed",
+        "link_href": "https://sign-your-mortgage-deed.landregistry.gov.uk"
+      },
+      "apprenticeshipsService": {
+        "header": "Manage apprenticeships",
+        "description": "Manage your apprentices, training providers, recruitment and funding.",
+        "link_text": "Go to your apprenticeship service account",
+        "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "findAndApplyForAGrant": {
+        "header": "Find and apply for a grant",
+        "description": "Search and apply for government grant funding",
+        "link_text": "Go to your grants account",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
+      },
+      "criminalInjuriesCompensation": {
+        "header": "Criminal injuries compensation",
+        "description": "Start or continue an application to get compensation for injuries and losses if you've been a victim of violent crime.",
+        "link_text": "Go to your criminal injuries compensation account",
+        "link_href": "https://claim-criminal-injuries-compensation.service.justice.gov.uk/account"
+      },
+      "ukmcab": {
+        "header": "Find a UK market conformity assessment body",
+        "description": "Manage conformity assessment bodies on the register.",
+        "link_text": "Go to your conformity assessment body account",
+        "link_href": "https://find-a-conformity-assessment-body.service.gov.uk/account/login"
+      },
+      "manageFamilySupport": {
+        "header": "Manage family support services and accounts",
+        "description": "Add and manage accounts and services in 'Find support for your family' and 'Connect families to support'.",
+        "link_text": "Go to your manage family support services account",
+        "link_href": "https://manage-family-support-services-and-accounts.education.gov.uk/Welcome"
+      },
+      "connectFamilies": {
+        "header": "Connect families to support",
+        "description": "Find local support services for children, young people, parents and carers.",
+        "link_text": "Go to your connect families to support account",
+        "link_href": "https://connect-families-to-support.education.gov.uk/ProfessionalReferral/Search"
+      },
+      "apar": {
+        "header": "Apprenticeship provider and assessment register",
+        "description": "Start or continue an application to join the apprenticeship provider and assessment register.",
+        "link_text": "Go to your apprenticeship provider and assessment register account",
+        "link_href": "https://apply.apprenticeships.education.gov.uk/signIn"
+      },
+      "aas": {
+        "header": "Apprenticeship assessment service (AAS)",
+        "description": "See or record your apprenticeship assessments.",
+        "link_text": "Go to your apprenticeship assessments account",
+        "link_href": "https://assessors.apprenticeships.education.gov.uk/account/signin"
+      },
+      "gbis": {
+        "header": "Great British Insulation Scheme (GBIS)",
+        "description": "Send your completed customer energy efficiency measures to Ofgem for review.",
+        "link_text": "Go to your GBIS dashboard",
+        "link_href": "https://gbinsulationscheme.ofgem.gov.uk/"
+      },
+      "veteransCard": {
+        "header": "Apply for an HM Armed Forces Veteran Card",
+        "link_text": "Apply for an HM Armed Forces Veteran Card",
+        "link_href": "https://www.gov.uk/veteran-card"
+      },
+      "childDevelopmentTraining": {
+        "header": "Early years child development training",
+        "description": "Training on child development, including advice on supporting child development in your early years setting.",
+        "link_text": "Go to your early years child development training account",
+        "link_href": "https://child-development-training.education.gov.uk/my-modules"
+      },
+      "hmrc": {
+        "header": "A service run by HM Revenue and Customs (HMRC)",
+        "hint_text": "For example services about tax, childcare, or state pensions.",
+        "paragraph1": "At the moment, GOV.UK One Login cannot show you which HMRC service you’ve used.",
+        "paragraph2": "We’re working to make this possible.",
+        "link_text": "Find the HMRC service you need",
+        "link_href": "https://www.gov.uk/government/organisations/hm-revenue-customs"
+      },
+      "dfeFindAndUseAnApi": {
+        "header": "Find and use an API from the Department for Education",
+        "description": "Find and use a Department for Education API to connect to their digital services.",
+        "link_text": "Go to your DfE find and use an API account",
+        "link_href": "https://beta-find-and-use-an-api.education.gov.uk/identity/signin"
+      },
+      "mojPlanYourFuture": {
+        "header": "Plan your future",
+        "description": "Access your appointments and information about your probation requirements.",
+        "link_text": "Go to your plan your future account",
+        "link_href": "https://plan-your-future.service.justice.gov.uk/otp"
+      },
+      "welshFisheriesPermit": {
+        "header": "Manage fishing permits and catch returns in Wales",
+        "description": "Apply for a fishing permit and submit your catch returns in Wales.",
+        "link_text": "Go to your fishing permits and catch returns account",
+        "link_href": "https://fishingpermitsandcatches.service.gov.wales"
+      },
+      "iaa": {
+        "header": "Register of immigration advisers",
+        "description": "Authorise and register an immigration adviser or organisation.",
+        "link_text": "Go to your Register of immigration advisers account",
+        "link_href": "https://portal.oisc.gov.uk/"
+      },
+      "prisonVisits": {
+        "header": "Visit someone in prison",
+        "description": "Make a booking to visit someone in prison.",
+        "link_text": "Go to your visit someone in prison account",
+        "link_href": "https://prison-visits.service.justice.gov.uk/"
+      },
+      "ate": {
+        "header": "Update your capital schemes",
+        "description": "Update Active Travel England about your capital schemes.",
+        "link_text": "Go to your capital schemes",
+        "link_href": "https://update-your-capital-schemes.activetravelengland.gov.uk/"
+      },
+      "faa": {
+        "header": "Find an apprenticeship",
+        "description": "Search and apply for apprenticeships in England.",
+        "link_text": "Go to your account to search for an apprenticeship",
+        "link_href": "https://www.findapprenticeship.service.gov.uk/apprenticeshipsearch"
+      },
+      "PDPConnect": {
+        "header": "PDP Connect",
+        "description": "Connect and manage pension data in PDP Connect.",
+        "link_text": "Go to your PDP Connect account",
+        "link_href": "https://www.pensionsdashboard-service.org.uk/s/"
+      },
+      "drivingMedicalCondition": {
+        "header": "Driving with a medical condition",
+        "link_text": "Driving with a medical condition",
+        "link_href": "https://www.gov.uk/browse/driving/disability-health-condition"
+      },
+      "useLastingPowerOfAttorney": {
+        "header": "Use a lasting power of attorney",
+        "description": "Share details of a lasting power of attorney.",
+        "link_text": "Go to your lasting power of attorney dashboard",
+        "link_href": "https://use-lasting-power-of-attorney.service.gov.uk/lpa/dashboard"
+      },
+      "CMAD": {
+        "header": "Confirm my apprenticeship details (CMAD)",
+        "description": "Check and confirm your apprenticeship details.",
+        "link_text": "Go to your account to confirm your apprenticeship",
+        "link_href": "https://confirm.my.apprenticeships.education.gov.uk/"
+      },
+      "dfeClaimAdditionalPayments": {
+        "header": "Claim additional payments for teaching",
+        "link_text": "Claim additional payments for teaching",
+        "link_href": "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details"
+      },
+      "companyHouseAccounts": {
+        "header": "Find and update company information",
+        "description": "View and update your company information, for example, filing history and registered office address.",
+        "link_text": "Go to Companies House",
+        "link_href": "https://find-and-update.company-information.service.gov.uk/"
+      },
+      "dwpBenefitOwed": {
+        "header": "Repay and manage benefit money you owe",
+        "description": "Repay any money you owe to the Department for Work and Pensions (DWP).",
+        "link_text": "Go to your Repay and manage benefit money you owe account",
+        "link_href": "https://www.repay-manage-benefit-owed.service.gov.uk/oidv-sign-in"
+      },
+      "dbtApplyForAnExportCertificate": {
+        "header": "Apply for an export certificate",
+        "description": "Apply for a certificate to export cosmetics, aerosols, pesticides or other goods.",
+        "link_text": "Go to your export certificate account",
+        "link_href": "https://apply-for-an-export-certificate.service.gov.uk/workbasket/"
+      },
+      "hmpoCancelPassport": {
+        "header": "Cancel a lost or stolen passport",
+        "description": "Report a passport as lost or stolen or apply for a replacement.",
+        "link_text": "Go to your cancel a lost or stolen passport account",
+        "link_href": "https://www.loststolenpassport.service.gov.uk/lost-stolen/passport-holder"
+      },
+      "defraDangerousDogsIndex": {
+        "header": "Dangerous dogs index",
+        "description": "Search the Dangerous dogs index for dogs or owners to view their details and exemption status.",
+        "link_text": "Go to your Dangerous dogs index account",
+        "link_href": "https://dogsindex.defra.gov.uk"
+      },
+      "dbtApplyForAnImportLicense": {
+        "header": "Apply for an import licence",
+        "description": "Apply for an import licence for anti-personnel mines, torture equipment for display, firearms and ammunition.",
+        "link_text": "Go to your import licence account",
+        "link_href": "https://apply-for-an-import-licence.service.gov.uk/workbasket/"
+      },
+      "dfeTeacherVacancies": {
+        "header": "Teaching vacancies in England",
+        "description": "Search and apply for teaching, leadership and education support vacancies.",
+        "link_text": "Go to your Teaching vacancies account",
+        "link_href": "https://teaching-vacancies.service.gov.uk/jobseekers/account"
+      },
+      "ofgemLafReg": {
+        "header": "Local authority flexible register",
+        "description": "Upload declaration notification templates to Ofgem and manage your users' accounts.",
+        "link_text": "Go to your flexible register account",
+        "link_href": "https://laf.ofgem.gov.uk/"
+      },
+      "dfeQualifiedTeacherStatus": {
+        "header": "Apply for qualified teacher status (QTS)",
+        "description": "Eligible teachers who trained outside of England can apply for QTS.",
+        "link_text": "Go to the apply for qualified teacher status (QTS) service",
+        "link_href": "https://apply-for-qts-in-england.education.gov.uk/teacher/application"
+      },
+      "checkFamilyEligibility": {
+        "header": "Check a family’s eligibility for free school meals",
+        "link_text": "Check a family’s eligibility for free school meals",
+        "link_href": "https://check-free-school-meals.education.gov.uk/"
+      },
+      "findATender": {
+        "header": "Find a tender",
+        "description": "Publish opportunities so that suppliers can search and apply for them.",
+        "link_text": "Go to your Find a tender account",
+        "link_href": "https://supplier-information.private-beta.find-tender.service.gov.uk/"
+      },
+      "airPollutionAssesment": {
+        "header": "Air pollution assessment service",
+        "description": "Upload environmental risk assessment results to use for in-combination assessments.",
+        "link_text": "Go to your Air pollution assessment service account",
+        "link_href": "https://register-dev.aerius.uk"
+      },
+      "oneLoginHome": {
+        "header": "Your GOV.UK One Login",
+        "description": "This includes ‘Security’ and ‘Your services’",
+        "link_text": "",
+        "link_href": "https://home.build.account.gov.uk"
+      },
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks.",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       },
       "dbTrade": {
         "header": "Apply for a licence to provide sanctioned trade services",
