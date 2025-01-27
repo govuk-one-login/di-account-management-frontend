@@ -1018,6 +1018,11 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      "PVTFrS4kgHYHFDqEb5IFanlIfcM": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks.",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "integration": {
@@ -1302,6 +1307,11 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      "PVTFrS4kgHYHFDqEb5IFanlIfcM": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks",
+        "link_text": "Go to your standard and enhanced DBS checks account.",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "staging": {
@@ -1574,6 +1584,11 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks.",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "build": {
@@ -1846,6 +1861,11 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks.",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "dev": {
@@ -2118,6 +2138,11 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks.",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     },
     "local": {
@@ -2390,6 +2415,11 @@
         "description": "Apply for a teacher training course to teach in England.",
         "link_text": "Go to your Apply for teacher training account",
         "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      "homeOfficeSEAS": {
+        "header": "Request a standard or enhanced DBS check",
+        "description": "Apply for standard and enhanced DBS checks.",
+        "link_text": "Go to your standard and enhanced DBS checks account",
+        "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       }
     }
   }

@@ -210,6 +210,9 @@ const AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD = "glcH6E9VxtnCAPPwBt550zDh22Q";
 const AIR_POLLUTION_ASSESMENT_ARCHIVE_NON_PROD = "airPollutionAssesment";
 const DFEAPPLYFORTEACHERTRAINING_PROD = "wo1OYi8Z2fCQEX-9B8IPS2-F-ZE";
 const DFEAPPLYFORTEACHERTRAINING_NON_PROD = "dfeApplyForTeacherTraining";
+const HOME_OFFICE_SEAS_PROD = "PVTFrS4kgHYHFDqEb5IFanlIfcM";
+const HOME_OFFICE_SEAS_NON_PROD = "homeOfficeSEAS";
+
 
 export const getAllowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -289,6 +292,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD,
   DFEAPPLYFORTEACHERTRAINING_PROD,
   DFEAPPLYFORTEACHERTRAINING_NON_PROD,
+  HOME_OFFICE_SEAS_NON_PROD,
+  HOME_OFFICE_SEAS_PROD,
 ];
 
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
@@ -433,6 +438,10 @@ export function universalAnalyticsGtmContainerId(): string {
 
 export function googleAnalytics4Enabled(): boolean {
   return process.env.GA4_ENABLED === "true";
+}
+
+export function missionLabsWebSocketAddress(): string {
+  return process.env.MISSION_LAB_WEBSOCKET_ADDR;
 }
 
 export function universalAnalyticsEnabled(): boolean {
