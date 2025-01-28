@@ -1961,6 +1961,12 @@
         "link_text": "Ewch i'ch cyfrif gwirio DBS safonol ac uwch",
         "link_href": "https://www.request-standard-enchanced-dbs-check.gov.uk/"
       },
+      "dfeApplyForTeacherTraining": {
+        "header": "Apply for teacher training",
+        "description": "Apply for a teacher training course to teach in England.",
+        "link_text": "Go to your Apply for teacher training account",
+        "link_href": "https://www.apply-for-teacher-training.service.gov.uk/candidate/"
+      },
       "dbTrade": {
         "header": "Apply for a licence to provide sanctioned trade services",
         "description": "Start or continue a licence application to provide sanctioned trade services.",
