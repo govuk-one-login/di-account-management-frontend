@@ -1030,6 +1030,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "Mh3SUEDHB74A2SIB_1VAXZKG_iw": {
+        "header": "Manage intellectual property",
+        "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
+        "link_text": "Go to manage your intellectual property",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "integration": {
@@ -1326,6 +1332,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "Mh3SUEDHB74A2SIB_1VAXZKG_iw": {
+        "header": "Manage intellectual property",
+        "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
+        "link_text": "Go to manage your intellectual property",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "staging": {
@@ -1610,6 +1622,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Manage intellectual property",
+        "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
+        "link_text": "Go to manage your intellectual property",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "build": {
@@ -1894,6 +1912,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Manage intellectual property",
+        "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
+        "link_text": "Go to manage your intellectual property",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "demo": {
@@ -2178,6 +2202,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Manage intellectual property",
+        "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
+        "link_text": "Go to manage your intellectual property",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "dev": {
@@ -2462,6 +2492,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Manage intellectual property",
+        "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
+        "link_text": "Go to manage your intellectual property",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "local": {
@@ -2746,6 +2782,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Manage intellectual property",
+        "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
+        "link_text": "Go to manage your intellectual property",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     }
   }

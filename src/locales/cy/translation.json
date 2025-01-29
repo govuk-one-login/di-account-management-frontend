@@ -848,6 +848,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "Mh3SUEDHB74A2SIB_1VAXZKG_iw": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "integration": {
@@ -1138,6 +1144,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "Mh3SUEDHB74A2SIB_1VAXZKG_iw": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "staging": {
@@ -1416,6 +1428,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "build": {
@@ -1694,6 +1712,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "demo": {
@@ -1972,6 +1996,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "dev": {
@@ -2250,6 +2280,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "local": {
@@ -2528,6 +2564,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     }
   }
