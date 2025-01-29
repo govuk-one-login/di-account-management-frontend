@@ -214,6 +214,8 @@ const DFE_APPLY_FOR_TEACHER_TRAINING_PROD = "wo1OYi8Z2fCQEX-9B8IPS2-F-ZE";
 const DFE_APPLY_FOR_TEACHER_TRAINING_NON_PROD = "dfeApplyForTeacherTraining";
 const DB_TRADE_PROD = "dPIP320ek5A50_12a00U2sEoM0k";
 const DB_TRADE_NON_PROD = "dbTrade";
+const INTELLECTUAL_PROPERTY_OFFICE_PROD = "Mh3SUEDHB74A2SIB_1VAXZKG_iw";
+const INTELLECTUAL_PROPERTY_OFFICE_NON_PROD = "intellectualPropertyOffice";
 
 export const getAllowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -297,6 +299,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   DFE_APPLY_FOR_TEACHER_TRAINING_NON_PROD,
   DB_TRADE_PROD,
   DB_TRADE_NON_PROD,
+  INTELLECTUAL_PROPERTY_OFFICE_PROD,
+  INTELLECTUAL_PROPERTY_OFFICE_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];

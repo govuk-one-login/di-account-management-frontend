@@ -619,7 +619,7 @@
       },
       "tya4DoMpw_B7FK5YvuMAj3asc0A": {
         "header": "Darganfod a gwneud cais am grant",
-        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth",
+        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth.",
         "link_text": "Ewch i'ch cyfrif grantiau",
         "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       },
@@ -848,6 +848,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "Mh3SUEDHB74A2SIB_1VAXZKG_iw": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "integration": {
@@ -900,6 +906,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "tya4DoMpw_B7FK5YvuMAj3asc0A": {
+        "header": "Darganfod a gwneud cais am grant",
+        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth.",
+        "link_text": "Ewch i'ch cyfrif grantiau",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       },
       "bGAwNKM0XvnxCAuDQ_rMhhP3dxM": {
         "header": "Digolledau anafiadau troseddol",
@@ -1138,6 +1150,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "Mh3SUEDHB74A2SIB_1VAXZKG_iw": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "staging": {
@@ -1190,6 +1208,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "findAndApplyForAGrant": {
+        "header": "Darganfod a gwneud cais am grant",
+        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth.",
+        "link_text": "Ewch i'ch cyfrif grantiau",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       },
       "criminalInjuriesCompensation": {
         "header": "Digolledau anafiadau troseddol",
@@ -1416,6 +1440,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "build": {
@@ -1468,6 +1498,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "findAndApplyForAGrant": {
+        "header": "Darganfod a gwneud cais am grant",
+        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth.",
+        "link_text": "Ewch i'ch cyfrif grantiau",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       },
       "criminalInjuriesCompensation": {
         "header": "Digolledau anafiadau troseddol",
@@ -1694,6 +1730,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "demo": {
@@ -1747,6 +1789,12 @@
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       },
+      "findAndApplyForAGrant": {
+        "header": "Darganfod a gwneud cais am grant",
+        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth.",
+        "link_text": "Ewch i'ch cyfrif grantiau",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
+      },
       "criminalInjuriesCompensation": {
         "header": "Digolledau anafiadau troseddol",
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
@@ -1972,6 +2020,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "dev": {
@@ -2025,6 +2079,12 @@
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
       },
+      "findAndApplyForAGrant": {
+        "header": "Darganfod a gwneud cais am grant",
+        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth.",
+        "link_text": "Ewch i'ch cyfrif grantiau",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
+      },
       "criminalInjuriesCompensation": {
         "header": "Digolledau anafiadau troseddol",
         "description": "Dechrau neu barhau â chais i gael eich digolledu am anafiadau neu golledion os ydych wedi bod yn ddioddefwr o drosedd treisiol.",
@@ -2250,6 +2310,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     },
     "local": {
@@ -2302,6 +2368,12 @@
         "description": "Rheoli eich prentisiaid, darparwyr hyfforddiant, recriwtio a chyllid.",
         "link_text": "Ewch i'ch cyfrif gwasanaeth prentisiaeth",
         "link_href": "https://accounts.manage-apprenticeships.service.gov.uk/service"
+      },
+      "findAndApplyForAGrant": {
+        "header": "Darganfod a gwneud cais am grant",
+        "description": "Chwilio a gwneud cais am gyllid grant gan y llywodraeth.",
+        "link_text": "Ewch i'ch cyfrif grantiau",
+        "link_href": "https://find-government-grants.service.cabinetoffice.gov.uk/apply/applicant"
       },
       "criminalInjuriesCompensation": {
         "header": "Digolledau anafiadau troseddol",
@@ -2528,6 +2600,12 @@
         "description": "Start or continue a licence application to provide sanctioned trade services.",
         "link_text": "Go to your sanctioned trade services account",
         "link_href": "https://apply-sanctioned-services-licence.trade.gov.uk/apply"
+      },
+      "intellectualPropertyOffice": {
+        "header": "Rheoli eiddo deallusol",
+        "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
+        "link_text": "Ewch i reoli eich eiddo deallusol",
+        "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
       }
     }
   }
