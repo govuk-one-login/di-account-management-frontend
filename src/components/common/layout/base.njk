@@ -152,11 +152,9 @@
     <script type="text/javascript" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
     if (window.DI) {
       window.DI.appInit({
-        ga4ContainerId: "{{ga4ContainerId}}",
-        uaContainerId: "{{uaContainerId}}"
+        ga4ContainerId: "{{ga4ContainerId}}"
       }, {
         enableGa4Tracking: {{isGa4Enabled}},
-        enableUaTracking: {{isUaEnabled}},
         cookieDomain: "{{analyticsCookieDomain}}",
         isDataSensitive: true,
         enablePageViewTracking: true,
