@@ -1036,6 +1036,12 @@
         "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
         "link_text": "Go to manage your intellectual property",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
+      },
+      "_cv8flGYkTpGUgCQN7Oab8wV15w": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "integration": {
@@ -1338,6 +1344,12 @@
         "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
         "link_text": "Go to manage your intellectual property",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
+      },
+      "_cv8flGYkTpGUgCQN7Oab8wV15w": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "staging": {
@@ -1628,6 +1640,12 @@
         "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
         "link_text": "Go to manage your intellectual property",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "build": {
@@ -1918,6 +1936,12 @@
         "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
         "link_text": "Go to manage your intellectual property",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "demo": {
@@ -2208,6 +2232,12 @@
         "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
         "link_text": "Go to manage your intellectual property",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "dev": {
@@ -2498,6 +2528,12 @@
         "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
         "link_text": "Go to manage your intellectual property",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "local": {
@@ -2788,6 +2824,12 @@
         "description": "Manage patents and applications you own or represent with the Intellectual Property Office.",
         "link_text": "Go to manage your intellectual property",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     }
   }
