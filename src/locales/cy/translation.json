@@ -854,6 +854,12 @@
         "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
         "link_text": "Ewch i reoli eich eiddo deallusol",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/cy"
+      },
+      "_cv8flGYkTpGUgCQN7Oab8wV15w": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "integration": {
@@ -1156,6 +1162,12 @@
         "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
         "link_text": "Ewch i reoli eich eiddo deallusol",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/cy"
+      },
+      "_cv8flGYkTpGUgCQN7Oab8wV15w": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "staging": {
@@ -1446,6 +1458,12 @@
         "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
         "link_text": "Ewch i reoli eich eiddo deallusol",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/cy"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "build": {
@@ -1736,6 +1754,12 @@
         "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
         "link_text": "Ewch i reoli eich eiddo deallusol",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/cy"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "demo": {
@@ -2026,6 +2050,12 @@
         "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
         "link_text": "Ewch i reoli eich eiddo deallusol",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/cy"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "dev": {
@@ -2316,6 +2346,12 @@
         "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
         "link_text": "Ewch i reoli eich eiddo deallusol",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/cy"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     },
     "local": {
@@ -2606,6 +2642,12 @@
         "description": "Rheoli patentau a cheisiadau rydych yn berchen arnynt neu'n eu cynrychioli gyda'r Swyddfa Eiddo Deallusol.",
         "link_text": "Ewch i reoli eich eiddo deallusol",
         "link_href": "https://www.manage-intellectual-property.service.gov.uk/cy"
+      },
+      "heatNetworkZoning": {
+        "header": "Heat network zoning",
+        "description": "Allows end users to search view and export data based around heat network opportunities.",
+        "link_text": "Heat Network Zoning",
+        "link_href": "https://www.heat-network-zoning.data.gov.uk/"
       }
     }
   }

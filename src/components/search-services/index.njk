@@ -1,40 +1,55 @@
 {% extends "common/layout/base-page.njk" %}
 {% set hideAccountNavigation = true %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set pageTitleName = 'pages.searchServices.title' | translate %}
 
-{% block content %}
+{% block pageContent %}
     <h1 class="govuk-heading-l">{{ "pages.searchServices.heading" | translate }}</h1>
     {% set paragraphs = 'pages.searchServices.paragraphs' | translate({ returnObjects: true }) %}
     {% for paragraph in paragraphs %}
         <p class="govuk-body">{{ paragraph }}</p>
     {% endfor %}
-    <div class="govuk-form-group">
-        <form method="get" action="{{ "SEARCH_SERVICES" | getPath }}">
-            <label for="search_box" class="govuk-label govuk-!-font-weight-bold">{{ "pages.searchServices.searchLabel" | translate }}</label>
-            <input id="search_box" class="govuk-input govuk-!-width-three-quarters" name="q" type="search" value="{{query}}" />
-            <button type="submit" class="govuk-button">{{ "pages.searchServices.searchButton" | translate }}</button>
-            {% if hasSearch %} 
-            <p class='govuk-body'>
-                {% if resultsCount === 1 %}
-                    {{ "pages.searchServices.oneResult" | translate }}
-                {% elseif (resultsCount > 0) %}
-                    {{ "pages.searchServices.manyResults" | translate | replace("[count]", resultsCount) }}
-                {% else %}
-                    {{ "pages.searchServices.noResults" | translate }}     
-                {% endif %}
-            </p>
-            {% endif %}
-        </form>
-    </div>
+    <form method="get" action="{{ "SEARCH_SERVICES" | getPath }}">
+      {% set submitButton %}
+        {{ govukButton({
+          "text": "pages.searchServices.searchButton" | translate
+        }) }}
+      {% endset %}
+      {{ govukInput({
+        label: {
+          text: "pages.searchServices.searchLabel" | translate
+        },
+        formGroup: {
+          afterInput: { html: submitButton}
+        },
+        id: "search_box",
+        type: "search",
+        name: "q",
+        classes: "govuk-!-width-three-quarters"
+      }) }}
+
+      {% if hasSearch %} 
+      <p class='govuk-body'>
+        {% if resultsCount === 1 %}
+            {{ "pages.searchServices.oneResult" | translate }}
+        {% elseif (resultsCount > 0) %}
+            {{ "pages.searchServices.manyResults" | translate | replace("[count]", resultsCount) }}
+        {% else %}
+            {{ "pages.searchServices.noResults" | translate }}     
+        {% endif %}
+      </p>
+      {% endif %}
+    </form>
     
     <ul class="govuk-list search-results">
-        {% for service in services %}
-            <li>
-                <a class="govuk-link" target="_blank" href="{{ ['clientRegistry.', env, '.', service, '.link_href'] | join | translate }}">
-                    {{ ['clientRegistry.', env, '.', service, '.header'] | join | translate }}
-                </a>
-            </li>
-        {% endfor %}
+      {% for service in services %}
+        <li>
+          <a class="govuk-link" href="{{ ['clientRegistry.', env, '.', service, '.link_href'] | join | translate }}">
+            {{ ['clientRegistry.', env, '.', service, '.header'] | join | translate }}
+          </a>
+        </li>
+      {% endfor %}
     </ul>
 {% endblock %}
