@@ -10,7 +10,7 @@ export async function yourServicesGet(
   const env = getAppEnv();
   let data;
 
-  if (user && user.subjectId) {
+  if (user?.subjectId) {
     const trace = res.locals.sessionId;
     const serviceData = await presentYourServices(
       user.subjectId,
