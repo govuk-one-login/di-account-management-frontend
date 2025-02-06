@@ -3,6 +3,11 @@ import { unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   activityLogItemsPerPage,
   getDynamoActivityLogStoreTableName,
+  getOIDCClientId,
+  getAllowedAccountListClientIDs,
+  hmrcClientIds,
+  getAllowedServiceListClientIDs,
+  ONE_LOGIN_HOME_NON_PROD,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import {
@@ -14,13 +19,6 @@ import { dynamoDBService } from "./dynamo";
 import { decryptData } from "./decrypt-data";
 import { PATH_DATA } from "../app.constants";
 import { logger } from "./logger";
-import {
-  getOIDCClientId,
-  getAllowedAccountListClientIDs,
-  hmrcClientIds,
-  getAllowedServiceListClientIDs,
-  ONE_LOGIN_HOME_NON_PROD,
-} from "../config";
 
 const servicesWithContent: string[] = [
   ONE_LOGIN_HOME_NON_PROD,

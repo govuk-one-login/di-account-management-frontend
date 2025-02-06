@@ -228,7 +228,7 @@ function errorHandler(error: any, trace: string, action: string): void {
         { trace },
         `Failed to ${action} MFA endpoint - Detail: ${problemDetail.detail}`
       );
-      if (problemDetail.extension && problemDetail.extension.error) {
+      if (problemDetail?.extension?.error) {
         logger.error(
           { trace },
           `Failed to ${action} MFA endpoint - Error code: ${problemDetail.extension.error.code}`

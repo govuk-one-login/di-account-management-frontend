@@ -5,10 +5,10 @@ import {
   getDynamoActivityLogStoreTableName,
   getOIDCClientId,
   reportSuspiciousActivity,
+  getSNSSuspicousActivityTopic,
 } from "../../config";
 import { QueryCommand } from "@aws-sdk/client-dynamodb";
 import { dynamoDBService } from "../../utils/dynamo";
-import { getSNSSuspicousActivityTopic } from "../../config";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
 import assert from "node:assert";
 import { formatActivityLogs } from "../../utils/activityHistory";
