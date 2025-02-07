@@ -3,12 +3,15 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.activityHistory.title' | translate %}
+{% set backLinkJS = true %}
 {% set paginationItems = [] %}
 {% if pagination.items and pagination.currentPage %}
   {% set pageTitleName = [pageTitleName, " - ", 'pages.activityHistory.page' | translate | replace("[pageNumber]", pagination.currentPage)] | join %}
 {% endif %}
-{% set backLinkJS = true %}
-
+{% set securityNoticeHtml %}
+  <p class="govuk-body">{{ 'pages.activityHistory.securityNoticeContent1' | translate | safe | replace("[changePasswordLink]", changePasswordLink) }}</p>
+  <p class="govuk-body">{{ 'pages.activityHistory.securityNoticeContent2' | translate | safe | replace("[reportActivityLink]", contactLink) }}</p>
+{% endset %}
 {# set up data structure for pagination #}
 {% for item in pagination.items %}
   {% set paginationItems = (paginationItems.push({
@@ -24,13 +27,14 @@
       <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.activityHistory.header' | translate }}</h1>
       {% if data.length %} 
         <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
-        <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
 
         {% if not reportSuspiciousActivity %}
           {{ govukDetails({ 
             summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
-            html: securityNoticeHtml | safe
+            html: securityNoticeHtml
           }) }}
+        {% else %}
+        <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
         {% endif %}
       {% else %}
         {# Fallback in case there is no activity history – this should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
