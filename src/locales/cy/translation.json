@@ -187,7 +187,10 @@
             "hint": " Mae hyn yn cynnwys 'Diogelwch' a 'Eich gwasanaethau'"
           }
         }
-      }
+      },
+      "securityNoticeTitle": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod",
+      "securityNoticeContent1": "Dylech <a href='[changePasswordLink]' class='govuk-link'>newid eich cyfrinair</a>. Dyma'r ffordd orau i gadw eich GOV.UK One Login yn ddiogel.",
+      "securityNoticeContent2": "Gallwch hefyd <a target='_blank' href='[reportActivityLink]' class='govuk-link'>roi gwybod am y weithgaredd i GOV.UK One Login gan ddefnyddio ffôn neu gwe sgwrs (agor mewn tab newydd)</a>."
     },
     "reportSuspiciousActivity": {
       "title": "Adrodd am weithgaredd nad ydych yn ei adnabod",

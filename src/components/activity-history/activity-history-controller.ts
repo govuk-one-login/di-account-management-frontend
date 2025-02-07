@@ -23,9 +23,7 @@ export async function activityHistoryGet(
   const env = getAppEnv();
   let activityData: ActivityLogEntry[] = [];
   let pagination: any = {};
-  const backLink = PATH_DATA.SECURITY.url;
   let formattedActivityLog: FormattedActivityLog[] = [];
-  const reportSuspiciousActivityFlag = reportSuspiciousActivity();
 
   try {
     if (user?.subjectId) {
@@ -59,21 +57,12 @@ export async function activityHistoryGet(
       logger.error("Activity history controller: user_id missing from session");
     }
 
-    const securityNoticeHtml = `
-    <p class="govuk-body">
-      ${req.t("pages.activityHistory.securityNoticeContent1").replace("[changePasswordLink]", PATH_DATA.SECURITY.url)}
-    </p>
-    <p class="govuk-body">
-      ${req.t("pages.activityHistory.securityNoticeContent2").replace("[reportActivityLink]", PATH_DATA.CONTACT.url)}
-    </p>`;
-
     res.render("activity-history/index.njk", {
       data: formattedActivityLog,
-      reportSuspiciousActivity: reportSuspiciousActivityFlag,
-      securityNoticeHtml,
+      reportSuspiciousActivity: reportSuspiciousActivity(),
       env: env,
       pagination: pagination,
-      backLink: backLink,
+      backLink: PATH_DATA.SECURITY.url,
       changePasswordLink: PATH_DATA.SECURITY.url,
       contactLink: PATH_DATA.CONTACT.url,
       homeClientId: getOIDCClientId(),
