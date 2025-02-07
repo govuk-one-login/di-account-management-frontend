@@ -66,7 +66,6 @@ describe("Activity history controller", () => {
           {
             env: getAppEnv(),
             reportSuspiciousActivity: reportSuspiciousActivity(),
-            securityNoticeHtml: sinon.match.string,
             data: [],
             pagination: {},
             backLink: PATH_DATA.SECURITY.url,
