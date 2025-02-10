@@ -1,6 +1,6 @@
 export class ApiError extends Error {
-  private status?: number;
-  private data?: string;
+  private readonly status?: number;
+  private readonly data?: string;
   constructor(message: string, status?: number, data?: string) {
     super(message);
     this.data = data;
@@ -9,7 +9,7 @@ export class ApiError extends Error {
 }
 
 export class BadRequestError extends Error {
-  private status: number;
+  private readonly status: number;
   constructor(message: string, code: number | string) {
     super(`${code}:${message}`);
     this.status = 400;

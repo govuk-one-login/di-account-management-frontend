@@ -102,7 +102,7 @@ export class Http {
   private static handleError(error: AxiosError) {
     let apiError: ApiError;
 
-    if (error.response && error.response.data) {
+    if (error?.response?.data) {
       apiError = new ApiError(
         error.message,
         error.response.status,
