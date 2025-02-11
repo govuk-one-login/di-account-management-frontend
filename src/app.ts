@@ -77,6 +77,7 @@ import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
+import { getTranslations } from "di-account-management-client-registry";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -125,6 +126,7 @@ async function createApp(): Promise<express.Application> {
   await i18next
     .use(Backend)
     .use(i18nextMiddleware.LanguageDetector)
+    .addResources("en", "clientRegistry", getTranslations(getNodeEnv(), "en"))
     .init(
       i18nextConfigurationOptions(
         path.join(__dirname, "locales/{{lng}}/{{ns}}.json")
@@ -251,6 +253,8 @@ async function startServer(app: Application): Promise<{
 
     server.keepAliveTimeout = 61 * 1000;
     server.headersTimeout = 91 * 1000;
+
+    console.log(app.routes);
 
     stopVitalSigns = frontendVitalSignsInit(server, {
       staticPaths: [/^\/assets\/.*/, /^\/public\/.*/],
