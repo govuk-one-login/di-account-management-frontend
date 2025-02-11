@@ -177,7 +177,7 @@ async function createApp(): Promise<express.Application> {
   app.use(globalLogoutRouter);
   app.use(csurf({ cookie: getCSRFCookieOptions(isProduction) }));
 
-  app.post("*", sanitizeRequestMiddleware);
+  app.post("/*splat", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
 
   app.use(securityRouter);

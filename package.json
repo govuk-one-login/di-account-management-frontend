@@ -68,7 +68,7 @@
     "csurf": "^1.11.0",
     "di-account-management-client-registry": "github:govuk-one-login/di-account-management-client-registry#main",
     "dompurify": "^3.2.3",
-    "express": "^4.21.2",
+    "express": "^5.0.1",
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
     "fast-memoize": "^2.5.2",
