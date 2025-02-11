@@ -131,14 +131,26 @@
       "title": "Search Services",
       "heading": "Services you can use with GOV.UK One Login",
       "paragraphs": [
-        "You can only use GOV.UK One Login to access some government services.",
-        "In the future, you'll be able to use it to access all services on GOV.UK"
+        "At the moment, you can only use GOV.UK One Login to access some government services.",
+        "In the future, you'll be able to use it to access all services on GOV.UK."
       ],
-      "searchLabel": "Search",
-      "searchButton": "Search",
+      "searchLabel": "Search for a service",
+      "searchButton": "Search for services using GOV.UK One Login",
       "oneResult": "1 result",
       "manyResults": "[count] results",
-      "noResults": "No Results"
+      "noResults": "0 results",
+      "sortedText": "Sorted by A to Z",
+      "noResultsBlock": {
+        "heading": "There are no matching results",
+        "paragraph1": "Improve your search results by:",
+        "suggestionsList": [
+          "double-checking your spelling",
+          "using fewer keywords",
+          "searching for something less specific"
+        ],
+        "paragraph2": "If there are still no matching results, the service you’re looking for might not be using GOV.UK One Login yet.",
+        "paragraph3": "You can <a class='govuk-link' href='https://www.gov.uk/'> go to the GOV.UK homepage to find the service you need</a>."
+      }
     },
     "security": {
       "title": "Security",
