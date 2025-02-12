@@ -77,6 +77,7 @@ import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
+import blocked from "blocked-at";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -243,6 +244,15 @@ async function startServer(app: Application): Promise<{
       .listen(port, () => {
         logger.info(`Server listening on port ${port}`);
         app.emit("appStarted");
+        blocked(
+          (time, stack) => {
+            logger.warn(
+              `Blocked for ${time}ms, operation started here:`,
+              stack
+            );
+          },
+          { threshold: 490 }
+        );
         resolve();
       })
       .on("error", (error: Error) => {
