@@ -1,4 +1,4 @@
-FROM node:20.18.1-bookworm@sha256:d17aaa2a2fd82e09bd6a6da7cc4a79741340d2a3e39d172d1b30f295b1a850ff
+FROM node:20.18.3-bookworm@sha256:09b38290270d132b895814d9b54602635dbe146ed3ee65b04619922fe4ef6415
 
 # Set up AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
