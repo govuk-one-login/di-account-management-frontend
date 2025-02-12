@@ -1,0 +1,11 @@
+fields @message
+| filter @message like "Blocked for"
+| filter @message not like "at setLocalVarsMiddleware (/app/dist/middleware/set-local-vars-middleware.js:13:64)"
+| filter @message not like "at yourServicesGet (/app/dist/components/your-services/your-services-controller.js:12:74)"
+| filter @message not like "at /app/node_modules/connect-dynamodb/lib/connect-dynamodb.js:158:10"
+| filter @message not like "at mfaMethodMiddleware (/app/dist/middleware/mfa-method-middleware.js:17:50)"
+| filter @message not like "at securityGet (/app/dist/components/security/security-controller.js:12:83)"
+| filter @message not like "at deleteAccountGet (/app/dist/components/delete-account/delete-account-controller.js:16:74)"
+| parse @message "Blocked for *ms." as time
+| sort time desc
+| limit 20
