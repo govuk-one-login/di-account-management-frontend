@@ -23,6 +23,7 @@ const logger = pino({
         trace: res.locals.persistentSessionId + "::" + res.locals.sessionId,
       };
     },
+    err: pino.stdSerializers.err,
   },
 });
 
