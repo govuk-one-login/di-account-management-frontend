@@ -247,8 +247,7 @@ async function startServer(app: Application): Promise<{
         blocked(
           (time, stack) => {
             logger.warn(
-              `Blocked for ${time}ms, operation started here:`,
-              stack
+              `Blocked for ${time}ms, operation started here: ${stack}`
             );
           },
           { threshold: 490 }
