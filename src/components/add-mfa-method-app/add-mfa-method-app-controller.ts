@@ -100,8 +100,8 @@ export async function addMfaAppMethodPost(
       EventType.ValueUpdated
     );
     return res.redirect(PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url);
-  } catch (e) {
-    req.log.error(e);
-    return next(e);
+  } catch (error) {
+    req.log.error(error);
+    return next(error);
   }
 }

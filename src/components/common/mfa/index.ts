@@ -41,9 +41,9 @@ export async function renderMfaMethodPage(
       errors,
       errorList: generateErrorList(errors),
     });
-  } catch (e) {
-    req.log.error(e);
-    return next(e);
+  } catch (error) {
+    req.log.error(error);
+    return next(error);
   }
 }
 

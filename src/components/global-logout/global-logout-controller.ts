@@ -29,9 +29,9 @@ async function verifyLogoutToken(req: Request): Promise<LogoutToken> {
     });
 
     return token.payload as LogoutToken;
-  } catch (e) {
+  } catch (error) {
     req.log.error(
-      new Error(`Unable to validate logout_token. Error: ${e.message}`)
+      new Error(`Unable to validate logout_token. Error: ${error.message}`)
     );
     return undefined;
   }
