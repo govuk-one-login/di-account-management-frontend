@@ -81,7 +81,7 @@ describe("MFA Function", () => {
     expect(loggerStub.calledOnce).to.be.true;
     const errorCallArgs = loggerStub.getCall(0).args;
     expect(errorCallArgs[1]).to.include(
-      "Failed to retrieve from MFA endpoint Network error"
+      "Index: errorHandler: failed to retrieve from MFA endpoint Network error"
     );
   });
 
@@ -367,7 +367,7 @@ describe("MFA Function", () => {
     expect(
       loggerStub.calledWith(
         sinon.match.has("trace", "session-123"),
-        sinon.match(/Failed to update MFA endpoint/)
+        sinon.match(/Index: errorHandler: failed to update MFA endpoint/)
       )
     ).to.be.true;
   });
@@ -423,7 +423,7 @@ describe("MFA Function", () => {
     expect(
       loggerStub.calledWith(
         sinon.match.has("trace", "session-123"),
-        sinon.match(/Failed to update MFA endpoint/)
+        sinon.match(/Index: errorHandler: failed to update MFA endpoint/)
       )
     ).to.be.true;
   });

@@ -45,8 +45,8 @@ function logRedacted(
   try {
     const failedEvent: string = redact(jsonAsString, propertyNames);
     logger.error({ trace: trace }, REDACTED_EVENT(failedEvent));
-  } catch (err) {
-    logger.error({ trace: trace }, MESSAGE_COULD_NOT_BE_REDACTED(err));
+  } catch (error) {
+    logger.error({ trace: trace }, MESSAGE_COULD_NOT_BE_REDACTED(error));
   }
 }
 
@@ -70,8 +70,8 @@ async function sendToQueue(
       EVENT_SENT_SUCCESSFULLY(queue, result.MessageId)
     );
     return true;
-  } catch (err: any) {
-    logger.error({ trace: trace }, err.toString());
+  } catch (error: any) {
+    logger.error({ trace: trace }, error.toString());
   }
 
   return false;

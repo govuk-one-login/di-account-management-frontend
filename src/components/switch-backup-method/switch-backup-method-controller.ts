@@ -76,9 +76,12 @@ export async function switchBackupMfaMethodPost(
       newDefaultMethod.mfaIdentifier,
       await generateSessionDetails(req, res)
     );
-  } catch (e) {
+  } catch (error) {
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
-    logger.error("error updating default MFA method", e.message);
+    logger.error(
+      "Switch backup method controller: error updating default MFA method",
+      error.message
+    );
     return;
   }
 

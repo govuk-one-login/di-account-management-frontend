@@ -24,7 +24,7 @@ async function cacheWithExpiration<T>(
       return data;
     } catch (error) {
       invalidateCache(key);
-      logger.error("Error fetching data:", error);
+      logger.error("Cache: error fetching data:", error);
       throw error;
     }
   });

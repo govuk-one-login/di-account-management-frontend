@@ -58,7 +58,7 @@ async function getSessions(subjectId: string): Promise<string[]> {
     );
   } catch (error) {
     logger.error(
-      `session-store - failed to get sessions: ${JSON.stringify(error)}`
+      `Session store: failed to get sessions: ${JSON.stringify(error)}`
     );
     return [];
   }
@@ -99,7 +99,7 @@ export async function destroyUserSessions(
     await deleteAllUserSessionsFromSessionStore(subjectId, sessionStore);
   } catch (error: any) {
     logger.error(
-      `session-store - failed to delete session(s): ${JSON.stringify(error)}`
+      `Session store: failed to delete session(s): ${JSON.stringify(error)}`
     );
   } finally {
     await deleteExpressSession(req);

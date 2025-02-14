@@ -130,8 +130,8 @@ async function retrieveMfaMethods(
     if (response.status === HTTP_STATUS_CODES.OK) {
       data = response.data;
     }
-  } catch (err) {
-    errorHandler(err, sessionId, "retrieve from");
+  } catch (error) {
+    errorHandler(error, sessionId, "retrieve from");
   }
   return data;
 }
@@ -196,7 +196,7 @@ function errorHandler(error: any, trace: string, action: string): void {
   if (!error.response || !error.response.status) {
     logger.error(
       { trace },
-      `Failed to ${action} MFA endpoint ${error.message}`
+      `Index: errorHandler: failed to ${action} MFA endpoint ${error.message}`
     );
     return;
   }
@@ -210,13 +210,13 @@ function errorHandler(error: any, trace: string, action: string): void {
         validationProblem.errors.forEach((error) => {
           logger.error(
             { trace },
-            `Failed to ${action} MFA endpoint ${error.detail}`
+            `Index: ValidationProblem: failed to ${action} MFA endpoint ${error.detail}`
           );
         });
       } else {
         logger.error(
           { trace },
-          `Failed to ${action} MFA endpoint ${validationProblem.title}`
+          `Index: 400 Status: failed to ${action} MFA endpoint ${validationProblem.title}`
         );
       }
       break;
@@ -226,12 +226,12 @@ function errorHandler(error: any, trace: string, action: string): void {
       const problemDetail: ProblemDetail = data;
       logger.error(
         { trace },
-        `Failed to ${action} MFA endpoint - Detail: ${problemDetail.detail}`
+        `Index: 500 Status: Failed to ${action} MFA endpoint - Detail: ${problemDetail.detail}`
       );
       if (problemDetail?.extension?.error) {
         logger.error(
           { trace },
-          `Failed to ${action} MFA endpoint - Error code: ${problemDetail.extension.error.code}`
+          `Index: 500 Status: ProblemDetail: Failed to ${action} MFA endpoint - Error code: ${problemDetail.extension.error.code}`
         );
       }
       break;
@@ -239,7 +239,7 @@ function errorHandler(error: any, trace: string, action: string): void {
     default:
       logger.error(
         { trace },
-        `Failed to ${action} MFA endpoint - Unexpected error: ${error.message}`
+        `Index: default: Failed to ${action} MFA endpoint - Unexpected error: ${error.message}`
       );
   }
 }
@@ -261,8 +261,8 @@ export async function updateMfaMethod(
         "update"
       );
     }
-  } catch (err) {
-    errorHandler(err, sessionDetails.sessionId, "update");
+  } catch (error) {
+    errorHandler(error, sessionDetails.sessionId, "update");
   }
   return isUpdated;
 }
@@ -284,8 +284,8 @@ export async function createOrUpdateMfaMethod(
         "create"
       );
     }
-  } catch (err) {
-    errorHandler(err, sessionDetails.sessionId, "create");
+  } catch (error) {
+    errorHandler(error, sessionDetails.sessionId, "create");
   }
   return isUpdated;
 }

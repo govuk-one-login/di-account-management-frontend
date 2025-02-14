@@ -35,7 +35,7 @@ export async function generateExpectedContext(
     );
     accessCheckValue = await getHashedAccessCheckValue(VERIFY_ACCESS_VALUE);
   } catch (error) {
-    logger.error(error.message);
+    logger.error(`Decrypt data: failed with the error ${error.message}`);
   }
 
   return {
@@ -52,12 +52,12 @@ export function validateEncryptionContext(
   expected: EncryptionContext
 ): void {
   if (context === undefined || Object.keys(context).length === 0) {
-    logger.error("Encryption context is empty or undefined");
+    logger.error("Decrypt data: encryption context is empty or undefined");
   }
 
   Object.keys(expected).forEach((key) => {
     if (context[key] !== expected[key]) {
-      logger.error(`Encryption context mismatch: ${key}`);
+      logger.error(`Decrypt data: encryption context mismatch: ${key}`);
     }
   });
 }
@@ -86,7 +86,7 @@ export async function decryptData(
   } catch (error) {
     logger.error(
       { err: error, trace: traceId },
-      "Could not decrypt data, returning original data and not throwing an error."
+      "Decrypt data: could not decrypt data, returning original data and not throwing an error."
     );
     return data;
   }

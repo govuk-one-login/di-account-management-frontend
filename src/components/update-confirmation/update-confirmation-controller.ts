@@ -164,7 +164,7 @@ export async function changeDefaultMfaMethodConfirmationGet(
   if (!defaultMethod) {
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     logger.error(
-      `unable to find MfaMethod with id ${req.session.newDefaultMfaMethodId}`
+      `Update confirmation controller: unable to find MfaMethod with id ${req.session.newDefaultMfaMethodId}`
     );
     return;
   }

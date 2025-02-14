@@ -52,7 +52,7 @@ describe("safeTranslate", () => {
     expect(translate.calledTwice).to.be.true;
     expect(
       logErrorSpy.calledWith(
-        `TranslationError: key '${key}' missing for requested '${requestedLanguage}' language.`
+        `Safe Translate: translationError: key '${key}' missing for requested '${requestedLanguage}' language.`
       )
     ).to.be.true;
   });
@@ -76,7 +76,7 @@ describe("safeTranslate", () => {
     ).to.be.true;
     expect(
       logErrorSpy.calledWith(
-        `TranslationError: key '${key}' missing for requested '${requestedLanguage}' language.`
+        `Safe Translate: translationError: key '${key}' missing for requested '${requestedLanguage}' language.`
       )
     ).to.be.true;
   });

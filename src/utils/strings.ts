@@ -33,8 +33,8 @@ export function isValidUrl(urlString: string | undefined): boolean {
       url.hostname === "localhost" ||
       url.hostname === "127.0.0.1"
     );
-  } catch (e) {
-    logger.warn({ url: urlString }, e.toString());
+  } catch (error) {
+    logger.warn({ url: urlString }, error.toString());
     return false;
   }
 }

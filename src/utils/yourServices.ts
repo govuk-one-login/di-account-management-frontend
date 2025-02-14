@@ -39,8 +39,8 @@ export const getServices = async (
     );
     const services = unmarshallDynamoData(response["Item"]).services;
     return services;
-  } catch (err) {
-    logger.error({ trace: trace }, err);
+  } catch (error) {
+    logger.error({ trace: trace }, `Your Services: failed with ${error}`);
     return [];
   }
 };

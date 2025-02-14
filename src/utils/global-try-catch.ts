@@ -12,7 +12,7 @@ export const globalTryCatchAsync = (
     try {
       await fn(req, res, next);
     } catch (error) {
-      logger.error(error);
+      logger.error(`Global try catch Async: failed with the error ${error}`);
       next?.(error);
     }
   };
@@ -25,7 +25,7 @@ export const globalTryCatch = (
     try {
       fn(req, res, next);
     } catch (error) {
-      logger.error(error);
+      logger.error(`Global try catch: failed with the error ${error}`);
       next?.(error);
     }
   };

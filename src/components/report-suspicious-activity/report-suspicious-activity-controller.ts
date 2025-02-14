@@ -83,8 +83,8 @@ export async function reportSuspiciousActivityGet(
         req.query.event !== undefined && req.query.event !== "",
         "mandatory query parameter 'event' missing from request"
       );
-    } catch (err) {
-      req.log.error(err.message);
+    } catch (error) {
+      req.log.error(error.message);
       return next();
     }
 
@@ -104,9 +104,9 @@ export async function reportSuspiciousActivityGet(
         return next();
       }
       activityLog = unmarshall(response.Items[0]) as ActivityLogEntry;
-    } catch (err) {
-      req.log.error(err.message);
-      return next(err);
+    } catch (error) {
+      req.log.error(error.message);
+      return next(error);
     }
 
     activityLog.event_type = await decryptData(
@@ -177,9 +177,9 @@ export async function reportSuspiciousActivityPost(
         reported_suspicious_time: new Date().getTime(),
         device_information: getTxmaHeader(req, res.locals.trace),
       });
-    } catch (err) {
-      req.log.error(err.message);
-      return next(err);
+    } catch (error) {
+      req.log.error(error.message);
+      return next(error);
     }
 
     const pageUrlParam = req.body.page ? `?page=${req.body.page}` : "";
@@ -195,7 +195,9 @@ export async function reportSuspiciousActivityConfirmation(
   res: Response
 ): Promise<void> {
   if (!reportSuspiciousActivity()) {
-    logger.error({ err: "Sending to 404, should not load" });
+    logger.error({
+      err: "Report suspicious activity controller: should not load, sending user to a 404",
+    });
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     res.render("common/errors/404.njk");
   } else {
