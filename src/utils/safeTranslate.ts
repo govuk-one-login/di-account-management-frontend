@@ -17,7 +17,7 @@ export const safeTranslate = (
   const result: translateResult = translate(key, options);
   if (result === key) {
     logger.error(
-      `TranslationError: key '${key}' missing for requested '${requestedLanguage}' language.`
+      `Safe Translate: translationError: key '${key}' missing for requested '${requestedLanguage}' language.`
     );
     return translate(key, {
       ...options,

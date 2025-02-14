@@ -2,6 +2,7 @@ import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js/mobile";
+import { logger } from "./logger";
 
 export function containsUKMobileNumber(value: string): boolean {
   try {
@@ -9,7 +10,8 @@ export function containsUKMobileNumber(value: string): boolean {
       isValidPhoneNumber(value, "GB") &&
       parsePhoneNumberWithError(value, "GB").countryCallingCode === "44"
     );
-  } catch {
+  } catch (error) {
+    logger.error(`Phone number: Error validating UK phone number ${error}`);
     return false;
   }
 }

@@ -217,10 +217,10 @@ export const getActivityLogEntry = async (
       unmarshall(item)
     ) as ActivityLogEntry[];
     return unmarshalledItems;
-  } catch (err) {
+  } catch (error) {
     logger.error(
       { trace: trace },
-      `Failed to retrieve from dynamodb ${err.message}`
+      `Activity history: failed to retrieve from dynamodb ${error.message}`
     );
     return [];
   }

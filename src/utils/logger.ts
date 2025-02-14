@@ -32,6 +32,8 @@ export function getRefererFrom(referer: string): string {
       const refererUrl = new URL(referer);
       return refererUrl.pathname + refererUrl.search;
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(`Logger: Error obtaining referer URL ${error}`);
       return undefined;
     }
   } else {

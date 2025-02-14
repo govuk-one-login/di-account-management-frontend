@@ -22,7 +22,7 @@ export async function mfaMethodMiddleware(
     );
     req.session.mfaMethods = [...response];
     next();
-  } catch (e) {
+  } catch (error) {
     req.log.info(
       { trace: res.locals.trace },
       ERROR_MESSAGES.FAILED_MFA_RETRIEVE_CALL
@@ -37,8 +37,8 @@ const selectMfaMiddleware = (): RequestHandler => {
     if (supportMfaPage() && mfaServiceUrl) {
       return mfaMethodMiddleware;
     }
-  } catch (e) {
-    logger.error(`selectMfaMiddleware ${e.message}`);
+  } catch (error) {
+    logger.error(`selectMfaMiddleware ${error.message}`);
   }
   return legacyMfaMethodsMiddleware;
 };

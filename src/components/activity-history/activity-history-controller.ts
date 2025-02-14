@@ -56,7 +56,7 @@ export async function activityHistoryGet(
         );
       }
     } else {
-      logger.error("user_id missing from session");
+      logger.error("Activity history controller: user_id missing from session");
     }
 
     const securityNoticeHtml = `
@@ -78,7 +78,10 @@ export async function activityHistoryGet(
       contactLink: PATH_DATA.CONTACT.url,
       homeClientId: getOIDCClientId(),
     });
-  } catch (e) {
+  } catch (error) {
+    logger.error(
+      `Activity-history-controller: Error during activity history get ${error}`
+    );
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
     res.render("common/errors/500.njk");
   }

@@ -8,7 +8,9 @@ import { logger } from "../../utils/logger";
 const router = express.Router();
 router.get(PATH_DATA.TRACK_AND_REDIRECT.url, (req, res) => {
   if (!req.session || !req.session.queryParameters) {
-    logger.error("Request session or queryParameters are undefined.");
+    logger.error(
+      "Track and redirect route: request session or queryParameters are undefined."
+    );
     return res.redirect(PATH_DATA.CONTACT.url);
   }
   const emailServiceUrl = buildContactEmailServiceUrl(req, res);

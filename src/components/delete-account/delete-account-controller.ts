@@ -67,9 +67,9 @@ export function deleteAccountPost(
           legacySubjectId,
           DeleteTopicARN
         );
-      } catch (err) {
+      } catch (error) {
         req.log.error(
-          `Unable to publish delete topic message for: ${subjectId} and ${publicSubjectId}and ARN ${DeleteTopicARN}. Error:${err}`
+          `Unable to publish delete topic message for: ${subjectId} and ${publicSubjectId}and ARN ${DeleteTopicARN}. Error:${error}`
         );
       }
     }

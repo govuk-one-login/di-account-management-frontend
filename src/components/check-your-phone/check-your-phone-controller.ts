@@ -110,7 +110,10 @@ async function handleMfaChange(
   } else if (intent === INTENT_CHANGE_DEFAULT_METHOD) {
     return handleChangeDefaultMethod(newPhoneNumber, sessionDetails, req);
   } else {
-    logger.error({ err: `Unknown phone verification intent ${intent}`, trace });
+    logger.error({
+      err: `Check your phone controller: unknown phone verification intent ${intent}`,
+      trace: trace,
+    });
   }
 }
 
@@ -157,8 +160,8 @@ async function handleChangePhoneNumber(
     );
   } else {
     logger.error({
-      err: "No existing MFA method in handleChangePhoneNumber",
-      trace,
+      err: "Check your phone controller: no existing MFA method in handleChangePhoneNumber",
+      trace: trace,
     });
   }
 }
@@ -177,8 +180,8 @@ async function handleAddMfaMethod(
 
   if (!defaultMfaMethod) {
     logger.error({
-      err: "No existing DEFAULT MFA method in handleAddMfaMethod",
-      trace,
+      err: "Check your phone controller: no existing DEFAULT MFA method in handleAddMfaMethod",
+      trace: trace,
     });
     return false;
   }
@@ -201,8 +204,8 @@ async function handleAddMfaMethod(
     }
   } catch (error) {
     logger.error({
-      err: `No existing MFA method in handleAddMfaMethod: ${error.message} `,
-      trace,
+      err: `Check your phone controller: no existing MFA method in handleAddMfaMethod: ${error.message} `,
+      trace: trace,
     });
   }
   return false;

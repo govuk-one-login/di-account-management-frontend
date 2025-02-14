@@ -57,6 +57,9 @@ describe("Refresh token middleware", () => {
         issuer: { metadata: { token_endpoint: "" } } as Partial<Issuer<any>>,
         refresh: sinon.fake.returns({ access_token: "", refresh_token: "" }),
       },
+      log: {
+        error: sinon.fake(),
+      },
     };
 
     const fakeService: ClientAssertionServiceInterface = {
@@ -70,6 +73,38 @@ describe("Refresh token middleware", () => {
 
     expect(fakeService.generateAssertionJwt).to.have.been.calledOnce;
     expect(req.oidc.refresh).to.have.been.calledOnce;
-    expect(nextFunction).to.have.called.calledOnce;
+    expect(nextFunction).to.have.been.calledOnce;
+  });
+
+  it("should call next with error when refresh fails", async () => {
+    const req: any = {
+      session: {
+        user: {
+          email: "test@test.com",
+          tokens: {
+            accessToken: createAccessToken(),
+            refreshToken: "refresh",
+          },
+        },
+      },
+      oidc: {
+        metadata: {} as Partial<ClientMetadata>,
+        issuer: { metadata: { token_endpoint: "" } } as Partial<Issuer<any>>,
+        refresh: sinon.fake.throws(new Error("Refresh token expired")),
+      },
+      log: {
+        error: sinon.fake(),
+      },
+    };
+    const fakeService: ClientAssertionServiceInterface = {
+      generateAssertionJwt: sinon.fake(),
+    };
+    const res: any = { locals: {}, redirect: sinon.fake() };
+    const nextFunction: NextFunction = sinon.fake(() => {});
+    await refreshTokenMiddleware(fakeService)(req, res, nextFunction);
+    expect(fakeService.generateAssertionJwt).to.have.been.calledOnce;
+    expect(req.oidc.refresh).to.have.been.calledTwice;
+    expect(nextFunction).to.have.been.calledOnce;
+    expect(req.log.error).to.have.been.calledWith("Refresh token expired");
   });
 });

@@ -49,7 +49,7 @@ describe("generateExpectedContext", () => {
           expect.fail("Expected function to throw an error but it did not");
         } catch (error) {
           expect(errorLoggerSpy).to.have.been.calledWith(
-            `Missing ${variable} environment variable`
+            `Decrypt data: failed with the error Missing ${variable} environment variable`
           );
         }
       });
@@ -104,7 +104,7 @@ describe("validateEncryptionContext", () => {
     validateEncryptionContext({}, expected);
 
     expect(errorLoggerSpy).to.have.been.calledWith(
-      "Encryption context is empty or undefined"
+      "Decrypt data: encryption context is empty or undefined"
     );
   });
 
@@ -120,7 +120,7 @@ describe("validateEncryptionContext", () => {
     validateEncryptionContext(wrongContext, expected);
 
     expect(errorLoggerSpy).to.have.been.calledWith(
-      "Encryption context mismatch: userId"
+      "Decrypt data: encryption context mismatch: userId"
     );
   });
 

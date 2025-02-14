@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { logger } from "./logger";
 
 export const readEnvVar = (filename: string): string => {
   try {
@@ -9,8 +10,7 @@ export const readEnvVar = (filename: string): string => {
       .trim();
     return keyValue;
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(`Error reading ${filename}:`, error);
+    logger.error(`Error reading ${filename}:`, error);
     return "";
   }
 };

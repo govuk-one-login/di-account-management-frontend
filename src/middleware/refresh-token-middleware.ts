@@ -32,9 +32,9 @@ export function refreshTokenMiddleware(
         );
         req.session.user.tokens.accessToken = tokenSet.access_token;
         req.session.user.tokens.refreshToken = tokenSet.refresh_token;
-      } catch (err) {
-        req.log.error(err.message);
-        return next(err);
+      } catch (error) {
+        req.log.error(error.message);
+        return next(error);
       }
     }
 
