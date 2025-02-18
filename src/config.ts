@@ -107,6 +107,10 @@ export function supportLanguageCY(): boolean {
   return process.env.SUPPORT_LANGUAGE_CY === "1";
 }
 
+export function supportClientRegistryLibrary(): boolean {
+  return process.env.SUPPORT_CLIENT_REGISTRY_LIBRARY === "1";
+}
+
 export function getLogoutTokenMaxAge(): number {
   return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
 }
