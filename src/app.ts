@@ -16,11 +16,13 @@ import session from "express-session";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
+  getAppEnv,
   getNodeEnv,
   getSessionExpiry,
   getSessionSecret,
   supportActivityLog,
   supportChangeMfa,
+  supportClientRegistryLibrary,
   supportSearchableList,
   supportTriagePage,
   supportWebchatContact,
@@ -33,7 +35,7 @@ import { securityRouter } from "./components/security/security-routes";
 import { activityHistoryRouter } from "./components/activity-history/activity-history-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
-import { ENVIRONMENT_NAME } from "./app.constants";
+import { ENVIRONMENT_NAME, LOCALE } from "./app.constants";
 import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
 import { authMiddleware } from "./middleware/auth-middleware";
@@ -126,12 +128,34 @@ async function createApp(): Promise<express.Application> {
   await i18next
     .use(Backend)
     .use(i18nextMiddleware.LanguageDetector)
-    .addResources("en", "clientRegistry", getTranslations(getNodeEnv(), "en"))
     .init(
       i18nextConfigurationOptions(
         path.join(__dirname, "locales/{{lng}}/{{ns}}.json")
       )
     );
+
+  if (supportClientRegistryLibrary()) {
+    const getTranslationObject = (locale: LOCALE) => {
+      return {
+        clientRegistry: {
+          [getAppEnv()]: getTranslations(getAppEnv(), locale),
+        },
+      };
+    };
+
+    i18next.addResourceBundle(
+      LOCALE.EN,
+      "translation",
+      getTranslationObject(LOCALE.EN),
+      true
+    );
+    i18next.addResourceBundle(
+      LOCALE.CY,
+      "translation",
+      getTranslationObject(LOCALE.CY),
+      true
+    );
+  }
 
   app.use(i18nextMiddleware.handle(i18next));
   if (supportWebchatContact()) {
@@ -253,8 +277,6 @@ async function startServer(app: Application): Promise<{
 
     server.keepAliveTimeout = 61 * 1000;
     server.headersTimeout = 91 * 1000;
-
-    console.log(app.routes);
 
     stopVitalSigns = frontendVitalSignsInit(server, {
       staticPaths: [/^\/assets\/.*/, /^\/public\/.*/],
