@@ -863,6 +863,12 @@
         "description": "Allows end users to search view and export data based around heat network opportunities.",
         "link_text": "Heat Network Zoning",
         "link_href": "https://www.heat-network-zoning.data.gov.uk/"
+      },
+      "SdpFRM0HdX38FfdbgRX8qzTl8sm": {
+        "header": "Taliadau Gwledig Cymru",
+        "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
+        "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
+        "link_href": "https://rpwonline.gov.wales"
       }
     },
     "integration": {
@@ -1171,6 +1177,12 @@
         "description": "Allows end users to search view and export data based around heat network opportunities.",
         "link_text": "Heat Network Zoning",
         "link_href": "https://www.heat-network-zoning.data.gov.uk/"
+      },
+      "SdpFRM0HdX38FfdbgRX8qzTl8sm": {
+        "header": "Taliadau Gwledig Cymru",
+        "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
+        "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
+        "link_href": "https://rpwonline.gov.wales"
       }
     },
     "staging": {
@@ -1467,6 +1479,12 @@
         "description": "Allows end users to search view and export data based around heat network opportunities.",
         "link_text": "Heat Network Zoning",
         "link_href": "https://www.heat-network-zoning.data.gov.uk/"
+      },
+      "ruralPaymentWales": {
+        "header": "Taliadau Gwledig Cymru",
+        "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
+        "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
+        "link_href": "https://rpwonline.gov.wales"
       }
     },
     "build": {
@@ -1763,6 +1781,12 @@
         "description": "Allows end users to search view and export data based around heat network opportunities.",
         "link_text": "Heat Network Zoning",
         "link_href": "https://www.heat-network-zoning.data.gov.uk/"
+      },
+      "ruralPaymentWales": {
+        "header": "Taliadau Gwledig Cymru",
+        "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
+        "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
+        "link_href": "https://rpwonline.gov.wales"
       }
     },
     "demo": {
@@ -2059,6 +2083,12 @@
         "description": "Allows end users to search view and export data based around heat network opportunities.",
         "link_text": "Heat Network Zoning",
         "link_href": "https://www.heat-network-zoning.data.gov.uk/"
+      },
+      "ruralPaymentWales": {
+        "header": "Taliadau Gwledig Cymru",
+        "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
+        "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
+        "link_href": "https://rpwonline.gov.wales"
       }
     },
     "dev": {
@@ -2355,6 +2385,12 @@
         "description": "Allows end users to search view and export data based around heat network opportunities.",
         "link_text": "Heat Network Zoning",
         "link_href": "https://www.heat-network-zoning.data.gov.uk/"
+      },
+      "ruralPaymentWales": {
+        "header": "Taliadau Gwledig Cymru",
+        "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
+        "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
+        "link_href": "https://rpwonline.gov.wales"
       }
     },
     "local": {
@@ -2651,6 +2687,12 @@
         "description": "Allows end users to search view and export data based around heat network opportunities.",
         "link_text": "Heat Network Zoning",
         "link_href": "https://www.heat-network-zoning.data.gov.uk/"
+      },
+      "ruralPaymentWales": {
+        "header": "Taliadau Gwledig Cymru",
+        "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
+        "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
+        "link_href": "https://rpwonline.gov.wales"
       }
     }
   }
