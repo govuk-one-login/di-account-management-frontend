@@ -306,7 +306,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
 .contact-reference {
   padding: govuk-spacing(3);
-  background-color: govuk-colour(light-grey);
+  background-color: govuk-colour("light-grey");
   border-left: 5px solid $govuk-border-colour;
 }
 
@@ -395,12 +395,65 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   text-transform: uppercase !important;
 }
 
-.search-results li {
-  padding-top: govuk-spacing(2);
-  padding-bottom: govuk-spacing(2);
+.search-results {
+  border-top: 1px solid $govuk-border-colour;
+}
+
+.search-results__list-item {
+  margin-top: govuk-spacing(3);
+  padding-bottom: govuk-spacing(3);
   border-bottom: 1px solid $govuk-border-colour;
 }
 
-.search-results li:last-child {
-  border-bottom: none;
+.search-services__input:not(:focus) {
+  border-right-width: 0;
+}
+
+.search-services__submit {
+  border: 0;
+  cursor: pointer;
+  border-radius: 0;
+  // render a border in high contrast mode
+  outline: $govuk-border-width-form-element solid transparent;
+  // Ensure outline appears outside of the element
+  outline-offset: 0;
+  position: relative;
+  padding: 0;
+  width: govuk-px-to-rem(40px);
+  height: govuk-px-to-rem(40px);
+  text-indent: -5000px;
+  overflow: hidden;
+  background-color: govuk-colour("blue");
+  color: govuk-colour("white");
+  &:hover {
+    background-color: lighten(govuk-colour("blue"), 5%);
+  }
+  &:focus {
+    z-index: 2;
+    outline: $govuk-focus-width solid $govuk-focus-colour;
+    // Double the border by adding its width again. Use `box-shadow` for this // instead of changing `border-width` - this is for consistency with
+    // Also, `outline` cannot be utilised
+    // here as it is already used for the yellow focus state.
+    box-shadow: inset 0 0 0 $govuk-border-width-form-element * 2
+      govuk-colour("black");
+  }
+
+  &::-moz-focus-inner {
+    border: 0;
+  }
+}
+
+.search-services__magnifier-icon {
+  pointer-events: none;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  transform: scale(0.5);
+}
+
+.search-results__filter-panel {
+  display: flex;
+  justify-content: space-between;
 }
