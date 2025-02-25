@@ -66,6 +66,7 @@
     "connect-dynamodb": "^3.0.5",
     "cookie-parser": "^1.4.7",
     "csurf": "^1.11.0",
+    "di-account-management-client-registry": "github:govuk-one-login/di-account-management-client-registry#main",
     "dompurify": "^3.2.4",
     "express": "^5.0.1",
     "express-session": "^1.18.1",
