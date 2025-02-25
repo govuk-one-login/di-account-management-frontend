@@ -253,7 +253,7 @@ async function startServer(app: Application): Promise<{
               `Blocked for ${time}ms.\nStack trace:\n${formattedStack}`
             );
           },
-          { threshold: 42 }
+          { threshold: 100 }
         );
         resolve();
       })
