@@ -24,18 +24,24 @@ interface SessionStore {
   session: any;
 }
 
+let sessionStoreInstance: Store | null = null;
+
 export function getSessionStore({ session }: SessionStore): Store {
-  const DynamoDBStore = connect_dynamodb(session);
-  const storeOptions = {
-    client: dynamoDBCientSessionStore,
-    table: getSessionStoreTableName(),
-    specialKeys: [
-      { name: USER_IDENTIFIER_IDX_ATTRIBUTE, type: ScalarAttributeType.S },
-    ],
-    skipThrowMissingSpecialKeys: true,
-    prefix: PREFIX,
-  };
-  return new DynamoDBStore(storeOptions);
+  if (!sessionStoreInstance) {
+    const DynamoDBStore = connect_dynamodb(session);
+    const storeOptions = {
+      client: dynamoDBCientSessionStore,
+      table: getSessionStoreTableName(),
+      specialKeys: [
+        { name: USER_IDENTIFIER_IDX_ATTRIBUTE, type: ScalarAttributeType.S },
+      ],
+      skipThrowMissingSpecialKeys: true,
+      prefix: PREFIX,
+    };
+    sessionStoreInstance = new DynamoDBStore(storeOptions);
+  }
+
+  return sessionStoreInstance;
 }
 
 async function getSessions(subjectId: string): Promise<string[]> {
