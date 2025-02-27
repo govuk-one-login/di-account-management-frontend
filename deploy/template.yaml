@@ -179,6 +179,7 @@ Mappings:
       SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       SUPPORTSEARCHABLELIST: "1"
+      SUPPORTCLIENTREGISTRYLIBRARY: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk"
@@ -215,6 +216,7 @@ Mappings:
       SUPPORTPHONECONTACT: "0"
       SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "1"
+      SUPPORTCLIENTREGISTRYLIBRARY: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.build.account.gov.uk"
@@ -252,6 +254,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "1"
+      SUPPORTCLIENTREGISTRYLIBRARY: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.staging.account.gov.uk"
@@ -289,6 +292,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "0"
+      SUPPORTCLIENTREGISTRYLIBRARY: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.integration.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "0"
@@ -326,6 +330,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "0"
+      SUPPORTCLIENTREGISTRYLIBRARY: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: ""
       SUPPORTMETHODMANAGEMENT: "0"
@@ -840,6 +845,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   METHODMANAGEMENTBASEURL,
+                ]
+            - Name: "SUPPORT_CLIENT_REGISTRY_LIBRARY"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTCLIENTREGISTRYLIBRARY,
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"

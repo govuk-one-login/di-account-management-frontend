@@ -107,6 +107,10 @@ export function supportLanguageCY(): boolean {
   return process.env.SUPPORT_LANGUAGE_CY === "1";
 }
 
+export function supportClientRegistryLibrary(): boolean {
+  return process.env.SUPPORT_CLIENT_REGISTRY_LIBRARY === "1";
+}
+
 export function getLogoutTokenMaxAge(): number {
   return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
 }
@@ -218,6 +222,8 @@ const INTELLECTUAL_PROPERTY_OFFICE_PROD = "Mh3SUEDHB74A2SIB_1VAXZKG_iw";
 const INTELLECTUAL_PROPERTY_OFFICE_NON_PROD = "intellectualPropertyOffice";
 const HEAT_NETWORK_ZONING_PROD = "_cv8flGYkTpGUgCQN7Oab8wV15w";
 const HEAT_NETWORK_ZONING_NON_PROD = "heatNetworkZoning";
+const RURAL_PAYMENT_WALES_PROD = "SdpFRM0HdX38FfdbgRX8qzTl8sm";
+const RURAL_PAYMENT_WALES_NON_PROD = "ruralPaymentWales";
 
 export const getAllowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -305,6 +311,8 @@ export const getAllowedAccountListClientIDs: string[] = [
   INTELLECTUAL_PROPERTY_OFFICE_NON_PROD,
   HEAT_NETWORK_ZONING_PROD,
   HEAT_NETWORK_ZONING_NON_PROD,
+  RURAL_PAYMENT_WALES_PROD,
+  RURAL_PAYMENT_WALES_NON_PROD,
 ];
 
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];

@@ -16,11 +16,13 @@ import session from "express-session";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
+  getAppEnv,
   getNodeEnv,
   getSessionExpiry,
   getSessionSecret,
   supportActivityLog,
   supportChangeMfa,
+  supportClientRegistryLibrary,
   supportSearchableList,
   supportTriagePage,
   supportWebchatContact,
@@ -33,7 +35,7 @@ import { securityRouter } from "./components/security/security-routes";
 import { activityHistoryRouter } from "./components/activity-history/activity-history-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
-import { ENVIRONMENT_NAME } from "./app.constants";
+import { ENVIRONMENT_NAME, LOCALE } from "./app.constants";
 import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
 import { authMiddleware } from "./middleware/auth-middleware";
@@ -77,6 +79,7 @@ import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
+import { getTranslations } from "di-account-management-client-registry";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -130,6 +133,29 @@ async function createApp(): Promise<express.Application> {
         path.join(__dirname, "locales/{{lng}}/{{ns}}.json")
       )
     );
+
+  if (supportClientRegistryLibrary()) {
+    const getTranslationObject = (locale: LOCALE) => {
+      return {
+        clientRegistry: {
+          [getAppEnv()]: getTranslations(getAppEnv(), locale),
+        },
+      };
+    };
+
+    i18next.addResourceBundle(
+      LOCALE.EN,
+      "translation",
+      getTranslationObject(LOCALE.EN),
+      true
+    );
+    i18next.addResourceBundle(
+      LOCALE.CY,
+      "translation",
+      getTranslationObject(LOCALE.CY),
+      true
+    );
+  }
 
   app.use(i18nextMiddleware.handle(i18next));
   if (supportWebchatContact()) {
