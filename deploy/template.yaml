@@ -132,28 +132,28 @@ Mappings:
     dev:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 16
-      MaxCapacity: 100
+      MinCapacity: 2
+      MaxCapacity: 40
     build:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 16
-      MaxCapacity: 100
+      MinCapacity: 2
+      MaxCapacity: 40
     staging:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 16
-      MaxCapacity: 100
+      MinCapacity: 2
+      MaxCapacity: 40
     integration:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 16
-      MaxCapacity: 100
+      MinCapacity: 2
+      MaxCapacity: 40
     production:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 16
-      MaxCapacity: 100
+      MinCapacity: 2
+      MaxCapacity: 40
   EnvironmentVariables:
     ### These environment variables are referenced further down the file.
     ### Please ensure that any variables defined for an environment are defined for _all_ environments.
@@ -489,21 +489,20 @@ Resources:
         - !Ref ECSStepScaleOutPolicy
       AlarmDescription: "ECSClusterOver40PercentCPU"
       ComparisonOperator: "GreaterThanThreshold"
-      DatapointsToAlarm: "2"
+      DatapointsToAlarm: "1"
       Dimensions:
         - Name: ClusterName
           Value: !Ref ECSCluster
         - Name: ServiceName
           Value: !GetAtt ContainerService.Name
       Unit: "Percent"
-      EvaluationPeriods: "2"
+      EvaluationPeriods: "1"
       MetricName: "CPUUtilization"
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
       Threshold: "40"
 
-  # Utilising ADR 0140
   ECSStepScaleInAlarm:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::CloudWatch::Alarm
@@ -513,14 +512,14 @@ Resources:
         - !Ref ECSStepScaleInPolicy
       AlarmDescription: "ECSClusterUnder40PercentCPU"
       ComparisonOperator: "LessThanThreshold"
-      DatapointsToAlarm: "5"
+      DatapointsToAlarm: "1"
       Dimensions:
         - Name: ClusterName
           Value: !Ref ECSCluster
         - Name: ServiceName
           Value: !GetAtt ContainerService.Name
       Unit: "Percent"
-      EvaluationPeriods: "5"
+      EvaluationPeriods: "1"
       MetricName: "CPUUtilization"
       Namespace: "AWS/ECS"
       Statistic: "Average"
@@ -607,10 +606,10 @@ Resources:
             Command:
               - "CMD-SHELL"
               - !Sub "curl -f http://localhost:${ContainerPort}/healthcheck || exit 1"
-            Interval: 40
-            Timeout: 10
-            Retries: 5
-            StartPeriod: 60
+            Interval: 10
+            Timeout: 5
+            Retries: 3
+            StartPeriod: 10
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join
