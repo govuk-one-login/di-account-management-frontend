@@ -1,3 +1,5 @@
+import { filterClients } from "di-account-management-client-registry";
+
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
 }
@@ -315,7 +317,16 @@ export const getAllowedAccountListClientIDs: string[] = [
   RURAL_PAYMENT_WALES_NON_PROD,
 ];
 
-export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
+function getHmrcClientIDs(): string[] {
+  if (supportClientRegistryLibrary()) {
+    const clients = filterClients(getAppEnv(), { isHmrc: true });
+    return clients.map((client) => client.clientId);
+  } else {
+    return [HMRC_NON_PROD, "hmrc"];
+  }
+}
+
+export const hmrcClientIds: string[] = getHmrcClientIDs();
 
 export const rsaAllowList: string[] = [
   ...hmrcClientIds,
