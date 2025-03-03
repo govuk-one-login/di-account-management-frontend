@@ -109,9 +109,9 @@ export const getAllowedListServices = async (
 ): Promise<Service[]> => {
   const userServices = await getServices(subjectId, trace);
   if (userServices) {
-    if (!supportClientRegistryLibrary()) {
+    if (supportClientRegistryLibrary()) {
       return userServices.filter((service) => {
-        return getClient(getAppEnv(), service.client_id).isAllowed;
+        return getClient(getAppEnv(), service.client_id)?.isAllowed;
       });
     }
 

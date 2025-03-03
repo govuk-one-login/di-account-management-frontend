@@ -15,6 +15,29 @@ describe("YourService Util", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    sandbox.stub(yourServices, "getServices").resolves([
+      {
+        client_id: "prisonVisits",
+        count_successful_logins: 1,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+        hasDetailedCard: true,
+      },
+      {
+        client_id: "mortgageDeed",
+        count_successful_logins: 1,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+        hasDetailedCard: true,
+      },
+      {
+        client_id: "nonExistant",
+        count_successful_logins: 1,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+        hasDetailedCard: true,
+      },
+    ]);
   });
 
   afterEach(() => {
@@ -102,31 +125,7 @@ describe("YourService Util", () => {
         ],
       };
 
-      sinon.stub(yourServices, "getServices").resolves([
-        {
-          client_id: "prisonVisits",
-          count_successful_logins: 1,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-          hasDetailedCard: true,
-        },
-        {
-          client_id: "mortgageDeed",
-          count_successful_logins: 1,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-          hasDetailedCard: true,
-        },
-        {
-          client_id: "nonExistant",
-          count_successful_logins: 1,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-          hasDetailedCard: true,
-        },
-      ]);
-
-      sinon
+      sandbox
         .stub(config, "supportClientRegistryLibrary")
         .onCall(0)
         .returns(false)
@@ -137,6 +136,44 @@ describe("YourService Util", () => {
       expect(services).to.deep.equal(expectedResponse);
 
       const servicesLegacy = await presentYourServices("subjectId", "trace");
+      expect(servicesLegacy).to.deep.equal(expectedResponse);
+    });
+
+    it("should return allowed list of services", async () => {
+      const expectedResponse: Service[] = [
+        {
+          client_id: "prisonVisits",
+          count_successful_logins: 1,
+          hasDetailedCard: true,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
+        {
+          client_id: "mortgageDeed",
+          count_successful_logins: 1,
+          hasDetailedCard: true,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
+      ];
+
+      sandbox
+        .stub(config, "supportClientRegistryLibrary")
+        .onCall(0)
+        .returns(true)
+        .onCall(1)
+        .returns(false);
+
+      const services = await yourServices.getAllowedListServices(
+        "subjectId",
+        "trace"
+      );
+      expect(services).to.deep.equal(expectedResponse);
+
+      const servicesLegacy = await yourServices.getAllowedListServices(
+        "subjectId",
+        "trace"
+      );
       expect(servicesLegacy).to.deep.equal(expectedResponse);
     });
   });
