@@ -10,7 +10,7 @@ import type { Service } from "../../../src/utils/types";
 import * as config from "../../../src/config";
 import sinon from "sinon";
 
-describe.only("YourService Util", () => {
+describe("YourService Util", () => {
   let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
