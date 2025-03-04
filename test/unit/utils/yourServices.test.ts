@@ -3,10 +3,47 @@ import { describe } from "mocha";
 import {
   formatService,
   containsGovUkPublishingService,
+  presentYourServices,
 } from "../../../src/utils/yourServices";
+import * as yourServices from "../../../src/utils/yourServices";
 import type { Service } from "../../../src/utils/types";
+import * as config from "../../../src/config";
+import sinon from "sinon";
 
 describe("YourService Util", () => {
+  let sandbox: sinon.SinonSandbox;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    sandbox.stub(yourServices, "getServices").resolves([
+      {
+        client_id: "prisonVisits",
+        count_successful_logins: 1,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+        hasDetailedCard: true,
+      },
+      {
+        client_id: "mortgageDeed",
+        count_successful_logins: 1,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+        hasDetailedCard: true,
+      },
+      {
+        client_id: "nonExistant",
+        count_successful_logins: 1,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+        hasDetailedCard: true,
+      },
+    ]);
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
   describe("format service information to diplay", () => {
     it("It takes a date epoch in seconds and returns a pretty formatted date", async () => {
       const dateEpochInSeconds = 1673358736;
@@ -64,6 +101,80 @@ describe("YourService Util", () => {
         },
       ];
       expect(containsGovUkPublishingService(serviceList)).equal(true);
+    });
+
+    it("should return a list of services for the user", async () => {
+      const expectedResponse = {
+        accountsList: [
+          {
+            client_id: "prisonVisits",
+            count_successful_logins: 1,
+            hasDetailedCard: false,
+            last_accessed: 14567776,
+            last_accessed_readable_format: "1 January 1970",
+          },
+        ],
+        servicesList: [
+          {
+            client_id: "mortgageDeed",
+            count_successful_logins: 1,
+            hasDetailedCard: false,
+            last_accessed: 14567776,
+            last_accessed_readable_format: "1 January 1970",
+          },
+        ],
+      };
+
+      sandbox
+        .stub(config, "supportClientRegistryLibrary")
+        .onCall(0)
+        .returns(false)
+        .onCall(1)
+        .returns(true);
+
+      const services = await presentYourServices("subjectId", "trace");
+      expect(services).to.deep.equal(expectedResponse);
+
+      const servicesLegacy = await presentYourServices("subjectId", "trace");
+      expect(servicesLegacy).to.deep.equal(expectedResponse);
+    });
+
+    it("should return allowed list of services", async () => {
+      const expectedResponse: Service[] = [
+        {
+          client_id: "prisonVisits",
+          count_successful_logins: 1,
+          hasDetailedCard: true,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
+        {
+          client_id: "mortgageDeed",
+          count_successful_logins: 1,
+          hasDetailedCard: true,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
+      ];
+
+      sandbox
+        .stub(config, "supportClientRegistryLibrary")
+        .onCall(0)
+        .returns(true)
+        .onCall(1)
+        .returns(false);
+
+      const services = await yourServices.getAllowedListServices(
+        "subjectId",
+        "trace"
+      );
+      expect(services).to.deep.equal(expectedResponse);
+
+      const servicesLegacy = await yourServices.getAllowedListServices(
+        "subjectId",
+        "trace"
+      );
+      expect(servicesLegacy).to.deep.equal(expectedResponse);
     });
   });
 });

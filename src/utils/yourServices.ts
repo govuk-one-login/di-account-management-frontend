@@ -9,11 +9,13 @@ import {
   getAppEnv,
   clientsToShowInSearchProd,
   clientsToShowInSearchNonProd,
+  supportClientRegistryLibrary,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
 import { ENVIRONMENT_NAME } from "../app.constants";
 import { logger } from "./logger";
+import { getClient } from "di-account-management-client-registry";
 
 const serviceStoreDynamoDBRequest = (subjectId: string): GetItemCommand => {
   const param = {
@@ -45,7 +47,7 @@ export const getServices = async (
   }
 };
 
-export const presentYourServices = async (
+const presentYourServicesLegacy = async (
   subjectId: string,
   trace: string,
   currentLanguage?: string
@@ -72,12 +74,47 @@ export const presentYourServices = async (
   return processedData;
 };
 
+export const presentYourServices = async (
+  subjectId: string,
+  trace: string,
+  currentLanguage?: string
+): Promise<YourServices> => {
+  if (!supportClientRegistryLibrary()) {
+    return presentYourServicesLegacy(subjectId, trace, currentLanguage);
+  }
+
+  const filterAndFormat = (
+    type: "account" | "service",
+    services: Service[]
+  ) => {
+    return services
+      .filter((service) => {
+        return getClient(getAppEnv(), service.client_id)?.clientType === type;
+      })
+      .map((service) => {
+        return formatService(service, currentLanguage);
+      });
+  };
+
+  const userServices = await getServices(subjectId, trace);
+  return {
+    accountsList: filterAndFormat("account", userServices),
+    servicesList: filterAndFormat("service", userServices),
+  };
+};
+
 export const getAllowedListServices = async (
   subjectId: string,
   trace: string
 ): Promise<Service[]> => {
   const userServices = await getServices(subjectId, trace);
   if (userServices) {
+    if (supportClientRegistryLibrary()) {
+      return userServices.filter((service) => {
+        return getClient(getAppEnv(), service.client_id)?.isAllowed;
+      });
+    }
+
     return userServices.filter((service) => {
       return (
         getAllowedAccountListClientIDs.includes(service.client_id) ||
