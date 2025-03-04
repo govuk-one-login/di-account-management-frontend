@@ -1,3 +1,5 @@
+import { filterClients } from "di-account-management-client-registry";
+
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
 }
@@ -225,7 +227,7 @@ const HEAT_NETWORK_ZONING_NON_PROD = "heatNetworkZoning";
 const RURAL_PAYMENT_WALES_PROD = "SdpFRM0HdX38FfdbgRX8qzTl8sm";
 const RURAL_PAYMENT_WALES_NON_PROD = "ruralPaymentWales";
 
-export const getAllowedAccountListClientIDs: string[] = [
+const allowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
   LITE_PROD,
   LITE_NON_PROD,
@@ -315,16 +317,21 @@ export const getAllowedAccountListClientIDs: string[] = [
   RURAL_PAYMENT_WALES_NON_PROD,
 ];
 
+export const getAllowedAccountListClientIDs = supportClientRegistryLibrary()
+  ? filterClients(getAppEnv(), { clientType: "account" }).map(
+      (client) => client.clientId
+    )
+  : allowedAccountListClientIDs;
+
 export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
 
-export const rsaAllowList: string[] = [
-  ...hmrcClientIds,
-  STUB_RP_INTEGRATION,
-  STUB_RP_PROD,
-  STUB_RP_STAGING,
-];
+export const rsaAllowList: string[] = supportClientRegistryLibrary()
+  ? filterClients(getAppEnv(), { isReportSuspiciousActivityEnabled: true }).map(
+      (client) => client.clientId
+    )
+  : [...hmrcClientIds, STUB_RP_INTEGRATION, STUB_RP_PROD, STUB_RP_STAGING];
 
-export const getAllowedServiceListClientIDs: string[] = [
+const allowedServiceListClientIDs: string[] = [
   DBS_CHECK_PROD,
   VEHICLE_OPERATOR_LICENSE_PROD,
   DBS_PROD,
@@ -345,6 +352,12 @@ export const getAllowedServiceListClientIDs: string[] = [
   CHECK_FAMILY_ELIGIBILITY_PROD,
   CHECK_FAMILY_ELIGIBILITY_NON_PROD,
 ];
+
+export const getAllowedServiceListClientIDs = supportClientRegistryLibrary()
+  ? filterClients(getAppEnv(), { clientType: "service" }).map(
+      (client) => client.clientId
+    )
+  : allowedServiceListClientIDs;
 
 export const clientsToShowInSearchNonProd: string[] = [
   "gov-uk",
