@@ -323,7 +323,16 @@ export const getAllowedAccountListClientIDs = supportClientRegistryLibrary()
     )
   : allowedAccountListClientIDs;
 
-export const hmrcClientIds: string[] = [HMRC_NON_PROD, "hmrc"];
+function getHmrcClientIDs(): string[] {
+  if (supportClientRegistryLibrary()) {
+    const clients = filterClients(getAppEnv(), { isHmrc: true });
+    return clients.map((client) => client.clientId);
+  } else {
+    return [HMRC_NON_PROD, "hmrc"];
+  }
+}
+
+export const hmrcClientIds: string[] = getHmrcClientIDs();
 
 export const rsaAllowList: string[] = supportClientRegistryLibrary()
   ? filterClients(getAppEnv(), { isReportSuspiciousActivityEnabled: true }).map(
