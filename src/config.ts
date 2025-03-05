@@ -227,7 +227,7 @@ const HEAT_NETWORK_ZONING_NON_PROD = "heatNetworkZoning";
 const RURAL_PAYMENT_WALES_PROD = "SdpFRM0HdX38FfdbgRX8qzTl8sm";
 const RURAL_PAYMENT_WALES_NON_PROD = "ruralPaymentWales";
 
-export const getAllowedAccountListClientIDs: string[] = [
+const allowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
   LITE_PROD,
   LITE_NON_PROD,
@@ -317,25 +317,25 @@ export const getAllowedAccountListClientIDs: string[] = [
   RURAL_PAYMENT_WALES_NON_PROD,
 ];
 
-function getHmrcClientIDs(): string[] {
-  if (supportClientRegistryLibrary()) {
-    const clients = filterClients(getAppEnv(), { isHmrc: true });
-    return clients.map((client) => client.clientId);
-  } else {
-    return [HMRC_NON_PROD, "hmrc"];
-  }
+function getIdListFromFilter(
+  filter: Parameters<typeof filterClients>[1]
+): string[] {
+  return filterClients(getAppEnv(), filter).map((client) => client.clientId);
 }
 
-export const hmrcClientIds: string[] = getHmrcClientIDs();
+export const getAllowedAccountListClientIDs = supportClientRegistryLibrary()
+  ? getIdListFromFilter({ clientType: "account" })
+  : allowedAccountListClientIDs;
 
-export const rsaAllowList: string[] = [
-  ...hmrcClientIds,
-  STUB_RP_INTEGRATION,
-  STUB_RP_PROD,
-  STUB_RP_STAGING,
-];
+export const hmrcClientIds: string[] = supportClientRegistryLibrary()
+  ? getIdListFromFilter({ isHmrc: true })
+  : [HMRC_NON_PROD, "hmrc"];
 
-export const getAllowedServiceListClientIDs: string[] = [
+export const rsaAllowList: string[] = supportClientRegistryLibrary()
+  ? getIdListFromFilter({ isReportSuspiciousActivityEnabled: true })
+  : [...hmrcClientIds, STUB_RP_INTEGRATION, STUB_RP_PROD, STUB_RP_STAGING];
+
+const allowedServiceListClientIDs: string[] = [
   DBS_CHECK_PROD,
   VEHICLE_OPERATOR_LICENSE_PROD,
   DBS_PROD,
@@ -356,6 +356,10 @@ export const getAllowedServiceListClientIDs: string[] = [
   CHECK_FAMILY_ELIGIBILITY_PROD,
   CHECK_FAMILY_ELIGIBILITY_NON_PROD,
 ];
+
+export const getAllowedServiceListClientIDs = supportClientRegistryLibrary()
+  ? getIdListFromFilter({ clientType: "service" })
+  : allowedServiceListClientIDs;
 
 export const clientsToShowInSearchNonProd: string[] = [
   "gov-uk",
