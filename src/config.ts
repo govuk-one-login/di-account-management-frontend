@@ -317,27 +317,22 @@ const allowedAccountListClientIDs: string[] = [
   RURAL_PAYMENT_WALES_NON_PROD,
 ];
 
-export const getAllowedAccountListClientIDs = supportClientRegistryLibrary()
-  ? filterClients(getAppEnv(), { clientType: "account" }).map(
-      (client) => client.clientId
-    )
-  : allowedAccountListClientIDs;
-
-function getHmrcClientIDs(): string[] {
-  if (supportClientRegistryLibrary()) {
-    const clients = filterClients(getAppEnv(), { isHmrc: true });
-    return clients.map((client) => client.clientId);
-  } else {
-    return [HMRC_NON_PROD, "hmrc"];
-  }
+function getIdListFromFilter(
+  filter: Parameters<typeof filterClients>[1]
+): string[] {
+  return filterClients(getAppEnv(), filter).map((client) => client.clientId);
 }
 
-export const hmrcClientIds: string[] = getHmrcClientIDs();
+export const getAllowedAccountListClientIDs = supportClientRegistryLibrary()
+  ? getIdListFromFilter({ clientType: "account" })
+  : allowedAccountListClientIDs;
+
+export const hmrcClientIds: string[] = supportClientRegistryLibrary()
+  ? getIdListFromFilter({ isHmrc: true })
+  : [HMRC_NON_PROD, "hmrc"];
 
 export const rsaAllowList: string[] = supportClientRegistryLibrary()
-  ? filterClients(getAppEnv(), { isReportSuspiciousActivityEnabled: true }).map(
-      (client) => client.clientId
-    )
+  ? getIdListFromFilter({ isReportSuspiciousActivityEnabled: true })
   : [...hmrcClientIds, STUB_RP_INTEGRATION, STUB_RP_PROD, STUB_RP_STAGING];
 
 const allowedServiceListClientIDs: string[] = [
@@ -363,9 +358,7 @@ const allowedServiceListClientIDs: string[] = [
 ];
 
 export const getAllowedServiceListClientIDs = supportClientRegistryLibrary()
-  ? filterClients(getAppEnv(), { clientType: "service" }).map(
-      (client) => client.clientId
-    )
+  ? getIdListFromFilter({ clientType: "service" })
   : allowedServiceListClientIDs;
 
 export const clientsToShowInSearchNonProd: string[] = [
