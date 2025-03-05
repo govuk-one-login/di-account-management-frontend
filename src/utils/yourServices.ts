@@ -7,13 +7,10 @@ import {
   getAllowedServiceListClientIDs,
   hmrcClientIds,
   getAppEnv,
-  clientsToShowInSearchProd,
-  clientsToShowInSearchNonProd,
   supportClientRegistryLibrary,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
-import { ENVIRONMENT_NAME } from "../app.constants";
 import { logger } from "./logger";
 import { getClient } from "di-account-management-client-registry";
 
@@ -156,10 +153,4 @@ export const containsGovUkPublishingService = (
   return serviceList.some((service) => {
     return govUkPublishingClientIds.includes(service.client_id);
   });
-};
-
-export const getSearchableClientsList = () => {
-  return getAppEnv() === ENVIRONMENT_NAME.PROD
-    ? clientsToShowInSearchProd
-    : clientsToShowInSearchNonProd;
 };

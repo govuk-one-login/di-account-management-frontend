@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { getSearchableClientsList } from "../../utils/yourServices";
-import { getAppEnv } from "../../config";
+import { getAppEnv, getClientsToShowInSearch } from "../../config";
 import isUserLoggedIn from "../../utils/isUserLoggedIn";
 
 const TEMPLATE_NAME = "search-services/index.njk";
@@ -13,7 +12,8 @@ export function searchServicesGet(req: Request, res: Response): void {
   const query = ((req.query.q || "") as string)
     .split(" ")
     .map(prepareForSearch);
-  const services = getSearchableClientsList()
+
+  const services = getClientsToShowInSearch()
     .filter((service) => {
       if (query.length === 0) return true;
 

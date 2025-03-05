@@ -1,4 +1,5 @@
 import { filterClients } from "di-account-management-client-registry";
+import { ENVIRONMENT_NAME } from "./app.constants";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -361,7 +362,7 @@ export const getAllowedServiceListClientIDs = supportClientRegistryLibrary()
   ? getIdListFromFilter({ clientType: "service" })
   : allowedServiceListClientIDs;
 
-export const clientsToShowInSearchNonProd: string[] = [
+const clientsToShowInSearchNonProd: string[] = [
   "gov-uk",
   "lite",
   "ofqual",
@@ -379,7 +380,7 @@ export const clientsToShowInSearchNonProd: string[] = [
   "iaa",
 ];
 
-export const clientsToShowInSearchProd: string[] = [
+const clientsToShowInSearchProd: string[] = [
   GOV_UK_EMAIL_PROD,
   OFQUAL_PROD,
   MODERN_SLAVERY_PROD,
@@ -411,6 +412,15 @@ export const clientsToShowInSearchProd: string[] = [
   CMAD_PROD,
   AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD,
 ];
+
+export const getClientsToShowInSearch = (): string[] => {
+  if (supportClientRegistryLibrary()) {
+    return getIdListFromFilter({ showInClientSearch: true });
+  }
+  return getAppEnv() === ENVIRONMENT_NAME.PROD
+    ? clientsToShowInSearchProd
+    : clientsToShowInSearchNonProd;
+};
 
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";
