@@ -25,7 +25,7 @@ const getRequestMock = (q?: string): Partial<Request> => {
   };
 };
 
-describe.only("search services controller", () => {
+describe("search services controller", () => {
   let res: Partial<Response>;
   let sandbox: sinon.SinonSandbox;
 
