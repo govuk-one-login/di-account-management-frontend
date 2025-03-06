@@ -1,4 +1,6 @@
 import { filterClients } from "di-account-management-client-registry";
+import { ENVIRONMENT_NAME } from "./app.constants";
+import memoize from "fast-memoize";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -317,11 +319,11 @@ const allowedAccountListClientIDs: string[] = [
   RURAL_PAYMENT_WALES_NON_PROD,
 ];
 
-function getIdListFromFilter(
-  filter: Parameters<typeof filterClients>[1]
-): string[] {
-  return filterClients(getAppEnv(), filter).map((client) => client.clientId);
-}
+const getIdListFromFilter = memoize(
+  (filter: Parameters<typeof filterClients>[1]): string[] => {
+    return filterClients(getAppEnv(), filter).map((client) => client.clientId);
+  }
+);
 
 export const getAllowedAccountListClientIDs = supportClientRegistryLibrary()
   ? getIdListFromFilter({ clientType: "account" })
@@ -361,7 +363,7 @@ export const getAllowedServiceListClientIDs = supportClientRegistryLibrary()
   ? getIdListFromFilter({ clientType: "service" })
   : allowedServiceListClientIDs;
 
-export const clientsToShowInSearchNonProd: string[] = [
+const clientsToShowInSearchNonProd: string[] = [
   "gov-uk",
   "lite",
   "ofqual",
@@ -379,7 +381,7 @@ export const clientsToShowInSearchNonProd: string[] = [
   "iaa",
 ];
 
-export const clientsToShowInSearchProd: string[] = [
+const clientsToShowInSearchProd: string[] = [
   GOV_UK_EMAIL_PROD,
   OFQUAL_PROD,
   MODERN_SLAVERY_PROD,
@@ -411,6 +413,15 @@ export const clientsToShowInSearchProd: string[] = [
   CMAD_PROD,
   AIR_POLLUTION_ASSESMENT_ARCHIVE_PROD,
 ];
+
+export const getClientsToShowInSearch = (): string[] => {
+  if (supportClientRegistryLibrary()) {
+    return getIdListFromFilter({ showInClientSearch: true });
+  }
+  return getAppEnv() === ENVIRONMENT_NAME.PROD
+    ? clientsToShowInSearchProd
+    : clientsToShowInSearchNonProd;
+};
 
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";

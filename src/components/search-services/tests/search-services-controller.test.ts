@@ -4,7 +4,6 @@ import { searchServicesGet } from "../search-services-controller";
 import { Request, Response } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
 
-import * as services from "../../../utils/yourServices";
 import * as config from "../../../config";
 import * as isUserLoggedIn from "../../../utils/isUserLoggedIn";
 
@@ -36,7 +35,7 @@ describe("search services controller", () => {
       render: sandbox.fake(),
     };
 
-    sandbox.stub(services, "getSearchableClientsList").returns(servicesMock);
+    sandbox.stub(config, "getClientsToShowInSearch").returns(servicesMock);
     sandbox.stub(config, "getAppEnv").returns("test");
     sandbox.stub(isUserLoggedIn, "default").returns(false);
   });
