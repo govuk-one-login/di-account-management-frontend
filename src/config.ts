@@ -1,5 +1,6 @@
 import { filterClients } from "di-account-management-client-registry";
 import { ENVIRONMENT_NAME } from "./app.constants";
+import memoize from "fast-memoize";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -318,11 +319,11 @@ const allowedAccountListClientIDs: string[] = [
   RURAL_PAYMENT_WALES_NON_PROD,
 ];
 
-function getIdListFromFilter(
-  filter: Parameters<typeof filterClients>[1]
-): string[] {
-  return filterClients(getAppEnv(), filter).map((client) => client.clientId);
-}
+const getIdListFromFilter = memoize(
+  (filter: Parameters<typeof filterClients>[1]): string[] => {
+    return filterClients(getAppEnv(), filter).map((client) => client.clientId);
+  }
+);
 
 export const getAllowedAccountListClientIDs = supportClientRegistryLibrary()
   ? getIdListFromFilter({ clientType: "account" })
