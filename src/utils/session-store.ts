@@ -38,7 +38,6 @@ export function getSessionStore({ session }: SessionStore): Store {
       ],
       skipThrowMissingSpecialKeys: true,
       prefix: PREFIX,
-      initialized: true,
     };
     sessionStoreInstance = new DynamoDBStore(storeOptions);
   }
