@@ -16,7 +16,7 @@ import { AwsConfig, getAWSConfig } from "../config/aws";
 // defined in `../../deploy/template.yaml`.
 const USER_IDENTIFIER_IDX_ATTRIBUTE = "user_id";
 const awsConfig: AwsConfig = getAWSConfig();
-const dynamoDBCientSessionStore = new DynamoDBClient(awsConfig as any);
+const dynamoDBClientSessionStore = new DynamoDBClient(awsConfig as any);
 
 const PREFIX = "sess:";
 
@@ -25,18 +25,20 @@ interface SessionStore {
 }
 
 let sessionStoreInstance: Store | null = null;
+const sessionStoreTable = getSessionStoreTableName();
 
 export function getSessionStore({ session }: SessionStore): Store {
   if (!sessionStoreInstance) {
     const DynamoDBStore = connect_dynamodb(session);
     const storeOptions = {
-      client: dynamoDBCientSessionStore,
-      table: getSessionStoreTableName(),
+      client: dynamoDBClientSessionStore,
+      table: sessionStoreTable,
       specialKeys: [
         { name: USER_IDENTIFIER_IDX_ATTRIBUTE, type: ScalarAttributeType.S },
       ],
       skipThrowMissingSpecialKeys: true,
       prefix: PREFIX,
+      initialized: true,
     };
     sessionStoreInstance = new DynamoDBStore(storeOptions);
   }
@@ -53,7 +55,7 @@ async function getSessions(subjectId: string): Promise<string[]> {
   };
 
   try {
-    const { Items } = await dynamoDBCientSessionStore.send(
+    const { Items } = await dynamoDBClientSessionStore.send(
       new QueryCommand(params)
     );
     return (
