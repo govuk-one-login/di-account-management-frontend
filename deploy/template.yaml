@@ -130,28 +130,28 @@ Mappings:
       AccountId: 652711504416
   Container:
     dev:
-      CPU: 1024
-      Memory: 2048
+      CPU: 2048
+      Memory: 4096
       MinCapacity: 2
       MaxCapacity: 40
     build:
-      CPU: 1024
-      Memory: 2048
+      CPU: 2048
+      Memory: 4096
       MinCapacity: 2
       MaxCapacity: 40
     staging:
-      CPU: 1024
-      Memory: 2048
+      CPU: 2048
+      Memory: 4096
       MinCapacity: 2
       MaxCapacity: 40
     integration:
-      CPU: 1024
-      Memory: 2048
+      CPU: 2048
+      Memory: 4096
       MinCapacity: 2
       MaxCapacity: 40
     production:
-      CPU: 1024
-      Memory: 2048
+      CPU: 2048
+      Memory: 4096
       MinCapacity: 2
       MaxCapacity: 40
   EnvironmentVariables:
