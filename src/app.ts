@@ -80,6 +80,7 @@ import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-client-registry";
+import blockedAt from "blocked-at";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -274,7 +275,20 @@ async function startServer(app: Application): Promise<{
       .on("error", (error: Error) => {
         logger.error(`Unable to start server because of ${error.message}`);
       });
+    blockedAt(
+      (time: any, stack: any) => {
+        const formattedStack = (stack || [])
+          .map((frame: string) => frame.trim())
+          .join("\n");
 
+        logger.error(
+          `Event loop blocked for ${time}ms. Stack trace:\n${formattedStack}`
+        );
+      },
+      {
+        threshold: 42,
+      }
+    );
     server.keepAliveTimeout = 61 * 1000;
     server.headersTimeout = 91 * 1000;
 
