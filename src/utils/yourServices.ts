@@ -13,6 +13,7 @@ import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
 import { logger } from "./logger";
 import { getClient } from "di-account-management-client-registry";
+import { cacheWithExpiration } from "./cache";
 
 const serviceStoreDynamoDBRequest = (subjectId: string): GetItemCommand => {
   const param = {
@@ -32,12 +33,20 @@ export const getServices = async (
   subjectId: string,
   trace: string
 ): Promise<Service[]> => {
+  const cacheKey = `services:${subjectId}`;
+
   try {
-    const response = await dynamoDBService().getItem(
-      serviceStoreDynamoDBRequest(subjectId)
+    return await cacheWithExpiration(
+      cacheKey,
+      async () => {
+        const response = await dynamoDBService().getItem(
+          serviceStoreDynamoDBRequest(subjectId)
+        );
+        const services = unmarshallDynamoData(response["Item"]).services;
+        return services;
+      },
+      30 * 1000
     );
-    const services = unmarshallDynamoData(response["Item"]).services;
-    return services;
   } catch (error) {
     logger.error({ trace: trace }, `Your Services: failed with ${error}`);
     return [];
