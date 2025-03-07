@@ -5,7 +5,7 @@ export const applyOverloadProtection = (isProduction: boolean) => {
     production: isProduction,
     clientRetrySecs: 3,
     sampleInterval: 10,
-    maxEventLoopDelay: 500,
+    maxEventLoopDelay: 100,
     maxHeapUsedBytes: 0,
     maxRssBytes: 0,
     errorPropagationMode: false,
