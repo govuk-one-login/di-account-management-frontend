@@ -131,7 +131,7 @@ const STUB_RP_INTEGRATION = "gjWNvoLYietMjeaOE6Zoww533u18ZUfr";
 const STUB_RP_STAGING = "3NKFv679oYlMdyrhKErrTGbzBy2h8rrd";
 export const ONE_LOGIN_HOME_NON_PROD = "oneLoginHome";
 
-const getIdListFromFilter = memoize(
+export const getIdListFromFilter = memoize(
   (filter: Parameters<typeof filterClients>[1]): string[] => {
     return filterClients(getAppEnv(), filter).map((client) => client.clientId);
   }

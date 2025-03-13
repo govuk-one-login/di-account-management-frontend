@@ -15,6 +15,8 @@
     "no": "Na",
     "backToAccountButtonText": "Yn ôl i’r dudalen Ddiogelwch",
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
+    "noWelshNoticeInline": "This service is not available in Welsh.",
+    "noWelshNoticeGlobal": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg.",
     "cookie": {
       "cookieBanner": {
         "title": "Cwcis ar gyfrif GOV.UK",
@@ -241,6 +243,7 @@
       "title": "Eich gwasanaethau",
       "header": "Eich gwasanaethau",
       "signedInStatus": "Rydych wedi mewngofnodi fel",
+      "intro": "Pan fyddwch chi'n cael mynediad i wasanaeth gyda'ch GOV.UK One Login, bydd yn ymddangos yma.",
       "lastUsed": "Defnyddwyd ddiwethaf",
       "empty": "Nid ydych yn defnyddio unrhyw wasanaethau gyda'ch GOV.UK One Login ar hyn o bryd.",
       "accountsList": {

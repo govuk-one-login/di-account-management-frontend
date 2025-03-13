@@ -5,6 +5,7 @@ import {
   getDynamoServiceStoreTableName,
   getAllowedAccountListClientIDs,
   getAllowedServiceListClientIDs,
+  getIdListFromFilter,
   hmrcClientIds,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
@@ -49,7 +50,6 @@ export const presentYourServices = async (
   const userServices = await getServices(subjectId, trace);
   const accountsList: Service[] = [];
   const servicesList: Service[] = [];
-
   userServices.forEach((service) => {
     if (
       getAllowedAccountListClientIDs.includes(service.client_id) ||
@@ -94,12 +94,15 @@ export const formatService = (
     locale: currentLanguage,
   });
   const hasDetailedCard = hmrcClientIds.includes(service.client_id);
+  const isAvailableInWelsh = serviceIsAvailableInWelsh(service.client_id);
+
   return {
     client_id: service.client_id,
     count_successful_logins: service.count_successful_logins,
     last_accessed: service.last_accessed,
     last_accessed_readable_format: readable_format_date,
-    hasDetailedCard: hasDetailedCard,
+    hasDetailedCard,
+    isAvailableInWelsh,
   };
 };
 
@@ -116,3 +119,6 @@ export const containsGovUkPublishingService = (
     return govUkPublishingClientIds.includes(service.client_id);
   });
 };
+
+export const serviceIsAvailableInWelsh = (serviceId: string): boolean =>
+  getIdListFromFilter({ isAvailableInWelsh: true }).includes(serviceId);

@@ -6,6 +6,7 @@ import * as cheerio from "cheerio";
 import * as nock from "nock";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
+import type { Service } from "../../../../src/utils/types";
 
 const { url } = PATH_DATA.YOUR_SERVICES;
 
@@ -120,12 +121,139 @@ describe("Integration:: your services", () => {
         expect($(testComponent("service-card-long")).length).to.equal(0);
       });
   });
+
+  it("should not display a global notice paragraph when the page is being viewed in English, and English-only services have been visited", async () => {
+    const app = await appWithMiddlewareSetup({
+      hasAccounts: true,
+      accountsList: [
+        {
+          client_id: "gov-uk",
+          count_successful_logins: 1,
+          last_accessed: 12312412532,
+          last_accessed_readable_format: "",
+          isAvailableInWelsh: false,
+        },
+      ],
+    });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("no-welsh-notice-global")).length).to.equal(0);
+      });
+  });
+
+  it("should display a global notice paragraph when the page is being viewed in Welsh, and English-only services have been visited", async () => {
+    const app = await appWithMiddlewareSetup({
+      hasAccounts: true,
+      language: "cy",
+      accountsList: [
+        {
+          client_id: "gov-uk",
+          count_successful_logins: 1,
+          last_accessed: 12312412532,
+          last_accessed_readable_format: "",
+          isAvailableInWelsh: false,
+        },
+      ],
+    });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("no-welsh-notice-global")).length).to.equal(1);
+      });
+  });
+
+  it("should not display an inline notice on English-only service cards, when the current language is English", async () => {
+    const app = await appWithMiddlewareSetup({
+      hasAccounts: true,
+      hasServices: true,
+      accountsList: [
+        {
+          client_id: "gov-uk",
+          count_successful_logins: 1,
+          last_accessed: 12312412532,
+          last_accessed_readable_format: "",
+          isAvailableInWelsh: false,
+        },
+      ],
+      serviceList: [
+        {
+          client_id: "veteransCard",
+          count_successful_logins: 1,
+          last_accessed: 5436437332532,
+          last_accessed_readable_format: "",
+          isAvailableInWelsh: false,
+        },
+        {
+          client_id: "dbs",
+          count_successful_logins: 5,
+          last_accessed: 46435423643,
+          last_accessed_readable_format: "",
+          isAvailableInWelsh: true,
+        },
+      ],
+    });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("no-welsh-notice-inline")).length).to.equal(0);
+      });
+  });
+
+  it("should display an inline notice on English-only service cards, when the current language is Welsh", async () => {
+    const app = await appWithMiddlewareSetup({
+      hasAccounts: true,
+      hasServices: true,
+      language: "cy",
+      accountsList: [
+        {
+          client_id: "gov-uk",
+          count_successful_logins: 1,
+          last_accessed: 12312412532,
+          last_accessed_readable_format: "",
+          isAvailableInWelsh: false,
+        },
+      ],
+      serviceList: [
+        {
+          client_id: "veteransCard",
+          count_successful_logins: 1,
+          last_accessed: 5436437332532,
+          last_accessed_readable_format: "",
+          isAvailableInWelsh: false,
+        },
+        {
+          client_id: "dbs",
+          count_successful_logins: 5,
+          last_accessed: 46435423643,
+          last_accessed_readable_format: "",
+          isAvailableInWelsh: true,
+        },
+      ],
+    });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("no-welsh-notice-inline")).length).to.equal(2);
+      });
+  });
 });
 
 const appWithMiddlewareSetup = async (data?: {
   hasAccounts?: boolean;
   hasServices?: boolean;
+  serviceList?: Service[];
+  accountsList?: Service[];
   hasHMRC?: boolean;
+  language?: string;
 }) => {
   decache("../../../app");
   decache("../../../middleware/requires-auth-middleware");
@@ -135,6 +263,7 @@ const appWithMiddlewareSetup = async (data?: {
   const oidc = require("../../../utils/oidc");
   const params = data || {};
   const hasHMRC = params.hasHMRC || false;
+  const language = params.language || "en";
   const accounts = params.hasAccounts || false;
   const services = params.hasServices || false;
   const serviceList = hasHMRC
@@ -155,7 +284,7 @@ const appWithMiddlewareSetup = async (data?: {
           last_accessed_readable_format: "",
         },
       ];
-  const accountsList = [
+  const accountsList = params.accountsList || [
     {
       client_id: "gov-uk",
       count_successful_logins: "1",
@@ -169,6 +298,7 @@ const appWithMiddlewareSetup = async (data?: {
     res: any,
     next: any
   ): void {
+    req.i18n.language = language;
     req.session.user = DEFAULT_USER_SESSION;
     next();
   });

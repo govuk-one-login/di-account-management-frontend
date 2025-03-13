@@ -54,9 +54,11 @@ describe("your services controller", () => {
       await yourServicesGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith("your-services/index.njk", {
         email: "test@test.com",
+        currentLngWelsh: false,
         accountsList: [],
         servicesList: [],
         env: getAppEnv(),
+        hasEnglishOnlyServices: false,
       });
     });
 
@@ -73,6 +75,115 @@ describe("your services controller", () => {
       expect(res.render).to.have.calledWith("your-services/index.njk", {
         email: "test@test.com",
         env: getAppEnv(),
+        currentLngWelsh: false,
+      });
+    });
+
+    it("should render your services page with English-only services flag, if there are English-only accounts", async () => {
+      const yourServices = require("../../../utils/yourServices");
+      req = validRequest();
+
+      sandbox.stub(yourServices, "presentYourServices").callsFake(function () {
+        return {
+          accountsList: [
+            {
+              client_id: "gov-uk",
+              count_successful_logins: 1,
+              last_accessed: 12312412532,
+              last_accessed_readable_format: "",
+              isAvailableInWelsh: false,
+            },
+          ],
+          servicesList: [
+            {
+              client_id: "veteransCard",
+              count_successful_logins: 1,
+              last_accessed: 5436437332532,
+              last_accessed_readable_format: "",
+              isAvailableInWelsh: true,
+            },
+          ],
+        };
+      });
+
+      await yourServicesGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith("your-services/index.njk", {
+        email: "test@test.com",
+        accountsList: [
+          {
+            client_id: "gov-uk",
+            count_successful_logins: 1,
+            last_accessed: 12312412532,
+            last_accessed_readable_format: "",
+            isAvailableInWelsh: false,
+          },
+        ],
+        servicesList: [
+          {
+            client_id: "veteransCard",
+            count_successful_logins: 1,
+            last_accessed: 5436437332532,
+            last_accessed_readable_format: "",
+            isAvailableInWelsh: true,
+          },
+        ],
+        env: getAppEnv(),
+        currentLngWelsh: false,
+        hasEnglishOnlyServices: true,
+      });
+    });
+
+    it("should render your services page with English-only services flag, if there are English-only services", async () => {
+      const yourServices = require("../../../utils/yourServices");
+      req = validRequest();
+
+      sandbox.stub(yourServices, "presentYourServices").callsFake(function () {
+        return {
+          accountsList: [
+            {
+              client_id: "gov-uk",
+              count_successful_logins: 1,
+              last_accessed: 12312412532,
+              last_accessed_readable_format: "",
+              isAvailableInWelsh: true,
+            },
+          ],
+          servicesList: [
+            {
+              client_id: "veteransCard",
+              count_successful_logins: 1,
+              last_accessed: 5436437332532,
+              last_accessed_readable_format: "",
+              isAvailableInWelsh: false,
+            },
+          ],
+        };
+      });
+
+      await yourServicesGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith("your-services/index.njk", {
+        email: "test@test.com",
+        accountsList: [
+          {
+            client_id: "gov-uk",
+            count_successful_logins: 1,
+            last_accessed: 12312412532,
+            last_accessed_readable_format: "",
+            isAvailableInWelsh: true,
+          },
+        ],
+        servicesList: [
+          {
+            client_id: "veteransCard",
+            count_successful_logins: 1,
+            last_accessed: 5436437332532,
+            last_accessed_readable_format: "",
+            isAvailableInWelsh: false,
+          },
+        ],
+        env: getAppEnv(),
+        currentLngWelsh: false,
+        hasEnglishOnlyServices: true,
       });
     });
   });
