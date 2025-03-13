@@ -477,12 +477,20 @@ export function googleAnalytics4GtmContainerId(): string {
   return process.env.GOOGLE_ANALYTICS_4_GTM_CONTAINER_ID;
 }
 
+export function universalAnalyticsGtmContainerId(): string {
+  return process.env.UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID;
+}
+
 export function googleAnalytics4Enabled(): boolean {
   return process.env.GA4_ENABLED === "true";
 }
 
 export function missionLabsWebSocketAddress(): string {
   return process.env.MISSION_LAB_WEBSOCKET_ADDR;
+}
+
+export function universalAnalyticsEnabled(): boolean {
+  return process.env.UA_ENABLED === "true";
 }
 
 export function selectContentTrackingEnabled(): boolean {

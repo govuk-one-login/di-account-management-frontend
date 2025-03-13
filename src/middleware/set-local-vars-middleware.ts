@@ -5,7 +5,9 @@ import {
   getGtmId,
   getYourAccountUrl,
   googleAnalytics4GtmContainerId,
+  universalAnalyticsGtmContainerId,
   googleAnalytics4Enabled,
+  universalAnalyticsEnabled,
   selectContentTrackingEnabled,
   getDtRumUrl,
   missionLabsWebSocketAddress,
@@ -31,7 +33,9 @@ export async function setLocalVarsMiddleware(
   res.locals.accountSecurity = PATH_DATA.SECURITY.url;
   res.locals.accountSignOut = PATH_DATA.SIGN_OUT.url;
   res.locals.ga4ContainerId = googleAnalytics4GtmContainerId();
+  res.locals.uaContainerId = universalAnalyticsGtmContainerId();
   res.locals.isGa4Enabled = googleAnalytics4Enabled();
+  res.locals.isUaEnabled = universalAnalyticsEnabled();
   res.locals.isSelectContentTrackingEnabled = selectContentTrackingEnabled();
   res.locals.currentUrl = getCurrentUrl(req);
 
