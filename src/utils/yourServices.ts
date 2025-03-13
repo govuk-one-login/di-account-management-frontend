@@ -52,7 +52,6 @@ const presentYourServicesLegacy = async (
   const userServices = await getServices(subjectId, trace);
   const accountsList: Service[] = [];
   const servicesList: Service[] = [];
-
   userServices.forEach((service) => {
     if (
       getAllowedAccountListClientIDs.includes(service.client_id) ||
@@ -132,12 +131,17 @@ export const formatService = (
     locale: currentLanguage,
   });
   const hasDetailedCard = hmrcClientIds.includes(service.client_id);
+  const hasWelshTranslation = getClient(
+    getAppEnv(),
+    service.client_id
+  )?.isAvailableInWelsh;
   return {
     client_id: service.client_id,
     count_successful_logins: service.count_successful_logins,
     last_accessed: service.last_accessed,
     last_accessed_readable_format: readable_format_date,
-    hasDetailedCard: hasDetailedCard,
+    hasDetailedCard,
+    hasWelshTranslation,
   };
 };
 

@@ -241,6 +241,7 @@
       "title": "Eich gwasanaethau",
       "header": "Eich gwasanaethau",
       "signedInStatus": "Rydych wedi mewngofnodi fel",
+      "intro": "Pan fyddwch chi'n cael mynediad i wasanaeth gyda'ch GOV.UK One Login, bydd yn ymddangos yma.",
       "lastUsed": "Defnyddwyd ddiwethaf",
       "empty": "Nid ydych yn defnyddio unrhyw wasanaethau gyda'ch GOV.UK One Login ar hyn o bryd.",
       "accountsList": {
@@ -249,6 +250,8 @@
       "servicesList": {
         "heading": "Gwasanaethau eraill rydych wedi eu defnyddio"
       },
+      "noWelshNoticeServiceCard": "This service is not available in Welsh.",
+      "noWelshNoticeGlobal": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg.",
       "informationBox": {
         "heading": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
         "paragraph1": "Mae GOV.UK One Login yn newydd. Ar hyn o bryd gallwch ond ei ddefnyddio i gael mynediad i rai gwasanaethau'r llywodraeth.",

@@ -54,9 +54,11 @@ describe("your services controller", () => {
       await yourServicesGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith("your-services/index.njk", {
         email: "test@test.com",
+        currentLngWelsh: false,
         accountsList: [],
         servicesList: [],
         env: getAppEnv(),
+        hasEnglishOnlyServices: false,
       });
     });
 
@@ -73,6 +75,7 @@ describe("your services controller", () => {
       expect(res.render).to.have.calledWith("your-services/index.njk", {
         email: "test@test.com",
         env: getAppEnv(),
+        currentLngWelsh: false,
       });
     });
   });

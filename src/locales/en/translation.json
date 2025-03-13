@@ -378,6 +378,7 @@
       "title": "Your services",
       "header": "Your services",
       "signedInStatus": "You’re signed in as",
+      "intro": "When you access a service with your GOV.UK One Login, it will appear here. You can go directly to a service to use it again.",
       "lastUsed": "Last used",
       "empty": "You’re not using any services with your GOV.UK One Login yet.",
       "accountsList": {
@@ -386,6 +387,8 @@
       "servicesList": {
         "heading": "Other services you’ve used"
       },
+      "noWelshNoticeServiceCard": "This service is not available in Welsh.",
+      "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
       "informationBox": {
         "heading": "Services you can use with GOV.UK One Login",
         "paragraph1": "GOV.UK One Login is new. At the moment you can only use it to access some government services.",

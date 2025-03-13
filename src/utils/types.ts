@@ -20,6 +20,7 @@ export interface Service {
   last_accessed: number;
   last_accessed_readable_format: string;
   hasDetailedCard?: boolean;
+  hasWelshTranslation?: boolean;
 }
 
 export interface YourServices {
