@@ -184,8 +184,10 @@ Mappings:
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk"
       SUPPORTMETHODMANAGEMENT: "1"
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
+      UAENABLED: "true"
       SELECTTRACKINGENABLED: "true"
       SUPPORTADDBACKUPMFA: "1"
       SUPPORTCHANGEMFA: "1"
@@ -223,8 +225,10 @@ Mappings:
       SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
+      UAENABLED: "true"
       SELECTTRACKINGENABLED: "true"
       LANGUAGETOGGLE: "1"
       DTRUMURL: ""
@@ -258,8 +262,10 @@ Mappings:
       SUPPORTADDBACKUPMFA: "0"
       SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TK92W68"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
+      UAENABLED: "true"
       SELECTTRACKINGENABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
@@ -294,8 +300,10 @@ Mappings:
       SUPPORTCHANGEMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "TBD"
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
       GA4ENABLED: "false"
+      UAENABLED: "false"
       SELECTTRACKINGENABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
@@ -330,8 +338,10 @@ Mappings:
       SUPPORTADDBACKUPMFA: "0"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables
+      UNIVERSALANALYTICSGTMCONTAINERID: "GTM-TT5HDKV"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
       GA4ENABLED: "true"
+      UAENABLED: "true"
       SELECTTRACKINGENABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
@@ -859,6 +869,13 @@ Resources:
               Value: !Ref Environment
             - Name: "VERIFY_ACCESS_VALUE"
               Value: !Sub "{{resolve:secretsmanager:/${BackendStackName}/Config/Storage/VerificationSecret}}"
+            - Name: "UNIVERSAL_ANALYTICS_GTM_CONTAINER_ID"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  UNIVERSALANALYTICSGTMCONTAINERID,
+                ]
             - Name: "GOOGLE_ANALYTICS_4_GTM_CONTAINER_ID"
               Value:
                 !FindInMap [
@@ -869,6 +886,9 @@ Resources:
             - Name: "GA4_ENABLED"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, GA4ENABLED]
+            - Name: "UA_ENABLED"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, UAENABLED]
             - Name: "SELECT_TRACKING_ENABLED"
               Value:
                 !FindInMap [
