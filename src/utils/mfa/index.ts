@@ -127,6 +127,8 @@ async function retrieveMfaMethods(
       persistentSessionId
     );
 
+    logger.info("Retrieve Response is: ", JSON.stringify(response));
+
     if (response.status === HTTP_STATUS_CODES.OK) {
       data = response.data;
     }
