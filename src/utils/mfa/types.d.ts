@@ -1,7 +1,7 @@
 export type PriorityIdentifier = "DEFAULT" | "BACKUP";
 
 export interface MfaMethod {
-  mfaIdentifier?: number;
+  mfaIdentifier?: string;
   priorityIdentifier: PriorityIdentifier;
   method: smsMethod | authAppMethod;
   methodVerified?: boolean;
@@ -9,7 +9,7 @@ export interface MfaMethod {
 }
 
 export interface AddMfaMethod {
-  mfaIdentifier?: number;
+  mfaIdentifier?: string;
   priorityIdentifier: PriorityIdentifier;
   mfaMethodType: MfaMethodType;
 }
