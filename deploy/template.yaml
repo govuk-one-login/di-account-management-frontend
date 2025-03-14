@@ -186,7 +186,7 @@ Mappings:
       SUPPORTCLIENTREGISTRYLIBRARY: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
-      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk"
+      METHODMANAGEMENTBASEURL: "https://xvzewdo561-vpce-087ac48f23f28a39b.execute-api.region.amazonaws.com/dev"
       SUPPORTMETHODMANAGEMENT: "1"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"

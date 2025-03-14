@@ -21,7 +21,7 @@ describe("MFA Function", () => {
     loggerStub = sinon.stub(logger, "error");
     httpInstance = {
       client: {
-        post: sinon.stub(),
+        get: sinon.stub(),
         put: sinon.stub(),
       },
     };
@@ -34,7 +34,7 @@ describe("MFA Function", () => {
 
   it("should return MFA methods on success", async () => {
     const mfaMethods = ["SMS", "EMAIL"];
-    httpInstance.client.post.resolves({
+    httpInstance.client.get.resolves({
       status: HTTP_STATUS_CODES.OK,
       data: mfaMethods,
     });
@@ -47,12 +47,12 @@ describe("MFA Function", () => {
       "persistentSessionId"
     );
     expect(result).to.deep.equal(mfaMethods);
-    expect(httpInstance.client.post.calledOnce).to.be.true;
+    expect(httpInstance.client.get.calledOnce).to.be.true;
     expect(loggerStub.called).to.be.false;
   });
 
   it("should return an empty array when the status is not OK", async () => {
-    httpInstance.client.post.resolves({
+    httpInstance.client.get.resolves({
       status: HTTP_STATUS_CODES.BAD_REQUEST,
     });
 
@@ -64,11 +64,11 @@ describe("MFA Function", () => {
       "persistentSessionId"
     );
     expect(result).to.deep.equal([]);
-    expect(httpInstance.client.post.calledOnce).to.be.true;
+    expect(httpInstance.client.get.calledOnce).to.be.true;
   });
 
   it("should log an error and return an empty array on exception", async () => {
-    httpInstance.client.post.rejects(new Error("Network error"));
+    httpInstance.client.get.rejects(new Error("Network error"));
 
     const result = await retrieveMfaMethods(
       "accessToken",
@@ -90,7 +90,7 @@ describe("MFA Function", () => {
       title: "Validation Failed",
       errors: [{ detail: "Email is required." }],
     };
-    httpInstance.client.post.rejects({
+    httpInstance.client.get.rejects({
       response: {
         status: HTTP_STATUS_CODES.BAD_REQUEST,
         data: validationProblem,
@@ -117,7 +117,7 @@ describe("MFA Function", () => {
     const validationProblem = {
       title: "General validation error",
     };
-    httpInstance.client.post.rejects({
+    httpInstance.client.get.rejects({
       response: {
         status: HTTP_STATUS_CODES.BAD_REQUEST,
         data: validationProblem,
@@ -145,7 +145,7 @@ describe("MFA Function", () => {
       detail: "Not Found",
       extension: { error: { code: 1056 } },
     };
-    httpInstance.client.post.rejects({
+    httpInstance.client.get.rejects({
       response: { status: HTTP_STATUS_CODES.NOT_FOUND, data: problemDetail },
     });
 
@@ -172,7 +172,7 @@ describe("MFA Function", () => {
   });
 
   it("should log a generic error message for errors without a response status", async () => {
-    httpInstance.client.post.rejects(new Error("Network Error"));
+    httpInstance.client.get.rejects(new Error("Network Error"));
 
     await retrieveMfaMethods(
       "accessToken",
@@ -195,7 +195,7 @@ describe("MFA Function", () => {
       message: "Unexpected error occurred",
     };
 
-    httpInstance.client.post.rejects({
+    httpInstance.client.get.rejects({
       response: { status: HTTP_STATUS_CODES.FORBIDDEN, data: unexpectedError },
     });
 
