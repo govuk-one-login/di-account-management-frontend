@@ -7,126 +7,159 @@ import {
 import { PATH_DATA } from "../../app.constants";
 import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list";
 import { getLastNDigits } from "../../utils/phone-number";
+import { MfaMethod } from "src/utils/mfa/types";
+
+function handleSmsMethod(
+  phoneNumber: string,
+  enterPasswordUrl: string,
+  t: (key: string) => string,
+  supportMfaChange: boolean,
+  priorityIdentifier: string
+) {
+  const lastDigits = getLastNDigits(phoneNumber, 4);
+  return supportMfaChange
+    ? {
+        text: t(
+          "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title"
+        ).replace("[phoneNumber]", lastDigits),
+        linkText: t(
+          "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change"
+        ),
+        linkHref: `${enterPasswordUrl}&type=changePhoneNumber`,
+        priorityIdentifier,
+      }
+    : {
+        type: "SMS",
+        classes: "govuk-summary-list__row--no-border",
+        key: {
+          text: t("pages.security.mfaSection.summaryList.phoneNumber.title"),
+        },
+        value: {
+          text: phoneNumber
+            ? t(
+                "pages.security.mfaSection.summaryList.phoneNumber.value"
+              ).replace("[phoneNumber]", lastDigits)
+            : t("pages.security.mfaSection.summaryList.phoneNumber.notSet"),
+        },
+        actions: {
+          items: [
+            {
+              attributes: { "data-test-id": "change-phone-number" },
+              href: `${enterPasswordUrl}&type=changePhoneNumber`,
+              text: t("general.change"),
+              visuallyHiddenText: t(
+                "pages.security.mfaSection.summaryList.phoneNumber.hiddenText"
+              ),
+            },
+          ],
+        },
+      };
+}
+
+function handleAuthAppMethod(
+  enterPasswordUrl: string,
+  t: (key: string) => string,
+  supportMfaChange: boolean,
+  priorityIdentifier: string
+) {
+  return supportMfaChange
+    ? {
+        text: t(
+          "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.title"
+        ),
+        linkText: t(
+          "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.change"
+        ),
+        linkHref: `${enterPasswordUrl}&type=changeAuthenticatorApp`,
+        priorityIdentifier,
+      }
+    : {
+        type: "AUTH_APP",
+        classes: "govuk-summary-list__row--no-border",
+        key: { text: t("pages.security.mfaSection.summaryList.app.title") },
+        value: { text: "" },
+        actions: {},
+      };
+}
+
+function mapMfaMethods(
+  mfaMethods: MfaMethod[],
+  enterPasswordUrl: string,
+  t: (key: string) => string,
+  supportMfaChange: boolean
+) {
+  return mfaMethods.map(({ method, priorityIdentifier }) => {
+    const { mfaMethodType } = method;
+
+    if (mfaMethodType === "SMS") {
+      return handleSmsMethod(
+        method.phoneNumber,
+        enterPasswordUrl,
+        t,
+        supportMfaChange,
+        priorityIdentifier
+      );
+    }
+
+    if (mfaMethodType === "AUTH_APP") {
+      return handleAuthAppMethod(
+        enterPasswordUrl,
+        t,
+        supportMfaChange,
+        priorityIdentifier
+      );
+    }
+
+    throw new Error(`Unexpected mfaMethodType: ${mfaMethodType}`);
+  });
+}
+
+function canChangePrimaryMethod(mfaMethods: MfaMethod[]): boolean {
+  return (
+    mfaMethods.length > 1 &&
+    mfaMethods.some(
+      (m) =>
+        m.method.mfaMethodType === "SMS" && m.priorityIdentifier === "DEFAULT"
+    ) &&
+    mfaMethods.some(
+      (m) =>
+        m.method.mfaMethodType === "AUTH_APP" &&
+        m.priorityIdentifier === "BACKUP"
+    )
+  );
+}
 
 export async function securityGet(req: Request, res: Response): Promise<void> {
   const { email } = req.session.user;
   const enterPasswordUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=security&edit=true`;
+
+  const supportMfaChange = supportChangeMfa();
+  const supportBackupMfa = supportAddBackupMfa();
   const supportActivityLogFlag = supportActivityLog();
 
-  const hasHmrc = await hasAllowedRSAServices(req, res);
+  const hasRSA = await hasAllowedRSAServices(req, res);
 
-  const activityLogUrl = PATH_DATA.SIGN_IN_HISTORY.url;
-
-  let mfaMethods = [];
-
-  if (supportChangeMfa()) {
-    mfaMethods = Array.isArray(req.session.mfaMethods)
-      ? req.session.mfaMethods.map((mfaMethod) => {
-          let text: string, linkText: string, linkHref: string;
-
-          if (mfaMethod.method.mfaMethodType === "SMS") {
-            const phoneNumber = getLastNDigits(mfaMethod.method.phoneNumber, 4);
-            text = req
-              .t(
-                "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.title"
-              )
-              .replace("[phoneNumber]", phoneNumber);
-            linkText = req.t(
-              "pages.security.mfaSection.supportChangeMfa.defaultMethod.phoneNumber.change"
-            );
-            linkHref = `${enterPasswordUrl}&type=changePhoneNumber`;
-          } else if (mfaMethod.method.mfaMethodType === "AUTH_APP") {
-            text = req.t(
-              "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.title"
-            );
-            linkText = req.t(
-              "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.change"
-            );
-            linkHref = `${enterPasswordUrl}&type=changeAuthenticatorApp`;
-          } else {
-            throw new Error(`Unexpected mfaMethodType: ${mfaMethod.method}`);
-          }
-
-          return {
-            text,
-            linkHref,
-            linkText,
-            priorityIdentifier: mfaMethod.priorityIdentifier,
-          };
-        })
-      : [];
-  } else {
-    mfaMethods = Array.isArray(req.session.mfaMethods)
-      ? req.session.mfaMethods.map((method) => {
-          let key: string,
-            value: string,
-            actions = {};
-          if (method.method.mfaMethodType === "SMS") {
-            const phoneNumber = getLastNDigits(method.method.phoneNumber, 4);
-            key = req.t(
-              "pages.security.mfaSection.summaryList.phoneNumber.title"
-            );
-            value = req
-              .t("pages.security.mfaSection.summaryList.phoneNumber.value")
-              .replace("[phoneNumber]", phoneNumber);
-            actions = {
-              items: [
-                {
-                  attributes: { "data-test-id": "change-phone-number" },
-                  href: `${enterPasswordUrl}&type=changePhoneNumber`,
-                  text: req.t("general.change"),
-                  visuallyHiddenText: req.t(
-                    "pages.security.mfaSection.summaryList.phoneNumber.hiddenText"
-                  ),
-                },
-              ],
-            };
-          } else if (method.method.mfaMethodType === "AUTH_APP") {
-            key = req.t("pages.security.mfaSection.summaryList.app.title");
-          } else {
-            throw new Error(`Unexpected mfaMethodType: ${method.method}`);
-          }
-
-          return {
-            type: method.method.mfaMethodType,
-            classes: "govuk-summary-list__row--no-border",
-            key: {
-              text: key,
-            },
-            value: {
-              text: value,
-            },
-            actions: actions,
-          };
-        })
-      : [];
-  }
-
-  // if primary method is SMS and secondary is app, the primary method cannot be changed to app
-  const denyChangeTypeofPrimary = Array.isArray(req.session.mfaMethods)
-    ? supportChangeMfa() &&
-      req.session.mfaMethods.length > 1 &&
-      req.session.mfaMethods.find(
-        (m) =>
-          m.method.mfaMethodType === "SMS" && m.priorityIdentifier === "DEFAULT"
-      ) &&
-      req.session.mfaMethods.find(
-        (m) =>
-          m.method.mfaMethodType === "AUTH_APP" &&
-          m.priorityIdentifier === "BACKUP"
+  const mfaMethods = Array.isArray(req.session.mfaMethods)
+    ? mapMfaMethods(
+        req.session.mfaMethods,
+        enterPasswordUrl,
+        req.t,
+        supportMfaChange
       )
+    : [];
+
+  const denyChangeTypeofPrimary = Array.isArray(req.session.mfaMethods)
+    ? supportChangeMfa() && canChangePrimaryMethod(req.session.mfaMethods)
     : false;
 
-  const data = {
+  res.render("security/index.njk", {
     email,
-    supportActivityLog: supportActivityLogFlag && hasHmrc,
-    activityLogUrl,
+    supportActivityLog: supportActivityLogFlag && hasRSA,
+    activityLogUrl: PATH_DATA.SIGN_IN_HISTORY.url,
     enterPasswordUrl,
     mfaMethods,
-    supportChangeMfa: supportChangeMfa(),
-    supportAddBackupMfa: supportAddBackupMfa(),
+    supportChangeMfa: supportMfaChange,
+    supportAddBackupMfa: supportBackupMfa,
     canChangeTypeofPrimary: !denyChangeTypeofPrimary,
-  };
-
-  res.render("security/index.njk", data);
+  });
 }

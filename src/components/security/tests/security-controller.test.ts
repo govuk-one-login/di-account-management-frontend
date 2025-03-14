@@ -9,6 +9,8 @@ describe("security controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  let configFuncs: any;
+  let allowedServicesModule: any;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -18,6 +20,8 @@ describe("security controller", () => {
       redirect: sandbox.fake(() => {}),
       locals: {},
     };
+    configFuncs = require("../../../config");
+    allowedServicesModule = require("../../../middleware/check-allowed-services-list");
   });
 
   afterEach(() => {
@@ -25,21 +29,14 @@ describe("security controller", () => {
   });
 
   describe("securityGet", () => {
-    it("should render security view", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportAddBackupMfa").callsFake(() => {
-        return true;
-      });
-      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+    it("should render security view with SMS MFA method", async () => {
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
         .resolves(true);
+
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -51,7 +48,7 @@ describe("security controller", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "SMS",
-            PhoneNumber: "xxxxxxx7898",
+            phoneNumber: "xxxxxxx7898",
           },
           methodVerified: true,
         },
@@ -80,19 +77,75 @@ describe("security controller", () => {
       });
     });
 
+    it("should render security view with SMS MFA method supportChangeMFa disabled", async () => {
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(false);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(true);
+
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        isPhoneNumberVerified: true,
+      } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "SMS",
+            phoneNumber: "xxxxxxx7898",
+          },
+          methodVerified: true,
+        },
+      ] as any;
+
+      await securityGet(req as Request, res as Response);
+
+      expect(res.render).to.have.calledWith("security/index.njk", {
+        email: "test@test.com",
+        supportActivityLog: true,
+        activityLogUrl: "/activity-history",
+        enterPasswordUrl: "/enter-password?from=security&edit=true",
+        mfaMethods: [
+          {
+            type: "SMS",
+            classes: "govuk-summary-list__row--no-border",
+            key: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.title",
+            },
+            value: {
+              text: "pages.security.mfaSection.summaryList.phoneNumber.value",
+            },
+            actions: {
+              items: [
+                {
+                  attributes: {
+                    "data-test-id": "change-phone-number",
+                  },
+                  href: "/enter-password?from=security&edit=true&type=changePhoneNumber",
+                  text: "general.change",
+                  visuallyHiddenText:
+                    "pages.security.mfaSection.summaryList.phoneNumber.hiddenText",
+                },
+              ],
+            },
+          },
+        ],
+        supportChangeMfa: false,
+        supportAddBackupMfa: true,
+        canChangeTypeofPrimary: true,
+      });
+    });
+
     it("should render security view without activity log when the feature flag is off", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-        return false;
-      });
-      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportAddBackupMfa").callsFake(() => {
-        return true;
-      });
-      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox.stub(configFuncs, "supportActivityLog").returns(false);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox.stub(allowedServicesModule, "hasHmrcService").resolves(true);
+
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -134,20 +187,13 @@ describe("security controller", () => {
     });
 
     it("should render security view without activity log when the user doesn't have a supported service", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportAddBackupMfa").callsFake(() => {
-        return true;
-      });
-      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
         .resolves(false);
+
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -189,17 +235,12 @@ describe("security controller", () => {
     });
 
     it("throws an error when the mfaMethodType is undefined", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-        return true;
-      });
-      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
         .resolves(false);
+
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -223,17 +264,12 @@ describe("security controller", () => {
     });
 
     it("throws an error when the mfaMethodType is not unknown", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-        return true;
-      });
-      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
         .resolves(false);
+
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -258,20 +294,13 @@ describe("security controller", () => {
 
     it("should render security view with activity log when the user has a supported service and the feature flag is on", async () => {
       const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-        return true;
-      });
-      sandbox.stub(configFuncs, "supportAddBackupMfa").callsFake(() => {
-        return true;
-      });
-
-      const allowedServicesModule = require("../../../middleware/check-allowed-services-list");
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
         .stub(allowedServicesModule, "hasAllowedRSAServices")
         .resolves(true);
+
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -309,6 +338,195 @@ describe("security controller", () => {
         supportChangeMfa: true,
         supportAddBackupMfa: true,
         canChangeTypeofPrimary: true,
+      });
+    });
+
+    it("should disable MFA changes when supportChangeMfa is false", async () => {
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(false);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(false);
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(true);
+
+      req.session.user = { email: "test@test.com" } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "SMS",
+          },
+          methodVerified: true,
+        },
+      ] as any;
+
+      await securityGet(req as Request, res as Response);
+
+      expect(res.render).to.have.been.calledWithMatch("security/index.njk", {
+        supportChangeMfa: false,
+        supportAddBackupMfa: false,
+      });
+    });
+
+    it("should render security view with empty MFA methods when no MFA methods are set", async () => {
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(true);
+
+      req.session.user = { email: "test@test.com" } as any;
+      req.session.mfaMethods = [];
+
+      await securityGet(req as Request, res as Response);
+
+      expect(res.render).to.have.been.calledWith("security/index.njk", {
+        email: "test@test.com",
+        supportActivityLog: true,
+        activityLogUrl: "/activity-history",
+        enterPasswordUrl: "/enter-password?from=security&edit=true",
+        mfaMethods: [],
+        supportChangeMfa: true,
+        supportAddBackupMfa: true,
+        canChangeTypeofPrimary: true,
+      });
+    });
+
+    it("should render security view with AUTH_APP MFA method", async () => {
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(true);
+
+      req.session.user = { email: "test@test.com" } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 2,
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
+          methodVerified: true,
+        },
+      ] as any;
+
+      await securityGet(req as Request, res as Response);
+
+      expect(res.render).to.have.been.calledWith("security/index.njk", {
+        email: "test@test.com",
+        supportActivityLog: true,
+        activityLogUrl: "/activity-history",
+        enterPasswordUrl: "/enter-password?from=security&edit=true",
+        mfaMethods: [
+          {
+            text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.title",
+            linkHref:
+              "/enter-password?from=security&edit=true&type=changeAuthenticatorApp",
+            linkText:
+              "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.change",
+            priorityIdentifier: "DEFAULT",
+          },
+        ],
+        supportChangeMfa: true,
+        supportAddBackupMfa: true,
+        canChangeTypeofPrimary: true,
+      });
+    });
+
+    it("should render security view with AUTH_APP MFA method supportChangeMFA disabled", async () => {
+      sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(false);
+      sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(true);
+
+      req.session.user = { email: "test@test.com" } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 2,
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
+          methodVerified: true,
+        },
+      ] as any;
+
+      await securityGet(req as Request, res as Response);
+
+      expect(res.render).to.have.been.calledWith("security/index.njk", {
+        email: "test@test.com",
+        supportActivityLog: true,
+        activityLogUrl: "/activity-history",
+        enterPasswordUrl: "/enter-password?from=security&edit=true",
+        mfaMethods: [
+          {
+            type: "AUTH_APP",
+            classes: "govuk-summary-list__row--no-border",
+            key: {
+              text: "pages.security.mfaSection.summaryList.app.title",
+            },
+            value: {
+              text: "",
+            },
+            actions: {},
+          },
+        ],
+        supportChangeMfa: false,
+        supportAddBackupMfa: true,
+        canChangeTypeofPrimary: true,
+      });
+    });
+
+    it("should throw an error for an unsupported MFA method type", async () => {
+      req.session.user = { email: "test@test.com" } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "UNKNOWN",
+            phoneNumber: "xxxxxxx7898",
+          },
+          methodVerified: true,
+        },
+      ] as any;
+
+      await expect(
+        securityGet(req as Request, res as Response)
+      ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: UNKNOWN");
+    });
+
+    it("should set canChangeTypeofPrimary to false when MFA constraints apply", async () => {
+      sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .resolves(true);
+
+      req.session.user = { email: "test@test.com" } as any;
+      req.session.mfaMethods = [
+        {
+          mfaIdentifier: 1,
+          priorityIdentifier: "DEFAULT",
+          method: { mfaMethodType: "SMS" },
+          methodVerified: true,
+        },
+        {
+          mfaIdentifier: 2,
+          priorityIdentifier: "BACKUP",
+          method: { mfaMethodType: "AUTH_APP" },
+          methodVerified: true,
+        },
+      ];
+
+      await securityGet(req as Request, res as Response);
+
+      expect(res.render).to.have.been.calledWithMatch("security/index.njk", {
+        canChangeTypeofPrimary: false, // Should be false due to constraints
       });
     });
   });
