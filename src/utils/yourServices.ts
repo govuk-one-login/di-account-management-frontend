@@ -12,7 +12,7 @@ import {
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
 import { logger } from "./logger";
-import { getClient } from "account-management-rp-registry";
+import { getClient } from "di-account-management-client-registry";
 
 const serviceStoreDynamoDBRequest = (subjectId: string): GetItemCommand => {
   const param = {

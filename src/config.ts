@@ -1,4 +1,4 @@
-import { filterClients } from "account-management-rp-registry";
+import { filterClients } from "di-account-management-client-registry";
 import { ENVIRONMENT_NAME } from "./app.constants";
 import memoize from "fast-memoize";
 

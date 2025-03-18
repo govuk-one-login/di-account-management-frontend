@@ -79,7 +79,7 @@ import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
-import { getTranslations } from "account-management-rp-registry";
+import { getTranslations } from "di-account-management-client-registry";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
