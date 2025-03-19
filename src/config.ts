@@ -335,7 +335,7 @@ export const hmrcClientIds: string[] = supportClientRegistryLibrary()
 
 export const rsaAllowList: string[] = supportClientRegistryLibrary()
   ? getIdListFromFilter({ isReportSuspiciousActivityEnabled: true })
-  : [...hmrcClientIds, STUB_RP_INTEGRATION, STUB_RP_PROD, STUB_RP_STAGING];
+  : [STUB_RP_INTEGRATION, STUB_RP_PROD, STUB_RP_STAGING];
 
 const allowedServiceListClientIDs: string[] = [
   DBS_CHECK_PROD,
