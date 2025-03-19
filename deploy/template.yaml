@@ -84,6 +84,13 @@ Parameters:
   ActivityLogTableName:
     Type: String
     Default: activity_log
+  DeploymentStrategy:
+    Description: "Predefined deployment configuration for ECS application"
+    Type: String
+    Default: "CodeDeployDefault.ECSAllAtOnce"
+    AllowedValues:
+      - CodeDeployDefault.ECSLinear10PercentEvery3Minutes
+      - CodeDeployDefault.ECSAllAtOnce
 
 Conditions:
   UseCodeSigning:
@@ -119,10 +126,6 @@ Conditions:
       - !Equals [!Ref Environment, staging]
       - !Equals [!Ref Environment, integration]
       - !Equals [!Ref Environment, production]
-
-  UseCanaryDeployment: !Or
-    - !Equals [!Ref Environment, production]
-    - !Equals [!Ref Environment, integration]
 
 Mappings:
   ElasticLoadBalancerAccountIds:
@@ -2429,10 +2432,7 @@ Resources:
         GreenTargetGroupName: !GetAtt ApplicationLoadBalancerTargetGroupGreen.TargetGroupName
         LoadBalancerListenerARN: !Ref ApplicationLoadBalancerListenerHTTPS
         ECSServiceTaskDefinition: !Ref TaskDefinition
-        DeploymentStrategy: !If
-          - UseCanaryDeployment
-          - "CodeDeployDefault.ECSLinear10PercentEvery3Minutes"
-          - "CodeDeployDefault.ECSAllAtOnce"
+        DeploymentStrategy: !Ref DeploymentStrategy
         ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
         ContainerPort: !Ref ContainerPort
         CloudWatchAlarms: !Sub
