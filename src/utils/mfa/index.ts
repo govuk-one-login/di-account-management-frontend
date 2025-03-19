@@ -149,14 +149,18 @@ async function getRequest(
   status: number;
   data: MfaMethod[];
 }> {
+  const requestConfig = {
+    token: accessToken,
+    sourceIp,
+    persistentSessionId,
+    sessionId,
+  };
+  logger.info(
+    `MFA Retrieve request URL is: ${METHOD_MANAGEMENT_API.MFA_RETRIEVE} and config is: ${JSON.stringify(requestConfig)}`
+  );
   return http.client.get(
     METHOD_MANAGEMENT_API.MFA_RETRIEVE,
-    getRequestConfig({
-      token: accessToken,
-      sourceIp,
-      persistentSessionId,
-      sessionId,
-    })
+    getRequestConfig(requestConfig)
   );
 }
 
