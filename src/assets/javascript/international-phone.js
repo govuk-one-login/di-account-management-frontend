@@ -1,9 +1,5 @@
-window.DI = window.DI || {};
-window.DI.analyticsUa = window.DI.analyticsUa || {};
-
 (function (w) {
   "use strict";
-
   var onIntNumberSelected = function (
     intPhoneNumberCheckbox,
     phoneNumberInput
@@ -34,13 +30,4 @@ window.DI.analyticsUa = window.DI.analyticsUa || {};
     }
   }
   initChangePhoneNumber();
-
-  function appInit() {
-    var cookies = window.GOVSignIn.Cookies();
-    if (window.DI.analyticsGa4.cookie.hasConsentForAnalytics()) {
-      cookies.initAnalytics();
-    }
-  }
-
-  w.DI.analyticsUa.init = appInit;
 })(window);
