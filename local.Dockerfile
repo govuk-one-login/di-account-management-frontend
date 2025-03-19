@@ -8,4 +8,4 @@ WORKDIR /app
 
 EXPOSE $PORT
 
-CMD npm install && npm run copy-assets && npm run build-js:analytics && npm run dev
+CMD npm install && npm run copy-assets && npm run dev
