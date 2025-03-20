@@ -80,6 +80,7 @@ import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
+import { readFileSync } from "node:fs";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -136,24 +137,29 @@ async function createApp(): Promise<express.Application> {
 
   if (supportClientRegistryLibrary()) {
     const getTranslationObject = (locale: LOCALE) => {
+      const translations = JSON.parse(
+        readFileSync(
+          path.join(__dirname, `locales/${locale}/translation.json`),
+          "utf8"
+        )
+      );
+
       return {
+        ...translations,
         clientRegistry: {
           [getAppEnv()]: getTranslations(getAppEnv(), locale),
         },
       };
     };
-
-    i18next.addResourceBundle(
-      LOCALE.EN,
-      "translation",
-      getTranslationObject(LOCALE.EN),
-      true
-    );
     i18next.addResourceBundle(
       LOCALE.CY,
       "translation",
-      getTranslationObject(LOCALE.CY),
-      true
+      getTranslationObject(LOCALE.CY)
+    );
+    i18next.addResourceBundle(
+      LOCALE.EN,
+      "translation",
+      getTranslationObject(LOCALE.EN)
     );
   }
 
