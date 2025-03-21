@@ -42,7 +42,7 @@ describe("Integration:: Activity history", () => {
     await request(app).get(url).expect(404);
   });
 
-  it("should redirect if the user does not have hmrc services on the list", async () => {
+  it("should redirect if the user does not have allowed activity log services on the list", async () => {
     const app = await appWithMiddlewareSetup([], {
       hideActivityLog: false,
       hasAllowedActivityLogServices: false,
