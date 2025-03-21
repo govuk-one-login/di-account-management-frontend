@@ -439,7 +439,10 @@ export function supportActivityLog(): boolean {
 // reportingFormEnabled() turns the link into the auth-owned RSA journey on/off
 // reportSuspiciousActivity() and reportingFormEnabled() should never be on at the same time
 export function reportingFormEnabled(): boolean {
-  return true;
+  return (
+    process.env.REPORT_SUSPICIOUS_ACTIVITY === "0" &&
+    process.env.REPORTING_FORM_ENABLED === "1"
+  );
 }
 
 export function reportSuspiciousActivity(): boolean {
