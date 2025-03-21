@@ -39,10 +39,47 @@ describe.only("Integration:: Activity history", () => {
 
   it("should not return Activity History page if feature flag is off", async () => {
     const app = await appWithMiddlewareSetup([], { hideActivityLog: true });
-    await request(app).get(url).expect(404);
+    await request(app)
+      .get(url)
+      .expect(200)
+      .expect(function (res) {
+        expect(cheerio.load(res.text)("[id='activity-history']").length).eq(1);
+      });
   });
 
-  it("should redirect if the user does not have hmrc services on the list", async () => {
+  it("should show link to reporting form by default", async () => {
+    const app = await appWithMiddlewareSetup();
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect(
+          $(testComponent("content-for-reporting-form-enabled")).length
+        ).to.not.equal(0);
+        expect(
+          $(testComponent("content-for-reporting-form-disabled")).length
+        ).to.equal(0);
+      });
+  });
+
+  it("should show the correct content when reporting form is disabled", async () => {
+    const app = await appWithMiddlewareSetup([], { hideReportingForm: true });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect(
+          $(testComponent("content-for-reporting-form-disabled")).length
+        ).to.not.equal(0);
+        expect(
+          $(testComponent("content-for-reporting-form-enabled")).length
+        ).to.equal(0);
+      });
+  });
+
+  it("should redirect if the user does not have allowed services on the list", async () => {
     const app = await appWithMiddlewareSetup([], {
       hideActivityLog: false,
       hasAllowedActivityLogServices: false,
@@ -134,6 +171,7 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
   const showActivityLog = !config?.hideActivityLog;
+  const reportingFormEnabled = !config?.hideReportingForm;
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
 
   const activity = data || [
@@ -189,6 +227,10 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
 
   sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
     return showActivityLog;
+  });
+
+  sandbox.stub(configFuncs, "reportingFormEnabled").callsFake(() => {
+    return reportingFormEnabled;
   });
 
   sandbox

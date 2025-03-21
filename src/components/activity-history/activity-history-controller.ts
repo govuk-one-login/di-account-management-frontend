@@ -4,6 +4,7 @@ import {
   activityLogItemsPerPage,
   getOIDCClientId,
   reportSuspiciousActivity,
+  reportingFormEnabled,
 } from "../../config";
 import { PATH_DATA, HTTP_STATUS_CODES } from "../../app.constants";
 import {
@@ -64,8 +65,9 @@ export async function activityHistoryGet(
       pagination: pagination,
       backLink: PATH_DATA.SECURITY.url,
       changePasswordLink: PATH_DATA.SECURITY.url,
-      contactLink: PATH_DATA.CONTACT.url,
+      contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
       homeClientId: getOIDCClientId(),
+      reportingFormEnabled: reportingFormEnabled(),
     });
   } catch (error) {
     logger.error(
