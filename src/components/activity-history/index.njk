@@ -28,11 +28,15 @@
       {% if data.length %} 
         <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
 
-        {% if not reportSuspiciousActivity %}
+        {%- if not reportSuspiciousActivity -%}
+          {%- if reportingFormEnabled -%}
           {{ govukDetails({ 
             summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
             html: securityNoticeHtml
           }) }}
+          {%- else -%}
+          <p class="govuk-body">{{ 'pages.activityHistory.securityNoticeContentAlt' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
+          {%- endif -%}
         {% else %}
         <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
         {% endif %}

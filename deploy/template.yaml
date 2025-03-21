@@ -170,6 +170,7 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
+      REPORTINGFORMENABLED: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
@@ -205,6 +206,7 @@ Mappings:
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
+      REPORTINGFORMENABLED: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
@@ -242,6 +244,7 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
+      REPORTINGFORMENABLED: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
@@ -278,6 +281,7 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
+      REPORTINGFORMENABLED: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
@@ -314,6 +318,7 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
+      REPORTINGFORMENABLED: "1"
       SUPPORTLANGUAGECY: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
@@ -677,6 +682,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   REPORTSUSPICIOUSACTIVITY,
+                ]
+            - Name: "REPORTING_FORM_ENABLED"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  REPORTNGFORMENABLED,
                 ]
             - Name: "BASE_URL"
               Value:
