@@ -869,6 +869,12 @@
         "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
         "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "Y12SlXI_zqYj_z6FFtVHExHjEO8": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "integration": {
@@ -1183,6 +1189,12 @@
         "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
         "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "Y12SlXI_zqYj_z6FFtVHExHjEO8": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "staging": {
@@ -1485,6 +1497,12 @@
         "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
         "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "build": {
@@ -1787,6 +1805,12 @@
         "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
         "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "demo": {
@@ -2089,6 +2113,12 @@
         "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
         "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "dev": {
@@ -2391,6 +2421,12 @@
         "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
         "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "local": {
@@ -2693,6 +2729,12 @@
         "description": "Gwneud cais am grant neu daliad Taliadau Gwledig Cymru.",
         "link_text": "Ewch i'ch cyfrif Taliad Gwledig Cymru",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     }
   }
