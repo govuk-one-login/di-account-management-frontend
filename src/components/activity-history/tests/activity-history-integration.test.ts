@@ -22,7 +22,7 @@ const DEFAULT_USER_SESSION = {
   },
 };
 
-describe("Integration:: Activity history", () => {
+describe.only("Integration:: Activity history", () => {
   beforeEach(() => {
     nock.cleanAll();
   });
@@ -45,7 +45,7 @@ describe("Integration:: Activity history", () => {
   it("should redirect if the user does not have hmrc services on the list", async () => {
     const app = await appWithMiddlewareSetup([], {
       hideActivityLog: false,
-      hasAllowedRSAServices: false,
+      hasAllowedActivityLogServices: false,
     });
     const response = await request(app).get(url);
     expect(response.status).to.equal(302);
@@ -192,8 +192,8 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   });
 
   sandbox
-    .stub(checkAllowedServicesList, "hasAllowedRSAServices")
-    .resolves(config?.hasAllowedRSAServices ?? true);
+    .stub(checkAllowedServicesList, "hasAllowedActivityLogServices")
+    .resolves(config?.hasAllowedActivityLogServices ?? true);
 
   return await require("../../../app").createApp();
 };

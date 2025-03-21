@@ -80,10 +80,10 @@ describe("Integration:: security", () => {
       });
   });
 
-  it("should not display link to activity log when supportActivityLog is true and hasAllowedRSAServices is false", async () => {
+  it("should not display link to activity log when supportActivityLog is true and hasAllowedActivityLogServices is false", async () => {
     const app = await appWithMiddlewareSetup({
       supportActivityLog: true,
-      hasAllowedRSAServices: false,
+      hasAllowedActivityLogServices: false,
     });
     await request(app)
       .get(url)
@@ -164,8 +164,8 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   });
 
   sandbox
-    .stub(checkAllowedServicesList, "hasAllowedRSAServices")
-    .resolves(config?.hasAllowedRSAServices ?? true);
+    .stub(checkAllowedServicesList, "hasAllowedActivityLogServices")
+    .resolves(config?.hasAllowedActivityLogServices ?? true);
 
   sandbox
     .stub(mfa, "default")
