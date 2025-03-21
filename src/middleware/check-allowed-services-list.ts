@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { hmrcClientIds, rsaAllowList } from "../config";
+import { hmrcClientIds, activityLogAllowList } from "../config";
 import { getServices } from "../utils/yourServices";
 import { LOG_MESSAGES, PATH_DATA } from "../app.constants";
 import type { Service } from "../utils/types";
@@ -23,7 +23,7 @@ export const hasHmrcService = async (
   return userServices && findClientInServices(hmrcClientIds, userServices);
 };
 
-export const hasAllowedRSAServices = async (
+export const hasAllowedActivityLogServices = async (
   req: Request,
   res: Response
 ): Promise<boolean> => {
@@ -31,7 +31,9 @@ export const hasAllowedRSAServices = async (
   const { trace } = res.locals;
 
   const userServices = await getServices(user.subjectId, trace);
-  return userServices && findClientInServices(rsaAllowList, userServices);
+  return (
+    userServices && findClientInServices(activityLogAllowList, userServices)
+  );
 };
 
 export async function checkRSAAllowedServicesList(
@@ -39,7 +41,7 @@ export async function checkRSAAllowedServicesList(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  if (await hasAllowedRSAServices(req, res)) {
+  if (await hasAllowedActivityLogServices(req, res)) {
     next();
   } else {
     req.log.info(
