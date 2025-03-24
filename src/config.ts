@@ -228,6 +228,8 @@ const HEAT_NETWORK_ZONING_PROD = "_cv8flGYkTpGUgCQN7Oab8wV15w";
 const HEAT_NETWORK_ZONING_NON_PROD = "heatNetworkZoning";
 const RURAL_PAYMENT_WALES_PROD = "SdpFRM0HdX38FfdbgRX8qzTl8sm";
 const RURAL_PAYMENT_WALES_NON_PROD = "ruralPaymentWales";
+const HO_DORS_PROD = "Y12SlXI_zqYj_z6FFtVHExHjEO8";
+const HO_DORS_NON_PROD = "hoDORS";
 
 const allowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -317,6 +319,8 @@ const allowedAccountListClientIDs: string[] = [
   HEAT_NETWORK_ZONING_NON_PROD,
   RURAL_PAYMENT_WALES_PROD,
   RURAL_PAYMENT_WALES_NON_PROD,
+  HO_DORS_PROD,
+  HO_DORS_NON_PROD,
 ];
 
 const getIdListFromFilter = memoize(
