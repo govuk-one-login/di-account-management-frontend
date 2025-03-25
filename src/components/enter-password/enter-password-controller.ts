@@ -21,7 +21,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeEmail]: PATH_DATA.CHANGE_EMAIL.url,
   [UserJourney.ChangePassword]: PATH_DATA.CHANGE_PASSWORD.url,
   [UserJourney.ChangePhoneNumber]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
-  [UserJourney.ChangeAuthenticatorApp]: PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
+  [UserJourney.ChangeAuthApp]: PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
   [UserJourney.DeleteAccount]: PATH_DATA.DELETE_ACCOUNT.url,
   [UserJourney.AddMfaMethod]: PATH_DATA.ADD_MFA_METHOD.url,
   [UserJourney.RemoveMfaMethod]: PATH_DATA.DELETE_MFA_METHOD.url,
@@ -57,7 +57,7 @@ const OPL_VALUES: Record<
     contentId: "375aa101-7bd6-43c2-ac39-19c864b49844",
     taxonomyLevel2: "remove backup mfa",
   },
-  changeAuthenticatorApp: {
+  changeAuthApp: {
     contentId: "9f21527b-59ec-4de3-99e7-babd5846e8de",
     taxonomyLevel2: "change auth app",
   },

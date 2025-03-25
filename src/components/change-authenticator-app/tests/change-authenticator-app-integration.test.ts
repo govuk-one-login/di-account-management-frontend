@@ -91,7 +91,7 @@ describe("Integration:: change authenticator app", () => {
         req.session.user = {
           email: "test@test.com",
           state: {
-            changeAuthenticatorApp: {
+            changeAuthApp: {
               value: "CHANGE_VALUE",
               events: ["VALUE_UPDATED", "CONFIRMATION"],
             },
