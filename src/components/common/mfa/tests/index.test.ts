@@ -66,6 +66,7 @@ describe("render mfa page", () => {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
+      backLink: undefined,
       errors: {},
       errorList: [],
     });
@@ -116,6 +117,7 @@ describe("render mfa page", () => {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
+      backLink: undefined,
       errors: {
         code: {
           text: "pages.renderUpdateAuthAppPage.errors.maxLength",
@@ -128,6 +130,55 @@ describe("render mfa page", () => {
           href: "#code",
         },
       ],
+    });
+  });
+
+  it("should pass the supplied backlink through to the template", async () => {
+    const req = {
+      body: {
+        code: "qrcode",
+        authAppSecret: "A".repeat(20),
+      },
+      session: {
+        id: "session_id",
+        user: {
+          email: "test@test.com",
+          tokens: { accessToken: "token" },
+          state: { changeAuthenticatorApp: ["VALUE_UPDATED"] },
+        },
+      },
+      log: { error: sinon.fake() },
+      ip: "127.0.0.1",
+      t: (t: string) => t,
+    };
+    const res = {
+      locals: {
+        persistentSessionId: "persistentSessionId",
+      },
+      render: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
+    };
+    const next = sinon.spy();
+
+    sandbox.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
+    sandbox.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+    const templateFilePath = "abc.njk";
+    await renderMfaMethodPage(
+      templateFilePath,
+      req as unknown as Request,
+      res as unknown as Response,
+      next,
+      undefined,
+      "backlink"
+    );
+
+    expect(res.render).to.have.been.calledWith(templateFilePath, {
+      authAppSecret: "A".repeat(20),
+      qrCode: await QRCode.toDataURL("qrcode"),
+      formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
+      errors: undefined,
+      errorList: undefined,
+      backLink: "backlink",
     });
   });
 });

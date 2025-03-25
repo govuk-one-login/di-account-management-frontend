@@ -20,7 +20,8 @@ export async function renderMfaMethodPage(
   req: Request,
   res: Response,
   next: NextFunction,
-  errors?: ReturnType<typeof formatValidationError>
+  errors?: ReturnType<typeof formatValidationError>,
+  backLink?: string
 ): Promise<void> {
   try {
     assert(req.session.user.email, "email not set in session");
@@ -38,6 +39,7 @@ export async function renderMfaMethodPage(
       authAppSecret,
       qrCode,
       formattedSecret: splitSecretKeyIntoFragments(authAppSecret).join(" "),
+      backLink,
       errors,
       errorList: generateErrorList(errors),
     });
