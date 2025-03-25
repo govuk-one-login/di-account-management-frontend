@@ -25,7 +25,7 @@ export async function renderMfaMethodPage(
   try {
     assert(req.session.user.email, "email not set in session");
 
-    const authAppSecret = req.body.authAppSecret || generateMfaSecret();
+    const authAppSecret = req.body?.authAppSecret || generateMfaSecret();
 
     const qrCodeText = generateQRCodeValue(
       authAppSecret,
