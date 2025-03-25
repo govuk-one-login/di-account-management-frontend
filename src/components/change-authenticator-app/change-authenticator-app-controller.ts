@@ -95,8 +95,8 @@ export function changeAuthenticatorAppPost(
     if (isAuthenticatorAppUpdated) {
       req.session.user.authAppSecret = authAppSecret;
 
-      req.session.user.state.changeAuthenticatorApp = getNextState(
-        req.session.user.state.changeAuthenticatorApp.value,
+      req.session.user.state.changeAuthApp = getNextState(
+        req.session.user.state.changeAuthApp.value,
         EventType.ValueUpdated
       );
 

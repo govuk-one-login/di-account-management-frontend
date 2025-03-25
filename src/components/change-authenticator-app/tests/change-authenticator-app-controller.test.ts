@@ -28,7 +28,7 @@ describe("change authenticator app controller", () => {
 
     req = new RequestBuilder()
       .withBody({})
-      .withSessionUserState({ changeAuthenticatorApp: {} })
+      .withSessionUserState({ changeAuthApp: {} })
       .withTimestampT(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
@@ -56,7 +56,7 @@ describe("change authenticator app controller", () => {
           user: {
             email: "test@test.com",
             tokens: { accessToken: "token" },
-            state: { changeAuthenticatorApp: ["VALUE_UPDATED"] },
+            state: { changeAuthApp: ["VALUE_UPDATED"] },
           },
         },
         log: { error: sinon.fake() },
@@ -148,7 +148,7 @@ describe("change authenticator app controller", () => {
         updateAuthenticatorApp: sandbox.fake.resolves(true),
       };
       req.session.user.tokens = { accessToken: "token" } as any;
-      req.session.user.state.changeAuthenticatorApp.value = "CHANGE_VALUE";
+      req.session.user.state.changeAuthApp.value = "CHANGE_VALUE";
       req.session.mfaMethods = [
         {
           mfaIdentifier: 111111,

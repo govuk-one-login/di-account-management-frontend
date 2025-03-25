@@ -70,7 +70,7 @@ function handleAuthAppMethod(
         linkText: t(
           "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.change"
         ),
-        linkHref: `${enterPasswordUrl}&type=changeAuthenticatorApp`,
+        linkHref: `${enterPasswordUrl}&type=changeAuthApp`,
         priorityIdentifier,
       }
     : {

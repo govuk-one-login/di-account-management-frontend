@@ -424,7 +424,7 @@ describe("security controller", () => {
           {
             text: "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.title",
             linkHref:
-              "/enter-password?from=security&edit=true&type=changeAuthenticatorApp",
+              "/enter-password?from=security&edit=true&type=changeAuthApp",
             linkText:
               "pages.security.mfaSection.supportChangeMfa.defaultMethod.app.change",
             priorityIdentifier: "DEFAULT",
