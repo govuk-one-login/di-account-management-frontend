@@ -14,12 +14,21 @@ import { containsNumbersOnly } from "../../utils/strings";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
 
+const backLink = `${PATH_DATA.ENTER_PASSWORD.url}?type=changeAuthApp`;
+
 export async function changeAuthenticatorAppGet(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderMfaMethodPage(CHANGE_AUTHENTICATOR_APP_TEMPLATE, req, res, next);
+  return renderMfaMethodPage(
+    CHANGE_AUTHENTICATOR_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    undefined,
+    backLink
+  );
 }
 
 export function changeAuthenticatorAppPost(
@@ -39,7 +48,8 @@ export function changeAuthenticatorAppPost(
         formatValidationError(
           "code",
           req.t("pages.addMfaMethodApp.errors.invalidFormat")
-        )
+        ),
+        backLink
       );
     }
 
@@ -52,7 +62,8 @@ export function changeAuthenticatorAppPost(
         formatValidationError(
           "code",
           req.t("pages.addMfaMethodApp.errors.maxLength")
-        )
+        ),
+        backLink
       );
     }
 
@@ -65,7 +76,8 @@ export function changeAuthenticatorAppPost(
         formatValidationError(
           "code",
           req.t("pages.addMfaMethodApp.errors.invalidCode")
-        )
+        ),
+        backLink
       );
     }
 

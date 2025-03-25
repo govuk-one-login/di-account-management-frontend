@@ -87,7 +87,7 @@ describe("change authenticator app controller", () => {
           authAppSecret: "A".repeat(20),
           qrCode: await QRCode.toDataURL("qrcode"),
           formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
-          backLink: undefined,
+          backLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changeAuthApp`,
           errors: undefined,
           errorList: undefined,
         }
@@ -215,7 +215,7 @@ describe("change authenticator app controller", () => {
           authAppSecret: "qwer42312345342",
           qrCode: await QRCode.toDataURL("qrcode"),
           formattedSecret: "qwer 4231 2345 342",
-          backLink: undefined,
+          backLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changeAuthApp`,
           errors: { code: { text: undefined, href: "#code" } },
           errorList: [{ text: undefined, href: "#code" }],
         }
