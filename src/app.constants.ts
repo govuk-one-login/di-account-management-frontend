@@ -16,22 +16,22 @@ export const PATH_DATA: Record<
   ADD_MFA_METHOD: {
     url: "/choose-backup",
     event: EventType.SelectedApp,
-    type: UserJourney.AddMfaMethod,
+    type: UserJourney.addBackup,
   },
   ADD_MFA_METHOD_APP: {
-    url: "/add-mfa-method-app",
+    url: "/set-up-auth-app",
     event: EventType.ValueUpdated,
-    type: UserJourney.AddMfaMethod,
+    type: UserJourney.addBackup,
   },
   ADD_MFA_METHOD_APP_CONFIRMATION: {
     url: "/backup-auth-app-confirmation",
     event: EventType.Confirmation,
-    type: UserJourney.AddMfaMethod,
+    type: UserJourney.addBackup,
   },
   ADD_MFA_METHOD_SMS: {
     url: "/add-mfa-method-sms",
     event: EventType.VerifyCodeSent,
-    type: UserJourney.AddMfaMethod,
+    type: UserJourney.addBackup,
   },
   ADD_MFA_METHOD_SMS_CONFIRMATION: {
     url: "/backup-text-message-confirmation",

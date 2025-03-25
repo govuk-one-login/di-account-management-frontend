@@ -6,6 +6,7 @@ import { formatValidationError } from "../../utils/validation";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { renderMfaMethodPage } from "../common/mfa";
 import { getTxmaHeader } from "../../utils/txma-header";
+import { containsNumbersOnly } from "../../utils/strings";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
@@ -36,6 +37,19 @@ export async function addMfaAppMethodPost(
         formatValidationError(
           "code",
           req.t("pages.addMfaMethodApp.errors.required")
+        )
+      );
+    }
+
+    if (!containsNumbersOnly(code)) {
+      return renderMfaMethodPage(
+        ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
+        req,
+        res,
+        next,
+        formatValidationError(
+          "code",
+          req.t("pages.addMfaMethodApp.errors.invalidFormat")
         )
       );
     }
@@ -95,8 +109,8 @@ export async function addMfaAppMethodPost(
       throw Error(`Failed to add MFA method, response status: ${status}`);
     }
 
-    req.session.user.state.addMfaMethod = getNextState(
-      req.session.user.state.addMfaMethod.value,
+    req.session.user.state.addBackup = getNextState(
+      req.session.user.state.addBackup.value,
       EventType.ValueUpdated
     );
     return res.redirect(PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url);

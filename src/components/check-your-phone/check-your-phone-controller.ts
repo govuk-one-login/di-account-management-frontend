@@ -18,7 +18,7 @@ import { supportChangeMfa } from "../../config";
 import { generateSessionDetails } from "../common/mfa";
 import {
   Intent,
-  INTENT_ADD_MFA_METHOD,
+  INTENT_ADD_BACKUP,
   INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../check-your-email/types";
@@ -98,7 +98,7 @@ async function handleMfaChange(
       service,
       trace
     );
-  } else if (intent === INTENT_ADD_MFA_METHOD) {
+  } else if (intent === INTENT_ADD_BACKUP) {
     return handleAddMfaMethod(
       newPhoneNumber,
       updateInput,
@@ -225,7 +225,7 @@ function updateSessionUser(
 }
 
 function getRedirectUrl(intent: Intent): string {
-  if (intent === INTENT_ADD_MFA_METHOD) {
+  if (intent === INTENT_ADD_BACKUP) {
     return PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url;
   }
   if (intent === INTENT_CHANGE_DEFAULT_METHOD) {

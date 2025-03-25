@@ -61,8 +61,8 @@ export function chooseBackupPost(
   }
 
   const selectedMfaMethod = MFA_METHODS[method as MfaMethods];
-  req.session.user.state.addMfaMethod = getNextState(
-    req.session.user.state.addMfaMethod.value,
+  req.session.user.state.addBackup = getNextState(
+    req.session.user.state.addBackup.value,
     selectedMfaMethod.event
   );
 

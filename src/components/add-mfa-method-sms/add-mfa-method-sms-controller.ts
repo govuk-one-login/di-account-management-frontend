@@ -4,7 +4,11 @@ import {
   convertInternationalPhoneNumberToE164Format,
   getLastNDigits,
 } from "../../utils/phone-number";
-import { EventType, getNextState } from "../../utils/state-machine";
+import {
+  EventType,
+  getNextState,
+  UserJourney,
+} from "../../utils/state-machine";
 import xss from "xss";
 import { getTxmaHeader } from "../../utils/txma-header";
 import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
@@ -56,12 +60,12 @@ export function addMfaSmsMethodPost(
       req.session.user.newPhoneNumber = newPhoneNumber;
 
       req.session.user.state.changePhoneNumber = getNextState(
-        req.session.user.state.addMfaMethod.value,
+        req.session.user.state.addBackup.value,
         EventType.VerifyCodeSent
       );
 
       return res.redirect(
-        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addMfaMethod`
+        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${UserJourney.addBackup}`
       );
     }
 
