@@ -256,24 +256,24 @@
       "title": "Set up an authenticator app",
       "step1": {
         "text": "1. Open your authenticator app on your smartphone, tablet, or computer.",
-        "hintTitle": "I don't have an authenticator app",
+        "hintTitle": "I do not have an authenticator app",
         "hintText": [
           "You can download an authenticator app for your smartphone or tablet from your app store.",
-          "If you don't have a smartphone or tablet, search online for an authenticator app for your computer",
+          "If you do not have a smartphone or tablet, search online for an authenticator app for your computer.",
           "You can use any authenticator app."
         ]
       },
       "step2": {
         "text": "2. Use your authenticator app to scan the QR code.",
         "hintTitle": "I cannot scan the QR code",
-        "hintText": "<p>You can enter the secret key into your authenticator app manually.</p><p>Secret Key:<br/><strong>[secretKey]</strong></p><p>Some authenticator apps call the secret key a 'code'.</p>"
+        "hintText": "<p>You can enter the secret key into your authenticator app instead.</p><p>Secret key:<br/><strong>[secretKey]</strong></p><p>Some authenticator apps call the secret key a 'code'.</p>"
       },
       "step3": {
         "text": "3. The authenticator app will show a security code."
       },
       "step4": {
         "text": "4. Enter the code.",
-        "hint": "This is the 6-digit code shown in your authenticator app"
+        "hint": "This is the 6-digit number shown in your authenticator app"
       },
       "errors": {
         "invalidCode": "The code you entered is not correct, check your authenticator app and try again",
