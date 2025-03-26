@@ -428,7 +428,7 @@
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
-      "changeAuthenticatorApp": {
+      "changeAuthApp": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
@@ -1060,6 +1060,12 @@
         "description": "Apply for a Rural Payment Wales grant or payment.",
         "link_text": "Go to your Rural Payment Wales account",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "Y12SlXI_zqYj_z6FFtVHExHjEO8": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "integration": {
@@ -1374,6 +1380,12 @@
         "description": "Apply for a Rural Payment Wales grant or payment.",
         "link_text": "Go to your Rural Payment Wales account",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "Y12SlXI_zqYj_z6FFtVHExHjEO8": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "staging": {
@@ -1676,6 +1688,12 @@
         "description": "Apply for a Rural Payment Wales grant or payment.",
         "link_text": "Go to your Rural Payment Wales account",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "build": {
@@ -1978,6 +1996,12 @@
         "description": "Apply for a Rural Payment Wales grant or payment.",
         "link_text": "Go to your Rural Payment Wales account",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "demo": {
@@ -2280,6 +2304,12 @@
         "description": "Apply for a Rural Payment Wales grant or payment.",
         "link_text": "Go to your Rural Payment Wales account",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "dev": {
@@ -2582,6 +2612,12 @@
         "description": "Apply for a Rural Payment Wales grant or payment.",
         "link_text": "Go to your Rural Payment Wales account",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     },
     "local": {
@@ -2884,6 +2920,12 @@
         "description": "Apply for a Rural Payment Wales grant or payment.",
         "link_text": "Go to your Rural Payment Wales account",
         "link_href": "https://rpwonline.gov.wales"
+      },
+      "hoDORS": {
+        "header": "DBS online results service",
+        "description": "View your DBS result and share with employers or voluntary organisations.",
+        "link_text": "Go to the DBS online results service",
+        "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
       }
     }
   }

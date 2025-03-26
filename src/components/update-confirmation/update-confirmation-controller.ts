@@ -85,7 +85,7 @@ export function updateAuthenticatorAppConfirmationGet(
   req: Request,
   res: Response
 ): void {
-  delete req.session.user.state.changeAuthenticatorApp;
+  delete req.session.user.state.changeAuthApp;
 
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.updateAuthenticatorAppConfirmation.title"),

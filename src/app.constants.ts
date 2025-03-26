@@ -116,7 +116,7 @@ export const PATH_DATA: Record<
   CHANGE_AUTHENTICATOR_APP: {
     url: "/change-authenticator-app",
     event: EventType.ValueUpdated,
-    type: UserJourney.ChangeAuthenticatorApp,
+    type: UserJourney.ChangeAuthApp,
   },
   CHECK_YOUR_PHONE: {
     url: "/check-your-phone",
@@ -136,7 +136,7 @@ export const PATH_DATA: Record<
   AUTHENTICATOR_APP_UPDATED_CONFIRMATION: {
     url: "/change-auth-app-confirmation",
     event: EventType.Confirmation,
-    type: UserJourney.ChangeAuthenticatorApp,
+    type: UserJourney.ChangeAuthApp,
   },
   DELETE_ACCOUNT: {
     url: "/delete-account",

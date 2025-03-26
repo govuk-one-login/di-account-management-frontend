@@ -35,7 +35,7 @@ describe("render mfa page", () => {
         user: {
           email: "test@test.com",
           tokens: { accessToken: "token" },
-          state: { changeAuthenticatorApp: ["VALUE_UPDATED"] },
+          state: { changeAuthApp: ["VALUE_UPDATED"] },
         },
       },
       log: { error: sinon.fake() },
@@ -82,7 +82,7 @@ describe("render mfa page", () => {
         user: {
           email: "test@test.com",
           tokens: { accessToken: "token" },
-          state: { changeAuthenticatorApp: ["VALUE_UPDATED"] },
+          state: { changeAuthApp: ["VALUE_UPDATED"] },
         },
       },
       log: { error: sinon.fake() },
