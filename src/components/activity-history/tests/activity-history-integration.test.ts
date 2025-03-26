@@ -39,16 +39,55 @@ describe("Integration:: Activity history", () => {
 
   it("should not return Activity History page if feature flag is off", async () => {
     const app = await appWithMiddlewareSetup([], { hideActivityLog: true });
+    await request(app).get(url).expect(404);
+  });
+
+  it("should never show link to external reporting form when OLH report suspicious activity journey is enabled", async () => {
+    const app = await appWithMiddlewareSetup(
+      [
+        {
+          event_type: "AUTH_AUTH_CODE_ISSUED",
+          session_id: "asdf",
+          user_id: "string",
+          timestamp: "1689210000",
+          truncated: false,
+          client_id: "vehicleOperatorLicense",
+        },
+      ],
+      {
+        reportSuspiciousActivityJourneyDisabled: false,
+      }
+    );
     await request(app)
       .get(url)
-      .expect(200)
       .expect(function (res) {
-        expect(cheerio.load(res.text)("[id='activity-history']").length).eq(1);
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect(
+          $(testComponent("content-for-reporting-form-disabled")).length
+        ).eq(0);
+        expect(
+          $(testComponent("content-for-reporting-form-enabled")).length
+        ).eq(0);
       });
   });
 
   it("should show link to reporting form by default", async () => {
-    const app = await appWithMiddlewareSetup();
+    const app = await appWithMiddlewareSetup(
+      [
+        {
+          event_type: "AUTH_AUTH_CODE_ISSUED",
+          session_id: "asdf",
+          user_id: "string",
+          timestamp: "1689210000",
+          truncated: false,
+          client_id: "vehicleOperatorLicense",
+        },
+      ],
+      {
+        reportSuspiciousActivityJourneyDisabled: true,
+      }
+    );
     await request(app)
       .get(url)
       .expect(function (res) {
@@ -56,15 +95,30 @@ describe("Integration:: Activity history", () => {
         expect(res.status).to.equal(200);
         expect(
           $(testComponent("content-for-reporting-form-enabled")).length
-        ).to.not.equal(0);
+        ).eq(1);
         expect(
           $(testComponent("content-for-reporting-form-disabled")).length
-        ).to.equal(0);
+        ).eq(0);
       });
   });
 
   it("should show the correct content when reporting form is disabled", async () => {
-    const app = await appWithMiddlewareSetup([], { hideReportingForm: true });
+    const app = await appWithMiddlewareSetup(
+      [
+        {
+          event_type: "AUTH_AUTH_CODE_ISSUED",
+          session_id: "asdf",
+          user_id: "string",
+          timestamp: "1689210000",
+          truncated: false,
+          client_id: "vehicleOperatorLicense",
+        },
+      ],
+      {
+        hideReportingForm: true,
+        reportSuspiciousActivityJourneyDisabled: true,
+      }
+    );
     await request(app)
       .get(url)
       .expect(function (res) {
@@ -72,10 +126,10 @@ describe("Integration:: Activity history", () => {
         expect(res.status).to.equal(200);
         expect(
           $(testComponent("content-for-reporting-form-disabled")).length
-        ).to.not.equal(0);
+        ).eq(1);
         expect(
           $(testComponent("content-for-reporting-form-enabled")).length
-        ).to.equal(0);
+        ).eq(0);
       });
   });
 
@@ -114,7 +168,7 @@ describe("Integration:: Activity history", () => {
       .expect(200)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($('nav[data-test-id="activity-log-pagination"]').length).eq(0);
+        expect($(testComponent("activity-log-pagination")).length).eq(0);
         expect($("ul.activity-history__list").find("li").length).eq(2);
       });
   });
@@ -136,7 +190,7 @@ describe("Integration:: Activity history", () => {
       .expect(200)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($('nav[data-test-id="activity-log-pagination"]').length).eq(1);
+        expect($(testComponent("activity-log-pagination")).length).eq(1);
       });
   });
 
@@ -172,6 +226,8 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const sandbox = sinon.createSandbox();
   const showActivityLog = !config?.hideActivityLog;
   const reportingFormEnabled = !config?.hideReportingForm;
+  const reportSuspiciousActivity =
+    !config?.reportSuspiciousActivityJourneyDisabled;
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
 
   const activity = data || [
@@ -231,6 +287,10 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
 
   sandbox.stub(configFuncs, "reportingFormEnabled").callsFake(() => {
     return reportingFormEnabled;
+  });
+
+  sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+    return reportSuspiciousActivity;
   });
 
   sandbox

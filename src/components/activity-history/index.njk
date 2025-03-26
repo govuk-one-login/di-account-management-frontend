@@ -35,7 +35,7 @@
             html: securityNoticeHtml
           }) }}
           {%- else -%}
-          <p class="govuk-body"  data-test-id="content-for-reporting-form-disabled">{{ 'pages.activityHistory.securityNoticeContentAlt' | translate | safe | replace("[changePasswordLink]", changePasswordLink) }}</p>
+          <p class="govuk-body" data-test-id="content-for-reporting-form-disabled">{{ 'pages.activityHistory.securityNoticeContentAlt' | translate | safe | replace("[changePasswordLink]", changePasswordLink) }}</p>
           {%- endif -%}
         {% else %}
         <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
@@ -71,7 +71,7 @@
       {% if data.length and not pagination.nextPage %}
         {# if this is the last page of the activity log, show an explanatory paragraph #}
         {# the paragraph details when GOVUK One Login started showing activity history #}
-        <p class="govuk-body" data-for-test="activity-log-explainer">{{ 'pages.activityHistory.featureIntro' | translate }}</p>
+        <p class="govuk-body" data-test-id="activity-log-explainer">{{ 'pages.activityHistory.featureIntro' | translate }}</p>
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
       {% endif %}
 
