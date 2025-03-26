@@ -78,8 +78,9 @@ describe("Activity history controller", () => {
             pagination: {},
             backLink: PATH_DATA.SECURITY.url,
             changePasswordLink: PATH_DATA.SECURITY.url,
-            contactLink: PATH_DATA.CONTACT.url,
+            contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
             homeClientId: clientId,
+            supportReportingForm: false,
           }
         );
       });

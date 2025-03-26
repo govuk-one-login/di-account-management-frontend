@@ -5,6 +5,9 @@ export const PATH_DATA: Record<
   { url: string; event?: EventType; type?: UserJourney }
 > = {
   CONTACT: { url: "/contact-gov-uk-one-login" },
+  AUTH_REPORTING_FORM: {
+    url: "https://signin.account.gov.uk/contact-us-questions?theme=suspect_unauthorised_access&referer=",
+  },
   SIGN_IN_HISTORY: { url: "/activity-history" },
   REPORT_SUSPICIOUS_ACTIVITY: { url: "/activity-history/report-activity" },
   MANAGE_YOUR_ACCOUNT: { url: "/manage-your-account" },
@@ -250,6 +253,8 @@ export const LOG_MESSAGES = {
     `Event sent to ${queue} with message id ${messageId}`,
   ILLEGAL_ATTEMPT_TO_ACCESS_RSA:
     "An attempt to access RSA without having visited one of the allowed services was made.",
+  ILLEGAL_ATTEMPT_TO_ACCESS_ACTIVITY_LOG:
+    "An attempt to access the activity log without having visited one of the allowed services was made.",
 };
 
 export const ERROR_MESSAGES = {

@@ -325,9 +325,10 @@
           }
         }
       },
-      "securityNoticeTitle": "If you see something you do not recognise",
-      "securityNoticeContent1": "You should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login secure.",
-      "securityNoticeContent2": "You can also <a target='_blank' href='[reportActivityLink]' class='govuk-link'>report the activity to GOV.UK One Login using phone or webchat (opens in new tab)</a>."
+      "securityNoticeTitle": "If there's activity you do not recognise",
+      "securityNoticeContent1": "You should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login safe.",
+      "securityNoticeContent2": "You can also <a target='_blank' href='[reportActivityLink]' class='govuk-link'>report it to the GOV.UK One Login team (opens in new tab)</a>. The team reviews and acts on these reports but you will not get a personalised reply.",
+      "securityNoticeContentAlt": "If there's activity you do not recognise, you should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login safe."
     },
     "reportSuspiciousActivity": {
       "title": "Report activity you do not recognise",
