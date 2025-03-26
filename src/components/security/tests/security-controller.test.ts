@@ -144,7 +144,9 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(false);
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
-      sandbox.stub(allowedServicesModule, "hasHmrcService").resolves(true);
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
+        .resolves(true);
 
       req.session.user = {
         email: "test@test.com",

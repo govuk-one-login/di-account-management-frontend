@@ -22,7 +22,7 @@ const DEFAULT_USER_SESSION = {
   },
 };
 
-describe.only("Integration:: Activity history", () => {
+describe("Integration:: Activity history", () => {
   beforeEach(() => {
     nock.cleanAll();
   });

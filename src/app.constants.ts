@@ -253,6 +253,8 @@ export const LOG_MESSAGES = {
     `Event sent to ${queue} with message id ${messageId}`,
   ILLEGAL_ATTEMPT_TO_ACCESS_RSA:
     "An attempt to access RSA without having visited one of the allowed services was made.",
+  ILLEGAL_ATTEMPT_TO_ACCESS_ACTIVITY_LOG:
+    "An attempt to access the activity log without having visited one of the allowed services was made.",
 };
 
 export const ERROR_MESSAGES = {
