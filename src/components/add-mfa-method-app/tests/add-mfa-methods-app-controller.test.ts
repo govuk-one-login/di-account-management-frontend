@@ -95,7 +95,7 @@ describe("addMfaAppMethodPost", () => {
         user: {
           email: "test@test.com",
           tokens: { accessToken: "token" },
-          state: { addMfaMethod: { value: "APP" } },
+          state: { addBackup: { value: "APP" } },
         },
       },
       log: { error: sinon.fake() },
@@ -114,7 +114,7 @@ describe("addMfaAppMethodPost", () => {
       redirect: sandbox.fake(() => {}),
     };
     const next = sinon.spy();
-    const addMfaMethod = sinon.fake.returns(
+    const addBackup = sinon.fake.returns(
       Promise.resolve({
         status: 200,
         data: {
@@ -131,8 +131,8 @@ describe("addMfaAppMethodPost", () => {
     sandbox.replace(mfaModule, "verifyMfaCode", () => true);
     sandbox.replace(
       mfaModule,
-      "addMfaMethod",
-      addMfaMethod as typeof mfaModule.addMfaMethod
+      "addBackup",
+      addBackup as typeof mfaModule.addBackup
     );
 
     await addMfaAppMethodPost(
@@ -141,7 +141,7 @@ describe("addMfaAppMethodPost", () => {
       next
     );
 
-    expect(addMfaMethod).to.have.been.calledWith(
+    expect(addBackup).to.have.been.calledWith(
       {
         email: "test@test.com",
         otp: "123456",

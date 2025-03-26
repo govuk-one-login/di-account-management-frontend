@@ -93,12 +93,12 @@ export async function addMfaAppMethodConfirmationGet(
   res: Response
 ): Promise<void> {
   return res.render("common/confirmation-page/confirmation.njk", {
-    pageTitleName: req.t("pages.addMfaMethodSms.confirm.title"),
-    heading: req.t("pages.addMfaMethodSms.confirm.heading"),
+    pageTitleName: req.t("pages.addBackupSms.confirm.title"),
+    heading: req.t("pages.addBackupSms.confirm.heading"),
     message: req
-      .t("pages.addMfaMethodSms.confirm.message")
+      .t("pages.addBackupSms.confirm.message")
       .replace("[mobile]", getLastNDigits(req.session.user.phoneNumber, 4)),
-    backLinkText: req.t("pages.addMfaMethodSms.confirm.backLink"),
+    backLinkText: req.t("pages.addBackupSms.confirm.backLink"),
     backLink: PATH_DATA.SECURITY.url,
   });
 }

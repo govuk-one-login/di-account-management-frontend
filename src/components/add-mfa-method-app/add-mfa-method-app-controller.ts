@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
-import { addMfaMethod, verifyMfaCode } from "../../utils/mfa";
+import { addBackup, verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
 import { formatValidationError } from "../../utils/validation";
 import { EventType, getNextState } from "../../utils/state-machine";
@@ -36,7 +36,7 @@ export async function addMfaAppMethodPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.required")
+          req.t("pages.addBackupApp.errors.required")
         )
       );
     }
@@ -49,7 +49,7 @@ export async function addMfaAppMethodPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.invalidFormat")
+          req.t("pages.addBackupApp.errors.invalidFormat")
         )
       );
     }
@@ -62,7 +62,7 @@ export async function addMfaAppMethodPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.maxLength")
+          req.t("pages.addBackupApp.errors.maxLength")
         )
       );
     }
@@ -77,12 +77,12 @@ export async function addMfaAppMethodPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.invalidCode")
+          req.t("pages.addBackupApp.errors.invalidCode")
         )
       );
     }
 
-    const { status } = await addMfaMethod(
+    const { status } = await addBackup(
       {
         email: req.session.user.email,
         otp: code,

@@ -139,6 +139,8 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
 
   const hasRSA = await hasAllowedRSAServices(req, res);
 
+  console.log("mfa methods", req.session.mfaMethods);
+
   const mfaMethods = Array.isArray(req.session.mfaMethods)
     ? mapMfaMethods(
         req.session.mfaMethods,

@@ -49,7 +49,7 @@ const OPL_VALUES: Record<
     contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349",
     taxonomyLevel2: "delete account",
   },
-  addMfaMethod: {
+  addBackup: {
     contentId: "375aa101-7bd6-43c2-ac39-19c864b49882",
     taxonomyLevel2: "add mfa method",
   },

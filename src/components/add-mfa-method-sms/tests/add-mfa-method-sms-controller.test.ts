@@ -22,7 +22,7 @@ describe("add sms mfa method controller", () => {
 
     req = new RequestBuilder()
       .withBody({})
-      .withSessionUserState({ addMfaMethod: { value: "CHANGE_VALUE" } })
+      .withSessionUserState({ addBackup: { value: "CHANGE_VALUE" } })
       .withTimestampT(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
@@ -47,7 +47,7 @@ describe("add sms mfa method controller", () => {
     req.body.ukPhoneNumber = "1234";
     await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
     expect(redirect).to.be.calledWith(
-      `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addMfaMethod`
+      `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addBackup`
     );
   });
 });

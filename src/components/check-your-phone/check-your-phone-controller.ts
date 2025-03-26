@@ -99,7 +99,7 @@ async function handleMfaChange(
       trace
     );
   } else if (intent === INTENT_ADD_BACKUP) {
-    return handleAddMfaMethod(
+    return handleaddBackup(
       newPhoneNumber,
       updateInput,
       sessionDetails,
@@ -166,7 +166,7 @@ async function handleChangePhoneNumber(
   }
 }
 
-async function handleAddMfaMethod(
+async function handleaddBackup(
   newPhoneNumber: string,
   updateInput: UpdateInformationInput,
   sessionDetails: any,
@@ -180,7 +180,7 @@ async function handleAddMfaMethod(
 
   if (!defaultMfaMethod) {
     logger.error({
-      err: "Check your phone controller: no existing DEFAULT MFA method in handleAddMfaMethod",
+      err: "Check your phone controller: no existing DEFAULT MFA method in handleaddBackup",
       trace: trace,
     });
     return false;
@@ -200,11 +200,11 @@ async function handleAddMfaMethod(
         },
         methodVerified: true,
       };
-      return await service.addMfaMethodService(updateInput, sessionDetails);
+      return await service.addBackupService(updateInput, sessionDetails);
     }
   } catch (error) {
     logger.error({
-      err: `Check your phone controller: no existing MFA method in handleAddMfaMethod: ${error.message} `,
+      err: `Check your phone controller: no existing MFA method in handleaddBackup: ${error.message} `,
       trace: trace,
     });
   }

@@ -6,7 +6,7 @@ import { validationResult } from "express-validator";
 import { validateChooseBackupRequest } from "../choose-backup-validation";
 import { SinonSpy } from "sinon";
 
-describe("validateAddMfaMethodRequest", () => {
+describe("validateaddBackupRequest", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
@@ -32,9 +32,9 @@ describe("validateAddMfaMethodRequest", () => {
     expect(middlewareArray[1]).to.be.a("function");
   });
 
-  it("should validate 'addMfaMethod' field is not empty", async () => {
+  it("should validate 'addBackup' field is not empty", async () => {
     const [validationMiddleware] = validateChooseBackupRequest();
-    req.body.addMfaMethod = ""; // Simulate an empty input
+    req.body.addBackup = ""; // Simulate an empty input
 
     await (validationMiddleware as any)(req, res, next);
 

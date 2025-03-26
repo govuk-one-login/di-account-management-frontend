@@ -66,7 +66,7 @@ describe("check your phone controller", () => {
     fakeService = {
       updatePhoneNumber: sandbox.stub().resolves(true),
       updatePhoneNumberWithMfaApi: sandbox.stub().resolves(true),
-      addMfaMethodService: sandbox.stub().resolves(true),
+      addBackupService: sandbox.stub().resolves(true),
     };
   });
 
@@ -114,7 +114,7 @@ describe("check your phone controller", () => {
       fakeService = {
         updatePhoneNumber: sandbox.fake.resolves(false),
         updatePhoneNumberWithMfaApi: sandbox.fake.resolves(false),
-        addMfaMethodService: sandbox.fake.resolves(false),
+        addBackupService: sandbox.fake.resolves(false),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -217,8 +217,8 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.addMfaMethodService).to.have.been.calledOnce;
-      expect(fakeService.addMfaMethodService).to.have.calledWith({
+      expect(fakeService.addBackupService).to.have.been.calledOnce;
+      expect(fakeService.addBackupService).to.have.calledWith({
         email: "test@test.com",
         otp: "123456",
         credential: "no-credentials",
@@ -249,8 +249,7 @@ describe("check your phone controller", () => {
       req.session.mfaMethods[0].priorityIdentifier =
         "INVALID-PRIORITY-IDENTIFIER" as any;
 
-      const errorMessage =
-        "No existing DEFAULT MFA method in handleAddMfaMethod";
+      const errorMessage = "No existing DEFAULT MFA method in handleaddBackup";
       (fakeService.updatePhoneNumber as sinon.SinonStub).throws(
         new Error(errorMessage)
       );
@@ -259,7 +258,7 @@ describe("check your phone controller", () => {
         await checkYourPhonePost(fakeService)(req as Request, res as Response);
         expect(fakeService.updatePhoneNumber).not.to.have.been.called;
         expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
-        expect(fakeService.addMfaMethodService).not.to.have.been.called;
+        expect(fakeService.addBackupService).not.to.have.been.called;
       } catch (e) {
         expect(errorLoggerSpy).to.have.been.calledWith(errorMessage);
       }
@@ -284,14 +283,14 @@ describe("check your phone controller", () => {
         await checkYourPhonePost(fakeService)(req as Request, res as Response);
         expect(fakeService.updatePhoneNumber).not.to.have.been.called;
         expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
-        expect(fakeService.addMfaMethodService).not.to.have.been.called;
+        expect(fakeService.addBackupService).not.to.have.been.called;
       } catch (e) {
         expect(errorLoggerSpy).to.have.been.calledWith(errorMessage);
       }
       delete process.env.SUPPORT_CHANGE_MFA;
     });
 
-    it("should log an error when addMfaMethodService fails", async () => {
+    it("should log an error when addBackupService fails", async () => {
       process.env.SUPPORT_CHANGE_MFA = "1";
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
@@ -301,7 +300,7 @@ describe("check your phone controller", () => {
       req.session.user.email = "test@test.com";
 
       const errorMessage = "error message";
-      (fakeService.addMfaMethodService as sinon.SinonStub).throws(
+      (fakeService.addBackupService as sinon.SinonStub).throws(
         new Error(errorMessage)
       );
 
