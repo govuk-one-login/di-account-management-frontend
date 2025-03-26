@@ -29,7 +29,7 @@
         <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
 
         {%- if not reportSuspiciousActivity -%}
-          {%- if reportingFormEnabled -%}
+          {%- if supportReportingForm -%}
           {{ govukDetails({ 
             summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
             html: securityNoticeHtml

@@ -225,7 +225,7 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
   const showActivityLog = !config?.hideActivityLog;
-  const reportingFormEnabled = !config?.hideReportingForm;
+  const supportReportingForm = !config?.hideReportingForm;
   const reportSuspiciousActivity =
     !config?.reportSuspiciousActivityJourneyDisabled;
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
@@ -285,8 +285,8 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
     return showActivityLog;
   });
 
-  sandbox.stub(configFuncs, "reportingFormEnabled").callsFake(() => {
-    return reportingFormEnabled;
+  sandbox.stub(configFuncs, "supportReportingForm").callsFake(() => {
+    return supportReportingForm;
   });
 
   sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {

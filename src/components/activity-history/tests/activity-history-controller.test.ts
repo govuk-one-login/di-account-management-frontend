@@ -80,7 +80,7 @@ describe("Activity history controller", () => {
             changePasswordLink: PATH_DATA.SECURITY.url,
             contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
             homeClientId: clientId,
-            reportingFormEnabled: false,
+            supportReportingForm: false,
           }
         );
       });
