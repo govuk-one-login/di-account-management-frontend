@@ -11,7 +11,7 @@ import { CheckYourPhoneServiceInterface } from "../types";
 import { PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import {
-  INTENT_ADD_MFA_METHOD,
+  INTENT_ADD_BACKUP,
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../../check-your-email/types";
 import { logger } from "../../../utils/logger";
@@ -211,7 +211,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
-      req.body.intent = INTENT_ADD_MFA_METHOD;
+      req.body.intent = INTENT_ADD_BACKUP;
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
 
@@ -243,7 +243,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
-      req.body.intent = INTENT_ADD_MFA_METHOD;
+      req.body.intent = INTENT_ADD_BACKUP;
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
       req.session.mfaMethods[0].priorityIdentifier =
@@ -295,7 +295,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
-      req.body.intent = INTENT_ADD_MFA_METHOD;
+      req.body.intent = INTENT_ADD_BACKUP;
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
 
