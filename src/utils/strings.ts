@@ -12,7 +12,6 @@ export function containsNumber(value: string): boolean {
 }
 
 export function containsNumbersOnly(value: string): boolean {
-  console.log("containsNumbersOnly", value);
   return value ? /^\d+$/.test(value) : false;
 }
 
