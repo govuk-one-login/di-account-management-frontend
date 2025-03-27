@@ -9,15 +9,23 @@ export default class MfaClient implements MfaClientInterface {
   private readonly requestConfig: AxiosRequestConfig;
   private readonly http: Http;
 
-  constructor(publicSubjectId: string, requestConfig: AxiosRequestConfig) {
+  constructor(
+    publicSubjectId: string,
+    requestConfig: AxiosRequestConfig,
+    http?: Http
+  ) {
     this.requestConfig = requestConfig;
     this.publicSubjectId = publicSubjectId;
-    this.http = new Http(getMfaServiceUrl());
+    this.http = http ? http : new Http(getMfaServiceUrl());
   }
 
-  retrieve() {
-    const methods: MfaMethod[] = [];
-    return methods;
+  async retrieve() {
+    const response = await this.http.client.get<MfaMethod[]>(
+      `/mfa-methods/${this.publicSubjectId}`,
+      this.requestConfig
+    );
+
+    return response.data;
   }
   // create(method: Method) {}
   // update() {}

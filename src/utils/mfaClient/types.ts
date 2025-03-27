@@ -1,12 +1,12 @@
 export interface MfaClientInterface {
-  retrieve: () => MfaMethod[];
+  retrieve: () => Promise<MfaMethod[]>;
   // create: (method: Method) => MfaMethod;
   // update: (method: MfaMethod) => MfaMethod;
   // delete: (method: MfaMethod) => void;
 }
 
 export interface MfaMethod {
-  mfaIdentifier: number;
+  mfaIdentifier: string;
   priorityIdentifier: PriorityIdentifier;
   method: Method;
   methodVerified: boolean;
