@@ -9,7 +9,7 @@ import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
 import { getAppEnv, getMfaServiceUrl } from "../../config";
 import { authenticator } from "otplib";
 import {
-  addBackupInput,
+  AddBackupInput,
   UpdateInformationInput,
   UpdateInformationSessionValues,
 } from "../types";
@@ -45,7 +45,7 @@ export function addBackup(
   const http = new Http(getMfaServiceUrl());
   const { accessToken, sourceIp, persistentSessionId, sessionId } =
     sessionDetails;
-  const addInput: addBackupInput = {
+  const addInput: AddBackupInput = {
     email: updateInput.email,
     credential: updateInput.credential,
     otp: updateInput.otp,

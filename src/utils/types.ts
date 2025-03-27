@@ -116,7 +116,7 @@ export interface UpdateInformationInput {
   mfaMethod?: MfaMethod;
 }
 
-export interface addBackupInput {
+export interface AddBackupInput {
   email: string;
   credential?: string;
   otp: string;
