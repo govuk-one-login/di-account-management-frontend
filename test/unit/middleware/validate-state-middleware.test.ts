@@ -28,7 +28,7 @@ describe("validate state middleware", () => {
           email: "test@example.com",
           tokens: { accessToken: "dummytoken" },
           state: {
-            addMfaMethod: { value: "CHNAGE_VALUE", events: ["SELECTED_APP"] },
+            addBackup: { value: "CHNAGE_VALUE", events: ["SELECTED_APP"] },
           },
         },
       } as any,

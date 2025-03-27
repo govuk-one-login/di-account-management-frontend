@@ -83,7 +83,7 @@ describe("update confirmation controller", () => {
   });
 });
 
-describe("addMfaMethodAppConfirmationGet", () => {
+describe("addBackupAppConfirmationGet", () => {
   let sandbox: sinon.SinonSandbox;
   let req: any;
   let res: Partial<Response>;
@@ -114,10 +114,10 @@ describe("addMfaMethodAppConfirmationGet", () => {
     expect(res.render).to.be.calledWith(
       "common/confirmation-page/confirmation.njk",
       {
-        pageTitleName: "pages.confirmAddMfaMethod.title",
-        heading: "pages.confirmAddMfaMethod.heading",
-        message: "pages.confirmAddMfaMethod.message",
-        backLinkText: "pages.confirmAddMfaMethod.backLinkText",
+        pageTitleName: "pages.confirmaddBackup.title",
+        heading: "pages.confirmaddBackup.heading",
+        message: "pages.confirmaddBackup.message",
+        backLinkText: "pages.confirmaddBackup.backLinkText",
         backLink: PATH_DATA.SECURITY.url,
       }
     );

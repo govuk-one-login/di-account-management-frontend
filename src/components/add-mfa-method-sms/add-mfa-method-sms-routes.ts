@@ -35,4 +35,4 @@ router.get(
   globalTryCatchAsync(addMfaAppMethodConfirmationGet)
 );
 
-export { router as addMfaMethodSmsRouter };
+export { router as addBackupSmsRouter };

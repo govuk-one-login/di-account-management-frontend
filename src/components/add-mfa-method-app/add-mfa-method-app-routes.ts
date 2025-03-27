@@ -23,4 +23,4 @@ router.post(
   globalTryCatchAsync(addMfaAppMethodPost)
 );
 
-export { router as addMfaMethodAppRouter };
+export { router as addBackupAppRouter };

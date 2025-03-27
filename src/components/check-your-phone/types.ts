@@ -14,7 +14,7 @@ export interface CheckYourPhoneServiceInterface {
     sessionDetails: UpdateInformationSessionValues
   ) => Promise<boolean>;
 
-  addMfaMethodService: (
+  addBackupService: (
     updateInput: UpdateInformationInput,
     sessionDetails: UpdateInformationSessionValues
   ) => Promise<boolean>;

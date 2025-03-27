@@ -6,7 +6,7 @@ import {
 
 import { SignCommandOutput } from "@aws-sdk/client-kms";
 import { PublishCommandOutput } from "@aws-sdk/client-sns";
-import { AddMfaMethod, MfaMethod } from "./mfa/types";
+import { addBackup, MfaMethod } from "./mfa/types";
 import { GetCommandOutput } from "@aws-sdk/lib-dynamodb";
 
 export interface UserServices {
@@ -116,11 +116,11 @@ export interface UpdateInformationInput {
   mfaMethod?: MfaMethod;
 }
 
-export interface AddMFAMethodInput {
+export interface AddBackupInput {
   email: string;
   credential?: string;
   otp: string;
-  mfaMethod?: AddMfaMethod;
+  mfaMethod?: addBackup;
   methodVerified?: boolean;
 }
 

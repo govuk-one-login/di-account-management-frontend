@@ -114,10 +114,10 @@ export async function addMfaAppMethodConfirmationGet(
   res: Response
 ): Promise<void> {
   return res.render("common/confirmation-page/confirmation.njk", {
-    pageTitleName: req.t("pages.confirmAddMfaMethod.title"),
-    heading: req.t("pages.confirmAddMfaMethod.heading"),
-    message: req.t("pages.confirmAddMfaMethod.message"),
-    backLinkText: req.t("pages.confirmAddMfaMethod.backLinkText"),
+    pageTitleName: req.t("pages.confirmaddBackup.title"),
+    heading: req.t("pages.confirmaddBackup.heading"),
+    message: req.t("pages.confirmaddBackup.message"),
+    backLinkText: req.t("pages.confirmaddBackup.backLinkText"),
     backLink: PATH_DATA.SECURITY.url,
   });
 }

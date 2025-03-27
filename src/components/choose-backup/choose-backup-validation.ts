@@ -6,10 +6,10 @@ export function validateChooseBackupRequest(): (
   | ValidationChain
   | ((req: Request, res: Response, next: NextFunction) => void)
 )[] {
-  const addMfaMethodValidation: ValidationChain = body("addMfaMethod")
+  const addBackupValidation: ValidationChain = body("addBackup")
     .notEmpty()
     .withMessage((value, { req }) =>
-      req.t("pages.addMfaMethod.errors.required", { value })
+      req.t("pages.addBackup.errors.required", { value })
     );
 
   const handleValidationErrors = (
@@ -23,5 +23,5 @@ export function validateChooseBackupRequest(): (
     validateBodyMiddleware("choose-backup/index.njk", options)(req, res, next);
   };
 
-  return [addMfaMethodValidation, handleValidationErrors];
+  return [addBackupValidation, handleValidationErrors];
 }
