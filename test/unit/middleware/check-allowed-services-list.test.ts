@@ -8,7 +8,6 @@ import {
   findClientInServices,
 } from "../../../src/middleware/check-allowed-services-list";
 import * as yourServices from "../../../src/utils/yourServices";
-import * as configFuncs from "../../../src/config";
 import * as allowListFuncs from "../../../src/middleware/check-allowed-services-list";
 import { LOG_MESSAGES, PATH_DATA } from "../../../src/app.constants";
 
@@ -25,6 +24,7 @@ describe("activity history allowlist middleware", () => {
 
   describe("checkActivityLogAllowedServicesList function", () => {
     it("calls next function if list of user services contains activity history allowlisted RPs", async () => {
+      //  mortgageDeed is on the allow list
       const yourNewServices = [
         {
           client_id: "prisonVisits",
@@ -47,9 +47,7 @@ describe("activity history allowlist middleware", () => {
         yourNewServices
       );
       sandbox.stub(yourServices, "getServices").resolves(yourNewServices);
-      sandbox
-        .stub(configFuncs, "activityLogAllowList")
-        .resolves(yourNewAllowlist);
+
       sandbox.stub(allowListFuncs, "findClientInServices").returns(containsRps);
       const req: any = {
         session: {
@@ -73,7 +71,7 @@ describe("activity history allowlist middleware", () => {
     });
 
     it("redirects if list of user services does not contain activity history allowlisted RPs", async () => {
-      const configFuncs = require("../../../src/config");
+      // prisonVisits and CMAD not on the allow list, so this should redirect
       sandbox.stub(yourServices, "getServices").resolves([
         {
           client_id: "prisonVisits",
@@ -83,14 +81,13 @@ describe("activity history allowlist middleware", () => {
           hasDetailedCard: true,
         },
         {
-          client_id: "mortgageDeed",
+          client_id: "CMAD",
           count_successful_logins: 1,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
           hasDetailedCard: true,
         },
       ]);
-      sandbox.stub(configFuncs, "activityLogAllowList").returns(["gov-uk"]);
       const req: any = {
         session: {
           user: {
@@ -118,6 +115,7 @@ describe("activity history allowlist middleware", () => {
 
   describe("checkRSAAllowedServicesList function", () => {
     it("calls next function if list of user services contains RSA allowlisted RPs", async () => {
+      // mortgageDeed is on the allow list so this should pass
       const yourNewServices = [
         {
           client_id: "prisonVisits",
@@ -140,9 +138,7 @@ describe("activity history allowlist middleware", () => {
         yourNewServices
       );
       sandbox.stub(yourServices, "getServices").resolves(yourNewServices);
-      sandbox
-        .stub(configFuncs, "activityLogAllowList")
-        .resolves(yourNewAllowlist);
+
       sandbox.stub(allowListFuncs, "findClientInServices").returns(containsRps);
       const req: any = {
         session: {
@@ -166,7 +162,7 @@ describe("activity history allowlist middleware", () => {
     });
 
     it("redirects if list of user services does not contain RSA allowlisted RPs", async () => {
-      const configFuncs = require("../../../src/config");
+      // prisonVisits and CMAD not on the allow list
       sandbox.stub(yourServices, "getServices").resolves([
         {
           client_id: "prisonVisits",
@@ -176,14 +172,13 @@ describe("activity history allowlist middleware", () => {
           hasDetailedCard: true,
         },
         {
-          client_id: "mortgageDeed",
+          client_id: "CMAD",
           count_successful_logins: 1,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
           hasDetailedCard: true,
         },
       ]);
-      sandbox.stub(configFuncs, "activityLogAllowList").returns(["gov-uk"]);
       const req: any = {
         session: {
           user: {

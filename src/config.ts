@@ -337,10 +337,30 @@ export const hmrcClientIds: string[] = supportClientRegistryLibrary()
   ? getIdListFromFilter({ isHmrc: true })
   : [HMRC_NON_PROD, "hmrc"];
 
+// TODO: Update di-account-management-rp-registry RPs with a activityLogAllowList flag
+// Update activityLogAllowList to retrieve list of IDs from RP registry instead
 export const activityLogAllowList: string[] = [
   STUB_RP_INTEGRATION,
   STUB_RP_PROD,
   STUB_RP_STAGING,
+  EARLY_YEARS_CHILD_DEV_TRAINING_PROD,
+  "childDevelopmentTraining",
+  GOV_UK_EMAIL_PROD,
+  "gov-uk",
+  DWP_PROD,
+  DWP_NON_PROD,
+  LITE_PROD,
+  LITE_NON_PROD,
+  GREAT_BRITISH_INSULATION_SCHEME_PROD,
+  "gbis",
+  DFE_TEACHER_VACANCIES_NON_PROD,
+  DFE_TEACHER_VACANCIES_PROD,
+  AAS_PROD,
+  AAS_NON_PROD,
+  SIGN_MORTGAGE_DEED_PROD,
+  "mortgageDeed",
+  VEHICLE_OPERATOR_LICENSE_PROD,
+  "vehicleOperatorLicense",
 ];
 
 const allowedServiceListClientIDs: string[] = [
