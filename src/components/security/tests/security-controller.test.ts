@@ -34,7 +34,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
 
       req.session.user = {
@@ -82,7 +82,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(false);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
 
       req.session.user = {
@@ -144,7 +144,9 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(false);
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
-      sandbox.stub(allowedServicesModule, "hasHmrcService").resolves(true);
+      sandbox
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
+        .resolves(true);
 
       req.session.user = {
         email: "test@test.com",
@@ -191,7 +193,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(false);
 
       req.session.user = {
@@ -238,7 +240,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(true);
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(false);
 
       req.session.user = {
@@ -267,7 +269,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(true);
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(false);
 
       req.session.user = {
@@ -298,7 +300,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
 
       req.session.user = {
@@ -345,7 +347,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(false);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(false);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
 
       req.session.user = { email: "test@test.com" } as any;
@@ -373,7 +375,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
 
       req.session.user = { email: "test@test.com" } as any;
@@ -398,7 +400,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
 
       req.session.user = { email: "test@test.com" } as any;
@@ -441,7 +443,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(false);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
 
       req.session.user = { email: "test@test.com" } as any;
@@ -504,7 +506,7 @@ describe("security controller", () => {
     it("should set canChangeTypeofPrimary to false when MFA constraints apply", async () => {
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox
-        .stub(allowedServicesModule, "hasAllowedRSAServices")
+        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
 
       req.session.user = { email: "test@test.com" } as any;
