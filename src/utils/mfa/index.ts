@@ -68,7 +68,7 @@ export function addMfaMethod(
 }
 
 export async function changeDefaultMfaMethod(
-  mfaMethodId: number,
+  mfaMethodId: string,
   sessionDetails: UpdateInformationSessionValues
 ): Promise<void> {
   const http = new Http(getMfaServiceUrl());
@@ -115,7 +115,8 @@ async function retrieveMfaMethods(
   email: string,
   sourceIp: string,
   sessionId: string,
-  persistentSessionId: string
+  persistentSessionId: string,
+  publicSubjectId: string
 ): Promise<MfaMethod[]> {
   let data: MfaMethod[] = [];
   try {
@@ -124,10 +125,11 @@ async function retrieveMfaMethods(
       email,
       sourceIp,
       sessionId,
-      persistentSessionId
+      persistentSessionId,
+      publicSubjectId
     );
 
-    logger.info("Retrieve Response is: ", JSON.stringify(response));
+    logger.info(`Retrieve Response data is: ${JSON.stringify(response.data)}`);
 
     if (response.status === HTTP_STATUS_CODES.OK) {
       data = response.data;
@@ -144,6 +146,7 @@ async function getRequest(
   sourceIp: string,
   sessionId: string,
   persistentSessionId: string,
+  publicSubjectId: string,
   http: Http = new Http(getMfaServiceUrl())
 ): Promise<{
   status: number;
@@ -155,13 +158,14 @@ async function getRequest(
     persistentSessionId,
     sessionId,
   };
-  logger.info(
-    `MFA Retrieve request URL is: ${METHOD_MANAGEMENT_API.MFA_RETRIEVE} and config is: ${JSON.stringify(requestConfig)}`
-  );
-  return http.client.get(
+  const formattedPath = format(
     METHOD_MANAGEMENT_API.MFA_RETRIEVE,
-    getRequestConfig(requestConfig)
+    publicSubjectId
   );
+  logger.info(
+    `MFA Log Retrieve request URL is: ${getMfaServiceUrl()}${formattedPath}`
+  );
+  return http.client.get(formattedPath, getRequestConfig(requestConfig));
 }
 
 async function putRequest(
