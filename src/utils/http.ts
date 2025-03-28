@@ -9,6 +9,7 @@ import { ApiResponseResult } from "./types";
 import { getApiBaseUrl } from "../config";
 import { HTTP_STATUS_CODES } from "../app.constants";
 import { ApiError } from "./errors";
+import { logger } from "./logger";
 
 const headers: RawAxiosRequestHeaders = {
   Accept: "application/json",
@@ -83,6 +84,8 @@ export function getRequestConfig({
   if (txmaAuditEncoded) {
     config.headers["txma-audit-encoded"] = txmaAuditEncoded;
   }
+
+  logger.info(`MFA Log Populated Request config is: ${JSON.stringify(config)}`);
 
   return config;
 }

@@ -26,6 +26,7 @@ describe("Integration:: check your phone", () => {
       .callsFake(function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
+          publicSubjectId: "publicSubjectId",
           phoneNumber: "07839490040",
           newPhoneNumber: "07839490041",
           isAuthenticated: true,

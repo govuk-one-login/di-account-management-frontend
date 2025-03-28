@@ -15,7 +15,7 @@ export const PATH_DATA: Record<
   SECURITY: { url: "/security" },
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
-  SEARCH_SERVICES: { url: "/services-using-one-login" },
+  SEARCH_SERVICES: { url: "/search-services" },
   ADD_MFA_METHOD: {
     url: "/choose-backup",
     event: EventType.SelectedApp,
@@ -201,7 +201,7 @@ export const API_ENDPOINTS = {
 };
 
 export const METHOD_MANAGEMENT_API = {
-  MFA_RETRIEVE: "/v1/mfa-methods/retrieve",
+  MFA_RETRIEVE: "/v1/mfa-methods/%s",
   MFA_METHODS_ADD: "/v1/mfa-methods",
   MFA_METHODS_PUT: "/v1/mfa-methods/%s",
   MFA_METHODS_DELETE: "/v1/mfa-methods/%s",
