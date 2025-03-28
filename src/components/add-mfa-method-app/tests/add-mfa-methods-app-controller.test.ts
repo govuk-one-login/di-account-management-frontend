@@ -119,7 +119,7 @@ describe("addMfaAppMethodPost", () => {
       Promise.resolve({
         status: 200,
         data: {
-          mfaIdentifier: 1,
+          mfaIdentifier: "1",
           methodVerified: true,
           method: {
             mfaMethodType: "AUTH_APP",

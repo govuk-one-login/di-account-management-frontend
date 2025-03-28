@@ -117,7 +117,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   const mfa = require("../../../utils/mfa");
   const methods: Record<string, MfaMethod> = {
     SMS: {
-      mfaIdentifier: 1,
+      mfaIdentifier: "1",
       priorityIdentifier: "DEFAULT",
       method: {
         mfaMethodType: "SMS",
@@ -126,7 +126,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
       methodVerified: true,
     },
     AUTH_APP: {
-      mfaIdentifier: 123456,
+      mfaIdentifier: "123456",
       priorityIdentifier: "DEFAULT",
       method: {
         mfaMethodType: "AUTH_APP",

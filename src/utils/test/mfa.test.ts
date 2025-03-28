@@ -44,7 +44,8 @@ describe("MFA Function", () => {
       "email@example.com",
       "sourceIp",
       "sessionId",
-      "persistentSessionId"
+      "persistentSessionId",
+      "publicSubjectId"
     );
     expect(result).to.deep.equal(mfaMethods);
     expect(httpInstance.client.get.calledOnce).to.be.true;
@@ -61,7 +62,8 @@ describe("MFA Function", () => {
       "email@example.com",
       "sourceIp",
       "sessionId",
-      "persistentSessionId"
+      "persistentSessionId",
+      "publicSubjectId"
     );
     expect(result).to.deep.equal([]);
     expect(httpInstance.client.get.calledOnce).to.be.true;
@@ -75,7 +77,8 @@ describe("MFA Function", () => {
       "email@example.com",
       "sourceIp",
       "sessionId",
-      "persistentSessionId"
+      "persistentSessionId",
+      "publicSubjectId"
     );
     expect(result).to.deep.equal([]);
     expect(loggerStub.calledOnce).to.be.true;
@@ -102,7 +105,8 @@ describe("MFA Function", () => {
       "email@example.com",
       "sourceIp",
       "sessionId",
-      "persistentSessionId"
+      "persistentSessionId",
+      "publicSubjectId"
     );
 
     expect(
@@ -129,7 +133,8 @@ describe("MFA Function", () => {
       "email@example.com",
       "sourceIp",
       "sessionId",
-      "persistentSessionId"
+      "persistentSessionId",
+      "publicSubjectId"
     );
 
     expect(
@@ -154,7 +159,8 @@ describe("MFA Function", () => {
       "email@example.com",
       "sourceIp",
       "sessionId",
-      "persistentSessionId"
+      "persistentSessionId",
+      "publicSubjectId"
     );
     // Adjusting to use match with a regular expression for partial matches.
     expect(
@@ -179,7 +185,8 @@ describe("MFA Function", () => {
       "email@example.com",
       "sourceIp",
       "sessionId",
-      "persistentSessionId"
+      "persistentSessionId",
+      "publicSubjectId"
     );
     // Again, using match for partial matching within the error message.
     expect(
@@ -204,7 +211,8 @@ describe("MFA Function", () => {
       "email@example.com",
       "sourceIp",
       "sessionId",
-      "persistentSessionId"
+      "persistentSessionId",
+      "publicSubjectId"
     );
 
     expect(
@@ -226,7 +234,7 @@ describe("MFA Function", () => {
     const userLanguage = "en";
 
     const mfaMethod: MfaMethod = {
-      mfaIdentifier: 111111,
+      mfaIdentifier: "111111",
       methodVerified: true,
       method: {
         phoneNumber: phoneNumber,
@@ -273,7 +281,7 @@ describe("MFA Function", () => {
     const authAppSecret = "A".repeat(20);
 
     const mfaMethod: MfaMethod = {
-      mfaIdentifier: 111111,
+      mfaIdentifier: "111111",
       methodVerified: true,
       method: {
         mfaMethodType: "AUTH_APP",
@@ -320,7 +328,7 @@ describe("MFA Function", () => {
     const userLanguage = "en";
 
     const mfaMethod: MfaMethod = {
-      mfaIdentifier: 111111,
+      mfaIdentifier: "111111",
       methodVerified: true,
       method: {
         mfaMethodType: "SMS",
@@ -383,7 +391,7 @@ describe("MFA Function", () => {
     const userLanguage = "en";
 
     const mfaMethod: MfaMethod = {
-      mfaIdentifier: 111111,
+      mfaIdentifier: "111111",
       methodVerified: true,
       method: {
         mfaMethodType: "SMS",
