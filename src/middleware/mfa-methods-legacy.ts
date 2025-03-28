@@ -8,7 +8,7 @@ export function legacyMfaMethodsMiddleware(
   if (req.session.user.isPhoneNumberVerified) {
     req.session.mfaMethods = [
       {
-        mfaIdentifier: 1,
+        mfaIdentifier: "1",
         priorityIdentifier: "DEFAULT",
         method: {
           mfaMethodType: "SMS",
@@ -20,7 +20,7 @@ export function legacyMfaMethodsMiddleware(
   } else {
     req.session.mfaMethods = [
       {
-        mfaIdentifier: 1,
+        mfaIdentifier: "1",
         priorityIdentifier: "DEFAULT",
         method: {
           mfaMethodType: "AUTH_APP",

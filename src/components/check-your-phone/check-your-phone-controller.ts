@@ -192,7 +192,7 @@ async function handleAddMfaMethod(
       updateInput.credential = "no-credentials";
       updateInput.mfaMethod = {
         ...defaultMfaMethod,
-        mfaIdentifier: defaultMfaMethod.mfaIdentifier + 1,
+        mfaIdentifier: req.session.user.publicSubjectId,
         priorityIdentifier: "BACKUP",
         method: {
           mfaMethodType: defaultMfaMethod.method.mfaMethodType,
