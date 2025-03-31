@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { Http } from "../http";
 import { getMfaServiceUrl } from "../../config";
 
-import { MfaClientInterface, MfaMethod } from "./types";
+import { Method, MfaClientInterface, MfaMethod } from "./types";
 
 export default class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;
@@ -27,7 +27,16 @@ export default class MfaClient implements MfaClientInterface {
 
     return response.data;
   }
-  // create(method: Method) {}
+
+  async create(method: Method) {
+    const response = await this.http.client.post<MfaMethod>(
+      `/mfa-methods/${this.publicSubjectId}`,
+      { priorityIdentifier: "DEFAULT", method: method },
+      this.requestConfig
+    );
+
+    return response.data;
+  }
   // update() {}
   // delete() {}
 }

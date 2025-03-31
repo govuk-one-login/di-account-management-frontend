@@ -19,17 +19,14 @@ const mfaMethod: MfaMethod = {
 };
 
 describe("MfaClient", () => {
-  let axiosStub: sinon.SinonStub;
+  const axiosStub = {} as AxiosInstance;
   let client: MfaClient;
-  const requestConfig = getRequestConfig({ token: "token" });
 
   beforeEach(() => {
-    axiosStub = sinon.stub();
-
     client = new MfaClient(
       "publicSubjectId",
-      requestConfig,
-      new Http("http://example.com", axiosStub as unknown as AxiosInstance)
+      getRequestConfig({ token: "token" }),
+      new Http("http://example.com", axiosStub)
     );
   });
 
@@ -39,7 +36,8 @@ describe("MfaClient", () => {
 
   describe("retrieve", () => {
     it("should return a list of MfaMethods", async () => {
-      axiosStub.get = sinon.stub().resolves({ data: [mfaMethod] });
+      const getStub = sinon.stub().resolves({ data: [mfaMethod] });
+      axiosStub.get = getStub;
 
       const methods = await client.retrieve();
       expect(methods.length).to.eq(1);
@@ -50,7 +48,24 @@ describe("MfaClient", () => {
       axiosStub.get = getStub;
 
       await client.retrieve();
-      getStub.calledWith("http://example.com/mfa-methods/publicSubjectId`");
+      expect(
+        getStub.calledWith("http://example.com/mfa-methods/publicSubjectId`")
+      );
+    });
+  });
+
+  describe("create", () => {
+    it("should POST to the endpoint", async () => {
+      const postStub = sinon.stub().resolves({ data: mfaMethod });
+      axiosStub.post = postStub;
+
+      const method = await client.create({
+        type: "SMS",
+        phoneNumber: "123456",
+      } as smsMethod);
+
+      expect(method == mfaMethod);
+      expect(postStub.calledOnce);
     });
   });
 });
