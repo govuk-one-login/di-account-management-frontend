@@ -94,4 +94,26 @@ describe("MfaClient", () => {
       );
     });
   });
+
+  describe("delete", () => {
+    it("should DELETE to the endpoint", async () => {
+      const deleteStub = sinon.stub().resolves();
+      axiosStub.delete = deleteStub;
+
+      expect(deleteStub.calledOnce);
+    });
+
+    it("should include the MFA id in the URL", async () => {
+      const deleteStub = sinon.stub().resolves();
+      axiosStub.delete = deleteStub;
+
+      expect(deleteStub.calledOnce);
+
+      expect(
+        deleteStub.calledWith(
+          "http://example.com/mfa-methods/publicSubjectId/1234"
+        )
+      );
+    });
+  });
 });

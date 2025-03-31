@@ -2,7 +2,7 @@ export interface MfaClientInterface {
   retrieve: () => Promise<MfaMethod[]>;
   create: (method: Method) => Promise<MfaMethod>;
   update: (method: MfaMethod) => Promise<MfaMethod[]>;
-  // delete: (method: MfaMethod) => void;
+  delete: (method: MfaMethod) => void;
 }
 
 export interface MfaMethod {

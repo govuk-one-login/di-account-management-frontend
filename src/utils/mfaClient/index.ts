@@ -46,5 +46,10 @@ export default class MfaClient implements MfaClientInterface {
 
     return response.data;
   }
-  // delete() {}
+  async delete(method: MfaMethod) {
+    await this.http.client.delete(
+      `/mfa-methods/${this.publicSubjectId}/${method.mfaIdentifier}`,
+      this.requestConfig
+    );
+  }
 }
