@@ -4,7 +4,7 @@ import sinon from "sinon";
 
 import { Http } from "../../../src/utils/http";
 import MfaClient, { buildResponse } from "../../../src/utils/mfaClient";
-import { MfaMethod, smsMethod } from "../../../src/utils/mfaClient/types";
+import { MfaMethod, SmsMethod } from "../../../src/utils/mfaClient/types";
 import { getRequestConfig } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
 import { ProblemDetail, ValidationProblem } from "../../../src/utils/mfa/types";
@@ -15,7 +15,7 @@ const mfaMethod: MfaMethod = {
   method: {
     type: "SMS",
     phoneNumber: "123456789",
-  } as smsMethod,
+  } as SmsMethod,
   priorityIdentifier: "DEFAULT",
 };
 
@@ -72,7 +72,7 @@ describe("MfaClient", () => {
       const response = await client.create({
         type: "SMS",
         phoneNumber: "123456",
-      } as smsMethod);
+      } as SmsMethod);
 
       expect(response.data).to.eq(mfaMethod);
       expect(postStub.calledOnce).to.be.true;

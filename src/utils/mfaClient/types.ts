@@ -18,12 +18,12 @@ export interface Method {
   type: string;
 }
 
-export interface smsMethod extends Method {
+export interface SmsMethod extends Method {
   type: "SMS";
   phoneNumber: string;
 }
 
-export interface authAppMethod extends Method {
+export interface AuthAppMethod extends Method {
   mfaMethodType: "AUTH_APP";
   credential: string;
 }
