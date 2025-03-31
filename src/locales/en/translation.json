@@ -1067,6 +1067,12 @@
         "description": "View your DBS result and share with employers or voluntary organisations.",
         "link_text": "Go to the DBS online results service",
         "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
+      },
+      "sXr5F6w5QytPPJN-Dtsgbl6hegQ": {
+        "header": "Foreign influence registration scheme",
+        "description": "Register an arrangement of foreign power influence in UK politics.",
+        "link_text": "Go to your Foreign influence registration scheme account",
+        "link_href": "http://foreign-influence-registration-scheme.service.gov.uk/"
       }
     },
     "integration": {
@@ -1387,6 +1393,12 @@
         "description": "View your DBS result and share with employers or voluntary organisations.",
         "link_text": "Go to the DBS online results service",
         "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
+      },
+      "sXr5F6w5QytPPJN-Dtsgbl6hegQ": {
+        "header": "Foreign influence registration scheme",
+        "description": "Register an arrangement of foreign power influence in UK politics.",
+        "link_text": "Go to your Foreign influence registration scheme account",
+        "link_href": "http://foreign-influence-registration-scheme.service.gov.uk/"
       }
     },
     "staging": {
@@ -1695,6 +1707,12 @@
         "description": "View your DBS result and share with employers or voluntary organisations.",
         "link_text": "Go to the DBS online results service",
         "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
+      },
+      "firs": {
+        "header": "Foreign influence registration scheme",
+        "description": "Register an arrangement of foreign power influence in UK politics.",
+        "link_text": "Go to your Foreign influence registration scheme account",
+        "link_href": "http://foreign-influence-registration-scheme.service.gov.uk/"
       }
     },
     "build": {
@@ -2003,6 +2021,12 @@
         "description": "View your DBS result and share with employers or voluntary organisations.",
         "link_text": "Go to the DBS online results service",
         "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
+      },
+      "firs": {
+        "header": "Foreign influence registration scheme",
+        "description": "Register an arrangement of foreign power influence in UK politics.",
+        "link_text": "Go to your Foreign influence registration scheme account",
+        "link_href": "http://foreign-influence-registration-scheme.service.gov.uk/"
       }
     },
     "demo": {
@@ -2311,6 +2335,12 @@
         "description": "View your DBS result and share with employers or voluntary organisations.",
         "link_text": "Go to the DBS online results service",
         "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
+      },
+      "firs": {
+        "header": "Foreign influence registration scheme",
+        "description": "Register an arrangement of foreign power influence in UK politics.",
+        "link_text": "Go to your Foreign influence registration scheme account",
+        "link_href": "http://foreign-influence-registration-scheme.service.gov.uk/"
       }
     },
     "dev": {
@@ -2619,6 +2649,12 @@
         "description": "View your DBS result and share with employers or voluntary organisations.",
         "link_text": "Go to the DBS online results service",
         "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
+      },
+      "firs": {
+        "header": "Foreign influence registration scheme",
+        "description": "Register an arrangement of foreign power influence in UK politics.",
+        "link_text": "Go to your Foreign influence registration scheme account",
+        "link_href": "http://foreign-influence-registration-scheme.service.gov.uk/"
       }
     },
     "local": {
@@ -2927,6 +2963,12 @@
         "description": "View your DBS result and share with employers or voluntary organisations.",
         "link_text": "Go to the DBS online results service",
         "link_href": "https://www.view-my-disclosure-result.dbsdigital.io/auth/login"
+      },
+      "firs": {
+        "header": "Foreign influence registration scheme",
+        "description": "Register an arrangement of foreign power influence in UK politics.",
+        "link_text": "Go to your Foreign influence registration scheme account",
+        "link_href": "http://foreign-influence-registration-scheme.service.gov.uk/"
       }
     }
   }
