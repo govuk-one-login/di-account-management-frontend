@@ -18,7 +18,7 @@ export default class MfaClient implements MfaClientInterface {
   ) {
     this.requestConfig = requestConfig;
     this.publicSubjectId = publicSubjectId;
-    this.http = http ? http : new Http(getMfaServiceUrl());
+    this.http = http || new Http(getMfaServiceUrl());
   }
 
   async retrieve() {
