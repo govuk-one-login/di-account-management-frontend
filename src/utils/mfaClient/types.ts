@@ -1,8 +1,10 @@
+import { ProblemDetail, ValidationProblem } from "../mfa/types";
+
 export interface MfaClientInterface {
-  retrieve: () => Promise<MfaMethod[]>;
-  create: (method: Method) => Promise<MfaMethod>;
-  update: (method: MfaMethod) => Promise<MfaMethod[]>;
-  delete: (method: MfaMethod) => void;
+  retrieve: () => Promise<ApiResponse<MfaMethod[]>>;
+  create: (method: Method) => Promise<ApiResponse<MfaMethod>>;
+  update: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
+  delete: (method: MfaMethod) => Promise<ApiResponse<any>>;
 }
 
 export interface MfaMethod {
@@ -27,3 +29,10 @@ export interface authAppMethod extends Method {
 }
 
 export type PriorityIdentifier = "DEFAULT" | "BACKUP";
+
+export interface ApiResponse<T> {
+  success: boolean;
+  status: number;
+  data: T;
+  problem?: ValidationProblem | ProblemDetail;
+}
