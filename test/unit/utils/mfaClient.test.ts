@@ -49,9 +49,7 @@ describe("MfaClient", () => {
       axiosStub.get = getStub;
 
       await client.retrieve();
-      expect(
-        getStub.calledWith("http://example.com/mfa-methods/publicSubjectId`")
-      );
+      expect(getStub.calledWith("/mfa-methods/publicSubjectId")).to.be.true;
     });
 
     it("passes through the status and problem for a non-successful request", async () => {
@@ -60,9 +58,9 @@ describe("MfaClient", () => {
       axiosStub.get = getStub;
 
       const response = await client.retrieve();
-      expect(!response.success);
-      expect(response.status == 404);
-      expect(response.problem?.title == problem.title);
+      expect(response.success).to.be.false;
+      expect(response.status).to.eq(404);
+      expect(response.problem?.title).to.eq(problem.title);
     });
   });
 
@@ -76,8 +74,8 @@ describe("MfaClient", () => {
         phoneNumber: "123456",
       } as smsMethod);
 
-      expect(response.data == mfaMethod);
-      expect(postStub.calledOnce);
+      expect(response.data).to.eq(mfaMethod);
+      expect(postStub.calledOnce).to.be.true;
     });
   });
 
@@ -89,8 +87,8 @@ describe("MfaClient", () => {
       const response = await client.update(mfaMethod);
 
       expect(response.data.length).to.eq(1);
-      expect(response.data[0] == mfaMethod);
-      expect(putStub.calledOnce);
+      expect(response.data[0]).to.eq(mfaMethod);
+      expect(putStub.calledOnce).to.be.true;
     });
 
     it("should include the MFA id in the URL", async () => {
@@ -99,31 +97,29 @@ describe("MfaClient", () => {
 
       await client.update(mfaMethod);
 
-      expect(
-        putStub.calledWith(
-          "http://example.com/mfa-methods/publicSubjectId/1234"
-        )
-      );
+      expect(putStub.calledWith("/mfa-methods/publicSubjectId/1234")).to.be
+        .true;
     });
   });
 
   describe("delete", () => {
     it("should DELETE to the endpoint", async () => {
-      const deleteStub = sinon.stub().resolves();
+      const deleteStub = sinon.stub().resolves({ status: 204, data: null });
       axiosStub.delete = deleteStub;
 
-      expect(deleteStub.calledOnce);
+      await client.delete(mfaMethod);
+
+      expect(deleteStub.calledOnce).to.be.true;
     });
 
     it("should include the MFA id in the URL", async () => {
-      const deleteStub = sinon.stub().resolves();
+      const deleteStub = sinon.stub().resolves({ status: 204, data: null });
       axiosStub.delete = deleteStub;
 
-      expect(
-        deleteStub.calledWith(
-          "http://example.com/mfa-methods/publicSubjectId/1234"
-        )
-      );
+      await client.delete(mfaMethod);
+
+      expect(deleteStub.calledWith("/mfa-methods/publicSubjectId/1234")).to.be
+        .true;
     });
   });
 });
@@ -137,9 +133,9 @@ describe("buildRequest", () => {
 
     const apiResponse = buildResponse(response);
 
-    expect(response.status == apiResponse.status);
-    expect(apiResponse.success);
-    expect(apiResponse.data == mfaMethod);
+    expect(response.status).to.eq(apiResponse.status);
+    expect(apiResponse.success).to.be.true;
+    expect(apiResponse.data).to.eq(mfaMethod);
   });
 
   it("returns success when response status is 204", () => {
@@ -149,7 +145,7 @@ describe("buildRequest", () => {
 
     const apiResponse = buildResponse(response);
 
-    expect(apiResponse.success);
+    expect(apiResponse.success).to.be.true;
   });
 
   it("returns a ValidationProblem when response status is 400", () => {
@@ -164,8 +160,8 @@ describe("buildRequest", () => {
 
     const apiResponse = buildResponse(response);
 
-    expect(apiResponse.status == 400);
-    expect(!apiResponse.success);
-    expect(apiResponse.problem == response.data);
+    expect(apiResponse.status).to.eq(400);
+    expect(apiResponse.success).to.be.false;
+    expect(apiResponse.problem).to.eq(response.data);
   });
 });
