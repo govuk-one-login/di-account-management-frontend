@@ -37,6 +37,14 @@ export default class MfaClient implements MfaClientInterface {
 
     return response.data;
   }
-  // update() {}
+  async update(method: MfaMethod) {
+    const response = await this.http.client.put<MfaMethod[]>(
+      `/mfa-methods/${this.publicSubjectId}/${method.mfaIdentifier}`,
+      { mfaMethod: method },
+      this.requestConfig
+    );
+
+    return response.data;
+  }
   // delete() {}
 }

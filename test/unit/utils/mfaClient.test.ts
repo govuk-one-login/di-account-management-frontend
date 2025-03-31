@@ -68,4 +68,30 @@ describe("MfaClient", () => {
       expect(postStub.calledOnce);
     });
   });
+
+  describe("update", () => {
+    it("should PUT to the endpoint", async () => {
+      const putStub = sinon.stub().resolves({ data: [mfaMethod] });
+      axiosStub.put = putStub;
+
+      const methods = await client.update(mfaMethod);
+
+      expect(methods.length).to.eq(1);
+      expect(methods[0] == mfaMethod);
+      expect(putStub.calledOnce);
+    });
+
+    it("should include the MFA id in the URL", async () => {
+      const putStub = sinon.stub().resolves({ data: [mfaMethod] });
+      axiosStub.put = putStub;
+
+      await client.update(mfaMethod);
+
+      expect(
+        putStub.calledWith(
+          "http://example.com/mfa-methods/publicSubjectId/1234"
+        )
+      );
+    });
+  });
 });
