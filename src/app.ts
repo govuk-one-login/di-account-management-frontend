@@ -22,7 +22,6 @@ import {
   getSessionSecret,
   supportActivityLog,
   supportChangeMfa,
-  supportClientRegistryLibrary,
   supportSearchableList,
   supportTriagePage,
   supportWebchatContact,
@@ -129,39 +128,33 @@ async function createApp(): Promise<express.Application> {
   await i18next
     .use(Backend)
     .use(i18nextMiddleware.LanguageDetector)
-    .init(
-      i18nextConfigurationOptions(
-        path.join(__dirname, "locales/{{lng}}/{{ns}}.json")
+    .init(i18nextConfigurationOptions());
+
+  const getTranslationObject = (locale: LOCALE) => {
+    const translations = JSON.parse(
+      readFileSync(
+        path.join(__dirname, `locales/${locale}/translation.json`),
+        "utf8"
       )
     );
 
-  if (supportClientRegistryLibrary()) {
-    const getTranslationObject = (locale: LOCALE) => {
-      const translations = JSON.parse(
-        readFileSync(
-          path.join(__dirname, `locales/${locale}/translation.json`),
-          "utf8"
-        )
-      );
-
-      return {
-        ...translations,
-        clientRegistry: {
-          [getAppEnv()]: getTranslations(getAppEnv(), locale),
-        },
-      };
+    return {
+      ...translations,
+      clientRegistry: {
+        [getAppEnv()]: getTranslations(getAppEnv(), locale),
+      },
     };
-    i18next.addResourceBundle(
-      LOCALE.CY,
-      "translation",
-      getTranslationObject(LOCALE.CY)
-    );
-    i18next.addResourceBundle(
-      LOCALE.EN,
-      "translation",
-      getTranslationObject(LOCALE.EN)
-    );
-  }
+  };
+  i18next.addResourceBundle(
+    LOCALE.CY,
+    "translation",
+    getTranslationObject(LOCALE.CY)
+  );
+  i18next.addResourceBundle(
+    LOCALE.EN,
+    "translation",
+    getTranslationObject(LOCALE.EN)
+  );
 
   app.use(i18nextMiddleware.handle(i18next));
   if (supportWebchatContact()) {
