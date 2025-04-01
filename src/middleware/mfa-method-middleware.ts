@@ -18,7 +18,8 @@ export async function mfaMethodMiddleware(
       email,
       req.ip,
       res.locals.sessionId,
-      res.locals.persistentSessionId
+      res.locals.persistentSessionId,
+      req.session.user.publicSubjectId
     );
     req.session.mfaMethods = [...response];
     next();

@@ -39,7 +39,7 @@ describe("changeAuthenticatorAppService", () => {
     process.env.SUPPORT_CHANGE_MFA = "1";
 
     const mfaMethod: MfaMethod = {
-      mfaIdentifier: 2,
+      mfaIdentifier: "2",
       priorityIdentifier: "BACKUP",
       method: {
         mfaMethodType: "AUTH_APP",
