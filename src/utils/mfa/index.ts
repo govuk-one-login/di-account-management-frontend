@@ -9,7 +9,7 @@ import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
 import { getAppEnv, getMfaServiceUrl } from "../../config";
 import { authenticator } from "otplib";
 import {
-  AddMFAMethodInput,
+  AddBackupInput,
   UpdateInformationInput,
   UpdateInformationSessionValues,
 } from "../types";
@@ -35,7 +35,7 @@ export function verifyMfaCode(secret: string, code: string): boolean {
   return authenticator.check(code, secret);
 }
 
-export function addMfaMethod(
+export function addBackup(
   updateInput: UpdateInformationInput,
   sessionDetails: UpdateInformationSessionValues
 ): Promise<{
@@ -45,7 +45,7 @@ export function addMfaMethod(
   const http = new Http(getMfaServiceUrl());
   const { accessToken, sourceIp, persistentSessionId, sessionId } =
     sessionDetails;
-  const addInput: AddMFAMethodInput = {
+  const addInput: AddBackupInput = {
     email: updateInput.email,
     credential: updateInput.credential,
     otp: updateInput.otp,
@@ -273,7 +273,7 @@ export async function createOrUpdateMfaMethod(
 ): Promise<boolean> {
   let isUpdated = false;
   try {
-    const response = await addMfaMethod(updateInput, sessionDetails);
+    const response = await addBackup(updateInput, sessionDetails);
 
     if (response.status === HTTP_STATUS_CODES.OK) {
       isUpdated = true;

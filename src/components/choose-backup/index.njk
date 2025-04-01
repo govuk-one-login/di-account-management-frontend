@@ -5,19 +5,19 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set helpText %}
-    <p class="govuk-body">{{ 'pages.addMfaMethod.app.help.text1' | translate }}</p>
-    <p class="govuk-body">{{ 'pages.addMfaMethod.app.help.text2' | translate }}</p>
+    <p class="govuk-body">{{ 'pages.addBackup.app.help.text1' | translate }}</p>
+    <p class="govuk-body">{{ 'pages.addBackup.app.help.text2' | translate }}</p>
 {% endset %}
 {% set smsItem = {
     value: 'sms',
-    text: 'pages.addMfaMethod.sms.title' | translate,
+    text: 'pages.addBackup.sms.title' | translate,
     hint: { 
-        text: 'pages.addMfaMethod.sms.hint' | translate
+        text: 'pages.addBackup.sms.hint' | translate
     }
 } %}
 {% set appItem = {
     value: 'app',
-    text: 'pages.addMfaMethod.app.title' | translate
+    text: 'pages.addBackup.app.title' | translate
 } %}
 
 {% if showSingleMethod %}
@@ -26,26 +26,26 @@
     {% set mfaMethods = [smsItem, appItem] %}
 {% endif %}
 
-{% set pageTitleName = 'pages.addMfaMethod.title' | translate %}
+{% set pageTitleName = 'pages.addBackup.title' | translate %}
 {% block pageContent %}
     {% include "common/errors/errorSummary.njk" %}
     <form action="{{ "ADD_MFA_METHOD" | getPath }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
     {% if showSingleMethod %}
-      <input type="hidden" name="addMfaMethod" value="sms" />
-      <h1 class="govuk-heading-l">{{ "pages.addMfaMethod.backup.title" | translate }}</h1>
-      <p class="govuk-body">{{ pages.addMfaMethod.backup.sms.message | translate }}</p>
+      <input type="hidden" name="addBackup" value="sms" />
+      <h1 class="govuk-heading-l">{{ "pages.addBackup.backup.title" | translate }}</h1>
+      <p class="govuk-body">{{ pages.addBackup.backup.sms.message | translate }}</p>
         {{ govukButton({
-            "text": button_text|default("pages.addMfaMethod.backup.sms.button" | translate, true),
+            "text": button_text|default("pages.addBackup.backup.sms.button" | translate, true),
             "type": "Submit",
             "preventDoubleClick": true
         }) }}
     {% else %}
       {{ govukRadios({
-        name: "addMfaMethod",
+        name: "addBackup",
         fieldset: {
             legend: {
-              text: "pages.addMfaMethod.title" | translate,
+              text: "pages.addBackup.title" | translate,
               isPageHeading: true,
               classes: "govuk-fieldset__legend--l"
             }
@@ -53,24 +53,24 @@
         items: mfaMethods,
         errorMessage: {
               attributes: { "data-test-id": "add-mfaMethod-error"},
-              text: errors["addMfaMethod"].text
-        } if(errors["addMfaMethod"])
+              text: errors["addBackup"].text
+        } if(errors["addBackup"])
         })
       }}
 
       {{ govukDetails({
-          summaryText: "pages.addMfaMethod.app.help.title" | translate,
+          summaryText: "pages.addBackup.app.help.title" | translate,
           html: helpText
           })
       }}
 
       {{ govukButton({
-        text: "pages.addMfaMethod.continue" | translate
+        text: "pages.addBackup.continue" | translate
       }) }}
     {% endif %}
     </form>
 
     <p class="govuk-body">
-        <a href="{{ "SECURITY" | getPath }}" class="govuk-link">{{ "pages.addMfaMethod.backLink" | translate }}</a>
+        <a href="{{ "SECURITY" | getPath }}" class="govuk-link">{{ "pages.addBackup.backLink" | translate }}</a>
     </p>
 {% endblock %}

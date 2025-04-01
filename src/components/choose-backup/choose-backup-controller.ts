@@ -49,20 +49,20 @@ export function chooseBackupPost(
   res: Response,
   next: NextFunction
 ): void {
-  const { addMfaMethod } = req.body;
+  const { addBackup } = req.body;
 
   const method = Object.keys(MFA_METHODS).find((key: MfaMethods) => {
-    return MFA_METHODS[key].type === addMfaMethod;
+    return MFA_METHODS[key].type === addBackup;
   });
 
   if (!method) {
-    req.log.error(`unknown addMfaMethod: ${addMfaMethod}`);
-    return next(new Error(`Unknown addMfaMethod: ${addMfaMethod}`));
+    req.log.error(`unknown addBackup: ${addBackup}`);
+    return next(new Error(`Unknown addBackup: ${addBackup}`));
   }
 
   const selectedMfaMethod = MFA_METHODS[method as MfaMethods];
-  req.session.user.state.addMfaMethod = getNextState(
-    req.session.user.state.addMfaMethod.value,
+  req.session.user.state.addBackup = getNextState(
+    req.session.user.state.addBackup.value,
     selectedMfaMethod.event
   );
 

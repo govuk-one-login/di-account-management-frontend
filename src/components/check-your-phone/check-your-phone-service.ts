@@ -41,7 +41,7 @@ export function checkYourPhoneService(
     return updateMfaMethod(updateInput, sessionDetails);
   };
 
-  const addMfaMethodService = async function (
+  const addBackupService = async function (
     updateInput: UpdateInformationInput,
     sessionDetails: UpdateInformationSessionValues
   ): Promise<boolean> {
@@ -51,6 +51,6 @@ export function checkYourPhoneService(
   return {
     updatePhoneNumber,
     updatePhoneNumberWithMfaApi,
-    addMfaMethodService,
+    addBackupService,
   };
 }

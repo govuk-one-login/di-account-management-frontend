@@ -218,13 +218,13 @@
         "info": "See what you’ve visited with your GOV.UK One Login and when."
       }
     },
-    "confirmAddMfaMethod": {
-      "title": "You've added another way to get security codes",
-      "heading": "You've added another way to get security codes",
-      "message": "If your usual way to get security codes is not available, you can get a code from this authenticator app instead",
+    "confirmaddBackup": {
+      "title": "You've added a back-up method for getting security codes",
+      "heading": "You've added a back-up method for getting security codes",
+      "message": "If your default method for getting security codes is not available, you can get a code from this authenticator app instead",
       "backLinkText": "Back to security"
     },
-    "addMfaMethod": {
+    "addBackup": {
       "title": "Choose a back-up method",
       "sms": {
         "title": "Back-up phone number",
@@ -252,14 +252,14 @@
         "required": "Select a way to get security codes"
       }
     },
-    "addMfaMethodApp": {
+    "addBackupApp": {
       "title": "Set up an authenticator app",
       "step1": {
         "text": "1. Open your authenticator app on your smartphone, tablet, or computer.",
         "hintTitle": "I do not have an authenticator app",
         "hintText": [
           "You can download an authenticator app for your smartphone or tablet from your app store.",
-          "If you do not have a smartphone or tablet, search online for an authenticator app for your computer.",
+          "If you do not have a smartphone or tablet, search online for an authenticator app for your computer",
           "You can use any authenticator app."
         ]
       },
@@ -283,7 +283,7 @@
       },
       "cancel": "Cancel and go back to Security"
     },
-    "addMfaMethodSms": {
+    "addBackupSms": {
       "confirm": {
         "title": "Add back-up phone number",
         "heading": "You've added a back-up method for getting security codes",
@@ -425,7 +425,7 @@
           "incorrectPassword": "Enter the correct password"
         }
       },
-      "addMfaMethod": {
+      "addBackup": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },

@@ -65,11 +65,11 @@ import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
 import { chooseBackupRouter } from "./components/choose-backup/choose-backup-routes";
-import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
+import { addBackupAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
 import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
 import { safeTranslate } from "./utils/safeTranslate";
-import { addMfaMethodSmsRouter } from "./components/add-mfa-method-sms/add-mfa-method-sms-routes";
+import { addBackupSmsRouter } from "./components/add-mfa-method-sms/add-mfa-method-sms-routes";
 import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa-method-routes";
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method-routes";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
@@ -238,8 +238,8 @@ async function createApp(): Promise<express.Application> {
   }
   if (supportChangeMfa()) {
     app.use(chooseBackupRouter);
-    app.use(addMfaMethodAppRouter);
-    app.use(addMfaMethodSmsRouter);
+    app.use(addBackupAppRouter);
+    app.use(addBackupSmsRouter);
     app.use(deleteMfaMethodRouter);
     app.use(switchBackupMethodRouter);
     app.use(changeAuthenticatorAppRouter);
