@@ -219,9 +219,9 @@
       }
     },
     "confirmaddBackup": {
-      "title": "You've added another way to get security codes",
-      "heading": "You've added another way to get security codes",
-      "message": "If your usual way to get security codes is not available, you can get a code from this authenticator app instead",
+      "title": "You've added a back-up method for getting security codes",
+      "heading": "You've added a back-up method for getting security codes",
+      "message": "If your default method for getting security codes is not available, you can get a code from this authenticator app instead",
       "backLinkText": "Back to security"
     },
     "addBackup": {
