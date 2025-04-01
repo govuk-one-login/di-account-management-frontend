@@ -337,9 +337,11 @@ export const hmrcClientIds: string[] = supportClientRegistryLibrary()
   ? getIdListFromFilter({ isHmrc: true })
   : [HMRC_NON_PROD, "hmrc"];
 
-export const rsaAllowList: string[] = supportClientRegistryLibrary()
-  ? getIdListFromFilter({ isReportSuspiciousActivityEnabled: true })
-  : [STUB_RP_INTEGRATION, STUB_RP_PROD, STUB_RP_STAGING];
+export const activityLogAllowList: string[] = [
+  STUB_RP_INTEGRATION,
+  STUB_RP_PROD,
+  STUB_RP_STAGING,
+];
 
 const allowedServiceListClientIDs: string[] = [
   DBS_CHECK_PROD,
@@ -435,6 +437,16 @@ export const activityLogItemsPerPage = 10;
 
 export function supportActivityLog(): boolean {
   return process.env.SUPPORT_ACTIVITY_LOG === "1";
+}
+
+// reportSuspiciousActivity() turns the OLH-owned RSA journey on/off
+// supportReportingForm() turns the link into the auth-owned RSA journey on/off
+// reportSuspiciousActivity() and supportReportingForm() should never be on at the same time
+export function supportReportingForm(): boolean {
+  return (
+    process.env.REPORT_SUSPICIOUS_ACTIVITY === "0" &&
+    process.env.SUPPORT_REPORTING_FORM === "1"
+  );
 }
 
 export function reportSuspiciousActivity(): boolean {

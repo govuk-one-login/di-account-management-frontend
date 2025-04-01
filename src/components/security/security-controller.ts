@@ -5,7 +5,7 @@ import {
   supportAddBackupMfa,
 } from "../../config";
 import { PATH_DATA } from "../../app.constants";
-import { hasAllowedRSAServices } from "../../middleware/check-allowed-services-list";
+import { hasAllowedActivityLogServices } from "../../middleware/check-allowed-services-list";
 import { getLastNDigits } from "../../utils/phone-number";
 import { MfaMethod } from "src/utils/mfa/types";
 
@@ -137,7 +137,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
   const supportBackupMfa = supportAddBackupMfa();
   const supportActivityLogFlag = supportActivityLog();
 
-  const hasRSA = await hasAllowedRSAServices(req, res);
+  const hasActivityLog = await hasAllowedActivityLogServices(req, res);
 
   const mfaMethods = Array.isArray(req.session.mfaMethods)
     ? mapMfaMethods(
@@ -154,7 +154,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
 
   res.render("security/index.njk", {
     email,
-    supportActivityLog: supportActivityLogFlag && hasRSA,
+    supportActivityLog: supportActivityLogFlag && hasActivityLog,
     activityLogUrl: PATH_DATA.SIGN_IN_HISTORY.url,
     enterPasswordUrl,
     mfaMethods,
