@@ -1,9 +1,14 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import sinon from "sinon";
+import { Request, Response } from "express";
 
 import { Http } from "../../../src/utils/http";
-import { MfaClient, buildResponse } from "../../../src/utils/mfaClient";
+import {
+  MfaClient,
+  buildResponse,
+  createMfaClient,
+} from "../../../src/utils/mfaClient";
 import { MfaMethod, SmsMethod } from "../../../src/utils/mfaClient/types";
 import { getRequestConfig } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
@@ -163,5 +168,39 @@ describe("buildRequest", () => {
     expect(apiResponse.status).to.eq(400);
     expect(apiResponse.success).to.be.false;
     expect(apiResponse.problem).to.eq(response.data);
+  });
+});
+
+describe("createMfaClient", () => {
+  it("creates an MfaClient", () => {
+    const req = {
+      ip: "ip",
+      session: {
+        user: {
+          publicSubjectId: "publicSubjectId",
+          tokens: { accessToken: "accessToken" },
+        },
+      },
+      headers: { "txma-audit-encoded": "auditHeader" },
+    };
+
+    const res = {
+      locals: {
+        sessionId: "sessionId",
+        persistentSessionID: "persistentSessionId",
+        clientSessionId: "clientSessionId",
+        trace: "trace",
+      },
+    };
+
+    const client = createMfaClient(
+      req as unknown as Request,
+      res as unknown as Response
+    );
+
+    expect(client.retrieve).to.be.a("Function");
+    expect(client.create).to.be.a("Function");
+    expect(client.update).to.be.a("Function");
+    expect(client.delete).to.be.a("Function");
   });
 });
