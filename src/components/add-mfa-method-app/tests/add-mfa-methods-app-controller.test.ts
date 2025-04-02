@@ -141,8 +141,11 @@ describe("addMfaAppMethodPost", () => {
         code: "123456",
         authAppSecret: appMethod.credential,
       },
-      session: { user: { state: { addBackup: { value: "APP" } } } },
+      session: {
+        user: { state: { addBackup: { value: "APP" } }, email: "email" },
+      },
       log: { error: logSpy },
+      t: (s: string) => s,
     };
     const res = { render: sinon.fake() };
 
@@ -155,5 +158,83 @@ describe("addMfaAppMethodPost", () => {
     );
 
     expect(mfaClientStub.create).not.to.have.been.called;
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+  });
+
+  it("should render an error if the code is missing", async () => {
+    const req = {
+      body: {
+        authAppSecret: appMethod.credential,
+      },
+      session: {
+        user: { state: { addBackup: { value: "APP" } }, email: "email" },
+      },
+      log: { error: logSpy },
+      t: (s: string) => s,
+    };
+    const res = { render: sinon.fake() };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+
+    await addMfaAppMethodPost(
+      req as unknown as Request,
+      res as unknown as Response,
+      nextSpy
+    );
+
+    expect(mfaClientStub.create).not.to.have.been.called;
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+  });
+
+  it("should render an error if the code has letters", async () => {
+    const req = {
+      body: {
+        code: "abc123",
+        authAppSecret: appMethod.credential,
+      },
+      session: {
+        user: { state: { addBackup: { value: "APP" } }, email: "email" },
+      },
+      log: { error: logSpy },
+      t: (s: string) => s,
+    };
+    const res = { render: sinon.fake() };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+
+    await addMfaAppMethodPost(
+      req as unknown as Request,
+      res as unknown as Response,
+      nextSpy
+    );
+
+    expect(mfaClientStub.create).not.to.have.been.called;
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+  });
+
+  it("should render an error if the code is longer than 6 digits", async () => {
+    const req = {
+      body: {
+        code: "1234567",
+        authAppSecret: appMethod.credential,
+      },
+      session: {
+        user: { state: { addBackup: { value: "APP" } }, email: "email" },
+      },
+      log: { error: logSpy },
+      t: (s: string) => s,
+    };
+    const res = { render: sinon.fake() };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+
+    await addMfaAppMethodPost(
+      req as unknown as Request,
+      res as unknown as Response,
+      nextSpy
+    );
+
+    expect(mfaClientStub.create).not.to.have.been.called;
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
   });
 });
