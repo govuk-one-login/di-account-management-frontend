@@ -64,11 +64,9 @@ export async function deleteMfaMethodPost(
     req.session.removedMfaMethods = [methodToRemove];
 
     res.redirect(`${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}`);
+  } else if (response.problem) {
+    throw new Error(response.problem.title);
   } else {
-    if (response.problem) {
-      throw new Error(response.problem.title);
-    } else {
-      throw new Error(`Error deleting MFA`);
-    }
+    throw new Error(`Error deleting MFA`);
   }
 }
