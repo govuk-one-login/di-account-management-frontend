@@ -24,7 +24,7 @@ export interface SmsMethod extends Method {
 }
 
 export interface AuthAppMethod extends Method {
-  mfaMethodType: "AUTH_APP";
+  type: "AUTH_APP";
   credential: string;
 }
 
