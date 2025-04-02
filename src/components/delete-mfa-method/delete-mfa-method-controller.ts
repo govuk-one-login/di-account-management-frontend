@@ -2,8 +2,10 @@ import { Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
-import { removeMfaMethod } from "../../utils/mfa";
-import { generateSessionDetails } from "../common/mfa";
+import MfaClient from "../../utils/mfaClient";
+import { getRequestConfig } from "../../utils/http";
+import { getTxmaHeader } from "../../utils/txma-header";
+import { MfaMethod } from "../../utils/mfaClient/types";
 
 export async function deleteMfaMethodGet(
   req: Request,
@@ -32,17 +34,26 @@ export async function deleteMfaMethodPost(
 ): Promise<void> {
   const methodToRemove = req.session.mfaMethods.find((m) => {
     return req.body.methodId == m.mfaIdentifier;
-  });
+  }) as unknown as MfaMethod;
 
   if (!methodToRemove || methodToRemove.priorityIdentifier !== "BACKUP") {
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     return;
   }
 
-  await removeMfaMethod(
-    methodToRemove.mfaIdentifier,
-    await generateSessionDetails(req, res)
+  const mfaClient = new MfaClient(
+    req.session.user?.publicSubjectId,
+    getRequestConfig({
+      token: req.session.user.tokens.accessToken,
+      sourceIp: req.ip,
+      persistentSessionId: res.locals.persistentSessionId,
+      sessionId: res.locals.sessionId,
+      clientSessionId: res.locals.clientSessionId,
+      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+    })
   );
+
+  await mfaClient.delete(methodToRemove);
 
   req.session.user.state.removeMfaMethod = getNextState(
     req.session.user.state.removeMfaMethod.value,
