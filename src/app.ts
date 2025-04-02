@@ -99,21 +99,12 @@ async function createApp(): Promise<express.Application> {
     app.use(protect);
   }
 
-  app.use(outboundContactUsLinksMiddleware);
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
-  app.use(cookieParser());
-  app.use(setLocalVarsMiddleware);
-  app.use(loggerMiddleware);
-
-  app.use((req, res, next) => {
-    req.log = req.log.child({
-      trace: res.locals.trace,
-    });
-    next();
-  });
-
+  // Define the healthcheck and static routes first
+  // Do not define a route or middleware before these unless there's a very good reason
+  app.use(healthcheckRouter);
   app.use(
     "/assets",
     express.static(
@@ -122,6 +113,18 @@ async function createApp(): Promise<express.Application> {
   );
 
   app.use("/public", express.static(path.join(__dirname, "public")));
+  app.use(cookieParser());
+  app.use(setLocalVarsMiddleware);
+  app.use(loggerMiddleware);
+  app.use(outboundContactUsLinksMiddleware);
+
+  app.use((req, res, next) => {
+    req.log = req.log.child({
+      trace: res.locals.trace,
+    });
+    next();
+  });
+
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 
   app.use(noCacheMiddleware);
@@ -198,8 +201,6 @@ async function createApp(): Promise<express.Application> {
   );
 
   app.locals.sessionStore = sessionStore;
-
-  app.use(healthcheckRouter);
 
   const oidcClient = await getOIDCClient(getOIDCConfig());
   app.use(authMiddleware(oidcClient));
