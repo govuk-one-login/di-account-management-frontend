@@ -230,6 +230,8 @@ const RURAL_PAYMENT_WALES_PROD = "SdpFRM0HdX38FfdbgRX8qzTl8sm";
 const RURAL_PAYMENT_WALES_NON_PROD = "ruralPaymentWales";
 const HO_DORS_PROD = "Y12SlXI_zqYj_z6FFtVHExHjEO8";
 const HO_DORS_NON_PROD = "hoDORS";
+const FIRS_PROD = "sXr5F6w5QytPPJN-Dtsgbl6hegQ";
+const FIRS_NON_PROD = "firs";
 
 const allowedAccountListClientIDs: string[] = [
   GOV_UK_EMAIL_PROD,
@@ -321,6 +323,8 @@ const allowedAccountListClientIDs: string[] = [
   RURAL_PAYMENT_WALES_NON_PROD,
   HO_DORS_PROD,
   HO_DORS_NON_PROD,
+  FIRS_PROD,
+  FIRS_NON_PROD,
 ];
 
 const getIdListFromFilter = memoize(
