@@ -5,7 +5,6 @@
     "serviceNameTitle": "GOV.UK One Login",
     "errorTitlePrefix": "Gwall",
     "back": "Yn ôl",
-    "change": "Newid",
     "warning": "Rhybudd",
     "errorSummaryTitle": "Mae problem",
     "phaseBanner": {
@@ -146,7 +145,7 @@
           "phoneNumber": {
             "title": "Neges testun",
             "value": "Rhif ffôn sy'n gorffen gyda [phoneNumber]",
-            "hiddenText": "Rhif ffôn"
+            "change": "Newid rhif ffôn"
           },
           "app": {
             "title": "Ap dilysydd"
