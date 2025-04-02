@@ -5,7 +5,6 @@
     "serviceNameTitle": "GOV.UK One Login",
     "errorTitlePrefix": "Error",
     "back": "Back",
-    "change": "Change",
     "warning": "Warning",
     "errorSummaryTitle": "There is a problem",
     "phaseBanner": {
@@ -171,7 +170,7 @@
           "phoneNumber": {
             "title": "Text message",
             "value": "Phone number ending with [phoneNumber]",
-            "hiddenText": "Phone number"
+            "change": "Change phone number"
           },
           "app": {
             "title": "Authenticator app"
