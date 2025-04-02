@@ -277,6 +277,20 @@ async function startServer(app: Application): Promise<{
       .listen(port, () => {
         logger.info(`Server listening on port ${port}`);
         app.emit("appStarted");
+        blockedAt(
+          (time, stack) => {
+            const formattedStack = (stack || [])
+              .map((frame: string) => frame.trim())
+              .join("\n");
+
+            logger.warn(
+              `Blocked for ${time}ms.\nStack trace:\n${formattedStack}`
+            );
+          },
+          {
+            threshold: 50,
+          }
+        );
         resolve();
       })
       .on("error", (error: Error) => {
@@ -296,20 +310,6 @@ async function startServer(app: Application): Promise<{
       stopVitalSigns();
       logger.info(`vital-signs stopped`);
     }
-    blockedAt(
-      (time, stack) => {
-        const formattedStack = (stack || [])
-          .map((frame: string) => frame.trim())
-          .join("\n");
-
-        logger.warn(
-          `Event loop blockage detected! Blocked for ${time}ms.\nStack trace:\n${formattedStack}`
-        );
-      },
-      {
-        threshold: 50,
-      }
-    );
     await new Promise<void>((res, rej) =>
       server.close((err) => (err ? rej(err) : res()))
     );
