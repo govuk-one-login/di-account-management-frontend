@@ -7,7 +7,6 @@ import {
 } from "../../../src/utils/yourServices";
 import * as yourServices from "../../../src/utils/yourServices";
 import type { Service } from "../../../src/utils/types";
-import * as config from "../../../src/config";
 import sinon from "sinon";
 
 describe("YourService Util", () => {
@@ -125,18 +124,8 @@ describe("YourService Util", () => {
         ],
       };
 
-      sandbox
-        .stub(config, "supportClientRegistryLibrary")
-        .onCall(0)
-        .returns(false)
-        .onCall(1)
-        .returns(true);
-
       const services = await presentYourServices("subjectId", "trace");
       expect(services).to.deep.equal(expectedResponse);
-
-      const servicesLegacy = await presentYourServices("subjectId", "trace");
-      expect(servicesLegacy).to.deep.equal(expectedResponse);
     });
 
     it("should return allowed list of services", async () => {
@@ -157,24 +146,11 @@ describe("YourService Util", () => {
         },
       ];
 
-      sandbox
-        .stub(config, "supportClientRegistryLibrary")
-        .onCall(0)
-        .returns(true)
-        .onCall(1)
-        .returns(false);
-
       const services = await yourServices.getAllowedListServices(
         "subjectId",
         "trace"
       );
       expect(services).to.deep.equal(expectedResponse);
-
-      const servicesLegacy = await yourServices.getAllowedListServices(
-        "subjectId",
-        "trace"
-      );
-      expect(servicesLegacy).to.deep.equal(expectedResponse);
     });
   });
 });

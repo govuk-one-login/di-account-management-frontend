@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
-import { addMfaMethod, verifyMfaCode } from "../../utils/mfa";
+import { addBackup, verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
 import { formatValidationError } from "../../utils/validation";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { renderMfaMethodPage } from "../common/mfa";
 import { getTxmaHeader } from "../../utils/txma-header";
+import { containsNumbersOnly } from "../../utils/strings";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
@@ -35,7 +36,20 @@ export async function addMfaAppMethodPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.required")
+          req.t("pages.addBackupApp.errors.required")
+        )
+      );
+    }
+
+    if (!containsNumbersOnly(code)) {
+      return renderMfaMethodPage(
+        ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
+        req,
+        res,
+        next,
+        formatValidationError(
+          "code",
+          req.t("pages.addBackupApp.errors.invalidFormat")
         )
       );
     }
@@ -48,7 +62,7 @@ export async function addMfaAppMethodPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.maxLength")
+          req.t("pages.addBackupApp.errors.maxLength")
         )
       );
     }
@@ -63,12 +77,12 @@ export async function addMfaAppMethodPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.invalidCode")
+          req.t("pages.addBackupApp.errors.invalidCode")
         )
       );
     }
 
-    const { status } = await addMfaMethod(
+    const { status } = await addBackup(
       {
         email: req.session.user.email,
         otp: code,
@@ -95,8 +109,8 @@ export async function addMfaAppMethodPost(
       throw Error(`Failed to add MFA method, response status: ${status}`);
     }
 
-    req.session.user.state.addMfaMethod = getNextState(
-      req.session.user.state.addMfaMethod.value,
+    req.session.user.state.addBackup = getNextState(
+      req.session.user.state.addBackup.value,
       EventType.ValueUpdated
     );
     return res.redirect(PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url);

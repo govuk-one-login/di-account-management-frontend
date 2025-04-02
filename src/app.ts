@@ -22,7 +22,6 @@ import {
   getSessionSecret,
   supportActivityLog,
   supportChangeMfa,
-  supportClientRegistryLibrary,
   supportSearchableList,
   supportTriagePage,
   supportWebchatContact,
@@ -65,11 +64,11 @@ import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
 import { chooseBackupRouter } from "./components/choose-backup/choose-backup-routes";
-import { addMfaMethodAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
+import { addBackupAppRouter } from "./components/add-mfa-method-app/add-mfa-method-app-routes";
 import { csrfErrorHandler } from "./handlers/csrf-error-handler";
 import { languageToggleMiddleware } from "./middleware/language-toggle-middleware";
 import { safeTranslate } from "./utils/safeTranslate";
-import { addMfaMethodSmsRouter } from "./components/add-mfa-method-sms/add-mfa-method-sms-routes";
+import { addBackupSmsRouter } from "./components/add-mfa-method-sms/add-mfa-method-sms-routes";
 import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa-method-routes";
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method-routes";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
@@ -99,21 +98,12 @@ async function createApp(): Promise<express.Application> {
     app.use(protect);
   }
 
-  app.use(outboundContactUsLinksMiddleware);
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
-  app.use(cookieParser());
-  app.use(setLocalVarsMiddleware);
-  app.use(loggerMiddleware);
-
-  app.use((req, res, next) => {
-    req.log = req.log.child({
-      trace: res.locals.trace,
-    });
-    next();
-  });
-
+  // Define the healthcheck and static routes first
+  // Do not define a route or middleware before these unless there's a very good reason
+  app.use(healthcheckRouter);
   app.use(
     "/assets",
     express.static(
@@ -122,6 +112,18 @@ async function createApp(): Promise<express.Application> {
   );
 
   app.use("/public", express.static(path.join(__dirname, "public")));
+  app.use(cookieParser());
+  app.use(setLocalVarsMiddleware);
+  app.use(loggerMiddleware);
+  app.use(outboundContactUsLinksMiddleware);
+
+  app.use((req, res, next) => {
+    req.log = req.log.child({
+      trace: res.locals.trace,
+    });
+    next();
+  });
+
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
 
   app.use(noCacheMiddleware);
@@ -129,39 +131,33 @@ async function createApp(): Promise<express.Application> {
   await i18next
     .use(Backend)
     .use(i18nextMiddleware.LanguageDetector)
-    .init(
-      i18nextConfigurationOptions(
-        path.join(__dirname, "locales/{{lng}}/{{ns}}.json")
+    .init(i18nextConfigurationOptions());
+
+  const getTranslationObject = (locale: LOCALE) => {
+    const translations = JSON.parse(
+      readFileSync(
+        path.join(__dirname, `locales/${locale}/translation.json`),
+        "utf8"
       )
     );
 
-  if (supportClientRegistryLibrary()) {
-    const getTranslationObject = (locale: LOCALE) => {
-      const translations = JSON.parse(
-        readFileSync(
-          path.join(__dirname, `locales/${locale}/translation.json`),
-          "utf8"
-        )
-      );
-
-      return {
-        ...translations,
-        clientRegistry: {
-          [getAppEnv()]: getTranslations(getAppEnv(), locale),
-        },
-      };
+    return {
+      ...translations,
+      clientRegistry: {
+        [getAppEnv()]: getTranslations(getAppEnv(), locale),
+      },
     };
-    i18next.addResourceBundle(
-      LOCALE.CY,
-      "translation",
-      getTranslationObject(LOCALE.CY)
-    );
-    i18next.addResourceBundle(
-      LOCALE.EN,
-      "translation",
-      getTranslationObject(LOCALE.EN)
-    );
-  }
+  };
+  i18next.addResourceBundle(
+    LOCALE.CY,
+    "translation",
+    getTranslationObject(LOCALE.CY)
+  );
+  i18next.addResourceBundle(
+    LOCALE.EN,
+    "translation",
+    getTranslationObject(LOCALE.EN)
+  );
 
   app.use(i18nextMiddleware.handle(i18next));
   if (supportWebchatContact()) {
@@ -198,8 +194,6 @@ async function createApp(): Promise<express.Application> {
   );
 
   app.locals.sessionStore = sessionStore;
-
-  app.use(healthcheckRouter);
 
   const oidcClient = await getOIDCClient(getOIDCConfig());
   app.use(authMiddleware(oidcClient));
@@ -238,8 +232,8 @@ async function createApp(): Promise<express.Application> {
   }
   if (supportChangeMfa()) {
     app.use(chooseBackupRouter);
-    app.use(addMfaMethodAppRouter);
-    app.use(addMfaMethodSmsRouter);
+    app.use(addBackupAppRouter);
+    app.use(addBackupSmsRouter);
     app.use(deleteMfaMethodRouter);
     app.use(switchBackupMethodRouter);
     app.use(changeAuthenticatorAppRouter);

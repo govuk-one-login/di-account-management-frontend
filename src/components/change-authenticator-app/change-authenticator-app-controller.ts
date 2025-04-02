@@ -38,7 +38,7 @@ export function changeAuthenticatorAppPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.invalidFormat")
+          req.t("pages.addBackupApp.errors.invalidFormat")
         )
       );
     }
@@ -51,7 +51,7 @@ export function changeAuthenticatorAppPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.maxLength")
+          req.t("pages.addBackupApp.errors.maxLength")
         )
       );
     }
@@ -64,7 +64,7 @@ export function changeAuthenticatorAppPost(
         next,
         formatValidationError(
           "code",
-          req.t("pages.addMfaMethodApp.errors.invalidCode")
+          req.t("pages.addBackupApp.errors.invalidCode")
         )
       );
     }

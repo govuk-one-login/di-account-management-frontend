@@ -18,7 +18,7 @@ import { supportChangeMfa } from "../../config";
 import { generateSessionDetails } from "../common/mfa";
 import {
   Intent,
-  INTENT_ADD_MFA_METHOD,
+  INTENT_ADD_BACKUP,
   INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../check-your-email/types";
@@ -98,8 +98,8 @@ async function handleMfaChange(
       service,
       trace
     );
-  } else if (intent === INTENT_ADD_MFA_METHOD) {
-    return handleAddMfaMethod(
+  } else if (intent === INTENT_ADD_BACKUP) {
+    return handleaddBackup(
       newPhoneNumber,
       updateInput,
       sessionDetails,
@@ -166,7 +166,7 @@ async function handleChangePhoneNumber(
   }
 }
 
-async function handleAddMfaMethod(
+async function handleaddBackup(
   newPhoneNumber: string,
   updateInput: UpdateInformationInput,
   sessionDetails: any,
@@ -180,7 +180,7 @@ async function handleAddMfaMethod(
 
   if (!defaultMfaMethod) {
     logger.error({
-      err: "Check your phone controller: no existing DEFAULT MFA method in handleAddMfaMethod",
+      err: "Check your phone controller: no existing DEFAULT MFA method in handleaddBackup",
       trace: trace,
     });
     return false;
@@ -200,11 +200,11 @@ async function handleAddMfaMethod(
         },
         methodVerified: true,
       };
-      return await service.addMfaMethodService(updateInput, sessionDetails);
+      return await service.addBackupService(updateInput, sessionDetails);
     }
   } catch (error) {
     logger.error({
-      err: `Check your phone controller: no existing MFA method in handleAddMfaMethod: ${error.message} `,
+      err: `Check your phone controller: no existing MFA method in handleaddBackup: ${error.message} `,
       trace: trace,
     });
   }
@@ -225,7 +225,7 @@ function updateSessionUser(
 }
 
 function getRedirectUrl(intent: Intent): string {
-  if (intent === INTENT_ADD_MFA_METHOD) {
+  if (intent === INTENT_ADD_BACKUP) {
     return PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url;
   }
   if (intent === INTENT_CHANGE_DEFAULT_METHOD) {

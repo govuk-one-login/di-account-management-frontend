@@ -8,7 +8,7 @@ import { chooseBackupGet, chooseBackupPost } from "../choose-backup-controller";
 import { PATH_DATA } from "../../../app.constants";
 import { EventType } from "../../../utils/state-machine";
 
-describe("addMfaMethodGet", () => {
+describe("addBackupGet", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
@@ -19,7 +19,7 @@ describe("addMfaMethodGet", () => {
     req = {
       body: {},
       session: {
-        user: { state: { addMfaMethod: { value: EventType.Authenticated } } },
+        user: { state: { addBackup: { value: EventType.Authenticated } } },
       } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
@@ -132,7 +132,7 @@ describe("addMfaMethodGet", () => {
   });
 });
 
-describe("addMfaMethodPost", () => {
+describe("addBackupPost", () => {
   let sandbox: SinonSandbox;
   let req: any;
   let res: Partial<Response>;
@@ -159,7 +159,7 @@ describe("addMfaMethodPost", () => {
       body: {},
       log: { error: sandbox.fake() } as any,
       session: {
-        user: { state: { addMfaMethod: { value: "SMS" } } },
+        user: { state: { addBackup: { value: "SMS" } } },
       } as any,
     };
     res = {
@@ -175,7 +175,7 @@ describe("addMfaMethodPost", () => {
   });
 
   it("should take the use to the add backup phone number page when that option is selected", () => {
-    req.body.addMfaMethod = "sms";
+    req.body.addBackup = "sms";
 
     chooseBackupPost(req as Request, res as Response, next);
 
@@ -185,7 +185,7 @@ describe("addMfaMethodPost", () => {
   });
 
   it("should take the user to the add auth app page when the user selects that option", () => {
-    req.body.addMfaMethod = "app";
+    req.body.addBackup = "app";
 
     chooseBackupPost(req as Request, res as Response, next);
 
@@ -194,13 +194,13 @@ describe("addMfaMethodPost", () => {
     );
   });
 
-  it("should call next with an error when addMfaMethod is unknown", () => {
-    req.body.addMfaMethod = "unknown";
+  it("should call next with an error when addBackup is unknown", () => {
+    req.body.addBackup = "unknown";
 
     chooseBackupPost(req as Request, res as Response, next);
 
     const call: sinon.SinonSpyCall<Error[], unknown> = next.getCall(0);
 
-    expect(call.args[0].message).to.equal("Unknown addMfaMethod: unknown");
+    expect(call.args[0].message).to.equal("Unknown addBackup: unknown");
   });
 });

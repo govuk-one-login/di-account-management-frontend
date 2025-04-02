@@ -8,7 +8,7 @@ export interface MfaMethod {
   smsPhoneNumber?: string;
 }
 
-export interface AddMfaMethod {
+export interface addBackup {
   mfaIdentifier?: number;
   priorityIdentifier: PriorityIdentifier;
   mfaMethodType: MfaMethodType;
