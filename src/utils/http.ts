@@ -91,8 +91,11 @@ export class Http {
   private instance: AxiosInstance;
   private readonly baseUrl: string;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, instance?: AxiosInstance) {
     this.baseUrl = baseUrl;
+    if (instance) {
+      this.instance = instance;
+    }
   }
 
   get client(): AxiosInstance {
