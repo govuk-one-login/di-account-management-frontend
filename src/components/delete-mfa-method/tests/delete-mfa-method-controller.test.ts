@@ -69,6 +69,7 @@ describe("delete mfa method controller", () => {
   it("should delete an MFA method", async () => {
     const req = generateRequest("1");
     const res = generateResponse();
+    mfaClientStub.delete.resolves({ success: true, status: 200, data: {} });
 
     //@ts-expect-error req and res aren't valid objects since they are mocked
     await deleteMfaMethodPost(req as Request, res as Response);
@@ -77,7 +78,7 @@ describe("delete mfa method controller", () => {
     expect(redirectFn).to.be.calledWith("/remove-backup-confirmation");
   });
 
-  it("should return a 404 if a non existant method is tried", async () => {
+  it("should return a 404 if a non-existent method is tried", async () => {
     const req = generateRequest("2");
     const res = generateResponse();
 
@@ -85,5 +86,21 @@ describe("delete mfa method controller", () => {
     await deleteMfaMethodPost(req as Request, res as Response);
 
     expect(statusFn).to.be.calledWith(404);
+  });
+
+  it("should throw an error if the API request is unsuccessful", async () => {
+    const req = generateRequest("1");
+    const res = generateResponse();
+    mfaClientStub.delete.resolves({
+      success: false,
+      status: 400,
+      data: {},
+      problem: { title: "Bad request" },
+    });
+
+    expect(
+      //@ts-expect-error req and res aren't valid objects since they are mocked
+      deleteMfaMethodPost(req as Request, res as Response)
+    ).to.be.rejectedWith("Bad request");
   });
 });

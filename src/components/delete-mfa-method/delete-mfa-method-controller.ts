@@ -53,14 +53,22 @@ export async function deleteMfaMethodPost(
     })
   );
 
-  await mfaClient.delete(methodToRemove);
+  const response = await mfaClient.delete(methodToRemove);
 
-  req.session.user.state.removeMfaMethod = getNextState(
-    req.session.user.state.removeMfaMethod.value,
-    EventType.RemoveBackup
-  );
+  if (response.success) {
+    req.session.user.state.removeMfaMethod = getNextState(
+      req.session.user.state.removeMfaMethod.value,
+      EventType.RemoveBackup
+    );
 
-  req.session.removedMfaMethods = [methodToRemove];
+    req.session.removedMfaMethods = [methodToRemove];
 
-  res.redirect(`${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}`);
+    res.redirect(`${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}`);
+  } else {
+    if (response.problem) {
+      throw new Error(response.problem.title);
+    } else {
+      throw new Error(`Error deleting MFA`);
+    }
+  }
 }
