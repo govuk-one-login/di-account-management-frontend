@@ -193,7 +193,7 @@
           },
           "backup": {
             "heading": "Your back-up method",
-            "headingNoBackup": "Add back-up method",
+            "headingNoBackup": "Add a back-up method",
             "paragraph": "We recommend you add a back-up method for getting security codes.",
             "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes using your default method.",
             "link": "Add a back-up method",
@@ -222,7 +222,7 @@
       "title": "You've added another way to get security codes",
       "heading": "You've added another way to get security codes",
       "message": "If your usual way to get security codes is not available, you can get a code from this authenticator app instead",
-      "backLinkText": "Back to security"
+      "backLinkText": "Back to Security"
     },
     "addMfaMethod": {
       "title": "Choose a back-up method",
@@ -297,7 +297,7 @@
       "sms": "We'll no longer send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "app": "We'll no longer send security codes to your authenticator app.",
       "button": "Remove back-up method",
-      "backLinkText": "Back to security",
+      "backLinkText": "Back to Security",
       "confirm": {
         "title": "You've removed your back-up method for getting security codes",
         "heading": "You've removed your back-up method for getting security codes.",
