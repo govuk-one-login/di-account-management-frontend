@@ -3,7 +3,7 @@ import { describe } from "mocha";
 import sinon from "sinon";
 
 import { Http } from "../../../src/utils/http";
-import MfaClient, { buildResponse } from "../../../src/utils/mfaClient";
+import { MfaClient, buildResponse } from "../../../src/utils/mfaClient";
 import { MfaMethod, SmsMethod } from "../../../src/utils/mfaClient/types";
 import { getRequestConfig } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
