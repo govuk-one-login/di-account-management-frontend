@@ -2,9 +2,7 @@ import { Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
-import MfaClient from "../../utils/mfaClient";
-import { getRequestConfig } from "../../utils/http";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { createMfaClient } from "../../utils/mfaClient";
 import { MfaMethod } from "../../utils/mfaClient/types";
 
 export async function deleteMfaMethodGet(
@@ -41,17 +39,7 @@ export async function deleteMfaMethodPost(
     return;
   }
 
-  const mfaClient = new MfaClient(
-    req.session.user?.publicSubjectId,
-    getRequestConfig({
-      token: req.session.user.tokens.accessToken,
-      sourceIp: req.ip,
-      persistentSessionId: res.locals.persistentSessionId,
-      sessionId: res.locals.sessionId,
-      clientSessionId: res.locals.clientSessionId,
-      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-    })
-  );
+  const mfaClient = createMfaClient(req, res);
 
   const response = await mfaClient.delete(methodToRemove);
 

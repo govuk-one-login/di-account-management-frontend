@@ -4,10 +4,8 @@ import { describe } from "mocha";
 import { deleteMfaMethodPost } from "../delete-mfa-method-controller";
 import { Request } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
-import MfaClient from "../../../utils/mfaClient";
+import { MfaClient } from "../../../utils/mfaClient";
 import { MfaMethod, SmsMethod } from "../../../utils/mfaClient/types";
-import * as http from "../../../utils/http";
-import * as txma from "../../../utils/txma-header";
 import * as mfaClient from "../../../utils/mfaClient";
 
 describe("delete mfa method controller", () => {
@@ -57,9 +55,7 @@ describe("delete mfa method controller", () => {
 
   beforeEach(() => {
     mfaClientStub = sinon.createStubInstance(MfaClient);
-    sinon.replace(http, "getRequestConfig", sinon.stub().returns({}));
-    sinon.replace(txma, "getTxmaHeader", sinon.stub().returns("txmaHeader"));
-    sinon.stub(mfaClient, "default").returns(mfaClientStub);
+    sinon.stub(mfaClient, "createMfaClient").returns(mfaClientStub);
   });
 
   afterEach(() => {
