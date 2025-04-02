@@ -81,6 +81,7 @@ import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
+import blockedAt from "blocked-at";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -295,6 +296,20 @@ async function startServer(app: Application): Promise<{
       stopVitalSigns();
       logger.info(`vital-signs stopped`);
     }
+    blockedAt(
+      (time, stack) => {
+        const formattedStack = (stack || [])
+          .map((frame: string) => frame.trim())
+          .join("\n");
+
+        logger.warn(
+          `Event loop blockage detected! Blocked for ${time}ms.\nStack trace:\n${formattedStack}`
+        );
+      },
+      {
+        threshold: 50,
+      }
+    );
     await new Promise<void>((res, rej) =>
       server.close((err) => (err ? rej(err) : res()))
     );
