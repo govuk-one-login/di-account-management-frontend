@@ -1,0 +1,32 @@
+{
+  "level": 40,
+  "time": 1743593281492, 
+  "pid": 25,
+  "hostname": "ip-10-0-4-131.eu-west-2.compute.internal",
+  "name": "di-account-management-frontend",
+  "msg": "Blocked for 114.58682000005246ms.
+Stack trace:
+at AsyncHook.init (/app/node_modules/blocked-at/index.js:31:11)
+at emitInitNative (node:internal/async_hooks:202:43)
+at emitInitScript (node:internal/async_hooks:505:3)
+at promiseInitHook (node:internal/async_hooks:324:3)
+at promiseInitHookWithDestroyTracking (node:internal/async_hooks:328:3)
+at Promise.then (<anonymous>)
+at Object.dynatraceOnServiceExecutionIndicator [as doInvoke] (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:3780:22)
+at Promise.then (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:9168:15)
+at /app/node_modules/connect-dynamodb/lib/connect-dynamodb.js:158:10
+at Object.dynatraceOnServiceExecutionIndicator [as doInvoke] (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:3780:22)
+at /opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:9160:59
+at t.runInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2064:24)
+at /opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:9160:35"
+}
+
+// 5 min: 
+// Count 570
+// Range 52 to 371ms
+
+// Full:
+// Count 6854
+// Range 
+
+

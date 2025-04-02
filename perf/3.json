@@ -1,0 +1,117 @@
+{
+  "level": 40,
+  "time": 1743593283437,
+  "pid": 25,
+  "hostname": "ip-10-0-4-131.eu-west-2.compute.internal",
+  "name": "di-account-management-frontend",
+  "msg": "Blocked for 542.1812710000277ms.
+Stack trace:
+at AsyncHook.init (/app/node_modules/blocked-at/index.js:31:11)
+at emitInitNative (node:internal/async_hooks:202:43)
+at emitInitScript (node:internal/async_hooks:505:3)
+at promiseInitHook (node:internal/async_hooks:324:3)
+at promiseInitHookWithDestroyTracking (node:internal/async_hooks:328:3)
+at yourServicesGet (/app/dist/components/your-services/your-services-controller.js:12:74)
+at /app/dist/utils/global-try-catch.js:8:19
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at next (/app/node_modules/router/lib/route.js:159:13)
+at requiresAuthMiddleware (/app/dist/middleware/requires-auth-middleware.js:24:9)
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at next (/app/node_modules/router/lib/route.js:159:13)
+at Route.dispatch (/app/node_modules/router/lib/route.js:119:3)
+at handle (/app/node_modules/router/index.js:428:11)
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at /app/node_modules/router/index.js:293:15
+at processParams (/app/node_modules/router/index.js:575:12)
+at next (/app/node_modules/router/index.js:289:5)
+at Function.handle (/app/node_modules/router/index.js:183:3)
+at router (/app/node_modules/router/index.js:59:12)
+at router (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8921:30)
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at trimPrefix (/app/node_modules/router/index.js:337:13)
+at /app/node_modules/router/index.js:295:9
+at processParams (/app/node_modules/router/index.js:575:12)
+at next (/app/node_modules/router/index.js:289:5)
+at /app/node_modules/router/index.js:677:15
+at next (/app/node_modules/router/index.js:274:14)
+at Function.handle (/app/node_modules/router/index.js:183:3)
+at router (/app/node_modules/router/index.js:59:12)
+at router (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8921:30)
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at trimPrefix (/app/node_modules/router/index.js:337:13)
+at /app/node_modules/router/index.js:295:9
+at processParams (/app/node_modules/router/index.js:575:12)
+at next (/app/node_modules/router/index.js:289:5)
+at csrfMiddleware (/app/dist/middleware/csrf-middleware.js:6:5)
+at csrfMiddleware (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8924:30)
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at trimPrefix (/app/node_modules/router/index.js:337:13)
+at /app/node_modules/router/index.js:295:9
+at processParams (/app/node_modules/router/index.js:575:12)
+at next (/app/node_modules/router/index.js:289:5)
+at csrf (/app/node_modules/csurf/index.js:117:5)
+at csrf (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8924:30)
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at trimPrefix (/app/node_modules/router/index.js:337:13)
+at /app/node_modules/router/index.js:295:9
+at processParams (/app/node_modules/router/index.js:575:12)
+at next (/app/node_modules/router/index.js:289:5)
+at /app/node_modules/router/index.js:677:15
+at next (/app/node_modules/router/index.js:274:14)
+at Function.handle (/app/node_modules/router/index.js:183:3)
+at router (/app/node_modules/router/index.js:59:12)
+at router (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8921:30)
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at trimPrefix (/app/node_modules/router/index.js:337:13)
+at /app/node_modules/router/index.js:295:9
+at processParams (/app/node_modules/router/index.js:575:12)
+at next (/app/node_modules/router/index.js:289:5)
+at /app/dist/middleware/auth-middleware.js:7:9
+at /opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8924:30
+at Layer.handleRequest (/app/node_modules/router/lib/layer.js:145:17)
+at m.runFunctionInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2300:80)
+at m.runFunction (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2288:19)
+at Layer.handleRequest (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:8901:18)
+at trimPrefix (/app/node_modules/router/index.js:337:13)
+at /app/node_modules/router/index.js:295:9
+at processParams (/app/node_modules/router/index.js:575:12)
+at next (/app/node_modules/router/index.js:289:5)
+at /app/node_modules/express-session/index.js:514:7
+at /app/node_modules/connect-dynamodb/lib/connect-dynamodb.js:161:13
+at Object.dynatraceOnServiceExecutionIndicator [as doInvoke] (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:3780:22)
+at /opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:9160:59
+at t.runInContext (/opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:2064:24)
+at /opt/dynatrace/oneagent/agent/bin/1.309.65.20250324-105046/any/nodejs/nodejsagent.js:9160:35
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)"
+}
+
+// 5 mins: 
+// Count 356
+// Range 50 - 241ms 
+
+// Full:
+// Count: 1367 
