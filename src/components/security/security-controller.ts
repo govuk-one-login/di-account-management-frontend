@@ -46,9 +46,8 @@ function handleSmsMethod(
             {
               attributes: { "data-test-id": "change-phone-number" },
               href: `${enterPasswordUrl}&type=changePhoneNumber`,
-              text: t("general.change"),
-              visuallyHiddenText: t(
-                "pages.security.mfaSection.summaryList.phoneNumber.hiddenText"
+              text: t(
+                "pages.security.mfaSection.summaryList.phoneNumber.change"
               ),
             },
           ],

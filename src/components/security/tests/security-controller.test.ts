@@ -126,9 +126,7 @@ describe("security controller", () => {
                     "data-test-id": "change-phone-number",
                   },
                   href: "/enter-password?from=security&edit=true&type=changePhoneNumber",
-                  text: "general.change",
-                  visuallyHiddenText:
-                    "pages.security.mfaSection.summaryList.phoneNumber.hiddenText",
+                  text: "pages.security.mfaSection.summaryList.phoneNumber.change",
                 },
               ],
             },
