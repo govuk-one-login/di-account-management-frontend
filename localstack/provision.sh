@@ -314,7 +314,7 @@ create_and_populate_activity_log_table() {
           "user_id": {"S": "'"$BUILD_CLIENT_ID"'"},
           "timestamp": {"N": "'$TIMESTAMP'"},
           "session_id": {"S": "'$SESSION_ID'"},
-          "client_id": {"S": "vehicleOperatorLicense"},
+          "client_id": {"S": "dfeApplyForTeacherTraining"},
           "event_type": {"S": "AUTH_AUTH_CODE_ISSUED"},
           "event_id": {"S": "'$EVENT_ID'"},
           "reported_suspicious": {"BOOL": true},

@@ -10,6 +10,7 @@ import {
   ONE_LOGIN_HOME_NON_PROD,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
+import { serviceIsAvailableInWelsh } from "./yourServices";
 import {
   ActivityLogEntry,
   allowedTxmaEvents,
@@ -153,6 +154,9 @@ export const formatActivityLog = (
   formattedActivityLog.visitedService = activityLogEntry.client_id;
   formattedActivityLog.visitedServiceId = activityLogEntry.client_id;
   formattedActivityLog.reportNumber = activityLogEntry.zendesk_ticket_number;
+  formattedActivityLog.isAvailableInWelsh = serviceIsAvailableInWelsh(
+    activityLogEntry.client_id
+  );
 
   if (activityLogEntry["reported_suspicious_time"]) {
     formattedActivityLog.reportedSuspiciousTime = prettifyDate({

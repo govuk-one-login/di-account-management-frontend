@@ -12,6 +12,7 @@ import {
   formatActivityLogs,
   filterAndDecryptActivity,
 } from "../../utils/activityHistory";
+import { serviceIsAvailableInWelsh } from "../../utils/yourServices";
 import { presentActivityHistory } from "../../utils/present-activity-history";
 import { logger } from "../../utils/logger";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
@@ -25,6 +26,7 @@ export async function activityHistoryGet(
   let activityData: ActivityLogEntry[] = [];
   let pagination: any = {};
   let formattedActivityLog: FormattedActivityLog[] = [];
+  let hasEnglishOnlyServices;
 
   try {
     if (user?.subjectId) {
@@ -35,6 +37,9 @@ export async function activityHistoryGet(
       const validActivityData: ActivityLogEntry[] =
         await filterAndDecryptActivity(activityData, res.locals.trace);
 
+      hasEnglishOnlyServices = validActivityData.some(
+        (item) => serviceIsAvailableInWelsh(item.client_id) === false
+      );
       if (validActivityData.length <= activityLogItemsPerPage) {
         formattedActivityLog = formatActivityLogs(
           validActivityData,
@@ -68,6 +73,8 @@ export async function activityHistoryGet(
       contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
       homeClientId: getOIDCClientId(),
       supportReportingForm: supportReportingForm(),
+      currentLngWelsh: req.i18n?.language === "cy",
+      hasEnglishOnlyServices,
     });
   } catch (error) {
     logger.error(

@@ -214,6 +214,83 @@ describe("Integration:: Activity history", () => {
         expect($(testComponent("activity-log-explainer")).length).eq(0);
       });
   });
+
+  describe("generate the correct markup for different languages", () => {
+    it("should display the correct markup if the current language is Welsh and an English-only service exists in the log", async () => {
+      const app = await appWithMiddlewareSetup(
+        [
+          {
+            event_type: "AUTH_AUTH_CODE_ISSUED",
+            session_id: "asdf",
+            user_id: "string",
+            timestamp: "1689210000",
+            truncated: false,
+            client_id: "dfeApplyForTeacherTraining",
+          },
+        ],
+        { language: "cy" }
+      );
+      await request(app)
+        .get(url)
+        .expect(function (res) {
+          const $ = cheerio.load(res.text);
+          expect(res.status).to.equal(200);
+          expect($(testComponent("no-welsh-notice")).length).eq(1);
+          expect($(testComponent("log-entry-heading")).prop("lang")).to.equal(
+            "en"
+          );
+        });
+    });
+  });
+
+  it("should not add intro paragraph and lang attributes when current language is English and an English-only service exists", async () => {
+    const app = await appWithMiddlewareSetup([
+      {
+        event_type: "AUTH_AUTH_CODE_ISSUED",
+        session_id: "asdf",
+        user_id: "string",
+        timestamp: "1689210000",
+        truncated: false,
+        client_id: "dfeApplyForTeacherTraining",
+      },
+    ]);
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("no-welsh-notice")).length).eq(0);
+        expect($(`[lang='en']${testComponent("log-entry-heading")}`).length).eq(
+          0
+        );
+      });
+  });
+
+  it("should not add intro paragraph and lang attributes when current language is Welsh and all services are available in Welsh", async () => {
+    const app = await appWithMiddlewareSetup(
+      [
+        {
+          event_type: "AUTH_AUTH_CODE_ISSUED",
+          session_id: "asdf",
+          user_id: "string",
+          timestamp: "1689210000",
+          truncated: false,
+          client_id: "dbs",
+        },
+      ],
+      { language: "cy" }
+    );
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("no-welsh-notice")).length).eq(0);
+        expect($(`[lang='en']${testComponent("log-entry-heading")}`).length).eq(
+          0
+        );
+      });
+  });
 });
 
 const appWithMiddlewareSetup = async (data?: any, config?: any) => {
@@ -228,6 +305,7 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const supportReportingForm = !config?.hideReportingForm;
   const reportSuspiciousActivity =
     !config?.reportSuspiciousActivityJourneyDisabled;
+  const language = config?.language || "en";
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
 
   const activity = data || [
@@ -259,6 +337,7 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
     res: any,
     next: any
   ): void {
+    req.i18n.language = language;
     req.session.user = DEFAULT_USER_SESSION;
     next();
   });

@@ -5,6 +5,8 @@
   <h2 class="govuk-heading-s govuk-!-margin-bottom-1">{{ [contentLocale, '.', 'oneLoginHome', '.header'] | join | translate }}</h2>
   <p class="govuk-body govuk-hint">{{[contentLocale, '.', 'oneLoginHome', '.hint'] | join | translate}}</p>
 {%- else -%}
-  <h2 class="govuk-heading-s">{{ ['clientRegistry.', env, '.', eventId, '.header'] | join | translate }}</h2>
+  <h2 class="govuk-heading-s" {% if currentLngWelsh and not event.isAvailableInWelsh %}lang="en"{% endif %} data-test-id="log-entry-heading">
+    {{ ['clientRegistry.', env, '.', eventId, '.header'] | join | translate }}
+  </h2>
 {%- endif -%}
 <p class="govuk-body">{{event.time}} ({{ 'pages.activityHistory.timeInfo' | translate }})</p>
