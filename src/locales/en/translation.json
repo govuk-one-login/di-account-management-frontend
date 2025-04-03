@@ -15,6 +15,8 @@
     "no": "No",
     "backToAccountButtonText": "Back to Security",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
+    "noWelshNoticeInline": "This service is not available in Welsh.",
+    "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
     "cookie": {
       "cookieBanner": {
         "title": "Cookies on GOV.UK One Login",
@@ -378,6 +380,7 @@
       "title": "Your services",
       "header": "Your services",
       "signedInStatus": "You’re signed in as",
+      "intro": "When you access a service with your GOV.UK One Login, it will appear here. You can go directly to a service to use it again.",
       "lastUsed": "Last used",
       "empty": "You’re not using any services with your GOV.UK One Login yet.",
       "accountsList": {

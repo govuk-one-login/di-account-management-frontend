@@ -21,6 +21,7 @@ describe("YourService Util", () => {
         last_accessed: 14567776,
         last_accessed_readable_format: "last_accessed_readable_format",
         hasDetailedCard: true,
+        isAvailableInWelsh: true,
       },
       {
         client_id: "mortgageDeed",
@@ -28,6 +29,7 @@ describe("YourService Util", () => {
         last_accessed: 14567776,
         last_accessed_readable_format: "last_accessed_readable_format",
         hasDetailedCard: true,
+        isAvailableInWelsh: true,
       },
       {
         client_id: "nonExistant",
@@ -109,6 +111,7 @@ describe("YourService Util", () => {
             client_id: "prisonVisits",
             count_successful_logins: 1,
             hasDetailedCard: false,
+            isAvailableInWelsh: true,
             last_accessed: 14567776,
             last_accessed_readable_format: "1 January 1970",
           },
@@ -120,6 +123,7 @@ describe("YourService Util", () => {
             hasDetailedCard: false,
             last_accessed: 14567776,
             last_accessed_readable_format: "1 January 1970",
+            isAvailableInWelsh: true,
           },
         ],
       };
@@ -136,6 +140,7 @@ describe("YourService Util", () => {
           hasDetailedCard: true,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
+          isAvailableInWelsh: true,
         },
         {
           client_id: "mortgageDeed",
@@ -143,6 +148,7 @@ describe("YourService Util", () => {
           hasDetailedCard: true,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
+          isAvailableInWelsh: true,
         },
       ];
 
