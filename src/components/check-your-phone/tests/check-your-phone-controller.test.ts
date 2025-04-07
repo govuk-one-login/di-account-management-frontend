@@ -12,6 +12,7 @@ import { PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import {
   INTENT_ADD_BACKUP,
+  INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../../check-your-email/types";
 import { logger } from "../../../utils/logger";
@@ -78,8 +79,63 @@ describe("check your phone controller", () => {
   describe("checkYourPhoneGet", () => {
     it("should render check your phone view", () => {
       checkYourPhoneGet(req as Request, res as Response);
-
       expect(res.render).to.have.calledWith("check-your-phone/index.njk");
+    });
+
+    it("should render check your phone view with backLink untent change phone number", () => {
+      if (req.query) {
+        req.query.intent = INTENT_CHANGE_PHONE_NUMBER;
+      }
+      checkYourPhoneGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
+        phoneNumber: "",
+        resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
+        changePhoneNumberLink: "/change-phone-number",
+        intent: "changePhoneNumber",
+        backLink: "/change-phone-number",
+      });
+    });
+
+    it("should render check your phone view with backLink intent add mfa method", () => {
+      if (req.query) {
+        req.query.intent = INTENT_ADD_BACKUP;
+      }
+      checkYourPhoneGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
+        phoneNumber: "",
+        resendCodeLink: "/resend-phone-code?intent=addBackup",
+        changePhoneNumberLink: "/change-phone-number",
+        intent: "addBackup",
+        backLink: "/add-mfa-method-sms",
+      });
+    });
+
+    it("should render check your phone view with backLink intent change default method", () => {
+      if (req.query) {
+        req.query.intent = INTENT_CHANGE_DEFAULT_METHOD;
+      }
+      checkYourPhoneGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
+        phoneNumber: "",
+        resendCodeLink: "/resend-phone-code?intent=changeDefaultMethod",
+        changePhoneNumberLink: "/change-phone-number",
+        intent: "changeDefaultMethod",
+        backLink: "/change-default-method",
+      });
+    });
+
+    it("should render check your phone view without backLink", () => {
+      if (req.query) {
+        req.query.intent = undefined;
+      }
+      checkYourPhoneGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
+        phoneNumber: "",
+        resendCodeLink: "/resend-phone-code?intent=undefined",
+        changePhoneNumberLink: "/change-phone-number",
+        intent: undefined,
+        backLink: undefined,
+      });
     });
   });
 

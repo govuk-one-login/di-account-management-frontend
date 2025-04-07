@@ -8,8 +8,11 @@ export async function yourServicesGet(
 ): Promise<void> {
   const { user } = req.session;
   const env = getAppEnv();
-  let data;
-
+  const data = {
+    email: user.email,
+    env: env,
+    currentLngWelsh: req.i18n?.language === "cy",
+  };
   if (user?.subjectId) {
     const trace = res.locals.sessionId;
     const serviceData = await presentYourServices(
@@ -17,14 +20,22 @@ export async function yourServicesGet(
       trace,
       req.i18n.language
     );
-    data = {
+    const hasEnglishOnlyServices =
+      serviceData.accountsList.some(
+        (service) => service.isAvailableInWelsh === false
+      ) ||
+      serviceData.servicesList.some(
+        (service) => service.isAvailableInWelsh === false
+      );
+
+    res.render("your-services/index.njk", {
+      ...data,
       email: req.session.user.email,
       accountsList: serviceData.accountsList,
       servicesList: serviceData.servicesList,
-      env: env,
-    };
+      hasEnglishOnlyServices,
+    });
   } else {
-    data = { email: user.email, env: env };
+    res.render("your-services/index.njk", data);
   }
-  res.render("your-services/index.njk", data);
 }
