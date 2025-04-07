@@ -106,10 +106,6 @@ export function getSessionStoreTableName(): string {
   return process.env.SESSION_STORE_TABLE_NAME;
 }
 
-export function supportLanguageCY(): boolean {
-  return process.env.SUPPORT_LANGUAGE_CY === "1";
-}
-
 export function getLogoutTokenMaxAge(): number {
   return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
 }
@@ -177,6 +173,8 @@ export function supportActivityLog(): boolean {
 // supportReportingForm() turns the link into the auth-owned RSA journey on/off
 // reportSuspiciousActivity() and supportReportingForm() should never be on at the same time
 export function supportReportingForm(): boolean {
+  console.log("MHTEST");
+  console.log(process.env);
   return (
     process.env.REPORT_SUSPICIOUS_ACTIVITY === "0" &&
     process.env.SUPPORT_REPORTING_FORM === "1"
