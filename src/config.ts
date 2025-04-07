@@ -173,8 +173,6 @@ export function supportActivityLog(): boolean {
 // supportReportingForm() turns the link into the auth-owned RSA journey on/off
 // reportSuspiciousActivity() and supportReportingForm() should never be on at the same time
 export function supportReportingForm(): boolean {
-  console.log("MHTEST");
-  console.log(process.env);
   return (
     process.env.REPORT_SUSPICIOUS_ACTIVITY === "0" &&
     process.env.SUPPORT_REPORTING_FORM === "1"
