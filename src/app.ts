@@ -12,7 +12,7 @@ import {
   webchatHelmetConfiguration,
 } from "./config/helmet";
 import helmet from "helmet";
-import session from "express-session";
+import session, { Store as SessionStore } from "express-session";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
@@ -20,6 +20,7 @@ import {
   getNodeEnv,
   getSessionExpiry,
   getSessionSecret,
+  getSessionStoreTableName,
   supportActivityLog,
   supportChangeMfa,
   supportClientRegistryLibrary,
@@ -60,7 +61,7 @@ import { resendEmailCodeRouter } from "./components/resend-email-code/resend-ema
 import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
 import { redirectsRouter } from "./components/redirects/redirects-routes";
 import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes";
-import { getSessionStore } from "./utils/session-store";
+//import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
 import { reportSuspiciousActivityRouter } from "./components/report-suspicious-activity/report-suspicious-activity-routes";
@@ -81,7 +82,10 @@ import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
+import connect from "connect-dynamodb";
 import blockedAt from "blocked-at";
+import { DynamoDBClient, ScalarAttributeType } from "@aws-sdk/client-dynamodb";
+import { AwsConfig, getAWSConfig } from "./config/aws";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -89,17 +93,39 @@ const APP_VIEWS = [
   path.resolve("node_modules/@govuk-one-login/"),
 ];
 
+const DynamoDBStore = connect(session);
+const awsConfig: AwsConfig = getAWSConfig();
+const USER_IDENTIFIER_IDX_ATTRIBUTE = "user_id";
+const PREFIX = "sess:";
+
+const sessionStore: SessionStore | undefined =
+  process.env.NODE_ENV !== "local"
+    ? new DynamoDBStore({
+        client: new DynamoDBClient(awsConfig as any),
+        readCapacityUnits: 40000,
+        writeCapacityUnits: 40000,
+        table: getSessionStoreTableName(),
+        specialKeys: [
+          {
+            name: USER_IDENTIFIER_IDX_ATTRIBUTE,
+            type: ScalarAttributeType.S,
+          },
+        ],
+        skipThrowMissingSpecialKeys: true,
+        prefix: PREFIX,
+      })
+    : undefined;
+
 async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
   const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
-
-  app.enable("trust proxy");
 
   if (isProduction) {
     const protect = applyOverloadProtection(isProduction);
     app.use(protect);
   }
 
+  app.enable("trust proxy");
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
@@ -184,7 +210,7 @@ async function createApp(): Promise<express.Application> {
 
   app.use(languageToggleMiddleware);
 
-  const sessionStore = getSessionStore({ session: session });
+  // const sessionStore = getSessionStore({ session: session });
   app.use(
     session({
       name: "am",
