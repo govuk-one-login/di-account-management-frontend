@@ -106,10 +106,6 @@ export function getSessionStoreTableName(): string {
   return process.env.SESSION_STORE_TABLE_NAME;
 }
 
-export function supportLanguageCY(): boolean {
-  return process.env.SUPPORT_LANGUAGE_CY === "1";
-}
-
 export function getLogoutTokenMaxAge(): number {
   return Number(process.env.LOGOUT_TOKEN_MAX_AGE_SECONDS) || 120;
 }
