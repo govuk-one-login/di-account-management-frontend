@@ -31,6 +31,8 @@ export function getSessionStore({ session }: SessionStore): Store {
     const DynamoDBStore = connect_dynamodb(session);
     const storeOptions = {
       client: dynamoDBCientSessionStore,
+      readCapacityUnits: 40000,
+      writeCapacityUnits: 40000,
       table: getSessionStoreTableName(),
       specialKeys: [
         { name: USER_IDENTIFIER_IDX_ATTRIBUTE, type: ScalarAttributeType.S },
