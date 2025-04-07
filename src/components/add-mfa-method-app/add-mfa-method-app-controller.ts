@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
-import { addBackup, verifyMfaCode } from "../../utils/mfa";
+import { PATH_DATA } from "../../app.constants";
+import { verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
 import { formatValidationError } from "../../utils/validation";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { renderMfaMethodPage } from "../common/mfa";
-import { getTxmaHeader } from "../../utils/txma-header";
 import { containsNumbersOnly } from "../../utils/strings";
+import { createMfaClient } from "../../utils/mfaClient";
+import { AuthAppMethod } from "src/utils/mfaClient/types";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
@@ -82,31 +83,18 @@ export async function addMfaAppMethodPost(
       );
     }
 
-    const { status } = await addBackup(
-      {
-        email: req.session.user.email,
-        otp: code,
-        credential: authAppSecret,
-        mfaMethod: {
-          priorityIdentifier: "BACKUP",
-          method: {
-            mfaMethodType: "AUTH_APP",
-          },
-        },
-      },
-      {
-        accessToken: req.session.user.tokens.accessToken,
-        sourceIp: req.ip,
-        sessionId: req.session.id,
-        persistentSessionId: res.locals.persistentSessionId,
-        userLanguage: req.cookies.lng as string,
-        clientSessionId: res.locals.clientSessionId,
-        txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-      }
-    );
+    const newMethod: AuthAppMethod = {
+      type: "AUTH_APP",
+      credential: authAppSecret,
+    };
 
-    if (status !== HTTP_STATUS_CODES.OK) {
-      throw Error(`Failed to add MFA method, response status: ${status}`);
+    const mfaClient = createMfaClient(req, res);
+    const response = await mfaClient.create(newMethod);
+
+    if (!response.success) {
+      throw Error(
+        `Failed to add MFA method, response status: ${response.status}`
+      );
     }
 
     req.session.user.state.addBackup = getNextState(

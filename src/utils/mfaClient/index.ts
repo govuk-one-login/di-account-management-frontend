@@ -1,12 +1,14 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { Http } from "../http";
+import { Request, Response } from "express";
+import { getRequestConfig, Http } from "../http";
 import { getMfaServiceUrl } from "../../config";
 import { ProblemDetail, ValidationProblem } from "../mfa/types";
 
 import { ApiResponse, Method, MfaClientInterface, MfaMethod } from "./types";
 import { HTTP_STATUS_CODES } from "../../app.constants";
+import { getTxmaHeader } from "../txma-header";
 
-export default class MfaClient implements MfaClientInterface {
+export class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;
   private readonly requestConfig: AxiosRequestConfig;
   private readonly http: Http;
@@ -84,4 +86,18 @@ export function buildResponse<T>(response: AxiosResponse<T>): ApiResponse<T> {
       problem,
     };
   }
+}
+
+export function createMfaClient(req: Request, res: Response): MfaClient {
+  return new MfaClient(
+    req.session.user?.publicSubjectId,
+    getRequestConfig({
+      token: req.session.user.tokens.accessToken,
+      sourceIp: req.ip,
+      persistentSessionId: res.locals.persistentSessionId,
+      sessionId: res.locals.sessionId,
+      clientSessionId: res.locals.clientSessionId,
+      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+    })
+  );
 }
