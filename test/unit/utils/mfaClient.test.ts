@@ -18,7 +18,7 @@ const mfaMethod: MfaMethod = {
   mfaIdentifier: "1234",
   methodVerified: true,
   method: {
-    type: "SMS",
+    mfaMethodType: "SMS",
     phoneNumber: "123456789",
   } as SmsMethod,
   priorityIdentifier: "DEFAULT",
@@ -75,7 +75,7 @@ describe("MfaClient", () => {
       axiosStub.post = postStub;
 
       const response = await client.create({
-        type: "SMS",
+        mfaMethodType: "SMS",
         phoneNumber: "123456",
       } as SmsMethod);
 
@@ -125,6 +125,36 @@ describe("MfaClient", () => {
 
       expect(deleteStub.calledWith("/mfa-methods/publicSubjectId/1234")).to.be
         .true;
+    });
+  });
+
+  describe("makeDefault", () => {
+    it("should PUT to the endpoint", async () => {
+      const putStub = sinon.stub().resolves({ data: [mfaMethod] });
+      axiosStub.put = putStub;
+
+      const response = await client.makeDefault(mfaMethod);
+
+      expect(response.data.length).to.eq(1);
+      expect(response.data[0]).to.eq(mfaMethod);
+      expect(putStub.calledOnce).to.be.true;
+    });
+
+    it("should call the API and change the priority to DEFAULT", async () => {
+      const putStub = sinon.stub().resolves({ data: [mfaMethod] });
+      axiosStub.put = putStub;
+
+      const backupMethod: MfaMethod = {
+        ...mfaMethod,
+        priorityIdentifier: "BACKUP",
+      };
+
+      await client.makeDefault(backupMethod);
+
+      expect(putStub).to.have.been.calledWith(
+        "/mfa-methods/publicSubjectId/1234",
+        { mfaMethod }
+      );
     });
   });
 });

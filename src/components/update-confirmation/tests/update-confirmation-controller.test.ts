@@ -90,7 +90,7 @@ describe("update confirmation controller", () => {
       mfaIdentifier: "1",
       priorityIdentifier: "BACKUP",
       methodVerified: true,
-      method: { type: "SMS", phoneNumber: "1234567890" } as SmsMethod,
+      method: { mfaMethodType: "SMS", phoneNumber: "1234567890" } as SmsMethod,
     };
 
     req = {

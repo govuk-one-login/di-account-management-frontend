@@ -18,7 +18,7 @@ describe("delete mfa method controller", () => {
     mfaIdentifier: "1",
     priorityIdentifier: "BACKUP",
     methodVerified: true,
-    method: { type: "SMS", phoneNumber: "1234567890" } as SmsMethod,
+    method: { mfaMethodType: "SMS", phoneNumber: "1234567890" } as SmsMethod,
   };
 
   const generateRequest = (idToRemove: string) => {
