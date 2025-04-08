@@ -191,6 +191,43 @@ describe("change authenticator app controller", () => {
       );
     });
 
+    it("should render an error if the code is empty", async () => {
+      const fakeService: ChangeAuthenticatorAppServiceInterface = {
+        updateAuthenticatorApp: sandbox.fake.resolves(true),
+      };
+      req.session.user.tokens = { accessToken: "token" } as any;
+      req.body.code = "";
+      req.body.authAppSecret = "qwer42312345342";
+      const tSpy = sandbox.spy();
+      req.t = tSpy;
+
+      sandbox.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
+      sandbox.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+
+      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+
+      await changeAuthenticatorAppPost(fakeService)(
+        req as Request,
+        res as Response
+      );
+
+      expect(res.render).to.have.been.calledWith(
+        "change-authenticator-app/index.njk",
+        {
+          authAppSecret: "qwer42312345342",
+          qrCode: await QRCode.toDataURL("qrcode"),
+          formattedSecret: "qwer 4231 2345 342",
+          backLink: undefined,
+          errors: { code: { text: undefined, href: "#code" } },
+          errorList: [{ text: undefined, href: "#code" }],
+        }
+      );
+      expect(fakeService.updateAuthenticatorApp).to.not.have.been.calledOnce;
+      expect(tSpy).to.have.been.calledOnceWith(
+        "pages.addBackupApp.errors.required"
+      );
+    });
+
     it("should render an error if the code is invalid", async () => {
       const fakeService: ChangeAuthenticatorAppServiceInterface = {
         updateAuthenticatorApp: sandbox.fake.resolves(true),
