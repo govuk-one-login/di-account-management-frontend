@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
-import { changeDefaultMfaMethod } from "../../utils/mfa";
-import { generateSessionDetails } from "../common/mfa";
 import { logger } from "../../utils/logger";
+import { createMfaClient } from "../../utils/mfaClient";
+import { MfaMethod } from "../../utils/mfaClient/types";
 
 export async function switchBackupMfaMethodGet(
   req: Request,
@@ -72,10 +72,19 @@ export async function switchBackupMfaMethodPost(
   }
 
   try {
-    await changeDefaultMfaMethod(
-      newDefaultMethod.mfaIdentifier,
-      await generateSessionDetails(req, res)
+    const mfaClient = createMfaClient(req, res);
+    const response = await mfaClient.makeDefault(
+      newDefaultMethod as unknown as MfaMethod
     );
+
+    if (!response.success) {
+      res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+      logger.error(
+        "Switch backup method controller: error updating default MFA method",
+        response.problem.title
+      );
+      return;
+    }
   } catch (error) {
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
     logger.error(

@@ -67,30 +67,6 @@ export function addBackup(
   );
 }
 
-export async function changeDefaultMfaMethod(
-  mfaMethodId: number,
-  sessionDetails: UpdateInformationSessionValues
-): Promise<void> {
-  const http = new Http(getMfaServiceUrl());
-  const { accessToken, sourceIp, persistentSessionId, sessionId } =
-    sessionDetails;
-
-  return http.client.put(
-    format(METHOD_MANAGEMENT_API.MFA_METHODS_PUT, mfaMethodId),
-    {
-      mfaMethod: {
-        priorityIdentifier: "DEFAULT",
-      },
-    },
-    getRequestConfig({
-      token: accessToken,
-      sourceIp,
-      persistentSessionId,
-      sessionId,
-    })
-  );
-}
-
 async function retrieveMfaMethods(
   accessToken: string,
   email: string,
