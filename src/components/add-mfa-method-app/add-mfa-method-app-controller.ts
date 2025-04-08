@@ -84,7 +84,7 @@ export async function addMfaAppMethodPost(
     }
 
     const newMethod: AuthAppMethod = {
-      type: "AUTH_APP",
+      mfaMethodType: "AUTH_APP",
       credential: authAppSecret,
     };
 

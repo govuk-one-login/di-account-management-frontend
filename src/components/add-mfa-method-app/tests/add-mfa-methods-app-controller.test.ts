@@ -80,7 +80,7 @@ describe("addMfaAppMethodPost", () => {
   let logSpy: sinon.SinonSpy;
 
   const appMethod: AuthAppMethod = {
-    type: "AUTH_APP",
+    mfaMethodType: "AUTH_APP",
     credential: "1234567890",
   };
 

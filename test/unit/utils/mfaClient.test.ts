@@ -18,7 +18,7 @@ const mfaMethod: MfaMethod = {
   mfaIdentifier: "1234",
   methodVerified: true,
   method: {
-    type: "SMS",
+    mfaMethodType: "SMS",
     phoneNumber: "123456789",
   } as SmsMethod,
   priorityIdentifier: "DEFAULT",
@@ -75,7 +75,7 @@ describe("MfaClient", () => {
       axiosStub.post = postStub;
 
       const response = await client.create({
-        type: "SMS",
+        mfaMethodType: "SMS",
         phoneNumber: "123456",
       } as SmsMethod);
 

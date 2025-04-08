@@ -81,7 +81,7 @@ describe("change default method", () => {
   describe("POST", () => {
     let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
     const appMethod: AuthAppMethod = {
-      type: "AUTH_APP",
+      mfaMethodType: "AUTH_APP",
       credential: "1234567890",
     };
 
