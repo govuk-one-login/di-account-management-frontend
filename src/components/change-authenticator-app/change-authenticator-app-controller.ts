@@ -30,6 +30,19 @@ export function changeAuthenticatorAppPost(
 
     assert(authAppSecret, "authAppSecret not set in body");
 
+    if (!code) {
+      return renderMfaMethodPage(
+        CHANGE_AUTHENTICATOR_APP_TEMPLATE,
+        req,
+        res,
+        next,
+        formatValidationError(
+          "code",
+          req.t("pages.addBackupApp.errors.required")
+        )
+      );
+    }
+
     if (!containsNumbersOnly(code)) {
       return renderMfaMethodPage(
         CHANGE_AUTHENTICATOR_APP_TEMPLATE,
