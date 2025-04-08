@@ -5,6 +5,7 @@ export interface MfaClientInterface {
   create: (method: Method) => Promise<ApiResponse<MfaMethod>>;
   update: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
   delete: (method: MfaMethod) => Promise<ApiResponse<any>>;
+  makeDefault: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
 }
 
 export interface MfaMethod {

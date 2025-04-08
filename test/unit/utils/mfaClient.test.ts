@@ -127,6 +127,36 @@ describe("MfaClient", () => {
         .true;
     });
   });
+
+  describe("makeDefault", () => {
+    it("should PUT to the endpoint", async () => {
+      const putStub = sinon.stub().resolves({ data: [mfaMethod] });
+      axiosStub.put = putStub;
+
+      const response = await client.makeDefault(mfaMethod);
+
+      expect(response.data.length).to.eq(1);
+      expect(response.data[0]).to.eq(mfaMethod);
+      expect(putStub.calledOnce).to.be.true;
+    });
+
+    it("should call the API and change the priority to DEFAULT", async () => {
+      const putStub = sinon.stub().resolves({ data: [mfaMethod] });
+      axiosStub.put = putStub;
+
+      const backupMethod: MfaMethod = {
+        ...mfaMethod,
+        priorityIdentifier: "BACKUP",
+      };
+
+      await client.makeDefault(backupMethod);
+
+      expect(putStub).to.have.been.calledWith(
+        "/mfa-methods/publicSubjectId/1234",
+        { mfaMethod }
+      );
+    });
+  });
 });
 
 describe("buildRequest", () => {
