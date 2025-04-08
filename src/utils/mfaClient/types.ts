@@ -5,6 +5,7 @@ export interface MfaClientInterface {
   create: (method: Method) => Promise<ApiResponse<MfaMethod>>;
   update: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
   delete: (method: MfaMethod) => Promise<ApiResponse<any>>;
+  makeDefault: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
 }
 
 export interface MfaMethod {
@@ -15,16 +16,16 @@ export interface MfaMethod {
 }
 
 export interface Method {
-  type: string;
+  mfaMethodType: string;
 }
 
 export interface SmsMethod extends Method {
-  type: "SMS";
+  mfaMethodType: "SMS";
   phoneNumber: string;
 }
 
 export interface AuthAppMethod extends Method {
-  type: "AUTH_APP";
+  mfaMethodType: "AUTH_APP";
   credential: string;
 }
 

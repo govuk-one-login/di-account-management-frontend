@@ -58,6 +58,17 @@ export class MfaClient implements MfaClientInterface {
 
     return buildResponse(response);
   }
+
+  async makeDefault(method: MfaMethod) {
+    const newMfaMethod: MfaMethod = {
+      mfaIdentifier: method.mfaIdentifier,
+      methodVerified: method.methodVerified,
+      priorityIdentifier: "DEFAULT",
+      method: method.method,
+    };
+
+    return this.update(newMfaMethod);
+  }
 }
 
 export function buildResponse<T>(response: AxiosResponse<T>): ApiResponse<T> {

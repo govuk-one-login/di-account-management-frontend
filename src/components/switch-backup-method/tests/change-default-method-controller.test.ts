@@ -6,16 +6,12 @@ import {
   switchBackupMfaMethodPost,
   switchBackupMfaMethodGet,
 } from "../switch-backup-method-controller";
-import * as mfa from "../../../utils/mfa";
-import * as mfaCommon from "../../common/mfa";
-import { UpdateInformationSessionValues } from "../../../utils/types";
+import * as mfaClient from "../../../utils/mfaClient";
+import { AuthAppMethod, MfaMethod } from "../../../utils/mfaClient/types";
 
 describe("change default method", () => {
-  let sandbox: sinon.SinonSandbox;
-
   const statusFn = sinon.spy();
   const redirectFn = sinon.spy();
-  const changeFn = sinon.spy();
 
   const generateRequest = (id: string, noBackup = true, noDefault = true) => {
     const mfaMethods: any[] = [];
@@ -60,18 +56,6 @@ describe("change default method", () => {
     };
   };
 
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    sandbox.replace(mfa, "changeDefaultMfaMethod", changeFn);
-    sandbox.replace(mfaCommon, "generateSessionDetails", () => {
-      return Promise.resolve({} as UpdateInformationSessionValues);
-    });
-  });
-
-  afterEach(() => {
-    sandbox.restore();
-  });
-
   describe("GET", () => {
     it("should return a 404 if there is no backup method", async () => {
       const req = generateRequest("1", true);
@@ -95,18 +79,61 @@ describe("change default method", () => {
   });
 
   describe("POST", () => {
+    let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
+    const appMethod: AuthAppMethod = {
+      mfaMethodType: "AUTH_APP",
+      credential: "1234567890",
+    };
+
+    const mfaMethod: MfaMethod = {
+      mfaIdentifier: "1",
+      priorityIdentifier: "BACKUP",
+      methodVerified: true,
+      method: appMethod,
+    };
+
+    beforeEach(() => {
+      mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
+      sinon.stub(mfaClient, "createMfaClient").returns(mfaClientStub);
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
     it("should change the DEFAULT MFA method", async () => {
-      const req = generateRequest("1", false);
+      const req = {
+        session: {
+          mfaMethods: [
+            mfaMethod,
+            { ...mfaMethod, priorityIdentifier: "DEFAULT", mfaIdentifier: "2" },
+          ],
+          user: {
+            state: {
+              switchBackupMethod: {
+                value: "CHANGE_VALUE",
+              },
+            },
+          },
+        },
+        body: { newDefault: mfaMethod.mfaIdentifier },
+      };
       const res = generateResponse();
+
+      mfaClientStub.makeDefault.resolves({
+        data: [mfaMethod],
+        success: true,
+        status: 200,
+      });
 
       //@ts-expect-error req and res aren't valid objects since they are mocked
       await switchBackupMfaMethodPost(req as Request, res as Response);
 
-      expect(changeFn).to.be.calledWith(1);
+      expect(mfaClientStub.makeDefault).to.be.calledWith(mfaMethod);
       expect(redirectFn).to.be.calledWith("/switch-methods-confirmation");
     });
 
-    it("should return a 404 if the new defualt method doesn't exist", async () => {
+    it("should return a 404 if the new default method doesn't exist", async () => {
       const req = generateRequest("5", false);
       const res = generateResponse();
 
@@ -116,13 +143,12 @@ describe("change default method", () => {
       expect(statusFn).to.be.calledWith(404);
     });
 
-    it("should return a 500 if there is an error when changing the defualt method", async () => {
-      sandbox.restore();
-      sandbox.replace(mfa, "changeDefaultMfaMethod", () => {
-        throw Error("error!");
-      });
-      sandbox.replace(mfaCommon, "generateSessionDetails", () => {
-        return Promise.resolve({} as UpdateInformationSessionValues);
+    it("should return a 500 if the request to the API fails", async () => {
+      mfaClientStub.makeDefault.resolves({
+        data: [mfaMethod],
+        success: false,
+        status: 500,
+        problem: { title: "Internal server error" },
       });
 
       const req = generateRequest("1", false);

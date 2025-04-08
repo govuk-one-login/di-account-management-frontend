@@ -132,11 +132,11 @@ export async function removeMfaMethodConfirmationGet(
     return "" + m.mfaIdentifier == req.query.id;
   }) as unknown as MfaMethod;
 
-  if (removedMethod?.method.type === "AUTH_APP") {
+  if (removedMethod?.method.mfaMethodType === "AUTH_APP") {
     message = req.t("pages.removeBackupMethod.confirm.message_app");
   }
 
-  if (removedMethod?.method.type === "SMS") {
+  if (removedMethod?.method.mfaMethodType === "SMS") {
     const method = removedMethod.method as SmsMethod;
     message = req
       .t("pages.removeBackupMethod.confirm.message_sms")
