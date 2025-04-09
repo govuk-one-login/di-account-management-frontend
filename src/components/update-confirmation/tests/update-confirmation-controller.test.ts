@@ -12,8 +12,10 @@ import {
   updatePhoneNumberConfirmationGet,
   updateAuthenticatorAppConfirmationGet,
   changeDefaultMethodConfirmationGet,
+  removeMfaMethodConfirmationGet,
 } from "../update-confirmation-controller";
 import { PATH_DATA } from "../../../app.constants";
+import { MfaMethod, SmsMethod } from "../../../utils/mfaClient/types";
 
 describe("update confirmation controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -37,6 +39,7 @@ describe("update confirmation controller", () => {
 
   afterEach(() => {
     sandbox.restore();
+    sinon.restore();
   });
 
   describe("updateEmailConfirmationGet", () => {
@@ -80,6 +83,32 @@ describe("update confirmation controller", () => {
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
+  });
+
+  describe("removeMfaMethodConfirmationGet", () => {
+    const mfaMethod: MfaMethod = {
+      mfaIdentifier: "1",
+      priorityIdentifier: "BACKUP",
+      methodVerified: true,
+      method: { mfaMethodType: "SMS", phoneNumber: "1234567890" } as SmsMethod,
+    };
+
+    req = {
+      body: {},
+      session: { user: { state: {} }, removedMfaMethods: [mfaMethod] } as any,
+      t: sinon.stub().returns("translated-string"),
+      query: { id: mfaMethod.mfaIdentifier },
+    };
+
+    res = {
+      render: sinon.fake(),
+    };
+
+    removeMfaMethodConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).to.be.calledWith(
+      "common/confirmation-page/confirmation.njk"
+    );
   });
 });
 

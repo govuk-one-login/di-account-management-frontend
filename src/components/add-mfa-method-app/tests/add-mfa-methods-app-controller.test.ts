@@ -11,6 +11,9 @@ import {
 import { PATH_DATA } from "../../../app.constants";
 import * as mfaModule from "../../../utils/mfa";
 import QRCode from "qrcode";
+import { MfaClient } from "../../../utils/mfaClient";
+import { AuthAppMethod, MfaMethod } from "../../../utils/mfaClient/types";
+import * as mfaClient from "../../../utils/mfaClient";
 
 describe("addMfaAppMethodGet", () => {
   let sandbox: SinonSandbox;
@@ -72,98 +75,60 @@ describe("addMfaAppMethodGet", () => {
 });
 
 describe("addMfaAppMethodPost", () => {
-  let sandbox: SinonSandbox;
+  let mfaClientStub: sinon.SinonStubbedInstance<MfaClient>;
+  let nextSpy: sinon.SinonSpy;
+  let logSpy: sinon.SinonSpy;
+
+  const appMethod: AuthAppMethod = {
+    mfaMethodType: "AUTH_APP",
+    credential: "1234567890",
+  };
+
+  const mfaMethod: MfaMethod = {
+    mfaIdentifier: "1",
+    priorityIdentifier: "BACKUP",
+    methodVerified: true,
+    method: appMethod,
+  };
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
+    mfaClientStub = sinon.createStubInstance(MfaClient);
+    sinon.stub(mfaClient, "createMfaClient").returns(mfaClientStub);
+    nextSpy = sinon.spy();
+    logSpy = sinon.spy();
   });
 
   afterEach(() => {
-    sandbox.restore();
+    sinon.restore();
   });
 
-  it("should redirect to add mfa app confirmation page", async () => {
+  it("should redirect to add mfa app confirmation page when successful", async () => {
     const req = {
-      headers: {
-        "txma-audit-encoded": "txma-audit-encoded",
-      },
       body: {
         code: "123456",
-        authAppSecret: "A".repeat(20),
+        authAppSecret: appMethod.credential,
       },
-      session: {
-        id: "session_id",
-        user: {
-          email: "test@test.com",
-          tokens: { accessToken: "token" },
-          state: { addBackup: { value: "APP" } },
-        },
-      },
-      log: { error: sinon.fake() },
-      ip: "127.0.0.1",
+      session: { user: { state: { addBackup: { value: "APP" } } } },
+      log: { error: logSpy },
       t: (t: string) => t,
-      cookies: {
-        lng: "en",
-      },
     };
-    const res = {
-      locals: {
-        persistentSessionId: "persistentSessionId",
-        clientSessionId: "clientSessionId",
-        trace: "trace",
-      },
-      redirect: sandbox.fake(() => {}),
-    };
-    const next = sinon.spy();
-    const addBackup = sinon.fake.returns(
-      Promise.resolve({
-        status: 200,
-        data: {
-          mfaIdentifier: 1,
-          methodVerified: true,
-          method: {
-            mfaMethodType: "AUTH_APP",
-          },
-          priorityIdentifier: "BACKUP",
-        },
-      })
-    );
 
-    sandbox.replace(mfaModule, "verifyMfaCode", () => true);
-    sandbox.replace(
-      mfaModule,
-      "addBackup",
-      addBackup as typeof mfaModule.addBackup
-    );
+    const res = { redirect: sinon.fake(() => {}) };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    mfaClientStub.create.resolves({
+      success: true,
+      status: 200,
+      data: mfaMethod,
+    });
 
     await addMfaAppMethodPost(
       req as unknown as Request,
       res as unknown as Response,
-      next
+      nextSpy
     );
 
-    expect(addBackup).to.have.been.calledWith(
-      {
-        email: "test@test.com",
-        otp: "123456",
-        credential: "AAAAAAAAAAAAAAAAAAAA",
-        mfaMethod: {
-          priorityIdentifier: "BACKUP",
-          method: {
-            mfaMethodType: "AUTH_APP",
-          },
-        },
-      },
-      {
-        accessToken: "token",
-        sourceIp: "127.0.0.1",
-        sessionId: "session_id",
-        persistentSessionId: "persistentSessionId",
-        userLanguage: "en",
-        clientSessionId: "clientSessionId",
-        txmaAuditEncoded: "txma-audit-encoded",
-      }
-    );
+    expect(mfaClientStub.create).to.have.been.calledWith(appMethod);
 
     expect(res.redirect).to.have.been.calledWith(
       PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url
@@ -174,29 +139,102 @@ describe("addMfaAppMethodPost", () => {
     const req = {
       body: {
         code: "123456",
-        authAppSecret: "A".repeat(20),
+        authAppSecret: appMethod.credential,
       },
       session: {
-        id: "session_id",
-        user: { email: "test@test.com", tokens: { accessToken: "token" } },
+        user: { state: { addBackup: { value: "APP" } }, email: "email" },
       },
-      log: { error: sinon.fake() },
-      ip: "127.0.0.1",
+      log: { error: logSpy },
+      t: (s: string) => s,
     };
-    const res = {
-      locals: {
-        persistentSessionId: "persistentSessionId",
-      },
-      render: sinon.fake(),
-    };
-    const next = sinon.spy();
+    const res = { render: sinon.fake() };
 
-    sandbox.replace(mfaModule, "verifyMfaCode", () => false);
+    sinon.replace(mfaModule, "verifyMfaCode", () => false);
 
     await addMfaAppMethodPost(
       req as unknown as Request,
       res as unknown as Response,
-      next
+      nextSpy
     );
+
+    expect(mfaClientStub.create).not.to.have.been.called;
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+  });
+
+  it("should render an error if the code is missing", async () => {
+    const req = {
+      body: {
+        authAppSecret: appMethod.credential,
+      },
+      session: {
+        user: { state: { addBackup: { value: "APP" } }, email: "email" },
+      },
+      log: { error: logSpy },
+      t: (s: string) => s,
+    };
+    const res = { render: sinon.fake() };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+
+    await addMfaAppMethodPost(
+      req as unknown as Request,
+      res as unknown as Response,
+      nextSpy
+    );
+
+    expect(mfaClientStub.create).not.to.have.been.called;
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+  });
+
+  it("should render an error if the code has letters", async () => {
+    const req = {
+      body: {
+        code: "abc123",
+        authAppSecret: appMethod.credential,
+      },
+      session: {
+        user: { state: { addBackup: { value: "APP" } }, email: "email" },
+      },
+      log: { error: logSpy },
+      t: (s: string) => s,
+    };
+    const res = { render: sinon.fake() };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+
+    await addMfaAppMethodPost(
+      req as unknown as Request,
+      res as unknown as Response,
+      nextSpy
+    );
+
+    expect(mfaClientStub.create).not.to.have.been.called;
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+  });
+
+  it("should render an error if the code is longer than 6 digits", async () => {
+    const req = {
+      body: {
+        code: "1234567",
+        authAppSecret: appMethod.credential,
+      },
+      session: {
+        user: { state: { addBackup: { value: "APP" } }, email: "email" },
+      },
+      log: { error: logSpy },
+      t: (s: string) => s,
+    };
+    const res = { render: sinon.fake() };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+
+    await addMfaAppMethodPost(
+      req as unknown as Request,
+      res as unknown as Response,
+      nextSpy
+    );
+
+    expect(mfaClientStub.create).not.to.have.been.called;
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
   });
 });

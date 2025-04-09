@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
-import { removeMfaMethod } from "../../utils/mfa";
-import { generateSessionDetails } from "../common/mfa";
+import { createMfaClient } from "../../utils/mfaClient";
+import { MfaMethod } from "../../utils/mfaClient/types";
 
 export async function deleteMfaMethodGet(
   req: Request,
@@ -32,24 +32,29 @@ export async function deleteMfaMethodPost(
 ): Promise<void> {
   const methodToRemove = req.session.mfaMethods.find((m) => {
     return req.body.methodId == m.mfaIdentifier;
-  });
+  }) as unknown as MfaMethod;
 
   if (!methodToRemove || methodToRemove.priorityIdentifier !== "BACKUP") {
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     return;
   }
 
-  await removeMfaMethod(
-    methodToRemove.mfaIdentifier,
-    await generateSessionDetails(req, res)
-  );
+  const mfaClient = createMfaClient(req, res);
 
-  req.session.user.state.removeMfaMethod = getNextState(
-    req.session.user.state.removeMfaMethod.value,
-    EventType.RemoveBackup
-  );
+  const response = await mfaClient.delete(methodToRemove);
 
-  req.session.removedMfaMethods = [methodToRemove];
+  if (response.success) {
+    req.session.user.state.removeMfaMethod = getNextState(
+      req.session.user.state.removeMfaMethod.value,
+      EventType.RemoveBackup
+    );
 
-  res.redirect(`${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}`);
+    req.session.removedMfaMethods = [methodToRemove];
+
+    res.redirect(`${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}`);
+  } else if (response.problem) {
+    throw new Error(response.problem.title);
+  } else {
+    throw new Error(`Error deleting MFA`);
+  }
 }

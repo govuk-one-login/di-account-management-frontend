@@ -4,35 +4,40 @@ import { describe } from "mocha";
 import { deleteMfaMethodPost } from "../delete-mfa-method-controller";
 import { Request } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
-import * as mfa from "../../../utils/mfa";
-import * as mfaCommon from "../../common/mfa";
-import { UpdateInformationSessionValues } from "../../../utils/types";
+import { MfaClient } from "../../../utils/mfaClient";
+import { MfaMethod, SmsMethod } from "../../../utils/mfaClient/types";
+import * as mfaClient from "../../../utils/mfaClient";
 
 describe("delete mfa method controller", () => {
-  let sandbox: sinon.SinonSandbox;
-
   const statusFn = sinon.spy();
-  const removeFn = sinon.spy();
   const redirectFn = sinon.spy();
+
+  let mfaClientStub: sinon.SinonStubbedInstance<MfaClient>;
+
+  const mfaMethod: MfaMethod = {
+    mfaIdentifier: "1",
+    priorityIdentifier: "BACKUP",
+    methodVerified: true,
+    method: { mfaMethodType: "SMS", phoneNumber: "1234567890" } as SmsMethod,
+  };
 
   const generateRequest = (idToRemove: string) => {
     return {
       session: {
-        mfaMethods: [
-          {
-            mfaIdentifier: 1,
-            priorityIdentifier: "BACKUP",
-          },
-        ],
+        mfaMethods: [mfaMethod],
         user: {
           state: {
             removeMfaMethod: {
               value: "CHANGE_VALUE",
             },
           },
+          tokens: {
+            accessToken: "accessToken",
+          },
         },
       },
       body: { methodId: idToRemove },
+      ip: "ip",
     };
   };
   const generateResponse = () => {
@@ -40,33 +45,36 @@ describe("delete mfa method controller", () => {
       status: statusFn,
       session: {},
       redirect: redirectFn,
+      locals: {
+        sessionId: "sessionId",
+        clientSessionId: "clientSessionId",
+        persistentSessionId: "persistentSessionId",
+      },
     };
   };
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    sandbox.replace(mfa, "removeMfaMethod", removeFn);
-    sandbox.replace(mfaCommon, "generateSessionDetails", () => {
-      return Promise.resolve({} as UpdateInformationSessionValues);
-    });
+    mfaClientStub = sinon.createStubInstance(MfaClient);
+    sinon.stub(mfaClient, "createMfaClient").returns(mfaClientStub);
   });
 
   afterEach(() => {
-    sandbox.restore();
+    sinon.restore();
   });
 
   it("should delete an MFA method", async () => {
     const req = generateRequest("1");
     const res = generateResponse();
+    mfaClientStub.delete.resolves({ success: true, status: 200, data: {} });
 
     //@ts-expect-error req and res aren't valid objects since they are mocked
     await deleteMfaMethodPost(req as Request, res as Response);
 
-    expect(removeFn).to.be.calledWith(1);
+    expect(mfaClientStub.delete).to.be.calledWith(mfaMethod);
     expect(redirectFn).to.be.calledWith("/remove-backup-confirmation");
   });
 
-  it("should return a 404 if a non existant method is tried", async () => {
+  it("should return a 404 if a non-existent method is tried", async () => {
     const req = generateRequest("2");
     const res = generateResponse();
 
@@ -74,5 +82,21 @@ describe("delete mfa method controller", () => {
     await deleteMfaMethodPost(req as Request, res as Response);
 
     expect(statusFn).to.be.calledWith(404);
+  });
+
+  it("should throw an error if the API request is unsuccessful", async () => {
+    const req = generateRequest("1");
+    const res = generateResponse();
+    mfaClientStub.delete.resolves({
+      success: false,
+      status: 400,
+      data: {},
+      problem: { title: "Bad request" },
+    });
+
+    expect(
+      //@ts-expect-error req and res aren't valid objects since they are mocked
+      deleteMfaMethodPost(req as Request, res as Response)
+    ).to.be.rejectedWith("Bad request");
   });
 });
