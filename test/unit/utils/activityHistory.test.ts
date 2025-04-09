@@ -65,6 +65,54 @@ describe("Activity History Util", () => {
       );
       expect(formattedActivityLogs[0].time).equal("13 July 2023 at 2:00 am");
     });
+
+    it("returns formatted event with isAvailableInWelsh:true if the service is available in Welsh", async () => {
+      const data: ActivityLogEntry[] = [
+        {
+          event_type: "AUTH_AUTH_CODE_ISSUED",
+          session_id: "asdf",
+          user_id: "1234",
+          timestamp: 1689210000,
+          client_id: "dbs",
+          event_id: "12345",
+          reported_suspicious: false,
+          truncated: false,
+        },
+      ];
+
+      const formattedActivityLogs = formatActivityLogs(
+        data,
+        "test",
+        1,
+        "en-GB"
+      );
+
+      expect(formattedActivityLogs[0].isAvailableInWelsh).equal(true);
+    });
+
+    it("returns formatted event with isAvailableInWelsh:false if the service is not available in Welsh", async () => {
+      const data: ActivityLogEntry[] = [
+        {
+          event_type: "AUTH_AUTH_CODE_ISSUED",
+          session_id: "asdf",
+          user_id: "1234",
+          timestamp: 1689210000,
+          client_id: "dfeApplyForTeacherTraining",
+          event_id: "12345",
+          reported_suspicious: false,
+          truncated: false,
+        },
+      ];
+
+      const formattedActivityLogs = formatActivityLogs(
+        data,
+        "test",
+        1,
+        "en-GB"
+      );
+
+      expect(formattedActivityLogs[0].isAvailableInWelsh).equal(false);
+    });
   });
 
   describe("generate a pagination object to render the pagination component", async () => {

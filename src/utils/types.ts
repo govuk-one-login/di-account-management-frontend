@@ -58,6 +58,7 @@ export interface FormattedActivityLog {
   visitedServiceId?: string;
   reportNumber?: string;
   reportedSuspiciousTime?: string;
+  isAvailableInWelsh?: boolean;
 }
 
 export interface SnsService {
