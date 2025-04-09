@@ -26,6 +26,11 @@ export const PATH_DATA: Record<
     event: EventType.ValueUpdated,
     type: UserJourney.addBackup,
   },
+  ADD_MFA_METHOD_GO_BACK: {
+    url: "/back-from-set-up-auth-app",
+    event: EventType.ValueUpdated,
+    type: UserJourney.addBackup,
+  },
   ADD_MFA_METHOD_APP_CONFIRMATION: {
     url: "/backup-auth-app-confirmation",
     event: EventType.Confirmation,
