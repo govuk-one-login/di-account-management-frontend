@@ -2,7 +2,9 @@ import { ProblemDetail, ValidationProblem } from "../mfa/types";
 
 export interface MfaClientInterface {
   retrieve: () => Promise<ApiResponse<MfaMethod[]>>;
-  create: (method: Method) => Promise<ApiResponse<MfaMethod>>;
+  create: (
+    method: SmsMethod | AuthAppMethod
+  ) => Promise<ApiResponse<MfaMethod>>;
   update: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
   delete: (method: MfaMethod) => Promise<ApiResponse<any>>;
   makeDefault: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
@@ -11,20 +13,16 @@ export interface MfaClientInterface {
 export interface MfaMethod {
   mfaIdentifier: string;
   priorityIdentifier: PriorityIdentifier;
-  method: Method;
+  method: SmsMethod | AuthAppMethod;
   methodVerified: boolean;
 }
 
-export interface Method {
-  mfaMethodType: string;
-}
-
-export interface SmsMethod extends Method {
+export interface SmsMethod {
   mfaMethodType: "SMS";
   phoneNumber: string;
 }
 
-export interface AuthAppMethod extends Method {
+export interface AuthAppMethod {
   mfaMethodType: "AUTH_APP";
   credential: string;
 }
