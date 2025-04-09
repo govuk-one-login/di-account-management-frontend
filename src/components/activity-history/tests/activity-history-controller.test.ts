@@ -81,6 +81,84 @@ describe("Activity history controller", () => {
             contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
             homeClientId: clientId,
             supportReportingForm: false,
+            hasEnglishOnlyServices: false,
+          }
+        );
+      });
+    });
+
+    it("should render with hasEnglishOnlyServices: true if data contains an English-only service", async () => {
+      sandbox
+        .stub(presentActivityHistoryModule, "presentActivityHistory")
+        .callsFake(() => {
+          return [
+            {
+              event_type: "AUTH_AUTH_CODE_ISSUED",
+              session_id: "asdf",
+              user_id: "string",
+              timestamp: "1689210000",
+              truncated: false,
+              client_id: "dfeApplyForTeacherTraining",
+            },
+          ];
+        });
+
+      const clientId = "clientId";
+      sandbox.stub(config, "getOIDCClientId").callsFake(() => {
+        return clientId;
+      });
+
+      const req: any = {
+        app: {
+          locals: {
+            sessionStore: {
+              destroy: sandbox.fake(),
+            },
+            subjectSessionIndexService: {
+              removeSession: sandbox.fake(),
+              getSessions: sandbox.stub().resolves(["session-1", "session-2"]),
+            },
+          },
+        },
+        body: {},
+        session: {
+          user: { subjectId: TEST_SUBJECT_ID },
+          query: {},
+          destroy: sandbox.fake(),
+        },
+        log: { error: sandbox.fake(), info: sandbox.fake() },
+        i18n: { language: "en" },
+        t: (k: string) => k,
+      };
+      await activityHistoryGet(req as Request, res as Response).then(() => {
+        expect(res.render).to.have.been.calledWithMatch(
+          "activity-history/index.njk",
+          {
+            env: getAppEnv(),
+            reportSuspiciousActivity: reportSuspiciousActivity(),
+            data: [
+              {
+                eventType: "signedIn",
+                eventId: undefined,
+                sessionId: "asdf",
+                clientId: "dfeApplyForTeacherTraining",
+                reportedSuspicious: undefined,
+                reportSuspiciousActivityUrl:
+                  "/activity-history/report-activity?event=undefined&page=1",
+                time: "13 July 2023 at 2:00 am",
+                visitedService: "dfeApplyForTeacherTraining",
+                visitedServiceId: "dfeApplyForTeacherTraining",
+                reportNumber: undefined,
+                isAvailableInWelsh: false,
+              },
+            ],
+            pagination: {},
+            backLink: PATH_DATA.SECURITY.url,
+            changePasswordLink: PATH_DATA.SECURITY.url,
+            contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
+            homeClientId: clientId,
+            supportReportingForm: false,
+            hasEnglishOnlyServices: true,
           }
         );
       });
