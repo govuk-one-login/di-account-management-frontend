@@ -4,7 +4,13 @@ import { getRequestConfig, Http } from "../http";
 import { getMfaServiceUrl } from "../../config";
 import { ProblemDetail, ValidationProblem } from "../mfa/types";
 
-import { ApiResponse, Method, MfaClientInterface, MfaMethod } from "./types";
+import {
+  ApiResponse,
+  SmsMethod,
+  AuthAppMethod,
+  MfaClientInterface,
+  MfaMethod,
+} from "./types";
 import { HTTP_STATUS_CODES } from "../../app.constants";
 import { getTxmaHeader } from "../txma-header";
 
@@ -32,7 +38,7 @@ export class MfaClient implements MfaClientInterface {
     return buildResponse(response);
   }
 
-  async create(method: Method) {
+  async create(method: SmsMethod | AuthAppMethod) {
     const response = await this.http.client.post<MfaMethod>(
       `/mfa-methods/${this.publicSubjectId}`,
       { priorityIdentifier: "DEFAULT", method: method },
