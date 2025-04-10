@@ -72,16 +72,18 @@ async function retrieveMfaMethods(
   email: string,
   sourceIp: string,
   sessionId: string,
-  persistentSessionId: string
+  persistentSessionId: string,
+  publicSubjectId: string
 ): Promise<MfaMethod[]> {
   let data: MfaMethod[] = [];
   try {
-    const response = await postRequest(
+    const response = await getRequest(
       accessToken,
       email,
       sourceIp,
       sessionId,
-      persistentSessionId
+      persistentSessionId,
+      publicSubjectId
     );
 
     if (response.status === HTTP_STATUS_CODES.OK) {
@@ -93,22 +95,24 @@ async function retrieveMfaMethods(
   return data;
 }
 
-async function postRequest(
+async function getRequest(
   accessToken: string,
   email: string,
   sourceIp: string,
   sessionId: string,
   persistentSessionId: string,
+  publicSubjectId: string,
   http: Http = new Http(getMfaServiceUrl())
 ): Promise<{
   status: number;
   data: MfaMethod[];
 }> {
-  return http.client.post<MfaMethod[]>(
+  const formattedPath = format(
     METHOD_MANAGEMENT_API.MFA_RETRIEVE,
-    {
-      email,
-    },
+    publicSubjectId
+  );
+  return http.client.get(
+    formattedPath,
     getRequestConfig({
       token: accessToken,
       sourceIp,

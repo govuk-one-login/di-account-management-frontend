@@ -94,7 +94,7 @@ describe("checkYourPhoneService", () => {
     process.env.SUPPORT_CHANGE_MFA = "1";
 
     const mfaMethod: MfaMethod = {
-      mfaIdentifier: 111111,
+      mfaIdentifier: "111111",
       methodVerified: true,
       method: {
         mfaMethodType: "SMS",
