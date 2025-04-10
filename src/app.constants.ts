@@ -206,10 +206,10 @@ export const API_ENDPOINTS = {
 };
 
 export const METHOD_MANAGEMENT_API = {
-  MFA_RETRIEVE: "/v1/mfa-methods/%s",
-  MFA_METHODS_ADD: "/v1/mfa-methods",
-  MFA_METHODS_PUT: "/v1/mfa-methods/%s",
-  MFA_METHODS_DELETE: "/v1/mfa-methods/%s",
+  MFA_RETRIEVE: "/mfa-methods/%s",
+  MFA_METHODS_ADD: "/mfa-methods",
+  MFA_METHODS_PUT: "/mfa-methods/%s",
+  MFA_METHODS_DELETE: "/mfa-methods/%s",
 };
 
 export enum NOTIFICATION_TYPE {
