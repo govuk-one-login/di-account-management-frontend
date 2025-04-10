@@ -51,7 +51,7 @@ describe("addBackupGet", () => {
   it("should handle a single mfa method", () => {
     req.session.mfaMethods = [
       {
-        mfaIdentifier: 111111,
+        mfaIdentifier: "111111",
         methodVerified: true,
         method: {
           credential: "ABC",
@@ -71,7 +71,7 @@ describe("addBackupGet", () => {
   it("should handle two mfa methods", () => {
     req.session.mfaMethods = [
       {
-        mfaIdentifier: 111111,
+        mfaIdentifier: "111111",
         methodVerified: true,
         method: {
           phoneNumber: "070",
@@ -80,7 +80,7 @@ describe("addBackupGet", () => {
         priorityIdentifier: "DEFAULT",
       },
       {
-        mfaIdentifier: 2222,
+        mfaIdentifier: "2222",
         methodVerified: true,
         method: {
           phoneNumber: "070",
@@ -99,7 +99,7 @@ describe("addBackupGet", () => {
   it("should handle mor than two mfa methods", () => {
     req.session.mfaMethods = [
       {
-        mfaIdentifier: 111111,
+        mfaIdentifier: "111111",
         methodVerified: true,
         method: {
           phoneNumber: "070",
@@ -108,7 +108,7 @@ describe("addBackupGet", () => {
         priorityIdentifier: "DEFAULT",
       },
       {
-        mfaIdentifier: 22222,
+        mfaIdentifier: "22222",
         methodVerified: true,
         method: {
           phoneNumber: "070",
@@ -117,7 +117,7 @@ describe("addBackupGet", () => {
         priorityIdentifier: "BACKUP",
       },
       {
-        mfaIdentifier: 33333,
+        mfaIdentifier: "33333",
         methodVerified: true,
         method: {
           phoneNumber: "070",

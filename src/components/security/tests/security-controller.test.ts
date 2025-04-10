@@ -510,13 +510,13 @@ describe("security controller", () => {
       req.session.user = { email: "test@test.com" } as any;
       req.session.mfaMethods = [
         {
-          mfaIdentifier: 1,
+          mfaIdentifier: "1",
           priorityIdentifier: "DEFAULT",
           method: { mfaMethodType: "SMS" },
           methodVerified: true,
         },
         {
-          mfaIdentifier: 2,
+          mfaIdentifier: "2",
           priorityIdentifier: "BACKUP",
           method: { mfaMethodType: "AUTH_APP" },
           methodVerified: true,

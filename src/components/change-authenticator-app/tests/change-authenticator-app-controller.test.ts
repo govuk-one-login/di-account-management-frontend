@@ -104,7 +104,7 @@ describe("change authenticator app controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.mfaMethods = [
         {
-          mfaIdentifier: 111111,
+          mfaIdentifier: "111111",
           methodVerified: true,
           method: {
             mfaMethodType: "SMS",
@@ -113,7 +113,7 @@ describe("change authenticator app controller", () => {
           priorityIdentifier: "DEFAULT",
         },
         {
-          mfaIdentifier: 2,
+          mfaIdentifier: "2",
           priorityIdentifier: "BACKUP",
           method: {
             mfaMethodType: "AUTH_APP",
@@ -152,7 +152,7 @@ describe("change authenticator app controller", () => {
       req.session.user.state.changeAuthApp.value = "CHANGE_VALUE";
       req.session.mfaMethods = [
         {
-          mfaIdentifier: 111111,
+          mfaIdentifier: "111111",
           methodVerified: true,
           method: {
             mfaMethodType: "SMS",
@@ -161,7 +161,7 @@ describe("change authenticator app controller", () => {
           priorityIdentifier: "DEFAULT",
         },
         {
-          mfaIdentifier: 2,
+          mfaIdentifier: "2",
           priorityIdentifier: "BACKUP",
           method: {
             mfaMethodType: "AUTH_APP",

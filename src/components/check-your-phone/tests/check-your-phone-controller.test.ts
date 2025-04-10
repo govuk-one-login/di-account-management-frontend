@@ -41,7 +41,7 @@ describe("check your phone controller", () => {
         },
         mfaMethods: [
           {
-            mfaIdentifier: 111111,
+            mfaIdentifier: "111111",
             methodVerified: true,
             method: {
               phoneNumber: "070",
@@ -246,7 +246,7 @@ describe("check your phone controller", () => {
         email: "test@test.com",
         otp: "123456",
         mfaMethod: {
-          mfaIdentifier: 111111,
+          mfaIdentifier: "111111",
           methodVerified: true,
           method: {
             mfaMethodType: "SMS",
@@ -270,6 +270,7 @@ describe("check your phone controller", () => {
       req.body.intent = INTENT_ADD_BACKUP;
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
+      req.session.user.publicSubjectId = "111112";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
@@ -279,7 +280,7 @@ describe("check your phone controller", () => {
         otp: "123456",
         credential: "no-credentials",
         mfaMethod: {
-          mfaIdentifier: 111112,
+          mfaIdentifier: "111112",
           methodVerified: true,
           method: {
             mfaMethodType: "SMS",
