@@ -184,7 +184,7 @@ Mappings:
       SUPPORTSEARCHABLELIST: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables
-      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk"
+      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk/v1"
       SUPPORTMETHODMANAGEMENT: "1"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
@@ -218,7 +218,7 @@ Mappings:
       SUPPORTSEARCHABLELIST: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
-      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.build.account.gov.uk"
+      METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.build.account.gov.uk/v1"
       SUPPORTMETHODMANAGEMENT: "0"
       SUPPORTADDBACKUPMFA: "0"
       SUPPORTCHANGEMFA: "0"
