@@ -11,12 +11,30 @@ import { AuthAppMethod } from "src/utils/mfaClient/types";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
+export async function addMfaAppMethodGoBackGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  req.session.user.state.addBackup = getNextState(
+    req.session.user.state.addBackup.value,
+    EventType.GoBackToChooseBackup
+  );
+  return res.redirect(PATH_DATA.ADD_MFA_METHOD.url);
+}
+
 export async function addMfaAppMethodGet(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderMfaMethodPage(ADD_MFA_METHOD_AUTH_APP_TEMPLATE, req, res, next);
+  return renderMfaMethodPage(
+    ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    undefined,
+    PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
+  );
 }
 
 export async function addMfaAppMethodPost(
@@ -38,7 +56,8 @@ export async function addMfaAppMethodPost(
         formatValidationError(
           "code",
           req.t("pages.addBackupApp.errors.required")
-        )
+        ),
+        PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
       );
     }
 
@@ -51,7 +70,8 @@ export async function addMfaAppMethodPost(
         formatValidationError(
           "code",
           req.t("pages.addBackupApp.errors.invalidFormat")
-        )
+        ),
+        PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
       );
     }
 
@@ -64,7 +84,8 @@ export async function addMfaAppMethodPost(
         formatValidationError(
           "code",
           req.t("pages.addBackupApp.errors.maxLength")
-        )
+        ),
+        PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
       );
     }
 
@@ -79,7 +100,8 @@ export async function addMfaAppMethodPost(
         formatValidationError(
           "code",
           req.t("pages.addBackupApp.errors.invalidCode")
-        )
+        ),
+        PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
       );
     }
 

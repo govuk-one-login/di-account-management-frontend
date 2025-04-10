@@ -4,6 +4,7 @@ import { requiresAuthMiddleware } from "../../middleware/requires-auth-middlewar
 import {
   addMfaAppMethodGet,
   addMfaAppMethodPost,
+  addMfaAppMethodGoBackGet,
 } from "./add-mfa-method-app-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
@@ -15,6 +16,13 @@ router.get(
   requiresAuthMiddleware,
   validateStateMiddleware,
   globalTryCatchAsync(addMfaAppMethodGet)
+);
+
+router.get(
+  PATH_DATA.ADD_MFA_METHOD_GO_BACK.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  globalTryCatchAsync(addMfaAppMethodGoBackGet)
 );
 
 router.post(

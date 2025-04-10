@@ -27,6 +27,7 @@ enum EventType {
   ResendCode = "RESEND_CODE",
   Confirmation = "CONFIRMATION",
   RemoveBackup = "REMOVE_BACKUP",
+  GoBackToChooseBackup = "GO_BACK_TO_CHOOSE_BACKUP",
 }
 
 interface Event {
@@ -93,6 +94,9 @@ export const amStateMachine = createMachine({
       on: {
         VALUE_UPDATED: {
           target: "CONFIRMATION",
+        },
+        GO_BACK_TO_CHOOSE_BACKUP: {
+          target: "CHANGE_VALUE",
         },
       },
     },
