@@ -1382,24 +1382,24 @@ Resources:
       FromPort: !Ref ContainerPort
       ToPort: !Ref ContainerPort
 
-  # ApplicationLoadBalancerListenerRuleRobots:
-  #   Type: AWS::ElasticLoadBalancingV2::ListenerRule
-  #   Properties:
-  #     Actions:
-  #       - Type: fixed-response
-  #         FixedResponseConfig:
-  #           ContentType: text/plain
-  #           MessageBody: |
-  #             User-agent: *
-  #             Disallow:
-  #           StatusCode: 200
-  #     Conditions:
-  #       - Field: path-pattern
-  #         PathPatternConfig:
-  #           Values:
-  #             - "/robots.txt"
-  #     ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
-  #     Priority: 10
+  ApplicationLoadBalancerListenerRuleRobots:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: fixed-response
+          FixedResponseConfig:
+            ContentType: text/plain
+            MessageBody: |
+              User-agent: *
+              Disallow:
+            StatusCode: 200
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - "/robots.txt"
+      ListenerArn: !Ref ApplicationLoadBalancerListenerHTTPS
+      Priority: 10
 
   #
   # ECS Alarms
