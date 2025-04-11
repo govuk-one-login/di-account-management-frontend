@@ -14,10 +14,6 @@
     <script src='{{ dynatraceRumUrl }}' crossorigin="anonymous" nonce='{{ scriptNonce }}'></script>
     {% endif %}
     <link href="/public/style.css" rel="stylesheet">
-
-    {% if not allowCrawl %}
-    <meta name="robots" content="noindex">
-    {% endif %}
 {% endblock %}
 
 {% block pageTitle %}

@@ -1389,10 +1389,9 @@ Resources:
         - Type: fixed-response
           FixedResponseConfig:
             ContentType: text/plain
-            MessageBody: >
-              "user-agent: *"
-              "disallow: /"
-              "allow: /contact-gov-uk-one-login"
+            MessageBody: |
+              User-agent: *
+              Disallow:
             StatusCode: 200
       Conditions:
         - Field: path-pattern
