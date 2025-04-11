@@ -6,7 +6,7 @@ import {
   afterEach,
 } from "@jest/globals";
 import { defineFeature, loadFeature } from "jest-cucumber";
-import { Page, Browser, HTTPResponse } from "puppeteer";
+import { Browser, BrowserContext, Page, Response } from "playwright";
 import { launchBrowser } from "../utils/launch";
 
 const feature = loadFeature("./tests/features/contact-govuk-one-login.feature");
@@ -16,6 +16,7 @@ const CONTACT_PAGE =
 
 defineFeature(feature, (test) => {
   let browser: Browser;
+  let context: BrowserContext;
   let page: Page;
 
   beforeAll(async () => {
@@ -27,15 +28,17 @@ defineFeature(feature, (test) => {
   });
 
   beforeEach(async () => {
-    page = await browser.newPage();
+    context = await browser.newContext();
+    page = await context.newPage();
   });
 
   afterEach(async () => {
+    await context.close();
     await page.close();
   });
 
   test("Visiting the contact page", async ({ given, then }) => {
-    let response: HTTPResponse;
+    let response: Response;
 
     given("I visit the contact page", async () => {
       response = await page.goto(CONTACT_PAGE);
