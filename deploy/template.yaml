@@ -1389,9 +1389,14 @@ Resources:
         - Type: fixed-response
           FixedResponseConfig:
             ContentType: text/plain
-            MessageBody: |
-              User-agent: *
-              Disallow:
+            MessageBody: !If
+              - IsProduction
+              - |
+                User-agent: *
+                Disallow:
+              - |
+                User-agent: *
+                Disallow: /
             StatusCode: 200
       Conditions:
         - Field: path-pattern
