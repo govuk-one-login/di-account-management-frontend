@@ -115,7 +115,13 @@ docker exec -it account-management-frontend /bin/sh
 
 ### Post-deploy tests
 
-The post-deploy tests are written with Jest, [jest-cucumber](https://www.npmjs.com/package/jest-cucumber) and [Playwright](https://playwright.dev/).
+The post-deploy tests are written with [Playwright](https://playwright.dev/) and [Playwright BDD](https://vitalets.github.io/playwright-bdd).
+
+#### Running the tests locally
+
+Copy the file `post-deploy-tests/.env.sample` to `post-deploy-tests/.env`.
+
+When running tests locally they are run against `http://localhost:6001` by default. Set the environment variable `BASE_URL` to change the base URL against which the tests are run e.g. `BASE_URL=https://home.build.account.gov.uk`
 
 If your machine has `AMD64` architecture then you can run the tests locally in Docker:
 
@@ -125,7 +131,7 @@ docker build -t frontend-post-deploy-tests .
 docker run -t frontend-post-deploy-tests
 ```
 
-This is also how the tests are run in CI so running the tests locally via Docker guarantees reproducible outcomes and is therefore the preferred option.
+This is also how the tests are run in the deployment pipeline so running the tests locally via Docker guarantees reproducible outcomes and is therefore the preferred option.
 
 If your machine has `ARM64` architecture then running the tests in Docker won't work because the Docker image is Linux-based and at the time of writing there is no `ARM64` build of Chrome for Linux. Instead you can run the tests against a locally installed version of Chrome:
 
@@ -134,7 +140,7 @@ cd post-deploy-tests
 npm ci && npm run test
 ```
 
-To avoid discrepancies between CI and local test run outcomes ensure that the your locally installed version of Chrome is up to date prior to running the tests.
+To avoid discrepancies between deployment pipeline and local test run outcomes ensure that your locally installed version of Chrome is up to date prior to running the tests.
 
 ### Restarting the app
 
