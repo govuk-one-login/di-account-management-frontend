@@ -117,10 +117,6 @@ docker exec -it account-management-frontend /bin/sh
 
 The post-deploy tests are written with [Playwright](https://playwright.dev/) and [Playwright BDD](https://vitalets.github.io/playwright-bdd).
 
-#### Writing tests
-
-There should be a one-to-one relationship between feature files and step files (i.e. if there is a file called `features/@log-in.feature` there should be a corresponding file called `steps/@log-in.ts`) and each of these files should be prefixed with `@`. This prefix ensures that the steps are scoped to the feature and not shared across features. This may result in some duplication of steps but reduces the cognitive overhead required to understand where steps are defined and used.
-
 #### Running the tests locally
 
 Copy the file `post-deploy-tests/.env.sample` to `post-deploy-tests/.env`.
