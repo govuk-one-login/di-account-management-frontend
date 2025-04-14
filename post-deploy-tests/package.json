@@ -17,8 +17,8 @@
   "devDependencies": {
     "@playwright/test": "^1.51.1",
     "@types/node": "^22.15.16",
-    "playwright-bdd": "^8.2.1",
     "dotenv": "^16.5.0",
+    "playwright-bdd": "^8.2.1",
     "typescript": "^5.8.3",
     "valibot": "^1.0.0"
   }
