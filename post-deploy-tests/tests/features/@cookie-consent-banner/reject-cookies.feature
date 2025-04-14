@@ -5,3 +5,4 @@ Feature: Cookie consent banner
     And I click to reject cookies
     Then I am shown a message confirming my rejection
     And I can dismiss the confirmation message
+    And the cookie consent banner does not show again when the page is refreshed

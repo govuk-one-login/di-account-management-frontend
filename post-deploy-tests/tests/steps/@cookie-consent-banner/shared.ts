@@ -13,3 +13,13 @@ Then("I can dismiss the confirmation message", async ({ page }) => {
     page.getByLabel("Cookies on GOV.UK One Login")
   ).not.toBeVisible();
 });
+
+Then(
+  "the cookie consent banner does not show again when the page is refreshed",
+  async ({ page }) => {
+    await page.reload();
+    await expect(
+      page.getByLabel("Cookies on GOV.UK One Login")
+    ).not.toBeVisible();
+  }
+);
