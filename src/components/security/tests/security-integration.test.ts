@@ -7,7 +7,8 @@ import * as nock from "nock";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
 import { getLastNDigits } from "../../../utils/phone-number";
-import { MfaMethod } from "../../../utils/mfa/types";
+import { MfaMethod } from "../../../utils/mfaClient/types";
+import { MfaClient } from "../../../utils/mfaClient";
 
 const { url } = PATH_DATA.SECURITY;
 const TEST_USER_EMAIL = "test@test.com";
@@ -114,7 +115,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   const oidc = require("../../../utils/oidc");
   const configFuncs = require("../../../config");
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
-  const mfa = require("../../../utils/mfa");
+  const mfa = require("../../../utils/mfaClient");
   const methods: Record<string, MfaMethod> = {
     SMS: {
       mfaIdentifier: "1",
@@ -130,7 +131,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
       priorityIdentifier: "DEFAULT",
       method: {
         mfaMethodType: "AUTH_APP",
-        credential: "http://mock-endpoint",
+        credential: "abc123",
       },
       methodVerified: true,
     },
@@ -167,11 +168,16 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     .stub(checkAllowedServicesList, "hasAllowedActivityLogServices")
     .resolves(config?.hasAllowedActivityLogServices ?? true);
 
-  sandbox
-    .stub(mfa, "default")
-    .resolves([
-      methods[config.mfaMethodType ? config.mfaMethodType : "AUTH_APP"],
-    ]);
+  const stubMfaClient: sinon.SinonStubbedInstance<MfaClient> =
+    sandbox.createStubInstance(mfa.MfaClient);
+
+  stubMfaClient.retrieve.resolves({
+    success: true,
+    status: 200,
+    data: [methods[config.mfaMethodType ? config.mfaMethodType : "AUTH_APP"]],
+  });
+
+  sandbox.stub(mfa, "createMfaClient").returns(stubMfaClient);
 
   return await require("../../../app").createApp();
 };

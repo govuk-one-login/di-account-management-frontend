@@ -9,6 +9,7 @@ import { PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
+import { MfaClient } from "../../../utils/mfaClient";
 
 describe("Integration:: check your phone", () => {
   let sandbox: sinon.SinonSandbox;
@@ -90,17 +91,30 @@ describe("Integration:: check your phone", () => {
       return true;
     });
 
-    const mfa = require("../../../utils/mfa");
-    sandbox.stub(mfa, "default").resolves([
-      {
-        mfaIdentifier: 111111,
-        methodVerified: true,
-        phoneNumber: "070",
-        mfaMethodType: "SMS",
-        priorityIdentifier: "DEFAULT",
-      },
-    ]);
+    const mfaClient = require("../../../utils/mfaClient");
 
+    const stubMfaClient: sinon.SinonStubbedInstance<MfaClient> =
+      sandbox.createStubInstance(mfaClient.MfaClient);
+
+    stubMfaClient.retrieve.resolves({
+      success: true,
+      status: 200,
+      data: [
+        {
+          mfaIdentifier: "123456",
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "AUTH_APP",
+            credential: "abc123",
+          },
+          methodVerified: true,
+        },
+      ],
+    });
+
+    sandbox.stub(mfaClient, "createMfaClient").returns(stubMfaClient);
+
+    const mfa = require("../../../utils/mfa");
     sandbox.stub(mfa, "updateMfaMethod").resolves(true);
 
     await request(app)
