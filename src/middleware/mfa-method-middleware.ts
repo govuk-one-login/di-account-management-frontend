@@ -3,7 +3,7 @@ import { ERROR_MESSAGES } from "../app.constants";
 import { getMfaServiceUrl, supportMfaPage } from "../config";
 import { logger } from "../utils/logger";
 import { legacyMfaMethodsMiddleware } from "./mfa-methods-legacy";
-import { createMfaClient } from "../utils/mfaClient";
+import { createMfaClient, formatErrorMessage } from "../utils/mfaClient";
 
 export async function mfaMethodMiddleware(
   req: Request,
@@ -19,7 +19,7 @@ export async function mfaMethodMiddleware(
     } else {
       req.log.error(
         { trace: res.locals.trace },
-        `Failed MFA retrieve with error: ${response.problem.title}`
+        formatErrorMessage("Failed MFA retrieve", response)
       );
     }
     next();

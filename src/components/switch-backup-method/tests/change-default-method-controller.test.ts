@@ -148,7 +148,7 @@ describe("change default method", () => {
         data: [mfaMethod],
         success: false,
         status: 500,
-        problem: { title: "Internal server error" },
+        error: { message: "Internal server error", code: 1 },
       });
 
       const req = generateRequest("1", false);

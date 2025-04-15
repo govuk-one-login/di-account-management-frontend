@@ -3,7 +3,7 @@ import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { logger } from "../../utils/logger";
-import { createMfaClient } from "../../utils/mfaClient";
+import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 
 export async function switchBackupMfaMethodGet(
   req: Request,
@@ -77,8 +77,10 @@ export async function switchBackupMfaMethodPost(
     if (!response.success) {
       res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
       logger.error(
-        "Switch backup method controller: error updating default MFA method",
-        response.problem.title
+        formatErrorMessage(
+          "Switch backup method controller: error updating default MFA method",
+          response
+        )
       );
       return;
     }
