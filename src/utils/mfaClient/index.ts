@@ -10,9 +10,11 @@ import {
   AuthAppMethod,
   MfaClientInterface,
   MfaMethod,
+  CreateMfaPayload,
 } from "./types";
 import { HTTP_STATUS_CODES } from "../../app.constants";
 import { getTxmaHeader } from "../txma-header";
+import { validateCreate } from "./validate";
 
 export class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;
@@ -38,10 +40,18 @@ export class MfaClient implements MfaClientInterface {
     return buildResponse(response);
   }
 
-  async create(method: SmsMethod | AuthAppMethod) {
+  async create(method: SmsMethod | AuthAppMethod, otp?: string) {
+    validateCreate(method, otp);
+    const payload: CreateMfaPayload = {
+      priorityIdentifier: "DEFAULT",
+      method: method,
+    };
+    if (otp) {
+      payload.otp = otp;
+    }
     const response = await this.http.client.post<MfaMethod>(
       `/mfa-methods/${this.publicSubjectId}`,
-      { priorityIdentifier: "DEFAULT", method: method },
+      payload,
       this.requestConfig
     );
 
