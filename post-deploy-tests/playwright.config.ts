@@ -32,6 +32,7 @@ export default defineConfig({
   use: {
     baseURL: getBaseUrl(),
     testIdAttribute: "data-test-id",
+    bypassCSP: true,
   },
   projects: [
     {
