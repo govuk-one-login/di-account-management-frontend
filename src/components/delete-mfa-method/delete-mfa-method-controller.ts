@@ -3,7 +3,6 @@ import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { createMfaClient } from "../../utils/mfaClient";
-import { MfaMethod } from "../../utils/mfaClient/types";
 
 export async function deleteMfaMethodGet(
   req: Request,
@@ -32,7 +31,7 @@ export async function deleteMfaMethodPost(
 ): Promise<void> {
   const methodToRemove = req.session.mfaMethods.find((m) => {
     return req.body.methodId == m.mfaIdentifier;
-  }) as unknown as MfaMethod;
+  });
 
   if (!methodToRemove || methodToRemove.priorityIdentifier !== "BACKUP") {
     res.status(HTTP_STATUS_CODES.NOT_FOUND);

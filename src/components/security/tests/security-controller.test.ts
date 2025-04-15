@@ -512,13 +512,13 @@ describe("security controller", () => {
         {
           mfaIdentifier: "1",
           priorityIdentifier: "DEFAULT",
-          method: { mfaMethodType: "SMS" },
+          method: { mfaMethodType: "SMS", phoneNumber: "0123456789" },
           methodVerified: true,
         },
         {
           mfaIdentifier: "2",
           priorityIdentifier: "BACKUP",
-          method: { mfaMethodType: "AUTH_APP" },
+          method: { mfaMethodType: "AUTH_APP", credential: "abc123" },
           methodVerified: true,
         },
       ];
