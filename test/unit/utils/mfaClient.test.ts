@@ -292,24 +292,24 @@ describe("validateCreate", () => {
   it("doesn't throw an error with an SMS method and an OTP", () => {
     expect(() => {
       validateCreate(smsMethod, "1234");
-    }).not.to.throw;
+    }).not.to.throw();
   });
 
   it("doesn't throw an error with an auth app method and no OTP", () => {
     expect(() => {
       validateCreate(authAppMethod);
-    }).not.to.throw;
+    }).not.to.throw();
   });
 
   it("throws an error with an auth app method and an OTP", () => {
     expect(() => {
       validateCreate(authAppMethod, "1234");
-    }).to.throw;
+    }).to.throw("Must not provide OTP when mfaMethodType is AUTH_APP");
   });
 
   it("throws an error with an SMS method and no OTP", () => {
     expect(() => {
       validateCreate(smsMethod);
-    }).to.throw;
+    }).to.throw("Must provide OTP when mfaMethodType is SMS");
   });
 });

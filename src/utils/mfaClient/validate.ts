@@ -9,6 +9,6 @@ export function validateCreate(
   }
 
   if (method.mfaMethodType == "SMS" && !otp) {
-    throw new Error("Must provice OTP when mfaMethodType is SMS");
+    throw new Error("Must provide OTP when mfaMethodType is SMS");
   }
 }
