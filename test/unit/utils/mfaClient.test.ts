@@ -8,16 +8,17 @@ import {
   MfaClient,
   buildResponse,
   createMfaClient,
+  formatErrorMessage,
 } from "../../../src/utils/mfaClient";
 import {
   AuthAppMethod,
   MfaMethod,
+  SimpleError,
   SmsMethod,
 } from "../../../src/utils/mfaClient/types";
 import { validateCreate } from "../../../src/utils/mfaClient/validate";
 import { getRequestConfig } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
-import { ProblemDetail, ValidationProblem } from "../../../src/utils/mfa/types";
 
 const mfaMethod: MfaMethod = {
   mfaIdentifier: "1234",
@@ -63,14 +64,14 @@ describe("MfaClient", () => {
     });
 
     it("passes through the status and problem for a non-successful request", async () => {
-      const problem: ProblemDetail = { title: "user not found" };
-      const getStub = sinon.stub().resolves({ data: problem, status: 404 });
+      const error: SimpleError = { message: "user not found", code: 1 };
+      const getStub = sinon.stub().resolves({ data: error, status: 404 });
       axiosStub.get = getStub;
 
       const response = await client.retrieve();
       expect(response.success).to.be.false;
       expect(response.status).to.eq(404);
-      expect(response.problem?.title).to.eq(problem.title);
+      expect(response.error?.message).to.eq(error.message);
     });
   });
 
@@ -231,17 +232,16 @@ describe("buildRequest", () => {
     const response = {
       status: 400,
       data: {
-        type: "Validation Problem",
-        title: "Title",
-        errors: [{ detail: "error detail", pointer: "error pointer" }],
-      } as ValidationProblem,
+        code: 1,
+        message: "Bad request",
+      } as SimpleError,
     } as AxiosResponse;
 
     const apiResponse = buildResponse(response);
 
     expect(apiResponse.status).to.eq(400);
     expect(apiResponse.success).to.be.false;
-    expect(apiResponse.problem).to.eq(response.data);
+    expect(apiResponse.error).to.eq(response.data);
   });
 });
 
@@ -311,5 +311,24 @@ describe("validateCreate", () => {
     expect(() => {
       validateCreate(smsMethod);
     }).to.throw("Must provide OTP when mfaMethodType is SMS");
+  });
+});
+
+describe("formatErrorMessage", () => {
+  it("includes the prefix, status code, API error code and message in the output", () => {
+    const prefix = "Prefix";
+    const response = {
+      status: 400,
+      error: {
+        code: 1,
+        message: "Bad request",
+      },
+      success: false,
+      data: {},
+    };
+
+    expect(formatErrorMessage(prefix, response)).to.eq(
+      `${prefix}. Status code: ${response.status}, API error code: ${response.error.code}, API error message: ${response.error.message}`
+    );
   });
 });
