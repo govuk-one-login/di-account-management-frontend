@@ -14,7 +14,7 @@ Then("the page should have status code 200", () => {
 });
 
 Given("webchat has initialised", async ({ page }) => {
-  // _sa is added to the window object by once webchat is initialised
+  // _sa is added to the window object once webchat is initialised
   // See https://help.smartagent.io/how-to-guides/admin/making-structural-changes/webchat-api/
   await page.waitForFunction(() => !!window._sa);
 });
