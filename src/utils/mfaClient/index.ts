@@ -51,7 +51,7 @@ export class MfaClient implements MfaClientInterface {
     }
     const response = await this.http.client.post<MfaMethod>(
       `/mfa-methods/${this.publicSubjectId}`,
-      payload,
+      { mfaMethod: payload },
       this.requestConfig
     );
 
