@@ -44,7 +44,7 @@ export class MfaClient implements MfaClientInterface {
     validateCreate(method, otp);
     const payload: CreateMfaPayload = {
       priorityIdentifier: "DEFAULT",
-      method: method,
+      mfaMethod: method,
     };
     if (otp) {
       payload.otp = otp;
