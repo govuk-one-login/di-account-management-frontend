@@ -2,7 +2,6 @@ import request from "supertest";
 import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
 import { testComponent } from "../../../../test/utils/helpers";
-import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
@@ -126,10 +125,6 @@ describe("Integration:: check your phone", () => {
           `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
         );
       });
-  });
-
-  beforeEach(() => {
-    nock.cleanAll();
   });
 
   after(() => {
