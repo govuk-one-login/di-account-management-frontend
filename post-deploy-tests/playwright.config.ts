@@ -18,7 +18,7 @@ export default defineConfig({
   reporter: [
     // See https://govukverify.atlassian.net/wiki/spaces/PLAT/pages/3054010402/How+to+run+tests+against+your+deployed+application+in+a+SAM+deployment+pipeline#Test-reports
     cucumberReporter("json", {
-      outputFile: path.join(env.TEST_REPORT_DIR_RESOLVED, "report.json"),
+      outputFile: path.join(env.TEST_REPORT_DIR, "report.json"),
     }),
   ],
   use: {
