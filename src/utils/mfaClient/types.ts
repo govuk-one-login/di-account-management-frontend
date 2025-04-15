@@ -3,7 +3,8 @@ import { ProblemDetail, ValidationProblem } from "../mfa/types";
 export interface MfaClientInterface {
   retrieve: () => Promise<ApiResponse<MfaMethod[]>>;
   create: (
-    method: SmsMethod | AuthAppMethod
+    method: SmsMethod | AuthAppMethod,
+    otp?: string
   ) => Promise<ApiResponse<MfaMethod>>;
   update: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
   delete: (method: MfaMethod) => Promise<ApiResponse<any>>;
@@ -34,4 +35,10 @@ export interface ApiResponse<T> {
   status: number;
   data: T;
   problem?: ValidationProblem | ProblemDetail;
+}
+
+export interface CreateMfaPayload {
+  priorityIdentifier: PriorityIdentifier;
+  method: SmsMethod | AuthAppMethod;
+  otp?: string;
 }

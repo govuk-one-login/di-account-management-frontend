@@ -9,7 +9,12 @@ import {
   buildResponse,
   createMfaClient,
 } from "../../../src/utils/mfaClient";
-import { MfaMethod, SmsMethod } from "../../../src/utils/mfaClient/types";
+import {
+  AuthAppMethod,
+  MfaMethod,
+  SmsMethod,
+} from "../../../src/utils/mfaClient/types";
+import { validateCreate } from "../../../src/utils/mfaClient/validate";
 import { getRequestConfig } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
 import { ProblemDetail, ValidationProblem } from "../../../src/utils/mfa/types";
@@ -70,17 +75,56 @@ describe("MfaClient", () => {
   });
 
   describe("create", () => {
-    it("should POST to the endpoint", async () => {
+    it("should POST to the endpoint with an SMS app and an OTP", async () => {
       const postStub = sinon.stub().resolves({ data: mfaMethod });
       axiosStub.post = postStub;
 
-      const response = await client.create({
-        mfaMethodType: "SMS",
-        phoneNumber: "123456",
-      } as SmsMethod);
+      const response = await client.create(
+        {
+          mfaMethodType: "SMS",
+          phoneNumber: "123456",
+        },
+        "OTP"
+      );
 
       expect(response.data).to.eq(mfaMethod);
       expect(postStub.calledOnce).to.be.true;
+    });
+
+    it("should POST to the endpoint with an auth app and no OTP", async () => {
+      const authApp: MfaMethod = {
+        mfaIdentifier: "1234",
+        methodVerified: true,
+        method: {
+          mfaMethodType: "AUTH_APP",
+          credential: "abc123",
+        },
+        priorityIdentifier: "DEFAULT",
+      };
+
+      const postStub = sinon.stub().resolves({ data: authApp });
+      axiosStub.post = postStub;
+
+      const response = await client.create({
+        mfaMethodType: "AUTH_APP",
+        credential: "123456",
+      });
+
+      expect(response.data).to.eq(authApp);
+      expect(postStub.calledOnce).to.be.true;
+    });
+
+    it("should raise an error with an SMS app and no OTP", async () => {
+      const postStub = sinon.stub().resolves({ data: mfaMethod });
+      axiosStub.post = postStub;
+
+      expect(
+        client.create({
+          mfaMethodType: "SMS",
+          phoneNumber: "123456",
+        })
+      ).to.be.rejected;
+      expect(postStub.notCalled).to.be.true;
     });
   });
 
@@ -232,5 +276,40 @@ describe("createMfaClient", () => {
     expect(client.create).to.be.a("Function");
     expect(client.update).to.be.a("Function");
     expect(client.delete).to.be.a("Function");
+  });
+});
+
+describe("validateCreate", () => {
+  const smsMethod: SmsMethod = {
+    mfaMethodType: "SMS",
+    phoneNumber: "0123456789",
+  };
+  const authAppMethod: AuthAppMethod = {
+    mfaMethodType: "AUTH_APP",
+    credential: "abc123",
+  };
+
+  it("doesn't throw an error with an SMS method and an OTP", () => {
+    expect(() => {
+      validateCreate(smsMethod, "1234");
+    }).not.to.throw();
+  });
+
+  it("doesn't throw an error with an auth app method and no OTP", () => {
+    expect(() => {
+      validateCreate(authAppMethod);
+    }).not.to.throw();
+  });
+
+  it("throws an error with an auth app method and an OTP", () => {
+    expect(() => {
+      validateCreate(authAppMethod, "1234");
+    }).to.throw("Must not provide OTP when mfaMethodType is AUTH_APP");
+  });
+
+  it("throws an error with an SMS method and no OTP", () => {
+    expect(() => {
+      validateCreate(smsMethod);
+    }).to.throw("Must provide OTP when mfaMethodType is SMS");
   });
 });
