@@ -1,17 +1,15 @@
-import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
 import { cucumberReporter, defineBddConfig } from "playwright-bdd";
 import path from "node:path";
-import { getTestEnvironment } from "./utils/getTestEnvironment";
-import * as v from "valibot";
 import { getBaseUrl } from "./utils/getBaseUrl";
+import { env } from "./env";
 
 const testDir = defineBddConfig({
   features: "tests/features/**/*.feature",
   steps: "tests/steps/**/*.ts",
 });
 
-const isLocal = getTestEnvironment() === "local";
+const isLocal = env.TEST_ENVIRONMENT === "local";
 
 export default defineConfig({
   testDir,
@@ -20,13 +18,7 @@ export default defineConfig({
   reporter: [
     // See https://govukverify.atlassian.net/wiki/spaces/PLAT/pages/3054010402/How+to+run+tests+against+your+deployed+application+in+a+SAM+deployment+pipeline#Test-reports
     cucumberReporter("json", {
-      outputFile: path.join(
-        v.parse(
-          v.string(),
-          process.env.TEST_REPORT_ABSOLUTE_DIR ?? process.env.TEST_REPORT_DIR
-        ),
-        "report.json"
-      ),
+      outputFile: path.join(env.TEST_REPORT_DIR_RESOLVED, "report.json"),
     }),
   ],
   use: {
