@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
 import { sinon } from "../../utils/test-utils";
-import * as mfa from "../../../src/utils/mfa";
 import { validateStateMiddleware } from "../../../src/middleware/validate-state-middleware";
 
 describe("validate state middleware", () => {
@@ -10,13 +9,11 @@ describe("validate state middleware", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
-  let mfaStub: sinon.SinonStub;
   const info: sinon.SinonSpy = sinon.spy();
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     next = sinon.fake(() => {});
-    mfaStub = sinon.stub(mfa, "default");
 
     req = {
       url: "/choose-backup",
@@ -45,7 +42,6 @@ describe("validate state middleware", () => {
   });
 
   afterEach(() => {
-    mfaStub.restore();
     sandbox.restore();
   });
 

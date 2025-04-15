@@ -4,7 +4,6 @@ import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { logger } from "../../utils/logger";
 import { createMfaClient } from "../../utils/mfaClient";
-import { MfaMethod } from "../../utils/mfaClient/types";
 
 export async function switchBackupMfaMethodGet(
   req: Request,
@@ -73,9 +72,7 @@ export async function switchBackupMfaMethodPost(
 
   try {
     const mfaClient = createMfaClient(req, res);
-    const response = await mfaClient.makeDefault(
-      newDefaultMethod as unknown as MfaMethod
-    );
+    const response = await mfaClient.makeDefault(newDefaultMethod);
 
     if (!response.success) {
       res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);

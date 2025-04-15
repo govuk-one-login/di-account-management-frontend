@@ -7,7 +7,7 @@ import {
 import { clearCookies } from "../../utils/session-store";
 import { logger } from "../../utils/logger";
 import { getLastNDigits } from "../../utils/phone-number";
-import { MfaMethod, SmsMethod } from "../../utils/mfaClient/types";
+import { SmsMethod } from "../../utils/mfaClient/types";
 
 const oplValues = {
   updateEmailConfirmation: {
@@ -130,7 +130,7 @@ export async function removeMfaMethodConfirmationGet(
   let message = req.t("pages.removeBackupMethod.confirm.message_unknown");
   const removedMethod = (req.session.removedMfaMethods || []).find((m) => {
     return "" + m.mfaIdentifier == req.query.id;
-  }) as unknown as MfaMethod;
+  });
 
   if (removedMethod?.method.mfaMethodType === "AUTH_APP") {
     message = req.t("pages.removeBackupMethod.confirm.message_app");
