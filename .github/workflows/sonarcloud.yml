@@ -19,7 +19,7 @@ jobs:
         with:
           node-version-file: .nvmrc
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Generate coverage report
         run: npm run test:coverage
       - name: SonarCloud Scan

@@ -214,10 +214,10 @@ npm run test:integration
 
 ### Install dependencies
 
-> To install dependencies, run npm install
+> To install dependencies, run npm ci
 
 ```shell script
-npm install
+npm ci
 ```
 
 Installs the dependencies required to run the application.
