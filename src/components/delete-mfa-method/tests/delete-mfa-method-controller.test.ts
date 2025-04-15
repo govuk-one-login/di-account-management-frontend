@@ -91,7 +91,7 @@ describe("delete mfa method controller", () => {
       success: false,
       status: 400,
       data: {},
-      problem: { title: "Bad request" },
+      error: { message: "Bad request", code: 1 },
     });
 
     expect(
