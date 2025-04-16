@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { AttributeValue, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { dynamoDBService } from "./dynamo";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
@@ -7,6 +8,7 @@ import {
   getAllowedServiceListClientIDs,
   getIdListFromFilter,
   hmrcClientIds,
+  getAppEnv,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
@@ -34,8 +36,14 @@ export const getServices = async (
     const response = await dynamoDBService().getItem(
       serviceStoreDynamoDBRequest(subjectId)
     );
-    const services = unmarshallDynamoData(response["Item"]).services;
-    return services;
+
+    const services = unmarshallDynamoData(response["Item"])
+      .services as Service[];
+
+    return services.map((service) => ({
+      ...service,
+      isAvailableInWelsh: serviceIsAvailableInWelsh(service.client_id),
+    }));
   } catch (error) {
     logger.error({ trace: trace }, `Your Services: failed with ${error}`);
     return [];
@@ -94,7 +102,6 @@ export const formatService = (
     locale: currentLanguage,
   });
   const hasDetailedCard = hmrcClientIds.includes(service.client_id);
-  const isAvailableInWelsh = serviceIsAvailableInWelsh(service.client_id);
 
   return {
     client_id: service.client_id,
@@ -102,8 +109,31 @@ export const formatService = (
     last_accessed: service.last_accessed,
     last_accessed_readable_format: readable_format_date,
     hasDetailedCard,
-    isAvailableInWelsh,
+    isAvailableInWelsh: service.isAvailableInWelsh,
   };
+};
+
+export const getYourServicesForAccountDeletion = async (
+  subjectId: string,
+  trace: string,
+  translate: Request["t"]
+) => {
+  return (await getAllowedListServices(subjectId, trace)).sort((a, b) => {
+    const aName = translate(
+      `clientRegistry.${getAppEnv()}.${a.client_id}.header`
+    );
+    const bName = translate(
+      `clientRegistry.${getAppEnv()}.${b.client_id}.header`
+    );
+
+    if (aName < bName) {
+      return -1;
+    }
+    if (aName > bName) {
+      return 1;
+    }
+    return 0;
+  });
 };
 
 export const containsGovUkPublishingService = (
