@@ -127,10 +127,28 @@ Conditions:
       - !Equals [!Ref Environment, integration]
       - !Equals [!Ref Environment, production]
 
+  UseFirewallTags: !Equals [!Ref Environment, dev]
+
 Mappings:
   ElasticLoadBalancerAccountIds:
     eu-west-2:
       AccountId: 652711504416
+  FirewallTags:
+    dev:
+      FMSGlobalCustomPolicy: true
+      FMSGlobalCustomPolicyName: platforms
+    build:
+      FMSGlobalCustomPolicy: true
+      FMSGlobalCustomPolicyName: platforms
+    staging:
+      FMSGlobalCustomPolicy: true
+      FMSGlobalCustomPolicyName: platforms
+    integration:
+      FMSGlobalCustomPolicy: true
+      FMSGlobalCustomPolicyName: platforms
+    production:
+      FMSGlobalCustomPolicy: true
+      FMSGlobalCustomPolicyName: platforms
   Container:
     dev:
       CPU: 1024
@@ -2119,6 +2137,22 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
+        - !If
+          - UseFirewallTags
+          - Key: FMSGlobalCustomPolicy
+            Value:
+              !FindInMap [FirewallTags, !Ref Environment, FMSGlobalCustomPolicy]
+          - !Ref AWS::NoValue
+        - !If
+          - UseFirewallTags
+          - Key: FMSGlobalCustomPolicyName
+            Value:
+              !FindInMap [
+                FirewallTags,
+                !Ref Environment,
+                FMSGlobalCustomPolicyName,
+              ]
+          - !Ref AWS::NoValue
 
   CloudFrontOriginRequestPolicy:
     Type: AWS::CloudFront::OriginRequestPolicy
