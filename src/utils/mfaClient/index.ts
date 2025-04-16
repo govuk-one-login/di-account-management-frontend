@@ -43,7 +43,7 @@ export class MfaClient implements MfaClientInterface {
   async create(method: SmsMethod | AuthAppMethod, otp?: string) {
     validateCreate(method, otp);
     const payload: CreateMfaPayload = {
-      priorityIdentifier: "DEFAULT",
+      priorityIdentifier: "BACKUP",
       method: method,
     };
     if (otp) {
