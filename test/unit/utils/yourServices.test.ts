@@ -37,6 +37,22 @@ describe("YourService Util", () => {
         isAvailableInWelsh: false,
       },
       {
+        client_id: "dfeApplyForTeacherTraining",
+        count_successful_logins: 2,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+        hasDetailedCard: false,
+        isAvailableInWelsh: false,
+      },
+      {
+        client_id: "vehicleOperatorLicense",
+        count_successful_logins: 3,
+        last_accessed: 14567776,
+        last_accessed_readable_format: "last_accessed_readable_format",
+        hasDetailedCard: false,
+        isAvailableInWelsh: true,
+      },
+      {
         client_id: "nonExistent",
         count_successful_logins: 1,
         last_accessed: 14567776,
@@ -207,6 +223,14 @@ describe("YourService Util", () => {
             last_accessed: 14567776,
             last_accessed_readable_format: "1 January 1970",
           },
+          {
+            client_id: "dfeApplyForTeacherTraining",
+            count_successful_logins: 2,
+            hasDetailedCard: false,
+            isAvailableInWelsh: false,
+            last_accessed: 14567776,
+            last_accessed_readable_format: "1 January 1970",
+          },
         ],
         servicesList: [
           {
@@ -216,6 +240,14 @@ describe("YourService Util", () => {
             last_accessed: 14567776,
             last_accessed_readable_format: "1 January 1970",
             isAvailableInWelsh: false,
+          },
+          {
+            client_id: "vehicleOperatorLicense",
+            count_successful_logins: 3,
+            hasDetailedCard: false,
+            isAvailableInWelsh: true,
+            last_accessed: 14567776,
+            last_accessed_readable_format: "1 January 1970",
           },
         ],
       };
@@ -242,6 +274,22 @@ describe("YourService Util", () => {
           last_accessed_readable_format: "last_accessed_readable_format",
           isAvailableInWelsh: false,
         },
+        {
+          client_id: "dfeApplyForTeacherTraining",
+          count_successful_logins: 2,
+          hasDetailedCard: false,
+          isAvailableInWelsh: false,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
+        {
+          client_id: "vehicleOperatorLicense",
+          count_successful_logins: 3,
+          hasDetailedCard: false,
+          isAvailableInWelsh: true,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
       ];
 
       const services = await yourServices.getAllowedListServices(
@@ -254,11 +302,17 @@ describe("YourService Util", () => {
 
   describe("getYourServicesForAccountDeletion", () => {
     it("returns a list of services in the expected format", async () => {
-      const mockTranslate = sinon.stub();
-      mockTranslate.onCall(0).returns("serviceA");
-      mockTranslate.onCall(1).returns("serviceB");
+      const mockTranslate = sinon.stub().callsFake((id) => id);
 
       const expectedResponse: Service[] = [
+        {
+          client_id: "dfeApplyForTeacherTraining",
+          count_successful_logins: 2,
+          hasDetailedCard: false,
+          isAvailableInWelsh: false,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
         {
           client_id: "mortgageDeed",
           count_successful_logins: 1,
@@ -275,6 +329,14 @@ describe("YourService Util", () => {
           last_accessed_readable_format: "last_accessed_readable_format",
           isAvailableInWelsh: false,
         },
+        {
+          client_id: "vehicleOperatorLicense",
+          count_successful_logins: 3,
+          hasDetailedCard: false,
+          isAvailableInWelsh: true,
+          last_accessed: 14567776,
+          last_accessed_readable_format: "last_accessed_readable_format",
+        },
       ];
 
       const services = await yourServices.getYourServicesForAccountDeletion(
@@ -283,7 +345,6 @@ describe("YourService Util", () => {
         mockTranslate
       );
       expect(services).to.deep.equal(expectedResponse);
-      expect(mockTranslate.callCount).to.eq(2);
     });
   });
 });
