@@ -16,7 +16,6 @@ const isLocal = getTestEnvironment() === "local";
 export default defineConfig({
   testDir,
   forbidOnly: !isLocal,
-  retries: isLocal ? 0 : 2,
   workers: "50%",
   reporter: [
     // See https://govukverify.atlassian.net/wiki/spaces/PLAT/pages/3054010402/How+to+run+tests+against+your+deployed+application+in+a+SAM+deployment+pipeline#Test-reports
