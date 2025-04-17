@@ -6,7 +6,7 @@ import { formatValidationError } from "../../utils/validation";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { renderMfaMethodPage } from "../common/mfa";
 import { containsNumbersOnly } from "../../utils/strings";
-import { createMfaClient } from "../../utils/mfaClient";
+import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { AuthAppMethod } from "src/utils/mfaClient/types";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
@@ -114,9 +114,12 @@ export async function addMfaAppMethodPost(
     const response = await mfaClient.create(newMethod);
 
     if (!response.success) {
-      throw Error(
-        `Failed to add MFA method, response status: ${response.status}`
+      const errorMessage = formatErrorMessage(
+        "Failed to add MFA method",
+        response
       );
+      req.log.error({ trace: res.locals.trace }, errorMessage);
+      throw new Error(errorMessage);
     }
 
     req.session.user.state.addBackup = getNextState(

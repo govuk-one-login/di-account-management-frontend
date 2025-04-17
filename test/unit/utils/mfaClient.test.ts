@@ -30,6 +30,16 @@ const mfaMethod: MfaMethod = {
   priorityIdentifier: "DEFAULT",
 };
 
+const backupMethod: MfaMethod = {
+  mfaIdentifier: "1234",
+  methodVerified: true,
+  method: {
+    mfaMethodType: "SMS",
+    phoneNumber: "123456789",
+  } as SmsMethod,
+  priorityIdentifier: "DEFAULT",
+};
+
 describe("MfaClient", () => {
   const axiosStub = {} as AxiosInstance;
   let client: MfaClient;
@@ -77,7 +87,7 @@ describe("MfaClient", () => {
 
   describe("create", () => {
     it("should POST to the endpoint with an SMS app and an OTP", async () => {
-      const postStub = sinon.stub().resolves({ data: mfaMethod });
+      const postStub = sinon.stub().resolves({ data: backupMethod });
       axiosStub.post = postStub;
 
       const response = await client.create(
@@ -88,8 +98,21 @@ describe("MfaClient", () => {
         "OTP"
       );
 
-      expect(response.data).to.eq(mfaMethod);
-      expect(postStub.calledOnce).to.be.true;
+      expect(response.data).to.eq(backupMethod);
+      expect(postStub).to.be.calledOnceWith(
+        "/mfa-methods/publicSubjectId",
+        {
+          mfaMethod: {
+            priorityIdentifier: "BACKUP",
+            method: {
+              mfaMethodType: "SMS",
+              phoneNumber: "123456",
+            },
+            otp: "OTP",
+          },
+        },
+        { headers: { Authorization: "Bearer token" }, proxy: false }
+      );
     });
 
     it("should POST to the endpoint with an auth app and no OTP", async () => {
@@ -100,19 +123,25 @@ describe("MfaClient", () => {
           mfaMethodType: "AUTH_APP",
           credential: "abc123",
         },
-        priorityIdentifier: "DEFAULT",
+        priorityIdentifier: "BACKUP",
       };
 
       const postStub = sinon.stub().resolves({ data: authApp });
       axiosStub.post = postStub;
 
-      const response = await client.create({
-        mfaMethodType: "AUTH_APP",
-        credential: "123456",
-      });
+      const response = await client.create(authApp.method);
 
       expect(response.data).to.eq(authApp);
-      expect(postStub.calledOnce).to.be.true;
+      expect(postStub).to.be.calledOnceWith(
+        "/mfa-methods/publicSubjectId",
+        {
+          mfaMethod: {
+            priorityIdentifier: "BACKUP",
+            method: authApp.method,
+          },
+        },
+        { headers: { Authorization: "Bearer token" }, proxy: false }
+      );
     });
 
     it("should raise an error with an SMS app and no OTP", async () => {

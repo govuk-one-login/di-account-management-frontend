@@ -317,4 +317,41 @@ describe("addMfaAppMethodPost", () => {
       ],
     });
   });
+
+  it("should log and throw an error if the call to the MFA API fails", async () => {
+    const req = {
+      body: {
+        code: "123456",
+        authAppSecret: appMethod.credential,
+      },
+      session: { user: { state: { addBackup: { value: "APP" } } } },
+      log: { error: logSpy },
+      t: (t: string) => t,
+    };
+
+    const res = { redirect: sinon.fake(() => {}), locals: { trace: "trace" } };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+
+    mfaClientStub.create.resolves({
+      success: false,
+      status: 400,
+      data: {} as MfaMethod,
+      error: {
+        code: 1,
+        message: "Bad request",
+      },
+    });
+
+    try {
+      await addMfaAppMethodPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        nextSpy
+      );
+    } catch (e) {
+      expect(logSpy.called).to.be.true;
+    }
+  });
 });
