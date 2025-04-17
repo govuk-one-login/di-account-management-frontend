@@ -62,14 +62,14 @@ describe("mfaMethodMiddleware", () => {
     mfaClientStub.retrieve.resolves({
       success: false,
       status: 403,
-      problem: { title: "Forbidden" },
+      error: { message: "Forbidden", code: 1 },
       data: [],
     });
 
     await mfaMethodMiddleware(req as Request, res as Response, next);
     expect(error).to.have.been.calledWith(
       { trace: res.locals.trace },
-      "Failed MFA retrieve with error: Forbidden"
+      "Failed MFA retrieve. Status code: 403, API error code: 1, API error message: Forbidden"
     );
     expect(next).to.have.been.called;
   });

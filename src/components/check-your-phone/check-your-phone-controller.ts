@@ -24,6 +24,7 @@ import {
 } from "../check-your-email/types";
 import { logger } from "../../utils/logger";
 import { updateMfaMethod } from "../../utils/mfa";
+import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
@@ -55,23 +56,38 @@ export function checkYourPhonePost(
       email,
       otp: req.body["code"],
     };
-    const sessionDetails = await generateSessionDetails(req, res);
     let isPhoneNumberUpdated = false;
 
     if (supportChangeMfa()) {
-      isPhoneNumberUpdated = await handleMfaChange(
-        intent,
-        newPhoneNumber,
-        updateInput,
-        sessionDetails,
-        req,
-        service,
-        res.locals.trace
-      );
+      if (intent === INTENT_ADD_BACKUP) {
+        const mfaClient = createMfaClient(req, res);
+        const response = await mfaClient.create(
+          { mfaMethodType: "SMS", phoneNumber: newPhoneNumber },
+          req.body.code
+        );
+
+        if (!response.success) {
+          logger.error(
+            { trace: res.locals.trace },
+            formatErrorMessage("Failed to create SMS MFA", response)
+          );
+        }
+        isPhoneNumberUpdated = response.success;
+      } else {
+        isPhoneNumberUpdated = await handleMfaChange(
+          intent,
+          newPhoneNumber,
+          updateInput,
+          await generateSessionDetails(req, res),
+          req,
+          service,
+          res.locals.trace
+        );
+      }
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(
         { ...updateInput, updatedValue: newPhoneNumber },
-        sessionDetails
+        await generateSessionDetails(req, res)
       );
     }
 
@@ -107,22 +123,16 @@ async function handleMfaChange(
       service,
       trace
     );
-  } else if (intent === INTENT_ADD_BACKUP) {
-    return handleaddBackup(
-      newPhoneNumber,
-      updateInput,
-      sessionDetails,
-      req,
-      service,
-      trace
-    );
   } else if (intent === INTENT_CHANGE_DEFAULT_METHOD) {
     return handleChangeDefaultMethod(newPhoneNumber, sessionDetails, req);
   } else {
-    logger.error({
-      err: `Check your phone controller: unknown phone verification intent ${intent}`,
-      trace: trace,
-    });
+    logger.error(
+      { trace: trace },
+      `Check your phone controller: unknown phone verification intent ${intent}`
+    );
+    throw new Error(
+      `Check your phone controller: unknown phone verification intent ${intent}`
+    );
   }
 }
 
@@ -173,51 +183,6 @@ async function handleChangePhoneNumber(
       trace: trace,
     });
   }
-}
-
-async function handleaddBackup(
-  newPhoneNumber: string,
-  updateInput: UpdateInformationInput,
-  sessionDetails: any,
-  req: Request,
-  service: CheckYourPhoneServiceInterface,
-  trace: string
-): Promise<boolean> {
-  const defaultMfaMethod = req.session.mfaMethods.find(
-    (mfa) => mfa.priorityIdentifier === "DEFAULT"
-  );
-
-  if (!defaultMfaMethod) {
-    logger.error({
-      err: "Check your phone controller: no existing DEFAULT MFA method in handleaddBackup",
-      trace: trace,
-    });
-    return false;
-  }
-
-  try {
-    if (defaultMfaMethod.method.mfaMethodType === "SMS") {
-      defaultMfaMethod.method.phoneNumber = newPhoneNumber;
-      updateInput.credential = "no-credentials";
-      updateInput.mfaMethod = {
-        ...defaultMfaMethod,
-        mfaIdentifier: req.session.user.publicSubjectId,
-        priorityIdentifier: "BACKUP",
-        method: {
-          mfaMethodType: defaultMfaMethod.method.mfaMethodType,
-          phoneNumber: newPhoneNumber,
-        },
-        methodVerified: true,
-      };
-      return await service.addBackupService(updateInput, sessionDetails);
-    }
-  } catch (error) {
-    logger.error({
-      err: `Check your phone controller: no existing MFA method in handleaddBackup: ${error.message} `,
-      trace: trace,
-    });
-  }
-  return false;
 }
 
 function updateSessionUser(

@@ -13,9 +13,4 @@ export interface CheckYourPhoneServiceInterface {
     updateInput: UpdateInformationInput,
     sessionDetails: UpdateInformationSessionValues
   ) => Promise<boolean>;
-
-  addBackupService: (
-    updateInput: UpdateInformationInput,
-    sessionDetails: UpdateInformationSessionValues
-  ) => Promise<boolean>;
 }

@@ -598,7 +598,11 @@
       "paragraph5": "If you need a GOV.UK One Login in the future, you’ll have to create a new one.",
       "details": "Deleting your GOV.UK One Login will not affect any other government accounts you may have, such as Government Gateway or Universal Credit.",
       "deleteAccount": "Delete your GOV.UK One Login",
-      "doNotDeleteAccount": "Cancel and go back to Security"
+      "doNotDeleteAccount": "Cancel and go back to Security",
+      "englishServicesInWelshExplanation": {
+        "title": "Why are some services listed in English?",
+        "body": "If a service you’ve accessed is not available in Welsh it will appear here in English."
+      }
     },
     "changePhoneNumber": {
       "title": "Enter your new mobile phone number",

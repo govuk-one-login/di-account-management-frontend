@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
-import { createMfaClient } from "../../utils/mfaClient";
+import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 
 export async function deleteMfaMethodGet(
   req: Request,
@@ -51,9 +51,14 @@ export async function deleteMfaMethodPost(
     req.session.removedMfaMethods = [methodToRemove];
 
     res.redirect(`${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}`);
-  } else if (response.problem) {
-    throw new Error(response.problem.title);
+  } else if (response.error) {
+    req.log.error(
+      { trace: res.locals.trace },
+      formatErrorMessage("Failed delete MFA", response)
+    );
+    throw new Error(response.error.message);
   } else {
+    req.log.error({ trace: res.locals.trace }, "Failed delete MFA");
     throw new Error(`Error deleting MFA`);
   }
 }

@@ -59,9 +59,8 @@ describe("delete account controller", () => {
   });
 
   describe("deleteAccountGet", () => {
-    it("deleteAccountGetWithoutSubjectId", () => {
-      // eslint-disable-next-line mocha/no-nested-tests
-      it("should render delete account page", () => {
+    describe("deleteAccountGetWithoutSubjectId", () => {
+      it("should render delete account page", async () => {
         const req: any = {
           body: {},
           session: {
@@ -70,33 +69,35 @@ describe("delete account controller", () => {
           },
         };
 
-        deleteAccountGet(req as Request, res as Response);
+        await deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
           env: getAppEnv(),
         });
       });
     });
 
-    it("deleteAccountGetWithoutServices", () => {
-      // eslint-disable-next-line mocha/no-identical-title,mocha/no-nested-tests
-      it("should render delete account page", () => {
+    describe("deleteAccountGetWithoutServices", () => {
+      it("should render delete account page", async () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
         sandbox
-          .stub(yourServices, "getAllowedListServices")
+          .stub(yourServices, "getYourServicesForAccountDeletion")
           .callsFake(function (): Service[] {
             return [];
           });
 
-        deleteAccountGet(req as Request, res as Response);
+        await deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
-          servicesList: [],
+          hasGovUkEmailSubscription: false,
+          services: [],
           env: getAppEnv(),
+          currentLngWelsh: false,
+          hasEnglishOnlyServices: false,
         });
       });
     });
 
-    it("deleteAccountGetWithServices", () => {
+    describe("deleteAccountGetWithServices", () => {
       const serviceList: Service[] = [
         {
           client_id: "client_id",
@@ -106,20 +107,22 @@ describe("delete account controller", () => {
         },
       ];
 
-      // eslint-disable-next-line mocha/no-nested-tests
-      it("should render the delete account page with list of services used", () => {
+      it("should render the delete account page with list of services used", async () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
         sandbox
-          .stub(yourServices, "getAllowedListServices")
+          .stub(yourServices, "getYourServicesForAccountDeletion")
           .callsFake(function (): Service[] {
             return serviceList;
           });
 
-        deleteAccountGet(req as Request, res as Response);
+        await deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
-          servicesList: serviceList,
+          services: serviceList,
           env: getAppEnv(),
+          hasGovUkEmailSubscription: false,
+          currentLngWelsh: false,
+          hasEnglishOnlyServices: true,
         });
       });
     });

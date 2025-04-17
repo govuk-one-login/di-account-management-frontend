@@ -1,5 +1,3 @@
-import { ProblemDetail, ValidationProblem } from "../mfa/types";
-
 export interface MfaClientInterface {
   retrieve: () => Promise<ApiResponse<MfaMethod[]>>;
   create: (
@@ -34,11 +32,16 @@ export interface ApiResponse<T> {
   success: boolean;
   status: number;
   data: T;
-  problem?: ValidationProblem | ProblemDetail;
+  error?: SimpleError;
 }
 
 export interface CreateMfaPayload {
   priorityIdentifier: PriorityIdentifier;
   method: SmsMethod | AuthAppMethod;
   otp?: string;
+}
+
+export interface SimpleError {
+  code: number;
+  message: string;
 }

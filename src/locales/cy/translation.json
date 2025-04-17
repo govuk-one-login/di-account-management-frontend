@@ -420,7 +420,11 @@
       "paragraph5": "Os byddwch angen GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd.",
       "details": "Ni fydd dileu eich GOV.UK One Login yn effeithio ar unrhyw gyfrifon eraill y llywodraeth sydd gennych, fel Porth y Llywodraeth neu Gredyd Cynhwysol.",
       "deleteAccount": "Dileu eich GOV.UK One Login",
-      "doNotDeleteAccount": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
+      "doNotDeleteAccount": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
+      "englishServicesInWelshExplanation": {
+        "title": "Pam fod rhai gwasanaethau wedi eu rhestru yn Saesneg?",
+        "body": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg."
+      }
     },
     "changePhoneNumber": {
       "title": "Rhowch eich rhif ffôn symudol newydd",

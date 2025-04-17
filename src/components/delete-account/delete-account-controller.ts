@@ -8,9 +8,8 @@ import { getAppEnv, getBaseUrl, getSNSDeleteTopic } from "../../config";
 import { clearCookies, destroyUserSessions } from "../../utils/session-store";
 import {
   containsGovUkPublishingService,
-  getAllowedListServices,
+  getYourServicesForAccountDeletion,
 } from "../../utils/yourServices";
-import { Service } from "../../utils/types";
 import { getTxmaHeader } from "../../utils/txma-header";
 
 export async function deleteAccountGet(
@@ -20,9 +19,14 @@ export async function deleteAccountGet(
   const env = getAppEnv();
   const { user } = req.session;
   if (user?.subjectId) {
-    const services: Service[] = await getAllowedListServices(
+    const services = await getYourServicesForAccountDeletion(
       user.subjectId,
-      res.locals.trace
+      res.locals.trace,
+      req.t
+    );
+
+    const hasEnglishOnlyServices = services.some(
+      (service) => !service.isAvailableInWelsh
     );
     const hasGovUkEmailSubscription: boolean =
       containsGovUkPublishingService(services);
@@ -30,6 +34,8 @@ export async function deleteAccountGet(
       hasGovUkEmailSubscription: hasGovUkEmailSubscription,
       services: services,
       env: env,
+      currentLngWelsh: req.i18n?.language === "cy",
+      hasEnglishOnlyServices,
     };
     res.render("delete-account/index.njk", data);
   } else {
