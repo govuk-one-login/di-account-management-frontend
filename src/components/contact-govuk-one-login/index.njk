@@ -116,15 +116,51 @@
     <h2 class="govuk-heading-l">{% if secondaryContactMethodEnabled %}{{'pages.contact.section3.headingMany' | translate}}{% else %}{{'pages.contact.section3.headingOne' | translate }}{% endif %}</h2>
     {% if contactWebchatEnabled %}
       <section>
-        {% set webchatParagraphs =  'pages.contact.section3.webchat.paragraphs1' | translate({ returnObjects: true }) %}
-
         <h3 class="govuk-heading-m">{{'pages.contact.section3.webchat.heading' | translate }}</h3>
 
-        {% for paragraph in webchatParagraphs %}
-          <p class="govuk-body">{{ paragraph }}</p>
-        {% endfor %}
+        <div class="contact-webchat-js-enabled">
+          {% set webchatParagraphs =  'pages.contact.section3.webchat.paragraphs1' | translate({ returnObjects: true }) %}
 
-        <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
+          {% for paragraph in webchatParagraphs %}
+            <p class="govuk-body">{{ paragraph }}</p>
+          {% endfor %}
+
+          <p class="govuk-body"><button type="button" class="launch-webchat-link" data-launch-webchat hidden>{{ 'pages.contact.section3.webchat.linkText' | translate }}</button></p>
+        </div>
+
+        <noscript>
+          {% set webchatParagraphs1 =  'pages.contact.section3.webchat.javascriptDisabled.paragraphs1' | translate({ returnObjects: true }) %}
+
+          {% for paragraph in webchatParagraphs1 %}
+            <p class="govuk-body">{{ paragraph }}</p>
+          {% endfor %}
+
+          {% set listItems =  'pages.contact.section3.webchat.javascriptDisabled.listItems' | translate({ returnObjects: true }) %}
+
+          {% if listItems.length %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for listItem in listItems %}
+                <li>{{ listItem }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% set webchatParagraphs2 =  'pages.contact.section3.webchat.javascriptDisabled.paragraphs2' | translate({ returnObjects: true }) %}
+
+          {% for paragraph in webchatParagraphs2 %}
+            <p class="govuk-body">{{ paragraph }}</p>
+          {% endfor %}
+
+          {% set listLinks =  'pages.contact.section3.webchat.javascriptDisabled.listLinks' | translate({ returnObjects: true }) %}
+
+          {% if listLinks.length %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for link in listLinks %}
+                <li><a class="govuk-link" href="{{link["href"]}}" target="_blank" rel="noreferrer noopener">{{link["text"]}}</a></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </noscript>
 
         {% set accessibilityTextHtml %}
           <p class="govuk-body">{{ 'pages.contact.section3.webchat.accessibilityStatementParagraph' | translate | safe | replace('[accessibilityStatementLinkHref]', accessibilityStatementUrl )  }}</p>
