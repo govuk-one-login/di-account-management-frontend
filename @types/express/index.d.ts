@@ -1,9 +1,7 @@
 import { Client } from "openid-client";
 import { User } from "../../src/types";
 import { QueryParameters } from "../../src/app.constants";
-
-import { MfaMethod } from "../../src/utils/mfa/types";
-import { MfaMethod as NewMfaMethod } from "../../src/utils/mfaClient/types";
+import { MfaMethod } from "../../src/utils/mfaClient/types";
 import { logger } from "../../src/utils/logger";
 
 declare module "express-session" {
@@ -19,7 +17,7 @@ declare module "express-session" {
     queryParameters?: QueryParameters;
     sessionId?: string;
     mfaMethods?: MfaMethod[];
-    removedMfaMethods?: NewMfaMethod[];
+    removedMfaMethods?: MfaMethod[];
     newDefaultMfaMethodId: string | number;
   }
 }

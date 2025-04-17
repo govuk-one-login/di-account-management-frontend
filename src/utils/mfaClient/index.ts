@@ -2,7 +2,6 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Request, Response } from "express";
 import { getRequestConfig, Http } from "../http";
 import { getMfaServiceUrl } from "../../config";
-import { ProblemDetail, ValidationProblem } from "../mfa/types";
 
 import {
   ApiResponse,
@@ -10,9 +9,12 @@ import {
   AuthAppMethod,
   MfaClientInterface,
   MfaMethod,
+  CreateMfaPayload,
+  SimpleError,
 } from "./types";
 import { HTTP_STATUS_CODES } from "../../app.constants";
 import { getTxmaHeader } from "../txma-header";
+import { validateCreate } from "./validate";
 
 export class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;
@@ -38,10 +40,18 @@ export class MfaClient implements MfaClientInterface {
     return buildResponse(response);
   }
 
-  async create(method: SmsMethod | AuthAppMethod) {
+  async create(method: SmsMethod | AuthAppMethod, otp?: string) {
+    validateCreate(method, otp);
+    const payload: CreateMfaPayload = {
+      priorityIdentifier: "BACKUP",
+      method: method,
+    };
+    if (otp) {
+      payload.otp = otp;
+    }
     const response = await this.http.client.post<MfaMethod>(
       `/mfa-methods/${this.publicSubjectId}`,
-      { priorityIdentifier: "DEFAULT", method: method },
+      { mfaMethod: payload },
       this.requestConfig
     );
 
@@ -81,28 +91,17 @@ export function buildResponse<T>(response: AxiosResponse<T>): ApiResponse<T> {
   const { status, data } = response;
   const success =
     status == HTTP_STATUS_CODES.OK || status == HTTP_STATUS_CODES.NO_CONTENT;
+  const apiResponse: ApiResponse<T> = {
+    success,
+    status,
+    data,
+  };
 
-  if (success) {
-    return {
-      success,
-      status,
-      data,
-    };
-  } else {
-    let problem: ValidationProblem | ProblemDetail;
-
-    if (status == HTTP_STATUS_CODES.BAD_REQUEST) {
-      problem = data as ValidationProblem;
-    } else {
-      problem = data as ProblemDetail;
-    }
-    return {
-      status,
-      success,
-      data,
-      problem,
-    };
+  if (!success) {
+    apiResponse.error = data as SimpleError;
   }
+
+  return apiResponse;
 }
 
 export function createMfaClient(req: Request, res: Response): MfaClient {
@@ -117,4 +116,11 @@ export function createMfaClient(req: Request, res: Response): MfaClient {
       txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
     })
   );
+}
+
+export function formatErrorMessage<T>(
+  prefix: string,
+  response: ApiResponse<T>
+) {
+  return `${prefix}. Status code: ${response.status}, API error code: ${response.error.code}, API error message: ${response.error.message}`;
 }

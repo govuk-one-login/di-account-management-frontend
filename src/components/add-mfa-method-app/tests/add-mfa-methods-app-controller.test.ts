@@ -6,6 +6,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 
 import {
   addMfaAppMethodGet,
+  addMfaAppMethodGoBackGet,
   addMfaAppMethodPost,
 } from "../add-mfa-method-app-controller";
 import { PATH_DATA } from "../../../app.constants";
@@ -14,6 +15,32 @@ import QRCode from "qrcode";
 import { MfaClient } from "../../../utils/mfaClient";
 import { AuthAppMethod, MfaMethod } from "../../../utils/mfaClient/types";
 import * as mfaClient from "../../../utils/mfaClient";
+
+describe("addMfaAppMethodGoBackGet", () => {
+  let sandbox: SinonSandbox;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should redirect to the method selection page", async () => {
+    const req = {
+      session: { user: { state: { addBackup: { value: "APP" } } } },
+    };
+    const res = { redirect: sinon.fake(() => {}) };
+
+    await addMfaAppMethodGoBackGet(
+      req as unknown as Request,
+      res as unknown as Response
+    );
+
+    expect(res.redirect).to.have.been.calledWith(PATH_DATA.ADD_MFA_METHOD.url);
+  });
+});
 
 describe("addMfaAppMethodGet", () => {
   let sandbox: SinonSandbox;
@@ -50,7 +77,7 @@ describe("addMfaAppMethodGet", () => {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
-      backLink: undefined,
+      backLink: "/back-from-set-up-auth-app",
       errors: undefined,
       errorList: undefined,
     });
@@ -116,6 +143,8 @@ describe("addMfaAppMethodPost", () => {
     const res = { redirect: sinon.fake(() => {}) };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+
     mfaClientStub.create.resolves({
       success: true,
       status: 200,
@@ -150,6 +179,7 @@ describe("addMfaAppMethodPost", () => {
     const res = { render: sinon.fake() };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => false);
+    sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
       req as unknown as Request,
@@ -158,7 +188,18 @@ describe("addMfaAppMethodPost", () => {
     );
 
     expect(mfaClientStub.create).not.to.have.been.called;
-    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk", {
+      authAppSecret: "1234567890",
+      qrCode: await QRCode.toDataURL("qrcode"),
+      formattedSecret: "1234 5678 90",
+      backLink: "/back-from-set-up-auth-app",
+      errors: {
+        code: { text: "pages.addBackupApp.errors.invalidCode", href: "#code" },
+      },
+      errorList: [
+        { text: "pages.addBackupApp.errors.invalidCode", href: "#code" },
+      ],
+    });
   });
 
   it("should render an error if the code is missing", async () => {
@@ -175,6 +216,7 @@ describe("addMfaAppMethodPost", () => {
     const res = { render: sinon.fake() };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
       req as unknown as Request,
@@ -183,7 +225,18 @@ describe("addMfaAppMethodPost", () => {
     );
 
     expect(mfaClientStub.create).not.to.have.been.called;
-    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk", {
+      authAppSecret: "1234567890",
+      qrCode: await QRCode.toDataURL("qrcode"),
+      formattedSecret: "1234 5678 90",
+      backLink: "/back-from-set-up-auth-app",
+      errors: {
+        code: { text: "pages.addBackupApp.errors.required", href: "#code" },
+      },
+      errorList: [
+        { text: "pages.addBackupApp.errors.required", href: "#code" },
+      ],
+    });
   });
 
   it("should render an error if the code has letters", async () => {
@@ -201,6 +254,7 @@ describe("addMfaAppMethodPost", () => {
     const res = { render: sinon.fake() };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
       req as unknown as Request,
@@ -209,7 +263,21 @@ describe("addMfaAppMethodPost", () => {
     );
 
     expect(mfaClientStub.create).not.to.have.been.called;
-    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk", {
+      authAppSecret: "1234567890",
+      qrCode: await QRCode.toDataURL("qrcode"),
+      formattedSecret: "1234 5678 90",
+      backLink: "/back-from-set-up-auth-app",
+      errors: {
+        code: {
+          text: "pages.addBackupApp.errors.invalidFormat",
+          href: "#code",
+        },
+      },
+      errorList: [
+        { text: "pages.addBackupApp.errors.invalidFormat", href: "#code" },
+      ],
+    });
   });
 
   it("should render an error if the code is longer than 6 digits", async () => {
@@ -227,6 +295,7 @@ describe("addMfaAppMethodPost", () => {
     const res = { render: sinon.fake() };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
       req as unknown as Request,
@@ -235,6 +304,54 @@ describe("addMfaAppMethodPost", () => {
     );
 
     expect(mfaClientStub.create).not.to.have.been.called;
-    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk");
+    expect(res.render).to.have.been.calledWith("add-mfa-method-app/index.njk", {
+      authAppSecret: "1234567890",
+      qrCode: await QRCode.toDataURL("qrcode"),
+      formattedSecret: "1234 5678 90",
+      backLink: "/back-from-set-up-auth-app",
+      errors: {
+        code: { text: "pages.addBackupApp.errors.maxLength", href: "#code" },
+      },
+      errorList: [
+        { text: "pages.addBackupApp.errors.maxLength", href: "#code" },
+      ],
+    });
+  });
+
+  it("should log and throw an error if the call to the MFA API fails", async () => {
+    const req = {
+      body: {
+        code: "123456",
+        authAppSecret: appMethod.credential,
+      },
+      session: { user: { state: { addBackup: { value: "APP" } } } },
+      log: { error: logSpy },
+      t: (t: string) => t,
+    };
+
+    const res = { redirect: sinon.fake(() => {}), locals: { trace: "trace" } };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+
+    mfaClientStub.create.resolves({
+      success: false,
+      status: 400,
+      data: {} as MfaMethod,
+      error: {
+        code: 1,
+        message: "Bad request",
+      },
+    });
+
+    try {
+      await addMfaAppMethodPost(
+        req as unknown as Request,
+        res as unknown as Response,
+        nextSpy
+      );
+    } catch (e) {
+      expect(logSpy.called).to.be.true;
+    }
   });
 });

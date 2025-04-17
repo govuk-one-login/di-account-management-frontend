@@ -92,7 +92,10 @@ describe("state-machine", () => {
     it("should move state from CHANGE_VALUE state to APP state when SELECTED_APP action event ", () => {
       const nextState = getNextState("CHANGE_VALUE", EventType.SelectedApp);
       expect(nextState.value).to.equal("APP");
-      expect(nextState.events).to.all.members([EventType.ValueUpdated]);
+      expect(nextState.events).to.all.members([
+        EventType.ValueUpdated,
+        EventType.GoBackToChooseBackup,
+      ]);
     });
 
     it("should move state from CHANGE_VALUE state to SMS state when SELECTED_SMS action event ", () => {
@@ -105,6 +108,18 @@ describe("state-machine", () => {
       const nextState = getNextState("APP", EventType.ValueUpdated);
       expect(nextState.value).to.equal(EventType.Confirmation);
       expect(nextState.events).to.all.members([]);
+    });
+
+    it("should move state from APP state to CHANGE_VALUE state when GO_BACK_TO_CHOOSE_BACKUP action event ", () => {
+      const nextState = getNextState("APP", EventType.GoBackToChooseBackup);
+      expect(nextState.value).to.equal("CHANGE_VALUE");
+      expect(nextState.events).to.all.members([
+        EventType.ValueUpdated,
+        EventType.VerifyCodeSent,
+        EventType.SelectedApp,
+        EventType.SelectedSms,
+        EventType.RemoveBackup,
+      ]);
     });
   });
 });

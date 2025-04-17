@@ -17,6 +17,8 @@ import {
 } from "../../check-your-email/types";
 import { logger } from "../../../utils/logger";
 import * as config from "../../../config";
+import { MfaMethod } from "../../../utils/mfaClient/types";
+import * as mfaClient from "../../../utils/mfaClient";
 
 describe("check your phone controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -24,9 +26,18 @@ describe("check your phone controller", () => {
   let res: Partial<Response>;
   let fakeService: CheckYourPhoneServiceInterface;
   let errorLoggerSpy: sinon.SinonSpy;
+  let stubMfaClient: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
+
+  const NEW_PHONE_NUMBER = "1234567890";
+
+  const mfaMethod: MfaMethod = {
+    mfaIdentifier: "1",
+    priorityIdentifier: "BACKUP",
+    methodVerified: true,
+    method: { mfaMethodType: "SMS", phoneNumber: NEW_PHONE_NUMBER },
+  };
 
   beforeEach(() => {
-    delete process.env.SUPPORT_CHANGE_MFA;
     sandbox = sinon.createSandbox();
     errorLoggerSpy = sinon.spy(logger, "error");
     req = {
@@ -67,11 +78,14 @@ describe("check your phone controller", () => {
     fakeService = {
       updatePhoneNumber: sandbox.stub().resolves(true),
       updatePhoneNumberWithMfaApi: sandbox.stub().resolves(true),
-      addBackupService: sandbox.stub().resolves(true),
     };
+
+    stubMfaClient = sandbox.createStubInstance(mfaClient.MfaClient);
+    sandbox.stub(mfaClient, "createMfaClient").returns(stubMfaClient);
   });
 
   afterEach(() => {
+    delete process.env.SUPPORT_CHANGE_MFA;
     errorLoggerSpy.restore();
     sandbox.restore();
   });
@@ -170,7 +184,6 @@ describe("check your phone controller", () => {
       fakeService = {
         updatePhoneNumber: sandbox.fake.resolves(false),
         updatePhoneNumberWithMfaApi: sandbox.fake.resolves(false),
-        addBackupService: sandbox.fake.resolves(false),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -224,7 +237,6 @@ describe("check your phone controller", () => {
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
       );
-      delete process.env.SUPPORT_CHANGE_MFA;
     });
   });
 
@@ -258,68 +270,25 @@ describe("check your phone controller", () => {
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
       );
-      delete process.env.SUPPORT_CHANGE_MFA;
     });
 
     it("should redirect to /phone-number-updated-confirmation when valid code entered for add MFA method journey", async () => {
       process.env.SUPPORT_CHANGE_MFA = "1";
-
-      req.session.user.tokens = { accessToken: "token" } as any;
-      req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
       req.body.intent = INTENT_ADD_BACKUP;
-      req.session.user.newPhoneNumber = "07111111111";
-      req.session.user.email = "test@test.com";
-      req.session.user.publicSubjectId = "111112";
+      req.session.user.newPhoneNumber = NEW_PHONE_NUMBER;
+
+      stubMfaClient.create.resolves({
+        success: true,
+        status: 200,
+        data: mfaMethod,
+      });
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.addBackupService).to.have.been.calledOnce;
-      expect(fakeService.addBackupService).to.have.calledWith({
-        email: "test@test.com",
-        otp: "123456",
-        credential: "no-credentials",
-        mfaMethod: {
-          mfaIdentifier: "111112",
-          methodVerified: true,
-          method: {
-            mfaMethodType: "SMS",
-            phoneNumber: "07111111111",
-          },
-          priorityIdentifier: "BACKUP",
-        },
-      });
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url
       );
-      delete process.env.SUPPORT_CHANGE_MFA;
-    });
-
-    it("should log an error when priorityIdentifier is not valid", async () => {
-      process.env.SUPPORT_CHANGE_MFA = "1";
-      req.session.user.tokens = { accessToken: "token" } as any;
-      req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
-      req.body.code = "123456";
-      req.body.intent = INTENT_ADD_BACKUP;
-      req.session.user.newPhoneNumber = "07111111111";
-      req.session.user.email = "test@test.com";
-      req.session.mfaMethods[0].priorityIdentifier =
-        "INVALID-PRIORITY-IDENTIFIER" as any;
-
-      const errorMessage = "No existing DEFAULT MFA method in handleaddBackup";
-      (fakeService.updatePhoneNumber as sinon.SinonStub).throws(
-        new Error(errorMessage)
-      );
-
-      try {
-        await checkYourPhonePost(fakeService)(req as Request, res as Response);
-        expect(fakeService.updatePhoneNumber).not.to.have.been.called;
-        expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
-        expect(fakeService.addBackupService).not.to.have.been.called;
-      } catch (e) {
-        expect(errorLoggerSpy).to.have.been.calledWith(errorMessage);
-      }
-      delete process.env.SUPPORT_CHANGE_MFA;
     });
 
     it("should log an error when intent is not valid", async () => {
@@ -331,44 +300,42 @@ describe("check your phone controller", () => {
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
 
-      const errorMessage = "Unknown phone verification intent invalid-intent";
-      (fakeService.updatePhoneNumber as sinon.SinonStub).throws(
-        new Error(errorMessage)
-      );
+      const errorMessage = `Check your phone controller: unknown phone verification intent ${req.body.intent}`;
 
       try {
         await checkYourPhonePost(fakeService)(req as Request, res as Response);
+      } catch (e) {
+        expect(errorLoggerSpy).to.have.been.calledWith(
+          { trace: res.locals.trace },
+          errorMessage
+        );
         expect(fakeService.updatePhoneNumber).not.to.have.been.called;
         expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
-        expect(fakeService.addBackupService).not.to.have.been.called;
-      } catch (e) {
-        expect(errorLoggerSpy).to.have.been.calledWith(errorMessage);
+        expect(stubMfaClient.create).not.to.have.been.called;
       }
-      delete process.env.SUPPORT_CHANGE_MFA;
     });
 
-    it("should log an error when addBackupService fails", async () => {
+    it("should log an error when adding a backup MFA method fails", async () => {
       process.env.SUPPORT_CHANGE_MFA = "1";
-      req.session.user.tokens = { accessToken: "token" } as any;
-      req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
       req.body.intent = INTENT_ADD_BACKUP;
-      req.session.user.newPhoneNumber = "07111111111";
-      req.session.user.email = "test@test.com";
+      req.session.user.newPhoneNumber = NEW_PHONE_NUMBER;
 
-      const errorMessage = "error message";
-      (fakeService.addBackupService as sinon.SinonStub).throws(
-        new Error(errorMessage)
+      const response = {
+        success: false,
+        status: 403,
+        error: { code: 1, message: "Not authorized" },
+        data: {} as MfaMethod,
+      };
+      stubMfaClient.create.resolves(response);
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+      expect(fakeService.updatePhoneNumber).not.to.have.been.called;
+      expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
+      expect(errorLoggerSpy).to.have.been.calledWith(
+        { trace: res.locals.trace },
+        mfaClient.formatErrorMessage("Failed to create SMS MFA", response)
       );
-
-      try {
-        await checkYourPhonePost(fakeService)(req as Request, res as Response);
-        expect(fakeService.updatePhoneNumber).not.to.have.been.called;
-        expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
-      } catch (e) {
-        expect(errorLoggerSpy).to.have.been.calledWith(errorMessage);
-      }
-      delete process.env.SUPPORT_CHANGE_MFA;
     });
   });
 });

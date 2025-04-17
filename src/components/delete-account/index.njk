@@ -16,12 +16,25 @@
 
  {% if services.length %}
   <p class="govuk-body">{{ 'pages.deleteAccount.paragraph2' | translate }}</p>
+
   <ul class="govuk-list govuk-list--bullet">
     {% for service in services %}
       {% set locale = ['clientRegistry.', env, '.', service.client_id, '.'] | join %}
-        <li data-test-id="service-list-item">{{ [locale, 'header'] | join | translate }}</li>
+        <li {% if currentLngWelsh and not service.isAvailableInWelsh %}lang="en"{% endif %} data-test-id="service-list-item">{{ [locale, 'header'] | join | translate }}</li>
     {% endfor %}
     </ul>
+
+    {% if currentLngWelsh and hasEnglishOnlyServices %}
+      {% set englishServicesInWelshExplanationHtml %}
+        <p class="govuk-body">{{ 'pages.deleteAccount.englishServicesInWelshExplanation.body' | translate }}</p>
+      {% endset %}
+
+      {{ govukDetails({ 
+        summaryText: 'pages.deleteAccount.englishServicesInWelshExplanation.title' | translate, 
+        html: englishServicesInWelshExplanationHtml
+      }) }}
+    {% endif %}
+
     {% if hasGovUkEmailSubscription %}
       <p class="govuk-body" data-test-id="govuk-email-subscription-info">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
     {% endif %}

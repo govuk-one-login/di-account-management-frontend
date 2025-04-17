@@ -10,7 +10,7 @@ COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
 
-RUN npm install && npm run build && npm run clean-modules && npm install --production=true
+RUN npm ci && npm run build && npm run clean-modules && npm ci --production=true
 
 FROM node:20.19.0-alpine@sha256:8bda036ddd59ea51a23bc1a1035d3b5c614e72c01366d989f4120e8adca196d4 as final
 

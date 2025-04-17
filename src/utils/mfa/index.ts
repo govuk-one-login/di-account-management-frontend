@@ -67,61 +67,6 @@ export function addBackup(
   );
 }
 
-async function retrieveMfaMethods(
-  accessToken: string,
-  email: string,
-  sourceIp: string,
-  sessionId: string,
-  persistentSessionId: string,
-  publicSubjectId: string
-): Promise<MfaMethod[]> {
-  let data: MfaMethod[] = [];
-  try {
-    const response = await getRequest(
-      accessToken,
-      email,
-      sourceIp,
-      sessionId,
-      persistentSessionId,
-      publicSubjectId
-    );
-
-    if (response.status === HTTP_STATUS_CODES.OK) {
-      data = response.data;
-    }
-  } catch (error) {
-    errorHandler(error, sessionId, "retrieve from");
-  }
-  return data;
-}
-
-async function getRequest(
-  accessToken: string,
-  email: string,
-  sourceIp: string,
-  sessionId: string,
-  persistentSessionId: string,
-  publicSubjectId: string,
-  http: Http = new Http(getMfaServiceUrl())
-): Promise<{
-  status: number;
-  data: MfaMethod[];
-}> {
-  const formattedPath = format(
-    METHOD_MANAGEMENT_API.MFA_RETRIEVE,
-    publicSubjectId
-  );
-  return http.client.get(
-    formattedPath,
-    getRequestConfig({
-      token: accessToken,
-      sourceIp,
-      persistentSessionId,
-      sessionId,
-    })
-  );
-}
-
 async function putRequest(
   updateInput: UpdateInformationInput,
   sessionDetails: UpdateInformationSessionValues,
@@ -250,5 +195,3 @@ export async function createOrUpdateMfaMethod(
   }
   return isUpdated;
 }
-
-export default retrieveMfaMethods;
