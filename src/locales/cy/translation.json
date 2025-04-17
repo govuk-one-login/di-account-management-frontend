@@ -545,16 +545,16 @@
           "accessibilityStatementParagraph": "Nid yw ein gwe-sgwrs yn gwbl hygyrch eto — rydym yn gweithio i’w wella. Gallwch ddarganfod <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy#webchat-accessibility\">mwy am y cyfyngiadau a sut rydym yn eu cywiro</a>.",
           "javascriptDisabled": {
             "paragraphs1": [
-              "Use webchat to get help from GOV.UK One Login’s digital assistant or chat with a member of the support team.",
-              "You need JavaScript to use webchat.",
-              "The browser you’re using does not support JavaScript or it’s turned off. You can either:"
+              "Defnyddiwch gwe-sgwrs i gael help gan gynorthwyydd digidol GOV.UK One Login neu sgwrsio ag aelod o'r tîm cymorth.",
+              "Rydych angen JavaScript i ddefnyddio gwe-sgwrs.",
+              "Nid yw'r porwr rydych yn ei ddefnyddio yn cefnogi JavaScript neu mae wedi'i ddiffodd. Gallwch naill ai:"
             ],
             "listItems": [
-              "contact us by phone or email instead",
-              "turn on JavaScript in your browser"
+              "gysylltu â ni dros y ffôn neu e-bost yn lle hynny",
+              "troi JavaScript ymlaen yn eich porwr"
             ],
             "paragraphs2": [
-              "You can follow the instructions to turn on JavaScript in:"
+              "Gallwch ddilyn y cyfarwyddiadau i droi JavaScript ymlaen yn:"
             ],
             "listLinks": [
               {
