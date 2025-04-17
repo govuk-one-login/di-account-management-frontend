@@ -129,6 +129,8 @@ Conditions:
 
   UseFirewallTags: !Equals [!Ref Environment, dev]
 
+  UseFirewallManager: !Equals [!Ref Environment, dev]
+
 Mappings:
   ElasticLoadBalancerAccountIds:
     eu-west-2:
@@ -2094,7 +2096,10 @@ Resources:
           AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
-        WebACLId: !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
+        WebACLId: !If
+          - UseFirewallManager
+          - !Ref "AWS::NoValue"
+          - !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
         CacheBehaviors:
           - !If
             - UseCloudFrontCaching
