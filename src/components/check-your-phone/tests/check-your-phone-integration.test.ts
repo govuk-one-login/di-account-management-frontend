@@ -65,15 +65,11 @@ describe("Integration:: check your phone", () => {
 
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     app = await require("../../../app").createApp();
@@ -111,10 +107,23 @@ describe("Integration:: check your phone", () => {
       ],
     });
 
-    sandbox.stub(mfaClient, "createMfaClient").returns(stubMfaClient);
+    stubMfaClient.update.resolves({
+      success: true,
+      status: 200,
+      data: [
+        {
+          mfaIdentifier: "123456",
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "AUTH_APP",
+            credential: "abc123",
+          },
+          methodVerified: true,
+        },
+      ],
+    });
 
-    const mfa = require("../../../utils/mfa");
-    sandbox.stub(mfa, "updateMfaMethod").resolves(true);
+    sandbox.stub(mfaClient, "createMfaClient").returns(stubMfaClient);
 
     await request(app)
       .get(PATH_DATA.CHECK_YOUR_PHONE.url)
@@ -219,7 +228,6 @@ describe("Integration:: check your phone", () => {
   });
 
   it("should redirect to /update confirmation when valid code entered", async () => {
-    // Act
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
