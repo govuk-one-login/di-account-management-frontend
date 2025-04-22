@@ -16,7 +16,6 @@ import {
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../../check-your-email/types";
 import { logger } from "../../../utils/logger";
-import * as config from "../../../config";
 import { MfaMethod } from "../../../utils/mfaClient/types";
 import * as mfaClient from "../../../utils/mfaClient";
 
