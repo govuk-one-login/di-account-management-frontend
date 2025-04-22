@@ -1,4 +1,4 @@
-import { AuthAppMethod, SmsMethod } from "./types";
+import { AuthAppMethod, MfaMethod, SmsMethod } from "./types";
 
 export function validateCreate(
   method: AuthAppMethod | SmsMethod,
@@ -10,5 +10,11 @@ export function validateCreate(
 
   if (method.mfaMethodType == "SMS" && !otp) {
     throw new Error("Must provide OTP when mfaMethodType is SMS");
+  }
+}
+
+export function validateUpdate(method: MfaMethod, otp?: string) {
+  if (method.method.mfaMethodType != "SMS" && otp) {
+    throw new Error("Must only provide OTP with an SMS method update");
   }
 }
