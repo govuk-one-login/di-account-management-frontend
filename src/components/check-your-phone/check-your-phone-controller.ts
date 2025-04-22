@@ -59,11 +59,40 @@ export function checkYourPhonePost(
     let isPhoneNumberUpdated = false;
 
     if (supportChangeMfa()) {
+      const mfaClient = createMfaClient(req, res);
       if (intent === INTENT_ADD_BACKUP) {
-        const mfaClient = createMfaClient(req, res);
         const response = await mfaClient.create(
           { mfaMethodType: "SMS", phoneNumber: newPhoneNumber },
           req.body.code
+        );
+
+        if (!response.success) {
+          logger.error(
+            { trace: res.locals.trace },
+            formatErrorMessage("Failed to create SMS MFA", response)
+          );
+        }
+        isPhoneNumberUpdated = response.success;
+      } else if (intent === INTENT_CHANGE_PHONE_NUMBER) {
+        const smsMFAMethod = req.session.mfaMethods.find(
+          (mfa) => mfa.method.mfaMethodType === "SMS"
+        );
+
+        if (!smsMFAMethod) {
+          const errorMessage =
+            "Could not change phone number - no existing SMS methods found.";
+          logger.error(errorMessage);
+          throw new Error(errorMessage);
+        }
+
+        const response = await mfaClient.update(
+          {
+            mfaIdentifier: smsMFAMethod.mfaIdentifier,
+            method: { mfaMethodType: "SMS", phoneNumber: newPhoneNumber },
+            priorityIdentifier: smsMFAMethod.priorityIdentifier,
+            methodVerified: smsMFAMethod.methodVerified,
+          },
+          req.body["code"]
         );
 
         if (!response.success) {
@@ -77,10 +106,8 @@ export function checkYourPhonePost(
         isPhoneNumberUpdated = await handleMfaChange(
           intent,
           newPhoneNumber,
-          updateInput,
           await generateSessionDetails(req, res),
           req,
-          service,
           res.locals.trace
         );
       }
@@ -108,22 +135,11 @@ export function checkYourPhonePost(
 async function handleMfaChange(
   intent: Intent,
   newPhoneNumber: string,
-  updateInput: UpdateInformationInput,
   sessionDetails: any,
   req: Request,
-  service: CheckYourPhoneServiceInterface,
   trace: string
 ): Promise<boolean> {
-  if (intent === INTENT_CHANGE_PHONE_NUMBER) {
-    return handleChangePhoneNumber(
-      newPhoneNumber,
-      updateInput,
-      sessionDetails,
-      req,
-      service,
-      trace
-    );
-  } else if (intent === INTENT_CHANGE_DEFAULT_METHOD) {
+  if (intent === INTENT_CHANGE_DEFAULT_METHOD) {
     return handleChangeDefaultMethod(newPhoneNumber, sessionDetails, req);
   } else {
     logger.error(
@@ -157,34 +173,6 @@ async function handleChangeDefaultMethod(
 
   return true;
 }
-
-async function handleChangePhoneNumber(
-  newPhoneNumber: string,
-  updateInput: UpdateInformationInput,
-  sessionDetails: any,
-  req: Request,
-  service: CheckYourPhoneServiceInterface,
-  trace: string
-): Promise<boolean> {
-  const smsMFAMethod = req.session.mfaMethods.find(
-    (mfa) => mfa.method.mfaMethodType === "SMS"
-  );
-
-  if (smsMFAMethod && smsMFAMethod.method.mfaMethodType === "SMS") {
-    smsMFAMethod.method.phoneNumber = newPhoneNumber;
-    updateInput.mfaMethod = smsMFAMethod;
-    return await service.updatePhoneNumberWithMfaApi(
-      updateInput,
-      sessionDetails
-    );
-  } else {
-    logger.error({
-      err: "Check your phone controller: no existing MFA method in handleChangePhoneNumber",
-      trace: trace,
-    });
-  }
-}
-
 function updateSessionUser(
   req: Request,
   newPhoneNumber: string,

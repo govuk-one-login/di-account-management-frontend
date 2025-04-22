@@ -77,7 +77,6 @@ describe("check your phone controller", () => {
     };
     fakeService = {
       updatePhoneNumber: sandbox.stub().resolves(true),
-      updatePhoneNumberWithMfaApi: sandbox.stub().resolves(true),
     };
 
     stubMfaClient = sandbox.createStubInstance(mfaClient.MfaClient);
@@ -183,7 +182,6 @@ describe("check your phone controller", () => {
     it("should return error when invalid code entered", async () => {
       fakeService = {
         updatePhoneNumber: sandbox.fake.resolves(false),
-        updatePhoneNumberWithMfaApi: sandbox.fake.resolves(false),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -207,7 +205,8 @@ describe("check your phone controller", () => {
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
       req.session.mfaMethods[0].method.mfaMethodType = "UNKNOWN" as any;
-      const errorMessage = "No existing MFA method in handleChangePhoneNumber";
+      const errorMessage =
+        "Could not change phone number - no existing SMS methods found.";
       try {
         await checkYourPhonePost(fakeService)(req as Request, res as Response);
       } catch (e) {
@@ -227,7 +226,6 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
       expect(fakeService.updatePhoneNumber).to.have.been.calledOnce;
       expect(fakeService.updatePhoneNumber).to.have.calledWith({
         email: "test@test.com",
@@ -244,20 +242,21 @@ describe("check your phone controller", () => {
     it("should redirect to /phone-number-updated-confirmation when valid code entered for change phone number journey", async () => {
       process.env.SUPPORT_CHANGE_MFA = "1";
 
-      req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
       req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       req.session.user.newPhoneNumber = "07111111111";
-      req.session.user.email = "test@test.com";
+
+      stubMfaClient.update.resolves({
+        success: true,
+        status: 200,
+        data: [mfaMethod],
+      });
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.updatePhoneNumberWithMfaApi).to.have.been.calledOnce;
-      expect(fakeService.updatePhoneNumberWithMfaApi).to.have.calledWith({
-        email: "test@test.com",
-        otp: "123456",
-        mfaMethod: {
+      expect(stubMfaClient.update).to.have.calledWith(
+        {
           mfaIdentifier: "111111",
           methodVerified: true,
           method: {
@@ -266,7 +265,8 @@ describe("check your phone controller", () => {
           },
           priorityIdentifier: "DEFAULT",
         },
-      });
+        req.body.code
+      );
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
       );
@@ -310,7 +310,7 @@ describe("check your phone controller", () => {
           errorMessage
         );
         expect(fakeService.updatePhoneNumber).not.to.have.been.called;
-        expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
+        expect(stubMfaClient.update).not.to.have.been.called;
         expect(stubMfaClient.create).not.to.have.been.called;
       }
     });
@@ -331,7 +331,7 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
       expect(fakeService.updatePhoneNumber).not.to.have.been.called;
-      expect(fakeService.updatePhoneNumberWithMfaApi).not.to.have.been.called;
+      expect(stubMfaClient.update).not.to.have.been.called;
       expect(errorLoggerSpy).to.have.been.calledWith(
         { trace: res.locals.trace },
         mfaClient.formatErrorMessage("Failed to create SMS MFA", response)
