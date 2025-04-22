@@ -23,7 +23,6 @@ import {
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../check-your-email/types";
 import { logger } from "../../utils/logger";
-import { updateMfaMethod } from "../../utils/mfa";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
@@ -102,14 +101,40 @@ export function checkYourPhonePost(
           );
         }
         isPhoneNumberUpdated = response.success;
-      } else {
-        isPhoneNumberUpdated = await handleMfaChange(
-          intent,
-          newPhoneNumber,
-          await generateSessionDetails(req, res),
-          req,
-          res.locals.trace
+      } else if (intent == INTENT_CHANGE_DEFAULT_METHOD) {
+        const defaultMethod = req.session.mfaMethods.find(
+          (mfa) => mfa.priorityIdentifier === "DEFAULT"
         );
+
+        if (!defaultMethod) {
+          const errorMessage =
+            "Could not change phone number - no default method found.";
+          logger.error(errorMessage);
+          throw new Error(errorMessage);
+        }
+
+        const response = await mfaClient.update(
+          {
+            mfaIdentifier: defaultMethod.mfaIdentifier,
+            method: { mfaMethodType: "SMS", phoneNumber: newPhoneNumber },
+            priorityIdentifier: defaultMethod.priorityIdentifier,
+            methodVerified: defaultMethod.methodVerified,
+          },
+          req.body["code"]
+        );
+
+        isPhoneNumberUpdated = response.success;
+
+        if (!response.success) {
+          logger.error(
+            { trace: res.locals.trace },
+            formatErrorMessage("Failed to create SMS MFA", response)
+          );
+        }
+      } else {
+        const errorMessage = `Check your phone controller: unknown phone verification intent ${intent}`;
+        logger.error({ trace: res.locals.trace }, errorMessage);
+        throw new Error(errorMessage);
       }
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(
@@ -132,47 +157,6 @@ export function checkYourPhonePost(
   };
 }
 
-async function handleMfaChange(
-  intent: Intent,
-  newPhoneNumber: string,
-  sessionDetails: any,
-  req: Request,
-  trace: string
-): Promise<boolean> {
-  if (intent === INTENT_CHANGE_DEFAULT_METHOD) {
-    return handleChangeDefaultMethod(newPhoneNumber, sessionDetails, req);
-  } else {
-    logger.error(
-      { trace: trace },
-      `Check your phone controller: unknown phone verification intent ${intent}`
-    );
-    throw new Error(
-      `Check your phone controller: unknown phone verification intent ${intent}`
-    );
-  }
-}
-
-async function handleChangeDefaultMethod(
-  newPhoneNumber: string,
-  sessionDetails: any,
-  req: Request
-): Promise<boolean> {
-  const updateInput: UpdateInformationInput = {
-    email: req.session.user.email,
-    otp: "",
-    mfaMethod: {
-      method: {
-        mfaMethodType: "SMS",
-        phoneNumber: newPhoneNumber,
-      },
-      priorityIdentifier: "DEFAULT",
-      methodVerified: true,
-    },
-  };
-  await updateMfaMethod(updateInput, sessionDetails);
-
-  return true;
-}
 function updateSessionUser(
   req: Request,
   newPhoneNumber: string,

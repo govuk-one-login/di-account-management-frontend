@@ -166,19 +166,6 @@ describe("check your phone controller", () => {
       );
     });
 
-    it("should redirect to change default method confirmation when valid code entered", async () => {
-      sandbox.replace(config, "supportChangeMfa", () => true);
-      req.session.user.tokens = { accessToken: "token" } as any;
-      req.body.intent = "changeDefaultMethod";
-      req.session.user.state.changeDefaultMethod.value = "CHANGE_VALUE";
-
-      await checkYourPhonePost(fakeService)(req as Request, res as Response);
-
-      expect(res.redirect).to.have.calledWith(
-        PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
-      );
-    });
-
     it("should return error when invalid code entered", async () => {
       fakeService = {
         updatePhoneNumber: sandbox.fake.resolves(false),
@@ -288,6 +275,25 @@ describe("check your phone controller", () => {
 
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url
+      );
+    });
+
+    it("should redirect to /phone-number-updated-confirmation when valid code entered for change default journey", async () => {
+      process.env.SUPPORT_CHANGE_MFA = "1";
+      req.body.code = "123456";
+      req.body.intent = INTENT_CHANGE_DEFAULT_METHOD;
+      req.session.user.newPhoneNumber = NEW_PHONE_NUMBER;
+
+      stubMfaClient.update.resolves({
+        success: true,
+        status: 200,
+        data: [mfaMethod],
+      });
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(
+        PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
       );
     });
 
