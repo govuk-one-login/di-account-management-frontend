@@ -542,43 +542,7 @@
             "Mae'r cynorthwyydd digidol bob amser ar gael."
           ],
           "linkText": "Defnyddio gwe-sgwrs",
-          "accessibilityStatementParagraph": "Nid yw ein gwe-sgwrs yn gwbl hygyrch eto — rydym yn gweithio i’w wella. Gallwch ddarganfod <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy#webchat-accessibility\">mwy am y cyfyngiadau a sut rydym yn eu cywiro</a>.",
-          "javascriptDisabled": {
-            "paragraphs1": [
-              "Defnyddiwch gwe-sgwrs i gael help gan gynorthwyydd digidol GOV.UK One Login neu sgwrsio ag aelod o'r tîm cymorth.",
-              "Rydych angen JavaScript i ddefnyddio gwe-sgwrs.",
-              "Nid yw'r porwr rydych yn ei ddefnyddio yn cefnogi JavaScript neu mae wedi'i ddiffodd. Gallwch naill ai:"
-            ],
-            "listItems": [
-              "gysylltu â ni dros y ffôn neu e-bost yn lle hynny",
-              "troi JavaScript ymlaen yn eich porwr"
-            ],
-            "paragraphs2": [
-              "Gallwch ddilyn y cyfarwyddiadau i droi JavaScript ymlaen yn:"
-            ],
-            "listLinks": [
-              {
-                "text": "Chrome",
-                "href": "https://support.google.com/admanager/answer/12654?hl=en"
-              },
-              {
-                "text": "Edge",
-                "href": "https://support.microsoft.com/en-gb/office/enable-javascript-7bb9ee74-6a9e-4dd1-babf-b0a1bb136361"
-              },
-              {
-                "text": "Firefox",
-                "href": "https://support.mozilla.org/en-US/kb/javascript-settings-for-interactive-web-pages"
-              },
-              {
-                "text": "Opera",
-                "href": "https://help.opera.com/en/latest/web-preferences/#javaScript"
-              },
-              {
-                "text": "Safari",
-                "href": "https://support.apple.com/en-gb/guide/safari/ibrw1074/mac"
-              }
-            ]
-          }
+          "accessibilityStatementParagraph": "Nid yw ein gwe-sgwrs yn gwbl hygyrch eto — rydym yn gweithio i’w wella. Gallwch ddarganfod <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy#webchat-accessibility\">mwy am y cyfyngiadau a sut rydym yn eu cywiro</a>."
         },
         "phone": {
           "heading": "Ffôn",

@@ -316,14 +316,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   @include govuk-font($size: 48, $weight: bold);
 }
 
-.contact-webchat-js-enabled {
-  display: none;
-}
-
-.js-enabled .contact-webchat-js-enabled {
-  display: unset;
-}
-
 .launch-webchat-link {
   margin: 0;
   padding: 0;
