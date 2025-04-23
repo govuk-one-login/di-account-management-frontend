@@ -21,11 +21,13 @@ import { BadRequestError } from "../../utils/errors";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "add-mfa-method-sms/index.njk";
 
+const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
+
 export async function addMfaSmsMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  res.render("add-mfa-method-sms/index.njk");
+  res.render("add-mfa-method-sms/index.njk", { backLink });
 }
 export function addMfaSmsMethodPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
@@ -81,14 +83,16 @@ export function addMfaSmsMethodPost(
           "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
         )
       );
-      return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);
+      return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error, {
+        backLink,
+      });
     } else {
       throw new BadRequestError(response.message, response.code);
     }
   };
 }
 
-export async function addMfaAppMethodConfirmationGet(
+export async function addMfaSmsMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {

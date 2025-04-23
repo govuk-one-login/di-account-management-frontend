@@ -6,7 +6,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 
 import {
   addMfaAppMethodGet,
-  addMfaAppMethodGoBackGet,
+  addMfaMethodGoBackGet,
   addMfaAppMethodPost,
 } from "../add-mfa-method-app-controller";
 import { PATH_DATA } from "../../../app.constants";
@@ -16,7 +16,7 @@ import { MfaClient } from "../../../utils/mfaClient";
 import { AuthAppMethod, MfaMethod } from "../../../utils/mfaClient/types";
 import * as mfaClient from "../../../utils/mfaClient";
 
-describe("addMfaAppMethodGoBackGet", () => {
+describe("addMfaMethodGoBackGet", () => {
   let sandbox: SinonSandbox;
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe("addMfaAppMethodGoBackGet", () => {
     };
     const res = { redirect: sinon.fake(() => {}) };
 
-    await addMfaAppMethodGoBackGet(
+    await addMfaMethodGoBackGet(
       req as unknown as Request,
       res as unknown as Response
     );
@@ -77,7 +77,7 @@ describe("addMfaAppMethodGet", () => {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
-      backLink: "/back-from-set-up-auth-app",
+      backLink: "/back-from-set-up-method",
       errors: undefined,
       errorList: undefined,
     });
@@ -192,7 +192,7 @@ describe("addMfaAppMethodPost", () => {
       authAppSecret: "1234567890",
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "1234 5678 90",
-      backLink: "/back-from-set-up-auth-app",
+      backLink: "/back-from-set-up-method",
       errors: {
         code: { text: "pages.addBackupApp.errors.invalidCode", href: "#code" },
       },
@@ -229,7 +229,7 @@ describe("addMfaAppMethodPost", () => {
       authAppSecret: "1234567890",
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "1234 5678 90",
-      backLink: "/back-from-set-up-auth-app",
+      backLink: "/back-from-set-up-method",
       errors: {
         code: { text: "pages.addBackupApp.errors.required", href: "#code" },
       },
@@ -267,7 +267,7 @@ describe("addMfaAppMethodPost", () => {
       authAppSecret: "1234567890",
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "1234 5678 90",
-      backLink: "/back-from-set-up-auth-app",
+      backLink: "/back-from-set-up-method",
       errors: {
         code: {
           text: "pages.addBackupApp.errors.invalidFormat",
@@ -308,7 +308,7 @@ describe("addMfaAppMethodPost", () => {
       authAppSecret: "1234567890",
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "1234 5678 90",
-      backLink: "/back-from-set-up-auth-app",
+      backLink: "/back-from-set-up-method",
       errors: {
         code: { text: "pages.addBackupApp.errors.maxLength", href: "#code" },
       },

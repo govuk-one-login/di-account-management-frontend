@@ -194,7 +194,7 @@ describe("generate input fields", () => {
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ changeAuthenticatorApp: {} })
-      .withTimestampT(sandbox.fake())
+      .withTranslate(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
