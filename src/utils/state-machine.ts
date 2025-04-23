@@ -105,6 +105,9 @@ export const amStateMachine = createMachine({
         VERIFY_CODE_SENT: {
           target: "VERIFY_CODE",
         },
+        GO_BACK_TO_CHOOSE_BACKUP: {
+          target: "CHANGE_VALUE",
+        },
       },
     },
   },

@@ -34,7 +34,7 @@
     {% if showSingleMethod %}
       <input type="hidden" name="addBackup" value="sms" />
       <h1 class="govuk-heading-l">{{ "pages.addBackup.backup.title" | translate }}</h1>
-      <p class="govuk-body">{{ pages.addBackup.backup.sms.message | translate }}</p>
+      <p class="govuk-body">{{ "pages.addBackup.backup.sms.message" | translate }}</p>
         {{ govukButton({
             "text": button_text|default("pages.addBackup.backup.sms.button" | translate, true),
             "type": "Submit",

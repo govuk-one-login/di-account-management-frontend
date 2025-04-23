@@ -11,7 +11,9 @@ import { AuthAppMethod } from "src/utils/mfaClient/types";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
-export async function addMfaAppMethodGoBackGet(
+const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
+
+export async function addMfaMethodGoBackGet(
   req: Request,
   res: Response
 ): Promise<void> {
@@ -33,7 +35,7 @@ export async function addMfaAppMethodGet(
     res,
     next,
     undefined,
-    PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
+    backLink
   );
 }
 
@@ -57,7 +59,7 @@ export async function addMfaAppMethodPost(
           "code",
           req.t("pages.addBackupApp.errors.required")
         ),
-        PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
+        backLink
       );
     }
 
@@ -71,7 +73,7 @@ export async function addMfaAppMethodPost(
           "code",
           req.t("pages.addBackupApp.errors.invalidFormat")
         ),
-        PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
+        backLink
       );
     }
 
@@ -85,7 +87,7 @@ export async function addMfaAppMethodPost(
           "code",
           req.t("pages.addBackupApp.errors.maxLength")
         ),
-        PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
+        backLink
       );
     }
 
@@ -101,7 +103,7 @@ export async function addMfaAppMethodPost(
           "code",
           req.t("pages.addBackupApp.errors.invalidCode")
         ),
-        PATH_DATA.ADD_MFA_METHOD_GO_BACK.url
+        backLink
       );
     }
 

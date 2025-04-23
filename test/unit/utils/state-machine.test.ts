@@ -101,7 +101,10 @@ describe("state-machine", () => {
     it("should move state from CHANGE_VALUE state to SMS state when SELECTED_SMS action event ", () => {
       const nextState = getNextState("CHANGE_VALUE", EventType.SelectedSms);
       expect(nextState.value).to.equal("SMS");
-      expect(nextState.events).to.all.members([EventType.VerifyCodeSent]);
+      expect(nextState.events).to.all.members([
+        EventType.VerifyCodeSent,
+        EventType.GoBackToChooseBackup,
+      ]);
     });
 
     it("should move state from APP state to CONFIRMATION state when VALUE_UPDATED action event ", () => {
@@ -112,6 +115,18 @@ describe("state-machine", () => {
 
     it("should move state from APP state to CHANGE_VALUE state when GO_BACK_TO_CHOOSE_BACKUP action event ", () => {
       const nextState = getNextState("APP", EventType.GoBackToChooseBackup);
+      expect(nextState.value).to.equal("CHANGE_VALUE");
+      expect(nextState.events).to.all.members([
+        EventType.ValueUpdated,
+        EventType.VerifyCodeSent,
+        EventType.SelectedApp,
+        EventType.SelectedSms,
+        EventType.RemoveBackup,
+      ]);
+    });
+
+    it("should move state from SMS state to CHANGE_VALUE state when GO_BACK_TO_CHOOSE_BACKUP action event ", () => {
+      const nextState = getNextState("SMS", EventType.GoBackToChooseBackup);
       expect(nextState.value).to.equal("CHANGE_VALUE");
       expect(nextState.events).to.all.members([
         EventType.ValueUpdated,
