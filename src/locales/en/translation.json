@@ -245,7 +245,7 @@
       "backup": {
         "title": "Add a back-up method",
         "sms": {
-          "message": "You can get security codes by text message as you back-up method.",
+          "message": "You can get security codes by text message as your back-up method.",
           "button": "Add a mobile phone number"
         }
       },
