@@ -29,7 +29,7 @@ describe("change email controller", () => {
     sandbox = sinon.createSandbox();
     req = new RequestBuilder()
       .withBody({ email: NEW_EMAIL })
-      .withTimestampT(sandbox.fake())
+      .withTranslate(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 

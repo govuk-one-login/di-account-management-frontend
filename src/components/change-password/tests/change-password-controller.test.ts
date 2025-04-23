@@ -41,7 +41,7 @@ describe("change password controller", () => {
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ changePassword: {} })
-      .withTimestampT(sandbox.fake())
+      .withTranslate(sandbox.fake())
       .withHeaders({
         "txma-audit-encoded": TXMA_AUDIT_ENCODED,
       })

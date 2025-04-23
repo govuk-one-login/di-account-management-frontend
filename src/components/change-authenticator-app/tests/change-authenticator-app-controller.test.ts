@@ -29,7 +29,7 @@ describe("change authenticator app controller", () => {
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ changeAuthApp: {} })
-      .withTimestampT(sandbox.fake())
+      .withTranslate(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
