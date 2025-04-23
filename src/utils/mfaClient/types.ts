@@ -4,7 +4,10 @@ export interface MfaClientInterface {
     method: SmsMethod | AuthAppMethod,
     otp?: string
   ) => Promise<ApiResponse<MfaMethod>>;
-  update: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
+  update: (
+    method: MfaMethod,
+    otp?: string
+  ) => Promise<ApiResponse<MfaMethod[]>>;
   delete: (method: MfaMethod) => Promise<ApiResponse<any>>;
   makeDefault: (method: MfaMethod) => Promise<ApiResponse<MfaMethod[]>>;
 }
@@ -38,6 +41,14 @@ export interface ApiResponse<T> {
 export interface CreateMfaPayload {
   priorityIdentifier: PriorityIdentifier;
   method: SmsMethod | AuthAppMethod;
+  otp?: string;
+}
+
+export interface UpdateMfaPayload {
+  mfaIdentifier: string;
+  priorityIdentifier: PriorityIdentifier;
+  method: SmsMethod | AuthAppMethod;
+  methodVerified: boolean;
   otp?: string;
 }
 

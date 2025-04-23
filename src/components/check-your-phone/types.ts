@@ -8,9 +8,4 @@ export interface CheckYourPhoneServiceInterface {
     updateInput: UpdateInformationInput,
     sessionDetails: UpdateInformationSessionValues
   ) => Promise<boolean>;
-
-  updatePhoneNumberWithMfaApi: (
-    updateInput: UpdateInformationInput,
-    sessionDetails: UpdateInformationSessionValues
-  ) => Promise<boolean>;
 }

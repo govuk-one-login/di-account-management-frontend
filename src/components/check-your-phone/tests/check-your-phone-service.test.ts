@@ -13,8 +13,6 @@ import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-import { MfaMethod } from "../../../utils/mfa/types";
-import * as mfaModule from "../../../utils/mfa";
 
 const baseUrl = getApiBaseUrl();
 
@@ -79,62 +77,5 @@ describe("checkYourPhoneService", () => {
     );
 
     expect(phoneNumberUpdated).to.be.true;
-  });
-
-  it("update the phone number with mfa method management api", async () => {
-    const accessToken = "1234";
-    const email = "something@test.com";
-    const phoneNumber = "11111111111";
-    const otp = "9876";
-    const sourceIp = "0.0.0.0";
-    const sessionId = "session-123";
-    const persistentSessionId = "persistentsession123";
-    const userLanguage = "en";
-
-    process.env.SUPPORT_CHANGE_MFA = "1";
-
-    const mfaMethod: MfaMethod = {
-      mfaIdentifier: "111111",
-      methodVerified: true,
-      method: {
-        mfaMethodType: "SMS",
-        phoneNumber: "PHONE",
-      },
-      priorityIdentifier: "DEFAULT",
-    };
-
-    const updateMfaMethod = sinon.fake.returns(Promise.resolve(true));
-
-    sandbox.replace(
-      mfaModule,
-      "updateMfaMethod",
-      updateMfaMethod as typeof mfaModule.updateMfaMethod
-    );
-
-    const updateInput: UpdateInformationInput = {
-      email,
-      updatedValue: phoneNumber,
-      otp,
-      mfaMethod,
-    };
-
-    const sessionDetails: UpdateInformationSessionValues = {
-      accessToken,
-      sourceIp,
-      sessionId,
-      persistentSessionId,
-      userLanguage,
-      clientSessionId: CLIENT_SESSION_ID,
-      txmaAuditEncoded: TXMA_AUDIT_ENCODED,
-    };
-
-    const phoneNumberUpdated =
-      await checkYourPhoneService().updatePhoneNumberWithMfaApi(
-        updateInput,
-        sessionDetails
-      );
-
-    expect(phoneNumberUpdated).to.be.true;
-    delete process.env.SUPPORT_CHANGE_MFA;
   });
 });
