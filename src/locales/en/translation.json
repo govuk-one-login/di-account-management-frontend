@@ -664,6 +664,7 @@
       "newBackupApp": "Your authenticator app will become your back-up method.",
       "newBackupSms": "Your back-up method will be a text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "button": "Switch methods",
+      "cancelLinkText": "Cancel and go back to Security",
       "confirm": {
         "title": "Switch security codes",
         "heading": "You've switched your back-up and default methods for getting security codes",
