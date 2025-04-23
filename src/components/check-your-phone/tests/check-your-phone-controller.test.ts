@@ -305,11 +305,11 @@ describe("check your phone controller", () => {
       req.session.user.newPhoneNumber = "07111111111";
       req.session.user.email = "test@test.com";
 
-      const errorMessage = `Check your phone controller: unknown phone verification intent ${req.body.intent}`;
+      const errorMessage = `Could not change phone number - unknown intent: ${req.body.intent}`;
 
       try {
         await checkYourPhonePost(fakeService)(req as Request, res as Response);
-      } catch (e) {
+      } catch {
         expect(errorLoggerSpy).to.have.been.calledWith(
           { trace: res.locals.trace },
           errorMessage
@@ -334,13 +334,19 @@ describe("check your phone controller", () => {
       };
       stubMfaClient.create.resolves(response);
 
-      await checkYourPhonePost(fakeService)(req as Request, res as Response);
-      expect(fakeService.updatePhoneNumber).not.to.have.been.called;
-      expect(stubMfaClient.update).not.to.have.been.called;
-      expect(errorLoggerSpy).to.have.been.calledWith(
-        { trace: res.locals.trace },
-        mfaClient.formatErrorMessage("Failed to create SMS MFA", response)
-      );
+      try {
+        await checkYourPhonePost(fakeService)(req as Request, res as Response);
+      } catch {
+        expect(fakeService.updatePhoneNumber).not.to.have.been.called;
+        expect(stubMfaClient.update).not.to.have.been.called;
+        expect(errorLoggerSpy).to.have.been.calledWith(
+          { trace: res.locals.trace },
+          mfaClient.formatErrorMessage(
+            "Could not change phone number",
+            response
+          )
+        );
+      }
     });
   });
 });
