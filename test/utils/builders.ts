@@ -65,7 +65,7 @@ export class RequestBuilder {
     return this;
   }
 
-  withTimestampT(func: () => void): RequestBuilder {
+  withTranslate(func: () => void): RequestBuilder {
     this.t = func;
     return this;
   }

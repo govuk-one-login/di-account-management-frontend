@@ -3,7 +3,7 @@ import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import {
-  addMfaAppMethodConfirmationGet,
+  addMfaSmsMethodConfirmationGet,
   addMfaSmsMethodGet,
   addMfaSmsMethodPost,
 } from "./add-mfa-method-sms-controller";
@@ -32,7 +32,7 @@ router.get(
   PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(addMfaAppMethodConfirmationGet)
+  globalTryCatchAsync(addMfaSmsMethodConfirmationGet)
 );
 
 export { router as addBackupSmsRouter };
