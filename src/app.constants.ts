@@ -49,12 +49,12 @@ export const PATH_DATA: Record<
   DELETE_MFA_METHOD: {
     url: "/remove-method",
     event: EventType.RemoveBackup,
-    type: UserJourney.RemoveMfaMethod,
+    type: UserJourney.RemoveBackup,
   },
   DELETE_MFA_METHOD_CONFIRMATION: {
     url: "/remove-backup-confirmation",
     event: EventType.Confirmation,
-    type: UserJourney.RemoveMfaMethod,
+    type: UserJourney.RemoveBackup,
   },
   CHANGE_EMAIL: {
     url: "/change-email",
