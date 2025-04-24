@@ -43,8 +43,8 @@ export async function deleteMfaMethodPost(
   const response = await mfaClient.delete(methodToRemove);
 
   if (response.success) {
-    req.session.user.state.removeMfaMethod = getNextState(
-      req.session.user.state.removeMfaMethod.value,
+    req.session.user.state.removeBackup = getNextState(
+      req.session.user.state.removeBackup.value,
       EventType.RemoveBackup
     );
 

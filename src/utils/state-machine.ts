@@ -13,7 +13,7 @@ enum UserJourney {
   ChangeAuthApp = "changeAuthApp",
   DeleteAccount = "deleteAccount",
   addBackup = "addBackup",
-  RemoveMfaMethod = "removeMfaMethod",
+  RemoveBackup = "removeBackup",
   SwitchBackupMethod = "switchBackupMethod",
   ChangeDefaultMethod = "changeDefaultMethod",
 }

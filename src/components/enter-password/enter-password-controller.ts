@@ -24,7 +24,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeAuthApp]: PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
   [UserJourney.DeleteAccount]: PATH_DATA.DELETE_ACCOUNT.url,
   [UserJourney.addBackup]: PATH_DATA.ADD_MFA_METHOD.url,
-  [UserJourney.RemoveMfaMethod]: PATH_DATA.DELETE_MFA_METHOD.url,
+  [UserJourney.RemoveBackup]: PATH_DATA.DELETE_MFA_METHOD.url,
   [UserJourney.SwitchBackupMethod]: PATH_DATA.SWITCH_BACKUP_METHOD.url,
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
 };
@@ -53,7 +53,7 @@ const OPL_VALUES: Record<
     contentId: "375aa101-7bd6-43c2-ac39-19c864b49882",
     taxonomyLevel2: "add mfa method",
   },
-  removeMfaMethod: {
+  removeBackup: {
     contentId: "375aa101-7bd6-43c2-ac39-19c864b49844",
     taxonomyLevel2: "remove backup mfa",
   },

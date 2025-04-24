@@ -85,7 +85,7 @@
                     <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.supportChangeMfa.backup.heading' | translate }}</h3>
                     <p class="govuk-body">{{ method.text }}</p>
                     <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=switchBackupMethod" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.switchLink' | translate }}</a></p>
-                    <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=removeMfaMethod" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.removeLink' | translate }}</a></p>
+                    <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=removeBackup" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.removeLink' | translate }}</a></p>
                     {% set foundSecondary = true %}
                   {% endif %}
                 {% endfor %}

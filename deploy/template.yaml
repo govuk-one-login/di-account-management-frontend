@@ -131,6 +131,7 @@ Conditions:
     - !Equals [!Ref Environment, dev]
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, staging]
+    - !Equals [!Ref Environment, integration]
 
 Mappings:
   ElasticLoadBalancerAccountIds:
@@ -139,7 +140,7 @@ Mappings:
   FirewallTags:
     dev:
       FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: platforms
+      FMSGlobalCustomPolicyName: cloudfront
     build:
       FMSGlobalCustomPolicy: true
       FMSGlobalCustomPolicyName: cloudfront
@@ -148,10 +149,10 @@ Mappings:
       FMSGlobalCustomPolicyName: cloudfront
     integration:
       FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: platforms
+      FMSGlobalCustomPolicyName: cloudfront
     production:
       FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: platforms
+      FMSGlobalCustomPolicyName: cloudfront
   Container:
     dev:
       CPU: 1024
@@ -2076,10 +2077,7 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           FunctionAssociations:
             - EventType: viewer-request
-              FunctionARN: !If
-                - IsProduction
-                - !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersFunction"
-                - !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersCloudFrontFunction"
+              FunctionARN: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersCloudFrontFunction"
         Enabled: true
         HttpVersion: "http2"
         Logging:
