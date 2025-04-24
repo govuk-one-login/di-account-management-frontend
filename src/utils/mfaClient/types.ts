@@ -16,7 +16,7 @@ export interface MfaMethod {
   mfaIdentifier: string;
   priorityIdentifier: PriorityIdentifier;
   method: SmsMethod | AuthAppMethod;
-  methodVerified: boolean;
+  methodVerified?: boolean;
 }
 
 export interface SmsMethod {
@@ -48,7 +48,7 @@ export interface UpdateMfaPayload {
   mfaIdentifier: string;
   priorityIdentifier: PriorityIdentifier;
   method: SmsMethod | AuthAppMethod;
-  methodVerified: boolean;
+  methodVerified?: boolean;
   otp?: string;
 }
 

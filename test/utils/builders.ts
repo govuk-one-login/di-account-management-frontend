@@ -50,6 +50,21 @@ export class RequestBuilder {
     return this;
   }
 
+  withMfaMethods(): RequestBuilder {
+    this.session.mfaMethods = [
+      {
+        mfaIdentifier: "1",
+        priorityIdentifier: "DEFAULT",
+        methodVerified: true,
+        method: {
+          mfaMethodType: "SMS",
+          phoneNumber: "0123456789",
+        },
+      },
+    ];
+    return this;
+  }
+
   withCookies(cookies: object): RequestBuilder {
     this.cookies = cookies;
     return this;

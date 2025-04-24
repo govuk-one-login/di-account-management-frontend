@@ -3,15 +3,9 @@ import {
   convertInternationalPhoneNumberToE164Format,
   getLastNDigits,
 } from "../../utils/phone-number";
-import {
-  generateSessionDetails,
-  handleMfaMethodPage,
-  renderMfaMethodPage,
-} from "../common/mfa";
-import { updateMfaMethod } from "../../utils/mfa";
+import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { ERROR_CODES, PATH_DATA } from "../../app.constants";
-import { UpdateInformationInput } from "../../utils/types";
 import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 import xss from "xss";
@@ -21,6 +15,8 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { BadRequestError } from "../../utils/errors";
+import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
+import { logger } from "../../utils/logger";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 
@@ -128,28 +124,42 @@ export async function changeDefaultMethodAppPost(
   next: NextFunction
 ): Promise<void> {
   return handleMfaMethodPage(ADD_APP_TEMPLATE, req, res, next, async () => {
-    const { code, authAppSecret } = req.body;
+    const { authAppSecret } = req.body;
 
-    const updateInput: UpdateInformationInput = {
-      otp: code,
-      credential: authAppSecret,
-      mfaMethod: {
-        priorityIdentifier: "DEFAULT",
-        method: {
-          mfaMethodType: "AUTH_APP",
-        },
-      },
-      email: "",
-    };
-
-    const sessionDetails = await generateSessionDetails(req, res);
-    await updateMfaMethod(updateInput, sessionDetails);
-
-    req.session.user.state.changeDefaultMethod = getNextState(
-      req.session.user.state.changeDefaultMethod.value,
-      EventType.ValueUpdated
+    const currentDefaultMethod = req.session.mfaMethods.find(
+      (mfa) => mfa.priorityIdentifier == "DEFAULT"
     );
 
-    res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
+    if (!currentDefaultMethod) {
+      throw new Error(
+        "Could not change default method - no current default method found"
+      );
+    }
+
+    const mfaClient = createMfaClient(req, res);
+    const response = await mfaClient.update({
+      mfaIdentifier: currentDefaultMethod.mfaIdentifier,
+      priorityIdentifier: "DEFAULT",
+      method: {
+        mfaMethodType: "AUTH_APP",
+        credential: authAppSecret,
+      },
+    });
+
+    if (response.success) {
+      req.session.user.state.changeDefaultMethod = getNextState(
+        req.session.user.state.changeDefaultMethod.value,
+        EventType.ValueUpdated
+      );
+
+      res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
+    } else {
+      const errorMessage = formatErrorMessage(
+        "Could not change default method",
+        response
+      );
+      logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
   });
 }

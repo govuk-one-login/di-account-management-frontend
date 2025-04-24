@@ -16,6 +16,7 @@ import {
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 import * as mfaModule from "../../../utils/mfa";
+import * as mfaClient from "../../../utils/mfaClient";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 
@@ -32,6 +33,7 @@ describe("change default method controller", () => {
       .withSessionUserState({ changeDefaultMethod: { value: "APP" } })
       .withTranslate(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+      .withMfaMethods()
       .build();
 
     res = new ResponseBuilder()
@@ -82,11 +84,23 @@ describe("change default method controller", () => {
     });
   });
 
-  describe("changeDefaultMethodMfaPost", async () => {
+  describe("changeDefaultMethodAppPost", async () => {
+    let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
+    let next: sinon.SinonSpy;
+
+    beforeEach(() => {
+      mfaClientStub = sandbox.createStubInstance(mfaClient.MfaClient);
+      sandbox.replace(mfaClient, "createMfaClient", () => mfaClientStub);
+      next = sandbox.spy();
+    });
+
     it("should redirect to confirmation page", async () => {
-      const next = sinon.spy();
-      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
       sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      mfaClientStub.update.resolves({
+        success: true,
+        status: 200,
+        data: [],
+      });
 
       await changeDefaultMethodAppPost(
         req as unknown as Request,
@@ -97,13 +111,13 @@ describe("change default method controller", () => {
       expect(res.redirect).to.be.calledWith(
         PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
       );
+      expect(mfaClientStub.update).to.be.calledOnce;
     });
 
     it("should return error if there is no code entered", async () => {
       //@ts-expect-error in test
       req.body.code = null;
-      const next = sinon.spy();
-      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+
       sandbox.replace(mfaModule, "verifyMfaCode", () => true);
 
       await changeDefaultMethodAppPost(
@@ -121,8 +135,6 @@ describe("change default method controller", () => {
     it("should return an erorr if the code is less than 6 chars", async () => {
       //@ts-expect-error in test
       req.body.code = "1234";
-      const next = sinon.spy();
-      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
       sandbox.replace(mfaModule, "verifyMfaCode", () => true);
 
       await changeDefaultMethodAppPost(
@@ -138,8 +150,6 @@ describe("change default method controller", () => {
     });
 
     it("should return an erorr if the code is entered wrong", async () => {
-      const next = sinon.spy();
-      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
       sandbox.replace(mfaModule, "verifyMfaCode", () => false);
 
       await changeDefaultMethodAppPost(
