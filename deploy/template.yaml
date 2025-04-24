@@ -152,7 +152,7 @@ Mappings:
       FMSGlobalCustomPolicyName: cloudfront
     production:
       FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: platforms
+      FMSGlobalCustomPolicyName: cloudfront
   Container:
     dev:
       CPU: 1024
