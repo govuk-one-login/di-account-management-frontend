@@ -32,7 +32,7 @@ import {
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
-const getRenderOptions = (req: Request, res: Response) => {
+const getRenderOptions = (req: Request) => {
   const intent = req.query.intent as string;
 
   const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
@@ -66,7 +66,7 @@ const getRenderOptions = (req: Request, res: Response) => {
 };
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
-  res.render(TEMPLATE_NAME, getRenderOptions(req, res));
+  res.render(TEMPLATE_NAME, getRenderOptions(req));
 }
 
 export function checkYourPhonePost(
@@ -108,13 +108,7 @@ export function checkYourPhonePost(
       req.t("pages.checkYourPhone.code.validationError.invalidCode")
     );
 
-    renderBadRequest(
-      res,
-      req,
-      TEMPLATE_NAME,
-      error,
-      getRenderOptions(req, res)
-    );
+    renderBadRequest(res, req, TEMPLATE_NAME, error, getRenderOptions(req));
   };
 }
 
