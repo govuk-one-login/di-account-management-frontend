@@ -7,7 +7,7 @@ import { EventType, getNextState } from "../../utils/state-machine";
 import { formatValidationError } from "../../utils/validation";
 import { verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
-import { MfaMethod } from "../../utils/mfa/types";
+import { MfaMethod } from "../../utils/mfaClient/types";
 import { generateSessionDetails, renderMfaMethodPage } from "../common/mfa";
 import { UpdateInformationInput } from "../../utils/types";
 import { containsNumbersOnly } from "../../utils/strings";

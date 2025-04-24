@@ -5,7 +5,7 @@ import { logger } from "../logger";
 import * as httpModule from "../http";
 import { updateMfaMethod } from "../../../src/utils/mfa";
 import { HTTP_STATUS_CODES } from "../../app.constants";
-import { MfaMethod } from "../mfa/types";
+import { MfaMethod } from "../mfaClient/types";
 import {
   UpdateInformationInput,
   UpdateInformationSessionValues,
@@ -94,6 +94,7 @@ describe("MFA Function", () => {
       methodVerified: true,
       method: {
         mfaMethodType: "AUTH_APP",
+        credential: authAppSecret,
       },
       priorityIdentifier: "DEFAULT",
     };
