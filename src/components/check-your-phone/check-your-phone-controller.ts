@@ -129,7 +129,6 @@ async function changePhoneNumberwithMfaApi(
           mfaIdentifier: smsMFAMethod.mfaIdentifier,
           method: { mfaMethodType: "SMS", phoneNumber: newPhoneNumber },
           priorityIdentifier: smsMFAMethod.priorityIdentifier,
-          methodVerified: smsMFAMethod.methodVerified,
         },
         code
       );
@@ -146,7 +145,6 @@ async function changePhoneNumberwithMfaApi(
           mfaIdentifier: defaultMethod.mfaIdentifier,
           method: { mfaMethodType: "SMS", phoneNumber: newPhoneNumber },
           priorityIdentifier: defaultMethod.priorityIdentifier,
-          methodVerified: defaultMethod.methodVerified,
         },
         code
       );

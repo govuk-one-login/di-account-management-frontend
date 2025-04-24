@@ -244,7 +244,6 @@ describe("check your phone controller", () => {
       expect(stubMfaClient.update).to.have.calledWith(
         {
           mfaIdentifier: "111111",
-          methodVerified: true,
           method: {
             mfaMethodType: "SMS",
             phoneNumber: "07111111111",
