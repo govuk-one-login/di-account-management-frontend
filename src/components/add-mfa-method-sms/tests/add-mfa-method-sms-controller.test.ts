@@ -7,15 +7,17 @@ import {
   ResponseBuilder,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-import { addMfaSmsMethodPost } from "../add-mfa-method-sms-controller";
-import { PATH_DATA } from "../../../app.constants";
+import {
+  addMfaSmsMethodPost,
+  addMfaSmsMethodGet,
+} from "../add-mfa-method-sms-controller";
+import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 
-describe("add sms mfa method controller", () => {
+describe("addMfaSmsMethodPost", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  const redirect = sinon.spy();
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -23,13 +25,13 @@ describe("add sms mfa method controller", () => {
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ addBackup: { value: "CHANGE_VALUE" } })
-      .withTimestampT(sandbox.fake())
+      .withTranslate(sandbox.fake((id) => id))
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
     res = new ResponseBuilder()
       .withRender(sandbox.fake())
-      .withRedirect(redirect)
+      .withRedirect(sandbox.fake())
       .withStatus(sandbox.fake())
       .build();
   });
@@ -46,8 +48,63 @@ describe("add sms mfa method controller", () => {
     };
     req.body.ukPhoneNumber = "1234";
     await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
-    expect(redirect).to.be.calledWith(
+    expect(res.redirect).to.be.calledWith(
       `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addBackup`
     );
+    expect(res.render).not.to.be.called;
+    expect(res.status).not.to.be.called;
+  });
+
+  it("should display errors when trying to change phone number to the existing phone number", async () => {
+    const fakeService: ChangePhoneNumberServiceInterface = {
+      sendPhoneVerificationNotification: sandbox.fake.resolves({
+        success: false,
+        code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
+      }),
+    };
+    await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
+    expect(res.redirect).not.to.be.called;
+    expect(res.render).to.be.calledWith("add-mfa-method-sms/index.njk", {
+      errors: {
+        phoneNumber: {
+          text: "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber",
+          href: "#phoneNumber",
+        },
+      },
+      errorList: [
+        {
+          text: "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber",
+          href: "#phoneNumber",
+        },
+      ],
+      backLink: "/back-from-set-up-method",
+      language: "en",
+    });
+    expect(res.status).to.be.calledWith(400);
+  });
+});
+
+describe("addMfaSmsMethodGet", () => {
+  let sandbox: sinon.SinonSandbox;
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+
+    req = new RequestBuilder().build();
+
+    res = new ResponseBuilder().withRender(sandbox.fake()).build();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should call render with the expected arguments", async () => {
+    await addMfaSmsMethodGet(req as Request, res as Response);
+    expect(res.render).to.be.calledWith("add-mfa-method-sms/index.njk", {
+      backLink: "/back-from-set-up-method",
+    });
   });
 });

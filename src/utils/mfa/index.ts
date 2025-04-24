@@ -9,7 +9,6 @@ import { MfaMethod, ProblemDetail, ValidationProblem } from "./types";
 import { getAppEnv, getMfaServiceUrl } from "../../config";
 import { authenticator } from "otplib";
 import {
-  AddBackupInput,
   UpdateInformationInput,
   UpdateInformationSessionValues,
 } from "../types";
@@ -33,38 +32,6 @@ export function generateQRCodeValue(
 
 export function verifyMfaCode(secret: string, code: string): boolean {
   return authenticator.check(code, secret);
-}
-
-export function addBackup(
-  updateInput: UpdateInformationInput,
-  sessionDetails: UpdateInformationSessionValues
-): Promise<{
-  status: number;
-  data: MfaMethod;
-}> {
-  const http = new Http(getMfaServiceUrl());
-  const { accessToken, sourceIp, persistentSessionId, sessionId } =
-    sessionDetails;
-  const addInput: AddBackupInput = {
-    email: updateInput.email,
-    credential: updateInput.credential,
-    otp: updateInput.otp,
-    mfaMethod: {
-      priorityIdentifier: updateInput.mfaMethod.priorityIdentifier,
-      mfaMethodType: updateInput.mfaMethod.method.mfaMethodType,
-    },
-    methodVerified: updateInput.mfaMethod.methodVerified,
-  };
-  return http.client.post<MfaMethod>(
-    METHOD_MANAGEMENT_API.MFA_METHODS_ADD,
-    addInput,
-    getRequestConfig({
-      token: accessToken,
-      sourceIp,
-      persistentSessionId,
-      sessionId,
-    })
-  );
 }
 
 async function putRequest(
@@ -169,29 +136,6 @@ export async function updateMfaMethod(
     }
   } catch (error) {
     errorHandler(error, sessionDetails.sessionId, "update");
-  }
-  return isUpdated;
-}
-
-export async function createOrUpdateMfaMethod(
-  updateInput: UpdateInformationInput,
-  sessionDetails: UpdateInformationSessionValues
-): Promise<boolean> {
-  let isUpdated = false;
-  try {
-    const response = await addBackup(updateInput, sessionDetails);
-
-    if (response.status === HTTP_STATUS_CODES.OK) {
-      isUpdated = true;
-    } else {
-      errorHandler(
-        new Error("MFA Method Not Found"),
-        sessionDetails.sessionId,
-        "create"
-      );
-    }
-  } catch (error) {
-    errorHandler(error, sessionDetails.sessionId, "create");
   }
   return isUpdated;
 }

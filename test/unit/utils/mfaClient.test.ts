@@ -16,7 +16,10 @@ import {
   SimpleError,
   SmsMethod,
 } from "../../../src/utils/mfaClient/types";
-import { validateCreate } from "../../../src/utils/mfaClient/validate";
+import {
+  validateCreate,
+  validateUpdate,
+} from "../../../src/utils/mfaClient/validate";
 import { getRequestConfig } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
 
@@ -39,6 +42,18 @@ const backupMethod: MfaMethod = {
   } as SmsMethod,
   priorityIdentifier: "DEFAULT",
 };
+
+const authAppMethod: MfaMethod = {
+  mfaIdentifier: "1234",
+  methodVerified: true,
+  method: {
+    mfaMethodType: "AUTH_APP",
+    credential: "abc123",
+  },
+  priorityIdentifier: "BACKUP",
+};
+
+const OTP = "123456";
 
 describe("MfaClient", () => {
   const axiosStub = {} as AxiosInstance;
@@ -116,28 +131,18 @@ describe("MfaClient", () => {
     });
 
     it("should POST to the endpoint with an auth app and no OTP", async () => {
-      const authApp: MfaMethod = {
-        mfaIdentifier: "1234",
-        methodVerified: true,
-        method: {
-          mfaMethodType: "AUTH_APP",
-          credential: "abc123",
-        },
-        priorityIdentifier: "BACKUP",
-      };
-
-      const postStub = sinon.stub().resolves({ data: authApp });
+      const postStub = sinon.stub().resolves({ data: authAppMethod });
       axiosStub.post = postStub;
 
-      const response = await client.create(authApp.method);
+      const response = await client.create(authAppMethod.method);
 
-      expect(response.data).to.eq(authApp);
+      expect(response.data).to.eq(authAppMethod);
       expect(postStub).to.be.calledOnceWith(
         "/mfa-methods/publicSubjectId",
         {
           mfaMethod: {
             priorityIdentifier: "BACKUP",
-            method: authApp.method,
+            method: authAppMethod.method,
           },
         },
         { headers: { Authorization: "Bearer token" }, proxy: false }
@@ -159,11 +164,11 @@ describe("MfaClient", () => {
   });
 
   describe("update", () => {
-    it("should PUT to the endpoint", async () => {
+    it("should PUT to the endpoint with an SMS and an OTP", async () => {
       const putStub = sinon.stub().resolves({ data: [mfaMethod] });
       axiosStub.put = putStub;
 
-      const response = await client.update(mfaMethod);
+      const response = await client.update(mfaMethod, OTP);
 
       expect(response.data.length).to.eq(1);
       expect(response.data[0]).to.eq(mfaMethod);
@@ -174,10 +179,40 @@ describe("MfaClient", () => {
       const putStub = sinon.stub().resolves({ data: [mfaMethod] });
       axiosStub.put = putStub;
 
-      await client.update(mfaMethod);
+      await client.update(mfaMethod, OTP);
 
       expect(putStub.calledWith("/mfa-methods/publicSubjectId/1234")).to.be
         .true;
+    });
+
+    it("should PUT to the endpoint with an auth app and no OTP", async () => {
+      const putStub = sinon.stub().resolves({ data: [authAppMethod] });
+      axiosStub.put = putStub;
+
+      const response = await client.update(authAppMethod);
+
+      expect(response.data.length).to.eq(1);
+      expect(response.data[0]).to.eq(authAppMethod);
+      expect(putStub.calledOnce).to.be.true;
+    });
+
+    it("should throw an error with an auth app and an OTP", () => {
+      const putStub = sinon.stub();
+      axiosStub.put = putStub;
+
+      expect(client.update(authAppMethod, OTP)).to.be.rejected;
+      expect(putStub.notCalled).to.be.true;
+    });
+
+    it("should not throw an error with an SMS method and no OTP", async () => {
+      const putStub = sinon.stub().resolves({ data: [mfaMethod] });
+      axiosStub.put = putStub;
+
+      const response = await client.update(mfaMethod);
+
+      expect(response.data.length).to.eq(1);
+      expect(response.data[0]).to.eq(mfaMethod);
+      expect(putStub.calledOnce).to.be.true;
     });
   });
 
@@ -308,38 +343,60 @@ describe("createMfaClient", () => {
   });
 });
 
-describe("validateCreate", () => {
-  const smsMethod: SmsMethod = {
-    mfaMethodType: "SMS",
-    phoneNumber: "0123456789",
-  };
-  const authAppMethod: AuthAppMethod = {
-    mfaMethodType: "AUTH_APP",
-    credential: "abc123",
-  };
+describe("validate", () => {
+  describe("validateCreate", () => {
+    const smsMethod: SmsMethod = {
+      mfaMethodType: "SMS",
+      phoneNumber: "0123456789",
+    };
+    const authAppMethod: AuthAppMethod = {
+      mfaMethodType: "AUTH_APP",
+      credential: "abc123",
+    };
 
-  it("doesn't throw an error with an SMS method and an OTP", () => {
-    expect(() => {
-      validateCreate(smsMethod, "1234");
-    }).not.to.throw();
+    it("doesn't throw an error with an SMS method and an OTP", () => {
+      expect(() => {
+        validateCreate(smsMethod, "1234");
+      }).not.to.throw();
+    });
+
+    it("doesn't throw an error with an auth app method and no OTP", () => {
+      expect(() => {
+        validateCreate(authAppMethod);
+      }).not.to.throw();
+    });
+
+    it("throws an error with an auth app method and an OTP", () => {
+      expect(() => {
+        validateCreate(authAppMethod, "1234");
+      }).to.throw("Must not provide OTP when mfaMethodType is AUTH_APP");
+    });
+
+    it("throws an error with an SMS method and no OTP", () => {
+      expect(() => {
+        validateCreate(smsMethod);
+      }).to.throw("Must provide OTP when mfaMethodType is SMS");
+    });
   });
 
-  it("doesn't throw an error with an auth app method and no OTP", () => {
-    expect(() => {
-      validateCreate(authAppMethod);
-    }).not.to.throw();
-  });
+  describe("validateUpdate", () => {
+    it("throws an error when an OTP is provided with an auth app", () => {
+      expect(() => {
+        validateUpdate(authAppMethod, OTP);
+      }).to.throw("Must only provide OTP with an SMS method update");
+    });
 
-  it("throws an error with an auth app method and an OTP", () => {
-    expect(() => {
-      validateCreate(authAppMethod, "1234");
-    }).to.throw("Must not provide OTP when mfaMethodType is AUTH_APP");
-  });
+    it("does not throw an error when an OTP is provided with an SMS method", () => {
+      expect(() => {
+        validateUpdate(mfaMethod, OTP);
+      }).not.to.throw();
+    });
 
-  it("throws an error with an SMS method and no OTP", () => {
-    expect(() => {
-      validateCreate(smsMethod);
-    }).to.throw("Must provide OTP when mfaMethodType is SMS");
+    it("does not throw an error when no OTP is provided with an SMS method", () => {
+      expect(() => {
+        validateUpdate(mfaMethod);
+      }).not.to.throw();
+    });
   });
 });
 

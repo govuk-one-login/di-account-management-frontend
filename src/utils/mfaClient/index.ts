@@ -11,10 +11,11 @@ import {
   MfaMethod,
   CreateMfaPayload,
   SimpleError,
+  UpdateMfaPayload,
 } from "./types";
 import { HTTP_STATUS_CODES } from "../../app.constants";
 import { getTxmaHeader } from "../txma-header";
-import { validateCreate } from "./validate";
+import { validateCreate, validateUpdate } from "./validate";
 
 export class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;
@@ -57,7 +58,17 @@ export class MfaClient implements MfaClientInterface {
 
     return buildResponse(response);
   }
-  async update(method: MfaMethod) {
+  async update(method: MfaMethod, otp?: string) {
+    validateUpdate(method, otp);
+
+    const payload: UpdateMfaPayload = {
+      ...method,
+    };
+
+    if (otp) {
+      payload.otp = otp;
+    }
+
     const response = await this.http.client.put<MfaMethod[]>(
       `/mfa-methods/${this.publicSubjectId}/${method.mfaIdentifier}`,
       { mfaMethod: method },
@@ -66,6 +77,7 @@ export class MfaClient implements MfaClientInterface {
 
     return buildResponse(response);
   }
+
   async delete(method: MfaMethod) {
     const response = await this.http.client.delete(
       `/mfa-methods/${this.publicSubjectId}/${method.mfaIdentifier}`,

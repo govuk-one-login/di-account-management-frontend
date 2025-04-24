@@ -4,12 +4,12 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% set pageTitleName = 'pages.changePhoneNumber.title' | translate %}
+{% set pageTitleName = pathToTitleString | translate or 'pages.changePhoneNumber.title' | translate %}
 
 {% block content %}
   {% include "common/errors/errorSummary.njk" %}
 
-  <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.changePhoneNumber.header' |
+  <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ pathToHeadingString | translate or 'pages.changePhoneNumber.header' |
     translate}}</h1>
 
   <form action="{{ formAction }}" method="post" novalidate>
@@ -20,7 +20,7 @@
       label: {
       text: 'pages.changePhoneNumber.ukPhoneNumber.label' | translate
       },
-      classes: "govuk-!-width-two-thirds",
+      classes: "govuk-input--width-20",
       id: "phoneNumber",
       name: "phoneNumber",
       type: "tel",
@@ -37,7 +37,7 @@
         name: "internationalPhoneNumber",
         type: "tel",
         autocomplete: "tel",
-        classes: "govuk-!-width-two-thirds",
+        classes: "govuk-input--width-20",
         label: {
           text: 'pages.changePhoneNumber.internationalPhoneNumber.label' | translate
         },

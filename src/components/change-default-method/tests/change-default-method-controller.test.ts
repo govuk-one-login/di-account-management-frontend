@@ -30,7 +30,7 @@ describe("change default method controller", () => {
     req = new RequestBuilder()
       .withBody({ code: "123456", authAppSecret: "A".repeat(20) })
       .withSessionUserState({ changeDefaultMethod: { value: "APP" } })
-      .withTimestampT(sandbox.fake())
+      .withTranslate(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
