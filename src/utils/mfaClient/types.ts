@@ -41,15 +41,13 @@ export interface ApiResponse<T> {
 export interface CreateMfaPayload {
   priorityIdentifier: PriorityIdentifier;
   method: (SmsMethod | AuthAppMethod) & { otp?: string };
-  otp?: string;
 }
 
 export interface UpdateMfaPayload {
   mfaIdentifier: string;
   priorityIdentifier: PriorityIdentifier;
-  method: SmsMethod | AuthAppMethod;
+  method: (SmsMethod | AuthAppMethod) & { otp?: string };
   methodVerified?: boolean;
-  otp?: string;
 }
 
 export interface SimpleError {

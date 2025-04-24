@@ -66,7 +66,7 @@ export class MfaClient implements MfaClientInterface {
     };
 
     if (otp) {
-      payload.otp = otp;
+      payload.method.otp = otp;
     }
 
     const response = await this.http.client.put<MfaMethod[]>(
