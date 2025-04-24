@@ -127,30 +127,12 @@ Conditions:
       - !Equals [!Ref Environment, integration]
       - !Equals [!Ref Environment, production]
 
-  UseFirewallManager: !Or
-    - !Equals [!Ref Environment, dev]
-    - !Equals [!Ref Environment, build]
-    - !Equals [!Ref Environment, staging]
-    - !Equals [!Ref Environment, integration]
-
 Mappings:
   ElasticLoadBalancerAccountIds:
     eu-west-2:
       AccountId: 652711504416
   FirewallTags:
-    dev:
-      FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: cloudfront
-    build:
-      FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: cloudfront
-    staging:
-      FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: cloudfront
-    integration:
-      FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: cloudfront
-    production:
+    Cloudfront:
       FMSGlobalCustomPolicy: true
       FMSGlobalCustomPolicyName: cloudfront
   Container:
@@ -2098,10 +2080,6 @@ Resources:
           AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
-        WebACLId: !If
-          - UseFirewallManager
-          - !Ref "AWS::NoValue"
-          - !Sub "{{resolve:ssm:/${Environment}/Platform/WAF/Global/ACL/ARN}}"
         CacheBehaviors:
           - !If
             - UseCloudFrontCaching
@@ -2144,22 +2122,11 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
-        - !If
-          - UseFirewallManager
-          - Key: FMSGlobalCustomPolicy
-            Value:
-              !FindInMap [FirewallTags, !Ref Environment, FMSGlobalCustomPolicy]
-          - !Ref AWS::NoValue
-        - !If
-          - UseFirewallManager
-          - Key: FMSGlobalCustomPolicyName
-            Value:
-              !FindInMap [
-                FirewallTags,
-                !Ref Environment,
-                FMSGlobalCustomPolicyName,
-              ]
-          - !Ref AWS::NoValue
+        - Key: FMSGlobalCustomPolicy
+          Value: !FindInMap [FirewallTags, Cloudfront, FMSGlobalCustomPolicy]
+        - Key: FMSGlobalCustomPolicyName
+          Value:
+            !FindInMap [FirewallTags, Cloudfront, FMSGlobalCustomPolicyName]
 
   CloudFrontOriginRequestPolicy:
     Type: AWS::CloudFront::OriginRequestPolicy
