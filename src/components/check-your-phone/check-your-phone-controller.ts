@@ -32,7 +32,7 @@ import {
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
-const getRenderOptions = (req: Request) => {
+const getRenderOptions = (req: Request, res: Response) => {
   const intent = req.query.intent as string;
 
   const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
@@ -47,19 +47,26 @@ const getRenderOptions = (req: Request) => {
       [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
       [INTENT_CHANGE_DEFAULT_METHOD]: PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
     };
+  const useDifferentPhoneNumberLink =
+    INTENT_TO_USE_DIFFERENT_PHONE_NUMBER_LINK_MAP[intent];
+
+  if (!useDifferentPhoneNumberLink) {
+    throw new Error(
+      "Intent does not map to a 'use a different phone number' link"
+    );
+  }
 
   return {
     phoneNumber: getLastNDigits(req.session.user.newPhoneNumber, 4),
     resendCodeLink: `${PATH_DATA.RESEND_PHONE_CODE.url}?intent=${intent}`,
-    useDifferentPhoneNumberLink:
-      INTENT_TO_USE_DIFFERENT_PHONE_NUMBER_LINK_MAP[intent] ?? undefined,
+    useDifferentPhoneNumberLink,
     intent,
-    backLink: INTENT_TO_BACKLINK_MAP[intent] ?? undefined,
+    backLink: INTENT_TO_BACKLINK_MAP[intent],
   };
 };
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
-  res.render(TEMPLATE_NAME, getRenderOptions(req));
+  res.render(TEMPLATE_NAME, getRenderOptions(req, res));
 }
 
 export function checkYourPhonePost(
@@ -101,7 +108,13 @@ export function checkYourPhonePost(
       req.t("pages.checkYourPhone.code.validationError.invalidCode")
     );
 
-    renderBadRequest(res, req, TEMPLATE_NAME, error, getRenderOptions(req));
+    renderBadRequest(
+      res,
+      req,
+      TEMPLATE_NAME,
+      error,
+      getRenderOptions(req, res)
+    );
   };
 }
 
