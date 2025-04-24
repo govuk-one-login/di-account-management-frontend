@@ -3,7 +3,6 @@ import { describe } from "mocha";
 import sinon from "sinon";
 import { Request, Response } from "express";
 
-import { Http } from "../../../src/utils/http";
 import {
   MfaClient,
   buildResponse,
@@ -20,7 +19,7 @@ import {
   validateCreate,
   validateUpdate,
 } from "../../../src/utils/mfaClient/validate";
-import { getRequestConfig } from "../../../src/utils/http";
+import { getRequestConfig, Http } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
 
 const mfaMethod: MfaMethod = {
@@ -122,8 +121,8 @@ describe("MfaClient", () => {
             method: {
               mfaMethodType: "SMS",
               phoneNumber: "123456",
+              otp: "OTP",
             },
-            otp: "OTP",
           },
         },
         { headers: { Authorization: "Bearer token" }, proxy: false }

@@ -40,7 +40,7 @@ export interface ApiResponse<T> {
 
 export interface CreateMfaPayload {
   priorityIdentifier: PriorityIdentifier;
-  method: SmsMethod | AuthAppMethod;
+  method: (SmsMethod | AuthAppMethod) & { otp?: string };
   otp?: string;
 }
 
