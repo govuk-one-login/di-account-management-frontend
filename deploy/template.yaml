@@ -140,7 +140,7 @@ Mappings:
   FirewallTags:
     dev:
       FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: platforms
+      FMSGlobalCustomPolicyName: cloudfront
     build:
       FMSGlobalCustomPolicy: true
       FMSGlobalCustomPolicyName: cloudfront
