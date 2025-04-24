@@ -144,13 +144,13 @@ describe("Integration:: check your phone", () => {
     app = undefined;
   });
 
-  it("should return check your phone page", async (done) => {
+  it("should return check your phone page", async () => {
     await request(app)
       .get(PATH_DATA.CHECK_YOUR_PHONE.url)
       .query({
         intent: "changePhoneNumber",
       })
-      .expect(200, done);
+      .expect(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
