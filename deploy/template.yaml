@@ -2076,10 +2076,7 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           FunctionAssociations:
             - EventType: viewer-request
-              FunctionARN: !If
-                - IsProduction
-                - !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersFunction"
-                - !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersCloudFrontFunction"
+              FunctionARN: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersCloudFrontFunction"
         Enabled: true
         HttpVersion: "http2"
         Logging:
