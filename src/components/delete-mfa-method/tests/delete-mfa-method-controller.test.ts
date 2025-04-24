@@ -27,7 +27,7 @@ describe("delete mfa method controller", () => {
         mfaMethods: [mfaMethod],
         user: {
           state: {
-            removeMfaMethod: {
+            removeBackup: {
               value: "CHANGE_VALUE",
             },
           },

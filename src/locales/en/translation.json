@@ -298,6 +298,7 @@
       "sms": "We'll no longer send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "app": "We'll no longer send security codes to your authenticator app.",
       "button": "Remove back-up method",
+      "cancelBackLink": "Cancel and go back to Security",
       "backLinkText": "Back to Security",
       "confirm": {
         "title": "You've removed your back-up method for getting security codes",

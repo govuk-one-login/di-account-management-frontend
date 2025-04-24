@@ -47,7 +47,7 @@ export const PATH_DATA: Record<
     type: UserJourney.ChangePhoneNumber,
   },
   DELETE_MFA_METHOD: {
-    url: "/remove-method",
+    url: "/remove-backup",
     event: EventType.RemoveBackup,
     type: UserJourney.RemoveBackup,
   },
