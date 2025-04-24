@@ -31,23 +31,35 @@ import {
 } from "../../utils/mfaClient/types";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
-const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
-  [INTENT_CHANGE_PHONE_NUMBER]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
-  [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
-  [INTENT_CHANGE_DEFAULT_METHOD]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+
+const getRenderOptions = (req: Request) => {
+  const intent = req.query.intent as string;
+
+  const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
+    [INTENT_CHANGE_PHONE_NUMBER]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+    [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
+    [INTENT_CHANGE_DEFAULT_METHOD]: PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
+  };
+
+  const INTENT_TO_USE_DIFFERENT_PHONE_NUMBER_LINK_MAP: Record<string, string> =
+    {
+      [INTENT_CHANGE_PHONE_NUMBER]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+      [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
+      [INTENT_CHANGE_DEFAULT_METHOD]: PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
+    };
+
+  return {
+    phoneNumber: getLastNDigits(req.session.user.newPhoneNumber, 4),
+    resendCodeLink: `${PATH_DATA.RESEND_PHONE_CODE.url}?intent=${intent}`,
+    useDifferentPhoneNumberLink:
+      INTENT_TO_USE_DIFFERENT_PHONE_NUMBER_LINK_MAP[intent] ?? undefined,
+    intent,
+    backLink: INTENT_TO_BACKLINK_MAP[intent] ?? undefined,
+  };
 };
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
-  const intent = req.query.intent as string;
-  const backLink = INTENT_TO_BACKLINK_MAP[intent] ?? undefined;
-
-  res.render(TEMPLATE_NAME, {
-    phoneNumber: getLastNDigits(req.session.user.newPhoneNumber, 4),
-    resendCodeLink: `${PATH_DATA.RESEND_PHONE_CODE.url}?intent=${req.query.intent}`,
-    changePhoneNumberLink: PATH_DATA.CHANGE_PHONE_NUMBER.url,
-    intent: intent,
-    backLink: backLink,
-  });
+  res.render(TEMPLATE_NAME, getRenderOptions(req));
 }
 
 export function checkYourPhonePost(
@@ -89,7 +101,7 @@ export function checkYourPhonePost(
       req.t("pages.checkYourPhone.code.validationError.invalidCode")
     );
 
-    renderBadRequest(res, req, TEMPLATE_NAME, error);
+    renderBadRequest(res, req, TEMPLATE_NAME, error, getRenderOptions(req));
   };
 }
 

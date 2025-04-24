@@ -23,7 +23,7 @@
         <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
          {# These fields are needed when the page is re-rendered once an error has occurred #}
         <input type="hidden" name="resendCodeLink" value="{{resendCodeLink}}"/>
-        <input type="hidden" name="changePhoneNumberLink" value="{{changePhoneNumberLink}}"/>
+        <input type="hidden" name="useDifferentPhoneNumberLink" value="{{useDifferentPhoneNumberLink}}"/>
         <input type="hidden" name="intent" value="{{intent}}"/>
         {{ govukInput({
             label: {
@@ -41,7 +41,7 @@
         }}
 
         {% set detailsHTML %}
-            <p class="govuk-body">{{'pages.checkYourPhone.details.text' | translate | replace("[resendCodeLink]", resendCodeLink) | replace("[changePhoneNumberLink]", changePhoneNumberLink) | safe }}</p>
+            <p class="govuk-body">{{'pages.checkYourPhone.details.text' | translate | replace("[resendCodeLink]", resendCodeLink) | replace("[useDifferentPhoneNumberLink]", useDifferentPhoneNumberLink) | safe }}</p>
         {% endset %}
 
         {{ govukButton({

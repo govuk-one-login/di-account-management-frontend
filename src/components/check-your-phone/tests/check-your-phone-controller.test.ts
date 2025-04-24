@@ -102,7 +102,7 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
         phoneNumber: "",
         resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
-        changePhoneNumberLink: "/change-phone-number",
+        useDifferentPhoneNumberLink: "/change-phone-number",
         intent: "changePhoneNumber",
         backLink: "/change-phone-number",
       });
@@ -116,7 +116,7 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
         phoneNumber: "",
         resendCodeLink: "/resend-phone-code?intent=addBackup",
-        changePhoneNumberLink: "/change-phone-number",
+        useDifferentPhoneNumberLink: "/change-phone-number",
         intent: "addBackup",
         backLink: "/add-mfa-method-sms",
       });
@@ -130,7 +130,7 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
         phoneNumber: "",
         resendCodeLink: "/resend-phone-code?intent=changeDefaultMethod",
-        changePhoneNumberLink: "/change-phone-number",
+        useDifferentPhoneNumberLink: "/change-phone-number",
         intent: "changeDefaultMethod",
         backLink: "/change-default-method",
       });
@@ -144,7 +144,7 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
         phoneNumber: "",
         resendCodeLink: "/resend-phone-code?intent=undefined",
-        changePhoneNumberLink: "/change-phone-number",
+        useDifferentPhoneNumberLink: "/change-phone-number",
         intent: undefined,
         backLink: undefined,
       });

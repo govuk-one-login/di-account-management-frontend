@@ -15,12 +15,19 @@ import { getTxmaHeader } from "../../utils/txma-header";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
 
-export function resendPhoneCodeGet(req: Request, res: Response): void {
-  res.render(TEMPLATE_NAME, {
+const getRenderOptions = (req: Request) => {
+  const intent = req.query.intent as string;
+
+  return {
     phoneNumberRedacted: getLastNDigits(req.session.user.newPhoneNumber, 4),
     phoneNumber: req.session.user.newPhoneNumber,
-    intent: req.query.intent,
-  });
+    intent,
+    backLink: `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${intent}`,
+  };
+};
+
+export function resendPhoneCodeGet(req: Request, res: Response): void {
+  res.render(TEMPLATE_NAME, getRenderOptions(req));
 }
 
 export function resendPhoneCodePost(
@@ -61,7 +68,13 @@ export function resendPhoneCodePost(
           "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
         )
       );
-      return renderBadRequest(res, req, TEMPLATE_NAME, error);
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req)
+      );
     } else {
       throw new BadRequestError(response.message, response.code);
     }

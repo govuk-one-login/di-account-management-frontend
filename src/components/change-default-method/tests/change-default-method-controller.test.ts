@@ -161,7 +161,9 @@ describe("change default method controller", () => {
         req as unknown as Request,
         res as unknown as Response
       );
-      expect(res.render).to.be.calledWith("common/sms/add-sms.njk");
+      expect(res.render).to.be.calledWith(
+        "change-default-method/change-to-sms.njk"
+      );
     });
   });
 
@@ -195,7 +197,7 @@ describe("change default method controller", () => {
       await handler(req as unknown as Request, res as unknown as Response);
 
       expect(res.render).to.be.calledWithMatch(
-        "common/sms/add-sms.njk",
+        "change-default-method/change-to-sms.njk",
         sinon.match.hasNested("errors.phoneNumber.href", "#phoneNumber")
       );
     });

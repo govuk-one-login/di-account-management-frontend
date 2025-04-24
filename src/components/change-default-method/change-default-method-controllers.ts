@@ -24,6 +24,8 @@ import { BadRequestError } from "../../utils/errors";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 
+const backLink = PATH_DATA.CHANGE_DEFAULT_METHOD.url;
+
 export async function changeDefaultMethodGet(
   req: Request,
   res: Response
@@ -60,7 +62,9 @@ export async function changeDefaultMethodSmsGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  return res.render("common/sms/add-sms.njk");
+  return res.render("change-default-method/change-to-sms.njk", {
+    backLink,
+  });
 }
 
 export function changeDefaultMethodSmsPost(
@@ -115,7 +119,15 @@ export function changeDefaultMethodSmsPost(
           "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
         )
       );
-      return renderBadRequest(res, req, "common/sms/add-sms.njk", error);
+      return renderBadRequest(
+        res,
+        req,
+        "change-default-method/change-to-sms.njk",
+        error,
+        {
+          backLink,
+        }
+      );
     } else {
       throw new BadRequestError(response.message, response.code);
     }
