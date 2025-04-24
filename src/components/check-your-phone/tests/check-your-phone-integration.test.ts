@@ -144,8 +144,8 @@ describe("Integration:: check your phone", () => {
     app = undefined;
   });
 
-  it("should return check your phone page", (done) => {
-    request(app)
+  it("should return check your phone page", async (done) => {
+    await request(app)
       .get(PATH_DATA.CHECK_YOUR_PHONE.url)
       .query({
         intent: "changePhoneNumber",
