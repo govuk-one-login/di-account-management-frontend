@@ -94,7 +94,7 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk");
     });
 
-    it("should render check your phone view with backLink untent change phone number", () => {
+    it("should render check your phone view with backLink intent change phone number", () => {
       if (req.query) {
         req.query.intent = INTENT_CHANGE_PHONE_NUMBER;
       }
@@ -102,7 +102,7 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
         phoneNumber: "",
         resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
-        changePhoneNumberLink: "/change-phone-number",
+        useDifferentPhoneNumberLink: "/change-phone-number",
         intent: "changePhoneNumber",
         backLink: "/change-phone-number",
       });
@@ -116,7 +116,7 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
         phoneNumber: "",
         resendCodeLink: "/resend-phone-code?intent=addBackup",
-        changePhoneNumberLink: "/change-phone-number",
+        useDifferentPhoneNumberLink: "/add-mfa-method-sms",
         intent: "addBackup",
         backLink: "/add-mfa-method-sms",
       });
@@ -130,24 +130,23 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
         phoneNumber: "",
         resendCodeLink: "/resend-phone-code?intent=changeDefaultMethod",
-        changePhoneNumberLink: "/change-phone-number",
+        useDifferentPhoneNumberLink: "/change-default-method-sms",
         intent: "changeDefaultMethod",
-        backLink: "/change-default-method",
+        backLink: "/change-default-method-sms",
       });
     });
 
-    it("should render check your phone view without backLink", () => {
+    it("should throw an error when intent is not defined", () => {
       if (req.query) {
         req.query.intent = undefined;
       }
-      checkYourPhoneGet(req as Request, res as Response);
-      expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
-        phoneNumber: "",
-        resendCodeLink: "/resend-phone-code?intent=undefined",
-        changePhoneNumberLink: "/change-phone-number",
-        intent: undefined,
-        backLink: undefined,
-      });
+
+      expect(() => {
+        checkYourPhoneGet(req as Request, res as Response);
+      }).to.throw(
+        "Intent does not map to a 'use a different phone number' link"
+      );
+      expect(res.render).not.to.have.been.called;
     });
   });
 
