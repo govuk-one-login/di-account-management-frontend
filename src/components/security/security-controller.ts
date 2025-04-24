@@ -7,7 +7,7 @@ import {
 import { PATH_DATA } from "../../app.constants";
 import { hasAllowedActivityLogServices } from "../../middleware/check-allowed-services-list";
 import { getLastNDigits } from "../../utils/phone-number";
-import { MfaMethod } from "src/utils/mfa/types";
+import { MfaMethod } from "src/utils/mfaClient/types";
 
 function handleSmsMethod(
   phoneNumber: string,

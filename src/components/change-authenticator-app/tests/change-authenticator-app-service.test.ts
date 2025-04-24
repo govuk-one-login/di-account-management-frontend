@@ -11,7 +11,7 @@ import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-import { MfaMethod } from "../../../utils/mfa/types";
+import { MfaMethod } from "../../../utils/mfaClient/types";
 import * as mfaModule from "../../../utils/mfa";
 
 describe("changeAuthenticatorAppService", () => {
