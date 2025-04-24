@@ -145,12 +145,10 @@ describe("Integration:: check your phone", () => {
   });
 
   it("should return check your phone page", async () => {
-    await request(app)
-      .get(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .query({
-        intent: "changePhoneNumber",
-      })
-      .expect(200);
+    const res = await request(app).get(PATH_DATA.CHECK_YOUR_PHONE.url).query({
+      intent: "changePhoneNumber",
+    });
+    expect(res.statusCode).to.eq(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
