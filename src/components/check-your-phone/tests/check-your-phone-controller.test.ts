@@ -94,7 +94,7 @@ describe("check your phone controller", () => {
       expect(res.render).to.have.calledWith("check-your-phone/index.njk");
     });
 
-    it("should render check your phone view with backLink untent change phone number", () => {
+    it("should render check your phone view with backLink intent change phone number", () => {
       if (req.query) {
         req.query.intent = INTENT_CHANGE_PHONE_NUMBER;
       }
