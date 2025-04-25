@@ -55,7 +55,14 @@ export async function changeDefaultMethodAppGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderMfaMethodPage(ADD_APP_TEMPLATE, req, res, next);
+  return renderMfaMethodPage(
+    ADD_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    undefined,
+    backLink
+  );
 }
 
 export async function changeDefaultMethodSmsGet(
@@ -139,29 +146,36 @@ export async function changeDefaultMethodAppPost(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return handleMfaMethodPage(ADD_APP_TEMPLATE, req, res, next, async () => {
-    const { code, authAppSecret } = req.body;
+  return handleMfaMethodPage(
+    ADD_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    async () => {
+      const { code, authAppSecret } = req.body;
 
-    const updateInput: UpdateInformationInput = {
-      otp: code,
-      credential: authAppSecret,
-      mfaMethod: {
-        priorityIdentifier: "DEFAULT",
-        method: {
-          mfaMethodType: "AUTH_APP",
+      const updateInput: UpdateInformationInput = {
+        otp: code,
+        credential: authAppSecret,
+        mfaMethod: {
+          priorityIdentifier: "DEFAULT",
+          method: {
+            mfaMethodType: "AUTH_APP",
+          },
         },
-      },
-      email: "",
-    };
+        email: "",
+      };
 
-    const sessionDetails = await generateSessionDetails(req, res);
-    await updateMfaMethod(updateInput, sessionDetails);
+      const sessionDetails = await generateSessionDetails(req, res);
+      await updateMfaMethod(updateInput, sessionDetails);
 
-    req.session.user.state.changeDefaultMethod = getNextState(
-      req.session.user.state.changeDefaultMethod.value,
-      EventType.ValueUpdated
-    );
+      req.session.user.state.changeDefaultMethod = getNextState(
+        req.session.user.state.changeDefaultMethod.value,
+        EventType.ValueUpdated
+      );
 
-    res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
-  });
+      res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
+    },
+    backLink
+  );
 }

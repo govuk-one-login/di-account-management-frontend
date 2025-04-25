@@ -185,11 +185,17 @@ describe("addBackupAppConfirmationGet", () => {
           priorityIdentifier: "DEFAULT",
           method: {
             mfaMethodType: "SMS",
-            phoneNumber: "070",
+            phoneNumber: "07123456789",
           },
         },
       ],
     };
+    req.t = (t: string) => {
+      return t === "pages.changeDefaultMethod.confirmation.sms"
+        ? "pages.changeDefaultMethod.confirmation.sms [phoneNumber]"
+        : t;
+    };
+
     changeDefaultMethodConfirmationGet(req as Request, res as Response);
 
     expect(res.render).to.be.calledWith(
@@ -197,7 +203,7 @@ describe("addBackupAppConfirmationGet", () => {
       {
         pageTitleName: "pages.changeDefaultMethod.confirmation.title",
         heading: "pages.changeDefaultMethod.confirmation.heading",
-        message: "",
+        message: "pages.changeDefaultMethod.confirmation.sms 6789",
         backLinkText: "pages.changeDefaultMethod.confirmation.back",
         backLink: PATH_DATA.SECURITY.url,
       }
