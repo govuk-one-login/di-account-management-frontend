@@ -396,7 +396,7 @@
       },
       "details": {
         "summaryText": "Problemau gyda'r cod",
-        "text": "Gallwn <a class=\"govuk-link\" href=\"[resendCodeLink]\">anfon y cod eto</a> neu gallwch <a class=\"govuk-link\" href=\"[changePhoneNumberLink]\">ddefnyddio rhif ffôn gwahanol</a>."
+        "text": "Gallwn <a class=\"govuk-link\" href=\"[resendCodeLink]\">anfon y cod eto</a> neu gallwch <a class=\"govuk-link\" href=\"[useDifferentPhoneNumberLink]\">ddefnyddio rhif ffôn gwahanol</a>."
       },
       "code": {
         "label": "Rhowch y cod 6 digid",
@@ -468,6 +468,7 @@
       "header": "Cael cod diogelwch",
       "continue": "Cael cod diogelwch",
       "message": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd.",
+      "cancel": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
       "phoneNumber": {
         "insetText": "Byddwn yn anfon cod i'ch rhif ffôn sy'n gorffen gyda <strong>[mobile]</strong>.",
         "paragraph": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd."

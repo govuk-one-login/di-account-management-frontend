@@ -1,2 +1,4 @@
 {% set formAction =  "CHANGE_DEFAULT_METHOD_SMS" | getPath %}
-{% include "common/sms/add-sms.njk" %}
+{% set pathToTitleString =  "pages.changeDefaultMethod.sms.title" %}
+{% set pathToHeadingString =  "pages.changeDefaultMethod.sms.heading" %}
+{% include "common/mfa/add-phone-number.njk" %}

@@ -127,6 +127,9 @@ describe("Integration:: check your phone", () => {
 
     await request(app)
       .get(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .query({
+        intent: "changePhoneNumber",
+      })
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
@@ -141,8 +144,11 @@ describe("Integration:: check your phone", () => {
     app = undefined;
   });
 
-  it("should return check your phone page", (done) => {
-    request(app).get(PATH_DATA.CHECK_YOUR_PHONE.url).expect(200, done);
+  it("should return check your phone page", async () => {
+    const res = await request(app).get(PATH_DATA.CHECK_YOUR_PHONE.url).query({
+      intent: "changePhoneNumber",
+    });
+    expect(res.statusCode).to.eq(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
@@ -158,6 +164,9 @@ describe("Integration:: check your phone", () => {
   it("should return validation error when code not entered", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .query({
+        intent: "changePhoneNumber",
+      })
       .type("form")
       .set("Cookie", cookies)
       .send({
@@ -176,6 +185,9 @@ describe("Integration:: check your phone", () => {
   it("should return validation error when code is less than 6 characters", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .query({
+        intent: "changePhoneNumber",
+      })
       .type("form")
       .set("Cookie", cookies)
       .send({
@@ -194,6 +206,9 @@ describe("Integration:: check your phone", () => {
   it("should return validation error when code is greater than 6 characters", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .query({
+        intent: "changePhoneNumber",
+      })
       .type("form")
       .set("Cookie", cookies)
       .send({
@@ -212,6 +227,9 @@ describe("Integration:: check your phone", () => {
   it("should return validation error when code entered contains letters", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .query({
+        intent: "changePhoneNumber",
+      })
       .type("form")
       .set("Cookie", cookies)
       .send({
@@ -230,6 +248,9 @@ describe("Integration:: check your phone", () => {
   it("should redirect to /update confirmation when valid code entered", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .query({
+        intent: "changePhoneNumber",
+      })
       .type("form")
       .set("Cookie", cookies)
       .send({

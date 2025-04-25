@@ -51,6 +51,7 @@ describe("resend phone code controller", () => {
         phoneNumberRedacted: "1111",
         phoneNumber: "07111111111",
         intent: "changePhoneNumber",
+        backLink: "/check-your-phone?intent=changePhoneNumber",
       });
     });
   });
