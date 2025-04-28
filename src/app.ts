@@ -80,6 +80,7 @@ import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
+import blockedAt from "blocked-at";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -269,6 +270,20 @@ async function startServer(app: Application): Promise<{
       .listen(port, () => {
         logger.info(`Server listening on port ${port}`);
         app.emit("appStarted");
+        blockedAt(
+          (time, stack) => {
+            const formattedStack = (stack || [])
+              .map((frame: string) => frame.trim())
+              .join("\n");
+
+            logger.warn(
+              `Blocked for ${time}ms.\nStack trace:\n${formattedStack}`
+            );
+          },
+          {
+            threshold: 50,
+          }
+        );
         resolve();
       })
       .on("error", (error: Error) => {
