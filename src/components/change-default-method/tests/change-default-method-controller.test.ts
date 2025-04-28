@@ -16,6 +16,8 @@ import {
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 import * as mfaModule from "../../../utils/mfa";
+import * as mfaClient from "../../../utils/mfaClient";
+import { MfaMethod } from "../../../utils/mfaClient/types";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 
@@ -32,6 +34,7 @@ describe("change default method controller", () => {
       .withSessionUserState({ changeDefaultMethod: { value: "APP" } })
       .withTranslate(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+      .withMfaMethods()
       .build();
 
     res = new ResponseBuilder()
@@ -82,11 +85,23 @@ describe("change default method controller", () => {
     });
   });
 
-  describe("changeDefaultMethodMfaPost", async () => {
-    it("should redirect to confirmation page", async () => {
-      const next = sinon.spy();
-      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+  describe("changeDefaultMethodAppPost", async () => {
+    let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
+    let next: sinon.SinonSpy;
+
+    beforeEach(() => {
+      mfaClientStub = sandbox.createStubInstance(mfaClient.MfaClient);
+      sandbox.replace(mfaClient, "createMfaClient", () => mfaClientStub);
+      next = sandbox.spy();
+    });
+
+    it("should redirect to confirmation page when successful", async () => {
       sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      mfaClientStub.update.resolves({
+        success: true,
+        status: 200,
+        data: [],
+      });
 
       await changeDefaultMethodAppPost(
         req as unknown as Request,
@@ -97,13 +112,13 @@ describe("change default method controller", () => {
       expect(res.redirect).to.be.calledWith(
         PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
       );
+      expect(mfaClientStub.update).to.be.calledOnce;
     });
 
     it("should return error if there is no code entered", async () => {
       //@ts-expect-error in test
       req.body.code = null;
-      const next = sinon.spy();
-      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+
       sandbox.replace(mfaModule, "verifyMfaCode", () => true);
 
       await changeDefaultMethodAppPost(
@@ -118,11 +133,9 @@ describe("change default method controller", () => {
       );
     });
 
-    it("should return an erorr if the code is less than 6 chars", async () => {
+    it("should return an error if the code is less than 6 chars", async () => {
       //@ts-expect-error in test
       req.body.code = "1234";
-      const next = sinon.spy();
-      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
       sandbox.replace(mfaModule, "verifyMfaCode", () => true);
 
       await changeDefaultMethodAppPost(
@@ -137,9 +150,7 @@ describe("change default method controller", () => {
       );
     });
 
-    it("should return an erorr if the code is entered wrong", async () => {
-      const next = sinon.spy();
-      sandbox.replace(mfaModule, "updateMfaMethod", async () => true);
+    it("should return an error if the code is entered wrong", async () => {
       sandbox.replace(mfaModule, "verifyMfaCode", () => false);
 
       await changeDefaultMethodAppPost(
@@ -151,6 +162,54 @@ describe("change default method controller", () => {
       expect(res.render).to.be.calledWithMatch(
         "change-default-method/change-to-app.njk",
         sinon.match.hasNested("errors.code.href", "#code")
+      );
+    });
+
+    it("should throw an error when a user has no current default method", async () => {
+      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      req = new RequestBuilder()
+        .withBody({ code: "123456", authAppSecret: "A".repeat(20) })
+        .withSessionUserState({ changeDefaultMethod: { value: "APP" } })
+        .withTranslate(sandbox.fake())
+        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+        .withNoDefaultMfaMethods()
+        .build();
+
+      expect(
+        changeDefaultMethodAppPost(
+          req as unknown as Request,
+          res as unknown as Response,
+          next
+        )
+      ).to.eventually.be.rejectedWith(
+        "Could not change default method - no current default method found"
+      );
+    });
+
+    it("should throw an error when the API call fails", async () => {
+      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      const response = {
+        success: false,
+        status: 400,
+        data: [] as MfaMethod[],
+        error: {
+          code: 1,
+          message: "Bad request",
+        },
+      };
+      mfaClientStub.update.resolves(response);
+
+      expect(
+        changeDefaultMethodAppPost(
+          req as unknown as Request,
+          res as unknown as Response,
+          next
+        )
+      ).to.eventually.be.rejectedWith(
+        mfaClient.formatErrorMessage(
+          "Could not change default method",
+          response
+        )
       );
     });
   });
