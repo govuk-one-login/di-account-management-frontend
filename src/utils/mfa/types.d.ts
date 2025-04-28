@@ -7,19 +7,6 @@ export interface MfaMethod {
   methodVerified?: boolean;
   smsPhoneNumber?: string;
 }
-
-export interface addBackup {
-  mfaIdentifier?: number;
-  priorityIdentifier: PriorityIdentifier;
-  mfaMethodType: MfaMethodType;
-}
-
-export interface AddMfaMethod {
-  mfaIdentifier?: string;
-  priorityIdentifier: PriorityIdentifier;
-  mfaMethodType: MfaMethodType;
-}
-
 interface smsMethod {
   mfaMethodType: "SMS";
   phoneNumber?: string;
