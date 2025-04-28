@@ -1,16 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import { PATH_DATA } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
-import { ChangeAuthenticatorAppServiceInterface } from "./types";
-import { changeAuthenticatorAppService } from "./change-authenticator-app-service";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { formatValidationError } from "../../utils/validation";
 import { verifyMfaCode } from "../../utils/mfa";
 import assert from "node:assert";
-import { MfaMethod } from "../../utils/mfa/types";
-import { generateSessionDetails, renderMfaMethodPage } from "../common/mfa";
-import { UpdateInformationInput } from "../../utils/types";
+import { MfaMethod } from "../../utils/mfaClient/types";
 import { containsNumbersOnly } from "../../utils/strings";
+import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
+import { logger } from "../../utils/logger";
+import { renderMfaMethodPage } from "../common/mfa";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
 
@@ -22,9 +21,7 @@ export async function changeAuthenticatorAppGet(
   return renderMfaMethodPage(CHANGE_AUTHENTICATOR_APP_TEMPLATE, req, res, next);
 }
 
-export function changeAuthenticatorAppPost(
-  service: ChangeAuthenticatorAppServiceInterface = changeAuthenticatorAppService()
-): ExpressRouteFunc {
+export function changeAuthenticatorAppPost(): ExpressRouteFunc {
   return async function (req: Request, res: Response, next: NextFunction) {
     const { code, authAppSecret } = req.body;
 
@@ -82,38 +79,43 @@ export function changeAuthenticatorAppPost(
       );
     }
 
-    const { email } = req.session.user;
-
-    const updateInput: UpdateInformationInput = {
-      email,
-      updatedValue: authAppSecret,
-      otp: code,
-    };
-
-    const sessionDetails = await generateSessionDetails(req, res);
-    let isAuthenticatorAppUpdated = false;
     const authAppMFAMethod: MfaMethod = req.session.mfaMethods.find(
       (mfa) => mfa.method.mfaMethodType === "AUTH_APP"
     );
-    if (authAppMFAMethod) {
-      updateInput.mfaMethod = authAppMFAMethod;
-      isAuthenticatorAppUpdated = await service.updateAuthenticatorApp(
-        updateInput,
-        sessionDetails
-      );
-    } else {
-      throw Error(`No existing MFA method for: ${email}`);
+
+    if (!authAppMFAMethod) {
+      const errorMessage =
+        "Could not change authenticator app - no existing auth app method found";
+      logger.error(errorMessage, { trace: res.locals.trace });
+      throw new Error(errorMessage);
     }
 
-    if (isAuthenticatorAppUpdated) {
-      req.session.user.authAppSecret = authAppSecret;
+    const mfaClient = createMfaClient(req, res);
+    const response = await mfaClient.update({
+      mfaIdentifier: authAppMFAMethod.mfaIdentifier,
+      priorityIdentifier: authAppMFAMethod.priorityIdentifier,
+      method: {
+        mfaMethodType: "AUTH_APP",
+        credential: authAppSecret,
+      },
+    });
 
-      req.session.user.state.changeAuthApp = getNextState(
-        req.session.user.state.changeAuthApp.value,
-        EventType.ValueUpdated
+    if (!response.success) {
+      const errorMessage = formatErrorMessage(
+        "Could not change authenticator app",
+        response
       );
-
-      return res.redirect(PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url);
+      logger.error(errorMessage, { trace: res.locals.trace });
+      throw new Error(errorMessage);
     }
+
+    req.session.user.authAppSecret = authAppSecret;
+
+    req.session.user.state.changeAuthApp = getNextState(
+      req.session.user.state.changeAuthApp.value,
+      EventType.ValueUpdated
+    );
+
+    return res.redirect(PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url);
   };
 }
