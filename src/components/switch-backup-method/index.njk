@@ -1,5 +1,8 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitleName = 'pages.switchBackupMethod.title' | translate %}
+
 {% block pageContent %}
     <h1 class="govuk-heading-xl">{{ 'pages.switchBackupMethod.title' | translate }}</h1>
     {% if currentBackup.method.mfaMethodType == "AUTH_APP" %}

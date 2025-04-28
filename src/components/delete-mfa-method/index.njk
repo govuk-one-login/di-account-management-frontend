@@ -1,6 +1,9 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% set cancelText = 'pages.removeBackupMethod.cancelBackLink' | translate %}
+
+{% set pageTitleName = 'pages.removeBackupMethod.title' | translate %}
+
 {% block pageContent %}
     <h1 class='govuk-heading-l'>{{ "pages.removeBackupMethod.title" | translate }}</h1>
     <p class='govuk-body'>{{ "pages.removeBackupMethod.paragraph" | translate }}</p>
