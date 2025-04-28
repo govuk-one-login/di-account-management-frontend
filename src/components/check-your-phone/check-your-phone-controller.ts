@@ -133,7 +133,9 @@ async function changePhoneNumberwithMfaApi(
 
     case INTENT_CHANGE_PHONE_NUMBER: {
       const smsMFAMethod = currentMfaMethods.find(
-        (mfa) => mfa.method.mfaMethodType === "SMS"
+        (mfa) =>
+          mfa.method.mfaMethodType === "SMS" &&
+          mfa.priorityIdentifier === "DEFAULT"
       );
 
       if (!smsMFAMethod) {
