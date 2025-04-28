@@ -7,7 +7,7 @@ import {
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { getSessionStoreTableName } from "../config";
 import { logger } from "./logger";
-import connect_dynamodb from "connect-dynamodb";
+import connect_dynamodb, { DynamoDBStore } from "connect-dynamodb";
 import { Store } from "express-session";
 import { ERROR_MESSAGES } from "../app.constants";
 import { AwsConfig, getAWSConfig } from "../config/aws";
@@ -24,7 +24,7 @@ interface SessionStore {
   session: any;
 }
 
-let sessionStoreInstance: Store | null = null;
+let sessionStoreInstance: DynamoDBStore | null = null;
 
 export function getSessionStore({ session }: SessionStore): Store {
   if (!sessionStoreInstance) {
@@ -39,6 +39,15 @@ export function getSessionStore({ session }: SessionStore): Store {
       prefix: PREFIX,
     };
     sessionStoreInstance = new DynamoDBStore(storeOptions);
+
+    sessionStoreInstance
+      .initialize()
+      .then(() => {
+        logger.info("Salina1");
+      })
+      .catch((err) => {
+        logger.error(`Salina2 : ${err.message}`);
+      });
   }
 
   return sessionStoreInstance;
