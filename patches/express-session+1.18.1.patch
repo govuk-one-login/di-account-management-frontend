@@ -1,0 +1,35 @@
+diff --git a/node_modules/express-session/index.js b/node_modules/express-session/index.js
+index d41b237..41085c4 100644
+--- a/node_modules/express-session/index.js
++++ b/node_modules/express-session/index.js
+@@ -491,6 +491,7 @@ function session(options) {
+     // generate the session object
+     debug('fetching %s', req.sessionID);
+     store.get(req.sessionID, function(err, sess){
++      console.time('session:get')
+       // error handling
+       if (err && err.code !== 'ENOENT') {
+         debug('error %j', err);
+@@ -501,16 +502,21 @@ function session(options) {
+       try {
+         if (err || !sess) {
+           debug('no session found')
++          console.time('session:generate')
+           generate()
++          console.timeEnd('session:generate')
+         } else {
+           debug('session found')
++          console.time('session:inflate')
+           inflate(req, sess)
++          console.timeEnd('session:inflate')
+         }
+       } catch (e) {
++        console.log('session:error', e)
+         next(e)
+         return
+       }
+-
++      console.timeEnd('session:get')
+       next()
+     });
+   };
