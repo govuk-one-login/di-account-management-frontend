@@ -204,7 +204,12 @@ export async function changeDefaultMethodConfirmationGet(
   const message =
     defaultMethod.method.mfaMethodType === "AUTH_APP"
       ? req.t("pages.changeDefaultMethod.confirmation.app")
-      : "";
+      : req
+          .t("pages.changeDefaultMethod.confirmation.sms")
+          .replace(
+            "[phoneNumber]",
+            getLastNDigits(defaultMethod.method.phoneNumber, 4)
+          );
 
   return res.render("common/confirmation-page/confirmation.njk", {
     pageTitleName: req.t("pages.changeDefaultMethod.confirmation.title"),

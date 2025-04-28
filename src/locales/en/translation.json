@@ -13,7 +13,7 @@
     },
     "yes": "Yes",
     "no": "No",
-    "backToAccountButtonText": "Back to Security",
+    "backToSecurityButtonText": "Back to Security",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
@@ -288,7 +288,7 @@
       "title": "Enter your mobile phone number",
       "heading": "Enter your mobile phone number",
       "confirm": {
-        "title": "Add back-up phone number",
+        "title": "You've added a back-up method for getting security codes",
         "heading": "You've added a back-up method for getting security codes",
         "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with [mobile] instead.",
         "backLink": "Back to Security"
@@ -577,16 +577,17 @@
     "changeDefaultMethod": {
       "title": "Use a different default method",
       "currentIsPhone": "Your default method for getting security codes is currently by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
-      "switchToApp": "You can use an authenticator app instead",
-      "currentIsApp": "Your default method for getting security codes is currently using your authenticator app",
+      "switchToApp": "You can use an authenticator app instead.",
+      "currentIsApp": "Your default method for getting security codes is currently using your authenticator app.",
       "switchToPhone": "You can get codes by text message instead.",
       "setUpPhoneButton": "Add a mobile phone number",
       "setUpAppButton": "Set up an authenticator app",
       "cancelButton": "Cancel and go back to Security",
       "confirmation": {
-        "title": "Change default method",
+        "title": "You've changed your default method for getting security codes",
         "heading": "You've changed your default method for getting security codes",
         "app": "Your default method for getting security codes is now your authenticator app.",
+        "sms": "Your default method for getting security codes will be text messages to your phone number ending with <strong>[phoneNumber]</strong>.",
         "back": "Back to Security"
       },
       "sms": {
@@ -672,7 +673,7 @@
       "button": "Switch methods",
       "cancelLinkText": "Cancel and go back to Security",
       "confirm": {
-        "title": "Switch security codes",
+        "title": "You've switched your back-up and default methods for getting security codes",
         "heading": "You've switched your back-up and default methods for getting security codes",
         "backLinkText": "Back to Security",
         "messageSms": "We'll send security codes to your phone number ending with <strong>[phoneNumber]</strong>.",

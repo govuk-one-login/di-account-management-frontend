@@ -28,11 +28,11 @@
 }) }}
 {% else %}
 {{ govukButton({
-  "text": button_text|default('general.backToAccountButtonText' | translate, true),
-  "href": "YOUR_SERVICES" | getPath,
+  "text": button_text|default('general.backToSecurityButtonText' | translate, true),
+  "href": "SECURITY" | getPath,
   "attributes": {
     "data-nav": true,
-    "data-link": "YOUR_SERVICES" | getPath
+    "data-link": "SECURITY" | getPath
   }
 }) }}
 {% endif %}

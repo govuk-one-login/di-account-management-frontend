@@ -1,5 +1,7 @@
 {% extends "common/layout/base-page.njk" %}
 
+{% set pageTitleName = 'pages.changeDefaultMethod.title' | translate %}
+
 {% block pageContent %}
   <h1 class="govuk-heading-l">{{ "pages.changeDefaultMethod.title" | translate }}</h1>
 
@@ -18,4 +20,10 @@
       data-nav="true"
       data-link='{{ "CHANGE_DEFAULT_METHOD_SMS" | getPath }}'>{{ "pages.changeDefaultMethod.setUpPhoneButton" | translate }}</a>
   {% endif %}
+
+  <p class="govuk-body">
+    <a href="{{"SECURITY" | getPath}}" class="govuk-link">
+      {{'pages.changeDefaultMethod.cancelButton' | translate }}
+    </a>
+  </p>
 {% endblock %}

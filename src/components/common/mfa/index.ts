@@ -54,7 +54,8 @@ export async function handleMfaMethodPage(
   req: Request,
   res: Response,
   next: NextFunction,
-  onSuccess: () => any
+  onSuccess: () => any,
+  backLink?: string
 ): Promise<void> {
   const { code, authAppSecret } = req.body;
 
@@ -66,7 +67,11 @@ export async function handleMfaMethodPage(
       req,
       res,
       next,
-      formatValidationError("code", req.t("pages.addBackupApp.errors.required"))
+      formatValidationError(
+        "code",
+        req.t("pages.addBackupApp.errors.required")
+      ),
+      backLink
     );
   }
 
@@ -79,7 +84,8 @@ export async function handleMfaMethodPage(
       formatValidationError(
         "code",
         req.t("pages.addBackupApp.errors.maxLength")
-      )
+      ),
+      backLink
     );
   }
 
@@ -94,7 +100,8 @@ export async function handleMfaMethodPage(
       formatValidationError(
         "code",
         req.t("pages.addBackupApp.errors.invalidCode")
-      )
+      ),
+      backLink
     );
   }
 

@@ -51,7 +51,14 @@ export async function changeDefaultMethodAppGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderMfaMethodPage(ADD_APP_TEMPLATE, req, res, next);
+  return renderMfaMethodPage(
+    ADD_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    undefined,
+    backLink
+  );
 }
 
 export async function changeDefaultMethodSmsGet(
@@ -135,43 +142,50 @@ export async function changeDefaultMethodAppPost(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return handleMfaMethodPage(ADD_APP_TEMPLATE, req, res, next, async () => {
-    const { authAppSecret } = req.body;
+  return handleMfaMethodPage(
+    ADD_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    async () => {
+      const { authAppSecret } = req.body;
 
-    const currentDefaultMethod = req.session.mfaMethods.find(
-      (mfa) => mfa.priorityIdentifier == "DEFAULT"
-    );
-
-    if (!currentDefaultMethod) {
-      throw new Error(
-        "Could not change default method - no current default method found"
-      );
-    }
-
-    const mfaClient = createMfaClient(req, res);
-    const response = await mfaClient.update({
-      mfaIdentifier: currentDefaultMethod.mfaIdentifier,
-      priorityIdentifier: "DEFAULT",
-      method: {
-        mfaMethodType: "AUTH_APP",
-        credential: authAppSecret,
-      },
-    });
-
-    if (response.success) {
-      req.session.user.state.changeDefaultMethod = getNextState(
-        req.session.user.state.changeDefaultMethod.value,
-        EventType.ValueUpdated
+      const currentDefaultMethod = req.session.mfaMethods.find(
+        (mfa) => mfa.priorityIdentifier == "DEFAULT"
       );
 
-      res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
-    } else {
-      const errorMessage = formatErrorMessage(
-        "Could not change default method",
-        response
-      );
-      logger.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-  });
+      if (!currentDefaultMethod) {
+        throw new Error(
+          "Could not change default method - no current default method found"
+        );
+      }
+
+      const mfaClient = createMfaClient(req, res);
+      const response = await mfaClient.update({
+        mfaIdentifier: currentDefaultMethod.mfaIdentifier,
+        priorityIdentifier: "DEFAULT",
+        method: {
+          mfaMethodType: "AUTH_APP",
+          credential: authAppSecret,
+        },
+      });
+
+      if (response.success) {
+        req.session.user.state.changeDefaultMethod = getNextState(
+          req.session.user.state.changeDefaultMethod.value,
+          EventType.ValueUpdated
+        );
+
+        res.redirect(PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url);
+      } else {
+        const errorMessage = formatErrorMessage(
+          "Could not change default method",
+          response
+        );
+        logger.error(errorMessage);
+        throw new Error(errorMessage);
+      }
+    },
+    backLink
+  );
 }

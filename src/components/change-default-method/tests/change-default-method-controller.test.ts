@@ -9,6 +9,7 @@ import {
   changeDefaultMethodGet,
   changeDefaultMethodSmsGet,
   changeDefaultMethodSmsPost,
+  changeDefaultMethodAppGet,
 } from "../change-default-method-controllers";
 import {
   RequestBuilder,
@@ -16,6 +17,7 @@ import {
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 import * as mfaModule from "../../../utils/mfa";
+import * as commonMfaModule from "../../common/mfa";
 import * as mfaClient from "../../../utils/mfaClient";
 import { MfaMethod } from "../../../utils/mfaClient/types";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
@@ -214,6 +216,26 @@ describe("change default method controller", () => {
     });
   });
 
+  describe("changeDefaultMethodAppGet", () => {
+    it("should render the app page correctly", async () => {
+      sandbox.stub(commonMfaModule, "renderMfaMethodPage");
+      const next = () => {};
+      await changeDefaultMethodAppGet(
+        req as unknown as Request,
+        res as unknown as Response,
+        next
+      );
+      expect(commonMfaModule.renderMfaMethodPage).to.be.calledWith(
+        "change-default-method/change-to-app.njk",
+        req,
+        res,
+        next,
+        undefined,
+        "/change-default-method"
+      );
+    });
+  });
+
   describe("changeDefaultMethodSmsGet", () => {
     it("should render the sms page correctly", async () => {
       await changeDefaultMethodSmsGet(
@@ -221,7 +243,8 @@ describe("change default method controller", () => {
         res as unknown as Response
       );
       expect(res.render).to.be.calledWith(
-        "change-default-method/change-to-sms.njk"
+        "change-default-method/change-to-sms.njk",
+        { backLink: "/change-default-method" }
       );
     });
   });
