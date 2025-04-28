@@ -13,7 +13,7 @@
     },
     "yes": "Yes",
     "no": "No",
-    "backToAccountButtonText": "Back to Security",
+    "backToSecurityButtonText": "Back to Security",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
