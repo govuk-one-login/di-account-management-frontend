@@ -139,8 +139,6 @@ export const getAllowedAccountListClientIDs = getIdListFromFilter({
 
 export const hmrcClientIds: string[] = getIdListFromFilter({ isHmrc: true });
 
-// TODO: Update di-account-management-rp-registry RPs with a activityLogAllowList flag
-// Update activityLogAllowList to retrieve list of IDs from RP registry instead
 export const activityLogAllowList: string[] = [
   STUB_RP_INTEGRATION,
   STUB_RP_PROD,
