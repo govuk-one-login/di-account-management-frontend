@@ -135,6 +135,7 @@ export const getIdListFromFilter = memoize(
 
 export const getAllowedAccountListClientIDs = getIdListFromFilter({
   clientType: "account",
+  isOffboarded: false,
 });
 
 export const hmrcClientIds: string[] = getIdListFromFilter({ isHmrc: true });
@@ -148,6 +149,7 @@ export const activityLogAllowList: string[] = [
 
 export const getAllowedServiceListClientIDs = getIdListFromFilter({
   clientType: "service",
+  isOffboarded: false,
 });
 
 export const rsaAllowList = getIdListFromFilter({

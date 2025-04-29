@@ -186,5 +186,55 @@ describe("your services controller", () => {
         hasEnglishOnlyServices: true,
       });
     });
+
+    it("shouldn't display a service card for an offboarded service", async () => {
+      const yourServices = require("../../../utils/yourServices");
+      const config = require("../../../config");
+      req = validRequest();
+
+      // The user has an offboarded service in their history
+      sandbox.stub(yourServices, "getServices").callsFake(async () => {
+        return [
+          {
+            client_id: "gov-uk",
+            count_successful_logins: 1,
+            last_accessed: 12312412532,
+            last_accessed_readable_format: "",
+            isAvailableInWelsh: false,
+          },
+          {
+            client_id: "offboarded",
+            count_successful_logins: 1,
+            last_accessed: 12312412532,
+            last_accessed_readable_format: "",
+            isAvailableInWelsh: false,
+          },
+        ];
+      });
+
+      // But that service's client ID isn't in the allow list
+      sandbox.stub(config, "getIdListFromFilter").callsFake(() => {
+        return ["gov-uk"];
+      });
+
+      await yourServicesGet(req as Request, res as Response);
+      expect(res.render).to.have.calledWith("your-services/index.njk", {
+        email: "test@test.com",
+        accountsList: [
+          {
+            client_id: "gov-uk",
+            count_successful_logins: 1,
+            last_accessed: 12312412532,
+            last_accessed_readable_format: "23 May 1970",
+            isAvailableInWelsh: false,
+            hasDetailedCard: false,
+          },
+        ],
+        servicesList: [],
+        env: getAppEnv(),
+        currentLngWelsh: false,
+        hasEnglishOnlyServices: true,
+      });
+    });
   });
 });
