@@ -72,7 +72,9 @@ export async function switchBackupMfaMethodPost(
 
   try {
     const mfaClient = createMfaClient(req, res);
-    const response = await mfaClient.makeDefault(newDefaultMethod);
+    const response = await mfaClient.makeDefault(
+      newDefaultMethod.mfaIdentifier
+    );
 
     if (!response.success) {
       res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);

@@ -87,15 +87,14 @@ export class MfaClient implements MfaClientInterface {
     return buildResponse(response);
   }
 
-  async makeDefault(method: MfaMethod) {
-    const newMfaMethod: MfaMethod = {
-      mfaIdentifier: method.mfaIdentifier,
-      methodVerified: method.methodVerified,
-      priorityIdentifier: "DEFAULT",
-      method: method.method,
-    };
+  async makeDefault(mfaIdentifier: string) {
+    const response = await this.http.client.put<MfaMethod[]>(
+      `/mfa-methods/${this.publicSubjectId}/${mfaIdentifier}`,
+      { mfaMethod: { priorityIdentifier: "DEFAULT" } },
+      this.requestConfig
+    );
 
-    return this.update(newMfaMethod);
+    return buildResponse(response);
   }
 }
 

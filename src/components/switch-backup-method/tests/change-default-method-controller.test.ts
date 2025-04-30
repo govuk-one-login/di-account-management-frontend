@@ -129,7 +129,9 @@ describe("change default method", () => {
       //@ts-expect-error req and res aren't valid objects since they are mocked
       await switchBackupMfaMethodPost(req as Request, res as Response);
 
-      expect(mfaClientStub.makeDefault).to.be.calledWith(mfaMethod);
+      expect(mfaClientStub.makeDefault).to.be.calledWith(
+        mfaMethod.mfaIdentifier
+      );
       expect(redirectFn).to.be.calledWith("/switch-methods-confirmation");
     });
 

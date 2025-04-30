@@ -241,7 +241,7 @@ describe("MfaClient", () => {
       const putStub = sinon.stub().resolves({ data: [mfaMethod] });
       axiosStub.put = putStub;
 
-      const response = await client.makeDefault(mfaMethod);
+      const response = await client.makeDefault(mfaMethod.mfaIdentifier);
 
       expect(response.data.length).to.eq(1);
       expect(response.data[0]).to.eq(mfaMethod);
@@ -257,11 +257,11 @@ describe("MfaClient", () => {
         priorityIdentifier: "BACKUP",
       };
 
-      await client.makeDefault(backupMethod);
+      await client.makeDefault(backupMethod.mfaIdentifier);
 
       expect(putStub).to.have.been.calledWith(
         "/mfa-methods/publicSubjectId/1234",
-        { mfaMethod }
+        { mfaMethod: { priorityIdentifier: "DEFAULT" } }
       );
     });
   });
