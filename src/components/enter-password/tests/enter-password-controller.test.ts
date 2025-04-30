@@ -86,6 +86,21 @@ describe("enter password controller", () => {
       expect(res.redirect).to.have.calledWith(PATH_DATA.CHANGE_EMAIL.url);
     });
 
+    it("should bad request when user doesn't enter a password", async () => {
+      const fakeService: EnterPasswordServiceInterface = {
+        authenticated: sandbox.fake(),
+      };
+
+      req.body["password"] = "";
+      req.body["requestType"] = "changeEmail";
+
+      await enterPasswordPost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.authenticated).not.to.have.been.called;
+      expect(res.render).to.have.been.called;
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+    });
+
     it("should bad request when user credentials are incorrect", async () => {
       const fakeService: EnterPasswordServiceInterface = {
         authenticated: sandbox.fake.resolves(false),
