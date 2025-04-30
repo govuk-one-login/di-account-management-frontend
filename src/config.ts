@@ -135,12 +135,11 @@ export const getIdListFromFilter = memoize(
 
 export const getAllowedAccountListClientIDs = getIdListFromFilter({
   clientType: "account",
+  isOffboarded: false,
 });
 
 export const hmrcClientIds: string[] = getIdListFromFilter({ isHmrc: true });
 
-// TODO: Update di-account-management-rp-registry RPs with a activityLogAllowList flag
-// Update activityLogAllowList to retrieve list of IDs from RP registry instead
 export const activityLogAllowList: string[] = [
   STUB_RP_INTEGRATION,
   STUB_RP_PROD,
@@ -150,6 +149,7 @@ export const activityLogAllowList: string[] = [
 
 export const getAllowedServiceListClientIDs = getIdListFromFilter({
   clientType: "service",
+  isOffboarded: false,
 });
 
 export const rsaAllowList = getIdListFromFilter({
