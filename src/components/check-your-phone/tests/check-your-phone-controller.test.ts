@@ -8,7 +8,7 @@ import {
   checkYourPhonePost,
 } from "../check-your-phone-controller";
 import { CheckYourPhoneServiceInterface } from "../types";
-import { PATH_DATA } from "../../../app.constants";
+import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import {
   INTENT_ADD_BACKUP,
@@ -154,6 +154,7 @@ describe("check your phone controller", () => {
     it("should redirect to /phone-number-updated-confirmation when valid code entered", async () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.body.code = "123456";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
@@ -164,6 +165,150 @@ describe("check your phone controller", () => {
       );
     });
 
+    it("should return an error when user doesn't enter a code", async () => {
+      fakeService = {
+        updatePhoneNumber: sandbox.fake(),
+      };
+
+      req.body.code = "";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
+      req.t = (id: string) => id;
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.updatePhoneNumber).not.to.have.been.called;
+      expect(res.render).to.have.been.calledWith("check-your-phone/index.njk", {
+        errors: {
+          code: {
+            text: "pages.checkYourPhone.code.validationError.required",
+            href: "#code",
+          },
+        },
+        errorList: [
+          {
+            text: "pages.checkYourPhone.code.validationError.required",
+            href: "#code",
+          },
+        ],
+        code: "",
+        intent: "changePhoneNumber",
+        phoneNumber: "",
+        resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
+        useDifferentPhoneNumberLink: "/change-phone-number",
+        backLink: "/change-phone-number",
+        language: "en",
+      });
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+    });
+
+    it("should return an error when user enters a code which is too short", async () => {
+      fakeService = {
+        updatePhoneNumber: sandbox.fake(),
+      };
+
+      req.body.code = "123";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
+      req.t = (id: string) => id;
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.updatePhoneNumber).not.to.have.been.called;
+      expect(res.render).to.have.been.calledWith("check-your-phone/index.njk", {
+        errors: {
+          code: {
+            text: "pages.checkYourPhone.code.validationError.minLength",
+            href: "#code",
+          },
+        },
+        errorList: [
+          {
+            text: "pages.checkYourPhone.code.validationError.minLength",
+            href: "#code",
+          },
+        ],
+        code: "123",
+        intent: "changePhoneNumber",
+        phoneNumber: "",
+        resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
+        useDifferentPhoneNumberLink: "/change-phone-number",
+        backLink: "/change-phone-number",
+        language: "en",
+      });
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+    });
+
+    it("should return an error when user enters a code which is too long", async () => {
+      fakeService = {
+        updatePhoneNumber: sandbox.fake(),
+      };
+
+      req.body.code = "1234567";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
+      req.t = (id: string) => id;
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.updatePhoneNumber).not.to.have.been.called;
+      expect(res.render).to.have.been.calledWith("check-your-phone/index.njk", {
+        errors: {
+          code: {
+            text: "pages.checkYourPhone.code.validationError.maxLength",
+            href: "#code",
+          },
+        },
+        errorList: [
+          {
+            text: "pages.checkYourPhone.code.validationError.maxLength",
+            href: "#code",
+          },
+        ],
+        code: "1234567",
+        intent: "changePhoneNumber",
+        phoneNumber: "",
+        resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
+        useDifferentPhoneNumberLink: "/change-phone-number",
+        backLink: "/change-phone-number",
+        language: "en",
+      });
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+    });
+
+    it("should return an error when user enters a code which contains letters", async () => {
+      fakeService = {
+        updatePhoneNumber: sandbox.fake(),
+      };
+
+      req.body.code = "123abc";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
+      req.t = (id: string) => id;
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.updatePhoneNumber).not.to.have.been.called;
+      expect(res.render).to.have.been.calledWith("check-your-phone/index.njk", {
+        errors: {
+          code: {
+            text: "pages.checkYourPhone.code.validationError.invalidFormat",
+            href: "#code",
+          },
+        },
+        errorList: [
+          {
+            text: "pages.checkYourPhone.code.validationError.invalidFormat",
+            href: "#code",
+          },
+        ],
+        code: "123abc",
+        intent: "changePhoneNumber",
+        phoneNumber: "",
+        resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
+        useDifferentPhoneNumberLink: "/change-phone-number",
+        backLink: "/change-phone-number",
+        language: "en",
+      });
+      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+    });
+
     it("should return error when invalid code entered", async () => {
       fakeService = {
         updatePhoneNumber: sandbox.fake.resolves(false),
@@ -172,6 +317,7 @@ describe("check your phone controller", () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.t = sandbox.fake.returns("translated string");
       req.body.code = "678988";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       res.locals.sessionId = "123456-djjad";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);

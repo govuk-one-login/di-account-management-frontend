@@ -33,12 +33,11 @@ import {
   MfaClientInterface,
   MfaMethod,
 } from "../../utils/mfaClient/types";
+import { containsNumbersOnly } from "../../utils/strings";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
-const getRenderOptions = (req: Request) => {
-  const intent = req.query.intent as string;
-
+const getRenderOptions = (req: Request, intent: Intent) => {
   const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
     [INTENT_CHANGE_PHONE_NUMBER]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
     [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
@@ -70,27 +69,86 @@ const getRenderOptions = (req: Request) => {
 };
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
-  res.render(TEMPLATE_NAME, getRenderOptions(req));
+  const intent = req.query.intent as Intent;
+  res.render(TEMPLATE_NAME, getRenderOptions(req, intent));
 }
 
 export function checkYourPhonePost(
   service: CheckYourPhoneServiceInterface = checkYourPhoneService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { email, newPhoneNumber } = req.session.user;
+    const { code } = req.body;
     const intent = req.body.intent as Intent;
+
+    if (!code) {
+      const error = formatValidationError(
+        "code",
+        req.t("pages.checkYourPhone.code.validationError.required")
+      );
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req, intent)
+      );
+    }
+
+    if (code.length > 6) {
+      const error = formatValidationError(
+        "code",
+        req.t("pages.checkYourPhone.code.validationError.maxLength")
+      );
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req, intent)
+      );
+    }
+
+    if (code.length < 6) {
+      const error = formatValidationError(
+        "code",
+        req.t("pages.checkYourPhone.code.validationError.minLength")
+      );
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req, intent)
+      );
+    }
+
+    if (!containsNumbersOnly(code)) {
+      const error = formatValidationError(
+        "code",
+        req.t("pages.checkYourPhone.code.validationError.invalidFormat")
+      );
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req, intent)
+      );
+    }
+
+    const { email, newPhoneNumber } = req.session.user;
     const updateInput: UpdateInformationInput = {
       email,
-      otp: req.body["code"],
+      otp: code,
     };
     let isPhoneNumberUpdated = false;
-    let errorMessage: string | undefined = undefined;
+    let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
 
     if (supportChangeMfa()) {
       const mfaClient = createMfaClient(req, res);
       const changePhoneNumberResult = await changePhoneNumberwithMfaApi(
         mfaClient,
-        req.body.code,
+        code,
         intent,
         newPhoneNumber,
         res.locals.trace,
@@ -99,7 +157,8 @@ export function checkYourPhonePost(
       );
       isPhoneNumberUpdated = changePhoneNumberResult.success;
       if (changePhoneNumberResult.success === false) {
-        errorMessage = changePhoneNumberResult.errorMessage;
+        changePhoneNumberWithMfaApiErrorMessage =
+          changePhoneNumberResult.errorMessage;
       }
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(
@@ -113,9 +172,19 @@ export function checkYourPhonePost(
       return res.redirect(getRedirectUrl(intent));
     }
 
-    const error = formatValidationError("code", errorMessage);
+    const error = formatValidationError(
+      "code",
+      changePhoneNumberWithMfaApiErrorMessage ??
+        req.t("pages.checkYourPhone.code.validationError.invalidCode")
+    );
 
-    renderBadRequest(res, req, TEMPLATE_NAME, error, getRenderOptions(req));
+    renderBadRequest(
+      res,
+      req,
+      TEMPLATE_NAME,
+      error,
+      getRenderOptions(req, intent)
+    );
   };
 }
 
