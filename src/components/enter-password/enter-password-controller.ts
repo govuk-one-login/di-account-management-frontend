@@ -14,7 +14,6 @@ import {
   UserJourney,
 } from "../../utils/state-machine";
 import { getTxmaHeader } from "../../utils/txma-header";
-import { body } from "express-validator";
 
 const TEMPLATE = "enter-password/index.njk";
 
