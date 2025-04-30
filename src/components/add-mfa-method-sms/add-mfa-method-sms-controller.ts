@@ -15,11 +15,14 @@ import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types"
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 import {
   formatValidationError,
+  isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
 import { BadRequestError } from "../../utils/errors";
+import { validationResult } from "express-validator";
+import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 
-const CHANGE_PHONE_NUMBER_TEMPLATE = "add-mfa-method-sms/index.njk";
+const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
 const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
 
@@ -27,12 +30,22 @@ export async function addMfaSmsMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  res.render("add-mfa-method-sms/index.njk", { backLink });
+  res.render(ADD_MFA_METHOD_SMS_TEMPLATE, { backLink });
 }
 export function addMfaSmsMethodPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
+    const errors = validationResult(req)
+      .formatWith(validationErrorFormatter)
+      .mapped();
+
+    if (!isObjectEmpty(errors)) {
+      return renderBadRequest(res, req, ADD_MFA_METHOD_SMS_TEMPLATE, errors, {
+        backLink,
+      });
+    }
+
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
@@ -83,7 +96,7 @@ export function addMfaSmsMethodPost(
           "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
         )
       );
-      return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error, {
+      return renderBadRequest(res, req, ADD_MFA_METHOD_SMS_TEMPLATE, error, {
         backLink,
       });
     } else {

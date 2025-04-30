@@ -12,13 +12,18 @@ import xss from "xss";
 import { getTxmaHeader } from "../../utils/txma-header";
 import {
   formatValidationError,
+  isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
 import { BadRequestError } from "../../utils/errors";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { logger } from "../../utils/logger";
+import { validationResult } from "express-validator";
+import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
+const CHANGE_DEFAULT_METHOD_SMS_TEMPLATE =
+  "change-default-method/change-to-sms.njk";
 
 const backLink = PATH_DATA.CHANGE_DEFAULT_METHOD.url;
 
@@ -65,7 +70,7 @@ export async function changeDefaultMethodSmsGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  return res.render("change-default-method/change-to-sms.njk", {
+  return res.render(CHANGE_DEFAULT_METHOD_SMS_TEMPLATE, {
     backLink,
   });
 }
@@ -74,6 +79,20 @@ export function changeDefaultMethodSmsPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
+    const errors = validationResult(req)
+      .formatWith(validationErrorFormatter)
+      .mapped();
+
+    if (!isObjectEmpty(errors)) {
+      return renderBadRequest(
+        res,
+        req,
+        CHANGE_DEFAULT_METHOD_SMS_TEMPLATE,
+        errors,
+        { backLink }
+      );
+    }
+
     const {
       hasInternationalPhoneNumber,
       internationalPhoneNumber,
@@ -125,7 +144,7 @@ export function changeDefaultMethodSmsPost(
       return renderBadRequest(
         res,
         req,
-        "change-default-method/change-to-sms.njk",
+        CHANGE_DEFAULT_METHOD_SMS_TEMPLATE,
         error,
         {
           backLink,

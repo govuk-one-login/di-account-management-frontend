@@ -52,7 +52,7 @@ router.post(
   PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  validatePhoneNumberRequest("change-default-method/change-to-sms.njk"),
+  validatePhoneNumberRequest(),
   selectMfaMiddleware(),
   globalTryCatchAsync(changeDefaultMethodSmsPost(changePhoneNumberService()))
 );

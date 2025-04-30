@@ -23,7 +23,7 @@ router.get(
 router.post(
   PATH_DATA.ADD_MFA_METHOD_SMS.url,
   requiresAuthMiddleware,
-  validatePhoneNumberRequest("add-mfa-method-sms/index.njk"),
+  validatePhoneNumberRequest(),
   validateStateMiddleware,
   globalTryCatchAsync(asyncHandler(addMfaSmsMethodPost()))
 );

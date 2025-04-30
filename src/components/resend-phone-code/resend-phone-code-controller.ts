@@ -9,9 +9,12 @@ import { EventType, getNextState } from "../../utils/state-machine";
 import xss from "xss";
 import {
   formatValidationError,
+  isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
 import { getTxmaHeader } from "../../utils/txma-header";
+import { validationResult } from "express-validator";
+import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
 
@@ -34,6 +37,20 @@ export function resendPhoneCodePost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    const errors = validationResult(req)
+      .formatWith(validationErrorFormatter)
+      .mapped();
+
+    if (!isObjectEmpty(errors)) {
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        errors,
+        getRenderOptions(req)
+      );
+    }
+
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
     const intent = req.body.intent;
