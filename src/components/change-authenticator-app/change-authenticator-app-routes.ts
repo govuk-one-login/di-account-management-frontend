@@ -23,7 +23,7 @@ router.post(
   PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
   requiresAuthMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatchAsync(asyncHandler(changeAuthenticatorAppPost()))
+  globalTryCatchAsync(asyncHandler(changeAuthenticatorAppPost))
 );
 
 export { router as changeAuthenticatorAppRouter };

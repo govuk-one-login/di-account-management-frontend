@@ -127,6 +127,14 @@
       }
     }
   },
+  "setUpAuthApp": {
+    "errors": {
+      "invalidCode": "The code you entered is not correct, check your authenticator app and try again",
+      "required": "Enter the code shown in your authenticator app",
+      "maxLength": "Enter the code using only 6 digits",
+      "invalidFormat": "Enter the code using only numbers"
+    }
+  },
   "pages": {
     "searchServices": {
       "title": "Search Services",
@@ -275,12 +283,6 @@
       "step4": {
         "text": "4. Enter the code.",
         "hint": "This is the 6-digit number shown in your authenticator app"
-      },
-      "errors": {
-        "invalidCode": "The code you entered is not correct, check your authenticator app and try again",
-        "required": "Enter the code shown in your authenticator app",
-        "maxLength": "Enter the code using only 6 digits",
-        "invalidFormat": "Enter the code using only numbers"
       },
       "cancel": "Cancel and go back to Security"
     },

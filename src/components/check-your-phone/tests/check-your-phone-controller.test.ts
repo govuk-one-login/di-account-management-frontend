@@ -41,7 +41,7 @@ describe("check your phone controller", () => {
     errorLoggerSpy = sinon.spy(logger, "error");
     req = {
       body: {},
-      t: sandbox.fake(),
+      t: sandbox.fake((id) => id),
       session: {
         user: {
           state: {
@@ -224,6 +224,61 @@ describe("check your phone controller", () => {
   });
 
   describe("checkYourPhonePost with mfa method management API", () => {
+    it("should render with the expected error message when an invalid OTP code is entered", async () => {
+      process.env.SUPPORT_CHANGE_MFA = "1";
+
+      req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
+      req.body.code = "123456";
+      req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
+      req.session.user.newPhoneNumber = "07111111111";
+
+      stubMfaClient.update.resolves({
+        success: false,
+        error: {
+          code: 1020,
+          message: "Invalid OTP code",
+        },
+        status: 200,
+        data: [mfaMethod],
+      });
+
+      await checkYourPhonePost(fakeService)(req as Request, res as Response);
+
+      expect(stubMfaClient.update).to.have.calledWith(
+        {
+          mfaIdentifier: "111111",
+          method: {
+            mfaMethodType: "SMS",
+            phoneNumber: "07111111111",
+          },
+          priorityIdentifier: "DEFAULT",
+        },
+        req.body.code
+      );
+      expect(res.render).to.have.been.calledWith("check-your-phone/index.njk", {
+        errors: {
+          code: {
+            text: "pages.checkYourPhone.code.validationError.invalidCode",
+            href: "#code",
+          },
+        },
+        errorList: [
+          {
+            text: "pages.checkYourPhone.code.validationError.invalidCode",
+            href: "#code",
+          },
+        ],
+        code: "123456",
+        intent: "changePhoneNumber",
+        phoneNumber: "1111",
+        resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
+        useDifferentPhoneNumberLink: "/change-phone-number",
+        backLink: "/change-phone-number",
+        language: "en",
+      });
+      expect(res.redirect).not.to.have.been.called;
+    });
+
     it("should redirect to /phone-number-updated-confirmation when valid code entered for change phone number journey", async () => {
       process.env.SUPPORT_CHANGE_MFA = "1";
 
