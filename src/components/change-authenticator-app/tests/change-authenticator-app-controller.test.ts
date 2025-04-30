@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { PATH_DATA } from "../../../app.constants";
 import {
   changeAuthenticatorAppGet,
