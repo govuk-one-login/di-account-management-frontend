@@ -257,7 +257,7 @@ Mappings:
       SUPPORTSEARCHABLELIST: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
-      METHODMANAGEMENTBASEURL: "https://a3bnrbtiga-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging"
+      METHODMANAGEMENTBASEURL: "https://a3bnrbtiga-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging/v1"
       SUPPORTMETHODMANAGEMENT: "1"
       SUPPORTADDBACKUPMFA: "1"
       SUPPORTCHANGEMFA: "1"
