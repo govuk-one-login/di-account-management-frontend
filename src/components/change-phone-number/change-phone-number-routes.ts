@@ -23,7 +23,7 @@ router.get(
 router.post(
   PATH_DATA.CHANGE_PHONE_NUMBER.url,
   requiresAuthMiddleware,
-  validatePhoneNumberRequest("change-phone-number/index.njk"),
+  validatePhoneNumberRequest(),
   refreshTokenMiddleware(),
   globalTryCatchAsync(asyncHandler(changePhoneNumberPost()))
 );

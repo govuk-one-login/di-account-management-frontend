@@ -23,18 +23,21 @@ import {
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../check-your-email/types";
 import { logger } from "../../utils/logger";
-import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
+import {
+  createMfaClient,
+  formatErrorMessage,
+  ERROR_CODES,
+} from "../../utils/mfaClient";
 import {
   ApiResponse,
   MfaClientInterface,
   MfaMethod,
 } from "../../utils/mfaClient/types";
+import { containsNumbersOnly } from "../../utils/strings";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
-const getRenderOptions = (req: Request) => {
-  const intent = req.query.intent as string;
-
+const getRenderOptions = (req: Request, intent: Intent) => {
   const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
     [INTENT_CHANGE_PHONE_NUMBER]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
     [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
@@ -66,31 +69,97 @@ const getRenderOptions = (req: Request) => {
 };
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
-  res.render(TEMPLATE_NAME, getRenderOptions(req));
+  const intent = req.query.intent as Intent;
+  res.render(TEMPLATE_NAME, getRenderOptions(req, intent));
 }
 
 export function checkYourPhonePost(
   service: CheckYourPhoneServiceInterface = checkYourPhoneService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { email, newPhoneNumber } = req.session.user;
+    const { code } = req.body;
     const intent = req.body.intent as Intent;
+
+    if (!code) {
+      const error = formatValidationError(
+        "code",
+        req.t("pages.checkYourPhone.code.validationError.required")
+      );
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req, intent)
+      );
+    }
+
+    if (code.length > 6) {
+      const error = formatValidationError(
+        "code",
+        req.t("pages.checkYourPhone.code.validationError.maxLength")
+      );
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req, intent)
+      );
+    }
+
+    if (code.length < 6) {
+      const error = formatValidationError(
+        "code",
+        req.t("pages.checkYourPhone.code.validationError.minLength")
+      );
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req, intent)
+      );
+    }
+
+    if (!containsNumbersOnly(code)) {
+      const error = formatValidationError(
+        "code",
+        req.t("pages.checkYourPhone.code.validationError.invalidFormat")
+      );
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        error,
+        getRenderOptions(req, intent)
+      );
+    }
+
+    const { email, newPhoneNumber } = req.session.user;
     const updateInput: UpdateInformationInput = {
       email,
-      otp: req.body["code"],
+      otp: code,
     };
     let isPhoneNumberUpdated = false;
+    let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
 
     if (supportChangeMfa()) {
       const mfaClient = createMfaClient(req, res);
-      isPhoneNumberUpdated = await changePhoneNumberwithMfaApi(
+      const changePhoneNumberResult = await changePhoneNumberwithMfaApi(
         mfaClient,
-        req.body.code,
+        code,
         intent,
         newPhoneNumber,
         res.locals.trace,
-        req.session.mfaMethods
+        req.session.mfaMethods,
+        req.t
       );
+      isPhoneNumberUpdated = changePhoneNumberResult.success;
+      if (changePhoneNumberResult.success === false) {
+        changePhoneNumberWithMfaApiErrorMessage =
+          changePhoneNumberResult.errorMessage;
+      }
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(
         { ...updateInput, updatedValue: newPhoneNumber },
@@ -105,10 +174,17 @@ export function checkYourPhonePost(
 
     const error = formatValidationError(
       "code",
-      req.t("pages.checkYourPhone.code.validationError.invalidCode")
+      changePhoneNumberWithMfaApiErrorMessage ??
+        req.t("pages.checkYourPhone.code.validationError.invalidCode")
     );
 
-    renderBadRequest(res, req, TEMPLATE_NAME, error, getRenderOptions(req));
+    renderBadRequest(
+      res,
+      req,
+      TEMPLATE_NAME,
+      error,
+      getRenderOptions(req, intent)
+    );
   };
 }
 
@@ -118,8 +194,17 @@ async function changePhoneNumberwithMfaApi(
   intent: Intent,
   newPhoneNumber: string,
   trace: string,
-  currentMfaMethods: MfaMethod[]
-): Promise<boolean> {
+  currentMfaMethods: MfaMethod[],
+  translate: Request["t"]
+): Promise<
+  | {
+      success: true;
+    }
+  | {
+      success: false;
+      errorMessage: string;
+    }
+> {
   let response: ApiResponse<unknown>;
 
   switch (intent) {
@@ -179,6 +264,15 @@ async function changePhoneNumberwithMfaApi(
     }
   }
 
+  if (response?.error?.code === ERROR_CODES.INVALID_OTP_CODE) {
+    return {
+      success: false,
+      errorMessage: translate(
+        "pages.checkYourPhone.code.validationError.invalidCode"
+      ),
+    };
+  }
+
   if (!response?.success) {
     const errorMessage = formatErrorMessage(
       "Could not change phone number",
@@ -188,7 +282,9 @@ async function changePhoneNumberwithMfaApi(
     throw new Error(errorMessage);
   }
 
-  return response.success;
+  return {
+    success: response.success,
+  };
 }
 
 function updateSessionUser(

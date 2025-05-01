@@ -164,14 +164,13 @@ describe("Integration:: check your phone", () => {
   it("should return validation error when code not entered", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .query({
-        intent: "changePhoneNumber",
-      })
+      .query({})
       .type("form")
       .set("Cookie", cookies)
       .send({
         _csrf: token,
         code: "",
+        intent: "changePhoneNumber",
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
@@ -185,14 +184,12 @@ describe("Integration:: check your phone", () => {
   it("should return validation error when code is less than 6 characters", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .query({
-        intent: "changePhoneNumber",
-      })
       .type("form")
       .set("Cookie", cookies)
       .send({
         _csrf: token,
         code: "2",
+        intent: "changePhoneNumber",
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
@@ -206,14 +203,12 @@ describe("Integration:: check your phone", () => {
   it("should return validation error when code is greater than 6 characters", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .query({
-        intent: "changePhoneNumber",
-      })
       .type("form")
       .set("Cookie", cookies)
       .send({
         _csrf: token,
         code: "1234567",
+        intent: "changePhoneNumber",
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
@@ -227,14 +222,12 @@ describe("Integration:: check your phone", () => {
   it("should return validation error when code entered contains letters", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .query({
-        intent: "changePhoneNumber",
-      })
       .type("form")
       .set("Cookie", cookies)
       .send({
         _csrf: token,
         code: "12ert-",
+        intent: "changePhoneNumber",
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
@@ -248,9 +241,6 @@ describe("Integration:: check your phone", () => {
   it("should redirect to /update confirmation when valid code entered", async () => {
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
-      .query({
-        intent: "changePhoneNumber",
-      })
       .type("form")
       .set("Cookie", cookies)
       .send({

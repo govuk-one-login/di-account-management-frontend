@@ -10,7 +10,10 @@ import {
   verifyMfaCode,
 } from "../../../utils/mfa";
 import QRCode from "qrcode";
-import { splitSecretKeyIntoFragments } from "../../../utils/strings";
+import {
+  containsNumbersOnly,
+  splitSecretKeyIntoFragments,
+} from "../../../utils/strings";
 import { UpdateInformationSessionValues } from "../../../utils/types";
 import xss from "xss";
 import { getTxmaHeader } from "../../../utils/txma-header";
@@ -67,10 +70,18 @@ export async function handleMfaMethodPage(
       req,
       res,
       next,
-      formatValidationError(
-        "code",
-        req.t("pages.addBackupApp.errors.required")
-      ),
+      formatValidationError("code", req.t("setUpAuthApp.errors.required")),
+      backLink
+    );
+  }
+
+  if (!containsNumbersOnly(code)) {
+    return renderMfaMethodPage(
+      templateFile,
+      req,
+      res,
+      next,
+      formatValidationError("code", req.t("setUpAuthApp.errors.invalidFormat")),
       backLink
     );
   }
@@ -81,10 +92,7 @@ export async function handleMfaMethodPage(
       req,
       res,
       next,
-      formatValidationError(
-        "code",
-        req.t("pages.addBackupApp.errors.maxLength")
-      ),
+      formatValidationError("code", req.t("setUpAuthApp.errors.maxLength")),
       backLink
     );
   }
@@ -97,10 +105,7 @@ export async function handleMfaMethodPage(
       req,
       res,
       next,
-      formatValidationError(
-        "code",
-        req.t("pages.addBackupApp.errors.invalidCode")
-      ),
+      formatValidationError("code", req.t("setUpAuthApp.errors.invalidCode")),
       backLink
     );
   }

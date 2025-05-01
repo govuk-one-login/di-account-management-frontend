@@ -6,23 +6,34 @@ import { changePhoneNumberService } from "./change-phone-number-service";
 import { EventType, getNextState } from "../../utils/state-machine";
 import {
   formatValidationError,
+  isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
 import { convertInternationalPhoneNumberToE164Format } from "../../utils/phone-number";
 import { BadRequestError } from "../../utils/errors";
 import xss from "xss";
 import { getTxmaHeader } from "../../utils/txma-header";
+import { validationResult } from "express-validator";
+import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
-  res.render("change-phone-number/index.njk");
+  res.render(CHANGE_PHONE_NUMBER_TEMPLATE);
 }
 
 export function changePhoneNumberPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    const errors = validationResult(req)
+      .formatWith(validationErrorFormatter)
+      .mapped();
+
+    if (!isObjectEmpty(errors)) {
+      return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, errors);
+    }
+
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;

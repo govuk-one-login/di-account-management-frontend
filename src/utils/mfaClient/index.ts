@@ -129,6 +129,10 @@ export function createMfaClient(req: Request, res: Response): MfaClient {
   );
 }
 
+export const ERROR_CODES = {
+  INVALID_OTP_CODE: 1020,
+} as const;
+
 export function formatErrorMessage<T>(
   prefix: string,
   response: ApiResponse<T>

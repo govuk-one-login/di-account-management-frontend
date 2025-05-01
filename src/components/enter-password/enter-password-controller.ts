@@ -71,6 +71,14 @@ const OPL_VALUES: Record<
   },
 };
 
+const getRenderOptions = (req: Request, requestType: UserJourney) => {
+  return {
+    requestType,
+    fromSecurity: req.query.from == "security",
+    oplValues: OPL_VALUES[requestType] || {},
+  };
+};
+
 export function enterPasswordGet(req: Request, res: Response): void {
   const requestType = req.query.type as UserJourney;
 
@@ -80,25 +88,39 @@ export function enterPasswordGet(req: Request, res: Response): void {
 
   req.session.user.state[requestType] = getInitialState();
 
-  res.render(`enter-password/index.njk`, {
-    requestType,
-    fromSecurity: req.query.from == "security",
-    oplValues: OPL_VALUES[requestType] || {},
-  });
+  res.render(TEMPLATE, getRenderOptions(req, requestType));
 }
 
 export function enterPasswordPost(
   service: EnterPasswordServiceInterface = enterPasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    const requestType = req.body.requestType as UserJourney;
+
+    const { password } = req.body;
+
+    if (!password) {
+      const error = formatValidationError(
+        "password",
+        req.t("pages.enterPassword.password.validationError.required")
+      );
+
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE,
+        error,
+        getRenderOptions(req, requestType)
+      );
+    }
+
     const { email } = req.session.user;
     const { accessToken } = req.session.user.tokens;
 
-    const requestType = req.body.requestType as UserJourney;
     const isAuthenticated = await service.authenticated(
       accessToken,
       email,
-      req.body["password"],
+      password,
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId,
@@ -120,6 +142,12 @@ export function enterPasswordPost(
       req.t("pages.enterPassword.password.validationError.incorrectPassword")
     );
 
-    renderBadRequest(res, req, TEMPLATE, error);
+    renderBadRequest(
+      res,
+      req,
+      TEMPLATE,
+      error,
+      getRenderOptions(req, requestType)
+    );
   };
 }

@@ -1,5 +1,4 @@
 import { body } from "express-validator";
-import { validateBodyMiddleware } from "../../middleware/form-validation-middleware";
 import { ValidationChainFunc } from "../../types";
 import {
   containsInternationalMobileNumber,
@@ -8,7 +7,7 @@ import {
   lengthInRangeWithoutSpaces,
 } from "../../utils/phone-number";
 
-export function validatePhoneNumberRequest(path: string): ValidationChainFunc {
+export function validatePhoneNumberRequest(): ValidationChainFunc {
   return [
     body("phoneNumber")
       .if(body("hasInternationalPhoneNumber").not().equals("true"))
@@ -89,6 +88,5 @@ export function validatePhoneNumberRequest(path: string): ValidationChainFunc {
         }
         return true;
       }),
-    validateBodyMiddleware(path),
   ];
 }

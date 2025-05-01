@@ -130,7 +130,11 @@ describe("change authenticator app controller", () => {
       let errorOccurred = false;
       // Act
       try {
-        await changeAuthenticatorAppPost()(req as Request, res as Response);
+        await changeAuthenticatorAppPost(
+          req as Request,
+          res as Response,
+          () => {}
+        );
       } catch {
         errorOccurred = true;
       }
@@ -148,7 +152,11 @@ describe("change authenticator app controller", () => {
       sinon.replace(mfaModule, "verifyMfaCode", () => true);
 
       // Act
-      await changeAuthenticatorAppPost()(req as Request, res as Response);
+      await changeAuthenticatorAppPost(
+        req as Request,
+        res as Response,
+        () => {}
+      );
 
       // Assert
       expect(mfaClientStub.update).to.have.been.calledOnce;
@@ -163,7 +171,11 @@ describe("change authenticator app controller", () => {
       req.t = tSpy;
       sinon.replace(mfaModule, "verifyMfaCode", () => true);
 
-      await changeAuthenticatorAppPost()(req as Request, res as Response);
+      await changeAuthenticatorAppPost(
+        req as Request,
+        res as Response,
+        () => {}
+      );
 
       expect(res.render).to.have.been.calledWith(
         "change-authenticator-app/index.njk",
@@ -177,15 +189,17 @@ describe("change authenticator app controller", () => {
         }
       );
       expect(mfaClientStub.update).to.not.have.been.called;
-      expect(tSpy).to.have.been.calledOnceWith(
-        "pages.addBackupApp.errors.required"
-      );
+      expect(tSpy).to.have.been.calledOnceWith("setUpAuthApp.errors.required");
     });
 
     it("should render an error if the code is invalid", async () => {
       sinon.replace(mfaModule, "verifyMfaCode", () => false);
 
-      await changeAuthenticatorAppPost()(req as Request, res as Response);
+      await changeAuthenticatorAppPost(
+        req as Request,
+        res as Response,
+        () => {}
+      );
 
       expect(res.render).to.have.been.calledWith(
         "change-authenticator-app/index.njk",
@@ -205,7 +219,11 @@ describe("change authenticator app controller", () => {
       req.body.code = "abc123";
       sinon.replace(mfaModule, "verifyMfaCode", () => true);
 
-      await changeAuthenticatorAppPost()(req as Request, res as Response);
+      await changeAuthenticatorAppPost(
+        req as Request,
+        res as Response,
+        () => {}
+      );
 
       expect(res.render).to.have.been.calledWith(
         "change-authenticator-app/index.njk",
@@ -236,7 +254,7 @@ describe("change authenticator app controller", () => {
       ];
 
       expect(
-        changeAuthenticatorAppPost()(req as Request, res as Response)
+        changeAuthenticatorAppPost(req as Request, res as Response, () => {})
       ).to.eventually.be.rejectedWith(
         "Could not change authenticator app - no existing auth app method found"
       );
@@ -256,7 +274,7 @@ describe("change authenticator app controller", () => {
       mfaClientStub.update.resolves(response);
 
       expect(
-        changeAuthenticatorAppPost()(req as Request, res as Response)
+        changeAuthenticatorAppPost(req as Request, res as Response, () => {})
       ).to.eventually.be.rejectedWith(
         mfaClient.formatErrorMessage(
           "Could not change authenticator app",

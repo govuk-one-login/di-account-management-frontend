@@ -194,11 +194,9 @@ describe("addMfaAppMethodPost", () => {
       formattedSecret: "1234 5678 90",
       backLink: "/back-from-set-up-method",
       errors: {
-        code: { text: "pages.addBackupApp.errors.invalidCode", href: "#code" },
+        code: { text: "setUpAuthApp.errors.invalidCode", href: "#code" },
       },
-      errorList: [
-        { text: "pages.addBackupApp.errors.invalidCode", href: "#code" },
-      ],
+      errorList: [{ text: "setUpAuthApp.errors.invalidCode", href: "#code" }],
     });
   });
 
@@ -231,11 +229,9 @@ describe("addMfaAppMethodPost", () => {
       formattedSecret: "1234 5678 90",
       backLink: "/back-from-set-up-method",
       errors: {
-        code: { text: "pages.addBackupApp.errors.required", href: "#code" },
+        code: { text: "setUpAuthApp.errors.required", href: "#code" },
       },
-      errorList: [
-        { text: "pages.addBackupApp.errors.required", href: "#code" },
-      ],
+      errorList: [{ text: "setUpAuthApp.errors.required", href: "#code" }],
     });
   });
 
@@ -270,13 +266,11 @@ describe("addMfaAppMethodPost", () => {
       backLink: "/back-from-set-up-method",
       errors: {
         code: {
-          text: "pages.addBackupApp.errors.invalidFormat",
+          text: "setUpAuthApp.errors.invalidFormat",
           href: "#code",
         },
       },
-      errorList: [
-        { text: "pages.addBackupApp.errors.invalidFormat", href: "#code" },
-      ],
+      errorList: [{ text: "setUpAuthApp.errors.invalidFormat", href: "#code" }],
     });
   });
 
@@ -310,11 +304,9 @@ describe("addMfaAppMethodPost", () => {
       formattedSecret: "1234 5678 90",
       backLink: "/back-from-set-up-method",
       errors: {
-        code: { text: "pages.addBackupApp.errors.maxLength", href: "#code" },
+        code: { text: "setUpAuthApp.errors.maxLength", href: "#code" },
       },
-      errorList: [
-        { text: "pages.addBackupApp.errors.maxLength", href: "#code" },
-      ],
+      errorList: [{ text: "setUpAuthApp.errors.maxLength", href: "#code" }],
     });
   });
 

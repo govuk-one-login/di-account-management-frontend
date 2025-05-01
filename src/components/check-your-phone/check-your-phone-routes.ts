@@ -8,7 +8,6 @@ import {
   checkYourPhonePost,
   requestNewOTPCodeGet,
 } from "./check-your-phone-controller";
-import { validateCheckYourPhoneRequest } from "./check-your-phone-validation";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 import {
@@ -29,7 +28,6 @@ router.get(
 router.post(
   PATH_DATA.CHECK_YOUR_PHONE.url,
   requiresAuthMiddleware,
-  validateCheckYourPhoneRequest(),
   refreshTokenMiddleware(),
   globalTryCatchAsync(asyncHandler(checkYourPhonePost()))
 );
