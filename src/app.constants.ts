@@ -162,6 +162,7 @@ export const PATH_DATA: Record<
   SIGN_OUT: { url: "/sign-out" },
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },
+  FINGERPRINT: { url: "/fingerprint" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
   RESEND_EMAIL_CODE: { url: "/resend-email-code" },
   RESEND_PHONE_CODE: {
