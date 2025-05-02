@@ -28,6 +28,7 @@ router.get(
 router.post(
   PATH_DATA.ADD_MFA_METHOD_APP.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   globalTryCatchAsync(addMfaAppMethodPost)
 );
 
