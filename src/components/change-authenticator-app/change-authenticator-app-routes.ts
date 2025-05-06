@@ -22,6 +22,7 @@ router.get(
 router.post(
   PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   refreshTokenMiddleware(),
   globalTryCatchAsync(asyncHandler(changeAuthenticatorAppPost))
 );

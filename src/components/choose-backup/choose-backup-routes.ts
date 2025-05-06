@@ -20,6 +20,7 @@ router.get(
 router.post(
   PATH_DATA.ADD_MFA_METHOD.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   ...validateChooseBackupRequest(),
   globalTryCatch(chooseBackupPost)
 );

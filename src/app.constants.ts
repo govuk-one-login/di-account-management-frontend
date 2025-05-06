@@ -164,7 +164,11 @@ export const PATH_DATA: Record<
   HEALTHCHECK: { url: "/healthcheck" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
   RESEND_EMAIL_CODE: { url: "/resend-email-code" },
-  RESEND_PHONE_CODE: { url: "/resend-phone-code" },
+  RESEND_PHONE_CODE: {
+    url: "/resend-phone-code",
+    event: EventType.ValueUpdated,
+    type: UserJourney.ChangePhoneNumber,
+  },
   SECURITY_TXT: {
     url: "/.well-known/security.txt",
   },
