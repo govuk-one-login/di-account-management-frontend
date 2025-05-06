@@ -555,27 +555,27 @@
               "troi JavaScript ymlaen yn eich porwr"
             ],
             "paragraphs2": [
-              "Gallwch ddilyn y cyfarwyddiadau i droi JavaScript ymlaen yn:"
+              "Gallwch ddilyn y cyfarwyddiadau i droi JavaScript ymlaen yn eich porwr (mae'r dolenni hyn yn agor mewn tab newydd):"
             ],
             "listLinks": [
               {
-                "text": "Chrome",
+                "html": "Chrome<span class=\"govuk-visually-hidden\"> (yn agor mewn tab newydd)</span>",
                 "href": "https://support.google.com/admanager/answer/12654?hl=en"
               },
               {
-                "text": "Edge",
+                "html": "Edge<span class=\"govuk-visually-hidden\"> (yn agor mewn tab newydd)</span>",
                 "href": "https://support.microsoft.com/en-gb/office/enable-javascript-7bb9ee74-6a9e-4dd1-babf-b0a1bb136361"
               },
               {
-                "text": "Firefox",
+                "html": "Firefox<span class=\"govuk-visually-hidden\"> (yn agor mewn tab newydd)</span>",
                 "href": "https://support.mozilla.org/en-US/kb/javascript-settings-for-interactive-web-pages"
               },
               {
-                "text": "Opera",
+                "html": "Opera<span class=\"govuk-visually-hidden\"> (yn agor mewn tab newydd)</span>",
                 "href": "https://help.opera.com/en/latest/web-preferences/#javaScript"
               },
               {
-                "text": "Safari",
+                "html": "Safari<span class=\"govuk-visually-hidden\"> (yn agor mewn tab newydd)</span>",
                 "href": "https://support.apple.com/en-gb/guide/safari/ibrw1074/mac"
               }
             ]

@@ -156,7 +156,7 @@
           {% if listLinks.length %}
             <ul class="govuk-list govuk-list--bullet">
               {% for link in listLinks %}
-                <li><a class="govuk-link" href="{{link["href"]}}" target="_blank" rel="noreferrer noopener">{{link["text"]}}</a></li>
+                <li><a class="govuk-link" href="{{link["href"]}}" target="_blank" rel="noreferrer noopener">{{link["html"] | safe}}</a></li>
               {% endfor %}
             </ul>
           {% endif %}
