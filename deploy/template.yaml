@@ -199,6 +199,7 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: ""
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
+      DEVICEINTELLIGENCETOGGLE: "0"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -234,6 +235,7 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: ""
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
+      DEVICEINTELLIGENCETOGGLE: "0"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -269,6 +271,7 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/e87dc9cd0e7082fb_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
+      DEVICEINTELLIGENCETOGGLE: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -304,6 +307,7 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/416cd438acc3a6f_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
+      DEVICEINTELLIGENCETOGGLE: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -340,6 +344,7 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf04188tda/b9835209cd235d3a_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
+      DEVICEINTELLIGENCETOGGLE: "0"
 
 Resources:
   #
@@ -895,6 +900,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   MISSIONLABWEBSOCKETADDR,
+                ]
+            - Name: "DEVICE_INTELLIGENCE_TOGGLE"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  DEVICEINTELLIGENCETOGGLE,
                 ]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
