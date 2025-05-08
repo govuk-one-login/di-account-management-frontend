@@ -1,26 +1,13 @@
-import "dotenv/config";
-import { getTestEnvironment } from "./getTestEnvironment";
-import * as v from "valibot";
+import { env } from "../env";
 
 export const getBaseUrl = () => {
-  const baseUrlRes = v.safeParse(
-    v.pipe(v.string(), v.url()),
-    process.env.BASE_URL
-  );
-
-  if (baseUrlRes.success) {
-    return baseUrlRes.output;
-  }
-
-  const testEnv = getTestEnvironment();
-
-  if (testEnv === "local") {
+  if (env.TEST_ENVIRONMENT === "local") {
     return "http://localhost:6001/";
   }
 
-  if (testEnv === "production") {
+  if (env.TEST_ENVIRONMENT === "production") {
     return "https://home.account.gov.uk";
   }
 
-  return `https://home.${testEnv}.account.gov.uk`;
+  return `https://home.${env.TEST_ENVIRONMENT}.account.gov.uk`;
 };
