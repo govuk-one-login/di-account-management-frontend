@@ -125,6 +125,11 @@ export function createMfaClient(req: Request, res: Response): MfaClient {
       sessionId: res.locals.sessionId,
       clientSessionId: res.locals.clientSessionId,
       txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+      validationStatuses: [
+        HTTP_STATUS_CODES.OK,
+        HTTP_STATUS_CODES.NO_CONTENT,
+        HTTP_STATUS_CODES.BAD_REQUEST,
+      ],
     })
   );
 }
