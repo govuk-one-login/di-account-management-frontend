@@ -34,7 +34,7 @@ import { securityRouter } from "./components/security/security-routes";
 import { activityHistoryRouter } from "./components/activity-history/activity-history-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
-import { ENVIRONMENT_NAME, LOCALE } from "./app.constants";
+import { ENVIRONMENT_NAME, LOCALE, PATH_DATA } from "./app.constants";
 import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
 import { authMiddleware } from "./middleware/auth-middleware";
@@ -108,6 +108,15 @@ async function createApp(): Promise<express.Application> {
     "/assets",
     express.static(
       path.resolve("node_modules/govuk-frontend/dist/govuk/assets")
+    )
+  );
+
+  app.use(
+    PATH_DATA.FINGERPRINT.url,
+    express.static(
+      path.resolve(
+        "node_modules/@govuk-one-login/frontend-device-intelligence/build/esm"
+      )
     )
   );
 
@@ -252,7 +261,6 @@ async function createApp(): Promise<express.Application> {
   app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
-
   return app;
 }
 
