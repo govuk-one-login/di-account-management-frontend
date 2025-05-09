@@ -110,14 +110,19 @@
   }
 }
 
-.govuk-header--right-align-nav .govuk-header__navigation-list {
-  @include govuk-media-query($from: tablet) {
-    text-align: right;
+.govuk-header--with-signout {
+  .govuk-template--rebranded & {
+    .govuk-header__logo {
+      width: 100%;
+      padding-right: govuk-spacing(9);
+    }
   }
-}
 
-.govuk-header__link--homepage {
-  margin-right: govuk-spacing(4);
+  .govuk-header__navigation-list {
+    @include govuk-media-query($from: tablet) {
+      text-align: right;
+    }
+  }
 }
 
 .account-navigation {
