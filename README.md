@@ -121,7 +121,7 @@ The post-deploy tests are written with [Playwright](https://playwright.dev/) and
 
 Copy the file `post-deploy-tests/.env.sample` to `post-deploy-tests/.env`.
 
-When running tests locally they are run against `http://localhost:6001` by default. Set the environment variable `BASE_URL` to change the base URL against which the tests are run e.g. `BASE_URL=https://home.build.account.gov.uk`
+When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_ENVIRONMENT` to one of `dev | build | staging | production` to run tests against the corresponding deployment instead.
 
 If your machine has `AMD64` architecture then you can run the tests locally in Docker:
 
