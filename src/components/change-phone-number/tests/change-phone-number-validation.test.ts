@@ -56,7 +56,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.ukPhoneNumber.validationError.required"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when phone number contains invalid characters", async () => {
@@ -71,7 +71,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.ukPhoneNumber.validationError.plusNumericOnly"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when phone number is not long enough", async () => {
@@ -86,7 +86,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when phone number is too long", async () => {
@@ -101,7 +101,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when phone number is not a UK number", async () => {
@@ -116,7 +116,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when phone number is already in use", async () => {
@@ -132,7 +132,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when no international phone number is provided", async () => {
@@ -147,7 +147,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.internationalPhoneNumber.validationError.required"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when international phone number contains invalid characters", async () => {
@@ -162,7 +162,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.internationalPhoneNumber.validationError.plusNumericOnly"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when international phone number is not long enough", async () => {
@@ -177,7 +177,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when international phone number is too long", async () => {
@@ -192,7 +192,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when international phone number is not an international number", async () => {
@@ -207,7 +207,7 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 
   it("errors as expected when international phone number is already in use", async () => {
@@ -223,6 +223,6 @@ describe("validatePhoneNumberRequest", () => {
         req,
         "pages.changePhoneNumber.internationalPhoneNumber.validationError.samePhoneNumber"
       )
-    ).to.not.throw;
+    ).to.not.throw();
   });
 });
