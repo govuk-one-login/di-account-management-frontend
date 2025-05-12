@@ -60,12 +60,9 @@ export const phoneNumberInUse = (
   value: string,
   mfaMethods: MfaMethod[] = []
 ) => {
-  if (mfaMethods) {
-    return mfaMethods.some(
-      (method) =>
-        method.method.mfaMethodType === "SMS" &&
-        method.method.phoneNumber === value
-    );
-  }
-  return false;
+  return mfaMethods.some(
+    (method) =>
+      method.method.mfaMethodType === "SMS" &&
+      method.method.phoneNumber === value
+  );
 };
