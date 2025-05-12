@@ -4,9 +4,9 @@ import { RequestBuilder } from "../../../../test/utils/builders";
 import { Request } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Assertion, expect } from "chai";
-
 declare global {
-  export namespace Chai {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Chai {
     interface Assertion {
       validationError(msg: string): Promise<void>;
     }
