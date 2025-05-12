@@ -10,6 +10,7 @@ import {
 import { asyncHandler } from "../../utils/async";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
+import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.get(
 router.post(
   PATH_DATA.ADD_MFA_METHOD_SMS.url,
   requiresAuthMiddleware,
+  selectMfaMiddleware(),
   validatePhoneNumberRequest(),
   validateStateMiddleware,
   globalTryCatchAsync(asyncHandler(addMfaSmsMethodPost()))

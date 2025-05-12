@@ -638,7 +638,8 @@
         "validationError": {
           "required": "Enter a mobile phone number",
           "plusNumericOnly": "Enter a mobile phone number using only numbers or the + symbol",
-          "internationalFormat": "Enter a mobile phone number in the correct format, including the country code"
+          "internationalFormat": "Enter a mobile phone number in the correct format, including the country code",
+          "samePhoneNumber": "You’re already using that phone number. Enter a different phone number"
         }
       }
     },
