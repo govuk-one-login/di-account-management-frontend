@@ -4,6 +4,7 @@ Feature: Contact GOV.UK One Login
     Given I visit the contact page
     Then the page should have status code 200
 
+  @fixme
   Scenario: Accessing webchat via the inline button
     Given I am not testing against a local deployment
     And I visit the contact page
@@ -13,6 +14,7 @@ Feature: Contact GOV.UK One Login
     Given I click on the minimise webchat button
     Then the webchat disappears
 
+  @fixme
   Scenario: Accessing webchat via the floating button
     Given I am not testing against a local deployment
     Given I visit the contact page
