@@ -5,6 +5,7 @@ import {
   containsLeadingPlusNumbersOrSpacesOnly,
   containsUKMobileNumber,
   lengthInRangeWithoutSpaces,
+  phoneNumberInUse,
 } from "../../utils/phone-number";
 
 export function validatePhoneNumberRequest(): ValidationChainFunc {
@@ -48,6 +49,16 @@ export function validatePhoneNumberRequest(): ValidationChainFunc {
           );
         }
         return true;
+      })
+      .custom((value, { req }) => {
+        if (phoneNumberInUse(value, req.session.mfaMethods)) {
+          throw new Error(
+            req.t(
+              "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
+            )
+          );
+        }
+        return true;
       }),
     body("internationalPhoneNumber")
       .if(body("hasInternationalPhoneNumber").notEmpty().equals("true"))
@@ -83,6 +94,16 @@ export function validatePhoneNumberRequest(): ValidationChainFunc {
           throw new Error(
             req.t(
               "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+            )
+          );
+        }
+        return true;
+      })
+      .custom((value, { req }) => {
+        if (phoneNumberInUse(value, req.session.mfaMethods)) {
+          throw new Error(
+            req.t(
+              "pages.changePhoneNumber.internationalPhoneNumber.validationError.samePhoneNumber"
             )
           );
         }

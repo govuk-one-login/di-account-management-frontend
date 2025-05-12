@@ -52,6 +52,7 @@ router.post(
   PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
+  selectMfaMiddleware(),
   validatePhoneNumberRequest(),
   selectMfaMiddleware(),
   globalTryCatchAsync(changeDefaultMethodSmsPost(changePhoneNumberService()))
