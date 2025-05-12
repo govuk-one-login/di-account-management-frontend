@@ -10,6 +10,7 @@ import {
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
+import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
@@ -24,6 +25,7 @@ router.post(
   PATH_DATA.CHANGE_PHONE_NUMBER.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
+  selectMfaMiddleware(),
   validatePhoneNumberRequest(),
   refreshTokenMiddleware(),
   globalTryCatchAsync(asyncHandler(changePhoneNumberPost()))
