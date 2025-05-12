@@ -28,7 +28,7 @@ Then("I am shown a message confirming my rejection", async ({ page }) => {
 });
 
 Then("I can dismiss the confirmation message", async ({ page }) => {
-  await page.getByRole("button", { name: "Hide cookie banner button" }).click();
+  await page.getByRole("button", { name: "Hide this message" }).click();
   await expect(
     page.getByLabel("Cookies on GOV.UK One Login")
   ).not.toBeVisible();
