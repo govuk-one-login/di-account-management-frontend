@@ -3,32 +3,49 @@ import { validatePhoneNumberRequest } from "../change-phone-number-validation";
 import { RequestBuilder } from "../../../../test/utils/builders";
 import { Request } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
-import { expect } from "chai";
+import { Assertion, expect } from "chai";
 
-const expectErrorMessage = async (req: Partial<Request>, msg: string) => {
-  const validations = validatePhoneNumberRequest();
+declare global {
+  export namespace Chai {
+    interface Assertion {
+      validationError(msg: string): Promise<void>;
+    }
+  }
+}
+
+function validationError(msg: string) {
   let messageFound = false;
-  const resultsArrays: any[] = [];
-
-  for (const validation of validations) {
-    // @ts-expect-error - 'run' doesn't exist error, but it does exist
-    const result = await validation.run(req);
-    const resultArray = result.array();
-    resultsArrays.push(resultArray);
+  for (const resultArray of this._obj) {
     messageFound = resultArray.some((res: any) => res.msg === msg);
     if (messageFound) break;
   }
-  expect(messageFound).to.eq(
-    true,
+
+  this.assert(
+    messageFound,
     `
   Expected to find error with message "${msg}" in one of the following arrays:
-  ${resultsArrays.reduce(
-    (append, resultArray) => `${append}
+  ${this._obj.reduce(
+    (append: string, resultArray: any[]) => `${append}
     ${JSON.stringify(resultArray, null, 2)}`,
     ""
   )}
   `.trim()
   );
+}
+
+Assertion.addMethod("validationError", validationError);
+
+const validate = async (req: Partial<Request>) => {
+  const validations = validatePhoneNumberRequest();
+  const resultsArrays: any[] = [];
+
+  for (const validation of validations) {
+    // @ts-expect-error - 'run' doesn't exist error, but it does exist
+    const result = await validation.run(req);
+    resultsArrays.push(result.array());
+  }
+
+  return resultsArrays;
 };
 
 describe("validatePhoneNumberRequest", () => {
@@ -51,12 +68,9 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.ukPhoneNumber.validationError.required"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.ukPhoneNumber.validationError.required"
+    );
   });
 
   it("errors as expected when phone number contains invalid characters", async () => {
@@ -66,12 +80,9 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "@12345",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.ukPhoneNumber.validationError.plusNumericOnly"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.ukPhoneNumber.validationError.plusNumericOnly"
+    );
   });
 
   it("errors as expected when phone number is not long enough", async () => {
@@ -81,12 +92,9 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "123456789",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
+    );
   });
 
   it("errors as expected when phone number is too long", async () => {
@@ -96,12 +104,9 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "123456789101112",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
+    );
   });
 
   it("errors as expected when phone number is not a UK number", async () => {
@@ -111,12 +116,9 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "+33612345678",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
+    );
   });
 
   it("errors as expected when phone number is already in use", async () => {
@@ -127,12 +129,9 @@ describe("validatePhoneNumberRequest", () => {
       })
       .withMfaMethods()
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
+    );
   });
 
   it("errors as expected when no international phone number is provided", async () => {
@@ -142,12 +141,9 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.internationalPhoneNumber.validationError.required"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.internationalPhoneNumber.validationError.required"
+    );
   });
 
   it("errors as expected when international phone number contains invalid characters", async () => {
@@ -157,12 +153,9 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "@12345",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.internationalPhoneNumber.validationError.plusNumericOnly"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.internationalPhoneNumber.validationError.plusNumericOnly"
+    );
   });
 
   it("errors as expected when international phone number is not long enough", async () => {
@@ -172,12 +165,9 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "1234",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+    );
   });
 
   it("errors as expected when international phone number is too long", async () => {
@@ -187,12 +177,9 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "123456789123456789123456789",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+    );
   });
 
   it("errors as expected when international phone number is not an international number", async () => {
@@ -202,12 +189,9 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "07123456789",
       })
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+    );
   });
 
   it("errors as expected when international phone number is already in use", async () => {
@@ -218,11 +202,8 @@ describe("validatePhoneNumberRequest", () => {
       })
       .withMfaMethods()
       .build();
-    expect(
-      await expectErrorMessage(
-        req,
-        "pages.changePhoneNumber.internationalPhoneNumber.validationError.samePhoneNumber"
-      )
-    ).to.not.throw();
+    expect(await validate(req)).to.have.validationError(
+      "pages.changePhoneNumber.internationalPhoneNumber.validationError.samePhoneNumber"
+    );
   });
 });
