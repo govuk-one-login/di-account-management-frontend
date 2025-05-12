@@ -20,6 +20,10 @@ describe("getLastNDigits", () => {
 });
 
 describe("phoneNumberInUse", () => {
+  it("should return false when there are no MFA methods", () => {
+    assert.equal(phoneNumberInUse("0123456789"), false);
+  });
+
   it("should return false when the phone numebr is not already in use", () => {
     assert.equal(
       phoneNumberInUse("0129384756", [
