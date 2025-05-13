@@ -1,7 +1,7 @@
 import { expect, Response } from "@playwright/test";
-import { createBdd } from "playwright-bdd";
+import { bdd } from "./fixtures";
 
-const { Given, Then, When } = createBdd();
+const { Given, Then, When } = bdd;
 
 let response: Response | null;
 
