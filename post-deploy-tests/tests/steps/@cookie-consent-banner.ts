@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
-import { createBdd } from "playwright-bdd";
+import { bdd } from "./fixtures";
 
-const { Given, Then } = createBdd();
+const { Given, Then } = bdd;
 
 Given("I visit the contact page", async ({ page }) => {
   await page.goto("/contact-gov-uk-one-login");
