@@ -1,5 +1,12 @@
 Feature: Contact GOV.UK One Login
 
+  # intermittently failing in build pipeline with errors like:
+  #{
+  #  msg: Failed to load resource: net::ERR_SOCKET_NOT_CONNECTED,
+  #  type: 'error',
+  #  location: 'https://uat-chat-loader-hgsgds.smartagent.app/loader/main.js:0:0'
+  #}
+  @fixme
   Scenario: Visiting the contact page
     Given I visit the contact page
     Then the page should have status code 200
