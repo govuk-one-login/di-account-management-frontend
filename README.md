@@ -128,16 +128,18 @@ If your machine has `AMD64` architecture then you can run the tests locally in D
 ```bash
 cd post-deploy-tests
 docker build -t frontend-post-deploy-tests .
-docker run -t frontend-post-deploy-tests
+docker run -t frontend-post-deploy-tests # or docker run -t --network="host" frontend-post-deploy-tests if running the tests against localhost
 ```
 
 This is also how the tests are run in the deployment pipeline so running the tests locally via Docker guarantees reproducible outcomes and is therefore the preferred option.
 
-If your machine has `ARM64` architecture then running the tests in Docker won't work because the Docker image is Linux-based and at the time of writing there is no `ARM64` build of Chrome for Linux. Instead you can run the tests against a locally installed version of Chrome:
+If your machine has `ARM64` architecture then running the tests in Docker won't work because the Docker image is Linux-based and at the time of writing there is no `ARM64` build of Chrome for Linux. Instead you can run the tests against a locally installed version of Chrome. This is also useful for running the tests in debug or UI mode:
 
 ```bash
 cd post-deploy-tests
 npm ci && npm run test
+# npm ci && npm run test:debug to run tests in debug mode
+# npm ci && npm run test:ui to run tests in UI mode
 ```
 
 To avoid discrepancies between deployment pipeline and local test run outcomes ensure that your locally installed version of Chrome is up to date prior to running the tests.
