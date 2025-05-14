@@ -59,6 +59,8 @@ import { resendEmailCodeRouter } from "./components/resend-email-code/resend-ema
 import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
 import { redirectsRouter } from "./components/redirects/redirects-routes";
 import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes";
+import { temporarilyBlockedRouter } from "./components/temporarily-blocked/temporarily-blocked-routes";
+import { permanentlyBlockedRouter } from "./components/permanently-blocked/permanently-blocked-routes";
 import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
@@ -231,6 +233,8 @@ async function createApp(): Promise<express.Application> {
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
+  app.use(temporarilyBlockedRouter);
+  app.use(permanentlyBlockedRouter);
 
   if (supportActivityLog()) {
     app.use(activityHistoryRouter);
