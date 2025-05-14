@@ -4,7 +4,8 @@
   "description": "Post-deploy tests for the account management frontend.",
   "scripts": {
     "test": "bddgen && playwright test",
-    "test:debug": "bddgen && playwright test --debug"
+    "test:debug": "bddgen && playwright test --debug",
+    "test:ui": "bddgen && playwright test --ui"
   },
   "repository": {
     "type": "git",
