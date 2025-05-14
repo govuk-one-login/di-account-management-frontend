@@ -25,6 +25,7 @@ import {
   supportSearchableList,
   supportTriagePage,
   supportWebchatContact,
+  supportChangeOnIntervention,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
@@ -233,8 +234,11 @@ async function createApp(): Promise<express.Application> {
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
-  app.use(temporarilyBlockedRouter);
-  app.use(permanentlyBlockedRouter);
+
+  if (supportChangeOnIntervention()) {
+    app.use(temporarilyBlockedRouter);
+    app.use(permanentlyBlockedRouter);
+  }
 
   if (supportActivityLog()) {
     app.use(activityHistoryRouter);
