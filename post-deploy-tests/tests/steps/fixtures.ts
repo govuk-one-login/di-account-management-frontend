@@ -28,6 +28,13 @@ export const test = base.extend({
     // eslint-disable-next-line no-console
     console.log({ Exceptions: exceptions });
   },
+  javaScriptEnabled: async ({ $tags }, use) => {
+    if ($tags.includes("@nojs")) {
+      await use(false);
+    } else {
+      await use(true);
+    }
+  },
 });
 
 export const bdd = createBdd(test);
