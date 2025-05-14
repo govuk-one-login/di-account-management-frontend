@@ -258,3 +258,7 @@ export function getDtRumUrl(): string {
 export function supportDeviceIntelligence(): boolean {
   return process.env.DEVICE_INTELLIGENCE_TOGGLE === "1";
 }
+
+export function supportBrandRefresh(): boolean {
+  return process.env.BRAND_REFRESH_ENABLED === "1";
+}
