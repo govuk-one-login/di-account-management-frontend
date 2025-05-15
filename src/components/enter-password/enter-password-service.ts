@@ -1,11 +1,22 @@
 import { getRequestConfig, http, Http } from "../../utils/http";
 import { EnterPasswordServiceInterface } from "./types";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
+import { supportChangeOnIntervention } from "../../config";
+
+const interventionMap: Record<string, string> = {
+  "1084": "BLOCKED",
+  "1083": "SUSPENDED",
+};
+
+function getInterventionFromError(response: any): string | undefined {
+  const code = response?.data?.code;
+  return code ? interventionMap[code] : undefined;
+}
 
 export function enterPasswordService(
   axios: Http = http
 ): EnterPasswordServiceInterface {
-  const authenticated = async function (
+  const authenticated = async (
     token: string,
     emailAddress: string,
     password: string,
@@ -14,13 +25,10 @@ export function enterPasswordService(
     persistentSessionId: string,
     clientSessionId: string,
     txmaAuditEncoded: string
-  ): Promise<boolean> {
-    const { status } = await axios.client.post<void>(
+  ): Promise<{ authenticated: boolean; intervention?: string }> => {
+    const response = await axios.client.post(
       API_ENDPOINTS.AUTHENTICATE,
-      {
-        email: emailAddress,
-        password: password,
-      },
+      { email: emailAddress, password },
       getRequestConfig({
         token,
         validationStatuses: [
@@ -35,9 +43,21 @@ export function enterPasswordService(
         txmaAuditEncoded,
       })
     );
-    return status === HTTP_STATUS_CODES.NO_CONTENT;
+
+    const { status } = response;
+
+    if (
+      status === HTTP_STATUS_CODES.FORBIDDEN &&
+      supportChangeOnIntervention()
+    ) {
+      const intervention = getInterventionFromError(response);
+      if (intervention) {
+        return { authenticated: false, intervention };
+      }
+    }
+
+    return { authenticated: status === HTTP_STATUS_CODES.NO_CONTENT };
   };
-  return {
-    authenticated,
-  };
+
+  return { authenticated };
 }

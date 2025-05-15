@@ -8,5 +8,5 @@ export interface EnterPasswordServiceInterface {
     persistentSessionId: string,
     clientSessionId: string,
     txmaAuditEncoded: string
-  ) => Promise<boolean>;
+  ) => Promise<{ authenticated: boolean; intervention?: string }>;
 }
