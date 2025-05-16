@@ -21,6 +21,7 @@ import {
   getSessionExpiry,
   getSessionSecret,
   supportActivityLog,
+  supportBrandRefresh,
   supportChangeMfa,
   supportSearchableList,
   supportTriagePage,
@@ -112,6 +113,13 @@ async function createApp(): Promise<express.Application> {
     express.static(
       path.resolve("node_modules/govuk-frontend/dist/govuk/assets")
     )
+  );
+  app.get("/favicon.ico", (req, res) =>
+    res.sendFile("favicon.ico", {
+      root: supportBrandRefresh()
+        ? "node_modules/govuk-frontend/dist/govuk/assets/rebrand/images"
+        : "node_modules/govuk-frontend/dist/govuk/assets/images",
+    })
   );
 
   app.use(
