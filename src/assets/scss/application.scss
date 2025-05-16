@@ -24,6 +24,7 @@
 @import "components/summary-list/summary-list";
 @import "components/warning-text/warning-text";
 @import "components/radios/radios";
+@import "components/service-navigation/service-navigation";
 // end Design System component imports
 
 // language toggle component import
@@ -125,38 +126,9 @@
   }
 }
 
-.account-navigation {
-  background-color: govuk-colour("light-grey");
-  border-bottom: 1px solid $govuk-border-colour;
-  position: relative;
-}
-
-.account-navigation__list {
-  @include govuk-font($size: 19);
-  @include govuk-text-colour;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.account-navigation__list-item {
-  display: inline-block;
-  margin: 0 govuk-spacing(4) 0 0;
-
-  @include govuk-media-query($from: tablet) {
-    margin: 0 govuk-spacing(6) 0 0;
-  }
-}
-
-$nav-link-padding: govuk-spacing(3);
-$nav-link-outline-thickness: 2px;
-$nav-active-border-thickness: 5px;
-$nav-link-padding-left: $nav-link-padding - 2;
-$nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
-
 /* Combined styles for buttons */
-.account-header-navigation__button,
-.account-navigation__button {
+.govuk-service-navigation__button,
+.account-header-navigation__button {
   border: 0 none;
   cursor: pointer;
   background-color: transparent;
@@ -171,30 +143,10 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   }
 }
 
-/* Specific styles for .account-header-navigation__button */
-.account-header-navigation__button-content {
-  @include govuk-font($size: 16);
-  color: govuk-colour("white");
-  @include govuk-link-style-inverse;
-
-  &:not(:hover) {
-    text-decoration: none;
-  }
-
-  &:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 3px;
-
-    @if $govuk-link-underline-offset {
-      text-underline-offset: $govuk-link-underline-offset;
-    }
-  }
-
-  &:focus {
-    @include govuk-focused-text;
-  }
+.govuk-service-navigation__button {
+  font-size: inherit;
+  @extend .govuk-service-navigation__link;
 }
-
 // /* Positioning for the navigation form */
 
 .account-header-navigation__form {
@@ -207,65 +159,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
     float: left;
     padding-left: 0;
   }
-}
-
-// /* Specific styles for .account-navigation__button */
-.account-navigation__button {
-  color: $govuk-link-colour;
-  font-size: inherit;
-
-  &:focus {
-    span {
-      padding: $nav-link-padding-left 0 16px;
-    }
-  }
-}
-
-.account-navigation__button-content,
-.account-navigation__link {
-  @extend .govuk-link;
-  display: inline-block;
-  font-weight: bold;
-  padding: $nav-link-padding-left 0 govuk-spacing(2);
-  margin-top: $nav-link-outline-thickness;
-
-  &:not(:hover) {
-    text-decoration: none;
-  }
-
-  &:focus {
-    padding: $nav-link-padding-left 0 $nav-link-padding;
-  }
-
-  &:visited {
-    color: $govuk-link-colour;
-
-    &:hover {
-      color: $govuk-link-hover-colour;
-    }
-
-    &:focus {
-      color: $govuk-focus-text-colour;
-    }
-  }
-
-  .account-navigation__list-item--active & {
-    border-bottom: $nav-active-border-thickness solid $govuk-link-colour;
-
-    &:focus {
-      border-bottom: none;
-      padding: $nav-link-padding-left 0 $nav-link-padding;
-      margin-top: $nav-link-outline-thickness;
-    }
-
-    &:hover {
-      border-color: $govuk-link-hover-colour;
-    }
-  }
-}
-
-.account-navigation__button-content {
-  padding: $nav-link-padding-left 0 $nav-link-padding-left;
 }
 
 .your-services__heading {

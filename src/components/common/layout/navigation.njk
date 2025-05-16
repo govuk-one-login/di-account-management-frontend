@@ -1,3 +1,5 @@
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+
 {% set active = activeNav if activeNav else "security" %}
 {% set navigationItems = [
   {
@@ -10,19 +12,19 @@
     text: 'general.header.accountNavSecurityLink' | translate
   }]
 %}
-<nav aria-label="Account navigation" class="account-navigation">
-    <div class="govuk-width-container">
-        <ul class="account-navigation__list">
-            {% for item in navigationItems %}
-                <li class="account-navigation__list-item {{ 'account-navigation__list-item--active' if item.active else '' }}">
-                    <a class="account-navigation__link" href="{{ item.href }}">{{ item.text }}</a></li>
-            {% endfor %}
-            <li class="account-navigation__list-item">
-                <form action="{{ accountSignOut }}" method="post">
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-                    <button class="account-navigation__button" type="submit"><span class="account-navigation__button-content">{{ 'general.header.signOutLink' | translate }}</span></button>
-                </form>
-            </li>
-        </ul>
-    </div>
-</nav>
+{% set signOutSlotHtml %}
+<li class="govuk-service-navigation__item">
+  <form action="{{ accountSignOut }}" method="post">
+      <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+      <button class="govuk-service-navigation__button" type="submit">{{ 'general.header.signOutLink' | translate }}</button>
+  </form>     
+</li>
+{% endset %}
+
+{{ govukServiceNavigation({
+  navigation:navigationItems,
+  navigationLabel: "Account navigation",
+  slots: {
+    navigationEnd: signOutSlotHtml
+  }
+}) }}
