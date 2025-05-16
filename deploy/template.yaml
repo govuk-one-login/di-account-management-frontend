@@ -315,7 +315,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
-      SUPPORTCHANGEONINTERVENTION: "1"
+      SUPPORTCHANGEONINTERVENTION: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -354,7 +354,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
-      SUPPORTCHANGEONINTERVENTION: "1"
+      SUPPORTCHANGEONINTERVENTION: "0"
 
 Resources:
   #
