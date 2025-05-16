@@ -81,9 +81,7 @@ export function resendPhoneCodePost(
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
       const error = formatValidationError(
         "phoneNumber",
-        req.t(
-          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
-        )
+        req.t("pages.changePhoneNumber.validationError.samePhoneNumber")
       );
       return renderBadRequest(
         res,

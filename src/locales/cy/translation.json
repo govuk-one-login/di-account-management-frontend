@@ -433,14 +433,16 @@
         "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i’r rhif rydych yn ei roi i ni.",
         "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
       },
+      "validationError": {
+        "samePhoneNumber": "Rydych eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
+      },
       "ukPhoneNumber": {
         "label": "Rhif ffôn symudol y DU",
         "validationError": {
           "required": "Rhowch rif ffôn symudol y DU",
           "international": "Rhowch rif ffôn symudol y DU",
           "length": "Rhowch rif ffôn symudol yn y DU, fel 07700 900000",
-          "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu’r symbol +",
-          "samePhoneNumber": "Rydych eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
+          "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu’r symbol +"
         }
       },
       "internationalPhoneNumber": {
