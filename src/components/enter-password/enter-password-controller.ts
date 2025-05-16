@@ -168,10 +168,10 @@ async function handleIntervention(
 ): Promise<void> {
   switch (intervention) {
     case "BLOCKED":
-      handleLogout(req, res, PATH_DATA.UNAVAILABLE_PERMANENT.url);
+      await handleLogout(req, res, PATH_DATA.UNAVAILABLE_PERMANENT.url);
       break;
     case "SUSPENDED":
-      handleLogout(req, res, PATH_DATA.UNAVAILABLE_TEMPORARY.url);
+      await handleLogout(req, res, PATH_DATA.UNAVAILABLE_TEMPORARY.url);
       break;
     default:
       renderPasswordError(
