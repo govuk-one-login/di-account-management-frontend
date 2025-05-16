@@ -122,13 +122,14 @@ export function enterPasswordPost(
       return;
     }
 
-    const { email, tokens } = req.session.user;
-    const { accessToken } = tokens;
+    const user = {
+      token: req.session.user.tokens.accessToken,
+      email: req.session.user.email,
+      password: password,
+    };
 
     const response = await service.authenticated(
-      accessToken,
-      email,
-      password,
+      user,
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId,

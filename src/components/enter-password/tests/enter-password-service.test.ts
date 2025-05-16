@@ -33,6 +33,11 @@ describe("enterPasswordService", () => {
     const sourceIp = "0.0.0.0";
     const sessionId = "session-123";
     const persistentSessionId = "persistentsession123";
+    const user = {
+      token: accessToken,
+      email: email,
+      password: password,
+    };
 
     nock(baseUrl, {
       reqheaders: {
@@ -50,9 +55,7 @@ describe("enterPasswordService", () => {
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
     const response = await enterPasswordService().authenticated(
-      accessToken,
-      email,
-      password,
+      user,
       sourceIp,
       sessionId,
       persistentSessionId,
@@ -70,6 +73,11 @@ describe("enterPasswordService", () => {
     const sourceIp = "0.0.0.0";
     const sessionId = "session-123";
     const persistentSessionId = "persistentsession123";
+    const user = {
+      token: accessToken,
+      email: email,
+      password: password,
+    };
 
     nock(baseUrl, {
       reqheaders: {
@@ -90,9 +98,7 @@ describe("enterPasswordService", () => {
       });
 
     const response = await enterPasswordService().authenticated(
-      accessToken,
-      email,
-      password,
+      user,
       sourceIp,
       sessionId,
       persistentSessionId,
@@ -111,6 +117,11 @@ describe("enterPasswordService", () => {
     const sourceIp = "0.0.0.0";
     const sessionId = "session-123";
     const persistentSessionId = "persistentsession123";
+    const user = {
+      token: accessToken,
+      email: email,
+      password: password,
+    };
 
     nock(baseUrl, {
       reqheaders: {
@@ -131,9 +142,7 @@ describe("enterPasswordService", () => {
       });
 
     const response = await enterPasswordService().authenticated(
-      accessToken,
-      email,
-      password,
+      user,
       sourceIp,
       sessionId,
       persistentSessionId,
@@ -153,6 +162,11 @@ describe("enterPasswordService", () => {
     const sourceIp = "0.0.0.0";
     const sessionId = "session-123";
     const persistentSessionId = "persistentsession123";
+    const user = {
+      token: accessToken,
+      email: email,
+      password: password,
+    };
 
     nock(baseUrl, {
       reqheaders: {
@@ -173,9 +187,7 @@ describe("enterPasswordService", () => {
       });
 
     const response = await enterPasswordService().authenticated(
-      accessToken,
-      email,
-      password,
+      user,
       sourceIp,
       sessionId,
       persistentSessionId,

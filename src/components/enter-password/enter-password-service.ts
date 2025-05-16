@@ -17,9 +17,11 @@ export function enterPasswordService(
   axios: Http = http
 ): EnterPasswordServiceInterface {
   const authenticated = async (
-    token: string,
-    emailAddress: string,
-    password: string,
+    {
+      token,
+      email,
+      password,
+    }: { token: string; email: string; password: string },
     sourceIp: string,
     sessionId: string,
     persistentSessionId: string,
@@ -28,7 +30,7 @@ export function enterPasswordService(
   ): Promise<{ authenticated: boolean; intervention?: string }> => {
     const response = await axios.client.post(
       API_ENDPOINTS.AUTHENTICATE,
-      { email: emailAddress, password },
+      { email: email, password },
       getRequestConfig({
         token,
         validationStatuses: [
