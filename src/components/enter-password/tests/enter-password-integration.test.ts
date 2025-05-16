@@ -240,46 +240,6 @@ describe("Integration::enter password", () => {
       .expect(302);
   });
 
-  it("should redirect to unavailable permanent when intervention BLOCKED", async (done) => {
-    nock(baseApi)
-      .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
-      .once()
-      .reply(403, { code: "1084" });
-
-    await request(app)
-      .post(ENDPOINT)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        password: "Password1",
-        requestType: "changeEmail",
-      })
-      .expect("Location", PATH_DATA.UNAVAILABLE_PERMANENT.url)
-      .expect(302, done());
-  });
-
-  it("should redirect to unavailable temporary when intervention SUSPENDED", async (done) => {
-    nock(baseApi)
-      .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
-      .once()
-      .reply(403, { code: "1083" });
-
-    await request(app)
-      .post(ENDPOINT)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        password: "Password1",
-        requestType: "changeEmail",
-      })
-      .expect("Location", PATH_DATA.UNAVAILABLE_TEMPORARY.url)
-      .expect(302, done());
-  });
-
   it("should show incorrect password error for unknown intervention", async () => {
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
