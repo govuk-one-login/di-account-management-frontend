@@ -37,14 +37,12 @@ describe("signed out controller", () => {
 
     it("should redirect if post_logout_redirect_uri is present as string", () => {
       req.query = {
-        post_logout_redirect_uri: "http://example.com/unavailable-temporary",
+        post_logout_redirect_uri: "/unavailable-temporary",
       };
 
       signedOutGet(req as Request, res as Response);
 
-      expect(res.redirect).to.have.been.calledWith(
-        "http://example.com/unavailable-temporary"
-      );
+      expect(res.redirect).to.have.been.calledWith("/unavailable-temporary");
       expect(res.render).to.not.have.been.called;
       expect(res.status).to.have.been.calledWith(401);
     });
