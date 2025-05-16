@@ -280,7 +280,7 @@ describe("Integration::enter password", () => {
       .expect(302, done());
   });
 
-  it("should show incorrect password error for unknown intervention", async (done) => {
+  it("should show incorrect password error for unknown intervention", async () => {
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
       .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
@@ -302,6 +302,6 @@ describe("Integration::enter password", () => {
           "Enter the correct password"
         );
       })
-      .expect(400, done());
+      .expect(400);
   });
 });
