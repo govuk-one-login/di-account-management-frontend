@@ -269,6 +269,8 @@ describe("Integration::enter password", () => {
         requestType: "changeEmail",
       });
 
+    expect(res.headers.location, "Expected redirect location header").to.not.be
+      .undefined;
     expect(res.headers.location).to.contain("/oidc/logout");
     expect(res.headers.location).to.contain(
       `post_logout_redirect_uri=${encodeURIComponent(PATH_DATA.UNAVAILABLE_PERMANENT.url)}`
@@ -292,6 +294,8 @@ describe("Integration::enter password", () => {
         requestType: "changeEmail",
       });
 
+    expect(res.headers.location, "Expected redirect location header").to.not.be
+      .undefined;
     expect(res.headers.location).to.contain("/oidc/logout");
     expect(res.headers.location).to.contain(
       `post_logout_redirect_uri=${encodeURIComponent(PATH_DATA.UNAVAILABLE_TEMPORARY.url)}`
