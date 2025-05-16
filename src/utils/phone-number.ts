@@ -3,7 +3,6 @@ import {
   parsePhoneNumberWithError,
 } from "libphonenumber-js/mobile";
 import { logger } from "./logger";
-import { MfaMethod } from "./mfaClient/types";
 
 export function containsUKMobileNumber(value: string): boolean {
   try {
