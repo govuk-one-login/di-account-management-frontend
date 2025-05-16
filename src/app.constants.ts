@@ -179,6 +179,12 @@ export const PATH_DATA: Record<
   TRACK_AND_REDIRECT: {
     url: "/track-and-redirect",
   },
+  UNAVAILABLE_PERMANENT: {
+    url: "/unavailable-permanent",
+  },
+  UNAVAILABLE_TEMPORARY: {
+    url: "/unavailable-temporary",
+  },
 };
 
 export const MFA_METHODS = {
