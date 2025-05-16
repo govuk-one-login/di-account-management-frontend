@@ -2,6 +2,14 @@ import { Request, Response } from "express";
 import { destroyUserSessions } from "../../utils/session-store";
 
 export async function logoutPost(req: Request, res: Response): Promise<void> {
+  await handleLogout(req, res);
+}
+
+export async function handleLogout(
+  req: Request,
+  res: Response,
+  post_logout_redirect_uri?: string
+): Promise<void> {
   const idToken = req.session.user.tokens.idToken;
   await destroyUserSessions(
     req,
@@ -9,5 +17,12 @@ export async function logoutPost(req: Request, res: Response): Promise<void> {
     req.app.locals.sessionStore
   );
   res.cookie("lo", "true");
-  res.redirect(req.oidc.endSessionUrl({ id_token_hint: idToken }));
+
+  const endSessionParams: any = { id_token_hint: idToken };
+  if (post_logout_redirect_uri) {
+    endSessionParams.post_logout_redirect_uri = post_logout_redirect_uri;
+  }
+
+  const redirectUrl = req.oidc.endSessionUrl(endSessionParams);
+  res.redirect(redirectUrl);
 }

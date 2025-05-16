@@ -15,7 +15,7 @@ import {
 } from "../../utils/state-machine";
 import { getTxmaHeader } from "../../utils/txma-header";
 import { supportChangeOnIntervention } from "../../config";
-import { globalLogoutPost } from "../global-logout/global-logout-controller";
+import { handleLogout } from "../logout/logout-controller";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -165,20 +165,19 @@ async function handleIntervention(
   res: Response,
   requestType: UserJourney
 ): Promise<void> {
-  if (intervention === "BLOCKED") {
-    await globalLogoutPost(req, res);
-    res.redirect(PATH_DATA.UNAVAILABLE_PERMANENT.url);
-    return;
+  switch (intervention) {
+    case "BLOCKED":
+      handleLogout(req, res, PATH_DATA.UNAVAILABLE_PERMANENT.url);
+      break;
+    case "SUSPENDED":
+      handleLogout(req, res, PATH_DATA.UNAVAILABLE_TEMPORARY.url);
+      break;
+    default:
+      renderPasswordError(
+        req,
+        res,
+        requestType,
+        "pages.enterPassword.password.validationError.incorrectPassword"
+      );
   }
-  if (intervention === "SUSPENDED") {
-    await globalLogoutPost(req, res);
-    res.redirect(PATH_DATA.UNAVAILABLE_TEMPORARY.url);
-    return;
-  }
-  renderPasswordError(
-    req,
-    res,
-    requestType,
-    "pages.enterPassword.password.validationError.incorrectPassword"
-  );
 }

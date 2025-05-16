@@ -11,7 +11,7 @@ import {
 import { EnterPasswordServiceInterface } from "../types";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
-import * as globalLogout from "../../global-logout/global-logout-controller";
+import * as logoutController from "../../logout/logout-controller";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -41,8 +41,8 @@ describe("enter password controller", () => {
     res = {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
-      locals: {},
       status: sandbox.fake(),
+      locals: {},
     };
     process.env.ENABLE_CHANGE_ON_INTERVENTION = "1";
   });
@@ -142,13 +142,21 @@ describe("enter password controller", () => {
       req.body["password"] = "password";
       req.body["requestType"] = "changeEmail";
 
-      const logoutStub = sandbox
-        .stub(globalLogout, "globalLogoutPost")
-        .resolves();
+      const handleLogoutStub = sandbox
+        .stub(logoutController, "handleLogout")
+        .callsFake(async (_req, _res, redirectUrl) => {
+          if (res.redirect) {
+            res.redirect(redirectUrl ?? "");
+          }
+        });
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(logoutStub).to.have.been.calledWith(req, res);
+      expect(handleLogoutStub).to.have.been.calledWith(
+        req,
+        res,
+        PATH_DATA.UNAVAILABLE_PERMANENT.url
+      );
       expect(res.redirect).to.have.been.calledWith(
         PATH_DATA.UNAVAILABLE_PERMANENT.url
       );
@@ -172,13 +180,20 @@ describe("enter password controller", () => {
       req.body["password"] = "password";
       req.body["requestType"] = "changeEmail";
 
-      const logoutStub = sandbox
-        .stub(globalLogout, "globalLogoutPost")
-        .resolves();
-
+      const handleLogoutStub = sandbox
+        .stub(logoutController, "handleLogout")
+        .callsFake(async (_req, _res, redirectUrl) => {
+          if (res.redirect) {
+            res.redirect(redirectUrl ?? "");
+          }
+        });
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(logoutStub).to.have.been.calledWith(req, res);
+      expect(handleLogoutStub).to.have.been.calledWith(
+        req,
+        res,
+        PATH_DATA.UNAVAILABLE_TEMPORARY.url
+      );
       expect(res.redirect).to.have.been.calledWith(
         PATH_DATA.UNAVAILABLE_TEMPORARY.url
       );

@@ -4,8 +4,8 @@ import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { supportChangeOnIntervention } from "../../config";
 
 const interventionMap: Record<string, string> = {
-  "1084": "BLOCKED",
   "1083": "SUSPENDED",
+  "1084": "BLOCKED",
 };
 
 function getInterventionFromError(response: any): string | undefined {
