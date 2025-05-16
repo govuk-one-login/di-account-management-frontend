@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { destroyUserSessions } from "../../utils/session-store";
+import { getBaseUrl } from "../../config";
 
 export async function logoutPost(req: Request, res: Response): Promise<void> {
   await handleLogout(req, res);
@@ -20,7 +21,7 @@ export async function handleLogout(
 
   const endSessionParams: any = { id_token_hint: idToken };
   if (post_logout_redirect_uri) {
-    endSessionParams.post_logout_redirect_uri = post_logout_redirect_uri;
+    endSessionParams.post_logout_redirect_uri = `${getBaseUrl()}${post_logout_redirect_uri}}`;
   }
 
   const redirectUrl = req.oidc.endSessionUrl(endSessionParams);

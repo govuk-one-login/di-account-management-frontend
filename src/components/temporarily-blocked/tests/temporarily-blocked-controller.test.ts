@@ -40,6 +40,7 @@ describe("temporarily blocked controller", () => {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       locals: {},
+      status: sandbox.fake(),
     };
   });
 
@@ -53,6 +54,7 @@ describe("temporarily blocked controller", () => {
       temporarilyBlockedGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("temporarily-blocked/index.njk");
+      expect(res.status).to.have.calledWith(401);
     });
   });
 });
