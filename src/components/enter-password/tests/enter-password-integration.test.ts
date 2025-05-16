@@ -55,6 +55,18 @@ describe("Integration::enter password", () => {
             refreshToken: "token",
           },
         };
+        req.oidc = {
+          endSessionUrl: (params: any) => {
+            let url = "/oidc/logout";
+            if (params) {
+              const q = Object.entries(params)
+                .map(([k, v]) => `${k}=${encodeURIComponent(String(v))}`)
+                .join("&");
+              url += "?" + q;
+            }
+            return url;
+          },
+        };
         next();
       });
 
@@ -238,6 +250,52 @@ describe("Integration::enter password", () => {
       })
       .expect("Location", PATH_DATA.DELETE_ACCOUNT.url)
       .expect(302);
+  });
+
+  it("should redirect to unavailable permanent when intervention BLOCKED", async () => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(403, { code: "1084" });
+
+    const res = await request(app)
+      .post(ENDPOINT)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        password: "Password1",
+        requestType: "changeEmail",
+      });
+
+    expect(res.headers.location).to.contain("/oidc/logout");
+    expect(res.headers.location).to.contain(
+      `post_logout_redirect_uri=${encodeURIComponent(PATH_DATA.UNAVAILABLE_PERMANENT.url)}`
+    );
+  });
+
+  it("should redirect to unavailable temporary when intervention SUSPENDED", async () => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(403, { code: "1083" });
+
+    const res = await request(app)
+      .post(ENDPOINT)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        password: "Password1",
+        requestType: "changeEmail",
+      });
+
+    expect(res.headers.location).to.contain("/oidc/logout");
+    expect(res.headers.location).to.contain(
+      `post_logout_redirect_uri=${encodeURIComponent(PATH_DATA.UNAVAILABLE_TEMPORARY.url)}`
+    );
   });
 
   it("should show incorrect password error for unknown intervention", async () => {
