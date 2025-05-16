@@ -9,6 +9,7 @@ import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
+import { getBaseUrl } from "../../../config";
 
 describe("Integration::enter password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -275,7 +276,7 @@ describe("Integration::enter password", () => {
       .undefined;
     expect(res.headers.location).to.contain("/oidc/logout");
     expect(res.headers.location).to.contain(
-      `post_logout_redirect_uri=${encodeURIComponent(PATH_DATA.UNAVAILABLE_PERMANENT.url)}`
+      `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.UNAVAILABLE_PERMANENT.url)}`
     );
   });
 
@@ -300,7 +301,7 @@ describe("Integration::enter password", () => {
       .undefined;
     expect(res.headers.location).to.contain("/oidc/logout");
     expect(res.headers.location).to.contain(
-      `post_logout_redirect_uri=${encodeURIComponent(PATH_DATA.UNAVAILABLE_TEMPORARY.url)}`
+      `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.UNAVAILABLE_TEMPORARY.url)}`
     );
   });
 
