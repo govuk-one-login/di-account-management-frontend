@@ -201,6 +201,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "1"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -238,6 +239,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -275,6 +277,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -312,6 +315,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -350,6 +354,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "0"
 
 Resources:
   #
@@ -920,6 +925,14 @@ Resources:
                   !Ref Environment,
                   BRANDREFRESHENABLED,
                 ]
+            - Name: "ENABLE_CHANGE_ON_INTERVENTION"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTCHANGEONINTERVENTION,
+                ]
+
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn

@@ -9,6 +9,7 @@ import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
+import { getBaseUrl } from "../../../config";
 
 describe("Integration::enter password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -23,7 +24,9 @@ describe("Integration::enter password", () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
+    const config = require("../../../config");
     sandbox = sinon.createSandbox();
+    sandbox.stub(config, "supportChangeOnIntervention").callsFake(() => true);
     sandbox
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
@@ -53,6 +56,18 @@ describe("Integration::enter password", () => {
               .encode(),
             idToken: "Idtoken",
             refreshToken: "token",
+          },
+        };
+        req.oidc = {
+          endSessionUrl: (params: any) => {
+            let url = "/oidc/logout";
+            if (params) {
+              const q = Object.entries(params)
+                .map(([k, v]) => `${k}=${encodeURIComponent(String(v))}`)
+                .join("&");
+              url += "?" + q;
+            }
+            return url;
           },
         };
         next();
@@ -238,5 +253,80 @@ describe("Integration::enter password", () => {
       })
       .expect("Location", PATH_DATA.DELETE_ACCOUNT.url)
       .expect(302);
+  });
+
+  it("should redirect to unavailable permanent when intervention BLOCKED", async () => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(403, { code: "1084" });
+
+    const res = await request(app)
+      .post(ENDPOINT)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        password: "Password1",
+        requestType: "changeEmail",
+      });
+
+    expect(res.headers.location, "Expected redirect location header").to.not.be
+      .undefined;
+    expect(res.headers.location).to.contain("/oidc/logout");
+    expect(res.headers.location).to.contain(
+      `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.UNAVAILABLE_PERMANENT.url)}`
+    );
+  });
+
+  it("should redirect to unavailable temporary when intervention SUSPENDED", async () => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(403, { code: "1083" });
+
+    const res = await request(app)
+      .post(ENDPOINT)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        password: "Password1",
+        requestType: "changeEmail",
+      });
+
+    expect(res.headers.location, "Expected redirect location header").to.not.be
+      .undefined;
+    expect(res.headers.location).to.contain("/oidc/logout");
+    expect(res.headers.location).to.contain(
+      `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.UNAVAILABLE_TEMPORARY.url)}`
+    );
+  });
+
+  it("should show incorrect password error for unknown intervention", async () => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.AUTHENTICATE)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .once()
+      .reply(403);
+
+    await request(app)
+      .post(ENDPOINT)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        password: "Password1",
+        requestType: "changeEmail",
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($(testComponent("password-error")).text()).to.contains(
+          "Enter the correct password"
+        );
+      })
+      .expect(400);
   });
 });

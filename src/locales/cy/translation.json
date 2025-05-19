@@ -611,6 +611,30 @@
           "I ddarganfod pa wybodaeth rydym yn ei gadw pan fyddwch yn cysylltu â ni a sut rydym yn ei defnyddio, gweler <a href=\"https://signin.account.gov.uk/privacy-notice\" class=\"govuk-link\">hysbysiad preifatrwydd GOV.UK One Login</a>"
         ]
       }
+    },
+    "permanentlyLockedScreen": {
+      "title": "Mae eich GOV.UK One Login wedi ei gloi yn barhaol",
+      "header": "Mae eich GOV.UK One Login wedi ei gloi yn barhaol",
+      "section1": {
+        "paragraph1": "Ni allwch fewngofnodi ac ni allwch ddefnyddio eich GOV.UK One Login i gael mynediad at wasanaethau’r llywodraeth."
+      },
+      "section2": {
+        "heading": "Beth allwch chi ei wneud",
+        "paragraph1": "Ewch yn ôl i’r gwasanaeth roeddech yn ceisio ei ddefnyddio. Gallwch chwilio am y gwasanaeth gan ddefnyddio’ch peiriant chwilio neu ddod o hyd iddo o’r hafan GOV.UK.",
+        "paragraph2": "Gallwch greu GOV.UK One Login newydd gyda chyfeiriad e-bost gwahanol."
+      }
+    },
+    "suspendedPageScreen": {
+      "title": "Mae’n ddrwg gennym, mae problem",
+      "heading": "Mae’n ddrwg gennym, mae problem",
+      "section1": {
+        "paragraph1": "Nid yw eich GOV.UK One Login ar gael ar hyn o bryd."
+      },
+      "section2": {
+        "heading": "Beth allwch chi ei wneud",
+        "paragraph1": "Dewch yn ôl yn nes ymlaen. Dylai eich GOV.UK One Login fod ar gael eto mewn 3 diwrnod gwaith.",
+        "paragraph2": "Gallwch hefyd fynd yn ôl i’r gwasanaeth roeddech yn ceisio ei ddefnyddio. Gallwch chwilio am y gwasanaeth gan ddefnyddio’ch peiriant chwilio neu ddod o hyd iddo o’r hafan GOV.UK."
+      }
     }
   }
 }

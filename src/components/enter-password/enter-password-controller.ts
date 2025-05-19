@@ -14,6 +14,8 @@ import {
   UserJourney,
 } from "../../utils/state-machine";
 import { getTxmaHeader } from "../../utils/txma-header";
+import { supportChangeOnIntervention } from "../../config";
+import { handleLogout } from "../../utils/logout";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -33,61 +35,73 @@ const OPL_VALUES: Record<
   UserJourney,
   { contentId: string; taxonomyLevel2: string }
 > = {
-  changeEmail: {
+  [UserJourney.ChangeEmail]: {
     contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
     taxonomyLevel2: "change email",
   },
-  changePassword: {
+  [UserJourney.ChangePassword]: {
     contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412",
     taxonomyLevel2: "change password",
   },
-  changePhoneNumber: {
+  [UserJourney.ChangePhoneNumber]: {
     contentId: "2f5f174d-c650-4b28-96cf-365f4fb17af1",
     taxonomyLevel2: "change phone number",
   },
-  deleteAccount: {
+  [UserJourney.DeleteAccount]: {
     contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349",
     taxonomyLevel2: "delete account",
   },
-  addBackup: {
+  [UserJourney.addBackup]: {
     contentId: "375aa101-7bd6-43c2-ac39-19c864b49882",
     taxonomyLevel2: "add mfa method",
   },
-  removeBackup: {
+  [UserJourney.RemoveBackup]: {
     contentId: "375aa101-7bd6-43c2-ac39-19c864b49844",
     taxonomyLevel2: "remove backup mfa",
   },
-  changeAuthApp: {
+  [UserJourney.ChangeAuthApp]: {
     contentId: "9f21527b-59ec-4de3-99e7-babd5846e8de",
     taxonomyLevel2: "change auth app",
   },
-  switchBackupMethod: {
+  [UserJourney.SwitchBackupMethod]: {
     contentId: "313fb160-5961-4f53-b3b9-72d2f961cc2d",
     taxonomyLevel2: "switch backup method",
   },
-  changeDefaultMethod: {
+  [UserJourney.ChangeDefaultMethod]: {
     contentId: "244e4f6f-23bb-489b-9e08-3fb8a44734db",
     taxonomyLevel2: "change default method",
   },
 };
 
-const getRenderOptions = (req: Request, requestType: UserJourney) => {
-  return {
-    requestType,
-    fromSecurity: req.query.from == "security",
-    oplValues: OPL_VALUES[requestType] || {},
-  };
-};
+const getRenderOptions = (req: Request, requestType: UserJourney) => ({
+  requestType,
+  fromSecurity: req.query.from === "security",
+  oplValues: OPL_VALUES[requestType] || {},
+});
+
+function renderPasswordError(
+  req: Request,
+  res: Response,
+  requestType: UserJourney,
+  errorMsgKey: string
+) {
+  const error = formatValidationError("password", req.t(errorMsgKey));
+  renderBadRequest(
+    res,
+    req,
+    TEMPLATE,
+    error,
+    getRenderOptions(req, requestType)
+  );
+}
 
 export function enterPasswordGet(req: Request, res: Response): void {
   const requestType = req.query.type as UserJourney;
-
   if (!requestType) {
-    return res.redirect(PATH_DATA.SETTINGS.url);
+    res.redirect(PATH_DATA.SETTINGS.url);
+    return;
   }
-
   req.session.user.state[requestType] = getInitialState();
-
   res.render(TEMPLATE, getRenderOptions(req, requestType));
 }
 
@@ -96,31 +110,26 @@ export function enterPasswordPost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const requestType = req.body.requestType as UserJourney;
-
     const { password } = req.body;
 
     if (!password) {
-      const error = formatValidationError(
-        "password",
-        req.t("pages.enterPassword.password.validationError.required")
-      );
-
-      return renderBadRequest(
-        res,
+      renderPasswordError(
         req,
-        TEMPLATE,
-        error,
-        getRenderOptions(req, requestType)
+        res,
+        requestType,
+        "pages.enterPassword.password.validationError.required"
       );
+      return;
     }
 
-    const { email } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
+    const user = {
+      token: req.session.user.tokens.accessToken,
+      email: req.session.user.email,
+      password: password,
+    };
 
-    const isAuthenticated = await service.authenticated(
-      accessToken,
-      email,
-      password,
+    const response = await service.authenticated(
+      user,
       req.ip,
       res.locals.sessionId,
       res.locals.persistentSessionId,
@@ -128,26 +137,48 @@ export function enterPasswordPost(
       getTxmaHeader(req, res.locals.trace)
     );
 
-    if (isAuthenticated) {
+    if (response.authenticated) {
       req.session.user.state[requestType] = getNextState(
         req.session.user.state[requestType].value,
         EventType.Authenticated
       );
-
-      return res.redirect(REDIRECT_PATHS[requestType]);
+      res.redirect(REDIRECT_PATHS[requestType]);
+      return;
     }
 
-    const error = formatValidationError(
-      "password",
-      req.t("pages.enterPassword.password.validationError.incorrectPassword")
-    );
+    if (supportChangeOnIntervention() && response.intervention) {
+      await handleIntervention(response.intervention, req, res, requestType);
+      return;
+    }
 
-    renderBadRequest(
-      res,
+    renderPasswordError(
       req,
-      TEMPLATE,
-      error,
-      getRenderOptions(req, requestType)
+      res,
+      requestType,
+      "pages.enterPassword.password.validationError.incorrectPassword"
     );
   };
+}
+
+async function handleIntervention(
+  intervention: string,
+  req: Request,
+  res: Response,
+  requestType: UserJourney
+): Promise<void> {
+  switch (intervention) {
+    case "BLOCKED":
+      await handleLogout(req, res, PATH_DATA.UNAVAILABLE_PERMANENT.url);
+      break;
+    case "SUSPENDED":
+      await handleLogout(req, res, PATH_DATA.UNAVAILABLE_TEMPORARY.url);
+      break;
+    default:
+      renderPasswordError(
+        req,
+        res,
+        requestType,
+        "pages.enterPassword.password.validationError.incorrectPassword"
+      );
+  }
 }
