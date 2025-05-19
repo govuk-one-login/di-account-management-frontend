@@ -67,13 +67,13 @@ describe("addMfaSmsMethodPost", () => {
     expect(res.render).to.be.calledWith("add-mfa-method-sms/index.njk", {
       errors: {
         phoneNumber: {
-          text: "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber",
+          text: "pages.changePhoneNumber.validationError.samePhoneNumber",
           href: "#phoneNumber",
         },
       },
       errorList: [
         {
-          text: "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber",
+          text: "pages.changePhoneNumber.validationError.samePhoneNumber",
           href: "#phoneNumber",
         },
       ],

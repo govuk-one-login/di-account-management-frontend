@@ -137,9 +137,7 @@ export function changeDefaultMethodSmsPost(
 
       const error = formatValidationError(
         href,
-        req.t(
-          "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
-        )
+        req.t("pages.changePhoneNumber.validationError.samePhoneNumber")
       );
       return renderBadRequest(
         res,

@@ -1434,11 +1434,7 @@ Resources:
               - IsProduction
               - |
                 User-agent: *
-                Allow: /contact-gov-uk-one-login$
-                Allow: /contact-gov-uk-one-login?lng=cy$
-                Allow: /assets/
-                Allow: /public/
-                Disallow: /
+                Disallow:
               - |
                 User-agent: *
                 Disallow: /
