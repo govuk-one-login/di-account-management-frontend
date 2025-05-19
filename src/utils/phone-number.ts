@@ -3,7 +3,6 @@ import {
   parsePhoneNumberWithError,
 } from "libphonenumber-js/mobile";
 import { logger } from "./logger";
-import { MfaMethod } from "./mfaClient/types";
 
 export function containsUKMobileNumber(value: string): boolean {
   try {
@@ -55,14 +54,3 @@ export function getLastNDigits(phoneNumber: string, n: number): string {
   }
   return phoneNumber.slice(-n);
 }
-
-export const phoneNumberInUse = (
-  value: string,
-  mfaMethods: MfaMethod[] = []
-) => {
-  return mfaMethods.some(
-    (method) =>
-      method.method.mfaMethodType === "SMS" &&
-      method.method.phoneNumber === value
-  );
-};

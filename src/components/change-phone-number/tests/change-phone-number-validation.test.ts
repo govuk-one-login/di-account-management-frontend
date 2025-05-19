@@ -121,19 +121,6 @@ describe("validatePhoneNumberRequest", () => {
     );
   });
 
-  it("errors as expected when phone number is already in use", async () => {
-    const req = reqBuilder
-      .withBody({
-        hasInternationalPhoneNumber: "false",
-        phoneNumber: "0123456789",
-      })
-      .withMfaMethods()
-      .build();
-    expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.ukPhoneNumber.validationError.samePhoneNumber"
-    );
-  });
-
   it("errors as expected when no international phone number is provided", async () => {
     const req = reqBuilder
       .withBody({
@@ -191,19 +178,6 @@ describe("validatePhoneNumberRequest", () => {
       .build();
     expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-    );
-  });
-
-  it("errors as expected when international phone number is already in use", async () => {
-    const req = reqBuilder
-      .withBody({
-        hasInternationalPhoneNumber: "true",
-        internationalPhoneNumber: "0123456789",
-      })
-      .withMfaMethods()
-      .build();
-    expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.internationalPhoneNumber.validationError.samePhoneNumber"
     );
   });
 });
