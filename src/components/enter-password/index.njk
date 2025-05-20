@@ -12,7 +12,7 @@
   {% set pageTitleName = 'pages.enterPassword.title' | translate %}
 {% endif %}
 {% if fromSecurity %}
-  {% set backLink = "/manage-your-account" %}
+  {% set backLink = "SECURITY" | getPath %}
 {% endif %}
 
 {% block pageContent %}
@@ -44,7 +44,7 @@
         "preventDoubleClick": true
         }) }}
         {% if fromSecurity %}
-        <p class="govuk-body"> <a href="/manage-your-account" class="govuk-link" rel="noreferrer noopener">{{cancelText}}</a></p>
+        <p class="govuk-body"> <a href='{{ "SECURITY" | getPath }}' class="govuk-link" rel="noreferrer noopener">{{cancelText}}</a></p>
         {% endif %}
     </form>
 
