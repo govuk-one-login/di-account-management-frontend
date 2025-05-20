@@ -95,6 +95,24 @@ describe("Integration::enter password", () => {
     app = undefined;
   });
 
+  it("should redirect to settings when type not present (GET)", async () => {
+    const response = await request(app).get(ENDPOINT).expect(302);
+    expect(response.header["location"]).to.equal("/settings");
+  });
+
+  it("should redirect to settings when type not present (POST)", async () => {
+    const response = await request(app)
+      .post(ENDPOINT)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+        password: "password",
+      })
+      .expect(302);
+    expect(response.header["location"]).to.equal("/settings");
+  });
+
   it("should return enter password page", (done) => {
     request(app).get(ENDPOINT).query({ type: "changeEmail" }).expect(200, done);
   });
@@ -110,10 +128,12 @@ describe("Integration::enter password", () => {
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "changeEmail",
+      })
       .send({
         _csrf: token,
         password: "",
-        requestType: "changeEmail",
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
@@ -138,10 +158,12 @@ describe("Integration::enter password", () => {
       .query({ type: "changeEmail" })
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "changeEmail",
+      })
       .send({
         _csrf: token,
         password: "pasasd",
-        requestType: "changeEmail",
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
@@ -165,10 +187,12 @@ describe("Integration::enter password", () => {
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "changeEmail",
+      })
       .send({
         _csrf: token,
         password: "Password1",
-        requestType: "changeEmail",
       })
       .expect("Location", PATH_DATA.CHANGE_EMAIL.url)
       .expect(302);
@@ -187,10 +211,12 @@ describe("Integration::enter password", () => {
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "changePassword",
+      })
       .send({
         _csrf: token,
         password: "Password1",
-        requestType: "changePassword",
       })
       .expect("Location", PATH_DATA.CHANGE_PASSWORD.url)
       .expect(302);
@@ -209,10 +235,12 @@ describe("Integration::enter password", () => {
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "changePhoneNumber",
+      })
       .send({
         _csrf: token,
         password: "Password1",
-        requestType: "changePhoneNumber",
       })
       .expect("Location", PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .expect(302);
@@ -231,10 +259,12 @@ describe("Integration::enter password", () => {
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "deleteAccount",
+      })
       .send({
         _csrf: token,
         password: "Password1",
-        requestType: "deleteAccount",
       })
       .expect("Location", PATH_DATA.DELETE_ACCOUNT.url)
       .expect(302);

@@ -20,11 +20,9 @@
 
     <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{header}}</h1>
 
-    <form action="{{'ENTER_PASSWORD' | getPath }}" method="post" novalidate>
+    <form action="{{formAction}}" method="post" novalidate>
 
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-        <input type="hidden" name="requestType" value="{{requestType}}"/>
-        <input type="hidden" name="fromSecurity" value="{{fromSecurity}}"/>
 
         <p class="govuk-body">{{paragraph}}</p>
 
