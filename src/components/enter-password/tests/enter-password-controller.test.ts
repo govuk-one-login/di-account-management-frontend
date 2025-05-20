@@ -171,13 +171,8 @@ describe("enter password controller", () => {
       req.body["password"] = "password";
       req.body["requestType"] = "changeEmail";
 
-      const handleLogoutStub = sandbox
-        .stub(logoutController, "handleLogout")
-        .callsFake(async (_req, _res, redirectUrl) => {
-          if (res.redirect) {
-            res.redirect(redirectUrl ?? "");
-          }
-        });
+      const handleLogoutStub = sandbox.stub(logoutController, "handleLogout");
+
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
       expect(handleLogoutStub).to.have.been.calledWith(
