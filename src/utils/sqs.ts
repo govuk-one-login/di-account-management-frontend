@@ -83,21 +83,17 @@ function sqsService(): SqsService {
     trace: string
   ): Promise<any> {
     const { AUDIT_QUEUE_URL } = process.env;
-    const messageSent: boolean = await sendToQueue(
-      AUDIT_QUEUE_URL,
-      messageBody,
-      trace
-    );
+    const messageSent = await sendToQueue(AUDIT_QUEUE_URL, messageBody, trace);
 
-    if (messageSent == false) {
+    if (!messageSent) {
       logger.error({ trace: trace }, FAILED_TO_SEND_TO_TXMA);
       const { AUDIT_QUEUE_DLQ_URL } = process.env;
-      const messageSentToDLQ: boolean = await sendToQueue(
+      const messageSentToDLQ = await sendToQueue(
         AUDIT_QUEUE_DLQ_URL,
         messageBody,
         trace
       );
-      if (messageSentToDLQ == false) {
+      if (!messageSentToDLQ) {
         logger.error({ trace: trace }, FAILED_SEND_TO_TXMA_DLQ);
         logRedacted(messageBody, FIELDS_REDACTED_FROM_LOG_MESSAGES, trace);
       }
