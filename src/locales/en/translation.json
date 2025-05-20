@@ -308,7 +308,7 @@
         "title": "You've removed your back-up method for getting security codes",
         "heading": "You've removed your back-up method for getting security codes.",
         "message_app": "You'll no longer get security codes to your authenticator app.",
-        "message_sms": "You'll no longer get security codes to your phone number ending <strong>[phoneNumber]</strong>."
+        "message_sms": "You'll no longer get security codes to your phone number ending with <strong>[phoneNumber]</strong>."
       }
     },
     "activityHistory": {
