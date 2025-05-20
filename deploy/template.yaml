@@ -202,6 +202,7 @@ Mappings:
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "1"
+      FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -240,6 +241,7 @@ Mappings:
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "1"
+      FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -278,6 +280,7 @@ Mappings:
       DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "1"
+      FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -316,6 +319,7 @@ Mappings:
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "0"
+      FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -355,6 +359,7 @@ Mappings:
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "0"
+      FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
 
 Resources:
   #
@@ -932,7 +937,13 @@ Resources:
                   !Ref Environment,
                   SUPPORTCHANGEONINTERVENTION,
                 ]
-
+            - Name: "FINGERPRINT_COOKIE_DOMAIN"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  FINGERPRINTCOOKIEDOMAIN,
+                ]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn

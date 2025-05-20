@@ -77,6 +77,10 @@ export function getAnalyticsCookieDomain(): string {
   return process.env.ANALYTICS_COOKIE_DOMAIN ?? "localhost";
 }
 
+export function getFingerprintCookieDomain(): string {
+  return process.env.FINGERPRINT_COOKIE_DOMAIN ?? "localhost";
+}
+
 export function getBaseUrl(): string {
   const baseUrl = process.env.BASE_URL ?? "localhost:6000";
   return getProtocol() + baseUrl;

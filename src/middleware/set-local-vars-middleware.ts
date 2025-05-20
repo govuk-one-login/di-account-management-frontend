@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   getAnalyticsCookieDomain,
   getAuthFrontEndUrl,
+  getFingerprintCookieDomain,
   getGtmId,
   getYourAccountUrl,
   googleAnalytics4GtmContainerId,
@@ -27,6 +28,7 @@ export async function setLocalVarsMiddleware(
   res.locals.scriptNonce = await generateNonce();
   res.locals.authFrontEndUrl = getAuthFrontEndUrl();
   res.locals.analyticsCookieDomain = getAnalyticsCookieDomain();
+  res.locals.fingerprintCookieDomain = getFingerprintCookieDomain();
   res.locals.govAccountsUrl = getYourAccountUrl();
   res.locals.accountHome = PATH_DATA.YOUR_SERVICES.url;
   res.locals.accountSecurity = PATH_DATA.SECURITY.url;
