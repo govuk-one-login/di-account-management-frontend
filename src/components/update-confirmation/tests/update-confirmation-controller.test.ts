@@ -104,10 +104,12 @@ describe("update confirmation controller", () => {
 
     res = {
       render: sinon.fake(),
+      redirect: sinon.fake(),
     };
 
     removeMfaMethodConfirmationGet(req, res);
 
+    expect(req.session.removedMfaMethod).to.eq(undefined);
     expect(res.render).to.be.calledWith(
       "common/confirmation-page/confirmation.njk",
       {
@@ -118,6 +120,7 @@ describe("update confirmation controller", () => {
         backLink: "/security",
       }
     );
+    expect(res.redirect).not.to.be.called;
   });
 
   describe("removeMfaMethodConfirmationGet with removed auth app method", () => {
@@ -135,10 +138,12 @@ describe("update confirmation controller", () => {
 
     res = {
       render: sinon.fake(),
+      redirect: sinon.fake(),
     };
 
     removeMfaMethodConfirmationGet(req, res);
 
+    expect(req.session.removedMfaMethod).to.eq(undefined);
     expect(res.render).to.be.calledWith(
       "common/confirmation-page/confirmation.njk",
       {
@@ -149,9 +154,10 @@ describe("update confirmation controller", () => {
         backLink: "/security",
       }
     );
+    expect(res.redirect).not.to.be.called;
   });
 
-  describe("removeMfaMethodConfirmationGet with removed unknown method", () => {
+  describe("removeMfaMethodConfirmationGet with no removed method", () => {
     req = {
       session: {},
       t: sinon.fake((k: string) => k),
@@ -159,20 +165,13 @@ describe("update confirmation controller", () => {
 
     res = {
       render: sinon.fake(),
+      redirect: sinon.fake(),
     };
 
     removeMfaMethodConfirmationGet(req, res);
 
-    expect(res.render).to.be.calledWith(
-      "common/confirmation-page/confirmation.njk",
-      {
-        pageTitleName: "pages.removeBackupMethod.confirm.title",
-        heading: "pages.removeBackupMethod.confirm.heading",
-        message: "pages.removeBackupMethod.confirm.message_unknown",
-        backLinkText: "pages.removeBackupMethod.backLinkText",
-        backLink: "/security",
-      }
-    );
+    expect(res.render).not.to.be.called;
+    expect(res.redirect).to.be.calledWith("/security");
   });
 });
 

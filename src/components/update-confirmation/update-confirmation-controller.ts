@@ -7,7 +7,6 @@ import {
 import { clearCookies } from "../../utils/session-store";
 import { logger } from "../../utils/logger";
 import { getLastNDigits } from "../../utils/phone-number";
-import { SmsMethod } from "../../utils/mfaClient/types";
 
 const oplValues = {
   updateEmailConfirmation: {
@@ -127,19 +126,26 @@ export async function removeMfaMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  let message = req.t("pages.removeBackupMethod.confirm.message_unknown");
+  let message: string;
   const removedMethod = req.session.removedMfaMethod;
+
+  if (!removedMethod) {
+    res.redirect(PATH_DATA.SECURITY.url);
+    return;
+  }
 
   if (removedMethod?.method.mfaMethodType === "AUTH_APP") {
     message = req.t("pages.removeBackupMethod.confirm.message_app");
   }
 
   if (removedMethod?.method.mfaMethodType === "SMS") {
-    const method = removedMethod.method as SmsMethod;
+    const method = removedMethod.method;
     message = req
       .t("pages.removeBackupMethod.confirm.message_sms")
       .replace("[phoneNumber]", getLastNDigits(method.phoneNumber, 4));
   }
+
+  delete req.session.removedMfaMethod;
 
   return res.render("common/confirmation-page/confirmation.njk", {
     pageTitleName: req.t("pages.removeBackupMethod.confirm.title"),
