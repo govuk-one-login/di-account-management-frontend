@@ -128,9 +128,7 @@ export async function removeMfaMethodConfirmationGet(
   res: Response
 ): Promise<void> {
   let message = req.t("pages.removeBackupMethod.confirm.message_unknown");
-  const removedMethod = (req.session.removedMfaMethods || []).find((m) => {
-    return "" + m.mfaIdentifier == req.query.id;
-  });
+  const removedMethod = req.session.removedMfaMethod;
 
   if (removedMethod?.method.mfaMethodType === "AUTH_APP") {
     message = req.t("pages.removeBackupMethod.confirm.message_app");
