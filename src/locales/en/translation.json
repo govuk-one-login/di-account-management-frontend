@@ -589,7 +589,7 @@
         "title": "You've changed your default method for getting security codes",
         "heading": "You've changed your default method for getting security codes",
         "app": "Your default method for getting security codes is now your authenticator app.",
-        "sms": "Your default method for getting security codes will be text messages to your phone number ending with <strong>[phoneNumber]</strong>.",
+        "sms": "Your default method for getting security codes will be a text message to your phone number ending with <strong>[phoneNumber]</strong>.",
         "back": "Back to Security"
       },
       "sms": {
@@ -671,7 +671,7 @@
     "switchBackupMethod": {
       "title": "Switch your back-up and default methods",
       "newDefaultApp": "Your default method for getting security codes will be using your authenticator app.",
-      "newDefaultSms": "Your default method for getting security codes will be text messages to your phone number ending with <strong>[phoneNumber]</strong>.",
+      "newDefaultSms": "Your default method for getting security codes will be a text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "newBackupApp": "Your authenticator app will become your back-up method.",
       "newBackupSms": "Your back-up method will be a text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "button": "Switch methods",
