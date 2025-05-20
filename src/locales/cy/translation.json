@@ -614,7 +614,7 @@
         ]
       }
     },
-    "permanentlyLockedScreen": {
+    "permanentlySuspendedScreen": {
       "title": "Mae eich GOV.UK One Login wedi ei gloi yn barhaol",
       "header": "Mae eich GOV.UK One Login wedi ei gloi yn barhaol",
       "section1": {
@@ -626,7 +626,7 @@
         "paragraph2": "Gallwch greu GOV.UK One Login newydd gyda chyfeiriad e-bost gwahanol."
       }
     },
-    "suspendedPageScreen": {
+    "temporarilySuspendedPageScreen": {
       "title": "Mae’n ddrwg gennym, mae problem",
       "heading": "Mae’n ddrwg gennym, mae problem",
       "section1": {

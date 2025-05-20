@@ -816,7 +816,7 @@
         ]
       }
     },
-    "permanentlyLockedScreen": {
+    "permanentlySuspendedScreen": {
       "title": "Your GOV.UK One Login has been permanently locked",
       "header": "Your GOV.UK One Login has been permanently locked",
       "section1": {
@@ -828,7 +828,7 @@
         "paragraph2": "You can create a new GOV.UK  One Login with a different email address."
       }
     },
-    "suspendedPageScreen": {
+    "temporarilySuspendedPageScreen": {
       "title": "Sorry, there is a problem",
       "heading": "Sorry, there is a problem",
       "section1": {

@@ -124,7 +124,7 @@ describe("enter password controller", () => {
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
-    it("should logout and redirect to permanently blocked when intervention is BLOCKED", async () => {
+    it("should logout and redirect to permanently suspended when intervention is BLOCKED", async () => {
       const fakeService: EnterPasswordServiceInterface = {
         authenticated: sandbox.fake.resolves({
           authenticated: false,
