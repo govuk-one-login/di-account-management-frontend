@@ -2,7 +2,7 @@ import {
   AnyMachineSnapshot,
   createActor,
   createMachine,
-  getNextSnapshot,
+  transition,
   StateValue,
 } from "xstate";
 
@@ -118,7 +118,7 @@ function getNextEvents(snapshot: AnyMachineSnapshot) {
 }
 
 function getNextState(from: StateValue, to: EventType): StateAction {
-  const t = getNextSnapshot(
+  const [t] = transition(
     amStateMachine,
     amStateMachine.resolveState({ value: from, context: {} }),
     { type: to }
