@@ -292,7 +292,7 @@
       "confirm": {
         "title": "You've added a back-up method for getting security codes",
         "heading": "You've added a back-up method for getting security codes",
-        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with [mobile] instead.",
+        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with <strong>[mobile]</strong> instead.",
         "backLink": "Back to Security"
       }
     },
