@@ -1,12 +1,3 @@
-import { CookieOptions } from "csurf";
-
-export function getCSRFCookieOptions(isProdEnv: boolean): CookieOptions {
-  return {
-    httpOnly: isProdEnv,
-    secure: isProdEnv,
-  };
-}
-
 export function getSessionCookieOptions(
   isProdEnv: boolean,
   expiry: number,

@@ -1,6 +1,5 @@
 import express, { Application } from "express";
 import cookieParser from "cookie-parser";
-import csurf from "csurf";
 import { logger, loggerMiddleware } from "./utils/logger";
 import { sanitizeRequestMiddleware } from "./middleware/sanitize-request-middleware";
 import i18nextMiddleware from "i18next-http-middleware";
@@ -11,6 +10,7 @@ import {
   helmetConfiguration,
   webchatHelmetConfiguration,
 } from "./config/helmet";
+import { csrfSynchronisedProtection } from "./config/csrf";
 import helmet from "helmet";
 import session from "express-session";
 import i18next from "i18next";
@@ -34,7 +34,7 @@ import { csrfMiddleware } from "./middleware/csrf-middleware";
 import { securityRouter } from "./components/security/security-routes";
 import { activityHistoryRouter } from "./components/activity-history/activity-history-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
-import { getCSRFCookieOptions, getSessionCookieOptions } from "./config/cookie";
+import { getSessionCookieOptions } from "./config/cookie";
 import { ENVIRONMENT_NAME, LOCALE, PATH_DATA } from "./app.constants";
 import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
@@ -216,7 +216,8 @@ async function createApp(): Promise<express.Application> {
   app.use(authMiddleware(oidcClient));
 
   app.use(globalLogoutRouter);
-  app.use(csurf({ cookie: getCSRFCookieOptions(isProduction) }));
+  // Must be added to the app after the session is set up and before the routers
+  app.use(csrfSynchronisedProtection);
 
   app.post("/*splat", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
