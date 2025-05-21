@@ -155,8 +155,7 @@ $nav-link-padding-left: $nav-link-padding - 2;
 $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
 /* Combined styles for buttons */
-.account-header-navigation__button,
-.account-navigation__button {
+.account-header-navigation__button {
   border: 0 none;
   cursor: pointer;
   background-color: transparent;
@@ -209,19 +208,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   }
 }
 
-// /* Specific styles for .account-navigation__button */
-.account-navigation__button {
-  color: $govuk-link-colour;
-  font-size: inherit;
-
-  &:focus {
-    span {
-      padding: $nav-link-padding-left 0 16px;
-    }
-  }
-}
-
-.account-navigation__button-content,
 .account-navigation__link {
   @extend .govuk-link;
   display: inline-block;
@@ -262,10 +248,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
       border-color: $govuk-link-hover-colour;
     }
   }
-}
-
-.account-navigation__button-content {
-  padding: $nav-link-padding-left 0 $nav-link-padding-left;
 }
 
 .your-services__heading {
