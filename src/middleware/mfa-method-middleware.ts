@@ -23,7 +23,7 @@ export async function mfaMethodMiddleware(
       );
     }
     next();
-  } catch (error) {
+  } catch {
     req.log.error(
       { trace: res.locals.trace },
       ERROR_MESSAGES.FAILED_MFA_RETRIEVE_CALL

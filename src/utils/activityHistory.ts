@@ -247,9 +247,7 @@ export async function filterAndDecryptActivity(
     if (!servicesWithContent.includes(activityLog.client_id)) {
       continue;
     }
-    let eventType = activityLog.event_type;
-
-    eventType = await decryptData(
+    const eventType = await decryptData(
       activityLog.event_type,
       activityLog.user_id,
       trace
