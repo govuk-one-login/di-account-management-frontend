@@ -26,6 +26,7 @@ import {
   supportSearchableList,
   supportTriagePage,
   supportWebchatContact,
+  supportChangeOnIntervention,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
@@ -60,6 +61,8 @@ import { resendEmailCodeRouter } from "./components/resend-email-code/resend-ema
 import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
 import { redirectsRouter } from "./components/redirects/redirects-routes";
 import { contactRouter } from "./components/contact-govuk-one-login/contact-govuk-one-login-routes";
+import { temporarilySuspendedRouter } from "./components/temporarily-suspended/temporarily-suspended-routes";
+import { permanentlySuspendedRouter } from "./components/permanently-suspended/permanently-suspended-routes";
 import { getSessionStore } from "./utils/session-store";
 import { outboundContactUsLinksMiddleware } from "./middleware/outbound-contact-us-links-middleware";
 import { trackAndRedirectRouter } from "./components/track-and-redirect/track-and-redirect-route";
@@ -240,6 +243,11 @@ async function createApp(): Promise<express.Application> {
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
+
+  if (supportChangeOnIntervention()) {
+    app.use(temporarilySuspendedRouter);
+    app.use(permanentlySuspendedRouter);
+  }
 
   if (supportActivityLog()) {
     app.use(activityHistoryRouter);

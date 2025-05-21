@@ -201,8 +201,8 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
-
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -240,6 +240,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
     staging:
       NODEENV: "production"
@@ -278,6 +279,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
     integration:
       NODEENV: "production"
@@ -316,6 +318,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "0"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
     production:
       NODEENV: "production"
@@ -355,6 +358,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "0"
       BRANDREFRESHENABLED: "0"
+      SUPPORTCHANGEONINTERVENTION: "0"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
 
 Resources:
@@ -925,6 +929,13 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   BRANDREFRESHENABLED,
+                ]
+            - Name: "ENABLE_CHANGE_ON_INTERVENTION"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  SUPPORTCHANGEONINTERVENTION,
                 ]
             - Name: "FINGERPRINT_COOKIE_DOMAIN"
               Value:

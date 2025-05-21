@@ -11,6 +11,7 @@ import {
 import { EnterPasswordServiceInterface } from "../types";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+import * as logoutController from "../../../utils/logout";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -40,12 +41,14 @@ describe("enter password controller", () => {
     res = {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
-      locals: {},
       status: sandbox.fake(),
+      locals: {},
     };
+    process.env.ENABLE_CHANGE_ON_INTERVENTION = "1";
   });
 
   afterEach(() => {
+    process.env.ENABLE_CHANGE_ON_INTERVENTION = "0";
     sandbox.restore();
   });
 
@@ -82,7 +85,7 @@ describe("enter password controller", () => {
 
     it("should redirect to change-email when the password is correct", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves(true),
+        authenticated: sandbox.fake.resolves({ authenticated: true }),
       };
 
       req.session.user = {
@@ -135,7 +138,7 @@ describe("enter password controller", () => {
 
     it("should bad request when user credentials are incorrect", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves(false),
+        authenticated: sandbox.fake.resolves({ authenticated: false }),
       };
 
       req.session.user = {
@@ -167,6 +170,64 @@ describe("enter password controller", () => {
         password: "password",
       });
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+    });
+
+    it("should logout and redirect to permanently suspended when intervention is BLOCKED", async () => {
+      const fakeService: EnterPasswordServiceInterface = {
+        authenticated: sandbox.fake.resolves({
+          authenticated: false,
+          intervention: "BLOCKED",
+        }),
+      };
+
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        tokens: { accessToken: "token" },
+        state: { changeEmail: { value: "CHANGE_VALUE" } },
+      } as any;
+
+      req.body["password"] = "password";
+      req.body["requestType"] = "changeEmail";
+
+      const handleLogoutStub = sandbox.stub(logoutController, "handleLogout");
+
+      await enterPasswordPost(fakeService)(req as Request, res as Response);
+
+      expect(handleLogoutStub).to.have.been.calledWith(
+        req,
+        res,
+        PATH_DATA.UNAVAILABLE_PERMANENT.url
+      );
+    });
+
+    it("should logout and redirect to unavailable temporary when intervention is SUSPENDED", async () => {
+      const fakeService: EnterPasswordServiceInterface = {
+        authenticated: sandbox.fake.resolves({
+          authenticated: false,
+          intervention: "SUSPENDED",
+        }),
+      };
+
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        tokens: { accessToken: "token" },
+        state: { changeEmail: { value: "CHANGE_VALUE" } },
+      } as any;
+
+      req.body["password"] = "password";
+      req.body["requestType"] = "changeEmail";
+
+      const handleLogoutStub = sandbox.stub(logoutController, "handleLogout");
+
+      await enterPasswordPost(fakeService)(req as Request, res as Response);
+
+      expect(handleLogoutStub).to.have.been.calledWith(
+        req,
+        res,
+        PATH_DATA.UNAVAILABLE_TEMPORARY.url
+      );
     });
   });
 });
