@@ -60,7 +60,7 @@ describe("logout controller", () => {
     expect(res.mockCookies.lo).to.equal("true");
     expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
     expect(res.redirect).to.have.called;
-    expect(destroyUserSessionsStub.called);
+    expect(destroyUserSessionsStub).to.have.been.called;
     destroyUserSessionsStub.restore();
   });
 });

@@ -18,9 +18,7 @@ export function configureNunjucks(
   });
 
   nunjucksEnv.addFilter("translate", function (key: string, options?: any) {
-    const currentLanguage = this.ctx?.i18n?.language
-      ? this.ctx.i18n.language
-      : LOCALE.EN;
+    const currentLanguage = this.ctx?.i18n?.language ?? LOCALE.EN;
     const translate: TFunction<"translation", undefined> =
       i18next.getFixedT(currentLanguage);
     return safeTranslate(translate, key, currentLanguage, options);
