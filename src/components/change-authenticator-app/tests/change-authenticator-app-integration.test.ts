@@ -62,21 +62,31 @@ describe("Integration:: change authenticator app", () => {
   it("should redirect to /update confirmation when valid code entered", async () => {
     const app = await appWithMiddlewareSetup({ verifyMfaCode: true });
 
-    await request(app)
+    // Do an initial request to set up the session and get the CSRF token
+    const initialRequest = await request(app).get(
+      PATH_DATA.CHANGE_AUTHENTICATOR_APP.url
+    );
+
+    const $ = cheerio.load(initialRequest.text);
+    token = $("[name=_csrf]").val();
+    cookies = initialRequest.headers["set-cookie"].concat(
+      `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+    );
+
+    const response = await request(app)
       .post(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
+      .set("Cookie", cookies)
       .type("form")
       .send({
         _csrf: token,
         code: "111111",
         authAppSecret: "qwer42312345342",
-      })
-      .then((res) => {
-        expect(
-          "Location",
-          PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url
-        );
-        expect(res.status).to.equal(302);
       });
+
+    expect(response.header.location).to.equal(
+      PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url
+    );
+    expect(response.status).to.equal(302);
   });
 
   const appWithMiddlewareSetup = async (config: any = {}) => {
