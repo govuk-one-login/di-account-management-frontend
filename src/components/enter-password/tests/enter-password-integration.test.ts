@@ -18,6 +18,19 @@ describe("Integration::enter password", () => {
   let app: any;
   let baseApi: string;
 
+  const setTokenAndCookies = async () => {
+    await request(app)
+      .get(ENDPOINT)
+      .query({ type: "changeEmail" })
+      .then((res) => {
+        const $ = cheerio.load(res.text);
+        token = $("[name=_csrf]").val();
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
+      });
+  };
+
   const ENDPOINT = PATH_DATA.ENTER_PASSWORD.url;
 
   before(async () => {
@@ -89,16 +102,7 @@ describe("Integration::enter password", () => {
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
-    await request(app)
-      .get(ENDPOINT)
-      .query({ type: "changeEmail" })
-      .then((res) => {
-        const $ = cheerio.load(res.text);
-        token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"].concat(
-          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
-        );
-      });
+    await setTokenAndCookies();
   });
 
   beforeEach(() => {
@@ -278,6 +282,7 @@ describe("Integration::enter password", () => {
     expect(res.headers.location).to.contain(
       `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.UNAVAILABLE_PERMANENT.url)}`
     );
+    await setTokenAndCookies();
   });
 
   it("should redirect to unavailable temporary when intervention SUSPENDED", async () => {
@@ -303,6 +308,7 @@ describe("Integration::enter password", () => {
     expect(res.headers.location).to.contain(
       `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.UNAVAILABLE_TEMPORARY.url)}`
     );
+    await setTokenAndCookies();
   });
 
   it("should show incorrect password error for unknown intervention", async () => {
