@@ -5,7 +5,7 @@
 {% from "frontend-language-toggle/macro.njk" import languageSelect %}
 {%- set headerClasses -%}
 {%- if not hideAccountNavigation -%} govuk-header--with-account-navigation {%- endif -%}
-{%- if showSignOut -%} govuk-header--with-signout {%- endif -%}
+{%- if isUserLoggedIn %} govuk-header--with-signout {%- endif -%}
 {%- endset-%}
 
 {% block head %}
