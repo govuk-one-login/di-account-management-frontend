@@ -11,7 +11,7 @@ import {
 import { EnterPasswordServiceInterface } from "../types";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
-import * as logoutController from "../../../utils/logout";
+import * as logout from "../../../utils/logout";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -72,7 +72,7 @@ describe("enter password controller", () => {
   describe("enterPasswordPost", () => {
     it("should redirect to security when there is no 'type' query parameter", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves(true),
+        authenticated: sandbox.fake.resolves({ authenticated: true }),
       };
 
       req.body["password"] = "password";
@@ -105,7 +105,7 @@ describe("enter password controller", () => {
 
     it("should bad request when user doesn't enter a password", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake(),
+        authenticated: sandbox.fake.resolves({ authenticated: true }),
       };
 
       req.body["password"] = "";
@@ -188,9 +188,9 @@ describe("enter password controller", () => {
       } as any;
 
       req.body["password"] = "password";
-      req.body["requestType"] = "changeEmail";
+      req.query["type"] = "changeEmail";
 
-      const handleLogoutStub = sandbox.stub(logoutController, "handleLogout");
+      const handleLogoutStub = sandbox.stub(logout, "handleLogout");
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
@@ -217,9 +217,9 @@ describe("enter password controller", () => {
       } as any;
 
       req.body["password"] = "password";
-      req.body["requestType"] = "changeEmail";
+      req.query["type"] = "changeEmail";
 
-      const handleLogoutStub = sandbox.stub(logoutController, "handleLogout");
+      const handleLogoutStub = sandbox.stub(logout, "handleLogout");
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
