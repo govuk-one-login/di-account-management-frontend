@@ -46,7 +46,7 @@
               <span class="govuk-header__product-name">{{ 'general.header.productName' | translate }}</span>
             </a>
         </div>
-        {% if showSignOut %}
+        {% if isUserLoggedIn %}
             <div class="govuk-header__content">
               <nav class="account-header-navigation" aria-label="{{ 'general.header.signOutLink' | translate }}">
                 <form class="account-header-navigation__form" action="{{ accountSignOut }}" method="post">

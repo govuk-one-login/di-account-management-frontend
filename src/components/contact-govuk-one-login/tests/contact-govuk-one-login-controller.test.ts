@@ -102,7 +102,6 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showContactEmergencyMessage: true,
-        showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
         accessibilityStatementUrl:
@@ -135,7 +134,6 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showContactEmergencyMessage: true,
-        showSignOut: false,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
         accessibilityStatementUrl:
@@ -174,7 +172,6 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showContactEmergencyMessage: true,
-        showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
         baseUrl,
@@ -215,7 +212,6 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showContactEmergencyMessage: true,
-        showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
         baseUrl,
@@ -248,7 +244,6 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showContactEmergencyMessage: true,
-        showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
         baseUrl,
@@ -286,7 +281,6 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showContactEmergencyMessage: true,
-        showSignOut: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
         baseUrl,
@@ -308,7 +302,6 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showContactEmergencyMessage: true,
-        showSignOut: true,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
         accessibilityStatementUrl:
@@ -334,7 +327,6 @@ describe("Contact GOV.UK One Login controller", () => {
         contactPhoneEnabled: true,
         showContactGuidance: true,
         showContactEmergencyMessage: true,
-        showSignOut: false,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
         accessibilityStatementUrl:
