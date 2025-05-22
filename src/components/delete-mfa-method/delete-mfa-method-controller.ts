@@ -48,7 +48,7 @@ export async function deleteMfaMethodPost(
       EventType.RemoveBackup
     );
 
-    req.session.removedMfaMethods = [methodToRemove];
+    req.session.removedMfaMethod = methodToRemove;
 
     res.redirect(`${PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url}`);
   } else if (response.error) {

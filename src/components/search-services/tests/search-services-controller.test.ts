@@ -5,7 +5,6 @@ import { Request, Response } from "express";
 import { sinon } from "../../../../test/utils/test-utils";
 
 import * as config from "../../../config";
-import * as isUserLoggedIn from "../../../utils/isUserLoggedIn";
 
 const translations: Record<string, string> = {
   "clientRegistry.test.govuk.header": "gov.uk email",
@@ -37,7 +36,6 @@ describe("search services controller", () => {
 
     sandbox.stub(config, "getClientsToShowInSearch").returns(servicesMock);
     sandbox.stub(config, "getAppEnv").returns("test");
-    sandbox.stub(isUserLoggedIn, "default").returns(false);
   });
 
   afterEach(() => {
@@ -52,7 +50,6 @@ describe("search services controller", () => {
       query: undefined,
       hasSearch: false,
       resultsCount: 5,
-      showSignOut: false,
     });
   });
 
@@ -64,7 +61,6 @@ describe("search services controller", () => {
       query: "noresults",
       hasSearch: true,
       resultsCount: 0,
-      showSignOut: false,
     });
   });
 
@@ -76,7 +72,6 @@ describe("search services controller", () => {
       query: "govuk",
       hasSearch: true,
       resultsCount: 1,
-      showSignOut: false,
     });
   });
 
@@ -88,7 +83,6 @@ describe("search services controller", () => {
       query: "gov.uk",
       hasSearch: true,
       resultsCount: 1,
-      showSignOut: false,
     });
   });
 
@@ -100,7 +94,6 @@ describe("search services controller", () => {
       query: "gov lite",
       hasSearch: true,
       resultsCount: 2,
-      showSignOut: false,
     });
   });
 
@@ -112,7 +105,6 @@ describe("search services controller", () => {
       query: "ageappre",
       hasSearch: true,
       resultsCount: 1,
-      showSignOut: false,
     });
   });
 });

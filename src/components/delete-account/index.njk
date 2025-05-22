@@ -63,7 +63,7 @@
 </form>
 
 {% if fromSecurity %}
-  <a href="/manage-your-account" class="govuk-link govuk-body">
+  <a href='{{ "SECURITY" | getPath }}' class="govuk-link govuk-body">
     {{ 'pages.deleteAccount.doNotDeleteAccount' | translate }}
   </a>
 {% endif %}
