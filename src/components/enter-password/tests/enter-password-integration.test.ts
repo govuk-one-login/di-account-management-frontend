@@ -300,10 +300,12 @@ describe("Integration::enter password", () => {
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "changeEmail",
+      })
       .send({
         _csrf: token,
         password: "Password1",
-        requestType: "changeEmail",
       });
 
     expect(res.headers.location, "Expected redirect location header").to.not.be
@@ -326,10 +328,12 @@ describe("Integration::enter password", () => {
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "changeEmail",
+      })
       .send({
         _csrf: token,
         password: "Password1",
-        requestType: "changeEmail",
       });
 
     expect(res.headers.location, "Expected redirect location header").to.not.be
@@ -352,10 +356,12 @@ describe("Integration::enter password", () => {
       .post(ENDPOINT)
       .type("form")
       .set("Cookie", cookies)
+      .query({
+        type: "changeEmail",
+      })
       .send({
         _csrf: token,
         password: "Password1",
-        requestType: "changeEmail",
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
