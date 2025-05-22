@@ -161,7 +161,7 @@ describe("Integration::enter password", () => {
       return !PATHS_TO_EXCLUDE.map((path) => path.url).includes(pathData.url);
     })
     .forEach(([requestType, redirectPath]) => {
-      it.only(`should redirect to your services when trying to GET ${requestType} without entering password`, async () => {
+      it(`should redirect to your services when trying to GET ${requestType} without entering password`, async () => {
         await request(app)
           .get(redirectPath.url)
           .set("Cookie", cookies)
@@ -173,7 +173,7 @@ describe("Integration::enter password", () => {
           });
       });
 
-      it.only(`should redirect to your services (or 404) when trying to POST ${requestType} without entering password`, async () => {
+      it(`should redirect to your services (or 404) when trying to POST ${requestType} without entering password`, async () => {
         await request(app)
           .post(redirectPath.url)
           .set("Cookie", cookies)
