@@ -1,9 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-
 import {
   enterPasswordGet,
   enterPasswordPost,
@@ -146,11 +144,7 @@ describe("enter password controller", () => {
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(handleLogoutStub).to.have.been.calledWith(
-        req,
-        res,
-        PATH_DATA.UNAVAILABLE_PERMANENT.url
-      );
+      expect(handleLogoutStub).to.have.been.calledWith(req, res, "blocked");
     });
 
     it("should logout and redirect to unavailable temporary when intervention is SUSPENDED", async () => {
@@ -175,11 +169,7 @@ describe("enter password controller", () => {
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(handleLogoutStub).to.have.been.calledWith(
-        req,
-        res,
-        PATH_DATA.UNAVAILABLE_TEMPORARY.url
-      );
+      expect(handleLogoutStub).to.have.been.calledWith(req, res, "suspended");
     });
   });
 });

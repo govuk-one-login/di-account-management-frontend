@@ -2,15 +2,15 @@ import { Request, Response } from "express";
 import { ExpressRouteFunc } from "../../types";
 import { DeleteAccountServiceInterface } from "./types";
 import { deleteAccountService } from "./delete-account-service";
-import { PATH_DATA } from "../../app.constants";
 import { EventType, getNextState } from "../../utils/state-machine";
-import { getAppEnv, getBaseUrl, getSNSDeleteTopic } from "../../config";
-import { clearCookies, destroyUserSessions } from "../../utils/session-store";
+import { getAppEnv, getSNSDeleteTopic } from "../../config";
 import {
   containsGovUkPublishingService,
   getYourServicesForAccountDeletion,
 } from "../../utils/yourServices";
 import { getTxmaHeader } from "../../utils/txma-header";
+import { handleLogout } from "../../utils/logout";
+import { LogoutState } from "../../app.constants";
 
 export async function deleteAccountGet(
   req: Request,
@@ -85,16 +85,6 @@ export function deleteAccountPost(
       EventType.ValueUpdated
     );
 
-    const logoutUrl = req.oidc.endSessionUrl({
-      id_token_hint: req.session.user.tokens.idToken,
-      post_logout_redirect_uri:
-        getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
-    });
-
-    await destroyUserSessions(req, subjectId, req.app.locals.sessionStore);
-
-    clearCookies(req, res, ["am"]);
-
-    return res.redirect(logoutUrl);
+    await handleLogout(req, res, LogoutState.AccountDeletion);
   };
 }

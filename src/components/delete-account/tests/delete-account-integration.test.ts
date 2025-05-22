@@ -193,7 +193,7 @@ describe("Integration:: delete account", () => {
     );
   });
 
-  it("post should redirect to end session endpoint", (done) => {
+  it("post should redirect to end session endpoint", async () => {
     nock(baseApi).post(API_ENDPOINTS.DELETE_ACCOUNT).once().reply(204);
     nock(govUkPublishingBaseApi)
       .delete(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
@@ -213,9 +213,9 @@ describe("Integration:: delete account", () => {
       .expect(
         "Location",
         `${opApi}/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${encodeURIComponent(
-          `${baseUrl}${PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url}`
-        )}`
+          `${baseUrl}${PATH_DATA.LOGOUT_REDIRECT.url}`
+        )}&state=accountDeletion`
       )
-      .expect(302, done);
+      .expect(302);
   });
 });
