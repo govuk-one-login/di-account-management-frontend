@@ -7,10 +7,10 @@ export const presentActivityHistory = async (
 ): Promise<ActivityLogEntry[]> => {
   const activityLogEntry = await getActivityLogEntry(subjectId, trace);
   if (activityLogEntry) {
-    const sorted = activityLogEntry.sort((first, second) => {
+    activityLogEntry.sort((first, second) => {
       return second.timestamp - first.timestamp;
     });
-    return sorted;
+    return activityLogEntry;
   } else {
     return [];
   }
