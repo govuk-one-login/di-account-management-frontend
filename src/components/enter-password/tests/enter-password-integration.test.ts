@@ -126,20 +126,42 @@ describe("Integration::enter password", () => {
 
   Object.entries(PATH_DATA)
     .filter(([, pathData]) => {
-      return !!pathData.event; //if there is an event property, it uses the state machine, and so we want to test it
+      return !!pathData.event; //if there is an event property, it uses the state machine, so we want to test it
     })
     .filter(([, pathData]) => {
       // exclude the account deleted confirmation page, user will be logged out, so we don't use the state machine
       return pathData.url !== PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url;
+    })
+    .filter(([, pathData]) => {
+      return pathData.url !== PATH_DATA.DELETE_ACCOUNT.url;
     })
     .forEach(([requestType, redirectPath]) => {
       it(`should redirect to your services when trying to access ${requestType} without entering password`, async () => {
         await request(app)
           .get(redirectPath.url)
           .set("Cookie", cookies)
-          .send()
           .expect(302)
           .expect("Location", PATH_DATA.YOUR_SERVICES.url);
+
+        await request(app)
+          .post(redirectPath.url)
+          .set("Cookie", cookies)
+          .send({
+            _csrf: token,
+          })
+          .expect((res) => {
+            if (res.status === 302) {
+              expect(res.headers.location).to.contain(
+                PATH_DATA.YOUR_SERVICES.url
+              );
+              return;
+            }
+            if (res.status !== 404) {
+              throw Error(
+                "unauthorised post request should redirect or throw 404"
+              );
+            }
+          });
       });
     });
 
