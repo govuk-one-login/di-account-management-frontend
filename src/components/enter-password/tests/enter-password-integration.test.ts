@@ -9,7 +9,7 @@ import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
-import { getBaseUrl } from "../../../config";
+import { getBaseUrl, supportChangeMfa } from "../../../config";
 
 describe("Integration::enter password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -141,6 +141,78 @@ describe("Integration::enter password", () => {
       password: "password",
     });
   });
+
+  // This test checks that all routes that use the state machine
+  // are redirected to the your services page if the user has not entered their password.
+  // I am using the PATH_DATA object, so that if we add a new route that uses the state machine,
+  // we don't have to add a new test for it.
+
+  const PATHS_TO_EXCLUDE = [
+    // exclude the account deletion flow, as the user will be logged out, so the usual tests wont work
+    PATH_DATA.ACCOUNT_DELETED_CONFIRMATION,
+    PATH_DATA.DELETE_ACCOUNT,
+
+    // don't test MFA Method routes in the feautre flag is off
+    ...(!supportChangeMfa()
+      ? [
+          PATH_DATA.ADD_MFA_METHOD,
+          PATH_DATA.ADD_MFA_METHOD_APP,
+          PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION,
+          PATH_DATA.ADD_MFA_METHOD_GO_BACK,
+          PATH_DATA.ADD_MFA_METHOD_SMS,
+          PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION,
+          PATH_DATA.DELETE_MFA_METHOD,
+          PATH_DATA.SWITCH_BACKUP_METHOD,
+          PATH_DATA.CHANGE_DEFAULT_METHOD,
+          PATH_DATA.CHANGE_DEFAULT_METHOD_APP,
+          PATH_DATA.CHANGE_DEFAULT_METHOD_SMS,
+          PATH_DATA.CHANGE_AUTHENTICATOR_APP,
+        ]
+      : []),
+  ];
+
+  Object.entries(PATH_DATA)
+    .filter(([, pathData]) => {
+      return !!pathData.event; //if there is an event property, it uses the state machine, so we want to test it
+    })
+    .filter(([, pathData]) => {
+      return !PATHS_TO_EXCLUDE.map((path) => path.url).includes(pathData.url);
+    })
+    .forEach(([requestType, redirectPath]) => {
+      it(`should redirect to your services when trying to GET ${requestType} without entering password`, async () => {
+        await request(app)
+          .get(redirectPath.url)
+          .set("Cookie", cookies)
+          .then((res) => {
+            expect(res.status).to.equal(302);
+            expect(res.headers.location).to.contain(
+              PATH_DATA.YOUR_SERVICES.url
+            );
+          });
+      });
+
+      it(`should redirect to your services (or 404) when trying to POST ${requestType} without entering password`, async () => {
+        await request(app)
+          .post(redirectPath.url)
+          .set("Cookie", cookies)
+          .send({
+            _csrf: token,
+          })
+          .then((res) => {
+            if (res.status === 302) {
+              expect(res.headers.location).to.contain(
+                PATH_DATA.YOUR_SERVICES.url
+              );
+              return;
+            }
+            if (res.status !== 404) {
+              throw Error(
+                "unauthorised post request should redirect or throw 404"
+              );
+            }
+          });
+      });
+    });
 
   it("should return validation error when password not entered", async () => {
     await request(app)
