@@ -332,7 +332,6 @@ export const PERSISTENT_SESSION_ID_UNKNOWN = "persistent-session-id-unknown";
 export const LogoutState = {
   Suspended: "suspended",
   Blocked: "blocked",
-  ManualLogout: "manualLogout",
   AccountDeletion: "accountDeletion",
   Default: "default",
 } as const;
@@ -345,9 +344,6 @@ export const LogoutRedirect = {
   },
   [LogoutState.Blocked]: {
     url: getBaseUrl() + PATH_DATA.UNAVAILABLE_PERMANENT.url,
-  },
-  [LogoutState.ManualLogout]: {
-    url: getBaseUrl() + PATH_DATA.SIGN_OUT.url,
   },
   [LogoutState.AccountDeletion]: {
     url: getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
