@@ -73,11 +73,14 @@ const OPL_VALUES: Record<
   },
 };
 
-const getRenderOptions = (req: Request, requestType: UserJourney) => ({
-  requestType,
-  fromSecurity: req.query.from === "security",
-  oplValues: OPL_VALUES[requestType] || {},
-});
+const getRenderOptions = (req: Request, requestType: UserJourney) => {
+  return {
+    requestType,
+    fromSecurity: req.query.from == "security",
+    oplValues: OPL_VALUES[requestType] || {},
+    formAction: req.url,
+  };
+};
 
 function renderPasswordError(
   req: Request,
@@ -109,7 +112,12 @@ export function enterPasswordPost(
   service: EnterPasswordServiceInterface = enterPasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const requestType = req.body.requestType as UserJourney;
+    const requestType = req.query.type as UserJourney;
+
+    if (!requestType) {
+      return res.redirect(PATH_DATA.SETTINGS.url);
+    }
+
     const { password } = req.body;
 
     if (!password) {
