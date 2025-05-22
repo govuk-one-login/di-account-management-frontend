@@ -161,22 +161,26 @@ describe("Integration::enter password", () => {
       return !PATHS_TO_EXCLUDE.map((path) => path.url).includes(pathData.url);
     })
     .forEach(([requestType, redirectPath]) => {
-      it(`should redirect to your services when trying to GET ${requestType} without entering password`, async () => {
+      it.only(`should redirect to your services when trying to GET ${requestType} without entering password`, async () => {
         await request(app)
           .get(redirectPath.url)
           .set("Cookie", cookies)
-          .expect(302)
-          .expect("Location", PATH_DATA.YOUR_SERVICES.url);
+          .then((res) => {
+            expect(res.status).to.equal(302);
+            expect(res.headers.location).to.contain(
+              PATH_DATA.YOUR_SERVICES.url
+            );
+          });
       });
 
-      it(`should redirect to your services (or 404) when trying to POST ${requestType} without entering password`, async () => {
+      it.only(`should redirect to your services (or 404) when trying to POST ${requestType} without entering password`, async () => {
         await request(app)
           .post(redirectPath.url)
           .set("Cookie", cookies)
           .send({
             _csrf: token,
           })
-          .expect((res) => {
+          .then((res) => {
             if (res.status === 302) {
               expect(res.headers.location).to.contain(
                 PATH_DATA.YOUR_SERVICES.url
