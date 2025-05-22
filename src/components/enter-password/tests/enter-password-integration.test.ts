@@ -143,13 +143,15 @@ describe("Integration::enter password", () => {
       return !PATHS_TO_EXCLUDE.map((path) => path.url).includes(pathData.url);
     })
     .forEach(([requestType, redirectPath]) => {
-      it(`should redirect to your services when trying to access ${requestType} without entering password`, async () => {
+      it(`should redirect to your services when trying to GET ${requestType} without entering password`, async () => {
         await request(app)
           .get(redirectPath.url)
           .set("Cookie", cookies)
           .expect(302)
           .expect("Location", PATH_DATA.YOUR_SERVICES.url);
+      });
 
+      it(`should redirect to your services (or 404) when trying to POST ${requestType} without entering password`, async () => {
         await request(app)
           .post(redirectPath.url)
           .set("Cookie", cookies)
