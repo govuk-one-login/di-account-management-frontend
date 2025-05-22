@@ -124,16 +124,23 @@ describe("Integration::enter password", () => {
     });
   });
 
+  // This test checks that all routes that use the state machine
+  // are redirected to the your services page if the user has not entered their password.
+  // I am using the PATH_DATA object, so that if we add a new route that uses the state machine,
+  // we don't have to add a new test for it.
+
+  // exclude the account deletion flow, as the user will be logged out, so the usual tests wont work
+  const PATHS_TO_EXCLUDE = [
+    PATH_DATA.ACCOUNT_DELETED_CONFIRMATION,
+    PATH_DATA.DELETE_ACCOUNT,
+  ];
+
   Object.entries(PATH_DATA)
     .filter(([, pathData]) => {
       return !!pathData.event; //if there is an event property, it uses the state machine, so we want to test it
     })
     .filter(([, pathData]) => {
-      // exclude the account deleted confirmation page, user will be logged out, so we don't use the state machine
-      return pathData.url !== PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url;
-    })
-    .filter(([, pathData]) => {
-      return pathData.url !== PATH_DATA.DELETE_ACCOUNT.url;
+      return !PATHS_TO_EXCLUDE.map((path) => path.url).includes(pathData.url);
     })
     .forEach(([requestType, redirectPath]) => {
       it(`should redirect to your services when trying to access ${requestType} without entering password`, async () => {
