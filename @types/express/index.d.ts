@@ -17,7 +17,7 @@ declare module "express-session" {
     queryParameters?: QueryParameters;
     sessionId?: string;
     mfaMethods?: MfaMethod[];
-    removedMfaMethods?: MfaMethod[];
+    removedMfaMethod?: MfaMethod;
     newDefaultMfaMethodId: string | number;
   }
 }

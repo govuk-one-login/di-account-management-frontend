@@ -15,7 +15,11 @@ import {
   removeMfaMethodConfirmationGet,
 } from "../update-confirmation-controller";
 import { PATH_DATA } from "../../../app.constants";
-import { MfaMethod, SmsMethod } from "../../../utils/mfaClient/types";
+import {
+  AuthAppMethod,
+  MfaMethod,
+  SmsMethod,
+} from "../../../utils/mfaClient/types";
 
 describe("update confirmation controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -85,7 +89,7 @@ describe("update confirmation controller", () => {
     });
   });
 
-  describe("removeMfaMethodConfirmationGet", () => {
+  describe("removeMfaMethodConfirmationGet with removed SMS method", () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: "1",
       priorityIdentifier: "BACKUP",
@@ -94,21 +98,80 @@ describe("update confirmation controller", () => {
     };
 
     req = {
-      body: {},
-      session: { user: { state: {} }, removedMfaMethods: [mfaMethod] } as any,
-      t: sinon.stub().returns("translated-string"),
-      query: { id: mfaMethod.mfaIdentifier },
+      session: { removedMfaMethod: mfaMethod },
+      t: sinon.fake((k: string) => k),
     };
 
     res = {
       render: sinon.fake(),
+      redirect: sinon.fake(),
     };
 
-    removeMfaMethodConfirmationGet(req as Request, res as Response);
+    removeMfaMethodConfirmationGet(req, res);
 
+    expect(req.session.removedMfaMethod).to.eq(undefined);
     expect(res.render).to.be.calledWith(
-      "common/confirmation-page/confirmation.njk"
+      "common/confirmation-page/confirmation.njk",
+      {
+        pageTitleName: "pages.removeBackupMethod.confirm.title",
+        heading: "pages.removeBackupMethod.confirm.heading",
+        message: "pages.removeBackupMethod.confirm.message_sms",
+        backLinkText: "pages.removeBackupMethod.backLinkText",
+        backLink: "/security",
+      }
     );
+    expect(res.redirect).not.to.be.called;
+  });
+
+  describe("removeMfaMethodConfirmationGet with removed auth app method", () => {
+    const mfaMethod: MfaMethod = {
+      mfaIdentifier: "1",
+      priorityIdentifier: "BACKUP",
+      methodVerified: true,
+      method: { mfaMethodType: "AUTH_APP" } as AuthAppMethod,
+    };
+
+    req = {
+      session: { removedMfaMethod: mfaMethod },
+      t: sinon.fake((k: string) => k),
+    };
+
+    res = {
+      render: sinon.fake(),
+      redirect: sinon.fake(),
+    };
+
+    removeMfaMethodConfirmationGet(req, res);
+
+    expect(req.session.removedMfaMethod).to.eq(undefined);
+    expect(res.render).to.be.calledWith(
+      "common/confirmation-page/confirmation.njk",
+      {
+        pageTitleName: "pages.removeBackupMethod.confirm.title",
+        heading: "pages.removeBackupMethod.confirm.heading",
+        message: "pages.removeBackupMethod.confirm.message_app",
+        backLinkText: "pages.removeBackupMethod.backLinkText",
+        backLink: "/security",
+      }
+    );
+    expect(res.redirect).not.to.be.called;
+  });
+
+  describe("removeMfaMethodConfirmationGet with no removed method", () => {
+    req = {
+      session: {},
+      t: sinon.fake((k: string) => k),
+    };
+
+    res = {
+      render: sinon.fake(),
+      redirect: sinon.fake(),
+    };
+
+    removeMfaMethodConfirmationGet(req, res);
+
+    expect(res.render).not.to.be.called;
+    expect(res.redirect).to.be.calledWith("/security");
   });
 });
 

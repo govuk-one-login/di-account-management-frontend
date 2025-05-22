@@ -4,7 +4,7 @@
 {% set pageTitleName = 'pages.switchBackupMethod.title' | translate %}
 
 {% block pageContent %}
-    <h1 class="govuk-heading-xl">{{ 'pages.switchBackupMethod.title' | translate }}</h1>
+    <h1 class="govuk-heading-l">{{ 'pages.switchBackupMethod.title' | translate }}</h1>
     {% if currentBackup.method.mfaMethodType == "AUTH_APP" %}
         <p class='govuk-body'>{{ 'pages.switchBackupMethod.newDefaultApp' | translate }}</p>
     {% endif %}

@@ -126,10 +126,13 @@ export async function removeMfaMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  let message = req.t("pages.removeBackupMethod.confirm.message_unknown");
-  const removedMethod = (req.session.removedMfaMethods || []).find((m) => {
-    return "" + m.mfaIdentifier == req.query.id;
-  });
+  let message: string;
+  const removedMethod = req.session.removedMfaMethod;
+
+  if (!removedMethod) {
+    res.redirect(PATH_DATA.SECURITY.url);
+    return;
+  }
 
   if (removedMethod?.method.mfaMethodType === "AUTH_APP") {
     message = req.t("pages.removeBackupMethod.confirm.message_app");
@@ -141,6 +144,8 @@ export async function removeMfaMethodConfirmationGet(
       .t("pages.removeBackupMethod.confirm.message_sms")
       .replace("[phoneNumber]", getLastNDigits(method.phoneNumber, 4));
   }
+
+  delete req.session.removedMfaMethod;
 
   return res.render("common/confirmation-page/confirmation.njk", {
     pageTitleName: req.t("pages.removeBackupMethod.confirm.title"),

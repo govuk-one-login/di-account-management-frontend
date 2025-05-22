@@ -9,7 +9,7 @@ import {
 import { EnterPasswordServiceInterface } from "../types";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
-import * as logoutController from "../../../utils/logout";
+import * as logout from "../../../utils/logout";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -32,7 +32,7 @@ describe("enter password controller", () => {
         },
       } as any,
       t: sandbox.fake(),
-      i18n: { language: "" },
+      i18n: { language: "en" },
       query: {},
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
     };
@@ -59,14 +59,28 @@ describe("enter password controller", () => {
       expect(res.render).to.have.calledWith("enter-password/index.njk");
     });
 
-    it("should redirect to security when no with query param", () => {
+    it("should redirect to security when there is no 'type' query parameter", () => {
       enterPasswordGet(req as Request, res as Response);
 
+      expect(res.render).not.to.have.been.called;
       expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);
     });
   });
 
   describe("enterPasswordPost", () => {
+    it("should redirect to security when there is no 'type' query parameter", async () => {
+      const fakeService: EnterPasswordServiceInterface = {
+        authenticated: sandbox.fake.resolves({ authenticated: true }),
+      };
+
+      req.body["password"] = "password";
+
+      await enterPasswordPost(fakeService)(req as Request, res as Response);
+
+      expect(res.render).not.to.have.been.called;
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);
+    });
+
     it("should redirect to change-email when the password is correct", async () => {
       const fakeService: EnterPasswordServiceInterface = {
         authenticated: sandbox.fake.resolves({ authenticated: true }),
@@ -80,7 +94,7 @@ describe("enter password controller", () => {
       } as any;
 
       req.body["password"] = "password";
-      req.body["requestType"] = "changeEmail";
+      req.query["type"] = "changeEmail";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
@@ -89,16 +103,34 @@ describe("enter password controller", () => {
 
     it("should bad request when user doesn't enter a password", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake(),
+        authenticated: sandbox.fake.resolves({ authenticated: true }),
       };
 
       req.body["password"] = "";
-      req.body["requestType"] = "changeEmail";
+      req.query["type"] = "changeEmail";
+      req.query["from"] = "security";
+      req.query["edit"] = "true";
+      req.url =
+        "https://test.com/enter-password?from=security&edit=true&type=changeEmail";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
       expect(fakeService.authenticated).not.to.have.been.called;
       expect(res.render).to.have.been.called;
+      expect(res.render).to.have.been.calledWith("enter-password/index.njk", {
+        requestType: "changeEmail",
+        fromSecurity: true,
+        oplValues: {
+          contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
+          taxonomyLevel2: "change email",
+        },
+        formAction:
+          "https://test.com/enter-password?from=security&edit=true&type=changeEmail",
+        errors: { password: { text: undefined, href: "#password" } },
+        errorList: [{ text: undefined, href: "#password" }],
+        language: "en",
+        password: "",
+      });
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
@@ -114,11 +146,27 @@ describe("enter password controller", () => {
       } as any;
 
       req.body["password"] = "password";
-      req.body["requestType"] = "changeEmail";
+      req.query["type"] = "changeEmail";
+      req.query["edit"] = "true";
+      req.url = "https://test.com/enter-password?edit=true&type=changeEmail";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
       expect(res.render).to.have.been.called;
+      expect(res.render).to.have.been.calledWith("enter-password/index.njk", {
+        requestType: "changeEmail",
+        fromSecurity: false,
+        oplValues: {
+          contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
+          taxonomyLevel2: "change email",
+        },
+        formAction:
+          "https://test.com/enter-password?edit=true&type=changeEmail",
+        errors: { password: { text: undefined, href: "#password" } },
+        errorList: [{ text: undefined, href: "#password" }],
+        language: "en",
+        password: "password",
+      });
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
@@ -138,9 +186,9 @@ describe("enter password controller", () => {
       } as any;
 
       req.body["password"] = "password";
-      req.body["requestType"] = "changeEmail";
+      req.query["type"] = "changeEmail";
 
-      const handleLogoutStub = sandbox.stub(logoutController, "handleLogout");
+      const handleLogoutStub = sandbox.stub(logout, "handleLogout");
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
@@ -163,9 +211,9 @@ describe("enter password controller", () => {
       } as any;
 
       req.body["password"] = "password";
-      req.body["requestType"] = "changeEmail";
+      req.query["type"] = "changeEmail";
 
-      const handleLogoutStub = sandbox.stub(logoutController, "handleLogout");
+      const handleLogoutStub = sandbox.stub(logout, "handleLogout");
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
