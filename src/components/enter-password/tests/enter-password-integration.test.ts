@@ -124,6 +124,25 @@ describe("Integration::enter password", () => {
     });
   });
 
+  Object.entries(PATH_DATA)
+    .filter(([, pathData]) => {
+      return !!pathData.event; //if there is an event property, it uses the state machine, and so we want to test it
+    })
+    .filter(([, pathData]) => {
+      // exclude the account deleted confirmation page, user will be logged out, so we don't use the state machine
+      return pathData.url !== PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url;
+    })
+    .forEach(([requestType, redirectPath]) => {
+      it(`should redirect to your services when trying to access ${requestType} without entering password`, async () => {
+        await request(app)
+          .get(redirectPath.url)
+          .set("Cookie", cookies)
+          .send()
+          .expect(302)
+          .expect("Location", PATH_DATA.YOUR_SERVICES.url);
+      });
+    });
+
   it("should return validation error when password not entered", async () => {
     await request(app)
       .post(ENDPOINT)
