@@ -127,6 +127,10 @@
 
 .account-navigation {
   background-color: govuk-colour("light-grey");
+  .govuk-template--rebranded & {
+    background-color: $_govuk-rebrand-template-background-colour;
+    border-bottom: 1px solid $_govuk-rebrand-border-colour-on-blue-tint-95;
+  }
   border-bottom: 1px solid $govuk-border-colour;
   position: relative;
 }
@@ -211,7 +215,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 .account-navigation__link {
   @extend .govuk-link;
   display: inline-block;
-  font-weight: bold;
   padding: $nav-link-padding-left 0 govuk-spacing(2);
   margin-top: $nav-link-outline-thickness;
 
