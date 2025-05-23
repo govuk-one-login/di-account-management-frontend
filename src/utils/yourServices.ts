@@ -37,6 +37,10 @@ export const getServices = async (
       serviceStoreDynamoDBRequest(subjectId)
     );
 
+    if (!response["Item"]) {
+      return [];
+    }
+
     const services = unmarshallDynamoData(response["Item"])
       .services as Service[];
 
