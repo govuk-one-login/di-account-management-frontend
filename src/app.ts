@@ -76,6 +76,7 @@ import { addBackupSmsRouter } from "./components/add-mfa-method-sms/add-mfa-meth
 import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa-method-routes";
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method-routes";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
+import { logoutRedirectRouter } from "./components/logout-redirect/logout-redirect-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
 import { getOIDCClient } from "./utils/oidc";
@@ -229,6 +230,7 @@ async function createApp(): Promise<express.Application> {
   app.use(yourServicesRouter);
   app.use(oidcAuthCallbackRouter);
   app.use(startRouter);
+  app.use(logoutRedirectRouter);
   app.use(logoutRouter);
   app.use(isUserLoggedInMiddleware);
   app.use(enterPasswordRouter);

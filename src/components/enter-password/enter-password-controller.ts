@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { EnterPasswordServiceInterface } from "./types";
 import { enterPasswordService } from "./enter-password-service";
 import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA, LogoutState } from "../../app.constants";
 import {
   formatValidationError,
   renderBadRequest,
@@ -176,10 +176,10 @@ async function handleIntervention(
 ): Promise<void> {
   switch (intervention) {
     case "BLOCKED":
-      await handleLogout(req, res, PATH_DATA.UNAVAILABLE_PERMANENT.url);
+      await handleLogout(req, res, LogoutState.Blocked);
       break;
     case "SUSPENDED":
-      await handleLogout(req, res, PATH_DATA.UNAVAILABLE_TEMPORARY.url);
+      await handleLogout(req, res, LogoutState.Suspended);
       break;
     default:
       renderPasswordError(

@@ -1,3 +1,4 @@
+import { getBaseUrl } from "./config";
 import { EventType, UserJourney } from "./utils/state-machine";
 
 export const PATH_DATA: Record<
@@ -185,6 +186,9 @@ export const PATH_DATA: Record<
   UNAVAILABLE_TEMPORARY: {
     url: "/unavailable-temporary",
   },
+  LOGOUT_REDIRECT: {
+    url: "/logout-redirect",
+  },
 };
 
 export const MFA_METHODS = {
@@ -324,3 +328,27 @@ export const OIDC_ERRORS = {
 export const SESSION_ID_UNKNOWN = "session-id-unknown";
 export const CLIENT_SESSION_ID_UNKNOWN = "client-session-id-unknown";
 export const PERSISTENT_SESSION_ID_UNKNOWN = "persistent-session-id-unknown";
+
+export const LogoutState = {
+  Suspended: "suspended",
+  Blocked: "blocked",
+  AccountDeletion: "accountDeletion",
+  Default: "default",
+} as const;
+
+export type LogoutStateType = (typeof LogoutState)[keyof typeof LogoutState];
+
+export const LogoutRedirect = {
+  [LogoutState.Suspended]: {
+    url: getBaseUrl() + PATH_DATA.UNAVAILABLE_TEMPORARY.url,
+  },
+  [LogoutState.Blocked]: {
+    url: getBaseUrl() + PATH_DATA.UNAVAILABLE_PERMANENT.url,
+  },
+  [LogoutState.AccountDeletion]: {
+    url: getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url,
+  },
+  [LogoutState.Default]: {
+    url: getBaseUrl() + PATH_DATA.USER_SIGNED_OUT.url,
+  },
+};
