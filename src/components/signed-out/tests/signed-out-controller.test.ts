@@ -30,7 +30,7 @@ describe("signed out controller", () => {
       signedOutGet(req as Request, res as Response);
 
       expect(res.render).to.have.been.calledWith("signed-out/index.njk");
-      expect(res.status).to.have.be.calledWith(401);
+      expect(res.status).to.have.be.calledWith(200);
     });
   });
 });
