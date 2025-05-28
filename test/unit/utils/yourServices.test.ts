@@ -123,7 +123,7 @@ describe("YourService Util", () => {
           return Promise.resolve(dynamodbGetItemOutput);
         },
         queryItem(): Promise<QueryCommandOutput> {
-          return Promise.resolve(undefined);
+          return Promise.resolve({} as QueryCommandOutput);
         },
       };
       const dynamoDBServiceStub = sandbox.stub(dynamo, "dynamoDBService");
@@ -147,6 +147,34 @@ describe("YourService Util", () => {
           isAvailableInWelsh: true,
         },
       ]);
+    });
+
+    it("gets services has no match", async () => {
+      sandbox.restore();
+
+      const dynamodbGetItemOutput = {
+        $metadata: {
+          httpStatusCode: 200,
+          requestId: "9dd17f00-efce-4a2f-8a3e-54cf41c196bf",
+          attempts: 1,
+          totalRetryDelay: 0,
+        },
+      };
+
+      const mockDynamoDBService: DynamoDBService = {
+        getItem(): Promise<GetItemCommandOutput> {
+          return Promise.resolve(dynamodbGetItemOutput);
+        },
+        queryItem(): Promise<QueryCommandOutput> {
+          return Promise.resolve({} as QueryCommandOutput);
+        },
+      };
+      const dynamoDBServiceStub = sandbox.stub(dynamo, "dynamoDBService");
+      dynamoDBServiceStub.returns(mockDynamoDBService);
+
+      const services = await yourServices.getServices("subjectId", "trace");
+
+      expect(services).to.deep.equal([]);
     });
   });
 
