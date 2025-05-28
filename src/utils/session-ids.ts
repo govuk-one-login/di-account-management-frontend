@@ -39,9 +39,9 @@ export function getSessionIdsFrom(req: Request): SessionIds {
   }
 
   return {
-    sessionId: req.session.authSessionIds.sessionId ?? SESSION_ID_UNKNOWN,
+    sessionId: req.session.authSessionIds?.sessionId ?? SESSION_ID_UNKNOWN,
     clientSessionId:
-      req.session.authSessionIds.clientSessionId ?? CLIENT_SESSION_ID_UNKNOWN,
+      req.session.authSessionIds?.clientSessionId ?? CLIENT_SESSION_ID_UNKNOWN,
     persistentSessionId: sessionIds.persistentSessionId,
   };
 }
