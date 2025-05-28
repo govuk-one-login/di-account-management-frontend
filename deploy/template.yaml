@@ -2437,6 +2437,64 @@ Resources:
             Period: 60
             Stat: Maximum
 
+  LoggerErrorsFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: '{ $.level = 50 || $.level = "error" }'
+      LogGroupName: !Ref TaskLogGroup
+      MetricTransformations:
+        - MetricName: LoggerErrorCount
+          MetricNamespace: !Sub "${AWS::StackName}/Logger"
+          MetricValue: "1"
+          Unit: Count
+
+  LoggerErrorRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-LoggerErrorRateAlarm"
+      AlarmDescription: "Alarm when Logger error rate exceeds 5 errors in 5 minutes"
+      Namespace: !Sub "${AWS::StackName}/Logger"
+      MetricName: LoggerErrorCount
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 5
+      Threshold: 5
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+
+  LoggerWarnsFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: '{ $.level = 40 || $.level = "warn" }'
+      LogGroupName: !Ref TaskLogGroup
+      MetricTransformations:
+        - MetricName: LoggerWarnCount
+          MetricNamespace: !Sub "${AWS::StackName}/Logger"
+          MetricValue: "1"
+          Unit: Count
+
+  LoggerWarnRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-LoggerWarnRateAlarm"
+      AlarmDescription: "Alarm when Logger warn rate exceeds 10 warnings in 5 minutes"
+      Namespace: !Sub "${AWS::StackName}/Logger"
+      MetricName: LoggerWarnCount
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 5
+      Threshold: 10
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+
   #
   # Canary Deployment
   #
