@@ -33,14 +33,21 @@ export async function mfaMethodMiddleware(
 }
 
 const selectMfaMiddleware = (): RequestHandler => {
-  try {
-    const mfaServiceUrl = new URL(getMfaServiceUrl());
-    if (supportMfaPage() && mfaServiceUrl) {
-      return mfaMethodMiddleware;
+  const mfaServiceUrlString = getMfaServiceUrl();
+  let mfaServiceUrl: URL | null = null;
+  if (mfaServiceUrlString) {
+    try {
+      mfaServiceUrl = new URL(mfaServiceUrlString);
+    } catch {
+      logger.warn(`Invalid MFA service URL: ${mfaServiceUrlString}`);
+      mfaServiceUrl = null;
     }
-  } catch (error) {
-    logger.error(`selectMfaMiddleware ${error.message}`);
   }
+
+  if (supportMfaPage() && mfaServiceUrl) {
+    return mfaMethodMiddleware;
+  }
+
   return legacyMfaMethodsMiddleware;
 };
 
