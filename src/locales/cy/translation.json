@@ -127,6 +127,14 @@
       }
     }
   },
+  "setUpAuthApp": {
+    "errors": {
+      "invalidCode": "Nid yw'r cod a roddwyd gennych yn gywir, gwiriwch eich ap dilysydd a rhowch gynnig arall ",
+      "required": "Rhowch y cod a ddangosir yn eich ap dilysydd",
+      "maxLength": "Rhowch y cod gan ddefnyddio 6 digid yn unig",
+      "invalidFormat": "Rhowch y cod gan ddefnyddio rhifau yn unig"
+    }
+  },
   "pages": {
     "security": {
       "title": "Diogelwch",
@@ -151,6 +159,30 @@
           },
           "app": {
             "title": "Ap dilysydd"
+          }
+        },
+        "supportChangeMfa": {
+          "heading": "Sut rydych yn cael codau diogelwch i fewngofnodi",
+          "defaultMethod": {
+            "heading": "Eich dull diofyn",
+            "phoneNumber": {
+              "title": "Neges destun i'ch rhif ffôn sy'n gorffen gyda [phoneNumber]",
+              "change": "Newid rhif ffôn"
+            },
+            "app": {
+              "title": "Ap dilysydd",
+              "change": "Newid ap dilysydd"
+            },
+            "change": "Defnyddio dull diofyn gwahanol"
+          },
+          "backup": {
+            "heading": "Eich dull wrth gefn",
+            "headingNoBackup": "Ychwanegu  dull wrth gefn",
+            "paragraph": "Rydym yn argymell eich bod yn ychwanegu dull wrth gefn ar gyfer cael codau diogelwch.",
+            "paragraph2": "Bydd hyn yn gwneud yn siŵr y gallwch fewngofnodi bob amser, hyd yn oed os na allwch gael codau diogelwch drwy ddefnyddio'ch dull diofyn.",
+            "link": "Ychwanegu  dull wrth gefn",
+            "removeLink": "Tynnu dull wrth gefn",
+            "switchLink": "Newid dulliau dull wrth gefn a diofyn"
           }
         }
       },
@@ -286,6 +318,26 @@
           "required": "Rhowch eich cyfrinair",
           "incorrectPassword": "Rhowch y cyfrinair cywir"
         }
+      },
+      "switchBackupMethod": {
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
+      },
+      "addBackup": {
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
+      },
+      "changeAuthApp": {
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
+      },
+      "removeBackup": {
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
+      },
+      "changeDefaultMethod": {
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
       },
       "cancelText": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
     },
@@ -636,6 +688,129 @@
         "heading": "Beth allwch chi ei wneud",
         "paragraph1": "Dewch yn ôl yn nes ymlaen. Dylai eich GOV.UK One Login fod ar gael eto mewn 3 diwrnod gwaith.",
         "paragraph2": "Gallwch hefyd fynd yn ôl i’r gwasanaeth roeddech yn ceisio ei ddefnyddio. Gallwch chwilio am y gwasanaeth gan ddefnyddio’ch peiriant chwilio neu ddod o hyd iddo o’r hafan GOV.UK."
+      }
+    },
+    "confirmaddBackup": {
+      "title": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
+      "heading": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
+      "message": "Os nad yw'ch dull diofyn ar gyfer cael codau diogelwch ar gael, gallwch gael cod o'r ap dilysydd hwn yn lle hynny.",
+      "backLinkText": "Yn ôl i Diogelwch"
+    },
+    "addBackup": {
+      "title": "Dewiswch ddull wrth gefn",
+      "sms": {
+        "title": "Rhif ffôn wrth gefn",
+        "hint": "Cael neges destun i ffôn symudol gwahanol"
+      },
+      "app": {
+        "title": "Ap dilysydd ar gyfer ffôn clyfar, tabled neu gyfrifiadur",
+        "help": {
+          "title": "Beth yw ap dilysydd?",
+          "text1": "Mae ap dilysydd yn creu cod diogelwch sy'n helpu i gadarnhau mai chi yw chi pan fyddwch yn mewngofnodi.",
+          "text2": "Gallwch ddefnyddio ap dilysydd ar eich ffôn clyfar, tabled neu gyfrifiadur. Lawrlwythwch ap dilysydd ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau neu chwiliwch ar-lein am ap dilysydd ar gyfer eich cyfrifiadur."
+        }
+      },
+      "backLink": "Canslo a mynd yn ôl i Diogelwch",
+      "continue": "Parhau",
+      "backup": {
+        "title": "Ychwanegu  dull wrth gefn",
+        "sms": {
+          "message": "Gallwch gael codau diogelwch drwy neges destun fel eich dull wrth gefn.",
+          "button": "Ychwanegu rhif ffôn symudol"
+        }
+      },
+      "errors": { "required": "Dewiswch ffordd i gael codau diogelwch" }
+    },
+    "addBackupApp": {
+      "title": "Sefydlu ap dilysydd",
+      "step1": {
+        "text": "1. Agorwch eich ap dilysydd ar eich ffôn clyfar, tabled, neu gyfrifiadur.",
+        "hintTitle": "Nid oes gennyf ap dilysydd",
+        "hintText": [
+          "Gallwch lawrlwytho ap dilysdd ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau.",
+          "Os nad oes gennych ffôn clyfar neu dabled, chwiliwch ar-lein am ap dilysydd ar gyfer eich cyfrifiadur",
+          "Gallwch ddefnyddio unrhyw ap dilysydd."
+        ]
+      },
+      "step2": {
+        "text": "2. Defnyddiwch eich ap dilysydd i sganio'r cod QR.",
+        "hintTitle": "Ni allaf sganio'r cod QR",
+        "hintText": "<p>Gallwch roi'r allwedd gyfrinachol i'ch ap dilysydd yn lle hynny.</p><p>Allwedd gyfrinachol:<br/><strong>[secretKey]</strong></p><p>Mae rhai apiau dilysydd yn galw'r allwedd gyfrinachol yn 'cod'.</p>"
+      },
+      "step3": {
+        "text": "3. Bydd yr ap dilysydd yn dangos cod diogelwch."
+      },
+      "step4": {
+        "text": "4. Rhowch y cod.",
+        "hint": "Dyma'r rhif 6 digid a ddangosir yn eich ap dilysydd"
+      },
+      "cancel": "Canslo a mynd yn ôl i Diogelwch"
+    },
+    "addBackupSms": {
+      "title": "Rhowch eich rhif ffôn symudol",
+      "heading": "Rhowch eich rhif ffôn symudol",
+      "confirm": {
+        "title": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
+        "heading": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
+        "message": "Os nad yw eich dull diofyn ar gyfer cael codau diogelwch ar gael, gallwch gael cod i'ch rhif ffôn sy'n gorffen gyda <strong>[mobile]</strong> yn lle hynny.",
+        "backLink": "Yn ôl i Diogelwch"
+      }
+    },
+    "removeBackupMethod": {
+      "title": "Tynnu eich dull wrth gefn ar gyfer cael codau diogelwch",
+      "paragraph": "Bydd hyn yn dileu'ch dull wrth gefn ar gyfer cael codau diogelwch.",
+      "sms": "Ni fyddwn bellach yn anfon codau diogelwch trwy neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
+      "app": "Ni fyddwn bellach yn anfon codau diogelwch i'ch ap dilysydd.",
+      "button": "Tynnu dull wrth gefn",
+      "cancelBackLink": "Canslo a mynd yn ôl i Diogelwch",
+      "backLinkText": "Yn ôl i Diogelwch",
+      "confirm": {
+        "title": "Rydych wedi tynnu eich dull wrth gefn ar gyfer cael codau diogelwch",
+        "heading": "Rydych wedi tynnu eich dull wrth gefn ar gyfer cael codau diogelwch.",
+        "message_app": "Ni fyddwch bellach yn cael codau diogelwch i'ch ap dilysydd.",
+        "message_sms": "Ni fyddwch bellach yn cael codau diogelwch i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>."
+      }
+    },
+    "updateAuthenticatorAppConfirmation": {
+      "title": "Rydych wedi newid eich ap dilysydd",
+      "panelText": "Rydych wedi newid eich ap dilysydd",
+      "summaryText": "Byddwn yn anfon codau diogelwch i'ch ap dilysydd newydd."
+    },
+    "changeDefaultMethod": {
+      "title": "Defnyddiwch ddull diofyn gwahanol",
+      "currentIsPhone": "Eich dull diofyn ar gyfer cael codau diogelwch ar hyn o bryd yw trwy neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
+      "switchToApp": "Gallwch ddefnyddio ap dilysydd yn lle hynny.",
+      "currentIsApp": "Eich dull diofyn ar gyfer cael codau diogelwch ar hyn o bryd yw trwy eich ap dilysydd.",
+      "switchToPhone": "Gallwch gael codau trwy neges destun yn lle hynny.",
+      "setUpPhoneButton": "Ychwanegu rhif ffôn symudol",
+      "setUpAppButton": "Sefydlu ap dilysydd",
+      "cancelButton": "Canslo a mynd yn ôl i Diogelwch",
+      "confirmation": {
+        "title": "Rydych wedi newid eich dull diofyn ar gyfer cael codau diogelwch",
+        "heading": "Rydych wedi newid eich dull diofyn ar gyfer cael codau diogelwch",
+        "app": "Eich dull diofyn ar gyfer cael codau diogelwch bellach yw eich ap dilysydd.",
+        "sms": "Eich dull diofyn ar gyfer cael codau diogelwch fydd neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
+        "back": "Yn ôl i Diogelwch"
+      },
+      "sms": {
+        "title": "Rhowch eich rhif ffôn symudol",
+        "heading": "Rhowch eich rhif ffôn symudol"
+      }
+    },
+    "switchBackupMethod": {
+      "title": "Newid eich dulliau wrth gefn a diofyn",
+      "newDefaultApp": "Eich dull diofyn ar gyfer cael codau diogelwch fydd defnyddio'ch ap dilysydd.",
+      "newDefaultSms": "Eich dull diofyn ar gyfer cael codau diogelwch fydd neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
+      "newBackupApp": "Bydd eich ap dilysydd yn dod yn eich dull wrth gefn.",
+      "newBackupSms": "Bydd eich dull wrth gefn yn neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
+      "button": "Newid dulliau",
+      "cancelLinkText": "Canslo a mynd yn ôl i Diogelwch",
+      "confirm": {
+        "title": "Rydych wedi newid eich dulliau wrth gefn a diofyn ar gyfer cael codau diogelwch",
+        "heading": "Rydych wedi newid eich dulliau wrth gefn a diofyn ar gyfer cael codau diogelwch",
+        "backLinkText": "Yn ôl i Diogelwch",
+        "messageSms": "Byddwn yn anfon codau diogelwch i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
+        "messageApp": "Byddwch yn defnyddio'ch ap dilysydd i gael codau diogelwch i fewngofnodi."
       }
     }
   }
