@@ -423,7 +423,7 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
 
       // Assert
-      expect(sqsClientStub.called);
+      expect(sqsClientStub.called).to.eq(true);
       const publishedEvent = JSON.parse(
         sqsClientStub.getCall(0).firstArg.input.MessageBody
       ) as AuditEvent;
