@@ -11,7 +11,7 @@ import * as mfaModule from "../../../utils/mfa";
 
 describe("Integration:: change authenticator app", () => {
   let token: string | string[];
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   let cookies: string;
   const sandbox = sinon.createSandbox();
 
@@ -68,17 +68,18 @@ describe("Integration:: change authenticator app", () => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
         console.log("TOKEN VALUE", token);
-      });
-
-    console.log("TOKEN VALUE", token);
-
-    await request(app)
-      .post(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
-      .type("form")
-      .send({
-        _csrf: token,
-        code: "111111",
-        authAppSecret: "qwer42312345342",
+      })
+      .then(() => {
+        console.log("2nd TOKEN VALUE", token);
+        return request(app)
+          .post(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
+          .type("form")
+          .set("Cookie", cookies)
+          .send({
+            _csrf: token,
+            code: "111111",
+            authAppSecret: "qwer42312345342",
+          });
       })
       .then((res) => {
         expect(res.header.location).to.equal(
