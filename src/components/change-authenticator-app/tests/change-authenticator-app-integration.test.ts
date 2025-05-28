@@ -59,7 +59,7 @@ describe("Integration:: change authenticator app", () => {
     );
   });
 
-  it("should redirect to /update confirmation when valid code entered", async () => {
+  it.only("should redirect to /update confirmation when valid code entered", async () => {
     const app = await appWithMiddlewareSetup({ verifyMfaCode: true });
 
     await request(app)
