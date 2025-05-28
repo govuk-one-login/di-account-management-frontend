@@ -65,10 +65,12 @@ describe("Integration:: change authenticator app", () => {
     await request(app)
       .get(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
       .then((res) => {
-        console.log("res.text", res.text);
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
+        console.log("TOKEN VALUE", token);
       });
+
+    console.log("TOKEN VALUE", token);
 
     await request(app)
       .post(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
