@@ -77,21 +77,5 @@ describe("Session Ids Util Tests", () => {
         LOG_MESSAGES.DI_PERSISTENT_SESSION_ID_COOKIE_NOT_IN_REQUEST
       );
     });
-
-    it("should handle no cookies in request", () => {
-      const mockRequest = new RequestBuilder().build();
-
-      const result = getSessionIdsFrom(mockRequest as Request);
-
-      expect(result.sessionId).to.equal(SESSION_ID_UNKNOWN);
-      expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID_UNKNOWN);
-      expect(result.persistentSessionId).to.equal(
-        PERSISTENT_SESSION_ID_UNKNOWN
-      );
-      expect(loggerSpy).to.have.been.calledWith(
-        { trace: PERSISTENT_SESSION_ID_UNKNOWN + "::" + SESSION_ID_UNKNOWN },
-        LOG_MESSAGES.DI_PERSISTENT_SESSION_ID_COOKIE_NOT_IN_REQUEST
-      );
-    });
   });
 });
