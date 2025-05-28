@@ -67,6 +67,9 @@ describe("Integration:: change authenticator app", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
         console.log("TOKEN VALUE", token);
       })
       .then(() => {
