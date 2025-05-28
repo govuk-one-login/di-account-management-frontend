@@ -63,6 +63,13 @@ describe("Integration:: change authenticator app", () => {
     const app = await appWithMiddlewareSetup({ verifyMfaCode: true });
 
     await request(app)
+      .get(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
+      .then((res) => {
+        const $ = cheerio.load(res.text);
+        token = $("[name=_csrf]").val();
+      });
+
+    await request(app)
       .post(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
       .type("form")
       .send({

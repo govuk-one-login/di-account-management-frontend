@@ -13,6 +13,7 @@ export async function changeAuthenticatorAppGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  console.log("SDFLKJSDLKFJDSLKFJSDL");
   return renderMfaMethodPage(CHANGE_AUTHENTICATOR_APP_TEMPLATE, req, res, next);
 }
 
