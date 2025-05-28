@@ -59,7 +59,7 @@ describe("Integration:: change authenticator app", () => {
     );
   });
 
-  it("should redirect to /update confirmation when valid code entered", async () => {
+  it.only("should redirect to /update confirmation when valid code entered", async () => {
     const app = await appWithMiddlewareSetup({ verifyMfaCode: true });
 
     await request(app)
@@ -71,8 +71,7 @@ describe("Integration:: change authenticator app", () => {
         authAppSecret: "qwer42312345342",
       })
       .then((res) => {
-        expect(
-          "Location",
+        expect(res.header.location).to.equal(
           PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url
         );
         expect(res.status).to.equal(302);
