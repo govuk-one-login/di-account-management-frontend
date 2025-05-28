@@ -31,19 +31,14 @@ export async function renderMfaMethodPage(
 
     const authAppSecret = req.body?.authAppSecret ?? generateMfaSecret();
 
-    console.log("authAppSecret", authAppSecret);
-
     const qrCodeText = generateQRCodeValue(
       authAppSecret,
       req.session.user.email,
       "GOV.UK One Login"
     );
 
-    console.log("qrCodeText", qrCodeText);
-
     const qrCode = await QRCode.toDataURL(qrCodeText);
 
-    console.log("generated qrCode");
     return res.render(templateFile, {
       authAppSecret,
       qrCode,
