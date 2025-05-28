@@ -12,7 +12,7 @@ export function csrfErrorHandler(
   }
 
   if (error.code === "EBADCSRFTOKEN") {
-    req.log.error({
+    req.log.info({
       msg: `Failed CSRF validation, redirecting to your services page.  Original error: ${error.message}`,
     });
     return res.redirect(PATH_DATA.YOUR_SERVICES.url);
