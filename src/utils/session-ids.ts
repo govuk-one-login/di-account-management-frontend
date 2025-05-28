@@ -15,33 +15,28 @@ interface SessionIds {
 }
 
 export function getSessionIdsFrom(req: Request): SessionIds {
-  const sessionIds: Partial<SessionIds> = {};
-
-  if (req?.cookies) {
-    logger.info(`Cookies: ${Object.keys(req.cookies)}`);
-    if (req.cookies["di-persistent-session-id"]) {
-      logger.info(`Cookies: ${req.cookies["di-persistent-session-id"]}`);
-    }
-  }
+  const sessionId = req.session.authSessionIds?.sessionId ?? SESSION_ID_UNKNOWN;
+  const clientSessionId =
+    req.session.authSessionIds?.clientSessionId ?? CLIENT_SESSION_ID_UNKNOWN;
+  let persistentSessionId = PERSISTENT_SESSION_ID_UNKNOWN;
 
   if (req?.cookies?.["di-persistent-session-id"]) {
-    sessionIds.persistentSessionId = xss(
-      req.cookies["di-persistent-session-id"]
+    logger.info(
+      `DI persistent session id cookie: ${req.cookies["di-persistent-session-id"]}`
     );
+    persistentSessionId = xss(req.cookies["di-persistent-session-id"]);
   } else {
     logger.info(
       {
-        trace: PERSISTENT_SESSION_ID_UNKNOWN + "::" + sessionIds.sessionId,
+        trace: PERSISTENT_SESSION_ID_UNKNOWN + "::" + sessionId,
       },
       LOG_MESSAGES.DI_PERSISTENT_SESSION_ID_COOKIE_NOT_IN_REQUEST
     );
-    sessionIds.persistentSessionId = PERSISTENT_SESSION_ID_UNKNOWN;
   }
 
   return {
-    sessionId: req.session.authSessionIds?.sessionId ?? SESSION_ID_UNKNOWN,
-    clientSessionId:
-      req.session.authSessionIds?.clientSessionId ?? CLIENT_SESSION_ID_UNKNOWN,
-    persistentSessionId: sessionIds.persistentSessionId,
+    sessionId,
+    clientSessionId,
+    persistentSessionId,
   };
 }

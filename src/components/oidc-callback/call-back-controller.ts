@@ -111,7 +111,9 @@ export function oidcAuthCallbackGet(
     };
 
     if (req.cookies?.gs) {
+      logger.info(`gs cookie: ${req.cookies.gs}`);
       const ids = xss(req.cookies.gs).split(".");
+
       if (ids.length !== 2) {
         logger.error(LOG_MESSAGES.MALFORMED_GS_COOKIE(req.cookies.gs));
       } else {
