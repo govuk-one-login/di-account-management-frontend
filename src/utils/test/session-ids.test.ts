@@ -75,9 +75,6 @@ describe("Session Ids Util Tests", () => {
       expect(result.sessionId).to.equal(SESSION_ID_UNKNOWN);
       expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID_UNKNOWN);
       expect(result.persistentSessionId).to.equal(PERSISTENT_SESSION_ID);
-      expect(loggerSpy).to.have.been.calledWith(
-        LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST
-      );
     });
 
     it("should handle missing di persistent session id cookie", () => {
@@ -111,9 +108,6 @@ describe("Session Ids Util Tests", () => {
       expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID_UNKNOWN);
       expect(result.persistentSessionId).to.equal(
         PERSISTENT_SESSION_ID_UNKNOWN
-      );
-      expect(loggerSpy).to.have.been.calledWith(
-        LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST
       );
       expect(loggerSpy).to.have.been.calledWith(
         { trace: PERSISTENT_SESSION_ID_UNKNOWN + "::" + SESSION_ID_UNKNOWN },

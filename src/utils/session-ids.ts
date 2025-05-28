@@ -38,7 +38,6 @@ export function getSessionIdsFrom(req: Request): SessionIds {
       sessionIds.clientSessionId = ids[1];
     }
   } else {
-    logger.info(LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST);
     sessionIds.sessionId = SESSION_ID_UNKNOWN;
     sessionIds.clientSessionId = CLIENT_SESSION_ID_UNKNOWN;
   }
