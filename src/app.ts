@@ -134,6 +134,26 @@ async function createApp(): Promise<express.Application> {
 
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.use(cookieParser());
+
+  const sessionStore = getSessionStore({ session: session });
+  app.use(
+    session({
+      name: "am",
+      store: sessionStore,
+      saveUninitialized: false,
+      secret: getSessionSecret(),
+      resave: false,
+      unset: "destroy",
+      cookie: getSessionCookieOptions(
+        isProduction,
+        getSessionExpiry(),
+        getSessionSecret()
+      ),
+    })
+  );
+
+  app.locals.sessionStore = sessionStore;
+
   app.use(setLocalVarsMiddleware);
   app.use(loggerMiddleware);
   app.use(outboundContactUsLinksMiddleware);
@@ -196,25 +216,6 @@ async function createApp(): Promise<express.Application> {
   });
 
   app.use(languageToggleMiddleware);
-
-  const sessionStore = getSessionStore({ session: session });
-  app.use(
-    session({
-      name: "am",
-      store: sessionStore,
-      saveUninitialized: false,
-      secret: getSessionSecret(),
-      resave: false,
-      unset: "destroy",
-      cookie: getSessionCookieOptions(
-        isProduction,
-        getSessionExpiry(),
-        getSessionSecret()
-      ),
-    })
-  );
-
-  app.locals.sessionStore = sessionStore;
 
   const oidcClient = await getOIDCClient(getOIDCConfig());
   app.use(authMiddleware(oidcClient));

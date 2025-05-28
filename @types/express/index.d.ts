@@ -19,6 +19,10 @@ declare module "express-session" {
     mfaMethods?: MfaMethod[];
     removedMfaMethod?: MfaMethod;
     newDefaultMfaMethodId: string | number;
+    authSessionIds?: {
+      sessionId: string;
+      clientSessionId: string;
+    };
   }
 }
 declare module "express-serve-static-core" {
