@@ -32,11 +32,11 @@ export function eventService(
       : MISSING_SESSION_ID_SPECIAL_CASE;
 
   const getPersistentSessionId = (res: Response): string =>
-    res.locals.persistentSessionId ||
+    res.locals.persistentSessionId ??
     MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE;
 
   const getUserId = (session: Session): string =>
-    session.user_id || MISSING_USER_ID_SPECIAL_CASE;
+    session.user_id ?? MISSING_USER_ID_SPECIAL_CASE;
 
   const getAppSessionId = (session: Session): string =>
     userHasComeFromTheApp(session)
@@ -44,7 +44,7 @@ export function eventService(
       : MISSING_APP_SESSION_ID_SPECIAL_CASE;
 
   const isSignedIn = (session: Session): boolean =>
-    session.user?.isAuthenticated || false;
+    session.user?.isAuthenticated ?? false;
 
   /**
    * A function for calculating and returning an object containing the current timestamp.

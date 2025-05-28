@@ -241,7 +241,6 @@
       },
       "app": {
         "title": "Authenticator app for smartphone, tablet or computer",
-        "hint": "",
         "help": {
           "title": "What is an authenticator app?",
           "text1": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
