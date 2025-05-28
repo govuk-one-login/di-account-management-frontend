@@ -20,10 +20,12 @@ export function getSessionIdsFrom(req: Request): SessionIds {
   if (req?.cookies) {
     logger.info(`Cookies: ${Object.keys(req.cookies)}`);
     if (req.cookies["gs"]) {
-      logger.info(`Cookies: ${req.cookies["gs"]}`);
+      logger.info(`GS Cookies: ${req.cookies["gs"]}`);
     }
     if (req.cookies["di-persistent-session-id"]) {
-      logger.info(`Cookies: ${req.cookies["di-persistent-session-id"]}`);
+      logger.info(
+        `DI persistent session id cookies: ${req.cookies["di-persistent-session-id"]}`
+      );
     }
   }
 
