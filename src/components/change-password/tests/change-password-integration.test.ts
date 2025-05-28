@@ -5,10 +5,13 @@ import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import { load } from "cheerio";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import {
+  API_ENDPOINTS,
+  CLIENT_SESSION_ID_UNKNOWN,
+  PATH_DATA,
+} from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 
 describe("Integration:: change password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -70,9 +73,7 @@ describe("Integration:: change password", () => {
       .get(PATH_DATA.CHANGE_PASSWORD.url)
       .then((res) => {
         const $ = load(res.text);
-        cookies = res.headers["set-cookie"].concat(
-          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
-        );
+        cookies = res.headers["set-cookie"];
         token = $("[name=_csrf]").val();
       });
   });
@@ -182,7 +183,7 @@ describe("Integration:: change password", () => {
   it("should return validation error when password is amongst most common passwords", async () => {
     // Arrange
     nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .post(API_ENDPOINTS.UPDATE_PASSWORD)
       .once()
       .reply(400, { code: 1040 });
@@ -228,7 +229,7 @@ describe("Integration:: change password", () => {
   it("should return error when new password is the same as existing password", async () => {
     // Arrange
     nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .post(API_ENDPOINTS.UPDATE_PASSWORD)
       .once()
       .reply(400, { code: 1024 });
@@ -255,7 +256,7 @@ describe("Integration:: change password", () => {
   it("should throw error when 400 is returned from API", async () => {
     // Arrange
     nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .post(API_ENDPOINTS.UPDATE_PASSWORD)
       .once()
       .reply(400, { code: 1000 });
@@ -281,7 +282,7 @@ describe("Integration:: change password", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.UPDATE_PASSWORD)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(204);
 
