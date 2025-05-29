@@ -130,19 +130,17 @@ export function enterPasswordPost(
       return;
     }
 
-    const user = {
-      token: req.session.user.tokens.accessToken,
-      email: req.session.user.email,
-      password: password,
-    };
-
     const response = await service.authenticated(
-      user,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
+      req.session.user.email,
+      password,
+      {
+        token: req.session.user.tokens.accessToken,
+        sourceIp: req.ip,
+        sessionId: res.locals.sessionId,
+        persistentSessionId: res.locals.persistentSessionId,
+        clientSessionId: res.locals.clientSessionId,
+        txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+      }
     );
 
     if (response.authenticated) {

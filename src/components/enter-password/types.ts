@@ -1,10 +1,9 @@
+import { RequestConfig } from "src/utils/http";
+
 export interface EnterPasswordServiceInterface {
   authenticated: (
-    user: { token: string; email: string; password: string },
-    sourceIp: string,
-    sessionId: string,
-    persistentSessionId: string,
-    clientSessionId: string,
-    txmaAuditEncoded: string
+    email: string,
+    password: string,
+    requestConfig: RequestConfig
   ) => Promise<{ authenticated: boolean; intervention?: string }>;
 }

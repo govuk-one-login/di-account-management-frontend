@@ -26,17 +26,15 @@ export function changePasswordPost(
     const { accessToken } = req.session.user.tokens;
 
     const newPassword = req.body.password as string;
-    const response = await service.updatePassword(
-      accessToken,
-      email,
-      newPassword,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string),
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
-    );
+    const response = await service.updatePassword(email, newPassword, {
+      token: accessToken,
+      sourceIp: req.ip,
+      sessionId: res.locals.sessionId,
+      persistentSessionId: res.locals.persistentSessionId,
+      userLanguage: xss(req.cookies.lng as string),
+      clientSessionId: res.locals.clientSessionId,
+      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+    });
 
     if (response.success) {
       req.session.user.state.changePassword = getNextState(

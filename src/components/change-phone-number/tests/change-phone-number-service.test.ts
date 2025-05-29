@@ -44,15 +44,17 @@ describe("changePhoneNumberService", () => {
 
     const changePhoneNumberResponse =
       await changePhoneNumberService().sendPhoneVerificationNotification(
-        TOKEN,
         CURRENT_EMAIL,
         phoneNumber,
-        SOURCE_IP,
-        SESSION_ID,
-        PERSISTENT_SESSION_ID,
-        ENGLISH,
-        CLIENT_SESSION_ID,
-        TXMA_AUDIT_ENCODED
+        {
+          token: TOKEN,
+          sourceIp: SOURCE_IP,
+          sessionId: SESSION_ID,
+          persistentSessionId: PERSISTENT_SESSION_ID,
+          userLanguage: ENGLISH,
+          clientSessionId: CLIENT_SESSION_ID,
+          txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+        }
       );
 
     expect(changePhoneNumberResponse.success).to.be.true;

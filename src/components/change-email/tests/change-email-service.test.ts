@@ -49,16 +49,15 @@ describe("changeEmailService", () => {
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
     const sendCodeVerificationNotification =
-      await changeEmailService().sendCodeVerificationNotification(
-        accessToken,
-        email,
+      await changeEmailService().sendCodeVerificationNotification(email, {
+        token: accessToken,
         sourceIp,
         sessionId,
         persistentSessionId,
         userLanguage,
         clientSessionId,
-        ""
-      );
+        txmaAuditEncoded: "",
+      });
 
     expect(sendCodeVerificationNotification).to.true;
   });

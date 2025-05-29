@@ -1,12 +1,8 @@
+import { RequestConfig } from "src/utils/http";
+
 export interface ChangeEmailServiceInterface {
   sendCodeVerificationNotification: (
-    accessToken: string,
     email: string,
-    sourceIp: string,
-    sessionId: string,
-    persistentSessionId: string,
-    userLanguage: string,
-    clientSessionId: string,
-    txmaAuditEncoded: string
+    requestConfig: RequestConfig
   ) => Promise<boolean>;
 }

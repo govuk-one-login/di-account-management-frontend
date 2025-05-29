@@ -106,15 +106,17 @@ export function changeDefaultMethodSmsPost(
         : phoneNumber;
 
     const response = await service.sendPhoneVerificationNotification(
-      accessToken,
       email,
       newPhoneNumber,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string),
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
+      {
+        token: accessToken,
+        sourceIp: req.ip,
+        sessionId: res.locals.sessionId,
+        persistentSessionId: res.locals.persistentSessionId,
+        userLanguage: xss(req.cookies.lng as string),
+        clientSessionId: res.locals.clientSessionId,
+        txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+      }
     );
 
     if (response.success) {
