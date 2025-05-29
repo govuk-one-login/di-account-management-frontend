@@ -13,9 +13,9 @@ import {
   getNextState,
   UserJourney,
 } from "../../utils/state-machine";
-import { getTxmaHeader } from "../../utils/txma-header";
 import { supportChangeOnIntervention } from "../../config";
 import { handleLogout } from "../../utils/logout";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -133,14 +133,7 @@ export function enterPasswordPost(
     const response = await service.authenticated(
       req.session.user.email,
       password,
-      {
-        token: req.session.user.tokens.accessToken,
-        sourceIp: req.ip,
-        sessionId: res.locals.sessionId,
-        persistentSessionId: res.locals.persistentSessionId,
-        clientSessionId: res.locals.clientSessionId,
-        txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-      }
+      getRequestConfigFromExpress(req, res)
     );
 
     if (response.authenticated) {

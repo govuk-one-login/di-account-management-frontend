@@ -1,4 +1,4 @@
-import { RequestConfig } from "src/utils/http";
+import { RequestConfig } from "../../utils/http";
 import { ApiResponseResult } from "../../utils/types";
 
 export interface ChangePasswordServiceInterface {

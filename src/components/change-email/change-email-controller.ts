@@ -8,8 +8,7 @@ import {
 } from "../../utils/validation";
 import { ChangeEmailServiceInterface } from "./types";
 import { changeEmailService } from "./change-email-service";
-import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const TEMPLATE_NAME = "change-email/index.njk";
 export function changeEmailGet(req: Request, res: Response): void {
@@ -30,7 +29,6 @@ export function changeEmailPost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const { email } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
 
     const newEmailAddress = req.body.email;
 
@@ -40,15 +38,7 @@ export function changeEmailPost(
 
     const emailSent = await service.sendCodeVerificationNotification(
       newEmailAddress,
-      {
-        token: accessToken,
-        sourceIp: req.ip,
-        sessionId: res.locals.sessionId,
-        persistentSessionId: res.locals.persistentSessionId,
-        userLanguage: xss(req.cookies.lng as string),
-        clientSessionId: res.locals.clientSessionId,
-        txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-      }
+      getRequestConfigFromExpress(req, res)
     );
 
     if (emailSent) {

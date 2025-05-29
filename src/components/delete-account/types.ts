@@ -1,12 +1,9 @@
+import { RequestConfig } from "../../utils/http";
+
 export interface DeleteAccountServiceInterface {
   deleteAccount: (
-    token: string,
     email: string,
-    sourceIp: string,
-    sessionId: string,
-    persistentSessionId: string,
-    clientSessionId: string,
-    txmaAuditEncoded: string
+    requestConfig: RequestConfig
   ) => Promise<boolean>;
   publishToDeleteTopic: (
     user_id: string,

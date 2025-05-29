@@ -9,6 +9,9 @@ import { ApiResponseResult } from "./types";
 import { getApiBaseUrl } from "../config";
 import { HTTP_STATUS_CODES } from "../app.constants";
 import { ApiError } from "./errors";
+import { Request, Response } from "express";
+import xss from "xss";
+import { getTxmaHeader } from "./txma-header";
 
 const headers: RawAxiosRequestHeaders = {
   Accept: "application/json",
@@ -37,6 +40,21 @@ export interface RequestConfig {
   userLanguage?: string;
   clientSessionId?: string;
   txmaAuditEncoded?: string;
+}
+
+export function getRequestConfigFromExpress(
+  req: Request,
+  res: Response
+): Parameters<typeof getRequestConfig>[0] {
+  return {
+    token: req.session.user.tokens.accessToken,
+    sourceIp: req.ip,
+    sessionId: res.locals.sessionId,
+    persistentSessionId: res.locals.persistentSessionId,
+    userLanguage: xss(req.cookies.lng as string),
+    clientSessionId: res.locals.clientSessionId,
+    txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+  };
 }
 
 export function getRequestConfig({

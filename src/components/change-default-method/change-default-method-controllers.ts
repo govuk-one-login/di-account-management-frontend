@@ -8,8 +8,6 @@ import { EventType, getNextState } from "../../utils/state-machine";
 import { ERROR_CODES, PATH_DATA } from "../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
-import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
 import {
   formatValidationError,
   isObjectEmpty,
@@ -20,6 +18,7 @@ import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { logger } from "../../utils/logger";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 const CHANGE_DEFAULT_METHOD_SMS_TEMPLATE =
@@ -98,7 +97,6 @@ export function changeDefaultMethodSmsPost(
       internationalPhoneNumber,
       phoneNumber,
     } = req.body;
-    const { accessToken } = req.session.user.tokens;
     const { email } = req.session.user;
     const newPhoneNumber =
       hasInternationalPhoneNumber === "true"
@@ -108,15 +106,7 @@ export function changeDefaultMethodSmsPost(
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
-      {
-        token: accessToken,
-        sourceIp: req.ip,
-        sessionId: res.locals.sessionId,
-        persistentSessionId: res.locals.persistentSessionId,
-        userLanguage: xss(req.cookies.lng as string),
-        clientSessionId: res.locals.clientSessionId,
-        txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-      }
+      getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {

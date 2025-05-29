@@ -15,7 +15,6 @@ import {
 import { getLastNDigits } from "../../utils/phone-number";
 import { UpdateInformationInput } from "../../utils/types";
 import { supportChangeMfa } from "../../config";
-import { generateSessionDetails } from "../common/mfa";
 import {
   Intent,
   INTENT_ADD_BACKUP,
@@ -34,6 +33,7 @@ import {
   MfaMethod,
 } from "../../utils/mfaClient/types";
 import { containsNumbersOnly } from "../../utils/strings";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -163,7 +163,7 @@ export function checkYourPhonePost(
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(
         { ...updateInput, updatedValue: newPhoneNumber },
-        await generateSessionDetails(req, res)
+        getRequestConfigFromExpress(req, res)
       );
     }
 

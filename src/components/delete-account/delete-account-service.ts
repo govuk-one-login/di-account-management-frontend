@@ -1,4 +1,4 @@
-import { getRequestConfig, Http, http } from "../../utils/http";
+import { getRequestConfig, Http, http, RequestConfig } from "../../utils/http";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { snsService } from "../../utils/sns";
 import { SnsService } from "../../utils/types";
@@ -11,27 +11,15 @@ export function deleteAccountService(
   sns: SnsService = snsService()
 ): DeleteAccountServiceInterface {
   const deleteAccount = async function (
-    token: string,
     email: string,
-    sourceIp: string,
-    sessionId: string,
-    persistentSessionId: string,
-    clientSessionId: string,
-    txmaAuditEncoded: string
+    requestConfig: RequestConfig
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.DELETE_ACCOUNT,
       {
         email: email,
       },
-      getRequestConfig({
-        token,
-        sourceIp,
-        persistentSessionId,
-        sessionId,
-        clientSessionId,
-        txmaAuditEncoded,
-      })
+      getRequestConfig(requestConfig)
     );
     return status === HTTP_STATUS_CODES.NO_CONTENT;
   };

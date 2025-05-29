@@ -21,6 +21,7 @@ describe("enter password controller", () => {
 
     req = {
       body: {},
+      cookies: {},
       session: {
         user: {
           state: {
