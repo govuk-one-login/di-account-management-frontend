@@ -53,7 +53,9 @@ describe("callback controller", () => {
       status: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       cookie: sandbox.fake(),
-      locals: {},
+      locals: {
+        trace: "fake_trace",
+      },
     };
   });
 
@@ -173,6 +175,7 @@ describe("callback controller", () => {
 
       expect(req.session.authSessionIds).to.eq(undefined);
       expect(loggerErrorSpy).to.have.been.calledWith(
+        { trace: "fake_trace" },
         "Malformed gs cookie contained: invalid_format"
       );
     });
@@ -186,6 +189,7 @@ describe("callback controller", () => {
 
       expect(req.session.authSessionIds).to.eq(undefined);
       expect(loggerInfoSpy).to.have.been.calledWith(
+        { trace: "fake_trace" },
         "gs cookie not in request."
       );
     });

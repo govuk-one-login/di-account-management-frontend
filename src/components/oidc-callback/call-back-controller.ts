@@ -111,11 +111,14 @@ export function oidcAuthCallbackGet(
     };
 
     if (req.cookies?.gs) {
-      logger.info(`gs cookie: ${req.cookies.gs}`);
+      logger.info({ trace: res.locals.trace }, `gs cookie: ${req.cookies.gs}`);
       const ids = xss(req.cookies.gs).split(".");
 
       if (ids.length !== 2) {
-        logger.error(LOG_MESSAGES.MALFORMED_GS_COOKIE(req.cookies.gs));
+        logger.error(
+          { trace: res.locals.trace },
+          LOG_MESSAGES.MALFORMED_GS_COOKIE(req.cookies.gs)
+        );
       } else {
         req.session.authSessionIds = {
           sessionId: ids[0],
@@ -123,7 +126,10 @@ export function oidcAuthCallbackGet(
         };
       }
     } else {
-      logger.info(LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST);
+      logger.info(
+        { trace: res.locals.trace },
+        LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST
+      );
     }
 
     // saved to session where `user_id` attribute is stored as a db item's root-level attribute that is used in indexing

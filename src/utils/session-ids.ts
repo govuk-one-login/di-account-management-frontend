@@ -21,10 +21,13 @@ export function getSessionIdsFrom(req: Request): SessionIds {
   let persistentSessionId = PERSISTENT_SESSION_ID_UNKNOWN;
 
   if (req?.cookies?.["di-persistent-session-id"]) {
+    persistentSessionId = xss(req.cookies["di-persistent-session-id"]);
     logger.info(
+      {
+        trace: persistentSessionId + "::" + sessionId,
+      },
       `DI persistent session id cookie: ${req.cookies["di-persistent-session-id"]}`
     );
-    persistentSessionId = xss(req.cookies["di-persistent-session-id"]);
   } else {
     logger.info(
       {
