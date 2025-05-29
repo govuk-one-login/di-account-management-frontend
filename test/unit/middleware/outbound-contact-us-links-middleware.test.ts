@@ -103,6 +103,15 @@ describe("Middleware", () => {
       const builtUrl = buildUrlFromRequest(req);
       expect(builtUrl).to.equal("https://signin.account.gov.uk/security");
     });
+
+    it("should handle fromURL with encoded nested fromURL to return first fromURL", () => {
+      req.originalUrl =
+        "/contact-gov-uk-one-login?fromURL=https%3A%2F%2Fsignin.account.gov.uk%2Fsecurity%3FfromURL%3Dhttps%253A%252F%252Ffoo";
+      const builtUrl = buildUrlFromRequest(req);
+      expect(builtUrl).to.equal(
+        "https://signin.account.gov.uk/security?fromURL=https%3A%2F%2Ffoo"
+      );
+    });
   });
 
   describe("appendFromUrlWhenTriagePageUrl", () => {
