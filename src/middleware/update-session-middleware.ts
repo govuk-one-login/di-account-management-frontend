@@ -40,7 +40,8 @@ export const updateSessionMiddleware = (
   } else {
     logger.warn(
       { trace: trace },
-      "fromURL in request query for contact-govuk-one-login page did not pass validation"
+      "fromURL in request query for contact-govuk-one-login page did not pass validation:",
+      fromURL
     );
   }
 
