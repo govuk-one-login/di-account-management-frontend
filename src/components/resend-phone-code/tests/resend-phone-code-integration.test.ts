@@ -3,15 +3,15 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import {
+  API_ENDPOINTS,
+  CLIENT_SESSION_ID_UNKNOWN,
+  PATH_DATA,
+} from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import * as cheerio from "cheerio";
-import {
-  CLIENT_SESSION_ID,
-  CURRENT_EMAIL,
-  SESSION_ID,
-} from "../../../../test/utils/builders";
+import { CURRENT_EMAIL } from "../../../../test/utils/builders";
 import { expect } from "chai";
 
 const PHONE_NUMBER = "07839490040";
@@ -80,9 +80,7 @@ describe("Integration:: request phone code", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"].concat(
-          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
-        );
+        cookies = res.headers["set-cookie"];
       });
   });
 
@@ -113,7 +111,7 @@ describe("Integration:: request phone code", () => {
     let phoneNumberRequestedToChangeTo: string;
     // Arrange
     nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .post(API_ENDPOINTS.SEND_NOTIFICATION, {
         email: CURRENT_EMAIL,
         phoneNumber: PHONE_NUMBER,

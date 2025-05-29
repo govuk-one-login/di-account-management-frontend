@@ -7,7 +7,6 @@ import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 import { MfaClient } from "../../../utils/mfaClient";
 
 describe("Integration:: check your phone", () => {
@@ -133,9 +132,7 @@ describe("Integration:: check your phone", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"].concat(
-          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
-        );
+        cookies = res.headers["set-cookie"];
       });
   });
 

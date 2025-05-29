@@ -5,10 +5,13 @@ import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import {
+  API_ENDPOINTS,
+  CLIENT_SESSION_ID_UNKNOWN,
+  PATH_DATA,
+} from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 import { getBaseUrl, supportChangeMfa } from "../../../config";
 
 describe("Integration::enter password", () => {
@@ -25,9 +28,7 @@ describe("Integration::enter password", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"].concat(
-          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
-        );
+        cookies = res.headers["set-cookie"];
       });
   };
 
@@ -239,7 +240,7 @@ describe("Integration::enter password", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(401);
 
@@ -269,7 +270,7 @@ describe("Integration::enter password", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(204);
 
@@ -293,7 +294,7 @@ describe("Integration::enter password", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(204);
 
@@ -317,7 +318,7 @@ describe("Integration::enter password", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(204);
 
@@ -341,7 +342,7 @@ describe("Integration::enter password", () => {
     // arrange
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(204);
 
@@ -364,7 +365,7 @@ describe("Integration::enter password", () => {
   it("should redirect to unavailable permanent when intervention BLOCKED", async () => {
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(403, { code: "1084" });
 
@@ -393,7 +394,7 @@ describe("Integration::enter password", () => {
   it("should redirect to unavailable temporary when intervention SUSPENDED", async () => {
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(403, { code: "1083" });
 
@@ -422,7 +423,7 @@ describe("Integration::enter password", () => {
   it("should show incorrect password error for unknown intervention", async () => {
     nock(baseApi)
       .post(API_ENDPOINTS.AUTHENTICATE)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(403);
 

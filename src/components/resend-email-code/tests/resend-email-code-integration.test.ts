@@ -5,13 +5,13 @@ import nock = require("nock");
 import decache from "decache";
 import {
   API_ENDPOINTS,
+  CLIENT_SESSION_ID_UNKNOWN,
   NOTIFICATION_TYPE,
   PATH_DATA,
 } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import * as cheerio from "cheerio";
-import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 import { expect } from "chai";
 
 describe("Integration:: request email code", () => {
@@ -79,9 +79,7 @@ describe("Integration:: request email code", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"].concat(
-          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
-        );
+        cookies = res.headers["set-cookie"];
       });
   });
 
@@ -112,7 +110,7 @@ describe("Integration:: request email code", () => {
     // Arrange
     let receivedEmail: string;
     nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .post(API_ENDPOINTS.SEND_NOTIFICATION, {
         email: "new@test.com",
         notificationType: "VERIFY_EMAIL",

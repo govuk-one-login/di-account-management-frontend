@@ -12,6 +12,7 @@ import {
 } from "../../app.constants";
 
 import { getSessionIdsFrom } from "../session-ids";
+import { RequestBuilder } from "../../../test/utils/builders";
 
 describe("Session Ids Util Tests", () => {
   describe("Extract session ids from Request", () => {
@@ -32,12 +33,12 @@ describe("Session Ids Util Tests", () => {
     });
 
     it("should extract all three session ids and return a SessionIds object", () => {
-      const mockRequest: Partial<Request> = {
-        cookies: {
-          gs: `${SESSION_ID}.${CLIENT_SESSION_ID}`,
+      const mockRequest = new RequestBuilder()
+        .withAuthSessionIds(SESSION_ID, CLIENT_SESSION_ID)
+        .withCookies({
           "di-persistent-session-id": PERSISTENT_SESSION_ID,
-        },
-      };
+        })
+        .build();
 
       const result = getSessionIdsFrom(mockRequest as Request);
 
@@ -46,46 +47,23 @@ describe("Session Ids Util Tests", () => {
       expect(result.persistentSessionId).to.equal(PERSISTENT_SESSION_ID);
     });
 
-    it("handles a malformed gs cookie", () => {
-      const mockRequest: Partial<Request> = {
-        cookies: {
-          gs: `${SESSION_ID}${CLIENT_SESSION_ID}`,
+    it("should handle missing session.authSessionIds", () => {
+      const mockRequest = new RequestBuilder()
+        .withCookies({
           "di-persistent-session-id": PERSISTENT_SESSION_ID,
-        },
-      };
-
+        })
+        .build();
       const result = getSessionIdsFrom(mockRequest as Request);
 
       expect(result.sessionId).to.equal(SESSION_ID_UNKNOWN);
       expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID_UNKNOWN);
       expect(result.persistentSessionId).to.equal(PERSISTENT_SESSION_ID);
-      expect(errorLoggerSpy).to.have.been.calledWith(
-        LOG_MESSAGES.MALFORMED_GS_COOKIE(`${SESSION_ID}${CLIENT_SESSION_ID}`)
-      );
-    });
-
-    it("should handle missing gs cookie", () => {
-      const mockRequest: Partial<Request> = {
-        cookies: {
-          "di-persistent-session-id": PERSISTENT_SESSION_ID,
-        },
-      };
-      const result = getSessionIdsFrom(mockRequest as Request);
-
-      expect(result.sessionId).to.equal(SESSION_ID_UNKNOWN);
-      expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID_UNKNOWN);
-      expect(result.persistentSessionId).to.equal(PERSISTENT_SESSION_ID);
-      expect(loggerSpy).to.have.been.calledWith(
-        LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST
-      );
     });
 
     it("should handle missing di persistent session id cookie", () => {
-      const mockRequest: Partial<Request> = {
-        cookies: {
-          gs: `${SESSION_ID}.${CLIENT_SESSION_ID}`,
-        },
-      };
+      const mockRequest = new RequestBuilder()
+        .withAuthSessionIds(SESSION_ID, CLIENT_SESSION_ID)
+        .build();
 
       const result = getSessionIdsFrom(mockRequest as Request);
 
@@ -96,27 +74,6 @@ describe("Session Ids Util Tests", () => {
       );
       expect(loggerSpy).to.have.been.calledWith(
         { trace: PERSISTENT_SESSION_ID_UNKNOWN + "::" + SESSION_ID },
-        LOG_MESSAGES.DI_PERSISTENT_SESSION_ID_COOKIE_NOT_IN_REQUEST
-      );
-    });
-
-    it("should handle no cookies in request", () => {
-      const mockRequest: Partial<Request> = {
-        cookies: {},
-      };
-
-      const result = getSessionIdsFrom(mockRequest as Request);
-
-      expect(result.sessionId).to.equal(SESSION_ID_UNKNOWN);
-      expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID_UNKNOWN);
-      expect(result.persistentSessionId).to.equal(
-        PERSISTENT_SESSION_ID_UNKNOWN
-      );
-      expect(loggerSpy).to.have.been.calledWith(
-        LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST
-      );
-      expect(loggerSpy).to.have.been.calledWith(
-        { trace: PERSISTENT_SESSION_ID_UNKNOWN + "::" + SESSION_ID_UNKNOWN },
         LOG_MESSAGES.DI_PERSISTENT_SESSION_ID_COOKIE_NOT_IN_REQUEST
       );
     });

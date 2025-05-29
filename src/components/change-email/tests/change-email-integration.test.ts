@@ -7,11 +7,11 @@ import * as cheerio from "cheerio";
 import decache from "decache";
 import {
   API_ENDPOINTS,
+  CLIENT_SESSION_ID_UNKNOWN,
   NOTIFICATION_TYPE,
   PATH_DATA,
 } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
-import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: change email", () => {
@@ -82,9 +82,7 @@ describe("Integration:: change email", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"].concat(
-          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
-        );
+        cookies = res.headers["set-cookie"];
       });
   });
 
@@ -184,7 +182,7 @@ describe("Integration:: change email", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(400, {});
 
@@ -210,7 +208,7 @@ describe("Integration:: change email", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(204, {});
 
@@ -237,7 +235,7 @@ describe("Integration:: change email", () => {
     ) => {
       // Arrange
       nock(baseApi)
-        .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+        .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
         .post(API_ENDPOINTS.SEND_NOTIFICATION, {
           email: expectedNormalisedEmail,
           notificationType: "VERIFY_EMAIL",

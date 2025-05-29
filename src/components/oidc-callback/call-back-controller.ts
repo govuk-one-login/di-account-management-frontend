@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
 import {
   HTTP_STATUS_CODES,
+  LOG_MESSAGES,
   OIDC_ERRORS,
   PATH_DATA,
   VECTORS_OF_TRUST,
@@ -9,6 +10,8 @@ import {
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
+import xss from "xss";
+import { logger } from "../../utils/logger";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
@@ -106,6 +109,28 @@ export function oidcAuthCallbackGet(
       isAuthenticated: true,
       state: {},
     };
+
+    if (req.cookies?.gs) {
+      logger.info({ trace: res.locals.trace }, `gs cookie: ${req.cookies.gs}`);
+      const ids = xss(req.cookies.gs).split(".");
+
+      if (ids.length !== 2) {
+        logger.error(
+          { trace: res.locals.trace },
+          LOG_MESSAGES.MALFORMED_GS_COOKIE(req.cookies.gs)
+        );
+      } else {
+        req.session.authSessionIds = {
+          sessionId: ids[0],
+          clientSessionId: ids[1],
+        };
+      }
+    } else {
+      logger.info(
+        { trace: res.locals.trace },
+        LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST
+      );
+    }
 
     // saved to session where `user_id` attribute is stored as a db item's root-level attribute that is used in indexing
     req.session.user_id = userInfoResponse.sub;
