@@ -6,11 +6,6 @@ import { Request, Response } from "express";
 import * as mfaModule from "../../../../utils/mfa";
 import QRCode from "qrcode";
 import { renderMfaMethodPage } from "../index";
-import {
-  RequestBuilder,
-  ResponseBuilder,
-  TXMA_AUDIT_ENCODED,
-} from "../../../../../test/utils/builders";
 import { formatValidationError } from "../../../../utils/validation";
 
 describe("render mfa page", () => {
