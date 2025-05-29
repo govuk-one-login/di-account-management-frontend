@@ -17,6 +17,7 @@
     "test",
     "coverage",
     "src/components/**/tests",
-    "post-deploy-tests"
+    "post-deploy-tests",
+    "src/utils/test"
   ]
 }
