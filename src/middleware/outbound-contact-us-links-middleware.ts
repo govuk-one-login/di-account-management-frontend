@@ -2,7 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import { PATH_DATA } from "../app.constants";
 
 export function buildUrlFromRequest(req: Request): string {
-  return `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+  const url = new URL(`${req.protocol}://${req.get("host")}${req.originalUrl}`);
+  const fromURLParam = url.searchParams.get("fromURL");
+  if (fromURLParam) {
+    return fromURLParam;
+  }
+  return url.toString();
 }
 
 export function appendFromUrlWhenTriagePageUrl(
@@ -13,7 +18,6 @@ export function appendFromUrlWhenTriagePageUrl(
 
   if (triagePageUrlRegEx.test(contactUsLinkUrl)) {
     const encodedFromUrl = encodeURIComponent(fromUrl);
-
     contactUsLinkUrl = `${contactUsLinkUrl}?fromURL=${encodedFromUrl}`;
   }
 

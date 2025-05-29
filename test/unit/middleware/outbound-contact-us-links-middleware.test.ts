@@ -91,12 +91,26 @@ describe("Middleware", () => {
       } as any;
     });
 
-    it("should build the fromUrl as expected", () => {
+    it("should build the fromUrl as expected when fromURL is not present", () => {
       const builtUrl = buildUrlFromRequest(req),
         expectedUrl = "https://home.account.gov.uk/contact-gov-uk-one-login";
-
       expect(builtUrl).to.equal(expectedUrl);
-      buildUrlFromRequest(req);
+    });
+
+    it("should return the decoded fromURL if present in the query", () => {
+      req.originalUrl =
+        "/contact-gov-uk-one-login?fromURL=https%3A%2F%2Fsignin.account.gov.uk%2Fsecurity";
+      const builtUrl = buildUrlFromRequest(req);
+      expect(builtUrl).to.equal("https://signin.account.gov.uk/security");
+    });
+
+    it("should handle fromURL with encoded nested fromURL to return first fromURL", () => {
+      req.originalUrl =
+        "/contact-gov-uk-one-login?fromURL=https%3A%2F%2Fsignin.account.gov.uk%2Fsecurity%3FfromURL%3Dhttps%253A%252F%252Ffoo";
+      const builtUrl = buildUrlFromRequest(req);
+      expect(builtUrl).to.equal(
+        "https://signin.account.gov.uk/security?fromURL=https%3A%2F%2Ffoo"
+      );
     });
   });
 

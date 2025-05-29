@@ -59,7 +59,8 @@ describe("updateSessionMiddleware", () => {
     expect(loggerWarnSpy).to.be.calledWith({ url: "invalid-url" });
     expect(loggerWarnSpy).to.be.calledWith(
       { trace: mockResponse.locals.sessionId },
-      "fromURL in request query for contact-govuk-one-login page did not pass validation"
+      "fromURL in request query for contact-govuk-one-login page did not pass validation:",
+      "invalid-url"
     );
     expect(mockRequest.session.queryParameters.fromURL).to.be.undefined;
   });
