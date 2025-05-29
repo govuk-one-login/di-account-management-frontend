@@ -3,9 +3,7 @@ import { randomBytes } from "crypto";
 
 import { logger } from "./logger";
 
-const lowerAndUpperCaseLettersAndNumbersMax50 = new RegExp(
-  "^[a-zA-Z0-9_-]{1,50}$"
-);
+const lowerAndUpperCaseLettersAndNumbersMax50 = /^[a-zA-Z0-9_-]{1,50}$/;
 
 export function containsNumber(value: string): boolean {
   return value ? /\d/.test(value) : false;
