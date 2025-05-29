@@ -10,14 +10,19 @@ import {
   VECTORS_OF_TRUST,
 } from "../../../app.constants";
 import { ClientAssertionServiceInterface } from "../../../utils/types";
+import { logger } from "../../../utils/logger";
 
 describe("callback controller", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
+  let loggerInfoSpy: sinon.SinonSpy;
+  let loggerErrorSpy: sinon.SinonSpy;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    loggerInfoSpy = sinon.spy(logger, "info");
+    loggerErrorSpy = sinon.spy(logger, "error");
 
     req = {
       body: {},
@@ -48,12 +53,16 @@ describe("callback controller", () => {
       status: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       cookie: sandbox.fake(),
-      locals: {},
+      locals: {
+        trace: "fake_trace",
+      },
     };
   });
 
   afterEach(() => {
     sandbox.restore();
+    loggerInfoSpy.restore();
+    loggerErrorSpy.restore();
   });
 
   describe("oidcAuthCallbackGet", () => {
@@ -134,6 +143,55 @@ describe("callback controller", () => {
       };
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
       expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.FORBIDDEN);
+    });
+
+    it("should populate req.session.authSessionIds", async () => {
+      req.cookies = {
+        gs: "fake_session_id.fake_client_session_id",
+      };
+
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake(),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(req.session.authSessionIds.sessionId).to.eq("fake_session_id");
+      expect(req.session.authSessionIds.clientSessionId).to.eq(
+        "fake_client_session_id"
+      );
+    });
+
+    it("should not populate req.session.authSessionIds when gs cookie is malformed", async () => {
+      req.cookies = {
+        gs: "invalid_format",
+      };
+
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake(),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(req.session.authSessionIds).to.eq(undefined);
+      expect(loggerErrorSpy).to.have.been.calledWith(
+        { trace: "fake_trace" },
+        "Malformed gs cookie contained: invalid_format"
+      );
+    });
+
+    it("should not populate req.session.authSessionIds when gs cookie is not set", async () => {
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake(),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(req.session.authSessionIds).to.eq(undefined);
+      expect(loggerInfoSpy).to.have.been.calledWith(
+        { trace: "fake_trace" },
+        "gs cookie not in request."
+      );
     });
   });
 });

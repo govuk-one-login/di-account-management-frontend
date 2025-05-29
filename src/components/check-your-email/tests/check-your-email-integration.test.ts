@@ -4,10 +4,13 @@ import { expect, sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import decache from "decache";
-import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
+import {
+  API_ENDPOINTS,
+  CLIENT_SESSION_ID_UNKNOWN,
+  PATH_DATA,
+} from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import { CLIENT_SESSION_ID, SESSION_ID } from "../../../../test/utils/builders";
 
 describe("Integration:: check your email", () => {
   let sandbox: sinon.SinonSandbox;
@@ -74,9 +77,7 @@ describe("Integration:: check your email", () => {
       .then((res) => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
-        cookies = res.headers["set-cookie"].concat(
-          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
-        );
+        cookies = res.headers["set-cookie"];
       });
   });
 
@@ -177,12 +178,12 @@ describe("Integration:: check your email", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.UPDATE_EMAIL)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(204);
     nock(govUkPublishingBaseApi)
       .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(200);
 
@@ -203,7 +204,7 @@ describe("Integration:: check your email", () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.UPDATE_EMAIL)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
       .reply(400, {});
 

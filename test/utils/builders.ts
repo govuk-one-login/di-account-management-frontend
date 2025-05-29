@@ -107,6 +107,17 @@ export class RequestBuilder {
     return this;
   }
 
+  withAuthSessionIds(
+    sessionId: string,
+    clientSessionId: string
+  ): RequestBuilder {
+    this.session.authSessionIds = {
+      sessionId,
+      clientSessionId,
+    };
+    return this;
+  }
+
   build(): Partial<Request> {
     return {
       body: this.body,
