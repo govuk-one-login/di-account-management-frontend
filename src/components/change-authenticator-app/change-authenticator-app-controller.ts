@@ -29,6 +29,8 @@ export async function changeAuthenticatorAppPost(
     async () => {
       const { authAppSecret } = req.body;
 
+      console.log("authAppSecret:", authAppSecret);
+
       const authAppMFAMethod: MfaMethod = req.session.mfaMethods.find(
         (mfa) => mfa.method.mfaMethodType === "AUTH_APP"
       );
@@ -40,6 +42,8 @@ export async function changeAuthenticatorAppPost(
         throw new Error(errorMessage);
       }
 
+      console.log("authAppMFAMethod:", authAppMFAMethod);
+
       const mfaClient = createMfaClient(req, res);
       const response = await mfaClient.update({
         mfaIdentifier: authAppMFAMethod.mfaIdentifier,
@@ -49,6 +53,8 @@ export async function changeAuthenticatorAppPost(
           credential: authAppSecret,
         },
       });
+
+      console.log("response from mfaClient.update:", response);
 
       if (!response.success) {
         const errorMessage = formatErrorMessage(

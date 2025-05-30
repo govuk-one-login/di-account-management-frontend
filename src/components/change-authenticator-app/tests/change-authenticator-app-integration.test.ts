@@ -10,7 +10,7 @@ import * as mfaModule from "../../../utils/mfa";
 
 describe("Integration:: change authenticator app", () => {
   let token: string | string[];
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   let cookies: string;
   const sandbox = sinon.createSandbox();
 
@@ -54,20 +54,33 @@ describe("Integration:: change authenticator app", () => {
     );
   });
 
-  it("should redirect to /update confirmation when valid code entered", async () => {
+  it.only("should redirect to /update confirmation when valid code entered", async () => {
     const app = await appWithMiddlewareSetup({ verifyMfaCode: true });
 
     await request(app)
-      .post(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
-      .type("form")
-      .send({
-        _csrf: token,
-        code: "111111",
-        authAppSecret: "qwer42312345342",
+      .get(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
+      .then((res) => {
+        const $ = cheerio.load(res.text);
+        token = $("[name=_csrf]").val();
+        cookies = res.headers["set-cookie"].concat(
+          `gs=${SESSION_ID}.${CLIENT_SESSION_ID}`
+        );
+        console.log("TOKEN VALUE", token);
+      })
+      .then(() => {
+        console.log("2nd TOKEN VALUE", token);
+        return request(app)
+          .post(PATH_DATA.CHANGE_AUTHENTICATOR_APP.url)
+          .type("form")
+          .set("Cookie", cookies)
+          .send({
+            _csrf: token,
+            code: "111111",
+            authAppSecret: "qwer42312345342",
+          });
       })
       .then((res) => {
-        expect(
-          "Location",
+        expect(res.header.location).to.equal(
           PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url
         );
         expect(res.status).to.equal(302);
