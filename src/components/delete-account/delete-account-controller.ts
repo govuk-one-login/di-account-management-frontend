@@ -8,9 +8,9 @@ import {
   containsGovUkPublishingService,
   getYourServicesForAccountDeletion,
 } from "../../utils/yourServices";
-import { getTxmaHeader } from "../../utils/txma-header";
 import { handleLogout } from "../../utils/logout";
 import { LogoutState } from "../../app.constants";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 export async function deleteAccountGet(
   req: Request,
@@ -52,16 +52,10 @@ export function deleteAccountPost(
   return async function (req: Request, res: Response) {
     const { email, subjectId, publicSubjectId, legacySubjectId } =
       req.session.user;
-    const { accessToken } = req.session.user.tokens;
 
     const deleteAccount = await service.deleteAccount(
-      accessToken,
       email,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
+      getRequestConfigFromExpress(req, res)
     );
 
     const DeleteTopicARN = getSNSDeleteTopic();

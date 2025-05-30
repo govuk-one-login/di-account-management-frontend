@@ -3,6 +3,7 @@ import {
   getRequestConfig,
   Http,
   http,
+  RequestConfig,
 } from "../../utils/http";
 import {
   API_ENDPOINTS,
@@ -16,15 +17,9 @@ export function changePhoneNumberService(
   axios: Http = http
 ): ChangePhoneNumberServiceInterface {
   const sendPhoneVerificationNotification = async function (
-    accessToken: string,
     email: string,
     phoneNumber: string,
-    sourceIp: string,
-    sessionId: string,
-    persistentSessionId: string,
-    userLanguage: string,
-    clientSessionId: string,
-    txmaAuditEncoded: string
+    requestConfig: RequestConfig
   ): Promise<ApiResponseResult> {
     const response = await axios.client.post<ApiResponse>(
       API_ENDPOINTS.SEND_NOTIFICATION,
@@ -34,17 +29,11 @@ export function changePhoneNumberService(
         notificationType: NOTIFICATION_TYPE.VERIFY_PHONE_NUMBER,
       },
       getRequestConfig({
-        token: accessToken,
+        ...requestConfig,
         validationStatuses: [
           HTTP_STATUS_CODES.NO_CONTENT,
           HTTP_STATUS_CODES.BAD_REQUEST,
         ],
-        sourceIp,
-        persistentSessionId,
-        sessionId,
-        userLanguage,
-        clientSessionId,
-        txmaAuditEncoded,
       })
     );
     return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);

@@ -319,6 +319,7 @@ describe("createMfaClient", () => {
         },
       },
       headers: { "txma-audit-encoded": "auditHeader" },
+      cookies: {},
     };
 
     const res = {

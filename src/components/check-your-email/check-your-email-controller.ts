@@ -10,12 +10,8 @@ import { CheckYourEmailServiceInterface } from "./types";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
-import xss from "xss";
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../utils/types";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { UpdateInformationInput } from "../../utils/types";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
 
@@ -39,19 +35,9 @@ export function checkYourEmailPost(
       otp: req.body["code"],
     };
 
-    const sessionDetails: UpdateInformationSessionValues = {
-      accessToken: req.session.user.tokens.accessToken,
-      sourceIp: req.ip,
-      sessionId: res.locals.sessionId,
-      persistentSessionId: res.locals.persistentSessionId,
-      userLanguage: xss(req.cookies.lng as string),
-      clientSessionId: res.locals.clientSessionId,
-      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-    };
-
     const isEmailUpdated = await service.updateEmail(
       updateInput,
-      sessionDetails
+      getRequestConfigFromExpress(req, res)
     );
 
     if (isEmailUpdated) {

@@ -89,17 +89,15 @@ describe("change password controller", () => {
       expect(fakeChangePasswordService.updatePassword).to.have.been.calledOnce;
       expect(
         fakeChangePasswordService.updatePassword
-      ).to.have.been.calledWithExactly(
-        TOKEN,
-        CURRENT_EMAIL,
-        "Password1",
-        SOURCE_IP,
-        SESSION_ID,
-        PERSISTENT_SESSION_ID,
-        ENGLISH,
-        CLIENT_SESSION_ID,
-        TXMA_AUDIT_ENCODED
-      );
+      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "Password1", {
+        token: TOKEN,
+        sourceIp: SOURCE_IP,
+        sessionId: SESSION_ID,
+        persistentSessionId: PERSISTENT_SESSION_ID,
+        userLanguage: ENGLISH,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      });
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url
       );

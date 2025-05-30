@@ -14,9 +14,6 @@ import {
   containsNumbersOnly,
   splitSecretKeyIntoFragments,
 } from "../../../utils/strings";
-import { UpdateInformationSessionValues } from "../../../utils/types";
-import xss from "xss";
-import { getTxmaHeader } from "../../../utils/txma-header";
 
 export async function renderMfaMethodPage(
   templateFile: string,
@@ -111,20 +108,4 @@ export async function handleMfaMethodPage(
   }
 
   return onSuccess();
-}
-
-export async function generateSessionDetails(
-  req: any,
-  res: any
-): Promise<UpdateInformationSessionValues> {
-  const sessionDetails: UpdateInformationSessionValues = {
-    accessToken: req.session.user.tokens.accessToken,
-    sourceIp: req.ip,
-    sessionId: res.locals.sessionId,
-    persistentSessionId: res.locals.persistentSessionId,
-    userLanguage: xss(req.cookies.lng as string),
-    clientSessionId: res.locals.clientSessionId,
-    txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
-  };
-  return sessionDetails;
 }

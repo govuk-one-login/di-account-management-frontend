@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Request, Response } from "express";
-import { getRequestConfig, Http } from "../http";
+import { getRequestConfig, getRequestConfigFromExpress, Http } from "../http";
 import { getMfaServiceUrl } from "../../config";
 
 import {
@@ -14,7 +14,6 @@ import {
   UpdateMfaPayload,
 } from "./types";
 import { HTTP_STATUS_CODES } from "../../app.constants";
-import { getTxmaHeader } from "../txma-header";
 import { validateCreate, validateUpdate } from "./validate";
 
 export class MfaClient implements MfaClientInterface {
@@ -119,12 +118,7 @@ export function createMfaClient(req: Request, res: Response): MfaClient {
   return new MfaClient(
     req.session.user?.publicSubjectId,
     getRequestConfig({
-      token: req.session.user.tokens.accessToken,
-      sourceIp: req.ip,
-      persistentSessionId: res.locals.persistentSessionId,
-      sessionId: res.locals.sessionId,
-      clientSessionId: res.locals.clientSessionId,
-      txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+      ...getRequestConfigFromExpress(req, res),
       validationStatuses: [
         HTTP_STATUS_CODES.OK,
         HTTP_STATUS_CODES.NO_CONTENT,

@@ -1,13 +1,11 @@
+import { RequestConfig } from "../../utils/http";
 import { UserJourney } from "../../utils/state-machine";
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../utils/types";
+import { UpdateInformationInput } from "../../utils/types";
 
 export interface CheckYourEmailServiceInterface {
   updateEmail: (
     updateInput: UpdateInformationInput,
-    sessionDetails: UpdateInformationSessionValues
+    requestConfig: RequestConfig
   ) => Promise<boolean>;
 }
 

@@ -32,7 +32,9 @@ export class RequestBuilder {
   private cookies: object = { lng: ENGLISH };
   private ip: string = SOURCE_IP;
   private i18n: object = { language: ENGLISH };
-  private headers: object = {};
+  private headers: object = {
+    "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+  };
   private t: () => void;
 
   withBody(body: object): RequestBuilder {

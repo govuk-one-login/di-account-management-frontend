@@ -4,10 +4,7 @@ import { checkYourPhoneService } from "../check-your-phone-service";
 import { expect } from "chai";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
 import { getApiBaseUrl } from "../../../config";
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../../utils/types";
+import { UpdateInformationInput } from "../../../utils/types";
 import { describe } from "mocha";
 import {
   CLIENT_SESSION_ID,
@@ -29,7 +26,7 @@ describe("checkYourPhoneService", () => {
   });
 
   it("update the phone number ", async () => {
-    const accessToken = "1234";
+    const token = "1234";
     const email = "something@test.com";
     const phoneNumber = "11111111111";
     const otp = "9876";
@@ -40,7 +37,7 @@ describe("checkYourPhoneService", () => {
 
     nock(baseUrl, {
       reqheaders: {
-        authorization: `Bearer ${accessToken}`,
+        authorization: `Bearer ${token}`,
         "x-forwarded-for": sourceIp,
         "di-persistent-session-id": persistentSessionId,
         "session-id": sessionId,
@@ -61,8 +58,8 @@ describe("checkYourPhoneService", () => {
       otp,
     };
 
-    const sessionDetails: UpdateInformationSessionValues = {
-      accessToken,
+    const requestConfig = {
+      token,
       sourceIp,
       sessionId,
       persistentSessionId,
@@ -73,7 +70,7 @@ describe("checkYourPhoneService", () => {
 
     const phoneNumberUpdated = await checkYourPhoneService().updatePhoneNumber(
       updateInput,
-      sessionDetails
+      requestConfig
     );
 
     expect(phoneNumberUpdated).to.be.true;

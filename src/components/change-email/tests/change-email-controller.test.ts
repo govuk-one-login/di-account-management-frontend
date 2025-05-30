@@ -69,16 +69,15 @@ describe("change email controller", () => {
       expect(fakeService.sendCodeVerificationNotification).calledOnce;
       expect(
         fakeService.sendCodeVerificationNotification
-      ).to.have.been.calledWithExactly(
-        TOKEN,
-        NEW_EMAIL,
-        SOURCE_IP,
-        SESSION_ID,
-        PERSISTENT_SESSION_ID,
-        ENGLISH,
-        CLIENT_SESSION_ID,
-        TXMA_AUDIT_ENCODED
-      );
+      ).to.have.been.calledWithExactly(NEW_EMAIL, {
+        token: TOKEN,
+        sourceIp: SOURCE_IP,
+        sessionId: SESSION_ID,
+        persistentSessionId: PERSISTENT_SESSION_ID,
+        userLanguage: ENGLISH,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      });
       expect(res.redirect).to.have.calledWith("/check-your-email");
     });
 

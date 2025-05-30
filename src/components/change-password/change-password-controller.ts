@@ -9,8 +9,7 @@ import {
   formatValidationError,
 } from "../../utils/validation";
 import { BadRequestError } from "../../utils/errors";
-import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const changePasswordTemplate = "change-password/index.njk";
 
@@ -23,19 +22,12 @@ export function changePasswordPost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const { email } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
 
     const newPassword = req.body.password as string;
     const response = await service.updatePassword(
-      accessToken,
       email,
       newPassword,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string),
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
+      getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {

@@ -118,16 +118,6 @@ export interface UpdateInformationInput {
   mfaMethod?: MfaMethod;
 }
 
-export interface UpdateInformationSessionValues {
-  accessToken: string;
-  sourceIp: string;
-  sessionId: string;
-  persistentSessionId: string;
-  userLanguage: string;
-  clientSessionId: string;
-  txmaAuditEncoded: string;
-}
-
 export const allowedTxmaEvents: string[] = [
   "AUTH_AUTH_CODE_ISSUED",
   "AUTH_IPV_AUTHORISATION_REQUESTED",

@@ -50,15 +50,17 @@ describe("changePasswordService", () => {
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
     const updatePasswordResult = await changePasswordService().updatePassword(
-      TOKEN,
       CURRENT_EMAIL,
       newPassword,
-      SOURCE_IP,
-      SESSION_ID,
-      PERSISTENT_SESSION_ID,
-      ENGLISH,
-      CLIENT_SESSION_ID,
-      TXMA_AUDIT_ENCODED
+      {
+        token: TOKEN,
+        sourceIp: SOURCE_IP,
+        sessionId: SESSION_ID,
+        persistentSessionId: PERSISTENT_SESSION_ID,
+        userLanguage: ENGLISH,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      }
     );
     expect(updatePasswordResult.success).to.be.true;
   });

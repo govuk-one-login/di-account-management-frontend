@@ -11,10 +11,9 @@ import {
 } from "../../utils/validation";
 import { convertInternationalPhoneNumberToE164Format } from "../../utils/phone-number";
 import { BadRequestError } from "../../utils/errors";
-import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
@@ -35,7 +34,6 @@ export function changePhoneNumberPost(
     }
 
     const { email } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
     let newPhoneNumber;
 
@@ -48,15 +46,9 @@ export function changePhoneNumberPost(
     }
 
     const response = await service.sendPhoneVerificationNotification(
-      accessToken,
       email,
       newPhoneNumber,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string),
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
+      getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {

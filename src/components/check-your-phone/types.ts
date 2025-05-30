@@ -1,11 +1,9 @@
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../utils/types";
+import { RequestConfig } from "../../utils/http";
+import { UpdateInformationInput } from "../../utils/types";
 
 export interface CheckYourPhoneServiceInterface {
   updatePhoneNumber: (
     updateInput: UpdateInformationInput,
-    sessionDetails: UpdateInformationSessionValues
+    requestConfig: RequestConfig
   ) => Promise<boolean>;
 }

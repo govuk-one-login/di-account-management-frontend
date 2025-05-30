@@ -78,17 +78,15 @@ describe("change phone number controller", () => {
         .calledOnce;
       expect(
         fakeService.sendPhoneVerificationNotification
-      ).to.have.been.calledWithExactly(
-        TOKEN,
-        CURRENT_EMAIL,
-        "12345678991",
-        SOURCE_IP,
-        SESSION_ID,
-        PERSISTENT_SESSION_ID,
-        ENGLISH,
-        CLIENT_SESSION_ID,
-        TXMA_AUDIT_ENCODED
-      );
+      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "12345678991", {
+        token: TOKEN,
+        sourceIp: SOURCE_IP,
+        sessionId: SESSION_ID,
+        persistentSessionId: PERSISTENT_SESSION_ID,
+        userLanguage: ENGLISH,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      });
       expect(res.redirect).to.have.calledWith(
         `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
       );
@@ -112,17 +110,15 @@ describe("change phone number controller", () => {
       expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
       expect(
         fakeService.sendPhoneVerificationNotification
-      ).to.have.been.calledWithExactly(
-        TOKEN,
-        CURRENT_EMAIL,
-        "12345678991",
-        SOURCE_IP,
-        SESSION_ID,
-        PERSISTENT_SESSION_ID,
-        ENGLISH,
-        CLIENT_SESSION_ID,
-        TXMA_AUDIT_ENCODED
-      );
+      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "12345678991", {
+        token: TOKEN,
+        sourceIp: SOURCE_IP,
+        sessionId: SESSION_ID,
+        persistentSessionId: PERSISTENT_SESSION_ID,
+        userLanguage: ENGLISH,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      });
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
 
@@ -144,17 +140,15 @@ describe("change phone number controller", () => {
       expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
       expect(
         fakeService.sendPhoneVerificationNotification
-      ).to.have.been.calledWithExactly(
-        TOKEN,
-        CURRENT_EMAIL,
-        "12345678991",
-        SOURCE_IP,
-        SESSION_ID,
-        PERSISTENT_SESSION_ID,
-        ENGLISH,
-        CLIENT_SESSION_ID,
-        TXMA_AUDIT_ENCODED
-      );
+      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "12345678991", {
+        token: TOKEN,
+        sourceIp: SOURCE_IP,
+        sessionId: SESSION_ID,
+        persistentSessionId: PERSISTENT_SESSION_ID,
+        userLanguage: ENGLISH,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      });
       expect(res.render).to.have.calledWith("change-phone-number/index.njk");
     });
 
@@ -175,17 +169,15 @@ describe("change phone number controller", () => {
         .calledOnce;
       expect(
         fakeService.sendPhoneVerificationNotification
-      ).to.have.been.calledWithExactly(
-        TOKEN,
-        CURRENT_EMAIL,
-        "+33645453322",
-        SOURCE_IP,
-        SESSION_ID,
-        PERSISTENT_SESSION_ID,
-        ENGLISH,
-        CLIENT_SESSION_ID,
-        TXMA_AUDIT_ENCODED
-      );
+      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "+33645453322", {
+        token: TOKEN,
+        sourceIp: SOURCE_IP,
+        sessionId: SESSION_ID,
+        persistentSessionId: PERSISTENT_SESSION_ID,
+        userLanguage: ENGLISH,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      });
       expect(res.redirect).to.have.calledWith(
         `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
       );

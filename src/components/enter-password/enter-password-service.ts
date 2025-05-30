@@ -1,4 +1,4 @@
-import { getRequestConfig, http, Http } from "../../utils/http";
+import { getRequestConfig, http, Http, RequestConfig } from "../../utils/http";
 import { EnterPasswordServiceInterface } from "./types";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { supportChangeOnIntervention } from "../../config";
@@ -17,32 +17,20 @@ export function enterPasswordService(
   axios: Http = http
 ): EnterPasswordServiceInterface {
   const authenticated = async (
-    {
-      token,
-      email,
-      password,
-    }: { token: string; email: string; password: string },
-    sourceIp: string,
-    sessionId: string,
-    persistentSessionId: string,
-    clientSessionId: string,
-    txmaAuditEncoded: string
+    email: string,
+    password: string,
+    requestConfig: RequestConfig
   ): Promise<{ authenticated: boolean; intervention?: string }> => {
     const response = await axios.client.post(
       API_ENDPOINTS.AUTHENTICATE,
       { email: email, password },
       getRequestConfig({
-        token,
+        ...requestConfig,
         validationStatuses: [
           HTTP_STATUS_CODES.NO_CONTENT,
           HTTP_STATUS_CODES.FORBIDDEN,
           HTTP_STATUS_CODES.UNAUTHORIZED,
         ],
-        sourceIp,
-        persistentSessionId,
-        sessionId,
-        clientSessionId,
-        txmaAuditEncoded,
       })
     );
 

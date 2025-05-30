@@ -9,8 +9,6 @@ import {
   getNextState,
   UserJourney,
 } from "../../utils/state-machine";
-import xss from "xss";
-import { getTxmaHeader } from "../../utils/txma-header";
 import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 import {
@@ -21,6 +19,7 @@ import {
 import { BadRequestError } from "../../utils/errors";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
@@ -47,7 +46,6 @@ export function addMfaSmsMethodPost(
     }
 
     const { email } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
     const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
     let newPhoneNumber;
 
@@ -60,15 +58,9 @@ export function addMfaSmsMethodPost(
     }
 
     const response = await service.sendPhoneVerificationNotification(
-      accessToken,
       email,
       newPhoneNumber,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string),
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
+      getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {

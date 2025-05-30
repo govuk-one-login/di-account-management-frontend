@@ -1,18 +1,15 @@
-import { getRequestConfig, Http, http } from "../../utils/http";
+import { getRequestConfig, Http, http, RequestConfig } from "../../utils/http";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { CheckYourEmailServiceInterface } from "./types";
 import { AxiosResponse } from "axios";
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../utils/types";
+import { UpdateInformationInput } from "../../utils/types";
 
 export function checkYourEmailService(
   axios: Http = http
 ): CheckYourEmailServiceInterface {
   const updateEmail = async function (
     updateInput: UpdateInformationInput,
-    sessionDetails: UpdateInformationSessionValues
+    requestConfig: RequestConfig
   ): Promise<boolean> {
     const { status }: AxiosResponse = await axios.client.post(
       API_ENDPOINTS.UPDATE_EMAIL,
@@ -22,12 +19,11 @@ export function checkYourEmailService(
         otp: updateInput.otp,
       },
       getRequestConfig({
-        token: sessionDetails.accessToken,
+        ...requestConfig,
         validationStatuses: [
           HTTP_STATUS_CODES.NO_CONTENT,
           HTTP_STATUS_CODES.BAD_REQUEST,
         ],
-        ...sessionDetails,
       })
     );
 
