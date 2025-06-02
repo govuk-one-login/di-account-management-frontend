@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { ExpressRouteFunc } from "../../types";
-import xss from "xss";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { PATH_DATA } from "../../app.constants";
 import { ChangeEmailServiceInterface } from "../change-email/types";
@@ -9,7 +8,7 @@ import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const TEMPLATE_NAME = "resend-email-code/index.njk";
 
@@ -33,21 +32,14 @@ export function resendEmailCodePost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const { email, newEmailAddress } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
 
     if (email.toLowerCase() === newEmailAddress.toLowerCase()) {
       return badRequest(req, res, "sameEmail");
     }
 
     const emailSent = await service.sendCodeVerificationNotification(
-      accessToken,
       newEmailAddress,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string),
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
+      getRequestConfigFromExpress(req, res)
     );
 
     if (emailSent) {

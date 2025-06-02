@@ -55,12 +55,16 @@ describe("enterPasswordService", () => {
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
     const response = await enterPasswordService().authenticated(
-      user,
-      sourceIp,
-      sessionId,
-      persistentSessionId,
-      CLIENT_SESSION_ID,
-      TXMA_AUDIT_ENCODED
+      user.email,
+      user.password,
+      {
+        token: user.token,
+        sourceIp,
+        sessionId,
+        persistentSessionId,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      }
     );
 
     expect(response.authenticated).to.be.true;
@@ -98,12 +102,16 @@ describe("enterPasswordService", () => {
       });
 
     const response = await enterPasswordService().authenticated(
-      user,
-      sourceIp,
-      sessionId,
-      persistentSessionId,
-      CLIENT_SESSION_ID,
-      TXMA_AUDIT_ENCODED
+      user.email,
+      user.password,
+      {
+        token: user.token,
+        sourceIp,
+        sessionId,
+        persistentSessionId,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      }
     );
 
     expect(response.authenticated).to.be.false;
@@ -142,12 +150,16 @@ describe("enterPasswordService", () => {
       });
 
     const response = await enterPasswordService().authenticated(
-      user,
-      sourceIp,
-      sessionId,
-      persistentSessionId,
-      CLIENT_SESSION_ID,
-      TXMA_AUDIT_ENCODED
+      user.email,
+      user.password,
+      {
+        token: user.token,
+        sourceIp,
+        sessionId,
+        persistentSessionId,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      }
     );
 
     expect(response.authenticated).to.be.false;
@@ -187,12 +199,16 @@ describe("enterPasswordService", () => {
       });
 
     const response = await enterPasswordService().authenticated(
-      user,
-      sourceIp,
-      sessionId,
-      persistentSessionId,
-      CLIENT_SESSION_ID,
-      TXMA_AUDIT_ENCODED
+      user.email,
+      user.password,
+      {
+        token: user.token,
+        sourceIp,
+        sessionId,
+        persistentSessionId,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      }
     );
 
     expect(response.authenticated).to.be.false;

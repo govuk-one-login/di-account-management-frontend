@@ -1,17 +1,14 @@
-import { getRequestConfig, Http, http } from "../../utils/http";
+import { getRequestConfig, Http, http, RequestConfig } from "../../utils/http";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
 import { CheckYourPhoneServiceInterface } from "./types";
-import {
-  UpdateInformationInput,
-  UpdateInformationSessionValues,
-} from "../../utils/types";
+import { UpdateInformationInput } from "../../utils/types";
 
 export function checkYourPhoneService(
   axios: Http = http
 ): CheckYourPhoneServiceInterface {
   const updatePhoneNumber = async function (
     updateInput: UpdateInformationInput,
-    sessionDetails: UpdateInformationSessionValues
+    requestConfig: RequestConfig
   ): Promise<boolean> {
     const { status } = await axios.client.post<void>(
       API_ENDPOINTS.UPDATE_PHONE_NUMBER,
@@ -21,12 +18,11 @@ export function checkYourPhoneService(
         otp: updateInput.otp,
       },
       getRequestConfig({
-        token: sessionDetails.accessToken,
+        ...requestConfig,
         validationStatuses: [
           HTTP_STATUS_CODES.NO_CONTENT,
           HTTP_STATUS_CODES.BAD_REQUEST,
         ],
-        ...sessionDetails,
       })
     );
 

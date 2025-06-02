@@ -6,15 +6,14 @@ import { changePhoneNumberService } from "../change-phone-number/change-phone-nu
 import { BadRequestError } from "../../utils/errors";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
-import xss from "xss";
 import {
   formatValidationError,
   isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
-import { getTxmaHeader } from "../../utils/txma-header";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
+import { getRequestConfigFromExpress } from "../../utils/http";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
 
@@ -52,19 +51,12 @@ export function resendPhoneCodePost(
     }
 
     const { email } = req.session.user;
-    const { accessToken } = req.session.user.tokens;
     const intent = req.body.intent;
     const newPhoneNumber = req.body.phoneNumber;
     const response = await service.sendPhoneVerificationNotification(
-      accessToken,
       email,
       newPhoneNumber,
-      req.ip,
-      res.locals.sessionId,
-      res.locals.persistentSessionId,
-      xss(req.cookies.lng as string),
-      res.locals.clientSessionId,
-      getTxmaHeader(req, res.locals.trace)
+      getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {

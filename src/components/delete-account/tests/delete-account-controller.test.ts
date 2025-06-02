@@ -31,6 +31,7 @@ describe("delete account controller", () => {
         },
       },
       body: {},
+      cookies: {},
       session: {
         user: {
           subjectId: TEST_SUBJECT_ID,

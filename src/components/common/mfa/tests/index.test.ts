@@ -5,12 +5,7 @@ import { sinon } from "../../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import * as mfaModule from "../../../../utils/mfa";
 import QRCode from "qrcode";
-import { generateSessionDetails, renderMfaMethodPage } from "../index";
-import {
-  RequestBuilder,
-  ResponseBuilder,
-  TXMA_AUDIT_ENCODED,
-} from "../../../../../test/utils/builders";
+import { renderMfaMethodPage } from "../index";
 import { formatValidationError } from "../../../../utils/validation";
 
 describe("render mfa page", () => {
@@ -180,50 +175,5 @@ describe("render mfa page", () => {
       errorList: undefined,
       backLink: "backlink",
     });
-  });
-});
-
-describe("generate input fields", () => {
-  let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
-    req = new RequestBuilder()
-      .withBody({})
-      .withSessionUserState({ changeAuthenticatorApp: {} })
-      .withTranslate(sandbox.fake())
-      .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
-      .build();
-
-    res = new ResponseBuilder()
-      .withRender(sandbox.fake())
-      .withRedirect(sandbox.fake(() => {}))
-      .withStatus(sandbox.fake())
-      .build();
-  });
-
-  afterEach(() => {
-    sandbox.restore();
-  });
-
-  it("should generate session details", async () => {
-    // Arrange
-    req.session.user.tokens = { accessToken: "token" } as any;
-
-    const expected = {
-      accessToken: "token",
-      clientSessionId: "clientsessionid",
-      persistentSessionId: "persistentsessionid",
-      sessionId: "sessionid",
-      sourceIp: "sourceip",
-      txmaAuditEncoded: "txma-audit-encoded",
-      userLanguage: "en",
-    };
-    const actual = await generateSessionDetails(req, res);
-    // Assert
-    expect(actual).to.be.deep.equal(expected);
   });
 });
