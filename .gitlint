@@ -1,0 +1,32 @@
+[general]
+ignore=B6
+verbosity = 3
+ignore-merge-commits=true
+ignore-revert-commits=true
+ignore-fixup-commits=false
+ignore-fixup-amend-commits=false
+ignore-squash-commits=false
+debug=false
+regex-style-search=True
+staged=true
+
+[title-max-length]
+line-length=72
+
+[title-min-length]
+min-length=10
+
+[title-must-not-contain-word]
+words=wip
+
+[title-match-regex]
+regex=^(BAU|OLH-[0-9]{1,4})[: ]+\w
+
+[author-valid-email]
+regex=[\w\.\+_-]+@(digital.cabinet-office.gov.uk|users.noreply.github.com)
+
+[ignore-body-lines]
+regex=^Co-authored-by
+
+[ignore-by-author-name]
+regex=(.*)dependabot(.*)

@@ -32,7 +32,8 @@
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --watch src/assets/scss/application.scss dist/public/style.css",
-    "prepare": "husky || true"
+    "prepare": "husky install || true",
+    "precommit": "pre-commit run"
   },
   "mocha": {
     "diff": true,
