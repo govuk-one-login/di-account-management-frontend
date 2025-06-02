@@ -35,6 +35,7 @@ export async function renderMfaMethodPage(
     );
 
     const qrCode = await QRCode.toDataURL(qrCodeText);
+
     return res.render(templateFile, {
       authAppSecret,
       qrCode,
