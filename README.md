@@ -15,14 +15,15 @@ Clones the repository to the `your_folder_name` directory.
 
 ## Developer notes
 
-### Pre-commit
+### Pre-commit for Husky and Gitlint
 
 This repository uses [pre-commit](https://pre-commit.com/) to run linting on all staged files before they're committed.
 Install & setup pre-commit by running:
 
 ```bash
-pip install pre-commit
-pre-commit install
+pip install pre-commit gitlint
+pre-commit install -f
+pre-commit install --hook-type commit-msg
 ```
 
 When you make your first commit, pre-commit will fetch and install the hook configuration.
