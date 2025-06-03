@@ -1178,6 +1178,10 @@ Resources:
         System: !Ref SystemTagValue
         Environment: !Ref Environment
         Owner: !Ref OwnerTagValue
+        FMSGlobalCustomPolicy:
+          !FindInMap [FirewallTags, Cloudfront, FMSGlobalCustomPolicy]
+        FMSGlobalCustomPolicyName:
+          !FindInMap [FirewallTags, Cloudfront, FMSGlobalCustomPolicyName]
 
   ApiGatewayIntegration:
     Type: AWS::ApiGatewayV2::Integration
