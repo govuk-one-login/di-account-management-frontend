@@ -14,3 +14,29 @@ repos:
       - id: gitlint
         name: Git Lint
         stages: [commit-msg]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: detect-private-key
+      - id: detect-aws-credentials
+        args: [--allow-missing-credentials]
+        exclude: "package.json|package-lock.json"
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: no-commit-to-branch
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        exclude: "package.json|package-lock.json|src/.*/.*.test.ts"
+
+  - repo: local
+    hooks:
+      - id: npm-audit
+        name: NPM Audit
+        pass_filenames: false
+        entry: "npm audit"
+        language: system
