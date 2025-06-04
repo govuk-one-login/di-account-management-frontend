@@ -23,6 +23,7 @@ router.get(
 router.post(
   PATH_DATA.DELETE_ACCOUNT.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   refreshTokenMiddleware(),
   globalTryCatchAsync(asyncHandler(deleteAccountPost()))
 );
