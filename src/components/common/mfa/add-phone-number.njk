@@ -78,7 +78,5 @@
 {% block scripts %}
   <script type="text/javascript" src="/public/scripts/international-phone.js" nonce='{{scriptNonce}}'></script>
 
-  {% if oplValues %}
-      {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:oplValues.taxonomyLevel2, taxonomyLevel3:oplValues.taxonomyLevel3, contentId:oplValues.contentId,loggedInStatus:true,dynamic:true})}}
-  {% endif %}
+  {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:oplValues.taxonomyLevel2, taxonomyLevel3:oplValues.taxonomyLevel3, contentId:oplValues.contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}
