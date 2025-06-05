@@ -38,6 +38,10 @@ const oplValues = {
     contentId: "95add60f-d8d3-4b24-a085-255b6010a36a",
     ...mfaOplTaxonomies,
   },
+  removeMfaMethodConfirmation: {
+    contentId: "aaee0142-9f28-4618-bb6d-4c8ee2f8c61d",
+    ...mfaOplTaxonomies,
+  },
 };
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
@@ -164,6 +168,7 @@ export async function removeMfaMethodConfirmationGet(
     message: message,
     backLinkText: req.t("pages.removeBackupMethod.backLinkText"),
     backLink: PATH_DATA.SECURITY.url,
+    oplValues: oplValues.removeMfaMethodConfirmation,
   });
 }
 

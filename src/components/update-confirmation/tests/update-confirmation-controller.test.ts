@@ -118,6 +118,11 @@ describe("update confirmation controller", () => {
         message: "pages.removeBackupMethod.confirm.message_sms",
         backLinkText: "pages.removeBackupMethod.backLinkText",
         backLink: "/security",
+        oplValues: {
+          contentId: "aaee0142-9f28-4618-bb6d-4c8ee2f8c61d",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       }
     );
     expect(res.redirect).not.to.be.called;
@@ -152,6 +157,11 @@ describe("update confirmation controller", () => {
         message: "pages.removeBackupMethod.confirm.message_app",
         backLinkText: "pages.removeBackupMethod.backLinkText",
         backLink: "/security",
+        oplValues: {
+          contentId: "aaee0142-9f28-4618-bb6d-4c8ee2f8c61d",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       }
     );
     expect(res.redirect).not.to.be.called;
