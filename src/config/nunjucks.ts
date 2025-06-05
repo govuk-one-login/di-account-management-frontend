@@ -17,12 +17,18 @@ export function configureNunjucks(
     noCache: true,
   });
 
-  nunjucksEnv.addFilter("translate", function (key: string, options?: any) {
-    const currentLanguage = this.ctx?.i18n?.language ?? LOCALE.EN;
-    const translate: TFunction<"translation", undefined> =
-      i18next.getFixedT(currentLanguage);
-    return safeTranslate(translate, key, currentLanguage, options);
-  });
+  nunjucksEnv.addFilter(
+    "translate",
+    function (key: string, options?: Record<string, unknown>) {
+      const currLang = this.ctx?.i18n?.language;
+      const selectedLanguage = Object.values(LOCALE).includes(currLang)
+        ? currLang
+        : LOCALE.EN;
+      const translate: TFunction<"translation", undefined> =
+        i18next.getFixedT(selectedLanguage);
+      return safeTranslate(translate, key, selectedLanguage, options);
+    }
+  );
 
   nunjucksEnv.addGlobal("addLanguageParam", addLanguageParam);
   nunjucksEnv.addGlobal("govukRebrand", supportBrandRefresh());
