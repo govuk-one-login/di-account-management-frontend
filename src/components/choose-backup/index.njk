@@ -74,3 +74,9 @@
         <a href="{{ "SECURITY" | getPath }}" class="govuk-link">{{ "pages.addBackup.backLink" | translate }}</a>
     </p>
 {% endblock %}
+
+{% if oplValues %}
+  {% block scripts %}
+      {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:oplValues.taxonomyLevel2, taxonomyLevel3:oplValues.taxonomyLevel3, contentId:oplValues.contentId,loggedInStatus:true,dynamic:true})}}
+  {% endblock %}
+{% endif %}

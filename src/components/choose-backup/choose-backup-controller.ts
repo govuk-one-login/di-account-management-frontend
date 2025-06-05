@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { MFA_METHODS } from "../../app.constants";
+import { MFA_METHODS, mfaOplTaxonomies } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
+import { match } from "ts-pattern";
 
 type MfaMethods = keyof typeof MFA_METHODS;
 enum MfaMethodType {
@@ -14,15 +15,43 @@ function handleMethods(res: Response): void {
   res.status(500).end();
 }
 
-function handleSingleAuthAppMethod(res: Response): void {
+const getOplValues = (
+  req: Request
+):
+  | { contentId: string; taxonomyLevel2?: string; taxonomyLevel3?: string }
+  | undefined => {
+  return match({ req })
+    .when(
+      ({ req }) =>
+        req.session.mfaMethods.find((m) => {
+          return (
+            m.method.mfaMethodType === "AUTH_APP" &&
+            m.priorityIdentifier === "DEFAULT"
+          );
+        }),
+
+      () => ({
+        contentId: "63f44ae6-46f1-46c3-a2e8-305fe2ddf27d",
+        ...mfaOplTaxonomies,
+      })
+    )
+    .otherwise((): undefined => undefined);
+};
+
+function handleSingleAuthAppMethod(req: Request, res: Response): void {
   res.render(ADD_METHOD_TEMPLATE, {
     mfaMethods: [],
     showSingleMethod: true,
+    oplValues: getOplValues(req),
   });
 }
 
-function renderChooseBackupTemplate(res: Response, mfaMethods: any[]): void {
-  res.render(ADD_METHOD_TEMPLATE, { mfaMethods });
+function renderChooseBackupTemplate(
+  req: Request,
+  res: Response,
+  mfaMethods: any[]
+): void {
+  res.render(ADD_METHOD_TEMPLATE, { mfaMethods, oplValues: getOplValues(req) });
 }
 
 export function chooseBackupGet(req: Request, res: Response): void {
@@ -37,11 +66,11 @@ export function chooseBackupGet(req: Request, res: Response): void {
     mfaMethods.length === 1 &&
     mfaMethods[0].method.mfaMethodType === MfaMethodType.AUTH_APP
   ) {
-    handleSingleAuthAppMethod(res);
+    handleSingleAuthAppMethod(req, res);
     return;
   }
 
-  renderChooseBackupTemplate(res, mfaMethods);
+  renderChooseBackupTemplate(req, res, mfaMethods);
 }
 
 export function chooseBackupPost(

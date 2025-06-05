@@ -21,6 +21,7 @@ router.post(
   PATH_DATA.ADD_MFA_METHOD.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
+  selectMfaMiddleware(),
   ...validateChooseBackupRequest(),
   globalTryCatch(chooseBackupPost)
 );

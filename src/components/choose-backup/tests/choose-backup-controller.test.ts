@@ -20,6 +20,7 @@ describe("addBackupGet", () => {
       body: {},
       session: {
         user: { state: { addBackup: { value: EventType.Authenticated } } },
+        mfaMethods: [],
       } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
@@ -65,6 +66,11 @@ describe("addBackupGet", () => {
     expect(res.render).to.have.calledWith("choose-backup/index.njk", {
       mfaMethods: [],
       showSingleMethod: true,
+      oplValues: {
+        contentId: "63f44ae6-46f1-46c3-a2e8-305fe2ddf27d",
+        taxonomyLevel2: "Home",
+        taxonomyLevel3: "MFA Method Management",
+      },
     });
   });
 
@@ -93,6 +99,7 @@ describe("addBackupGet", () => {
 
     expect(res.render).to.have.calledWith("choose-backup/index.njk", {
       mfaMethods: req.session.mfaMethods,
+      oplValues: undefined,
     });
   });
 
