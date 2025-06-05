@@ -105,6 +105,11 @@ describe("check your phone controller", () => {
         useDifferentPhoneNumberLink: "/change-phone-number",
         intent: "changePhoneNumber",
         backLink: "/change-phone-number",
+        oplValues: {
+          contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
     });
 
@@ -119,6 +124,11 @@ describe("check your phone controller", () => {
         useDifferentPhoneNumberLink: "/add-mfa-method-sms",
         intent: "addBackup",
         backLink: "/add-mfa-method-sms",
+        oplValues: {
+          contentId: "8d348159-08ab-4e27-96ea-843ec64e953f",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
     });
 
@@ -133,6 +143,11 @@ describe("check your phone controller", () => {
         useDifferentPhoneNumberLink: "/change-default-method-sms",
         intent: "changeDefaultMethod",
         backLink: "/change-default-method-sms",
+        oplValues: {
+          contentId: "df468804-c84b-4134-96ca-6610ffd8b6f5",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
     });
 
@@ -197,6 +212,11 @@ describe("check your phone controller", () => {
         useDifferentPhoneNumberLink: "/change-phone-number",
         backLink: "/change-phone-number",
         language: "en",
+        oplValues: {
+          contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
@@ -233,6 +253,11 @@ describe("check your phone controller", () => {
         useDifferentPhoneNumberLink: "/change-phone-number",
         backLink: "/change-phone-number",
         language: "en",
+        oplValues: {
+          contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
@@ -269,6 +294,11 @@ describe("check your phone controller", () => {
         useDifferentPhoneNumberLink: "/change-phone-number",
         backLink: "/change-phone-number",
         language: "en",
+        oplValues: {
+          contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
@@ -305,6 +335,11 @@ describe("check your phone controller", () => {
         useDifferentPhoneNumberLink: "/change-phone-number",
         backLink: "/change-phone-number",
         language: "en",
+        oplValues: {
+          contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
       expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
@@ -421,6 +456,11 @@ describe("check your phone controller", () => {
         useDifferentPhoneNumberLink: "/change-phone-number",
         backLink: "/change-phone-number",
         language: "en",
+        oplValues: {
+          contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
       expect(res.redirect).not.to.have.been.called;
     });

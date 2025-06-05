@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA } from "../../app.constants";
+import { mfaOplTaxonomies, PATH_DATA } from "../../app.constants";
 import { CheckYourPhoneServiceInterface } from "./types";
 import {
   EventType,
@@ -34,8 +34,71 @@ import {
 } from "../../utils/mfaClient/types";
 import { containsNumbersOnly } from "../../utils/strings";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { match, P } from "ts-pattern";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
+
+const getOplValues = (
+  req: Request,
+  intent: Intent
+):
+  | { contentId: string; taxonomyLevel2?: string; taxonomyLevel3?: string }
+  | undefined => {
+  return match({ req, intent })
+    .with(
+      {
+        intent: UserJourney.ChangePhoneNumber,
+      },
+      () => ({
+        contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+        ...mfaOplTaxonomies,
+      })
+    )
+    .with(
+      {
+        intent: UserJourney.ChangeDefaultMethod,
+      },
+      () => ({
+        contentId: "df468804-c84b-4134-96ca-6610ffd8b6f5",
+        ...mfaOplTaxonomies,
+      })
+    )
+    .with(
+      {
+        intent: UserJourney.addBackup,
+        req: P.when((req) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "AUTH_APP" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          })
+        ),
+      },
+      () => ({
+        contentId: "a6156870-d4c7-4e1b-b72c-a84b924e4913",
+        ...mfaOplTaxonomies,
+      })
+    )
+    .with(
+      {
+        intent: UserJourney.addBackup,
+        req: P.when((req) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "SMS" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          })
+        ),
+      },
+      () => ({
+        contentId: "8d348159-08ab-4e27-96ea-843ec64e953f",
+        ...mfaOplTaxonomies,
+      })
+    )
+    .otherwise((): undefined => undefined);
+};
 
 const getRenderOptions = (req: Request, intent: Intent) => {
   const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
@@ -65,6 +128,7 @@ const getRenderOptions = (req: Request, intent: Intent) => {
     useDifferentPhoneNumberLink,
     intent,
     backLink: INTENT_TO_BACKLINK_MAP[intent],
+    oplValues: getOplValues(req, intent),
   };
 };
 

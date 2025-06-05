@@ -54,5 +54,10 @@
             html: detailsHTML
         }) }}
     </form>
-    {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change phone number", contentId:"fb69b162-9ddb-41db-a8fa-3cca7fea2fa9",loggedInStatus:true,dynamic:true})}}
 {% endblock %}
+
+{% if oplValues %}
+  {% block scripts %}
+      {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:oplValues.taxonomyLevel2, taxonomyLevel3:oplValues.taxonomyLevel3, contentId:oplValues.contentId,loggedInStatus:true,dynamic:true})}}
+  {% endblock %}
+{% endif %}

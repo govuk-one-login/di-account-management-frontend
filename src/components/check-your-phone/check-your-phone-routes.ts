@@ -30,6 +30,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   refreshTokenMiddleware(),
+  selectMfaMiddleware(),
   globalTryCatchAsync(asyncHandler(checkYourPhonePost()))
 );
 
