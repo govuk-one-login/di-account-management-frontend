@@ -252,6 +252,11 @@ describe("addBackupAppConfirmationGet", () => {
         message: "pages.changeDefaultMethod.confirmation.app",
         backLinkText: "pages.changeDefaultMethod.confirmation.back",
         backLink: PATH_DATA.SECURITY.url,
+        oplValues: {
+          contentId: "d165657a-aa51-4974-8902-1013645b9acc",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       }
     );
   });
@@ -284,6 +289,11 @@ describe("addBackupAppConfirmationGet", () => {
         message: "pages.changeDefaultMethod.confirmation.sms 6789",
         backLinkText: "pages.changeDefaultMethod.confirmation.back",
         backLink: PATH_DATA.SECURITY.url,
+        oplValues: {
+          contentId: "87c95563-8fff-41d9-91a5-a34504d343a8",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       }
     );
   });

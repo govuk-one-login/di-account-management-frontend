@@ -8,6 +8,7 @@ import {
 import { clearCookies } from "../../utils/session-store";
 import { logger } from "../../utils/logger";
 import { getLastNDigits } from "../../utils/phone-number";
+import { match } from "ts-pattern";
 
 const oplValues = {
   updateEmailConfirmation: {
@@ -238,5 +239,35 @@ export async function changeDefaultMethodConfirmationGet(
     message,
     backLinkText: req.t("pages.changeDefaultMethod.confirmation.back"),
     backLink: PATH_DATA.SECURITY.url,
+    oplValues: match({ req })
+      .when(
+        ({ req }) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "AUTH_APP" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          }),
+
+        () => ({
+          contentId: "d165657a-aa51-4974-8902-1013645b9acc",
+          ...mfaOplTaxonomies,
+        })
+      )
+      .when(
+        ({ req }) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "SMS" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          }),
+
+        () => ({
+          contentId: "87c95563-8fff-41d9-91a5-a34504d343a8",
+          ...mfaOplTaxonomies,
+        })
+      )
+      .otherwise((): undefined => undefined),
   });
 }
