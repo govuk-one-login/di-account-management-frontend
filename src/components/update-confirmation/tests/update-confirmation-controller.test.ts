@@ -211,6 +211,11 @@ describe("addBackupAppConfirmationGet", () => {
         message: "pages.confirmaddBackup.message",
         backLinkText: "pages.confirmaddBackup.backLinkText",
         backLink: PATH_DATA.SECURITY.url,
+        oplValues: {
+          contentId: "95add60f-d8d3-4b24-a085-255b6010a36a",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       }
     );
   });

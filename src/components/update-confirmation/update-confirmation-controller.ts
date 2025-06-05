@@ -34,6 +34,10 @@ const oplValues = {
     contentId: "51c6d660-4a44-4d16-a447-b42a4f626a2e",
     ...mfaOplTaxonomies,
   },
+  addMfaAppMethodConfirmation: {
+    contentId: "95add60f-d8d3-4b24-a085-255b6010a36a",
+    ...mfaOplTaxonomies,
+  },
 };
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
@@ -125,6 +129,7 @@ export async function addMfaAppMethodConfirmationGet(
     message: req.t("pages.confirmaddBackup.message"),
     backLinkText: req.t("pages.confirmaddBackup.backLinkText"),
     backLink: PATH_DATA.SECURITY.url,
+    oplValues: oplValues.addMfaAppMethodConfirmation,
   });
 }
 
