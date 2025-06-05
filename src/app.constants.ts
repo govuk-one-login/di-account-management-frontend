@@ -356,3 +356,8 @@ export const LogoutRedirect = {
     url: getBaseUrl() + PATH_DATA.USER_SIGNED_OUT.url,
   },
 };
+
+export const mfaOplTaxonomies = {
+  taxonomyLevel2: "Home",
+  taxonomyLevel3: "MFA Method Management",
+};

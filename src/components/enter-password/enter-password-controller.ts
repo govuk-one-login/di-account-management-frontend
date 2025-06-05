@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { EnterPasswordServiceInterface } from "./types";
 import { enterPasswordService } from "./enter-password-service";
 import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA, LogoutState } from "../../app.constants";
+import { PATH_DATA, LogoutState, mfaOplTaxonomies } from "../../app.constants";
 import {
   formatValidationError,
   renderBadRequest,
@@ -16,6 +16,7 @@ import {
 import { supportChangeOnIntervention } from "../../config";
 import { handleLogout } from "../../utils/logout";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { match, P } from "ts-pattern";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -31,53 +32,102 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
 };
 
-const OPL_VALUES: Record<
-  UserJourney,
-  { contentId: string; taxonomyLevel2: string }
-> = {
-  [UserJourney.ChangeEmail]: {
-    contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
-    taxonomyLevel2: "change email",
-  },
-  [UserJourney.ChangePassword]: {
-    contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412",
-    taxonomyLevel2: "change password",
-  },
-  [UserJourney.ChangePhoneNumber]: {
-    contentId: "2f5f174d-c650-4b28-96cf-365f4fb17af1",
-    taxonomyLevel2: "change phone number",
-  },
-  [UserJourney.DeleteAccount]: {
-    contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349",
-    taxonomyLevel2: "delete account",
-  },
-  [UserJourney.addBackup]: {
-    contentId: "375aa101-7bd6-43c2-ac39-19c864b49882",
-    taxonomyLevel2: "add mfa method",
-  },
-  [UserJourney.RemoveBackup]: {
-    contentId: "375aa101-7bd6-43c2-ac39-19c864b49844",
-    taxonomyLevel2: "remove backup mfa",
-  },
-  [UserJourney.ChangeAuthApp]: {
-    contentId: "9f21527b-59ec-4de3-99e7-babd5846e8de",
-    taxonomyLevel2: "change auth app",
-  },
-  [UserJourney.SwitchBackupMethod]: {
-    contentId: "313fb160-5961-4f53-b3b9-72d2f961cc2d",
-    taxonomyLevel2: "switch backup method",
-  },
-  [UserJourney.ChangeDefaultMethod]: {
-    contentId: "244e4f6f-23bb-489b-9e08-3fb8a44734db",
-    taxonomyLevel2: "change default method",
-  },
+const getOplValues = (
+  req: Request,
+  requestType: UserJourney
+):
+  | { contentId: string; taxonomyLevel2?: string; taxonomyLevel3?: string }
+  | undefined => {
+  return match({ req, requestType })
+    .with({ requestType: UserJourney.ChangeEmail }, () => ({
+      contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
+      taxonomyLevel2: "change email",
+    }))
+    .with({ requestType: UserJourney.ChangePassword }, () => ({
+      contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412",
+      taxonomyLevel2: "change password",
+    }))
+    .with({ requestType: UserJourney.DeleteAccount }, () => ({
+      contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349",
+      taxonomyLevel2: "delete account",
+    }))
+    .with({ requestType: UserJourney.ChangePhoneNumber }, () => ({
+      contentId: "e1cde140-d7e6-4221-90ca-0f2d131743cd",
+      ...mfaOplTaxonomies,
+    }))
+    .with({ requestType: UserJourney.RemoveBackup }, () => ({
+      contentId: "a4bbf434-652c-45de-bdda-c47922b43960",
+      ...mfaOplTaxonomies,
+    }))
+    .with({ requestType: UserJourney.ChangeAuthApp }, () => ({
+      contentId: "70ce4972-cde0-4e58-ac9d-8ea1b57775bf",
+      ...mfaOplTaxonomies,
+    }))
+    .with({ requestType: UserJourney.SwitchBackupMethod }, () => ({
+      contentId: "acef67be-40e5-4ebf-83d6-b8bc8c414304",
+      ...mfaOplTaxonomies,
+    }))
+    .with(
+      {
+        requestType: UserJourney.addBackup,
+        req: P.when((req) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "AUTH_APP" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          })
+        ),
+      },
+      () => ({
+        contentId: "bf008253-6df5-47ee-8c5a-33dced6bd5a0",
+        ...mfaOplTaxonomies,
+      })
+    )
+    .with(
+      {
+        requestType: UserJourney.ChangeDefaultMethod,
+        req: P.when((req) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "AUTH_APP" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          })
+        ),
+      },
+      () => ({
+        contentId: "dab39fa5-b685-4ade-b541-9fa836df9569",
+        ...mfaOplTaxonomies,
+      })
+    )
+    .with(
+      {
+        requestType: UserJourney.ChangeDefaultMethod,
+        req: P.when((req) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "SMS" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          })
+        ),
+      },
+      () => ({
+        contentId: "0ee49bab-a3c2-4fc3-b062-b2c5641aec5b",
+        ...mfaOplTaxonomies,
+      })
+    )
+    .otherwise((): undefined => undefined);
 };
 
 const getRenderOptions = (req: Request, requestType: UserJourney) => {
+  const oplValues = getOplValues(req, requestType);
+
   return {
     requestType,
     fromSecurity: req.query.from == "security",
-    oplValues: OPL_VALUES[requestType] || {},
+    oplValues,
     formAction: req.url,
   };
 };

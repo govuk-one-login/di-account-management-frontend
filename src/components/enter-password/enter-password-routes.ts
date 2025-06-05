@@ -11,12 +11,14 @@ import {
   globalTryCatchAsync,
 } from "../../utils/global-try-catch";
 import { asyncHandler } from "../../utils/async";
+import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
 router.get(
   PATH_DATA.ENTER_PASSWORD.url,
   requiresAuthMiddleware,
+  selectMfaMiddleware(),
   globalTryCatch(enterPasswordGet)
 );
 
@@ -24,6 +26,7 @@ router.post(
   PATH_DATA.ENTER_PASSWORD.url,
   requiresAuthMiddleware,
   refreshTokenMiddleware(),
+  selectMfaMiddleware(),
   globalTryCatchAsync(asyncHandler(enterPasswordPost()))
 );
 
