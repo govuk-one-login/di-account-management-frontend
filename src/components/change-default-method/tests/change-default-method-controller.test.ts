@@ -249,7 +249,14 @@ describe("change default method controller", () => {
       );
       expect(res.render).to.be.calledWith(
         "change-default-method/change-to-sms.njk",
-        { backLink: "/change-default-method" }
+        {
+          backLink: "/change-default-method",
+          oplValues: {
+            contentId: "e847d040-e59e-4a88-8f9c-1d00a840d0bd",
+            taxonomyLevel2: "Home",
+            taxonomyLevel3: "MFA Method Management",
+          },
+        }
       );
     });
   });

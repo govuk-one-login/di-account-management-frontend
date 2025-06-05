@@ -96,12 +96,18 @@ export async function changeDefaultMethodAppGet(
   );
 }
 
+const changeDefaultMethodSmsOplValues = {
+  contentId: "e847d040-e59e-4a88-8f9c-1d00a840d0bd",
+  ...mfaOplTaxonomies,
+};
+
 export async function changeDefaultMethodSmsGet(
   req: Request,
   res: Response
 ): Promise<void> {
   return res.render(CHANGE_DEFAULT_METHOD_SMS_TEMPLATE, {
     backLink,
+    oplValues: changeDefaultMethodSmsOplValues,
   });
 }
 
@@ -119,7 +125,7 @@ export function changeDefaultMethodSmsPost(
         req,
         CHANGE_DEFAULT_METHOD_SMS_TEMPLATE,
         errors,
-        { backLink }
+        { backLink, oplValues: changeDefaultMethodSmsOplValues }
       );
     }
 
@@ -169,6 +175,7 @@ export function changeDefaultMethodSmsPost(
         error,
         {
           backLink,
+          oplValues: changeDefaultMethodSmsOplValues,
         }
       );
     } else {
