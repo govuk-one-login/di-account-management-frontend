@@ -19,8 +19,8 @@ const oplValues = {
     taxonomyLevel2: "change password",
   },
   updatePhoneNumberConfirmation: {
-    contentId: "8641c8eb-b695-4c31-b78d-6c901111152b",
-    taxonomyLevel2: "change phone number",
+    contentId: "670a63e1-94a5-4bec-9a5c-af36bd894ef6",
+    ...mfaOplTaxonomies,
   },
   deleteAccountConfirmation: {
     contentId: "1a4650c5-3a00-4d9b-9487-4ace9c119a1b",
