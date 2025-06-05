@@ -138,6 +138,50 @@ export function addMfaSmsMethodPost(
   };
 }
 
+const getOplValuesForConfirmation = (
+  req: Request
+):
+  | {
+      contentId: string;
+      taxonomyLevel2?: string;
+      taxonomyLevel3?: string;
+      loggedInStatus: boolean;
+    }
+  | undefined => {
+  return match({ req })
+    .when(
+      ({ req }) =>
+        req.session.mfaMethods.find((m) => {
+          return (
+            m.method.mfaMethodType === "AUTH_APP" &&
+            m.priorityIdentifier === "DEFAULT"
+          );
+        }),
+
+      () => ({
+        contentId: "26dbe851-1c35-46e9-a9ee-8b4976126031",
+        loggedInStatus: true,
+        ...mfaOplTaxonomies,
+      })
+    )
+    .when(
+      ({ req }) =>
+        req.session.mfaMethods.find((m) => {
+          return (
+            m.method.mfaMethodType === "SMS" &&
+            m.priorityIdentifier === "DEFAULT"
+          );
+        }),
+
+      () => ({
+        contentId: "532a69a3-222b-4540-b9e7-35ec86960ec5",
+        loggedInStatus: true,
+        ...mfaOplTaxonomies,
+      })
+    )
+    .otherwise((): undefined => undefined);
+};
+
 export async function addMfaSmsMethodConfirmationGet(
   req: Request,
   res: Response
@@ -150,5 +194,6 @@ export async function addMfaSmsMethodConfirmationGet(
       .replace("[mobile]", getLastNDigits(req.session.user.phoneNumber, 4)),
     backLinkText: req.t("pages.addBackupSms.confirm.backLink"),
     backLink: PATH_DATA.SECURITY.url,
+    oplValues: getOplValuesForConfirmation(req),
   });
 }

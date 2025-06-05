@@ -35,6 +35,7 @@ router.get(
   PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
+  selectMfaMiddleware(),
   globalTryCatchAsync(addMfaSmsMethodConfirmationGet)
 );
 
