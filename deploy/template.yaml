@@ -2072,7 +2072,7 @@ Resources:
       AliasTarget:
         DNSName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
         # see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
-        HostedZoneId: "Z2FDTNDATAQYW2"
+        HostedZoneId: "ZJ5UAJN8Y3Z2Q"
         EvaluateTargetHealth: false
 
   AppFrontApiMapping:
