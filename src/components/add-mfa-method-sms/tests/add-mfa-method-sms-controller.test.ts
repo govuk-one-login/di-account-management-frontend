@@ -27,6 +27,7 @@ describe("addMfaSmsMethodPost", () => {
       .withSessionUserState({ addBackup: { value: "CHANGE_VALUE" } })
       .withTranslate(sandbox.fake((id) => id))
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+      .withMfaMethods()
       .build();
 
     res = new ResponseBuilder()
@@ -79,6 +80,11 @@ describe("addMfaSmsMethodPost", () => {
       ],
       backLink: "/back-from-set-up-method",
       language: "en",
+      oplValues: {
+        contentId: "29895f1c-d5be-4135-8bcc-0e92c0847fa1",
+        taxonomyLevel2: "Home",
+        taxonomyLevel3: "MFA Method Management",
+      },
     });
     expect(res.status).to.be.calledWith(400);
   });
@@ -92,7 +98,7 @@ describe("addMfaSmsMethodGet", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = new RequestBuilder().build();
+    req = new RequestBuilder().withMfaMethods().build();
 
     res = new ResponseBuilder().withRender(sandbox.fake()).build();
   });
@@ -105,6 +111,11 @@ describe("addMfaSmsMethodGet", () => {
     await addMfaSmsMethodGet(req as Request, res as Response);
     expect(res.render).to.be.calledWith("add-mfa-method-sms/index.njk", {
       backLink: "/back-from-set-up-method",
+      oplValues: {
+        contentId: "29895f1c-d5be-4135-8bcc-0e92c0847fa1",
+        taxonomyLevel2: "Home",
+        taxonomyLevel3: "MFA Method Management",
+      },
     });
   });
 });
