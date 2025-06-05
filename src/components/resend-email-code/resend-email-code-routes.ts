@@ -10,6 +10,7 @@ import { refreshTokenMiddleware } from "../../middleware/refresh-token-middlewar
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.get(
   PATH_DATA.RESEND_EMAIL_CODE.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
+  selectMfaMiddleware(),
   resendEmailCodeGet
 );
 
@@ -25,6 +27,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   refreshTokenMiddleware(),
+  selectMfaMiddleware(),
   globalTryCatchAsync(asyncHandler(resendEmailCodePost()))
 );
 

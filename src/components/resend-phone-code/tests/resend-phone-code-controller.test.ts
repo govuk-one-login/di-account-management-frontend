@@ -52,6 +52,11 @@ describe("resend phone code controller", () => {
         phoneNumber: "07111111111",
         intent: "changePhoneNumber",
         backLink: "/check-your-phone?intent=changePhoneNumber",
+        oplValues: {
+          contentId: "2af1424d-dcd1-46c7-b982-4b4b11e039f0",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
     });
   });

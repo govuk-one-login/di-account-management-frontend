@@ -28,5 +28,10 @@
     <a href="{{"SECURITY" | getPath}}" class="govuk-link govuk-body">
         {{'pages.resendMfaCode.cancel' | translate}}
     </a>
-    {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change phone number", contentId:"e92e3a80-ea97-4eae-bbff-903e89291765",loggedInStatus:true,dynamic:true})}}
 {% endblock %}
+
+{% if oplValues %}
+  {% block scripts %}
+      {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:oplValues.taxonomyLevel2, taxonomyLevel3:oplValues.taxonomyLevel3, contentId:oplValues.contentId,loggedInStatus:true,dynamic:true})}}
+  {% endblock %}
+{% endif %}
