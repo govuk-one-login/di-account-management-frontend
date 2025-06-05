@@ -71,6 +71,11 @@ describe("change default method controller", () => {
       expect(res.render).to.be.calledWith("change-default-method/index.njk", {
         currentMethodType: "SMS",
         phoneNumber: "5678",
+        oplValues: {
+          contentId: "edada29a-9cca-4b59-9d0b-86a1af67cf68",
+          taxonomyLevel2: "Home",
+          taxonomyLevel3: "MFA Method Management",
+        },
       });
     });
 

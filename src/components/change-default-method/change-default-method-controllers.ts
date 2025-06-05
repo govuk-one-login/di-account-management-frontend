@@ -5,7 +5,7 @@ import {
 } from "../../utils/phone-number";
 import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { EventType, getNextState } from "../../utils/state-machine";
-import { ERROR_CODES, PATH_DATA } from "../../app.constants";
+import { ERROR_CODES, mfaOplTaxonomies, PATH_DATA } from "../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 import {
@@ -19,6 +19,7 @@ import { logger } from "../../utils/logger";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { match } from "ts-pattern";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 const CHANGE_DEFAULT_METHOD_SMS_TEMPLATE =
@@ -45,6 +46,36 @@ export async function changeDefaultMethodGet(
       defaultMethod.method.mfaMethodType === "SMS"
         ? getLastNDigits(defaultMethod.method.phoneNumber, 4)
         : null,
+    oplValues: match({ req })
+      .when(
+        ({ req }) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "AUTH_APP" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          }),
+
+        () => ({
+          contentId: "1c044729-69ca-488f-bf1f-40d6df909deb",
+          ...mfaOplTaxonomies,
+        })
+      )
+      .when(
+        ({ req }) =>
+          req.session.mfaMethods.find((m) => {
+            return (
+              m.method.mfaMethodType === "SMS" &&
+              m.priorityIdentifier === "DEFAULT"
+            );
+          }),
+
+        () => ({
+          contentId: "edada29a-9cca-4b59-9d0b-86a1af67cf68",
+          ...mfaOplTaxonomies,
+        })
+      )
+      .otherwise((): undefined => undefined),
   };
 
   res.render("change-default-method/index.njk", data);
