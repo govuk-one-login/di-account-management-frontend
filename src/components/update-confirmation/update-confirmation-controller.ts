@@ -30,6 +30,10 @@ const oplValues = {
     contentId: "b60b91ec-4907-4c59-a16c-9cfb0508f85c",
     ...mfaOplTaxonomies,
   },
+  switchMfaMethodsConfirmation: {
+    contentId: "51c6d660-4a44-4d16-a447-b42a4f626a2e",
+    ...mfaOplTaxonomies,
+  },
 };
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
@@ -158,7 +162,7 @@ export async function removeMfaMethodConfirmationGet(
   });
 }
 
-export async function changeDefaultMfaMethodConfirmationGet(
+export async function switchMfaMethodsConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
@@ -191,6 +195,7 @@ export async function changeDefaultMfaMethodConfirmationGet(
     message: message,
     backLinkText: req.t("pages.switchBackupMethod.confirm.backLinkText"),
     backLink: PATH_DATA.SECURITY.url,
+    oplValues: oplValues.switchMfaMethodsConfirmation,
   });
 }
 

@@ -9,7 +9,7 @@ import {
   updatePasswordConfirmationGet,
   updatePhoneNumberConfirmationGet,
   removeMfaMethodConfirmationGet,
-  changeDefaultMfaMethodConfirmationGet,
+  switchMfaMethodsConfirmationGet,
   changeDefaultMethodConfirmationGet,
 } from "./update-confirmation-controller";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
@@ -70,7 +70,7 @@ router.get(
   requiresAuthMiddleware,
   selectMfaMiddleware(),
   validateStateMiddleware,
-  globalTryCatchAsync(changeDefaultMfaMethodConfirmationGet)
+  globalTryCatchAsync(switchMfaMethodsConfirmationGet)
 );
 
 router.get(
