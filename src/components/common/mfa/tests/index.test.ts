@@ -64,6 +64,7 @@ describe("render mfa page", () => {
       backLink: undefined,
       errors: {},
       errorList: [],
+      oplValues: undefined,
     });
   });
 
@@ -125,6 +126,7 @@ describe("render mfa page", () => {
           href: "#code",
         },
       ],
+      oplValues: undefined,
     });
   });
 
@@ -164,7 +166,12 @@ describe("render mfa page", () => {
       res as unknown as Response,
       next,
       undefined,
-      "backlink"
+      "backlink",
+      {
+        contentId: "contentId",
+        taxonomyLevel2: "taxonomyLevel2",
+        taxonomyLevel3: "taxonomyLevel3",
+      }
     );
 
     expect(res.render).to.have.been.calledWith(templateFilePath, {
@@ -174,6 +181,11 @@ describe("render mfa page", () => {
       errors: undefined,
       errorList: undefined,
       backLink: "backlink",
+      oplValues: {
+        contentId: "contentId",
+        taxonomyLevel2: "taxonomyLevel2",
+        taxonomyLevel3: "taxonomyLevel3",
+      },
     });
   });
 });

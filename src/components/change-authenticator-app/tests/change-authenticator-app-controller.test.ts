@@ -86,6 +86,11 @@ describe("change authenticator app controller", () => {
           backLink: undefined,
           errors: undefined,
           errorList: undefined,
+          oplValues: {
+            contentId: "673fc9b6-3c25-4ab2-8963-fde55432f7d5",
+            taxonomyLevel2: "Home",
+            taxonomyLevel3: "MFA Method Management",
+          },
         }
       );
     });
@@ -186,6 +191,11 @@ describe("change authenticator app controller", () => {
           backLink: undefined,
           errors: { code: { text: undefined, href: "#code" } },
           errorList: [{ text: undefined, href: "#code" }],
+          oplValues: {
+            contentId: "673fc9b6-3c25-4ab2-8963-fde55432f7d5",
+            taxonomyLevel2: "Home",
+            taxonomyLevel3: "MFA Method Management",
+          },
         }
       );
       expect(mfaClientStub.update).to.not.have.been.called;
@@ -210,6 +220,11 @@ describe("change authenticator app controller", () => {
           backLink: undefined,
           errors: { code: { text: undefined, href: "#code" } },
           errorList: [{ text: undefined, href: "#code" }],
+          oplValues: {
+            contentId: "673fc9b6-3c25-4ab2-8963-fde55432f7d5",
+            taxonomyLevel2: "Home",
+            taxonomyLevel3: "MFA Method Management",
+          },
         }
       );
       expect(mfaClientStub.update).to.not.have.been.called;
@@ -234,6 +249,11 @@ describe("change authenticator app controller", () => {
           backLink: undefined,
           errors: { code: { text: undefined, href: "#code" } },
           errorList: [{ text: undefined, href: "#code" }],
+          oplValues: {
+            contentId: "673fc9b6-3c25-4ab2-8963-fde55432f7d5",
+            taxonomyLevel2: "Home",
+            taxonomyLevel3: "MFA Method Management",
+          },
         }
       );
       expect(mfaClientStub.update).to.not.have.been.called;

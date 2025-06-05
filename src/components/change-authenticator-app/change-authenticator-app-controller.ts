@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
+import { mfaOplTaxonomies, PATH_DATA } from "../../app.constants";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { MfaMethod } from "../../utils/mfaClient/types";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
@@ -8,12 +8,25 @@ import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
 
+const oplValues = {
+  contentId: "673fc9b6-3c25-4ab2-8963-fde55432f7d5",
+  ...mfaOplTaxonomies,
+};
+
 export async function changeAuthenticatorAppGet(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  return renderMfaMethodPage(CHANGE_AUTHENTICATOR_APP_TEMPLATE, req, res, next);
+  return renderMfaMethodPage(
+    CHANGE_AUTHENTICATOR_APP_TEMPLATE,
+    req,
+    res,
+    next,
+    undefined,
+    undefined,
+    oplValues
+  );
 }
 
 export async function changeAuthenticatorAppPost(
@@ -67,6 +80,8 @@ export async function changeAuthenticatorAppPost(
       );
 
       return res.redirect(PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url);
-    }
+    },
+    undefined,
+    oplValues
   );
 }

@@ -15,13 +15,20 @@ import {
   splitSecretKeyIntoFragments,
 } from "../../../utils/strings";
 
+interface OplValues {
+  contentId: string;
+  taxonomyLevel2?: string;
+  taxonomyLevel3?: string;
+}
+
 export async function renderMfaMethodPage(
   templateFile: string,
   req: Request,
   res: Response,
   next: NextFunction,
   errors?: ReturnType<typeof formatValidationError>,
-  backLink?: string
+  backLink?: string,
+  oplValues?: OplValues
 ): Promise<void> {
   try {
     assert(req.session.user.email, "email not set in session");
@@ -42,6 +49,7 @@ export async function renderMfaMethodPage(
       backLink,
       errors,
       errorList: generateErrorList(errors),
+      oplValues,
     });
   } catch (error) {
     req.log.error(error);
@@ -55,7 +63,8 @@ export async function handleMfaMethodPage(
   res: Response,
   next: NextFunction,
   onSuccess: () => any,
-  backLink?: string
+  backLink?: string,
+  oplValues?: OplValues
 ): Promise<void> {
   const { code, authAppSecret } = req.body;
 
@@ -68,7 +77,8 @@ export async function handleMfaMethodPage(
       res,
       next,
       formatValidationError("code", req.t("setUpAuthApp.errors.required")),
-      backLink
+      backLink,
+      oplValues
     );
   }
 
@@ -79,7 +89,8 @@ export async function handleMfaMethodPage(
       res,
       next,
       formatValidationError("code", req.t("setUpAuthApp.errors.invalidFormat")),
-      backLink
+      backLink,
+      oplValues
     );
   }
 
@@ -90,7 +101,8 @@ export async function handleMfaMethodPage(
       res,
       next,
       formatValidationError("code", req.t("setUpAuthApp.errors.maxLength")),
-      backLink
+      backLink,
+      oplValues
     );
   }
 
@@ -103,7 +115,8 @@ export async function handleMfaMethodPage(
       res,
       next,
       formatValidationError("code", req.t("setUpAuthApp.errors.invalidCode")),
-      backLink
+      backLink,
+      oplValues
     );
   }
 

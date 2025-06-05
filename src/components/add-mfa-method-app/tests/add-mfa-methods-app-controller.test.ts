@@ -80,6 +80,7 @@ describe("addMfaAppMethodGet", () => {
       backLink: "/back-from-set-up-method",
       errors: undefined,
       errorList: undefined,
+      oplValues: undefined,
     });
   });
 
@@ -197,6 +198,7 @@ describe("addMfaAppMethodPost", () => {
         code: { text: "setUpAuthApp.errors.invalidCode", href: "#code" },
       },
       errorList: [{ text: "setUpAuthApp.errors.invalidCode", href: "#code" }],
+      oplValues: undefined,
     });
   });
 
@@ -232,6 +234,7 @@ describe("addMfaAppMethodPost", () => {
         code: { text: "setUpAuthApp.errors.required", href: "#code" },
       },
       errorList: [{ text: "setUpAuthApp.errors.required", href: "#code" }],
+      oplValues: undefined,
     });
   });
 
@@ -271,6 +274,7 @@ describe("addMfaAppMethodPost", () => {
         },
       },
       errorList: [{ text: "setUpAuthApp.errors.invalidFormat", href: "#code" }],
+      oplValues: undefined,
     });
   });
 
@@ -307,6 +311,7 @@ describe("addMfaAppMethodPost", () => {
         code: { text: "setUpAuthApp.errors.maxLength", href: "#code" },
       },
       errorList: [{ text: "setUpAuthApp.errors.maxLength", href: "#code" }],
+      oplValues: undefined,
     });
   });
 
