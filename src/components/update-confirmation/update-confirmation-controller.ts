@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   ERROR_MESSAGES,
   HTTP_STATUS_CODES,
+  mfaOplTaxonomies,
   PATH_DATA,
 } from "../../app.constants";
 import { clearCookies } from "../../utils/session-store";
@@ -25,14 +26,17 @@ const oplValues = {
     contentId: "1a4650c5-3a00-4d9b-9487-4ace9c119a1b",
     taxonomyLevel2: "delete account",
   },
+  updateAuthenticatorAppConfirmation: {
+    contentId: "b60b91ec-4907-4c59-a16c-9cfb0508f85c",
+    ...mfaOplTaxonomies,
+  },
 };
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
   delete req.session.user.state.changeEmail;
 
   res.render("update-confirmation/index.njk", {
-    contentId: oplValues.updateEmailConfirmation.contentId,
-    taxonomyLevel2: oplValues.updateEmailConfirmation.taxonomyLevel2,
+    oplValues: oplValues.updateEmailConfirmation,
     pageTitle: req.t("pages.updateEmailConfirmation.title"),
     panelText: req.t("pages.updateEmailConfirmation.panelText"),
     summaryText: req
@@ -57,8 +61,7 @@ export function updatePasswordConfirmationGet(
   }
 
   res.render("update-confirmation/index.njk", {
-    contentId: oplValues.updatePasswordConfirmation.contentId,
-    taxonomyLevel2: oplValues.updatePasswordConfirmation.taxonomyLevel2,
+    oplValues: oplValues.updatePasswordConfirmation,
     pageTitle: req.t("pages.updatePasswordConfirmation.title"),
     panelText: req.t("pages.updatePasswordConfirmation.panelText"),
   });
@@ -71,8 +74,7 @@ export function updatePhoneNumberConfirmationGet(
   delete req.session.user.state.changePhoneNumber;
 
   res.render("update-confirmation/index.njk", {
-    contentId: oplValues.updatePhoneNumberConfirmation.contentId,
-    taxonomyLevel2: oplValues.updatePhoneNumberConfirmation.taxonomyLevel2,
+    oplValues: oplValues.updatePhoneNumberConfirmation,
     pageTitle: req.t("pages.updatePhoneNumberConfirmation.title"),
     panelText: req.t("pages.updatePhoneNumberConfirmation.panelText"),
     summaryText: req
@@ -91,6 +93,7 @@ export function updateAuthenticatorAppConfirmationGet(
     pageTitle: req.t("pages.updateAuthenticatorAppConfirmation.title"),
     panelText: req.t("pages.updateAuthenticatorAppConfirmation.panelText"),
     summaryText: req.t("pages.updateAuthenticatorAppConfirmation.summaryText"),
+    oplValues: oplValues.updateAuthenticatorAppConfirmation,
   });
 }
 
@@ -99,8 +102,7 @@ export function deleteAccountConfirmationGet(
   res: Response
 ): void {
   res.render("update-confirmation/index.njk", {
-    contentId: oplValues.deleteAccountConfirmation.contentId,
-    taxonomyLevel2: oplValues.deleteAccountConfirmation.taxonomyLevel2,
+    oplValues: oplValues.deleteAccountConfirmation,
     pageTitle: req.t("pages.deleteAccountConfirmation.title"),
     panelText: req.t("pages.deleteAccountConfirmation.panelText"),
     summaryText: req.t("pages.deleteAccountConfirmation.summaryText"),
