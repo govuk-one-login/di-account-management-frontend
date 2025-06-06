@@ -549,6 +549,10 @@
             "text": "Cysylltu'r ap GOV.UK  ID Check i GOV.UK"
           },
           {
+            "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app.cy",
+            "text": "Profi eich hunaniaeth gyda’r ap GOV.UK One Login"
+          },
+          {
             "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions.cy",
             "text": "Profi eich hunaniaeth gyda GOV.UK One Login drwy ateb cwestiynau diogelwch"
           },
@@ -597,7 +601,6 @@
             "Mae'r cynorthwyydd digidol bob amser ar gael."
           ],
           "linkText": "Defnyddio gwe-sgwrs",
-          "accessibilityStatementParagraph": "Nid yw ein gwe-sgwrs yn gwbl hygyrch eto — rydym yn gweithio i’w wella. Gallwch ddarganfod <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=cy#webchat-accessibility\">mwy am y cyfyngiadau a sut rydym yn eu cywiro</a>.",
           "javascriptDisabled": {
             "paragraphs1": [
               "Defnyddiwch gwe-sgwrs i gael help gan gynorthwyydd digidol GOV.UK One Login neu sgwrsio ag aelod o'r tîm cymorth.",
@@ -661,9 +664,7 @@
       },
       "section4": {
         "heading": "Sut rydym yn defnyddio eich gwybodaeth",
-        "paragraphs": [
-          "I ddarganfod pa wybodaeth rydym yn ei gadw pan fyddwch yn cysylltu â ni a sut rydym yn ei defnyddio, gweler <a href=\"https://signin.account.gov.uk/privacy-notice\" class=\"govuk-link\">hysbysiad preifatrwydd GOV.UK One Login</a>"
-        ]
+        "paragraph": "I ddarganfod pa wybodaeth rydym yn ei gadw pan fyddwch yn cysylltu â ni a sut rydym yn ei defnyddio, gweler <a href=\"[link].cy\" class=\"govuk-link\">hysbysiad preifatrwydd GOV.UK One Login</a>."
       }
     },
     "permanentlySuspendedScreen": {
