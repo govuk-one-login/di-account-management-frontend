@@ -699,6 +699,10 @@
             "text": "Linking the GOV.UK ID Check app to GOV.UK"
           },
           {
+            "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app",
+            "text": "Proving your identity with the GOV.UK One Login app"
+          },
+          {
             "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions",
             "text": "Proving your identity with GOV.UK One Login by answering security questions"
           },
@@ -747,7 +751,6 @@
             "The digital assistant is always available."
           ],
           "linkText": "Use webchat",
-          "accessibilityStatementParagraph": "Our webchat is not fully accessible yet — we’re working to improve it. You can find out <a class=\"govuk-link\" href=\"[accessibilityStatementLinkHref]?lng=en#webchat-accessibility\">more about the limitations and how we’re fixing them</a>.",
           "javascriptDisabled": {
             "paragraphs1": [
               "Use webchat to get help from GOV.UK One Login’s digital assistant or chat with a member of the support team.",
@@ -809,9 +812,7 @@
       },
       "section4": {
         "heading": "How we use your information",
-        "paragraphs": [
-          "To find out what information we store when you contact us and how we use it, see the <a href=\"https://signin.account.gov.uk/privacy-notice\" class=\"govuk-link\">GOV.UK One Login privacy notice.</a>"
-        ]
+        "paragraph": "To find out what information we store when you contact us and how we use it, see the <a href=\"[link]\" class=\"govuk-link\">GOV.UK One Login privacy notice</a>."
       }
     },
     "permanentlySuspendedScreen": {

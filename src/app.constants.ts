@@ -17,6 +17,9 @@ export const PATH_DATA: Record<
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
   SEARCH_SERVICES: { url: "/services-using-one-login" },
+  PRIVACY_NOTICE: {
+    url: "https://www.gov.uk/government/publications/govuk-one-login-privacy-notice",
+  },
   ADD_MFA_METHOD: {
     url: "/choose-backup",
     event: EventType.SelectedApp,
