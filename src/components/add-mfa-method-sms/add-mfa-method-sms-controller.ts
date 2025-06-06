@@ -20,21 +20,34 @@ import { BadRequestError } from "../../utils/errors";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
 
 const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
 const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
 
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      taxonomyLevel2: "change phone number",
+    },
+    res
+  );
+};
+
 export async function addMfaSmsMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  setLocalOplSettings(res);
   res.render(ADD_MFA_METHOD_SMS_TEMPLATE, { backLink });
 }
 export function addMfaSmsMethodPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
+    setLocalOplSettings(res);
+
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)
       .mapped();

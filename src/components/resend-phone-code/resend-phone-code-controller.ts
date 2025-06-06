@@ -14,8 +14,19 @@ import {
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
+
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      contentId: "e92e3a80-ea97-4eae-bbff-903e89291765",
+      taxonomyLevel2: "change phone number",
+    },
+    res
+  );
+};
 
 const getRenderOptions = (req: Request) => {
   const intent = req.query.intent as string;
@@ -29,6 +40,7 @@ const getRenderOptions = (req: Request) => {
 };
 
 export function resendPhoneCodeGet(req: Request, res: Response): void {
+  setLocalOplSettings(res);
   res.render(TEMPLATE_NAME, getRenderOptions(req));
 }
 
@@ -36,6 +48,8 @@ export function resendPhoneCodePost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    setLocalOplSettings(res);
+
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)
       .mapped();

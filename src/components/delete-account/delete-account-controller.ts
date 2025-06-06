@@ -11,11 +11,24 @@ import {
 import { handleLogout } from "../../utils/logout";
 import { LogoutState } from "../../app.constants";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { OplSettings, setOplSettings } from "../../utils/opl";
+
+const oplSettings: OplSettings = {
+  taxonomyLevel2: "delete account",
+};
 
 export async function deleteAccountGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  setOplSettings(
+    {
+      ...oplSettings,
+      contentId: "7c0ae794-46ba-4abd-bf23-ebd70782a96b",
+    },
+    res
+  );
+
   const env = getAppEnv();
   const { user } = req.session;
   if (user?.subjectId) {
@@ -37,6 +50,17 @@ export async function deleteAccountGet(
       currentLngWelsh: req.i18n?.language === "cy",
       hasEnglishOnlyServices,
     };
+
+    if (services.length) {
+      setOplSettings(
+        {
+          ...oplSettings,
+          contentId: "0768fa94-3a7a-4f19-8bf5-a1d5afa49023",
+        },
+        res
+      );
+    }
+
     res.render("delete-account/index.njk", data);
   } else {
     const data = {

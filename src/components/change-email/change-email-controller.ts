@@ -9,9 +9,21 @@ import {
 import { ChangeEmailServiceInterface } from "./types";
 import { changeEmailService } from "./change-email-service";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
+
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      contentId: "1f97b62b-a124-4d6a-ae51-8abd2611ec55",
+      taxonomyLevel2: "change email",
+    },
+    res
+  );
+};
 
 const TEMPLATE_NAME = "change-email/index.njk";
 export function changeEmailGet(req: Request, res: Response): void {
+  setLocalOplSettings(res);
   return res.render(TEMPLATE_NAME);
 }
 
@@ -21,6 +33,7 @@ function badRequest(req: Request, res: Response, errorMessage: string) {
     req.t(`pages.changeEmail.email.validationError.${errorMessage}`)
   );
 
+  setLocalOplSettings(res);
   return renderBadRequest(res, req, TEMPLATE_NAME, error);
 }
 

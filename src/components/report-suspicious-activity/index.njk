@@ -17,9 +17,7 @@
       {# account for the possibility of users re-visiting the report page soon after reporting an event, before a report number is known #}
       <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.alreadyReported.noReportNo' | translate }}</p>
     {% endif %}
-    {%set contentId = "5f83e2b4-6c9d-4b98-b68e-43d4f6892b56"%}
   {% else %}
-   {% set contentId = "0252c1d4-c233-48c1-bf4b-a5b124ed8ec2"%}
     {# The event has not been reported yet – show report form #}
     <h1 class="govuk-heading-l">{{ 'pages.reportSuspiciousActivity.header' | translate }}</h1>
     <p class="govuk-body">{{ 'pages.reportSuspiciousActivity.intro' | translate }}</p>
@@ -44,5 +42,4 @@
       }) }}
     </form>
   {% endif %}
-  {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"activity", contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}

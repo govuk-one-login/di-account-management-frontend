@@ -17,6 +17,7 @@ import { snsService } from "../../utils/sns";
 import { getTxmaHeader } from "../../utils/txma-header";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { logger } from "../../utils/logger";
+import { setOplSettings } from "../../utils/opl";
 
 const activityLogDynamoDBRequest = (
   subjectId: string,
@@ -142,6 +143,16 @@ export async function reportSuspiciousActivityGet(
       homeClientId: getOIDCClientId(),
     };
 
+    setOplSettings(
+      {
+        contentId: data.alreadyReported
+          ? "5f83e2b4-6c9d-4b98-b68e-43d4f6892b56"
+          : "0252c1d4-c233-48c1-bf4b-a5b124ed8ec2",
+        taxonomyLevel2: "activity",
+      },
+      res
+    );
+
     res.render("report-suspicious-activity/index.njk", {
       ...data,
       ...activityLogDetails,
@@ -201,6 +212,14 @@ export async function reportSuspiciousActivityConfirmation(
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     res.render("common/errors/404.njk");
   } else {
+    setOplSettings(
+      {
+        contentId: "e047725a-f19a-448a-9f8d-1e9e08f5c21f",
+        taxonomyLevel2: "activity",
+      },
+      res
+    );
+
     res.render("report-suspicious-activity/success.njk", {
       backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${req.query.page || 1}`,
       email: req.session.user.email,

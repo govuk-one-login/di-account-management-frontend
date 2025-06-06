@@ -74,7 +74,6 @@
   <a href="{{"SECURITY" | getPath}}" class="govuk-link govuk-body">
     {{'pages.changePhoneNumber.info.backLink' | translate}}
   </a>
-  {{ ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"change phone number", contentId:contentId,loggedInStatus:true,dynamic:true })}}
 {% endblock %}
 {% block scripts %}
   <script type="text/javascript" src="/public/scripts/international-phone.js" nonce='{{scriptNonce}}'></script>

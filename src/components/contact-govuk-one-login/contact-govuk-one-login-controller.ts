@@ -11,6 +11,7 @@ import {
   getAccessibilityStatementUrl,
 } from "../../config";
 import { EVENT_NAME, PATH_DATA } from "../../app.constants";
+import { setOplSettings } from "../../utils/opl";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
@@ -61,5 +62,12 @@ const render = (req: Request, res: Response): void => {
     nonce: res.locals.scriptNonce,
   };
 
+  setOplSettings(
+    {
+      contentId: "dbd37b91-5d9e-419e-b6e4-1ea5b40a99f6",
+      taxonomyLevel2: "contact gov uk",
+    },
+    res
+  );
   res.render(CONTACT_ONE_LOGIN_TEMPLATE, data);
 };

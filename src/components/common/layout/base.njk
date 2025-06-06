@@ -119,7 +119,6 @@
 {% endblock %}
 
 {% block bodyEnd %}
-    {% block scripts %}{% endblock %}
     <script type="module" src="/public/scripts/govuk-frontend.min.js" {% if scriptNonce %} nonce="{{ scriptNonce }}"{% endif %}></script>
 
     <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
@@ -165,5 +164,19 @@
       import { setFingerprintCookie } from "{{'FINGERPRINT' | getPath }}/index.js";
       setFingerprintCookie("{{ fingerprintCookieDomain }}")
     </script>
+  {% endif %}
+
+  {% if opl %}
+    {{ ga4OnPageLoad({
+      nonce: scriptNonce,
+      englishPageTitle: pageTitleName,
+      statusCode: opl.statusCode,
+      taxonomyLevel1: opl.taxonomyLevel1,
+      taxonomyLevel2: opl.taxonomyLevel2,
+      taxonomyLevel3: opl.taxonomyLevel3,
+      contentId: opl.contentId,
+      loggedInStatus: opl.loggedInStatus,
+      dynamic: opl.dynamic
+    })}}
   {% endif %}
 {% endblock %}
