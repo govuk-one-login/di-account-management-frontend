@@ -4,7 +4,6 @@
 {% set pageTitleName = pageTitle %}
 {% set hideAccountNavigation = hideAccountNavigation %}
 {% set govUkLink = "https://www.gov.uk" %}
-{% set contentId = contentId %}
 {% set taxonomyLevel2 = taxonomyLevel2 %}
 
 {% block pageContent %}
@@ -36,5 +35,4 @@
   }
 }) }}
 {% endif %}
-{{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:taxonomyLevel2, contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}
