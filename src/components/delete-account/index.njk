@@ -4,7 +4,6 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.deleteAccount.title' | translate %}
-{% set contentId = "0768fa94-3a7a-4f19-8bf5-a1d5afa49023" if services.length else "7c0ae794-46ba-4abd-bf23-ebd70782a96b" %}
 
 {% block pageContent %}
 
@@ -67,5 +66,4 @@
     {{ 'pages.deleteAccount.doNotDeleteAccount' | translate }}
   </a>
 {% endif %}
-{{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"delete account", contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}

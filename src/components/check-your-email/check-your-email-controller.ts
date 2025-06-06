@@ -12,10 +12,22 @@ import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/typ
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 import { UpdateInformationInput } from "../../utils/types";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
 
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      contentId: "d5441a1e-28d1-455b-83fd-071cd876cd06",
+      taxonomyLevel2: "change email",
+    },
+    res
+  );
+};
+
 export function checkYourEmailGet(req: Request, res: Response): void {
+  setLocalOplSettings(res);
   res.render(TEMPLATE_NAME, {
     email: req.session.user.newEmailAddress,
   });
@@ -69,6 +81,7 @@ export function checkYourEmailPost(
       req.t("pages.checkYourEmail.code.validationError.invalidCode")
     );
 
+    setLocalOplSettings(res);
     renderBadRequest(res, req, TEMPLATE_NAME, error);
   };
 }

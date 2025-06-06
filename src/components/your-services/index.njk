@@ -7,15 +7,6 @@
 {% set hasRPs = servicesList.length or accountsList.length %}
 {% set serviceListLink = 'pages.yourServices.informationBox.link' | translate | safe %}
 
-{% if not hasRPs %}
-    {% set contentId = "886900f6-178f-41e7-9051-c8428cca86dd" %}
-{% elif accountsList.length %}
-    {% set contentId = "74c08523-6bce-41da-bcdc-179d5e3784c8" %}
-{% elif servicesList.length %}
-    {% set contentId = "bfb16754-2768-47c9-a338-21405bc6a98a" %}
-{% else %}
-    {% set contentId = "04566d1b-d791-4e2a-9154-26787fb60516" %}
-{% endif %}
 {%- macro setKey(key, clientId) -%} 
   {{ ['clientRegistry.', env, '.', clientId, '.', key] | join }}
 {%- endmacro -%}
@@ -119,5 +110,4 @@
       </div>
     </div>
   </div>
-   {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:pageTitleName, taxonomyLevel1: "accounts", taxonomyLevel2:"home", contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}

@@ -9,10 +9,22 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
 
 const TEMPLATE_NAME = "resend-email-code/index.njk";
 
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      contentId: "24ad9e0f-9d6f-43d2-8828-5d8f2003c6fe",
+      taxonomyLevel2: "change email",
+    },
+    res
+  );
+};
+
 export function resendEmailCodeGet(req: Request, res: Response): void {
+  setLocalOplSettings(res);
   res.render(TEMPLATE_NAME, {
     emailAddress: req.session.user.newEmailAddress,
   });
@@ -23,6 +35,8 @@ function badRequest(req: Request, res: Response, errorMessage: string) {
     "email",
     req.t(`pages.changeEmail.email.validationError.${errorMessage}`)
   );
+
+  setLocalOplSettings(res);
 
   return renderBadRequest(res, req, TEMPLATE_NAME, error);
 }
