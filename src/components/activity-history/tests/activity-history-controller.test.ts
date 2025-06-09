@@ -3,7 +3,7 @@ import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA, EXTERNAL_URLS } from "../../../app.constants";
 import { activityHistoryGet } from "../activity-history-controller";
 import { getAppEnv, reportSuspiciousActivity } from "../../../config";
 import { logger } from "../../../utils/logger";
@@ -78,7 +78,7 @@ describe("Activity history controller", () => {
             pagination: {},
             backLink: PATH_DATA.SECURITY.url,
             changePasswordLink: PATH_DATA.SECURITY.url,
-            contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
+            contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
             homeClientId: clientId,
             supportReportingForm: false,
             hasEnglishOnlyServices: false,
@@ -155,7 +155,7 @@ describe("Activity history controller", () => {
             pagination: {},
             backLink: PATH_DATA.SECURITY.url,
             changePasswordLink: PATH_DATA.SECURITY.url,
-            contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
+            contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
             homeClientId: clientId,
             supportReportingForm: false,
             hasEnglishOnlyServices: true,

@@ -175,7 +175,7 @@
     <hr class="govuk-section-break govuk-section-break--m">
     <section>
       <h2 class="govuk-heading-l">{{'pages.contact.section4.heading' | translate}}</h2>
-      <p class="govuk-body">{{ 'pages.contact.section4.paragraph' | translate | replace('[link]', "PRIVACY_NOTICE" | getPath ) | safe }}</p>
+      <p class="govuk-body">{{ 'pages.contact.section4.paragraph' | translate | replace('[link]', "PRIVACY_NOTICE" | getExternalUrl ) | safe }}</p>
     </section>
   {% endif %}
 {% endif %}
