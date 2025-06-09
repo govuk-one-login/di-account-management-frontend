@@ -30,7 +30,7 @@ declare module "express-serve-static-core" {
     i18n?: {
       language?: string;
     };
-    language?: string;
+    language?: LOCALE;
     t?: (string) => string;
     csrfToken?: () => string;
     oidc?: Client;
