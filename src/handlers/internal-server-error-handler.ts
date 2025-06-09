@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../app.constants";
+import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../utils/opl";
 
 export function serverErrorHandler(
   err: any,
@@ -10,6 +11,14 @@ export function serverErrorHandler(
   if (res.headersSent) {
     return next(err);
   }
+
+  setOplSettings(
+    {
+      statusCode: 500,
+      taxonomyLevel2: EMPTY_OPL_SETTING_VALUE,
+    },
+    res
+  );
 
   if (
     res.statusCode === HTTP_STATUS_CODES.UNAUTHORIZED ||
