@@ -71,6 +71,11 @@ const OPL_VALUES = ((): Record<string, Partial<OplSettings>> => ({
       ...MFA_COMMON_OPL_SETTINGS,
       contentId: "bf008253-6df5-47ee-8c5a-33dced6bd5a0",
     },
+  [`${UserJourney.addBackup}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]:
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "7fa84113-f58c-418f-a3c1-c5297cd05f48",
+    },
   [`${UserJourney.ChangeDefaultMethod}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
     {
       ...MFA_COMMON_OPL_SETTINGS,
