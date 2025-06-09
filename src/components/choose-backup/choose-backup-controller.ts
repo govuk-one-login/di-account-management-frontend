@@ -24,6 +24,10 @@ const OPL_VALUES: Record<string, Partial<OplSettings>> = {
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "63f44ae6-46f1-46c3-a2e8-305fe2ddf27d",
   },
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "d567c2cd-b769-4085-9d7b-bd6094d44050",
+  },
 };
 
 const setLocalOplSettings = (req: Request, res: Response) => {
