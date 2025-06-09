@@ -5,11 +5,12 @@ import { TFunction } from "i18next";
 import { logger } from "../../../src/utils/logger";
 
 import { safeTranslate } from "../../../src/utils/safeTranslate";
+import { LOCALE } from "../../../src/app.constants";
 
 describe("safeTranslate", () => {
   let translate: sinon.SinonStub<[string, any?], string>;
   let logErrorSpy: sinon.SinonSpy;
-  const requestedLanguage = "cy";
+  const requestedLanguage = LOCALE.CY;
 
   beforeEach(() => {
     translate = sinon.stub();

@@ -6,6 +6,7 @@ import express from "express";
 import i18next, { TFunction } from "i18next";
 import { configureNunjucks } from "../../../src/config/nunjucks";
 import { SinonStub } from "sinon";
+import { EXTERNAL_URLS } from "../../../src/app.constants";
 
 type MyStubType = TFunction & SinonStub;
 
@@ -64,6 +65,42 @@ describe("configureNunjucks", () => {
 
       expect(result).to.equal(undefined);
       expect(fixedTStub.calledWith("test_key")).to.be.true;
+    });
+
+    it("should translate fallback to en if false lang is passed", () => {
+      const fixedTStub = sinon
+        .stub()
+        .returns("translated_value") as unknown as MyStubType;
+      const getFixedTStub = sinon
+        .stub(i18next, "getFixedT")
+        .returns(fixedTStub);
+
+      const translateFilter = nunjucksEnv.getFilter("translate");
+      const result = translateFilter.call(
+        { ctx: { i18n: { language: "" } } },
+        "test_key"
+      );
+
+      expect(result).to.equal("translated_value");
+      expect(getFixedTStub.firstCall.args[0]).to.equal("en");
+      expect(fixedTStub.calledWith("test_key")).to.be.true;
+    });
+  });
+
+  describe("external URL filter", () => {
+    it("should return the external URL when it exists", () => {
+      const externalUrlFilter = nunjucksEnv.getFilter("getExternalUrl");
+      const result = externalUrlFilter.call({}, "PRIVACY_NOTICE");
+
+      expect(result).to.equal(EXTERNAL_URLS.PRIVACY_NOTICE);
+    });
+
+    it("should throw an error when the external URL does not exist", () => {
+      const externalUrlFilter = nunjucksEnv.getFilter("getExternalUrl");
+
+      expect(() => {
+        externalUrlFilter.call({}, "UNKNOWN_KEY");
+      }).to.throw("Unknown URL: UNKNOWN_KEY");
     });
   });
 

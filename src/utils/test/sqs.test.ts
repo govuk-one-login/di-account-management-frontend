@@ -9,7 +9,7 @@ import sinonChai from "sinon-chai";
 import { logger } from "../logger";
 import * as redact from "../redact";
 import chaiAsPromised from "chai-as-promised";
-import { ERROR_MESSAGES, LOG_MESSAGES } from "../../app.constants";
+import { EventName, ERROR_MESSAGES, LOG_MESSAGES } from "../../app.constants";
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -25,7 +25,7 @@ describe("SQS service tests", (): void => {
     timestamp: undefined,
     event_timestamp_ms: 1,
     event_timestamp_ms_formatted: "1",
-    event_name: "HOME_TRIAGE_PAGE_VISIT",
+    event_name: EventName.HOME_TRIAGE_PAGE_VISIT,
     component_id: "HOME",
     user: {
       session_id: "session-id",
@@ -39,7 +39,7 @@ describe("SQS service tests", (): void => {
     timestamp: undefined,
     event_timestamp_ms: 1,
     event_timestamp_ms_formatted: "1",
-    event_name: "HOME_TRIAGE_PAGE_VISIT",
+    event_name: EventName.HOME_TRIAGE_PAGE_VISIT,
     component_id: "HOME",
     user: {
       session_id: "session-id",
