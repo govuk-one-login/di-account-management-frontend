@@ -10,8 +10,8 @@ import {
   supportWebchatContact,
   getAccessibilityStatementUrl,
 } from "../../config";
-import { EVENT_NAME, PATH_DATA } from "../../app.constants";
 import { setOplSettings } from "../../utils/opl";
+import { EventName, PATH_DATA } from "../../app.constants";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
@@ -20,7 +20,7 @@ export function contactGet(req: Request, res: Response): void {
   const audit_event = service.buildAuditEvent(
     req,
     res,
-    EVENT_NAME.HOME_TRIAGE_PAGE_VISIT
+    EventName.HOME_TRIAGE_PAGE_VISIT
   );
   logUserVisitsContactPage(audit_event, res.locals.trace);
   service.send(audit_event, res.locals.sessionId);

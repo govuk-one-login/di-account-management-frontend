@@ -309,11 +309,10 @@ export const ENVIRONMENT_NAME = {
   TEST: "test",
 };
 
-export const EVENT_NAME = {
-  HOME_TRIAGE_PAGE_VISIT: "HOME_TRIAGE_PAGE_VISIT",
-  HOME_TRIAGE_PAGE_EMAIL: "HOME_TRIAGE_PAGE_EMAIL",
-};
-
+export enum EventName {
+  HOME_TRIAGE_PAGE_VISIT = "HOME_TRIAGE_PAGE_VISIT",
+  HOME_TRIAGE_PAGE_EMAIL = "HOME_TRIAGE_PAGE_EMAIL",
+}
 export interface QueryParameters {
   fromURL?: string;
   appSessionId?: string;

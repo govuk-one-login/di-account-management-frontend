@@ -4,6 +4,7 @@ import sinon from "sinon";
 import { SqsService } from "../utils/types";
 import { eventService } from "./event-service";
 import {
+  EventName,
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
   MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
   MISSING_SESSION_ID_SPECIAL_CASE,
@@ -60,10 +61,14 @@ describe("eventService", () => {
         },
       };
 
-      const result = service.buildAuditEvent(mockReq, mockRes, "TEST_EVENT");
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_TRIAGE_PAGE_EMAIL
+      );
 
       expect(result.component_id).to.equal("HOME");
-      expect(result.event_name).to.equal("TEST_EVENT");
+      expect(result.event_name).to.equal("HOME_TRIAGE_PAGE_EMAIL");
       expect(result.user.session_id).to.equal("test-session-id");
       expect(result.user.persistent_session_id).to.equal(
         "test-persistent-session-id"
@@ -100,7 +105,11 @@ describe("eventService", () => {
         locals: {},
       };
 
-      const result = service.buildAuditEvent(mockReq, mockRes, "TEST_EVENT");
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_TRIAGE_PAGE_EMAIL
+      );
 
       expect(result.user.session_id).to.equal(MISSING_SESSION_ID_SPECIAL_CASE);
       expect(result.user.persistent_session_id).to.equal(
@@ -129,7 +138,11 @@ describe("eventService", () => {
         },
       };
 
-      const result = service.buildAuditEvent(mockReq, mockRes, "TEST_EVENT");
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_TRIAGE_PAGE_EMAIL
+      );
 
       expect(result.extensions.from_url).to.be.undefined;
       expect(result.extensions.app_error_code).to.be.undefined;
@@ -144,17 +157,23 @@ describe("eventService", () => {
     it("should send the event to SQS", () => {
       const service = eventService(sqs);
 
-      service.send({ event_name: "TEST_EVENT" }, "session-id");
+      service.send(
+        { event_name: EventName.HOME_TRIAGE_PAGE_EMAIL },
+        "session-id"
+      );
 
       expect(sendSpy.calledOnce).to.be.true;
-      expect(sendSpy.calledWith(JSON.stringify({ event_name: "TEST_EVENT" })))
-        .to.be.true;
+      expect(
+        sendSpy.calledWith(
+          JSON.stringify({ event_name: "HOME_TRIAGE_PAGE_EMAIL" })
+        )
+      ).to.be.true;
     });
 
     it("should stringify the event object before sending", () => {
       const service = eventService(sqs);
 
-      const mockEvent = { event_name: "MOCK_EVENT" };
+      const mockEvent = { event_name: EventName.HOME_TRIAGE_PAGE_EMAIL };
       service.send(mockEvent, "session-id");
 
       expect(sendSpy.calledOnceWith(JSON.stringify(mockEvent))).to.be.true;

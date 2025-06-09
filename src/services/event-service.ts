@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import {
   EventServiceInterface,
-  EventNameType,
   AuditEvent,
   Event,
   CurrentTimeDescriptor,
@@ -9,6 +8,7 @@ import {
 import { SqsService } from "../utils/types";
 import { sqsService } from "../utils/sqs";
 import {
+  EventName,
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
   MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
   MISSING_SESSION_ID_SPECIAL_CASE,
@@ -62,7 +62,7 @@ export function eventService(
   const buildAuditEvent = (
     req: Request,
     res: Response,
-    eventName: EventNameType
+    eventName: EventName
   ): AuditEvent => {
     const { headers, session } = req;
 
