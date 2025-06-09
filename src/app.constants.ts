@@ -305,7 +305,7 @@ export const ENVIRONMENT_NAME = {
   TEST: "test",
 };
 
-export enum EventName {
+export const enum EventName {
   HOME_TRIAGE_PAGE_VISIT = "HOME_TRIAGE_PAGE_VISIT",
   HOME_TRIAGE_PAGE_EMAIL = "HOME_TRIAGE_PAGE_EMAIL",
 }
