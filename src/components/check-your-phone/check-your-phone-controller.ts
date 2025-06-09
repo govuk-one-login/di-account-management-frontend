@@ -34,8 +34,19 @@ import {
 } from "../../utils/mfaClient/types";
 import { containsNumbersOnly } from "../../utils/strings";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
+
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      contentId: "fb69b162-9ddb-41db-a8fa-3cca7fea2fa9",
+      taxonomyLevel2: "change phone number",
+    },
+    res
+  );
+};
 
 const getRenderOptions = (req: Request, intent: Intent) => {
   const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
@@ -70,6 +81,7 @@ const getRenderOptions = (req: Request, intent: Intent) => {
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
   const intent = req.query.intent as Intent;
+  setLocalOplSettings(res);
   res.render(TEMPLATE_NAME, getRenderOptions(req, intent));
 }
 
@@ -79,6 +91,8 @@ export function checkYourPhonePost(
   return async function (req: Request, res: Response) {
     const { code } = req.body;
     const intent = req.body.intent as Intent;
+
+    setLocalOplSettings(res);
 
     if (!code) {
       const error = formatValidationError(

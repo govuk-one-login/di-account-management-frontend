@@ -47,5 +47,7 @@ export async function setLocalVarsMiddleware(
   res.locals.trace =
     res.locals.persistentSessionId + "::" + res.locals.sessionId;
 
+  res.locals.opl = undefined;
+
   next();
 }

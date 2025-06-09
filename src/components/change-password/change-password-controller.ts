@@ -10,10 +10,22 @@ import {
 } from "../../utils/validation";
 import { BadRequestError } from "../../utils/errors";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
 
 const changePasswordTemplate = "change-password/index.njk";
 
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      contentId: "00ca6657-4139-43fa-979b-0eb3576fa94c",
+      taxonomyLevel2: "change password",
+    },
+    res
+  );
+};
+
 export function changePasswordGet(req: Request, res: Response): void {
+  setLocalOplSettings(res);
   res.render(changePasswordTemplate);
 }
 
@@ -21,6 +33,8 @@ export function changePasswordPost(
   service: ChangePasswordServiceInterface = changePasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    setLocalOplSettings(res);
+
     const { email } = req.session.user;
 
     const newPassword = req.body.password as string;

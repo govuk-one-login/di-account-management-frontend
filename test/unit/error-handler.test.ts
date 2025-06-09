@@ -19,6 +19,7 @@ describe("Error handlers", () => {
       render: sandbox.fake(),
       status: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
+      locals: {},
     };
     next = sandbox.fake(() => {});
   });
@@ -31,6 +32,15 @@ describe("Error handlers", () => {
     it("should render 404 view", () => {
       pageNotFoundHandler(req as Request, res as Response, next);
 
+      expect(res.locals?.opl).to.deep.eq({
+        contentId: "undefined",
+        dynamic: true,
+        loggedInStatus: true,
+        statusCode: 404,
+        taxonomyLevel1: "accounts",
+        taxonomyLevel2: "undefined",
+        taxonomyLevel3: "undefined",
+      });
       expect(res.status).to.have.been.calledOnceWith(404);
       expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
     });
@@ -43,6 +53,15 @@ describe("Error handlers", () => {
 
       serverErrorHandler(err, req as Request, res as Response, next);
 
+      expect(res.locals?.opl).to.deep.eq({
+        contentId: "undefined",
+        dynamic: true,
+        loggedInStatus: true,
+        statusCode: 500,
+        taxonomyLevel1: "accounts",
+        taxonomyLevel2: "undefined",
+        taxonomyLevel3: "undefined",
+      });
       expect(res.status).to.have.been.calledOnceWith(500);
       expect(res.render).to.have.been.calledOnceWith("common/errors/500.njk");
     });
@@ -52,6 +71,15 @@ describe("Error handlers", () => {
 
       serverErrorHandler(err, req as Request, res as Response, next);
 
+      expect(res.locals?.opl).to.deep.eq({
+        contentId: "undefined",
+        dynamic: true,
+        loggedInStatus: true,
+        statusCode: 500,
+        taxonomyLevel1: "accounts",
+        taxonomyLevel2: "undefined",
+        taxonomyLevel3: "undefined",
+      });
       expect(res.status).to.have.been.calledOnceWith(500);
       expect(res.render).to.have.been.calledOnceWith("common/errors/500.njk");
     });
@@ -62,6 +90,15 @@ describe("Error handlers", () => {
 
       serverErrorHandler(err, req as Request, res as Response, next);
 
+      expect(res.locals?.opl).to.deep.eq({
+        contentId: "undefined",
+        dynamic: true,
+        loggedInStatus: true,
+        statusCode: 500,
+        taxonomyLevel1: "accounts",
+        taxonomyLevel2: "undefined",
+        taxonomyLevel3: "undefined",
+      });
       expect(res.redirect).to.have.been.calledOnceWith(
         PATH_DATA.SESSION_EXPIRED.url
       );

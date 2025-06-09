@@ -8,6 +8,7 @@ import { PATH_DATA } from "../../app.constants";
 import { hasAllowedActivityLogServices } from "../../middleware/check-allowed-services-list";
 import { getLastNDigits } from "../../utils/phone-number";
 import { MfaMethod } from "src/utils/mfaClient/types";
+import { setOplSettings } from "../../utils/opl";
 
 function handleSmsMethod(
   phoneNumber: string,
@@ -150,6 +151,13 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
   const denyChangeTypeofPrimary = Array.isArray(req.session.mfaMethods)
     ? supportChangeMfa() && canChangePrimaryMethod(req.session.mfaMethods)
     : false;
+
+  setOplSettings(
+    {
+      contentId: "caaccf0a-1dd3-441c-af20-01925c8f9cba",
+    },
+    res
+  );
 
   res.render("security/index.njk", {
     email,

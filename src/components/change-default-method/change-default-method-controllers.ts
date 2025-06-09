@@ -19,6 +19,7 @@ import { logger } from "../../utils/logger";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 const CHANGE_DEFAULT_METHOD_SMS_TEMPLATE =
@@ -65,10 +66,20 @@ export async function changeDefaultMethodAppGet(
   );
 }
 
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      taxonomyLevel2: "change phone number",
+    },
+    res
+  );
+};
+
 export async function changeDefaultMethodSmsGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  setLocalOplSettings(res);
   return res.render(CHANGE_DEFAULT_METHOD_SMS_TEMPLATE, {
     backLink,
   });
@@ -78,6 +89,8 @@ export function changeDefaultMethodSmsPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
+    setLocalOplSettings(res);
+
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)
       .mapped();
