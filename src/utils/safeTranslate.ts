@@ -11,7 +11,7 @@ export type translateResult =
 export const safeTranslate = (
   translate: TFunction<"translation", undefined>,
   key: string,
-  requestedLanguage: string,
+  requestedLanguage: LOCALE,
   options?: Record<string, any>
 ): translateResult => {
   const result: translateResult = translate(key, options);

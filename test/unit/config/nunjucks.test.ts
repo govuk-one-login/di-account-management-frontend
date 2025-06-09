@@ -66,6 +66,25 @@ describe("configureNunjucks", () => {
       expect(result).to.equal(undefined);
       expect(fixedTStub.calledWith("test_key")).to.be.true;
     });
+
+    it("should translate fallback to en if false lang is passed", () => {
+      const fixedTStub = sinon
+        .stub()
+        .returns("translated_value") as unknown as MyStubType;
+      const getFixedTStub = sinon
+        .stub(i18next, "getFixedT")
+        .returns(fixedTStub);
+
+      const translateFilter = nunjucksEnv.getFilter("translate");
+      const result = translateFilter.call(
+        { ctx: { i18n: { language: "" } } },
+        "test_key"
+      );
+
+      expect(result).to.equal("translated_value");
+      expect(getFixedTStub.firstCall.args[0]).to.equal("en");
+      expect(fixedTStub.calledWith("test_key")).to.be.true;
+    });
   });
 
   describe("external URL filter", () => {
