@@ -356,7 +356,7 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf04188tda/b9835209cd235d3a_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
-      DEVICEINTELLIGENCETOGGLE: "0"
+      DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "0"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
