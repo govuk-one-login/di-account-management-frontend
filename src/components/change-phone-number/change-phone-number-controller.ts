@@ -14,16 +14,22 @@ import { BadRequestError } from "../../utils/errors";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
-import { setOplSettings } from "../../utils/opl";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { supportMfaManagement } from "../../config";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
-    {
-      contentId: "39a31338-cadc-4e09-a74d-bd9f0dd68d2f",
-      taxonomyLevel2: "change phone number",
-    },
+    supportMfaManagement()
+      ? {
+          ...MFA_COMMON_OPL_SETTINGS,
+          contentId: "a8d82f1b-c682-433b-8695-34343afb9666",
+        }
+      : {
+          contentId: "39a31338-cadc-4e09-a74d-bd9f0dd68d2f",
+          taxonomyLevel2: "change phone number",
+        },
     res
   );
 };

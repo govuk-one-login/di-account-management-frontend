@@ -1,6 +1,6 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { ERROR_MESSAGES } from "../app.constants";
-import { getMfaServiceUrl, supportMfaPage } from "../config";
+import { getMfaServiceUrl, supportMfaManagement } from "../config";
 import { logger } from "../utils/logger";
 import { legacyMfaMethodsMiddleware } from "./mfa-methods-legacy";
 import { createMfaClient, formatErrorMessage } from "../utils/mfaClient";
@@ -44,7 +44,7 @@ const selectMfaMiddleware = (): RequestHandler => {
     }
   }
 
-  if (supportMfaPage() && mfaServiceUrl) {
+  if (supportMfaManagement() && mfaServiceUrl) {
     return mfaMethodMiddleware;
   }
 

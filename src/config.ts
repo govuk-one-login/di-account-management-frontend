@@ -219,7 +219,7 @@ export function getContactEmailServiceUrl(): string {
   return process.env.CONTACT_EMAIL_SERVICE_URL;
 }
 
-export function supportMfaPage(): boolean {
+export function supportMfaManagement(): boolean {
   return process.env.SUPPORT_METHOD_MANAGEMENT === "1";
 }
 

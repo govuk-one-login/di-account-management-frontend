@@ -19,13 +19,33 @@ import { logger } from "../../utils/logger";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
-import { setOplSettings } from "../../utils/opl";
+import {
+  MFA_COMMON_OPL_SETTINGS,
+  OplSettings,
+  setOplSettings,
+} from "../../utils/opl";
+import {
+  mfaMethodTypes,
+  mfaPriorityIdentifiers,
+} from "../../utils/mfaClient/types";
+import { supportMfaManagement } from "../../config";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 const CHANGE_DEFAULT_METHOD_SMS_TEMPLATE =
   "change-default-method/change-to-sms.njk";
 
 const backLink = PATH_DATA.CHANGE_DEFAULT_METHOD.url;
+
+const CHANGE_DEFAULT_METHOD_OPL_VALUES: Record<string, Partial<OplSettings>> = {
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "1c044729-69ca-488f-bf1f-40d6df909deb",
+  },
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "edada29a-9cca-4b59-9d0b-86a1af67cf68",
+  },
+};
 
 export async function changeDefaultMethodGet(
   req: Request,
@@ -40,6 +60,12 @@ export async function changeDefaultMethodGet(
     return;
   }
 
+  const oplSettings =
+    CHANGE_DEFAULT_METHOD_OPL_VALUES[
+      `${mfaPriorityIdentifiers.default}_${defaultMethod.method.mfaMethodType}`
+    ];
+  setOplSettings(oplSettings, res);
+
   const data = {
     currentMethodType: defaultMethod.method.mfaMethodType,
     phoneNumber:
@@ -51,11 +77,23 @@ export async function changeDefaultMethodGet(
   res.render("change-default-method/index.njk", data);
 }
 
+const setChangeDefaultMethodAppOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "5ca73acd-4c03-479e-b937-2abd899a6590",
+    },
+
+    res
+  );
+};
+
 export async function changeDefaultMethodAppGet(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  setChangeDefaultMethodAppOplSettings(res);
   return renderMfaMethodPage(
     ADD_APP_TEMPLATE,
     req,
@@ -66,11 +104,16 @@ export async function changeDefaultMethodAppGet(
   );
 }
 
-const setLocalOplSettings = (res: Response) => {
+const setChangeDefaultMethodSmsOplSettings = (res: Response) => {
   setOplSettings(
-    {
-      taxonomyLevel2: "change phone number",
-    },
+    supportMfaManagement()
+      ? {
+          ...MFA_COMMON_OPL_SETTINGS,
+          contentId: "e847d040-e59e-4a88-8f9c-1d00a840d0bd",
+        }
+      : {
+          taxonomyLevel2: "change phone number",
+        },
     res
   );
 };
@@ -79,7 +122,7 @@ export async function changeDefaultMethodSmsGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  setLocalOplSettings(res);
+  setChangeDefaultMethodSmsOplSettings(res);
   return res.render(CHANGE_DEFAULT_METHOD_SMS_TEMPLATE, {
     backLink,
   });
@@ -89,7 +132,7 @@ export function changeDefaultMethodSmsPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
-    setLocalOplSettings(res);
+    setChangeDefaultMethodSmsOplSettings(res);
 
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)
@@ -170,6 +213,8 @@ export async function changeDefaultMethodAppPost(
     res,
     next,
     async () => {
+      setChangeDefaultMethodAppOplSettings(res);
+
       const { authAppSecret } = req.body;
 
       const currentDefaultMethod = req.session.mfaMethods.find(
