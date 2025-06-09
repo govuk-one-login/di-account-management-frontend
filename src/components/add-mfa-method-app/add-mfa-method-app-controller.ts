@@ -3,7 +3,8 @@ import { PATH_DATA } from "../../app.constants";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
-import { AuthAppMethod } from "src/utils/mfaClient/types";
+import { AuthAppMethod } from "../../utils/mfaClient/types";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
@@ -20,11 +21,23 @@ export async function addMfaMethodGoBackGet(
   return res.redirect(PATH_DATA.ADD_MFA_METHOD.url);
 }
 
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "c393c909-373f-47b8-a768-32f23dca81ae",
+    },
+    res
+  );
+};
+
 export async function addMfaAppMethodGet(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  setLocalOplSettings(res);
+
   return renderMfaMethodPage(
     ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
     req,
@@ -46,6 +59,8 @@ export async function addMfaAppMethodPost(
     res,
     next,
     async () => {
+      setLocalOplSettings(res);
+
       try {
         const { authAppSecret } = req.body;
 

@@ -47,18 +47,18 @@ describe("update confirmation controller", () => {
   });
 
   describe("updateEmailConfirmationGet", () => {
-    it("should render update email confirmation page", () => {
-      updateEmailConfirmationGet(req as Request, res as Response);
+    it("should render update email confirmation page", async () => {
+      await updateEmailConfirmationGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
   });
 
   describe("updatePasswordConfirmationGet", () => {
-    it("should render update password confirmation page", () => {
+    it("should render update password confirmation page", async () => {
       const sessionStore = require("../../../utils/session-store");
       sandbox.stub(sessionStore, "clearCookies").callsFake(() => {});
-      updatePasswordConfirmationGet(req as Request, res as Response);
+      await updatePasswordConfirmationGet(req as Request, res as Response);
       expect(req.session.destroy).called;
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
       expect(sessionStore.clearCookies).to.have.calledWith(req, res, ["am"]);
@@ -66,30 +66,33 @@ describe("update confirmation controller", () => {
   });
 
   describe("updatePhoneNumberConfirmationGet", () => {
-    it("should render update phone number page", () => {
-      updatePhoneNumberConfirmationGet(req as Request, res as Response);
+    it("should render update phone number page", async () => {
+      await updatePhoneNumberConfirmationGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
   });
 
   describe("updateAuthenticatorAppConfirmationGet", () => {
-    it("should render update authenticator app page", () => {
-      updateAuthenticatorAppConfirmationGet(req as Request, res as Response);
+    it("should render update authenticator app page", async () => {
+      await updateAuthenticatorAppConfirmationGet(
+        req as Request,
+        res as Response
+      );
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
   });
 
   describe("deleteAccountConfirmationGet", () => {
-    it("should render delete confirmation page", () => {
-      deleteAccountConfirmationGet(req as Request, res as Response);
+    it("should render delete confirmation page", async () => {
+      await deleteAccountConfirmationGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
   });
 
-  describe("removeMfaMethodConfirmationGet with removed SMS method", () => {
+  describe("removeMfaMethodConfirmationGet with removed SMS method", async () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: "1",
       priorityIdentifier: "BACKUP",
@@ -105,9 +108,10 @@ describe("update confirmation controller", () => {
     res = {
       render: sinon.fake(),
       redirect: sinon.fake(),
+      locals: {},
     };
 
-    removeMfaMethodConfirmationGet(req, res);
+    await removeMfaMethodConfirmationGet(req, res);
 
     expect(req.session.removedMfaMethod).to.eq(undefined);
     expect(res.render).to.be.calledWith(
@@ -123,7 +127,7 @@ describe("update confirmation controller", () => {
     expect(res.redirect).not.to.be.called;
   });
 
-  describe("removeMfaMethodConfirmationGet with removed auth app method", () => {
+  describe("removeMfaMethodConfirmationGet with removed auth app method", async () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: "1",
       priorityIdentifier: "BACKUP",
@@ -139,9 +143,10 @@ describe("update confirmation controller", () => {
     res = {
       render: sinon.fake(),
       redirect: sinon.fake(),
+      locals: {},
     };
 
-    removeMfaMethodConfirmationGet(req, res);
+    await removeMfaMethodConfirmationGet(req, res);
 
     expect(req.session.removedMfaMethod).to.eq(undefined);
     expect(res.render).to.be.calledWith(
@@ -157,7 +162,7 @@ describe("update confirmation controller", () => {
     expect(res.redirect).not.to.be.called;
   });
 
-  describe("removeMfaMethodConfirmationGet with no removed method", () => {
+  describe("removeMfaMethodConfirmationGet with no removed method", async () => {
     req = {
       session: {},
       t: sinon.fake((k: string) => k),
@@ -166,9 +171,10 @@ describe("update confirmation controller", () => {
     res = {
       render: sinon.fake(),
       redirect: sinon.fake(),
+      locals: {},
     };
 
-    removeMfaMethodConfirmationGet(req, res);
+    await removeMfaMethodConfirmationGet(req, res);
 
     expect(res.render).not.to.be.called;
     expect(res.redirect).to.be.calledWith("/security");
@@ -200,8 +206,8 @@ describe("addBackupAppConfirmationGet", () => {
     sandbox.restore();
   });
 
-  it("should render add mfa app confirmation page", () => {
-    addMfaAppMethodConfirmationGet(req as Request, res as Response);
+  it("should render add mfa app confirmation page", async () => {
+    await addMfaAppMethodConfirmationGet(req as Request, res as Response);
 
     expect(res.render).to.be.calledWith(
       "common/confirmation-page/confirmation.njk",
@@ -215,7 +221,7 @@ describe("addBackupAppConfirmationGet", () => {
     );
   });
 
-  it("should render change default app confirmation page for AUTH_APP", () => {
+  it("should render change default app confirmation page for AUTH_APP", async () => {
     req.session = {
       mfaMethods: [
         {
@@ -227,7 +233,7 @@ describe("addBackupAppConfirmationGet", () => {
         },
       ],
     };
-    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+    await changeDefaultMethodConfirmationGet(req as Request, res as Response);
 
     expect(res.render).to.be.calledWith(
       "common/confirmation-page/confirmation.njk",
@@ -241,7 +247,7 @@ describe("addBackupAppConfirmationGet", () => {
     );
   });
 
-  it("should render change default app confirmation page for SMS", () => {
+  it("should render change default app confirmation page for SMS", async () => {
     req.session = {
       mfaMethods: [
         {
@@ -259,7 +265,7 @@ describe("addBackupAppConfirmationGet", () => {
         : t;
     };
 
-    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+    await changeDefaultMethodConfirmationGet(req as Request, res as Response);
 
     expect(res.render).to.be.calledWith(
       "common/confirmation-page/confirmation.njk",
@@ -273,11 +279,11 @@ describe("addBackupAppConfirmationGet", () => {
     );
   });
 
-  it("should throw 404 if there is no default method", () => {
+  it("should throw 404 if there is no default method", async () => {
     req.session = {
       mfaMethods: [],
     };
-    changeDefaultMethodConfirmationGet(req as Request, res as Response);
+    await changeDefaultMethodConfirmationGet(req as Request, res as Response);
     expect(res.status).to.be.calledWith(404);
   });
 });

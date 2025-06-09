@@ -94,7 +94,7 @@ describe("mfaMethodMiddleware", () => {
 
   it("should use legacy mfa middleware if MFA service URL is invalid", () => {
     sandbox.stub(configFuncs, "getMfaServiceUrl").returns("not-a-valid-url");
-    sandbox.stub(configFuncs, "supportMfaPage").returns(true);
+    sandbox.stub(configFuncs, "supportMfaManagement").returns(true);
     const loggerModule = require("../../../src/utils/logger");
     const warnStub = sandbox.stub(loggerModule.logger, "warn");
     const middleware = selectMfaMiddleware();
@@ -102,11 +102,11 @@ describe("mfaMethodMiddleware", () => {
     expect(warnStub).to.have.been.calledWithMatch("Invalid MFA service URL");
   });
 
-  it("should use legacy mfa middleware if supportMfaPage returns false", () => {
+  it("should use legacy mfa middleware if supportMfaManagement returns false", () => {
     sandbox
       .stub(configFuncs, "getMfaServiceUrl")
       .returns("https://method-management-v1-stub.home.build.account.gov.uk");
-    sandbox.stub(configFuncs, "supportMfaPage").returns(false);
+    sandbox.stub(configFuncs, "supportMfaManagement").returns(false);
     const middleware = selectMfaMiddleware();
     expect(middleware).to.equal(legacyMfaMethodsMiddleware);
   });

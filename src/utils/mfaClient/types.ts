@@ -19,17 +19,28 @@ export interface MfaMethod {
   methodVerified?: boolean;
 }
 
+export const mfaMethodTypes = {
+  authApp: "AUTH_APP",
+  sms: "SMS",
+} as const;
+
 export interface SmsMethod {
-  mfaMethodType: "SMS";
+  mfaMethodType: typeof mfaMethodTypes.sms;
   phoneNumber: string;
 }
 
 export interface AuthAppMethod {
-  mfaMethodType: "AUTH_APP";
+  mfaMethodType: typeof mfaMethodTypes.authApp;
   credential: string;
 }
 
-export type PriorityIdentifier = "DEFAULT" | "BACKUP";
+export const mfaPriorityIdentifiers = {
+  default: "DEFAULT",
+  backup: "BACKUP",
+} as const;
+
+export type PriorityIdentifier =
+  (typeof mfaPriorityIdentifiers)[keyof typeof mfaPriorityIdentifiers];
 
 export interface ApiResponse<T> {
   success: boolean;
