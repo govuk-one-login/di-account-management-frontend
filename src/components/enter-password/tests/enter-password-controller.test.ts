@@ -121,10 +121,6 @@ describe("enter password controller", () => {
       expect(res.render).to.have.been.calledWith("enter-password/index.njk", {
         requestType: "changeEmail",
         fromSecurity: true,
-        oplValues: {
-          contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
-          taxonomyLevel2: "change email",
-        },
         formAction:
           "https://test.com/enter-password?from=security&edit=true&type=changeEmail",
         errors: { password: { text: undefined, href: "#password" } },
@@ -157,10 +153,6 @@ describe("enter password controller", () => {
       expect(res.render).to.have.been.calledWith("enter-password/index.njk", {
         requestType: "changeEmail",
         fromSecurity: false,
-        oplValues: {
-          contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
-          taxonomyLevel2: "change email",
-        },
         formAction:
           "https://test.com/enter-password?edit=true&type=changeEmail",
         errors: { password: { text: undefined, href: "#password" } },

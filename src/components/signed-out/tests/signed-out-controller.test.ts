@@ -18,6 +18,7 @@ describe("signed out controller", () => {
     res = {
       render: sandbox.fake(),
       status: sandbox.fake(),
+      locals: {},
     };
   });
 

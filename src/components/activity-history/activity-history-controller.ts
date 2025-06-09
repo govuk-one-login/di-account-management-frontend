@@ -11,6 +11,7 @@ import {
   HTTP_STATUS_CODES,
   EXTERNAL_URLS,
 } from "../../app.constants";
+
 import {
   generatePagination,
   formatActivityLogs,
@@ -20,6 +21,7 @@ import { serviceIsAvailableInWelsh } from "../../utils/yourServices";
 import { presentActivityHistory } from "../../utils/present-activity-history";
 import { logger } from "../../utils/logger";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
+import { setOplSettings } from "../../utils/opl";
 
 export async function activityHistoryGet(
   req: Request,
@@ -66,6 +68,13 @@ export async function activityHistoryGet(
     } else {
       logger.error("Activity history controller: user_id missing from session");
     }
+
+    setOplSettings(
+      {
+        contentId: "d61e09c3-5741-4cb9-aca6-d57f62fc3475",
+      },
+      res
+    );
 
     res.render("activity-history/index.njk", {
       data: formattedActivityLog,

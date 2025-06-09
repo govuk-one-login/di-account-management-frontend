@@ -16,6 +16,7 @@ import {
 import { supportChangeOnIntervention } from "../../config";
 import { handleLogout } from "../../utils/logout";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../../utils/opl";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -77,9 +78,18 @@ const getRenderOptions = (req: Request, requestType: UserJourney) => {
   return {
     requestType,
     fromSecurity: req.query.from == "security",
-    oplValues: OPL_VALUES[requestType] || {},
     formAction: req.url,
   };
+};
+
+const setLocalOplSettings = (res: Response, requestType: UserJourney) => {
+  setOplSettings(
+    OPL_VALUES[requestType] ?? {
+      contentId: EMPTY_OPL_SETTING_VALUE,
+      taxonomyLevel2: EMPTY_OPL_SETTING_VALUE,
+    },
+    res
+  );
 };
 
 function renderPasswordError(
@@ -89,6 +99,8 @@ function renderPasswordError(
   errorMsgKey: string
 ) {
   const error = formatValidationError("password", req.t(errorMsgKey));
+
+  setLocalOplSettings(res, requestType);
   renderBadRequest(
     res,
     req,
@@ -105,6 +117,9 @@ export function enterPasswordGet(req: Request, res: Response): void {
     return;
   }
   req.session.user.state[requestType] = getInitialState();
+
+  setLocalOplSettings(res, requestType);
+
   res.render(TEMPLATE, getRenderOptions(req, requestType));
 }
 

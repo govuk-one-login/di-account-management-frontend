@@ -14,10 +14,22 @@ import { BadRequestError } from "../../utils/errors";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
+import { setOplSettings } from "../../utils/opl";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      contentId: "39a31338-cadc-4e09-a74d-bd9f0dd68d2f",
+      taxonomyLevel2: "change phone number",
+    },
+    res
+  );
+};
+
 export function changePhoneNumberGet(req: Request, res: Response): void {
+  setLocalOplSettings(res);
   res.render(CHANGE_PHONE_NUMBER_TEMPLATE);
 }
 
@@ -25,6 +37,8 @@ export function changePhoneNumberPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    setLocalOplSettings(res);
+
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)
       .mapped();

@@ -1,7 +1,6 @@
 {% extends "common/layout/base.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% set pageTitleName = 'pages.security.title' | translate %}
-{% set contentId = "06b3a091-8595-45b7-832a-1b5f3632ad2e" if isPhoneNumberVerified else "caaccf0a-1dd3-441c-af20-01925c8f9cba" %}
 
 {% set accountDetailsSummaryList = {
   classes: 'govuk-summary-list--security',
@@ -147,5 +146,4 @@
       </div>
     </div>
   </div>
-  {{ga4OnPageLoad({ nonce: scriptNonce,statusCode:"200",englishPageTitle:"pages.security.title" | translate, taxonomyLevel1: "accounts", taxonomyLevel2:"home", contentId:contentId,loggedInStatus:true,dynamic:true})}}
 {% endblock %}
