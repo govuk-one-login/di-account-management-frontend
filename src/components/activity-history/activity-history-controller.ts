@@ -6,7 +6,12 @@ import {
   reportSuspiciousActivity,
   supportReportingForm,
 } from "../../config";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
+import {
+  PATH_DATA,
+  HTTP_STATUS_CODES,
+  EXTERNAL_URLS,
+} from "../../app.constants";
+
 import {
   generatePagination,
   formatActivityLogs,
@@ -78,7 +83,7 @@ export async function activityHistoryGet(
       pagination: pagination,
       backLink: PATH_DATA.SECURITY.url,
       changePasswordLink: PATH_DATA.SECURITY.url,
-      contactLink: PATH_DATA.AUTH_REPORTING_FORM.url,
+      contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
       homeClientId: getOIDCClientId(),
       supportReportingForm: supportReportingForm(),
       currentLngWelsh: req.i18n?.language === "cy",

@@ -2,7 +2,7 @@ import express from "express";
 import * as nunjucks from "nunjucks";
 import { Environment } from "nunjucks";
 import i18next, { TFunction } from "i18next";
-import { LOCALE, PATH_DATA } from "../app.constants";
+import { EXTERNAL_URLS, LOCALE, PATH_DATA } from "../app.constants";
 import addLanguageParam from "@govuk-one-login/frontend-language-toggle";
 import { safeTranslate } from "../utils/safeTranslate";
 import { supportBrandRefresh } from "../config";
@@ -39,6 +39,16 @@ export function configureNunjucks(
     }
     return PATH_DATA[route].url;
   });
+
+  nunjucksEnv.addFilter(
+    "getExternalUrl",
+    function (key: keyof typeof EXTERNAL_URLS) {
+      if (!EXTERNAL_URLS[key]) {
+        throw new Error(`Unknown URL: ${key}`);
+      }
+      return EXTERNAL_URLS[key];
+    }
+  );
 
   return nunjucksEnv;
 }

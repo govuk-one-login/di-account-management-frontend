@@ -6,9 +6,6 @@ export const PATH_DATA: Record<
   { url: string; event?: EventType; type?: UserJourney }
 > = {
   CONTACT: { url: "/contact-gov-uk-one-login" },
-  AUTH_REPORTING_FORM: {
-    url: "https://signin.account.gov.uk/contact-us-questions?theme=suspect_unauthorised_access&referer=",
-  },
   SIGN_IN_HISTORY: { url: "/activity-history" },
   REPORT_SUSPICIOUS_ACTIVITY: { url: "/activity-history/report-activity" },
   MANAGE_YOUR_ACCOUNT: { url: "/manage-your-account" },
@@ -194,6 +191,13 @@ export const PATH_DATA: Record<
     url: "/logout-redirect",
   },
 };
+
+export const EXTERNAL_URLS = {
+  AUTH_REPORTING_FORM:
+    "https://signin.account.gov.uk/contact-us-questions?theme=suspect_unauthorised_access&referer=",
+  PRIVACY_NOTICE:
+    "https://www.gov.uk/government/publications/govuk-one-login-privacy-notice",
+} as const;
 
 export const MFA_METHODS = {
   SMS: {
