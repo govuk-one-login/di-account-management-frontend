@@ -2072,6 +2072,21 @@ Resources:
         Owner: !Ref OwnerTagValue
         Source: !Ref SourceTagValue
 
+  DNSEntyForCloudFrontOrigin:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Sub
+        - "origin.${BaseAlias}"
+        - BaseAlias:
+            !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+      Type: A
+      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
+      AliasTarget:
+        DNSName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
+        # see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
+        HostedZoneId: "ZJ5UAJN8Y3Z2Q"
+        EvaluateTargetHealth: false
+
   AppFrontApiRecord:
     Type: AWS::Route53::RecordSet
     Properties:
