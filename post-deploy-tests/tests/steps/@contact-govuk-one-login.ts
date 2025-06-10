@@ -17,6 +17,15 @@ Given("I visit the contact page", async ({ page }) => {
   response = await page.goto("/contact-gov-uk-one-login");
 });
 
+Then("the page should look expected", async ({ page }) => {
+  expect(
+    await page.screenshot({
+      fullPage: true,
+      mask: [page.locator(".contact-reference__code")],
+    })
+  ).toMatchSnapshot();
+});
+
 Then("the page should have status code 200", () => {
   expect(response?.status()).toBe(200);
 });
@@ -67,7 +76,20 @@ When("I click on the floating webchat button", async ({ page }) => {
 
 Then("the webchat appears", async ({ page }) => {
   await expect(page.getByText("GOV.UK One Login webchat · Beta")).toBeVisible();
-  expect(await page.screenshot()).toMatchSnapshot();
+  await expect(
+    page.getByText("Welcome to GOV.UK One Login chatbot support")
+  ).toBeVisible();
+  await expect(
+    page.getByText("Would you like to receive support in English or Welsh?")
+  ).toBeVisible();
+});
+
+Then("the webchat looks as expected", async ({ page }) => {
+  expect(
+    await page.screenshot({
+      mask: [page.locator(".sa-chat-wrapper .timestamp-container")],
+    })
+  ).toMatchSnapshot();
 });
 
 When("I click on the minimise webchat button", async ({ page }) => {

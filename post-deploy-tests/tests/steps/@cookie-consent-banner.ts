@@ -5,6 +5,7 @@ const { Given, Then } = bdd;
 
 Given("I visit the contact page", async ({ page }) => {
   await page.goto("/contact-gov-uk-one-login");
+  await page.waitForLoadState("networkidle");
 });
 
 Then("the cookie consent banner shows", async ({ page }) => {
@@ -15,6 +16,9 @@ Then("the cookie consent banner shows", async ({ page }) => {
   await page.getByText(
     "We’d also like to use analytics cookies so we can understand how you use the service and make improvements."
   );
+});
+
+Then("the cookie consent banner looks as expected", async ({ page }) => {
   expect(await page.screenshot()).toMatchSnapshot();
 });
 
@@ -26,8 +30,14 @@ Then("I am shown a message confirming my acceptance", async ({ page }) => {
   await page.getByText(
     "You’ve accepted additional cookies. You can change your cookie settings at any time."
   );
-  expect(await page.screenshot()).toMatchSnapshot();
 });
+
+Then(
+  "the message confirming my acceptance looks as expected",
+  async ({ page }) => {
+    expect(await page.screenshot()).toMatchSnapshot();
+  }
+);
 
 Given("I click to reject cookies", async ({ page }) => {
   await page.getByText("Reject analytics cookies").click();
@@ -37,8 +47,14 @@ Then("I am shown a message confirming my rejection", async ({ page }) => {
   await page.getByText(
     "You’ve rejected additional cookies. You can change your cookie settings at any time."
   );
-  expect(await page.screenshot()).toMatchSnapshot();
 });
+
+Then(
+  "the message confirming my rejection looks as expected",
+  async ({ page }) => {
+    expect(await page.screenshot()).toMatchSnapshot();
+  }
+);
 
 Then("I can dismiss the confirmation message", async ({ page }) => {
   await page.getByRole("button", { name: "Hide this message" }).click();
