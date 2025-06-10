@@ -57,7 +57,7 @@ const OPL_VALUES: Record<string, Partial<OplSettings>> = {
 };
 
 const setLocalOplSettings = (intent: Intent, req: Request, res: Response) => {
-  if (!supportMfaManagement()) {
+  if (!supportMfaManagement(req.cookies)) {
     setOplSettings(
       {
         contentId: "e92e3a80-ea97-4eae-bbff-903e89291765",

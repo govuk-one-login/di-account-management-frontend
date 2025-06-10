@@ -44,7 +44,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
 };
 
-const OPL_VALUES = ((): Record<string, Partial<OplSettings>> => ({
+const getOplValues = (req: Request): Record<string, Partial<OplSettings>> => ({
   [UserJourney.ChangeEmail]: {
     contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
     taxonomyLevel2: "change email",
@@ -53,7 +53,7 @@ const OPL_VALUES = ((): Record<string, Partial<OplSettings>> => ({
     contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412",
     taxonomyLevel2: "change password",
   },
-  [UserJourney.ChangePhoneNumber]: supportMfaManagement()
+  [UserJourney.ChangePhoneNumber]: supportMfaManagement(req.cookies)
     ? {
         ...MFA_COMMON_OPL_SETTINGS,
         contentId: "e1cde140-d7e6-4221-90ca-0f2d131743cd",
@@ -98,7 +98,7 @@ const OPL_VALUES = ((): Record<string, Partial<OplSettings>> => ({
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "acef67be-40e5-4ebf-83d6-b8bc8c414304",
   },
-}))();
+});
 
 const getRenderOptions = (req: Request, requestType: UserJourney) => {
   return {
@@ -116,6 +116,8 @@ const setLocalOplSettings = (
   const defaultMfaMethodType = req.session.mfaMethods?.find(
     (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
   )?.method.mfaMethodType;
+
+  const OPL_VALUES = getOplValues(req);
 
   setOplSettings(
     OPL_VALUES[
