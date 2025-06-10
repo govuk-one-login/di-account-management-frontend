@@ -61,6 +61,7 @@ describe("addMfaAppMethodGet", () => {
     };
     const res = {
       render: sinon.fake(),
+      locals: {},
     };
     const next = sinon.spy();
 
@@ -88,7 +89,9 @@ describe("addMfaAppMethodGet", () => {
       session: { user: {} },
       log: { error: sinon.fake() },
     };
-    const res = {};
+    const res = {
+      locals: {},
+    };
     const next = sinon.spy();
 
     await addMfaAppMethodGet(
@@ -140,7 +143,7 @@ describe("addMfaAppMethodPost", () => {
       t: (t: string) => t,
     };
 
-    const res = { redirect: sinon.fake(() => {}) };
+    const res = { redirect: sinon.fake(() => {}), locals: {} };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
