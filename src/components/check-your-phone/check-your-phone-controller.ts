@@ -76,25 +76,26 @@ const getRenderOptions = (req: Request, intent: Intent) => {
 };
 
 const OPL_VALUES: Record<string, Partial<OplSettings>> = {
-  [`${INTENT_ADD_BACKUP}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
-    {
-      ...MFA_COMMON_OPL_SETTINGS,
-      contentId: "a6156870-d4c7-4e1b-b72c-a84b924e4913",
-    },
   [`${INTENT_ADD_BACKUP}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]:
     {
       ...MFA_COMMON_OPL_SETTINGS,
       contentId: "8d348159-08ab-4e27-96ea-843ec64e953f",
     },
-  [`${INTENT_CHANGE_DEFAULT_METHOD}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
-    {
-      ...MFA_COMMON_OPL_SETTINGS,
-      contentId: "df468804-c84b-4134-96ca-6610ffd8b6f5",
-    },
+
   [`${INTENT_CHANGE_PHONE_NUMBER}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]:
     {
       ...MFA_COMMON_OPL_SETTINGS,
       contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+    },
+  [`${INTENT_ADD_BACKUP}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "a6156870-d4c7-4e1b-b72c-a84b924e4913",
+    },
+  [`${INTENT_CHANGE_DEFAULT_METHOD}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "df468804-c84b-4134-96ca-6610ffd8b6f5",
     },
 };
 
