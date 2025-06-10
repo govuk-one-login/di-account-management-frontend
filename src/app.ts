@@ -259,7 +259,11 @@ async function createApp(): Promise<express.Application> {
   if (supportTriagePage()) {
     app.use(contactRouter);
   }
-  if (supportChangeMfa()) {
+  if (
+    supportChangeMfa({
+      enable_mfa_for_qa: "1",
+    })
+  ) {
     app.use(chooseBackupRouter);
     app.use(addBackupAppRouter);
     app.use(addBackupSmsRouter);

@@ -104,7 +104,7 @@ const setCheckYourPhoneOplSettings = (
   req: Request,
   res: Response
 ) => {
-  if (!supportMfaManagement()) {
+  if (!supportMfaManagement(req.cookies)) {
     setOplSettings(
       {
         contentId: "fb69b162-9ddb-41db-a8fa-3cca7fea2fa9",
@@ -205,7 +205,7 @@ export function checkYourPhonePost(
     let isPhoneNumberUpdated = false;
     let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
 
-    if (supportChangeMfa()) {
+    if (supportChangeMfa(req.cookies)) {
       const mfaClient = createMfaClient(req, res);
       const changePhoneNumberResult = await changePhoneNumberwithMfaApi(
         mfaClient,

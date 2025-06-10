@@ -104,9 +104,9 @@ export async function changeDefaultMethodAppGet(
   );
 }
 
-const setChangeDefaultMethodSmsOplSettings = (res: Response) => {
+const setChangeDefaultMethodSmsOplSettings = (req: Request, res: Response) => {
   setOplSettings(
-    supportMfaManagement()
+    supportMfaManagement(req.cookies)
       ? {
           ...MFA_COMMON_OPL_SETTINGS,
           contentId: "e847d040-e59e-4a88-8f9c-1d00a840d0bd",
@@ -122,7 +122,7 @@ export async function changeDefaultMethodSmsGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  setChangeDefaultMethodSmsOplSettings(res);
+  setChangeDefaultMethodSmsOplSettings(req, res);
   return res.render(CHANGE_DEFAULT_METHOD_SMS_TEMPLATE, {
     backLink,
   });
@@ -132,7 +132,7 @@ export function changeDefaultMethodSmsPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
-    setChangeDefaultMethodSmsOplSettings(res);
+    setChangeDefaultMethodSmsOplSettings(req, res);
 
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)

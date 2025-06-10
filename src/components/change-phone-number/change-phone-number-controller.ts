@@ -19,9 +19,9 @@ import { supportMfaManagement } from "../../config";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
-const setLocalOplSettings = (res: Response) => {
+const setLocalOplSettings = (req: Request, res: Response) => {
   setOplSettings(
-    supportMfaManagement()
+    supportMfaManagement(req.cookies)
       ? {
           ...MFA_COMMON_OPL_SETTINGS,
           contentId: "a8d82f1b-c682-433b-8695-34343afb9666",
@@ -35,7 +35,7 @@ const setLocalOplSettings = (res: Response) => {
 };
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
-  setLocalOplSettings(res);
+  setLocalOplSettings(req, res);
   res.render(CHANGE_PHONE_NUMBER_TEMPLATE);
 }
 
@@ -43,7 +43,7 @@ export function changePhoneNumberPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    setLocalOplSettings(res);
+    setLocalOplSettings(req, res);
 
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)

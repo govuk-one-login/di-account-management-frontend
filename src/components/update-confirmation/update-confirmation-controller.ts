@@ -72,7 +72,7 @@ export function updatePhoneNumberConfirmationGet(
   res: Response
 ): void {
   setOplSettings(
-    supportMfaManagement()
+    supportMfaManagement(req.cookies)
       ? {
           ...MFA_COMMON_OPL_SETTINGS,
           contentId: "670a63e1-94a5-4bec-9a5c-af36bd894ef6",
