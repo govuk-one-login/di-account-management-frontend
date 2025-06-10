@@ -43,6 +43,7 @@ describe("change default method controller", () => {
       .withRender(sandbox.fake())
       .withRedirect(sandbox.fake(() => {}))
       .withStatus(sandbox.fake())
+      .withLocals({})
       .build();
   });
 

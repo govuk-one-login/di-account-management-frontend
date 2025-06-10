@@ -92,7 +92,7 @@ describe("update confirmation controller", () => {
     });
   });
 
-  describe("removeMfaMethodConfirmationGet with removed SMS method", async () => {
+  it("removeMfaMethodConfirmationGet with removed SMS method", async () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: "1",
       priorityIdentifier: "BACKUP",
@@ -127,7 +127,7 @@ describe("update confirmation controller", () => {
     expect(res.redirect).not.to.be.called;
   });
 
-  describe("removeMfaMethodConfirmationGet with removed auth app method", async () => {
+  it("removeMfaMethodConfirmationGet with removed auth app method", async () => {
     const mfaMethod: MfaMethod = {
       mfaIdentifier: "1",
       priorityIdentifier: "BACKUP",
@@ -162,7 +162,7 @@ describe("update confirmation controller", () => {
     expect(res.redirect).not.to.be.called;
   });
 
-  describe("removeMfaMethodConfirmationGet with no removed method", async () => {
+  it("removeMfaMethodConfirmationGet with no removed method", async () => {
     req = {
       session: {},
       t: sinon.fake((k: string) => k),
