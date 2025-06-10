@@ -115,6 +115,12 @@ export function eventService(
         };
         break;
 
+      case EventName.AUTH_MFA_METHOD_ADD_STARTED:
+        baseEvent.extensions = {
+          "journey-type": "ACCOUNT_MANAGEMENT",
+        };
+        break;
+
       default: {
         throw new Error(`Unknown event name: ${eventName}`);
       }

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { EnterPasswordServiceInterface } from "./types";
 import { enterPasswordService } from "./enter-password-service";
 import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA, LogoutState } from "../../app.constants";
+import { PATH_DATA, LogoutState, EventName } from "../../app.constants";
 import {
   formatValidationError,
   renderBadRequest,
@@ -33,6 +33,7 @@ import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
+import { eventService } from "../../services/event-service";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -152,7 +153,28 @@ function renderPasswordError(
   );
 }
 
-export function enterPasswordGet(req: Request, res: Response): void {
+async function sendJourneyAuditEvent(
+  req: Request,
+  res: Response,
+  requestType: UserJourney
+): Promise<void> {
+  let eventName: EventName;
+
+  if (requestType == UserJourney.addBackup) {
+    eventName = EventName.AUTH_MFA_METHOD_ADD_STARTED;
+  }
+
+  if (eventName) {
+    const service = eventService();
+    const auditEvent = service.buildAuditEvent(req, res, eventName);
+    service.send(auditEvent, res.locals.trace);
+  }
+}
+
+export async function enterPasswordGet(
+  req: Request,
+  res: Response
+): Promise<void> {
   const requestType = req.query.type as UserJourney;
 
   setLocalOplSettings(req, res, requestType);
@@ -163,6 +185,7 @@ export function enterPasswordGet(req: Request, res: Response): void {
   }
   req.session.user.state[requestType] = getInitialState();
 
+  await sendJourneyAuditEvent(req, res, requestType);
   res.render(TEMPLATE, getRenderOptions(req, requestType));
 }
 
