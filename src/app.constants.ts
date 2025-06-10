@@ -312,6 +312,7 @@ export const ENVIRONMENT_NAME = {
 export const enum EventName {
   HOME_TRIAGE_PAGE_VISIT = "HOME_TRIAGE_PAGE_VISIT",
   HOME_TRIAGE_PAGE_EMAIL = "HOME_TRIAGE_PAGE_EMAIL",
+  AUTH_MFA_METHOD_ADD_STARTED = "AUTH_MFA_METHOD_ADD_STARTED",
 }
 export interface QueryParameters {
   fromURL?: string;

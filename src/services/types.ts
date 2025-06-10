@@ -43,11 +43,12 @@ export interface Platform {
 }
 
 export interface Extensions {
-  from_url: string;
-  app_session_id: string;
-  app_error_code: string;
-  reference_code: string;
+  from_url?: string;
+  app_session_id?: string;
+  app_error_code?: string;
+  reference_code?: string;
   is_signed_in?: boolean;
+  "journey-type"?: string;
 }
 
 export interface CurrentTimeDescriptor {
