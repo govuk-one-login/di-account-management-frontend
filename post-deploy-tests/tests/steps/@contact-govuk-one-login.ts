@@ -67,6 +67,7 @@ When("I click on the floating webchat button", async ({ page }) => {
 
 Then("the webchat appears", async ({ page }) => {
   await expect(page.getByText("GOV.UK One Login webchat · Beta")).toBeVisible();
+  expect(await page.screenshot()).toMatchSnapshot();
 });
 
 When("I click on the minimise webchat button", async ({ page }) => {
