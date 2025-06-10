@@ -88,7 +88,7 @@ async function deleteAllUserSessionsFromSessionStore(
   }
 }
 
-async function deleteExpressSession(req: Request) {
+export async function deleteExpressSession(req: Request) {
   req.session?.destroy((err) => {
     if (err) {
       logger.error(ERROR_MESSAGES.FAILED_TO_DESTROY_SESSION(err));
