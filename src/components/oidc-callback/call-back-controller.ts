@@ -1,17 +1,12 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
-import {
-  HTTP_STATUS_CODES,
-  LOG_MESSAGES,
-  OIDC_ERRORS,
-  PATH_DATA,
-  VECTORS_OF_TRUST,
-} from "../../app.constants";
+import { LOG_MESSAGES, PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
 import xss from "xss";
 import { logger } from "../../utils/logger";
+import { clearCookies, deleteExpressSession } from "../../utils/session-store";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
@@ -55,9 +50,20 @@ export function oidcAuthCallbackGet(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
-    if (queryParams?.error === OIDC_ERRORS.ACCESS_DENIED) {
-      res.status(HTTP_STATUS_CODES.FORBIDDEN);
+    if (queryParams?.error) {
+      logger.warn(
+        {
+          trace: res.locals.trace,
+          error: queryParams.error,
+          description: queryParams.error_description,
+        },
+        "OIDC callback error received"
+      );
+      deleteExpressSession(req);
+      clearCookies(req, res, ["am"]);
+      return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
     }
+
     const clientAssertion = await service.generateAssertionJwt(
       req.oidc.metadata.client_id,
       req.oidc.issuer.metadata.token_endpoint

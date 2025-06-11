@@ -4,11 +4,7 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { oidcAuthCallbackGet } from "../call-back-controller";
-import {
-  HTTP_STATUS_CODES,
-  PATH_DATA,
-  VECTORS_OF_TRUST,
-} from "../../../app.constants";
+import { PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants";
 import { ClientAssertionServiceInterface } from "../../../utils/types";
 import { logger } from "../../../utils/logger";
 
@@ -46,6 +42,13 @@ describe("callback controller", () => {
         issuer: {
           metadata: {},
         } as any,
+      } as any,
+      app: {
+        locals: {
+          sessionStore: {
+            destroy: sandbox.fake(),
+          },
+        },
       } as any,
     };
     res = {
@@ -133,7 +136,7 @@ describe("callback controller", () => {
       expect(res.redirect).to.have.calledWith(PATH_DATA.START.url);
     });
 
-    it("response status code should be 403 when access denied error occurs", async () => {
+    it("redirect to session expired when access denied error received", async () => {
       req.oidc.callbackParams = sandbox.fake.returns({
         error: "access_denied",
         state: "m0H_2VvrhKR0qA",
@@ -142,7 +145,19 @@ describe("callback controller", () => {
         generateAssertionJwt: sandbox.fake.resolves("testassert"),
       };
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
-      expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.FORBIDDEN);
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
+    });
+
+    it("redirect to session expired when any error occurs", async () => {
+      req.oidc.callbackParams = sandbox.fake.returns({
+        error: "server_error",
+        error_description: "Unexpected server error",
+      });
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+      };
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
     it("should populate req.session.authSessionIds", async () => {
