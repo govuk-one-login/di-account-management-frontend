@@ -15,5 +15,6 @@ confirm_changeset = true
 image_repositories = []
 tags = "project=\"account-management-frontend\" stage=\"dev\""
 parameter_overrides=[
-    "VpcStackName=vpc-enhanced"
+    "VpcStackName=vpc-enhanced",
+    "CloudfrontStackName=devplatform-cloudfront"
 ]
