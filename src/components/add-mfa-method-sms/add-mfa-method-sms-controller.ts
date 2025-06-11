@@ -22,7 +22,7 @@ import { validationErrorFormatter } from "../../middleware/form-validation-middl
 import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
-  OplSettings,
+  OplSettingsLookupObject,
   setOplSettings,
 } from "../../utils/opl";
 import {
@@ -34,7 +34,7 @@ const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
 const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
 
-const ADD_MFA_SMS_METHOD_OPL_VALUES: Record<string, Partial<OplSettings>> = {
+const ADD_MFA_SMS_METHOD_OPL_VALUES: OplSettingsLookupObject = {
   [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "f2dd366e-19b6-47c8-a0e0-48a659d4af07",
@@ -131,10 +131,7 @@ export function addMfaSmsMethodPost(
   };
 }
 
-const ADD_MFA_SMS_METHOD_CONFIRMATION_OPL_VALUES: Record<
-  string,
-  Partial<OplSettings>
-> = {
+const ADD_MFA_SMS_METHOD_CONFIRMATION_OPL_VALUES: OplSettingsLookupObject = {
   [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "26dbe851-1c35-46e9-a9ee-8b4976126031",

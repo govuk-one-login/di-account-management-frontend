@@ -22,7 +22,11 @@ import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   EMPTY_OPL_SETTING_VALUE,
   MFA_COMMON_OPL_SETTINGS,
-  OplSettings,
+  OplSettingsLookupObject,
+  CHANGE_EMAIL_COMMON_OPL_SETTINGS,
+  CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
+  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
+  DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 import {
@@ -44,27 +48,27 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
 };
 
-const OPL_VALUES = ((): Record<string, Partial<OplSettings>> => ({
+const getOplValues = (req: Request): OplSettingsLookupObject => ({
   [UserJourney.ChangeEmail]: {
+    ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
     contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
-    taxonomyLevel2: "change email",
   },
   [UserJourney.ChangePassword]: {
+    ...CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
     contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412",
-    taxonomyLevel2: "change password",
   },
-  [UserJourney.ChangePhoneNumber]: supportMfaManagement()
+  [UserJourney.ChangePhoneNumber]: supportMfaManagement(req.cookies)
     ? {
         ...MFA_COMMON_OPL_SETTINGS,
         contentId: "e1cde140-d7e6-4221-90ca-0f2d131743cd",
       }
     : {
+        ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
         contentId: "2f5f174d-c650-4b28-96cf-365f4fb17af1",
-        taxonomyLevel2: "change phone number",
       },
   [UserJourney.DeleteAccount]: {
+    ...DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
     contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349",
-    taxonomyLevel2: "delete account",
   },
   [`${UserJourney.addBackup}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
     {
@@ -98,7 +102,7 @@ const OPL_VALUES = ((): Record<string, Partial<OplSettings>> => ({
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "acef67be-40e5-4ebf-83d6-b8bc8c414304",
   },
-}))();
+});
 
 const getRenderOptions = (req: Request, requestType: UserJourney) => {
   return {
@@ -116,6 +120,8 @@ const setLocalOplSettings = (
   const defaultMfaMethodType = req.session.mfaMethods?.find(
     (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
   )?.method.mfaMethodType;
+
+  const OPL_VALUES = getOplValues(req);
 
   setOplSettings(
     OPL_VALUES[

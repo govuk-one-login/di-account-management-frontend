@@ -9,13 +9,16 @@ import {
 import { ChangeEmailServiceInterface } from "./types";
 import { changeEmailService } from "./change-email-service";
 import { getRequestConfigFromExpress } from "../../utils/http";
-import { setOplSettings } from "../../utils/opl";
+import {
+  CHANGE_EMAIL_COMMON_OPL_SETTINGS,
+  setOplSettings,
+} from "../../utils/opl";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
     {
+      ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
       contentId: "1f97b62b-a124-4d6a-ae51-8abd2611ec55",
-      taxonomyLevel2: "change email",
     },
     res
   );

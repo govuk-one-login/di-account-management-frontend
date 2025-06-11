@@ -10,15 +10,18 @@ import {
 } from "../../utils/validation";
 import { BadRequestError } from "../../utils/errors";
 import { getRequestConfigFromExpress } from "../../utils/http";
-import { setOplSettings } from "../../utils/opl";
+import {
+  CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
+  setOplSettings,
+} from "../../utils/opl";
 
 const changePasswordTemplate = "change-password/index.njk";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
     {
+      ...CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
       contentId: "00ca6657-4139-43fa-979b-0eb3576fa94c",
-      taxonomyLevel2: "change password",
     },
     res
   );
