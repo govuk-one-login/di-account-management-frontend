@@ -59,7 +59,7 @@ export function eventService(
     };
   }
 
-  const buildAuditEvent = (
+  const buildBaseAuditEvent = (
     req: Request,
     res: Response,
     eventName: EventName
@@ -82,13 +82,6 @@ export function eventService(
       platform: {
         user_agent: headers["user-agent"],
       },
-      extensions: {
-        from_url: session.queryParameters?.fromURL,
-        app_error_code: session.queryParameters?.appErrorCode,
-        app_session_id: getAppSessionId(session),
-        reference_code: session.referenceCode,
-        is_signed_in: isSignedIn(session),
-      },
       ...(txmaHeader !== undefined
         ? {
             restricted: {
@@ -99,6 +92,41 @@ export function eventService(
           }
         : {}),
     };
+  };
+
+  const buildAuditEvent = (
+    req: Request,
+    res: Response,
+    eventName: EventName
+  ): AuditEvent => {
+    const baseEvent = buildBaseAuditEvent(req, res, eventName);
+
+    const { session } = req;
+
+    switch (eventName) {
+      case EventName.HOME_TRIAGE_PAGE_VISIT:
+      case EventName.HOME_TRIAGE_PAGE_EMAIL:
+        baseEvent.extensions = {
+          from_url: session.queryParameters?.fromURL,
+          app_error_code: session.queryParameters?.appErrorCode,
+          app_session_id: getAppSessionId(session),
+          reference_code: session.referenceCode,
+          is_signed_in: isSignedIn(session),
+        };
+        break;
+
+      case EventName.AUTH_MFA_METHOD_ADD_STARTED:
+        baseEvent.extensions = {
+          "journey-type": "ACCOUNT_MANAGEMENT",
+        };
+        break;
+
+      default: {
+        throw new Error(`Unknown event name: ${eventName}`);
+      }
+    }
+
+    return baseEvent;
   };
 
   const send = (event: Event, trace: string): void => {
