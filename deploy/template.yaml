@@ -8,11 +8,11 @@ Description: >-
   CloudFront -> WAF -> API Gateway -> VPC link -> Private ALB -> ECS Fargate
 
 Parameters:
-  CloudfrontStackName:
-    Description: >
-      The name of the stack that defines the Cloudfront distribution.
-    Default: "devplatform-cloudfront"
-    Type: String
+  #  CloudfrontStackName:
+  #    Description: >
+  #      The name of the stack that defines the Cloudfront distribution.
+  #    Default: "devplatform-cloudfront"
+  #    Type: String
   VpcStackName:
     Description: >
       The name of the stack that defines the VPC in which this container will run.
@@ -2088,8 +2088,7 @@ Resources:
       Type: A
       HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
       AliasTarget:
-        DNSName:
-          - Fn::ImportValue: !Sub "${CloudfrontStackName}-DistributionDomain"
+        DNSName: "dpk2d2hzqk8fu.cloudfront.net"
         # see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
         HostedZoneId: "Z2FDTNDATAQYW2"
         EvaluateTargetHealth: false
