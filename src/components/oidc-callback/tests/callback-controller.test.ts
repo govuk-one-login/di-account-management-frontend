@@ -136,7 +136,7 @@ describe("callback controller", () => {
       expect(res.redirect).to.have.calledWith(PATH_DATA.START.url);
     });
 
-    it("response status code should be 401 when access denied error occurs", async () => {
+    it("redirect to session expired when access denied error received", async () => {
       req.oidc.callbackParams = sandbox.fake.returns({
         error: "access_denied",
         state: "m0H_2VvrhKR0qA",
@@ -148,7 +148,7 @@ describe("callback controller", () => {
       expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
-    it("response status code should be 401 when any error occurs", async () => {
+    it("redirect to session expired when any error occurs", async () => {
       req.oidc.callbackParams = sandbox.fake.returns({
         error: "server_error",
         error_description: "Unexpected server error",
