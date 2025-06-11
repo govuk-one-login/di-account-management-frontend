@@ -16,7 +16,8 @@ import { validationErrorFormatter } from "../../middleware/form-validation-middl
 import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
-  OplSettings,
+  OplSettingsLookupObject,
+  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 import {
@@ -33,7 +34,7 @@ import { supportMfaManagement } from "../../config";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
 
-const OPL_VALUES: Record<string, Partial<OplSettings>> = {
+const OPL_VALUES: OplSettingsLookupObject = {
   [`${INTENT_ADD_BACKUP}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -60,8 +61,8 @@ const setLocalOplSettings = (intent: Intent, req: Request, res: Response) => {
   if (!supportMfaManagement(req.cookies)) {
     setOplSettings(
       {
+        ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
         contentId: "e92e3a80-ea97-4eae-bbff-903e89291765",
-        taxonomyLevel2: "change phone number",
       },
       res
     );

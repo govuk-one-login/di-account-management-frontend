@@ -38,7 +38,8 @@ import { containsNumbersOnly } from "../../utils/strings";
 import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
-  OplSettings,
+  OplSettingsLookupObject,
+  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 
@@ -75,7 +76,7 @@ const getRenderOptions = (req: Request, intent: Intent) => {
   };
 };
 
-const OPL_VALUES: Record<string, Partial<OplSettings>> = {
+const OPL_VALUES: OplSettingsLookupObject = {
   [`${INTENT_ADD_BACKUP}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]:
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -107,8 +108,8 @@ const setCheckYourPhoneOplSettings = (
   if (!supportMfaManagement(req.cookies)) {
     setOplSettings(
       {
+        ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
         contentId: "fb69b162-9ddb-41db-a8fa-3cca7fea2fa9",
-        taxonomyLevel2: "change phone number",
       },
       res
     );

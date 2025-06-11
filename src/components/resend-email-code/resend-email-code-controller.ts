@@ -9,15 +9,18 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { getRequestConfigFromExpress } from "../../utils/http";
-import { setOplSettings } from "../../utils/opl";
+import {
+  CHANGE_EMAIL_COMMON_OPL_SETTINGS,
+  setOplSettings,
+} from "../../utils/opl";
 
 const TEMPLATE_NAME = "resend-email-code/index.njk";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
     {
+      ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
       contentId: "24ad9e0f-9d6f-43d2-8828-5d8f2003c6fe",
-      taxonomyLevel2: "change email",
     },
     res
   );

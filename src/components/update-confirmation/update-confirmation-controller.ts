@@ -9,7 +9,11 @@ import { logger } from "../../utils/logger";
 import { getLastNDigits } from "../../utils/phone-number";
 import {
   MFA_COMMON_OPL_SETTINGS,
-  OplSettings,
+  OplSettingsLookupObject,
+  CHANGE_EMAIL_COMMON_OPL_SETTINGS,
+  CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
+  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
+  DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 import { supportMfaManagement } from "../../config";
@@ -21,8 +25,8 @@ import {
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
   setOplSettings(
     {
+      ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
       contentId: "97c85664-bc62-468a-b5a8-a4eb1ede68dc",
-      taxonomyLevel2: "change email",
     },
     res
   );
@@ -44,8 +48,8 @@ export function updatePasswordConfirmationGet(
 ): void {
   setOplSettings(
     {
+      ...CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
       contentId: "6e223a74-7a80-4333-82b4-d44d972b3297",
-      taxonomyLevel2: "change password",
     },
     res
   );
@@ -78,8 +82,8 @@ export function updatePhoneNumberConfirmationGet(
           contentId: "670a63e1-94a5-4bec-9a5c-af36bd894ef6",
         }
       : {
+          ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
           contentId: "8641c8eb-b695-4c31-b78d-6c901111152b",
-          taxonomyLevel2: "change phone number",
         },
     res
   );
@@ -122,8 +126,8 @@ export function deleteAccountConfirmationGet(
 ): void {
   setOplSettings(
     {
+      ...DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
       contentId: "1a4650c5-3a00-4d9b-9487-4ace9c119a1b",
-      taxonomyLevel2: "delete account",
     },
     res
   );
@@ -244,10 +248,7 @@ export async function changeDefaultMfaMethodConfirmationGet(
   });
 }
 
-const CHANGE_DEFAULT_METHOD_CONFIRMATION_OPL_VALUES: Record<
-  string,
-  Partial<OplSettings>
-> = {
+const CHANGE_DEFAULT_METHOD_CONFIRMATION_OPL_VALUES: OplSettingsLookupObject = {
   [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "87c95563-8fff-41d9-91a5-a34504d343a8",
