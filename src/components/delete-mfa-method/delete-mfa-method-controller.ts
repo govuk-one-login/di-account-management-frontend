@@ -3,11 +3,24 @@ import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "143f63ff-cf73-4911-a024-bf0759ba3a1f",
+    },
+    res
+  );
+};
 
 export async function deleteMfaMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  setLocalOplSettings(res);
+
   let phoneNumber;
   const backupMethod = req.session.mfaMethods.find((m) => {
     return m.priorityIdentifier === "BACKUP";
@@ -29,6 +42,8 @@ export async function deleteMfaMethodPost(
   req: Request,
   res: Response
 ): Promise<void> {
+  setLocalOplSettings(res);
+
   const methodToRemove = req.session.mfaMethods.find((m) => {
     return req.body.methodId == m.mfaIdentifier;
   });

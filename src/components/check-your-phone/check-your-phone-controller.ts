@@ -14,7 +14,7 @@ import {
 } from "../../utils/validation";
 import { getLastNDigits } from "../../utils/phone-number";
 import { UpdateInformationInput } from "../../utils/types";
-import { supportChangeMfa } from "../../config";
+import { supportChangeMfa, supportMfaManagement } from "../../config";
 import {
   Intent,
   INTENT_ADD_BACKUP,
@@ -31,22 +31,19 @@ import {
   ApiResponse,
   MfaClientInterface,
   MfaMethod,
+  mfaMethodTypes,
+  mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
 import { containsNumbersOnly } from "../../utils/strings";
 import { getRequestConfigFromExpress } from "../../utils/http";
-import { setOplSettings } from "../../utils/opl";
+import {
+  MFA_COMMON_OPL_SETTINGS,
+  OplSettingsLookupObject,
+  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
+  setOplSettings,
+} from "../../utils/opl";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
-
-const setLocalOplSettings = (res: Response) => {
-  setOplSettings(
-    {
-      contentId: "fb69b162-9ddb-41db-a8fa-3cca7fea2fa9",
-      taxonomyLevel2: "change phone number",
-    },
-    res
-  );
-};
 
 const getRenderOptions = (req: Request, intent: Intent) => {
   const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
@@ -79,9 +76,59 @@ const getRenderOptions = (req: Request, intent: Intent) => {
   };
 };
 
+const OPL_VALUES: OplSettingsLookupObject = {
+  [`${INTENT_ADD_BACKUP}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]:
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "8d348159-08ab-4e27-96ea-843ec64e953f",
+    },
+
+  [`${INTENT_CHANGE_PHONE_NUMBER}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]:
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "c9a421f2-766c-49c8-8e66-42d0f41bd757",
+    },
+  [`${INTENT_ADD_BACKUP}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "a6156870-d4c7-4e1b-b72c-a84b924e4913",
+    },
+  [`${INTENT_CHANGE_DEFAULT_METHOD}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "df468804-c84b-4134-96ca-6610ffd8b6f5",
+    },
+};
+
+const setCheckYourPhoneOplSettings = (
+  intent: Intent,
+  req: Request,
+  res: Response
+) => {
+  if (!supportMfaManagement(req.cookies)) {
+    setOplSettings(
+      {
+        ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
+        contentId: "fb69b162-9ddb-41db-a8fa-3cca7fea2fa9",
+      },
+      res
+    );
+  } else {
+    const defaultMfaMethodType = req.session.mfaMethods?.find(
+      (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
+    )?.method.mfaMethodType;
+    const oplSettings =
+      OPL_VALUES[
+        `${intent}_${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`
+      ];
+
+    setOplSettings(oplSettings, res);
+  }
+};
+
 export function checkYourPhoneGet(req: Request, res: Response): void {
   const intent = req.query.intent as Intent;
-  setLocalOplSettings(res);
+  setCheckYourPhoneOplSettings(intent, req, res);
   res.render(TEMPLATE_NAME, getRenderOptions(req, intent));
 }
 
@@ -89,10 +136,11 @@ export function checkYourPhonePost(
   service: CheckYourPhoneServiceInterface = checkYourPhoneService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    const { code } = req.body;
     const intent = req.body.intent as Intent;
 
-    setLocalOplSettings(res);
+    setCheckYourPhoneOplSettings(intent, req, res);
+
+    const { code } = req.body;
 
     if (!code) {
       const error = formatValidationError(
@@ -158,7 +206,7 @@ export function checkYourPhonePost(
     let isPhoneNumberUpdated = false;
     let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
 
-    if (supportChangeMfa()) {
+    if (supportChangeMfa(req.cookies)) {
       const mfaClient = createMfaClient(req, res);
       const changePhoneNumberResult = await changePhoneNumberwithMfaApi(
         mfaClient,

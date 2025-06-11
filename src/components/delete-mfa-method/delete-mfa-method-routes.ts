@@ -1,7 +1,7 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 import {
   deleteMfaMethodGet,
   deleteMfaMethodPost,
@@ -14,7 +14,7 @@ const router = express.Router();
 router.get(
   PATH_DATA.DELETE_MFA_METHOD.url,
   requiresAuthMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   validateStateMiddleware,
   globalTryCatchAsync(deleteMfaMethodGet)
 );
@@ -22,7 +22,7 @@ router.get(
 router.post(
   PATH_DATA.DELETE_MFA_METHOD.url,
   requiresAuthMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   validateStateMiddleware,
   globalTryCatchAsync(deleteMfaMethodPost)
 );

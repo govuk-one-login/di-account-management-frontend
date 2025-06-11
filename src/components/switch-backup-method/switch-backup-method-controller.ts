@@ -4,11 +4,24 @@ import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { logger } from "../../utils/logger";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "86d46095-c39b-490e-82fe-354f74bd2f7c",
+    },
+    res
+  );
+};
 
 export async function switchBackupMfaMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  setLocalOplSettings(res);
+
   let currentBackupPhoneNumber;
   const currentBackupMethod = req.session.mfaMethods.find((m) => {
     return m.priorityIdentifier === "BACKUP";
@@ -59,6 +72,8 @@ export async function switchBackupMfaMethodPost(
   req: Request,
   res: Response
 ): Promise<void> {
+  setLocalOplSettings(res);
+
   const { newDefault } = req.body;
 
   const newDefaultMethod = req.session.mfaMethods.find(

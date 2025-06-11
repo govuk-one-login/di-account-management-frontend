@@ -166,6 +166,7 @@ describe("addBackupPost", () => {
       status: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
       end: endFake,
+      locals: {},
     } as Partial<Response>;
     next = sinon.spy();
   });
