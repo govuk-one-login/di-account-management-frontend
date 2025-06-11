@@ -102,6 +102,9 @@ export function eventService(
     const baseEvent = buildBaseAuditEvent(req, res, eventName);
 
     const { session } = req;
+    const defaultMethod = session.mfaMethods.find(
+      (method) => method.priorityIdentifier === "DEFAULT"
+    );
 
     switch (eventName) {
       case EventName.HOME_TRIAGE_PAGE_VISIT:
@@ -118,6 +121,13 @@ export function eventService(
       case EventName.AUTH_MFA_METHOD_ADD_STARTED:
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
+        };
+        break;
+
+      case EventName.AUTH_MFA_METHOD_SWITCH_STARTED:
+        baseEvent.extensions = {
+          "journey-type": "ACCOUNT_MANAGEMENT",
+          "mfa-type": defaultMethod.method.mfaMethodType,
         };
         break;
 

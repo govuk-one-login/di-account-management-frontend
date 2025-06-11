@@ -1,3 +1,4 @@
+import { mfaMethodTypes } from "../utils/mfaClient/types";
 import { EventName } from "../app.constants";
 import { Request, Response } from "express";
 
@@ -48,7 +49,8 @@ export interface Extensions {
   app_error_code?: string;
   reference_code?: string;
   is_signed_in?: boolean;
-  "journey-type"?: string;
+  "journey-type"?: "ACCOUNT_MANAGEMENT";
+  "mfa-type"?: (typeof mfaMethodTypes)[keyof typeof mfaMethodTypes];
 }
 
 export interface CurrentTimeDescriptor {

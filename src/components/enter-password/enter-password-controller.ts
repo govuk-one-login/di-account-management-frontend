@@ -160,8 +160,13 @@ async function sendJourneyAuditEvent(
 ): Promise<void> {
   let eventName: EventName;
 
-  if (requestType == UserJourney.addBackup) {
-    eventName = EventName.AUTH_MFA_METHOD_ADD_STARTED;
+  switch (requestType) {
+    case UserJourney.addBackup:
+      eventName = EventName.AUTH_MFA_METHOD_ADD_STARTED;
+      break;
+    case UserJourney.SwitchBackupMethod:
+      eventName = EventName.AUTH_MFA_METHOD_SWITCH_STARTED;
+      break;
   }
 
   if (eventName) {

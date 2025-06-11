@@ -68,7 +68,7 @@ describe("enter password controller", () => {
       expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);
     });
 
-    it("should send an audit event when journey type is addBackup", async () => {
+    it("should send an AUTH_MFA_METHOD_ADD_STARTED audit event when journey type is addBackup", async () => {
       req.query.type = UserJourney.addBackup;
 
       const mockEventService = {
@@ -91,6 +91,34 @@ describe("enter password controller", () => {
         req,
         res,
         "AUTH_MFA_METHOD_ADD_STARTED"
+      );
+      expect(mockEventService.send).to.have.been.calledOnce;
+      expect(res.render).to.have.calledWith("enter-password/index.njk");
+    });
+
+    it("should send an AUTH_MFA_METHOD_SWITCH_STARTED audit event when journey type is SwitchBackupMethod", async () => {
+      req.query.type = UserJourney.SwitchBackupMethod;
+
+      const mockEventService = {
+        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
+        send: sandbox.fake(),
+      };
+
+      const eventServiceStub = sandbox.stub().returns(mockEventService);
+
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
+      sandbox
+        .stub(eventServiceModule, "eventService")
+        .get(() => eventServiceStub);
+
+      await enterPasswordGet(req as Request, res as Response);
+
+      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+        req,
+        res,
+        "AUTH_MFA_METHOD_SWITCH_STARTED"
       );
       expect(mockEventService.send).to.have.been.calledOnce;
       expect(res.render).to.have.calledWith("enter-password/index.njk");
