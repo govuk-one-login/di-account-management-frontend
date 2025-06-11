@@ -167,6 +167,9 @@ async function sendJourneyAuditEvent(
     case UserJourney.SwitchBackupMethod:
       eventName = EventName.AUTH_MFA_METHOD_SWITCH_STARTED;
       break;
+    case UserJourney.RemoveBackup:
+      eventName = EventName.AUTH_MFA_METHOD_DELETE_STARTED;
+      break;
   }
 
   if (eventName) {

@@ -124,6 +124,34 @@ describe("enter password controller", () => {
       expect(res.render).to.have.calledWith("enter-password/index.njk");
     });
 
+    it("should send an AUTH_MFA_METHOD_DELETE_STARTED audit event when journey type is RemoveBackup", async () => {
+      req.query.type = UserJourney.RemoveBackup;
+
+      const mockEventService = {
+        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
+        send: sandbox.fake(),
+      };
+
+      const eventServiceStub = sandbox.stub().returns(mockEventService);
+
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
+      sandbox
+        .stub(eventServiceModule, "eventService")
+        .get(() => eventServiceStub);
+
+      await enterPasswordGet(req as Request, res as Response);
+
+      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+        req,
+        res,
+        "AUTH_MFA_METHOD_DELETE_STARTED"
+      );
+      expect(mockEventService.send).to.have.been.calledOnce;
+      expect(res.render).to.have.calledWith("enter-password/index.njk");
+    });
+
     it("should not send an audit event when journey type is change password", async () => {
       req.query.type = UserJourney.ChangePassword;
 
