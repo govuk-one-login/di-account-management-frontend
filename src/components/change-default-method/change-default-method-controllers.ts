@@ -21,7 +21,8 @@ import { validationErrorFormatter } from "../../middleware/form-validation-middl
 import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
-  OplSettings,
+  OplSettingsLookupObject,
+  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 import {
@@ -36,7 +37,7 @@ const CHANGE_DEFAULT_METHOD_SMS_TEMPLATE =
 
 const backLink = PATH_DATA.CHANGE_DEFAULT_METHOD.url;
 
-const CHANGE_DEFAULT_METHOD_OPL_VALUES: Record<string, Partial<OplSettings>> = {
+const CHANGE_DEFAULT_METHOD_OPL_VALUES: OplSettingsLookupObject = {
   [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "1c044729-69ca-488f-bf1f-40d6df909deb",
@@ -111,9 +112,7 @@ const setChangeDefaultMethodSmsOplSettings = (req: Request, res: Response) => {
           ...MFA_COMMON_OPL_SETTINGS,
           contentId: "e847d040-e59e-4a88-8f9c-1d00a840d0bd",
         }
-      : {
-          taxonomyLevel2: "change phone number",
-        },
+      : PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
     res
   );
 };

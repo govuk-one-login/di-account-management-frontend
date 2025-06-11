@@ -7,7 +7,7 @@ import {
 } from "../../utils/mfaClient/types";
 import {
   MFA_COMMON_OPL_SETTINGS,
-  OplSettings,
+  OplSettingsLookupObject,
   setOplSettings,
 } from "../../utils/opl";
 
@@ -19,7 +19,7 @@ enum MfaMethodType {
 const MAX_METHODS = 2;
 const ADD_METHOD_TEMPLATE = `choose-backup/index.njk`;
 
-const OPL_VALUES: Record<string, Partial<OplSettings>> = {
+const OPL_VALUES: OplSettingsLookupObject = {
   [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "63f44ae6-46f1-46c3-a2e8-305fe2ddf27d",
