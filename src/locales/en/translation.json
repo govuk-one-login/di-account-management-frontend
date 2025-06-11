@@ -823,11 +823,11 @@
       },
       "section2": {
         "heading": "What you can do",
-        "paragraph1": "If you need a GOV.UK One Login to access a government service you can create a new one using a different email address."
-      },
-      "link": {
-        "href": "https://www.gov.uk/using-your-gov-uk-one-login/services",
-        "text": "Go to the service you need to use"
+        "paragraph1": "If you need a GOV.UK One Login to access a government service you can create a new one using a different email address.",
+        "link": {
+          "href": "https://www.gov.uk/using-your-gov-uk-one-login/services",
+          "text": "Go to the service you need to use"
+        }
       }
     },
     "temporarilySuspendedPageScreen": {
@@ -837,10 +837,10 @@
         "paragraph1": "You've been signed out."
       },
       "section2": {
-        "paragraph1": "Your GOV.UK One Login is not available at the moment."
-      },
-      "link": {
-        "text": "Try signing in later"
+        "paragraph1": "Your GOV.UK One Login is not available at the moment.",
+        "link": {
+          "text": "Try signing in later"
+        }
       }
     }
   }
