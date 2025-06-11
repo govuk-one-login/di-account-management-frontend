@@ -675,8 +675,11 @@
       },
       "section2": {
         "heading": "Beth allwch chi ei wneud",
-        "paragraph1": "Ewch yn ôl i’r gwasanaeth roeddech yn ceisio ei ddefnyddio. Gallwch chwilio am y gwasanaeth gan ddefnyddio’ch peiriant chwilio neu ddod o hyd iddo o’r hafan GOV.UK.",
-        "paragraph2": "Gallwch greu GOV.UK One Login newydd gyda chyfeiriad e-bost gwahanol."
+        "paragraph1": "Ewch yn ôl i’r gwasanaeth roeddech yn ceisio ei ddefnyddio. Gallwch chwilio am y gwasanaeth gan ddefnyddio’ch peiriant chwilio neu ddod o hyd iddo o’r hafan GOV.UK."
+      },
+      "link": {
+        "href": "https://www.gov.uk/using-your-gov-uk-one-login/services",
+        "text": "Ewch i'r gwasanaeth sydd angen i chi ei ddefnyddio"
       }
     },
     "temporarilySuspendedPageScreen": {
@@ -686,9 +689,10 @@
         "paragraph1": "Nid yw eich GOV.UK One Login ar gael ar hyn o bryd."
       },
       "section2": {
-        "heading": "Beth allwch chi ei wneud",
-        "paragraph1": "Dewch yn ôl yn nes ymlaen. Dylai eich GOV.UK One Login fod ar gael eto mewn 3 diwrnod gwaith.",
-        "paragraph2": "Gallwch hefyd fynd yn ôl i’r gwasanaeth roeddech yn ceisio ei ddefnyddio. Gallwch chwilio am y gwasanaeth gan ddefnyddio’ch peiriant chwilio neu ddod o hyd iddo o’r hafan GOV.UK."
+        "paragraph1": "Dewch yn ôl yn nes ymlaen. Dylai eich GOV.UK One Login fod ar gael eto mewn 3 diwrnod gwaith."
+      },
+      "link": {
+        "text": "Ceisiwch fewngofnodi yn nes ymlaen"
       }
     },
     "confirmaddBackup": {
