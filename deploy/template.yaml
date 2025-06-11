@@ -11,7 +11,7 @@ Parameters:
   CloudfrontStackName:
     Description: >
       The name of the stack that defines the Cloudfront distribution.
-    Default: devplatform-cloudfront
+    Default: "devplatform-cloudfront"
     Type: String
   VpcStackName:
     Description: >
