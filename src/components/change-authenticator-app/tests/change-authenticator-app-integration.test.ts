@@ -154,7 +154,7 @@ describe("Integration:: change authenticator app", () => {
       return !config.hideChangeMfa;
     });
 
-    sandbox.stub(configFuncs, "supportMfaPage").callsFake(() => {
+    sandbox.stub(configFuncs, "supportMfaManagement").callsFake(() => {
       return true;
     });
 

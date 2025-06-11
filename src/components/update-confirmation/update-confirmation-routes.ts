@@ -14,7 +14,7 @@ import {
 } from "./update-confirmation-controller";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 import {
   globalTryCatchAsync,
   globalTryCatch,
@@ -68,7 +68,7 @@ router.get(
 router.get(
   PATH_DATA.SWITCH_BACKUP_METHOD_CONFIRMATION.url,
   requiresAuthMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   validateStateMiddleware,
   globalTryCatchAsync(changeDefaultMfaMethodConfirmationGet)
 );
@@ -76,7 +76,7 @@ router.get(
 router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url,
   requiresAuthMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   validateStateMiddleware,
   globalTryCatchAsync(changeDefaultMethodConfirmationGet)
 );

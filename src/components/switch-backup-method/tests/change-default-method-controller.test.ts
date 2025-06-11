@@ -53,6 +53,7 @@ describe("change default method", () => {
       status: statusFn,
       session: {},
       redirect: redirectFn,
+      locals: {},
     };
   };
 

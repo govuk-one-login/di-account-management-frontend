@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from "express";
 
-export function legacyMfaMethodsMiddleware(
+export function runLegacyMfaMethodsMiddleware(
   req: Request,
   res: Response,
   next: NextFunction

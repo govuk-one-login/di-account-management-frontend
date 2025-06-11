@@ -20,33 +20,56 @@ import { BadRequestError } from "../../utils/errors";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
-import { setOplSettings } from "../../utils/opl";
+import {
+  MFA_COMMON_OPL_SETTINGS,
+  OplSettingsLookupObject,
+  setOplSettings,
+} from "../../utils/opl";
+import {
+  mfaMethodTypes,
+  mfaPriorityIdentifiers,
+} from "../../utils/mfaClient/types";
 
 const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
 const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
 
-const setLocalOplSettings = (res: Response) => {
-  setOplSettings(
-    {
-      taxonomyLevel2: "change phone number",
-    },
-    res
-  );
+const ADD_MFA_SMS_METHOD_OPL_VALUES: OplSettingsLookupObject = {
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "f2dd366e-19b6-47c8-a0e0-48a659d4af07",
+  },
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "29895f1c-d5be-4135-8bcc-0e92c0847fa1",
+  },
+};
+
+const setAddMfaSmsMethodGetOplSettings = (req: Request, res: Response) => {
+  const defaultMfaMethodType = req.session.mfaMethods?.find(
+    (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
+  )?.method.mfaMethodType;
+
+  const oplSettings =
+    ADD_MFA_SMS_METHOD_OPL_VALUES[
+      `${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`
+    ];
+
+  setOplSettings(oplSettings, res);
 };
 
 export async function addMfaSmsMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  setLocalOplSettings(res);
+  setAddMfaSmsMethodGetOplSettings(req, res);
   res.render(ADD_MFA_METHOD_SMS_TEMPLATE, { backLink });
 }
 export function addMfaSmsMethodPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
-    setLocalOplSettings(res);
+    setAddMfaSmsMethodGetOplSettings(req, res);
 
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)
@@ -108,10 +131,32 @@ export function addMfaSmsMethodPost(
   };
 }
 
+const ADD_MFA_SMS_METHOD_CONFIRMATION_OPL_VALUES: OplSettingsLookupObject = {
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "26dbe851-1c35-46e9-a9ee-8b4976126031",
+  },
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "532a69a3-222b-4540-b9e7-35ec86960ec5",
+  },
+};
+
 export async function addMfaSmsMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  const defaultMfaMethodType = req.session.mfaMethods?.find(
+    (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
+  )?.method.mfaMethodType;
+
+  setOplSettings(
+    ADD_MFA_SMS_METHOD_CONFIRMATION_OPL_VALUES[
+      `${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`
+    ],
+    res
+  );
+
   return res.render("common/confirmation-page/confirmation.njk", {
     pageTitleName: req.t("pages.addBackupSms.confirm.title"),
     heading: req.t("pages.addBackupSms.confirm.heading"),

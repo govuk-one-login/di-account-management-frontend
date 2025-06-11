@@ -17,7 +17,7 @@ import { snsService } from "../../utils/sns";
 import { getTxmaHeader } from "../../utils/txma-header";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { logger } from "../../utils/logger";
-import { setOplSettings } from "../../utils/opl";
+import { ACTIVITY_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 
 const activityLogDynamoDBRequest = (
   subjectId: string,
@@ -145,10 +145,10 @@ export async function reportSuspiciousActivityGet(
 
     setOplSettings(
       {
+        ...ACTIVITY_COMMON_OPL_SETTINGS,
         contentId: data.alreadyReported
           ? "5f83e2b4-6c9d-4b98-b68e-43d4f6892b56"
           : "0252c1d4-c233-48c1-bf4b-a5b124ed8ec2",
-        taxonomyLevel2: "activity",
       },
       res
     );
@@ -214,8 +214,8 @@ export async function reportSuspiciousActivityConfirmation(
   } else {
     setOplSettings(
       {
+        ...ACTIVITY_COMMON_OPL_SETTINGS,
         contentId: "e047725a-f19a-448a-9f8d-1e9e08f5c21f",
-        taxonomyLevel2: "activity",
       },
       res
     );

@@ -133,8 +133,8 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
   const { email } = req.session.user;
   const enterPasswordUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=security&edit=true`;
 
-  const supportMfaChange = supportChangeMfa();
-  const supportBackupMfa = supportAddBackupMfa();
+  const supportMfaChange = supportChangeMfa(req.cookies);
+  const supportBackupMfa = supportAddBackupMfa(req.cookies);
   const supportActivityLogFlag = supportActivityLog();
 
   const hasActivityLog = await hasAllowedActivityLogServices(req, res);
@@ -149,7 +149,8 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
     : [];
 
   const denyChangeTypeofPrimary = Array.isArray(req.session.mfaMethods)
-    ? supportChangeMfa() && canChangePrimaryMethod(req.session.mfaMethods)
+    ? supportChangeMfa(req.cookies) &&
+      canChangePrimaryMethod(req.session.mfaMethods)
     : false;
 
   setOplSettings(
