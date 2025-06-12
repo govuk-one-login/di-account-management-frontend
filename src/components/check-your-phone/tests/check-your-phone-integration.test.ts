@@ -81,7 +81,7 @@ describe("Integration:: check your phone", () => {
     sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
       return true;
     });
-    sandbox.stub(configFuncs, "supportMfaPage").callsFake(() => {
+    sandbox.stub(configFuncs, "supportMfaManagement").callsFake(() => {
       return true;
     });
 

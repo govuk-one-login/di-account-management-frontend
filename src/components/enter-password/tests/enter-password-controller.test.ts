@@ -10,6 +10,7 @@ import { EnterPasswordServiceInterface } from "../types";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import * as logout from "../../../utils/logout";
+import { UserJourney } from "../../../utils/state-machine";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -52,10 +53,10 @@ describe("enter password controller", () => {
   });
 
   describe("enterPasswordGet", () => {
-    it("should render enter password view with query param", () => {
+    it("should render enter password view with query param", async () => {
       req.query.type = "changePassword";
 
-      enterPasswordGet(req as Request, res as Response);
+      await enterPasswordGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("enter-password/index.njk");
     });
@@ -65,6 +66,112 @@ describe("enter password controller", () => {
 
       expect(res.render).not.to.have.been.called;
       expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);
+    });
+
+    it("should send an AUTH_MFA_METHOD_ADD_STARTED audit event when journey type is addBackup", async () => {
+      req.query.type = UserJourney.addBackup;
+
+      const mockEventService = {
+        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
+        send: sandbox.fake(),
+      };
+
+      const eventServiceStub = sandbox.stub().returns(mockEventService);
+
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
+      sandbox
+        .stub(eventServiceModule, "eventService")
+        .get(() => eventServiceStub);
+
+      await enterPasswordGet(req as Request, res as Response);
+
+      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+        req,
+        res,
+        "AUTH_MFA_METHOD_ADD_STARTED"
+      );
+      expect(mockEventService.send).to.have.been.calledOnce;
+      expect(res.render).to.have.calledWith("enter-password/index.njk");
+    });
+
+    it("should send an AUTH_MFA_METHOD_SWITCH_STARTED audit event when journey type is SwitchBackupMethod", async () => {
+      req.query.type = UserJourney.SwitchBackupMethod;
+
+      const mockEventService = {
+        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
+        send: sandbox.fake(),
+      };
+
+      const eventServiceStub = sandbox.stub().returns(mockEventService);
+
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
+      sandbox
+        .stub(eventServiceModule, "eventService")
+        .get(() => eventServiceStub);
+
+      await enterPasswordGet(req as Request, res as Response);
+
+      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+        req,
+        res,
+        "AUTH_MFA_METHOD_SWITCH_STARTED"
+      );
+      expect(mockEventService.send).to.have.been.calledOnce;
+      expect(res.render).to.have.calledWith("enter-password/index.njk");
+    });
+
+    it("should send an AUTH_MFA_METHOD_DELETE_STARTED audit event when journey type is RemoveBackup", async () => {
+      req.query.type = UserJourney.RemoveBackup;
+
+      const mockEventService = {
+        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
+        send: sandbox.fake(),
+      };
+
+      const eventServiceStub = sandbox.stub().returns(mockEventService);
+
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
+      sandbox
+        .stub(eventServiceModule, "eventService")
+        .get(() => eventServiceStub);
+
+      await enterPasswordGet(req as Request, res as Response);
+
+      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+        req,
+        res,
+        "AUTH_MFA_METHOD_DELETE_STARTED"
+      );
+      expect(mockEventService.send).to.have.been.calledOnce;
+      expect(res.render).to.have.calledWith("enter-password/index.njk");
+    });
+
+    it("should not send an audit event when journey type is change password", async () => {
+      req.query.type = UserJourney.ChangePassword;
+
+      const mockEventService = {
+        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
+        send: sandbox.fake(),
+      };
+
+      const eventServiceStub = sandbox.stub().returns(mockEventService);
+
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
+      sandbox
+        .stub(eventServiceModule, "eventService")
+        .get(() => eventServiceStub);
+
+      await enterPasswordGet(req as Request, res as Response);
+      expect(mockEventService.send).not.to.have.been.called;
+      expect(res.render).to.have.calledWith("enter-password/index.njk");
     });
   });
 

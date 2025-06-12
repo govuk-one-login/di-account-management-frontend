@@ -819,24 +819,28 @@
       "title": "Your GOV.UK One Login has been permanently locked",
       "header": "Your GOV.UK One Login has been permanently locked",
       "section1": {
-        "paragraph1": "You cannot sign in and you cannot use your GOV.UK  One Login to access government services."
+        "paragraph1": "You've been signed out and you can no longer use your GOV.UK One Login."
       },
       "section2": {
         "heading": "What you can do",
-        "paragraph1": "Go back to the service you were trying to use. You can look for the service using your search engine or find it from the GOV.UK  homepage.",
-        "paragraph2": "You can create a new GOV.UK  One Login with a different email address."
+        "paragraph1": "If you need a GOV.UK One Login to access a government service you can create a new one using a different email address.",
+        "link": {
+          "href": "https://www.gov.uk/using-your-gov-uk-one-login/services",
+          "text": "Go to the service you need to use"
+        }
       }
     },
     "temporarilySuspendedPageScreen": {
       "title": "Sorry, there is a problem",
       "heading": "Sorry, there is a problem",
       "section1": {
-        "paragraph1": "Your GOV.UK  One Login is not available at the moment."
+        "paragraph1": "You've been signed out."
       },
       "section2": {
-        "heading": "What you can do",
-        "paragraph1": "Come back later. Your GOV.UK  One Login should be available again in 3 working days.",
-        "paragraph2": "You can also go back to the service you were trying to use. You can look for the service using your search engine or find it from the GOV.UK homepage."
+        "paragraph1": "Your GOV.UK One Login is not available at the moment.",
+        "link": {
+          "text": "Try signing in later"
+        }
       }
     }
   }

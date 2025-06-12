@@ -1,3 +1,4 @@
+import { mfaMethodTypes } from "../utils/mfaClient/types";
 import { EventName } from "../app.constants";
 import { Request, Response } from "express";
 
@@ -9,7 +10,6 @@ export interface EventServiceInterface {
   ) => AuditEvent;
   send: (event: Event, trace: string) => void;
 }
-
 export interface Event {
   event_name: EventName;
 }
@@ -21,7 +21,7 @@ export interface AuditEvent extends Event {
   component_id: string;
   user: User;
   platform: Platform;
-  extensions: Extensions;
+  extensions?: Extensions;
   restricted?: Restricted;
 }
 
@@ -44,11 +44,13 @@ export interface Platform {
 }
 
 export interface Extensions {
-  from_url: string;
-  app_session_id: string;
-  app_error_code: string;
-  reference_code: string;
+  from_url?: string;
+  app_session_id?: string;
+  app_error_code?: string;
+  reference_code?: string;
   is_signed_in?: boolean;
+  "journey-type"?: "ACCOUNT_MANAGEMENT";
+  "mfa-type"?: (typeof mfaMethodTypes)[keyof typeof mfaMethodTypes];
 }
 
 export interface CurrentTimeDescriptor {

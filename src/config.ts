@@ -219,8 +219,12 @@ export function getContactEmailServiceUrl(): string {
   return process.env.CONTACT_EMAIL_SERVICE_URL;
 }
 
-export function supportMfaPage(): boolean {
-  return process.env.SUPPORT_METHOD_MANAGEMENT === "1";
+export function supportMfaManagement(cookies: Record<string, string>): boolean {
+  return (
+    process.env.SUPPORT_METHOD_MANAGEMENT === "1" ||
+    (process.env.SUPPORT_METHOD_MANAGEMENT === "qa" &&
+      cookies.enable_mfa_for_qa === "1")
+  );
 }
 
 export function googleAnalytics4GtmContainerId(): string {
@@ -243,12 +247,20 @@ export function getMfaServiceUrl(): string {
   return process.env.METHOD_MANAGEMENT_BASE_URL;
 }
 
-export function supportChangeMfa(): boolean {
-  return process.env.SUPPORT_CHANGE_MFA === "1";
+export function supportChangeMfa(cookies: Record<string, string>): boolean {
+  return (
+    process.env.SUPPORT_CHANGE_MFA === "1" ||
+    (process.env.SUPPORT_CHANGE_MFA === "qa" &&
+      cookies.enable_mfa_for_qa === "1")
+  );
 }
 
-export function supportAddBackupMfa(): boolean {
-  return process.env.SUPPORT_ADD_BACKUP_MFA === "1";
+export function supportAddBackupMfa(cookies: Record<string, string>): boolean {
+  return (
+    process.env.SUPPORT_ADD_BACKUP_MFA === "1" ||
+    (process.env.SUPPORT_ADD_BACKUP_MFA === "qa" &&
+      cookies.enable_mfa_for_qa === "1")
+  );
 }
 
 export function supportSearchableList(): boolean {

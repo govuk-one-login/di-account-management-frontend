@@ -1,11 +1,11 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ERROR_MESSAGES } from "../app.constants";
-import { getMfaServiceUrl, supportMfaPage } from "../config";
+import { getMfaServiceUrl, supportMfaManagement } from "../config";
 import { logger } from "../utils/logger";
-import { legacyMfaMethodsMiddleware } from "./mfa-methods-legacy";
+import { runLegacyMfaMethodsMiddleware } from "./mfa-methods-legacy";
 import { createMfaClient, formatErrorMessage } from "../utils/mfaClient";
 
-export async function mfaMethodMiddleware(
+async function runMfaMethodMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
@@ -32,7 +32,11 @@ export async function mfaMethodMiddleware(
   }
 }
 
-const selectMfaMiddleware = (): RequestHandler => {
+export async function mfaMethodMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   const mfaServiceUrlString = getMfaServiceUrl();
   let mfaServiceUrl: URL | null = null;
   if (mfaServiceUrlString) {
@@ -44,11 +48,9 @@ const selectMfaMiddleware = (): RequestHandler => {
     }
   }
 
-  if (supportMfaPage() && mfaServiceUrl) {
-    return mfaMethodMiddleware;
+  if (supportMfaManagement(req.cookies) && mfaServiceUrl) {
+    await runMfaMethodMiddleware(req, res, next);
+  } else {
+    runLegacyMfaMethodsMiddleware(req, res, next);
   }
-
-  return legacyMfaMethodsMiddleware;
-};
-
-export { selectMfaMiddleware };
+}

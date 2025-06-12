@@ -1,6 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import { MFA_METHODS } from "../../app.constants";
 import { getNextState } from "../../utils/state-machine";
+import {
+  mfaMethodTypes,
+  mfaPriorityIdentifiers,
+} from "../../utils/mfaClient/types";
+import {
+  MFA_COMMON_OPL_SETTINGS,
+  OplSettingsLookupObject,
+  setOplSettings,
+} from "../../utils/opl";
 
 type MfaMethods = keyof typeof MFA_METHODS;
 enum MfaMethodType {
@@ -9,6 +18,28 @@ enum MfaMethodType {
 }
 const MAX_METHODS = 2;
 const ADD_METHOD_TEMPLATE = `choose-backup/index.njk`;
+
+const OPL_VALUES: OplSettingsLookupObject = {
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "63f44ae6-46f1-46c3-a2e8-305fe2ddf27d",
+  },
+  [`${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "d567c2cd-b769-4085-9d7b-bd6094d44050",
+  },
+};
+
+const setLocalOplSettings = (req: Request, res: Response) => {
+  const defaultMfaMethodType = req.session.mfaMethods?.find(
+    (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
+  )?.method.mfaMethodType;
+
+  const oplSettings =
+    OPL_VALUES[`${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`];
+
+  setOplSettings(oplSettings, res);
+};
 
 function handleMethods(res: Response): void {
   res.status(500).end();
@@ -26,6 +57,8 @@ function renderChooseBackupTemplate(res: Response, mfaMethods: any[]): void {
 }
 
 export function chooseBackupGet(req: Request, res: Response): void {
+  setLocalOplSettings(req, res);
+
   const mfaMethods = req.session.mfaMethods || [];
 
   if (mfaMethods.length > MAX_METHODS) {
@@ -49,6 +82,8 @@ export function chooseBackupPost(
   res: Response,
   next: NextFunction
 ): void {
+  setLocalOplSettings(req, res);
+
   const { addBackup } = req.body;
 
   const method = Object.keys(MFA_METHODS).find((key: MfaMethods) => {

@@ -12,15 +12,18 @@ import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/typ
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
 import { UpdateInformationInput } from "../../utils/types";
 import { getRequestConfigFromExpress } from "../../utils/http";
-import { setOplSettings } from "../../utils/opl";
+import {
+  CHANGE_EMAIL_COMMON_OPL_SETTINGS,
+  setOplSettings,
+} from "../../utils/opl";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
     {
+      ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
       contentId: "d5441a1e-28d1-455b-83fd-071cd876cd06",
-      taxonomyLevel2: "change email",
     },
     res
   );

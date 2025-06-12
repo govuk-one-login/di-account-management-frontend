@@ -5,14 +5,26 @@ import { MfaMethod } from "../../utils/mfaClient/types";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { logger } from "../../utils/logger";
 import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
+
+const setLocalOplSettings = (res: Response) => {
+  setOplSettings(
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "673fc9b6-3c25-4ab2-8963-fde55432f7d5",
+    },
+    res
+  );
+};
 
 export async function changeAuthenticatorAppGet(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  setLocalOplSettings(res);
   return renderMfaMethodPage(CHANGE_AUTHENTICATOR_APP_TEMPLATE, req, res, next);
 }
 
@@ -27,6 +39,8 @@ export async function changeAuthenticatorAppPost(
     res,
     next,
     async () => {
+      setLocalOplSettings(res);
+
       const { authAppSecret } = req.body;
 
       const authAppMFAMethod: MfaMethod = req.session.mfaMethods.find(

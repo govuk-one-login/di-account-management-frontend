@@ -9,7 +9,7 @@ import {
   requestNewOTPCodeGet,
 } from "./check-your-phone-controller";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
-import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 import {
   globalTryCatchAsync,
   globalTryCatch,
@@ -20,7 +20,7 @@ const router = express.Router();
 router.get(
   PATH_DATA.CHECK_YOUR_PHONE.url,
   requiresAuthMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   validateStateMiddleware,
   globalTryCatch(checkYourPhoneGet)
 );

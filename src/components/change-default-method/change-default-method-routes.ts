@@ -9,7 +9,7 @@ import {
   changeDefaultMethodSmsGet,
   changeDefaultMethodSmsPost,
 } from "./change-default-method-controllers";
-import { selectMfaMiddleware } from "../../middleware/mfa-method-middleware";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
@@ -20,7 +20,7 @@ router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodGet)
 );
 
@@ -28,7 +28,7 @@ router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodAppGet)
 );
 
@@ -36,7 +36,7 @@ router.post(
   PATH_DATA.CHANGE_DEFAULT_METHOD_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodAppPost)
 );
 
@@ -44,7 +44,7 @@ router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodSmsGet)
 );
 
@@ -53,7 +53,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   validatePhoneNumberRequest(),
-  selectMfaMiddleware(),
+  mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodSmsPost(changePhoneNumberService()))
 );
 

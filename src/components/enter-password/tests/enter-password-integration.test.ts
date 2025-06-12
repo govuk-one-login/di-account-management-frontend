@@ -154,7 +154,9 @@ describe("Integration::enter password", () => {
     PATH_DATA.DELETE_ACCOUNT,
 
     // don't test MFA Method routes in the feautre flag is off
-    ...(!supportChangeMfa()
+    ...(!supportChangeMfa({
+      enable_mfa_for_qa: "1",
+    })
       ? [
           PATH_DATA.ADD_MFA_METHOD,
           PATH_DATA.ADD_MFA_METHOD_APP,
