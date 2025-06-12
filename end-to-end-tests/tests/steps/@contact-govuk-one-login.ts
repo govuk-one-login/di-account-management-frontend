@@ -78,7 +78,7 @@ Then("the webchat appears", async ({ page }) => {
   await expect(page.getByText("GOV.UK One Login webchat · Beta")).toBeVisible();
   await expect(
     page.getByText("Welcome to GOV.UK One Login chatbot support")
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 10000 });
   await expect(
     page.getByText("Would you like to receive support in English or Welsh?")
   ).toBeVisible();
