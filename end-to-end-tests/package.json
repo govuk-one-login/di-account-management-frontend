@@ -1,0 +1,30 @@
+{
+  "name": "end-to-end-tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests for the account management frontend.",
+  "scripts": {
+    "build": "docker build -t frontend-end-to-end-tests .",
+    "install-browsers": "playwright install --with-deps chromium",
+    "test": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" frontend-end-to-end-tests",
+    "test:update-snapshots": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" frontend-end-to-end-tests update-snapshots",
+    "test:ui": "npm ci && npm run install-browsers && bddgen && playwright test --ui --ignore-snapshots",
+    "run-tests": "bddgen && playwright test",
+    "run-tests:update-snapshots": "bddgen && playwright test --update-snapshots"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/govuk-one-login/di-account-management-frontend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/govuk-one-login/di-account-management-frontend/issues"
+  },
+  "homepage": "https://github.com/govuk-one-login/di-account-management-frontend#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.26",
+    "playwright-bdd": "^8.2.1",
+    "dotenv": "^16.5.0",
+    "typescript": "^5.8.3",
+    "valibot": "^1.1.0"
+  }
+}

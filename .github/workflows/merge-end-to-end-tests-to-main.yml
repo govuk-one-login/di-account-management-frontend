@@ -1,13 +1,13 @@
 ---
-name: "Publish Feature Tests to Build"
+name: "Publish End-to-End Tests to Build"
 
 on:
   push:
     branches:
       - main
     paths:
-      - "post-deploy-tests/**"
-      - ".github/workflows/merge-post-deploy-tests-to-main.yml"
+      - "end-to-end-tests/**"
+      - ".github/workflows/merge-end-to-end-tests-to-main.yml"
 
 permissions:
   id-token: write
@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   publish_artifacts:
-    name: "Publish post-deploy tests image"
+    name: "Publish end-to-end tests image"
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -32,11 +32,11 @@ jobs:
         uses: aws-actions/amazon-ecr-login@261a7de32bda11ba01f4d75c4ed6caf3739e54be # pin@v1
 
       - name: Build & Publish Docker image
-        working-directory: post-deploy-tests/
+        working-directory: end-to-end-tests/
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.POST_DEPLOY_TESTS_IMAGE_REPOSITORY }}
+          ECR_REPOSITORY: ${{ secrets.END_TO_END_TESTS_IMAGE_REPOSITORY }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push -a $ECR_REGISTRY/$ECR_REPOSITORY

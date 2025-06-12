@@ -15,6 +15,7 @@ export default defineConfig({
   testDir,
   forbidOnly: !isLocal,
   workers: "50%",
+  snapshotPathTemplate: "./snapshots/{projectName}/{testFilePath}/{arg}{ext}",
   reporter: [
     // See https://govukverify.atlassian.net/wiki/spaces/PLAT/pages/3054010402/How+to+run+tests+against+your+deployed+application+in+a+SAM+deployment+pipeline#Test-reports
     cucumberReporter("json", {
@@ -28,8 +29,8 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "Chrome",
-      use: { ...devices["Desktop Chrome"], channel: "chrome" },
+      name: "Chromium",
+      use: { ...devices["Desktop Chrome"], channel: "chromium" },
     },
   ],
 });

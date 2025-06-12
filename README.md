@@ -114,22 +114,22 @@ docker exec -it account-management-frontend /bin/sh
 # npm run test:integration
 ```
 
-### Post-deploy tests
+### End-to-end tests
 
-The post-deploy tests are written with [Playwright](https://playwright.dev/) and [Playwright BDD](https://vitalets.github.io/playwright-bdd).
+The end-to-end tests are written with [Playwright](https://playwright.dev/) and [Playwright BDD](https://vitalets.github.io/playwright-bdd).
 
 #### Running the tests locally
 
-Copy the file `post-deploy-tests/.env.sample` to `post-deploy-tests/.env`.
+Copy the file `end-to-end-tests/.env.sample` to `end-to-end-tests/.env`.
 
 When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_ENVIRONMENT` to one of `dev | build | staging | production` to run tests against the corresponding deployment instead.
 
 If your machine has `AMD64` architecture then you can run the tests locally in Docker:
 
 ```bash
-cd post-deploy-tests
-docker build -t frontend-post-deploy-tests .
-docker run -t frontend-post-deploy-tests # or docker run -t --network="host" frontend-post-deploy-tests if running the tests against localhost
+cd end-to-end-tests
+docker build -t frontend-end-to-end-tests .
+docker run -t frontend-end-to-end-tests # or docker run -t -v `pwd`/snapshots:/snapshots -v `pwd`/test-results:/test-results --network="host" frontend-end-to-end-tests if running the tests against localhost
 ```
 
 This is also how the tests are run in the deployment pipeline so running the tests locally via Docker guarantees reproducible outcomes and is therefore the preferred option.
@@ -137,13 +137,17 @@ This is also how the tests are run in the deployment pipeline so running the tes
 If your machine has `ARM64` architecture then running the tests in Docker won't work because the Docker image is Linux-based and at the time of writing there is no `ARM64` build of Chrome for Linux. Instead you can run the tests against a locally installed version of Chrome. This is also useful for running the tests in debug or UI mode:
 
 ```bash
-cd post-deploy-tests
+cd end-to-end-tests
 npm ci && npm run test
 # npm ci && npm run test:debug to run tests in debug mode
 # npm ci && npm run test:ui to run tests in UI mode
 ```
 
 To avoid discrepancies between deployment pipeline and local test run outcomes ensure that your locally installed version of Chrome is up to date prior to running the tests.
+
+TODO
+update to explain how to run in Docker as the only method to run tests and update test snapshots
+but explain that to run in ui mode for the debugging the tests should be run locally
 
 ### Restarting the app
 
