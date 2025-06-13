@@ -9,6 +9,7 @@ import {
 import { destroyUserSessions } from "../../utils/session-store";
 import { getOIDCConfig } from "../../config/oidc";
 import { getCachedJWKS } from "../../utils/oidc";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const BACK_CHANNEL_LOGOUT_EVENT =
   "http://schemas.openid.net/event/backchannel-logout";
@@ -67,6 +68,7 @@ export async function globalLogoutPost(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("globalLogoutPost", MetricUnit.Count, 1);
   const token = await verifyLogoutToken(req);
 
   if (token && validateLogoutTokenClaims(token, req)) {

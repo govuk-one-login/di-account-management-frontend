@@ -18,6 +18,7 @@ import { getTxmaHeader } from "../../utils/txma-header";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { logger } from "../../utils/logger";
 import { ACTIVITY_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const activityLogDynamoDBRequest = (
   subjectId: string,
@@ -75,6 +76,7 @@ export async function reportSuspiciousActivityGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  req.metrics?.addMetric("reportSuspiciousActivityGet", MetricUnit.Count, 1);
   if (!reportSuspiciousActivity()) {
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     res.render("common/errors/404.njk");
@@ -165,6 +167,7 @@ export async function reportSuspiciousActivityPost(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  req.metrics?.addMetric("reportSuspiciousActivityPost", MetricUnit.Count, 1);
   if (!reportSuspiciousActivity()) {
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     res.render("common/errors/404.njk");
@@ -201,10 +204,15 @@ export async function reportSuspiciousActivityPost(
   }
 }
 
-export async function reportSuspiciousActivityConfirmation(
+export async function reportSuspiciousActivityConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric(
+    "reportSuspiciousActivityConfirmation",
+    MetricUnit.Count,
+    1
+  );
   if (!reportSuspiciousActivity()) {
     logger.error({
       err: "Report suspicious activity controller: should not load, sending user to a 404",
