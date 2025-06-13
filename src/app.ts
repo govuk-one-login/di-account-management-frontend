@@ -85,6 +85,7 @@ import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
+import { metricsMiddleware } from "./middleware/metrics-middlware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -219,6 +220,7 @@ async function createApp(): Promise<express.Application> {
 
   const oidcClient = await getOIDCClient(getOIDCConfig());
   app.use(authMiddleware(oidcClient));
+  app.use(metricsMiddleware());
 
   app.use(globalLogoutRouter);
   // Must be added to the app after the session is set up and before the routers
@@ -285,6 +287,7 @@ async function createApp(): Promise<express.Application> {
   app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
+
   return app;
 }
 
