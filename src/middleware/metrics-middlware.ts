@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Metrics } from "@aws-lambda-powertools/metrics";
+import { Metrics, MetricUnit } from "@aws-lambda-powertools/metrics";
 import { logger } from "../utils/logger";
 
 declare module "express-serve-static-core" {
@@ -8,7 +8,10 @@ declare module "express-serve-static-core" {
   }
 }
 
-export function metricsMiddleware(namespace = "amf", serviceName = "frontend") {
+export function metricsMiddleware(
+  namespace = "Account Home",
+  serviceName = "Frontend"
+) {
   return (req: Request, res: Response, next: NextFunction) => {
     const metrics = new Metrics({
       namespace,
@@ -18,6 +21,9 @@ export function metricsMiddleware(namespace = "amf", serviceName = "frontend") {
     req.metrics = metrics;
 
     res.on("finish", async () => {
+      const statusCode = res.statusCode;
+      metrics.addMetric(`HttpStatus_${statusCode}`, MetricUnit.Count, 1);
+
       try {
         metrics.publishStoredMetrics();
       } catch (error) {
