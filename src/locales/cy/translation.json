@@ -668,28 +668,28 @@
       }
     },
     "permanentlySuspendedScreen": {
-      "title": "Mae eich GOV.UK One Login wedi ei gloi yn barhaol",
-      "header": "Mae eich GOV.UK One Login wedi ei gloi yn barhaol",
+      "title": "Mae eich GOV.UK One Login wedi ei gloi'n barhaol",
+      "header": "Mae eich GOV.UK One Login wedi ei gloi'n barhaol",
       "section1": {
-        "paragraph1": "Ni allwch fewngofnodi ac ni allwch ddefnyddio eich GOV.UK One Login i gael mynediad at wasanaethau’r llywodraeth."
+        "paragraph1": "Rydych wedi cael eich allgofnodi ac ni allwch ddefnyddio'ch GOV.UK One Login mwyach."
       },
       "section2": {
-        "heading": "Beth allwch chi ei wneud",
-        "paragraph1": "Ewch yn ôl i’r gwasanaeth roeddech yn ceisio ei ddefnyddio. Gallwch chwilio am y gwasanaeth gan ddefnyddio’ch peiriant chwilio neu ddod o hyd iddo o’r hafan GOV.UK.",
+        "heading": "Beth allwch ei wneud",
+        "paragraph1": "Os ydych angen GOV.UK One Login i gael mynediad at wasanaeth y llywodraeth, gallwch greu un newydd gan ddefnyddio cyfeiriad e-bost gwahanol.",
         "link": {
-          "href": "https://www.gov.uk/using-your-gov-uk-one-login/services",
-          "text": "Ewch i'r gwasanaeth sydd angen i chi ei ddefnyddio"
+          "href": "https://www.gov.uk/defnyddio-eich-gov-uk-one-login",
+          "text": "Ewch i'r gwasanaeth rydych angen ei ddefnyddio i barhau"
         }
       }
     },
     "temporarilySuspendedPageScreen": {
-      "title": "Mae’n ddrwg gennym, mae problem",
-      "heading": "Mae’n ddrwg gennym, mae problem",
+      "title": "Sori, mae yna broblem",
+      "heading": "Sori, mae yna broblem",
       "section1": {
-        "paragraph1": "Nid yw eich GOV.UK One Login ar gael ar hyn o bryd."
+        "paragraph1": "Rydych wedi cael eich allgofnodi."
       },
       "section2": {
-        "paragraph1": "Dewch yn ôl yn nes ymlaen. Dylai eich GOV.UK One Login fod ar gael eto mewn 3 diwrnod gwaith.",
+        "paragraph1": "Ni allwch ddefnyddio eich GOV.UK One Login ar hyn o bryd.",
         "link": {
           "text": "Ceisiwch fewngofnodi yn nes ymlaen"
         }

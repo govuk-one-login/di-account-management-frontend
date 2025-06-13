@@ -826,7 +826,7 @@
         "paragraph1": "If you need a GOV.UK One Login to access a government service you can create a new one using a different email address.",
         "link": {
           "href": "https://www.gov.uk/using-your-gov-uk-one-login/services",
-          "text": "Go to the service you need to use"
+          "text": "Go to the service you need to use to continue"
         }
       }
     },
@@ -837,7 +837,7 @@
         "paragraph1": "You've been signed out."
       },
       "section2": {
-        "paragraph1": "Your GOV.UK One Login is not available at the moment.",
+        "paragraph1": "You cannot use your GOV.UK One Login at the moment.",
         "link": {
           "text": "Try signing in later"
         }
