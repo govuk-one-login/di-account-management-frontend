@@ -176,6 +176,7 @@ export async function enterPasswordGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("enterPasswordGet", MetricUnit.Count, 1);
   const requestType = req.query.type as UserJourney;
 
   setLocalOplSettings(req, res, requestType);

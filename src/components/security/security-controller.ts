@@ -9,6 +9,7 @@ import { hasAllowedActivityLogServices } from "../../middleware/check-allowed-se
 import { getLastNDigits } from "../../utils/phone-number";
 import { MfaMethod } from "src/utils/mfaClient/types";
 import { setOplSettings } from "../../utils/opl";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 function handleSmsMethod(
   phoneNumber: string,
@@ -130,6 +131,7 @@ function canChangePrimaryMethod(mfaMethods: MfaMethod[]): boolean {
 }
 
 export async function securityGet(req: Request, res: Response): Promise<void> {
+  req.metrics?.addMetric("securityGet", MetricUnit.Count, 1);
   const { email } = req.session.user;
   const enterPasswordUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=security&edit=true`;
 

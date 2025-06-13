@@ -15,11 +15,13 @@ import {
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function deleteAccountGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("deleteAccountGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
@@ -73,6 +75,7 @@ export function deleteAccountPost(
   service: DeleteAccountServiceInterface = deleteAccountService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    req.metrics?.addMetric("deleteAccountPost", MetricUnit.Count, 1);
     const { email, subjectId, publicSubjectId, legacySubjectId } =
       req.session.user;
 

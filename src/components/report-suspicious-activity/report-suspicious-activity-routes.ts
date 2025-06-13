@@ -2,7 +2,7 @@ import * as express from "express";
 import {
   reportSuspiciousActivityGet,
   reportSuspiciousActivityPost,
-  reportSuspiciousActivityConfirmation,
+  reportSuspiciousActivityConfirmationGet,
 } from "./report-suspicious-activity-controller";
 import { PATH_DATA } from "../../app.constants";
 import { asyncHandler } from "../../utils/async";
@@ -30,7 +30,7 @@ router.get(
   PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done",
   requiresAuthMiddleware,
   checkRSAAllowedServicesList,
-  reportSuspiciousActivityConfirmation
+  reportSuspiciousActivityConfirmationGet
 );
 
 export { router as reportSuspiciousActivityRouter };

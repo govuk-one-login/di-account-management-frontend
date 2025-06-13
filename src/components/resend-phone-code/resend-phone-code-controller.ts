@@ -31,6 +31,7 @@ import {
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../check-your-email/types";
 import { supportMfaManagement } from "../../config";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
 
@@ -89,6 +90,7 @@ const getRenderOptions = (req: Request, intent: Intent) => {
 };
 
 export function resendPhoneCodeGet(req: Request, res: Response): void {
+  req.metrics?.addMetric("resendPhoneCodeGet", MetricUnit.Count, 1);
   const intent = req.query.intent as Intent;
 
   setLocalOplSettings(intent, req, res);
@@ -99,6 +101,7 @@ export function resendPhoneCodePost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    req.metrics?.addMetric("resendPhoneCodePost", MetricUnit.Count, 1);
     const intent = req.body.intent;
 
     setLocalOplSettings(intent, req, res);
