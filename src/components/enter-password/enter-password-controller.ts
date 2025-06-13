@@ -34,6 +34,7 @@ import {
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
 import { eventService } from "../../services/event-service";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -193,6 +194,7 @@ export function enterPasswordPost(
   service: EnterPasswordServiceInterface = enterPasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    req.metrics?.addMetric("enterPasswordPost", MetricUnit.Count, 1);
     const requestType = req.query.type as UserJourney;
 
     setLocalOplSettings(req, res, requestType);
