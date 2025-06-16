@@ -158,8 +158,10 @@
           "searching for something less specific"
         ],
         "paragraph2": "If there are still no matching results, the service you’re looking for might not be using GOV.UK One Login yet.",
-        "paragraph3": "You can <a class='govuk-link' href='https://www.gov.uk/'> go to the GOV.UK homepage to find the service you need</a>."
-      }
+        "paragraph3": "You can <a class='govuk-link' href='https://www.gov.uk/'> go to the GOV.UK homepage to find the service you need</a>.",
+        "welshDisclaimer": "If there are still no matching results, the service might not be available in Welsh. <a class='govuk-link' href='[ENGLISH_LINK]'>Go to the English page to find a service in English</a>."
+      },
+      "welshDisclaimer": "Only services that are available in Welsh will appear in the results. <a class='govuk-link' href='[ENGLISH_LINK]'>Go to the English page to find a service in English</a>."
     },
     "security": {
       "title": "Security",

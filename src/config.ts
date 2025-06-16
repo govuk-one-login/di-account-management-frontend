@@ -1,5 +1,6 @@
 import { filterClients } from "di-account-management-rp-registry";
 import memoize from "fast-memoize";
+import { LOCALE } from "./app.constants";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -160,8 +161,15 @@ export const rsaAllowList = getIdListFromFilter({
   isReportSuspiciousActivityEnabled: true,
 });
 
-export const getClientsToShowInSearch = () =>
-  getIdListFromFilter({ showInClientSearch: true });
+export const getClientsToShowInSearch = (language: LOCALE) => {
+  if (language === LOCALE.CY) {
+    return getIdListFromFilter({
+      showInClientSearch: true,
+      isAvailableInWelsh: true,
+    });
+  }
+  return getIdListFromFilter({ showInClientSearch: true });
+};
 
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";

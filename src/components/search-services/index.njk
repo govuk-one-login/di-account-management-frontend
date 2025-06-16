@@ -18,6 +18,9 @@
     {% for paragraph in paragraphs %}
         <p class="govuk-body">{{ paragraph }}</p>
     {% endfor %}
+    {% if isWelsh %}
+      <div class='govuk-inset-text'>{{ "pages.searchServices.welshDisclaimer" | translate | safe | replace("[ENGLISH_LINK]", englishLanguageLink) }}</div>
+    {% endif %}
     <form method="get" action="{{ "SEARCH_SERVICES" | getPath }}" role="search">
       {% set submitButton %}
         <button class="search-services__submit" type="submit" enterkeyhint="search">
@@ -61,16 +64,20 @@
       {% endfor %}
     </ul>
     {% else %}
-    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-3">
-    <h2 class="govuk-heading-s">{{ "pages.searchServices.noResultsBlock.heading" | translate }}</h2>
-    <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph1" | translate }}</h2>
-    <ul class="govuk-list govuk-list--bullet">
-      {% set suggestionsList =  "pages.searchServices.noResultsBlock.suggestionsList" | translate({ returnObjects: true }) %}
-      {% for item in suggestionsList %}
-        <li class="">{{ item }}</li>
-      {% endfor %}
-    </ul>
-    <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph2" | translate }}</p>
-    <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph3" | translate | safe }}</p>
+      <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-3">
+      <h2 class="govuk-heading-s">{{ "pages.searchServices.noResultsBlock.heading" | translate }}</h2>
+      <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph1" | translate }}</h2>
+      <ul class="govuk-list govuk-list--bullet">
+        {% set suggestionsList =  "pages.searchServices.noResultsBlock.suggestionsList" | translate({ returnObjects: true }) %}
+        {% for item in suggestionsList %}
+          <li class="">{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% if isWelsh %}
+        <p class='govuk-body'>{{ "pages.searchServices.noResultsBlock.welshDisclaimer" | translate | safe | replace("[ENGLISH_LINK]", englishLanguageLink) }}</p>
+      {% else %}
+        <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph2" | translate }}</p>
+        <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph3" | translate | safe }}</p>
+      {% endif %}
     {% endif %}
 {% endblock %}
