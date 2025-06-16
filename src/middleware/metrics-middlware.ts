@@ -6,8 +6,10 @@ import {
   CloudWatchClient,
 } from "@aws-sdk/client-cloudwatch";
 import { logger } from "../utils/logger";
+import { getAWSConfig, AwsConfig } from "../config/aws";
 
-export const cloudWatchClient = new CloudWatchClient({});
+const awsConfig: AwsConfig = getAWSConfig();
+export const cloudWatchClient = new CloudWatchClient(awsConfig as any);
 
 interface Metric {
   MetricName: string;
