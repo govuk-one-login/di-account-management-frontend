@@ -91,6 +91,7 @@ export async function activityHistoryGet(
       hasEnglishOnlyServices,
     });
   } catch (error) {
+    req.metrics?.addMetric("activityHistoryGetError", MetricUnit.Count, 1);
     logger.error(
       `Activity-history-controller: Error during activity history get ${error}`
     );

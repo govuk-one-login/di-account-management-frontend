@@ -31,6 +31,7 @@ async function verifyLogoutToken(req: Request): Promise<LogoutToken> {
 
     return token.payload as LogoutToken;
   } catch (error) {
+    req.metrics?.addMetric("verifyLogoutTokenError", MetricUnit.Count, 1);
     req.log.error(
       new Error(`Unable to validate logout_token. Error: ${error.message}`)
     );

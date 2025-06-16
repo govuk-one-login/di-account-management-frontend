@@ -91,6 +91,7 @@ export async function addMfaAppMethodPost(
         );
         return res.redirect(PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url);
       } catch (error) {
+        req.metrics?.addMetric("addMfaAppMethodPostError", MetricUnit.Count, 1);
         req.log.error(error);
         return next(error);
       }

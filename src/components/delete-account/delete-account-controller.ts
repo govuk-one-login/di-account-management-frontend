@@ -94,6 +94,7 @@ export function deleteAccountPost(
           DeleteTopicARN
         );
       } catch (error) {
+        req.metrics?.addMetric("deleteAccountPostError", MetricUnit.Count, 1);
         req.log.error(
           `Unable to publish delete topic message for: ${subjectId} and ${publicSubjectId}and ARN ${DeleteTopicARN}. Error:${error}`
         );

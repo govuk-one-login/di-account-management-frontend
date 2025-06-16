@@ -105,6 +105,11 @@ export async function switchBackupMfaMethodPost(
       return;
     }
   } catch (error) {
+    req.metrics?.addMetric(
+      "switchBackupMfaMethodPostError",
+      MetricUnit.Count,
+      1
+    );
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
     logger.error(
       "Switch backup method controller: error updating default MFA method",
