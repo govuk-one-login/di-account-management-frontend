@@ -10,7 +10,39 @@ import { logger } from "./logger";
 const awsConfig: AwsConfig = getAWSConfig();
 export const cloudWatchClient = new CloudWatchClient(awsConfig as any);
 
-export async function sendCustomMetric({
+const METRIC_BATCH_SIZE = 20;
+const METRIC_FLUSH_INTERVAL_MS = 5000;
+const metricQueue: MetricDatum[] = [];
+let flushTimer: NodeJS.Timeout | null = null;
+
+function flushMetrics(namespace: string) {
+  if (metricQueue.length === 0) return;
+  const batch = metricQueue.splice(0, METRIC_BATCH_SIZE);
+  cloudWatchClient
+    .send(
+      new PutMetricDataCommand({
+        Namespace: namespace,
+        MetricData: batch,
+      })
+    )
+    .catch((err) => {
+      logger.error("Failed to send batched CloudWatch metrics", err);
+    });
+}
+
+function scheduleFlush(namespace: string) {
+  if (!flushTimer) {
+    flushTimer = setInterval(() => {
+      flushMetrics(namespace);
+      if (metricQueue.length === 0) {
+        clearInterval(flushTimer!);
+        flushTimer = null;
+      }
+    }, METRIC_FLUSH_INTERVAL_MS);
+  }
+}
+
+export function sendCustomMetric({
   metricName,
   unit,
   value,
@@ -24,7 +56,7 @@ export async function sendCustomMetric({
   dimensions?: { Name: string; Value: string }[];
   timestamp?: Date;
   namespace?: string;
-}): Promise<void> {
+}): void {
   const metric: MetricDatum = {
     MetricName: metricName,
     Unit: unit,
@@ -32,15 +64,10 @@ export async function sendCustomMetric({
     Dimensions: dimensions,
     Timestamp: timestamp,
   };
-
-  await cloudWatchClient
-    .send(
-      new PutMetricDataCommand({
-        Namespace: namespace,
-        MetricData: [metric],
-      })
-    )
-    .catch((err) => {
-      logger.error("Failed to send custom CloudWatch metric", err);
-    });
+  metricQueue.push(metric);
+  if (metricQueue.length >= METRIC_BATCH_SIZE) {
+    flushMetrics(namespace);
+  } else {
+    scheduleFlush(namespace);
+  }
 }
