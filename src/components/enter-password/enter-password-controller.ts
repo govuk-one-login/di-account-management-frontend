@@ -177,7 +177,7 @@ export async function enterPasswordGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  sendCustomMetric({
+  await sendCustomMetric({
     metricName: "enterPasswordGet",
     unit: StandardUnit.Count,
     value: 1,
