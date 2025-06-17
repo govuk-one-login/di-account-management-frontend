@@ -16,20 +16,24 @@ const translations: Record<string, string> = {
 
 const servicesMock = ["govuk", "lite", "ofqual", "slavery", "apprentice"];
 const servicesMockSorted = ["govuk", "lite", "apprentice", "slavery", "ofqual"];
+const servicesMockMultiplePages = new Array(25)
+  .fill(0)
+  .map((_, i) => `service${i + 1}`);
 
 const getRequestMock = (q?: string, lng?: string): Partial<Request> => {
   const url = lng === "cy" ? "/search-services?lng=cy" : "/search-services";
   return {
     query: q ? { q } : {},
-    t: (k: string): string => translations[k],
     originalUrl: url,
     language: lng || "en",
+    t: (k: string): string => translations[k] || k,
   };
 };
 
 describe("search services controller", () => {
   let res: Partial<Response>;
   let sandbox: sinon.SinonSandbox;
+  let searchStub: sinon.SinonStub;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -37,7 +41,9 @@ describe("search services controller", () => {
       render: sandbox.fake(),
     };
 
-    sandbox.stub(config, "getClientsToShowInSearch").returns(servicesMock);
+    searchStub = sandbox
+      .stub(config, "getClientsToShowInSearch")
+      .returns(servicesMock);
     sandbox.stub(config, "getAppEnv").returns("test");
   });
 
@@ -55,6 +61,7 @@ describe("search services controller", () => {
       resultsCount: 5,
       isWelsh: false,
       englishLanguageLink: "/search-services?lng=en",
+      pagination: { items: [], previous: false, next: false },
     });
   });
 
@@ -68,6 +75,7 @@ describe("search services controller", () => {
       resultsCount: 0,
       isWelsh: false,
       englishLanguageLink: "/search-services?lng=en",
+      pagination: { items: [], previous: false, next: false },
     });
   });
 
@@ -81,6 +89,7 @@ describe("search services controller", () => {
       resultsCount: 1,
       isWelsh: false,
       englishLanguageLink: "/search-services?lng=en",
+      pagination: { items: [], previous: false, next: false },
     });
   });
 
@@ -94,6 +103,7 @@ describe("search services controller", () => {
       resultsCount: 1,
       isWelsh: false,
       englishLanguageLink: "/search-services?lng=en",
+      pagination: { items: [], previous: false, next: false },
     });
   });
 
@@ -107,6 +117,7 @@ describe("search services controller", () => {
       resultsCount: 2,
       isWelsh: false,
       englishLanguageLink: "/search-services?lng=en",
+      pagination: { items: [], previous: false, next: false },
     });
   });
 
@@ -120,6 +131,7 @@ describe("search services controller", () => {
       resultsCount: 1,
       isWelsh: false,
       englishLanguageLink: "/search-services?lng=en",
+      pagination: { items: [], previous: false, next: false },
     });
   });
 
@@ -136,6 +148,54 @@ describe("search services controller", () => {
       resultsCount: 5,
       isWelsh: true,
       englishLanguageLink: "/search-services?lng=en",
+      pagination: { items: [], previous: false, next: false },
+    });
+  });
+
+  it("shoud work with pagination", () => {
+    searchStub.reset();
+    searchStub.returns(servicesMockMultiplePages);
+    searchServicesGet(getRequestMock() as Request, res as Response);
+    expect(res.render).to.have.calledWith("search-services/index.njk", {
+      env: "test",
+      services: [
+        "service1",
+        "service10",
+        "service11",
+        "service12",
+        "service13",
+        "service14",
+        "service15",
+        "service16",
+        "service17",
+        "service18",
+      ],
+      hasSearch: false,
+      resultsCount: 25,
+      query: undefined,
+      pagination: {
+        items: [
+          {
+            number: 1,
+            current: true,
+            href: "/search-services?page=1",
+          },
+          {
+            number: 2,
+            current: false,
+            href: "/search-services?page=2",
+          },
+          {
+            number: 3,
+            current: false,
+            href: "/search-services?page=3",
+          },
+        ],
+        previous: false,
+        next: { href: "/search-services?page=2" },
+      },
+      englishLanguageLink: '/search-services?lng=en',
+      isWelsh: false
     });
   });
 });

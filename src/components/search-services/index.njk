@@ -2,6 +2,7 @@
 {% set hideAccountNavigation = true %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% set pageTitleName = 'pages.searchServices.heading' | translate %}
 {% set resultsCountText %}
   {% if resultsCount === 1 %}
@@ -63,6 +64,7 @@
         </li>
       {% endfor %}
     </ul>
+    {{ govukPagination(pagination) }}
     {% else %}
       <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-3">
       <h2 class="govuk-heading-s">{{ "pages.searchServices.noResultsBlock.heading" | translate }}</h2>
