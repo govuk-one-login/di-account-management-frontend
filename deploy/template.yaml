@@ -1052,6 +1052,11 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                  - "cloudwatch:PutMetricData"
+                Resource:
+                  - "*"
+              - Effect: Allow
+                Action:
                   - "sns:Publish"
                 Resource:
                   - !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
