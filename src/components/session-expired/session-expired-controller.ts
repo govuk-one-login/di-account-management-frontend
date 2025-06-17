@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
 import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 export function sessionExpiredGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("sessionExpiredGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "sessionExpiredGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   res.status(401);
 
   setOplSettings(

@@ -15,13 +15,18 @@ import {
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 export async function deleteAccountGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("deleteAccountGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "deleteAccountGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setOplSettings(
     {
       ...DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
@@ -75,7 +80,11 @@ export function deleteAccountPost(
   service: DeleteAccountServiceInterface = deleteAccountService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("deleteAccountPost", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "deleteAccountPost",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     const { email, subjectId, publicSubjectId, legacySubjectId } =
       req.session.user;
 
@@ -94,7 +103,11 @@ export function deleteAccountPost(
           DeleteTopicARN
         );
       } catch (error) {
-        req.metrics?.addMetric("deleteAccountPostError", MetricUnit.Count, 1);
+        sendCustomMetric({
+          metricName: "deleteAccountPostError",
+          unit: StandardUnit.Count,
+          value: 1,
+        });
         req.log.error(
           `Unable to publish delete topic message for: ${subjectId} and ${publicSubjectId}and ARN ${DeleteTopicARN}. Error:${error}`
         );

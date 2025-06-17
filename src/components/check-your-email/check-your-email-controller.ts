@@ -16,7 +16,8 @@ import {
   CHANGE_EMAIL_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
 
@@ -31,7 +32,11 @@ const setLocalOplSettings = (res: Response) => {
 };
 
 export function checkYourEmailGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("checkYourEmailGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "checkYourEmailGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setLocalOplSettings(res);
   res.render(TEMPLATE_NAME, {
     email: req.session.user.newEmailAddress,
@@ -43,7 +48,11 @@ export function checkYourEmailPost(
   publishingService: GovUkPublishingServiceInterface = govUkPublishingService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("checkYourEmailPost", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "checkYourEmailPost",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     const { email, newEmailAddress, publicSubjectId, legacySubjectId } =
       req.session.user;
 
@@ -93,7 +102,11 @@ export function checkYourEmailPost(
 }
 
 export function requestNewCodeGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("requestNewCodeGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "requestNewCodeGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   req.session.user.state.changeEmail = getNextState(
     req.session.user.state.changeEmail.value,
     EventType.ResendCode

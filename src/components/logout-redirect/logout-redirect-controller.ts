@@ -1,12 +1,17 @@
 import { Request, Response } from "express";
 import { LogoutRedirect, LogoutState } from "../../app.constants";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 export async function logoutRedirectGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("logoutRedirectGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "logoutRedirectGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   const state = req.query?.state;
 
   if (state === LogoutState.Suspended) {

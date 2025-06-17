@@ -9,7 +9,8 @@ import {
 import { destroyUserSessions } from "../../utils/session-store";
 import { getOIDCConfig } from "../../config/oidc";
 import { getCachedJWKS } from "../../utils/oidc";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 const BACK_CHANNEL_LOGOUT_EVENT =
   "http://schemas.openid.net/event/backchannel-logout";
@@ -31,7 +32,11 @@ async function verifyLogoutToken(req: Request): Promise<LogoutToken> {
 
     return token.payload as LogoutToken;
   } catch (error) {
-    req.metrics?.addMetric("verifyLogoutTokenError", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "verifyLogoutTokenError",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     req.log.error(
       new Error(`Unable to validate logout_token. Error: ${error.message}`)
     );
@@ -69,7 +74,11 @@ export async function globalLogoutPost(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("globalLogoutPost", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "globalLogoutPost",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   const token = await verifyLogoutToken(req);
 
   if (token && validateLogoutTokenClaims(token, req)) {

@@ -14,7 +14,8 @@ import {
   CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
 
 const changePasswordTemplate = "change-password/index.njk";
 
@@ -29,7 +30,11 @@ const setLocalOplSettings = (res: Response) => {
 };
 
 export function changePasswordGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("changePasswordGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "changePasswordGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setLocalOplSettings(res);
   res.render(changePasswordTemplate);
 }
@@ -38,7 +43,11 @@ export function changePasswordPost(
   service: ChangePasswordServiceInterface = changePasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("changePasswordPost", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "changePasswordPost",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     setLocalOplSettings(res);
 
     const { email } = req.session.user;

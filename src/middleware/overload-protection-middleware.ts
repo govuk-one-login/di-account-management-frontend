@@ -1,6 +1,13 @@
 import overloadProtection from "overload-protection";
+import { sendCustomMetric } from "../utils/cloudwatch-metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
 
 export const applyOverloadProtection = (isProduction: boolean) => {
+  sendCustomMetric({
+    metricName: "changePasswordGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   return overloadProtection("express", {
     production: isProduction,
     clientRetrySecs: 3,

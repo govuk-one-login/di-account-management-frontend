@@ -85,7 +85,8 @@ import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
-import { metricsMiddleware } from "./middleware/metrics-middlware";
+import { sendCustomMetric } from "./utils/cloudwatch-metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -96,7 +97,6 @@ const APP_VIEWS = [
 async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
   const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
-  app.use(metricsMiddleware());
   app.enable("trust proxy");
 
   if (isProduction) {
@@ -106,6 +106,22 @@ async function createApp(): Promise<express.Application> {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+
+  // CloudWatch HTTP status code metric middleware
+  app.use((req, res, next) => {
+    res.on("finish", () => {
+      sendCustomMetric({
+        metricName: `HttpStatus_${res.statusCode}`,
+        unit: StandardUnit.Count,
+        value: 1,
+        dimensions: [
+          { Name: "Path", Value: req.path },
+          { Name: "Method", Value: req.method },
+        ],
+      });
+    });
+    next();
+  });
 
   // Define the healthcheck and static routes first
   // Do not define a route or middleware before these unless there's a very good reason

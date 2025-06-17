@@ -1,10 +1,15 @@
 import { Request, Response } from "express";
 import { generators } from "openid-client";
 import { VECTORS_OF_TRUST } from "../../app.constants";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 export async function startGet(req: Request, res: Response): Promise<void> {
-  req.metrics?.addMetric("signedOutGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "signedOutGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   req.session.nonce = generators.nonce(15);
   req.session.state = generators.nonce(10);
 

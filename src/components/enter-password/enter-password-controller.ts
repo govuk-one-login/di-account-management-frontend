@@ -34,7 +34,8 @@ import {
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
 import { eventService } from "../../services/event-service";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -176,7 +177,11 @@ export async function enterPasswordGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("enterPasswordGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "enterPasswordGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   const requestType = req.query.type as UserJourney;
 
   setLocalOplSettings(req, res, requestType);
@@ -195,7 +200,11 @@ export function enterPasswordPost(
   service: EnterPasswordServiceInterface = enterPasswordService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("enterPasswordPost", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "enterPasswordPost",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     const requestType = req.query.type as UserJourney;
 
     setLocalOplSettings(req, res, requestType);

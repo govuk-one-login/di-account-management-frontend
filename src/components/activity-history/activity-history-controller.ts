@@ -21,13 +21,18 @@ import { presentActivityHistory } from "../../utils/present-activity-history";
 import { logger } from "../../utils/logger";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
 import { setOplSettings } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 export async function activityHistoryGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("activityHistoryGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "activityHistoryGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   const { user } = req.session;
   const env = getAppEnv();
   let activityData: ActivityLogEntry[] = [];
@@ -91,7 +96,11 @@ export async function activityHistoryGet(
       hasEnglishOnlyServices,
     });
   } catch (error) {
-    req.metrics?.addMetric("activityHistoryGetError", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "activityHistoryGetError",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     logger.error(
       `Activity-history-controller: Error during activity history get ${error}`
     );

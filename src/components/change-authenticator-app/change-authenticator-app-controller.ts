@@ -6,7 +6,8 @@ import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { logger } from "../../utils/logger";
 import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";
 
@@ -25,7 +26,11 @@ export async function changeAuthenticatorAppGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  req.metrics?.addMetric("changeAuthenticatorAppGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "changeAuthenticatorAppGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setLocalOplSettings(res);
   return renderMfaMethodPage(CHANGE_AUTHENTICATOR_APP_TEMPLATE, req, res, next);
 }
@@ -35,7 +40,11 @@ export async function changeAuthenticatorAppPost(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  req.metrics?.addMetric("changeAuthenticatorAppPost", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "changeAuthenticatorAppPost",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   return handleMfaMethodPage(
     CHANGE_AUTHENTICATOR_APP_TEMPLATE,
     req,

@@ -29,7 +29,8 @@ import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
 
 const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
@@ -63,7 +64,11 @@ export async function addMfaSmsMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("addMfaSmsMethodGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "addMfaSmsMethodGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setAddMfaSmsMethodGetOplSettings(req, res);
   res.render(ADD_MFA_METHOD_SMS_TEMPLATE, { backLink });
 }
@@ -72,7 +77,11 @@ export function addMfaSmsMethodPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
-    req.metrics?.addMetric("addMfaSmsMethodPost", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "addMfaSmsMethodPost",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     setAddMfaSmsMethodGetOplSettings(req, res);
 
     const errors = validationResult(req)
@@ -150,7 +159,11 @@ export async function addMfaSmsMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("addMfaSmsMethodConfirmationGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "addMfaSmsMethodConfirmationGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   const defaultMfaMethodType = req.session.mfaMethods?.find(
     (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
   )?.method.mfaMethodType;

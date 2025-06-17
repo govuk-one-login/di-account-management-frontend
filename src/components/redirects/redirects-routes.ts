@@ -2,7 +2,8 @@ import * as express from "express";
 import { Request, Response } from "express";
 import { PATH_DATA, WELL_KNOWN_FILES } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 const router = express.Router();
 
@@ -21,7 +22,11 @@ router.get(PATH_DATA.THANKS_TXT.url, (_, res) =>
 );
 
 function redirectToSecurityGet(req: Request, res: Response) {
-  req.metrics?.addMetric("redirectToSecurityGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "redirectToSecurityGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   return res.redirect(PATH_DATA.SECURITY.url);
 }
 

@@ -5,7 +5,8 @@ import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { AuthAppMethod } from "../../utils/mfaClient/types";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";
 
@@ -15,7 +16,11 @@ export async function addMfaMethodGoBackGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("addMfaMethodGoBackGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "addMfaMethodGoBackGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   req.session.user.state.addBackup = getNextState(
     req.session.user.state.addBackup.value,
     EventType.GoBackToChooseBackup
@@ -38,7 +43,11 @@ export async function addMfaAppMethodGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  req.metrics?.addMetric("addMfaAppMethodGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "addMfaAppMethodGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setLocalOplSettings(res);
 
   return renderMfaMethodPage(
@@ -56,7 +65,11 @@ export async function addMfaAppMethodPost(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  req.metrics?.addMetric("addMfaAppMethodPost", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "addMfaAppMethodPost",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   return handleMfaMethodPage(
     ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
     req,
@@ -91,7 +104,11 @@ export async function addMfaAppMethodPost(
         );
         return res.redirect(PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION.url);
       } catch (error) {
-        req.metrics?.addMetric("addMfaAppMethodPostError", MetricUnit.Count, 1);
+        sendCustomMetric({
+          metricName: "addMfaAppMethodPostError",
+          unit: StandardUnit.Count,
+          value: 1,
+        });
         req.log.error(error);
         return next(error);
       }

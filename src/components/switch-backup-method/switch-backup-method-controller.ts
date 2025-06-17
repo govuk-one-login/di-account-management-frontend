@@ -5,7 +5,8 @@ import { EventType, getNextState } from "../../utils/state-machine";
 import { logger } from "../../utils/logger";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
@@ -21,7 +22,11 @@ export async function switchBackupMfaMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("switchBackupMfaMethodGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "switchBackupMfaMethodGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setLocalOplSettings(res);
 
   let currentBackupPhoneNumber;
@@ -74,7 +79,11 @@ export async function switchBackupMfaMethodPost(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("switchBackupMfaMethodPost", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "switchBackupMfaMethodPost",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setLocalOplSettings(res);
 
   const { newDefault } = req.body;
@@ -105,11 +114,11 @@ export async function switchBackupMfaMethodPost(
       return;
     }
   } catch (error) {
-    req.metrics?.addMetric(
-      "switchBackupMfaMethodPostError",
-      MetricUnit.Count,
-      1
-    );
+    sendCustomMetric({
+      metricName: "switchBackupMfaMethodPostError",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
     logger.error(
       "Switch backup method controller: error updating default MFA method",

@@ -20,7 +20,8 @@ import {
   setOplSettings,
 } from "../../utils/opl";
 import { supportMfaManagement } from "../../config";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 
@@ -40,7 +41,11 @@ const setLocalOplSettings = (req: Request, res: Response) => {
 };
 
 export function changePhoneNumberGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("changePhoneNumberGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "changePhoneNumberGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   setLocalOplSettings(req, res);
   res.render(CHANGE_PHONE_NUMBER_TEMPLATE);
 }
@@ -49,7 +54,11 @@ export function changePhoneNumberPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("changePhoneNumberPost", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "changePhoneNumberPost",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     setLocalOplSettings(req, res);
 
     const errors = validationResult(req)

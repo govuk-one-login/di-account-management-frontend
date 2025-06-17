@@ -14,7 +14,8 @@ import {
   containsNumbersOnly,
   splitSecretKeyIntoFragments,
 } from "../../../utils/strings";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../../utils/cloudwatch-metrics";
 
 export async function renderMfaMethodPage(
   templateFile: string,
@@ -45,7 +46,11 @@ export async function renderMfaMethodPage(
       errorList: generateErrorList(errors),
     });
   } catch (error) {
-    req.metrics?.addMetric("renderMfaMethodPageError", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "renderMfaMethodPageError",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     req.log.error(error);
     return next(error);
   }

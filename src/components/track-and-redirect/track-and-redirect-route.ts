@@ -4,11 +4,16 @@ import { EventName, PATH_DATA } from "../../app.constants";
 import { eventService } from "../../services/event-service";
 import { buildContactEmailServiceUrl } from "./track-and-redirect-controller";
 import { logger } from "../../utils/logger";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 const router = express.Router();
 router.get(PATH_DATA.TRACK_AND_REDIRECT.url, (req, res) => {
-  req.metrics?.addMetric("trackAndRedirectGet", MetricUnit.Count, 1);
+  sendCustomMetric({
+    metricName: "trackAndRedirectGet",
+    unit: StandardUnit.Count,
+    value: 1,
+  });
   if (!req.session || !req.session.queryParameters) {
     logger.error(
       "Track and redirect route: request session or queryParameters are undefined."

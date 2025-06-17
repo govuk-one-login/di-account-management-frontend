@@ -7,7 +7,8 @@ import { clientAssertionGenerator } from "../../utils/oidc";
 import xss from "xss";
 import { logger } from "../../utils/logger";
 import { clearCookies, deleteExpressSession } from "../../utils/session-store";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { StandardUnit } from "@aws-sdk/client-cloudwatch";
+import { sendCustomMetric } from "../../utils/cloudwatch-metrics";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
@@ -50,7 +51,11 @@ export function oidcAuthCallbackGet(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("oidcAuthCallbackGet", MetricUnit.Count, 1);
+    sendCustomMetric({
+      metricName: "oidcAuthCallbackGet",
+      unit: StandardUnit.Count,
+      value: 1,
+    });
     const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
     if (queryParams?.error) {
       logger.warn(
