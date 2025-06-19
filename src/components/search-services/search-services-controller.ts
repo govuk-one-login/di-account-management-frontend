@@ -7,7 +7,6 @@ import {
 import { LOCALE } from "../../app.constants";
 
 const TEMPLATE_NAME = "search-services/index.njk";
-const ITEMS_PER_PAGE = getResultsPerServicePage();
 
 const prepareForSearch = (q: string): string => {
   return q.toLowerCase().replace(/[^0-9a-z]/gi, "");
@@ -65,7 +64,7 @@ export function searchServicesGet(req: Request, res: Response): void {
 
   const currentPage = Number(req.query.page) || 1;
 
-  const totalPages = Math.ceil(services.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(services.length / getResultsPerServicePage());
   const pagination = {
     items:
       totalPages > 1
@@ -87,7 +86,11 @@ export function searchServicesGet(req: Request, res: Response): void {
 
   res.render(TEMPLATE_NAME, {
     env: getAppEnv(),
-    services: paginate(services, Number(req.query.page) || 1, ITEMS_PER_PAGE),
+    services: paginate(
+      services,
+      Number(req.query.page) || 1,
+      getResultsPerServicePage()
+    ),
     pagination,
     query: req.query.q,
     hasSearch: !!req.query.q,
