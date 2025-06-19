@@ -67,6 +67,7 @@ describe("search services controller", () => {
       .stub(config, "getClientsToShowInSearch")
       .returns(servicesMock);
     sandbox.stub(config, "getAppEnv").returns("test");
+    sandbox.stub(config, "getResultsPerServicePage").returns(10);
   });
 
   afterEach(() => {

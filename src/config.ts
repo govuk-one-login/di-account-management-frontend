@@ -127,6 +127,10 @@ export function getAccessibilityStatementUrl(): string {
   return process.env.ACCESSIBILITY_STATEMENT_URL;
 }
 
+export function getResultsPerServicePage(): number {
+  return Number(process.env.RESULTS_PER_SERVICE_PAGE) || 1000;
+}
+
 const STUB_RP_PROD = "5Vfplamzln0AoarlnX5CX4UTqyh59xfA";
 const STUB_RP_INTEGRATION = "gjWNvoLYietMjeaOE6Zoww533u18ZUfr";
 const STUB_RP_STAGING = "3NKFv679oYlMdyrhKErrTGbzBy2h8rrd";

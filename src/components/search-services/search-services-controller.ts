@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
-import { getAppEnv, getClientsToShowInSearch } from "../../config";
+import {
+  getAppEnv,
+  getClientsToShowInSearch,
+  getResultsPerServicePage,
+} from "../../config";
 import { LOCALE } from "../../app.constants";
 
 const TEMPLATE_NAME = "search-services/index.njk";
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = getResultsPerServicePage();
 
 const prepareForSearch = (q: string): string => {
   return q.toLowerCase().replace(/[^0-9a-z]/gi, "");
@@ -51,7 +55,7 @@ export function searchServicesGet(req: Request, res: Response): void {
     url.searchParams.set("lng", LOCALE.EN);
     url.searchParams.delete("page");
     return url.pathname + url.search;
-  }
+  };
 
   const getPageUrl = (page: number): string => {
     const url = new URL(req.originalUrl, "http://example.com");
