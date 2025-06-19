@@ -20,10 +20,32 @@ const servicesMockMultiplePages = new Array(25)
   .fill(0)
   .map((_, i) => `service${i + 1}`);
 
-const getRequestMock = (q?: string, lng?: string): Partial<Request> => {
-  const url = lng === "cy" ? "/search-services?lng=cy" : "/search-services";
+interface RequestMockOptions {
+  q?: string;
+  lng?: string;
+  page?: number;
+}
+
+const getRequestMock = ({
+  q,
+  lng,
+  page,
+}: RequestMockOptions = {}): Partial<Request> => {
+  const params: string[] = [];
+  if (q) params.push(`q=${encodeURIComponent(q)}`);
+  if (lng) params.push(`lng=${lng}`);
+  if (page) params.push(`page=${page}`);
+
+  const url =
+    params.length === 0
+      ? "/search-services"
+      : `/search-services?${params.join("&")}`;
+
   return {
-    query: q ? { q } : {},
+    query: {
+      ...(q && { q }),
+      ...(page && { page: String(page) }),
+    },
     originalUrl: url,
     language: lng || "en",
     t: (k: string): string => translations[k] || k,
@@ -66,7 +88,10 @@ describe("search services controller", () => {
   });
 
   it("should show no results when there is a search with no results", () => {
-    searchServicesGet(getRequestMock("noresults") as Request, res as Response);
+    searchServicesGet(
+      getRequestMock({ q: "noresults" }) as Request,
+      res as Response
+    );
     expect(res.render).to.have.calledWith("search-services/index.njk", {
       env: "test",
       services: [],
@@ -80,7 +105,10 @@ describe("search services controller", () => {
   });
 
   it("should match when there is punctuation in the title, but not in the query", () => {
-    searchServicesGet(getRequestMock("govuk") as Request, res as Response);
+    searchServicesGet(
+      getRequestMock({ q: "govuk" }) as Request,
+      res as Response
+    );
     expect(res.render).to.have.calledWith("search-services/index.njk", {
       env: "test",
       services: ["govuk"],
@@ -94,7 +122,10 @@ describe("search services controller", () => {
   });
 
   it("should match when there is punctuation in the query", () => {
-    searchServicesGet(getRequestMock("gov.uk") as Request, res as Response);
+    searchServicesGet(
+      getRequestMock({ q: "gov.uk" }) as Request,
+      res as Response
+    );
     expect(res.render).to.have.calledWith("search-services/index.njk", {
       env: "test",
       services: ["govuk"],
@@ -108,7 +139,10 @@ describe("search services controller", () => {
   });
 
   it("should match multiple words in the query", () => {
-    searchServicesGet(getRequestMock("gov lite") as Request, res as Response);
+    searchServicesGet(
+      getRequestMock({ q: "gov lite" }) as Request,
+      res as Response
+    );
     expect(res.render).to.have.calledWith("search-services/index.njk", {
       env: "test",
       services: ["govuk", "lite"],
@@ -122,7 +156,10 @@ describe("search services controller", () => {
   });
 
   it("should match across words in the service header", () => {
-    searchServicesGet(getRequestMock("ageappre") as Request, res as Response);
+    searchServicesGet(
+      getRequestMock({ q: "ageappre" }) as Request,
+      res as Response
+    );
     expect(res.render).to.have.calledWith("search-services/index.njk", {
       env: "test",
       services: ["apprentice"],
@@ -137,7 +174,7 @@ describe("search services controller", () => {
 
   it("should set isWelsh to true when the language is welsh", () => {
     searchServicesGet(
-      getRequestMock(undefined, "cy") as Request,
+      getRequestMock({ lng: "cy" }) as Request,
       res as Response
     );
     expect(res.render).to.have.calledWith("search-services/index.njk", {
@@ -148,6 +185,23 @@ describe("search services controller", () => {
       resultsCount: 5,
       isWelsh: true,
       englishLanguageLink: "/search-services?lng=en",
+      pagination: { items: [], previous: false, next: false },
+    });
+  });
+
+  it('should remove the "page" query parameter from the English language link', () => {
+    searchServicesGet(
+      getRequestMock({ q: "govuk", lng: "cy", page: 5 }) as Request,
+      res as Response
+    );
+    expect(res.render).to.have.calledWith("search-services/index.njk", {
+      env: "test",
+      services: ["govuk"],
+      query: "govuk",
+      hasSearch: true,
+      resultsCount: 1,
+      isWelsh: true,
+      englishLanguageLink: "/search-services?q=govuk&lng=en",
       pagination: { items: [], previous: false, next: false },
     });
   });
@@ -194,8 +248,45 @@ describe("search services controller", () => {
         previous: false,
         next: { href: "/search-services?page=2" },
       },
-      englishLanguageLink: '/search-services?lng=en',
-      isWelsh: false
+      englishLanguageLink: "/search-services?lng=en",
+      isWelsh: false,
+    });
+  });
+
+  it("should be able to show results for a specific page", () => {
+    searchStub.reset();
+    searchStub.returns(servicesMockMultiplePages);
+    const req = getRequestMock({ page: 3 });
+    searchServicesGet(req as Request, res as Response);
+    expect(res.render).to.have.calledWith("search-services/index.njk", {
+      env: "test",
+      services: ["service5", "service6", "service7", "service8", "service9"],
+      query: undefined,
+      hasSearch: false,
+      resultsCount: 25,
+      isWelsh: false,
+      englishLanguageLink: "/search-services?lng=en",
+      pagination: {
+        items: [
+          {
+            number: 1,
+            current: false,
+            href: "/search-services?page=1",
+          },
+          {
+            number: 2,
+            current: false,
+            href: "/search-services?page=2",
+          },
+          {
+            number: 3,
+            current: true,
+            href: "/search-services?page=3",
+          },
+        ],
+        previous: { href: "/search-services?page=2" },
+        next: false,
+      },
     });
   });
 });
