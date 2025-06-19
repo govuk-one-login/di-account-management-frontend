@@ -8,12 +8,12 @@
         titleText: heading
     }) }}
     <p class='govuk-body'>{{ message | safe }}</p>
-    <p>{{ govukButton({
+    {{ govukButton({
         text: backLinkText,
         href: backLink,
         attributes: {
             "data-nav": true,
             "data-link": backLink
         }
-    }) }}</p>
+    }) }}
 {% endblock %}
