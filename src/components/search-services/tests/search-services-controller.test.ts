@@ -99,7 +99,7 @@ describe("search services controller", () => {
       hasSearch: true,
       resultsCount: 0,
       isWelsh: false,
-      englishLanguageLink: "/search-services?lng=en",
+      englishLanguageLink: "/search-services?q=noresults&lng=en",
       pagination: { items: [], previous: false, next: false },
     });
   });
@@ -116,7 +116,7 @@ describe("search services controller", () => {
       hasSearch: true,
       resultsCount: 1,
       isWelsh: false,
-      englishLanguageLink: "/search-services?lng=en",
+      englishLanguageLink: "/search-services?q=govuk&lng=en",
       pagination: { items: [], previous: false, next: false },
     });
   });
@@ -133,7 +133,7 @@ describe("search services controller", () => {
       hasSearch: true,
       resultsCount: 1,
       isWelsh: false,
-      englishLanguageLink: "/search-services?lng=en",
+      englishLanguageLink: "/search-services?q=gov.uk&lng=en",
       pagination: { items: [], previous: false, next: false },
     });
   });
@@ -150,7 +150,7 @@ describe("search services controller", () => {
       hasSearch: true,
       resultsCount: 2,
       isWelsh: false,
-      englishLanguageLink: "/search-services?lng=en",
+      englishLanguageLink: "/search-services?q=gov+lite&lng=en",
       pagination: { items: [], previous: false, next: false },
     });
   });
@@ -167,7 +167,7 @@ describe("search services controller", () => {
       hasSearch: true,
       resultsCount: 1,
       isWelsh: false,
-      englishLanguageLink: "/search-services?lng=en",
+      englishLanguageLink: "/search-services?q=ageappre&lng=en",
       pagination: { items: [], previous: false, next: false },
     });
   });
@@ -191,7 +191,7 @@ describe("search services controller", () => {
 
   it('should remove the "page" query parameter from the English language link', () => {
     searchServicesGet(
-      getRequestMock({ q: "govuk", lng: "cy", page: 5 }) as Request,
+      getRequestMock({ q: "govuk", lng: "cy" }) as Request,
       res as Response
     );
     expect(res.render).to.have.calledWith("search-services/index.njk", {
