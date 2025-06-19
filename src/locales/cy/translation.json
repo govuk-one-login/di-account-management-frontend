@@ -136,6 +136,32 @@
     }
   },
   "pages": {
+    "searchServices": {
+      "title": "Chwilio",
+      "heading": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
+      "paragraphs": [
+        "Ar hyn o bryd gallwch ond ei ddefnyddio i gael mynediad i rai gwasanaethau'r llywodraeth.",
+        "Yn y dyfodol, byddwch yn gallu ei ddefnyddio i gael mynediad i bob gwasanaeth ar GOV.UK."
+      ],
+      "searchLabel": "Chwilio am wasanaeth yn Gymraeg",
+      "searchButton": "Chwilio am wasanaethau sy'n defnyddio GOV.UK One Login sydd ar gael yn Gymraeg",
+      "oneResult": "1 o ganlyniadau",
+      "manyResults": "[count] o ganlyniadau",
+      "noResults": "0 o ganlyniadau",
+      "sortedText": "Trefnwyd o A i Z",
+      "noResultsBlock": {
+        "heading": "Dim canlyniadau yn cyfateb",
+        "paragraph1": "Gallwch wella eich canlyniadau chwilio drwy:",
+        "suggestionsList": [
+          "edrych dros eich sillafu",
+          "defnyddio llai o eiriau allweddol",
+          "chwilio am rywbeth llai penodol"
+        ],
+        "welshDisclaimer": "Os nad oes canlyniadau yn cyfateb o hyd, efallai nad yw'r gwasanaeth ar gael yn Gymraeg. <a class='govuk-link' href='[ENGLISH_LINK]'>Ewch i'r dudalen Saesneg i ddod o hyd i wasanaeth yn Saesneg</a>."
+      },
+      "welshDisclaimer": "Dim ond gwasanaethau sydd ar gael yn Gymraeg fydd yn ymddangos yn y canlyniadau. <a class='govuk-link' href='[ENGLISH_LINK]'>Ewch i'r dudalen Saesneg i ddod o hyd i wasanaeth yn Saesneg</a>.",
+      "clearSearch": "Clirio chwiliad"
+    },
     "security": {
       "title": "Diogelwch",
       "header": "Diogelwch",
