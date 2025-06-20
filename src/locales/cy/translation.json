@@ -145,9 +145,9 @@
       ],
       "searchLabel": "Chwilio am wasanaeth yn Gymraeg",
       "searchButton": "Chwilio am wasanaethau sy'n defnyddio GOV.UK One Login sydd ar gael yn Gymraeg",
-      "oneResult": "1 o ganlyniadau",
-      "manyResults": "[count] o ganlyniadau",
-      "noResults": "0 o ganlyniadau",
+      "oneResult": "1 canlyniad",
+      "manyResults": "[count] canlyniad",
+      "noResults": "0 canlyniad",
       "sortedText": "Trefnwyd o A i Z",
       "noResultsBlock": {
         "heading": "Dim canlyniadau yn cyfateb",
