@@ -119,6 +119,7 @@
 {% endblock %}
 
 {% block bodyEnd %}
+    {% block scripts %}{% endblock %}
     <script type="module" src="/public/scripts/govuk-frontend.min.js" {% if scriptNonce %} nonce="{{ scriptNonce }}"{% endif %}></script>
 
     <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
