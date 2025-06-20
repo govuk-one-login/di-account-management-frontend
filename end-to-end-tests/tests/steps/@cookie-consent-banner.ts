@@ -3,12 +3,6 @@ import { bdd } from "./fixtures";
 
 const { Given, Then } = bdd;
 
-Given("I visit the contact page", async ({ page }) => {
-  await page.goto("/contact-gov-uk-one-login", {
-    waitUntil: "networkidle",
-  });
-});
-
 Then("the cookie consent banner shows", async ({ page }) => {
   await page.getByRole("heading", { name: "Cookies on GOV.UK One Login" });
   await page.getByText(

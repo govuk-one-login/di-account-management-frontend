@@ -11,9 +11,8 @@ WORKDIR /end-to-end-tests
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json
+COPY run-tests.sh run-tests.sh
 
 RUN npm ci && npm run install-browsers
-
-COPY . .
 
 ENTRYPOINT [ "./run-tests.sh" ]

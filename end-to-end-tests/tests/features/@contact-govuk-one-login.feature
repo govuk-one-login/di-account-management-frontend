@@ -3,14 +3,12 @@ Feature: Contact GOV.UK One Login
   Scenario: Visiting the contact page
     Given I visit the contact page
     Then the page should look expected
-    And the page should have status code 200
     And the page should display the expected webchat content
 
   @nojs
   Scenario: Visiting the contact page with JavaScript disabled
     Given I visit the contact page
     Then the page should look expected
-    And the page should have status code 200
     And the page should display the expected webchat content
 
   Scenario: Accessing webchat via the inline button

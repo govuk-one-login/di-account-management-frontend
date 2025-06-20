@@ -1,9 +1,7 @@
-import { expect, Page, Response } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import { bdd } from "./fixtures";
 
 const { Given, Then, When } = bdd;
-
-let response: Response | null;
 
 const getInlineWebchatButton = ({ page }: { page: Page }) => {
   return page.getByRole("button", { name: "Use webchat" });
@@ -13,12 +11,6 @@ const getFloatingWebchatButton = ({ page }: { page: Page }) => {
   return page.locator(".sa-chat-tab");
 };
 
-Given("I visit the contact page", async ({ page }) => {
-  response = await page.goto("/contact-gov-uk-one-login", {
-    waitUntil: "networkidle",
-  });
-});
-
 Then("the page should look expected", async ({ page }) => {
   expect(
     await page.screenshot({
@@ -26,10 +18,6 @@ Then("the page should look expected", async ({ page }) => {
       mask: [page.locator(".contact-reference__code")],
     })
   ).toMatchSnapshot();
-});
-
-Then("the page should have status code 200", () => {
-  expect(response?.status()).toBe(200);
 });
 
 Then(

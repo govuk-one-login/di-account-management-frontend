@@ -8,8 +8,8 @@
     "test": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" di-account-management-frontend-end-to-end-test",
     "test:update-snapshots": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" di-account-management-frontend-end-to-end-test update-snapshots",
     "test:ui": "npm ci && npm run install-browsers && bddgen && playwright test --ui --ignore-snapshots",
-    "run-tests": "bddgen && playwright test",
-    "run-tests:update-snapshots": "bddgen && playwright test --update-snapshots"
+    "run-tests": "npm ci && bddgen && playwright test",
+    "run-tests:update-snapshots": "npm ci && bddgen && playwright test --update-snapshots"
   },
   "repository": {
     "type": "git",
