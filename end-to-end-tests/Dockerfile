@@ -7,8 +7,12 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 
 ENV AWS_PAGER=""
 
-COPY . .
+WORKDIR /end-to-end-tests
 
-RUN npm ci
-RUN npx playwright install --with-deps chrome
-ENTRYPOINT [ "/run-tests.sh" ]
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+COPY run-tests.sh run-tests.sh
+
+RUN npm ci && npm run install-browsers
+
+ENTRYPOINT [ "./run-tests.sh" ]
