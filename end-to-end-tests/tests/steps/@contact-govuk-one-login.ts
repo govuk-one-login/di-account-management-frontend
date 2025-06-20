@@ -14,7 +14,9 @@ const getFloatingWebchatButton = ({ page }: { page: Page }) => {
 };
 
 Given("I visit the contact page", async ({ page }) => {
-  response = await page.goto("/contact-gov-uk-one-login");
+  response = await page.goto("/contact-gov-uk-one-login", {
+    waitUntil: "networkidle",
+  });
 });
 
 Then("the page should look expected", async ({ page }) => {

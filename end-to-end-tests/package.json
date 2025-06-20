@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "End-to-end tests for the account management frontend.",
   "scripts": {
-    "build": "docker build -t frontend-end-to-end-tests .",
+    "build": "docker build -t di-account-management-frontend-end-to-end-test .",
     "install-browsers": "playwright install --with-deps chromium",
-    "test": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" frontend-end-to-end-tests",
-    "test:update-snapshots": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" frontend-end-to-end-tests update-snapshots",
+    "test": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" di-account-management-frontend-end-to-end-test",
+    "test:update-snapshots": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" di-account-management-frontend-end-to-end-test update-snapshots",
     "test:ui": "npm ci && npm run install-browsers && bddgen && playwright test --ui --ignore-snapshots",
     "run-tests": "bddgen && playwright test",
     "run-tests:update-snapshots": "bddgen && playwright test --update-snapshots"
