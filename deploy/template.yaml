@@ -2071,7 +2071,7 @@ Resources:
     Properties:
       WebACLArn:
         Fn::ImportValue: "devplatform-cloudfront-CloakingOriginWebACLArn"
-      ResourceArn: arn:aws:apigateway:eu-west-2::/domainnames/home.dev.account.gov.uk
+      ResourceArn: arn:aws:elasticloadbalancing:eu-west-2:985326104449:loadbalancer/app/accoun-Appli-NS8Y7oDKhZJD/ea911865d4268538
 
   AppFrontApiRecord:
     Type: AWS::Route53::RecordSet
