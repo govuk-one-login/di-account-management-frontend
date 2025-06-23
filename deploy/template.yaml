@@ -2081,6 +2081,12 @@ Resources:
         HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
         EvaluateTargetHealth: false
 
+  AppCloakingOriginAssociation:
+    Type: "AWS::WAFv2::WebACLAssociation"
+    Properties:
+      WebACLArn: !ImportValue devplatform-cloudfront-CloakingOriginWebACLArn
+      ResourceArn: arn:aws:apigateway:eu-west-2::/domainnames/home.dev.account.gov.uk
+
   AppFrontApiRecord:
     Type: AWS::Route53::RecordSet
     Properties:
