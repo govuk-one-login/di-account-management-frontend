@@ -67,7 +67,11 @@ describe("MfaClient", () => {
           },
         },
       } as unknown as Request,
-      {} as unknown as Response,
+      {
+        locals: {
+          sessionId: "sessionId",
+        },
+      } as unknown as Response,
       getRequestConfig({ token: "token" }),
       new Http("http://example.com", axiosStub)
     );
@@ -166,6 +170,76 @@ describe("MfaClient", () => {
         })
       ).to.be.rejected;
       expect(postStub.notCalled).to.be.true;
+    });
+
+    it("should send an AUTH_MFA_METHOD_ADD_COMPLETED audit event when MFA method is created successfully", async () => {
+      const postStub = sinon
+        .stub()
+        .resolves({ data: authAppMethod, status: 200 });
+      axiosStub.post = postStub;
+
+      // Mock the event service
+      const mockEventService = {
+        buildAuditEvent: sinon.stub().returns({ event: "test-audit-event" }),
+        send: sinon.stub(),
+      };
+
+      // Import and stub the event service module
+      const eventServiceModule = await import(
+        "../../../src/services/event-service"
+      );
+      const eventServiceStub = sinon
+        .stub(eventServiceModule, "eventService")
+        .returns(mockEventService);
+
+      const response = await client.create(authAppMethod.method);
+
+      expect(response.success).to.be.true;
+      expect(response.data).to.eq(authAppMethod);
+
+      // Verify audit event was built and sent
+      expect(mockEventService.buildAuditEvent).to.have.been.calledOnceWith(
+        sinon.match.any, // req
+        sinon.match.any, // res
+        "AUTH_MFA_METHOD_ADD_COMPLETED"
+      );
+      expect(mockEventService.send).to.have.been.calledOnceWith(
+        { event: "test-audit-event" },
+        sinon.match.any // trace
+      );
+
+      eventServiceStub.restore();
+    });
+
+    it("should not send audit event when MFA method creation fails", async () => {
+      const error: SimpleError = { message: "creation failed", code: 1001 };
+      const postStub = sinon.stub().resolves({ data: error, status: 400 });
+      axiosStub.post = postStub;
+
+      // Mock the event service
+      const mockEventService = {
+        buildAuditEvent: sinon.stub(),
+        send: sinon.stub(),
+      };
+
+      // Import and stub the event service module
+      const eventServiceModule = await import(
+        "../../../src/services/event-service"
+      );
+      const eventServiceStub = sinon
+        .stub(eventServiceModule, "eventService")
+        .returns(mockEventService);
+
+      const response = await client.create(authAppMethod.method);
+
+      expect(response.success).to.be.false;
+      expect(response.status).to.eq(400);
+
+      // Verify audit event was NOT sent for failed creation
+      expect(mockEventService.buildAuditEvent).not.to.have.been.called;
+      expect(mockEventService.send).not.to.have.been.called;
+
+      eventServiceStub.restore();
     });
   });
 
