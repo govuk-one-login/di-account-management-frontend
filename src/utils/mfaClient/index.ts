@@ -13,22 +13,28 @@ import {
   SimpleError,
   UpdateMfaPayload,
 } from "./types";
-import { HTTP_STATUS_CODES } from "../../app.constants";
+import { EventName, HTTP_STATUS_CODES } from "../../app.constants";
 import { validateCreate, validateUpdate } from "./validate";
+import { eventService } from "../../services/event-service";
 
 export class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;
   private readonly requestConfig: AxiosRequestConfig;
   private readonly http: Http;
+  private readonly req: Request;
+  private readonly res: Response;
 
   constructor(
-    publicSubjectId: string,
+    req: Request,
+    res: Response,
     requestConfig: AxiosRequestConfig,
     http?: Http
   ) {
     this.requestConfig = requestConfig;
-    this.publicSubjectId = publicSubjectId;
+    this.publicSubjectId = req.session.user?.publicSubjectId;
     this.http = http || new Http(getMfaServiceUrl());
+    this.req = req;
+    this.res = res;
   }
 
   async retrieve() {
@@ -55,7 +61,20 @@ export class MfaClient implements MfaClientInterface {
       this.requestConfig
     );
 
-    return buildResponse(response);
+    const builtResponse = buildResponse(response);
+
+    if (builtResponse.success) {
+      const service = eventService();
+      const audit_event = service.buildAuditEvent(
+        this.req,
+        this.res,
+        EventName.AUTH_MFA_METHOD_ADD_COMPLETED
+      );
+      const trace = this.res.locals.sessionId;
+      service.send(audit_event, trace);
+    }
+
+    return builtResponse;
   }
   async update(method: MfaMethod, otp?: string) {
     validateUpdate(method, otp);
@@ -116,7 +135,8 @@ export function buildResponse<T>(response: AxiosResponse<T>): ApiResponse<T> {
 
 export function createMfaClient(req: Request, res: Response): MfaClient {
   return new MfaClient(
-    req.session.user?.publicSubjectId,
+    req,
+    res,
     getRequestConfig({
       ...getRequestConfigFromExpress(req, res),
       validationStatuses: [
