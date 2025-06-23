@@ -60,7 +60,14 @@ describe("MfaClient", () => {
 
   beforeEach(() => {
     client = new MfaClient(
-      "publicSubjectId",
+      {
+        session: {
+          user: {
+            publicSubjectId: "publicSubjectId",
+          },
+        },
+      } as unknown as Request,
+      {} as unknown as Response,
       getRequestConfig({ token: "token" }),
       new Http("http://example.com", axiosStub)
     );
