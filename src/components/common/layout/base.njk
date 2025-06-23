@@ -149,7 +149,7 @@
         enableGa4Tracking: {{isGa4Enabled}},
         cookieDomain: "{{analyticsCookieDomain}}",
         isDataSensitive: false,
-        isPageDataSensitive: {{ opl.isPageDataSensitive }},
+        isPageDataSensitive: {{ opl.isPageDataSensitive | default("true") }},
         enablePageViewTracking: true,
         enableFormResponseTracking: true,
         enableFormChangeTracking: true,
