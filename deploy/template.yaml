@@ -2223,9 +2223,8 @@ Resources:
         - "-"
         - - !Ref AWS::StackName
           - cloudfront
-          - pre-dev-platform
           - Fn::Select:
-              - 4
+              - 0
               - Fn::Split:
                   - "-"
                   - Fn::Select:
