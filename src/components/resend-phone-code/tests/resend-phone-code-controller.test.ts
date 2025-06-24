@@ -11,6 +11,7 @@ import {
   resendPhoneCodePost,
 } from "../resend-phone-code-controller";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+import { BadRequestError } from "../../../utils/errors";
 
 describe("resend phone code controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -78,6 +79,29 @@ describe("resend phone code controller", () => {
       expect(res.redirect).to.have.calledWith(
         "/check-your-phone?intent=changePhoneNumber"
       );
+    });
+
+    it("should redirect to error /check-your-phone when invalid intent is passed", async () => {
+      const fakeService: ChangePhoneNumberServiceInterface = {
+        sendPhoneVerificationNotification: sandbox.fake.resolves({
+          success: true,
+        }),
+      };
+
+      res.locals.sessionId = "123456-djjad";
+      req.session.user.tokens = { accessToken: "token" } as any;
+      req.body.phoneNumber = "+33645453322";
+      req.body.intent = "unknown";
+      req.session.user.email = "test@test.com";
+      req.session.user.state = { changePhoneNumber: getInitialState() };
+
+      try {
+        await resendPhoneCodePost(fakeService)(req as Request, res as Response);
+        expect(fakeService.sendPhoneVerificationNotification).not.to.have.been
+          .called;
+      } catch (err) {
+        expect(err).to.be.instanceOf(BadRequestError);
+      }
     });
   });
 });

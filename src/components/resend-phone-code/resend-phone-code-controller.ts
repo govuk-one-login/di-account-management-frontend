@@ -25,6 +25,7 @@ import {
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
 import {
+  ALL_INTENTS,
   Intent,
   INTENT_ADD_BACKUP,
   INTENT_CHANGE_DEFAULT_METHOD,
@@ -132,7 +133,9 @@ export function resendPhoneCodePost(
         req.session.user.state.changePhoneNumber.value,
         EventType.VerifyCodeSent
       );
-
+      if (!Object.values(ALL_INTENTS).includes(intent)) {
+        throw new BadRequestError("Invalid intent", 400);
+      }
       return res.redirect(`${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${intent}`);
     }
 
