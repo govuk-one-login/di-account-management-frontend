@@ -37,6 +37,7 @@ export function searchServicesGet(req: Request, res: Response): void {
 
   const url = new URL(req.originalUrl, "http://example.com");
   url.searchParams.set("lng", LOCALE.EN);
+  url.searchParams.delete("q");
   const englishLanguageLink = url.pathname + url.search;
 
   res.render(TEMPLATE_NAME, {
