@@ -97,6 +97,8 @@ describe("resend phone code controller", () => {
 
       try {
         await resendPhoneCodePost(fakeService)(req as Request, res as Response);
+        expect(fakeService.sendPhoneVerificationNotification).not.to.have.been
+          .called;
       } catch (err) {
         expect(err).to.be.instanceOf(BadRequestError);
       }
