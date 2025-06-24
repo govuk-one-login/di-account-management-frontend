@@ -298,6 +298,29 @@ describe("report suspicious activity controller", () => {
       });
     });
 
+    it("should send event to SNS without page information", async () => {
+      // Arrange
+      req.body.page = "AAA";
+      req.headers = {};
+
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return true;
+      });
+
+      // Act
+      await reportSuspiciousActivityPost(
+        req as Request,
+        res as Response,
+        () => {}
+      );
+
+      // Assert
+      expect(res.redirect).to.have.been.calledWith(
+        "/activity-history/report-activity/done"
+      );
+    });
+
     it("Should render 404 in POST view when report suspicious activity is false", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
