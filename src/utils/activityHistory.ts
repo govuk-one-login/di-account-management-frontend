@@ -3,11 +3,7 @@ import { unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   activityLogItemsPerPage,
   getDynamoActivityLogStoreTableName,
-  getOIDCClientId,
-  getAllowedAccountListClientIDs,
-  hmrcClientIds,
-  getAllowedServiceListClientIDs,
-  ONE_LOGIN_HOME_NON_PROD,
+  getAllowedActivityLogListClientIDs,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import { serviceIsAvailableInWelsh } from "./yourServices";
@@ -20,14 +16,6 @@ import { dynamoDBService } from "./dynamo";
 import { decryptData } from "./decrypt-data";
 import { PATH_DATA } from "../app.constants";
 import { logger } from "./logger";
-
-const servicesWithContent: string[] = [
-  ONE_LOGIN_HOME_NON_PROD,
-  getOIDCClientId(),
-  ...hmrcClientIds,
-  ...getAllowedAccountListClientIDs,
-  ...getAllowedServiceListClientIDs,
-];
 
 export const generatePagination = (dataLength: number, page: any): [] => {
   const pagination: any = {
@@ -244,7 +232,7 @@ export async function filterAndDecryptActivity(
     ) {
       continue;
     }
-    if (!servicesWithContent.includes(activityLog.client_id)) {
+    if (!getAllowedActivityLogListClientIDs.includes(activityLog.client_id)) {
       continue;
     }
     const eventType = await decryptData(

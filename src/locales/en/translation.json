@@ -226,7 +226,7 @@
       "activityHistory": {
         "heading": "Activity history",
         "link": "See your activity history",
-        "info": "See what you’ve visited with your GOV.UK One Login and when."
+        "info": "See what you’ve accessed with your GOV.UK One Login and when."
       }
     },
     "confirmaddBackup": {
@@ -316,7 +316,7 @@
       "title": "Activity history",
       "header": "Activity history",
       "page": "Page [pageNumber]",
-      "explanation": "See what you’ve visited with your GOV.UK One Login and when.",
+      "explanation": "See what you’ve accessed with your GOV.UK One Login and when.",
       "empty": "There is a problem showing your activity history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">contact the GOV.UK One Login team</a>.",
       "notice": "If you see something you do not recognise, report it and <a class=\"govuk-link\" href=\"[changePassword]\"> change your password</a>.",
       "timeInfo": "UK time",
