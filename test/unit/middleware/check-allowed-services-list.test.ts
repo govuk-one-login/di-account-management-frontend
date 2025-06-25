@@ -165,14 +165,14 @@ describe("activity history allowlist middleware", () => {
       // prisonVisits and CMAD not on the allow list
       sandbox.stub(yourServices, "getServices").resolves([
         {
-          client_id: "prisonVisits",
+          client_id: "smokeTests",
           count_successful_logins: 1,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
           hasDetailedCard: true,
         },
         {
-          client_id: "CMAD",
+          client_id: "relyingPartyStub",
           count_successful_logins: 1,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
