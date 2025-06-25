@@ -13,8 +13,8 @@ import {
   updateAuthenticatorAppConfirmationGet,
   changeDefaultMethodConfirmationGet,
   removeMfaMethodConfirmationGet,
+  changeDefaultMfaMethodConfirmationGet,
 } from "../update-confirmation-controller";
-import { PATH_DATA } from "../../../app.constants";
 import {
   AuthAppMethod,
   MfaMethod,
@@ -84,6 +84,28 @@ describe("update confirmation controller", () => {
     });
   });
 
+  describe("changeDefaultMfaMethodConfirmationGet", () => {
+    it("should render update default mfa method page", async () => {
+      req.session = {
+        mfaMethods: [
+          {
+            priorityIdentifier: "DEFAULT",
+            method: {
+              mfaMethodType: "AUTH_APP",
+              credential: "ABC",
+            },
+          },
+        ],
+      };
+      await changeDefaultMfaMethodConfirmationGet(
+        req as Request,
+        res as Response
+      );
+
+      expect(res.render).to.have.calledWith("update-confirmation/index.njk");
+    });
+  });
+
   describe("deleteAccountConfirmationGet", () => {
     it("should render delete confirmation page", async () => {
       await deleteAccountConfirmationGet(req as Request, res as Response);
@@ -114,16 +136,11 @@ describe("update confirmation controller", () => {
     await removeMfaMethodConfirmationGet(req, res);
 
     expect(req.session.removedMfaMethod).to.eq(undefined);
-    expect(res.render).to.be.calledWith(
-      "common/confirmation-page/confirmation.njk",
-      {
-        pageTitleName: "pages.removeBackupMethod.confirm.title",
-        heading: "pages.removeBackupMethod.confirm.heading",
-        message: "pages.removeBackupMethod.confirm.message_sms",
-        backLinkText: "pages.removeBackupMethod.backLinkText",
-        backLink: "/security",
-      }
-    );
+    expect(res.render).to.be.calledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.removeBackupMethod.confirm.title",
+      panelText: "pages.removeBackupMethod.confirm.heading",
+      summaryText: "pages.removeBackupMethod.confirm.message_sms",
+    });
     expect(res.redirect).not.to.be.called;
   });
 
@@ -149,16 +166,11 @@ describe("update confirmation controller", () => {
     await removeMfaMethodConfirmationGet(req, res);
 
     expect(req.session.removedMfaMethod).to.eq(undefined);
-    expect(res.render).to.be.calledWith(
-      "common/confirmation-page/confirmation.njk",
-      {
-        pageTitleName: "pages.removeBackupMethod.confirm.title",
-        heading: "pages.removeBackupMethod.confirm.heading",
-        message: "pages.removeBackupMethod.confirm.message_app",
-        backLinkText: "pages.removeBackupMethod.backLinkText",
-        backLink: "/security",
-      }
-    );
+    expect(res.render).to.be.calledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.removeBackupMethod.confirm.title",
+      panelText: "pages.removeBackupMethod.confirm.heading",
+      summaryText: "pages.removeBackupMethod.confirm.message_app",
+    });
     expect(res.redirect).not.to.be.called;
   });
 
@@ -209,16 +221,11 @@ describe("addBackupAppConfirmationGet", () => {
   it("should render add mfa app confirmation page", async () => {
     await addMfaAppMethodConfirmationGet(req as Request, res as Response);
 
-    expect(res.render).to.be.calledWith(
-      "common/confirmation-page/confirmation.njk",
-      {
-        pageTitleName: "pages.confirmaddBackup.title",
-        heading: "pages.confirmaddBackup.heading",
-        message: "pages.confirmaddBackup.message",
-        backLinkText: "pages.confirmaddBackup.backLinkText",
-        backLink: PATH_DATA.SECURITY.url,
-      }
-    );
+    expect(res.render).to.be.calledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.confirmaddBackup.title",
+      panelText: "pages.confirmaddBackup.heading",
+      summaryText: "pages.confirmaddBackup.message",
+    });
   });
 
   it("should render change default app confirmation page for AUTH_APP", async () => {
@@ -235,16 +242,11 @@ describe("addBackupAppConfirmationGet", () => {
     };
     await changeDefaultMethodConfirmationGet(req as Request, res as Response);
 
-    expect(res.render).to.be.calledWith(
-      "common/confirmation-page/confirmation.njk",
-      {
-        pageTitleName: "pages.changeDefaultMethod.confirmation.title",
-        heading: "pages.changeDefaultMethod.confirmation.heading",
-        message: "pages.changeDefaultMethod.confirmation.app",
-        backLinkText: "pages.changeDefaultMethod.confirmation.back",
-        backLink: PATH_DATA.SECURITY.url,
-      }
-    );
+    expect(res.render).to.be.calledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.changeDefaultMethod.confirmation.title",
+      panelText: "pages.changeDefaultMethod.confirmation.heading",
+      summaryText: "pages.changeDefaultMethod.confirmation.app",
+    });
   });
 
   it("should render change default app confirmation page for SMS", async () => {
@@ -267,16 +269,11 @@ describe("addBackupAppConfirmationGet", () => {
 
     await changeDefaultMethodConfirmationGet(req as Request, res as Response);
 
-    expect(res.render).to.be.calledWith(
-      "common/confirmation-page/confirmation.njk",
-      {
-        pageTitleName: "pages.changeDefaultMethod.confirmation.title",
-        heading: "pages.changeDefaultMethod.confirmation.heading",
-        message: "pages.changeDefaultMethod.confirmation.sms 6789",
-        backLinkText: "pages.changeDefaultMethod.confirmation.back",
-        backLink: PATH_DATA.SECURITY.url,
-      }
-    );
+    expect(res.render).to.be.calledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.changeDefaultMethod.confirmation.title",
+      panelText: "pages.changeDefaultMethod.confirmation.heading",
+      summaryText: "pages.changeDefaultMethod.confirmation.sms 6789",
+    });
   });
 
   it("should throw 404 if there is no default method", async () => {
