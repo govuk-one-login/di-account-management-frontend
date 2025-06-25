@@ -199,14 +199,14 @@
       "activityHistory": {
         "heading": "Hanes gweithgaredd",
         "link": "Gweld eich hanes gweithgaredd",
-        "info": "Gweld beth rydych chi wedi ymweld â gyda’ch GOV.UK One Login a phryd."
+        "info": "Gweld beth rydych chi wedi cael mynediad iddo gyda’ch GOV.UK One Login a phryd."
       }
     },
     "activityHistory": {
       "title": "Hanes gweithgaredd",
       "header": "Hanes gweithgaredd",
       "page": "Tudalen [pageNumber]",
-      "explanation": "Gweld beth rydych chi wedi ymweld â gyda’ch GOV.UK One Login a phryd.",
+      "explanation": "Gweld beth rydych chi wedi cael mynediad iddo gyda’ch GOV.UK One Login a phryd.",
       "empty": "Mae problem dangos hanes eich gweithgaredd ar hyn o bryd. Gallwch roi cynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[link]\">cysylltwch â'r tîm GOV.UK One Login </a>.",
       "notice": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod, rhowch wybod amdano a <a class=\"govuk-link\" href=\"[changePassword]\"> newidiwch eich cyfrinair</a>.",
       "timeInfo": "Amser y DU",
