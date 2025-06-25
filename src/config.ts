@@ -140,7 +140,6 @@ export const getIdListFromFilter = memoize(
 
 export const getAllowedActivityLogListClientIDs = getIdListFromFilter({
   isActivityLogEnabled: true,
-  isOffboarded: false,
 });
 
 export const getAllowedAccountListClientIDs = getIdListFromFilter({
