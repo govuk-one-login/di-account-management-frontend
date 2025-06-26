@@ -2,7 +2,11 @@
 {% set hideAccountNavigation = true %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% set pageTitleName = 'pages.searchServices.heading' | translate %}
+{% set pageTitleName = 'pages.searchServices.title' | translate %}
+{% if query %}
+  {% set pageTitleName = [query, " - ", 'pages.searchServices.title' | translate ] | join %}
+{% endif %}
+
 {% set resultsCountText %}
   {% if resultsCount === 1 %}
     {{ "pages.searchServices.oneResult" | translate }}
@@ -37,21 +41,25 @@
           classes: "govuk-!-font-weight-bold"
         },
         formGroup: {
-          afterInput: { html: submitButton}
+          afterInput: { html: submitButton},
+          classes: "govuk-!-margin-bottom-3"
         },
         id: "search_box",
-        type: "search",
+        type: "text",
         name: "q",
         classes: "search-services__input",
         value: query
       }) }}
 
-      {# {% if hasSearch %}  #}
+      {% if hasSearch %} 
+      <p class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="{{ "SEARCH_SERVICES" | getPath }}">{{ "pages.searchServices.clearSearch" | translate }}</a>
+      </p>
+      {% endif %}
       <div class="search-results__filter-panel">
         <span class="govuk-body">{{ "pages.searchServices.sortedText" | translate }}</span>
         <span class="govuk-body">{{ resultsCountText }}</span>
       </div>
-      {# {% endif %} #}
     </form>
     {% if (resultsCount > 0) %}
     <ul class="govuk-list search-results">
@@ -66,11 +74,11 @@
     {% else %}
       <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-3">
       <h2 class="govuk-heading-s">{{ "pages.searchServices.noResultsBlock.heading" | translate }}</h2>
-      <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph1" | translate }}</h2>
+      <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph1" | translate }}</p>
       <ul class="govuk-list govuk-list--bullet">
         {% set suggestionsList =  "pages.searchServices.noResultsBlock.suggestionsList" | translate({ returnObjects: true }) %}
         {% for item in suggestionsList %}
-          <li class="">{{ item }}</li>
+          <li>{{ item }}</li>
         {% endfor %}
       </ul>
       {% if isWelsh %}
