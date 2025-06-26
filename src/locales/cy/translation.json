@@ -136,6 +136,32 @@
     }
   },
   "pages": {
+    "searchServices": {
+      "title": "Chwilio",
+      "heading": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
+      "paragraphs": [
+        "Ar hyn o bryd gallwch ond ei ddefnyddio i gael mynediad i rai gwasanaethau'r llywodraeth.",
+        "Yn y dyfodol, byddwch yn gallu ei ddefnyddio i gael mynediad i bob gwasanaeth ar GOV.UK."
+      ],
+      "searchLabel": "Chwilio am wasanaeth yn Gymraeg",
+      "searchButton": "Chwilio am wasanaethau sy'n defnyddio GOV.UK One Login sydd ar gael yn Gymraeg",
+      "oneResult": "1 canlyniad",
+      "manyResults": "[count] canlyniad",
+      "noResults": "0 canlyniad",
+      "sortedText": "Trefnwyd o A i Z",
+      "noResultsBlock": {
+        "heading": "Dim canlyniadau yn cyfateb",
+        "paragraph1": "Gallwch wella eich canlyniadau chwilio drwy:",
+        "suggestionsList": [
+          "edrych dros eich sillafu",
+          "defnyddio llai o eiriau allweddol",
+          "chwilio am rywbeth llai penodol"
+        ],
+        "welshDisclaimer": "Os nad oes canlyniadau yn cyfateb o hyd, efallai nad yw'r gwasanaeth ar gael yn Gymraeg. <a class='govuk-link' href='[ENGLISH_LINK]'>Ewch i'r dudalen Saesneg i ddod o hyd i wasanaeth yn Saesneg</a>."
+      },
+      "welshDisclaimer": "Dim ond gwasanaethau sydd ar gael yn Gymraeg fydd yn ymddangos yn y canlyniadau. <a class='govuk-link' href='[ENGLISH_LINK]'>Ewch i'r dudalen Saesneg i ddod o hyd i wasanaeth yn Saesneg</a>.",
+      "clearSearch": "Clirio chwiliad"
+    },
     "security": {
       "title": "Diogelwch",
       "header": "Diogelwch",
@@ -199,14 +225,14 @@
       "activityHistory": {
         "heading": "Hanes gweithgaredd",
         "link": "Gweld eich hanes gweithgaredd",
-        "info": "Gweld beth rydych chi wedi ymweld â gyda’ch GOV.UK One Login a phryd."
+        "info": "Gweld beth rydych chi wedi cael mynediad iddo gyda’ch GOV.UK One Login a phryd."
       }
     },
     "activityHistory": {
       "title": "Hanes gweithgaredd",
       "header": "Hanes gweithgaredd",
       "page": "Tudalen [pageNumber]",
-      "explanation": "Gweld beth rydych chi wedi ymweld â gyda’ch GOV.UK One Login a phryd.",
+      "explanation": "Gweld beth rydych chi wedi cael mynediad iddo gyda’ch GOV.UK One Login a phryd.",
       "empty": "Mae problem dangos hanes eich gweithgaredd ar hyn o bryd. Gallwch roi cynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[link]\">cysylltwch â'r tîm GOV.UK One Login </a>.",
       "notice": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod, rhowch wybod amdano a <a class=\"govuk-link\" href=\"[changePassword]\"> newidiwch eich cyfrinair</a>.",
       "timeInfo": "Amser y DU",
@@ -668,28 +694,28 @@
       }
     },
     "permanentlySuspendedScreen": {
-      "title": "Mae eich GOV.UK One Login wedi ei gloi yn barhaol",
-      "header": "Mae eich GOV.UK One Login wedi ei gloi yn barhaol",
+      "title": "Mae eich GOV.UK One Login wedi ei gloi'n barhaol",
+      "header": "Mae eich GOV.UK One Login wedi ei gloi'n barhaol",
       "section1": {
-        "paragraph1": "Ni allwch fewngofnodi ac ni allwch ddefnyddio eich GOV.UK One Login i gael mynediad at wasanaethau’r llywodraeth."
+        "paragraph1": "Rydych wedi cael eich allgofnodi ac ni allwch ddefnyddio'ch GOV.UK One Login mwyach."
       },
       "section2": {
-        "heading": "Beth allwch chi ei wneud",
-        "paragraph1": "Ewch yn ôl i’r gwasanaeth roeddech yn ceisio ei ddefnyddio. Gallwch chwilio am y gwasanaeth gan ddefnyddio’ch peiriant chwilio neu ddod o hyd iddo o’r hafan GOV.UK.",
+        "heading": "Beth allwch ei wneud",
+        "paragraph1": "Os ydych angen GOV.UK One Login i gael mynediad at wasanaeth y llywodraeth, gallwch greu un newydd gan ddefnyddio cyfeiriad e-bost gwahanol.",
         "link": {
-          "href": "https://www.gov.uk/using-your-gov-uk-one-login/services",
-          "text": "Ewch i'r gwasanaeth sydd angen i chi ei ddefnyddio"
+          "href": "https://www.gov.uk/defnyddio-eich-gov-uk-one-login",
+          "text": "Ewch i'r gwasanaeth rydych angen ei ddefnyddio i barhau"
         }
       }
     },
     "temporarilySuspendedPageScreen": {
-      "title": "Mae’n ddrwg gennym, mae problem",
-      "heading": "Mae’n ddrwg gennym, mae problem",
+      "title": "Sori, mae yna broblem",
+      "heading": "Sori, mae yna broblem",
       "section1": {
-        "paragraph1": "Nid yw eich GOV.UK One Login ar gael ar hyn o bryd."
+        "paragraph1": "Rydych wedi cael eich allgofnodi."
       },
       "section2": {
-        "paragraph1": "Dewch yn ôl yn nes ymlaen. Dylai eich GOV.UK One Login fod ar gael eto mewn 3 diwrnod gwaith.",
+        "paragraph1": "Ni allwch ddefnyddio eich GOV.UK One Login ar hyn o bryd.",
         "link": {
           "text": "Ceisiwch fewngofnodi yn nes ymlaen"
         }

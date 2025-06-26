@@ -1,4 +1,5 @@
 {% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitleName = 'pages.changeDefaultMethod.title' | translate %}
 
@@ -8,17 +9,27 @@
   {% if currentMethodType == "SMS" %}
     <p class="govuk-body">{{ "pages.changeDefaultMethod.currentIsPhone" | translate | safe | replace("[phoneNumber]", phoneNumber) }}</p>
     <p class="govuk-body">{{ "pages.changeDefaultMethod.switchToApp" | translate }}</p>
-    <a href='{{ "CHANGE_DEFAULT_METHOD_APP" | getPath }}' class="govuk-button" data-module="govuk-button">{{ "pages.changeDefaultMethod.setUpAppButton" | translate }}</a>
+    {{ govukButton({
+      text: "pages.changeDefaultMethod.setUpAppButton" | translate,
+      href: "CHANGE_DEFAULT_METHOD_APP" | getPath,
+      attributes: {
+        "data-nav": true,
+        "data-link": "CHANGE_DEFAULT_METHOD_APP" | getPath
+      }
+    }) }}
   {% endif %}
 
   {% if currentMethodType == "AUTH_APP" %}
     <p class="govuk-body">{{ "pages.changeDefaultMethod.currentIsApp" | translate }}</p>
     <p class="govuk-body">{{ "pages.changeDefaultMethod.switchToPhone" | translate }}</p>
-    <a href='{{ "CHANGE_DEFAULT_METHOD_SMS" | getPath }}'
-      class="govuk-button"
-      data-module="govuk-button"
-      data-nav="true"
-      data-link='{{ "CHANGE_DEFAULT_METHOD_SMS" | getPath }}'>{{ "pages.changeDefaultMethod.setUpPhoneButton" | translate }}</a>
+    {{ govukButton({
+      text: "pages.changeDefaultMethod.setUpPhoneButton" | translate,
+      href: "CHANGE_DEFAULT_METHOD_SMS" | getPath,
+      attributes: {
+        "data-nav": true,
+        "data-link": "CHANGE_DEFAULT_METHOD_SMS" | getPath
+      }
+    }) }}
   {% endif %}
 
   <p class="govuk-body">

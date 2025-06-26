@@ -98,7 +98,7 @@ describe("Activity history controller", () => {
               user_id: "string",
               timestamp: "1689210000",
               truncated: false,
-              client_id: "dfeApplyForTeacherTraining",
+              client_id: "apprenticeshipsService",
             },
           ];
         });
@@ -127,7 +127,6 @@ describe("Activity history controller", () => {
           destroy: sandbox.fake(),
         },
         log: { error: sandbox.fake(), info: sandbox.fake() },
-        i18n: { language: "en" },
         t: (k: string) => k,
       };
       await activityHistoryGet(req as Request, res as Response).then(() => {
@@ -141,13 +140,13 @@ describe("Activity history controller", () => {
                 eventType: "signedIn",
                 eventId: undefined,
                 sessionId: "asdf",
-                clientId: "dfeApplyForTeacherTraining",
+                clientId: "apprenticeshipsService",
                 reportedSuspicious: undefined,
                 reportSuspiciousActivityUrl:
                   "/activity-history/report-activity?event=undefined&page=1",
                 time: "13 July 2023 at 2:00 am",
-                visitedService: "dfeApplyForTeacherTraining",
-                visitedServiceId: "dfeApplyForTeacherTraining",
+                visitedService: "apprenticeshipsService",
+                visitedServiceId: "apprenticeshipsService",
                 reportNumber: undefined,
                 isAvailableInWelsh: false,
               },

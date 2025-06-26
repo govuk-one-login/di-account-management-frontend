@@ -2,7 +2,11 @@
 {% set hideAccountNavigation = true %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% set pageTitleName = 'pages.searchServices.heading' | translate %}
+{% set pageTitleName = 'pages.searchServices.title' | translate %}
+{% if query %}
+  {% set pageTitleName = [query, " - ", 'pages.searchServices.title' | translate ] | join %}
+{% endif %}
+
 {% set resultsCountText %}
   {% if resultsCount === 1 %}
     {{ "pages.searchServices.oneResult" | translate }}
@@ -18,6 +22,9 @@
     {% for paragraph in paragraphs %}
         <p class="govuk-body">{{ paragraph }}</p>
     {% endfor %}
+    {% if isWelsh %}
+      <div class='govuk-inset-text'>{{ "pages.searchServices.welshDisclaimer" | translate | safe | replace("[ENGLISH_LINK]", englishLanguageLink) }}</div>
+    {% endif %}
     <form method="get" action="{{ "SEARCH_SERVICES" | getPath }}" role="search">
       {% set submitButton %}
         <button class="search-services__submit" type="submit" enterkeyhint="search">
@@ -34,43 +41,51 @@
           classes: "govuk-!-font-weight-bold"
         },
         formGroup: {
-          afterInput: { html: submitButton}
+          afterInput: { html: submitButton},
+          classes: "govuk-!-margin-bottom-3"
         },
         id: "search_box",
-        type: "search",
+        type: "text",
         name: "q",
         classes: "search-services__input",
         value: query
       }) }}
 
-      {# {% if hasSearch %}  #}
+      {% if hasSearch %} 
+      <p class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="{{ "SEARCH_SERVICES" | getPath }}">{{ "pages.searchServices.clearSearch" | translate }}</a>
+      </p>
+      {% endif %}
       <div class="search-results__filter-panel">
         <span class="govuk-body">{{ "pages.searchServices.sortedText" | translate }}</span>
         <span class="govuk-body">{{ resultsCountText }}</span>
       </div>
-      {# {% endif %} #}
     </form>
     {% if (resultsCount > 0) %}
     <ul class="govuk-list search-results">
       {% for service in services %}
         <li class="search-results__list-item">
-          <a class="govuk-link" href="{{ ['clientRegistry.', env, '.', service, '.link_href'] | join | translate }}">
-            {{ ['clientRegistry.', env, '.', service, '.header'] | join | translate }}
+          <a class="govuk-link" href="{{ ['clientRegistry.', env, '.', service, '.start_href'] | join | translate }}">
+            {{ ['clientRegistry.', env, '.', service, '.start_text'] | join | translate }}
           </a>
         </li>
       {% endfor %}
     </ul>
     {% else %}
-    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-3">
-    <h2 class="govuk-heading-s">{{ "pages.searchServices.noResultsBlock.heading" | translate }}</h2>
-    <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph1" | translate }}</h2>
-    <ul class="govuk-list govuk-list--bullet">
-      {% set suggestionsList =  "pages.searchServices.noResultsBlock.suggestionsList" | translate({ returnObjects: true }) %}
-      {% for item in suggestionsList %}
-        <li class="">{{ item }}</li>
-      {% endfor %}
-    </ul>
-    <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph2" | translate }}</p>
-    <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph3" | translate | safe }}</p>
+      <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-3">
+      <h2 class="govuk-heading-s">{{ "pages.searchServices.noResultsBlock.heading" | translate }}</h2>
+      <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph1" | translate }}</p>
+      <ul class="govuk-list govuk-list--bullet">
+        {% set suggestionsList =  "pages.searchServices.noResultsBlock.suggestionsList" | translate({ returnObjects: true }) %}
+        {% for item in suggestionsList %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% if isWelsh %}
+        <p class='govuk-body'>{{ "pages.searchServices.noResultsBlock.welshDisclaimer" | translate | safe | replace("[ENGLISH_LINK]", englishLanguageLink) }}</p>
+      {% else %}
+        <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph2" | translate }}</p>
+        <p class="govuk-body">{{ "pages.searchServices.noResultsBlock.paragraph3" | translate | safe }}</p>
+      {% endif %}
     {% endif %}
 {% endblock %}

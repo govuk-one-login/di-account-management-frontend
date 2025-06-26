@@ -13,6 +13,7 @@ describe("setOplSettings", () => {
       {
         contentId: "test_content_id",
         dynamic: false,
+        isPageDataSensitive: false,
         loggedInStatus: false,
         statusCode: 401,
         taxonomyLevel1: "test_taxonomy_level1",
@@ -25,6 +26,7 @@ describe("setOplSettings", () => {
     expect(res.locals.opl).to.deep.eq({
       contentId: "test_content_id",
       dynamic: false,
+      isPageDataSensitive: false,
       loggedInStatus: false,
       statusCode: 401,
       taxonomyLevel1: "test_taxonomy_level1",
@@ -43,6 +45,7 @@ describe("setOplSettings", () => {
     expect(res.locals.opl).to.deep.eq({
       contentId: "undefined",
       dynamic: true,
+      isPageDataSensitive: true,
       loggedInStatus: true,
       statusCode: 200,
       taxonomyLevel1: "accounts",

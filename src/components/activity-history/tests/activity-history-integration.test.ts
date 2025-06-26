@@ -225,7 +225,7 @@ describe("Integration:: Activity history", () => {
             user_id: "string",
             timestamp: "1689210000",
             truncated: false,
-            client_id: "dfeApplyForTeacherTraining",
+            client_id: "apprenticeshipsService",
           },
         ],
         { language: "cy" }

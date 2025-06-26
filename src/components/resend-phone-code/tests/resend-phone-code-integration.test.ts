@@ -13,6 +13,7 @@ import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behav
 import * as cheerio from "cheerio";
 import { CURRENT_EMAIL } from "../../../../test/utils/builders";
 import { expect } from "chai";
+import { INTENT_CHANGE_PHONE_NUMBER } from "../../check-your-email/types";
 
 const PHONE_NUMBER = "07839490040";
 
@@ -136,7 +137,11 @@ describe("Integration:: request phone code", () => {
       .post(PATH_DATA.RESEND_PHONE_CODE.url)
       .type("form")
       .set("Cookie", cookies)
-      .send({ _csrf: token, phoneNumber: PHONE_NUMBER })
+      .send({
+        _csrf: token,
+        phoneNumber: PHONE_NUMBER,
+        intent: INTENT_CHANGE_PHONE_NUMBER,
+      })
       .expect(302);
 
     expect(phoneNumberRequestedToChangeTo).to.equal(PHONE_NUMBER);

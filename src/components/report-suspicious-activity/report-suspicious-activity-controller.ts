@@ -193,7 +193,13 @@ export async function reportSuspiciousActivityPost(
       return next(error);
     }
 
-    const pageUrlParam = req.body.page ? `?page=${req.body.page}` : "";
+    let pageUrlParam = "";
+    if (req.body.page !== undefined) {
+      const pageNum = parseInt(req.body.page, 10);
+      if (Number.isInteger(pageNum) && pageNum > 0) {
+        pageUrlParam = `?page=${pageNum}`;
+      }
+    }
 
     res.redirect(
       PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done" + pageUrlParam
