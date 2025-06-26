@@ -71,7 +71,6 @@ describe("activity history allowlist middleware", () => {
     });
 
     it("redirects if list of user services does not contain activity history allowlisted RPs", async () => {
-      // prisonVisits and CMAD not on the allow list, so this should redirect
       sandbox.stub(yourServices, "getServices").resolves([
         {
           client_id: "smokeTests",
@@ -162,7 +161,6 @@ describe("activity history allowlist middleware", () => {
     });
 
     it("redirects if list of user services does not contain RSA allowlisted RPs", async () => {
-      // prisonVisits and CMAD not on the allow list
       sandbox.stub(yourServices, "getServices").resolves([
         {
           client_id: "smokeTests",
