@@ -61,7 +61,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Install dependencies defined in package.json as a clean install
-        run: npm ci
+        run: npm ci && cd end-to-end-tests && npm ci
 
       - name: Run lint
         run: npm run lint && cd end-to-end-tests && npm run lint
