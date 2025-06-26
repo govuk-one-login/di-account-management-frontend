@@ -1,5 +1,5 @@
-import { ConsoleMessage } from "@playwright/test";
-import { createBdd, test as base } from "playwright-bdd";
+import type { ConsoleMessage } from "@playwright/test";
+import { test as base, createBdd } from "playwright-bdd";
 
 export const test = base.extend({
   page: async ({ page }, use) => {

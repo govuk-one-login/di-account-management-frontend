@@ -1,8 +1,8 @@
+import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 import { cucumberReporter, defineBddConfig } from "playwright-bdd";
-import path from "node:path";
-import { getBaseUrl } from "./utils/getBaseUrl";
 import { env } from "./env";
+import { getBaseUrl } from "./utils/getBaseUrl";
 
 const testDir = defineBddConfig({
   features: "tests/features/**/*.feature",

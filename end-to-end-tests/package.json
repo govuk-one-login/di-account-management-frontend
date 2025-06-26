@@ -9,7 +9,11 @@
     "test:update-snapshots": "npm run build && docker run -t -v `pwd`:/end-to-end-tests --network=\"host\" di-account-management-frontend-end-to-end-test update-snapshots",
     "test:ui": "npm ci && npm run install-browsers && bddgen && playwright test --ui --ignore-snapshots",
     "run-tests": "npm ci && bddgen && playwright test",
-    "run-tests:update-snapshots": "npm ci && bddgen && playwright test --update-snapshots"
+    "run-tests:update-snapshots": "npm ci && bddgen && playwright test --update-snapshots",
+    "lint": "tsc --noEmit && biome lint --changed",
+    "lint:fix": "biome lint --write --changed",
+    "format": "biome check --changed --linter-enabled=false",
+    "format:fix": "biome check --write --changed --linter-enabled=false"
   },
   "repository": {
     "type": "git",
@@ -20,10 +24,11 @@
   },
   "homepage": "https://github.com/govuk-one-login/di-account-management-frontend#readme",
   "devDependencies": {
+    "@biomejs/biome": "^2.0.5",
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.15.26",
-    "playwright-bdd": "^8.2.1",
     "dotenv": "^16.5.0",
+    "playwright-bdd": "^8.2.1",
     "typescript": "^5.8.3",
     "valibot": "^1.1.0"
   }
