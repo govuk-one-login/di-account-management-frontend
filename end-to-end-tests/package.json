@@ -11,9 +11,7 @@
     "run-tests": "npm ci && bddgen && playwright test",
     "run-tests:update-snapshots": "npm ci && bddgen && playwright test --update-snapshots",
     "lint": "tsc --noEmit && biome lint",
-    "lint:fix": "biome lint --write",
-    "format": "biome check --changed --linter-enabled=false",
-    "format:fix": "biome check --write --changed --linter-enabled=false"
+    "lint:fix": "biome lint --write"
   },
   "repository": {
     "type": "git",
