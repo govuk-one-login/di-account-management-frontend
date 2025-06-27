@@ -33,5 +33,19 @@ jobs:
       - name: Run app
         run: |
           touch .env
-          echo ${{ secrets.ENV_VARIABLES }} >> .env
-          docker compose build && docker compose up
+          echo '${{ secrets.ENV_VARIABLES }}' >> .env
+          docker compose build && docker compose up &
+
+      - name: Run end-to-end tests
+        run: |
+          cd end-to-end-tests
+
+          until curl --output /dev/null --silent --head --fail http://localhost:6001; do
+              printf '.'
+              sleep 5
+          done
+
+          npm run test
+        env:
+          TEST_ENVIRONMENT: local
+          TEST_REPORT_DIR: cucumber-report
