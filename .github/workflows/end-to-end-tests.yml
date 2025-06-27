@@ -27,6 +27,9 @@ jobs:
       - name: Install app dependencies
         run: npm ci
 
+      - name: Build app
+        run: npm run build
+
       - name: Run app
         run: |
           touch .env
