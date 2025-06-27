@@ -11,7 +11,7 @@ const getFloatingWebchatButton = ({ page }: { page: Page }) => {
   return page.locator(".sa-chat-tab");
 };
 
-Then("the page should look expected", async ({ page }) => {
+Then("the page looks as expected", async ({ page }) => {
   expect(
     await page.screenshot({
       fullPage: true,
@@ -21,7 +21,7 @@ Then("the page should look expected", async ({ page }) => {
 });
 
 Then(
-  "the page should display the expected webchat content",
+  "the page displays the expected webchat content",
   async ({ page, $tags }) => {
     await expect(page.getByRole("heading", { name: "Webchat" })).toBeVisible();
 

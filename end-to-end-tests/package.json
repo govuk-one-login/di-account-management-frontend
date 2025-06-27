@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/govuk-one-login/di-account-management-frontend#readme",
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@biomejs/biome": "^2.0.5",
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.15.26",

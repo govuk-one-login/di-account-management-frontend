@@ -122,7 +122,7 @@ The end-to-end tests are written with [Playwright](https://playwright.dev/) and 
 
 Copy the file `end-to-end-tests/.env.sample` to `end-to-end-tests/.env`.
 
-When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_ENVIRONMENT` to one of `dev | build | staging | production` to run tests against the corresponding deployment instead.
+When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_TARGET` to one of `build | staging` to run tests against the corresponding deployment instead.
 
 If your machine has `AMD64` architecture then you can run the tests locally in Docker:
 

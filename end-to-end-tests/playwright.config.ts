@@ -9,11 +9,9 @@ const testDir = defineBddConfig({
   steps: "tests/steps/**/*.ts",
 });
 
-const isLocal = env.TEST_ENVIRONMENT === "local";
-
 export default defineConfig({
   testDir,
-  forbidOnly: !isLocal,
+  forbidOnly: !env.HUMAN_IN_THE_LOOP,
   workers: "50%",
   snapshotPathTemplate: "./snapshots/{projectName}/{testFilePath}/{arg}{ext}",
   reporter: [
