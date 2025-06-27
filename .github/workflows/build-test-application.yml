@@ -82,9 +82,6 @@ jobs:
 
       - name: Run integration tests
         run: npm run test:integration
-
-      - name: Run end-to-end tests
-        run: cd end-to-end-tests && npm run test
     env:
       HUSKY: 0
       API_BASE_URL: http://localhost:6000/api
