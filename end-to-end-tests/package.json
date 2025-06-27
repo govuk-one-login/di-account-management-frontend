@@ -10,8 +10,9 @@
     "test:ui": "npm ci && npm run install-browsers && bddgen && playwright test --ui --ignore-snapshots",
     "run-tests": "npm ci && bddgen && playwright test",
     "run-tests:update-snapshots": "npm ci && bddgen && playwright test --update-snapshots",
-    "lint": "tsc --noEmit && biome lint",
-    "lint:fix": "biome lint --write"
+    "lint": "tsc --noEmit && biome check --formatter-enabled=false --assist-enabled=false",
+    "lint:fix": "biome check --formatter-enabled=false --assist-enabled=false --write",
+    "lint:ci": "tsc --noEmit && biome ci --formatter-enabled=false --assist-enabled=false"
   },
   "repository": {
     "type": "git",

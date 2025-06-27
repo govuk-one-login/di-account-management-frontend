@@ -67,7 +67,7 @@ jobs:
         run: npm ci && cd end-to-end-tests && npm ci
 
       - name: WORKAROUND (Install biome manually) - https://github.com/biomejs/biome/issues/4467
-        run: npm install --no-save @biomejs/cli-linux-arm64
+        run: npm install --no-save @biomejs/cli-linux-x64
 
       - name: Run lint
         run: npm run lint && cd end-to-end-tests && npm run lint
