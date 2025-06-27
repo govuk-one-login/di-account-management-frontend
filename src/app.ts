@@ -18,7 +18,6 @@ import Backend from "i18next-fs-backend";
 import {
   getAppEnv,
   getNodeEnv,
-  getSessionExpiry,
   getSessionSecret,
   supportActivityLog,
   supportBrandRefresh,
@@ -144,11 +143,7 @@ async function createApp(): Promise<express.Application> {
       secret: getSessionSecret(),
       resave: false,
       unset: "destroy",
-      cookie: getSessionCookieOptions(
-        isProduction,
-        getSessionExpiry(),
-        getSessionSecret()
-      ),
+      cookie: getSessionCookieOptions(isProduction, getSessionSecret()),
     })
   );
 
