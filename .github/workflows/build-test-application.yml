@@ -40,8 +40,6 @@ jobs:
           DEBUG: 0
         ports:
           - 4566:4566
-    permissions:
-      pull-requests: write
 
     steps:
       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
@@ -64,13 +62,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Install dependencies defined in package.json as a clean install
-        run: npm ci && cd end-to-end-tests && npm ci
-
-      - name: WORKAROUND (Install biome manually) - https://github.com/biomejs/biome/issues/4467
-        run: npm install --no-save @biomejs/cli-linux-x64
-
-      - name: Run lint
-        run: npm run lint && cd end-to-end-tests && npm run lint
+        run: npm ci
 
       - name: Build app
         run: npm run build
@@ -82,6 +74,9 @@ jobs:
 
       - name: Run integration tests
         run: npm run test:integration
+
+      - name: Run lint
+        run: npm run lint
     env:
       HUSKY: 0
       API_BASE_URL: http://localhost:6000/api

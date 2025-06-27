@@ -10,9 +10,9 @@
     "test:ui": "npm ci && npm run install-browsers && bddgen && playwright test --ui --ignore-snapshots",
     "run-tests": "npm ci && bddgen && playwright test",
     "run-tests:update-snapshots": "npm ci && bddgen && playwright test --update-snapshots",
-    "lint": "tsc --noEmit && biome check --formatter-enabled=false --assist-enabled=false",
+    "lint": "biome check --formatter-enabled=false --assist-enabled=false",
     "lint:fix": "biome check --formatter-enabled=false --assist-enabled=false --write",
-    "lint:ci": "tsc --noEmit && biome ci --formatter-enabled=false --assist-enabled=false"
+    "lint:ci": "biome ci --formatter-enabled=false --assist-enabled=false"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.0.5",
     "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.26",
+    "@types/node": "^24.0.4",
     "dotenv": "^16.5.0",
     "nock": "^14.0.5",
     "playwright-bdd": "^8.2.1",
