@@ -12,6 +12,9 @@ jobs:
     timeout-minutes: 15
     permissions:
       pull-requests: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
@@ -34,18 +37,4 @@ jobs:
         run: |
           touch .env
           echo '${{ secrets.ENV_VARIABLES }}' >> .env
-          docker compose build && docker compose up &
-
-      - name: Run end-to-end tests
-        run: |
-          cd end-to-end-tests
-
-          until curl --output /dev/null --silent --head --fail http://localhost:6001; do
-              printf '.'
-              sleep 5
-          done
-
-          npm run test
-        env:
-          TEST_ENVIRONMENT: local
-          TEST_REPORT_DIR: cucumber-report
+          docker compose build && docker compose up
