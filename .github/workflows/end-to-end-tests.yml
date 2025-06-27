@@ -56,6 +56,6 @@ jobs:
 
           touch .env
           echo TEST_ENVIRONMENT=local >> .env
-          echo TEST_ENVIRONMENT=cucumber-report >> .env
+          echo TEST_REPORT_DIR=cucumber-report >> .env
 
           npm run test
