@@ -146,8 +146,10 @@ npm ci && npm run test
 To avoid discrepancies between deployment pipeline and local test run outcomes ensure that your locally installed version of Chrome is up to date prior to running the tests.
 
 TODO
+Move end-to-end testing README section to README in end-to-end testing folder and link to it from here
 update to explain how to run in Docker as the only method to run tests and update test snapshots
 but explain that to run in ui mode for the debugging the tests should be run locally
+explain that nock is available in the context of each step. explain not to mock things unless it is required for tests to produce reproducible results
 
 ### Restarting the app
 
