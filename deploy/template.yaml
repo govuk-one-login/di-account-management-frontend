@@ -304,9 +304,9 @@ Mappings:
       SUPPORTSEARCHABLELIST: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://z7lornzyy5-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration/v1"
-      SUPPORTMETHODMANAGEMENT: "qa"
-      SUPPORTADDBACKUPMFA: "qa"
-      SUPPORTCHANGEMFA: "qa"
+      SUPPORTMETHODMANAGEMENT: "1"
+      SUPPORTADDBACKUPMFA: "1"
+      SUPPORTCHANGEMFA: "1"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables # pragma: allowlist secret
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
