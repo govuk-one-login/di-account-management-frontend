@@ -33,7 +33,7 @@ jobs:
       - name: Run app
         run: |
           touch .env
-          echo '${{ secrets.ENV_VARIABLES }}' >> .env
+          echo '${{ secrets.END_TO_END_TESTS_APP_ENV_VARIABLES }}' >> .env
           docker compose build && docker compose up &
 
       - name: Install end-to-end-tests dependencies
@@ -41,6 +41,9 @@ jobs:
 
       - name: WORKAROUND (install biome manually) - https://github.com/biomejs/biome/issues/4467
         run: cd end-to-end-tests && npm install --no-save @biomejs/cli-linux-x64
+
+      - name: Run type check
+        run: npm run check-types
 
       - name: Run lint
         run: cd end-to-end-tests && npm run lint
@@ -55,7 +58,5 @@ jobs:
           done
 
           touch .env
-          echo TEST_ENVIRONMENT=local >> .env
-          echo TEST_REPORT_DIR=cucumber-report >> .env
-
+          echo '${{ secrets.END_TO_END_TESTS_TEST_ENV_VARIABLES }}' >> .env
           npm run test
