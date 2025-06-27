@@ -43,7 +43,7 @@ jobs:
         run: cd end-to-end-tests && npm install --no-save @biomejs/cli-linux-x64
 
       - name: Run type check
-        run: npm run check-types
+        run: cd end-to-end-tests && npm run check-types
 
       - name: Run lint
         run: cd end-to-end-tests && npm run lint
