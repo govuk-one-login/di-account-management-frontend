@@ -1,9 +1,7 @@
-import { expect, Page, Response } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import { bdd } from "./fixtures";
 
 const { Given, Then, When } = bdd;
-
-let response: Response | null;
 
 const getInlineWebchatButton = ({ page }: { page: Page }) => {
   return page.getByRole("button", { name: "Use webchat" });
@@ -13,16 +11,17 @@ const getFloatingWebchatButton = ({ page }: { page: Page }) => {
   return page.locator(".sa-chat-tab");
 };
 
-Given("I visit the contact page", async ({ page }) => {
-  response = await page.goto("/contact-gov-uk-one-login");
-});
-
-Then("the page should have status code 200", () => {
-  expect(response?.status()).toBe(200);
+Then("the page looks as expected", async ({ page }) => {
+  expect(
+    await page.screenshot({
+      fullPage: true,
+      mask: [page.locator(".contact-reference__code")],
+    })
+  ).toMatchSnapshot();
 });
 
 Then(
-  "the page should display the expected webchat content",
+  "the page displays the expected webchat content",
   async ({ page, $tags }) => {
     await expect(page.getByRole("heading", { name: "Webchat" })).toBeVisible();
 
@@ -67,6 +66,20 @@ When("I click on the floating webchat button", async ({ page }) => {
 
 Then("the webchat appears", async ({ page }) => {
   await expect(page.getByText("GOV.UK One Login webchat · Beta")).toBeVisible();
+  await expect(
+    page.getByText("Welcome to GOV.UK One Login chatbot support")
+  ).toBeVisible({ timeout: 10000 });
+  await expect(
+    page.getByText("Would you like to receive support in English or Welsh?")
+  ).toBeVisible();
+});
+
+Then("the webchat looks as expected", async ({ page }) => {
+  expect(
+    await page.screenshot({
+      mask: [page.locator(".sa-chat-wrapper .timestamp-container")],
+    })
+  ).toMatchSnapshot();
 });
 
 When("I click on the minimise webchat button", async ({ page }) => {
