@@ -157,13 +157,11 @@ export async function addMfaSmsMethodConfirmationGet(
     res
   );
 
-  return res.render("common/confirmation-page/confirmation.njk", {
-    pageTitleName: req.t("pages.addBackupSms.confirm.title"),
-    heading: req.t("pages.addBackupSms.confirm.heading"),
-    message: req
+  return res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.addBackupSms.confirm.title"),
+    panelText: req.t("pages.addBackupSms.confirm.heading"),
+    summaryText: req
       .t("pages.addBackupSms.confirm.message")
       .replace("[mobile]", getLastNDigits(req.session.user.phoneNumber, 4)),
-    backLinkText: req.t("pages.addBackupSms.confirm.backLink"),
-    backLink: PATH_DATA.SECURITY.url,
   });
 }

@@ -233,8 +233,7 @@
     "confirmaddBackup": {
       "title": "You've added a back-up method for getting security codes",
       "heading": "You've added a back-up method for getting security codes",
-      "message": "If your default method for getting security codes is not available, you can get a code from this authenticator app instead.",
-      "backLinkText": "Back to Security"
+      "message": "If your default method for getting security codes is not available, you can get a code from this authenticator app instead."
     },
     "addBackup": {
       "title": "Choose a back-up method",
@@ -294,23 +293,21 @@
       "confirm": {
         "title": "You've added a back-up method for getting security codes",
         "heading": "You've added a back-up method for getting security codes",
-        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with <strong>[mobile]</strong> instead.",
-        "backLink": "Back to Security"
+        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with <strong>[mobile]</strong> instead."
       }
     },
     "removeBackupMethod": {
       "title": "Remove your back-up method for getting security codes",
       "paragraph": "This will delete your back-up method for getting security codes.",
-      "sms": "We'll no longer send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
-      "app": "We'll no longer send security codes to your authenticator app.",
+      "sms": "We’ll no longer send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
+      "app": "We’ll no longer send security codes to your authenticator app.",
       "button": "Remove back-up method",
       "cancelBackLink": "Cancel and go back to Security",
-      "backLinkText": "Back to Security",
       "confirm": {
-        "title": "You've removed your back-up method for getting security codes",
-        "heading": "You've removed your back-up method for getting security codes.",
-        "message_app": "You'll no longer get security codes to your authenticator app.",
-        "message_sms": "You'll no longer get security codes to your phone number ending with <strong>[phoneNumber]</strong>."
+        "title": "You’ve removed your back-up method for getting security codes",
+        "heading": "You’ve removed your back-up method for getting security codes.",
+        "message_app": "You’ll no longer get security codes to your authenticator app.",
+        "message_sms": "You’ll no longer get security codes to your phone number ending with <strong>[phoneNumber]</strong>."
       }
     },
     "activityHistory": {
@@ -587,11 +584,10 @@
       "setUpAppButton": "Set up an authenticator app",
       "cancelButton": "Cancel and go back to Security",
       "confirmation": {
-        "title": "You've changed your default method for getting security codes",
-        "heading": "You've changed your default method for getting security codes",
+        "title": "You’ve changed your default method for getting security codes",
+        "heading": "You’ve changed your default method for getting security codes",
         "app": "Your default method for getting security codes is now your authenticator app.",
-        "sms": "Your default method for getting security codes will be a text message to your phone number ending with <strong>[phoneNumber]</strong>.",
-        "back": "Back to Security"
+        "sms": "Your default method for getting security codes will be a text message to your phone number ending with <strong>[phoneNumber]</strong>."
       },
       "sms": {
         "title": "Enter your mobile phone number",
@@ -678,11 +674,10 @@
       "button": "Switch methods",
       "cancelLinkText": "Cancel and go back to Security",
       "confirm": {
-        "title": "You've switched your back-up and default methods for getting security codes",
-        "heading": "You've switched your back-up and default methods for getting security codes",
-        "backLinkText": "Back to Security",
-        "messageSms": "We'll send security codes to your phone number ending with <strong>[phoneNumber]</strong>.",
-        "messageApp": "You'll use your authenticator app to get security codes to sign in."
+        "title": "You’ve switched your back-up and default methods for getting security codes",
+        "heading": "You’ve switched your back-up and default methods for getting security codes",
+        "messageSms": "We’ll send security codes to your phone number ending with <strong>[phoneNumber]</strong>.",
+        "messageApp": "You’ll use your authenticator app to get security codes to sign in."
       }
     },
     "contact": {

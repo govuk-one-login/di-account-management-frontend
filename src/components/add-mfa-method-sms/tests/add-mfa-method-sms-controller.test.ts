@@ -10,6 +10,7 @@ import {
 import {
   addMfaSmsMethodPost,
   addMfaSmsMethodGet,
+  addMfaSmsMethodConfirmationGet,
 } from "../add-mfa-method-sms-controller";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
@@ -105,6 +106,38 @@ describe("addMfaSmsMethodGet", () => {
     await addMfaSmsMethodGet(req as Request, res as Response);
     expect(res.render).to.be.calledWith("add-mfa-method-sms/index.njk", {
       backLink: "/back-from-set-up-method",
+    });
+  });
+});
+
+describe("addMfaSmsMethodConfirmationGet", () => {
+  let sandbox: sinon.SinonSandbox;
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+
+    req = new RequestBuilder()
+      .withBody({})
+      .withSessionUserState({ addBackup: { value: "CHANGE_VALUE" } })
+      .withTranslate(sandbox.fake((id) => id))
+      .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+      .build();
+
+    res = new ResponseBuilder().withRender(sandbox.fake()).build();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should call render with the expected arguments", async () => {
+    await addMfaSmsMethodConfirmationGet(req as Request, res as Response);
+    expect(res.render).to.be.calledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.addBackupSms.confirm.title",
+      panelText: "pages.addBackupSms.confirm.heading",
+      summaryText: "pages.addBackupSms.confirm.message",
     });
   });
 });
