@@ -25,7 +25,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.0.5",
     "@playwright/test": "^1.52.0",
-    "@types/node": "^24.0.4",
+    "@types/node": "^22.15.26",
     "dotenv": "^16.5.0",
     "nock": "^14.0.5",
     "playwright-bdd": "^8.2.1",

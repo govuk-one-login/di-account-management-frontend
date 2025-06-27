@@ -16,14 +16,16 @@ export const test = base.extend<{
     await use({
       nock,
       methodManagementApi: nock(
-        new RegExp(
+        "http://TODO.com"
+        /*TODO new RegExp(
           `^${RegExp.escape("https://method-management-v1-stub.home.dev.account.gov.uk/v1")}|^${RegExp.escape("https://a3bnrbtiga-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging/v1")}|^${RegExp.escape("https://z7lornzyy5-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration/v1")}|^${RegExp.escape("https://63qq2dsjo5-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production/v1")}`
-        )
+        )*/
       ),
       accountManagementApi: nock(
-        new RegExp(
+        "http://TODO2.com"
+        /*TODO new RegExp(
           `^${RegExp.escape("https://am-stub.home.dev.account.gov.uk")}|^${RegExp.escape("https://manage.staging.account.gov.uk")}|^${RegExp.escape("https://manage.build.account.gov.uk")}|^${RegExp.escape("https://manage.integration.account.gov.uk")}|^${RegExp.escape("https://manage.account.gov.uk")}`
-        )
+        )*/
       ),
     });
 
