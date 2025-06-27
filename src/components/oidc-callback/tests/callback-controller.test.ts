@@ -23,7 +23,11 @@ describe("callback controller", () => {
     req = {
       body: {},
       query: {},
-      session: { user: {}, destroy: sandbox.fake() } as any,
+      session: {
+        user: {},
+        destroy: sandbox.fake(),
+        state: sandbox.fake(),
+      } as any,
       t: sandbox.fake(),
       oidc: {
         callbackParams: sandbox.fake(),
@@ -207,6 +211,18 @@ describe("callback controller", () => {
         { trace: "fake_trace" },
         "gs cookie not in request."
       );
+    });
+
+    it("should redirect to session expired if session state is missing", async () => {
+      req.session.state = undefined;
+
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake(),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
   });
 });

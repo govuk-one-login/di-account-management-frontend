@@ -76,6 +76,9 @@ export function oidcAuthCallbackGet(
     } else {
       redirectUri = PATH_DATA.YOUR_SERVICES.url;
     }
+    if (!req.session.state) {
+      return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
+    }
     const tokenResponse: TokenSet = await req.oidc.callback(
       req.oidc.metadata.redirect_uris[0],
       queryParams,
