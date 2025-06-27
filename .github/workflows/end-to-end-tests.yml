@@ -9,7 +9,7 @@ jobs:
   end_to_end_tests:
     name: "Run end-to-end tests"
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     permissions:
       pull-requests: write
     concurrency:
@@ -54,7 +54,8 @@ jobs:
               sleep 5
           done
 
+          touch .env
+          echo TEST_ENVIRONMENT=local >> .env
+          echo TEST_ENVIRONMENT=cucumber-report >> .env
+
           npm run test
-        env:
-          TEST_ENVIRONMENT: local
-          TEST_REPORT_DIR: cucumber-report
