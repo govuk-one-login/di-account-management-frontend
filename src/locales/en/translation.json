@@ -676,7 +676,6 @@
       "confirm": {
         "title": "You’ve switched your back-up and default methods for getting security codes",
         "heading": "You’ve switched your back-up and default methods for getting security codes",
-        "backLinkText": "Back to Security",
         "messageSms": "We’ll send security codes to your phone number ending with <strong>[phoneNumber]</strong>.",
         "messageApp": "You’ll use your authenticator app to get security codes to sign in."
       }

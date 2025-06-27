@@ -102,7 +102,11 @@ describe("update confirmation controller", () => {
         res as Response
       );
 
-      expect(res.render).to.have.calledWith("update-confirmation/index.njk");
+      expect(res.render).to.have.calledWith("update-confirmation/index.njk", {
+        pageTitle: req.t("pages.switchBackupMethod.confirm.title"),
+        panelText: req.t("pages.switchBackupMethod.confirm.heading"),
+        summaryText: req.t("pages.switchBackupMethod.confirm.messageApp"),
+      });
     });
   });
 
