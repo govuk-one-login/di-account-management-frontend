@@ -31,7 +31,7 @@ export default defineConfig({
     env.TEST_TARGET === "local"
       ? [
           {
-            command: "npm run build-app",
+            command: "npm run build-and-run-app",
             url: "https://localhost:6001/healthcheck",
             reuseExistingServer: true,
             timeout: 300000,
