@@ -6,6 +6,7 @@
 {% set serviceHeadingLevel =  "h3" if showSecondaryHeadings else "h2" %}
 {% set hasRPs = servicesList.length or accountsList.length %}
 {% set serviceListLink = 'pages.yourServices.informationBox.link' | translate | safe %}
+{% set searchableListLink = "SEARCH_SERVICES" | getPath %}
 
 {%- macro setKey(key, clientId) -%} 
   {{ ['clientRegistry.', env, '.', clientId, '.', key] | join }}
@@ -106,7 +107,11 @@
         <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
         {{ bodyParagraph({ content: 'pages.yourServices.informationBox.paragraph1'}) }}
         {{ bodyParagraph({ content: 'pages.yourServices.informationBox.paragraph2'}) }}
-        {{ bodyParagraph({ contentBlock: 'pages.yourServices.informationBox.paragraph3' | translate | replace("[serviceListLink]", serviceListLink) | safe })}}</p>
+        {% if searchableListEnabled %}
+          {{ bodyParagraph({ contentBlock: 'pages.yourServices.informationBox.paragraph3' | translate | replace("[serviceListLink]", searchableListLink) | safe })}}</p>
+        {% else %}
+          {{ bodyParagraph({ contentBlock: 'pages.yourServices.informationBox.paragraph3' | translate | replace("[serviceListLink]", serviceListLink) | safe })}}</p>
+        {% endif %}
       </div>
     </div>
   </div>
