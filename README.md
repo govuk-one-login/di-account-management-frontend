@@ -158,6 +158,7 @@ Post-deployment tests ignore snapshots.
 By default tests run pre and post but can be tagged to be one or the other with @skipPreDeploy @skipPostDeploy.
 when writing and debugging tests use UI mode
 Don't import things from outside the end-to-end-tests directory, treat it as it's own standalone project.
+Mention that running tests will start app locally which can take some time, but if you already have it running then it will use that which will be faster.
 
 ### Restarting the app
 

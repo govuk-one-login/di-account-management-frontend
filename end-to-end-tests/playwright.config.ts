@@ -31,8 +31,7 @@ export default defineConfig({
     env.TEST_TARGET === "local"
       ? [
           {
-            cwd: path.join(__dirname, "../"),
-            command: "docker compose build && docker compose up",
+            command: "npm run build-app",
             url: "https://localhost:6001/healthcheck",
             reuseExistingServer: true,
             timeout: 300000,
