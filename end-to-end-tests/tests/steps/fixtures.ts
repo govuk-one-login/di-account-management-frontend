@@ -17,7 +17,9 @@ export const test = base.extend<
     async ({}, use) => {
       if (env.TEST_TARGET === "local") {
         const mswServer = setupServer();
-        mswServer.listen();
+        mswServer.listen({
+          onUnhandledRequest: () => {},
+        });
         await use(mswServer);
         mswServer.close();
       } else {
@@ -43,30 +45,34 @@ export const test = base.extend<
   ],
 
   page: async ({ page }, use) => {
-    const logs: {
-      msg: ConsoleMessage;
-      type: string;
-      location: string;
-    }[] = [];
-    page.on("console", (msg) => {
-      const location = msg.location();
-      logs.push({
-        msg,
-        type: msg.type(),
-        location: `${location.url}:${location.lineNumber}:${location.columnNumber}`,
+    if (!env.UI_MODE) {
+      const logs: {
+        msg: ConsoleMessage;
+        type: string;
+        location: string;
+      }[] = [];
+      page.on("console", (msg) => {
+        const location = msg.location();
+        logs.push({
+          msg,
+          type: msg.type(),
+          location: `${location.url}:${location.lineNumber}:${location.columnNumber}`,
+        });
       });
-    });
 
-    const exceptions: Error[] = [];
-    page.on("pageerror", (exception) => {
-      exceptions.push(exception);
-    });
+      const exceptions: Error[] = [];
+      page.on("pageerror", (exception) => {
+        exceptions.push(exception);
+      });
 
-    await use(page);
+      await use(page);
 
-    console.log({ "Console logs": logs });
+      console.log({ "Console logs": logs });
 
-    console.log({ Exceptions: exceptions });
+      console.log({ Exceptions: exceptions });
+    } else {
+      await use(page);
+    }
   },
 
   javaScriptEnabled: async ({ $tags }, use) => {

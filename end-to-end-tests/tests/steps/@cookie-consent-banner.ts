@@ -1,7 +1,11 @@
-import { expect } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import { bdd } from "./fixtures";
 
 const { Given, Then } = bdd;
+
+const getCookieBanner = ({ page }: { page: Page }) => {
+  return page.getByLabel("Cookies on GOV.UK One Login");
+};
 
 Then("the cookie consent banner shows", ({ page }) => {
   page.getByRole("heading", { name: "Cookies on GOV.UK One Login" });
@@ -12,7 +16,7 @@ Then("the cookie consent banner shows", ({ page }) => {
 });
 
 Then("the cookie consent banner looks as expected", async ({ page }) => {
-  expect(await page.screenshot()).toMatchSnapshot();
+  expect(await getCookieBanner({ page }).screenshot()).toMatchSnapshot();
 });
 
 Given("I click to accept cookies", async ({ page }) => {
@@ -28,7 +32,7 @@ Then("I am shown a message confirming my acceptance", ({ page }) => {
 Then(
   "the message confirming my acceptance looks as expected",
   async ({ page }) => {
-    expect(await page.screenshot()).toMatchSnapshot();
+    expect(await getCookieBanner({ page }).screenshot()).toMatchSnapshot();
   }
 );
 
@@ -45,23 +49,19 @@ Then("I am shown a message confirming my rejection", ({ page }) => {
 Then(
   "the message confirming my rejection looks as expected",
   async ({ page }) => {
-    expect(await page.screenshot()).toMatchSnapshot();
+    expect(await getCookieBanner({ page }).screenshot()).toMatchSnapshot();
   }
 );
 
 Then("I can dismiss the confirmation message", async ({ page }) => {
   await page.getByRole("button", { name: "Hide this message" }).click();
-  await expect(
-    page.getByLabel("Cookies on GOV.UK One Login")
-  ).not.toBeVisible();
+  await expect(getCookieBanner({ page })).not.toBeVisible();
 });
 
 Then(
   "the cookie consent banner does not show again when the page is refreshed",
   async ({ page }) => {
     await page.reload();
-    await expect(
-      page.getByLabel("Cookies on GOV.UK One Login")
-    ).not.toBeVisible();
+    await expect(getCookieBanner({ page })).not.toBeVisible();
   }
 );
