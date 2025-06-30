@@ -85,6 +85,8 @@ import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
+import https from "node:https";
+import selfsigned from "selfsigned";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -288,7 +290,10 @@ async function createApp(): Promise<express.Application> {
   return app;
 }
 
-async function startServer(app: Application): Promise<{
+async function startServer(
+  app: Application,
+  useSSLWithSelfSignedCert = false
+): Promise<{
   server: Server;
   closeServer: (callback?: (err?: Error) => void) => Promise<void>;
 }> {
@@ -297,7 +302,29 @@ async function startServer(app: Application): Promise<{
   let stopVitalSigns: () => void;
 
   await new Promise<void>((resolve) => {
-    server = app
+    let appOrServer: ReturnType<(typeof https)["createServer"]> | typeof app =
+      app;
+
+    if (useSSLWithSelfSignedCert) {
+      const pems = selfsigned.generate(
+        [
+          {
+            name: "commonName",
+            value: "localhost",
+          },
+        ],
+        { days: 365 }
+      );
+      appOrServer = https.createServer(
+        {
+          key: pems.private,
+          cert: pems.cert,
+        },
+        app
+      );
+    }
+
+    server = appOrServer
       .listen(port, () => {
         logger.info(`Server listening on port ${port}`);
         app.emit("appStarted");

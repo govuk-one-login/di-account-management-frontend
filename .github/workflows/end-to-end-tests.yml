@@ -28,19 +28,13 @@ jobs:
         run: npm ci
 
       - name: Build app
-        run: npm run build
-
-      - name: Run app
         run: |
           touch .env
           echo '${{ secrets.END_TO_END_TESTS_APP_ENV_VARIABLES }}' >> .env
-          docker compose build && docker compose up &
+          npm run build
 
       - name: Install end-to-end-tests dependencies
         run: cd end-to-end-tests && npm ci
-
-      - name: WORKAROUND (install biome manually) - https://github.com/biomejs/biome/issues/4467
-        run: cd end-to-end-tests && npm install --no-save @biomejs/cli-linux-x64
 
       - name: Run type check
         run: cd end-to-end-tests && npm run check-types
@@ -51,12 +45,7 @@ jobs:
       - name: Run end-to-end tests
         run: |
           cd end-to-end-tests
-
-          until curl --output /dev/null --silent --head --fail http://localhost:6001; do
-              printf '.'
-              sleep 5
-          done
-
           touch .env
-          echo '${{ secrets.END_TO_END_TESTS_TEST_ENV_VARIABLES }}' >> .env
+          echo "PRE_OR_POST_DEPLOY=pre" >> .env
+          echo "PW_TEST_CONNECT_WS_ENDPOINT=ws://127.0.0.1:3000/" >> .env
           npm run test

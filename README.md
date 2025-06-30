@@ -58,7 +58,7 @@ Run `docker compose build && docker compose up` to force a new build of the cont
 
 To find out if the application has started, open a console window on the docker container and view the logs. If the server has started successfully you will see this message `Server listening on port 6001`.
 
-Navigate to [http://localhost:6001](http://localhost:6001). You should be redirected through the OIDC stub and back to the application.
+Navigate to [https://localhost:6001](https://localhost:6001) and continue past any self-signed SSL certificate warning. You should be redirected through the OIDC stub and back to the application.
 
 Changes made locally will automatically be deployed after a few seconds. You should check the docker console to check that your changes have been picked up.
 
@@ -122,7 +122,7 @@ The end-to-end tests are written with [Playwright](https://playwright.dev/) and 
 
 Copy the file `end-to-end-tests/.env.sample` to `end-to-end-tests/.env`.
 
-When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_TARGET` to one of `build | staging` to run tests against the corresponding deployment instead.
+When running tests locally they are run against `https://localhost:6001` by default. Change the value of the environment variable `TEST_TARGET` to one of `dev | build | staging | integration | production` to run tests against the corresponding deployment instead.
 
 If your machine has `AMD64` architecture then you can run the tests locally in Docker:
 
@@ -149,7 +149,15 @@ TODO
 Move end-to-end testing README section to README in end-to-end testing folder and link to it from here
 update to explain how to run in Docker as the only method to run tests and update test snapshots
 but explain that to run in ui mode for the debugging the tests should be run locally
-explain that nock is available in the context of each step. explain not to mock things unless it is required for tests to produce reproducible results
+explain that a MSW server is available in the context of each step when running against local. explain not to mock things unless it is required for tests to produce reproducible results
+mention that snapshots are ignored when running in post-deploy
+
+TODO Mention that:
+When running in a pre-deployment environemnt (locally, GH Actions) then tests target localhost, when running in a post-deployment environment (post-deploy tests) they target the environment the deployment was made to.
+Post-deployment tests ignore snapshots.
+By default tests run pre and post but can be tagged to be one or the other with @skipPreDeploy @skipPostDeploy.
+when writing and debugging tests use UI mode
+Don't import things from outside the end-to-end-tests directory, treat it as it's own standalone project.
 
 ### Restarting the app
 

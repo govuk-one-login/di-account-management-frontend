@@ -3,12 +3,10 @@ import { bdd } from "./fixtures";
 
 const { Given, Then } = bdd;
 
-Then("the cookie consent banner shows", async ({ page }) => {
-  await page.getByRole("heading", { name: "Cookies on GOV.UK One Login" });
-  await page.getByText(
-    "We use some essential cookies to make this service work."
-  );
-  await page.getByText(
+Then("the cookie consent banner shows", ({ page }) => {
+  page.getByRole("heading", { name: "Cookies on GOV.UK One Login" });
+  page.getByText("We use some essential cookies to make this service work.");
+  page.getByText(
     "We’d also like to use analytics cookies so we can understand how you use the service and make improvements."
   );
 });
@@ -21,8 +19,8 @@ Given("I click to accept cookies", async ({ page }) => {
   await page.getByText("Accept analytics cookies").click();
 });
 
-Then("I am shown a message confirming my acceptance", async ({ page }) => {
-  await page.getByText(
+Then("I am shown a message confirming my acceptance", ({ page }) => {
+  page.getByText(
     "You’ve accepted additional cookies. You can change your cookie settings at any time."
   );
 });
@@ -38,8 +36,8 @@ Given("I click to reject cookies", async ({ page }) => {
   await page.getByText("Reject analytics cookies").click();
 });
 
-Then("I am shown a message confirming my rejection", async ({ page }) => {
-  await page.getByText(
+Then("I am shown a message confirming my rejection", ({ page }) => {
+  page.getByText(
     "You’ve rejected additional cookies. You can change your cookie settings at any time."
   );
 });

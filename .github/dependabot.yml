@@ -51,9 +51,6 @@ updates:
     labels:
       - dependabot
       - dependencies
-    ignore:
-      - dependency-name: "node"
-        versions: ["17.x", "18.x", "19.x"]
     commit-message:
       prefix: BAU
     groups:
