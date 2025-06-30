@@ -148,7 +148,8 @@
       }, {
         enableGa4Tracking: {{isGa4Enabled}},
         cookieDomain: "{{analyticsCookieDomain}}",
-        isDataSensitive: true,
+        isDataSensitive: false,
+        isPageDataSensitive: {{ opl.isPageDataSensitive | default("true") }},
         enablePageViewTracking: true,
         enableFormResponseTracking: true,
         enableFormChangeTracking: true,

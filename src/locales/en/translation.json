@@ -137,7 +137,7 @@
   },
   "pages": {
     "searchServices": {
-      "title": "Search Services",
+      "title": "Search",
       "heading": "Services you can use with GOV.UK One Login",
       "paragraphs": [
         "At the moment, you can only use GOV.UK One Login to access some government services.",
@@ -161,7 +161,8 @@
         "paragraph3": "You can <a class='govuk-link' href='https://www.gov.uk/'> go to the GOV.UK homepage to find the service you need</a>.",
         "welshDisclaimer": "If there are still no matching results, the service might not be available in Welsh. <a class='govuk-link' href='[ENGLISH_LINK]'>Go to the English page to find a service in English</a>."
       },
-      "welshDisclaimer": "Only services that are available in Welsh will appear in the results. <a class='govuk-link' href='[ENGLISH_LINK]'>Go to the English page to find a service in English</a>."
+      "welshDisclaimer": "Only services that are available in Welsh will appear in the results. <a class='govuk-link' href='[ENGLISH_LINK]'>Go to the English page to find a service in English</a>.",
+      "clearSearch": "Clear search"
     },
     "security": {
       "title": "Security",
@@ -226,14 +227,13 @@
       "activityHistory": {
         "heading": "Activity history",
         "link": "See your activity history",
-        "info": "See what you’ve visited with your GOV.UK One Login and when."
+        "info": "See what you’ve accessed with your GOV.UK One Login and when."
       }
     },
     "confirmaddBackup": {
       "title": "You've added a back-up method for getting security codes",
       "heading": "You've added a back-up method for getting security codes",
-      "message": "If your default method for getting security codes is not available, you can get a code from this authenticator app instead.",
-      "backLinkText": "Back to Security"
+      "message": "If your default method for getting security codes is not available, you can get a code from this authenticator app instead."
     },
     "addBackup": {
       "title": "Choose a back-up method",
@@ -293,30 +293,28 @@
       "confirm": {
         "title": "You've added a back-up method for getting security codes",
         "heading": "You've added a back-up method for getting security codes",
-        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with <strong>[mobile]</strong> instead.",
-        "backLink": "Back to Security"
+        "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with <strong>[mobile]</strong> instead."
       }
     },
     "removeBackupMethod": {
       "title": "Remove your back-up method for getting security codes",
       "paragraph": "This will delete your back-up method for getting security codes.",
-      "sms": "We'll no longer send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
-      "app": "We'll no longer send security codes to your authenticator app.",
+      "sms": "We’ll no longer send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
+      "app": "We’ll no longer send security codes to your authenticator app.",
       "button": "Remove back-up method",
       "cancelBackLink": "Cancel and go back to Security",
-      "backLinkText": "Back to Security",
       "confirm": {
-        "title": "You've removed your back-up method for getting security codes",
-        "heading": "You've removed your back-up method for getting security codes.",
-        "message_app": "You'll no longer get security codes to your authenticator app.",
-        "message_sms": "You'll no longer get security codes to your phone number ending with <strong>[phoneNumber]</strong>."
+        "title": "You’ve removed your back-up method for getting security codes",
+        "heading": "You’ve removed your back-up method for getting security codes.",
+        "message_app": "You’ll no longer get security codes to your authenticator app.",
+        "message_sms": "You’ll no longer get security codes to your phone number ending with <strong>[phoneNumber]</strong>."
       }
     },
     "activityHistory": {
       "title": "Activity history",
       "header": "Activity history",
       "page": "Page [pageNumber]",
-      "explanation": "See what you’ve visited with your GOV.UK One Login and when.",
+      "explanation": "See what you’ve accessed with your GOV.UK One Login and when.",
       "empty": "There is a problem showing your activity history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">contact the GOV.UK One Login team</a>.",
       "notice": "If you see something you do not recognise, report it and <a class=\"govuk-link\" href=\"[changePassword]\"> change your password</a>.",
       "timeInfo": "UK time",
@@ -586,11 +584,10 @@
       "setUpAppButton": "Set up an authenticator app",
       "cancelButton": "Cancel and go back to Security",
       "confirmation": {
-        "title": "You've changed your default method for getting security codes",
-        "heading": "You've changed your default method for getting security codes",
+        "title": "You’ve changed your default method for getting security codes",
+        "heading": "You’ve changed your default method for getting security codes",
         "app": "Your default method for getting security codes is now your authenticator app.",
-        "sms": "Your default method for getting security codes will be a text message to your phone number ending with <strong>[phoneNumber]</strong>.",
-        "back": "Back to Security"
+        "sms": "Your default method for getting security codes will be a text message to your phone number ending with <strong>[phoneNumber]</strong>."
       },
       "sms": {
         "title": "Enter your mobile phone number",
@@ -677,11 +674,10 @@
       "button": "Switch methods",
       "cancelLinkText": "Cancel and go back to Security",
       "confirm": {
-        "title": "You've switched your back-up and default methods for getting security codes",
-        "heading": "You've switched your back-up and default methods for getting security codes",
-        "backLinkText": "Back to Security",
-        "messageSms": "We'll send security codes to your phone number ending with <strong>[phoneNumber]</strong>.",
-        "messageApp": "You'll use your authenticator app to get security codes to sign in."
+        "title": "You’ve switched your back-up and default methods for getting security codes",
+        "heading": "You’ve switched your back-up and default methods for getting security codes",
+        "messageSms": "We’ll send security codes to your phone number ending with <strong>[phoneNumber]</strong>.",
+        "messageApp": "You’ll use your authenticator app to get security codes to sign in."
       }
     },
     "contact": {

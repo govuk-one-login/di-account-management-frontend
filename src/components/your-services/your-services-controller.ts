@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { presentYourServices } from "../../utils/yourServices";
-import { getAppEnv } from "../../config";
+import { getAppEnv, supportSearchableList } from "../../config";
 import { setOplSettings } from "../../utils/opl";
 
 const defaultContentId = "04566d1b-d791-4e2a-9154-26787fb60516";
@@ -61,6 +61,7 @@ export async function yourServicesGet(
       accountsList: serviceData.accountsList,
       servicesList: serviceData.servicesList,
       hasEnglishOnlyServices,
+      searchableListEnabled: supportSearchableList(),
     });
   } else {
     res.render("your-services/index.njk", data);

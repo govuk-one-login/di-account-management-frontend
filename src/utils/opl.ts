@@ -8,6 +8,7 @@ interface OplSettings {
   statusCode?: number;
   loggedInStatus?: boolean;
   dynamic?: boolean;
+  isPageDataSensitive?: boolean;
 }
 
 export type OplSettingsLookupObject = Record<string, Partial<OplSettings>>;
@@ -42,6 +43,7 @@ export const setOplSettings = (
     statusCode: settings?.statusCode ?? 200,
     loggedInStatus: settings?.loggedInStatus ?? true,
     dynamic: settings?.dynamic ?? true,
+    isPageDataSensitive: settings?.isPageDataSensitive ?? true,
     taxonomyLevel1: settings?.taxonomyLevel1 ?? "accounts",
     taxonomyLevel2: settings?.taxonomyLevel2 ?? "home",
     taxonomyLevel3: settings?.taxonomyLevel3 ?? EMPTY_OPL_SETTING_VALUE,

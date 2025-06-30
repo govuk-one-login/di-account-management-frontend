@@ -2224,7 +2224,7 @@ Resources:
         - - !Ref AWS::StackName
           - cloudfront
           - Fn::Select:
-              - 4
+              - 0
               - Fn::Split:
                   - "-"
                   - Fn::Select:
