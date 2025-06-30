@@ -3,6 +3,7 @@ import { isTokenExpired, clientAssertionGenerator } from "../utils/oidc";
 import { ExpressRouteFunc } from "../types";
 import { ClientAssertionServiceInterface } from "../utils/types";
 import { retryableFunction } from "../utils/retryableFunction";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function refreshTokenMiddleware(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()
@@ -33,6 +34,11 @@ export function refreshTokenMiddleware(
         req.session.user.tokens.accessToken = tokenSet.access_token;
         req.session.user.tokens.refreshToken = tokenSet.refresh_token;
       } catch (error) {
+        req.metrics?.addMetric(
+          "refreshTokenMiddlewareError",
+          MetricUnit.Count,
+          1
+        );
         req.log.error(error.message);
         return next(error);
       }

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getAppEnv, getClientsToShowInSearch } from "../../config";
 import { LOCALE } from "../../app.constants";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "search-services/index.njk";
 
@@ -9,6 +10,7 @@ const prepareForSearch = (q: string): string => {
 };
 
 export function searchServicesGet(req: Request, res: Response): void {
+  req.metrics?.addMetric("searchServicesGet", MetricUnit.Count, 1);
   const query = ((req.query.q || "") as string)
     .split(" ")
     .map(prepareForSearch);

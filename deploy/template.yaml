@@ -1047,6 +1047,11 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                  - "cloudwatch:PutMetricData"
+                Resource:
+                  - "*"
+              - Effect: Allow
+                Action:
                   - "sns:Publish"
                 Resource:
                   - !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
@@ -1880,7 +1885,7 @@ Resources:
     Type: AWS::Logs::SubscriptionFilter
     Properties:
       DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
-      FilterPattern: ""
+      FilterPattern: '{$.message != "*CloudWatchMetrics*"}'
       LogGroupName: !Ref TaskLogGroup
 
   #
