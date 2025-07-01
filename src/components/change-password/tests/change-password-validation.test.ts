@@ -5,20 +5,26 @@ import { validationResult } from "express-validator";
 import { sinon } from "../../../../test/utils/test-utils";
 import { RequestBuilder } from "../../../../test/utils/builders";
 import { validateChangePasswordRequest } from "../change-password-validation";
+import { ValidationChainFunc } from "../../../types";
 
 describe("change password validation", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
+  let validators: ValidationChainFunc;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = new RequestBuilder()
-      .withTranslate(sandbox.fake.returns("validation error"))
+      .withTranslate(sinon.fake.returns("validation error"))
       .build();
+
+    const validateBodyMiddleware = require("../../../middleware/form-validation-middleware");
+    const stub = sinon.stub(validateBodyMiddleware, "validateBodyMiddleware");
+    stub.returns(() => {});
+
+    validators = validateChangePasswordRequest();
   });
 
   afterEach(() => {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe("validateChangePasswordRequest", () => {
@@ -28,8 +34,7 @@ describe("change password validation", () => {
         "confirm-password": "Password123",
       };
 
-      const validators = validateChangePasswordRequest();
-      for (const validator of validators.slice(0, -1)) {
+      for (const validator of validators) {
         await validator(req as Request, {} as any, () => {});
       }
 
@@ -43,8 +48,7 @@ describe("change password validation", () => {
         "confirm-password": "Password123",
       };
 
-      const validators = validateChangePasswordRequest();
-      for (const validator of validators.slice(0, -1)) {
+      for (const validator of validators) {
         await validator(req as Request, {} as any, () => {});
       }
 
@@ -62,8 +66,7 @@ describe("change password validation", () => {
         "confirm-password": longPassword,
       };
 
-      const validators = validateChangePasswordRequest();
-      for (const validator of validators.slice(0, -1)) {
+      for (const validator of validators) {
         await validator(req as Request, {} as any, () => {});
       }
 
@@ -80,8 +83,7 @@ describe("change password validation", () => {
         "confirm-password": "Password",
       };
 
-      const validators = validateChangePasswordRequest();
-      for (const validator of validators.slice(0, -1)) {
+      for (const validator of validators) {
         await validator(req as Request, {} as any, () => {});
       }
 
@@ -98,8 +100,7 @@ describe("change password validation", () => {
         "confirm-password": "12345678",
       };
 
-      const validators = validateChangePasswordRequest();
-      for (const validator of validators.slice(0, -1)) {
+      for (const validator of validators) {
         await validator(req as Request, {} as any, () => {});
       }
 
@@ -116,8 +117,7 @@ describe("change password validation", () => {
         "confirm-password": "Pass1",
       };
 
-      const validators = validateChangePasswordRequest();
-      for (const validator of validators.slice(0, -1)) {
+      for (const validator of validators) {
         await validator(req as Request, {} as any, () => {});
       }
 
@@ -134,8 +134,7 @@ describe("change password validation", () => {
         "confirm-password": "DifferentPassword123",
       };
 
-      const validators = validateChangePasswordRequest();
-      for (const validator of validators.slice(0, -1)) {
+      for (const validator of validators) {
         await validator(req as Request, {} as any, () => {});
       }
 
@@ -152,8 +151,7 @@ describe("change password validation", () => {
         "confirm-password": "",
       };
 
-      const validators = validateChangePasswordRequest();
-      for (const validator of validators.slice(0, -1)) {
+      for (const validator of validators) {
         await validator(req as Request, {} as any, () => {});
       }
 
