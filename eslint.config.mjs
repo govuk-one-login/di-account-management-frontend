@@ -15,8 +15,16 @@ export default [
   },
   pluginJs.configs.recommended,
   mochaPlugin.configs.flat.recommended,
-  ...tsEslint.configs.recommended,
-  ...tsEslint.configs.stylistic,
+  ...tsEslint.configs.recommendedTypeChecked,
+  ...tsEslint.configs.stylisticTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   {
     ignores: [
       "*.d.ts",
