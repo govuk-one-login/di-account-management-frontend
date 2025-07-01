@@ -126,10 +126,6 @@ Mappings:
   ElasticLoadBalancerAccountIds:
     eu-west-2:
       AccountId: 652711504416
-  FirewallTags:
-    Cloudfront:
-      FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: cloudfront
   Container:
     dev:
       CPU: 1024
