@@ -65,18 +65,18 @@ export const test = base.extend<
 
   accessibilityScan: [
     async ({ $test, page, javaScriptEnabled }, use) => {
-      if (javaScriptEnabled) {
-        page.on("load", async () => {
-          const accessibilityScanResults = await new AxeBuilder({ page })
-            .withTags(["wcag22aa"])
-            .analyze();
+      await page.waitForLoadState("load");
 
-          $test.info().annotations.push({
-            type: "accessibility_violations",
-            description: accessibilityScanResults.violations.length
-              ? JSON.stringify(accessibilityScanResults.violations, null, 2)
-              : "None",
-          });
+      if (javaScriptEnabled) {
+        const accessibilityScanResults = await new AxeBuilder({ page })
+          .withTags(["wcag22aa"])
+          .analyze();
+
+        $test.info().annotations.push({
+          type: "accessibility_violations",
+          description: accessibilityScanResults.violations.length
+            ? JSON.stringify(accessibilityScanResults.violations, null, 2)
+            : "None",
         });
       } else {
         $test.info().annotations.push({
