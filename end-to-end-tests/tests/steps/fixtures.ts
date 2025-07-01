@@ -26,16 +26,18 @@ export const test = base.extend<
         await use(undefined);
       }
     },
-    { scope: "worker", auto: true },
+    { scope: "worker" },
   ],
 
   beforeAndAfterEach: [
-    async ({ $test, $tags, mswServer }, use) => {
+    async ({ $test, $tags, mswServer, isMobile }, use) => {
       $test.skip(
         ($tags.includes("@skipPreDeploy") &&
           env.PRE_OR_POST_DEPLOY === "pre") ||
           ($tags.includes("@skipPostDeploy") &&
-            env.PRE_OR_POST_DEPLOY === "post")
+            env.PRE_OR_POST_DEPLOY === "post") ||
+          ($tags.includes("@skipMobile") && isMobile) ||
+          ($tags.includes("@skipDesktop") && !isMobile)
       );
 
       await use(undefined);

@@ -22,10 +22,10 @@ Then("the page looks as expected", async ({ page }) => {
 
 Then(
   "the page displays the expected webchat content",
-  async ({ page, $tags }) => {
+  async ({ page, javaScriptEnabled }) => {
     await expect(page.getByRole("heading", { name: "Webchat" })).toBeVisible();
 
-    if (!$tags.includes("@nojs")) {
+    if (javaScriptEnabled) {
       await expect(
         page.getByText(
           "You can chat live with our support team Monday to Friday, 8am to 8pm UK time."

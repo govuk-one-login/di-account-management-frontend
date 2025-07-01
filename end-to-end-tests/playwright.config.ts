@@ -9,7 +9,7 @@ const testDir = defineBddConfig({
   steps: "tests/steps/**/*.ts",
 });
 
-const sharedContextOptions: BrowserContextOptions = {
+const sharedProjectContextOptions: BrowserContextOptions = {
   ignoreHTTPSErrors: env.TEST_TARGET === "local",
 };
 
@@ -56,18 +56,18 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "Chromium",
+      name: "Desktop",
       use: {
         ...devices["Desktop Chrome"],
         channel: "chromium",
-        contextOptions: sharedContextOptions,
+        contextOptions: sharedProjectContextOptions,
       },
     },
     {
-      name: "Mobile Safari",
+      name: "Mobile",
       use: {
-        ...devices["iPhone 13"],
-        contextOptions: sharedContextOptions,
+        ...devices["Pixel 7"],
+        contextOptions: sharedProjectContextOptions,
       },
     },
   ],
