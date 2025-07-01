@@ -40,6 +40,7 @@ export default [
     rules: {
       "no-console": 2,
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
