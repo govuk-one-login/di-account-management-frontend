@@ -15,8 +15,16 @@ export default [
   },
   pluginJs.configs.recommended,
   mochaPlugin.configs.flat.recommended,
-  ...tsEslint.configs.recommended,
-  ...tsEslint.configs.stylistic,
+  ...tsEslint.configs.recommendedTypeChecked,
+  ...tsEslint.configs.stylisticTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   {
     ignores: [
       "*.d.ts",
@@ -32,6 +40,7 @@ export default [
     rules: {
       "no-console": 2,
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
