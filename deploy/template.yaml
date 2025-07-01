@@ -2051,7 +2051,7 @@ Resources:
         Owner: !Ref OwnerTagValue
         Source: !Ref SourceTagValue
 
-  DNSEntyForCloudFrontOrigin:
+  DNSRecordForCloudFrontOrigin:
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !Sub
