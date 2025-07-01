@@ -323,6 +323,77 @@ describe("eventService", () => {
       );
     });
 
+    it("should build an AUTH_MFA_METHOD_SWITCH_COMPLETED event correctly", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: {
+          "user-agent": "test-user-agent",
+          "txma-audit-encoded": btoa("test-txma-header"),
+        },
+        session: {
+          user_id: "test-user-id",
+          user: {
+            isAuthenticated: true,
+          },
+          mfaMethods: [
+            {
+              mfaIdentifier: "1234",
+              methodVerified: true,
+              method: {
+                mfaMethodType: "SMS",
+                phoneNumber: "123456789",
+              },
+              priorityIdentifier: "DEFAULT",
+            },
+            {
+              mfaIdentifier: "5678",
+              methodVerified: true,
+              method: {
+                mfaMethodType: "AUTH_APP",
+              },
+              priorityIdentifier: "BACKUP",
+            },
+          ],
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+        },
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.AUTH_MFA_METHOD_SWITCH_COMPLETED
+      );
+
+      console.log("aaa");
+      console.log(result);
+
+      expect(result.component_id).to.equal("HOME");
+      expect(result.event_name).to.equal("AUTH_MFA_METHOD_SWITCH_COMPLETED");
+      expect(result.user.session_id).to.equal("test-session-id");
+      expect(result.user.persistent_session_id).to.equal(
+        "test-persistent-session-id"
+      );
+      expect(result.user.user_id).to.equal("test-user-id");
+      expect(result.platform.user_agent).to.equal("test-user-agent");
+      expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
+      expect(result.extensions["mfa-type"]).to.equal("AUTH_APP");
+      expect(result.event_timestamp_ms).to.equal(1726099200000);
+      expect(result.event_timestamp_ms_formatted).to.equal(
+        "2024-09-12T00:00:00.000Z"
+      );
+      expect(result.timestamp).to.equal(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).to.equal(
+        "test-txma-header"
+      );
+    });
+
     it("should build an AUTH_MFA_METHOD_DELETE_STARTED event correctly", () => {
       const service = eventService(sqs);
 

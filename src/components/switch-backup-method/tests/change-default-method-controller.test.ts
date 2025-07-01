@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
+import { SinonSpy } from "sinon";
 
 import {
   switchBackupMfaMethodPost,
@@ -80,6 +81,10 @@ describe("change default method", () => {
   });
 
   describe("POST", () => {
+    let mockEventService: {
+      buildAuditEvent: SinonSpy;
+      send: SinonSpy;
+    };
     let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
     const appMethod: AuthAppMethod = {
       mfaMethodType: "AUTH_APP",
@@ -93,9 +98,21 @@ describe("change default method", () => {
       method: appMethod,
     };
 
-    beforeEach(() => {
+    beforeEach(async () => {
       mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
       sinon.stub(mfaClient, "createMfaClient").returns(mfaClientStub);
+
+      mockEventService = {
+        buildAuditEvent: sinon.fake.returns({ event: "test-event" }),
+        send: sinon.fake(),
+      };
+      const eventServiceStub = sinon.stub().returns(mockEventService);
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
+      sinon
+        .stub(eventServiceModule, "eventService")
+        .get(() => eventServiceStub);
     });
 
     afterEach(() => {
@@ -136,6 +153,47 @@ describe("change default method", () => {
       expect(redirectFn).to.be.calledWith("/switch-methods-confirmation");
     });
 
+    it("should send an AUTH_MFA_METHOD_SWITCH_STARTED audit event upon success", async () => {
+      const req = {
+        session: {
+          mfaMethods: [
+            mfaMethod,
+            { ...mfaMethod, priorityIdentifier: "DEFAULT", mfaIdentifier: "2" },
+          ],
+          user: {
+            state: {
+              switchBackupMethod: {
+                value: "CHANGE_VALUE",
+              },
+            },
+          },
+        },
+        body: { newDefault: mfaMethod.mfaIdentifier },
+      };
+      const res = generateResponse();
+
+      mfaClientStub.makeDefault.resolves({
+        data: [mfaMethod],
+        success: true,
+        status: 200,
+      });
+
+      //@ts-expect-error req and res aren't valid objects since they are mocked
+      await switchBackupMfaMethodPost(req as Request, res as Response);
+
+      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+        req,
+        res,
+        "AUTH_MFA_METHOD_SWITCH_COMPLETED"
+      );
+      expect(mockEventService.send).to.have.been.calledOnce;
+
+      expect(mfaClientStub.makeDefault).to.be.calledWith(
+        mfaMethod.mfaIdentifier
+      );
+      expect(redirectFn).to.be.calledWith("/switch-methods-confirmation");
+    });
+
     it("should return a 404 if the new default method doesn't exist", async () => {
       const req = generateRequest("5", false);
       const res = generateResponse();
@@ -144,6 +202,7 @@ describe("change default method", () => {
       await switchBackupMfaMethodPost(req as Request, res as Response);
 
       expect(statusFn).to.be.calledWith(404);
+      expect(mockEventService.send).not.to.have.been.called;
     });
 
     it("should return a 500 if the request to the API fails", async () => {
@@ -161,6 +220,7 @@ describe("change default method", () => {
       await switchBackupMfaMethodPost(req as Request, res as Response);
 
       expect(statusFn).to.be.calledWith(500);
+      expect(mockEventService.send).not.to.have.been.called;
     });
   });
 });

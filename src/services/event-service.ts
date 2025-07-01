@@ -135,6 +135,13 @@ export function eventService(
         };
         break;
 
+      case EventName.AUTH_MFA_METHOD_SWITCH_COMPLETED:
+        baseEvent.extensions = {
+          "journey-type": "ACCOUNT_MANAGEMENT",
+          "mfa-type": backupMethod.method.mfaMethodType,
+        };
+        break;
+
       case EventName.AUTH_MFA_METHOD_DELETE_STARTED:
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",

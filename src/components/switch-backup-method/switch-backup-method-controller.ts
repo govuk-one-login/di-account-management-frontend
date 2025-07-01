@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
+import { EventName, HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { logger } from "../../utils/logger";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { eventService } from "../../services/event-service";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
@@ -68,6 +69,17 @@ export async function switchBackupMfaMethodGet(
   });
 }
 
+async function sendAuditEvent(req: Request, res: Response): Promise<void> {
+  const service = eventService();
+
+  const auditEvent = service.buildAuditEvent(
+    req,
+    res,
+    EventName.AUTH_MFA_METHOD_SWITCH_COMPLETED
+  );
+  service.send(auditEvent, res.locals.trace);
+}
+
 export async function switchBackupMfaMethodPost(
   req: Request,
   res: Response
@@ -116,6 +128,8 @@ export async function switchBackupMfaMethodPost(
   );
 
   req.session.newDefaultMfaMethodId = newDefaultMethod.mfaIdentifier;
+
+  await sendAuditEvent(req, res);
 
   res.redirect(PATH_DATA.SWITCH_BACKUP_METHOD_CONFIRMATION.url);
 }
