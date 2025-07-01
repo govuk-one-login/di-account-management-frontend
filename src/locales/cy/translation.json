@@ -247,10 +247,10 @@
           }
         }
       },
-      "securityNoticeTitle": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod",
-      "securityNoticeContent1": "Dylech <a href='[changePasswordLink]' class='govuk-link'>newid eich cyfrinair</a>. Dyma'r ffordd orau i gadw eich GOV.UK One Login yn ddiogel.",
-      "securityNoticeContent2": "Gallwch hefyd <a target='_blank' href='[reportActivityLink]' class='govuk-link'>roi gwybod am y weithgaredd i GOV.UK One Login gan ddefnyddio ffôn neu gwe sgwrs (agor mewn tab newydd)</a>.",
-      "securityNoticeContentAlt": "If there's activity you do not recognise, you should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login safe.",
+      "securityNoticeTitle": "Os oes gweithgaredd nad ydych yn ei adnabod",
+      "securityNoticeContent1": "Dylech <a href='[changePasswordLink]' class='govuk-link'>newid eich cyfrinair</a>. Dyma'r ffordd orau o gadw'ch GOV.UK One Login yn ddiogel.",
+      "securityNoticeContent2": "Gallwch hefyd <a target='_blank' href='[reportActivityLink]' class='govuk-link'>roi gwybod i dîm GOV.UK One Login (agor mewn tab newydd)</a>. Mae'r tîm yn adolygu ac yn gweithredu ar yr adroddiadau hyn ond ni fyddwch yn cael ateb personol.",
+      "securityNoticeContentAlt": "Os oes gweithgaredd nad ydych yn ei adnabod, dylech <a href='[changePasswordLink]' class='govuk-link'>newid eich cyfrinair</a>. Dyma'r ffordd orau o gadw'ch GOV.UK One Login yn ddiogel.",
       "noWelshNotice": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg."
     },
     "reportSuspiciousActivity": {
