@@ -161,6 +161,7 @@ export const PATH_DATA: Record<
   START: { url: "/" },
   HEALTHCHECK: { url: "/healthcheck" },
   FINGERPRINT: { url: "/fingerprint" },
+  BACKCHANNEL_LOGOUT: { url: "/backchannel-logout" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
   RESEND_EMAIL_CODE: {
     url: "/resend-email-code",

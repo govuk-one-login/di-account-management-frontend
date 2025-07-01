@@ -63,7 +63,7 @@ function validateLogoutTokenClaims(token: LogoutToken, req: Request): boolean {
   return true;
 }
 
-export async function globalLogoutPost(
+export async function backchannelLogoutPost(
   req: Request,
   res: Response
 ): Promise<void> {

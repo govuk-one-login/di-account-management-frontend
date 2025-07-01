@@ -56,7 +56,7 @@ import { sessionExpiredRouter } from "./components/session-expired/session-expir
 import { signedOutRouter } from "./components/signed-out/signed-out-routes";
 import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
 import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
-import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
+import { backchannelLogoutRouter } from "./components/backchannel-logout/backchannel-logout-routes";
 import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
 import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
 import { redirectsRouter } from "./components/redirects/redirects-routes";
@@ -220,7 +220,7 @@ async function createApp(): Promise<express.Application> {
   const oidcClient = await getOIDCClient(getOIDCConfig());
   app.use(authMiddleware(oidcClient));
 
-  app.use(globalLogoutRouter);
+  app.use(backchannelLogoutRouter);
   // Must be added to the app after the session is set up and before the routers
   app.use(csrfSynchronisedProtection);
 
