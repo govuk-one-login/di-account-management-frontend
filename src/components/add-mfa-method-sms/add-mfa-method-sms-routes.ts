@@ -7,7 +7,6 @@ import {
   addMfaSmsMethodGet,
   addMfaSmsMethodPost,
 } from "./add-mfa-method-sms-controller";
-import { asyncHandler } from "../../utils/async";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
@@ -25,7 +24,7 @@ router.post(
   requiresAuthMiddleware,
   validatePhoneNumberRequest(),
   validateStateMiddleware,
-  globalTryCatchAsync(asyncHandler(addMfaSmsMethodPost()))
+  globalTryCatchAsync(addMfaSmsMethodPost())
 );
 
 router.get(

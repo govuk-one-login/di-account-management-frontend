@@ -1,6 +1,5 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
-import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import {
@@ -30,7 +29,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatchAsync(asyncHandler(checkYourPhonePost()))
+  globalTryCatchAsync(checkYourPhonePost())
 );
 
 router.get(
