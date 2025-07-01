@@ -1,11 +1,13 @@
-import type { ConsoleMessage } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
 import { setupServer, SetupServerApi } from "msw/node";
 import { env } from "../../env";
+import AxeBuilder from "@axe-core/playwright";
 
 export const test = base.extend<
   {
-    beforeAndAfterEach: undefined;
+    processSkipTags: undefined;
+    mswTeardown: undefined;
+    accessibilityScan: undefined;
   },
   {
     mswServer?: SetupServerApi;
@@ -29,8 +31,16 @@ export const test = base.extend<
     { scope: "worker" },
   ],
 
-  beforeAndAfterEach: [
-    async ({ $test, $tags, mswServer, isMobile }, use) => {
+  mswTeardown: [
+    async ({ mswServer }, use) => {
+      await use(undefined);
+      mswServer?.resetHandlers();
+    },
+    { auto: true },
+  ],
+
+  processSkipTags: [
+    async ({ $test, $tags, isMobile }, use) => {
       $test.skip(
         ($tags.includes("@skipPreDeploy") &&
           env.PRE_OR_POST_DEPLOY === "pre") ||
@@ -41,41 +51,9 @@ export const test = base.extend<
       );
 
       await use(undefined);
-      mswServer?.resetHandlers();
     },
     { auto: true },
   ],
-
-  page: async ({ page }, use) => {
-    if (!env.UI_MODE) {
-      const logs: {
-        msg: ConsoleMessage;
-        type: string;
-        location: string;
-      }[] = [];
-      page.on("console", (msg) => {
-        const location = msg.location();
-        logs.push({
-          msg,
-          type: msg.type(),
-          location: `${location.url}:${location.lineNumber}:${location.columnNumber}`,
-        });
-      });
-
-      const exceptions: Error[] = [];
-      page.on("pageerror", (exception) => {
-        exceptions.push(exception);
-      });
-
-      await use(page);
-
-      console.log({ "Console logs": logs });
-
-      console.log({ Exceptions: exceptions });
-    } else {
-      await use(page);
-    }
-  },
 
   javaScriptEnabled: async ({ $tags }, use) => {
     if ($tags.includes("@nojs")) {
@@ -84,6 +62,34 @@ export const test = base.extend<
       await use(true);
     }
   },
+
+  accessibilityScan: [
+    async ({ $test, page, javaScriptEnabled }, use) => {
+      if (javaScriptEnabled) {
+        page.on("load", async () => {
+          const accessibilityScanResults = await new AxeBuilder({ page })
+            .withTags(["wcag22aa"])
+            .analyze();
+
+          $test.info().annotations.push({
+            type: "accessibility_violations",
+            description: accessibilityScanResults.violations.length
+              ? JSON.stringify(accessibilityScanResults.violations, null, 2)
+              : "None",
+          });
+        });
+      } else {
+        $test.info().annotations.push({
+          type: "accessibility_violations",
+          description:
+            "Unable to perform accessibility scan as JavaScript is disabled",
+        });
+      }
+
+      await use(undefined);
+    },
+    { auto: true },
+  ],
 });
 
 export const bdd = createBdd(test);

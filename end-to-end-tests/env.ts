@@ -22,10 +22,6 @@ const envSchema = v.object({
     "post"
   ),
   TEST_REPORT_DIR: v.optional(v.string()),
-  UI_MODE: v.pipe(
-    v.fallback(v.pipe(v.string(), v.value("1")), "0"),
-    v.transform((val) => Boolean(Number(val)))
-  ),
 });
 
 export const env = v.parse(envSchema, {

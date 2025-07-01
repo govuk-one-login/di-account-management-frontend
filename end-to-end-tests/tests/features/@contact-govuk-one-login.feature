@@ -3,7 +3,6 @@ Feature: Contact GOV.UK One Login
   Scenario: Visiting the contact page
     Given I visit the contact page
     Then the page looks as expected
-    And the page is accessible
     And the page displays the expected webchat content
 
   @nojs
