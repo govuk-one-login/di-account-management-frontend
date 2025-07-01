@@ -2,7 +2,7 @@ import { env } from "../env";
 
 export const getBaseUrl = () => {
   if (env.TEST_TARGET === "local") {
-    return "https://localhost:6001/";
+    return "http://localhost:6001/";
   }
 
   if (env.TEST_TARGET === "production") {

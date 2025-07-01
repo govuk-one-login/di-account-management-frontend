@@ -1,5 +1,5 @@
 import path from "node:path";
-import { BrowserContextOptions, defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
 import { cucumberReporter, defineBddConfig } from "playwright-bdd";
 import { env } from "./env";
 import { getBaseUrl } from "./utils/getBaseUrl";
@@ -8,10 +8,6 @@ const testDir = defineBddConfig({
   features: "tests/features/**/*.feature",
   steps: "tests/steps/**/*.ts",
 });
-
-const sharedProjectContextOptions: BrowserContextOptions = {
-  ignoreHTTPSErrors: env.TEST_TARGET === "local",
-};
 
 export default defineConfig({
   testDir,
@@ -32,10 +28,9 @@ export default defineConfig({
       ? [
           {
             command: "npm run build-and-run-app",
-            url: "https://localhost:6001/healthcheck",
+            url: "http://localhost:6001/healthcheck",
             reuseExistingServer: true,
             timeout: 300000,
-            ignoreHTTPSErrors: true,
             name: "app-server",
             gracefulShutdown: { signal: "SIGTERM", timeout: 30000 },
           },
@@ -60,14 +55,12 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         channel: "chromium",
-        contextOptions: sharedProjectContextOptions,
       },
     },
     {
       name: "Mobile",
       use: {
         ...devices["Pixel 7"],
-        contextOptions: sharedProjectContextOptions,
       },
     },
   ],

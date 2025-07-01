@@ -58,7 +58,7 @@ Run `docker compose build && docker compose up` to force a new build of the cont
 
 To find out if the application has started, open a console window on the docker container and view the logs. If the server has started successfully you will see this message `Server listening on port 6001`.
 
-Navigate to [https://localhost:6001](https://localhost:6001) and continue past any self-signed SSL certificate warning. You should be redirected through the OIDC stub and back to the application.
+Navigate to [http://localhost:6001](http://localhost:6001). You should be redirected through the OIDC stub and back to the application.
 
 Changes made locally will automatically be deployed after a few seconds. You should check the docker console to check that your changes have been picked up.
 
@@ -122,7 +122,7 @@ The end-to-end tests are written with [Playwright](https://playwright.dev/) and 
 
 Copy the file `end-to-end-tests/.env.sample` to `end-to-end-tests/.env`.
 
-When running tests locally they are run against `https://localhost:6001` by default. Change the value of the environment variable `TEST_TARGET` to one of `dev | build | staging | integration | production` to run tests against the corresponding deployment instead.
+When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_TARGET` to one of `dev | build | staging | integration | production` to run tests against the corresponding deployment instead.
 
 If your machine has `AMD64` architecture then you can run the tests locally in Docker:
 
