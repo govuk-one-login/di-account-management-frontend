@@ -87,7 +87,5 @@ When("I click on the minimise webchat button", async ({ page }) => {
 });
 
 Then("the webchat disappears", async ({ page }) => {
-  await expect(
-    page.getByText("GOV.UK One Login webchat · Beta")
-  ).not.toBeVisible();
+  await expect(page.getByText("GOV.UK One Login webchat · Beta")).toBeHidden();
 });

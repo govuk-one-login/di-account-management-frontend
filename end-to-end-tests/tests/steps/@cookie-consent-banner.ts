@@ -55,13 +55,13 @@ Then(
 
 Then("I can dismiss the confirmation message", async ({ page }) => {
   await page.getByRole("button", { name: "Hide this message" }).click();
-  await expect(getCookieBanner({ page })).not.toBeVisible();
+  await expect(getCookieBanner({ page })).toBeHidden();
 });
 
 Then(
   "the cookie consent banner does not show again when the page is refreshed",
   async ({ page }) => {
     await page.reload();
-    await expect(getCookieBanner({ page })).not.toBeVisible();
+    await expect(getCookieBanner({ page })).toBeHidden();
   }
 );

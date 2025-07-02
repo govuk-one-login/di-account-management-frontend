@@ -6,6 +6,7 @@ const { Given, Then } = bdd;
 
 Given("I visit the contact page", async ({ page }) => {
   await page.goto("/contact-gov-uk-one-login", {
+    // eslint-disable-next-line playwright/no-networkidle
     waitUntil: "networkidle",
   });
 });

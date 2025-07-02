@@ -14,8 +14,6 @@ export const test = base.extend<
   }
 >({
   mswServer: [
-    // Empty object is required to suppress Playwright error "First argument must use the object destructuring pattern"
-    // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
       if (env.TEST_TARGET === "local") {
         const mswServer = setupServer();
