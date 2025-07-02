@@ -276,7 +276,8 @@
       "step2": {
         "text": "2. Use your authenticator app to scan the QR code.",
         "hintTitle": "I cannot scan the QR code",
-        "hintText": "<p>You can enter the secret key into your authenticator app instead.</p><p>Secret key:<br/><strong>[secretKey]</strong></p><p>Some authenticator apps call the secret key a 'code'.</p>"
+        "hintText": "<p>You can enter the secret key into your authenticator app instead.</p><p>Secret key:<br/><strong>[secretKey]</strong></p><p>Some authenticator apps call the secret key a 'code'.</p>",
+        "altText": "QR code to set up authenticator app"
       },
       "step3": {
         "text": "3. The authenticator app will show a security code."
