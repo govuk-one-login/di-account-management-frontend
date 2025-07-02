@@ -26,7 +26,7 @@
     </li>
     <li>
       <p class="govuk-body">{{ 'pages.addBackupApp.step2.text' | translate }}</p>
-      <img id="qr-code" src="{{qrCode}}" alt="QR Code Image">
+      <img id="qr-code" src="{{qrCode}}" alt="{{ 'pages.addBackupApp.step2.altText' | translate }}">
       {{ govukDetails({
           summaryText: "pages.addBackupApp.step2.hintTitle" | translate,
           html: "pages.addBackupApp.step2.hintText" | translate | safe | replace ("[secretKey]", formattedSecret)

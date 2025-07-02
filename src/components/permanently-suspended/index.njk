@@ -13,8 +13,14 @@
 
     <p class="govuk-body">{{'pages.permanentlySuspendedScreen.section2.paragraph1' | translate }}</p>
 
-    <a href="{{'pages.permanentlySuspendedScreen.section2.link.href' | translate}}" class="govuk-link govuk-body">
-    {{'pages.permanentlySuspendedScreen.section2.link.text' | translate}}
-    </a>
+    {% if searchableListEnabled %}
+        <a href="{{'SEARCH_SERVICES' | getPath }}" class="govuk-link govuk-body">
+        {{'pages.permanentlySuspendedScreen.section2.link.text' | translate}}
+        </a>
+    {% else %}
+        <a href="{{'pages.permanentlySuspendedScreen.section2.link.href' | translate}}" class="govuk-link govuk-body">
+        {{'pages.permanentlySuspendedScreen.section2.link.text' | translate}}
+        </a>
+    {% endif %}
 
 {% endblock %}

@@ -4,6 +4,7 @@ import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
@@ -19,6 +20,8 @@ export async function deleteMfaMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("deleteMfaMethodGet", MetricUnit.Count, 1);
+
   setLocalOplSettings(res);
 
   let phoneNumber;
@@ -42,6 +45,7 @@ export async function deleteMfaMethodPost(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("deleteMfaMethodPost", MetricUnit.Count, 1);
   setLocalOplSettings(res);
 
   const methodToRemove = req.session.mfaMethods.find((m) => {

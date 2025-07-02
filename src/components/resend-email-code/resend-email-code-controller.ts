@@ -13,6 +13,7 @@ import {
   CHANGE_EMAIL_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "resend-email-code/index.njk";
 
@@ -27,6 +28,7 @@ const setLocalOplSettings = (res: Response) => {
 };
 
 export function resendEmailCodeGet(req: Request, res: Response): void {
+  req.metrics?.addMetric("resendEmailCodeGet", MetricUnit.Count, 1);
   setLocalOplSettings(res);
   res.render(TEMPLATE_NAME, {
     emailAddress: req.session.user.newEmailAddress,
@@ -48,6 +50,7 @@ export function resendEmailCodePost(
   service: ChangeEmailServiceInterface = changeEmailService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
+    req.metrics?.addMetric("resendEmailCodePost", MetricUnit.Count, 1);
     const { email, newEmailAddress } = req.session.user;
 
     if (email.toLowerCase() === newEmailAddress.toLowerCase()) {

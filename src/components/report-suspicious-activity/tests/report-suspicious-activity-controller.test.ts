@@ -1,6 +1,6 @@
 import { describe } from "mocha";
 import {
-  reportSuspiciousActivityConfirmation,
+  reportSuspiciousActivityConfirmationGet,
   reportSuspiciousActivityGet,
   reportSuspiciousActivityPost,
 } from "../report-suspicious-activity-controller";
@@ -344,7 +344,7 @@ describe("report suspicious activity controller", () => {
         return false;
       });
       // Act
-      await reportSuspiciousActivityConfirmation(
+      await reportSuspiciousActivityConfirmationGet(
         req as Request,
         res as Response
       );

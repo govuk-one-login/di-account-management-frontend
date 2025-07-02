@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { sinon } from "../utils/test-utils";
+import { sinon } from "../../utils/test-utils";
 import { NextFunction, Request, Response } from "express";
-import { pageNotFoundHandler } from "../../src/handlers/page-not-found-handler";
-import { serverErrorHandler } from "../../src/handlers/internal-server-error-handler";
-import { PATH_DATA } from "../../src/app.constants";
+import { pageNotFoundHandler } from "../../../src/handlers/page-not-found-handler";
+import { serverErrorHandler } from "../../../src/handlers/internal-server-error-handler";
+import { PATH_DATA } from "../../../src/app.constants";
 
 describe("Error handlers", () => {
   let sandbox: sinon.SinonSandbox;

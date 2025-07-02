@@ -4,7 +4,7 @@ import { describe } from "mocha";
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
-import { globalLogoutPost } from "../global-logout-controller";
+import { backchannelLogoutPost } from "../backchannel-logout-controller";
 
 import {
   createLocalJWKSet,
@@ -111,12 +111,12 @@ describe("global logout controller", () => {
     destroyUserSessionsSpy.restore();
   });
 
-  describe("globalLogoutPost", async () => {
+  describe("backchannelLogoutPost", async () => {
     it("should return 401 if no logout_token present", async () => {
       req = {
         body: {},
       };
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
     });
@@ -128,7 +128,7 @@ describe("global logout controller", () => {
         },
         log: logger,
       };
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -144,7 +144,7 @@ describe("global logout controller", () => {
 
       req = validRequest(logoutJwt);
 
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -163,7 +163,7 @@ describe("global logout controller", () => {
 
       req = validRequest(logoutJwt);
 
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -180,7 +180,7 @@ describe("global logout controller", () => {
 
       req = validRequest(logoutJwt);
 
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -196,7 +196,7 @@ describe("global logout controller", () => {
         .sign(keySet.privateKey);
 
       req = validRequest(logoutJwt);
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -212,7 +212,7 @@ describe("global logout controller", () => {
         .sign(keySet.privateKey);
 
       req = validRequest(logoutJwt);
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -227,7 +227,7 @@ describe("global logout controller", () => {
         .sign(keySet.privateKey);
 
       req = validRequest(logoutJwt);
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -235,7 +235,7 @@ describe("global logout controller", () => {
 
     it("should return 401 if logout_token is blank", async () => {
       req = validRequest(await generateValidToken(validLogoutToken, " "));
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -252,7 +252,7 @@ describe("global logout controller", () => {
 
       req = validRequest(await generateValidToken(invalidLogoutToken));
 
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -266,7 +266,7 @@ describe("global logout controller", () => {
 
       req = validRequest(await generateValidToken(invalidLogoutToken));
 
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -283,7 +283,7 @@ describe("global logout controller", () => {
 
       req = validRequest(await generateValidToken(invalidLogoutToken));
 
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -301,7 +301,7 @@ describe("global logout controller", () => {
       };
 
       req = validRequest(await generateValidToken(invalidLogoutToken));
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
       sandbox.assert.calledOnce(loggerSpy);
@@ -310,7 +310,7 @@ describe("global logout controller", () => {
     it("should return 200 if logout_token is present and valid", async () => {
       req = validRequest(await generateValidToken(validLogoutToken));
 
-      await globalLogoutPost(req as Request, res as Response);
+      await backchannelLogoutPost(req as Request, res as Response);
 
       expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
       expect(destroyUserSessionsSpy).to.have.been.calledWith(req, "123456");
