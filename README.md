@@ -170,6 +170,8 @@ TODO tags:
 @failMobile, @failDesktop, @fixmeMobile, @fixmeDesktop, @skipMobile, @skipDesktop, @skipPreDeploy, @skipPostDeploy, @noJs
 also link to playwright BDD built in tags - https://vitalets.github.io/playwright-bdd/#/writing-features/special-tags
 
+TODO mention if using Docker Desktop on Mac or Windows you will need to `Enable host networking` in `Settings > Resources > Network`.
+
 ### Restarting the app
 
 You can restart the app by running `docker compose down` and then `docker compose up`.
