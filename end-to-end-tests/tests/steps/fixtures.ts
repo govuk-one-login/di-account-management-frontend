@@ -7,7 +7,7 @@ export const test = base.extend<
     processSkipTags: undefined;
     processFixmeTags: undefined;
     processFailTags: undefined;
-    mswTeardown: undefined;
+    mswReset: undefined;
   },
   {
     mswServer?: SetupServerApi;
@@ -31,7 +31,7 @@ export const test = base.extend<
     { scope: "worker" },
   ],
 
-  mswTeardown: [
+  mswReset: [
     async ({ mswServer }, use) => {
       await use(undefined);
       mswServer?.resetHandlers();
@@ -80,11 +80,7 @@ export const test = base.extend<
   ],
 
   javaScriptEnabled: async ({ $tags }, use) => {
-    if ($tags.includes("@noJs")) {
-      await use(false);
-    } else {
-      await use(true);
-    }
+    await use(!$tags.includes("@noJs"));
   },
 });
 
