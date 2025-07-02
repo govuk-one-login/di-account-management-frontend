@@ -168,6 +168,10 @@ mention that tests are run against desktop and mobile viewports by default. Can 
 
 TODO mention that an accessibility scan is performed for each test and results are reported as an annotation with the title `accessibility_violations`. Accessibility violations do not cause tests to fail.
 
+TODO tags:
+@failMobile, @failDesktop, @fixmeMobile, @fixmeDesktop, @skipMobile, @skipDesktop, @skipPreDeploy, @skipPostDeploy, @noJs
+also link to playwright BDD built in tags - https://vitalets.github.io/playwright-bdd/#/writing-features/special-tags
+
 ### Restarting the app
 
 You can restart the app by running `docker compose down` and then `docker compose up`.
