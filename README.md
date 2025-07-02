@@ -166,8 +166,6 @@ mention that you can use the Playwright extension for VS Code but to pick up cha
 TODO
 mention that tests are run against desktop and mobile viewports by default. Can be tagged with @skipMobile or @skipDesktop to skip the respective device.
 
-TODO mention that an accessibility scan is performed for each test and results are reported as an annotation with the title `accessibility_violations`. Accessibility violations do not cause tests to fail.
-
 TODO tags:
 @failMobile, @failDesktop, @fixmeMobile, @fixmeDesktop, @skipMobile, @skipDesktop, @skipPreDeploy, @skipPostDeploy, @noJs
 also link to playwright BDD built in tags - https://vitalets.github.io/playwright-bdd/#/writing-features/special-tags
