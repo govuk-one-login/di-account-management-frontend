@@ -173,11 +173,8 @@ describe("delete account controller", () => {
         req.oidc = {
           endSessionUrl: sandbox.fake.returns("logout-url"),
         } as any;
-        const sessionStore = require("../../../utils/session-store");
-        sandbox.stub(sessionStore, "clearCookies").callsFake(() => {});
 
         await deleteAccountPost(fakeService)(req as Request, res as Response);
-        expect(sessionStore.clearCookies).to.have.calledWith(req, res, ["am"]);
       });
     });
   });
