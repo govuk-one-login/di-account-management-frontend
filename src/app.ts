@@ -85,6 +85,7 @@ import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
+import { metricsMiddleware } from "./middleware/metrics-middlware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -95,7 +96,7 @@ const APP_VIEWS = [
 async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
   const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
-
+  app.use(metricsMiddleware());
   app.enable("trust proxy");
 
   if (isProduction) {
@@ -285,6 +286,7 @@ async function createApp(): Promise<express.Application> {
   app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
+
   return app;
 }
 
