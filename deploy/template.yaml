@@ -1880,7 +1880,7 @@ Resources:
     Type: AWS::Logs::SubscriptionFilter
     Properties:
       DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
-      FilterPattern: '{$.message != "*CloudWatchMetrics*"}'
+      FilterPattern: "{$._aws.CloudWatchMetrics NOT EXISTS}"
       LogGroupName: !Ref TaskLogGroup
 
   #
