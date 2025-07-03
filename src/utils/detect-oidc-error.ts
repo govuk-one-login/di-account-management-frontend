@@ -1,16 +1,16 @@
 export type OidcErrorType =
-  | 'access_denied'
-  | 'invalid_grant'
-  | 'id_token_missing'
-  | 'state_mismatch'
-  | 'unauthorized_response';
+  | "access_denied"
+  | "invalid_grant"
+  | "id_token_missing"
+  | "state_mismatch"
+  | "unauthorized_response";
 
 export function detectOidcError(
   err: unknown
 ): { type: OidcErrorType; message: string } | null {
   if (!err) return null;
 
-  const message = typeof err === "string" ? err : (err as any)?.message || "";
+  const message = typeof err === "string" ? err : ((err as any)?.message ?? "");
 
   if (message.includes("access_denied")) {
     return { type: "access_denied", message };

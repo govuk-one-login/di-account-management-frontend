@@ -239,7 +239,7 @@ describe("callback controller", () => {
     });
 
     it("redirect to session expired when access denied error is thrown", async () => {
-      req.oidc.callbackParams = sandbox.fake.throws("access_denied");
+      req.oidc.callbackParams = sandbox.fake.throws(new Error("access_denied"));
       const fakeService: ClientAssertionServiceInterface = {
         generateAssertionJwt: sandbox.fake.resolves("testassert"),
       };
