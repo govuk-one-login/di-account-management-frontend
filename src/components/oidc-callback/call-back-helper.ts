@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { CallbackParamsType, UserinfoResponse } from "openid-client";
-import { TokenSet } from "openid-client";
+import { CallbackParamsType, UserinfoResponse, TokenSet } from "openid-client";
 import xss from "xss";
 import { LOG_MESSAGES, PATH_DATA } from "../../app.constants";
 import { logger } from "../../utils/logger";
