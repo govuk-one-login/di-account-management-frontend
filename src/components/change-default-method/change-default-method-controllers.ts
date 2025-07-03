@@ -30,6 +30,7 @@ import {
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
 import { supportMfaManagement } from "../../config";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
 const CHANGE_DEFAULT_METHOD_SMS_TEMPLATE =
@@ -52,6 +53,7 @@ export async function changeDefaultMethodGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("changeDefaultMethodGet", MetricUnit.Count, 1);
   const defaultMethod = req.session.mfaMethods.find(
     (method) => method.priorityIdentifier === "DEFAULT"
   );
@@ -94,6 +96,7 @@ export async function changeDefaultMethodAppGet(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  req.metrics?.addMetric("changeDefaultMethodAppGet", MetricUnit.Count, 1);
   setChangeDefaultMethodAppOplSettings(res);
   return renderMfaMethodPage(
     ADD_APP_TEMPLATE,
@@ -121,6 +124,7 @@ export async function changeDefaultMethodSmsGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("changeDefaultMethodAppGet", MetricUnit.Count, 1);
   setChangeDefaultMethodSmsOplSettings(req, res);
   return res.render(CHANGE_DEFAULT_METHOD_SMS_TEMPLATE, {
     backLink,
@@ -131,6 +135,7 @@ export function changeDefaultMethodSmsPost(
   service: ChangePhoneNumberServiceInterface = changePhoneNumberService()
 ) {
   return async function (req: Request, res: Response): Promise<void> {
+    req.metrics?.addMetric("changeDefaultMethodSmsPost", MetricUnit.Count, 1);
     setChangeDefaultMethodSmsOplSettings(req, res);
 
     const errors = validationResult(req)
@@ -206,6 +211,7 @@ export async function changeDefaultMethodAppPost(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  req.metrics?.addMetric("changeDefaultMethodAppPost", MetricUnit.Count, 1);
   return handleMfaMethodPage(
     ADD_APP_TEMPLATE,
     req,

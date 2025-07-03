@@ -56,7 +56,7 @@ import { sessionExpiredRouter } from "./components/session-expired/session-expir
 import { signedOutRouter } from "./components/signed-out/signed-out-routes";
 import { setLocalVarsMiddleware } from "./middleware/set-local-vars-middleware";
 import { healthcheckRouter } from "./components/healthcheck/healthcheck-routes";
-import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
+import { backchannelLogoutRouter } from "./components/backchannel-logout/backchannel-logout-routes";
 import { resendEmailCodeRouter } from "./components/resend-email-code/resend-email-code-routes";
 import { resendPhoneCodeRouter } from "./components/resend-phone-code/resend-phone-code-routes";
 import { redirectsRouter } from "./components/redirects/redirects-routes";
@@ -85,6 +85,7 @@ import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
+import { metricsMiddleware } from "./middleware/metrics-middlware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -95,7 +96,7 @@ const APP_VIEWS = [
 async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
   const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
-
+  app.use(metricsMiddleware());
   app.enable("trust proxy");
 
   if (isProduction) {
@@ -220,7 +221,7 @@ async function createApp(): Promise<express.Application> {
   const oidcClient = await getOIDCClient(getOIDCConfig());
   app.use(authMiddleware(oidcClient));
 
-  app.use(globalLogoutRouter);
+  app.use(backchannelLogoutRouter);
   // Must be added to the app after the session is set up and before the routers
   app.use(csrfSynchronisedProtection);
 
@@ -285,6 +286,7 @@ async function createApp(): Promise<express.Application> {
   app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
+
   return app;
 }
 

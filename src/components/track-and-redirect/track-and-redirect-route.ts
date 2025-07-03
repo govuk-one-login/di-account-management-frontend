@@ -4,11 +4,13 @@ import { EventName, PATH_DATA } from "../../app.constants";
 import { eventService } from "../../services/event-service";
 import { buildContactEmailServiceUrl } from "./track-and-redirect-controller";
 import { logger } from "../../utils/logger";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const router = express.Router();
 router.get(PATH_DATA.TRACK_AND_REDIRECT.url, (req, res) => {
+  req.metrics?.addMetric("trackAndRedirectGet", MetricUnit.Count, 1);
   if (!req.session || !req.session.queryParameters) {
-    logger.error(
+    logger.info(
       "Track and redirect route: request session or queryParameters are undefined."
     );
     return res.redirect(PATH_DATA.CONTACT.url);

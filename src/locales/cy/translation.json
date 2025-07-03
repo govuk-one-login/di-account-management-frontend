@@ -136,6 +136,32 @@
     }
   },
   "pages": {
+    "searchServices": {
+      "title": "Chwilio",
+      "heading": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
+      "paragraphs": [
+        "Ar hyn o bryd gallwch ond ei ddefnyddio i gael mynediad i rai gwasanaethau'r llywodraeth.",
+        "Yn y dyfodol, byddwch yn gallu ei ddefnyddio i gael mynediad i bob gwasanaeth ar GOV.UK."
+      ],
+      "searchLabel": "Chwilio am wasanaeth yn Gymraeg",
+      "searchButton": "Chwilio am wasanaethau sy'n defnyddio GOV.UK One Login sydd ar gael yn Gymraeg",
+      "oneResult": "1 canlyniad",
+      "manyResults": "[count] canlyniad",
+      "noResults": "0 canlyniad",
+      "sortedText": "Trefnwyd o A i Z",
+      "noResultsBlock": {
+        "heading": "Dim canlyniadau yn cyfateb",
+        "paragraph1": "Gallwch wella eich canlyniadau chwilio drwy:",
+        "suggestionsList": [
+          "edrych dros eich sillafu",
+          "defnyddio llai o eiriau allweddol",
+          "chwilio am rywbeth llai penodol"
+        ],
+        "welshDisclaimer": "Os nad oes canlyniadau yn cyfateb o hyd, efallai nad yw'r gwasanaeth ar gael yn Gymraeg. <a class='govuk-link' href='[ENGLISH_LINK]'>Ewch i'r dudalen Saesneg i ddod o hyd i wasanaeth yn Saesneg</a>."
+      },
+      "welshDisclaimer": "Dim ond gwasanaethau sydd ar gael yn Gymraeg fydd yn ymddangos yn y canlyniadau. <a class='govuk-link' href='[ENGLISH_LINK]'>Ewch i'r dudalen Saesneg i ddod o hyd i wasanaeth yn Saesneg</a>.",
+      "clearSearch": "Clirio chwiliad"
+    },
     "security": {
       "title": "Diogelwch",
       "header": "Diogelwch",
@@ -221,10 +247,10 @@
           }
         }
       },
-      "securityNoticeTitle": "Os ydych yn gweld rhywbeth nad ydych yn ei adnabod",
-      "securityNoticeContent1": "Dylech <a href='[changePasswordLink]' class='govuk-link'>newid eich cyfrinair</a>. Dyma'r ffordd orau i gadw eich GOV.UK One Login yn ddiogel.",
-      "securityNoticeContent2": "Gallwch hefyd <a target='_blank' href='[reportActivityLink]' class='govuk-link'>roi gwybod am y weithgaredd i GOV.UK One Login gan ddefnyddio ffôn neu gwe sgwrs (agor mewn tab newydd)</a>.",
-      "securityNoticeContentAlt": "If there's activity you do not recognise, you should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login safe.",
+      "securityNoticeTitle": "Os oes gweithgaredd nad ydych yn ei adnabod",
+      "securityNoticeContent1": "Dylech <a href='[changePasswordLink]' class='govuk-link'>newid eich cyfrinair</a>. Dyma'r ffordd orau o gadw'ch GOV.UK One Login yn ddiogel.",
+      "securityNoticeContent2": "Gallwch hefyd <a target='_blank' href='[reportActivityLink]' class='govuk-link'>roi gwybod i dîm GOV.UK One Login (agor mewn tab newydd)</a>. Mae'r tîm yn adolygu ac yn gweithredu ar yr adroddiadau hyn ond ni fyddwch yn cael ateb personol.",
+      "securityNoticeContentAlt": "Os oes gweithgaredd nad ydych yn ei adnabod, dylech <a href='[changePasswordLink]' class='govuk-link'>newid eich cyfrinair</a>. Dyma'r ffordd orau o gadw'ch GOV.UK One Login yn ddiogel.",
       "noWelshNotice": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg."
     },
     "reportSuspiciousActivity": {
@@ -698,8 +724,7 @@
     "confirmaddBackup": {
       "title": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
       "heading": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
-      "message": "Os nad yw'ch dull diofyn ar gyfer cael codau diogelwch ar gael, gallwch gael cod o'r ap dilysydd hwn yn lle hynny.",
-      "backLinkText": "Yn ôl i Diogelwch"
+      "message": "Os nad yw'ch dull diofyn ar gyfer cael codau diogelwch ar gael, gallwch gael cod o'r ap dilysydd hwn yn lle hynny."
     },
     "addBackup": {
       "title": "Dewiswch ddull wrth gefn",
@@ -757,8 +782,7 @@
       "confirm": {
         "title": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
-        "message": "Os nad yw eich dull diofyn ar gyfer cael codau diogelwch ar gael, gallwch gael cod i'ch rhif ffôn sy'n gorffen gyda <strong>[mobile]</strong> yn lle hynny.",
-        "backLink": "Yn ôl i Diogelwch"
+        "message": "Os nad yw eich dull diofyn ar gyfer cael codau diogelwch ar gael, gallwch gael cod i'ch rhif ffôn sy'n gorffen gyda <strong>[mobile]</strong> yn lle hynny."
       }
     },
     "removeBackupMethod": {
@@ -768,7 +792,6 @@
       "app": "Ni fyddwn bellach yn anfon codau diogelwch i'ch ap dilysydd.",
       "button": "Tynnu dull wrth gefn",
       "cancelBackLink": "Canslo a mynd yn ôl i Diogelwch",
-      "backLinkText": "Yn ôl i Diogelwch",
       "confirm": {
         "title": "Rydych wedi tynnu eich dull wrth gefn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi tynnu eich dull wrth gefn ar gyfer cael codau diogelwch.",
@@ -794,8 +817,7 @@
         "title": "Rydych wedi newid eich dull diofyn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi newid eich dull diofyn ar gyfer cael codau diogelwch",
         "app": "Eich dull diofyn ar gyfer cael codau diogelwch bellach yw eich ap dilysydd.",
-        "sms": "Eich dull diofyn ar gyfer cael codau diogelwch fydd neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
-        "back": "Yn ôl i Diogelwch"
+        "sms": "Eich dull diofyn ar gyfer cael codau diogelwch fydd neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>."
       },
       "sms": {
         "title": "Rhowch eich rhif ffôn symudol",
@@ -813,7 +835,6 @@
       "confirm": {
         "title": "Rydych wedi newid eich dulliau wrth gefn a diofyn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi newid eich dulliau wrth gefn a diofyn ar gyfer cael codau diogelwch",
-        "backLinkText": "Yn ôl i Diogelwch",
         "messageSms": "Byddwn yn anfon codau diogelwch i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
         "messageApp": "Byddwch yn defnyddio'ch ap dilysydd i gael codau diogelwch i fewngofnodi."
       }

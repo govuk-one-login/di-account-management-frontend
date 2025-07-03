@@ -21,8 +21,10 @@ import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
+  req.metrics?.addMetric("updateEmailConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
@@ -46,6 +48,7 @@ export function updatePasswordConfirmationGet(
   req: Request,
   res: Response
 ): void {
+  req.metrics?.addMetric("updatePasswordConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
@@ -75,6 +78,11 @@ export function updatePhoneNumberConfirmationGet(
   req: Request,
   res: Response
 ): void {
+  req.metrics?.addMetric(
+    "updatePhoneNumberConfirmationGet",
+    MetricUnit.Count,
+    1
+  );
   setOplSettings(
     supportMfaManagement(req.cookies)
       ? {
@@ -103,6 +111,11 @@ export function updateAuthenticatorAppConfirmationGet(
   req: Request,
   res: Response
 ): void {
+  req.metrics?.addMetric(
+    "updateAuthenticatorAppConfirmationGet",
+    MetricUnit.Count,
+    1
+  );
   setOplSettings(
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -124,6 +137,7 @@ export function deleteAccountConfirmationGet(
   req: Request,
   res: Response
 ): void {
+  req.metrics?.addMetric("deleteAccountConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
@@ -145,6 +159,7 @@ export async function addMfaAppMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("addMfaAppMethodConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -153,12 +168,10 @@ export async function addMfaAppMethodConfirmationGet(
     res
   );
 
-  return res.render("common/confirmation-page/confirmation.njk", {
-    pageTitleName: req.t("pages.confirmaddBackup.title"),
-    heading: req.t("pages.confirmaddBackup.heading"),
-    message: req.t("pages.confirmaddBackup.message"),
-    backLinkText: req.t("pages.confirmaddBackup.backLinkText"),
-    backLink: PATH_DATA.SECURITY.url,
+  return res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.confirmaddBackup.title"),
+    panelText: req.t("pages.confirmaddBackup.heading"),
+    summaryText: req.t("pages.confirmaddBackup.message"),
   });
 }
 
@@ -166,6 +179,7 @@ export async function removeMfaMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric("removeMfaMethodConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -195,12 +209,10 @@ export async function removeMfaMethodConfirmationGet(
 
   delete req.session.removedMfaMethod;
 
-  return res.render("common/confirmation-page/confirmation.njk", {
-    pageTitleName: req.t("pages.removeBackupMethod.confirm.title"),
-    heading: req.t("pages.removeBackupMethod.confirm.heading"),
-    message: message,
-    backLinkText: req.t("pages.removeBackupMethod.backLinkText"),
-    backLink: PATH_DATA.SECURITY.url,
+  res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.removeBackupMethod.confirm.title"),
+    panelText: req.t("pages.removeBackupMethod.confirm.heading"),
+    summaryText: message,
   });
 }
 
@@ -208,6 +220,11 @@ export async function changeDefaultMfaMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric(
+    "changeDefaultMfaMethodConfirmationGet",
+    MetricUnit.Count,
+    1
+  );
   setOplSettings(
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -239,12 +256,10 @@ export async function changeDefaultMfaMethodConfirmationGet(
         .replace("[phoneNumber]", phoneNumber)
     : req.t("pages.switchBackupMethod.confirm.messageApp");
 
-  return res.render("common/confirmation-page/confirmation.njk", {
-    pageTitleName: req.t("pages.switchBackupMethod.confirm.title"),
-    heading: req.t("pages.switchBackupMethod.confirm.heading"),
-    message: message,
-    backLinkText: req.t("pages.switchBackupMethod.confirm.backLinkText"),
-    backLink: PATH_DATA.SECURITY.url,
+  return res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.switchBackupMethod.confirm.title"),
+    panelText: req.t("pages.switchBackupMethod.confirm.heading"),
+    summaryText: message,
   });
 }
 
@@ -263,6 +278,11 @@ export async function changeDefaultMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  req.metrics?.addMetric(
+    "changeDefaultMethodConfirmationGet",
+    MetricUnit.Count,
+    1
+  );
   const defaultMethod = req.session.mfaMethods.find(
     (m) => m.priorityIdentifier === "DEFAULT"
   );
@@ -289,11 +309,9 @@ export async function changeDefaultMethodConfirmationGet(
             getLastNDigits(defaultMethod.method.phoneNumber, 4)
           );
 
-  return res.render("common/confirmation-page/confirmation.njk", {
-    pageTitleName: req.t("pages.changeDefaultMethod.confirmation.title"),
-    heading: req.t("pages.changeDefaultMethod.confirmation.heading"),
-    message,
-    backLinkText: req.t("pages.changeDefaultMethod.confirmation.back"),
-    backLink: PATH_DATA.SECURITY.url,
+  return res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.changeDefaultMethod.confirmation.title"),
+    panelText: req.t("pages.changeDefaultMethod.confirmation.heading"),
+    summaryText: message,
   });
 }

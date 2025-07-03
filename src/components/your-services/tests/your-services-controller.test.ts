@@ -37,6 +37,9 @@ describe("your services controller", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
+    const configFuncs = require("../../../config");
+    sandbox.stub(configFuncs, "supportSearchableList").returns(true);
+
     res = {
       render: sandbox.fake(),
       redirect: sandbox.fake(() => {}),
@@ -59,6 +62,7 @@ describe("your services controller", () => {
         servicesList: [],
         env: getAppEnv(),
         hasEnglishOnlyServices: false,
+        searchableListEnabled: true,
       });
     });
 
@@ -130,6 +134,7 @@ describe("your services controller", () => {
         env: getAppEnv(),
         currentLngWelsh: false,
         hasEnglishOnlyServices: true,
+        searchableListEnabled: true,
       });
     });
 
@@ -184,6 +189,7 @@ describe("your services controller", () => {
         env: getAppEnv(),
         currentLngWelsh: false,
         hasEnglishOnlyServices: true,
+        searchableListEnabled: true,
       });
     });
 
@@ -234,6 +240,7 @@ describe("your services controller", () => {
         env: getAppEnv(),
         currentLngWelsh: false,
         hasEnglishOnlyServices: true,
+        searchableListEnabled: true,
       });
     });
   });
