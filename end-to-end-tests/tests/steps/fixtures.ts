@@ -10,21 +10,17 @@ export const test = base.extend<
     mswReset: undefined;
   },
   {
-    mswServer?: SetupServerApi;
+    mswServer: SetupServerApi;
   }
 >({
   mswServer: [
     async ({}, use) => {
-      if (env.TEST_TARGET === "local") {
-        const mswServer = setupServer();
-        mswServer.listen({
-          onUnhandledRequest: () => {},
-        });
-        await use(mswServer);
-        mswServer.close();
-      } else {
-        await use(undefined);
-      }
+      const mswServer = setupServer();
+      mswServer.listen({
+        onUnhandledRequest: () => {},
+      });
+      await use(mswServer);
+      mswServer.close();
     },
     { scope: "worker" },
   ],
@@ -32,7 +28,8 @@ export const test = base.extend<
   mswReset: [
     async ({ mswServer }, use) => {
       await use(undefined);
-      mswServer?.resetHandlers();
+      mswServer.resetHandlers();
+      mswServer.events.removeAllListeners();
     },
     { auto: true },
   ],
