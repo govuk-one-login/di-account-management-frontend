@@ -22,13 +22,11 @@ import { presentActivityHistory } from "../../utils/present-activity-history";
 import { logger } from "../../utils/logger";
 import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
 import { setOplSettings } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function activityHistoryGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("activityHistoryGet", MetricUnit.Count, 1);
   const { user } = req.session;
   const env = getAppEnv();
   let activityData: ActivityLogEntry[] = [];
@@ -92,7 +90,6 @@ export async function activityHistoryGet(
       hasEnglishOnlyServices,
     });
   } catch (error) {
-    req.metrics?.addMetric("activityHistoryGetError", MetricUnit.Count, 1);
     logger.error(
       `Activity-history-controller: Error during activity history get ${error}`
     );

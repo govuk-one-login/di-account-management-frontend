@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { presentYourServices } from "../../utils/yourServices";
 import { getAppEnv, supportSearchableList } from "../../config";
 import { setOplSettings } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const defaultContentId = "04566d1b-d791-4e2a-9154-26787fb60516";
 const contentIds: Record<string, string> = {
@@ -16,7 +15,6 @@ export async function yourServicesGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("yourServicesGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       contentId: defaultContentId,

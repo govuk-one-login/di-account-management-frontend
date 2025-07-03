@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { generators } from "openid-client";
 import { VECTORS_OF_TRUST } from "../../app.constants";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function startGet(req: Request, res: Response): Promise<void> {
-  req.metrics?.addMetric("signedOutGet", MetricUnit.Count, 1);
   req.session.nonce = generators.nonce(15);
   req.session.state = generators.nonce(10);
 

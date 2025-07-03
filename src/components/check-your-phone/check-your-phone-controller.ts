@@ -42,7 +42,6 @@ import {
   PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
 
@@ -128,7 +127,6 @@ const setCheckYourPhoneOplSettings = (
 };
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("checkYourPhoneGet", MetricUnit.Count, 1);
   const intent = req.query.intent as Intent;
   setCheckYourPhoneOplSettings(intent, req, res);
   res.render(TEMPLATE_NAME, getRenderOptions(req, intent));
@@ -138,7 +136,6 @@ export function checkYourPhonePost(
   service: CheckYourPhoneServiceInterface = checkYourPhoneService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("checkYourPhonePost", MetricUnit.Count, 1);
     const intent = req.body.intent as Intent;
 
     setCheckYourPhoneOplSettings(intent, req, res);
@@ -383,7 +380,6 @@ function getUserJourney(intent: Intent): UserJourney {
 }
 
 export function requestNewOTPCodeGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("requestNewOTPCodeGet", MetricUnit.Count, 1);
   req.session.user.state.changePhoneNumber = getNextState(
     req.session.user.state.changePhoneNumber.value,
     EventType.ResendCode

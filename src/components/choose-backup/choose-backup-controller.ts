@@ -10,7 +10,6 @@ import {
   OplSettingsLookupObject,
   setOplSettings,
 } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 type MfaMethods = keyof typeof MFA_METHODS;
 enum MfaMethodType {
@@ -60,7 +59,6 @@ function renderChooseBackupTemplate(res: Response, mfaMethods: any[]): void {
 }
 
 export function chooseBackupGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("chooseBackupGet", MetricUnit.Count, 1);
   setLocalOplSettings(req, res);
 
   const mfaMethods = req.session.mfaMethods || [];
@@ -86,7 +84,6 @@ export function chooseBackupPost(
   res: Response,
   next: NextFunction
 ): void {
-  req.metrics?.addMetric("chooseBackupPost", MetricUnit.Count, 1);
   setLocalOplSettings(req, res);
 
   const { addBackup } = req.body;

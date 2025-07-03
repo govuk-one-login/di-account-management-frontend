@@ -6,7 +6,7 @@ services:
       - "4566:4566"
       - "4569:4569"
     environment:
-      - SERVICES=kms,sns,dynamodb,sqs,stepfunctions,cloudwatch
+      - SERVICES=kms,sns,dynamodb,sqs,stepfunctions
       - LOCALSTACK_HOST=localhost
       - DYNAMODB_SHARE_DB=1 # Removes regions and allows NoSQL Workbench to work.
       - DEBUG=${DEBUG:-0}

@@ -13,7 +13,6 @@ import {
   CHANGE_EMAIL_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
@@ -27,7 +26,6 @@ const setLocalOplSettings = (res: Response) => {
 
 const TEMPLATE_NAME = "change-email/index.njk";
 export function changeEmailGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("changeEmailGet", MetricUnit.Count, 1);
   setLocalOplSettings(res);
   return res.render(TEMPLATE_NAME);
 }
@@ -46,7 +44,6 @@ export function changeEmailPost(
   service: ChangeEmailServiceInterface = changeEmailService()
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("changeEmailPost", MetricUnit.Count, 1);
     const { email } = req.session.user;
 
     const newEmailAddress = req.body.email;

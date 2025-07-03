@@ -14,7 +14,6 @@ import {
   containsNumbersOnly,
   splitSecretKeyIntoFragments,
 } from "../../../utils/strings";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function renderMfaMethodPage(
   templateFile: string,
@@ -45,7 +44,6 @@ export async function renderMfaMethodPage(
       errorList: generateErrorList(errors),
     });
   } catch (error) {
-    req.metrics?.addMetric("renderMfaMethodPageError", MetricUnit.Count, 1);
     req.log.error(error);
     return next(error);
   }

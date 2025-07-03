@@ -21,10 +21,8 @@ import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("updateEmailConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
@@ -48,7 +46,6 @@ export function updatePasswordConfirmationGet(
   req: Request,
   res: Response
 ): void {
-  req.metrics?.addMetric("updatePasswordConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
@@ -78,11 +75,6 @@ export function updatePhoneNumberConfirmationGet(
   req: Request,
   res: Response
 ): void {
-  req.metrics?.addMetric(
-    "updatePhoneNumberConfirmationGet",
-    MetricUnit.Count,
-    1
-  );
   setOplSettings(
     supportMfaManagement(req.cookies)
       ? {
@@ -111,11 +103,6 @@ export function updateAuthenticatorAppConfirmationGet(
   req: Request,
   res: Response
 ): void {
-  req.metrics?.addMetric(
-    "updateAuthenticatorAppConfirmationGet",
-    MetricUnit.Count,
-    1
-  );
   setOplSettings(
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -137,7 +124,6 @@ export function deleteAccountConfirmationGet(
   req: Request,
   res: Response
 ): void {
-  req.metrics?.addMetric("deleteAccountConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
@@ -159,7 +145,6 @@ export async function addMfaAppMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("addMfaAppMethodConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -179,7 +164,6 @@ export async function removeMfaMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("removeMfaMethodConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -220,11 +204,6 @@ export async function changeDefaultMfaMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric(
-    "changeDefaultMfaMethodConfirmationGet",
-    MetricUnit.Count,
-    1
-  );
   setOplSettings(
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -278,11 +257,6 @@ export async function changeDefaultMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric(
-    "changeDefaultMethodConfirmationGet",
-    MetricUnit.Count,
-    1
-  );
   const defaultMethod = req.session.mfaMethods.find(
     (m) => m.priorityIdentifier === "DEFAULT"
   );

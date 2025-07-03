@@ -4,7 +4,6 @@ import { getMfaServiceUrl, supportMfaManagement } from "../config";
 import { logger } from "../utils/logger";
 import { runLegacyMfaMethodsMiddleware } from "./mfa-methods-legacy";
 import { createMfaClient, formatErrorMessage } from "../utils/mfaClient";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 async function runMfaMethodMiddleware(
   req: Request,
@@ -25,7 +24,6 @@ async function runMfaMethodMiddleware(
     }
     next();
   } catch {
-    req.metrics?.addMetric("runMfaMethodMiddlewareError", MetricUnit.Count, 1);
     req.log.error(
       { trace: res.locals.trace },
       ERROR_MESSAGES.FAILED_MFA_RETRIEVE_CALL

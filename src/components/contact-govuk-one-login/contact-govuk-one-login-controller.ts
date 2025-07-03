@@ -12,12 +12,10 @@ import {
 } from "../../config";
 import { setOplSettings } from "../../utils/opl";
 import { EventName, PATH_DATA } from "../../app.constants";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
 export function contactGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("contactGet", MetricUnit.Count, 1);
   const service = eventService();
   const audit_event = service.buildAuditEvent(
     req,

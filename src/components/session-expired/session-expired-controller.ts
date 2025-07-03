@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
 import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../../utils/opl";
-import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function sessionExpiredGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("sessionExpiredGet", MetricUnit.Count, 1);
   res.status(401);
 
   setOplSettings(
