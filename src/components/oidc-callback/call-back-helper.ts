@@ -10,7 +10,7 @@ export async function handleOidcCallbackError(
   req: Request,
   res: Response,
   queryParams: CallbackParamsType,
-  log: boolean = true
+  log = true
 ) {
   if (log) {
     logger.warn(

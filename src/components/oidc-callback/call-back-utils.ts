@@ -11,7 +11,7 @@ export const COOKIE_CONSENT = {
   NOT_ENGAGED: "not-engaged",
 };
 
-function setPreferencesCookie(
+export function setPreferencesCookie(
   cookieConsent: string,
   res: Response,
   gaId: string
