@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { clearCookies, destroyUserSessions } from "./session-store";
+import { destroyUserSessions } from "./session-store";
 import { getBaseUrl } from "../config";
 import { LogoutState, LogoutStateType, PATH_DATA } from "../app.constants";
 import { EndSessionParameters } from "openid-client";
@@ -13,9 +13,7 @@ export async function handleLogout(
   const { subjectId } = req.session.user;
   await destroyUserSessions(req, subjectId, req.app.locals.sessionStore);
 
-  if (state === LogoutState.AccountDeletion) {
-    clearCookies(req, res, ["am"]);
-  } else {
+  if (state !== LogoutState.AccountDeletion) {
     res.cookie("lo", "true");
   }
 
