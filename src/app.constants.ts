@@ -329,6 +329,7 @@ export const MISSING_SESSION_ID_SPECIAL_CASE = "No session ID";
 export const MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE =
   "No persistent session ID";
 export const MISSING_USER_ID_SPECIAL_CASE = "No user ID";
+export const MISSING_USER_EMAIL_SPECIAL_CASE = "No user email";
 
 export type ParamName = keyof QueryParameters;
 
