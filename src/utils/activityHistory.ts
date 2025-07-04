@@ -3,7 +3,7 @@ import { unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   activityLogItemsPerPage,
   getDynamoActivityLogStoreTableName,
-  getAllowedActivityLogListClientIDs,
+  getListOfActivityHistoryClientIDs,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import { serviceIsAvailableInWelsh } from "./yourServices";
@@ -232,7 +232,7 @@ export async function filterAndDecryptActivity(
     ) {
       continue;
     }
-    if (!getAllowedActivityLogListClientIDs.includes(activityLog.client_id)) {
+    if (!getListOfActivityHistoryClientIDs.includes(activityLog.client_id)) {
       continue;
     }
     const eventType = await decryptData(
