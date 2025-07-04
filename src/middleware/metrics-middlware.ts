@@ -2,12 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { Metrics, MetricUnit } from "@aws-lambda-powertools/metrics";
 import { logger } from "../utils/logger";
 
-declare module "express-serve-static-core" {
-  interface Request {
-    metrics?: Metrics;
-  }
-}
-
 export function metricsMiddleware(
   namespace = "Account Home",
   serviceName = "Frontend"

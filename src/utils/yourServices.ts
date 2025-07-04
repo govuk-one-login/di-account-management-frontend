@@ -4,10 +4,10 @@ import { dynamoDBService } from "./dynamo";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   getDynamoServiceStoreTableName,
-  getAllowedAccountListClientIDs,
-  getAllowedServiceListClientIDs,
+  getListOfAccountClientIDs,
+  getListOfServiceClientIDs,
   getIdListFromFilter,
-  hmrcClientIds,
+  getClientsWithDetailedCard,
   getAppEnv,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
@@ -64,11 +64,11 @@ export const presentYourServices = async (
   const servicesList: Service[] = [];
   userServices.forEach((service) => {
     if (
-      getAllowedAccountListClientIDs.includes(service.client_id) ||
-      getAllowedServiceListClientIDs.includes(service.client_id)
+      getListOfAccountClientIDs.includes(service.client_id) ||
+      getListOfServiceClientIDs.includes(service.client_id)
     ) {
       const formattedService = formatService(service, currentLanguage);
-      if (getAllowedAccountListClientIDs.includes(service.client_id)) {
+      if (getListOfAccountClientIDs.includes(service.client_id)) {
         accountsList.push(formattedService);
       } else {
         servicesList.push(formattedService);
@@ -88,8 +88,8 @@ export const getAllowedListServices = async (
   if (userServices) {
     return userServices.filter((service) => {
       return (
-        getAllowedAccountListClientIDs.includes(service.client_id) ||
-        getAllowedServiceListClientIDs.includes(service.client_id)
+        getListOfAccountClientIDs.includes(service.client_id) ||
+        getListOfServiceClientIDs.includes(service.client_id)
       );
     });
   } else {
@@ -105,7 +105,9 @@ export const formatService = (
     dateEpoch: service.last_accessed,
     locale: currentLanguage,
   });
-  const hasDetailedCard = hmrcClientIds.includes(service.client_id);
+  const hasDetailedCard = getClientsWithDetailedCard.includes(
+    service.client_id
+  );
 
   return {
     client_id: service.client_id,
