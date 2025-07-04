@@ -1,5 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import { bdd } from "./fixtures";
+import { visitContactPage } from "./shared";
 
 const { Given, Then, When } = bdd;
 
@@ -10,6 +11,10 @@ const getInlineWebchatButton = ({ page }: { page: Page }) => {
 const getFloatingWebchatButton = ({ page }: { page: Page }) => {
   return page.locator(".sa-chat-tab");
 };
+
+Given("I visit the contact page", async ({ page, javaScriptEnabled }) => {
+  await visitContactPage({ page, javaScriptEnabled });
+});
 
 Then("the page looks as expected", async ({ page }) => {
   expect(
