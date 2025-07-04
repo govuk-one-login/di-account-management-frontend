@@ -21,7 +21,10 @@ export const hasAllowedActivityLogServices = async (
   const { trace } = res.locals;
 
   const userServices = await getServices(user.subjectId, trace);
-  return userServices && findClientInServices(["test"], userServices);
+  return (
+    userServices &&
+    findClientInServices(getListOfActivityHistoryClientIDs, userServices)
+  );
 };
 
 export async function checkActivityLogAllowedServicesList(
