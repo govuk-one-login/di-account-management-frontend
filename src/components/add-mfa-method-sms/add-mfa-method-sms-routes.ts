@@ -10,7 +10,6 @@ import {
 import { asyncHandler } from "../../utils/async";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 
 const router = express.Router();
 
@@ -26,7 +25,6 @@ router.post(
   requiresAuthMiddleware,
   validatePhoneNumberRequest(),
   validateStateMiddleware,
-  refreshTokenMiddleware(),
   globalTryCatchAsync(asyncHandler(addMfaSmsMethodPost()))
 );
 

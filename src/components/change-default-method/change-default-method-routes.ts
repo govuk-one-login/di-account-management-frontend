@@ -13,7 +13,6 @@ import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 
 const router = express.Router();
 
@@ -38,7 +37,6 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   mfaMethodMiddleware,
-  refreshTokenMiddleware(),
   globalTryCatchAsync(changeDefaultMethodAppPost)
 );
 
@@ -56,7 +54,6 @@ router.post(
   validateStateMiddleware,
   validatePhoneNumberRequest(),
   mfaMethodMiddleware,
-  refreshTokenMiddleware(),
   globalTryCatchAsync(changeDefaultMethodSmsPost(changePhoneNumberService()))
 );
 
