@@ -1,0 +1,51 @@
+name: "End-to-end tests"
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  end_to_end_tests:
+    name: "Run end-to-end tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      pull-requests: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
+
+      - name: Set up Node
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install app dependencies
+        run: npm ci
+
+      - name: Build app
+        run: |
+          touch .env
+          echo '${{ secrets.END_TO_END_TESTS_APP_ENV_VARIABLES }}' >> .env
+          npm run build
+
+      - name: Install end-to-end-tests dependencies
+        run: cd end-to-end-tests && npm ci
+
+      - name: Run type check
+        run: cd end-to-end-tests && npm run check-types
+
+      - name: Run lint
+        run: cd end-to-end-tests && npm run lint
+
+      - name: Run end-to-end tests
+        run: |
+          cd end-to-end-tests
+          touch .env
+          echo "PRE_OR_POST_DEPLOY=pre" >> .env
+          echo "PW_TEST_CONNECT_WS_ENDPOINT=ws://127.0.0.1:3000/" >> .env
+          npm run test

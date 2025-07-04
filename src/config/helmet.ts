@@ -1,5 +1,7 @@
 import { HelmetOptions } from "helmet";
 import { Request, Response } from "express";
+import { allowUnsafeEval } from "../config";
+
 // Helmet does not export the config type - This is the way the recommend getting it on GitHub.
 export const helmetConfiguration: HelmetOptions = {
   contentSecurityPolicy: {
@@ -15,6 +17,7 @@ export const helmetConfiguration: HelmetOptions = {
         "https://*.analytics.google.com",
         "https://*.ruxit.com",
         "https://*.dynatrace.com",
+        ...(allowUnsafeEval() ? ["'unsafe-eval'"] : []),
       ],
       imgSrc: [
         "'self'",
@@ -75,6 +78,7 @@ export const webchatHelmetConfiguration: HelmetOptions = {
         "https://*.ruxit.com",
         "https://*.dynatrace.com",
         "'strict-dynamic'",
+        ...(allowUnsafeEval() ? ["'unsafe-eval'"] : []),
       ],
       scriptSrcAttr: ["'self'", "'unsafe-inline'"],
       imgSrc: [

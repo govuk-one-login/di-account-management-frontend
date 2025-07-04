@@ -294,3 +294,7 @@ export function supportBrandRefresh(): boolean {
 export function supportChangeOnIntervention(): boolean {
   return process.env.ENABLE_CHANGE_ON_INTERVENTION === "1";
 }
+
+export function allowUnsafeEval(): boolean {
+  return process.env.ALLOW_UNSAFE_EVAL === "1";
+}

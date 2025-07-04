@@ -1,1 +1,2 @@
 npx lint-staged
+cd end-to-end-tests && npm run check-types && npm run lint
