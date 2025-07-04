@@ -162,7 +162,6 @@ export const PATH_DATA: Record<
   HEALTHCHECK: { url: "/healthcheck" },
   FINGERPRINT: { url: "/fingerprint" },
   BACKCHANNEL_LOGOUT: { url: "/backchannel-logout" },
-  GLOBAL_LOGOUT: { url: "/global-logout" },
   RESEND_EMAIL_CODE: {
     url: "/resend-email-code",
     event: EventType.ValueUpdated,
