@@ -344,9 +344,9 @@ Mappings:
       SUPPORTCLIENTREGISTRYLIBRARY: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://63qq2dsjo5-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production/v1"
-      SUPPORTMETHODMANAGEMENT: "qa"
-      SUPPORTCHANGEMFA: "qa"
-      SUPPORTADDBACKUPMFA: "qa"
+      SUPPORTMETHODMANAGEMENT: "1"
+      SUPPORTCHANGEMFA: "1"
+      SUPPORTADDBACKUPMFA: "1"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables # pragma: allowlist secret
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
