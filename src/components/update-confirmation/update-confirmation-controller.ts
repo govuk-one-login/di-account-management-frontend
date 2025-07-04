@@ -4,7 +4,6 @@ import {
   HTTP_STATUS_CODES,
   PATH_DATA,
 } from "../../app.constants";
-import { clearCookies } from "../../utils/session-store";
 import { logger } from "../../utils/logger";
 import { getLastNDigits } from "../../utils/phone-number";
 import {
@@ -58,7 +57,6 @@ export function updatePasswordConfirmationGet(
   );
 
   delete req.session.user.state.changePassword;
-  clearCookies(req, res, ["am"]);
 
   if (req.session) {
     req.session.destroy((error) => {

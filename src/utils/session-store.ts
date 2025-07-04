@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import {
   DynamoDBClient,
   QueryCommand,
@@ -109,21 +109,5 @@ export async function destroyUserSessions(
     );
   } finally {
     await deleteExpressSession(req);
-  }
-}
-
-export function clearCookies(
-  req: Request,
-  res: Response,
-  cookieNames: string[]
-): void {
-  if (req.cookies) {
-    if (cookieNames) {
-      for (const cookieName of Object.keys(req.cookies)) {
-        if (cookieNames.includes(cookieName)) {
-          res.clearCookie(cookieName);
-        }
-      }
-    }
   }
 }

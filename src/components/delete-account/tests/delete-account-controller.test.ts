@@ -161,24 +161,6 @@ describe("delete account controller", () => {
         );
         sessionStore.destroyUserSessions.restore();
       });
-
-      it("should clear am cookie", async () => {
-        req = validRequest();
-        const fakeService: DeleteAccountServiceInterface = {
-          deleteAccount: sandbox.fake.resolves(true),
-          publishToDeleteTopic: sandbox.fake(),
-        };
-        req.session.user.tokens = { accessToken: "token" } as any;
-        req.session.user.state.deleteAccount.value = "CHANGE_VALUE";
-        req.oidc = {
-          endSessionUrl: sandbox.fake.returns("logout-url"),
-        } as any;
-        const sessionStore = require("../../../utils/session-store");
-        sandbox.stub(sessionStore, "clearCookies").callsFake(() => {});
-
-        await deleteAccountPost(fakeService)(req as Request, res as Response);
-        expect(sessionStore.clearCookies).to.have.calledWith(req, res, ["am"]);
-      });
     });
   });
 });

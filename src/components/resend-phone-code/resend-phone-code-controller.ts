@@ -8,11 +8,8 @@ import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
 import {
   formatValidationError,
-  isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
-import { validationResult } from "express-validator";
-import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
@@ -106,20 +103,6 @@ export function resendPhoneCodePost(
     const intent = req.body.intent;
 
     setLocalOplSettings(intent, req, res);
-
-    const errors = validationResult(req)
-      .formatWith(validationErrorFormatter)
-      .mapped();
-
-    if (!isObjectEmpty(errors)) {
-      return renderBadRequest(
-        res,
-        req,
-        TEMPLATE_NAME,
-        errors,
-        getRenderOptions(req, intent)
-      );
-    }
 
     const { email } = req.session.user;
     const newPhoneNumber = req.body.phoneNumber;

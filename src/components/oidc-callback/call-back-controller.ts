@@ -6,7 +6,7 @@ import { ClientAssertionServiceInterface } from "../../utils/types";
 import { clientAssertionGenerator } from "../../utils/oidc";
 import xss from "xss";
 import { logger } from "../../utils/logger";
-import { clearCookies, deleteExpressSession } from "../../utils/session-store";
+import { deleteExpressSession } from "../../utils/session-store";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
@@ -62,7 +62,6 @@ export function oidcAuthCallbackGet(
         "OIDC callback error received"
       );
       deleteExpressSession(req);
-      clearCookies(req, res, ["am"]);
       return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
     }
 

@@ -56,12 +56,9 @@ describe("update confirmation controller", () => {
 
   describe("updatePasswordConfirmationGet", () => {
     it("should render update password confirmation page", async () => {
-      const sessionStore = require("../../../utils/session-store");
-      sandbox.stub(sessionStore, "clearCookies").callsFake(() => {});
       await updatePasswordConfirmationGet(req as Request, res as Response);
       expect(req.session.destroy).called;
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
-      expect(sessionStore.clearCookies).to.have.calledWith(req, res, ["am"]);
     });
   });
 
