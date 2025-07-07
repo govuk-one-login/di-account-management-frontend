@@ -1,7 +1,7 @@
 Feature: Cookie consent banner
 
   Scenario: Accepting cookies
-    Given I visit the contact page
+    Given I visit the "Contact GOV.UK One Login" page
     Then the cookie consent banner shows
     And the cookie consent banner looks as expected
     And I click to accept cookies
@@ -11,7 +11,7 @@ Feature: Cookie consent banner
     And the cookie consent banner does not show again when the page is refreshed
 
   Scenario: Rejecting cookies
-    Given I visit the contact page
+    Given I visit the "Contact GOV.UK One Login" page
     Then the cookie consent banner shows
     And I click to reject cookies
     Then I am shown a message confirming my rejection

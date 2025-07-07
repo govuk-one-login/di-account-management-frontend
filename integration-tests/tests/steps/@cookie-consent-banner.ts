@@ -8,9 +8,12 @@ const getCookieBanner = ({ page }: { page: Page }) => {
   return page.getByLabel("Cookies on GOV.UK One Login");
 };
 
-Given("I visit the contact page", async ({ page, javaScriptEnabled }) => {
-  await visitContactPage({ page, acceptCookies: false, javaScriptEnabled });
-});
+Given(
+  'I visit the "Contact GOV.UK One Login" page',
+  async ({ page, javaScriptEnabled }) => {
+    await visitContactPage({ page, acceptCookies: false, javaScriptEnabled });
+  }
+);
 
 Then("the cookie consent banner shows", ({ page }) => {
   page.getByRole("heading", { name: "Cookies on GOV.UK One Login" });

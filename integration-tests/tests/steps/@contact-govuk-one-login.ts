@@ -12,9 +12,12 @@ const getFloatingWebchatButton = ({ page }: { page: Page }) => {
   return page.locator(".sa-chat-tab");
 };
 
-Given("I visit the contact page", async ({ page, javaScriptEnabled }) => {
-  await visitContactPage({ page, javaScriptEnabled });
-});
+Given(
+  'I visit the "Contact GOV.UK One Login" page',
+  async ({ page, javaScriptEnabled }) => {
+    await visitContactPage({ page, javaScriptEnabled });
+  }
+);
 
 Then("the page looks as expected", async ({ page }) => {
   expect(
