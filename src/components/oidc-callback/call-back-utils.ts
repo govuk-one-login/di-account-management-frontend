@@ -3,7 +3,7 @@ import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
 import { ClientAssertionServiceInterface } from "../../utils/types";
 import { LOG_MESSAGES, PATH_DATA } from "../../app.constants";
 import { logger } from "../../utils/logger";
-import { clearCookies, deleteExpressSession } from "../../utils/session-store";
+import { deleteExpressSession } from "../../utils/session-store";
 import xss from "xss";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
@@ -110,7 +110,6 @@ export async function handleOidcCallbackError(
     );
   }
   await deleteExpressSession(req);
-  clearCookies(req, res, ["am"]);
   return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
 }
 

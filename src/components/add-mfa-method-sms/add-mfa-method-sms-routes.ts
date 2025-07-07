@@ -9,6 +9,7 @@ import {
 } from "./add-mfa-method-sms-controller";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
+import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 
 const router = express.Router();
 
@@ -24,6 +25,7 @@ router.post(
   requiresAuthMiddleware,
   validatePhoneNumberRequest(),
   validateStateMiddleware,
+  refreshTokenMiddleware(),
   globalTryCatchAsync(addMfaSmsMethodPost())
 );
 
