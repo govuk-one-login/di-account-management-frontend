@@ -9,6 +9,7 @@ import { PATH_DATA } from "../../../app.constants";
 import { getLastNDigits } from "../../../utils/phone-number";
 import { MfaMethod } from "../../../utils/mfaClient/types";
 import { MfaClient } from "../../../utils/mfaClient";
+import { UnsecuredJWT } from "jose";
 
 const { url } = PATH_DATA.SECURITY;
 const TEST_USER_EMAIL = "test@test.com";
@@ -20,7 +21,13 @@ const DEFAULT_USER_SESSION = {
   isAuthenticated: true,
   state: {},
   tokens: {
-    accessToken: "token",
+    accessToken: new UnsecuredJWT({})
+      .setIssuedAt()
+      .setSubject("12345")
+      .setIssuer("urn:example:issuer")
+      .setAudience("urn:example:audience")
+      .setExpirationTime("2h")
+      .encode(),
     idToken: "Idtoken",
     refreshToken: "token",
   },
