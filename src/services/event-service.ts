@@ -128,6 +128,7 @@ export function eventService(
               defaultMethod.method.phoneNumber,
               "GB"
             ).countryCallingCode,
+            phone: defaultMethod.method.phoneNumber,
           }
         : {};
 
@@ -138,6 +139,7 @@ export function eventService(
               backupMethod.method.phoneNumber,
               "GB"
             ).countryCallingCode,
+            phone: backupMethod.method.phoneNumber,
           }
         : {};
 
