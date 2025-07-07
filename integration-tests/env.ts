@@ -1,11 +1,16 @@
 import "dotenv/config";
 import * as v from "valibot";
 
+const boolish = v.pipe(
+  v.unknown(),
+  v.transform((val) => {
+    const truthyValues: unknown[] = [1, "1", true, "true"];
+    return truthyValues.includes(val);
+  })
+);
+
 const envSchema = v.object({
-  HUMAN_IN_THE_LOOP: v.pipe(
-    v.fallback(v.pipe(v.string(), v.value("1")), "0"),
-    v.transform((val) => Boolean(Number(val)))
-  ),
+  HUMAN_IN_THE_LOOP: v.optional(boolish, false),
   TEST_TARGET: v.fallback(
     v.union([
       v.literal("local"),
@@ -22,6 +27,7 @@ const envSchema = v.object({
     "post"
   ),
   TEST_REPORT_DIR: v.optional(v.string()),
+  UPDATE_SNAPSHOTS: v.optional(boolish, false),
 });
 
 export const env = v.parse(envSchema, {

@@ -7,3 +7,4 @@ node_modules/
 /cucumber-report
 .env*
 !.env.sample
+/snapshots-updated

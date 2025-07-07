@@ -1,4 +1,4 @@
-name: "End-to-end tests"
+name: "Integration tests"
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   end_to_end_tests:
-    name: "Run end-to-end tests"
+    name: "Run integration tests"
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -33,18 +33,18 @@ jobs:
           echo '${{ secrets.END_TO_END_TESTS_APP_ENV_VARIABLES }}' >> .env
           npm run build
 
-      - name: Install end-to-end-tests dependencies
-        run: cd end-to-end-tests && npm ci
+      - name: Install integration-tests dependencies
+        run: cd integration-tests && npm ci
 
       - name: Run type check
-        run: cd end-to-end-tests && npm run check-types
+        run: cd integration-tests && npm run check-types
 
       - name: Run lint
-        run: cd end-to-end-tests && npm run lint
+        run: cd integration-tests && npm run lint
 
-      - name: Run end-to-end tests
+      - name: Run integration tests
         run: |
-          cd end-to-end-tests
+          cd integration-tests
           touch .env
           echo "PRE_OR_POST_DEPLOY=pre" >> .env
           echo "PW_TEST_CONNECT_WS_ENDPOINT=ws://127.0.0.1:3000/" >> .env

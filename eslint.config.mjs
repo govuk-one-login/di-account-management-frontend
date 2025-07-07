@@ -26,7 +26,7 @@ export default [
       "coverage",
       "src/assets/javascript",
       "dev-app.js",
-      "end-to-end-tests",
+      "integration-tests",
     ],
   },
   {
