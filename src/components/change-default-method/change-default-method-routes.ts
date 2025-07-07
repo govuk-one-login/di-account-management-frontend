@@ -21,6 +21,7 @@ router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
+  refreshTokenMiddleware(),
   mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodGet)
 );
@@ -29,6 +30,7 @@ router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
+  refreshTokenMiddleware(),
   mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodAppGet)
 );
@@ -37,8 +39,8 @@ router.post(
   PATH_DATA.CHANGE_DEFAULT_METHOD_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  mfaMethodMiddleware,
   refreshTokenMiddleware(),
+  mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodAppPost)
 );
 
@@ -46,6 +48,7 @@ router.get(
   PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
+  refreshTokenMiddleware(),
   mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodSmsGet)
 );
@@ -55,8 +58,8 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   validatePhoneNumberRequest(),
-  mfaMethodMiddleware,
   refreshTokenMiddleware(),
+  mfaMethodMiddleware,
   globalTryCatchAsync(changeDefaultMethodSmsPost(changePhoneNumberService()))
 );
 

@@ -15,6 +15,7 @@ const router = express.Router();
 router.get(
   PATH_DATA.DELETE_MFA_METHOD.url,
   requiresAuthMiddleware,
+  refreshTokenMiddleware(),
   mfaMethodMiddleware,
   validateStateMiddleware,
   globalTryCatchAsync(deleteMfaMethodGet)
@@ -23,9 +24,9 @@ router.get(
 router.post(
   PATH_DATA.DELETE_MFA_METHOD.url,
   requiresAuthMiddleware,
+  refreshTokenMiddleware(),
   mfaMethodMiddleware,
   validateStateMiddleware,
-  refreshTokenMiddleware(),
   globalTryCatchAsync(deleteMfaMethodPost)
 );
 
