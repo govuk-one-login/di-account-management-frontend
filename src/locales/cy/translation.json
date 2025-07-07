@@ -137,7 +137,8 @@
   },
   "pages": {
     "searchServices": {
-      "title": "Chwilio",
+      "title": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
+      "metaDescription": "Chwiliwch am wasanaethau llywodraeth y gallwch eu defnyddio gyda GOV.UK  One Login.",
       "heading": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
       "paragraphs": [
         "Ar hyn o bryd gallwch ond ei ddefnyddio i gael mynediad i rai gwasanaethau'r llywodraeth.",

@@ -145,7 +145,8 @@
       "cancelButton": "Cancel and go back to Activity history"
     },
     "searchServices": {
-      "title": "Search",
+      "title": "Services you can use with GOV.UK One Login",
+      "metaDescription": "Search for government services you can use with GOV.UK One Login.",
       "heading": "Services you can use with GOV.UK One Login",
       "paragraphs": [
         "At the moment, you can only use GOV.UK One Login to access some government services.",
