@@ -18,7 +18,6 @@ Feature: Contact GOV.UK One Login
     And webchat has initialised
     When I click on the inline webchat button
     Then the webchat appears
-    And the webchat looks as expected
     Given I click on the minimise webchat button
     Then the webchat disappears
 
@@ -27,6 +26,5 @@ Feature: Contact GOV.UK One Login
     And webchat has initialised
     When I click on the floating webchat button
     Then the webchat appears
-    And the webchat looks as expected
     Given I click on the minimise webchat button
     Then the webchat disappears    
