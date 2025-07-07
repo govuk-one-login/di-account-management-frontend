@@ -47,7 +47,7 @@
           {# A lang attribute must be added if a service is displayed in English, on the Welsh language version of the page #}
           {%- set EnglishOnlyService = true if (currentLngWelsh and not account.isAvailableInWelsh) -%}
           {%- set clientId = account.client_id -%}
-          {%- set accountCardLink -%} <a class="govuk-link" href="{{ setKey('link_href', clientId) | translate }}">{{ setKey('link_text', clientId) | translate }}</a>{%- endset -%}
+          {%- set accountCardLink -%} <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId) | translate }}</a>{%- endset -%}
           {# Begin Account card #}
           <li class="your-services__card">
             <{{serviceHeadingLevel}} class="govuk-heading-s your-services__card__heading" data-test-id="account-card-heading" {% if EnglishOnlyService %} lang="en"{% endif %}>{{ setKey('header', clientId) | translate }}</{{serviceHeadingLevel}}>
@@ -74,7 +74,7 @@
           {# A lang attribute must be added if a service is displayed in English, on the Welsh language version of the page #}
           {%- set EnglishOnlyService = true if (currentLngWelsh and not service.isAvailableInWelsh) -%}
           {%- set clientId = service.client_id -%}
-          {%- set serviceCardLink -%} <a class="govuk-link" href="{{ setKey('link_href', clientId) | translate }}">{{ setKey('link_text', clientId) | translate }}</a>{%- endset -%}
+          {%- set serviceCardLink -%} <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId) | translate }}</a>{%- endset -%}
           {# Begin Service card #}
           <li class="your-services__card" data-test-id={{testIdValue}}>
             <div class="your-services__card__content">
@@ -83,7 +83,7 @@
               <{{serviceHeadingLevel}} class="govuk-heading-s" data-test-id="service-card-heading" {% if EnglishOnlyService %} lang="en"{% endif %}>
                 {{ setKey('header', clientId) | translate }}
               </{{serviceHeadingLevel}}>
-              {{ bodyParagraph({ classes: "govuk-hint", content: setKey('hint_text', clientId) })}}
+              {{ bodyParagraph({ classes: "govuk-hint", content: setKey('hintText', clientId) })}}
               <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
               {{ bodyParagraph({ content: setKey('paragraph1', clientId), EnglishOnlyService: EnglishOnlyService })}}
               {{ bodyParagraph({ content: setKey('paragraph2', clientId), EnglishOnlyService: EnglishOnlyService })}}
@@ -91,7 +91,7 @@
               {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}              
             {% else %}
               <{{serviceHeadingLevel}} class="govuk-heading-s govuk-!-font-weight-regular" data-test-id="service-card-heading" {% if EnglishOnlyService %}lang="en"{% endif %}>
-                <a class="govuk-link" href="{{ setKey('link_href', clientId) | translate }}">{{ setKey('link_text', clientId)| translate }}</a>
+                <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId)| translate }}</a>
               </{{serviceHeadingLevel}}>
               {{ bodyParagraph({ content: 'general.noWelshNoticeInline', testId: "no-welsh-notice-inline", EnglishOnlyService: EnglishOnlyService}) if EnglishOnlyService }}
               {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}              
