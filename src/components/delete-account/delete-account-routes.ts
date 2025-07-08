@@ -5,6 +5,7 @@ import {
   deleteAccountGet,
   deleteAccountPost,
 } from "./delete-account-controller";
+import { asyncHandler } from "../../utils/async";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
@@ -24,7 +25,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatchAsync(deleteAccountPost())
+  globalTryCatchAsync(asyncHandler(deleteAccountPost()))
 );
 
 export { router as deleteAccountRouter };
