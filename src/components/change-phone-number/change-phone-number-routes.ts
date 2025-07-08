@@ -1,6 +1,7 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
 import { validatePhoneNumberRequest } from "./change-phone-number-validation";
+import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import {
   changePhoneNumberGet,
@@ -25,7 +26,7 @@ router.post(
   validateStateMiddleware,
   validatePhoneNumberRequest(),
   refreshTokenMiddleware(),
-  globalTryCatchAsync(changePhoneNumberPost())
+  globalTryCatchAsync(asyncHandler(changePhoneNumberPost()))
 );
 
 export { router as changePhoneNumberRouter };

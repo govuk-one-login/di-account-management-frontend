@@ -1,5 +1,6 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
+import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import {
   changeAuthenticatorAppGet,
@@ -23,7 +24,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatchAsync(changeAuthenticatorAppPost)
+  globalTryCatchAsync(asyncHandler(changeAuthenticatorAppPost))
 );
 
 export { router as changeAuthenticatorAppRouter };
