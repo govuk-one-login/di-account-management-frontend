@@ -142,7 +142,8 @@
       "paragraph2": "This will help keep your GOV.UK One Login safe. For example, if you've lost your phone.",
       "warning": "If you're signed in to the GOV.UK One Login/Wallet app, signing out will delete all the information and digital documents saved in it",
       "button": "Sign out of all devices and apps",
-      "cancelButton": "Cancel and go back to Activity history"
+      "cancelButton": "Cancel and go back to Activity history",
+      "pageTitle": "Sign out of all devices and apps"
     },
     "searchServices": {
       "title": "Services you can use with GOV.UK One Login",
