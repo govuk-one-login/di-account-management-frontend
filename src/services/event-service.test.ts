@@ -40,6 +40,7 @@ describe("eventService", () => {
           "user-agent": "test-user-agent",
           "txma-audit-encoded": btoa("test-txma-header"),
         },
+        ip: "127.0.0.1",
         session: {
           queryParameters: {
             fromURL: "test-from-url",
@@ -50,6 +51,7 @@ describe("eventService", () => {
           user_id: "test-user-id",
           user: {
             isAuthenticated: true,
+            email: "test@example.com",
           },
         },
       };
@@ -58,6 +60,7 @@ describe("eventService", () => {
         locals: {
           sessionId: "test-session-id",
           persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
         },
       };
 
@@ -74,6 +77,11 @@ describe("eventService", () => {
         "test-persistent-session-id"
       );
       expect(result.user.user_id).to.equal("test-user-id");
+      expect(result.user.email).to.equal("test@example.com");
+      expect(result.user.ip_address).to.equal("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).to.equal(
+        "test-client-session-id"
+      );
       expect(result.platform.user_agent).to.equal("test-user-agent");
       expect(result.extensions.from_url).to.equal("test-from-url");
       expect(result.extensions.app_error_code).to.equal("test-error-code");
@@ -157,6 +165,7 @@ describe("eventService", () => {
           "user-agent": "test-user-agent",
           "txma-audit-encoded": btoa("test-txma-header"),
         },
+        ip: "127.0.0.1",
         session: {
           queryParameters: {
             fromURL: "test-from-url",
@@ -167,6 +176,7 @@ describe("eventService", () => {
           user_id: "test-user-id",
           user: {
             isAuthenticated: true,
+            email: "test@example.com",
           },
         },
       };
@@ -175,6 +185,7 @@ describe("eventService", () => {
         locals: {
           sessionId: "test-session-id",
           persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
         },
       };
 
@@ -191,6 +202,11 @@ describe("eventService", () => {
         "test-persistent-session-id"
       );
       expect(result.user.user_id).to.equal("test-user-id");
+      expect(result.user.email).to.equal("test@example.com");
+      expect(result.user.ip_address).to.equal("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).to.equal(
+        "test-client-session-id"
+      );
       expect(result.platform.user_agent).to.equal("test-user-agent");
       expect(result.extensions.from_url).to.equal("test-from-url");
       expect(result.extensions.app_error_code).to.equal("test-error-code");
@@ -215,11 +231,24 @@ describe("eventService", () => {
           "user-agent": "test-user-agent",
           "txma-audit-encoded": btoa("test-txma-header"),
         },
+        ip: "127.0.0.1",
         session: {
           user_id: "test-user-id",
           user: {
             isAuthenticated: true,
+            email: "test@example.com",
           },
+          mfaMethods: [
+            {
+              mfaIdentifier: "1234",
+              methodVerified: true,
+              method: {
+                mfaMethodType: "SMS",
+                phoneNumber: "+447123456789",
+              },
+              priorityIdentifier: "DEFAULT",
+            },
+          ],
         },
       };
 
@@ -227,6 +256,7 @@ describe("eventService", () => {
         locals: {
           sessionId: "test-session-id",
           persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
         },
       };
 
@@ -243,8 +273,15 @@ describe("eventService", () => {
         "test-persistent-session-id"
       );
       expect(result.user.user_id).to.equal("test-user-id");
+      expect(result.user.email).to.equal("test@example.com");
+      expect(result.user.ip_address).to.equal("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).to.equal(
+        "test-client-session-id"
+      );
       expect(result.platform.user_agent).to.equal("test-user-agent");
       expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
+      expect(result.extensions.phone_number_country_code).to.equal("44");
+      expect(result.extensions.phone).to.equal("+447123456789");
       expect(result.event_timestamp_ms).to.equal(1726099200000);
       expect(result.event_timestamp_ms_formatted).to.equal(
         "2024-09-12T00:00:00.000Z"
@@ -263,10 +300,12 @@ describe("eventService", () => {
           "user-agent": "test-user-agent",
           "txma-audit-encoded": btoa("test-txma-header"),
         },
+        ip: "127.0.0.1",
         session: {
           user_id: "test-user-id",
           user: {
             isAuthenticated: true,
+            email: "test@example.com",
           },
           mfaMethods: [
             {
@@ -274,7 +313,7 @@ describe("eventService", () => {
               methodVerified: true,
               method: {
                 mfaMethodType: "SMS",
-                phoneNumber: "123456789",
+                phoneNumber: "+447123456789",
               },
               priorityIdentifier: "DEFAULT",
             },
@@ -294,6 +333,7 @@ describe("eventService", () => {
         locals: {
           sessionId: "test-session-id",
           persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
         },
       };
 
@@ -310,9 +350,16 @@ describe("eventService", () => {
         "test-persistent-session-id"
       );
       expect(result.user.user_id).to.equal("test-user-id");
+      expect(result.user.email).to.equal("test@example.com");
+      expect(result.user.ip_address).to.equal("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).to.equal(
+        "test-client-session-id"
+      );
       expect(result.platform.user_agent).to.equal("test-user-agent");
       expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
       expect(result.extensions["mfa-type"]).to.equal("SMS");
+      expect(result.extensions.phone_number_country_code).to.equal("44");
+      expect(result.extensions.phone).to.equal("+447123456789");
       expect(result.event_timestamp_ms).to.equal(1726099200000);
       expect(result.event_timestamp_ms_formatted).to.equal(
         "2024-09-12T00:00:00.000Z"
@@ -331,10 +378,12 @@ describe("eventService", () => {
           "user-agent": "test-user-agent",
           "txma-audit-encoded": btoa("test-txma-header"),
         },
+        ip: "127.0.0.1",
         session: {
           user_id: "test-user-id",
           user: {
             isAuthenticated: true,
+            email: "test@example.com",
           },
           mfaMethods: [
             {
@@ -342,7 +391,7 @@ describe("eventService", () => {
               methodVerified: true,
               method: {
                 mfaMethodType: "SMS",
-                phoneNumber: "123456789",
+                phoneNumber: "+447123456789",
               },
               priorityIdentifier: "DEFAULT",
             },
@@ -350,7 +399,8 @@ describe("eventService", () => {
               mfaIdentifier: "5678",
               methodVerified: true,
               method: {
-                mfaMethodType: "AUTH_APP",
+                mfaMethodType: "SMS",
+                phoneNumber: "+447987654321",
               },
               priorityIdentifier: "BACKUP",
             },
@@ -362,6 +412,7 @@ describe("eventService", () => {
         locals: {
           sessionId: "test-session-id",
           persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
         },
       };
 
@@ -378,9 +429,16 @@ describe("eventService", () => {
         "test-persistent-session-id"
       );
       expect(result.user.user_id).to.equal("test-user-id");
+      expect(result.user.email).to.equal("test@example.com");
+      expect(result.user.ip_address).to.equal("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).to.equal(
+        "test-client-session-id"
+      );
       expect(result.platform.user_agent).to.equal("test-user-agent");
       expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
-      expect(result.extensions["mfa-type"]).to.equal("AUTH_APP");
+      expect(result.extensions["mfa-type"]).to.equal("SMS");
+      expect(result.extensions.phone_number_country_code).to.equal("44");
+      expect(result.extensions.phone).to.equal("+447987654321");
       expect(result.event_timestamp_ms).to.equal(1726099200000);
       expect(result.event_timestamp_ms_formatted).to.equal(
         "2024-09-12T00:00:00.000Z"
