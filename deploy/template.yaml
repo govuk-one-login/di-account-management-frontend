@@ -203,7 +203,7 @@ Mappings:
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
-      SUPPORT_GLOBAL_LOGOUT: "1"
+      SUPPORTGLOBALLOGOUT: "1"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -243,7 +243,7 @@ Mappings:
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
-      SUPPORT_GLOBAL_LOGOUT: "0"
+      SUPPORTGLOBALLOGOUT: "0"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -283,7 +283,7 @@ Mappings:
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
-      SUPPORT_GLOBAL_LOGOUT: "0"
+      SUPPORTGLOBALLOGOUT: "0"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -323,7 +323,7 @@ Mappings:
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
-      SUPPORT_GLOBAL_LOGOUT: "0"
+      SUPPORTGLOBALLOGOUT: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -364,7 +364,7 @@ Mappings:
       BRANDREFRESHENABLED: "0"
       SUPPORTCHANGEONINTERVENTION: "0"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
-      SUPPORT_GLOBAL_LOGOUT: "0"
+      SUPPORTGLOBALLOGOUT: "0"
 
 Resources:
   #
@@ -954,7 +954,7 @@ Resources:
                 !FindInMap [
                   EnvironmentVariables,
                   !Ref Environment,
-                  SUPPORT_GLOBAL_LOGOUT,
+                  SUPPORTGLOBALLOGOUT,
                 ]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]

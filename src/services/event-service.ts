@@ -142,6 +142,9 @@ export function eventService(
         };
         break;
 
+      case EventName.HOME_GLOBAL_LOGOUT_REQUESTED:
+        break;
+
       default: {
         throw new Error(`Unknown event name: ${eventName}`);
       }
