@@ -19,6 +19,7 @@ export interface AuditEvent extends Event {
   event_timestamp_ms: number;
   event_timestamp_ms_formatted: string;
   component_id: string;
+  client_id?: string;
   user: User;
   platform: Platform;
   extensions?: Extensions;
@@ -37,6 +38,8 @@ export interface User {
   session_id: string;
   persistent_session_id: string;
   user_id: string;
+  govuk_signin_journey_id?: string;
+  ip_address?: string;
 }
 
 export interface Platform {

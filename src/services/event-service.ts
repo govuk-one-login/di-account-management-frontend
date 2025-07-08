@@ -74,10 +74,13 @@ export function eventService(
       event_timestamp_ms_formatted: timestamps.isoString,
       event_name: eventName,
       component_id: "HOME",
+      client_id: req.oidc.metadata.client_id,
       user: {
         session_id: getSessionId(res),
         persistent_session_id: getPersistentSessionId(res),
         user_id: getUserId(session),
+        govuk_signin_journey_id: session.authSessionIds?.clientSessionId,
+        ip_address: req.ip,
       },
       platform: {
         user_agent: headers["user-agent"],
