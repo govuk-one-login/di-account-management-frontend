@@ -5,6 +5,7 @@ import {
   resendPhoneCodeGet,
   resendPhoneCodePost,
 } from "./resend-phone-code-controller";
+import { asyncHandler } from "../../utils/async";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
@@ -24,7 +25,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatchAsync(resendPhoneCodePost())
+  globalTryCatchAsync(asyncHandler(resendPhoneCodePost()))
 );
 
 export { router as resendPhoneCodeRouter };
