@@ -111,7 +111,7 @@ The easiest way is to start the docker compose stack and run the tests from insi
 ```shell script
 docker exec -it account-management-frontend /bin/sh
 
-# npm run test:integration
+# npm run test:integration-legacy
 ```
 
 ### Integration tests
@@ -246,7 +246,7 @@ using mocha.
 > To run the integration tests
 
 ```shell script
-npm run test:integration
+npm run test:integration-lrgacy
 ```
 
 ### Install dependencies

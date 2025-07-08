@@ -73,7 +73,7 @@ jobs:
           SUSPICIOUS_ACTIVITY_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:SuspiciousActivityTopicArn
 
       - name: Run integration tests
-        run: npm run test:integration
+        run: npm run test:integration-legacy
 
       - name: Run lint
         run: npm run lint
