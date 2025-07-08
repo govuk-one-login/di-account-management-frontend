@@ -74,7 +74,7 @@ export function eventService(
       event_timestamp_ms_formatted: timestamps.isoString,
       event_name: eventName,
       component_id: "HOME",
-      client_id: req.oidc.metadata.client_id,
+      client_id: req.oidc?.metadata?.client_id,
       user: {
         session_id: getSessionId(res),
         persistent_session_id: getPersistentSessionId(res),
