@@ -25,7 +25,7 @@ describe("Integration:: delete account", () => {
 
   const aSingleService: Service[] = [
     {
-      client_id: "client_id",
+      client_id: "govukApp",
       count_successful_logins: 1,
       last_accessed: 14567776,
       last_accessed_readable_format: "last_accessed_readable_format",
@@ -59,7 +59,7 @@ describe("Integration:: delete account", () => {
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
     const yourServices = require("../../../utils/yourServices");
     sandbox = sinon.createSandbox();
-    yourServicesStub = sandbox.stub(yourServices, "getAllowedListServices");
+    yourServicesStub = sandbox.stub(yourServices, "getServices");
     sandbox
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
