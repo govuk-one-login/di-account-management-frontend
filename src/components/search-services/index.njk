@@ -7,6 +7,11 @@
   {% set pageTitleName = [query, " - ", 'pages.searchServices.title' | translate ] | join %}
 {% endif %}
 
+{% block head %}
+  {{ super() }}
+  <meta name="description" content="{{'pages.searchServices.metaDescription' | translate }}">
+{% endblock %}
+
 {% set resultsCountText %}
   {% if resultsCount === 1 %}
     {{ "pages.searchServices.oneResult" | translate }}

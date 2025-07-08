@@ -11,9 +11,4 @@ router.post(
   globalTryCatchAsync(asyncHandler(backchannelLogoutPost))
 );
 
-router.post(
-  PATH_DATA.GLOBAL_LOGOUT.url,
-  globalTryCatchAsync(asyncHandler(backchannelLogoutPost))
-);
-
 export { router as backchannelLogoutRouter };
