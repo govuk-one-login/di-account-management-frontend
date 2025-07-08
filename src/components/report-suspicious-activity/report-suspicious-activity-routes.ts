@@ -5,7 +5,6 @@ import {
   reportSuspiciousActivityConfirmationGet,
 } from "./report-suspicious-activity-controller";
 import { PATH_DATA } from "../../app.constants";
-import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { checkRSAAllowedServicesList } from "../../middleware/check-allowed-services-list";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
@@ -23,7 +22,7 @@ router.post(
   PATH_DATA.REPORT_SUSPICIOUS_ACTIVITY.url + "/done",
   requiresAuthMiddleware,
   checkRSAAllowedServicesList,
-  globalTryCatchAsync(asyncHandler(reportSuspiciousActivityPost))
+  globalTryCatchAsync(reportSuspiciousActivityPost)
 );
 
 router.get(
