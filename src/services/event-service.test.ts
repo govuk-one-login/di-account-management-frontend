@@ -52,6 +52,11 @@ describe("eventService", () => {
             isAuthenticated: true,
           },
         },
+        oidc: {
+          metadata: {
+            client_id: "test-client-id",
+          },
+        },
       };
 
       const mockRes: any = {
@@ -323,7 +328,7 @@ describe("eventService", () => {
       );
     });
 
-    it.only("should build an HOME_GLOBAL_LOGOUT_REQUESTED event correctly", () => {
+    it("should build an HOME_GLOBAL_LOGOUT_REQUESTED event correctly", () => {
       const service = eventService(sqs);
       const mockReq: any = {
         headers: {
