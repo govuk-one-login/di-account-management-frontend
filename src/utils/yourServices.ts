@@ -81,20 +81,6 @@ export const presentYourServices = async (
   return processedData;
 };
 
-export const getAllowedListServices = async (
-  subjectId: string,
-  trace: string
-): Promise<Service[]> => {
-  const userServices = await getServices(subjectId, trace);
-  if (userServices) {
-    return userServices.filter((service) => {
-      return getListOfShowInDeleteAccountClientIDs.includes(service.client_id);
-    });
-  } else {
-    return [];
-  }
-};
-
 export const formatService = (
   service: Service,
   currentLanguage?: string
@@ -122,7 +108,13 @@ export const getYourServicesForAccountDeletion = async (
   trace: string,
   translate: Request["t"]
 ) => {
-  return (await getAllowedListServices(subjectId, trace)).sort((a, b) => {
+  const userServices = await getServices(subjectId, trace);
+  const allowedServices = userServices
+    ? userServices.filter((service) =>
+        getListOfShowInDeleteAccountClientIDs.includes(service.client_id)
+      )
+    : [];
+  return allowedServices.sort((a, b) => {
     const aName = translate(
       `clientRegistry.${getAppEnv()}.${a.client_id}.header`
     );
