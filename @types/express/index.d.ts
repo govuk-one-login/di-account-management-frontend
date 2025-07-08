@@ -36,6 +36,7 @@ declare module "express-serve-static-core" {
     oidc?: Client;
     issuerJWKS?: any;
     log: logger;
+    metrics?: Metrics;
   }
 }
 interface Cookie {

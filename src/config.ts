@@ -127,9 +127,6 @@ export function getAccessibilityStatementUrl(): string {
   return process.env.ACCESSIBILITY_STATEMENT_URL;
 }
 
-const STUB_RP_PROD = "5Vfplamzln0AoarlnX5CX4UTqyh59xfA";
-const STUB_RP_INTEGRATION = "gjWNvoLYietMjeaOE6Zoww533u18ZUfr";
-const STUB_RP_STAGING = "3NKFv679oYlMdyrhKErrTGbzBy2h8rrd";
 export const ONE_LOGIN_HOME_NON_PROD = "oneLoginHome";
 
 export const getIdListFromFilter = memoize(
@@ -138,41 +135,40 @@ export const getIdListFromFilter = memoize(
   }
 );
 
-export const getAllowedActivityLogListClientIDs = getIdListFromFilter({
-  isActivityLogEnabled: true,
+export const getListOfActivityHistoryClientIDs = getIdListFromFilter({
+  showInActivityHistory: true,
 });
 
-export const getAllowedAccountListClientIDs = getIdListFromFilter({
-  clientType: "account",
+export const getListOfAccountClientIDs = getIdListFromFilter({
+  showInAccounts: true,
   isOffboarded: false,
 });
 
-export const hmrcClientIds: string[] = getIdListFromFilter({ isHmrc: true });
+export const getClientsWithDetailedCard = getIdListFromFilter({
+  showDetailedCard: true,
+});
 
-export const activityLogAllowList: string[] = [
-  STUB_RP_INTEGRATION,
-  STUB_RP_PROD,
-  STUB_RP_STAGING,
-  ...getIdListFromFilter({ isActivityLogEnabled: true }),
-];
-
-export const getAllowedServiceListClientIDs = getIdListFromFilter({
-  clientType: "service",
+export const getListOfServiceClientIDs = getIdListFromFilter({
+  showInServices: true,
   isOffboarded: false,
 });
 
-export const rsaAllowList = getIdListFromFilter({
-  isReportSuspiciousActivityEnabled: true,
+export const getListOfClientIDsAvailableInWelsh = getIdListFromFilter({
+  isAvailableInWelsh: true,
+});
+
+export const getListOfShowInDeleteAccountClientIDs = getIdListFromFilter({
+  showInDeleteAccount: true,
 });
 
 export const getClientsToShowInSearch = (language: LOCALE) => {
   if (language === LOCALE.CY) {
     return getIdListFromFilter({
-      showInClientSearch: true,
+      showInSearchableList: true,
       isAvailableInWelsh: true,
     });
   }
-  return getIdListFromFilter({ showInClientSearch: true });
+  return getIdListFromFilter({ showInSearchableList: true });
 };
 
 function getProtocol(): string {
