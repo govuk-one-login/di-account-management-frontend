@@ -19,6 +19,7 @@ const router = express.Router();
 router.get(
   PATH_DATA.CHECK_YOUR_PHONE.url,
   requiresAuthMiddleware,
+  refreshTokenMiddleware(),
   mfaMethodMiddleware,
   validateStateMiddleware,
   globalTryCatch(checkYourPhoneGet)
