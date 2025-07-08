@@ -10,7 +10,6 @@ import {
   globalTryCatch,
   globalTryCatchAsync,
 } from "../../utils/global-try-catch";
-import { asyncHandler } from "../../utils/async";
 
 const router = express.Router();
 
@@ -24,7 +23,7 @@ router.post(
   PATH_DATA.ENTER_PASSWORD.url,
   requiresAuthMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatchAsync(asyncHandler(enterPasswordPost()))
+  globalTryCatchAsync(enterPasswordPost())
 );
 
 export { router as enterPasswordRouter };
