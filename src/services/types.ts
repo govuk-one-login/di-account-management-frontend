@@ -19,8 +19,8 @@ export interface AuditEvent extends Event {
   event_timestamp_ms: number;
   event_timestamp_ms_formatted: string;
   component_id: string;
-  client_id?: string;
   user: User;
+  client_id?: string;
   platform: Platform;
   extensions?: Extensions;
   restricted?: Restricted;
@@ -38,8 +38,9 @@ export interface User {
   session_id: string;
   persistent_session_id: string;
   user_id: string;
-  govuk_signin_journey_id?: string;
+  email?: string;
   ip_address?: string;
+  govuk_signin_journey_id?: string;
 }
 
 export interface Platform {
@@ -54,6 +55,8 @@ export interface Extensions {
   is_signed_in?: boolean;
   "journey-type"?: "ACCOUNT_MANAGEMENT";
   "mfa-type"?: (typeof mfaMethodTypes)[keyof typeof mfaMethodTypes];
+  phone_number_country_code?: string;
+  phone?: string;
 }
 
 export interface CurrentTimeDescriptor {

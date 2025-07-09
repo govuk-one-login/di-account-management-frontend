@@ -283,49 +283,6 @@ describe("YourService Util", () => {
       const services = await presentYourServices("subjectId", "trace");
       expect(services).to.deep.equal(expectedResponse);
     });
-
-    it("should return allowed list of services", async () => {
-      const expectedResponse: Service[] = [
-        {
-          client_id: "prisonVisits",
-          count_successful_logins: 1,
-          hasDetailedCard: true,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-          isAvailableInWelsh: false,
-        },
-        {
-          client_id: "mortgageDeed",
-          count_successful_logins: 1,
-          hasDetailedCard: true,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-          isAvailableInWelsh: false,
-        },
-        {
-          client_id: "dfeApplyForTeacherTraining",
-          count_successful_logins: 2,
-          hasDetailedCard: false,
-          isAvailableInWelsh: false,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-        },
-        {
-          client_id: "vehicleOperatorLicense",
-          count_successful_logins: 3,
-          hasDetailedCard: false,
-          isAvailableInWelsh: true,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-        },
-      ];
-
-      const services = await yourServices.getAllowedListServices(
-        "subjectId",
-        "trace"
-      );
-      expect(services).to.deep.equal(expectedResponse);
-    });
   });
 
   describe("getYourServicesForAccountDeletion", () => {

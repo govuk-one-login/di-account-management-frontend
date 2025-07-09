@@ -12,10 +12,14 @@ import {
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
   MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
   MISSING_SESSION_ID_SPECIAL_CASE,
+  MISSING_USER_EMAIL_SPECIAL_CASE,
   MISSING_USER_ID_SPECIAL_CASE,
 } from "../app.constants";
 import { Session } from "express-session";
 import { getTxmaHeader } from "../utils/txma-header";
+import { getOIDCClientId } from "../config";
+import { mfaMethodTypes } from "../utils/mfaClient/types";
+import { parsePhoneNumber } from "libphonenumber-js/mobile";
 
 export function eventService(
   sqs: SqsService = sqsService()
@@ -37,6 +41,9 @@ export function eventService(
 
   const getUserId = (session: Session): string =>
     session.user_id ?? MISSING_USER_ID_SPECIAL_CASE;
+
+  const getUserEmail = (session: Session): string =>
+    session.user?.email ?? MISSING_USER_EMAIL_SPECIAL_CASE;
 
   const getAppSessionId = (session: Session): string =>
     userHasComeFromTheApp(session)
@@ -74,13 +81,14 @@ export function eventService(
       event_timestamp_ms_formatted: timestamps.isoString,
       event_name: eventName,
       component_id: "HOME",
-      client_id: req.oidc?.metadata?.client_id,
+      client_id: getOIDCClientId(),
       user: {
         session_id: getSessionId(res),
         persistent_session_id: getPersistentSessionId(res),
         user_id: getUserId(session),
-        govuk_signin_journey_id: session.authSessionIds?.clientSessionId,
         ip_address: req.ip,
+        email: getUserEmail(session),
+        govuk_signin_journey_id: res.locals.clientSessionId,
       },
       platform: {
         user_agent: headers["user-agent"],
@@ -113,6 +121,28 @@ export function eventService(
       (method) => method.priorityIdentifier === "BACKUP"
     );
 
+    const defaultPhoneNumberCountryCodeObject =
+      defaultMethod?.method.mfaMethodType === mfaMethodTypes.sms
+        ? {
+            phone_number_country_code: parsePhoneNumber(
+              defaultMethod.method.phoneNumber,
+              "GB"
+            ).countryCallingCode,
+            phone: defaultMethod.method.phoneNumber,
+          }
+        : {};
+
+    const backupPhoneNumberCountryCodeObject =
+      backupMethod?.method.mfaMethodType === mfaMethodTypes.sms
+        ? {
+            phone_number_country_code: parsePhoneNumber(
+              backupMethod.method.phoneNumber,
+              "GB"
+            ).countryCallingCode,
+            phone: backupMethod.method.phoneNumber,
+          }
+        : {};
+
     switch (eventName) {
       case EventName.HOME_TRIAGE_PAGE_VISIT:
       case EventName.HOME_TRIAGE_PAGE_EMAIL:
@@ -128,6 +158,7 @@ export function eventService(
       case EventName.AUTH_MFA_METHOD_ADD_STARTED:
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
+          ...defaultPhoneNumberCountryCodeObject,
         };
         break;
 
@@ -135,6 +166,7 @@ export function eventService(
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
           "mfa-type": defaultMethod.method.mfaMethodType,
+          ...defaultPhoneNumberCountryCodeObject,
         };
         break;
 
@@ -142,6 +174,7 @@ export function eventService(
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
           "mfa-type": backupMethod.method.mfaMethodType,
+          ...backupPhoneNumberCountryCodeObject,
         };
         break;
 
