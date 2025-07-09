@@ -86,8 +86,8 @@ export function eventService(
         session_id: getSessionId(res),
         persistent_session_id: getPersistentSessionId(res),
         user_id: getUserId(session),
-        email: getUserEmail(session),
         ip_address: req.ip,
+        email: getUserEmail(session),
         govuk_signin_journey_id: res.locals.clientSessionId,
       },
       platform: {
@@ -176,6 +176,9 @@ export function eventService(
           "mfa-type": backupMethod.method.mfaMethodType,
           ...backupPhoneNumberCountryCodeObject,
         };
+        break;
+
+      case EventName.HOME_GLOBAL_LOGOUT_REQUESTED:
         break;
 
       default: {

@@ -14,6 +14,7 @@ export const PATH_DATA: Record<
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
   SEARCH_SERVICES: { url: "/services-using-one-login" },
+  GLOBAL_LOGOUT: { url: "/global-logout" },
   ADD_MFA_METHOD: {
     url: "/choose-backup",
     event: EventType.SelectedApp,
@@ -315,6 +316,7 @@ export const enum EventName {
   AUTH_MFA_METHOD_ADD_STARTED = "AUTH_MFA_METHOD_ADD_STARTED",
   AUTH_MFA_METHOD_SWITCH_STARTED = "AUTH_MFA_METHOD_SWITCH_STARTED",
   AUTH_MFA_METHOD_DELETE_STARTED = "AUTH_MFA_METHOD_DELETE_STARTED",
+  HOME_GLOBAL_LOGOUT_REQUESTED = "HOME_GLOBAL_LOGOUT_REQUESTED",
 }
 export interface QueryParameters {
   fromURL?: string;
