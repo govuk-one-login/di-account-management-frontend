@@ -115,17 +115,16 @@ export async function handleOidcCallbackError(
 
 export function populateSessionWithUserInfo(
   req: Request,
-  res: Response,
-  userInfo: UserinfoResponse,
+  userInfoResponse: UserinfoResponse,
   tokenSet: TokenSet
 ) {
   req.session.user = {
-    email: userInfo.email,
-    phoneNumber: userInfo.phone_number,
-    isPhoneNumberVerified: userInfo.phone_number_verified as boolean,
-    subjectId: userInfo.sub,
-    legacySubjectId: userInfo.legacy_subject_id as string,
-    publicSubjectId: userInfo.public_subject_id as string,
+    email: userInfoResponse.email,
+    phoneNumber: userInfoResponse.phone_number,
+    isPhoneNumberVerified: userInfoResponse.phone_number_verified as boolean,
+    subjectId: userInfoResponse.sub,
+    legacySubjectId: userInfoResponse.legacy_subject_id as string,
+    publicSubjectId: userInfoResponse.public_subject_id as string,
     tokens: {
       idToken: tokenSet.id_token,
       accessToken: tokenSet.access_token,
@@ -134,12 +133,6 @@ export function populateSessionWithUserInfo(
     isAuthenticated: true,
     state: {},
   };
-
-  /** saved to session where `user_id` attribute is stored as
-   a db item's root-level attribute that is used in indexing **/
-
-  req.session.user_id = userInfo.sub;
-  res.locals.isUserLoggedIn = true;
 }
 
 export function attachSessionIdsFromGsCookie(req: Request, res: Response) {
