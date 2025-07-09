@@ -7,12 +7,12 @@ import { clientAssertionGenerator } from "../../utils/oidc";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { detectOidcError } from "../../utils/detect-oidc-error";
 import {
-  COOKIE_CONSENT,
+  determineRedirectUri,
   handleOidcCallbackError,
-  setPreferencesCookie,
+  populateSessionWithUserInfo,
 } from "./call-back-utils";
-import { logger } from "../../utils/logger";
 import xss from "xss";
+import { logger } from "../../utils/logger";
 
 export function oidcAuthCallbackGet(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()
@@ -29,18 +29,11 @@ export function oidcAuthCallbackGet(
         req.oidc.metadata.client_id,
         req.oidc.issuer.metadata.token_endpoint
       );
-      let redirectUri;
-      const crossDomainGaIdParam = req.query._ga as string;
 
-      if (req.session.currentURL) {
-        redirectUri = req.session.currentURL;
-      } else {
-        redirectUri = PATH_DATA.YOUR_SERVICES.url;
-      }
       if (!req.session.state || !req.session.nonce) {
         return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
       }
-      const tokenResponse: TokenSet = await req.oidc.callback(
+      const tokenSet: TokenSet = await req.oidc.callback(
         req.oidc.metadata.redirect_uris[0],
         queryParams,
         { nonce: req.session.nonce, state: req.session.state },
@@ -53,33 +46,18 @@ export function oidcAuthCallbackGet(
         }
       );
 
-      const vot = tokenResponse.claims().vot;
+      const vot = tokenSet.claims().vot;
 
       if (vot !== VECTORS_OF_TRUST.MEDIUM) {
         return res.redirect(PATH_DATA.START.url);
       }
 
       const userInfoResponse = await req.oidc.userinfo<UserinfoResponse>(
-        tokenResponse.access_token,
+        tokenSet.access_token,
         { method: "GET", via: "header" }
       );
 
-      req.session.user = {
-        email: userInfoResponse.email,
-        phoneNumber: userInfoResponse.phone_number,
-        isPhoneNumberVerified:
-          userInfoResponse.phone_number_verified as boolean,
-        subjectId: userInfoResponse.sub,
-        legacySubjectId: userInfoResponse.legacy_subject_id as string,
-        publicSubjectId: userInfoResponse.public_subject_id as string,
-        tokens: {
-          idToken: tokenResponse.id_token,
-          accessToken: tokenResponse.access_token,
-          refreshToken: tokenResponse.refresh_token,
-        },
-        isAuthenticated: true,
-        state: {},
-      };
+      populateSessionWithUserInfo(req, userInfoResponse, tokenSet);
 
       if (req.cookies?.gs) {
         logger.info(
@@ -110,25 +88,7 @@ export function oidcAuthCallbackGet(
       req.session.user_id = userInfoResponse.sub;
       res.locals.isUserLoggedIn = true;
 
-      if (req.query.cookie_consent) {
-        setPreferencesCookie(
-          req.query.cookie_consent as string,
-          res,
-          crossDomainGaIdParam
-        );
-
-        if (
-          crossDomainGaIdParam &&
-          req.query.cookie_consent === COOKIE_CONSENT.ACCEPT
-        ) {
-          const searchParams = new URLSearchParams({
-            _ga: crossDomainGaIdParam,
-          });
-          redirectUri = redirectUri + "?" + searchParams.toString();
-        }
-      }
-
-      return res.redirect(redirectUri);
+      return res.redirect(determineRedirectUri(req, res));
     } catch (error) {
       const detected = detectOidcError(error);
       if (detected) {

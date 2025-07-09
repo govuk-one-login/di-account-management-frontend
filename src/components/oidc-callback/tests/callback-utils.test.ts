@@ -150,10 +150,6 @@ describe("callback-utils", () => {
       const req: any = {
         session: {},
       };
-      const res: any = {
-        locals: {},
-      };
-
       const userInfo = {
         email: "user@example.com",
         phone_number: "1234567890",
@@ -169,13 +165,11 @@ describe("callback-utils", () => {
         refresh_token: "refresh.token",
       };
 
-      populateSessionWithUserInfo(req, res, userInfo as any, tokenSet as any);
+      populateSessionWithUserInfo(req, userInfo as any, tokenSet as any);
 
       expect(req.session.user.email).to.equal("user@example.com");
       expect(req.session.user.tokens.accessToken).to.equal("access.token");
       expect(req.session.user.legacySubjectId).to.equal("legacy123");
-      expect(res.locals.isUserLoggedIn).to.be.true;
-      expect(req.session.user_id).to.equal("subject123");
     });
   });
 
