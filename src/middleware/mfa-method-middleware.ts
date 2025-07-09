@@ -23,14 +23,13 @@ async function runMfaMethodMiddleware(
         formatErrorMessage("Failed MFA retrieve", response)
       );
     }
-    next();
-  } catch {
+  } catch (error) {
     req.metrics?.addMetric("runMfaMethodMiddlewareError", MetricUnit.Count, 1);
     req.log.error(
       { trace: res.locals.trace },
       ERROR_MESSAGES.FAILED_MFA_RETRIEVE_CALL
     );
-    next();
+    next(error);
   }
 }
 

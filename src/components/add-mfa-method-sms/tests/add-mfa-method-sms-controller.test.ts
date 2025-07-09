@@ -14,6 +14,7 @@ import {
 } from "../add-mfa-method-sms-controller";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
+import Sinon from "sinon";
 
 describe("addMfaSmsMethodPost", () => {
   let sandbox: sinon.SinonSandbox;
@@ -48,7 +49,13 @@ describe("addMfaSmsMethodPost", () => {
       }),
     };
     req.body.ukPhoneNumber = "1234";
+    if (req.session) {
+      req.session.save = sandbox.stub();
+    }
+
     await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
+    expect(req.session?.save).to.be.calledOnce;
+    (req.session?.save as Sinon.SinonStub).getCall(0).args[0]();
     expect(res.redirect).to.be.calledWith(
       `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addBackup`
     );

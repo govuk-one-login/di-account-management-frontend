@@ -111,9 +111,11 @@ export function addMfaSmsMethodPost(
         EventType.VerifyCodeSent
       );
 
-      return res.redirect(
-        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${UserJourney.addBackup}`
-      );
+      req.session.save(() => {
+        res.redirect(
+          `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${UserJourney.addBackup}`
+        );
+      });
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
