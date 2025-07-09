@@ -3,7 +3,6 @@ import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
 import { sinon } from "../../utils/test-utils";
 import { mfaMethodMiddleware } from "../../../src/middleware/mfa-method-middleware";
-import { ERROR_MESSAGES } from "../../../src/app.constants";
 import * as mfaClient from "../../../src/utils/mfaClient";
 import { MfaMethod } from "../../../src/utils/mfaClient/types";
 
