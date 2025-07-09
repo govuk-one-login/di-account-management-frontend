@@ -238,6 +238,11 @@
         "heading": "Activity history",
         "link": "See your activity history",
         "info": "See what you’ve accessed with your GOV.UK One Login and when."
+      },
+      "globalLogout": {
+        "heading": "Sign out of all devices",
+        "link": "Sign out of all devices",
+        "info": "You can sign out of all devices and sessions to help keep your GOV.UK One Login safe."
       }
     },
     "confirmaddBackup": {
