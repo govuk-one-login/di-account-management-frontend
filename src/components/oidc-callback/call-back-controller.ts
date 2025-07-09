@@ -23,16 +23,7 @@ export function oidcAuthCallbackGet(
       req.metrics?.addMetric("oidcAuthCallbackGet", MetricUnit.Count, 1);
       const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
       if (queryParams?.error) {
-        logger.warn(
-          {
-            trace: res.locals.trace,
-            error: queryParams.error,
-            description: queryParams.error_description,
-          },
-          "OIDC callback error received"
-        );
-        deleteExpressSession(req);
-        return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
+        await handleOidcCallbackError(req, res, queryParams);
       }
 
       const clientAssertion = await service.generateAssertionJwt(
