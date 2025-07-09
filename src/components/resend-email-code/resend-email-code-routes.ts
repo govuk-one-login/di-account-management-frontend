@@ -5,6 +5,7 @@ import {
   resendEmailCodeGet,
   resendEmailCodePost,
 } from "./resend-email-code-controller";
+import { asyncHandler } from "../../utils/async";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
@@ -24,7 +25,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   refreshTokenMiddleware(),
-  globalTryCatchAsync(resendEmailCodePost())
+  globalTryCatchAsync(asyncHandler(resendEmailCodePost()))
 );
 
 export { router as resendEmailCodeRouter };
