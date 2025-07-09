@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
+import { ClientAssertionServiceInterface } from "../../utils/types";
 import { LOG_MESSAGES, PATH_DATA } from "../../app.constants";
 import { logger } from "../../utils/logger";
 import { deleteExpressSession } from "../../utils/session-store";
@@ -42,24 +43,31 @@ export function setPreferencesCookie(
   });
 }
 
-export async function generateTokenSet(
+export async function exchangeToken(
   req: Request,
-  queryParams: CallbackParamsType,
-  clientAssertion: string
-) {
-  const tokenSet: TokenSet = await req.oidc.callback(
+  service: ClientAssertionServiceInterface,
+  queryParams: CallbackParamsType
+): Promise<TokenSet> {
+  const clientAssertion = await service.generateAssertionJwt(
+    req.oidc.metadata.client_id,
+    req.oidc.issuer.metadata.token_endpoint
+  );
+
+  return req.oidc.callback(
     req.oidc.metadata.redirect_uris[0],
     queryParams,
-    { nonce: req.session.nonce, state: req.session.state },
+    {
+      nonce: req.session.nonce,
+      state: req.session.state,
+    },
     {
       exchangeBody: {
         client_assertion_type:
-          "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+          "urn:ietf:params:oauth:client-assertioncall-type:jwt-bearer",
         client_assertion: clientAssertion,
       },
     }
   );
-  return tokenSet;
 }
 
 export function determineRedirectUri(req: Request, res: Response): string {
@@ -107,16 +115,17 @@ export async function handleOidcCallbackError(
 
 export function populateSessionWithUserInfo(
   req: Request,
-  userInfoResponse: UserinfoResponse,
+  res: Response,
+  userInfo: UserinfoResponse,
   tokenSet: TokenSet
 ) {
   req.session.user = {
-    email: userInfoResponse.email,
-    phoneNumber: userInfoResponse.phone_number,
-    isPhoneNumberVerified: userInfoResponse.phone_number_verified as boolean,
-    subjectId: userInfoResponse.sub,
-    legacySubjectId: userInfoResponse.legacy_subject_id as string,
-    publicSubjectId: userInfoResponse.public_subject_id as string,
+    email: userInfo.email,
+    phoneNumber: userInfo.phone_number,
+    isPhoneNumberVerified: userInfo.phone_number_verified as boolean,
+    subjectId: userInfo.sub,
+    legacySubjectId: userInfo.legacy_subject_id as string,
+    publicSubjectId: userInfo.public_subject_id as string,
     tokens: {
       idToken: tokenSet.id_token,
       accessToken: tokenSet.access_token,
@@ -125,6 +134,12 @@ export function populateSessionWithUserInfo(
     isAuthenticated: true,
     state: {},
   };
+
+  /** saved to session where `user_id` attribute is stored as
+   a db item's root-level attribute that is used in indexing **/
+
+  req.session.user_id = userInfo.sub;
+  res.locals.isUserLoggedIn = true;
 }
 
 export function attachSessionIdsFromGsCookie(req: Request, res: Response) {

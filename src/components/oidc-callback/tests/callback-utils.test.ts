@@ -2,86 +2,58 @@ import { expect } from "chai";
 import sinon from "sinon";
 import { describe } from "mocha";
 import {
+  exchangeToken,
   determineRedirectUri,
   COOKIE_CONSENT,
   handleOidcCallbackError,
   populateSessionWithUserInfo,
   attachSessionIdsFromGsCookie,
-  generateTokenSet,
 } from "../call-back-utils";
 import { PATH_DATA } from "../../../app.constants";
 import * as sessionStore from "../../../utils/session-store";
 import { logger } from "../../../utils/logger";
-import { TokenSet } from "openid-client";
 
 describe("callback-utils", () => {
   afterEach(() => {
     sinon.restore();
   });
 
-  describe("generateTokenSet", () => {
-    let req: any;
-    let callbackStub: sinon.SinonStub;
+  describe("exchangeToken", () => {
+    it("should call req.oidc.callback with expected arguments", async () => {
+      const fakeTokenSet = { access_token: "abc", id_token: "xyz" };
 
-    beforeEach(() => {
-      const mockTokenSet = {
-        access_token: "fake-access-token",
-        id_token: "fake-id-token",
-      } as TokenSet;
-
-      callbackStub = sinon.stub().resolves(mockTokenSet);
-
-      req = {
+      const req: any = {
+        session: { state: "test-state", nonce: "test-nonce" },
         oidc: {
           metadata: {
+            client_id: "client123",
             redirect_uris: ["http://localhost/callback"],
           },
-          callback: callbackStub,
+          issuer: {
+            metadata: {
+              token_endpoint: "http://issuer/token",
+            },
+          },
+          callback: sinon.fake.resolves(fakeTokenSet),
         },
-        session: {
-          nonce: "mock-nonce",
-          state: "mock-state",
-        },
-      } as any;
-    });
-
-    afterEach(() => {
-      sinon.restore();
-    });
-
-    it("should call oidc.callback with correct arguments and return the token set", async () => {
-      const queryParams = {
-        code: "fake-code",
-        state: "mock-state",
       };
 
-      const clientAssertion = "mock-client-assertion";
+      const service = {
+        generateAssertionJwt: sinon.fake.resolves("jwt-token"),
+      };
 
-      const tokenSet = await generateTokenSet(
-        req,
-        queryParams,
-        clientAssertion
-      );
-
-      expect(callbackStub.calledOnce).to.be.true;
-      expect(callbackStub.firstCall.args[0]).to.equal(
-        "http://localhost/callback"
-      );
-      expect(callbackStub.firstCall.args[1]).to.deep.equal(queryParams);
-      expect(callbackStub.firstCall.args[2]).to.deep.equal({
-        nonce: "mock-nonce",
-        state: "mock-state",
-      });
-      expect(callbackStub.firstCall.args[3]).to.deep.equal({
-        exchangeBody: {
-          client_assertion_type:
-            "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-          client_assertion: clientAssertion,
-        },
+      const result = await exchangeToken(req, service as any, {
+        code: "auth-code",
       });
 
-      expect(tokenSet).to.have.property("access_token", "fake-access-token");
-      expect(tokenSet).to.have.property("id_token", "fake-id-token");
+      expect(result).to.equal(fakeTokenSet);
+      expect(
+        service.generateAssertionJwt.calledWith(
+          "client123",
+          "http://issuer/token"
+        )
+      ).to.be.true;
+      expect(req.oidc.callback.calledOnce).to.be.true;
     });
   });
 
@@ -178,6 +150,10 @@ describe("callback-utils", () => {
       const req: any = {
         session: {},
       };
+      const res: any = {
+        locals: {},
+      };
+
       const userInfo = {
         email: "user@example.com",
         phone_number: "1234567890",
@@ -193,11 +169,13 @@ describe("callback-utils", () => {
         refresh_token: "refresh.token",
       };
 
-      populateSessionWithUserInfo(req, userInfo as any, tokenSet as any);
+      populateSessionWithUserInfo(req, res, userInfo as any, tokenSet as any);
 
       expect(req.session.user.email).to.equal("user@example.com");
       expect(req.session.user.tokens.accessToken).to.equal("access.token");
       expect(req.session.user.legacySubjectId).to.equal("legacy123");
+      expect(res.locals.isUserLoggedIn).to.be.true;
+      expect(req.session.user_id).to.equal("subject123");
     });
   });
 
