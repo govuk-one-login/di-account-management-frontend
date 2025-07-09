@@ -12,7 +12,6 @@ import {
   setPreferencesCookie,
 } from "./call-back-utils";
 import { logger } from "../../utils/logger";
-import { deleteExpressSession } from "../../utils/session-store";
 import xss from "xss";
 
 export function oidcAuthCallbackGet(
