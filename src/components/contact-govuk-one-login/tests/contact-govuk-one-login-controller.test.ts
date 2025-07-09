@@ -43,6 +43,10 @@ describe("Contact GOV.UK One Login controller", () => {
       originalUrl: baseUrl,
       language: "en",
       log: logger,
+      oidc: {
+        authorizationUrl: sinon.fake(),
+        metadata: { client_id: "test-client-id" } as any,
+      } as any,
     };
     res = {
       render: sandbox.fake(),

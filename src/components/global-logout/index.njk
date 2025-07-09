@@ -1,0 +1,24 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% set backLink = "SIGN_IN_HISTORY" | getPath %}
+{% set pageTitleName = "pages.globalLogout.pageTitle" | translate %}
+{% block pageContent %}
+    <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ 'pages.globalLogout.title' | translate }}</h1>
+    <p class="govuk-body">{{ "pages.globalLogout.paragraph1" | translate }}</p>
+    <p class="govuk-body">{{ "pages.globalLogout.paragraph2" | translate }}</p>
+    {{ govukWarningText({
+        text: "pages.globalLogout.warning" | translate,
+        iconFallbackText: "Warning"
+    }) }}
+    <form class='govuk-form' method="POST" action='{{ "GLOBAL_LOGOUT" | getPath }}'>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        {{ govukButton({
+            text: 'pages.globalLogout.button' | translate,
+            classes: "govuk-button--warning" 
+        }) }}
+    </form>
+    <a href='{{ "SIGN_IN_HISTORY" | getPath }}' class="govuk-link govuk-body">
+        {{ 'pages.globalLogout.cancelButton' | translate }}
+    </a>
+{% endblock %}

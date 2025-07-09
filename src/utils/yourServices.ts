@@ -4,11 +4,12 @@ import { dynamoDBService } from "./dynamo";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   getDynamoServiceStoreTableName,
-  getAllowedAccountListClientIDs,
-  getAllowedServiceListClientIDs,
+  getListOfAccountClientIDs,
+  getListOfServiceClientIDs,
   getIdListFromFilter,
-  hmrcClientIds,
+  getClientsWithDetailedCard,
   getAppEnv,
+  getListOfShowInDeleteAccountClientIDs,
 } from "../config";
 import { prettifyDate } from "./prettifyDate";
 import type { YourServices, Service } from "./types";
@@ -64,11 +65,11 @@ export const presentYourServices = async (
   const servicesList: Service[] = [];
   userServices.forEach((service) => {
     if (
-      getAllowedAccountListClientIDs.includes(service.client_id) ||
-      getAllowedServiceListClientIDs.includes(service.client_id)
+      getListOfAccountClientIDs.includes(service.client_id) ||
+      getListOfServiceClientIDs.includes(service.client_id)
     ) {
       const formattedService = formatService(service, currentLanguage);
-      if (getAllowedAccountListClientIDs.includes(service.client_id)) {
+      if (getListOfAccountClientIDs.includes(service.client_id)) {
         accountsList.push(formattedService);
       } else {
         servicesList.push(formattedService);
@@ -80,23 +81,6 @@ export const presentYourServices = async (
   return processedData;
 };
 
-export const getAllowedListServices = async (
-  subjectId: string,
-  trace: string
-): Promise<Service[]> => {
-  const userServices = await getServices(subjectId, trace);
-  if (userServices) {
-    return userServices.filter((service) => {
-      return (
-        getAllowedAccountListClientIDs.includes(service.client_id) ||
-        getAllowedServiceListClientIDs.includes(service.client_id)
-      );
-    });
-  } else {
-    return [];
-  }
-};
-
 export const formatService = (
   service: Service,
   currentLanguage?: string
@@ -105,7 +89,9 @@ export const formatService = (
     dateEpoch: service.last_accessed,
     locale: currentLanguage,
   });
-  const hasDetailedCard = hmrcClientIds.includes(service.client_id);
+  const hasDetailedCard = getClientsWithDetailedCard.includes(
+    service.client_id
+  );
 
   return {
     client_id: service.client_id,
@@ -122,7 +108,13 @@ export const getYourServicesForAccountDeletion = async (
   trace: string,
   translate: Request["t"]
 ) => {
-  return (await getAllowedListServices(subjectId, trace)).sort((a, b) => {
+  const userServices = await getServices(subjectId, trace);
+  const allowedServices = userServices
+    ? userServices.filter((service) =>
+        getListOfShowInDeleteAccountClientIDs.includes(service.client_id)
+      )
+    : [];
+  return allowedServices.sort((a, b) => {
     const aName = translate(
       `clientRegistry.${getAppEnv()}.${a.client_id}.header`
     );

@@ -27,6 +27,7 @@ import {
   supportTriagePage,
   supportWebchatContact,
   supportChangeOnIntervention,
+  supportGlobalLogout,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler";
@@ -86,6 +87,7 @@ import { searchServicesRouter } from "./components/search-services/search-servic
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
 import { metricsMiddleware } from "./middleware/metrics-middlware";
+import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -247,6 +249,10 @@ async function createApp(): Promise<express.Application> {
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
+
+  if (supportGlobalLogout()) {
+    app.use(globalLogoutRouter);
+  }
 
   if (supportChangeOnIntervention()) {
     app.use(temporarilySuspendedRouter);

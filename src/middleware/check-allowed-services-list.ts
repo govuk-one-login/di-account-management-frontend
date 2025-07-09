@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { activityLogAllowList } from "../config";
+import { getListOfActivityHistoryClientIDs } from "../config";
 import { getServices } from "../utils/yourServices";
 import { LOG_MESSAGES, PATH_DATA } from "../app.constants";
 import type { Service } from "../utils/types";
@@ -22,7 +22,8 @@ export const hasAllowedActivityLogServices = async (
 
   const userServices = await getServices(user.subjectId, trace);
   return (
-    userServices && findClientInServices(activityLogAllowList, userServices)
+    userServices &&
+    findClientInServices(getListOfActivityHistoryClientIDs, userServices)
   );
 };
 
