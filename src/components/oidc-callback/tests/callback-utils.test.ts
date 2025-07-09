@@ -2,58 +2,86 @@ import { expect } from "chai";
 import sinon from "sinon";
 import { describe } from "mocha";
 import {
-  exchangeToken,
   determineRedirectUri,
   COOKIE_CONSENT,
   handleOidcCallbackError,
   populateSessionWithUserInfo,
   attachSessionIdsFromGsCookie,
+  generateTokenSet,
 } from "../call-back-utils";
 import { PATH_DATA } from "../../../app.constants";
 import * as sessionStore from "../../../utils/session-store";
 import { logger } from "../../../utils/logger";
+import { TokenSet } from "openid-client";
 
 describe("callback-utils", () => {
   afterEach(() => {
     sinon.restore();
   });
 
-  describe("exchangeToken", () => {
-    it("should call req.oidc.callback with expected arguments", async () => {
-      const fakeTokenSet = { access_token: "abc", id_token: "xyz" };
+  describe("generateTokenSet", () => {
+    let req: any;
+    let callbackStub: sinon.SinonStub;
 
-      const req: any = {
-        session: { state: "test-state", nonce: "test-nonce" },
+    beforeEach(() => {
+      const mockTokenSet = {
+        access_token: "fake-access-token",
+        id_token: "fake-id-token",
+      } as TokenSet;
+
+      callbackStub = sinon.stub().resolves(mockTokenSet);
+
+      req = {
         oidc: {
           metadata: {
-            client_id: "client123",
             redirect_uris: ["http://localhost/callback"],
           },
-          issuer: {
-            metadata: {
-              token_endpoint: "http://issuer/token",
-            },
-          },
-          callback: sinon.fake.resolves(fakeTokenSet),
+          callback: callbackStub,
         },
+        session: {
+          nonce: "mock-nonce",
+          state: "mock-state",
+        },
+      } as any;
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it("should call oidc.callback with correct arguments and return the token set", async () => {
+      const queryParams = {
+        code: "fake-code",
+        state: "mock-state",
       };
 
-      const service = {
-        generateAssertionJwt: sinon.fake.resolves("jwt-token"),
-      };
+      const clientAssertion = "mock-client-assertion";
 
-      const result = await exchangeToken(req, service as any, {
-        code: "auth-code",
+      const tokenSet = await generateTokenSet(
+        req,
+        queryParams,
+        clientAssertion
+      );
+
+      expect(callbackStub.calledOnce).to.be.true;
+      expect(callbackStub.firstCall.args[0]).to.equal(
+        "http://localhost/callback"
+      );
+      expect(callbackStub.firstCall.args[1]).to.deep.equal(queryParams);
+      expect(callbackStub.firstCall.args[2]).to.deep.equal({
+        nonce: "mock-nonce",
+        state: "mock-state",
+      });
+      expect(callbackStub.firstCall.args[3]).to.deep.equal({
+        exchangeBody: {
+          client_assertion_type:
+            "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+          client_assertion: clientAssertion,
+        },
       });
 
-      expect(result).to.equal(fakeTokenSet);
-      expect(
-        service.generateAssertionJwt.calledWith(
-          "client123",
-          "http://issuer/token"
-        )
-      ).to.be.true;
-      expect(req.oidc.callback.calledOnce).to.be.true;
+      expect(tokenSet).to.have.property("access_token", "fake-access-token");
+      expect(tokenSet).to.have.property("id_token", "fake-id-token");
     });
   });
 

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
-import { ClientAssertionServiceInterface } from "../../utils/types";
 import { LOG_MESSAGES, PATH_DATA } from "../../app.constants";
 import { logger } from "../../utils/logger";
 import { deleteExpressSession } from "../../utils/session-store";
@@ -43,31 +42,24 @@ export function setPreferencesCookie(
   });
 }
 
-export async function exchangeToken(
+export async function generateTokenSet(
   req: Request,
-  service: ClientAssertionServiceInterface,
-  queryParams: CallbackParamsType
-): Promise<TokenSet> {
-  const clientAssertion = await service.generateAssertionJwt(
-    req.oidc.metadata.client_id,
-    req.oidc.issuer.metadata.token_endpoint
-  );
-
-  return req.oidc.callback(
+  queryParams: CallbackParamsType,
+  clientAssertion: string
+) {
+  const tokenSet: TokenSet = await req.oidc.callback(
     req.oidc.metadata.redirect_uris[0],
     queryParams,
-    {
-      nonce: req.session.nonce,
-      state: req.session.state,
-    },
+    { nonce: req.session.nonce, state: req.session.state },
     {
       exchangeBody: {
         client_assertion_type:
-          "urn:ietf:params:oauth:client-assertioncall-type:jwt-bearer",
+          "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
         client_assertion: clientAssertion,
       },
     }
   );
+  return tokenSet;
 }
 
 export function determineRedirectUri(req: Request, res: Response): string {
