@@ -15,19 +15,19 @@ async function runMfaMethodMiddleware(
     const mfaClient = createMfaClient(req, res);
     const response = await mfaClient.retrieve();
 
-    if (response.success) {
-      req.session.mfaMethods = response.data;
-    } else {
-      req.log.error(
-        { trace: res.locals.trace },
-        formatErrorMessage("Failed MFA retrieve", response)
-      );
+    if (!response.success) {
+      throw new Error(formatErrorMessage("Failed MFA retrieve", response));
     }
+
+    req.session.mfaMethods = response.data;
+    next();
   } catch (error) {
     req.metrics?.addMetric("runMfaMethodMiddlewareError", MetricUnit.Count, 1);
     req.log.error(
       { trace: res.locals.trace },
-      ERROR_MESSAGES.FAILED_MFA_RETRIEVE_CALL
+      error instanceof Error
+        ? error.message
+        : ERROR_MESSAGES.FAILED_MFA_RETRIEVE_CALL
     );
     next(error);
   }

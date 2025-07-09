@@ -116,6 +116,7 @@ export function addMfaSmsMethodPost(
           `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${UserJourney.addBackup}`
         );
       });
+      return;
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {

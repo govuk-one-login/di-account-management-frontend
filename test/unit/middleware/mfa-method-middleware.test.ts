@@ -66,7 +66,7 @@ describe("mfaMethodMiddleware", () => {
     expect(req.session.mfaMethods).to.deep.eq([mfaMethod]);
   });
 
-  it("should continue to next middleware when request to retrieve MFA fails", async () => {
+  it("should not continue to next middleware when request to retrieve MFA fails", async () => {
     mfaClientStub.retrieve.resolves({
       success: false,
       status: 403,
@@ -88,7 +88,7 @@ describe("mfaMethodMiddleware", () => {
     await mfaMethodMiddleware(req as Request, res as Response, next);
     expect(error).to.have.been.calledWith(
       { trace: res.locals.trace },
-      ERROR_MESSAGES.FAILED_MFA_RETRIEVE_CALL
+      "Failed MFA retrieve. Status code: 403, API error code: 1, API error message: Forbidden"
     );
     expect(next).to.have.been.called;
   });
