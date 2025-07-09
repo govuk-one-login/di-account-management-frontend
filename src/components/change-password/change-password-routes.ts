@@ -5,7 +5,6 @@ import {
   changePasswordPost,
 } from "./change-password-controller";
 import { validateChangePasswordRequest } from "./change-password-validation";
-import { asyncHandler } from "../../utils/async";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
@@ -29,7 +28,7 @@ router.post(
   validateStateMiddleware,
   validateChangePasswordRequest(),
   refreshTokenMiddleware(),
-  globalTryCatchAsync(asyncHandler(changePasswordPost()))
+  globalTryCatchAsync(changePasswordPost())
 );
 
 export { router as changePasswordRouter };

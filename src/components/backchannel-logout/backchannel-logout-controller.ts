@@ -69,7 +69,7 @@ export async function backchannelLogoutPost(
   req: Request,
   res: Response
 ): Promise<void> {
-  req.metrics?.addMetric("globalLogoutPost", MetricUnit.Count, 1);
+  req.metrics?.addMetric("backChannelLogoutPost", MetricUnit.Count, 1);
   const token = await verifyLogoutToken(req);
 
   if (token && validateLogoutTokenClaims(token, req)) {
