@@ -12,7 +12,7 @@ import {
 } from "../app.constants";
 import { SinonFakeTimers } from "sinon";
 
-describe.only("eventService", () => {
+describe("eventService", () => {
   let sqs: SqsService;
   let sendSpy: sinon.SinonSpy;
 
