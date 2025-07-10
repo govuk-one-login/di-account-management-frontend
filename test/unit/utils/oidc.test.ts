@@ -6,7 +6,6 @@ import {
   getOIDCClient,
   initRefreshToken,
 } from "../../../src/utils/oidc";
-import * as oidcModule from "../../../src/utils/oidc";
 import { sinon, expect } from "../../utils/test-utils";
 import { generators, Issuer, ClientMetadata } from "openid-client";
 import { OIDCConfig } from "../../../src/types";
