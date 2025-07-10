@@ -9,6 +9,7 @@ import { cacheWithExpiration } from "./cache";
 import { Request } from "express";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { retryableFunction } from "./retryableFunction";
+import { ERROR_MESSAGES } from "../app.constants";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
 const jwksRefreshInterval = 24 * 60 * 60 * 1000;
@@ -128,7 +129,8 @@ const initRefreshToken = function (
           MetricUnit.Count,
           1
         );
-        throw error;
+        req.log.error(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN, error);
+        throw new Error(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
       }
     }
   };

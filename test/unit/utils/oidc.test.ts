@@ -17,6 +17,7 @@ import {
 import base64url from "base64url";
 import { invalidateCache } from "../../../src/utils/cache";
 import { UnsecuredJWT } from "jose";
+import { ERROR_MESSAGES } from "../../../src/app.constants";
 
 function createAccessToken(expiry = 1600711538) {
   return new UnsecuredJWT({ exp: expiry })
@@ -427,6 +428,9 @@ describe("OIDC Functions", () => {
         metrics: {
           addMetric: sandbox.fake(),
         },
+        log: {
+          error: sandbox.fake(),
+        },
       };
 
       const fakeClientAssertionService: ClientAssertionServiceInterface = {
@@ -447,7 +451,10 @@ describe("OIDC Functions", () => {
       expect(req.metrics.addMetric).to.have.been.calledWith(
         "refreshTokenMiddlewareError"
       );
-      expect(error.message).to.eq("Unable to refresh token");
+      expect(req.log.error).to.have.been.calledWith(
+        ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN
+      );
+      expect(error.message).to.eq(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
     });
   });
 });
