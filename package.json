@@ -6,8 +6,10 @@
   "license": "ISC",
   "scripts": {
     "bubbleprof": "NODE_ENV=production clinic bubbleprof --autocannon [ -c 10 -d 10 /healthcheck ] -- node -r dotenv/config dist/server.js && echo '\n\nRemember to clean up files in .clinic and node_trace.*.log\n'",
-    "build": "rolldown src/lambda.ts --platform=node --file dist/lambda.mjs && npm run build-sass && npm run copy-assets",
-    "build-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --no-source-map src/assets/scss/application.scss dist/public/style.css --style compressed",
+    "build-ts": "tsc",
+    "build": "npm run build-sass && npm run build-ts && npm run copy-assets",
+    "build-dev": "npm run build-sass && npm run build-ts && npm run copy-assets",
+    "build-sass": "rm -rf dist/public/style.css && sass --load-path=node_modules/govuk-frontend/dist/govuk --no-source-map src/assets/scss/application.scss dist/public/style.css --style compressed",
     "clean": "rm -rf dist node_modules logs.json",
     "clean-modules": "rm -rf node_modules",
     "copy-assets": "copyfiles -u 1 src/**/*.njk dist/ src/locales/**/** dist/ src/config/*.txt dist/ && npm run copy-scripts",
