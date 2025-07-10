@@ -31,7 +31,7 @@ export function oidcAuthCallbackGet(
         req.oidc.issuer.metadata.token_endpoint
       );
 
-      if (!req.session.state || !req.session.nonce) {
+      if (!req.session?.state || !req.session?.nonce) {
         return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
       }
 

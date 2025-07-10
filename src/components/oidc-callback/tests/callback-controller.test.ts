@@ -238,6 +238,18 @@ describe("callback controller", () => {
       expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
+    it("should redirect to session expired if session is missing", async () => {
+      req.session = undefined;
+
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake(),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
+    });
+
     it("redirect to session expired when access denied error is thrown", async () => {
       req.oidc.callbackParams = sandbox.fake.throws(new Error("access_denied"));
       const fakeService: ClientAssertionServiceInterface = {
