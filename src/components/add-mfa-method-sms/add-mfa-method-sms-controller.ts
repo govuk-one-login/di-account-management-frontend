@@ -114,6 +114,7 @@ export function addMfaSmsMethodPost(
 
       req.session.save(() => {
         logger.info(
+          { trace: res?.locals?.trace },
           `Add MFA Method SMS POST controller req.session.user.newPhoneNumber: ${
             req.session.user.newPhoneNumber?.replace(
               /^(.{2})(.*)/,

@@ -133,6 +133,7 @@ export function checkYourPhoneGet(req: Request, res: Response): void {
   setCheckYourPhoneOplSettings(intent, req, res);
 
   logger.info(
+    { trace: res?.locals?.trace },
     `Check your phone GET controller newPhoneNumber: ${
       req.session.user.newPhoneNumber?.replace(
         /^(.{2})(.*)/,
@@ -214,6 +215,7 @@ export function checkYourPhonePost(
     const { email, newPhoneNumber } = req.session.user;
 
     logger.info(
+      { trace: res?.locals?.trace },
       `Check your phone POST controller newPhoneNumber: ${
         req.session.user.newPhoneNumber?.replace(
           /^(.{2})(.*)/,
