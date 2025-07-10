@@ -57,7 +57,7 @@ export async function deleteMfaMethodPost(
     return;
   }
 
-  const mfaClient = createMfaClient(req, res);
+  const mfaClient = await createMfaClient(req, res);
 
   const response = await mfaClient.delete(methodToRemove);
 

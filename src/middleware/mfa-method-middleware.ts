@@ -12,7 +12,7 @@ async function runMfaMethodMiddleware(
   next: NextFunction
 ): Promise<void> {
   try {
-    const mfaClient = createMfaClient(req, res);
+    const mfaClient = await createMfaClient(req, res);
     const response = await mfaClient.retrieve();
 
     if (response.success) {

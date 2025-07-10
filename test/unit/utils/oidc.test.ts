@@ -4,9 +4,11 @@ import {
   getCachedIssuer,
   getCachedJWKS,
   getOIDCClient,
+  initRefreshToken,
 } from "../../../src/utils/oidc";
+import * as oidcModule from "../../../src/utils/oidc";
 import { sinon, expect } from "../../utils/test-utils";
-import { generators, Issuer } from "openid-client";
+import { generators, Issuer, ClientMetadata } from "openid-client";
 import { OIDCConfig } from "../../../src/types";
 import * as jose from "jose";
 import {
@@ -15,6 +17,16 @@ import {
 } from "../../../src/utils/types";
 import base64url from "base64url";
 import { invalidateCache } from "../../../src/utils/cache";
+import { UnsecuredJWT } from "jose";
+
+function createAccessToken(expiry = 1600711538) {
+  return new UnsecuredJWT({ exp: expiry })
+    .setIssuedAt()
+    .setSubject("12345")
+    .setIssuer("urn:example:issuer")
+    .setAudience("urn:example:audience")
+    .encode();
+}
 
 describe("OIDC Functions", () => {
   describe("getOIDCClient", () => {
@@ -303,6 +315,127 @@ describe("OIDC Functions", () => {
       );
 
       expect(jwt1).to.not.equal(jwt2);
+    });
+  });
+
+  describe("Refresh token", () => {
+    let sandbox: sinon.SinonSandbox;
+
+    beforeEach(() => {
+      sandbox = sinon.createSandbox();
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it("should call next when token not expired", async () => {
+      const accessToken = createAccessToken(1758477938);
+      const refreshTokenToken = "refreshToken";
+      const req: any = {
+        session: {
+          user: {
+            email: "test@test.com",
+            tokens: {
+              accessToken,
+              refreshToken: refreshTokenToken,
+            },
+          },
+        },
+      };
+
+      const fakeClientAssertionService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sinon.fake(),
+      };
+
+      await initRefreshToken(fakeClientAssertionService)(req);
+
+      expect(req.session.user.tokens.accessToken).to.eq(accessToken);
+      expect(req.session.user.tokens.refreshToken).to.eq(refreshTokenToken);
+      expect(req.oidc.refresh).not.to.have.been.called;
+      expect(fakeClientAssertionService.generateAssertionJwt).to.have.been
+        .calledOnce;
+    });
+
+    it("should refresh token when token expired", async () => {
+      const accessToken = createAccessToken();
+      const refreshTokenToken = "refreshToken";
+      const req: any = {
+        session: {
+          user: {
+            email: "test@test.com",
+            tokens: {
+              accessToken,
+              refreshToken: refreshTokenToken,
+            },
+          },
+        },
+        oidc: {
+          metadata: {} as Partial<ClientMetadata>,
+          issuer: { metadata: { token_endpoint: "" } } as Partial<Issuer<any>>,
+          refresh: sandbox.fake.returns({
+            access_token: "newAccessToken",
+            refresh_token: "newRefreshToken",
+          }),
+        },
+        log: {
+          error: sandbox.fake(),
+        },
+      };
+
+      const fakeClientAssertionService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sinon.fake(),
+      };
+
+      await initRefreshToken(fakeClientAssertionService)(req);
+
+      expect(fakeClientAssertionService.generateAssertionJwt).to.have.been
+        .calledOnce;
+      expect(req.oidc.refresh).to.have.been.calledOnce;
+      expect(req.session.user.tokens.accessToken).to.eq("newAccessToken");
+      expect(req.session.user.tokens.refreshToken).to.eq("newRefreshToken");
+    });
+
+    it("should throw an error when refresh fails", async () => {
+      const accessToken = createAccessToken();
+      const refreshTokenToken = "refreshToken";
+      const req: any = {
+        session: {
+          user: {
+            email: "test@test.com",
+            tokens: {
+              accessToken,
+              refreshToken: refreshTokenToken,
+            },
+          },
+        },
+        oidc: {
+          metadata: {} as Partial<ClientMetadata>,
+          issuer: { metadata: { token_endpoint: "" } } as Partial<Issuer<any>>,
+          refresh: sandbox.fake.throws(new Error("Unable to refresh token")),
+        },
+        log: {
+          error: sandbox.fake(),
+        },
+      };
+
+      const fakeClientAssertionService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sinon.fake(),
+      };
+
+      let error;
+      try {
+        await initRefreshToken(fakeClientAssertionService)(req);
+      } catch (err) {
+        error = err;
+      }
+      expect(fakeClientAssertionService.generateAssertionJwt).to.have.been
+        .calledOnce;
+      expect(req.oidc.refresh).to.have.been.calledTwice;
+      expect(req.session.user.tokens.accessToken).to.eq(accessToken);
+      expect(req.session.user.tokens.refreshToken).to.eq(refreshTokenToken);
+      expect(req.log.error).to.have.been.calledWith("Unable to refresh token");
+      expect(error.msg).to.eq("Unable to refresh token");
     });
   });
 });

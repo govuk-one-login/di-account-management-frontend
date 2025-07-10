@@ -95,7 +95,7 @@ describe("change default method", () => {
 
     beforeEach(() => {
       mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
-      sinon.stub(mfaClient, "createMfaClient").returns(mfaClientStub);
+      sinon.stub(mfaClient, "createMfaClient").resolves(mfaClientStub);
     });
 
     afterEach(() => {

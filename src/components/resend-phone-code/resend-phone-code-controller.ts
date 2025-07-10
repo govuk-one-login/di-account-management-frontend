@@ -109,7 +109,7 @@ export function resendPhoneCodePost(
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
-      getRequestConfigFromExpress(req, res)
+      await getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {

@@ -81,7 +81,7 @@ export function deleteAccountPost(
 
     const deleteAccount = await service.deleteAccount(
       email,
-      getRequestConfigFromExpress(req, res)
+      await getRequestConfigFromExpress(req, res)
     );
 
     const DeleteTopicARN = getSNSDeleteTopic();

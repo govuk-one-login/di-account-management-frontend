@@ -7,7 +7,6 @@ import {
   changePhoneNumberPost,
 } from "./change-phone-number-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
@@ -24,7 +23,6 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   validatePhoneNumberRequest(),
-  refreshTokenMiddleware(),
   globalTryCatchAsync(changePhoneNumberPost())
 );
 

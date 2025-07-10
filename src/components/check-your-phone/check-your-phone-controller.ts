@@ -210,7 +210,7 @@ export function checkYourPhonePost(
     let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
 
     if (supportChangeMfa(req.cookies)) {
-      const mfaClient = createMfaClient(req, res);
+      const mfaClient = await await createMfaClient(req, res);
       const changePhoneNumberResult = await changePhoneNumberwithMfaApi(
         mfaClient,
         code,
@@ -228,7 +228,7 @@ export function checkYourPhonePost(
     } else {
       isPhoneNumberUpdated = await service.updatePhoneNumber(
         { ...updateInput, updatedValue: newPhoneNumber },
-        getRequestConfigFromExpress(req, res)
+        await getRequestConfigFromExpress(req, res)
       );
     }
 

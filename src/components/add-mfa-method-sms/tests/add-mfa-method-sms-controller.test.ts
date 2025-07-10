@@ -14,6 +14,7 @@ import {
 } from "../add-mfa-method-sms-controller";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
+import * as oidcModule from "../../../utils/oidc";
 
 describe("addMfaSmsMethodPost", () => {
   let sandbox: sinon.SinonSandbox;
@@ -35,6 +36,8 @@ describe("addMfaSmsMethodPost", () => {
       .withRedirect(sandbox.fake())
       .withStatus(sandbox.fake())
       .build();
+
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {

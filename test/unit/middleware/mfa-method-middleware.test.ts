@@ -34,7 +34,7 @@ describe("mfaMethodMiddleware", () => {
       .returns("https://method-management-v1-stub.home.build.account.gov.uk");
     next = sinon.fake(() => {});
     mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
-    sinon.stub(mfaClient, "createMfaClient").returns(mfaClientStub);
+    sinon.stub(mfaClient, "createMfaClient").resolves(mfaClientStub);
 
     req = {
       session: {} as any,

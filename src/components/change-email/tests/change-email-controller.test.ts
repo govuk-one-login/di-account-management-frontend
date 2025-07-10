@@ -18,6 +18,7 @@ import {
   TOKEN,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
+import * as oidcModule from "../../../utils/oidc";
 
 describe("change email controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -44,6 +45,7 @@ describe("change email controller", () => {
         true as unknown as Promise<boolean>
       ),
     };
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {
