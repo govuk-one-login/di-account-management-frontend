@@ -82,6 +82,14 @@ Then("the webchat appears", async ({ page }) => {
   ).toBeVisible();
 });
 
+Then("the webchat looks as expected", async ({ page }) => {
+  expect(
+    await page.screenshot({
+      mask: [page.locator(".sa-chat-wrapper .timestamp-container")],
+    })
+  ).toMatchSnapshot();
+});
+
 When("I click on the minimise webchat button", async ({ page }) => {
   await page.getByRole("button", { name: "Minimise chat window" }).click();
 });

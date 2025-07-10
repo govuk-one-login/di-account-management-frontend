@@ -149,7 +149,7 @@ TODO
 Move integration testing README section to README in integration testing folder and link to it from here
 update to explain how to run in Docker as the only method to run tests and update test snapshots
 but explain that to run in ui mode for the debugging the tests should be run locally
-explain that a MSW server is available in the context of each step but is only really useful in preDeploy tests when running against local. explain not to mock things unless it is required for tests to produce reproducible results
+explain that a MSW server is available in the context of each step when running against local. explain not to mock things unless it is required for tests to produce reproducible results.
 mention that snapshots are ignored when running in post-deploy
 explain the the `monitorMswRequests` function can be used to see what requests MSW has and hasn't handled and make assertions on those requests.
 
