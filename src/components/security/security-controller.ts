@@ -3,6 +3,7 @@ import {
   supportActivityLog,
   supportChangeMfa,
   supportAddBackupMfa,
+  supportGlobalLogout,
 } from "../../config";
 import { PATH_DATA } from "../../app.constants";
 import { hasAllowedActivityLogServices } from "../../middleware/check-allowed-services-list";
@@ -171,5 +172,6 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
     supportChangeMfa: supportMfaChange,
     supportAddBackupMfa: supportBackupMfa,
     canChangeTypeofPrimary: !denyChangeTypeofPrimary,
+    supportGlobalLogout: supportGlobalLogout(),
   });
 }

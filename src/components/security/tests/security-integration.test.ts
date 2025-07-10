@@ -112,6 +112,28 @@ describe("Integration:: security", () => {
         expect($(testComponent("activity-log-section")).length).to.equal(0);
       });
   });
+
+  it("should display link to global logout page when supportGlobalLogout is true", async () => {
+    const app = await appWithMiddlewareSetup({ supportGlobalLogout: true });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("global-logout-section")).length).to.equal(1);
+      });
+  });
+
+  it("should not display link to global logout page when supportGlobalLogout is false", async () => {
+    const app = await appWithMiddlewareSetup({ supportGlobalLogout: false });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).to.equal(200);
+        expect($(testComponent("global-logout-section")).length).to.equal(0);
+      });
+  });
 });
 
 const appWithMiddlewareSetup = async (config: any = {}) => {
@@ -169,6 +191,10 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
 
   sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
     return config.supportActivityLog;
+  });
+
+  sandbox.stub(configFuncs, "supportGlobalLogout").callsFake(() => {
+    return config.supportGlobalLogout;
   });
 
   sandbox
