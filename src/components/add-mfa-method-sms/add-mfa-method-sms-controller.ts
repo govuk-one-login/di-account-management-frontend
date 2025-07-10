@@ -30,6 +30,7 @@ import {
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { logger } from "../../utils/logger";
 
 const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
@@ -111,9 +112,22 @@ export function addMfaSmsMethodPost(
         EventType.VerifyCodeSent
       );
 
-      return res.redirect(
-        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${UserJourney.addBackup}`
-      );
+      req.session.save(() => {
+        logger.info(
+          { trace: res?.locals?.trace },
+          `Add MFA Method SMS POST controller req.session.user.newPhoneNumber: ${
+            req.session.user.newPhoneNumber?.replace(
+              /^(.{2})(.*)/,
+              (_, first2, rest) => first2 + rest.replace(/./g, "*")
+            ) ?? req.session.user.newPhoneNumber.toString()
+          }`
+        );
+
+        res.redirect(
+          `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${UserJourney.addBackup}`
+        );
+      });
+      return;
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {

@@ -92,17 +92,19 @@ describe("check your phone controller", () => {
 
   describe("checkYourPhoneGet", () => {
     it("should render check your phone view", () => {
+      req.session.user.newPhoneNumber = "07111111111";
       checkYourPhoneGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith("check-your-phone/index.njk");
     });
 
     it("should render check your phone view with backLink intent change phone number", () => {
+      req.session.user.newPhoneNumber = "07111111111";
       if (req.query) {
         req.query.intent = INTENT_CHANGE_PHONE_NUMBER;
       }
       checkYourPhoneGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
-        phoneNumber: "",
+        phoneNumber: "1111",
         resendCodeLink: "/resend-phone-code?intent=changePhoneNumber",
         useDifferentPhoneNumberLink: "/change-phone-number",
         intent: "changePhoneNumber",
@@ -111,12 +113,13 @@ describe("check your phone controller", () => {
     });
 
     it("should render check your phone view with backLink intent add mfa method", () => {
+      req.session.user.newPhoneNumber = "07111111111";
       if (req.query) {
         req.query.intent = INTENT_ADD_BACKUP;
       }
       checkYourPhoneGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
-        phoneNumber: "",
+        phoneNumber: "1111",
         resendCodeLink: "/resend-phone-code?intent=addBackup",
         useDifferentPhoneNumberLink: "/add-mfa-method-sms",
         intent: "addBackup",
@@ -125,12 +128,13 @@ describe("check your phone controller", () => {
     });
 
     it("should render check your phone view with backLink intent change default method", () => {
+      req.session.user.newPhoneNumber = "07111111111";
       if (req.query) {
         req.query.intent = INTENT_CHANGE_DEFAULT_METHOD;
       }
       checkYourPhoneGet(req as Request, res as Response);
       expect(res.render).to.have.calledWith("check-your-phone/index.njk", {
-        phoneNumber: "",
+        phoneNumber: "1111",
         resendCodeLink: "/resend-phone-code?intent=changeDefaultMethod",
         useDifferentPhoneNumberLink: "/change-default-method-sms",
         intent: "changeDefaultMethod",
@@ -139,6 +143,7 @@ describe("check your phone controller", () => {
     });
 
     it("should throw an error when intent is not defined", () => {
+      req.session.user.newPhoneNumber = "07111111111";
       if (req.query) {
         req.query.intent = undefined;
       }
@@ -158,6 +163,7 @@ describe("check your phone controller", () => {
       req.body.code = "123456";
       req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
+      req.session.user.newPhoneNumber = "07111111111";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
@@ -321,6 +327,7 @@ describe("check your phone controller", () => {
       req.body.code = "678988";
       req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       res.locals.sessionId = "123456-djjad";
+      req.session.user.newPhoneNumber = "07111111111";
 
       await checkYourPhonePost(fakeService)(req as Request, res as Response);
 
