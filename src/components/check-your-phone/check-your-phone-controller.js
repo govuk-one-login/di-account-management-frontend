@@ -1,7 +1,4 @@
-import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
 import { PATH_DATA } from "../../app.constants";
-import { CheckYourPhoneServiceInterface } from "./types";
 import {
   EventType,
   getNextState,
@@ -13,10 +10,8 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { getLastNDigits } from "../../utils/phone-number";
-import { UpdateInformationInput } from "../../utils/types";
 import { supportChangeMfa, supportMfaManagement } from "../../config";
 import {
-  Intent,
   INTENT_ADD_BACKUP,
   INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
@@ -28,9 +23,6 @@ import {
   ERROR_CODES,
 } from "../../utils/mfaClient";
 import {
-  ApiResponse,
-  MfaClientInterface,
-  MfaMethod,
   mfaMethodTypes,
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
@@ -38,36 +30,29 @@ import { containsNumbersOnly } from "../../utils/strings";
 import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
-  OplSettingsLookupObject,
   PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-
 const TEMPLATE_NAME = "check-your-phone/index.njk";
-
-const getRenderOptions = (req: Request, intent: Intent) => {
-  const INTENT_TO_BACKLINK_MAP: Record<string, string> = {
+const getRenderOptions = (req, intent) => {
+  const INTENT_TO_BACKLINK_MAP = {
     [INTENT_CHANGE_PHONE_NUMBER]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
     [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
     [INTENT_CHANGE_DEFAULT_METHOD]: PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
   };
-
-  const INTENT_TO_USE_DIFFERENT_PHONE_NUMBER_LINK_MAP: Record<string, string> =
-    {
-      [INTENT_CHANGE_PHONE_NUMBER]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
-      [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
-      [INTENT_CHANGE_DEFAULT_METHOD]: PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
-    };
+  const INTENT_TO_USE_DIFFERENT_PHONE_NUMBER_LINK_MAP = {
+    [INTENT_CHANGE_PHONE_NUMBER]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+    [INTENT_ADD_BACKUP]: PATH_DATA.ADD_MFA_METHOD_SMS.url,
+    [INTENT_CHANGE_DEFAULT_METHOD]: PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url,
+  };
   const useDifferentPhoneNumberLink =
     INTENT_TO_USE_DIFFERENT_PHONE_NUMBER_LINK_MAP[intent];
-
   if (!useDifferentPhoneNumberLink) {
     throw new Error(
       "Intent does not map to a 'use a different phone number' link"
     );
   }
-
   return {
     phoneNumber: getLastNDigits(req.session.user.newPhoneNumber, 4),
     resendCodeLink: `${PATH_DATA.RESEND_PHONE_CODE.url}?intent=${intent}`,
@@ -76,14 +61,12 @@ const getRenderOptions = (req: Request, intent: Intent) => {
     backLink: INTENT_TO_BACKLINK_MAP[intent],
   };
 };
-
-const OPL_VALUES: OplSettingsLookupObject = {
+const OPL_VALUES = {
   [`${INTENT_ADD_BACKUP}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]:
     {
       ...MFA_COMMON_OPL_SETTINGS,
       contentId: "8d348159-08ab-4e27-96ea-843ec64e953f",
     },
-
   [`${INTENT_CHANGE_PHONE_NUMBER}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.sms}`]:
     {
       ...MFA_COMMON_OPL_SETTINGS,
@@ -100,12 +83,7 @@ const OPL_VALUES: OplSettingsLookupObject = {
       contentId: "df468804-c84b-4134-96ca-6610ffd8b6f5",
     },
 };
-
-const setCheckYourPhoneOplSettings = (
-  intent: Intent,
-  req: Request,
-  res: Response
-) => {
+const setCheckYourPhoneOplSettings = (intent, req, res) => {
   if (!supportMfaManagement(req.cookies)) {
     setOplSettings(
       {
@@ -122,29 +100,21 @@ const setCheckYourPhoneOplSettings = (
       OPL_VALUES[
         `${intent}_${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`
       ];
-
     setOplSettings(oplSettings, res);
   }
 };
-
-export function checkYourPhoneGet(req: Request, res: Response): void {
+export function checkYourPhoneGet(req, res) {
   req.metrics?.addMetric("checkYourPhoneGet", MetricUnit.Count, 1);
-  const intent = req.query.intent as Intent;
+  const intent = req.query.intent;
   setCheckYourPhoneOplSettings(intent, req, res);
   res.render(TEMPLATE_NAME, getRenderOptions(req, intent));
 }
-
-export function checkYourPhonePost(
-  service: CheckYourPhoneServiceInterface = checkYourPhoneService()
-): ExpressRouteFunc {
-  return async function (req: Request, res: Response) {
+export function checkYourPhonePost(service = checkYourPhoneService()) {
+  return async function (req, res) {
     req.metrics?.addMetric("checkYourPhonePost", MetricUnit.Count, 1);
-    const intent = req.body.intent as Intent;
-
+    const intent = req.body.intent;
     setCheckYourPhoneOplSettings(intent, req, res);
-
     const { code } = req.body;
-
     if (!code) {
       const error = formatValidationError(
         "code",
@@ -158,7 +128,6 @@ export function checkYourPhonePost(
         getRenderOptions(req, intent)
       );
     }
-
     if (code.length > 6) {
       const error = formatValidationError(
         "code",
@@ -172,7 +141,6 @@ export function checkYourPhonePost(
         getRenderOptions(req, intent)
       );
     }
-
     if (code.length < 6) {
       const error = formatValidationError(
         "code",
@@ -186,7 +154,6 @@ export function checkYourPhonePost(
         getRenderOptions(req, intent)
       );
     }
-
     if (!containsNumbersOnly(code)) {
       const error = formatValidationError(
         "code",
@@ -200,15 +167,13 @@ export function checkYourPhonePost(
         getRenderOptions(req, intent)
       );
     }
-
     const { email, newPhoneNumber } = req.session.user;
-    const updateInput: UpdateInformationInput = {
+    const updateInput = {
       email,
       otp: code,
     };
     let isPhoneNumberUpdated = false;
-    let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
-
+    let changePhoneNumberWithMfaApiErrorMessage = undefined;
     if (supportChangeMfa(req.cookies)) {
       const mfaClient = await createMfaClient(req, res);
       const changePhoneNumberResult = await changePhoneNumberwithMfaApi(
@@ -231,18 +196,15 @@ export function checkYourPhonePost(
         await getRequestConfigFromExpress(req, res)
       );
     }
-
     if (isPhoneNumberUpdated) {
       updateSessionUser(req, newPhoneNumber, getUserJourney(intent));
       return res.redirect(getRedirectUrl(intent));
     }
-
     const error = formatValidationError(
       "code",
       changePhoneNumberWithMfaApiErrorMessage ??
         req.t("pages.checkYourPhone.code.validationError.invalidCode")
     );
-
     renderBadRequest(
       res,
       req,
@@ -252,26 +214,16 @@ export function checkYourPhonePost(
     );
   };
 }
-
 async function changePhoneNumberwithMfaApi(
-  client: MfaClientInterface,
-  code: string,
-  intent: Intent,
-  newPhoneNumber: string,
-  trace: string,
-  currentMfaMethods: MfaMethod[],
-  translate: Request["t"]
-): Promise<
-  | {
-      success: true;
-    }
-  | {
-      success: false;
-      errorMessage: string;
-    }
-> {
-  let response: ApiResponse<unknown>;
-
+  client,
+  code,
+  intent,
+  newPhoneNumber,
+  trace,
+  currentMfaMethods,
+  translate
+) {
+  let response;
   switch (intent) {
     case INTENT_ADD_BACKUP: {
       response = await client.create(
@@ -280,21 +232,18 @@ async function changePhoneNumberwithMfaApi(
       );
       break;
     }
-
     case INTENT_CHANGE_PHONE_NUMBER: {
       const smsMFAMethod = currentMfaMethods.find(
         (mfa) =>
           mfa.method.mfaMethodType === "SMS" &&
           mfa.priorityIdentifier === "DEFAULT"
       );
-
       if (!smsMFAMethod) {
         const errorMessage =
           "Could not change phone number - no existing SMS methods found.";
         logger.error(errorMessage);
         throw new Error(errorMessage);
       }
-
       response = await client.update(
         {
           mfaIdentifier: smsMFAMethod.mfaIdentifier,
@@ -305,12 +254,10 @@ async function changePhoneNumberwithMfaApi(
       );
       break;
     }
-
     case INTENT_CHANGE_DEFAULT_METHOD: {
       const defaultMethod = currentMfaMethods.find(
         (mfa) => mfa.priorityIdentifier === "DEFAULT"
       );
-
       response = await client.update(
         {
           mfaIdentifier: defaultMethod.mfaIdentifier,
@@ -321,14 +268,12 @@ async function changePhoneNumberwithMfaApi(
       );
       break;
     }
-
     default: {
       const errorMessage = `Could not change phone number - unknown intent: ${intent}`;
       logger.error({ trace }, errorMessage);
       throw new Error(errorMessage);
     }
   }
-
   if (response?.error?.code === ERROR_CODES.INVALID_OTP_CODE) {
     return {
       success: false,
@@ -337,7 +282,6 @@ async function changePhoneNumberwithMfaApi(
       ),
     };
   }
-
   if (!response?.success) {
     const errorMessage = formatErrorMessage(
       "Could not change phone number",
@@ -346,17 +290,15 @@ async function changePhoneNumberwithMfaApi(
     logger.error({ trace }, errorMessage);
     throw new Error(errorMessage);
   }
-
   return {
     success: response.success,
   };
 }
-
 function updateSessionUser(
-  req: Request,
-  newPhoneNumber: string,
-  state: UserJourney = UserJourney.ChangePhoneNumber
-): void {
+  req,
+  newPhoneNumber,
+  state = UserJourney.ChangePhoneNumber
+) {
   req.session.user.phoneNumber = newPhoneNumber;
   delete req.session.user.newPhoneNumber;
   req.session.user.state[state] = getNextState(
@@ -364,8 +306,7 @@ function updateSessionUser(
     EventType.ValueUpdated
   );
 }
-
-function getRedirectUrl(intent: Intent): string {
+function getRedirectUrl(intent) {
   if (intent === INTENT_ADD_BACKUP) {
     return PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url;
   }
@@ -374,15 +315,13 @@ function getRedirectUrl(intent: Intent): string {
   }
   return PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url;
 }
-
-function getUserJourney(intent: Intent): UserJourney {
+function getUserJourney(intent) {
   if (intent === "changeDefaultMethod") {
     return UserJourney.ChangeDefaultMethod;
   }
   return UserJourney.ChangePhoneNumber;
 }
-
-export function requestNewOTPCodeGet(req: Request, res: Response): void {
+export function requestNewOTPCodeGet(req, res) {
   req.metrics?.addMetric("requestNewOTPCodeGet", MetricUnit.Count, 1);
   req.session.user.state.changePhoneNumber = getNextState(
     req.session.user.state.changePhoneNumber.value,

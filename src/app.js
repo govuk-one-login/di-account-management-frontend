@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express from "express";
 import cookieParser from "cookie-parser";
 import { logger, loggerMiddleware } from "./utils/logger";
 import { sanitizeRequestMiddleware } from "./middleware/sanitize-request-middleware";
@@ -82,33 +82,27 @@ import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middlew
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
 import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
-import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
 import { metricsMiddleware } from "./middleware/metrics-middlware";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
-
 const APP_VIEWS = [
   path.join(__dirname, "components"),
   path.resolve("node_modules/govuk-frontend/dist"),
   path.resolve("node_modules/@govuk-one-login/"),
 ];
-
-async function createApp(): Promise<express.Application> {
-  const app: express.Application = express();
+async function createApp() {
+  const app = express();
   const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
   app.use(metricsMiddleware());
   app.enable("trust proxy");
-
   if (isProduction) {
     const protect = applyOverloadProtection(isProduction);
     app.use(protect);
   }
-
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-
   // Define the healthcheck and static routes first
   // Do not define a route or middleware before these unless there's a very good reason
   app.use(healthcheckRouter);
@@ -125,7 +119,6 @@ async function createApp(): Promise<express.Application> {
         : "node_modules/govuk-frontend/dist/govuk/assets/images",
     })
   );
-
   app.use(
     PATH_DATA.FINGERPRINT.url,
     express.static(
@@ -134,10 +127,8 @@ async function createApp(): Promise<express.Application> {
       )
     )
   );
-
   app.use("/public", express.static(path.join(__dirname, "public")));
   app.use(cookieParser());
-
   const sessionStore = getSessionStore({ session: session });
   app.use(
     session({
@@ -154,37 +145,29 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
-
   app.locals.sessionStore = sessionStore;
-
   app.use(setLocalVarsMiddleware);
   app.use(loggerMiddleware);
   app.use(outboundContactUsLinksMiddleware);
-
   app.use((req, res, next) => {
     req.log = req.log.child({
       trace: res.locals.trace,
     });
     next();
   });
-
   app.set("view engine", configureNunjucks(app, APP_VIEWS));
-
   app.use(noCacheMiddleware);
-
   await i18next
     .use(Backend)
     .use(i18nextMiddleware.LanguageDetector)
     .init(i18nextConfigurationOptions());
-
-  const getTranslationObject = (locale: LOCALE) => {
+  const getTranslationObject = (locale) => {
     const translations = JSON.parse(
       readFileSync(
         path.join(__dirname, `locales/${locale}/translation.json`),
         "utf8"
       )
     );
-
     return {
       ...translations,
       clientRegistry: {
@@ -202,34 +185,27 @@ async function createApp(): Promise<express.Application> {
     "translation",
     getTranslationObject(LOCALE.EN)
   );
-
   app.use(i18nextMiddleware.handle(i18next));
   if (supportWebchatContact()) {
     app.use(helmet(webchatHelmetConfiguration));
   } else {
     app.use(helmet(helmetConfiguration));
   }
-
   app.use((req, res, next) => {
     const translate = req.t.bind(req);
-    req.t = (key: string): string => {
-      return safeTranslate(translate, key, req.language, {}) as string;
+    req.t = (key) => {
+      return safeTranslate(translate, key, req.language, {});
     };
     next();
   });
-
   app.use(languageToggleMiddleware);
-
   const oidcClient = await getOIDCClient(getOIDCConfig());
   app.use(authMiddleware(oidcClient));
-
   app.use(backchannelLogoutRouter);
   // Must be added to the app after the session is set up and before the routers
   app.use(csrfSynchronisedProtection);
-
   app.post("/*splat", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
-
   app.use(securityRouter);
   app.use(yourServicesRouter);
   app.use(oidcAuthCallbackRouter);
@@ -249,16 +225,13 @@ async function createApp(): Promise<express.Application> {
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
-
   if (supportGlobalLogout()) {
     app.use(globalLogoutRouter);
   }
-
   if (supportChangeOnIntervention()) {
     app.use(temporarilySuspendedRouter);
     app.use(permanentlySuspendedRouter);
   }
-
   if (supportActivityLog()) {
     app.use(activityHistoryRouter);
     app.use(reportSuspiciousActivityRouter);
@@ -283,70 +256,55 @@ async function createApp(): Promise<express.Application> {
     app.use(searchServicesRouter);
   }
   app.use(trackAndRedirectRouter);
-
   // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy
   app.use(redirectsRouter);
   app.use(pageNotFoundHandler);
-
   app.use(csrfErrorHandler);
   app.use(logErrorMiddleware);
   app.use(serverErrorHandler);
-
   return app;
 }
-
-async function startServer(app: Application): Promise<{
-  server: Server;
-  closeServer: (callback?: (err?: Error) => void) => Promise<void>;
-}> {
-  const port: number | string = process.env.PORT || 6001;
-  let server: Server;
-  let stopVitalSigns: () => void;
-
-  await new Promise<void>((resolve) => {
+async function startServer(app) {
+  const port = process.env.PORT || 6001;
+  let server;
+  let stopVitalSigns;
+  await new Promise((resolve) => {
     server = app
       .listen(port, () => {
         logger.info(`Server listening on port ${port}`);
         app.emit("appStarted");
         resolve();
       })
-      .on("error", (error: Error) => {
+      .on("error", (error) => {
         logger.error(`Unable to start server because of ${error.message}`);
       });
-
     server.keepAliveTimeout = 61 * 1000;
     server.headersTimeout = 91 * 1000;
-
     stopVitalSigns = frontendVitalSignsInit(server, {
       staticPaths: [/^\/assets\/.*/, /^\/public\/.*/],
     });
   });
-
   const closeServer = async () => {
     if (stopVitalSigns) {
       stopVitalSigns();
       logger.info(`vital-signs stopped`);
     }
-    await new Promise<void>((res, rej) =>
+    await new Promise((res, rej) =>
       server.close((err) => (err ? rej(err) : res()))
     );
   };
-
   return { server, closeServer };
 }
-
-const shutdownProcess =
-  (closeServer: () => Promise<void>) => async (): Promise<void> => {
-    try {
-      logger.info("closing server");
-      await closeServer();
-      logger.info("server closed");
-      process.exit(0);
-    } catch (error) {
-      logger.error(`error closing server: ${error.message}`);
-      process.exit(1);
-    }
-  };
-
+const shutdownProcess = (closeServer) => async () => {
+  try {
+    logger.info("closing server");
+    await closeServer();
+    logger.info("server closed");
+    process.exit(0);
+  } catch (error) {
+    logger.error(`error closing server: ${error.message}`);
+    process.exit(1);
+  }
+};
 export { createApp, startServer, shutdownProcess };
