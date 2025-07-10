@@ -14,6 +14,7 @@ import {
 } from "../add-mfa-method-sms-controller";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
+import Sinon from "sinon";
 
 describe("addMfaSmsMethodPost", () => {
   let sandbox: sinon.SinonSandbox;
@@ -47,8 +48,15 @@ describe("addMfaSmsMethodPost", () => {
         success: true,
       }),
     };
-    req.body.ukPhoneNumber = "1234";
+    req.body.phoneNumber = "07123456789";
+    if (req.session) {
+      req.session.save = sandbox.stub();
+    }
+
     await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
+    expect(req.session?.save).to.be.calledOnce;
+    expect(req.session?.user.newPhoneNumber).to.eq("07123456789");
+    (req.session?.save as Sinon.SinonStub).getCall(0).args[0]();
     expect(res.redirect).to.be.calledWith(
       `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=addBackup`
     );
@@ -63,8 +71,12 @@ describe("addMfaSmsMethodPost", () => {
         code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
       }),
     };
+    if (req.session) {
+      req.session.save = sandbox.stub();
+    }
+
     await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
-    expect(res.redirect).not.to.be.called;
+    expect(req.session?.save).not.to.be.called;
     expect(res.render).to.be.calledWith("add-mfa-method-sms/index.njk", {
       errors: {
         phoneNumber: {
