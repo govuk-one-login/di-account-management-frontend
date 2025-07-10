@@ -17,7 +17,6 @@ import {
 import base64url from "base64url";
 import { invalidateCache } from "../../../src/utils/cache";
 import { UnsecuredJWT } from "jose";
-import { ERROR_MESSAGES } from "../../../src/app.constants";
 
 function createAccessToken(expiry = 1600711538) {
   return new UnsecuredJWT({ exp: expiry })
@@ -329,7 +328,7 @@ describe("OIDC Functions", () => {
       sandbox.restore();
     });
 
-    it("should not update the token when token not expired", async () => {
+    it("should call next when token not expired", async () => {
       const accessToken = createAccessToken(1758477938);
       const refreshTokenToken = "refreshToken";
       const req: any = {
@@ -342,17 +341,6 @@ describe("OIDC Functions", () => {
             },
           },
         },
-        oidc: {
-          metadata: {} as Partial<ClientMetadata>,
-          issuer: { metadata: { token_endpoint: "" } } as Partial<Issuer<any>>,
-          refresh: sandbox.fake.returns({
-            access_token: "newAccessToken",
-            refresh_token: "newRefreshToken",
-          }),
-        },
-        metrics: {
-          addMetric: sandbox.fake(),
-        },
       };
 
       const fakeClientAssertionService: ClientAssertionServiceInterface = {
@@ -364,8 +352,8 @@ describe("OIDC Functions", () => {
       expect(req.session.user.tokens.accessToken).to.eq(accessToken);
       expect(req.session.user.tokens.refreshToken).to.eq(refreshTokenToken);
       expect(req.oidc.refresh).not.to.have.been.called;
-      expect(fakeClientAssertionService.generateAssertionJwt).not.to.have.been
-        .called;
+      expect(fakeClientAssertionService.generateAssertionJwt).to.have.been
+        .calledOnce;
     });
 
     it("should refresh token when token expired", async () => {
@@ -389,8 +377,8 @@ describe("OIDC Functions", () => {
             refresh_token: "newRefreshToken",
           }),
         },
-        metrics: {
-          addMetric: sandbox.fake(),
+        log: {
+          error: sandbox.fake(),
         },
       };
 
@@ -425,8 +413,8 @@ describe("OIDC Functions", () => {
           issuer: { metadata: { token_endpoint: "" } } as Partial<Issuer<any>>,
           refresh: sandbox.fake.throws(new Error("Unable to refresh token")),
         },
-        metrics: {
-          addMetric: sandbox.fake(),
+        log: {
+          error: sandbox.fake(),
         },
       };
 
@@ -445,10 +433,8 @@ describe("OIDC Functions", () => {
       expect(req.oidc.refresh).to.have.been.calledTwice;
       expect(req.session.user.tokens.accessToken).to.eq(accessToken);
       expect(req.session.user.tokens.refreshToken).to.eq(refreshTokenToken);
-      expect(req.metrics.addMetric).to.have.been.calledWith(
-        "refreshTokenError"
-      );
-      expect(error.message).to.eq(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
+      expect(req.log.error).to.have.been.calledWith("Unable to refresh token");
+      expect(error.msg).to.eq("Unable to refresh token");
     });
   });
 });

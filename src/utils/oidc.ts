@@ -9,7 +9,6 @@ import { cacheWithExpiration } from "./cache";
 import { Request } from "express";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { retryableFunction } from "./retryableFunction";
-import { ERROR_MESSAGES } from "../app.constants";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
 const jwksRefreshInterval = 24 * 60 * 60 * 1000;
@@ -123,9 +122,13 @@ const initRefreshToken = function (
         );
         req.session.user.tokens.accessToken = tokenSet.access_token;
         req.session.user.tokens.refreshToken = tokenSet.refresh_token;
-      } catch {
-        req.metrics?.addMetric("refreshTokenError", MetricUnit.Count, 1);
-        throw new Error(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
+      } catch (error) {
+        req.metrics?.addMetric(
+          "refreshTokenMiddlewareError",
+          MetricUnit.Count,
+          1
+        );
+        throw error;
       }
     }
   };

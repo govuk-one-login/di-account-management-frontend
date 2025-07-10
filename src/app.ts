@@ -1,9 +1,9 @@
-import express, { Application } from "express";
+import express from "express";
 import cookieParser from "cookie-parser";
-import { logger, loggerMiddleware } from "./utils/logger";
+import { loggerMiddleware } from "./utils/logger";
 import { sanitizeRequestMiddleware } from "./middleware/sanitize-request-middleware";
 import i18nextMiddleware from "i18next-http-middleware";
-import * as path from "path";
+import * as path from "node:path";
 import { configureNunjucks } from "./config/nunjucks";
 import { i18nextConfigurationOptions } from "./config/i18next";
 import {
@@ -81,8 +81,6 @@ import { logoutRedirectRouter } from "./components/logout-redirect/logout-redire
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
 import { getOIDCClient } from "./utils/oidc";
-import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
-import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
 import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
@@ -90,7 +88,7 @@ import { metricsMiddleware } from "./middleware/metrics-middlware";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
 
 const APP_VIEWS = [
-  path.join(__dirname, "components"),
+  path.join(import.meta.dirname, "components"),
   path.resolve("node_modules/govuk-frontend/dist"),
   path.resolve("node_modules/@govuk-one-login/"),
 ];
@@ -135,7 +133,7 @@ async function createApp(): Promise<express.Application> {
     )
   );
 
-  app.use("/public", express.static(path.join(__dirname, "public")));
+  app.use("/public", express.static(path.join(import.meta.dirname, "public")));
   app.use(cookieParser());
 
   const sessionStore = getSessionStore({ session: session });
@@ -180,7 +178,7 @@ async function createApp(): Promise<express.Application> {
   const getTranslationObject = (locale: LOCALE) => {
     const translations = JSON.parse(
       readFileSync(
-        path.join(__dirname, `locales/${locale}/translation.json`),
+        path.join(import.meta.dirname, `locales/${locale}/translation.json`),
         "utf8"
       )
     );
@@ -296,57 +294,4 @@ async function createApp(): Promise<express.Application> {
   return app;
 }
 
-async function startServer(app: Application): Promise<{
-  server: Server;
-  closeServer: (callback?: (err?: Error) => void) => Promise<void>;
-}> {
-  const port: number | string = process.env.PORT || 6001;
-  let server: Server;
-  let stopVitalSigns: () => void;
-
-  await new Promise<void>((resolve) => {
-    server = app
-      .listen(port, () => {
-        logger.info(`Server listening on port ${port}`);
-        app.emit("appStarted");
-        resolve();
-      })
-      .on("error", (error: Error) => {
-        logger.error(`Unable to start server because of ${error.message}`);
-      });
-
-    server.keepAliveTimeout = 61 * 1000;
-    server.headersTimeout = 91 * 1000;
-
-    stopVitalSigns = frontendVitalSignsInit(server, {
-      staticPaths: [/^\/assets\/.*/, /^\/public\/.*/],
-    });
-  });
-
-  const closeServer = async () => {
-    if (stopVitalSigns) {
-      stopVitalSigns();
-      logger.info(`vital-signs stopped`);
-    }
-    await new Promise<void>((res, rej) =>
-      server.close((err) => (err ? rej(err) : res()))
-    );
-  };
-
-  return { server, closeServer };
-}
-
-const shutdownProcess =
-  (closeServer: () => Promise<void>) => async (): Promise<void> => {
-    try {
-      logger.info("closing server");
-      await closeServer();
-      logger.info("server closed");
-      process.exit(0);
-    } catch (error) {
-      logger.error(`error closing server: ${error.message}`);
-      process.exit(1);
-    }
-  };
-
-export { createApp, startServer, shutdownProcess };
+export { createApp };
