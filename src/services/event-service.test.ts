@@ -11,6 +11,7 @@ import {
   MISSING_USER_ID_SPECIAL_CASE,
 } from "../app.constants";
 import { SinonFakeTimers } from "sinon";
+import * as configModule from "../config";
 
 describe("eventService", () => {
   let sqs: SqsService;
@@ -19,6 +20,12 @@ describe("eventService", () => {
   beforeEach(() => {
     sendSpy = sinon.spy();
     sqs = { send: sendSpy } as any;
+
+    sinon.replace(configModule, "getOIDCClientId", () => "test-client-id");
+  });
+
+  afterEach(() => {
+    sinon.restore();
   });
 
   describe("buildAuditEvent", () => {
@@ -52,11 +59,6 @@ describe("eventService", () => {
           user: {
             isAuthenticated: true,
             email: "test@example.com",
-          },
-        },
-        oidc: {
-          metadata: {
-            client_id: "test-client-id",
           },
         },
       };
@@ -388,11 +390,6 @@ describe("eventService", () => {
             isAuthenticated: true,
           },
         },
-        oidc: {
-          metadata: {
-            client_id: "test-client-id",
-          },
-        },
       };
       const mockRes: any = {
         locals: {
@@ -413,7 +410,7 @@ describe("eventService", () => {
       );
       expect(result.user.user_id).to.equal("test-user-id");
       expect(result.platform.user_agent).to.equal("test-user-agent");
-      expect(result.client_id).to.equal("test");
+      expect(result.client_id).to.equal("test-client-id");
       expect(result.event_timestamp_ms).to.equal(1726099200000);
       expect(result.event_timestamp_ms_formatted).to.equal(
         "2024-09-12T00:00:00.000Z"

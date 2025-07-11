@@ -12,6 +12,7 @@ import { ApiError } from "./errors";
 import { Request, Response } from "express";
 import xss from "xss";
 import { getTxmaHeader } from "./txma-header";
+import { refreshToken } from "./oidc";
 
 const headers: RawAxiosRequestHeaders = {
   Accept: "application/json",
@@ -42,10 +43,12 @@ export interface RequestConfig {
   txmaAuditEncoded?: string;
 }
 
-export function getRequestConfigFromExpress(
+export async function getRequestConfigFromExpress(
   req: Request,
   res: Response
-): Parameters<typeof getRequestConfig>[0] {
+): Promise<Parameters<typeof getRequestConfig>[0]> {
+  await refreshToken(req);
+
   return {
     token: req.session.user.tokens.accessToken,
     sourceIp: req.ip,

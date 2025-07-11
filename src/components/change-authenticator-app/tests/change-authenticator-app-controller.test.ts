@@ -96,7 +96,9 @@ describe("change authenticator app controller", () => {
 
     beforeEach(() => {
       mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
-      sinon.replace(mfaClient, "createMfaClient", () => mfaClientStub);
+      sinon.replace(mfaClient, "createMfaClient", () =>
+        Promise.resolve(mfaClientStub)
+      );
       sinon.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
       sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 

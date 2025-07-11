@@ -7,7 +7,6 @@ import {
 } from "./delete-account-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
@@ -23,7 +22,6 @@ router.post(
   PATH_DATA.DELETE_ACCOUNT.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  refreshTokenMiddleware(),
   globalTryCatchAsync(deleteAccountPost())
 );
 

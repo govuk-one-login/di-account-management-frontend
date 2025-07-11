@@ -5,7 +5,6 @@ import {
   enterPasswordGet,
 } from "./enter-password-controller";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import {
   globalTryCatch,
   globalTryCatchAsync,
@@ -22,7 +21,6 @@ router.get(
 router.post(
   PATH_DATA.ENTER_PASSWORD.url,
   requiresAuthMiddleware,
-  refreshTokenMiddleware(),
   globalTryCatchAsync(enterPasswordPost())
 );
 

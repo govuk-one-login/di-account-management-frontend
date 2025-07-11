@@ -114,11 +114,14 @@ export function buildResponse<T>(response: AxiosResponse<T>): ApiResponse<T> {
   return apiResponse;
 }
 
-export function createMfaClient(req: Request, res: Response): MfaClient {
+export async function createMfaClient(
+  req: Request,
+  res: Response
+): Promise<MfaClient> {
   return new MfaClient(
     req.session.user?.publicSubjectId,
     getRequestConfig({
-      ...getRequestConfigFromExpress(req, res),
+      ...(await getRequestConfigFromExpress(req, res)),
       validationStatuses: [
         HTTP_STATUS_CODES.OK,
         HTTP_STATUS_CODES.NO_CONTENT,
