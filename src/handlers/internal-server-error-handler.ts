@@ -25,7 +25,6 @@ export function serverErrorHandler(
 
   setOplSettings(
     {
-      statusCode: 500,
       taxonomyLevel2: EMPTY_OPL_SETTING_VALUE,
     },
     res

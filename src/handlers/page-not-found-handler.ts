@@ -13,7 +13,6 @@ export function pageNotFoundHandler(
 
   setOplSettings(
     {
-      statusCode: 404,
       taxonomyLevel2: EMPTY_OPL_SETTING_VALUE,
     },
     res
