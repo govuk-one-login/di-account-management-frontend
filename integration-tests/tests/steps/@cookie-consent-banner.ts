@@ -1,19 +1,11 @@
 import { expect, Page } from "@playwright/test";
 import { bdd } from "./fixtures";
-import { visitContactPage } from "./shared";
 
 const { Given, Then } = bdd;
 
 const getCookieBanner = ({ page }: { page: Page }) => {
   return page.getByLabel("Cookies on GOV.UK One Login");
 };
-
-Given(
-  'I visit the "Contact GOV.UK One Login" page',
-  async ({ page, javaScriptEnabled }) => {
-    await visitContactPage({ page, acceptCookies: false, javaScriptEnabled });
-  }
-);
 
 Then("the cookie consent banner shows", ({ page }) => {
   page.getByRole("heading", { name: "Cookies on GOV.UK One Login" });

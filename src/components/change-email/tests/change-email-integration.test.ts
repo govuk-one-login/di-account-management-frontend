@@ -106,21 +106,20 @@ describe("Integration:: change email", () => {
   });
 
   it("should return validation error when email not entered", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
       .send({
         _csrf: token,
         email: "",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect($(testComponent("email-error")).text()).to.contains(
-          "Enter your email address"
-        );
-      })
-      .expect(400);
+      });
+
+    const $ = cheerio.load(res.text);
+    expect($(testComponent("email-error")).text()).to.contains(
+      "Enter your email address"
+    );
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when email too long", async () => {

@@ -1,39 +1,11 @@
 import { test as base, createBdd } from "playwright-bdd";
-import { setupServer, SetupServerApi } from "msw/node";
 import { env } from "../../env";
 
-export const test = base.extend<
-  {
-    processSkipTags: undefined;
-    processFixmeTags: undefined;
-    processFailTags: undefined;
-    mswReset: undefined;
-  },
-  {
-    mswServer?: SetupServerApi;
-  }
->({
-  mswServer: [
-    async ({}, use) => {
-      const mswServer = env.TEST_TARGET === "local" ? setupServer() : undefined;
-      mswServer?.listen({
-        onUnhandledRequest: () => {},
-      });
-      await use(mswServer);
-      mswServer?.close();
-    },
-    { scope: "worker" },
-  ],
-
-  mswReset: [
-    async ({ mswServer }, use) => {
-      await use(undefined);
-      mswServer?.resetHandlers();
-      mswServer?.events.removeAllListeners();
-    },
-    { auto: true },
-  ],
-
+export const test = base.extend<{
+  processSkipTags: undefined;
+  processFixmeTags: undefined;
+  processFailTags: undefined;
+}>({
   processSkipTags: [
     async ({ $test, $tags, isMobile }, use) => {
       $test.skip(
@@ -42,7 +14,8 @@ export const test = base.extend<
           ($tags.includes("@skipPostDeploy") &&
             env.PRE_OR_POST_DEPLOY === "post") ||
           ($tags.includes("@skipMobile") && isMobile) ||
-          ($tags.includes("@skipDesktop") && !isMobile)
+          ($tags.includes("@skipDesktop") && !isMobile) ||
+          $tags.includes(`@skipTarget-${env.TEST_TARGET}`)
       );
 
       await use(undefined);

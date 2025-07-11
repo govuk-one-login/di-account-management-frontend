@@ -1,8 +1,7 @@
 import { expect, type Page } from "@playwright/test";
 import { bdd } from "./fixtures";
-import { visitContactPage } from "./shared";
 
-const { Given, Then, When } = bdd;
+const { Then, When } = bdd;
 
 const getInlineWebchatButton = ({ page }: { page: Page }) => {
   return page.getByRole("button", { name: "Use webchat" });
@@ -11,22 +10,6 @@ const getInlineWebchatButton = ({ page }: { page: Page }) => {
 const getFloatingWebchatButton = ({ page }: { page: Page }) => {
   return page.locator(".sa-chat-tab");
 };
-
-Given(
-  'I visit the "Contact GOV.UK One Login" page',
-  async ({ page, javaScriptEnabled }) => {
-    await visitContactPage({ page, javaScriptEnabled });
-  }
-);
-
-Then("the page looks as expected", async ({ page }) => {
-  expect(
-    await page.screenshot({
-      fullPage: true,
-      mask: [page.locator(".contact-reference__code")],
-    })
-  ).toMatchSnapshot();
-});
 
 Then(
   "the page displays the expected webchat content",
@@ -57,12 +40,6 @@ Then(
     }
   }
 );
-
-Given("webchat has initialised", async ({ page }) => {
-  // _sa is added to the window object once webchat is initialised
-  // See https://help.smartagent.io/how-to-guides/admin/making-structural-changes/webchat-api/
-  await page.waitForFunction(() => !!window._sa);
-});
 
 When("I click on the inline webchat button", async ({ page }) => {
   await getInlineWebchatButton({ page }).click();
