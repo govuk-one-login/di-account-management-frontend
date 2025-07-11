@@ -35,7 +35,7 @@ describe("Middleware", () => {
         },
         get: function (headerName: string) {
           if (headerName === "Referrer") {
-            return this.headers["referer"] || this.headers["referrer"];
+            return this.headers["referer"] ?? this.headers["referrer"];
           }
           if (headerName === "host") {
             return "home.account.gov.uk";

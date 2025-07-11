@@ -102,7 +102,7 @@ describe("Integration:: change email", () => {
   });
 
   it("should return validation error when email not entered", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -117,10 +117,11 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when email too long", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -136,10 +137,11 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when invalid email entered", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -154,10 +156,11 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when same email used", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -172,6 +175,7 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when same email used by another user", async () => {
@@ -183,7 +187,7 @@ describe("Integration:: change email", () => {
       .reply(400, {});
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -198,6 +202,7 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should redirect to /check-your-email when valid email", async () => {
@@ -209,7 +214,7 @@ describe("Integration:: change email", () => {
       .reply(204, {});
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -219,6 +224,7 @@ describe("Integration:: change email", () => {
       })
       .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url)
       .expect(302);
+    expect(res.statusCode).to.eq(302);
   });
 
   describe("Email Normalization Tests", () => {

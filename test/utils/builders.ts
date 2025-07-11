@@ -37,22 +37,22 @@ export class RequestBuilder {
   };
   private t: () => void;
 
-  withBody(body: object): RequestBuilder {
+  withBody(body: object): this {
     this.body = body;
     return this;
   }
 
-  withSession(session: Session & Partial<SessionData>): RequestBuilder {
+  withSession(session: Session & Partial<SessionData>): this {
     this.session = session;
     return this;
   }
 
-  withSessionUserState(state: object): RequestBuilder {
+  withSessionUserState(state: object): this {
     this.session.user.state = state;
     return this;
   }
 
-  withMfaMethods(): RequestBuilder {
+  withMfaMethods(): this {
     this.session.mfaMethods = [
       {
         mfaIdentifier: "1",
@@ -67,7 +67,7 @@ export class RequestBuilder {
     return this;
   }
 
-  withNoDefaultMfaMethods(): RequestBuilder {
+  withNoDefaultMfaMethods(): this {
     this.session.mfaMethods = [
       {
         mfaIdentifier: "1",
@@ -82,35 +82,32 @@ export class RequestBuilder {
     return this;
   }
 
-  withCookies(cookies: object): RequestBuilder {
+  withCookies(cookies: object): this {
     this.cookies = cookies;
     return this;
   }
 
-  withHeaders(headers: object): RequestBuilder {
+  withHeaders(headers: object): this {
     this.headers = headers;
     return this;
   }
 
-  withI18n(i18n: object): RequestBuilder {
+  withI18n(i18n: object): this {
     this.i18n = i18n;
     return this;
   }
 
-  withTranslate(func: () => void): RequestBuilder {
+  withTranslate(func: () => void): this {
     this.t = func;
     return this;
   }
 
-  withIp(ip: string): RequestBuilder {
+  withIp(ip: string): this {
     this.ip = ip;
     return this;
   }
 
-  withAuthSessionIds(
-    sessionId: string,
-    clientSessionId: string
-  ): RequestBuilder {
+  withAuthSessionIds(sessionId: string, clientSessionId: string): this {
     this.session.authSessionIds = {
       sessionId,
       clientSessionId,
@@ -143,21 +140,21 @@ export class ResponseBuilder {
     return 200;
   };
 
-  withStatus(func: () => number): ResponseBuilder {
+  withStatus(func: () => number): this {
     this.status = func;
     return this;
   }
-  withRender(func: () => void): ResponseBuilder {
+  withRender(func: () => void): this {
     this.render = func;
     return this;
   }
 
-  withRedirect(func: () => void): ResponseBuilder {
+  withRedirect(func: () => void): this {
     this.redirect = func;
     return this;
   }
 
-  withLocals(locals: object): ResponseBuilder {
+  withLocals(locals: object): this {
     this.locals = locals;
     return this;
   }

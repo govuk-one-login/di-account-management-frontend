@@ -349,7 +349,7 @@ describe("check your phone controller", () => {
         "Could not change phone number - no existing SMS methods found.";
       try {
         await checkYourPhonePost(fakeService)(req as Request, res as Response);
-      } catch (e) {
+      } catch {
         expect(errorLoggerSpy).to.have.been.calledWith(errorMessage);
       }
     });

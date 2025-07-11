@@ -171,22 +171,16 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     res: any,
     next: any
   ): void {
-    req.session.user = config.customUserSession
-      ? config.customUserSession
-      : DEFAULT_USER_SESSION;
+    req.session.user = config.customUserSession ?? DEFAULT_USER_SESSION;
     next();
   });
 
   sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-    return new Promise((resolve) => {
-      resolve({});
-    });
+    return Promise.resolve({});
   });
 
   sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-    return new Promise((resolve) => {
-      resolve({});
-    });
+    return Promise.resolve({});
   });
 
   sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
@@ -207,7 +201,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   stubMfaClient.retrieve.resolves({
     success: true,
     status: 200,
-    data: [methods[config.mfaMethodType ? config.mfaMethodType : "AUTH_APP"]],
+    data: [methods[config.mfaMethodType ?? "AUTH_APP"]],
   });
 
   sandbox.stub(mfa, "createMfaClient").resolves(stubMfaClient);

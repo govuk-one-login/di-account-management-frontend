@@ -5,7 +5,7 @@ import { Client } from "openid-client";
 import { authMiddleware } from "../../../src/middleware/auth-middleware";
 
 describe("authMiddleware", () => {
-  let req: Partial<Request> | any;
+  let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
   let oidcClient: Client;
