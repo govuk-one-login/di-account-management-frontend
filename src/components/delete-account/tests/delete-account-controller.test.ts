@@ -10,6 +10,7 @@ import { DeleteAccountServiceInterface } from "../types";
 import { getAppEnv } from "../../../config";
 import { Service } from "../../../utils/types";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
+import * as oidcModule from "../../../utils/oidc";
 
 describe("delete account controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -53,6 +54,7 @@ describe("delete account controller", () => {
       redirect: sandbox.fake(() => {}),
       locals: {},
     };
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {

@@ -9,6 +9,7 @@ import {
   changePasswordPost,
 } from "../change-password-controller";
 import { ChangePasswordServiceInterface } from "../types";
+import * as oidcModule from "../../../utils/oidc";
 
 import {
   ERROR_CODES,
@@ -58,6 +59,8 @@ describe("change password controller", () => {
         success: true,
       } as unknown as Promise<ApiResponseResult>),
     };
+
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {

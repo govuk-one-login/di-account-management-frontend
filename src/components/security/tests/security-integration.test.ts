@@ -210,7 +210,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     data: [methods[config.mfaMethodType ? config.mfaMethodType : "AUTH_APP"]],
   });
 
-  sandbox.stub(mfa, "createMfaClient").returns(stubMfaClient);
+  sandbox.stub(mfa, "createMfaClient").resolves(stubMfaClient);
 
   return await require("../../../app").createApp();
 };

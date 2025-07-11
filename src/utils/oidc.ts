@@ -6,6 +6,10 @@ import base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
 import { cacheWithExpiration } from "./cache";
+import { Request } from "express";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { retryableFunction } from "./retryableFunction";
+import { ERROR_MESSAGES } from "../app.constants";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
 const jwksRefreshInterval = 24 * 60 * 60 * 1000;
@@ -90,10 +94,56 @@ const clientAssertionGenerator = (
   },
 });
 
+const initRefreshToken = function (
+  clientAssertionService: ClientAssertionServiceInterface = clientAssertionGenerator()
+) {
+  return async function (req: Request) {
+    const accessToken = req.session.user.tokens.accessToken;
+
+    if (isTokenExpired(accessToken)) {
+      try {
+        const clientAssertion =
+          await clientAssertionService.generateAssertionJwt(
+            req.oidc.metadata.client_id,
+            req.oidc.issuer.metadata.token_endpoint
+          );
+
+        const tokenSet = await retryableFunction(
+          req.oidc.refresh.bind(req.oidc) as typeof req.oidc.refresh,
+          [
+            req.session.user.tokens.refreshToken,
+            {
+              exchangeBody: {
+                client_assertion_type:
+                  "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+                client_assertion: clientAssertion,
+              },
+            },
+          ]
+        );
+        req.session.user.tokens.accessToken = tokenSet.access_token;
+        req.session.user.tokens.refreshToken = tokenSet.refresh_token;
+      } catch (error) {
+        req.metrics?.addMetric(
+          "refreshTokenMiddlewareError",
+          MetricUnit.Count,
+          1
+        );
+        req.log.error(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN, error);
+        throw new Error(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
+      }
+    }
+  };
+};
+
+const refreshToken = initRefreshToken();
+
 export {
   getOIDCClient,
   getCachedJWKS,
   isTokenExpired,
   clientAssertionGenerator,
   getCachedIssuer,
+  initRefreshToken,
+  refreshToken,
 };

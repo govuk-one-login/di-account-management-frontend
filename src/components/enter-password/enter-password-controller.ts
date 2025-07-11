@@ -227,7 +227,7 @@ export function enterPasswordPost(
     const response = await service.authenticated(
       req.session.user.email,
       password,
-      getRequestConfigFromExpress(req, res)
+      await getRequestConfigFromExpress(req, res)
     );
 
     if (response.authenticated) {

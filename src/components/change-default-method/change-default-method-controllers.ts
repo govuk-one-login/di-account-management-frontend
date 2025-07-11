@@ -166,7 +166,7 @@ export function changeDefaultMethodSmsPost(
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
-      getRequestConfigFromExpress(req, res)
+      await getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {
@@ -232,7 +232,7 @@ export async function changeDefaultMethodAppPost(
         );
       }
 
-      const mfaClient = createMfaClient(req, res);
+      const mfaClient = await createMfaClient(req, res);
       const response = await mfaClient.update({
         mfaIdentifier: currentDefaultMethod.mfaIdentifier,
         priorityIdentifier: "DEFAULT",
