@@ -320,7 +320,7 @@ Mappings:
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/416cd438acc3a6f_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "1"
-      BRANDREFRESHENABLED: "0"
+      BRANDREFRESHENABLED: "1"
       SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
