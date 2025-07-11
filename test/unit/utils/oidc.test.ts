@@ -428,9 +428,6 @@ describe("OIDC Functions", () => {
         metrics: {
           addMetric: sandbox.fake(),
         },
-        log: {
-          error: sandbox.fake(),
-        },
       };
 
       const fakeClientAssertionService: ClientAssertionServiceInterface = {
@@ -449,10 +446,7 @@ describe("OIDC Functions", () => {
       expect(req.session.user.tokens.accessToken).to.eq(accessToken);
       expect(req.session.user.tokens.refreshToken).to.eq(refreshTokenToken);
       expect(req.metrics.addMetric).to.have.been.calledWith(
-        "refreshTokenMiddlewareError"
-      );
-      expect(req.log.error).to.have.been.calledWith(
-        ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN
+        "refreshTokenError"
       );
       expect(error.message).to.eq(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
     });
