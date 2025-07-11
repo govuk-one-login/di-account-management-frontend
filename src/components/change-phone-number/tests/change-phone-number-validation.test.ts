@@ -68,7 +68,7 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.ukPhoneNumber.validationError.required"
     );
   });
@@ -80,7 +80,7 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "@12345",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.ukPhoneNumber.validationError.plusNumericOnly"
     );
   });
@@ -92,7 +92,7 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "123456789",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
     );
   });
@@ -104,7 +104,7 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "123456789101112",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
     );
   });
@@ -116,7 +116,7 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "+33612345678",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
     );
   });
@@ -128,7 +128,7 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.internationalPhoneNumber.validationError.required"
     );
   });
@@ -140,7 +140,7 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "@12345",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.internationalPhoneNumber.validationError.plusNumericOnly"
     );
   });
@@ -152,7 +152,7 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "1234",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
     );
   });
@@ -164,7 +164,7 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "123456789123456789123456789",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
     );
   });
@@ -176,7 +176,7 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "07123456789",
       })
       .build();
-    expect(await validate(req)).to.have.validationError(
+    await expect(await validate(req)).to.have.validationError(
       "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
     );
   });

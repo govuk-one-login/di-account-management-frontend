@@ -1,5 +1,5 @@
 import request from "supertest";
-import { describe, Done } from "mocha";
+import { describe } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
 import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
@@ -61,16 +61,12 @@ describe("Integration:: change email", () => {
 
     oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     oidcGetCachedJWKS = require("../../../utils/oidc");
     sandbox.stub(oidcGetCachedJWKS, "getCachedJWKS").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     app = await require("../../../app").createApp();
@@ -230,8 +226,7 @@ describe("Integration:: change email", () => {
 
     const performTest = async (
       inputEmail: string,
-      expectedNormalisedEmail: string,
-      done: Done
+      expectedNormalisedEmail: string
     ) => {
       // Arrange
       nock(baseApi)
@@ -268,35 +263,34 @@ describe("Integration:: change email", () => {
 
       // Assert
       expect(receivedEmail).to.equal(expectedNormalisedEmail);
-      done();
     };
 
-    it("should normalise email to all lowercase", (done) => {
-      performTest("Test@Example.Com", "test@example.com", done);
+    it("should normalise email to all lowercase", async () => {
+      await performTest("Test@Example.Com", "test@example.com");
     });
 
-    it("should normalise Gmail email to lowercase", (done) => {
-      performTest("Test@Gmail.Com", "test@gmail.com", done);
+    it("should normalise Gmail email to lowercase", async () => {
+      await performTest("Test@Gmail.Com", "test@gmail.com");
     });
 
-    it("should not remove full stops from email", (done) => {
-      performTest("Test.user@Gmail.Com", "test.user@gmail.com", done);
+    it("should not remove full stops from email", async () => {
+      await performTest("Test.user@Gmail.Com", "test.user@gmail.com");
     });
 
-    it("should not remove sub-addresses for gmail accounts", (done) => {
-      performTest("Test+user@Gmail.Com", "test+user@gmail.com", done);
+    it("should not remove sub-addresses for gmail accounts", async () => {
+      await performTest("Test+user@Gmail.Com", "test+user@gmail.com");
     });
 
-    it("should not remove sub-addresses for outlook accounts", (done) => {
-      performTest("Test+user@outlook.Com", "test+user@outlook.com", done);
+    it("should not remove sub-addresses for outlook accounts", async () => {
+      await performTest("Test+user@outlook.Com", "test+user@outlook.com");
     });
 
-    it("should not remove sub-addresses for yahoo accounts", (done) => {
-      performTest("Test+user@icloud.Com", "test+user@icloud.com", done);
+    it("should not remove sub-addresses for yahoo accounts", async () => {
+      await performTest("Test+user@icloud.Com", "test+user@icloud.com");
     });
 
-    it("should convert googlemail.com addresses to gmail.com", (done) => {
-      performTest("Test@googlemail.com", "test@gmail.com", done);
+    it("should convert googlemail.com addresses to gmail.com", async () => {
+      await performTest("Test@googlemail.com", "test@gmail.com");
     });
   });
 });
