@@ -1,5 +1,5 @@
 import request from "supertest";
-import { describe } from "mocha";
+import { describe, Done } from "mocha";
 import { expect, sinon } from "../../../../test/utils/test-utils";
 import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
@@ -61,12 +61,16 @@ describe("Integration:: change email", () => {
 
     oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return Promise.resolve({});
+      return new Promise((resolve) => {
+        resolve({});
+      });
     });
 
     oidcGetCachedJWKS = require("../../../utils/oidc");
     sandbox.stub(oidcGetCachedJWKS, "getCachedJWKS").callsFake(() => {
-      return Promise.resolve({});
+      return new Promise((resolve) => {
+        resolve({});
+      });
     });
 
     app = await require("../../../app").createApp();
@@ -102,7 +106,7 @@ describe("Integration:: change email", () => {
   });
 
   it("should return validation error when email not entered", async () => {
-    const res = await request(app)
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -117,11 +121,10 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when email too long", async () => {
-    const res = await request(app)
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -137,11 +140,10 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when invalid email entered", async () => {
-    const res = await request(app)
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -156,11 +158,10 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when same email used", async () => {
-    const res = await request(app)
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -175,7 +176,6 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when same email used by another user", async () => {
@@ -187,7 +187,7 @@ describe("Integration:: change email", () => {
       .reply(400, {});
 
     // Act
-    const res = await request(app)
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -202,7 +202,6 @@ describe("Integration:: change email", () => {
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
   });
 
   it("should redirect to /check-your-email when valid email", async () => {
@@ -214,7 +213,7 @@ describe("Integration:: change email", () => {
       .reply(204, {});
 
     // Act
-    const res = await request(app)
+    await request(app)
       .post(PATH_DATA.CHANGE_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -224,7 +223,6 @@ describe("Integration:: change email", () => {
       })
       .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url)
       .expect(302);
-    expect(res.statusCode).to.eq(302);
   });
 
   describe("Email Normalization Tests", () => {
@@ -232,7 +230,8 @@ describe("Integration:: change email", () => {
 
     const performTest = async (
       inputEmail: string,
-      expectedNormalisedEmail: string
+      expectedNormalisedEmail: string,
+      done: Done
     ) => {
       // Arrange
       nock(baseApi)
@@ -269,34 +268,35 @@ describe("Integration:: change email", () => {
 
       // Assert
       expect(receivedEmail).to.equal(expectedNormalisedEmail);
+      done();
     };
 
-    it("should normalise email to all lowercase", async () => {
-      await performTest("Test@Example.Com", "test@example.com");
+    it("should normalise email to all lowercase", (done) => {
+      performTest("Test@Example.Com", "test@example.com", done);
     });
 
-    it("should normalise Gmail email to lowercase", async () => {
-      await performTest("Test@Gmail.Com", "test@gmail.com");
+    it("should normalise Gmail email to lowercase", (done) => {
+      performTest("Test@Gmail.Com", "test@gmail.com", done);
     });
 
-    it("should not remove full stops from email", async () => {
-      await performTest("Test.user@Gmail.Com", "test.user@gmail.com");
+    it("should not remove full stops from email", (done) => {
+      performTest("Test.user@Gmail.Com", "test.user@gmail.com", done);
     });
 
-    it("should not remove sub-addresses for gmail accounts", async () => {
-      await performTest("Test+user@Gmail.Com", "test+user@gmail.com");
+    it("should not remove sub-addresses for gmail accounts", (done) => {
+      performTest("Test+user@Gmail.Com", "test+user@gmail.com", done);
     });
 
-    it("should not remove sub-addresses for outlook accounts", async () => {
-      await performTest("Test+user@outlook.Com", "test+user@outlook.com");
+    it("should not remove sub-addresses for outlook accounts", (done) => {
+      performTest("Test+user@outlook.Com", "test+user@outlook.com", done);
     });
 
-    it("should not remove sub-addresses for yahoo accounts", async () => {
-      await performTest("Test+user@icloud.Com", "test+user@icloud.com");
+    it("should not remove sub-addresses for yahoo accounts", (done) => {
+      performTest("Test+user@icloud.Com", "test+user@icloud.com", done);
     });
 
-    it("should convert googlemail.com addresses to gmail.com", async () => {
-      await performTest("Test@googlemail.com", "test@gmail.com");
+    it("should convert googlemail.com addresses to gmail.com", (done) => {
+      performTest("Test@googlemail.com", "test@gmail.com", done);
     });
   });
 });
