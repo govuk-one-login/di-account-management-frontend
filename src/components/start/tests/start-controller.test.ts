@@ -30,12 +30,12 @@ describe("start controller", () => {
   });
 
   describe("startGet", () => {
-    it("should redirect to authorisation server", () => {
+    it("should redirect to authorisation server", async () => {
       req.oidc.metadata.scopes = "openid";
       req.oidc.metadata.redirect_uris = ["url"];
       req.oidc.metadata.client_id = "test-client";
 
-      startGet(req as Request, res as Response);
+      await startGet(req as Request, res as Response);
 
       expect(res.redirect).to.have.called;
       expect(req.oidc.authorizationUrl).to.have.been.calledOnce;

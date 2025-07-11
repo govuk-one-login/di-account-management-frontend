@@ -106,7 +106,7 @@ describe("Integration:: change authenticator app", () => {
           authAppSecret: "A".repeat(20),
         };
 
-        (req.session.mfaMethods = [
+        req.session.mfaMethods = [
           {
             mfaIdentifier: 111111,
             methodVerified: true,
@@ -124,21 +124,17 @@ describe("Integration:: change authenticator app", () => {
             },
             methodVerified: true,
           },
-        ]),
-          next();
+        ];
+        next();
       });
 
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     sandbox.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));

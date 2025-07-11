@@ -56,7 +56,7 @@ describe("globalTryCatchAsync", () => {
     const loggerSpy = sinon.spy(logger, "error");
     const wrapped = globalTryCatchAsync(fn);
 
-    await wrapped(req as Request, res as Response);
+    await wrapped(req as Request, res as Response, next as NextFunction);
 
     expect(fn.calledOnce).to.be.true;
 

@@ -63,8 +63,8 @@ describe("enter password controller", () => {
       expect(res.render).to.have.calledWith("enter-password/index.njk");
     });
 
-    it("should redirect to security when there is no 'type' query parameter", () => {
-      enterPasswordGet(req as Request, res as Response);
+    it("should redirect to security when there is no 'type' query parameter", async () => {
+      await enterPasswordGet(req as Request, res as Response);
 
       expect(res.render).not.to.have.been.called;
       expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);

@@ -305,10 +305,10 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const supportReportingForm = !config?.hideReportingForm;
   const reportSuspiciousActivity =
     !config?.reportSuspiciousActivityJourneyDisabled;
-  const language = config?.language || "en";
+  const language = config?.language ?? "en";
   const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
 
-  const activity = data || [
+  const activity = data ?? [
     {
       event_type: "signed-in",
       session_id: "asdf",
@@ -343,15 +343,11 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   });
 
   sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-    return new Promise((resolve) => {
-      resolve({});
-    });
+    return Promise.resolve({});
   });
 
   sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-    return new Promise((resolve) => {
-      resolve({});
-    });
+    return Promise.resolve({});
   });
 
   sandbox

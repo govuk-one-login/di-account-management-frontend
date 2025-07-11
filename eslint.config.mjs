@@ -11,6 +11,13 @@ export default [
     languageOptions: {
       globals: globals.browser,
       parser: tsEslintParser,
+      ecmaVersion: 2022,
+      sourceType: "module",
+      parserOptions: {
+        project: ["./test/tsconfig.json", "./post-deploy-tests/tsconfig.json"],
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
     },
   },
   pluginJs.configs.recommended,
@@ -26,6 +33,8 @@ export default [
       "coverage",
       "src/assets/javascript",
       "dev-app.js",
+      "eslint.config.mjs",
+      "post-deploy-tests/.features-gen/**/*",
     ],
   },
   {
@@ -41,6 +50,7 @@ export default [
           caughtErrors: "none", // Add this line to ignore unused variables in catch blocks
         },
       ],
+      "@typescript-eslint/no-floating-promises": "error",
       "mocha/no-exclusive-tests": "error",
       "mocha/no-mocha-arrows": "off",
       "mocha/no-setup-in-describe": "off",

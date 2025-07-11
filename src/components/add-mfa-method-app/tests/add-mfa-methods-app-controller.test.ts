@@ -345,7 +345,7 @@ describe("addMfaAppMethodPost", () => {
         res as unknown as Response,
         nextSpy
       );
-    } catch (e) {
+    } catch {
       expect(logSpy.called).to.be.true;
     }
   });

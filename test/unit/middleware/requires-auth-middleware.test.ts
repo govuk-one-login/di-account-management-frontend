@@ -1,13 +1,12 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { NextFunction } from "express";
 import { sinon } from "../../utils/test-utils";
 import { requiresAuthMiddleware } from "../../../src/middleware/requires-auth-middleware";
 import { PATH_DATA } from "../../../src/app.constants";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 describe("Requires auth middleware", () => {
-  it("should redirect to signed out page if user logged out", () => {
+  it("should redirect to signed out page if user logged out", async () => {
     const req: any = {
       session: {
         user: {
@@ -22,13 +21,13 @@ describe("Requires auth middleware", () => {
     const res: any = { locals: {}, redirect: sinon.fake() };
     const nextFunction: NextFunction = sinon.fake(() => {});
 
-    requiresAuthMiddleware(req, res, nextFunction);
+    await requiresAuthMiddleware(req, res, nextFunction);
 
     expect(res.redirect).to.have.been.calledWith(PATH_DATA.USER_SIGNED_OUT.url);
     expect(nextFunction).to.have.not.been.called;
   });
 
-  it("should redirect to session expired page if user not authenticated", () => {
+  it("should redirect to session expired page if user not authenticated", async () => {
     const req: any = {
       session: {
         user: {
@@ -41,13 +40,13 @@ describe("Requires auth middleware", () => {
     const res: any = { locals: {}, redirect: sinon.fake() };
     const nextFunction: NextFunction = sinon.fake(() => {});
 
-    requiresAuthMiddleware(req, res, nextFunction);
+    await requiresAuthMiddleware(req, res, nextFunction);
 
     expect(res.redirect).to.have.been.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     expect(nextFunction).to.have.not.been.called;
   });
 
-  it("should redirect to session expired page if no user session", () => {
+  it("should redirect to session expired page if no user session", async () => {
     const req: any = {
       session: {
         user: {
@@ -58,13 +57,13 @@ describe("Requires auth middleware", () => {
     const res: any = { locals: {}, redirect: sinon.fake() };
     const nextFunction: NextFunction = sinon.fake(() => {});
 
-    requiresAuthMiddleware(req, res, nextFunction);
+    await requiresAuthMiddleware(req, res, nextFunction);
 
     expect(res.redirect).to.have.been.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     expect(nextFunction).to.have.not.been.called;
   });
 
-  it("should call next user session is valid", () => {
+  it("should call next user session is valid", async () => {
     const req: any = {
       session: {
         user: {
@@ -80,12 +79,12 @@ describe("Requires auth middleware", () => {
     };
     const nextFunction: NextFunction = sinon.fake(() => {});
 
-    requiresAuthMiddleware(req, res, nextFunction);
+    await requiresAuthMiddleware(req, res, nextFunction);
 
     expect(nextFunction).to.have.been.calledOnce;
   });
 
-  it("should call next and reset lo cookie to false if user is authenticated", () => {
+  it("should call next and reset lo cookie to false if user is authenticated", async () => {
     const req: any = {
       session: {
         user: {
@@ -108,13 +107,13 @@ describe("Requires auth middleware", () => {
     };
     const nextFunction: NextFunction = sinon.fake(() => {});
 
-    requiresAuthMiddleware(req, res, nextFunction);
+    await requiresAuthMiddleware(req, res, nextFunction);
 
     expect(nextFunction).to.have.been.calledOnce;
     expect(res.mockCookies.lo).to.equal("false");
   });
 
-  it("should redirect to Log in page", () => {
+  it("should redirect to Log in page", async () => {
     const sandbox: sinon.SinonSandbox = sinon.createSandbox();
     const req: Partial<Request> = {
       body: {},
@@ -138,7 +137,7 @@ describe("Requires auth middleware", () => {
     };
 
     const nextFunction: NextFunction = sandbox.fake(() => {});
-    requiresAuthMiddleware(req as Request, res as Response, nextFunction);
+    await requiresAuthMiddleware(req as Request, res as Response, nextFunction);
     expect(res.redirect).to.have.called;
     expect(req.oidc.authorizationUrl).to.have.been.calledOnce;
     sandbox.restore();

@@ -68,7 +68,7 @@ describe("change default method controller", () => {
           },
         ],
       };
-      changeDefaultMethodGet(
+      await changeDefaultMethodGet(
         req as unknown as Request,
         res as unknown as Response
       );
@@ -82,7 +82,7 @@ describe("change default method controller", () => {
       //@ts-expect-error in test
       req.session = { mfaMethods: [] };
 
-      changeDefaultMethodGet(
+      await changeDefaultMethodGet(
         req as unknown as Request,
         res as unknown as Response
       );
