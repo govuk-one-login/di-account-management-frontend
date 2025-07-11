@@ -168,7 +168,13 @@ async function createApp(): Promise<express.Application> {
     next();
   });
 
-  app.set("view engine", configureNunjucks(app, APP_VIEWS));
+  app.set("nunjucksEngine", configureNunjucks(app, APP_VIEWS));
+  app.use((req, res, next) => {
+    const engine = res.app.get("nunjucksEngine");
+    engine.addGlobal("request", req);
+    engine.addGlobal("response", res);
+    next();
+  });
 
   app.use(noCacheMiddleware);
 
