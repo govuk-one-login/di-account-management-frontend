@@ -17,20 +17,20 @@ describe("authMiddleware", () => {
     oidcClient = {} as Client;
   });
 
-  it("should attach oidcClient to req.oidc and call next()", () => {
+  it("should attach oidcClient to req.oidc and call next()", async () => {
     const middleware = authMiddleware(oidcClient);
 
-    middleware(req as Request, res as Response, next);
+    await middleware(req as Request, res as Response, next);
 
     expect(req.oidc).to.equal(oidcClient);
 
     expect(next).to.have.been.calledOnce;
   });
 
-  it("should not modify the response object", () => {
+  it("should not modify the response object", async () => {
     const middleware = authMiddleware(oidcClient);
 
-    middleware(req as Request, res as Response, next);
+    await middleware(req as Request, res as Response, next);
 
     expect(res).to.be.empty;
 

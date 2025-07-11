@@ -56,21 +56,17 @@ describe("Integration:: change phone number", () => {
 
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .then((res) => {
         const $ = cheerio.load(res.text);
