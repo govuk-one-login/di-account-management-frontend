@@ -47,7 +47,7 @@ describe("generateExpectedContext", () => {
         try {
           await generateExpectedContext(userId);
           expect.fail("Expected function to throw an error but it did not");
-        } catch (error) {
+        } catch {
           expect(errorLoggerSpy).to.have.been.calledWith(
             `Decrypt data: failed with the error Missing ${variable} environment variable`
           );

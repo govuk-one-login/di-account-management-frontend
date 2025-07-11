@@ -106,6 +106,15 @@ describe("callback-utils", () => {
       expect(result).to.equal(PATH_DATA.YOUR_SERVICES.url);
     });
 
+    it("should return default path if session is null", () => {
+      const req: any = {
+        query: {},
+      };
+      const res: any = {};
+      const result = determineRedirectUri(req, res);
+      expect(result).to.equal(PATH_DATA.YOUR_SERVICES.url);
+    });
+
     it("should append _ga param to redirect URL if consent is accepted", () => {
       const req: any = {
         session: {},

@@ -36,9 +36,7 @@ describe("Activity history controller", () => {
       sandbox
         .stub(presentActivityHistoryModule, "presentActivityHistory")
         .callsFake(() => {
-          return new Promise((resolve) => {
-            resolve([]);
-          });
+          return Promise.resolve([]);
         });
 
       const clientId = "clientId";
@@ -167,9 +165,7 @@ describe("Activity history controller", () => {
       sandbox
         .stub(presentActivityHistoryModule, "presentActivityHistory")
         .callsFake(() => {
-          return new Promise((resolve) => {
-            resolve([]);
-          });
+          return Promise.resolve([]);
         });
 
       const clientId = "clientId";

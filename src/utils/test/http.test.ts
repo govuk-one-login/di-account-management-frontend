@@ -5,6 +5,7 @@ import { sinon } from "../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { RequestBuilder, ResponseBuilder } from "../../../test/utils/builders";
 import { getRequestConfigFromExpress } from "../http";
+import * as oidcModule from "../oidc";
 
 describe("getRequestConfigFromExpress", () => {
   let sandbox: sinon.SinonSandbox;
@@ -15,6 +16,7 @@ describe("getRequestConfigFromExpress", () => {
     sandbox = sinon.createSandbox();
     req = new RequestBuilder().build();
     res = new ResponseBuilder().build();
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {
@@ -24,7 +26,7 @@ describe("getRequestConfigFromExpress", () => {
   it("returns the expected request config", async () => {
     req.session.user.tokens = { accessToken: "token" } as any;
 
-    const requestConfig = getRequestConfigFromExpress(
+    const requestConfig = await getRequestConfigFromExpress(
       req as Request,
       res as Response
     );

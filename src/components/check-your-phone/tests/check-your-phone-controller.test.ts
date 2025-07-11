@@ -18,6 +18,7 @@ import {
 import { logger } from "../../../utils/logger";
 import { MfaMethod } from "../../../utils/mfaClient/types";
 import * as mfaClient from "../../../utils/mfaClient";
+import * as oidcModule from "../../../utils/oidc";
 
 describe("check your phone controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -79,7 +80,8 @@ describe("check your phone controller", () => {
     };
 
     stubMfaClient = sandbox.createStubInstance(mfaClient.MfaClient);
-    sandbox.stub(mfaClient, "createMfaClient").returns(stubMfaClient);
+    sandbox.stub(mfaClient, "createMfaClient").resolves(stubMfaClient);
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {
@@ -347,7 +349,7 @@ describe("check your phone controller", () => {
         "Could not change phone number - no existing SMS methods found.";
       try {
         await checkYourPhonePost(fakeService)(req as Request, res as Response);
-      } catch (e) {
+      } catch {
         expect(errorLoggerSpy).to.have.been.calledWith(errorMessage);
       }
     });

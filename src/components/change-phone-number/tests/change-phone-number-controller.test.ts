@@ -22,6 +22,7 @@ import {
   TOKEN,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
+import * as oidcModule from "../../../utils/oidc";
 
 describe("change phone number controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -43,6 +44,8 @@ describe("change phone number controller", () => {
       .withRedirect(sandbox.fake(() => {}))
       .withStatus(sandbox.fake())
       .build();
+
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {

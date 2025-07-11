@@ -5,6 +5,7 @@ import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 import { getInitialState } from "../../../utils/state-machine";
+import * as oidcModule from "../../../utils/oidc";
 
 import {
   resendPhoneCodeGet,
@@ -35,6 +36,8 @@ describe("resend phone code controller", () => {
       status: sandbox.fake(),
       locals: {},
     };
+
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {

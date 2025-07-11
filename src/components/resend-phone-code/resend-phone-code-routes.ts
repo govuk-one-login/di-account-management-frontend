@@ -5,7 +5,6 @@ import {
   resendPhoneCodeGet,
   resendPhoneCodePost,
 } from "./resend-phone-code-controller";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { globalTryCatchAsync } from "../../utils/global-try-catch";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
@@ -23,7 +22,6 @@ router.post(
   PATH_DATA.RESEND_PHONE_CODE.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  refreshTokenMiddleware(),
   globalTryCatchAsync(resendPhoneCodePost())
 );
 

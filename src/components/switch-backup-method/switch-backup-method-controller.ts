@@ -89,7 +89,7 @@ export async function switchBackupMfaMethodPost(
   }
 
   try {
-    const mfaClient = createMfaClient(req, res);
+    const mfaClient = await createMfaClient(req, res);
     const response = await mfaClient.makeDefault(
       newDefaultMethod.mfaIdentifier
     );

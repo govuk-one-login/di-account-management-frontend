@@ -123,7 +123,7 @@ describe("addMfaAppMethodPost", () => {
 
   beforeEach(() => {
     mfaClientStub = sinon.createStubInstance(MfaClient);
-    sinon.stub(mfaClient, "createMfaClient").returns(mfaClientStub);
+    sinon.stub(mfaClient, "createMfaClient").resolves(mfaClientStub);
     nextSpy = sinon.spy();
     logSpy = sinon.spy();
   });
@@ -345,7 +345,7 @@ describe("addMfaAppMethodPost", () => {
         res as unknown as Response,
         nextSpy
       );
-    } catch (e) {
+    } catch {
       expect(logSpy.called).to.be.true;
     }
   });

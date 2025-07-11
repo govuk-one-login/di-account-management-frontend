@@ -139,6 +139,15 @@
           <p class="govuk-body"><a href="{{activityLogUrl}}" class="govuk-link">{{ 'pages.security.activityHistory.link' | translate }}</a></p>
         </div>
       {% endif %}
+
+      {% if supportGlobalLogout %}
+        <div class="summary-list-container" data-test-id="global-logout-section">
+          <h2 class="govuk-heading-m">{{ 'pages.security.globalLogout.heading' | translate }}</h2>
+          <p class="govuk-body">{{ 'pages.security.globalLogout.info' | translate }}</p>
+          <p class="govuk-body"><a href="{{'GLOBAL_LOGOUT' | getPath }}" class="govuk-link">{{ 'pages.security.globalLogout.link' | translate }}</a></p>
+        </div>
+      {% endif %}
+
       <div class="summary-list-container">
         <h2 class="govuk-heading-m">{{ 'pages.security.deleteAccount.heading' | translate }}</h2>
         <p class="govuk-body">{{ 'pages.security.deleteAccount.info' | translate }}</p>

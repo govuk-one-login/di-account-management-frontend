@@ -11,6 +11,7 @@ import {
 } from "../check-your-email-controller";
 import { CheckYourEmailServiceInterface } from "../types";
 import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
+import * as oidcModule from "../../../utils/oidc";
 
 describe("check your email controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -36,6 +37,7 @@ describe("check your email controller", () => {
       status: sandbox.fake(),
       locals: {},
     };
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {

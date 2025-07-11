@@ -7,7 +7,6 @@ import {
 import { validateChangePasswordRequest } from "./change-password-validation";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { refreshTokenMiddleware } from "../../middleware/refresh-token-middleware";
 import {
   globalTryCatchAsync,
   globalTryCatch,
@@ -27,7 +26,6 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   validateChangePasswordRequest(),
-  refreshTokenMiddleware(),
   globalTryCatchAsync(changePasswordPost())
 );
 

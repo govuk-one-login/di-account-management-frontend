@@ -63,7 +63,7 @@ export async function generateTokenSet(
 }
 
 export function determineRedirectUri(req: Request, res: Response): string {
-  let redirectUri = req.session.currentURL || PATH_DATA.YOUR_SERVICES.url;
+  let redirectUri = req.session?.currentURL || PATH_DATA.YOUR_SERVICES.url;
   const crossDomainGaIdParam = req.query._ga as string;
 
   if (req.query.cookie_consent) {

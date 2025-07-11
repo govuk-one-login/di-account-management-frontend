@@ -56,21 +56,17 @@ describe("Integration:: change phone number", () => {
 
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     app = await require("../../../app").createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .then((res) => {
         const $ = cheerio.load(res.text);
@@ -103,7 +99,7 @@ describe("Integration:: change phone number", () => {
   });
 
   it("should return validation error when uk phone number not entered", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -118,10 +114,11 @@ describe("Integration:: change phone number", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when uk phone number entered is not valid", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -136,10 +133,11 @@ describe("Integration:: change phone number", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when uk phone number entered contains text", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -154,10 +152,11 @@ describe("Integration:: change phone number", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when uk phone number entered less than 12 characters", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -172,10 +171,11 @@ describe("Integration:: change phone number", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when uk phone number entered greater than 12 characters", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -190,6 +190,7 @@ describe("Integration:: change phone number", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number entered", async () => {
@@ -201,7 +202,7 @@ describe("Integration:: change phone number", () => {
       .reply(204, {});
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -211,6 +212,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
+    expect(res.statusCode).to.eq(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", async () => {
@@ -222,7 +224,7 @@ describe("Integration:: change phone number", () => {
       .reply(204, {});
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -232,6 +234,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
+    expect(res.statusCode).to.eq(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with 447 is entered", async () => {
@@ -243,7 +246,7 @@ describe("Integration:: change phone number", () => {
       .reply(204, {});
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -253,6 +256,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
+    expect(res.statusCode).to.eq(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with 440 is entered", async () => {
@@ -264,7 +268,7 @@ describe("Integration:: change phone number", () => {
       .reply(204, {});
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -274,6 +278,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
+    expect(res.statusCode).to.eq(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +440 is entered", async () => {
@@ -285,7 +290,7 @@ describe("Integration:: change phone number", () => {
       .reply(204, {});
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -295,10 +300,11 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
+    expect(res.statusCode).to.eq(302);
   });
 
   it("should return validation error when international phone number not entered", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -315,6 +321,7 @@ describe("Integration:: change phone number", () => {
         expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when new international phone number entered is same as current phone number", async () => {
@@ -326,7 +333,7 @@ describe("Integration:: change phone number", () => {
       .reply(400, { code: 1044 });
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -345,6 +352,7 @@ describe("Integration:: change phone number", () => {
         expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when new UK phone number is the same as curent phone number", async () => {
@@ -356,7 +364,7 @@ describe("Integration:: change phone number", () => {
       .reply(400, { code: 1044 });
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -371,10 +379,11 @@ describe("Integration:: change phone number", () => {
         );
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when international phone number entered is not valid", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -393,10 +402,11 @@ describe("Integration:: change phone number", () => {
         expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when international phone number entered contains text", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -415,10 +425,11 @@ describe("Integration:: change phone number", () => {
         expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when international phone number entered less than 8 characters", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -437,10 +448,11 @@ describe("Integration:: change phone number", () => {
         expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return validation error when international phone number entered greater than 16 characters", async () => {
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -459,6 +471,7 @@ describe("Integration:: change phone number", () => {
         expect($(testComponent("phoneNumber-error")).text()).to.contains("");
       })
       .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should redirect to /check-your-phone page when valid international phone number entered", async () => {
@@ -470,7 +483,7 @@ describe("Integration:: change phone number", () => {
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -481,6 +494,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
+    expect(res.statusCode).to.eq(302);
   });
 
   it("should return internal server error if send-otp-notification API call fails", async () => {
@@ -494,7 +508,7 @@ describe("Integration:: change phone number", () => {
       });
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
       .set("Cookie", cookies)
@@ -503,5 +517,6 @@ describe("Integration:: change phone number", () => {
         phoneNumber: "07738394991",
       })
       .expect(500);
+    expect(res.statusCode).to.eq(500);
   });
 });

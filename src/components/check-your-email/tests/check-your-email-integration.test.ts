@@ -57,15 +57,11 @@ describe("Integration:: check your email", () => {
 
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     app = await require("../../../app").createApp();

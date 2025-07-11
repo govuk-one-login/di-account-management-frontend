@@ -190,7 +190,7 @@ export function eventService(
   };
 
   const send = (event: Event, trace: string): void => {
-    sqs.send(JSON.stringify(event), trace);
+    void sqs.send(JSON.stringify(event), trace);
   };
 
   return { buildAuditEvent, send };

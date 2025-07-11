@@ -47,7 +47,7 @@ export function changePasswordPost(
     const response = await service.updatePassword(
       email,
       newPassword,
-      getRequestConfigFromExpress(req, res)
+      await getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {

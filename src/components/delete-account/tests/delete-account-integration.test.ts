@@ -91,23 +91,19 @@ describe("Integration:: delete account", () => {
 
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({
-          endSessionUrl: function (params: any = {}) {
-            return `${process.env.API_BASE_URL}/logout?id_token_hint=${
-              params.id_token_hint
-            }&post_logout_redirect_uri=${encodeURIComponent(
-              params.post_logout_redirect_uri
-            )}`;
-          },
-        });
+      return Promise.resolve({
+        endSessionUrl: function (params: any = {}) {
+          return `${process.env.API_BASE_URL}/logout?id_token_hint=${
+            params.id_token_hint
+          }&post_logout_redirect_uri=${encodeURIComponent(
+            params.post_logout_redirect_uri
+          )}`;
+        },
       });
     });
 
     sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     app = await require("../../../app").createApp();
@@ -115,7 +111,7 @@ describe("Integration:: delete account", () => {
     baseApi = process.env.AM_API_BASE_URL;
     govUkPublishingBaseApi = process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .then((res) => {
         const $ = cheerio.load(res.text);

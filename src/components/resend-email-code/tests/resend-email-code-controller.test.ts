@@ -3,6 +3,7 @@ import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
+import * as oidcModule from "../../../utils/oidc";
 
 import {
   resendEmailCodeGet,
@@ -33,6 +34,8 @@ describe("check your email controller", () => {
       status: sandbox.fake(),
       locals: {},
     };
+
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {

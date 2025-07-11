@@ -310,15 +310,11 @@ const appWithMiddlewareSetup = async (data?: {
     };
   });
   sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-    return new Promise((resolve) => {
-      resolve({});
-    });
+    return Promise.resolve({});
   });
 
   sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-    return new Promise((resolve) => {
-      resolve({});
-    });
+    return Promise.resolve({});
   });
 
   return await require("../../../app").createApp();

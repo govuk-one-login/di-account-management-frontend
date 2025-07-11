@@ -57,7 +57,7 @@ export async function changeAuthenticatorAppPost(
         throw new Error(errorMessage);
       }
 
-      const mfaClient = createMfaClient(req, res);
+      const mfaClient = await createMfaClient(req, res);
       const response = await mfaClient.update({
         mfaIdentifier: authAppMFAMethod.mfaIdentifier,
         priorityIdentifier: authAppMFAMethod.priorityIdentifier,

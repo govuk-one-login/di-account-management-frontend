@@ -14,9 +14,7 @@ describe("Integration::healthcheck", () => {
     sandbox = sinon.createSandbox();
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
     app = await require("../../../app").createApp();
   });

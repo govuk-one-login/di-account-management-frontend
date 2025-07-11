@@ -21,6 +21,7 @@ import {
 } from "../../../src/utils/mfaClient/validate";
 import { getRequestConfig, Http } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
+import * as oidcModule from "../../../src/utils/oidc";
 
 const mfaMethod: MfaMethod = {
   mfaIdentifier: "1234",
@@ -309,7 +310,15 @@ describe("buildRequest", () => {
 });
 
 describe("createMfaClient", () => {
-  it("creates an MfaClient", () => {
+  beforeEach(() => {
+    sinon.replace(oidcModule, "refreshToken", async () => {});
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it("creates an MfaClient", async () => {
     const req = {
       ip: "ip",
       session: {
@@ -331,7 +340,7 @@ describe("createMfaClient", () => {
       },
     };
 
-    const client = createMfaClient(
+    const client = await createMfaClient(
       req as unknown as Request,
       res as unknown as Response
     );

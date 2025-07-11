@@ -73,7 +73,7 @@ export async function addMfaAppMethodPost(
           credential: authAppSecret,
         };
 
-        const mfaClient = createMfaClient(req, res);
+        const mfaClient = await createMfaClient(req, res);
         const response = await mfaClient.create(newMethod);
 
         if (!response.success) {

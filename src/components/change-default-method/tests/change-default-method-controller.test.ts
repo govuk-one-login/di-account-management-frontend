@@ -22,6 +22,7 @@ import * as mfaClient from "../../../utils/mfaClient";
 import { MfaMethod } from "../../../utils/mfaClient/types";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
+import * as oidcModule from "../../../utils/oidc";
 
 describe("change default method controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -45,6 +46,8 @@ describe("change default method controller", () => {
       .withStatus(sandbox.fake())
       .withLocals({})
       .build();
+
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {
@@ -65,7 +68,7 @@ describe("change default method controller", () => {
           },
         ],
       };
-      changeDefaultMethodGet(
+      await changeDefaultMethodGet(
         req as unknown as Request,
         res as unknown as Response
       );
@@ -79,7 +82,7 @@ describe("change default method controller", () => {
       //@ts-expect-error in test
       req.session = { mfaMethods: [] };
 
-      changeDefaultMethodGet(
+      await changeDefaultMethodGet(
         req as unknown as Request,
         res as unknown as Response
       );
@@ -94,7 +97,9 @@ describe("change default method controller", () => {
 
     beforeEach(() => {
       mfaClientStub = sandbox.createStubInstance(mfaClient.MfaClient);
-      sandbox.replace(mfaClient, "createMfaClient", () => mfaClientStub);
+      sandbox.replace(mfaClient, "createMfaClient", () =>
+        Promise.resolve(mfaClientStub)
+      );
       next = sandbox.spy();
     });
 

@@ -10,7 +10,7 @@ describe("referenceCode", () => {
 
     it("should return a code with only numbers", () => {
       const code = generateReferenceCode();
-      const onlyNumbers = new RegExp("^[0-9]+$");
+      const onlyNumbers = /^\d+$/;
       expect(onlyNumbers.test(code)).to.equal(true);
     });
   });

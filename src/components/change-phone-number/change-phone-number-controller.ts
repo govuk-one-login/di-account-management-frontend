@@ -75,7 +75,7 @@ export function changePhoneNumberPost(
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
-      getRequestConfigFromExpress(req, res)
+      await getRequestConfigFromExpress(req, res)
     );
 
     if (response.success) {

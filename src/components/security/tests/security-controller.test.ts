@@ -31,6 +31,7 @@ describe("security controller", () => {
   describe("securityGet", () => {
     it("should render security view with SMS MFA method", async () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(true);
+      sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
       sandbox
@@ -59,6 +60,7 @@ describe("security controller", () => {
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
         supportActivityLog: true,
+        supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
         mfaMethods: [
@@ -81,6 +83,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(true);
       sandbox.stub(configFuncs, "supportChangeMfa").returns(false);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
+      sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
       sandbox
         .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
@@ -107,6 +110,7 @@ describe("security controller", () => {
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
         supportActivityLog: true,
+        supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
         mfaMethods: [
@@ -142,6 +146,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(false);
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
+      sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
       sandbox
         .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
@@ -168,6 +173,7 @@ describe("security controller", () => {
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
         supportActivityLog: false,
+        supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
         mfaMethods: [
@@ -190,6 +196,7 @@ describe("security controller", () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(true);
       sandbox.stub(configFuncs, "supportChangeMfa").returns(true);
       sandbox.stub(configFuncs, "supportAddBackupMfa").returns(true);
+      sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
       sandbox
         .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(false);
@@ -216,6 +223,7 @@ describe("security controller", () => {
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
         supportActivityLog: false,
+        supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
         mfaMethods: [
@@ -323,6 +331,7 @@ describe("security controller", () => {
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
         supportActivityLog: true,
+        supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
         mfaMethods: [
@@ -384,6 +393,7 @@ describe("security controller", () => {
       expect(res.render).to.have.been.calledWith("security/index.njk", {
         email: "test@test.com",
         supportActivityLog: true,
+        supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
         mfaMethods: [],
@@ -418,6 +428,7 @@ describe("security controller", () => {
       expect(res.render).to.have.been.calledWith("security/index.njk", {
         email: "test@test.com",
         supportActivityLog: true,
+        supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
         mfaMethods: [
@@ -461,6 +472,7 @@ describe("security controller", () => {
       expect(res.render).to.have.been.calledWith("security/index.njk", {
         email: "test@test.com",
         supportActivityLog: true,
+        supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
         mfaMethods: [

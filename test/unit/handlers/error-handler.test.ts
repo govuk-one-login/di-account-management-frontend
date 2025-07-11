@@ -37,7 +37,6 @@ describe("Error handlers", () => {
         dynamic: true,
         loggedInStatus: true,
         isPageDataSensitive: true,
-        statusCode: 404,
         taxonomyLevel1: "accounts",
         taxonomyLevel2: "undefined",
         taxonomyLevel3: "undefined",
@@ -48,18 +47,17 @@ describe("Error handlers", () => {
   });
 
   describe("serverErrorHandler", () => {
-    it("should render 500 view when csrf token is invalid", () => {
+    it("should render 500 view when csrf token is invalid", async () => {
       const err: any = new Error("invalid csrf token");
       err["code"] = "EBADCSRFTOKEN";
 
-      serverErrorHandler(err, req as Request, res as Response, next);
+      await serverErrorHandler(err, req as Request, res as Response, next);
 
       expect(res.locals?.opl).to.deep.eq({
         contentId: "undefined",
         dynamic: true,
         loggedInStatus: true,
         isPageDataSensitive: true,
-        statusCode: 500,
         taxonomyLevel1: "accounts",
         taxonomyLevel2: "undefined",
         taxonomyLevel3: "undefined",
@@ -68,17 +66,16 @@ describe("Error handlers", () => {
       expect(res.render).to.have.been.calledOnceWith("common/errors/500.njk");
     });
 
-    it("should render 500 view when unexpected error", () => {
+    it("should render 500 view when unexpected error", async () => {
       const err = new Error("internal server error");
 
-      serverErrorHandler(err, req as Request, res as Response, next);
+      await serverErrorHandler(err, req as Request, res as Response, next);
 
       expect(res.locals?.opl).to.deep.eq({
         contentId: "undefined",
         dynamic: true,
         loggedInStatus: true,
         isPageDataSensitive: true,
-        statusCode: 500,
         taxonomyLevel1: "accounts",
         taxonomyLevel2: "undefined",
         taxonomyLevel3: "undefined",
@@ -87,18 +84,17 @@ describe("Error handlers", () => {
       expect(res.render).to.have.been.calledOnceWith("common/errors/500.njk");
     });
 
-    it("should render timeout view when no session", () => {
+    it("should render timeout view when no session", async () => {
       const err = new Error("timeout");
       res.statusCode = 401;
 
-      serverErrorHandler(err, req as Request, res as Response, next);
+      await serverErrorHandler(err, req as Request, res as Response, next);
 
       expect(res.locals?.opl).to.deep.eq({
         contentId: "undefined",
         dynamic: true,
         loggedInStatus: true,
         isPageDataSensitive: true,
-        statusCode: 500,
         taxonomyLevel1: "accounts",
         taxonomyLevel2: "undefined",
         taxonomyLevel3: "undefined",

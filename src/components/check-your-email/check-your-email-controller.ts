@@ -55,7 +55,7 @@ export function checkYourEmailPost(
 
     const isEmailUpdated = await service.updateEmail(
       updateInput,
-      getRequestConfigFromExpress(req, res)
+      await getRequestConfigFromExpress(req, res)
     );
 
     if (isEmailUpdated) {

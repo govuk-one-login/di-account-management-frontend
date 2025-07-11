@@ -3,11 +3,11 @@ import { generators } from "openid-client";
 import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants";
 import { logger } from "../utils/logger";
 
-export function requiresAuthMiddleware(
+export async function requiresAuthMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   const isAuthenticated = req.session.user?.isAuthenticated;
   const isLoggedOut = req.cookies?.lo;
 
@@ -17,7 +17,7 @@ export function requiresAuthMiddleware(
   );
   // if there is no session, then should create a session and redirect to auth to sign in
   if (isAuthenticated === undefined) {
-    redirectToLogIn(req, res);
+    await redirectToLogIn(req, res);
   } else if (!isAuthenticated && isLoggedOut == "true") {
     return res.redirect(PATH_DATA.USER_SIGNED_OUT.url);
   } else if (!isAuthenticated) {

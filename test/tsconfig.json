@@ -7,17 +7,18 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
+    // do not check types in node_modules folder
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
-    "typeRoots": ["../@types", "../node_modules/@types"]
+    "typeRoots": ["@types", "/node_modules/@types"]
   },
-  "include": ["**/*.ts"],
+  "include": ["../src/**/*.ts", "../@types/**/*.d.ts", "**/*.ts"],
   "exclude": [
     "../coverage",
     "../dist",
+    "../post-deploy-tests",
     "../**/*.js",
-    "./post-deploy-tests/.features-gen",
     "../eslint.config.mjs"
   ]
 }

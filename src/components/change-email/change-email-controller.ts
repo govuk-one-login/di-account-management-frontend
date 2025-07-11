@@ -57,7 +57,7 @@ export function changeEmailPost(
 
     const emailSent = await service.sendCodeVerificationNotification(
       newEmailAddress,
-      getRequestConfigFromExpress(req, res)
+      await getRequestConfigFromExpress(req, res)
     );
 
     if (emailSent) {

@@ -122,7 +122,7 @@ describe("Integration:: check your phone", () => {
       ],
     });
 
-    sandbox.stub(mfaClient, "createMfaClient").returns(stubMfaClient);
+    sandbox.stub(mfaClient, "createMfaClient").resolves(stubMfaClient);
 
     await request(app)
       .get(PATH_DATA.CHECK_YOUR_PHONE.url)

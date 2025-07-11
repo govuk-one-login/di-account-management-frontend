@@ -83,14 +83,12 @@ describe("global logout controller", () => {
 
     const oidc = require("../../../utils/oidc");
     sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return new Promise((resolve) => {
-        resolve({});
-      });
+      return Promise.resolve({});
     });
 
     keySet = await generateKeyPair("ES256");
 
-    issuerJWKS = await createLocalJWKSet({
+    issuerJWKS = createLocalJWKSet({
       keys: [await exportJWK(keySet.publicKey)],
     });
 

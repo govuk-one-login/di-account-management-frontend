@@ -15,7 +15,7 @@ describe("applyOverloadProtection", () => {
 
     require.cache[require.resolve("overload-protection")] = {
       exports: overloadProtectionStub,
-    } as NodeModule;
+    } as NodeJS.Module;
 
     applyOverloadProtection =
       require("../../../src/middleware/overload-protection-middleware").applyOverloadProtection;

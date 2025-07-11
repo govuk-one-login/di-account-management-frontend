@@ -11,6 +11,7 @@ import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import * as logout from "../../../utils/logout";
 import { UserJourney } from "../../../utils/state-machine";
+import * as oidcModule from "../../../utils/oidc";
 
 describe("enter password controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -45,6 +46,7 @@ describe("enter password controller", () => {
       locals: {},
     };
     process.env.ENABLE_CHANGE_ON_INTERVENTION = "1";
+    sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {
@@ -61,8 +63,8 @@ describe("enter password controller", () => {
       expect(res.render).to.have.calledWith("enter-password/index.njk");
     });
 
-    it("should redirect to security when there is no 'type' query parameter", () => {
-      enterPasswordGet(req as Request, res as Response);
+    it("should redirect to security when there is no 'type' query parameter", async () => {
+      await enterPasswordGet(req as Request, res as Response);
 
       expect(res.render).not.to.have.been.called;
       expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);

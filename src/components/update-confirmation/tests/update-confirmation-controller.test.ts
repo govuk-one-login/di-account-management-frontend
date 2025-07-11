@@ -48,7 +48,7 @@ describe("update confirmation controller", () => {
 
   describe("updateEmailConfirmationGet", () => {
     it("should render update email confirmation page", async () => {
-      await updateEmailConfirmationGet(req as Request, res as Response);
+      updateEmailConfirmationGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
@@ -56,7 +56,7 @@ describe("update confirmation controller", () => {
 
   describe("updatePasswordConfirmationGet", () => {
     it("should render update password confirmation page", async () => {
-      await updatePasswordConfirmationGet(req as Request, res as Response);
+      updatePasswordConfirmationGet(req as Request, res as Response);
       expect(req.session.destroy).called;
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
@@ -64,7 +64,7 @@ describe("update confirmation controller", () => {
 
   describe("updatePhoneNumberConfirmationGet", () => {
     it("should render update phone number page", async () => {
-      await updatePhoneNumberConfirmationGet(req as Request, res as Response);
+      updatePhoneNumberConfirmationGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
@@ -72,10 +72,7 @@ describe("update confirmation controller", () => {
 
   describe("updateAuthenticatorAppConfirmationGet", () => {
     it("should render update authenticator app page", async () => {
-      await updateAuthenticatorAppConfirmationGet(
-        req as Request,
-        res as Response
-      );
+      updateAuthenticatorAppConfirmationGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });
@@ -109,7 +106,7 @@ describe("update confirmation controller", () => {
 
   describe("deleteAccountConfirmationGet", () => {
     it("should render delete confirmation page", async () => {
-      await deleteAccountConfirmationGet(req as Request, res as Response);
+      deleteAccountConfirmationGet(req as Request, res as Response);
 
       expect(res.render).to.have.calledWith("update-confirmation/index.njk");
     });

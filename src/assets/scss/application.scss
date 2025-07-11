@@ -204,11 +204,14 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   position: absolute;
   padding: 5px;
   right: 0;
-  bottom: 7px;
+  bottom: 50%;
+  transform: translateY(50%);
+
   @include govuk-media-query($until: mobile) {
     position: relative;
     float: left;
     padding-left: 0;
+    transform: none;
   }
 }
 

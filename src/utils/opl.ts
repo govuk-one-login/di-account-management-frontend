@@ -5,7 +5,6 @@ interface OplSettings {
   taxonomyLevel1?: string;
   taxonomyLevel2?: string;
   taxonomyLevel3?: string;
-  statusCode?: number;
   loggedInStatus?: boolean;
   dynamic?: boolean;
   isPageDataSensitive?: boolean;
@@ -40,7 +39,6 @@ export const setOplSettings = (
   res: Response
 ): void => {
   const mergedSettings: OplSettings = {
-    statusCode: settings?.statusCode ?? 200,
     loggedInStatus: settings?.loggedInStatus ?? true,
     dynamic: settings?.dynamic ?? true,
     isPageDataSensitive: settings?.isPageDataSensitive ?? true,
