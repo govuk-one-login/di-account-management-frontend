@@ -40,6 +40,7 @@ jobs:
           DEBUG: 0
         ports:
           - 4566:4566
+
     steps:
       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # pin@v3
         with:
@@ -72,7 +73,7 @@ jobs:
           SUSPICIOUS_ACTIVITY_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:SuspiciousActivityTopicArn
 
       - name: Run integration tests
-        run: npm run test:integration
+        run: npm run test:integration-legacy
 
       - name: Run lint
         run: npm run lint

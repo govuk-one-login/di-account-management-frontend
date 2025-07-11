@@ -33,8 +33,8 @@ export default [
       "coverage",
       "src/assets/javascript",
       "dev-app.js",
+      "integration-tests",
       "eslint.config.mjs",
-      "post-deploy-tests/.features-gen/**/*",
     ],
   },
   {
