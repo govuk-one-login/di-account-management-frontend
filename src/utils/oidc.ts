@@ -123,13 +123,8 @@ const initRefreshToken = function (
         );
         req.session.user.tokens.accessToken = tokenSet.access_token;
         req.session.user.tokens.refreshToken = tokenSet.refresh_token;
-      } catch (error) {
-        req.metrics?.addMetric(
-          "refreshTokenMiddlewareError",
-          MetricUnit.Count,
-          1
-        );
-        req.log.error(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN, error);
+      } catch {
+        req.metrics?.addMetric("refreshTokenError", MetricUnit.Count, 1);
         throw new Error(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
       }
     }
