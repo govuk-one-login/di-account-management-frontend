@@ -446,7 +446,7 @@ describe("OIDC Functions", () => {
       expect(req.session.user.tokens.accessToken).to.eq(accessToken);
       expect(req.session.user.tokens.refreshToken).to.eq(refreshTokenToken);
       expect(req.metrics.addMetric).to.have.been.calledWith(
-        "refreshTokenMiddlewareError"
+        "refreshTokenError"
       );
       expect(error.message).to.eq(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
     });
