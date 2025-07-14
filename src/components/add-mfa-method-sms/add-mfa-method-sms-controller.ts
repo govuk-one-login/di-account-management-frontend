@@ -112,21 +112,19 @@ export function addMfaSmsMethodPost(
         EventType.VerifyCodeSent
       );
 
-      req.session.save(() => {
-        logger.info(
-          { trace: res?.locals?.trace },
-          `Add MFA Method SMS POST controller req.session.user.newPhoneNumber: ${
-            req.session.user.newPhoneNumber?.replace(
-              /^(.{2})(.*)/,
-              (_, first2, rest) => first2 + rest.replace(/./g, "*")
-            ) ?? JSON.stringify(req.session.user.newPhoneNumber)
-          }`
-        );
+      logger.info(
+        { trace: res?.locals?.trace },
+        `Add MFA Method SMS POST controller req.session.user.newPhoneNumber: ${
+          req.session.user.newPhoneNumber?.replace(
+            /^(.{2})(.*)/,
+            (_, first2, rest) => first2 + rest.replace(/./g, "*")
+          ) ?? JSON.stringify(req.session.user.newPhoneNumber)
+        }`
+      );
 
-        res.redirect(
-          `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${UserJourney.addBackup}`
-        );
-      });
+      res.redirect(
+        `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${UserJourney.addBackup}`
+      );
       return;
     }
 
