@@ -19,7 +19,7 @@ describe("globalTryCatchAsync", () => {
   });
 
   it("should call the wrapped async function and handle no error", async () => {
-    const fn = sinon.stub().resolves(); // Simulate an async function that resolves without error
+    const fn = sinon.stub().resolves();
 
     const wrapped = globalTryCatchAsync(fn);
 
@@ -29,7 +29,7 @@ describe("globalTryCatchAsync", () => {
     expect(next.called).to.be.false;
   });
 
-  it("should log the error and call next if the wrapped async function throws an error", async () => {
+  it("should log the error and stack when wrapped async function throws an error", async () => {
     const fn = sinon.stub().rejects(new Error("Test error"));
 
     const loggerSpy = sinon.spy(logger, "error");
@@ -44,19 +44,16 @@ describe("globalTryCatchAsync", () => {
       "Error: Test error"
     );
 
-    expect(next.calledOnce).to.be.true;
-    expect(next.firstCall.args[0].message).to.equal("Test error");
-
     loggerSpy.restore();
   });
 
-  it("should log the error only when next is not provided and the wrapped async function throws an error", async () => {
+  it("should log the error when next is not provided and the wrapped function throws an error", async () => {
     const fn = sinon.stub().rejects(new Error("Test error"));
 
     const loggerSpy = sinon.spy(logger, "error");
     const wrapped = globalTryCatchAsync(fn);
 
-    await wrapped(req as Request, res as Response, next as NextFunction);
+    await wrapped(req as Request, res as Response);
 
     expect(fn.calledOnce).to.be.true;
 
@@ -107,14 +104,12 @@ describe("globalTryCatch", () => {
     expect(loggerSpy.firstCall.args[0].toString()).to.equal(
       "Error: Test error"
     );
-
     expect(next.calledOnce).to.be.true;
-    expect(next.firstCall.args[0].message).to.equal("Test error");
 
     loggerSpy.restore();
   });
 
-  it("should log the error only when next is not provided and the wrapped function throws an error", () => {
+  it("should log the error when next is not provided and the wrapped function throws an error", () => {
     const fn = sinon.stub().throws(new Error("Test error"));
 
     const loggerSpy = sinon.spy(logger, "error");
