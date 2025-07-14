@@ -151,6 +151,7 @@ describe("callback controller", () => {
       };
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
       expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
+      expect(res.redirect).to.have.calledOnce;
     });
 
     it("redirect to session expired when any error occurs", async () => {
