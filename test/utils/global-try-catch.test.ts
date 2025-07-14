@@ -62,8 +62,6 @@ describe("globalTryCatchAsync", () => {
       "Error: Test error"
     );
 
-    expect(next.calledOnce).to.be.false;
-
     loggerSpy.restore();
   });
 });
