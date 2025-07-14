@@ -155,4 +155,9 @@ describe("addMfaSmsMethodConfirmationGet", () => {
       summaryText: "pages.addBackupSms.confirm.message",
     });
   });
+
+  it("should clear the user's state", async () => {
+    await addMfaSmsMethodConfirmationGet(req as Request, res as Response);
+    expect(req.session.user.state.addBackup).to.be.undefined;
+  });
 });

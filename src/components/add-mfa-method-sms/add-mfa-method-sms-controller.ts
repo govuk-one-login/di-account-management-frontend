@@ -176,6 +176,8 @@ export async function addMfaSmsMethodConfirmationGet(
     res
   );
 
+  delete req.session.user.state.addBackup;
+
   return res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.addBackupSms.confirm.title"),
     panelText: req.t("pages.addBackupSms.confirm.heading"),
