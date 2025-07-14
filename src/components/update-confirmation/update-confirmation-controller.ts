@@ -166,6 +166,8 @@ export async function addMfaAppMethodConfirmationGet(
     res
   );
 
+  delete req.session.user.state.addBackup;
+
   return res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.confirmaddBackup.title"),
     panelText: req.t("pages.confirmaddBackup.heading"),

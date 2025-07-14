@@ -132,16 +132,6 @@ export function checkYourPhoneGet(req: Request, res: Response): void {
   const intent = req.query.intent as Intent;
   setCheckYourPhoneOplSettings(intent, req, res);
 
-  logger.info(
-    { trace: res?.locals?.trace },
-    `Check your phone GET controller newPhoneNumber: ${
-      req.session.user.newPhoneNumber?.replace(
-        /^(.{2})(.*)/,
-        (_, first2, rest) => first2 + rest.replace(/./g, "*")
-      ) ?? JSON.stringify(req.session.user.newPhoneNumber)
-    }`
-  );
-
   res.render(TEMPLATE_NAME, getRenderOptions(req, intent));
 }
 
@@ -213,16 +203,6 @@ export function checkYourPhonePost(
     }
 
     const { email, newPhoneNumber } = req.session.user;
-
-    logger.info(
-      { trace: res?.locals?.trace },
-      `Check your phone POST controller newPhoneNumber: ${
-        req.session.user.newPhoneNumber?.replace(
-          /^(.{2})(.*)/,
-          (_, first2, rest) => first2 + rest.replace(/./g, "*")
-        ) ?? JSON.stringify(req.session.user.newPhoneNumber)
-      }`
-    );
 
     const updateInput: UpdateInformationInput = {
       email,
