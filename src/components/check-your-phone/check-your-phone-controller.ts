@@ -138,7 +138,7 @@ export function checkYourPhoneGet(req: Request, res: Response): void {
       req.session.user.newPhoneNumber?.replace(
         /^(.{2})(.*)/,
         (_, first2, rest) => first2 + rest.replace(/./g, "*")
-      ) ?? req.session.user.newPhoneNumber.toString()
+      ) ?? JSON.stringify(req.session.user.newPhoneNumber)
     }`
   );
 
@@ -220,7 +220,7 @@ export function checkYourPhonePost(
         req.session.user.newPhoneNumber?.replace(
           /^(.{2})(.*)/,
           (_, first2, rest) => first2 + rest.replace(/./g, "*")
-        ) ?? req.session.user.newPhoneNumber.toString()
+        ) ?? JSON.stringify(req.session.user.newPhoneNumber)
       }`
     );
 
