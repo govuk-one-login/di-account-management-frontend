@@ -20,6 +20,7 @@ import {
   MfaMethod,
   SmsMethod,
 } from "../../../utils/mfaClient/types";
+import { RequestBuilder } from "../../../../test/utils/builders";
 
 describe("update confirmation controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -199,12 +200,12 @@ describe("addBackupAppConfirmationGet", () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
 
-    req = {
-      body: {},
-      cookies: { lng: "en" },
-      i18n: { language: "en" },
-      t: (t: string) => t,
-    };
+    req = new RequestBuilder()
+      .withBody({})
+      .withSessionUserState({ addBackup: { value: "CHANGE_VALUE" } })
+      .withTranslate(sandbox.fake((id) => id))
+      .build();
+
     res = {
       render: sandbox.fake(),
       locals: {},
@@ -280,5 +281,10 @@ describe("addBackupAppConfirmationGet", () => {
     };
     await changeDefaultMethodConfirmationGet(req as Request, res as Response);
     expect(res.status).to.be.calledWith(404);
+  });
+
+  it("should clear the user's state", async () => {
+    await addMfaAppMethodConfirmationGet(req as Request, res as Response);
+    expect(req.session.user.state.addBackup).to.be.undefined;
   });
 });
