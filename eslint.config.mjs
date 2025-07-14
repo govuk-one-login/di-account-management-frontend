@@ -14,7 +14,7 @@ export default [
       ecmaVersion: 2022,
       sourceType: "module",
       parserOptions: {
-        project: ["./test/tsconfig.json", "./post-deploy-tests/tsconfig.json"],
+        project: ["./test/tsconfig.json"],
         ecmaVersion: "latest",
         sourceType: "module",
       },

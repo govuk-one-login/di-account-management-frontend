@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { allowUnsafeEval } from "../config";
 
 // Helmet does not export the config type - This is the way the recommend getting it on GitHub.
-export const helmetConfiguration: HelmetOptions = {
+export const getHelmetConfiguration = (): HelmetOptions => ({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
@@ -52,9 +52,9 @@ export const helmetConfiguration: HelmetOptions = {
   },
   referrerPolicy: false,
   permittedCrossDomainPolicies: false,
-};
+});
 
-export const webchatHelmetConfiguration: HelmetOptions = {
+export const getWebchatHelmetConfiguration = (): HelmetOptions => ({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
@@ -124,4 +124,4 @@ export const webchatHelmetConfiguration: HelmetOptions = {
   },
   referrerPolicy: false,
   permittedCrossDomainPolicies: false,
-};
+});
