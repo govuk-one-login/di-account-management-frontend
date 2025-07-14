@@ -7,11 +7,11 @@ import { sinon } from "../../../../test/utils/test-utils";
 import * as config from "../../../config";
 
 const translations: Record<string, string> = {
-  "clientRegistry.test.govuk.header": "gov.uk email",
-  "clientRegistry.test.lite.header": "LITE (licenseing)",
-  "clientRegistry.test.ofqual.header": "Ofqual subject matter",
-  "clientRegistry.test.slavery.header": "Modern slavery statement registry",
-  "clientRegistry.test.apprentice.header": "Manage apprenticeships",
+  "clientRegistry.test.govuk.searchText": "gov.uk email",
+  "clientRegistry.test.lite.searchText": "LITE (licenseing)",
+  "clientRegistry.test.ofqual.searchText": "Ofqual subject matter",
+  "clientRegistry.test.slavery.searchText": "Modern slavery statement registry",
+  "clientRegistry.test.apprentice.searchText": "Manage apprenticeships",
 };
 
 const servicesMock = ["govuk", "lite", "ofqual", "slavery", "apprentice"];
@@ -110,7 +110,7 @@ describe("search services controller", () => {
     });
   });
 
-  it("should match across words in the service header", () => {
+  it("should match across words in the service searchText", () => {
     searchServicesGet(getRequestMock("ageappre") as Request, res as Response);
     expect(res.render).to.have.calledWith("search-services/index.njk", {
       env: "test",
