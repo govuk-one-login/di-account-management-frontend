@@ -20,7 +20,7 @@ export function searchServicesGet(req: Request, res: Response): void {
       if (query.length === 0) return true;
 
       const serviceName = prepareForSearch(
-        req.t(`clientRegistry.${getAppEnv()}.${service}.header`)
+        req.t(`clientRegistry.${getAppEnv()}.${service}.startText`)
       );
 
       for (const q of query) {
@@ -32,8 +32,8 @@ export function searchServicesGet(req: Request, res: Response): void {
       return false;
     })
     .sort((a, b) => {
-      const a_trn = req.t(`clientRegistry.${getAppEnv()}.${a}.header`);
-      const b_trn = req.t(`clientRegistry.${getAppEnv()}.${b}.header`);
+      const a_trn = req.t(`clientRegistry.${getAppEnv()}.${a}.startText`);
+      const b_trn = req.t(`clientRegistry.${getAppEnv()}.${b}.startText`);
       return a_trn.localeCompare(b_trn, req.language ?? LOCALE.EN);
     });
 
