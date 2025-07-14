@@ -24,7 +24,7 @@ export function oidcAuthCallbackGet(
 
       const queryParams: CallbackParamsType = req.oidc.callbackParams(req);
       if (queryParams?.error) {
-        await handleOidcCallbackError(req, res, queryParams);
+        return await handleOidcCallbackError(req, res, queryParams);
       }
 
       const clientAssertion = await service.generateAssertionJwt(
