@@ -123,7 +123,6 @@ Conditions:
 
   ExportLogsToSplunk:
     Fn::Or:
-      - !Equals [!Ref Environment, staging]
       - !Equals [!Ref Environment, integration]
       - !Equals [!Ref Environment, production]
 

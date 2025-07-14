@@ -4,11 +4,11 @@ import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function globalTryCatchAsync(
   fn: RequestHandler
-): (req: Request, res: Response, next: NextFunction) => Promise<void> {
-  return function (req: Request, res: Response, next: NextFunction) {
+): (req: Request, res: Response, next?: NextFunction) => Promise<void> {
+  return function (req: Request, res: Response, next?: NextFunction) {
     return Promise.resolve(fn(req, res, next)).catch((error) => {
       req.metrics?.addMetric("globalTryCatchAsyncError", MetricUnit.Count, 1);
-      logger.error("Global async error handler:", error);
+      logger.error(error, "Global async error handler:")
       next?.(error);
     });
   };
@@ -22,7 +22,7 @@ export const globalTryCatch = (
       fn(req, res, next);
     } catch (error) {
       req.metrics?.addMetric("globalTryCatchError", MetricUnit.Count, 1);
-      logger.error("Global error handler:", error);
+      logger.error(error, "Global error handler:")
       next?.(error);
     }
   };

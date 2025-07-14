@@ -91,8 +91,7 @@ describe("callback-utils", () => {
         session: { currentURL: "/dashboard" },
         query: {},
       };
-      const res: any = {};
-      const result = determineRedirectUri(req, res);
+      const result = determineRedirectUri(req);
       expect(result).to.equal("/dashboard");
     });
 
@@ -101,8 +100,7 @@ describe("callback-utils", () => {
         session: {},
         query: {},
       };
-      const res: any = {};
-      const result = determineRedirectUri(req, res);
+      const result = determineRedirectUri(req);
       expect(result).to.equal(PATH_DATA.YOUR_SERVICES.url);
     });
 
@@ -110,8 +108,7 @@ describe("callback-utils", () => {
       const req: any = {
         query: {},
       };
-      const res: any = {};
-      const result = determineRedirectUri(req, res);
+      const result = determineRedirectUri(req);
       expect(result).to.equal(PATH_DATA.YOUR_SERVICES.url);
     });
 
@@ -123,14 +120,7 @@ describe("callback-utils", () => {
           _ga: "GA1.2.123456",
         },
       };
-      const res: any = {
-        cookie: sinon.fake(),
-        locals: {
-          trace: "fake_trace",
-          analyticsCookieDomain: "fake_analytics_domain",
-        },
-      };
-      const result = determineRedirectUri(req, res);
+      const result = determineRedirectUri(req);
       expect(result).to.equal(
         `${PATH_DATA.YOUR_SERVICES.url}?_ga=GA1.2.123456`
       );
@@ -144,14 +134,7 @@ describe("callback-utils", () => {
           _ga: "GA1.2.123456",
         },
       };
-      const res: any = {
-        cookie: sinon.fake(),
-        locals: {
-          trace: "fake_trace",
-          analyticsCookieDomain: "fake_analytics_domain",
-        },
-      };
-      const result = determineRedirectUri(req, res);
+      const result = determineRedirectUri(req);
       expect(result).to.equal(PATH_DATA.YOUR_SERVICES.url);
     });
   });
