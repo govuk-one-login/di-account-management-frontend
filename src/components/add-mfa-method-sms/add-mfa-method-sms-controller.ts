@@ -119,7 +119,7 @@ export function addMfaSmsMethodPost(
             req.session.user.newPhoneNumber?.replace(
               /^(.{2})(.*)/,
               (_, first2, rest) => first2 + rest.replace(/./g, "*")
-            ) ?? req.session.user.newPhoneNumber.toString()
+            ) ?? JSON.stringify(req.session.user.newPhoneNumber)
           }`
         );
 
