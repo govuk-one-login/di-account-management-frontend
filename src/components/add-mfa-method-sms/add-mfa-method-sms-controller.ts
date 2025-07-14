@@ -30,7 +30,6 @@ import {
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { logger } from "../../utils/logger";
 
 const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
@@ -110,16 +109,6 @@ export function addMfaSmsMethodPost(
       req.session.user.state.changePhoneNumber = getNextState(
         req.session.user.state.addBackup.value,
         EventType.VerifyCodeSent
-      );
-
-      logger.info(
-        { trace: res?.locals?.trace },
-        `Add MFA Method SMS POST controller req.session.user.newPhoneNumber: ${
-          req.session.user.newPhoneNumber?.replace(
-            /^(.{2})(.*)/,
-            (_, first2, rest) => first2 + rest.replace(/./g, "*")
-          ) ?? JSON.stringify(req.session.user.newPhoneNumber)
-        }`
       );
 
       res.redirect(
