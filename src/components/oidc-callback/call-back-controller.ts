@@ -12,6 +12,7 @@ import {
   generateTokenSet,
   handleOidcCallbackError,
   populateSessionWithUserInfo,
+  setPreferencesCookie,
 } from "./call-back-utils";
 
 export function oidcAuthCallbackGet(
@@ -58,7 +59,19 @@ export function oidcAuthCallbackGet(
       req.session.user_id = userInfoResponse.sub;
       res.locals.isUserLoggedIn = true;
 
-      return res.redirect(determineRedirectUri(req, res));
+      const crossDomainGaIdParam = req.query._ga as string;
+
+      if (req.query.cookie_consent) {
+        setPreferencesCookie(
+          req.query.cookie_consent as string,
+          res,
+          crossDomainGaIdParam
+        );
+      }
+
+      const redirectUri = determineRedirectUri(req);
+
+      return res.redirect(redirectUri);
     } catch (error) {
       const detected = detectOidcError(error);
       if (detected) {

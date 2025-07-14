@@ -62,24 +62,15 @@ export async function generateTokenSet(
   return tokenSet;
 }
 
-export function determineRedirectUri(req: Request, res: Response): string {
+export function determineRedirectUri(req: Request): string {
   let redirectUri = req.session?.currentURL || PATH_DATA.YOUR_SERVICES.url;
   const crossDomainGaIdParam = req.query._ga as string;
-
-  if (req.query.cookie_consent) {
-    setPreferencesCookie(
-      req.query.cookie_consent as string,
-      res,
-      crossDomainGaIdParam
-    );
-
-    if (
-      crossDomainGaIdParam &&
-      req.query.cookie_consent === COOKIE_CONSENT.ACCEPT
-    ) {
-      const searchParams = new URLSearchParams({ _ga: crossDomainGaIdParam });
-      redirectUri += `?${searchParams.toString()}`;
-    }
+  if (
+    crossDomainGaIdParam &&
+    req.query.cookie_consent === COOKIE_CONSENT.ACCEPT
+  ) {
+    const searchParams = new URLSearchParams({ _ga: crossDomainGaIdParam });
+    redirectUri += `?${searchParams.toString()}`;
   }
 
   return redirectUri;
