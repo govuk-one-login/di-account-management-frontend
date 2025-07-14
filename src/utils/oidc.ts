@@ -6,10 +6,11 @@ import base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
 import { cacheWithExpiration } from "./cache";
-import { Request } from "express";
+import { Request, Response } from "express";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { retryableFunction } from "./retryableFunction";
-import { ERROR_MESSAGES } from "../app.constants";
+import { LogoutState } from "../app.constants";
+import { handleLogout } from "./logout";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
 const jwksRefreshInterval = 24 * 60 * 60 * 1000;
@@ -95,9 +96,10 @@ const clientAssertionGenerator = (
 });
 
 const initRefreshToken = function (
-  clientAssertionService: ClientAssertionServiceInterface = clientAssertionGenerator()
+  clientAssertionService: ClientAssertionServiceInterface = clientAssertionGenerator(),
+  handleLogoutFn: typeof handleLogout = handleLogout
 ) {
-  return async function (req: Request) {
+  return async function (req: Request, res: Response) {
     const accessToken = req.session.user.tokens.accessToken;
 
     if (isTokenExpired(accessToken)) {
@@ -125,7 +127,7 @@ const initRefreshToken = function (
         req.session.user.tokens.refreshToken = tokenSet.refresh_token;
       } catch {
         req.metrics?.addMetric("refreshTokenError", MetricUnit.Count, 1);
-        throw new Error(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
+        await handleLogoutFn(req, res, LogoutState.Default);
       }
     }
   };
