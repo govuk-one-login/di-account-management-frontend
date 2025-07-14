@@ -296,7 +296,6 @@ export const ERROR_MESSAGES = {
   FAILED_TO_SEND_TO_TXMA: "Failed to send to TxMA",
   FAILED_SEND_TO_TXMA_DLQ: "Failed to send to TxMA DLQ.",
   FAILED_MFA_RETRIEVE_CALL: "Failed to call mfa methods API",
-  FAILED_TO_REFRESH_TOKEN: "Failed to refresh token",
 };
 
 export const ERROR_CODES = {

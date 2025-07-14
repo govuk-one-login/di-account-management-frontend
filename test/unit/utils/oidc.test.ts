@@ -17,7 +17,6 @@ import {
 import base64url from "base64url";
 import { invalidateCache } from "../../../src/utils/cache";
 import { UnsecuredJWT } from "jose";
-import { ERROR_MESSAGES } from "../../../src/app.constants";
 
 function createAccessToken(expiry = 1600711538) {
   return new UnsecuredJWT({ exp: expiry })
@@ -354,12 +353,13 @@ describe("OIDC Functions", () => {
           addMetric: sandbox.fake(),
         },
       };
+      const res = {} as any;
 
       const fakeClientAssertionService: ClientAssertionServiceInterface = {
         generateAssertionJwt: sinon.fake(),
       };
 
-      await initRefreshToken(fakeClientAssertionService)(req);
+      await initRefreshToken(fakeClientAssertionService)(req, res);
 
       expect(req.session.user.tokens.accessToken).to.eq(accessToken);
       expect(req.session.user.tokens.refreshToken).to.eq(refreshTokenToken);
@@ -393,12 +393,13 @@ describe("OIDC Functions", () => {
           addMetric: sandbox.fake(),
         },
       };
+      const res = {} as any;
 
       const fakeClientAssertionService: ClientAssertionServiceInterface = {
         generateAssertionJwt: sinon.fake(),
       };
 
-      await initRefreshToken(fakeClientAssertionService)(req);
+      await initRefreshToken(fakeClientAssertionService)(req, res);
 
       expect(fakeClientAssertionService.generateAssertionJwt).to.have.been
         .calledOnce;
@@ -429,17 +430,18 @@ describe("OIDC Functions", () => {
           addMetric: sandbox.fake(),
         },
       };
+      const res = {} as any;
 
       const fakeClientAssertionService: ClientAssertionServiceInterface = {
         generateAssertionJwt: sinon.fake(),
       };
+      const fakeHandleLogout = sinon.fake();
 
-      let error;
-      try {
-        await initRefreshToken(fakeClientAssertionService)(req);
-      } catch (err) {
-        error = err;
-      }
+      await initRefreshToken(fakeClientAssertionService, fakeHandleLogout)(
+        req,
+        res
+      );
+
       expect(fakeClientAssertionService.generateAssertionJwt).to.have.been
         .calledOnce;
       expect(req.oidc.refresh).to.have.been.calledTwice;
@@ -448,7 +450,7 @@ describe("OIDC Functions", () => {
       expect(req.metrics.addMetric).to.have.been.calledWith(
         "refreshTokenError"
       );
-      expect(error.message).to.eq(ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN);
+      expect(fakeHandleLogout).to.have.been.calledOnceWith(req, res, "default");
     });
   });
 });
