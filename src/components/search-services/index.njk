@@ -70,8 +70,8 @@
     <ul class="govuk-list search-results">
       {% for service in services %}
         <li class="search-results__list-item">
-          <a class="govuk-link" href="{{ service.startUrl }}">
-            {{ service.startText }}
+          <a class="govuk-link" href="{{ ['clientRegistry.', env, '.', service, '.startUrl'] | join | translate }}">
+            {{ ['clientRegistry.', env, '.', service, '.startText'] | join | translate }}
           </a>
         </li>
       {% endfor %}
