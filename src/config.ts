@@ -50,10 +50,6 @@ export function getGtmId(): string {
   return process.env.GTM_ID;
 }
 
-export function getSessionExpiry(): number {
-  return Number(process.env.SESSION_EXPIRY);
-}
-
 export function getSessionSecret(): string {
   return process.env.SESSION_SECRET;
 }
