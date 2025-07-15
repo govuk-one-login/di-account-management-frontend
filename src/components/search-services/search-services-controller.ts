@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getAppEnv, getClientsToShowInSearch } from "../../config";
 import { LOCALE } from "../../app.constants";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+// @ts-expect-error - fuse.js doesn't have types available
 import Fuse from "fuse.js/basic";
 
 const TEMPLATE_NAME = "search-services/index.njk";
