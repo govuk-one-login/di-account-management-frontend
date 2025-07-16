@@ -1,0 +1,3 @@
+bucket = "di-account-staging-tfstate"
+key    = "account-management-frontend.tfstate"
+region = "eu-west-2"

@@ -1,0 +1,7 @@
+certDomainName = "home.account.gov.uk"
+certAlternativeNameOne = "origin.home.account.gov.uk"
+certHostedZoneID = "Z03482661ZKAYC1MCXGDY"
+cloudfrontDistributionAlias = "home.account.gov.uk"
+originCloakingHeaderManagedSecretAlarmSNSTopicARN = "arn:aws:sns:eu-west-2:026991849909:platform-alerting-BuildNotificationTopic"
+originCloakingHeaderManagedSecretNotificationSNSTopicARN = "arn:aws:sns:eu-west-2:026991849909:platform-alerting-BuildNotificationTopic"
+originCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN = "arn:aws:kms:eu-west-2:026991849909:key/86737c28-4d0b-4955-ac98-840429705fbe"

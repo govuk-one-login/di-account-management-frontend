@@ -1170,8 +1170,6 @@ Resources:
         System: !Ref SystemTagValue
         Environment: !Ref Environment
         Owner: !Ref OwnerTagValue
-        FMSRegionalPolicy: false
-        CustomPolicy: true
 
   ApiGatewayIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -2074,9 +2072,16 @@ Resources:
       Type: A
       HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
       AliasTarget:
-        DNSName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
+        DNSName: !GetAtt AppFrontCustomDomain.RegionalDomainName
         HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
         EvaluateTargetHealth: false
+
+  AppCloakingOriginAssociation:
+    Type: "AWS::WAFv2::WebACLAssociation"
+    Properties:
+      WebACLArn:
+        Fn::ImportValue: "devplatform-cloudfront-CloakingOriginWebACLArn"
+      ResourceArn: !GetAtt ApplicationLoadBalancer.LoadBalancerArn
 
   AppFrontApiRecord:
     Type: AWS::Route53::RecordSet
@@ -2085,9 +2090,9 @@ Resources:
       Type: A
       HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
       AliasTarget:
-        DNSName: !GetAtt AppFrontCustomDomain.RegionalDomainName
-        # see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
-        HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
+        DNSName:
+          Fn::ImportValue: "devplatform-cloudfront-DistributionDomain"
+        HostedZoneId: "Z2FDTNDATAQYW2"
         EvaluateTargetHealth: false
 
   AppFrontApiMapping:
