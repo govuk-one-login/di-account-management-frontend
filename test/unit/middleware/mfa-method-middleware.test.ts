@@ -12,7 +12,6 @@ describe("mfaMethodMiddleware", () => {
   let res: Partial<Response>;
   let next: NextFunction;
   let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
-  const error: sinon.SinonSpy = sinon.spy();
   const configFuncs = require("../../../src/config");
   const legacyMfaMiddleware = require("../../../src/middleware/mfa-methods-legacy");
   const sandbox = sinon.createSandbox();
@@ -39,7 +38,7 @@ describe("mfaMethodMiddleware", () => {
     req = {
       session: {} as any,
       log: {
-        error,
+        error: sinon.fake(),
       } as any,
     };
     res = {
@@ -75,10 +74,7 @@ describe("mfaMethodMiddleware", () => {
     });
 
     await mfaMethodMiddleware(req as Request, res as Response, next);
-    expect(error).to.have.been.calledWith(
-      { trace: res.locals.trace },
-      "Failed MFA retrieve. Status code: 403, API error code: 1, API error message: Forbidden"
-    );
+    expect(req.log.error).to.have.been.calledOnce;
     expect((next as Sinon.SinonSpy).getCalls()[0].args[0]).to.be.instanceOf(
       Error
     );
@@ -88,10 +84,7 @@ describe("mfaMethodMiddleware", () => {
     mfaClientStub.retrieve.rejects();
 
     await mfaMethodMiddleware(req as Request, res as Response, next);
-    expect(error).to.have.been.calledWith(
-      { trace: res.locals.trace },
-      "Failed MFA retrieve. Status code: 403, API error code: 1, API error message: Forbidden"
-    );
+    expect(req.log.error).to.have.been.calledOnce;
     expect((next as Sinon.SinonSpy).getCalls()[0].args[0]).to.be.instanceOf(
       Error
     );

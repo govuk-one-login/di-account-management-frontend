@@ -12,6 +12,7 @@ const translations: Record<string, string> = {
   "clientRegistry.test.ofqual.startText": "Ofqual subject matter",
   "clientRegistry.test.slavery.startText": "Modern slavery statement registry",
   "clientRegistry.test.apprentice.startText": "Manage apprenticeships",
+  "clientRegistry.test.apprentice.additionalSearchTerms": "Secret",
 };
 
 const servicesMock = ["govuk", "lite", "ofqual", "slavery", "apprentice"];
@@ -116,6 +117,19 @@ describe("search services controller", () => {
       env: "test",
       services: ["apprentice"],
       query: "ageappre",
+      hasSearch: true,
+      resultsCount: 1,
+      isWelsh: false,
+      englishLanguageLink: "/search-services?lng=en",
+    });
+  });
+
+  it("should match across words in the service additionalSearchTerms", () => {
+    searchServicesGet(getRequestMock("secret") as Request, res as Response);
+    expect(res.render).to.have.calledWith("search-services/index.njk", {
+      env: "test",
+      services: ["apprentice"],
+      query: "secret",
       hasSearch: true,
       resultsCount: 1,
       isWelsh: false,

@@ -19,8 +19,17 @@ export function searchServicesGet(req: Request, res: Response): void {
     .filter((service) => {
       if (query.length === 0) return true;
 
+      const additionalSearchTermsKey = `clientRegistry.${getAppEnv()}.${service}.additionalSearchTerms`;
+      const additionalSearchTerms = req.t(additionalSearchTermsKey);
+      const additionalSearchTermsToAppend =
+        additionalSearchTerms === additionalSearchTermsKey
+          ? ""
+          : ` ${additionalSearchTerms}`;
+      const startText = req.t(
+        `clientRegistry.${getAppEnv()}.${service}.startText`
+      );
       const serviceName = prepareForSearch(
-        req.t(`clientRegistry.${getAppEnv()}.${service}.startText`)
+        `${startText}${additionalSearchTermsToAppend}`
       );
 
       for (const q of query) {

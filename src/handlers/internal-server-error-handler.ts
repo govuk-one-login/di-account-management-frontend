@@ -1,6 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../app.constants";
+import {
+  ERROR_MESSAGES,
+  HTTP_STATUS_CODES,
+  LogoutState,
+  PATH_DATA,
+} from "../app.constants";
 import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../utils/opl";
+import { handleLogout } from "../utils/logout";
 
 export async function serverErrorHandler(
   err: any,
@@ -10,6 +16,11 @@ export async function serverErrorHandler(
 ): Promise<void> {
   if (res.headersSent) {
     return next(err);
+  }
+
+  if (err.message === ERROR_MESSAGES.FAILED_TO_REFRESH_TOKEN) {
+    await handleLogout(req, res, LogoutState.Default);
+    return;
   }
 
   setOplSettings(

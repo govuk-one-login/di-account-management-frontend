@@ -47,7 +47,7 @@ export async function getRequestConfigFromExpress(
   req: Request,
   res: Response
 ): Promise<Parameters<typeof getRequestConfig>[0]> {
-  await refreshToken(req, res);
+  await refreshToken(req);
 
   return {
     token: req.session.user.tokens.accessToken,
