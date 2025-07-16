@@ -117,10 +117,6 @@ Conditions:
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
 
-  UseCloudFrontCaching: !Or
-    - !Equals [!Ref Environment, staging]
-    - !Equals [!Ref Environment, build]
-
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, integration]
@@ -130,10 +126,6 @@ Mappings:
   ElasticLoadBalancerAccountIds:
     eu-west-2:
       AccountId: 652711504416
-  FirewallTags:
-    Cloudfront:
-      FMSGlobalCustomPolicy: true
-      FMSGlobalCustomPolicyName: cloudfront
   Container:
     dev:
       CPU: 1024
@@ -1178,6 +1170,8 @@ Resources:
         System: !Ref SystemTagValue
         Environment: !Ref Environment
         Owner: !Ref OwnerTagValue
+        FMSRegionalPolicy: false
+        CustomPolicy: true
 
   ApiGatewayIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -2070,6 +2064,20 @@ Resources:
         Owner: !Ref OwnerTagValue
         Source: !Ref SourceTagValue
 
+  DNSRecordForCloudFrontOrigin:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Sub
+        - "origin.${BaseAlias}"
+        - BaseAlias:
+            !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+      Type: A
+      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
+      AliasTarget:
+        DNSName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
+        HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
+        EvaluateTargetHealth: false
+
   AppFrontApiRecord:
     Type: AWS::Route53::RecordSet
     Properties:
@@ -2077,9 +2085,9 @@ Resources:
       Type: A
       HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
       AliasTarget:
-        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        DNSName: !GetAtt AppFrontCustomDomain.RegionalDomainName
         # see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html#cfn-route53-aliastarget-hostedzoneid
-        HostedZoneId: "Z2FDTNDATAQYW2"
+        HostedZoneId: !GetAtt AppFrontCustomDomain.RegionalHostedZoneId
         EvaluateTargetHealth: false
 
   AppFrontApiMapping:
@@ -2090,220 +2098,6 @@ Resources:
       Stage: !Ref ApiDefaultStage
     DependsOn:
       - AppFrontCustomDomain
-
-  #
-  # CloudFront Distribution
-  #
-
-  CloudFrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Aliases:
-          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-        CNAMEs:
-          - !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-        Comment: !Sub "CloudFront Distribution resource for the ${AWS::StackName} application"
-        DefaultCacheBehavior:
-          AllowedMethods:
-            ["GET", "HEAD", "OPTIONS", "PUT", "PATCH", "POST", "DELETE"]
-          # CachingDisabled managed cache policy id
-          # see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
-          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
-          OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
-          Compress: false
-          MinTTL: 0
-          TargetOriginId:
-            !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-          ViewerProtocolPolicy: redirect-to-https
-          FunctionAssociations:
-            - EventType: viewer-request
-              FunctionARN: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:function/TICFFraudHeadersCloudFrontFunction"
-        Enabled: true
-        HttpVersion: "http2"
-        Logging:
-          Bucket: !Sub "${CloudFrontLogsBucket}.s3.amazonaws.com"
-        Origins:
-          - ConnectionAttempts: 3
-            ConnectionTimeout: 10
-            DomainName: !Sub "${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
-            Id: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-            CustomOriginConfig:
-              HTTPSPort: 443
-              OriginKeepaliveTimeout: 5
-              OriginProtocolPolicy: https-only
-              OriginReadTimeout: 30
-              OriginSSLProtocols:
-                - TLSv1.2
-        ViewerCertificate:
-          AcmCertificateArn: !Sub "{{resolve:ssm:/${Environment}/Platform/ACM/Global/Certificate/Home/ARN}}"
-          MinimumProtocolVersion: TLSv1.2_2021
-          SslSupportMethod: sni-only
-        CacheBehaviors:
-          - !If
-            - UseCloudFrontCaching
-            - PathPattern: "/assets/*"
-              AllowedMethods:
-                - GET
-                - HEAD
-              CachePolicyId: !Ref FrontendCachePolicy
-              Compress: true
-              TargetOriginId:
-                !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-              OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
-              ViewerProtocolPolicy: redirect-to-https
-              MinTTL: 0
-            - !Ref "AWS::NoValue"
-          - !If
-            - UseCloudFrontCaching
-            - PathPattern: "/public/*"
-              AllowedMethods:
-                - GET
-                - HEAD
-              CachePolicyId: !Ref FrontendCachePolicy
-              Compress: true
-              TargetOriginId:
-                !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
-              OriginRequestPolicyId: !GetAtt CloudFrontOriginRequestPolicy.Id
-              ViewerProtocolPolicy: redirect-to-https
-              MinTTL: 0
-            - !Ref "AWS::NoValue"
-      Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-CloudFrontDistribution"
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-        - Key: FMSGlobalCustomPolicy
-          Value: !FindInMap [FirewallTags, Cloudfront, FMSGlobalCustomPolicy]
-        - Key: FMSGlobalCustomPolicyName
-          Value:
-            !FindInMap [FirewallTags, Cloudfront, FMSGlobalCustomPolicyName]
-
-  CloudFrontOriginRequestPolicy:
-    Type: AWS::CloudFront::OriginRequestPolicy
-    Properties:
-      OriginRequestPolicyConfig:
-        Comment: String
-        CookiesConfig:
-          CookieBehavior: all
-        HeadersConfig:
-          HeaderBehavior: allViewerAndWhitelistCloudFront
-          Headers:
-            - CloudFront-Viewer-Country
-            - CloudFront-Viewer-JA3-Fingerprint
-            - CloudFront-Viewer-Address
-        Name: !Sub "${AWS::StackName}-OriginRequestPolicy"
-        QueryStringsConfig:
-          QueryStringBehavior: all
-
-  FrontendCachePolicy:
-    Type: AWS::CloudFront::CachePolicy
-    Properties:
-      CachePolicyConfig:
-        Name: FrontendCachePolicy
-        DefaultTTL: 60
-        MaxTTL: 86400
-        MinTTL: 0
-        ParametersInCacheKeyAndForwardedToOrigin:
-          CookiesConfig:
-            CookieBehavior: none
-          HeadersConfig:
-            HeaderBehavior: whitelist
-            Headers:
-              - CloudFront-Viewer-Country
-          QueryStringsConfig:
-            QueryStringBehavior: none
-          EnableAcceptEncodingBrotli: true
-          EnableAcceptEncodingGzip: true
-
-  CloudFrontLogsBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      OwnershipControls:
-        Rules:
-          - ObjectOwnership: BucketOwnerPreferred
-      BucketName: !Join
-        - "-"
-        - - !Ref AWS::StackName
-          - cloudfront
-          - Fn::Select:
-              - 0
-              - Fn::Split:
-                  - "-"
-                  - Fn::Select:
-                      - 2
-                      - Fn::Split:
-                          - /
-                          - Ref: AWS::StackId
-      VersioningConfiguration:
-        Status: Enabled
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
-      LoggingConfiguration:
-        DestinationBucketName: !Ref AccessLogsBucket
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
-      Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-AccessLogs"
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-        - Key: CheckovRulesToSkip
-          Value: CKV_AWS_18
-
-  CloudFrontLogsBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref CloudFrontLogsBucket
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Sid: AllowAwsLogDeliveryToLogToS3
-            Effect: Allow
-            Principal:
-              Service: delivery.logs.amazonaws.com
-            Action:
-              - s3:PutObject
-            Resource: !Sub "${CloudFrontLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
-            Condition:
-              StringEquals:
-                "s3:x-amz-acl": bucket-owner-full-control
-                "aws:SourceAccount": !Ref AWS::AccountId
-              Bool:
-                "aws:SecureTransport": true
-          - Sid: AllowAwsLogDeliveryToReadBucketAcl
-            Effect: Allow
-            Principal:
-              Service: delivery.logs.amazonaws.com
-            Action:
-              - s3:GetBucketAcl
-            Resource: !GetAtt CloudFrontLogsBucket.Arn
-            Condition:
-              StringEquals:
-                "aws:SourceAccount": !Ref AWS::AccountId
-              Bool:
-                "aws:SecureTransport": true
 
   #
   # Metrics and Alarms
