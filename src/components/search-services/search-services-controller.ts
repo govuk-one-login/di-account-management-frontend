@@ -40,7 +40,8 @@ export function searchServicesGet(req: Request, res: Response): void {
   if (query.length) {
     const fuse = new Fuse(services, {
       keys: ["startText", "additionalSearchTerms"],
-      findAllMatches: true,
+      threshold: 0.4,
+      ignoreLocation: true,
     });
 
     services = fuse.search(query).map((service: any) => ({
