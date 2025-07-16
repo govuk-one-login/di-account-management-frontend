@@ -1,13 +1,3 @@
-provider "aws" {
-  alias  = "virginia"
-  region = "us-east-1"
-}
-
-provider "aws" {
-  alias  = "london"
-  region = "eu-west-2"
-}
-
 resource "aws_cloudformation_stack" "certificate_stack" {
   provider      = aws.virginia
   name          = "devplatform-certificate"
