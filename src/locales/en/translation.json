@@ -187,17 +187,6 @@
         }
       },
       "mfaSection": {
-        "paragraph": "We use security codes to make sure it’s you when you sign in.",
-        "summaryList": {
-          "phoneNumber": {
-            "title": "Text message",
-            "value": "Phone number ending with [phoneNumber]",
-            "change": "Change phone number"
-          },
-          "app": {
-            "title": "Authenticator app"
-          }
-        },
         "heading": "How you get security codes to sign in",
         "defaultMethod": {
           "heading": "Your default method",

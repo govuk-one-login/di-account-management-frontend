@@ -176,17 +176,6 @@
         }
       },
       "mfaSection": {
-        "paragraph": "Rydym yn defnyddio codau diogelwch i wneud yn siwr mae chi yw chi pan fyddwch yn mewngofnodi.",
-        "summaryList": {
-          "phoneNumber": {
-            "title": "Neges testun",
-            "value": "Rhif ffôn sy'n gorffen gyda [phoneNumber]",
-            "change": "Newid rhif ffôn"
-          },
-          "app": {
-            "title": "Ap dilysydd"
-          }
-        },
         "heading": "Sut rydych yn cael codau diogelwch i fewngofnodi",
         "defaultMethod": {
           "heading": "Eich dull diofyn",
