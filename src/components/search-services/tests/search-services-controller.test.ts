@@ -376,7 +376,7 @@ describe("searchServicesGet", () => {
   it("should handle missing metrics gracefully", () => {
     mockReq.metrics = undefined;
 
-    expect(() => searchServicesGet(mockReq, mockRes)).not.to.throw;
+    expect(() => searchServicesGet(mockReq, mockRes)).not.to.throw();
   });
 
   it("should preserve existing query params except q in English link", () => {
