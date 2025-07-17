@@ -70,11 +70,10 @@ describe("Integration:: change authenticator app", () => {
       });
   });
 
-  const appWithMiddlewareSetup = async (config: any = {}) => {
+  const appWithMiddlewareSetup = async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    const configFuncs = require("../../../config");
     const mfaModule = require("../../../utils/mfa");
 
     sandbox
