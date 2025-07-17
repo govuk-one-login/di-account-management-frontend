@@ -78,12 +78,6 @@ describe("Integration:: check your phone", () => {
     sandbox.stub(configFuncs, "getMfaServiceUrl").callsFake(() => {
       return "https://method-management-v1-stub.home.build.account.gov.uk";
     });
-    sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-      return true;
-    });
-    sandbox.stub(configFuncs, "supportMfaManagement").callsFake(() => {
-      return true;
-    });
 
     const mfaClient = require("../../../utils/mfaClient");
 

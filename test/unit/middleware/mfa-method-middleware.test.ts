@@ -13,7 +13,6 @@ describe("mfaMethodMiddleware", () => {
   let next: NextFunction;
   let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
   const configFuncs = require("../../../src/config");
-  const legacyMfaMiddleware = require("../../../src/middleware/mfa-methods-legacy");
   const sandbox = sinon.createSandbox();
 
   const mfaMethod: MfaMethod = {
@@ -27,7 +26,6 @@ describe("mfaMethodMiddleware", () => {
   };
 
   beforeEach(() => {
-    sandbox.stub(configFuncs, "supportMfaManagement").returns(true);
     sandbox
       .stub(configFuncs, "getMfaServiceUrl")
       .returns("https://method-management-v1-stub.home.build.account.gov.uk");
@@ -88,25 +86,5 @@ describe("mfaMethodMiddleware", () => {
     expect((next as Sinon.SinonSpy).getCalls()[0].args[0]).to.be.instanceOf(
       Error
     );
-  });
-
-  it("should use legacy mfa middleware if MFA service URL is invalid", async () => {
-    configFuncs.getMfaServiceUrl.restore();
-    sandbox.stub(configFuncs, "getMfaServiceUrl").returns("not-a-valid-url");
-    sandbox.stub(legacyMfaMiddleware, "runLegacyMfaMethodsMiddleware");
-    await mfaMethodMiddleware(req as Request, res as Response, next);
-    expect(
-      legacyMfaMiddleware.runLegacyMfaMethodsMiddleware
-    ).to.have.been.calledWith(req, res, next);
-  });
-
-  it("should use legacy mfa middleware if supportMfaManagement returns false", async () => {
-    configFuncs.supportMfaManagement.restore();
-    sandbox.stub(configFuncs, "supportMfaManagement").returns(false);
-    sandbox.stub(legacyMfaMiddleware, "runLegacyMfaMethodsMiddleware");
-    await mfaMethodMiddleware(req as Request, res as Response, next);
-    expect(
-      legacyMfaMiddleware.runLegacyMfaMethodsMiddleware
-    ).to.have.been.calledWith(req, res, next);
   });
 });

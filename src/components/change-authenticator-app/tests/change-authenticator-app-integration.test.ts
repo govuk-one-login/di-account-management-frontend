@@ -148,14 +148,6 @@ describe("Integration:: change authenticator app", () => {
       return "https://method-management-v1-stub.home.build.account.gov.uk/v1";
     });
 
-    sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-      return !config.hideChangeMfa;
-    });
-
-    sandbox.stub(configFuncs, "supportMfaManagement").callsFake(() => {
-      return true;
-    });
-
     return await require("../../../app").createApp();
   };
 });

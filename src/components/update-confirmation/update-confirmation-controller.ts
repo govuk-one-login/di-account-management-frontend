@@ -11,11 +11,9 @@ import {
   OplSettingsLookupObject,
   CHANGE_EMAIL_COMMON_OPL_SETTINGS,
   CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
-  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
-import { supportMfaManagement } from "../../config";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
@@ -82,15 +80,10 @@ export function updatePhoneNumberConfirmationGet(
     1
   );
   setOplSettings(
-    supportMfaManagement(req.cookies)
-      ? {
-          ...MFA_COMMON_OPL_SETTINGS,
-          contentId: "670a63e1-94a5-4bec-9a5c-af36bd894ef6",
-        }
-      : {
-          ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
-          contentId: "8641c8eb-b695-4c31-b78d-6c901111152b",
-        },
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "670a63e1-94a5-4bec-9a5c-af36bd894ef6",
+    },
     res
   );
 
