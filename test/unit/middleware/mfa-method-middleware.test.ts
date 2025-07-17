@@ -12,7 +12,6 @@ describe("mfaMethodMiddleware", () => {
   let res: Partial<Response>;
   let next: NextFunction;
   let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
-  const configFuncs = require("../../../src/config");
   const sandbox = sinon.createSandbox();
 
   const mfaMethod: MfaMethod = {
@@ -26,9 +25,6 @@ describe("mfaMethodMiddleware", () => {
   };
 
   beforeEach(() => {
-    sandbox
-      .stub(configFuncs, "getMfaServiceUrl")
-      .returns("https://method-management-v1-stub.home.build.account.gov.uk");
     next = sinon.fake(() => {});
     mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
     sinon.stub(mfaClient, "createMfaClient").resolves(mfaClientStub);

@@ -73,12 +73,6 @@ describe("Integration:: check your phone", () => {
 
     app = await require("../../../app").createApp();
 
-    const configFuncs = require("../../../config");
-
-    sandbox.stub(configFuncs, "getMfaServiceUrl").callsFake(() => {
-      return "https://method-management-v1-stub.home.build.account.gov.uk";
-    });
-
     const mfaClient = require("../../../utils/mfaClient");
 
     const stubMfaClient: sinon.SinonStubbedInstance<MfaClient> =
