@@ -129,7 +129,7 @@ describe("addMfaSmsMethodConfirmationGet", () => {
 
     req = new RequestBuilder()
       .withBody({})
-      .withSessionUserState({ addBackup: { value: "CHANGE_VALUE" } })
+      .withSessionUserState({ changePhoneNumber: { value: "CHANGE_VALUE" } })
       .withTranslate(sandbox.fake((id) => id))
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
@@ -152,6 +152,6 @@ describe("addMfaSmsMethodConfirmationGet", () => {
 
   it("should clear the user's state", async () => {
     await addMfaSmsMethodConfirmationGet(req as Request, res as Response);
-    expect(req.session.user.state.addBackup).to.be.undefined;
+    expect(req.session.user.state.changePhoneNumber).to.be.undefined;
   });
 });
