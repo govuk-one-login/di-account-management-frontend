@@ -1,11 +1,10 @@
 #!/bin/bash
 
 # Service name and expected log line
-SERVICE_NAME="account-management-frontend"  # Replace with your service name
-READY_MESSAGE="Server listening on port"  # Replace with your app's log output
+SERVICE_NAME="account-management-frontend"
+READY_MESSAGE="Server listening on port"
 
-# Start the app in detached mode
-docker-compose up -d
+docker-compose up --build -d
 
 echo ".... Waiting for ${SERVICE_NAME} service to start producing logs..."
 
