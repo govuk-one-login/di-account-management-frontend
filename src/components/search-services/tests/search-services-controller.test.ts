@@ -124,7 +124,7 @@ describe("getAllServices", () => {
     const result = getAllServices(mockTranslate, LOCALE.EN);
 
     expect(result).to.have.length(3);
-    expect(result[0].startText).to.equal("Alpha Service");
+    expect(result[0]?.startText).to.equal("Alpha Service");
     expect(result[1].startText).to.equal("Beta Service");
     expect(result[2].startText).to.equal("Zebra Service");
   });
@@ -165,7 +165,7 @@ describe("getAllServices", () => {
   });
 });
 
-describe("searchServices", () => {
+describe("searchServices", async () => {
   const mockServices = [
     {
       client: "client1",
@@ -187,53 +187,56 @@ describe("searchServices", () => {
     },
   ];
 
-  it("should return matching services based on startText", () => {
-    const result = searchServices(LOCALE.EN, "tax", mockServices);
+  await controller.createSearchIndex(LOCALE.EN, mockServices);
+  await controller.createSearchIndex(LOCALE.CY, []);
 
-    expect(result).to.have.length(1);
-    expect(result[0].client).to.equal("client1");
-  });
-
-  it("should return matching services based on additionalSearchTerms", () => {
-    const result = searchServices(LOCALE.EN, "HMRC", mockServices);
-
-    expect(result).to.have.length(1);
-    expect(result[0].client).to.equal("client1");
-  });
-
-  it("should return multiple matching services", () => {
-    const result = searchServices(LOCALE.EN, "service", mockServices);
-
-    expect(result).to.have.length(3);
-  });
-
-  it("should return empty array when no matches found", () => {
-    const result = searchServices(LOCALE.EN, "nonexistent", mockServices);
-
-    expect(result).to.have.length(0);
-  });
-
-  it("should handle empty query", () => {
-    const result = searchServices(LOCALE.EN, "", mockServices);
-
-    expect(result).to.have.length(0);
-  });
-
-  it("should handle empty services array", () => {
-    const result = searchServices(LOCALE.CY, "tax", []);
-
-    expect(result).to.have.length(0);
-  });
-
-  it("should be case insensitive", () => {
-    const result = searchServices(LOCALE.EN, "TAX", mockServices);
+  it("should return matching services based on startText", async () => {
+    const result = await searchServices(LOCALE.EN, "tax", mockServices);
 
     expect(result).to.have.length(1);
     expect(result[0]?.client).to.equal("client1");
   });
 
-  it("should handle partial matches", () => {
-    const result = searchServices(LOCALE.EN, "pass", mockServices);
+  it("should return matching services based on additionalSearchTerms", async () => {
+    const result = await searchServices(LOCALE.EN, "HMRC", mockServices);
+
+    expect(result).to.have.length(1);
+    expect(result[0]?.client).to.equal("client1");
+  });
+
+  it("should return multiple matching services", async () => {
+    const result = await searchServices(LOCALE.EN, "service", mockServices);
+
+    expect(result).to.have.length(3);
+  });
+
+  it("should return empty array when no matches found", async () => {
+    const result = await searchServices(LOCALE.EN, "nonexistent", mockServices);
+
+    expect(result).to.have.length(0);
+  });
+
+  it("should handle empty query", async () => {
+    const result = await searchServices(LOCALE.EN, "", mockServices);
+
+    expect(result).to.have.length(0);
+  });
+
+  it("should handle empty services array", async () => {
+    const result = await searchServices(LOCALE.CY, "tax", []);
+
+    expect(result).to.have.length(0);
+  });
+
+  it("should be case insensitive", async () => {
+    const result = await searchServices(LOCALE.EN, "TAX", mockServices);
+
+    expect(result).to.have.length(1);
+    expect(result[0]?.client).to.equal("client1");
+  });
+
+  it("should handle partial matches", async () => {
+    const result = await searchServices(LOCALE.EN, "pass", mockServices);
 
     expect(result).to.have.length(1);
     expect(result[0]?.client).to.equal("client2");
@@ -246,6 +249,7 @@ describe("searchServicesGet", () => {
   let mockRes: any;
   let getAllServicesStub: sinon.SinonStub;
   let searchServicesStub: sinon.SinonStub;
+  let createSearchIndexStub: sinon.SinonStub;
   let getAppEnvStub: sinon.SinonStub;
 
   const mockServices = [
@@ -267,6 +271,7 @@ describe("searchServicesGet", () => {
     sandbox = sinon.createSandbox();
     getAllServicesStub = sandbox.stub(controller, "getAllServices");
     searchServicesStub = sandbox.stub(controller, "searchServices");
+    createSearchIndexStub = sandbox.stub(controller, "createSearchIndex");
     getAppEnvStub = sandbox.stub(config, "getAppEnv");
 
     mockReq = {
@@ -289,10 +294,14 @@ describe("searchServicesGet", () => {
     sandbox.restore();
   });
 
-  it("should render all services when no query provided", () => {
-    searchServicesGet(mockReq, mockRes);
+  it("should render all services when no query provided", async () => {
+    await searchServicesGet(mockReq, mockRes);
 
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.EN);
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.EN,
+      mockServices
+    );
     expect(searchServicesStub).not.to.have.been.called;
     expect(mockRes.render).to.have.been.calledWith(
       "search-services/index.njk",
@@ -308,14 +317,18 @@ describe("searchServicesGet", () => {
     );
   });
 
-  it("should search services when query provided", () => {
+  it("should search services when query provided", async () => {
     const filteredServices = [mockServices[0]];
     mockReq.query.q = "service";
     searchServicesStub.returns(filteredServices);
 
-    searchServicesGet(mockReq, mockRes);
+    await searchServicesGet(mockReq, mockRes);
 
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.EN);
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.EN,
+      mockServices
+    );
     expect(searchServicesStub).to.have.been.calledWith(
       LOCALE.EN,
       "service",
@@ -335,12 +348,16 @@ describe("searchServicesGet", () => {
     );
   });
 
-  it("should handle Welsh locale", () => {
+  it("should handle Welsh locale", async () => {
     mockReq.language = LOCALE.CY;
 
-    searchServicesGet(mockReq, mockRes);
+    await searchServicesGet(mockReq, mockRes);
 
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.CY);
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.CY,
+      mockServices
+    );
     expect(mockRes.render).to.have.been.calledWith(
       "search-services/index.njk",
       sinon.match({
@@ -349,10 +366,10 @@ describe("searchServicesGet", () => {
     );
   });
 
-  it("should default to English when no language set", () => {
+  it("should default to English when no language set", async () => {
     mockReq.language = undefined;
 
-    searchServicesGet(mockReq, mockRes);
+    await searchServicesGet(mockReq, mockRes);
 
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.EN);
     expect(mockRes.render).to.have.been.calledWith(
@@ -363,8 +380,8 @@ describe("searchServicesGet", () => {
     );
   });
 
-  it("should add metrics", () => {
-    searchServicesGet(mockReq, mockRes);
+  it("should add metrics", async () => {
+    await searchServicesGet(mockReq, mockRes);
 
     expect(mockReq.metrics.addMetric).to.have.been.calledWith(
       "searchServicesGet",
@@ -379,10 +396,10 @@ describe("searchServicesGet", () => {
     expect(() => searchServicesGet(mockReq, mockRes)).not.to.throw();
   });
 
-  it("should preserve existing query params except q in English link", () => {
+  it("should preserve existing query params except q in English link", async () => {
     mockReq.originalUrl = "/search?param=value&q=test";
 
-    searchServicesGet(mockReq, mockRes);
+    await searchServicesGet(mockReq, mockRes);
 
     expect(mockRes.render).to.have.been.calledWith(
       "search-services/index.njk",
