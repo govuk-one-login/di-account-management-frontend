@@ -142,3 +142,8 @@ deploy/.terraform.lock.hcl
 deploy/terraform.tfstate
 deploy/terraform.tfstate.backup
 
+
+# Bun
+bun.lock
+bun.lockb
+
