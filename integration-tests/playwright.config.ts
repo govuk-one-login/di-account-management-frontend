@@ -13,7 +13,6 @@ export default defineConfig({
   testDir,
   forbidOnly: !env.HUMAN_IN_THE_LOOP,
   workers: "50%",
-  ignoreSnapshots: env.PRE_OR_POST_DEPLOY === "post",
   snapshotPathTemplate: `./${env.UPDATE_SNAPSHOTS ? "snapshots-updated" : "snapshots"}/${env.TEST_TARGET}/{projectName}/{testFilePath}/{arg}{ext}`,
   reporter: env.TEST_REPORT_DIR
     ? [
@@ -27,7 +26,7 @@ export default defineConfig({
     env.TEST_TARGET === "local"
       ? [
           {
-            command: "npm run build-and-run-app",
+            command: "npm run run-app",
             url: "http://localhost:6001/healthcheck",
             reuseExistingServer: true,
             timeout: 300000,

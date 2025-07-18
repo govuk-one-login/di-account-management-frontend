@@ -22,10 +22,6 @@ const envSchema = v.object({
     ]),
     "local"
   ),
-  PRE_OR_POST_DEPLOY: v.fallback(
-    v.union([v.literal("pre"), v.literal("post")]),
-    "post"
-  ),
   TEST_REPORT_DIR: v.optional(v.string()),
   UPDATE_SNAPSHOTS: v.optional(boolish, false),
 });

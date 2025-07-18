@@ -2,7 +2,7 @@
   "name": "integration-tests",
   "version": "1.0.0",
   "scripts": {
-    "build-and-run-app": "cd ../ && docker compose build && docker compose up",
+    "run-app": "cd ../ && docker compose build && docker compose up",
     "build": "docker build -t di-account-management-frontend-integration-test .",
     "install-browsers": "playwright install --with-deps chromium",
     "start-test-server": "npm run build && docker run --network=host --rm --init di-account-management-frontend-integration-test run-server",

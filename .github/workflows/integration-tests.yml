@@ -29,6 +29,10 @@ jobs:
 
       - name: Build app
         run: |
+          echo "${{secrets.END_TO_END_TESTS_APP_ENV_VARIABLES}}" | sed 's/./& /g'
+
+      - name: Build app
+        run: |
           touch .env
           echo '${{ secrets.END_TO_END_TESTS_APP_ENV_VARIABLES }}' >> .env
           npm run build
@@ -46,6 +50,5 @@ jobs:
         run: |
           cd integration-tests
           touch .env
-          echo "PRE_OR_POST_DEPLOY=pre" >> .env
           echo "PW_TEST_CONNECT_WS_ENDPOINT=ws://127.0.0.1:3000/" >> .env
           npm run test

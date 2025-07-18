@@ -149,16 +149,13 @@ TODO
 Move integration testing README section to README in integration testing folder and link to it from here
 update to explain how to run in Docker as the only method to run tests and update test snapshots
 but explain that to run in ui mode for the debugging the tests should be run locally
-mention that snapshots are ignored when running in post-deploy
 
 TODO Mention that:
 When running in a pre-deployment environemnt (locally, GH Actions) then tests target localhost, when running in a post-deployment environment (post-deploy tests) they target the environment the deployment was made to.
-Post-deployment tests ignore snapshots.
-By default tests run pre and post but can be tagged to be one or the other with @skipPreDeploy @skipPostDeploy.
 when writing and debugging tests use UI mode
 Don't import things from outside the integration-tests directory, treat it as it's own standalone project.
-Mention that running tests will start app and test server which can take some time and will be killed when the tests end. If doing a prolonged period of testing it will be quicker start the app and test server separately using `cd integration-tests && npm run build-and-run-app` and `cd integration-tests && npm run start-test-server` respectively.
-Explain @skipTarget-${env.TEST_TARGET} tags.
+Mention that running tests will start app and test server which can take some time and will be killed when the tests end. If doing a prolonged period of testing it will be quicker start the app and test server separately using `cd integration-tests && npm run run-app` and `cd integration-tests && npm run start-test-server` respectively.
+Explain @skipTarget-${env.TEST_TARGET} tags and equivalent fail tags.
 Being connected to the VPN will make some webchat related tests fail.
 
 TODO
@@ -168,7 +165,7 @@ TODO
 mention that tests are run against desktop and mobile viewports by default. Can be tagged with @skipMobile or @skipDesktop to skip the respective device.
 
 TODO tags:
-@failMobile, @failDesktop, @fixmeMobile, @fixmeDesktop, @skipMobile, @skipDesktop, @skipPreDeploy, @skipPostDeploy, @noJs
+@failMobile, @failDesktop, @skipMobile, @skipDesktop, @noJs
 also link to playwright BDD built in tags - https://vitalets.github.io/playwright-bdd/#/writing-features/special-tags
 
 TODO mention if using Docker Desktop on Mac or Windows you will need to `Enable host networking` in `Settings > Resources > Network`.
