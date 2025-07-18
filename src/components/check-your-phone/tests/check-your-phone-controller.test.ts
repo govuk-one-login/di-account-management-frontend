@@ -3,11 +3,8 @@ import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-import {
-  checkYourPhoneGet,
-  checkYourPhonePost,
-} from "../check-your-phone-controller";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
+import { checkYourPhonePost } from "../check-your-phone-controller";
+import { PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import {
   INTENT_ADD_BACKUP,
