@@ -18,6 +18,6 @@
     "coverage",
     "src/components/**/tests",
     "src/utils/test",
-    "post-deploy-tests"
+    "integration-tests"
   ]
 }

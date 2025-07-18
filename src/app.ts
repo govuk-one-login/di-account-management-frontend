@@ -7,8 +7,8 @@ import * as path from "path";
 import { configureNunjucks } from "./config/nunjucks";
 import { i18nextConfigurationOptions } from "./config/i18next";
 import {
-  helmetConfiguration,
-  webchatHelmetConfiguration,
+  getHelmetConfiguration,
+  getWebchatHelmetConfiguration,
 } from "./config/helmet";
 import { csrfSynchronisedProtection } from "./config/csrf";
 import helmet from "helmet";
@@ -211,9 +211,9 @@ async function createApp(): Promise<express.Application> {
 
   app.use(i18nextMiddleware.handle(i18next));
   if (supportWebchatContact()) {
-    app.use(helmet(webchatHelmetConfiguration));
+    app.use(helmet(getWebchatHelmetConfiguration()));
   } else {
-    app.use(helmet(helmetConfiguration));
+    app.use(helmet(getHelmetConfiguration()));
   }
 
   app.use((req, res, next) => {

@@ -14,7 +14,7 @@ export default [
       ecmaVersion: 2022,
       sourceType: "module",
       parserOptions: {
-        project: ["./test/tsconfig.json", "./post-deploy-tests/tsconfig.json"],
+        project: ["./test/tsconfig.json"],
         ecmaVersion: "latest",
         sourceType: "module",
       },
@@ -33,8 +33,8 @@ export default [
       "coverage",
       "src/assets/javascript",
       "dev-app.js",
+      "integration-tests",
       "eslint.config.mjs",
-      "post-deploy-tests/.features-gen/**/*",
     ],
   },
   {

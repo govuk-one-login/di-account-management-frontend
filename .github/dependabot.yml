@@ -43,7 +43,7 @@ updates:
           - "version-update:semver-major"
 
   - package-ecosystem: "npm"
-    directory: "/post-deploy-tests"
+    directory: "/integration-tests"
     schedule:
       interval: daily
       time: "03:00"
@@ -51,9 +51,6 @@ updates:
     labels:
       - dependabot
       - dependencies
-    ignore:
-      - dependency-name: "node"
-        versions: ["17.x", "18.x", "19.x"]
     commit-message:
       prefix: BAU
     groups:
@@ -69,7 +66,7 @@ updates:
           - "patch"
 
   - package-ecosystem: docker
-    directory: "/post-deploy-tests"
+    directory: "/integration-tests"
     schedule:
       interval: daily
       time: "03:00"
