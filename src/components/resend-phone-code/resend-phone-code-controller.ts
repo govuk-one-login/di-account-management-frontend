@@ -14,7 +14,6 @@ import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
-  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 import {
@@ -28,7 +27,6 @@ import {
   INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../check-your-email/types";
-import { supportMfaManagement } from "../../config";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";
@@ -57,25 +55,15 @@ const OPL_VALUES: OplSettingsLookupObject = {
 };
 
 const setLocalOplSettings = (intent: Intent, req: Request, res: Response) => {
-  if (!supportMfaManagement(req.cookies)) {
-    setOplSettings(
-      {
-        ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
-        contentId: "e92e3a80-ea97-4eae-bbff-903e89291765",
-      },
-      res
-    );
-  } else {
-    const defaultMfaMethodType = req.session.mfaMethods?.find(
-      (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
-    )?.method.mfaMethodType;
-    const oplSettings =
-      OPL_VALUES[
-        `${intent}_${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`
-      ];
+  const defaultMfaMethodType = req.session.mfaMethods?.find(
+    (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
+  )?.method.mfaMethodType;
+  const oplSettings =
+    OPL_VALUES[
+      `${intent}_${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`
+    ];
 
-    setOplSettings(oplSettings, res);
-  }
+  setOplSettings(oplSettings, res);
 };
 
 const getRenderOptions = (req: Request, intent: Intent) => {

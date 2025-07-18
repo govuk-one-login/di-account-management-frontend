@@ -27,7 +27,7 @@ router.post(
   PATH_DATA.CHECK_YOUR_PHONE.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(checkYourPhonePost())
+  globalTryCatchAsync(checkYourPhonePost)
 );
 
 router.get(

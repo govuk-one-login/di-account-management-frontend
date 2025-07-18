@@ -17,10 +17,6 @@ export const EMPTY_OPL_SETTING_VALUE = "undefined";
 export const MFA_COMMON_OPL_SETTINGS: Partial<OplSettings> = {
   taxonomyLevel3: "MFA Method Management",
 };
-export const PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS: Partial<OplSettings> =
-  {
-    taxonomyLevel2: "change phone number",
-  };
 export const CHANGE_EMAIL_COMMON_OPL_SETTINGS: Partial<OplSettings> = {
   taxonomyLevel2: "change email",
 };

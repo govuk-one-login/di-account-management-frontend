@@ -176,41 +176,27 @@
         }
       },
       "mfaSection": {
-        "heading": "Sut i gael codau diogelwch",
-        "paragraph": "Rydym yn defnyddio codau diogelwch i wneud yn siwr mae chi yw chi pan fyddwch yn mewngofnodi.",
-        "summaryList": {
+        "heading": "Sut rydych yn cael codau diogelwch i fewngofnodi",
+        "defaultMethod": {
+          "heading": "Eich dull diofyn",
           "phoneNumber": {
-            "title": "Neges testun",
-            "value": "Rhif ffôn sy'n gorffen gyda [phoneNumber]",
+            "title": "Neges destun i'ch rhif ffôn sy'n gorffen gyda [phoneNumber]",
             "change": "Newid rhif ffôn"
           },
           "app": {
-            "title": "Ap dilysydd"
-          }
-        },
-        "supportChangeMfa": {
-          "heading": "Sut rydych yn cael codau diogelwch i fewngofnodi",
-          "defaultMethod": {
-            "heading": "Eich dull diofyn",
-            "phoneNumber": {
-              "title": "Neges destun i'ch rhif ffôn sy'n gorffen gyda [phoneNumber]",
-              "change": "Newid rhif ffôn"
-            },
-            "app": {
-              "title": "Ap dilysydd",
-              "change": "Newid ap dilysydd"
-            },
-            "change": "Defnyddio dull diofyn gwahanol"
+            "title": "Ap dilysydd",
+            "change": "Newid ap dilysydd"
           },
-          "backup": {
-            "heading": "Eich dull wrth gefn",
-            "headingNoBackup": "Ychwanegu  dull wrth gefn",
-            "paragraph": "Rydym yn argymell eich bod yn ychwanegu dull wrth gefn ar gyfer cael codau diogelwch.",
-            "paragraph2": "Bydd hyn yn gwneud yn siŵr y gallwch fewngofnodi bob amser, hyd yn oed os na allwch gael codau diogelwch drwy ddefnyddio'ch dull diofyn.",
-            "link": "Ychwanegu  dull wrth gefn",
-            "removeLink": "Tynnu dull wrth gefn",
-            "switchLink": "Newid dulliau dull wrth gefn a diofyn"
-          }
+          "change": "Defnyddio dull diofyn gwahanol"
+        },
+        "backup": {
+          "heading": "Eich dull wrth gefn",
+          "headingNoBackup": "Ychwanegu  dull wrth gefn",
+          "paragraph": "Rydym yn argymell eich bod yn ychwanegu dull wrth gefn ar gyfer cael codau diogelwch.",
+          "paragraph2": "Bydd hyn yn gwneud yn siŵr y gallwch fewngofnodi bob amser, hyd yn oed os na allwch gael codau diogelwch drwy ddefnyddio'ch dull diofyn.",
+          "link": "Ychwanegu  dull wrth gefn",
+          "removeLink": "Tynnu dull wrth gefn",
+          "switchLink": "Newid dulliau dull wrth gefn a diofyn"
         }
       },
       "manageEmailSubscriptions": {

@@ -70,11 +70,10 @@ describe("Integration:: change authenticator app", () => {
       });
   });
 
-  const appWithMiddlewareSetup = async (config: any = {}) => {
+  const appWithMiddlewareSetup = async () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    const configFuncs = require("../../../config");
     const mfaModule = require("../../../utils/mfa");
 
     sandbox
@@ -141,18 +140,6 @@ describe("Integration:: change authenticator app", () => {
     sandbox.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     sandbox.replace(mfaModule, "verifyMfaCode", () => {
-      return true;
-    });
-
-    sandbox.stub(configFuncs, "getMfaServiceUrl").callsFake(() => {
-      return "https://method-management-v1-stub.home.build.account.gov.uk/v1";
-    });
-
-    sandbox.stub(configFuncs, "supportChangeMfa").callsFake(() => {
-      return !config.hideChangeMfa;
-    });
-
-    sandbox.stub(configFuncs, "supportMfaManagement").callsFake(() => {
       return true;
     });
 

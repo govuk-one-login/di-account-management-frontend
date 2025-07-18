@@ -22,14 +22,12 @@ import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
-  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
-import { supportMfaManagement } from "../../config";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";
@@ -110,12 +108,10 @@ export async function changeDefaultMethodAppGet(
 
 const setChangeDefaultMethodSmsOplSettings = (req: Request, res: Response) => {
   setOplSettings(
-    supportMfaManagement(req.cookies)
-      ? {
-          ...MFA_COMMON_OPL_SETTINGS,
-          contentId: "e847d040-e59e-4a88-8f9c-1d00a840d0bd",
-        }
-      : PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
+    {
+      ...MFA_COMMON_OPL_SETTINGS,
+      contentId: "e847d040-e59e-4a88-8f9c-1d00a840d0bd",
+    },
     res
   );
 };

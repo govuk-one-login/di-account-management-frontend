@@ -88,3 +88,4 @@ jobs:
       SESSION_SECRET: secret
       SESSION_EXPIRY: 3600000
       SESSION_STORE_TABLE_NAME: account-mgmt-frontend-SessionStore
+      METHOD_MANAGEMENT_BASE_URL: https://method-management-v1-stub.home.dev.account.gov.uk/v1
