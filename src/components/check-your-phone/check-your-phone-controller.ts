@@ -204,7 +204,6 @@ export async function checkYourPhonePost(req: Request, res: Response) {
     }`
   );
 
-  let isPhoneNumberUpdated = false;
   let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
 
   const mfaClient = await createMfaClient(req, res);
@@ -217,15 +216,14 @@ export async function checkYourPhonePost(req: Request, res: Response) {
     req.session.mfaMethods,
     req.t
   );
-  isPhoneNumberUpdated = changePhoneNumberResult.success;
+  if (changePhoneNumberResult.success) {
+    updateSessionUser(req, newPhoneNumber, getUserJourney(intent));
+    return res.redirect(getRedirectUrl(intent));
+  }
+
   if (changePhoneNumberResult.success === false) {
     changePhoneNumberWithMfaApiErrorMessage =
       changePhoneNumberResult.errorMessage;
-  }
-
-  if (isPhoneNumberUpdated) {
-    updateSessionUser(req, newPhoneNumber, getUserJourney(intent));
-    return res.redirect(getRedirectUrl(intent));
   }
 
   const error = formatValidationError(
