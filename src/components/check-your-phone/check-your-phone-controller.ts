@@ -1,20 +1,15 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
 import { PATH_DATA } from "../../app.constants";
-import { CheckYourPhoneServiceInterface } from "./types";
 import {
   EventType,
   getNextState,
   UserJourney,
 } from "../../utils/state-machine";
-import { checkYourPhoneService } from "./check-your-phone-service";
 import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation";
 import { getLastNDigits } from "../../utils/phone-number";
-import { UpdateInformationInput } from "../../utils/types";
-import { supportChangeMfa, supportMfaManagement } from "../../config";
 import {
   Intent,
   INTENT_ADD_BACKUP,
@@ -35,11 +30,9 @@ import {
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types";
 import { containsNumbersOnly } from "../../utils/strings";
-import { getRequestConfigFromExpress } from "../../utils/http";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
-  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
@@ -106,25 +99,15 @@ const setCheckYourPhoneOplSettings = (
   req: Request,
   res: Response
 ) => {
-  if (!supportMfaManagement(req.cookies)) {
-    setOplSettings(
-      {
-        ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
-        contentId: "fb69b162-9ddb-41db-a8fa-3cca7fea2fa9",
-      },
-      res
-    );
-  } else {
-    const defaultMfaMethodType = req.session.mfaMethods?.find(
-      (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
-    )?.method.mfaMethodType;
-    const oplSettings =
-      OPL_VALUES[
-        `${intent}_${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`
-      ];
+  const defaultMfaMethodType = req.session.mfaMethods?.find(
+    (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
+  )?.method.mfaMethodType;
+  const oplSettings =
+    OPL_VALUES[
+      `${intent}_${mfaPriorityIdentifiers.default}_${defaultMfaMethodType}`
+    ];
 
-    setOplSettings(oplSettings, res);
-  }
+  setOplSettings(oplSettings, res);
 };
 
 export function checkYourPhoneGet(req: Request, res: Response): void {
@@ -145,134 +128,117 @@ export function checkYourPhoneGet(req: Request, res: Response): void {
   res.render(TEMPLATE_NAME, getRenderOptions(req, intent));
 }
 
-export function checkYourPhonePost(
-  service: CheckYourPhoneServiceInterface = checkYourPhoneService()
-): ExpressRouteFunc {
-  return async function (req: Request, res: Response) {
-    req.metrics?.addMetric("checkYourPhonePost", MetricUnit.Count, 1);
-    const intent = req.body.intent as Intent;
+export async function checkYourPhonePost(req: Request, res: Response) {
+  req.metrics?.addMetric("checkYourPhonePost", MetricUnit.Count, 1);
+  const intent = req.body.intent as Intent;
 
-    setCheckYourPhoneOplSettings(intent, req, res);
+  setCheckYourPhoneOplSettings(intent, req, res);
 
-    const { code } = req.body;
+  const { code } = req.body;
 
-    if (!code) {
-      const error = formatValidationError(
-        "code",
-        req.t("pages.checkYourPhone.code.validationError.required")
-      );
-      return renderBadRequest(
-        res,
-        req,
-        TEMPLATE_NAME,
-        error,
-        getRenderOptions(req, intent)
-      );
-    }
-
-    if (code.length > 6) {
-      const error = formatValidationError(
-        "code",
-        req.t("pages.checkYourPhone.code.validationError.maxLength")
-      );
-      return renderBadRequest(
-        res,
-        req,
-        TEMPLATE_NAME,
-        error,
-        getRenderOptions(req, intent)
-      );
-    }
-
-    if (code.length < 6) {
-      const error = formatValidationError(
-        "code",
-        req.t("pages.checkYourPhone.code.validationError.minLength")
-      );
-      return renderBadRequest(
-        res,
-        req,
-        TEMPLATE_NAME,
-        error,
-        getRenderOptions(req, intent)
-      );
-    }
-
-    if (!containsNumbersOnly(code)) {
-      const error = formatValidationError(
-        "code",
-        req.t("pages.checkYourPhone.code.validationError.invalidFormat")
-      );
-      return renderBadRequest(
-        res,
-        req,
-        TEMPLATE_NAME,
-        error,
-        getRenderOptions(req, intent)
-      );
-    }
-
-    const { email, newPhoneNumber } = req.session.user;
-
-    logger.info(
-      { trace: res?.locals?.trace },
-      `Check your phone POST controller newPhoneNumber: ${
-        req.session.user.newPhoneNumber?.replace(
-          /^(.{2})(.*)/,
-          (_, first2, rest) => first2 + rest.replace(/./g, "*")
-        ) ?? JSON.stringify(req.session.user.newPhoneNumber)
-      }`
-    );
-
-    const updateInput: UpdateInformationInput = {
-      email,
-      otp: code,
-    };
-    let isPhoneNumberUpdated = false;
-    let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
-
-    if (supportChangeMfa(req.cookies)) {
-      const mfaClient = await createMfaClient(req, res);
-      const changePhoneNumberResult = await changePhoneNumberwithMfaApi(
-        mfaClient,
-        code,
-        intent,
-        newPhoneNumber,
-        res.locals.trace,
-        req.session.mfaMethods,
-        req.t
-      );
-      isPhoneNumberUpdated = changePhoneNumberResult.success;
-      if (changePhoneNumberResult.success === false) {
-        changePhoneNumberWithMfaApiErrorMessage =
-          changePhoneNumberResult.errorMessage;
-      }
-    } else {
-      isPhoneNumberUpdated = await service.updatePhoneNumber(
-        { ...updateInput, updatedValue: newPhoneNumber },
-        await getRequestConfigFromExpress(req, res)
-      );
-    }
-
-    if (isPhoneNumberUpdated) {
-      updateSessionUser(req, newPhoneNumber, getUserJourney(intent));
-      return res.redirect(getRedirectUrl(intent));
-    }
-
+  if (!code) {
     const error = formatValidationError(
       "code",
-      changePhoneNumberWithMfaApiErrorMessage ??
-        req.t("pages.checkYourPhone.code.validationError.invalidCode")
+      req.t("pages.checkYourPhone.code.validationError.required")
     );
-
-    renderBadRequest(
+    return renderBadRequest(
       res,
       req,
       TEMPLATE_NAME,
       error,
       getRenderOptions(req, intent)
     );
-  };
+  }
+
+  if (code.length > 6) {
+    const error = formatValidationError(
+      "code",
+      req.t("pages.checkYourPhone.code.validationError.maxLength")
+    );
+    return renderBadRequest(
+      res,
+      req,
+      TEMPLATE_NAME,
+      error,
+      getRenderOptions(req, intent)
+    );
+  }
+
+  if (code.length < 6) {
+    const error = formatValidationError(
+      "code",
+      req.t("pages.checkYourPhone.code.validationError.minLength")
+    );
+    return renderBadRequest(
+      res,
+      req,
+      TEMPLATE_NAME,
+      error,
+      getRenderOptions(req, intent)
+    );
+  }
+
+  if (!containsNumbersOnly(code)) {
+    const error = formatValidationError(
+      "code",
+      req.t("pages.checkYourPhone.code.validationError.invalidFormat")
+    );
+    return renderBadRequest(
+      res,
+      req,
+      TEMPLATE_NAME,
+      error,
+      getRenderOptions(req, intent)
+    );
+  }
+
+  const { newPhoneNumber } = req.session.user;
+
+  logger.info(
+    { trace: res?.locals?.trace },
+    `Check your phone POST controller newPhoneNumber: ${
+      req.session.user.newPhoneNumber?.replace(
+        /^(.{2})(.*)/,
+        (_, first2, rest) => first2 + rest.replace(/./g, "*")
+      ) ?? JSON.stringify(req.session.user.newPhoneNumber)
+    }`
+  );
+
+  let changePhoneNumberWithMfaApiErrorMessage: string | undefined = undefined;
+
+  const mfaClient = await createMfaClient(req, res);
+  const changePhoneNumberResult = await changePhoneNumberwithMfaApi(
+    mfaClient,
+    code,
+    intent,
+    newPhoneNumber,
+    res.locals.trace,
+    req.session.mfaMethods,
+    req.t
+  );
+  if (changePhoneNumberResult.success) {
+    updateSessionUser(req, newPhoneNumber, getUserJourney(intent));
+    return res.redirect(getRedirectUrl(intent));
+  }
+
+  if (changePhoneNumberResult.success === false) {
+    changePhoneNumberWithMfaApiErrorMessage =
+      changePhoneNumberResult.errorMessage;
+  }
+
+  const error = formatValidationError(
+    "code",
+    changePhoneNumberWithMfaApiErrorMessage ??
+      req.t("pages.checkYourPhone.code.validationError.invalidCode")
+  );
+
+  renderBadRequest(
+    res,
+    req,
+    TEMPLATE_NAME,
+    error,
+    getRenderOptions(req, intent)
+  );
 }
 
 async function changePhoneNumberwithMfaApi(
