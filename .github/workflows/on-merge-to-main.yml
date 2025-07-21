@@ -15,18 +15,18 @@ jobs:
   validate_application:
     name: App Checks
     uses: ./.github/workflows/build-test-application.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
 
   validate_container:
     name: Container Checks
     uses: ./.github/workflows/validate-docker-image.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     needs: validate_application
 
   validate_deployment:
     name: Deployment Template Checks
     uses: ./.github/workflows/validate-sam-template.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     needs: validate_container
 
   publish_artifacts:

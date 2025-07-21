@@ -27,4 +27,4 @@ Feature: Contact GOV.UK One Login
     When I click on the floating webchat button
     Then the webchat appears
     Given I click on the minimise webchat button
-    Then the webchat disappears    
+    Then the webchat disappears

@@ -29,10 +29,10 @@ resource "aws_cloudformation_stack" "cloudfront_stack" {
     OriginCloakingHeader                                           = "none"
     OriginCloakingHeaderManagedSecretAlarmSNSTopicARN              = var.originCloakingHeaderManagedSecretAlarmSNSTopicARN
     OriginCloakingHeaderManagedSecretNotificationSNSTopicARN       = var.originCloakingHeaderManagedSecretNotificationSNSTopicARN
-    OriginCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN = var.originCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN
-    OriginCloakingHeaderManagedSecretPreviousVersion               = "AWSPREVIOUS"
-    OriginCloakingHeaderManagedSecretRotationMonthWeekDaySchedule  = "THU#3"
-    OriginCloakingHeaderManagedSecretVersion                       = "AWSCURRENT"
+    OriginCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN = var.originCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN       #pragma: allowlist secret
+    OriginCloakingHeaderManagedSecretPreviousVersion               = "AWSPREVIOUS"                                                            #pragma: allowlist secret
+    OriginCloakingHeaderManagedSecretRotationMonthWeekDaySchedule  = "THU#3"                                                                  #pragma: allowlist secret
+    OriginCloakingHeaderManagedSecretVersion                       = "AWSCURRENT"                                                             #pragma: allowlist secret
     PreviousOriginCloakingHeader                                   = "none"
     StandardLoggingEnabled                                         = "true"
     CloudFrontCertArn                                              = aws_cloudformation_stack.certificate_stack.outputs["CertificateARN"]

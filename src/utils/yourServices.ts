@@ -136,8 +136,8 @@ export const containsGovUkPublishingService = (
   serviceList: Service[]
 ): boolean => {
   const govUkPublishingClientIds: string[] = [
-    "LcueBVCnGZw-YFdTZ4S07XbQx7I",
-    "CEr97IZfEPQFgBxq8QNcM8LFxw4",
+    "LcueBVCnGZw-YFdTZ4S07XbQx7I", //pragma: allowlist secret
+    "CEr97IZfEPQFgBxq8QNcM8LFxw4", //pragma: allowlist secret
     "gov-uk",
   ];
 

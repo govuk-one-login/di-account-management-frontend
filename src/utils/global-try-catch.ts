@@ -8,7 +8,7 @@ export function globalTryCatchAsync(
   return function (req: Request, res: Response, next?: NextFunction) {
     return Promise.resolve(fn(req, res, next)).catch((error) => {
       req.metrics?.addMetric("globalTryCatchAsyncError", MetricUnit.Count, 1);
-      logger.error(error, "Global async error handler:")
+      logger.error(error, "Global async error handler:");
       next?.(error);
     });
   };
@@ -22,7 +22,7 @@ export const globalTryCatch = (
       fn(req, res, next);
     } catch (error) {
       req.metrics?.addMetric("globalTryCatchError", MetricUnit.Count, 1);
-      logger.error(error, "Global error handler:")
+      logger.error(error, "Global error handler:");
       next?.(error);
     }
   };

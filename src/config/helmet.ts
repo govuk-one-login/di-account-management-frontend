@@ -9,7 +9,7 @@ export const helmetConfiguration: HelmetOptions = {
         "'self'",
         (req: Request, res: Response): string =>
           `'nonce-${res.locals.scriptNonce}'`,
-        "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
+        "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='", //pragma: allowlist secret
         "https://*.googletagmanager.com",
         "https://*.google-analytics.com",
         "https://*.analytics.google.com",
@@ -66,7 +66,7 @@ export const webchatHelmetConfiguration: HelmetOptions = {
         "'self'",
         (req: Request, res: Response): string =>
           `'nonce-${res.locals.scriptNonce}'`,
-        "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
+        "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='", //pragma: allowlist secret
         "https://*.googletagmanager.com",
         "https://*.google-analytics.com",
         "https://*.analytics.google.com",

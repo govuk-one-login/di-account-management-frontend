@@ -16,7 +16,7 @@
         <p class='govuk-body'>{{ "pages.removeBackupMethod.sms" | translate | safe | replace("[phoneNumber]", phoneNumber) }}</p>
     {% endif %}
 
-     
+
     <form action="{{ "DELETE_MFA_METHOD" | getPath }}" method="POST">
         <input type="hidden" name="_csrf" value="{{csrfToken}}" />
         <input type="hidden" name="methodId" value="{{mfaIdentifier}}" />
@@ -25,7 +25,7 @@
         "type": "Submit",
         "preventDoubleClick": true
         }) }}
-    
+
         <p class="govuk-body"> <a href="{{ "SECURITY" | getPath }}" class="govuk-link" rel="noreferrer noopener">{{cancelText}}</a></p>
     </div>
 {% endblock %}

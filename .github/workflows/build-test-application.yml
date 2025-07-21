@@ -36,7 +36,7 @@ jobs:
           LOCALSTACK_HOST: localstack
           AWS_DEFAULT_REGION: eu-west-2
           AWS_ACCESS_KEY_ID: na
-          AWS_SECRET_ACCESS_KEY: na
+          AWS_SECRET_ACCESS_KEY: na #pragma: allowlist secret
           DEBUG: 0
         ports:
           - 4566:4566
@@ -49,7 +49,7 @@ jobs:
         env:
           AWS_DEFAULT_REGION: eu-west-2
           AWS_ACCESS_KEY_ID: na
-          AWS_SECRET_ACCESS_KEY: na
+          AWS_SECRET_ACCESS_KEY: na #pragma: allowlist secret
           RUNNING_OUTSIDE_DOCKER: true
         run: ./localstack/provision.sh
 
@@ -85,7 +85,7 @@ jobs:
       AM_YOUR_ACCOUNT_URL: some url
       OIDC_CLIENT_ID: test
       OIDC_CLIENT_SCOPES: openid
-      SESSION_SECRET: secret
+      SESSION_SECRET: secret #pragma: allowlist secret
       SESSION_EXPIRY: 3600000
       SESSION_STORE_TABLE_NAME: account-mgmt-frontend-SessionStore
       METHOD_MANAGEMENT_BASE_URL: https://method-management-v1-stub.home.build.account.gov.uk/v1

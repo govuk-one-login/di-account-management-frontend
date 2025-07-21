@@ -35,6 +35,6 @@ jobs:
       AM_YOUR_ACCOUNT_URL: some url
       OIDC_CLIENT_ID: test
       OIDC_CLIENT_SCOPES: openid
-      SESSION_SECRET: secret
+      SESSION_SECRET: secret #pragma: allowlist secret
       SESSION_EXPIRY: 3600000
       SESSION_STORE_TABLE_NAME: account-mgmt-frontend-SessionStore

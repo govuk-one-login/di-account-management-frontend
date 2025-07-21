@@ -44,8 +44,8 @@ function getLocalStackAWSConfig(): AwsConfig {
   return {
     endpoint: getLocalStackBaseUrl(),
     credentials: {
-      accessKeyId: "na",
-      secretAccessKey: "na",
+      accessKeyId: "na", //pragma: allowlist secret
+      secretAccessKey: "na", //pragma: allowlist secret
     },
     region: getAwsRegion(),
   };
@@ -79,8 +79,8 @@ export function getSQSConfig(): SqsConfig {
         region: getAwsRegion(),
         endpoint: "http://localstack:4566", // NOSONAR: http used locally
         credentials: {
-          accessKeyId: "na",
-          secretAccessKey: "na",
+          accessKeyId: "na", //pragma: allowlist secret
+          secretAccessKey: "na", //pragma: allowlist secret
         },
       },
     };

@@ -6,5 +6,5 @@ Keys:
           KeyUsage: SIGN_VERIFY
           Description: RSA key with 2048 bits
         PrivateKeyPem: |
-          -----BEGIN PRIVATE KEY-----
+          -----BEGIN PRIVATE KEY-----       # pragma: allowlist secret
           -----END PRIVATE KEY-----

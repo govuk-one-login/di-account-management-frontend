@@ -16,7 +16,7 @@ import {
 } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
-const changePasswordTemplate = "change-password/index.njk";
+const changePasswordTemplate = "change-password/index.njk"; //pragma: allowlist secret
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(

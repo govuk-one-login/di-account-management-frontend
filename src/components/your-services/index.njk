@@ -8,14 +8,14 @@
 {% set serviceListLink = 'pages.yourServices.informationBox.link' | translate | safe %}
 {% set searchableListLink = "SEARCH_SERVICES" | getPath %}
 
-{%- macro setKey(key, clientId) -%} 
+{%- macro setKey(key, clientId) -%}
   {{ ['clientRegistry.', env, '.', clientId, '.', key] | join }}
 {%- endmacro -%}
 {%- macro bodyParagraph(settings) -%}
 <p class="govuk-body {{ settings.classes }}"{% if settings.EnglishOnlyService %} lang="en"{% endif %} data-test-id={{settings.testId}}>
   {{ settings.content | translate }}
   {{ settings.contentBlock }}
-</p> 
+</p>
 {%- endmacro -%}
 
 {% block content %}
@@ -30,7 +30,7 @@
       </div>
       {% if not hasRPs %}
         {# Display an empty state when no accounts nor services have been used #}
-        {# This should be an edge case as the only pathways into the account would be signing up via other services #} 
+        {# This should be an edge case as the only pathways into the account would be signing up via other services #}
       <div class="your-services__card your-services__card--empty" data-test-id="empty-state">
         <div class="your-services__card__content">
           {{ bodyParagraph({ content: 'pages.yourServices.empty'}) }}
@@ -55,7 +55,7 @@
               {{ bodyParagraph({ content: setKey('description', clientId), EnglishOnlyService: EnglishOnlyService}) }}
               {{ bodyParagraph({ content: 'general.noWelshNoticeInline', EnglishOnlyService: EnglishOnlyService, testId: "no-welsh-notice-inline"}) if EnglishOnlyService }}
               {{ bodyParagraph({ EnglishOnlyService: EnglishOnlyService, contentBlock: accountCardLink | safe }) }}
-              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', account.last_accessed_readable_format] | join | safe }) }}              
+              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', account.last_accessed_readable_format] | join | safe }) }}
             </div>
           </li>
           {# End Account card #}
@@ -88,13 +88,13 @@
               {{ bodyParagraph({ content: setKey('paragraph1', clientId), EnglishOnlyService: EnglishOnlyService })}}
               {{ bodyParagraph({ content: setKey('paragraph2', clientId), EnglishOnlyService: EnglishOnlyService })}}
               {{ bodyParagraph({ EnglishOnlyService: EnglishOnlyService, contentBlock: serviceCardLink | safe })}}
-              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}              
+              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}
             {% else %}
               <{{serviceHeadingLevel}} class="govuk-heading-s govuk-!-font-weight-regular" data-test-id="service-card-heading" {% if EnglishOnlyService %}lang="en"{% endif %}>
                 <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId)| translate }}</a>
               </{{serviceHeadingLevel}}>
               {{ bodyParagraph({ content: 'general.noWelshNoticeInline', testId: "no-welsh-notice-inline", EnglishOnlyService: EnglishOnlyService}) if EnglishOnlyService }}
-              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}              
+              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}
             {% endif %}
             </div>
           </li>

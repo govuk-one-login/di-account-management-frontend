@@ -18,7 +18,7 @@
   {% elseif (resultsCount > 0) %}
       {{ "pages.searchServices.manyResults" | translate | replace("[count]", resultsCount) }}
   {% else %}
-      {{ "pages.searchServices.noResults" | translate }}     
+      {{ "pages.searchServices.noResults" | translate }}
   {% endif %}
 {% endset %}
 {% block pageContent %}
@@ -56,7 +56,7 @@
         value: query
       }) }}
 
-      {% if hasSearch %} 
+      {% if hasSearch %}
       <p class="govuk-body">
         <a class="govuk-link govuk-link--no-visited-state" href="{{ "SEARCH_SERVICES" | getPath }}">{{ "pages.searchServices.clearSearch" | translate }}</a>
       </p>

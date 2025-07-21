@@ -2,7 +2,7 @@ default_stages: [pre-commit]
 
 repos:
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.1.0
+    rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
         additional_dependencies:
@@ -16,9 +16,10 @@ repos:
         stages: [commit-msg]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v5.0.0
     hooks:
       - id: detect-private-key
+        exclude: seed.yaml.sample
       - id: detect-aws-credentials
         args: [--allow-missing-credentials]
         exclude: "package.json|package-lock.json"
@@ -28,10 +29,11 @@ repos:
       - id: no-commit-to-branch
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
+    rev: v1.5.0
     hooks:
       - id: detect-secrets
-        exclude: "package.json|package-lock.json|src/.*/.*.test.ts"
+        args: ["--baseline", ".secrets.baseline"]
+        exclude: "package.json|package-lock.json|src/.*/.*.test.ts|src/.*/translation.json|src/.*/.*.njk"
 
   - repo: local
     hooks:

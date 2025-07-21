@@ -15,7 +15,7 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         {{ govukButton({
             text: 'pages.globalLogout.button' | translate,
-            classes: "govuk-button--warning" 
+            classes: "govuk-button--warning"
         }) }}
     </form>
     <a href='{{ "SIGN_IN_HISTORY" | getPath }}' class="govuk-link govuk-body">

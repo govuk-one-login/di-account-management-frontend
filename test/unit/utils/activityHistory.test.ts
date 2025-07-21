@@ -61,7 +61,7 @@ describe("Activity History Util", () => {
 
       expect(formattedActivityLogs[0].eventType).equal("signedIn");
       expect(formattedActivityLogs[0].clientId).equal(
-        "RqFZ83csmS4Mi4Y7s7ohD9-ekwU"
+        "RqFZ83csmS4Mi4Y7s7ohD9-ekwU" //pragma: allowlist secret
       );
       expect(formattedActivityLogs[0].time).equal("13 July 2023 at 2:00 am");
     });
