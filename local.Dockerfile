@@ -8,4 +8,4 @@ WORKDIR /app
 
 EXPOSE $PORT
 
-CMD npm ci && npm run copy-assets && npm run dev
+CMD npm ci && npm run copy-assets && npm run start
