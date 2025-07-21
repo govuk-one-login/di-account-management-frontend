@@ -8,4 +8,4 @@ WORKDIR /app
 
 EXPOSE $PORT
 
-CMD npm ci && npm run build && npm install -g bun && npm start
+CMD npm ci && npm run build && npm start
