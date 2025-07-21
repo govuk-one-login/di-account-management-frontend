@@ -12,7 +12,7 @@ import {
 } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import { getBaseUrl, supportChangeMfa } from "../../../config";
+import { getBaseUrl } from "../../../config";
 
 describe("Integration::enter password", () => {
   let sandbox: sinon.SinonSandbox;
@@ -148,26 +148,6 @@ describe("Integration::enter password", () => {
     // exclude the account deletion flow, as the user will be logged out, so the usual tests wont work
     PATH_DATA.ACCOUNT_DELETED_CONFIRMATION,
     PATH_DATA.DELETE_ACCOUNT,
-
-    // don't test MFA Method routes in the feautre flag is off
-    ...(!supportChangeMfa({
-      enable_mfa_for_qa: "1",
-    })
-      ? [
-          PATH_DATA.ADD_MFA_METHOD,
-          PATH_DATA.ADD_MFA_METHOD_APP,
-          PATH_DATA.ADD_MFA_METHOD_APP_CONFIRMATION,
-          PATH_DATA.ADD_MFA_METHOD_GO_BACK,
-          PATH_DATA.ADD_MFA_METHOD_SMS,
-          PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION,
-          PATH_DATA.DELETE_MFA_METHOD,
-          PATH_DATA.SWITCH_BACKUP_METHOD,
-          PATH_DATA.CHANGE_DEFAULT_METHOD,
-          PATH_DATA.CHANGE_DEFAULT_METHOD_APP,
-          PATH_DATA.CHANGE_DEFAULT_METHOD_SMS,
-          PATH_DATA.CHANGE_AUTHENTICATOR_APP,
-        ]
-      : []),
   ];
 
   Object.entries(PATH_DATA)

@@ -13,10 +13,7 @@ import {
   getNextState,
   UserJourney,
 } from "../../utils/state-machine";
-import {
-  supportChangeOnIntervention,
-  supportMfaManagement,
-} from "../../config";
+import { supportChangeOnIntervention } from "../../config";
 import { handleLogout } from "../../utils/logout";
 import { getRequestConfigFromExpress } from "../../utils/http";
 import {
@@ -25,7 +22,6 @@ import {
   OplSettingsLookupObject,
   CHANGE_EMAIL_COMMON_OPL_SETTINGS,
   CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
-  PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl";
@@ -50,7 +46,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
 };
 
-const getOplValues = (req: Request): OplSettingsLookupObject => ({
+const getOplValues = (): OplSettingsLookupObject => ({
   [UserJourney.ChangeEmail]: {
     ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
     contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
@@ -59,15 +55,10 @@ const getOplValues = (req: Request): OplSettingsLookupObject => ({
     ...CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
     contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412",
   },
-  [UserJourney.ChangePhoneNumber]: supportMfaManagement(req.cookies)
-    ? {
-        ...MFA_COMMON_OPL_SETTINGS,
-        contentId: "e1cde140-d7e6-4221-90ca-0f2d131743cd",
-      }
-    : {
-        ...PRE_MFA_CHANGE_PHONE_NUMBER_COMMON_OPL_SETTINGS,
-        contentId: "2f5f174d-c650-4b28-96cf-365f4fb17af1",
-      },
+  [UserJourney.ChangePhoneNumber]: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "e1cde140-d7e6-4221-90ca-0f2d131743cd",
+  },
   [UserJourney.DeleteAccount]: {
     ...DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
     contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349",
@@ -123,7 +114,7 @@ const setLocalOplSettings = (
     (method) => method.priorityIdentifier === mfaPriorityIdentifiers.default
   )?.method.mfaMethodType;
 
-  const OPL_VALUES = getOplValues(req);
+  const OPL_VALUES = getOplValues();
 
   setOplSettings(
     OPL_VALUES[
