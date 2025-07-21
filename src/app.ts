@@ -313,6 +313,8 @@ async function startServer(app: Application): Promise<{
   await new Promise<void>((resolve) => {
     server = app
       .listen(port, () => {
+        console.log("SERVER_STARTED", new Date().getTime());
+
         logger.info(`Server listening on port ${port}`);
         app.emit("appStarted");
         resolve();

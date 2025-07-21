@@ -22,7 +22,7 @@
     "flame": "NODE_ENV=production clinic flame --autocannon [ -c 10 -d  10 /healthcheck ] -- node -r dotenv/config dist/server.js && echo '\n\nRemember to clean up files in .clinic and node_trace.*.log\n'",
     "heap-profiler": "NODE_ENV=production clinic flame --autocannon [ / --method GET -d 120 ] -- node -r dotenv/config dist/server.js && echo '\n\nRemember to clean up files in .clinic and node_trace.*.log\n'",
     "lint": "eslint .",
-    "start": "node dist/server.js",
+    "start": "node -e \"console.log('SERVER_STARTING', new Date().getTime())\" && bun dist/server.js",
     "test:audit": "npm audit",
     "test:integration": "rm -rf test/coverage && NODE_ENV=test nyc mocha -r dotenv/config -P tsconfig.mocha.json  \"src/**/*-integration.test.ts\"",
     "test:unit": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config --exclude \"src/**/*-integration.test.ts\"  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
