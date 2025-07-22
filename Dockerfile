@@ -1,4 +1,4 @@
-FROM node:20.19.4-alpine@sha256:940a1dc7c783725ebbf04fa433bec13fa7478437f20387753dbf701858ea8e31 as builder
+FROM oven/bun:1.1.10 as builder
 
 ENV HUSKY=0
 
@@ -10,11 +10,7 @@ COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
 
-RUN bun install --production
-
 RUN bun install && bun run build && bun run clean-modules && bun install --production
-
-FROM oven/bun:1.1.13 as final
 
 RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
