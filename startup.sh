@@ -4,6 +4,7 @@
 SERVICE_NAME="account-management-frontend"
 READY_MESSAGE="Server listening on port"
 
+# Start the app in detached mode
 docker-compose up --build -d
 
 echo ".... Waiting for ${SERVICE_NAME} service to start producing logs..."
