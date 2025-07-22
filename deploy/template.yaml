@@ -2211,6 +2211,35 @@ Resources:
             Period: 60
             Stat: Maximum
 
+  LoggerErrorsFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: '{ $.level = 50 || $.level = "error" }'
+      LogGroupName: !Ref TaskLogGroup
+      MetricTransformations:
+        - MetricName: LoggerErrorCount
+          MetricNamespace: !Sub "${AWS::StackName}/Logger"
+          MetricValue: "1"
+          Unit: Count
+
+  LoggerErrorRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-LoggerErrorRateAlarm"
+      AlarmDescription: "Alarm when Logger error rate exceeds 5 errors in 5 minutes"
+      Namespace: !Sub "${AWS::StackName}/Logger"
+      MetricName: LoggerErrorCount
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 5
+      Threshold: 5
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+
   #
   # Canary Deployment
   #
@@ -2239,8 +2268,9 @@ Resources:
         ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
         ContainerPort: !Ref ContainerPort
         CloudWatchAlarms: !Sub
-          - "${ELB5XX10PercentAlarm}"
+          - "${ELB5XX10PercentAlarm},${LoggerErrorRateAlarm}"
           - ELB5XX10PercentAlarm: !Ref ELB5XX10PercentAlarm
+            LoggerErrorRateAlarm: !Ref LoggerErrorRateAlarm
 
 Outputs:
   ApiGatewayEndpoint:
