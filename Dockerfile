@@ -12,6 +12,8 @@ COPY ./@types ./@types
 
 RUN bun install && bun run build && bun run clean-modules && bun install --production
 
+FROM oven/bun:1.1.10 as builder
+
 RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
 
