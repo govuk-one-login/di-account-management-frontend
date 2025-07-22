@@ -51,86 +51,54 @@
         </div>
         {{ govukSummaryList(accountDetailsSummaryList) }}
       </div>
-      {% if supportChangeMfa %}
-        {# if changing authenticator app is supported, show the new design #}
-        <div class="summary-list-container">
-          <div class="summary-list-container__content">
-            <h2 class="govuk-heading-m">{{ 'pages.security.mfaSection.supportChangeMfa.heading' | translate }}</h2>
-          </div>
-          {% if mfaMethods | length > 0 %}
-            {% set foundPrimary = false %}
-            {% set foundSecondary = false %}
-            {% for method in mfaMethods %}
-              {% if (method.priorityIdentifier == "DEFAULT") and not foundPrimary %}
-                {# display existing primary method with options to change the method or use a different type #}
-                <div class="summary-list-container__content" data-test-id="mfa-summary-list">
-                  <h2 class="govuk-heading-s">{{'pages.security.mfaSection.supportChangeMfa.defaultMethod.heading' | translate }}</h2>
-                  <p class="govuk-body">{{ method.text }}</p>
-                  <p class="govuk-body"><a href="{{ method.linkHref }}" class="govuk-link"> {{ method.linkText }}</a></p>
-                  {% if canChangeTypeofPrimary %}
-                  <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=changeDefaultMethod" class="govuk-link"> {{ ['pages.security.mfaSection.supportChangeMfa.defaultMethod.change'] | join | translate }}</a></p>
-                  {% endif %}
-                </div>
-                {% set foundPrimary = true %}
-              {% endif %}
-            {% endfor %}
 
-            {% if supportAddBackupMfa %}
-              {# backup mfa block has two states #}
-              <div class="summary-list-container__content">
-                {% for method in mfaMethods %}
-                  {% if (method.priorityIdentifier == "BACKUP") and not foundSecondary %}
-                    {# 1: backup method exists => display backup method block with options to change backup method or switch primary and backup #}
-                    <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.supportChangeMfa.backup.heading' | translate }}</h3>
-                    <p class="govuk-body">{{ method.text }}</p>
-                    <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=switchBackupMethod" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.switchLink' | translate }}</a></p>
-                    <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=removeBackup" class="govuk-link"> {{ 'pages.security.mfaSection.supportChangeMfa.backup.removeLink' | translate }}</a></p>
-                    {% set foundSecondary = true %}
-                  {% endif %}
-                {% endfor %}
-                {% if not foundSecondary %}
-                  <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.supportChangeMfa.backup.headingNoBackup' | translate }}</h3>
-                  {# 2: backup method does not exist => display option to add a new backup method #}
-                  <p class="govuk-body">{{ 'pages.security.mfaSection.supportChangeMfa.backup.paragraph' | translate }}</p>
-                  <p class="govuk-body">{{ 'pages.security.mfaSection.supportChangeMfa.backup.paragraph2' | translate }}</p>
-                  <p class="govuk-body">
-                    <a href="{{enterPasswordUrl}}&type=addBackup" class="govuk-link">{{ 'pages.security.mfaSection.supportChangeMfa.backup.link' | translate }}</a>
-                  </p>
+      <div class="summary-list-container">
+        <div class="summary-list-container__content">
+          <h2 class="govuk-heading-m">{{ 'pages.security.mfaSection.heading' | translate }}</h2>
+        </div>
+        {% if mfaMethods | length > 0 %}
+          {% set foundPrimary = false %}
+          {% set foundSecondary = false %}
+          {% for method in mfaMethods %}
+            {% if (method.priorityIdentifier == "DEFAULT") and not foundPrimary %}
+              {# display existing primary method with options to change the method or use a different type #}
+              <div class="summary-list-container__content" data-test-id="mfa-summary-list">
+                <h2 class="govuk-heading-s">{{'pages.security.mfaSection.defaultMethod.heading' | translate }}</h2>
+                <p class="govuk-body">{{ method.text }}</p>
+                <p class="govuk-body"><a href="{{ method.linkHref }}" class="govuk-link"> {{ method.linkText }}</a></p>
+                {% if canChangeTypeofPrimary %}
+                <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=changeDefaultMethod" class="govuk-link"> {{ ['pages.security.mfaSection.defaultMethod.change'] | join | translate }}</a></p>
                 {% endif %}
               </div>
+              {% set foundPrimary = true %}
             {% endif %}
-          {% endif %}
+          {% endfor %}
 
-        </div>
-      {% else %}
-        {# if changing authenticator app is not supported, show the old design #}
-        <div class="summary-list-container">
+          {# backup mfa block has two states #}
           <div class="summary-list-container__content">
-            <h2 class="govuk-heading-m">{{ 'pages.security.mfaSection.heading' | translate }}</h2>
-            <p class="govuk-body">{{ 'pages.security.mfaSection.paragraph' | translate }}</p>
-          </div>
-          {% if mfaMethods | length > 0 %}
             {% for method in mfaMethods %}
-              {% if method.type == "SMS" %}
-                {%
-                  set mfaSummaryList = {
-                    classes:"govuk-summary-list--security",
-                    attributes: {"data-test-id": "mfa-summary-list"},
-                    rows: [method]
-                  }
-                %}
-                {{ govukSummaryList(mfaSummaryList)}}
-              {% elif method.type == "AUTH_APP" %}
-                <div class="summary-list-container__content">
-                  {# if mfa method management is not supported, the auth app method is READ ONLY #}
-                  <p class="govuk-body"><strong>{{ method.key.text }}</strong></p>
-                </div>
+              {% if (method.priorityIdentifier == "BACKUP") and not foundSecondary %}
+                {# 1: backup method exists => display backup method block with options to change backup method or switch primary and backup #}
+                <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.backup.heading' | translate }}</h3>
+                <p class="govuk-body">{{ method.text }}</p>
+                <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=switchBackupMethod" class="govuk-link"> {{ 'pages.security.mfaSection.backup.switchLink' | translate }}</a></p>
+                <p class="govuk-body"><a href="{{enterPasswordUrl}}&type=removeBackup" class="govuk-link"> {{ 'pages.security.mfaSection.backup.removeLink' | translate }}</a></p>
+                {% set foundSecondary = true %}
               {% endif %}
             {% endfor %}
-          {% endif %}
+            {% if not foundSecondary %}
+              <h3 class='govuk-heading-s'>{{ 'pages.security.mfaSection.backup.headingNoBackup' | translate }}</h3>
+              {# 2: backup method does not exist => display option to add a new backup method #}
+              <p class="govuk-body">{{ 'pages.security.mfaSection.backup.paragraph' | translate }}</p>
+              <p class="govuk-body">{{ 'pages.security.mfaSection.backup.paragraph2' | translate }}</p>
+              <p class="govuk-body">
+                <a href="{{enterPasswordUrl}}&type=addBackup" class="govuk-link">{{ 'pages.security.mfaSection.backup.link' | translate }}</a>
+              </p>
+            {% endif %}
+          </div>
+        {% endif %}
 
-        </div>
-      {% endif %}
+      </div>
 
       {% if supportActivityLog %}
         <div class="summary-list-container" data-test-id="activity-log-section">

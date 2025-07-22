@@ -22,7 +22,6 @@ import {
   getSessionSecret,
   supportActivityLog,
   supportBrandRefresh,
-  supportChangeMfa,
   supportSearchableList,
   supportTriagePage,
   supportWebchatContact,
@@ -272,19 +271,15 @@ async function createApp(): Promise<express.Application> {
   if (supportTriagePage()) {
     app.use(contactRouter);
   }
-  if (
-    supportChangeMfa({
-      enable_mfa_for_qa: "1",
-    })
-  ) {
-    app.use(chooseBackupRouter);
-    app.use(addBackupAppRouter);
-    app.use(addBackupSmsRouter);
-    app.use(deleteMfaMethodRouter);
-    app.use(switchBackupMethodRouter);
-    app.use(changeAuthenticatorAppRouter);
-    app.use(changeDefaultMethodRouter);
-  }
+
+  app.use(chooseBackupRouter);
+  app.use(addBackupAppRouter);
+  app.use(addBackupSmsRouter);
+  app.use(deleteMfaMethodRouter);
+  app.use(switchBackupMethodRouter);
+  app.use(changeAuthenticatorAppRouter);
+  app.use(changeDefaultMethodRouter);
+
   if (supportSearchableList()) {
     app.use(searchServicesRouter);
   }

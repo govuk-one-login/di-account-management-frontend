@@ -7,7 +7,6 @@ import {
 } from "./switch-backup-method-controller";
 import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -16,7 +15,7 @@ router.get(
   requiresAuthMiddleware,
   mfaMethodMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(switchBackupMfaMethodGet)
+  switchBackupMfaMethodGet
 );
 
 router.post(
@@ -24,7 +23,7 @@ router.post(
   requiresAuthMiddleware,
   mfaMethodMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(switchBackupMfaMethodPost)
+  switchBackupMfaMethodPost
 );
 
 export { router as switchBackupMethodRouter };

@@ -180,12 +180,9 @@ Mappings:
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables # pragma: allowlist secret
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.dev.account.gov.uk/v1"
-      SUPPORTMETHODMANAGEMENT: "1"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
       SELECTTRACKINGENABLED: "true"
-      SUPPORTADDBACKUPMFA: "1"
-      SUPPORTCHANGEMFA: "1"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       LANGUAGETOGGLE: "1"
       DTRUMURL: ""
@@ -219,9 +216,6 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://method-management-v1-stub.home.build.account.gov.uk/v1"
-      SUPPORTMETHODMANAGEMENT: "0"
-      SUPPORTADDBACKUPMFA: "0"
-      SUPPORTCHANGEMFA: "0"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables # pragma: allowlist secret
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
@@ -259,9 +253,6 @@ Mappings:
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
       METHODMANAGEMENTBASEURL: "https://a3bnrbtiga-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging/v1"
-      SUPPORTMETHODMANAGEMENT: "1"
-      SUPPORTADDBACKUPMFA: "1"
-      SUPPORTCHANGEMFA: "1"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables # pragma: allowlist secret
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
@@ -298,9 +289,6 @@ Mappings:
       SUPPORTSEARCHABLELIST: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://z7lornzyy5-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration/v1"
-      SUPPORTMETHODMANAGEMENT: "1"
-      SUPPORTADDBACKUPMFA: "1"
-      SUPPORTCHANGEMFA: "1"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables # pragma: allowlist secret
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
@@ -339,9 +327,6 @@ Mappings:
       SUPPORTCLIENTREGISTRYLIBRARY: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://63qq2dsjo5-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production/v1"
-      SUPPORTMETHODMANAGEMENT: "1"
-      SUPPORTCHANGEMFA: "1"
-      SUPPORTADDBACKUPMFA: "1"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables # pragma: allowlist secret
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
@@ -820,33 +805,12 @@ Resources:
                   !Ref Environment,
                   CONTACTEMAILSERVICEURL,
                 ]
-            - Name: "SUPPORT_METHOD_MANAGEMENT"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTMETHODMANAGEMENT,
-                ]
             - Name: "SUPPORT_SEARCHABLE_LIST"
               Value:
                 !FindInMap [
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTSEARCHABLELIST,
-                ]
-            - Name: "SUPPORT_CHANGE_MFA"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTCHANGEMFA,
-                ]
-            - Name: "SUPPORT_ADD_BACKUP_MFA"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTADDBACKUPMFA,
                 ]
             - Name: "METHOD_MANAGEMENT_BASE_URL"
               Value:
@@ -2247,6 +2211,35 @@ Resources:
             Period: 60
             Stat: Maximum
 
+  LoggerErrorsFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: '{ $.level = 50 || $.level = "error" }'
+      LogGroupName: !Ref TaskLogGroup
+      MetricTransformations:
+        - MetricName: LoggerErrorCount
+          MetricNamespace: !Sub "${AWS::StackName}/Logger"
+          MetricValue: "1"
+          Unit: Count
+
+  LoggerErrorRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-LoggerErrorRateAlarm"
+      AlarmDescription: "Alarm when Logger error rate exceeds 5 errors in 5 minutes"
+      Namespace: !Sub "${AWS::StackName}/Logger"
+      MetricName: LoggerErrorCount
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 5
+      Threshold: 5
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+
   #
   # Canary Deployment
   #
@@ -2275,8 +2268,9 @@ Resources:
         ContainerName: !Sub "${AWS::StackName}-TaskDefinition"
         ContainerPort: !Ref ContainerPort
         CloudWatchAlarms: !Sub
-          - "${ELB5XX10PercentAlarm}"
+          - "${ELB5XX10PercentAlarm},${LoggerErrorRateAlarm}"
           - ELB5XX10PercentAlarm: !Ref ELB5XX10PercentAlarm
+            LoggerErrorRateAlarm: !Ref LoggerErrorRateAlarm
 
 Outputs:
   ApiGatewayEndpoint:

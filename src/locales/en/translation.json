@@ -187,41 +187,27 @@
         }
       },
       "mfaSection": {
-        "heading": "How you get security codes",
-        "paragraph": "We use security codes to make sure it’s you when you sign in.",
-        "summaryList": {
+        "heading": "How you get security codes to sign in",
+        "defaultMethod": {
+          "heading": "Your default method",
           "phoneNumber": {
-            "title": "Text message",
-            "value": "Phone number ending with [phoneNumber]",
+            "title": "Text message to your phone number ending with [phoneNumber]",
             "change": "Change phone number"
           },
           "app": {
-            "title": "Authenticator app"
-          }
-        },
-        "supportChangeMfa": {
-          "heading": "How you get security codes to sign in",
-          "defaultMethod": {
-            "heading": "Your default method",
-            "phoneNumber": {
-              "title": "Text message to your phone number ending with [phoneNumber]",
-              "change": "Change phone number"
-            },
-            "app": {
-              "title": "Authenticator app",
-              "change": "Change authenticator app"
-            },
-            "change": "Use a different default method"
+            "title": "Authenticator app",
+            "change": "Change authenticator app"
           },
-          "backup": {
-            "heading": "Your back-up method",
-            "headingNoBackup": "Add a back-up method",
-            "paragraph": "We recommend you add a back-up method for getting security codes.",
-            "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes using your default method.",
-            "link": "Add a back-up method",
-            "removeLink": "Remove back-up method",
-            "switchLink": "Switch back-up and default methods"
-          }
+          "change": "Use a different default method"
+        },
+        "backup": {
+          "heading": "Your back-up method",
+          "headingNoBackup": "Add a back-up method",
+          "paragraph": "We recommend you add a back-up method for getting security codes.",
+          "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes using your default method.",
+          "link": "Add a back-up method",
+          "removeLink": "Remove back-up method",
+          "switchLink": "Switch back-up and default methods"
         }
       },
       "manageEmailSubscriptions": {
