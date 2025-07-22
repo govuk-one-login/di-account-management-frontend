@@ -160,7 +160,6 @@ Mappings:
       APIBASEURL: "https://oidc.staging.account.gov.uk"
       AMAPIBASEURL: "https://manage.staging.account.gov.uk"
       BASEURL: "home.dev.account.gov.uk"
-      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
@@ -197,7 +196,6 @@ Mappings:
       APIBASEURL: "https://oidc.build.account.gov.uk"
       AMAPIBASEURL: "https://manage.build.account.gov.uk"
       BASEURL: "home.build.account.gov.uk"
-      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
@@ -234,7 +232,6 @@ Mappings:
       APIBASEURL: "https://oidc.staging.account.gov.uk"
       AMAPIBASEURL: "https://manage.staging.account.gov.uk"
       BASEURL: "home.staging.account.gov.uk"
-      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
@@ -271,7 +268,6 @@ Mappings:
       APIBASEURL: "https://oidc.integration.account.gov.uk"
       AMAPIBASEURL: "https://manage.integration.account.gov.uk"
       BASEURL: "home.integration.account.gov.uk"
-      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
@@ -308,7 +304,6 @@ Mappings:
       APIBASEURL: "https://oidc.account.gov.uk"
       AMAPIBASEURL: "https://manage.account.gov.uk"
       BASEURL: "home.account.gov.uk"
-      SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
@@ -693,13 +688,6 @@ Resources:
               Value: !Sub "{{resolve:ssm:/${AWS::StackName}/Config/OIDC/Client/Id}}"
             - Name: "OIDC_CLIENT_SCOPES"
               Value: "openid phone email am offline_access govuk-account"
-            - Name: "SESSION_EXPIRY"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SESSIONEXPIRY,
-                ]
             - Name: "SESSION_SECRET"
               Value: !Sub "{{resolve:secretsmanager:${SessionSecret}}}"
             - Name: "AM_YOUR_ACCOUNT_URL"
