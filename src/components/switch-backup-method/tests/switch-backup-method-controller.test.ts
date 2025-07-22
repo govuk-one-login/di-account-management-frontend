@@ -146,7 +146,7 @@ describe("change default method", () => {
       expect(statusFn).to.be.calledWith(404);
     });
 
-    it("should return a 500 if the request to the API fails", async () => {
+    it("should throw an error if the request to the API fails", async () => {
       mfaClientStub.makeDefault.resolves({
         data: [mfaMethod],
         success: false,
@@ -157,10 +157,12 @@ describe("change default method", () => {
       const req = generateRequest("1", false);
       const res = generateResponse();
 
-      //@ts-expect-error req and res aren't valid objects since they are mocked
-      await switchBackupMfaMethodPost(req as Request, res as Response);
-
-      expect(statusFn).to.be.calledWith(500);
+      expect(
+        //@ts-expect-error req and res aren't valid objects since they are mocked
+        switchBackupMfaMethodPost(req, res)
+      ).to.be.rejectedWith(
+        "Switch backup method controller: error updating default MFA method. Status code: 500, API error code: 1, API error message: Internal server error"
+      );
     });
   });
 });

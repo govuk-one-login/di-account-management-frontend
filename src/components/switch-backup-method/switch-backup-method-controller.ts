@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
 import { getLastNDigits } from "../../utils/phone-number";
 import { EventType, getNextState } from "../../utils/state-machine";
-import { logger } from "../../utils/logger";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
@@ -95,14 +94,12 @@ export async function switchBackupMfaMethodPost(
     );
 
     if (!response.success) {
-      res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
-      logger.error(
+      throw new Error(
         formatErrorMessage(
           "Switch backup method controller: error updating default MFA method",
           response
         )
       );
-      return;
     }
   } catch (error) {
     req.metrics?.addMetric(
@@ -110,12 +107,7 @@ export async function switchBackupMfaMethodPost(
       MetricUnit.Count,
       1
     );
-    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
-    logger.error(
-      "Switch backup method controller: error updating default MFA method",
-      error.message
-    );
-    return;
+    throw error;
   }
 
   req.session.user.state.switchBackupMethod = getNextState(
