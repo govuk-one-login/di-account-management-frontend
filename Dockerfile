@@ -5,10 +5,12 @@ ENV HUSKY=0
 WORKDIR /app
 
 COPY package.json ./
-COPY package-lock.json ./
+COPY bun.lockb ./
 COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
+
+RUN bun install --production
 
 RUN bun install && bun run build && bun run clean-modules && bun install --production
 
@@ -20,6 +22,7 @@ RUN ["apk", "add", "--no-cache", "curl"]
 WORKDIR /app
 
 COPY --chown=node:node --from=builder /app/package*.json ./
+COPY --chown=node:node --from=builder /app/bun.lockb ./
 COPY --chown=node:node --from=builder /app/node_modules/ node_modules
 COPY --chown=node:node --from=builder /app/dist/ dist
 
