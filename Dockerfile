@@ -10,9 +10,9 @@ COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
 
-RUN npm ci && npm run build && npm run clean-modules && npm ci --production=true
+RUN bun install && bun run build && bun run clean-modules && bun install --production
 
-FROM node:20.19.4-alpine@sha256:940a1dc7c783725ebbf04fa433bec13fa7478437f20387753dbf701858ea8e31 as final
+FROM oven/bun:1.1.13 as final
 
 RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
@@ -37,4 +37,4 @@ USER node
 
 ENTRYPOINT ["tini", "--"]
 
-CMD ["npm", "start"]
+CMD ["bun", "start"]
