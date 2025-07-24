@@ -1,1 +1,2 @@
 npx lint-staged
+cd integration-tests && npm run check-types && npm run lint
