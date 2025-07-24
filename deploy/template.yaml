@@ -486,14 +486,14 @@ Resources:
         AdjustmentType: PercentChangeInCapacity
         Cooldown: 30
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-          - MetricIntervalLowerBound: -10 #30%
-            MetricIntervalUpperBound: 0 #40%
-            ScalingAdjustment: -100
-          - MetricIntervalLowerBound: -20 #20%
-            MetricIntervalUpperBound: -10 #30%
-            ScalingAdjustment: -200
-          - MetricIntervalUpperBound: -20 #30%
-            ScalingAdjustment: -500
+          - MetricIntervalLowerBound: -10 #20%
+            MetricIntervalUpperBound: 0 #30%
+            ScalingAdjustment: -10
+          - MetricIntervalLowerBound: -20 #10%
+            MetricIntervalUpperBound: -10 #20%
+            ScalingAdjustment: -20
+          - MetricIntervalUpperBound: -20 #10%
+            ScalingAdjustment: -50
 
   ECSStepScaleOutAlarm:
     DependsOn: ContainerAutoScalingTarget
@@ -539,7 +539,7 @@ Resources:
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "40"
+      Threshold: "30"
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
