@@ -41,12 +41,7 @@ This means we don't need to register a new client with the Authentication team f
 ### Configure environment variables
 
 Create a copy of the `.env.sample` file and rename it `.env`.
-Ask another team member for the client ID and add that to your `.env` file.
-All other values should be correct.
-
-```
-OIDC_CLIENT_ID=<client id>
-```
+Create a copy of the `.env.integration-tests.sample` file and rename it `.env.integration-tests`.
 
 ### Setup the private key
 
@@ -105,45 +100,16 @@ You'll be able to run the unit tests from outside the container
 npm run test:unit
 ```
 
-The integration tests need localstack to run successfully.
+Integration tests live in the sub-project in the `integration-tests` folder. Refer to the README file in this directory for more details.
+
+The legacy integration tests need localstack to run successfully.
 The easiest way is to start the docker compose stack and run the tests from inside the app container.
 
 ```shell script
 docker exec -it account-management-frontend /bin/sh
 
-# npm run test:integration
+# npm run test:integration-legacy
 ```
-
-### Post-deploy tests
-
-The post-deploy tests are written with [Playwright](https://playwright.dev/) and [Playwright BDD](https://vitalets.github.io/playwright-bdd).
-
-#### Running the tests locally
-
-Copy the file `post-deploy-tests/.env.sample` to `post-deploy-tests/.env`.
-
-When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_ENVIRONMENT` to one of `dev | build | staging | production` to run tests against the corresponding deployment instead.
-
-If your machine has `AMD64` architecture then you can run the tests locally in Docker:
-
-```bash
-cd post-deploy-tests
-docker build -t frontend-post-deploy-tests .
-docker run -t frontend-post-deploy-tests # or docker run -t --network="host" frontend-post-deploy-tests if running the tests against localhost
-```
-
-This is also how the tests are run in the deployment pipeline so running the tests locally via Docker guarantees reproducible outcomes and is therefore the preferred option.
-
-If your machine has `ARM64` architecture then running the tests in Docker won't work because the Docker image is Linux-based and at the time of writing there is no `ARM64` build of Chrome for Linux. Instead you can run the tests against a locally installed version of Chrome. This is also useful for running the tests in debug or UI mode:
-
-```bash
-cd post-deploy-tests
-npm ci && npm run test
-# npm ci && npm run test:debug to run tests in debug mode
-# npm ci && npm run test:ui to run tests in UI mode
-```
-
-To avoid discrepancies between deployment pipeline and local test run outcomes ensure that your locally installed version of Chrome is up to date prior to running the tests.
 
 ### Restarting the app
 
@@ -201,25 +167,6 @@ npm start
 
 Starts a node server pointing to the entry point found in
 the build directory.
-
-### Unit tests
-
-> To run the unit tests
-
-```shell script
-npm run test:unit
-```
-
-Runs all unit tests found in the `tests/unit/` directory
-using mocha.
-
-### Integration tests
-
-> To run the integration tests
-
-```shell script
-npm run test:integration
-```
 
 ### Install dependencies
 
