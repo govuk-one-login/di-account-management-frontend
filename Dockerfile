@@ -1,4 +1,4 @@
-FROM oven/bun:1.1.10 as builder
+FROM oven/bun:1.1.10-alpine AS builder
 
 ENV HUSKY=0
 
@@ -12,7 +12,7 @@ COPY ./@types ./@types
 
 RUN bun install && bun run build && bun run clean-modules && bun install --production
 
-FROM oven/bun:1.1.10 as final
+FROM oven/bun:1.1.10-alpine AS final
 
 RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
@@ -26,10 +26,10 @@ COPY --chown=node:node --from=builder /app/dist/ dist
 
 # DynaTrace
 COPY --from=khw46367.live.dynatrace.com/linux/oneagent-codemodules-musl:nodejs / /
-ENV LD_PRELOAD /opt/dynatrace/oneagent/agent/lib64/liboneagentproc.so
+ENV LD_PRELOAD=/opt/dynatrace/oneagent/agent/lib64/liboneagentproc.so
 
-ENV NODE_ENV "production"
-ENV PORT 6001
+ENV NODE_ENV="production"
+ENV PORT=6001
 EXPOSE $PORT
 
 HEALTHCHECK CMD curl --fail http://localhost:6001/healthcheck || exit 1
