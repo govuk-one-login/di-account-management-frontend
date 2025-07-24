@@ -130,27 +130,27 @@ Mappings:
     dev:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 2
+      MinCapacity: 3
       MaxCapacity: 40
     build:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 2
+      MinCapacity: 3
       MaxCapacity: 40
     staging:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 2
+      MinCapacity: 3
       MaxCapacity: 40
     integration:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 2
+      MinCapacity: 3
       MaxCapacity: 40
     production:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 2
+      MinCapacity: 3
       MaxCapacity: 40
   EnvironmentVariables:
     ### These environment variables are referenced further down the file.
@@ -384,6 +384,7 @@ Resources:
       DeploymentController:
         Type: CODE_DEPLOY
       PropagateTags: SERVICE
+      HealthCheckGracePeriodSeconds: 5
       CapacityProviderStrategy:
         - CapacityProvider: !If [IsProduction, "FARGATE", "FARGATE_SPOT"]
           Weight: 1
@@ -446,12 +447,12 @@ Resources:
         Cooldown: 30
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
           - MetricIntervalUpperBound: 10 #50%
-            ScalingAdjustment: 30
+            ScalingAdjustment: 50
           - MetricIntervalLowerBound: 10 #50%
             MetricIntervalUpperBound: 30 #70%
-            ScalingAdjustment: 60
-          - MetricIntervalLowerBound: 30 #70%
             ScalingAdjustment: 100
+          - MetricIntervalLowerBound: 30 #70%
+            ScalingAdjustment: 200
 
   ECSStepScaleInPolicy:
     DependsOn: ContainerAutoScalingTarget
@@ -468,15 +469,15 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 30
+        Cooldown: 60
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-          - MetricIntervalLowerBound: -10 #30%
-            MetricIntervalUpperBound: 0 #40%
+          - MetricIntervalLowerBound: -10 #20%
+            MetricIntervalUpperBound: 0 #30%
             ScalingAdjustment: -10
-          - MetricIntervalLowerBound: -20 #20%
-            MetricIntervalUpperBound: -10 #30%
+          - MetricIntervalLowerBound: -20 #10%
+            MetricIntervalUpperBound: -10 #20%
             ScalingAdjustment: -20
-          - MetricIntervalUpperBound: -20 #30%
+          - MetricIntervalUpperBound: -20 #10%
             ScalingAdjustment: -50
 
   ECSStepScaleOutAlarm:
@@ -523,7 +524,7 @@ Resources:
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "40"
+      Threshold: "30"
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -605,10 +606,7 @@ Resources:
             Command:
               - "CMD-SHELL"
               - !Sub "curl -f http://localhost:${ContainerPort}/healthcheck || exit 1"
-            Interval: 10
-            Timeout: 5
-            Retries: 3
-            StartPeriod: 10
+            Interval: 5
           Secrets:
             - Name: DT_TENANT
               ValueFrom: !Join
@@ -1276,7 +1274,9 @@ Resources:
       HealthCheckPort: !Ref ContainerPort
       HealthCheckProtocol: HTTP
       HealthCheckPath: /healthcheck
-      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 2
+      HealthCheckIntervalSeconds: 5
+      HealthyThresholdCount: 2
       Port: !Ref ContainerPort
       Protocol: HTTP
       ProtocolVersion: HTTP1
