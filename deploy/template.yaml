@@ -444,12 +444,12 @@ Resources:
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
 
-  ECSCpuTargetTrackingPolicy:
+  ECSStepScaleOutPolicy:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: ECSCpuTargetTrackingPolicy
-      PolicyType: TargetTrackingScaling
+      PolicyName: ECSStepScalingOutPolicy
+      PolicyType: StepScaling
       ResourceId: !Join
         - "/"
         - - "service"
@@ -457,118 +457,89 @@ Resources:
           - !GetAtt ContainerService.Name
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
-      TargetTrackingScalingPolicyConfiguration:
-        # Define the custom metric from Container Insights
-        CustomizedMetricSpecification:
-          MetricName: CpuUtilized
-          Namespace: ECS/ContainerInsights
-          Statistic: Average
-          Unit: Percent
-          Dimensions:
-            - Name: ClusterName
-              Value: !Ref ECSCluster
-            - Name: ServiceName
-              Value: !GetAtt ContainerService.Name
-        TargetValue: 50
-        ScaleOutCooldown: 30
-        ScaleInCooldown: 60
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 30
+        StepAdjustments: # Bounds are calculated based on difference from alarm threshold
+          - MetricIntervalUpperBound: 10 #50%
+            ScalingAdjustment: 50
+          - MetricIntervalLowerBound: 10 #50%
+            MetricIntervalUpperBound: 30 #70%
+            ScalingAdjustment: 100
+          - MetricIntervalLowerBound: 30 #70%
+            ScalingAdjustment: 200
 
-  # ECSStepScaleOutPolicy:
-  #   DependsOn: ContainerAutoScalingTarget
-  #   Type: AWS::ApplicationAutoScaling::ScalingPolicy
-  #   Properties:
-  #     PolicyName: ECSStepScalingOutPolicy
-  #     PolicyType: StepScaling
-  #     ResourceId: !Join
-  #       - "/"
-  #       - - "service"
-  #         - !Ref ECSCluster
-  #         - !GetAtt ContainerService.Name
-  #     ScalableDimension: ecs:service:DesiredCount
-  #     ServiceNamespace: ecs
-  #     StepScalingPolicyConfiguration:
-  #       AdjustmentType: PercentChangeInCapacity
-  #       Cooldown: 60
-  #       StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-  #         - MetricIntervalUpperBound: 10 #50%
-  #           ScalingAdjustment: 50
-  #         - MetricIntervalLowerBound: 10 #50%
-  #           MetricIntervalUpperBound: 30 #70%
-  #           ScalingAdjustment: 100
-  #         - MetricIntervalLowerBound: 30 #70%
-  #           ScalingAdjustment: 200
+  ECSStepScaleInPolicy:
+    DependsOn: ContainerAutoScalingTarget
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: ECSStepScalingInPolicy
+      PolicyType: StepScaling
+      ResourceId: !Join
+        - "/"
+        - - "service"
+          - !Ref ECSCluster
+          - !GetAtt ContainerService.Name
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 60
+        StepAdjustments: # Bounds are calculated based on difference from alarm threshold
+          - MetricIntervalLowerBound: -10 #20%
+            MetricIntervalUpperBound: 0 #30%
+            ScalingAdjustment: -10
+          - MetricIntervalLowerBound: -20 #10%
+            MetricIntervalUpperBound: -10 #20%
+            ScalingAdjustment: -20
+          - MetricIntervalUpperBound: -20 #10%
+            ScalingAdjustment: -50
 
-  # ECSStepScaleInPolicy:
-  #   DependsOn: ContainerAutoScalingTarget
-  #   Type: AWS::ApplicationAutoScaling::ScalingPolicy
-  #   Properties:
-  #     PolicyName: ECSStepScalingInPolicy
-  #     PolicyType: StepScaling
-  #     ResourceId: !Join
-  #       - "/"
-  #       - - "service"
-  #         - !Ref ECSCluster
-  #         - !GetAtt ContainerService.Name
-  #     ScalableDimension: ecs:service:DesiredCount
-  #     ServiceNamespace: ecs
-  #     StepScalingPolicyConfiguration:
-  #       AdjustmentType: PercentChangeInCapacity
-  #       Cooldown: 120
-  #       StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-  #         - MetricIntervalLowerBound: -10 #20%
-  #           MetricIntervalUpperBound: 0 #30%
-  #           ScalingAdjustment: -10
-  #         - MetricIntervalLowerBound: -20 #10%
-  #           MetricIntervalUpperBound: -10 #20%
-  #           ScalingAdjustment: -20
-  #         - MetricIntervalUpperBound: -20 #10%
-  #           ScalingAdjustment: -50
+  ECSStepScaleOutAlarm:
+    DependsOn: ContainerAutoScalingTarget
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ECSStepScaleOutPolicy
+      AlarmDescription: "ECSClusterOver40PercentCPU"
+      ComparisonOperator: "GreaterThanThreshold"
+      DatapointsToAlarm: "1"
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSCluster
+        - Name: ServiceName
+          Value: !GetAtt ContainerService.Name
+      Unit: "Percent"
+      EvaluationPeriods: "1"
+      MetricName: "CPUUtilization"
+      Namespace: "AWS/ECS"
+      Statistic: "Average"
+      Period: "60"
+      Threshold: "40"
 
-  # ECSStepScaleOutAlarm:
-  #   DependsOn: ContainerAutoScalingTarget
-  #   Type: AWS::CloudWatch::Alarm
-  #   Properties:
-  #     ActionsEnabled: true
-  #     AlarmActions:
-  #       - !Ref ECSStepScaleOutPolicy
-  #     AlarmDescription: "ECSClusterOver40PercentCPU"
-  #     ComparisonOperator: "GreaterThanThreshold"
-  #     DatapointsToAlarm: "1"
-  #     Dimensions:
-  #       - Name: ClusterName
-  #         Value: !Ref ECSCluster
-  #       - Name: ServiceName
-  #         Value: !GetAtt ContainerService.Name
-  #     Unit: "Percent"
-  #     EvaluationPeriods: "1"
-  #     MetricName: "CPUUtilization"
-  #     Namespace: "AWS/ECS"
-  #     Statistic: "Average"
-  #     Period: "60"
-  #     Threshold: "40"
-
-  # ECSStepScaleInAlarm:
-  #   DependsOn: ContainerAutoScalingTarget
-  #   Type: AWS::CloudWatch::Alarm
-  #   Properties:
-  #     ActionsEnabled: true
-  #     AlarmActions:
-  #       - !Ref ECSStepScaleInPolicy
-  #     AlarmDescription: "ECSClusterUnder40PercentCPU"
-  #     ComparisonOperator: "LessThanThreshold"
-  #     DatapointsToAlarm: "1"
-  #     Dimensions:
-  #       - Name: ClusterName
-  #         Value: !Ref ECSCluster
-  #       - Name: ServiceName
-  #         Value: !GetAtt ContainerService.Name
-  #     Unit: "Percent"
-  #     EvaluationPeriods: "1"
-  #     MetricName: "CPUUtilization"
-  #     Namespace: "AWS/ECS"
-  #     Statistic: "Average"
-  #     Period: "60"
-  #     Threshold: "30"
+  ECSStepScaleInAlarm:
+    DependsOn: ContainerAutoScalingTarget
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ECSStepScaleInPolicy
+      AlarmDescription: "ECSClusterUnder40PercentCPU"
+      ComparisonOperator: "LessThanThreshold"
+      DatapointsToAlarm: "1"
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSCluster
+        - Name: ServiceName
+          Value: !GetAtt ContainerService.Name
+      Unit: "Percent"
+      EvaluationPeriods: "1"
+      MetricName: "CPUUtilization"
+      Namespace: "AWS/ECS"
+      Statistic: "Average"
+      Period: "60"
+      Threshold: "30"
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
