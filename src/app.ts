@@ -17,7 +17,7 @@ import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import {
   getAppEnv,
-  getNodeEnv,
+  isLocalEnv,
   getSessionExpiry,
   getSessionSecret,
   supportActivityLog,
@@ -36,7 +36,7 @@ import { securityRouter } from "./components/security/security-routes";
 import { activityHistoryRouter } from "./components/activity-history/activity-history-routes";
 import { yourServicesRouter } from "./components/your-services/your-services-routes";
 import { getSessionCookieOptions } from "./config/cookie";
-import { ENVIRONMENT_NAME, LOCALE, PATH_DATA } from "./app.constants";
+import { LOCALE, PATH_DATA } from "./app.constants";
 import { startRouter } from "./components/start/start-routes";
 import { oidcAuthCallbackRouter } from "./components/oidc-callback/call-back-routes";
 import { authMiddleware } from "./middleware/auth-middleware";
@@ -96,12 +96,12 @@ const APP_VIEWS = [
 
 async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
-  const isProduction = getNodeEnv() === ENVIRONMENT_NAME.PROD;
+  const isDeployedEnvironment = !isLocalEnv();
   app.use(metricsMiddleware());
   app.enable("trust proxy");
 
-  if (isProduction) {
-    const protect = applyOverloadProtection(isProduction);
+  if (isDeployedEnvironment) {
+    const protect = applyOverloadProtection(isDeployedEnvironment);
     app.use(protect);
   }
 
@@ -147,7 +147,7 @@ async function createApp(): Promise<express.Application> {
       resave: false,
       unset: "destroy",
       cookie: getSessionCookieOptions(
-        isProduction,
+        isDeployedEnvironment,
         getSessionExpiry(),
         getSessionSecret()
       ),

@@ -305,11 +305,15 @@ export const ERROR_CODES = {
   NEW_PHONE_NUMBER_SAME_AS_EXISTING: 1044,
 };
 
-export const ENVIRONMENT_NAME = {
-  PROD: "production",
-  DEV: "development",
-  TEST: "test",
-};
+export const enum ENVIRONMENT_NAME {
+  LOCAL = "local",
+  TEST = "test",
+  DEV = "development",
+  BUILD = "build",
+  STAGING = "staging",
+  INTEGRATION = "integration",
+  PROD = "production",
+}
 
 export const enum EventName {
   HOME_TRIAGE_PAGE_VISIT = "HOME_TRIAGE_PAGE_VISIT",
