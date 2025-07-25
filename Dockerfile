@@ -1,40 +1,50 @@
-FROM node:20.19.4-alpine@sha256:940a1dc7c783725ebbf04fa433bec13fa7478437f20387753dbf701858ea8e31 as builder
+FROM oven/bun:1.1.10-alpine AS builder
 
 ENV HUSKY=0
 
+RUN addgroup -S app && adduser -S app -G app
+
 WORKDIR /app
+RUN chown -R app:app /app
+
+
+USER app
 
 COPY package.json ./
-COPY package-lock.json ./
+COPY bun.lockb ./
 COPY tsconfig.json ./
 COPY ./src ./src
 COPY ./@types ./@types
 
-RUN npm ci && npm run build && npm run clean-modules && npm ci --production=true
+RUN bun install && bun run build && bun run clean-modules && bun install --production
 
-FROM node:20.19.4-alpine@sha256:940a1dc7c783725ebbf04fa433bec13fa7478437f20387753dbf701858ea8e31 as final
+FROM oven/bun:1.1.10-alpine AS final
+
+RUN addgroup -S app && adduser -S app -G app
 
 RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
 
 WORKDIR /app
+RUN chown -R app:app /app
 
 COPY --chown=node:node --from=builder /app/package*.json ./
+COPY --chown=node:node --from=builder /app/bun.lockb ./
 COPY --chown=node:node --from=builder /app/node_modules/ node_modules
 COPY --chown=node:node --from=builder /app/dist/ dist
 
 # DynaTrace
 COPY --from=khw46367.live.dynatrace.com/linux/oneagent-codemodules-musl:nodejs / /
-ENV LD_PRELOAD /opt/dynatrace/oneagent/agent/lib64/liboneagentproc.so
+ENV LD_PRELOAD=/opt/dynatrace/oneagent/agent/lib64/liboneagentproc.so
 
-ENV NODE_ENV "production"
-ENV PORT 6001
+ENV NODE_ENV="production"
+ENV PORT=6001
 EXPOSE $PORT
 
 HEALTHCHECK CMD curl --fail http://localhost:6001/healthcheck || exit 1
 
-USER node
+USER app
 
 ENTRYPOINT ["tini", "--"]
 
-CMD ["npm", "start"]
+CMD ["bun", "start"]
