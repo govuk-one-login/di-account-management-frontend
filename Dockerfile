@@ -2,7 +2,11 @@ FROM oven/bun:1.1.10-alpine AS builder
 
 ENV HUSKY=0
 
+RUN addgroup -S app && adduser -S app -G app
+
 WORKDIR /app
+
+USER app
 
 COPY package.json ./
 COPY bun.lockb ./
@@ -13,6 +17,8 @@ COPY ./@types ./@types
 RUN bun install && bun run build && bun run clean-modules && bun install --production
 
 FROM oven/bun:1.1.10-alpine AS final
+
+RUN addgroup -S app && adduser -S app -G app
 
 RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
@@ -34,7 +40,7 @@ EXPOSE $PORT
 
 HEALTHCHECK CMD curl --fail http://localhost:6001/healthcheck || exit 1
 
-USER node
+USER app
 
 ENTRYPOINT ["tini", "--"]
 
