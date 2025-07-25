@@ -5,6 +5,8 @@ ENV HUSKY=0
 RUN addgroup -S app && adduser -S app -G app
 
 WORKDIR /app
+RUN chown -R app:app /app
+
 
 USER app
 
@@ -24,6 +26,7 @@ RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
 
 WORKDIR /app
+RUN chown -R app:app /app
 
 COPY --chown=node:node --from=builder /app/package*.json ./
 COPY --chown=node:node --from=builder /app/bun.lockb ./
