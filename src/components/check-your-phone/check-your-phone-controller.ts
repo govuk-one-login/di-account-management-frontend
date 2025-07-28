@@ -194,6 +194,11 @@ export async function checkYourPhonePost(req: Request, res: Response) {
 
   const { newPhoneNumber } = req.session.user;
 
+  if (!newPhoneNumber) {
+    res.redirect(PATH_DATA.YOUR_SERVICES.url);
+    return;
+  }
+
   logger.info(
     { trace: res?.locals?.trace },
     `Check your phone POST controller newPhoneNumber: ${
