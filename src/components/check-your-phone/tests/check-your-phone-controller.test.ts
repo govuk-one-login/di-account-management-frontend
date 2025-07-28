@@ -220,6 +220,16 @@ describe("check your phone controller", () => {
       );
     });
 
+    it("should redirect to 'Your services' when newPhoneNumber is undefined", async () => {
+      req.body.code = "123456";
+      req.body.intent = INTENT_ADD_BACKUP;
+      req.session.user.newPhoneNumber = undefined;
+
+      await checkYourPhonePost(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
+    });
+
     it("should log an error when intent is not valid", async () => {
       req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
