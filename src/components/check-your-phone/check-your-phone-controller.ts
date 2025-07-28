@@ -195,7 +195,7 @@ export async function checkYourPhonePost(req: Request, res: Response) {
   const { newPhoneNumber } = req.session.user;
 
   if (!newPhoneNumber) {
-    res.redirect(PATH_DATA.YOUR_SERVICES.url);
+    res.redirect(PATH_DATA.SECURITY.url);
     return;
   }
 
@@ -215,7 +215,7 @@ export async function checkYourPhonePost(req: Request, res: Response) {
     req.session.mfaMethods.length === MAX_MFA_METHOD_COUNT &&
     intent === INTENT_ADD_BACKUP
   ) {
-    res.redirect(PATH_DATA.YOUR_SERVICES.url);
+    res.redirect(PATH_DATA.SECURITY.url);
     return;
   }
 

@@ -176,7 +176,7 @@ describe("addMfaAppMethodPost", () => {
 
     expect(mfaClientStub.create).not.to.have.been.called;
 
-    expect(res.redirect).to.have.been.calledWith(PATH_DATA.YOUR_SERVICES.url);
+    expect(res.redirect).to.have.been.calledWith(PATH_DATA.SECURITY.url);
   });
 
   it("should redirect to add mfa app confirmation page when successful", async () => {

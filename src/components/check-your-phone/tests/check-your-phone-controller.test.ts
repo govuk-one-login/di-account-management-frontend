@@ -150,7 +150,7 @@ describe("check your phone controller", () => {
 
       expect(stubMfaClient.create).not.to.have.been.called;
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should redirect to /phone-number-updated-confirmation when valid code entered for change phone number journey", async () => {
@@ -227,7 +227,7 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should log an error when intent is not valid", async () => {

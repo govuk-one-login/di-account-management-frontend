@@ -64,7 +64,7 @@ export async function addMfaAppMethodPost(
     next,
     async () => {
       if (req.session.mfaMethods.length === MAX_MFA_METHOD_COUNT) {
-        res.redirect(PATH_DATA.YOUR_SERVICES.url);
+        res.redirect(PATH_DATA.SECURITY.url);
         return;
       }
 
