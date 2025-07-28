@@ -213,6 +213,8 @@ export const MFA_METHODS = {
   },
 };
 
+export const MAX_MFA_METHOD_COUNT = 2;
+
 export const WELL_KNOWN_FILES = {
   SECURITY_TEXT_URL:
     "https://vdp.cabinetoffice.gov.uk/.well-known/security.txt",

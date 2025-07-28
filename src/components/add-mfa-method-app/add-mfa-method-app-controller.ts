@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
+import { MAX_MFA_METHOD_COUNT, PATH_DATA } from "../../app.constants";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
@@ -63,6 +63,11 @@ export async function addMfaAppMethodPost(
     res,
     next,
     async () => {
+      if (req.session.mfaMethods.length === MAX_MFA_METHOD_COUNT) {
+        res.redirect(PATH_DATA.YOUR_SERVICES.url);
+        return;
+      }
+
       setLocalOplSettings(res);
 
       try {
