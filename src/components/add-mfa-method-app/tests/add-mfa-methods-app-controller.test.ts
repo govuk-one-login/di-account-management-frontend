@@ -29,7 +29,9 @@ describe("addMfaMethodGoBackGet", () => {
 
   it("should redirect to the method selection page", async () => {
     const req = {
-      session: { user: { state: { addBackup: { value: "APP" } } } },
+      session: {
+        user: { state: { addBackup: { value: "APP" } } },
+      },
     };
     const res = { redirect: sinon.fake(() => {}) };
 
@@ -55,7 +57,9 @@ describe("addMfaAppMethodGet", () => {
 
   it("should render the add app page", async () => {
     const req = {
-      session: { user: { email: "test@test.com" } },
+      session: {
+        user: { email: "test@test.com" },
+      },
       body: {},
       log: { error: sinon.fake() },
     };
@@ -132,13 +136,59 @@ describe("addMfaAppMethodPost", () => {
     sinon.restore();
   });
 
+  it("should redirect to 'Your services' when the user has the max number of MFA methods'", async () => {
+    const req = {
+      body: {
+        code: "123456",
+        authAppSecret: appMethod.credential,
+      },
+      session: {
+        user: { state: { addBackup: { value: "APP" } } },
+        mfaMethods: [
+          {
+            mfaIdentifier: "1",
+            priorityIdentifier: "DEFAULT",
+            method: { mfaMethodType: "SMS", phoneNumber: "0123456789" },
+            methodVerified: true,
+          },
+          {
+            mfaIdentifier: "2",
+            priorityIdentifier: "BACKUP",
+            method: { mfaMethodType: "AUTH_APP", credential: "abc123" },
+            methodVerified: true,
+          },
+        ],
+      },
+      log: { error: logSpy },
+      t: (t: string) => t,
+    };
+
+    const res = { redirect: sinon.fake(() => {}), locals: {} };
+
+    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+
+    await addMfaAppMethodPost(
+      req as unknown as Request,
+      res as unknown as Response,
+      nextSpy
+    );
+
+    expect(mfaClientStub.create).not.to.have.been.called;
+
+    expect(res.redirect).to.have.been.calledWith(PATH_DATA.SECURITY.url);
+  });
+
   it("should redirect to add mfa app confirmation page when successful", async () => {
     const req = {
       body: {
         code: "123456",
         authAppSecret: appMethod.credential,
       },
-      session: { user: { state: { addBackup: { value: "APP" } } } },
+      session: {
+        user: { state: { addBackup: { value: "APP" } } },
+        mfaMethods: [] as MfaMethod[],
+      },
       log: { error: logSpy },
       t: (t: string) => t,
     };
@@ -175,6 +225,7 @@ describe("addMfaAppMethodPost", () => {
       },
       session: {
         user: { state: { addBackup: { value: "APP" } }, email: "email" },
+        mfaMethods: [] as MfaMethod[],
       },
       log: { error: logSpy },
       t: (s: string) => s,
@@ -210,6 +261,7 @@ describe("addMfaAppMethodPost", () => {
       },
       session: {
         user: { state: { addBackup: { value: "APP" } }, email: "email" },
+        mfaMethods: [] as MfaMethod[],
       },
       log: { error: logSpy },
       t: (s: string) => s,
@@ -246,6 +298,7 @@ describe("addMfaAppMethodPost", () => {
       },
       session: {
         user: { state: { addBackup: { value: "APP" } }, email: "email" },
+        mfaMethods: [] as MfaMethod[],
       },
       log: { error: logSpy },
       t: (s: string) => s,
@@ -285,6 +338,7 @@ describe("addMfaAppMethodPost", () => {
       },
       session: {
         user: { state: { addBackup: { value: "APP" } }, email: "email" },
+        mfaMethods: [] as MfaMethod[],
       },
       log: { error: logSpy },
       t: (s: string) => s,
@@ -319,7 +373,10 @@ describe("addMfaAppMethodPost", () => {
         code: "123456",
         authAppSecret: appMethod.credential,
       },
-      session: { user: { state: { addBackup: { value: "APP" } } } },
+      session: {
+        user: { state: { addBackup: { value: "APP" } } },
+        mfaMethods: [] as MfaMethod[],
+      },
       log: { error: logSpy },
       t: (t: string) => t,
     };

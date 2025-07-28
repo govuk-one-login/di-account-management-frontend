@@ -85,11 +85,11 @@ describe("Integration:: check your phone", () => {
         {
           mfaIdentifier: "123456",
           priorityIdentifier: "DEFAULT",
-          method: {
-            mfaMethodType: "AUTH_APP",
-            credential: "abc123",
-          },
           methodVerified: true,
+          method: {
+            mfaMethodType: "SMS",
+            phoneNumber: "12345678",
+          },
         },
       ],
     });
