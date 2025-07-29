@@ -5,7 +5,7 @@
 {% set pageTitleName = 'pages.resendMfaCode.title' | translate %}
 
 {% block content %}
-    <form action="/resend-phone-code" method="post" novalidate="novalidate">
+    <form action="{{ 'RESEND_PHONE_CODE' | getPath }}" method="post" novalidate="novalidate">
       <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
       <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
       <input type="hidden" name="intent" value="{{intent}}"/>
@@ -21,7 +21,11 @@
       {{ govukButton({
           "text": 'pages.resendMfaCode.continue' | translate,
           "type": "Submit",
-          "preventDoubleClick": true
+          "preventDoubleClick": true,
+            attributes: {
+                "data-nav": true,
+                "data-link": "RESEND_PHONE_CODE" | getPath
+            } 
       }) }}
     </form>
 

@@ -23,7 +23,11 @@
         {{ govukButton({
         "text": button_text|default('pages.removeBackupMethod.button' | translate, true),
         "type": "Submit",
-        "preventDoubleClick": true
+        "preventDoubleClick": true,
+        attributes: {
+          "data-nav": true,
+          "data-link": "DELETE_MFA_METHOD" | getPath
+        }        
         }) }}
     
         <p class="govuk-body"> <a href="{{ "SECURITY" | getPath }}" class="govuk-link" rel="noreferrer noopener">{{cancelText}}</a></p>

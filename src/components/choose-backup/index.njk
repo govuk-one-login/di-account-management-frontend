@@ -38,7 +38,11 @@
         {{ govukButton({
             "text": button_text|default("pages.addBackup.backup.sms.button" | translate, true),
             "type": "Submit",
-            "preventDoubleClick": true
+            "preventDoubleClick": true,
+            attributes: {
+                "data-nav": true,
+                "data-link": "ADD_MFA_METHOD" | getPath
+            }
         }) }}
     {% else %}
       {{ govukRadios({
