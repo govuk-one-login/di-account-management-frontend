@@ -36,14 +36,13 @@ export async function changeAuthenticatorAppPost(
   next: NextFunction
 ): Promise<void> {
   req.metrics?.addMetric("changeAuthenticatorAppPost", MetricUnit.Count, 1);
+  setLocalOplSettings(res);
   return handleMfaMethodPage(
     CHANGE_AUTHENTICATOR_APP_TEMPLATE,
     req,
     res,
     next,
     async () => {
-      setLocalOplSettings(res);
-
       const { authAppSecret } = req.body;
 
       const authAppMFAMethod: MfaMethod = req.session.mfaMethods.find(

@@ -208,14 +208,13 @@ export async function changeDefaultMethodAppPost(
   next: NextFunction
 ): Promise<void> {
   req.metrics?.addMetric("changeDefaultMethodAppPost", MetricUnit.Count, 1);
+  setChangeDefaultMethodAppOplSettings(res);
   return handleMfaMethodPage(
     ADD_APP_TEMPLATE,
     req,
     res,
     next,
     async () => {
-      setChangeDefaultMethodAppOplSettings(res);
-
       const { authAppSecret } = req.body;
 
       const currentDefaultMethod = req.session.mfaMethods.find(

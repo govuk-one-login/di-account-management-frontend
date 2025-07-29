@@ -230,7 +230,7 @@ describe("addMfaAppMethodPost", () => {
       log: { error: logSpy },
       t: (s: string) => s,
     };
-    const res = { render: sinon.fake() };
+    const res = { render: sinon.fake(), locals: {} };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => false);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
@@ -266,7 +266,7 @@ describe("addMfaAppMethodPost", () => {
       log: { error: logSpy },
       t: (s: string) => s,
     };
-    const res = { render: sinon.fake() };
+    const res = { render: sinon.fake(), locals: {} };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
@@ -303,7 +303,7 @@ describe("addMfaAppMethodPost", () => {
       log: { error: logSpy },
       t: (s: string) => s,
     };
-    const res = { render: sinon.fake() };
+    const res = { render: sinon.fake(), locals: {} };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
@@ -343,7 +343,7 @@ describe("addMfaAppMethodPost", () => {
       log: { error: logSpy },
       t: (s: string) => s,
     };
-    const res = { render: sinon.fake() };
+    const res = { render: sinon.fake(), locals: {} };
 
     sinon.replace(mfaModule, "verifyMfaCode", () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
