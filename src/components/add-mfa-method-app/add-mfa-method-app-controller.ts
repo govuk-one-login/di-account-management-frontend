@@ -57,6 +57,7 @@ export async function addMfaAppMethodPost(
   next: NextFunction
 ): Promise<void> {
   req.metrics?.addMetric("addMfaAppMethodPost", MetricUnit.Count, 1);
+  setLocalOplSettings(res);
   return handleMfaMethodPage(
     ADD_MFA_METHOD_AUTH_APP_TEMPLATE,
     req,
@@ -67,8 +68,6 @@ export async function addMfaAppMethodPost(
         res.redirect(PATH_DATA.SECURITY.url);
         return;
       }
-
-      setLocalOplSettings(res);
 
       try {
         const { authAppSecret } = req.body;
