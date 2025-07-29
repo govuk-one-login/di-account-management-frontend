@@ -10,7 +10,7 @@
 {% set emailMessage = 'pages.resendMfaCode.email.recipientMessage' | translate %}
 
 {% block content %}
-    <form action="/resend-email-code" method="post" novalidate="novalidate">
+    <form action="{{ 'RESEND_EMAIL_CODE' | getPath }}" method="post" novalidate="novalidate">
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
 
         <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.resendMfaCode.header' | translate}}</h1>
@@ -23,7 +23,11 @@
         {{ govukButton({
         "text": 'pages.resendMfaCode.continue' | translate,
         "type": "Submit",
-        "preventDoubleClick": true
+        "preventDoubleClick": true,
+            attributes: {
+                "data-nav": true,
+                "data-link": "RESEND_EMAIL_CODE" | getPath
+            } 
     }) }}
 
     </form>
