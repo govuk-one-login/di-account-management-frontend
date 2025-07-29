@@ -55,6 +55,12 @@ describe("check your phone controller", () => {
             },
             priorityIdentifier: "DEFAULT",
           },
+          {
+            mfaIdentifier: "2",
+            priorityIdentifier: "BACKUP",
+            method: { mfaMethodType: "AUTH_APP", credential: "abc123" },
+            methodVerified: true,
+          },
         ],
       } as any,
       cookies: { lng: "en" },
@@ -135,6 +141,18 @@ describe("check your phone controller", () => {
       expect(res.redirect).not.to.have.been.called;
     });
 
+    it("should redirect to 'Your services' when the user has the max number of MFA methods' for add MFA methods journey", async () => {
+      req.body.code = "123456";
+      req.body.intent = INTENT_ADD_BACKUP;
+      req.session.user.newPhoneNumber = NEW_PHONE_NUMBER;
+
+      await checkYourPhonePost(req as Request, res as Response);
+
+      expect(stubMfaClient.create).not.to.have.been.called;
+
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
+    });
+
     it("should redirect to /phone-number-updated-confirmation when valid code entered for change phone number journey", async () => {
       req.session.user.state.changePhoneNumber.value = "CHANGE_VALUE";
       req.body.code = "123456";
@@ -169,6 +187,7 @@ describe("check your phone controller", () => {
       req.body.code = "123456";
       req.body.intent = INTENT_ADD_BACKUP;
       req.session.user.newPhoneNumber = NEW_PHONE_NUMBER;
+      req.session.mfaMethods = [req.session.mfaMethods[0]];
 
       stubMfaClient.create.resolves({
         success: true,
@@ -199,6 +218,16 @@ describe("check your phone controller", () => {
       expect(res.redirect).to.have.calledWith(
         PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
       );
+    });
+
+    it("should redirect to 'Your services' when newPhoneNumber is undefined", async () => {
+      req.body.code = "123456";
+      req.body.intent = INTENT_ADD_BACKUP;
+      req.session.user.newPhoneNumber = undefined;
+
+      await checkYourPhonePost(req as Request, res as Response);
+
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should log an error when intent is not valid", async () => {
