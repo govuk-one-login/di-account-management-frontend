@@ -9,7 +9,8 @@
     "errorSummaryTitle": "There is a problem",
     "phaseBanner": {
       "tag": "Beta",
-      "text": "This is a new service – your <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">feedback (opens in new tab)</a> will help us to improve it."
+      "text": "This is a new service – your <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">feedback (opens in new tab)</a> will help us to improve it.",
+      "testText": "This is a test environment."
     },
     "yes": "Yes",
     "no": "No",

@@ -2,7 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { expect, sinon } from "../../utils/test-utils";
 import { describe } from "mocha";
 import { setLocalVarsMiddleware } from "../../../src/middleware/set-local-vars-middleware";
-import { PERSISTENT_SESSION_ID_UNKNOWN } from "../../../src/app.constants";
+import {
+  ENVIRONMENT_NAME,
+  PERSISTENT_SESSION_ID_UNKNOWN,
+} from "../../../src/app.constants";
 import * as nonceModule from "../../../src/utils/strings";
 
 describe("set-local-vars-middleware", () => {
@@ -35,6 +38,7 @@ describe("set-local-vars-middleware", () => {
 
   afterEach(() => {
     sandbox.restore();
+    delete process.env.APP_ENV;
   });
 
   describe("setLocalVarsMiddleware", () => {
@@ -83,12 +87,71 @@ describe("set-local-vars-middleware", () => {
 
     it("should not add supportDeviceIntelligence to locals when flag is false", async () => {
       process.env.DEVICE_INTELLIGENCE_TOGGLE = "0";
-
       await setLocalVarsMiddleware(req as Request, res as Response, next);
 
       expect(res.locals).to.have.property("supportDeviceIntelligence");
       expect(res.locals.supportDeviceIntelligence).to.equal(false);
       expect(next).to.be.calledOnce;
+    });
+
+    describe("isProd", () => {
+      afterEach(() => {
+        delete process.env.APP_ENV;
+      });
+
+      it("should be true when the value of APP_ENV is 'production'", async () => {
+        process.env.APP_ENV = ENVIRONMENT_NAME.PROD;
+        await setLocalVarsMiddleware(req as Request, res as Response, next);
+
+        expect(res.locals).to.have.property("isProd");
+        expect(res.locals.isProd).to.equal(true);
+        expect(next).to.be.calledOnce;
+      });
+
+      it("should be false when the value of APP_ENV is 'local'", async () => {
+        process.env.APP_ENV = ENVIRONMENT_NAME.LOCAL;
+        await setLocalVarsMiddleware(req as Request, res as Response, next);
+
+        expect(res.locals).to.have.property("isProd");
+        expect(res.locals.isProd).to.equal(false);
+        expect(next).to.be.calledOnce;
+      });
+
+      it("should be false when the value of APP_ENV is 'development'", async () => {
+        process.env.APP_ENV = ENVIRONMENT_NAME.DEV;
+        await setLocalVarsMiddleware(req as Request, res as Response, next);
+
+        expect(res.locals).to.have.property("isProd");
+        expect(res.locals.isProd).to.equal(false);
+        expect(next).to.be.calledOnce;
+      });
+
+      it("should be false when the value of APP_ENV is 'build'", async () => {
+        process.env.APP_ENV = ENVIRONMENT_NAME.BUILD;
+        await setLocalVarsMiddleware(req as Request, res as Response, next);
+
+        expect(res.locals).to.have.property("isProd");
+        expect(res.locals.isProd).to.equal(false);
+        expect(next).to.be.calledOnce;
+      });
+
+      it("should be false when the value of APP_ENV is 'staging'", async () => {
+        process.env.APP_ENV = ENVIRONMENT_NAME.STAGING;
+        await setLocalVarsMiddleware(req as Request, res as Response, next);
+
+        expect(res.locals).to.have.property("isProd");
+        expect(res.locals.isProd).to.equal(false);
+        expect(next).to.be.calledOnce;
+      });
+
+      it("should be false when the value of APP_ENV is 'integration'", async () => {
+        process.env.APP_ENV = ENVIRONMENT_NAME.INTEGRATION;
+        await setLocalVarsMiddleware(req as Request, res as Response, next);
+
+        expect(res.locals).to.have.property("isProd");
+        expect(res.locals.isProd).to.equal(false);
+        expect(next).to.be.calledOnce;
+      });
     });
   });
 });

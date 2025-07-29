@@ -387,13 +387,16 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   // https://accessibility.blog.gov.uk/2017/03/27/how-users-change-colours-on-websites/
   outline: 2px solid transparent;
   outline-offset: -2px;
-
-  // the most important properties for keeping the phase banner looking the same have been !important-ed
-  color: govuk-colour("white") !important;
-  background-color: govuk-colour("blue") !important;
   letter-spacing: 1px !important;
   text-decoration: none !important;
   text-transform: uppercase !important;
+
+  // the most important properties for keeping the phase banner looking the same have been !important-ed
+  // we use the yellow variation in non-prod environments
+  &:not(.govuk-tag--yellow) {
+    color: govuk-colour("white") !important;
+    background-color: govuk-colour("blue") !important;
+  }
 }
 
 .search-results {

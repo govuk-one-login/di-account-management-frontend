@@ -1,5 +1,4 @@
-import { ENVIRONMENT_NAME } from "../../app.constants";
-import { getAppEnv } from "../../config";
+import { getAppEnv, isProd } from "../../config";
 import { authenticator } from "otplib";
 
 export function generateMfaSecret(): string {
@@ -11,10 +10,7 @@ export function generateQRCodeValue(
   email: string,
   issuerName: string
 ): string {
-  const issuer =
-    getAppEnv() === ENVIRONMENT_NAME.PROD
-      ? issuerName
-      : `${issuerName} - ${getAppEnv()}`;
+  const issuer = isProd() ? issuerName : `${issuerName} - ${getAppEnv()}`;
   return authenticator.keyuri(email, issuer, secret);
 }
 
