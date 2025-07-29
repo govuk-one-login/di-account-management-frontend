@@ -78,7 +78,7 @@ import { switchBackupMethodRouter } from "./components/switch-backup-method/swit
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { logoutRedirectRouter } from "./components/logout-redirect/logout-redirect-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
-import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
+//import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
 import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
@@ -101,8 +101,8 @@ async function createApp(): Promise<express.Application> {
   app.enable("trust proxy");
 
   if (isDeployedEnvironment) {
-    const protect = applyOverloadProtection(isDeployedEnvironment);
-    app.use(protect);
+    // const protect = applyOverloadProtection(isDeployedEnvironment);
+    // app.use(protect);
   }
 
   app.use(express.json());
