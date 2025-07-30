@@ -163,7 +163,11 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   border: 0 none;
   cursor: pointer;
   background-color: transparent;
-  padding: 0;
+  // this strange non standard padding mirrors the spacing currently used on the DS header
+  padding: 16px 0 12px;
+  // this value is the height of the GOVUK logo (30px) + GOVUK logo bottom margin (2px) + padding (16px + 12px)
+  // it has not been made available as a SASS variable so must be hard coded.
+  height: 60px;
   margin: 0;
 
   &:focus {
@@ -202,10 +206,8 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
 .account-header-navigation__form {
   position: absolute;
-  padding: 5px;
   right: 0;
-  bottom: 50%;
-  transform: translateY(50%);
+  top: 0;
 
   @include govuk-media-query($until: mobile) {
     position: relative;
