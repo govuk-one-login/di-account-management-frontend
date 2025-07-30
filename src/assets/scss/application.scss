@@ -114,7 +114,6 @@
   .govuk-template--rebranded & {
     .govuk-header__logo {
       width: 100%;
-      padding-right: govuk-spacing(9);
     }
   }
 
@@ -202,15 +201,14 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
 .account-header-navigation__form {
   position: absolute;
-  padding: 5px;
+  padding: govuk-spacing(2) 0 govuk-spacing(2) 0;
   right: 0;
   bottom: 50%;
   transform: translateY(50%);
 
-  @include govuk-media-query($until: mobile) {
+  @include govuk-media-query($until: 480px) {
     position: relative;
-    float: left;
-    padding-left: 0;
+    padding-top: govuk-spacing(1);
     transform: none;
   }
 }
