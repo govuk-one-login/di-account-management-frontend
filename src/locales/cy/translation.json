@@ -9,7 +9,8 @@
     "errorSummaryTitle": "Mae problem",
     "phaseBanner": {
       "tag": "Beta",
-      "text": "Mae hwn yn wasanaeth newydd – bydd eich <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">adborth (agor mewn tab newydd)</a> yn ein helpu i’w wella."
+      "text": "Mae hwn yn wasanaeth newydd – bydd eich <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">adborth (agor mewn tab newydd)</a> yn ein helpu i’w wella.",
+      "testText": "Mae hwn yn amgylchedd profi."
     },
     "yes": "Yes",
     "no": "Na",

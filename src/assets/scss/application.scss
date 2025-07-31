@@ -114,7 +114,6 @@
   .govuk-template--rebranded & {
     .govuk-header__logo {
       width: 100%;
-      padding-right: govuk-spacing(9);
     }
   }
 
@@ -202,15 +201,14 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
 .account-header-navigation__form {
   position: absolute;
-  padding: 5px;
+  padding: govuk-spacing(2) 0 govuk-spacing(2) 0;
   right: 0;
   bottom: 50%;
   transform: translateY(50%);
 
-  @include govuk-media-query($until: mobile) {
+  @include govuk-media-query($until: 480px) {
     position: relative;
-    float: left;
-    padding-left: 0;
+    padding-top: govuk-spacing(1);
     transform: none;
   }
 }
@@ -387,13 +385,16 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   // https://accessibility.blog.gov.uk/2017/03/27/how-users-change-colours-on-websites/
   outline: 2px solid transparent;
   outline-offset: -2px;
-
-  // the most important properties for keeping the phase banner looking the same have been !important-ed
-  color: govuk-colour("white") !important;
-  background-color: govuk-colour("blue") !important;
   letter-spacing: 1px !important;
   text-decoration: none !important;
   text-transform: uppercase !important;
+
+  // the most important properties for keeping the phase banner looking the same have been !important-ed
+  // we use the yellow variation in non-prod environments
+  &:not(.govuk-tag--yellow) {
+    color: govuk-colour("white") !important;
+    background-color: govuk-colour("blue") !important;
+  }
 }
 
 .search-results {

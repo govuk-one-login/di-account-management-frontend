@@ -11,6 +11,7 @@ import {
   getDtRumUrl,
   missionLabsWebSocketAddress,
   supportDeviceIntelligence,
+  isProd,
 } from "../config";
 import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
@@ -38,6 +39,7 @@ export async function setLocalVarsMiddleware(
   res.locals.isSelectContentTrackingEnabled = selectContentTrackingEnabled();
   res.locals.currentUrl = getCurrentUrl(req);
   res.locals.supportDeviceIntelligence = supportDeviceIntelligence();
+  res.locals.isProd = isProd();
 
   const sessionIds = getSessionIdsFrom(req);
   res.locals.sessionId = sessionIds.sessionId;
