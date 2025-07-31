@@ -12,7 +12,7 @@ const pageTitleToPath: Record<string, string> = {
   "Services you can use with GOV.UK One Login": "/services-using-one-login",
 };
 
-Then("the page is accessible", async ({ page }) => {
+Then("the page meets our accessibility standards", async ({ page }) => {
   const accessibilityScanResults = await new AxeBuilder({ page })
     .withTags(["wcag22aa"])
     .analyze();

@@ -7,7 +7,7 @@ Feature: "Contact GOV.UK One Login" page
     And I accept cookies
     Then the page title is "Contact GOV.UK One Login"
     And the page looks as expected
-    And the page is accessible
+    And the page meets our accessibility standards
     And the page displays the expected webchat content
 
   @noJs

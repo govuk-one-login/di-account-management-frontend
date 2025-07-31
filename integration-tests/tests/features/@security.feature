@@ -9,4 +9,4 @@ Feature: "Security" page
     And I accept cookies
     Then the page title is prefixed with "Security"
     And the page looks as expected
-    And the page is accessible
+    And the page meets our accessibility standards
