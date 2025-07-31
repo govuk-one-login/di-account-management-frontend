@@ -38,12 +38,24 @@
 
 {% block main %}
     <div class="govuk-width-container {{ containerClasses }}">
-        {{ govukPhaseBanner({
-            tag: {
-                text: 'general.phaseBanner.tag' | translate
-            },
-            html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback")
-        }) if not hidePhaseBanner}}
+        {% if not hidePhaseBanner %}
+          {% if isProd %}
+            {{ govukPhaseBanner({
+                tag: {
+                  text: 'general.phaseBanner.tag' | translate
+                },
+                html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback")
+            })}}
+          {% else %}
+            {{ govukPhaseBanner({
+                tag: {
+                  text: "TEST",
+                  classes: "govuk-tag--yellow"
+                },
+                text: 'general.phaseBanner.testText' | translate
+            })}}
+          {% endif %}
+        {% endif %}
         {% if showLanguageToggle %}
           {{ languageSelect({
             ariaLabel: 'general.languageToggle.ariaLabel' | translate,
