@@ -1,0 +1,104 @@
+name: "Integration tests"
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  end_to_end_tests:
+    name: "Run integration tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      pull-requests: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
+
+      - name: Set up Node
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install app dependencies
+        run: npm ci
+
+      - name: Build app
+        run: |
+          touch .env
+          echo "AUTH_FRONTEND_URL=https://signin.build.account.gov.uk" >> .env
+          echo "API_BASE_URL=https://oidc-stub.home.build.account.gov.uk" >> .env
+          echo "OIDC_CLIENT_ID=UJtd0gskJAqo1MR0liyVU1FykG8" >> .env
+          echo "OIDC_CLIENT_SCOPES=openidphoneemailamoffline_accessgovuk-account" >> .env
+          echo "AM_API_BASE_URL=https://am-stub.home.build.account.gov.uk" >> .env
+          echo "AM_YOUR_ACCOUNT_URL=http://localhost:6001" >> .env
+          echo "SESSION_EXPIRY=1800000" >> .env
+          echo "SESSION_SECRET=secret" >> .env
+          echo "GOV_ACCOUNTS_PUBLISHING_API_URL=http://localhost:4444" >> .env
+          echo "GOV_ACCOUNTS_PUBLISHING_API_TOKEN=token" >> .env
+          echo "ANALYTICS_COOKIE_DOMAIN=localhost" >> .env
+          echo "GTM_ID=" >> .env
+          echo "DELETE_TOPIC_ARN=arn:aws:sns:eu-west-2:000000000000:DeleteAccountTopicArn" >> .env
+          echo "SUSPICIOUS_ACTIVITY_TOPIC_ARN=arn:aws:sns:eu-west-2:000000000000:SuspiciousActivityTopicArn" >> .env
+          echo "COOKIES_AND_FEEDBACK_URL=localhost" >> .env
+          echo "BASE_URL=localhost:6001" >> .env
+          echo "SERVICE_STORE_TABLE_NAME=user_services" >> .env
+          echo "SESSION_STORE_TABLE_NAME=account-mgmt-frontend-SessionStore" >> .env
+          echo "SUPPORT_ACTIVITY_LOG=1" >> .env
+          echo "SUPPORT_REPORTING_FORM=1" >> .env
+          echo "REPORT_SUSPICIOUS_ACTIVITY=1" >> .env
+          echo "ACTIVITY_LOG_STORE_TABLE_NAME=activity_log" >> .env
+          echo "SUPPORT_TRIAGE_PAGE=1" >> .env
+          echo "WEBCHAT_SOURCE_URL=https://dev-chat-loader-hgsgds.smartagent.app" >> .env
+          echo "SUPPORT_WEBCHAT_CONTACT=1" >> .env
+          echo "SUPPORT_PHONE_CONTACT=1" >> .env
+          echo "SUPPORT_SEARCHABLE_LIST=1" >> .env
+          echo "SHOW_CONTACT_GUIDANCE=1" >> .env
+          echo "SHOW_CONTACT_EMERGENCY_MESSAGE=0" >> .env
+          echo "CONTACT_EMAIL_SERVICE_URL=https://signin.staging.account.gov.uk/contact-us-from-triage-page" >> .env
+          echo "AUDIT_QUEUE_URL=http://localhost:4566/000000000000/audit-queue" >> .env
+          echo "AWS_REGION=eu-west-2" >> .env
+          echo "GENERATOR_KEY_ARN=" >> .env
+          echo "WRAPPING_KEY_ARN=" >> .env
+          echo "ACCOUNT_ID=" >> .env
+          echo "ENVIRONMENT=" >> .env
+          echo "VERIFY_ACCESS_VALUE=" >> .env
+          echo "MY_ONE_LOGIN_USER_ID=urn:fdc:gov.uk:default" >> .env
+          echo "METHOD_MANAGEMENT_BASE_URL=https://method-management-v1-stub.home.build.account.gov.uk/v1" >> .env
+          echo "GOOGLE_ANALYTICS_4_GTM_CONTAINER_ID=GTM-KD86CMZ" >> .env
+          echo "GA4_ENABLED=true" >> .env
+          echo "SELECT_TRACKING_ENABLED=true" >> .env
+          echo "SUPPORT_ADD_BACKUP_MFA=1" >> .env
+          echo "SUPPORT_METHOD_MANAGEMENT=1" >> .env
+          echo "ACCESSIBILITY_STATEMENT_URL=https://signin.account.gov.uk/accessibility-statement" >> .env
+          echo "LANGUAGE_TOGGLE=1" >> .env
+          echo "SUPPORT_CHANGE_MFA=1" >> .env
+          echo "DT_RUM_URL=" >> .env
+          echo "MISSION_LAB_WEBSOCKET_ADDR=wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com" >> .env
+          echo "DEVICE_INTELLIGENCE_TOGGLE=1" >> .env
+          echo "BRAND_REFRESH_ENABLED=1" >> .env
+          echo "ENABLE_CHANGE_ON_INTERVENTION=1" >> .env
+          echo "FINGERPRINT_COOKIE_DOMAIN=localhost" >> .env
+          echo "SUPPORT_GLOBAL_LOGOUT=1" >> .env
+          npm run build
+
+      - name: Install integration-tests dependencies
+        run: cd integration-tests && npm ci
+
+      - name: Run type check
+        run: cd integration-tests && npm run check-types
+
+      - name: Run lint
+        run: cd integration-tests && npm run lint
+
+      - name: Run integration tests
+        run: |
+          cd integration-tests
+          touch .env
+          echo "PRE_OR_POST_DEPLOY=pre" >> .env
+          echo "PW_TEST_CONNECT_WS_ENDPOINT=ws://127.0.0.1:3000/" >> .env
+          npm run test
