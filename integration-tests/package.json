@@ -1,0 +1,35 @@
+{
+  "name": "integration-tests",
+  "version": "1.0.0",
+  "scripts": {
+    "run-app": "cd ../ && if [ -e .env.integration-tests ]; then docker compose --env-file ./.env.integration-tests build && docker compose --env-file ./.env.integration-tests up; else docker compose build && docker compose up; fi",
+    "build": "docker build -t di-account-management-frontend-integration-test .",
+    "install-browsers": "playwright install --with-deps chromium",
+    "start-test-server": "npm run build && docker run --network=host --rm --init di-account-management-frontend-integration-test run-server",
+    "watch": "nodemon -w ./tests -w ./utils -w ./.env.ts -w ./.env -e \"*\" --exec \"bddgen\"",
+    "test": "npm ci && bddgen && playwright test",
+    "test:update-snapshots": "sh update-snapshots.sh",
+    "test:ui": "npm ci && run-p test:ui:*",
+    "test:ui:watch": "npm run watch",
+    "test:ui:run": "playwright test --ui",
+    "lint": "eslint . --report-unused-disable-directives",
+    "lint:fix": "eslint . --fix --report-unused-disable-directives",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@eslint/compat": "^1.3.1",
+    "@eslint/js": "^9.30.0",
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.26",
+    "dotenv": "^16.5.0",
+    "eslint": "^9.30.0",
+    "eslint-plugin-playwright": "^2.2.0",
+    "nodemon": "^3.1.10",
+    "npm-run-all": "^4.1.5",
+    "playwright-bdd": "^8.2.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.0",
+    "valibot": "^1.1.0"
+  }
+}
