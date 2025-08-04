@@ -121,6 +121,7 @@ Conditions:
     Fn::Or:
       - !Equals [!Ref Environment, integration]
       - !Equals [!Ref Environment, production]
+      - !Equals [!Ref Environment, staging]
 
 Mappings:
   ElasticLoadBalancerAccountIds:
