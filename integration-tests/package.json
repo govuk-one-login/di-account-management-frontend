@@ -22,7 +22,7 @@
     "@eslint/js": "^9.30.0",
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.15.26",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.2.1",
     "eslint": "^9.30.0",
     "eslint-plugin-playwright": "^2.2.0",
     "nodemon": "^3.1.10",
