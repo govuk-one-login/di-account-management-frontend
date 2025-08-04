@@ -354,6 +354,7 @@ export const LogoutState = {
   Blocked: "blocked",
   AccountDeletion: "accountDeletion",
   Default: "default",
+  Start: "start",
 } as const;
 
 export type LogoutStateType = (typeof LogoutState)[keyof typeof LogoutState];
@@ -370,5 +371,8 @@ export const LogoutRedirect = {
   },
   [LogoutState.Default]: {
     url: getBaseUrl() + PATH_DATA.USER_SIGNED_OUT.url,
+  },
+  [LogoutState.Start]: {
+    url: getBaseUrl() + PATH_DATA.START.url,
   },
 };

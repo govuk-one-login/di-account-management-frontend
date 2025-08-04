@@ -17,5 +17,5 @@ export async function globalLogoutPost(req: Request, res: Response) {
   );
   service.send(auditEvent, res.locals.trace);
   req.metrics?.addMetric("globalLogoutPost", MetricUnit.Count, 1);
-  await handleLogout(req, res, LogoutState.Default);
+  await handleLogout(req, res, LogoutState.Start);
 }
