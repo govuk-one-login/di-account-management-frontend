@@ -54,6 +54,16 @@ describe("logout redirect controller", () => {
     );
   });
 
+  it("should redirect to start", async () => {
+    req.query = { state: LogoutState.Start };
+
+    await logoutRedirectGet(req, res);
+
+    expect(res.redirect).to.have.calledWith(
+      `${getBaseUrl() + PATH_DATA.START.url}`
+    );
+  });
+
   it("should redirect to default if state is not set", async () => {
     req.query = {};
 

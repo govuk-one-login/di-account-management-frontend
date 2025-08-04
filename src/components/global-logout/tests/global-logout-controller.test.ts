@@ -60,7 +60,7 @@ describe("Global Logout Controller", () => {
         handleLogoutStub,
         req,
         res,
-        LogoutState.Default
+        LogoutState.Start
       );
     });
   });

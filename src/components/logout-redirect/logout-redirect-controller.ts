@@ -15,6 +15,8 @@ export async function logoutRedirectGet(
     res.redirect(LogoutRedirect[LogoutState.Blocked].url);
   } else if (state === LogoutState.AccountDeletion) {
     res.redirect(LogoutRedirect[LogoutState.AccountDeletion].url);
+  } else if (state === LogoutState.Start) {
+    res.redirect(LogoutRedirect[LogoutState.Start].url);
   } else {
     res.redirect(LogoutRedirect[LogoutState.Default].url);
   }
