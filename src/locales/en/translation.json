@@ -138,13 +138,15 @@
   },
   "pages": {
     "globalLogout": {
-      "title": "Are you sure you want to sign out of all devices and apps?",
-      "paragraph1": "If you're signed in with GOV.UK One Login in more than one place you can sign out everywhere. Such as on web, mobile, apps and any services you were using.",
-      "paragraph2": "This will help keep your GOV.UK One Login safe. For example, if you've lost your phone.",
-      "warning": "If you're signed in to the GOV.UK One Login/Wallet app, signing out will delete all the information and digital documents saved in it",
-      "button": "Sign out of all devices and apps",
-      "cancelButton": "Cancel and go back to Activity history",
-      "pageTitle": "Sign out of all devices and apps"
+      "title": "Sign out of all devices",
+      "paragraph1": "Sign out of GOV.UK One Login on all devices.",
+      "paragraph2": "You might want to do this if:",
+      "listItem1": "you've lost your phone",
+      "listItem2": "you think someone else might have access to your information",
+      "paragraph3": "Signing out will help keep your information safe.",
+      "button": "Sign out of all devices",
+      "cancelButton": "Cancel and go back to Security",
+      "pageTitle": "Sign out of all devices"
     },
     "searchServices": {
       "title": "Services you can use with GOV.UK One Login",
