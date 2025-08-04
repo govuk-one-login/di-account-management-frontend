@@ -10,7 +10,7 @@ describe("Global Logout Controller", () => {
   describe("globalLogoutGet", () => {
     it("should render the correct view", () => {
       const req = {} as Request;
-      const res = { render: sinon.spy() };
+      const res = { render: sinon.spy(), locals: {} };
       globalLogoutGet(req, res as unknown as Response);
 
       expect(res.render.calledOnce).to.be.true;
