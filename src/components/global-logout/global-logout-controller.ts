@@ -3,8 +3,15 @@ import { eventService } from "../../services/event-service";
 import { EventName, LogoutState } from "../../app.constants";
 import { handleLogout } from "../../utils/logout";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { setOplSettings } from "../../utils/opl";
 
 export function globalLogoutGet(req: Request, res: Response): void {
+  setOplSettings(
+    {
+      contentId: "2b095344-f460-4e7c-a7e8-51e882447750",
+    },
+    res
+  );
   res.render("global-logout/index.njk", {});
 }
 
