@@ -17,7 +17,6 @@ Feature: "Contact GOV.UK One Login" page
     And the page title is "Contact GOV.UK One Login"
     And the page displays the expected webchat content
 
-  @postDeploy
   Scenario: Access webchat via the inline button
     Given I go to the "Contact GOV.UK One Login" page
     And the page has finished loading
@@ -27,7 +26,6 @@ Feature: "Contact GOV.UK One Login" page
     When I click on the minimise webchat button
     Then the webchat disappears
 
-  @postDeploy
   Scenario: Access webchat via the floating button
     Given I go to the "Contact GOV.UK One Login" page
     And the page has finished loading
