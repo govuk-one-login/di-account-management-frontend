@@ -5,6 +5,7 @@ import { expect } from "@playwright/test";
 const { Then, Given } = bdd;
 
 const pageTitleToPath: Record<string, string> = {
+  Healthcheck: "/healthcheck",
   Root: "/",
   Security: "/security",
   "Your services": "/your-services",
