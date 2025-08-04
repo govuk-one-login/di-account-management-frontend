@@ -13,4 +13,4 @@ RUN npm ci && npm run install-browsers
 
 COPY . .
 
-ENTRYPOINT [ "./run.sh" ]
+ENTRYPOINT [ "./run-tests.sh" ]
