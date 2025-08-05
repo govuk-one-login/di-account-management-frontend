@@ -229,7 +229,7 @@ Mappings:
       BRANDREFRESHENABLED: "1"
       SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
-      SUPPORTGLOBALLOGOUT: "0"
+      SUPPORTGLOBALLOGOUT: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -266,7 +266,7 @@ Mappings:
       BRANDREFRESHENABLED: "1"
       SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
-      SUPPORTGLOBALLOGOUT: "0"
+      SUPPORTGLOBALLOGOUT: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
