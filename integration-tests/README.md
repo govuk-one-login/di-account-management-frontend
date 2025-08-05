@@ -24,9 +24,9 @@ Being connected to the VPN may make some webchat related tests fail.
 
 When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_TARGET` to one of `dev | build | staging | integration | production` to run tests against the corresponding deployment instead.
 
-Explain about how steps in files not prefixed with @ are available to features to up to the parent directory prefixed with @. If there is no parent directory prefixed with @ then the steps will be available to all features.
-
 ### Steps to run the tests:
+
+Copy the file `.env.integration-tests.sample` to `.env.integration-tests`.
 
 Copy the file `integration-tests/.env.sample` to `integration-tests/.env`.
 
