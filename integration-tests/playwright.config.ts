@@ -13,7 +13,7 @@ export default defineConfig({
   testDir,
   forbidOnly: !env.HUMAN_IN_THE_LOOP,
   workers: "50%",
-  snapshotPathTemplate: `./${env.UPDATE_SNAPSHOTS ? "snapshots-updated" : "snapshots"}/${env.TEST_TARGET}/{projectName}/{testFilePath}/{arg}{ext}`,
+  snapshotPathTemplate: `./${env.UPDATE_SNAPSHOTS ? "snapshots-updated" : "snapshots"}/{projectName}/{testFilePath}/{arg}{ext}`,
   reporter: env.TEST_REPORT_DIR
     ? [
         // See https://govukverify.atlassian.net/wiki/spaces/PLAT/pages/3054010402/How+to+run+tests+against+your+deployed+application+in+a+SAM+deployment+pipeline#Test-reports
