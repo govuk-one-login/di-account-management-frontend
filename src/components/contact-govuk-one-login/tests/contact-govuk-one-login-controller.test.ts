@@ -64,7 +64,6 @@ describe("Contact GOV.UK One Login controller", () => {
       .stub(reference, "generateReferenceCode")
       .returns(MOCK_REFERENCE_CODE);
 
-    process.env.SUPPORT_TRIAGE_PAGE = "1";
     process.env.SUPPORT_PHONE_CONTACT = "1";
     process.env.SHOW_CONTACT_GUIDANCE = "1";
     process.env.SHOW_CONTACT_EMERGENCY_MESSAGE = "1";
@@ -80,7 +79,6 @@ describe("Contact GOV.UK One Login controller", () => {
   afterEach(() => {
     sandbox.restore();
     loggerSpy.restore();
-    delete process.env.SUPPORT_TRIAGE_PAGE;
     delete process.env.SUPPORT_PHONE_CONTACT;
     delete process.env.SHOW_CONTACT_GUIDANCE;
     delete process.env.SHOW_CONTACT_EMERGENCY_MESSAGE;

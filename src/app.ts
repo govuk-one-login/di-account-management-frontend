@@ -23,7 +23,6 @@ import {
   supportActivityLog,
   supportBrandRefresh,
   supportSearchableList,
-  supportTriagePage,
   supportWebchatContact,
   supportChangeOnIntervention,
   supportGlobalLogout,
@@ -268,10 +267,8 @@ async function createApp(): Promise<express.Application> {
     app.use(activityHistoryRouter);
     app.use(reportSuspiciousActivityRouter);
   }
-  if (supportTriagePage()) {
-    app.use(contactRouter);
-  }
 
+  app.use(contactRouter);
   app.use(chooseBackupRouter);
   app.use(addBackupAppRouter);
   app.use(addBackupSmsRouter);

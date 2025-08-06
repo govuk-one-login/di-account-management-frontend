@@ -52,7 +52,6 @@ jobs:
           echo "SUPPORT_REPORTING_FORM=1" >> .env
           echo "REPORT_SUSPICIOUS_ACTIVITY=1" >> .env
           echo "ACTIVITY_LOG_STORE_TABLE_NAME=activity_log" >> .env
-          echo "SUPPORT_TRIAGE_PAGE=1" >> .env
           echo "WEBCHAT_SOURCE_URL=https://dev-chat-loader-hgsgds.smartagent.app" >> .env
           echo "SUPPORT_WEBCHAT_CONTACT=1" >> .env
           echo "SUPPORT_PHONE_CONTACT=1" >> .env

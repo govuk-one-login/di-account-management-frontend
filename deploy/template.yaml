@@ -171,7 +171,6 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGSLEVEL: "debug"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://dev-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
@@ -208,7 +207,6 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
       LOGSLEVEL: "debug"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "0"
@@ -245,7 +243,6 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
       LOGSLEVEL: "info"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
@@ -282,7 +279,6 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
@@ -319,7 +315,6 @@ Mappings:
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
@@ -755,13 +750,6 @@ Resources:
               Value: !Ref ServiceStoreTableName
             - Name: "ACTIVITY_LOG_STORE_TABLE_NAME"
               Value: !Ref ActivityLogTableName
-            - Name: "SUPPORT_TRIAGE_PAGE"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTTRIAGEPAGE,
-                ]
             - Name: "WEBCHAT_SOURCE_URL"
               Value:
                 !FindInMap [

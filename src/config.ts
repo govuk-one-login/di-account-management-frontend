@@ -199,10 +199,6 @@ export function getDynamoActivityLogStoreTableName(): string {
   return process.env.ACTIVITY_LOG_STORE_TABLE_NAME;
 }
 
-export function supportTriagePage(): boolean {
-  return process.env.SUPPORT_TRIAGE_PAGE === "1";
-}
-
 export function getWebchatUrl(): string {
   return process.env.WEBCHAT_SOURCE_URL;
 }
