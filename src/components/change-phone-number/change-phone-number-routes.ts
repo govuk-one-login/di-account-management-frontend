@@ -7,7 +7,6 @@ import {
   changePhoneNumberPost,
 } from "./change-phone-number-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -23,7 +22,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   validatePhoneNumberRequest(),
-  globalTryCatchAsync(changePhoneNumberPost())
+  changePhoneNumberPost()
 );
 
 export { router as changePhoneNumberRouter };

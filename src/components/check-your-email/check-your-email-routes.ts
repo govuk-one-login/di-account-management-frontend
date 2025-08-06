@@ -8,7 +8,6 @@ import {
 import { validateCheckYourEmailRequest } from "./check-your-email-validation";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { globalTryCatch } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -23,7 +22,7 @@ router.get(
   PATH_DATA.REQUEST_NEW_CODE_EMAIL.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatch(requestNewCodeGet)
+  requestNewCodeGet
 );
 
 router.post(
@@ -31,7 +30,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   validateCheckYourEmailRequest(),
-  globalTryCatch(checkYourEmailPost())
+  checkYourEmailPost()
 );
 
 export { router as checkYourEmailRouter };

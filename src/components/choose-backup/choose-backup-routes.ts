@@ -5,7 +5,6 @@ import { chooseBackupGet, chooseBackupPost } from "./choose-backup-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 import { validateChooseBackupRequest } from "./choose-backup-validation";
-import { globalTryCatch } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -14,7 +13,7 @@ router.get(
   requiresAuthMiddleware,
   mfaMethodMiddleware,
   validateStateMiddleware,
-  globalTryCatch(chooseBackupGet)
+  chooseBackupGet
 );
 
 router.post(
@@ -22,7 +21,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   ...validateChooseBackupRequest(),
-  globalTryCatch(chooseBackupPost)
+  chooseBackupPost
 );
 
 export { router as chooseBackupRouter };
