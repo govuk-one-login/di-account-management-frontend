@@ -173,7 +173,6 @@ describe("security controller", () => {
     });
 
     it("should render security view with activity log when the user has a supported service and the feature flag is on", async () => {
-      const configFuncs = require("../../../config");
       sandbox
         .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
