@@ -270,7 +270,7 @@ Mappings:
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
-      AMAPIBASEURL: "https://manage.integration.account.gov.uk"
+      AMAPIBASEURL: "https://z7lornzyy5-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration"
       BASEURL: "home.integration.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
