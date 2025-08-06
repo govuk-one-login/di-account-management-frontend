@@ -75,25 +75,6 @@ describe("set-local-vars-middleware", () => {
       expect(next).to.be.calledOnce;
     });
 
-    it("should add supportDeviceIntelligence to locals when flag is true", async () => {
-      process.env.DEVICE_INTELLIGENCE_TOGGLE = "1";
-
-      await setLocalVarsMiddleware(req as Request, res as Response, next);
-
-      expect(res.locals).to.have.property("supportDeviceIntelligence");
-      expect(res.locals.supportDeviceIntelligence).to.equal(true);
-      expect(next).to.be.calledOnce;
-    });
-
-    it("should not add supportDeviceIntelligence to locals when flag is false", async () => {
-      process.env.DEVICE_INTELLIGENCE_TOGGLE = "0";
-      await setLocalVarsMiddleware(req as Request, res as Response, next);
-
-      expect(res.locals).to.have.property("supportDeviceIntelligence");
-      expect(res.locals.supportDeviceIntelligence).to.equal(false);
-      expect(next).to.be.calledOnce;
-    });
-
     describe("isProd", () => {
       afterEach(() => {
         delete process.env.APP_ENV;
