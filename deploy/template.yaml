@@ -307,7 +307,7 @@ Mappings:
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
-      AMAPIBASEURL: "https://manage.account.gov.uk"
+      AMAPIBASEURL: "https://63qq2dsjo5-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production"
       BASEURL: "home.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
