@@ -38,7 +38,7 @@ describe("Activity history controller", () => {
         .callsFake(() => {
           return Promise.resolve([]);
         });
-
+      sandbox.stub(config, "supportReportingForm").returns(false);
       const clientId = "clientId";
       sandbox.stub(config, "getOIDCClientId").callsFake(() => {
         return clientId;
@@ -105,6 +105,8 @@ describe("Activity history controller", () => {
       sandbox.stub(config, "getOIDCClientId").callsFake(() => {
         return clientId;
       });
+
+      sandbox.stub(config, "supportReportingForm").returns(false);
 
       const req: any = {
         app: {
