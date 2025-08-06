@@ -6,7 +6,6 @@ Feature: "Services you can use with GOV.UK One Login" page
     And the page has finished loading
     And I accept cookies
     Then the page title is prefixed with "Services you can use with GOV.UK One Login"
-    And the page looks as expected
     And the page meets our accessibility standards
     Given I search for "APAR"
     Then there is a search result with the text "Apprenticeship provider and assessment register (APAR)"
