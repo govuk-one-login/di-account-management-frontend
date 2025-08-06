@@ -174,7 +174,6 @@ Mappings:
       WEBCHATSOURCEURL: "https://dev-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       SUPPORTSEARCHABLELIST: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
@@ -210,7 +209,6 @@ Mappings:
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "0"
-      SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
@@ -246,7 +244,6 @@ Mappings:
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
@@ -282,7 +279,6 @@ Mappings:
       WEBCHATSOURCEURL: "https://chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://z7lornzyy5-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration/v1"
@@ -318,7 +314,6 @@ Mappings:
       WEBCHATSOURCEURL: "https://chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "0"
       SUPPORTCLIENTREGISTRYLIBRARY: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
@@ -770,13 +765,6 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTPHONECONTACT,
-                ]
-            - Name: "SHOW_CONTACT_GUIDANCE"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SHOWCONTACTGUIDANCE,
                 ]
             - Name: "SHOW_CONTACT_EMERGENCY_MESSAGE"
               Value:

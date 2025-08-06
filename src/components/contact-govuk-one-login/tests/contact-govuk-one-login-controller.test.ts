@@ -65,7 +65,6 @@ describe("Contact GOV.UK One Login controller", () => {
       .returns(MOCK_REFERENCE_CODE);
 
     process.env.SUPPORT_PHONE_CONTACT = "1";
-    process.env.SHOW_CONTACT_GUIDANCE = "1";
     process.env.SHOW_CONTACT_EMERGENCY_MESSAGE = "1";
     process.env.SUPPORT_WEBCHAT_CONTACT = "1";
     process.env.CONTACT_EMAIL_SERVICE_URL =
@@ -80,7 +79,6 @@ describe("Contact GOV.UK One Login controller", () => {
     sandbox.restore();
     loggerSpy.restore();
     delete process.env.SUPPORT_PHONE_CONTACT;
-    delete process.env.SHOW_CONTACT_GUIDANCE;
     delete process.env.SHOW_CONTACT_EMERGENCY_MESSAGE;
     delete process.env.SUPPORT_WEBCHAT_CONTACT;
     delete process.env.CONTACT_EMAIL_SERVICE_URL;
@@ -102,7 +100,6 @@ describe("Contact GOV.UK One Login controller", () => {
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
-        showContactGuidance: true,
         showContactEmergencyMessage: true,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
@@ -134,7 +131,6 @@ describe("Contact GOV.UK One Login controller", () => {
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
-        showContactGuidance: true,
         showContactEmergencyMessage: true,
         referenceCode: MOCK_REFERENCE_CODE,
         contactEmailServiceUrl: "/track-and-redirect",
@@ -172,7 +168,6 @@ describe("Contact GOV.UK One Login controller", () => {
           "https://signin.account.gov.uk/accessibility-statement",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
-        showContactGuidance: true,
         showContactEmergencyMessage: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
@@ -212,7 +207,6 @@ describe("Contact GOV.UK One Login controller", () => {
           "https://signin.account.gov.uk/accessibility-statement",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
-        showContactGuidance: true,
         showContactEmergencyMessage: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
@@ -244,7 +238,6 @@ describe("Contact GOV.UK One Login controller", () => {
           "https://signin.account.gov.uk/accessibility-statement",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
-        showContactGuidance: true,
         showContactEmergencyMessage: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
@@ -281,7 +274,6 @@ describe("Contact GOV.UK One Login controller", () => {
           "https://signin.account.gov.uk/accessibility-statement",
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
-        showContactGuidance: true,
         showContactEmergencyMessage: true,
         referenceCode: MOCK_REFERENCE_CODE,
         webchatSource: "https://example.com",
@@ -302,7 +294,6 @@ describe("Contact GOV.UK One Login controller", () => {
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
-        showContactGuidance: true,
         showContactEmergencyMessage: true,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",
@@ -327,7 +318,6 @@ describe("Contact GOV.UK One Login controller", () => {
       expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
-        showContactGuidance: true,
         showContactEmergencyMessage: true,
         referenceCode: "654321",
         contactEmailServiceUrl: "/track-and-redirect",

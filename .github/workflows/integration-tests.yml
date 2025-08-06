@@ -56,7 +56,6 @@ jobs:
           echo "SUPPORT_WEBCHAT_CONTACT=1" >> .env
           echo "SUPPORT_PHONE_CONTACT=1" >> .env
           echo "SUPPORT_SEARCHABLE_LIST=1" >> .env
-          echo "SHOW_CONTACT_GUIDANCE=1" >> .env
           echo "SHOW_CONTACT_EMERGENCY_MESSAGE=0" >> .env
           echo "CONTACT_EMAIL_SERVICE_URL=https://signin.staging.account.gov.uk/contact-us-from-triage-page" >> .env
           echo "AUDIT_QUEUE_URL=http://localhost:4566/000000000000/audit-queue" >> .env
