@@ -188,7 +188,6 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
     build:
@@ -223,7 +222,6 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
     staging:
@@ -258,7 +256,6 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
     integration:
@@ -293,7 +290,6 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
     production:
@@ -329,7 +325,6 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       DEVICEINTELLIGENCETOGGLE: "1"
       BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
 
@@ -864,13 +859,6 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   BRANDREFRESHENABLED,
-                ]
-            - Name: "ENABLE_CHANGE_ON_INTERVENTION"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTCHANGEONINTERVENTION,
                 ]
             - Name: "FINGERPRINT_COOKIE_DOMAIN"
               Value:

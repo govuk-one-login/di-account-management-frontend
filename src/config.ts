@@ -255,10 +255,6 @@ export function supportBrandRefresh(): boolean {
   return process.env.BRAND_REFRESH_ENABLED === "1";
 }
 
-export function supportChangeOnIntervention(): boolean {
-  return process.env.ENABLE_CHANGE_ON_INTERVENTION === "1";
-}
-
 export function supportGlobalLogout(): boolean {
   return process.env.SUPPORT_GLOBAL_LOGOUT === "1";
 }

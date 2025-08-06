@@ -1,7 +1,6 @@
 import { getRequestConfig, http, Http, RequestConfig } from "../../utils/http";
 import { EnterPasswordServiceInterface } from "./types";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
-import { supportChangeOnIntervention } from "../../config";
 
 const interventionMap: Record<string, string> = {
   "1083": "SUSPENDED",
@@ -36,10 +35,7 @@ export function enterPasswordService(
 
     const { status } = response;
 
-    if (
-      status === HTTP_STATUS_CODES.FORBIDDEN &&
-      supportChangeOnIntervention()
-    ) {
+    if (status === HTTP_STATUS_CODES.FORBIDDEN) {
       const intervention = getInterventionFromError(response);
       if (intervention) {
         return { authenticated: false, intervention };

@@ -24,7 +24,6 @@ import {
   supportBrandRefresh,
   supportSearchableList,
   supportWebchatContact,
-  supportChangeOnIntervention,
   supportGlobalLogout,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
@@ -258,10 +257,8 @@ async function createApp(): Promise<express.Application> {
     app.use(globalLogoutRouter);
   }
 
-  if (supportChangeOnIntervention()) {
-    app.use(temporarilySuspendedRouter);
-    app.use(permanentlySuspendedRouter);
-  }
+  app.use(temporarilySuspendedRouter);
+  app.use(permanentlySuspendedRouter);
 
   if (supportActivityLog()) {
     app.use(activityHistoryRouter);
