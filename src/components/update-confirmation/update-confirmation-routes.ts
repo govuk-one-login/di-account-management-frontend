@@ -15,10 +15,6 @@ import {
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
-import {
-  globalTryCatchAsync,
-  globalTryCatch,
-} from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -26,13 +22,13 @@ router.get(
   PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatch(updateEmailConfirmationGet)
+  updateEmailConfirmationGet
 );
 router.get(
   PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatch(updatePasswordConfirmationGet)
+  updatePasswordConfirmationGet
 );
 router.get(
   PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url,
@@ -62,7 +58,7 @@ router.get(
   PATH_DATA.DELETE_MFA_METHOD_CONFIRMATION.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(removeMfaMethodConfirmationGet)
+  removeMfaMethodConfirmationGet
 );
 
 router.get(
@@ -70,7 +66,7 @@ router.get(
   requiresAuthMiddleware,
   mfaMethodMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(changeDefaultMfaMethodConfirmationGet)
+  changeDefaultMfaMethodConfirmationGet
 );
 
 router.get(
@@ -78,7 +74,7 @@ router.get(
   requiresAuthMiddleware,
   mfaMethodMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(changeDefaultMethodConfirmationGet)
+  changeDefaultMethodConfirmationGet
 );
 
 export { router as updateConfirmationRouter };

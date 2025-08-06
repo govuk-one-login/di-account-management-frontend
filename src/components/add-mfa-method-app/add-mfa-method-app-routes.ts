@@ -7,7 +7,6 @@ import {
   addMfaMethodGoBackGet,
 } from "./add-mfa-method-app-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { globalTryCatchAsync } from "../../utils/global-try-catch";
 import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 
 const router = express.Router();
@@ -16,14 +15,14 @@ router.get(
   PATH_DATA.ADD_MFA_METHOD_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(addMfaAppMethodGet)
+  addMfaAppMethodGet
 );
 
 router.get(
   PATH_DATA.ADD_MFA_METHOD_GO_BACK.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(addMfaMethodGoBackGet)
+  addMfaMethodGoBackGet
 );
 
 router.post(
@@ -31,7 +30,7 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   mfaMethodMiddleware,
-  globalTryCatchAsync(addMfaAppMethodPost)
+  addMfaAppMethodPost
 );
 
 export { router as addBackupAppRouter };

@@ -8,10 +8,6 @@ import {
   requestNewOTPCodeGet,
 } from "./check-your-phone-controller";
 import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
-import {
-  globalTryCatchAsync,
-  globalTryCatch,
-} from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -20,7 +16,7 @@ router.get(
   requiresAuthMiddleware,
   mfaMethodMiddleware,
   validateStateMiddleware,
-  globalTryCatch(checkYourPhoneGet)
+  checkYourPhoneGet
 );
 
 router.post(
@@ -28,14 +24,14 @@ router.post(
   requiresAuthMiddleware,
   validateStateMiddleware,
   mfaMethodMiddleware,
-  globalTryCatchAsync(checkYourPhonePost)
+  checkYourPhonePost
 );
 
 router.get(
   PATH_DATA.REQUEST_NEW_CODE_OTP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatch(requestNewOTPCodeGet)
+  requestNewOTPCodeGet
 );
 
 export { router as checkYourPhoneRouter };
