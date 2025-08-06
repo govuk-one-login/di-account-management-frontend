@@ -6,7 +6,6 @@ import {
   changeAuthenticatorAppPost,
 } from "./change-authenticator-app-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { globalTryCatchAsync } from "../../utils/global-try-catch";
 
 const router = express.Router();
 
@@ -14,14 +13,14 @@ router.get(
   PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(changeAuthenticatorAppGet)
+  changeAuthenticatorAppGet
 );
 
 router.post(
   PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  globalTryCatchAsync(changeAuthenticatorAppPost)
+  changeAuthenticatorAppPost
 );
 
 export { router as changeAuthenticatorAppRouter };
