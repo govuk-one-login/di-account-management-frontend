@@ -21,6 +21,7 @@ describe("security controller", () => {
       locals: {},
     };
     configFuncs = require("../../../config");
+    sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
     allowedServicesModule = require("../../../middleware/check-allowed-services-list");
   });
 
@@ -31,7 +32,6 @@ describe("security controller", () => {
   describe("securityGet", () => {
     it("should render security view with SMS MFA method", async () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(true);
-      sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
       sandbox
         .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
@@ -77,7 +77,6 @@ describe("security controller", () => {
 
     it("should render security view without activity log when the feature flag is off", async () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(false);
-      sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
       sandbox
         .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(true);
@@ -123,7 +122,6 @@ describe("security controller", () => {
 
     it("should render security view without activity log when the user doesn't have a supported service", async () => {
       sandbox.stub(configFuncs, "supportActivityLog").returns(true);
-      sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
       sandbox
         .stub(allowedServicesModule, "hasAllowedActivityLogServices")
         .resolves(false);
@@ -224,7 +222,6 @@ describe("security controller", () => {
     });
 
     it("should render security view with activity log when the user has a supported service and the feature flag is on", async () => {
-      const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "supportActivityLog").returns(true);
       sandbox
         .stub(allowedServicesModule, "hasAllowedActivityLogServices")
