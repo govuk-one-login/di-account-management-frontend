@@ -4,7 +4,6 @@ import {
   activityLogItemsPerPage,
   getOIDCClientId,
   reportSuspiciousActivity,
-  supportReportingForm,
 } from "../../config";
 import {
   PATH_DATA,
@@ -87,7 +86,6 @@ export async function activityHistoryGet(
       changePasswordLink: PATH_DATA.SECURITY.url,
       contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
       homeClientId: getOIDCClientId(),
-      supportReportingForm: supportReportingForm(),
       currentLngWelsh: req.i18n?.language === "cy",
       hasEnglishOnlyServices,
     });

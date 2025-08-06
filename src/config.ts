@@ -181,16 +181,6 @@ export function supportActivityLog(): boolean {
   return process.env.SUPPORT_ACTIVITY_LOG === "1";
 }
 
-// reportSuspiciousActivity() turns the OLH-owned RSA journey on/off
-// supportReportingForm() turns the link into the auth-owned RSA journey on/off
-// reportSuspiciousActivity() and supportReportingForm() should never be on at the same time
-export function supportReportingForm(): boolean {
-  return (
-    process.env.REPORT_SUSPICIOUS_ACTIVITY === "0" &&
-    process.env.SUPPORT_REPORTING_FORM === "1"
-  );
-}
-
 export function reportSuspiciousActivity(): boolean {
   return process.env.REPORT_SUSPICIOUS_ACTIVITY === "1";
 }

@@ -166,7 +166,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
-      SUPPORTREPORTINGFORM: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
@@ -198,7 +197,6 @@ Mappings:
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
-      SUPPORTREPORTINGFORM: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
@@ -232,7 +230,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
-      SUPPORTREPORTINGFORM: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
@@ -265,7 +262,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
-      SUPPORTREPORTINGFORM: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
@@ -298,7 +294,6 @@ Mappings:
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.publishing.service.gov.uk"
       SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
-      SUPPORTREPORTINGFORM: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
@@ -657,13 +652,6 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   REPORTSUSPICIOUSACTIVITY,
-                ]
-            - Name: "SUPPORT_REPORTING_FORM"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTREPORTINGFORM,
                 ]
             - Name: "BASE_URL"
               Value:

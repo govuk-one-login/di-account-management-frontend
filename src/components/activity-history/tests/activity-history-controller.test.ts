@@ -78,7 +78,6 @@ describe("Activity history controller", () => {
             changePasswordLink: PATH_DATA.SECURITY.url,
             contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
             homeClientId: clientId,
-            supportReportingForm: false,
             hasEnglishOnlyServices: false,
           }
         );
@@ -154,7 +153,6 @@ describe("Activity history controller", () => {
             changePasswordLink: PATH_DATA.SECURITY.url,
             contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
             homeClientId: clientId,
-            supportReportingForm: false,
             hasEnglishOnlyServices: true,
           }
         );
