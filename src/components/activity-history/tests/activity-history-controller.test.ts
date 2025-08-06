@@ -38,7 +38,6 @@ describe("Activity history controller", () => {
         .callsFake(() => {
           return Promise.resolve([]);
         });
-
       const clientId = "clientId";
       sandbox.stub(config, "getOIDCClientId").callsFake(() => {
         return clientId;
