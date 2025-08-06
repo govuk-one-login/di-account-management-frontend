@@ -20,7 +20,6 @@ import {
   isLocalEnv,
   getSessionExpiry,
   getSessionSecret,
-  supportActivityLog,
   supportBrandRefresh,
   supportSearchableList,
   supportWebchatContact,
@@ -260,10 +259,8 @@ async function createApp(): Promise<express.Application> {
   app.use(temporarilySuspendedRouter);
   app.use(permanentlySuspendedRouter);
 
-  if (supportActivityLog()) {
-    app.use(activityHistoryRouter);
-    app.use(reportSuspiciousActivityRouter);
-  }
+  app.use(activityHistoryRouter);
+  app.use(reportSuspiciousActivityRouter);
 
   app.use(contactRouter);
   app.use(chooseBackupRouter);

@@ -48,7 +48,6 @@ jobs:
           echo "BASE_URL=localhost:6001" >> .env
           echo "SERVICE_STORE_TABLE_NAME=user_services" >> .env
           echo "SESSION_STORE_TABLE_NAME=account-mgmt-frontend-SessionStore" >> .env
-          echo "SUPPORT_ACTIVITY_LOG=1" >> .env
           echo "REPORT_SUSPICIOUS_ACTIVITY=1" >> .env
           echo "ACTIVITY_LOG_STORE_TABLE_NAME=activity_log" >> .env
           echo "WEBCHAT_SOURCE_URL=https://dev-chat-loader-hgsgds.smartagent.app" >> .env

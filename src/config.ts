@@ -177,10 +177,6 @@ function getProtocol(): string {
 
 export const activityLogItemsPerPage = 10;
 
-export function supportActivityLog(): boolean {
-  return process.env.SUPPORT_ACTIVITY_LOG === "1";
-}
-
 export function reportSuspiciousActivity(): boolean {
   return process.env.REPORT_SUSPICIOUS_ACTIVITY === "1";
 }

@@ -37,11 +37,6 @@ describe("Integration:: Activity history", () => {
       });
   });
 
-  it("should not return Activity History page if feature flag is off", async () => {
-    const app = await appWithMiddlewareSetup([], { hideActivityLog: true });
-    await request(app).get(url).expect(404);
-  });
-
   it("should never show link to external reporting form when OLH report suspicious activity journey is enabled", async () => {
     const app = await appWithMiddlewareSetup(
       [
@@ -98,7 +93,6 @@ describe("Integration:: Activity history", () => {
 
   it("should redirect if the user does not have allowed services on the list", async () => {
     const app = await appWithMiddlewareSetup([], {
-      hideActivityLog: false,
       hasAllowedActivityLogServices: false,
     });
     const response = await request(app).get(url);
@@ -264,7 +258,6 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const presentActivityHistory = require("../../../utils/present-activity-history");
   const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
-  const showActivityLog = !config?.hideActivityLog;
   const reportSuspiciousActivity =
     !config?.reportSuspiciousActivityJourneyDisabled;
   const language = config?.language ?? "en";
@@ -317,10 +310,6 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
     .callsFake(function () {
       return activity;
     });
-
-  sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-    return showActivityLog;
-  });
 
   sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
     return reportSuspiciousActivity;
