@@ -75,7 +75,6 @@ jobs:
           echo "SUPPORT_CHANGE_MFA=1" >> .env
           echo "DT_RUM_URL=" >> .env
           echo "MISSION_LAB_WEBSOCKET_ADDR=wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com" >> .env
-          echo "BRAND_REFRESH_ENABLED=1" >> .env
           echo "FINGERPRINT_COOKIE_DOMAIN=localhost" >> .env
           echo "SUPPORT_GLOBAL_LOGOUT=1" >> .env
           npm run build

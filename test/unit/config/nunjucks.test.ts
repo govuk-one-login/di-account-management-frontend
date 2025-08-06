@@ -105,14 +105,7 @@ describe("configureNunjucks", () => {
   });
 
   describe("rebrand flag", () => {
-    it("should return false when environment variable false", () => {
-      process.env.BRAND_REFRESH_ENABLED = "0";
-      nunjucksEnv = configureNunjucks(app, ["./views"]);
-      expect(nunjucksEnv.getGlobal("govukRebrand")).to.equal(false);
-    });
-
-    it("should return true when environment variable true", () => {
-      process.env.BRAND_REFRESH_ENABLED = "1";
+    it("should return true", () => {
       nunjucksEnv = configureNunjucks(app, ["./views"]);
       expect(nunjucksEnv.getGlobal("govukRebrand")).to.equal(true);
     });

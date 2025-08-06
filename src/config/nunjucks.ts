@@ -5,7 +5,6 @@ import i18next, { TFunction } from "i18next";
 import { EXTERNAL_URLS, LOCALE, PATH_DATA } from "../app.constants";
 import addLanguageParam from "@govuk-one-login/frontend-language-toggle";
 import { safeTranslate } from "../utils/safeTranslate";
-import { supportBrandRefresh } from "../config";
 
 export function configureNunjucks(
   app: express.Application,
@@ -31,7 +30,7 @@ export function configureNunjucks(
   );
 
   nunjucksEnv.addGlobal("addLanguageParam", addLanguageParam);
-  nunjucksEnv.addGlobal("govukRebrand", supportBrandRefresh());
+  nunjucksEnv.addGlobal("govukRebrand", true);
 
   nunjucksEnv.addFilter("getPath", function (route: string) {
     if (!PATH_DATA[route]) {
