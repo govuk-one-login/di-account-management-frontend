@@ -71,7 +71,6 @@ jobs:
           echo "SUPPORT_ADD_BACKUP_MFA=1" >> .env
           echo "SUPPORT_METHOD_MANAGEMENT=1" >> .env
           echo "ACCESSIBILITY_STATEMENT_URL=https://signin.account.gov.uk/accessibility-statement" >> .env
-          echo "SUPPORT_CHANGE_MFA=1" >> .env
           echo "DT_RUM_URL=" >> .env
           echo "MISSION_LAB_WEBSOCKET_ADDR=wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com" >> .env
           echo "FINGERPRINT_COOKIE_DOMAIN=localhost" >> .env
