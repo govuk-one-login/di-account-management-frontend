@@ -68,7 +68,6 @@ jobs:
           echo "GOOGLE_ANALYTICS_4_GTM_CONTAINER_ID=GTM-KD86CMZ" >> .env
           echo "GA4_ENABLED=true" >> .env
           echo "SELECT_TRACKING_ENABLED=true" >> .env
-          echo "SUPPORT_METHOD_MANAGEMENT=1" >> .env
           echo "ACCESSIBILITY_STATEMENT_URL=https://signin.account.gov.uk/accessibility-statement" >> .env
           echo "DT_RUM_URL=" >> .env
           echo "MISSION_LAB_WEBSOCKET_ADDR=wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com" >> .env
