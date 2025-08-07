@@ -87,6 +87,7 @@ import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
 import { metricsMiddleware } from "./middleware/metrics-middlware";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
+import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -154,20 +155,7 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
-
-  app.use((req, res, next) => {
-    // Here we monkey-patch res.redirect to defer calling it until after the session has been saved.
-    // This prevents race conditions where the user follows a redirect response and the
-    // subsequent request reads session before the changes to the session made in the previous
-    // request have been saved.
-    const originalRedirect = res.redirect;
-    res.redirect = (...args: [number, string] | [string]) => {
-      req.session.save(() => {
-        originalRedirect.call(res, ...args);
-      });
-    };
-    next();
-  });
+  app.use(monkeyPatchRedirectToSaveSessionMiddleware);
 
   app.locals.sessionStore = sessionStore;
 
