@@ -48,16 +48,12 @@ jobs:
           echo "BASE_URL=localhost:6001" >> .env
           echo "SERVICE_STORE_TABLE_NAME=user_services" >> .env
           echo "SESSION_STORE_TABLE_NAME=account-mgmt-frontend-SessionStore" >> .env
-          echo "SUPPORT_ACTIVITY_LOG=1" >> .env
-          echo "SUPPORT_REPORTING_FORM=1" >> .env
           echo "REPORT_SUSPICIOUS_ACTIVITY=1" >> .env
           echo "ACTIVITY_LOG_STORE_TABLE_NAME=activity_log" >> .env
-          echo "SUPPORT_TRIAGE_PAGE=1" >> .env
           echo "WEBCHAT_SOURCE_URL=https://dev-chat-loader-hgsgds.smartagent.app" >> .env
           echo "SUPPORT_WEBCHAT_CONTACT=1" >> .env
           echo "SUPPORT_PHONE_CONTACT=1" >> .env
           echo "SUPPORT_SEARCHABLE_LIST=1" >> .env
-          echo "SHOW_CONTACT_GUIDANCE=1" >> .env
           echo "SHOW_CONTACT_EMERGENCY_MESSAGE=0" >> .env
           echo "CONTACT_EMAIL_SERVICE_URL=https://signin.staging.account.gov.uk/contact-us-from-triage-page" >> .env
           echo "AUDIT_QUEUE_URL=http://localhost:4566/000000000000/audit-queue" >> .env
@@ -79,9 +75,6 @@ jobs:
           echo "SUPPORT_CHANGE_MFA=1" >> .env
           echo "DT_RUM_URL=" >> .env
           echo "MISSION_LAB_WEBSOCKET_ADDR=wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com" >> .env
-          echo "DEVICE_INTELLIGENCE_TOGGLE=1" >> .env
-          echo "BRAND_REFRESH_ENABLED=1" >> .env
-          echo "ENABLE_CHANGE_ON_INTERVENTION=1" >> .env
           echo "FINGERPRINT_COOKIE_DOMAIN=localhost" >> .env
           echo "SUPPORT_GLOBAL_LOGOUT=1" >> .env
           npm run build

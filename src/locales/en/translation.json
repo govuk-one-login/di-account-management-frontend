@@ -335,7 +335,6 @@
       "securityNoticeTitle": "If there's activity you do not recognise",
       "securityNoticeContent1": "You should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login safe.",
       "securityNoticeContent2": "You can also <a target='_blank' href='[reportActivityLink]' class='govuk-link'>report it to the GOV.UK One Login team (opens in new tab)</a>. The team reviews and acts on these reports but you will not get a personalised reply.",
-      "securityNoticeContentAlt": "If there's activity you do not recognise, you should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login safe.",
       "noWelshNotice": "If a service you’ve visited is not available in Welsh it will appear here in English."
     },
     "reportSuspiciousActivity": {

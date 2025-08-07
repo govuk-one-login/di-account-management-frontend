@@ -45,12 +45,10 @@ describe("enter password controller", () => {
       status: sandbox.fake(),
       locals: {},
     };
-    process.env.ENABLE_CHANGE_ON_INTERVENTION = "1";
     sandbox.replace(oidcModule, "refreshToken", async () => {});
   });
 
   afterEach(() => {
-    process.env.ENABLE_CHANGE_ON_INTERVENTION = "0";
     sandbox.restore();
   });
 

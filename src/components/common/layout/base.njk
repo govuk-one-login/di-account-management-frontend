@@ -172,13 +172,11 @@
       });
     }
   </script>
-  {% if supportDeviceIntelligence %}
   <script type="module" src="{{'FINGERPRINT' | getPath }}/index.js" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}></script>
-    <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
-      import { setFingerprintCookie } from "{{'FINGERPRINT' | getPath }}/index.js";
-      setFingerprintCookie("{{ fingerprintCookieDomain }}")
-    </script>
-  {% endif %}
+  <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
+    import { setFingerprintCookie } from "{{'FINGERPRINT' | getPath }}/index.js";
+    setFingerprintCookie("{{ fingerprintCookieDomain }}")
+  </script>
 
   {% if opl %}
     {{ ga4OnPageLoad({

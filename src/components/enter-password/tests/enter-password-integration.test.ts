@@ -39,9 +39,7 @@ describe("Integration::enter password", () => {
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
     const monkeyPatchRedirectToSaveSessionMiddleware = require("../../../middleware/monkey-patch-redirect-to-save-session-middleware");
-    const config = require("../../../config");
     sandbox = sinon.createSandbox();
-    sandbox.stub(config, "supportChangeOnIntervention").callsFake(() => true);
     sandbox
       .stub(sessionMiddleware, "requiresAuthMiddleware")
       .callsFake(function (req: any, res: any, next: any): void {
