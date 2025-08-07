@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { supportActivityLog, supportGlobalLogout } from "../../config";
+import { supportGlobalLogout } from "../../config";
 import { PATH_DATA } from "../../app.constants";
 import { hasAllowedActivityLogServices } from "../../middleware/check-allowed-services-list";
 import { getLastNDigits } from "../../utils/phone-number";
@@ -82,8 +82,6 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
   const { email } = req.session.user;
   const enterPasswordUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=security&edit=true`;
 
-  const supportActivityLogFlag = supportActivityLog();
-
   const hasActivityLog = await hasAllowedActivityLogServices(req, res);
 
   const mfaMethods = Array.isArray(req.session.mfaMethods)
@@ -103,7 +101,7 @@ export async function securityGet(req: Request, res: Response): Promise<void> {
 
   res.render("security/index.njk", {
     email,
-    supportActivityLog: supportActivityLogFlag && hasActivityLog,
+    hasActivityLog,
     activityLogUrl: PATH_DATA.SIGN_IN_HISTORY.url,
     enterPasswordUrl,
     mfaMethods,

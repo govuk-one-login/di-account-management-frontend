@@ -13,7 +13,6 @@ import {
   getNextState,
   UserJourney,
 } from "../../utils/state-machine";
-import { supportChangeOnIntervention } from "../../config";
 import { handleLogout } from "../../utils/logout";
 import { getRequestConfigFromExpress } from "../../utils/http";
 import {
@@ -230,7 +229,7 @@ export function enterPasswordPost(
       return;
     }
 
-    if (supportChangeOnIntervention() && response.intervention) {
+    if (response.intervention) {
       await handleIntervention(response.intervention, req, res, requestType);
       return;
     }

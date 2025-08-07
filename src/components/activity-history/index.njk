@@ -30,14 +30,10 @@
         {% if hasEnglishOnlyServices and currentLngWelsh %}<p class="govuk-body" data-test-id="no-welsh-notice">{{ 'pages.activityHistory.noWelshNotice' | translate }}</p>{% endif %}
 
         {%- if not reportSuspiciousActivity -%}
-          {%- if supportReportingForm -%}
           {{ govukDetails({ 
             summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
             html: securityNoticeHtml
           }) }}
-          {%- else -%}
-          <p class="govuk-body" data-test-id="content-for-reporting-form-disabled">{{ 'pages.activityHistory.securityNoticeContentAlt' | translate | safe | replace("[changePasswordLink]", changePasswordLink) }}</p>
-          {%- endif -%}
         {% else %}
         <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
         {% endif %}

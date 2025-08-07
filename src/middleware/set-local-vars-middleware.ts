@@ -10,7 +10,6 @@ import {
   selectContentTrackingEnabled,
   getDtRumUrl,
   missionLabsWebSocketAddress,
-  supportDeviceIntelligence,
   isProd,
 } from "../config";
 import { generateNonce } from "../utils/strings";
@@ -38,7 +37,6 @@ export async function setLocalVarsMiddleware(
   res.locals.isGa4Enabled = googleAnalytics4Enabled();
   res.locals.isSelectContentTrackingEnabled = selectContentTrackingEnabled();
   res.locals.currentUrl = getCurrentUrl(req);
-  res.locals.supportDeviceIntelligence = supportDeviceIntelligence();
   res.locals.isProd = isProd();
 
   const sessionIds = getSessionIdsFrom(req);

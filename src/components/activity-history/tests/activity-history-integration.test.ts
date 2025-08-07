@@ -37,11 +37,6 @@ describe("Integration:: Activity history", () => {
       });
   });
 
-  it("should not return Activity History page if feature flag is off", async () => {
-    const app = await appWithMiddlewareSetup([], { hideActivityLog: true });
-    await request(app).get(url).expect(404);
-  });
-
   it("should never show link to external reporting form when OLH report suspicious activity journey is enabled", async () => {
     const app = await appWithMiddlewareSetup(
       [
@@ -63,9 +58,6 @@ describe("Integration:: Activity history", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).to.equal(200);
-        expect(
-          $(testComponent("content-for-reporting-form-disabled")).length
-        ).eq(0);
         expect(
           $(testComponent("content-for-reporting-form-enabled")).length
         ).eq(0);
@@ -96,46 +88,11 @@ describe("Integration:: Activity history", () => {
         expect(
           $(testComponent("content-for-reporting-form-enabled")).length
         ).eq(1);
-        expect(
-          $(testComponent("content-for-reporting-form-disabled")).length
-        ).eq(0);
-      });
-  });
-
-  it("should show the correct content when reporting form is disabled", async () => {
-    const app = await appWithMiddlewareSetup(
-      [
-        {
-          event_type: "AUTH_AUTH_CODE_ISSUED",
-          session_id: "asdf",
-          user_id: "string",
-          timestamp: "1689210000",
-          truncated: false,
-          client_id: "vehicleOperatorLicense",
-        },
-      ],
-      {
-        hideReportingForm: true,
-        reportSuspiciousActivityJourneyDisabled: true,
-      }
-    );
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect(
-          $(testComponent("content-for-reporting-form-disabled")).length
-        ).eq(1);
-        expect(
-          $(testComponent("content-for-reporting-form-enabled")).length
-        ).eq(0);
       });
   });
 
   it("should redirect if the user does not have allowed services on the list", async () => {
     const app = await appWithMiddlewareSetup([], {
-      hideActivityLog: false,
       hasAllowedActivityLogServices: false,
     });
     const response = await request(app).get(url);
@@ -301,8 +258,6 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const presentActivityHistory = require("../../../utils/present-activity-history");
   const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
   const sandbox = sinon.createSandbox();
-  const showActivityLog = !config?.hideActivityLog;
-  const supportReportingForm = !config?.hideReportingForm;
   const reportSuspiciousActivity =
     !config?.reportSuspiciousActivityJourneyDisabled;
   const language = config?.language ?? "en";
@@ -355,14 +310,6 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
     .callsFake(function () {
       return activity;
     });
-
-  sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-    return showActivityLog;
-  });
-
-  sandbox.stub(configFuncs, "supportReportingForm").callsFake(() => {
-    return supportReportingForm;
-  });
 
   sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
     return reportSuspiciousActivity;

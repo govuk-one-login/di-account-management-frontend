@@ -20,12 +20,8 @@ import {
   isLocalEnv,
   getSessionExpiry,
   getSessionSecret,
-  supportActivityLog,
-  supportBrandRefresh,
   supportSearchableList,
-  supportTriagePage,
   supportWebchatContact,
-  supportChangeOnIntervention,
   supportGlobalLogout,
 } from "./config";
 import { logErrorMiddleware } from "./middleware/log-error-middleware";
@@ -116,13 +112,6 @@ async function createApp(): Promise<express.Application> {
     express.static(
       path.resolve("node_modules/govuk-frontend/dist/govuk/assets")
     )
-  );
-  app.get("/favicon.ico", (req, res) =>
-    res.sendFile("favicon.ico", {
-      root: supportBrandRefresh()
-        ? "node_modules/govuk-frontend/dist/govuk/assets/rebrand/images"
-        : "node_modules/govuk-frontend/dist/govuk/assets/images",
-    })
   );
 
   app.use(
@@ -259,19 +248,13 @@ async function createApp(): Promise<express.Application> {
     app.use(globalLogoutRouter);
   }
 
-  if (supportChangeOnIntervention()) {
-    app.use(temporarilySuspendedRouter);
-    app.use(permanentlySuspendedRouter);
-  }
+  app.use(temporarilySuspendedRouter);
+  app.use(permanentlySuspendedRouter);
 
-  if (supportActivityLog()) {
-    app.use(activityHistoryRouter);
-    app.use(reportSuspiciousActivityRouter);
-  }
-  if (supportTriagePage()) {
-    app.use(contactRouter);
-  }
+  app.use(activityHistoryRouter);
+  app.use(reportSuspiciousActivityRouter);
 
+  app.use(contactRouter);
   app.use(chooseBackupRouter);
   app.use(addBackupAppRouter);
   app.use(addBackupSmsRouter);

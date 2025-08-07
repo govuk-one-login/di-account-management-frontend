@@ -80,29 +80,27 @@
 {% block pageContent %}
 <h1 class="govuk-heading-xl">{{'pages.contact.header' | translate}}</h1>
 
-{% if not showContactGuidance and not contactWebchatEnabled and not contactPhoneEnabled %}
+{% if not contactWebchatEnabled and not contactPhoneEnabled %}
   {# if everything is disabled, only show the contact form option #}
   {{ emailBlock | safe }}
 {% else %}
-  {% if showContactGuidance %} 
-    <section>
-      {% set section1Paragraphs =  'pages.contact.section1.paragraphs' | translate({ returnObjects: true }) %}
-      {% set section1Links =  'pages.contact.section1.links' | translate({ returnObjects: true }) %}
-      <h2 class="govuk-heading-l">{{'pages.contact.section1.heading' | translate}}</h2>
-      {% for paragraph in section1Paragraphs %}
-        <p class="govuk-body">{{ paragraph }}</p>
+  <section>
+    {% set section1Paragraphs =  'pages.contact.section1.paragraphs' | translate({ returnObjects: true }) %}
+    {% set section1Links =  'pages.contact.section1.links' | translate({ returnObjects: true }) %}
+    <h2 class="govuk-heading-l">{{'pages.contact.section1.heading' | translate}}</h2>
+    {% for paragraph in section1Paragraphs %}
+      <p class="govuk-body">{{ paragraph }}</p>
+    {% endfor %}
+    {% if section1Links.length %}
+    <ul class="govuk-list govuk-list--bullet">
+      {% for link in section1Links %}
+        <li><a class="govuk-link" href="{{link["href"]}}">{{link["text"]}}</a></li>
       {% endfor %}
-      {% if section1Links.length %}
-      <ul class="govuk-list govuk-list--bullet">
-        {% for link in section1Links %}
-          <li><a class="govuk-link" href="{{link["href"]}}">{{link["text"]}}</a></li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-      <p class="govuk-body">{{ 'pages.contact.section1.guidance-for-helpers' | translate | safe }}</p>
-    </section>
-    <hr class="govuk-section-break govuk-section-break--m">
-  {% endif %}
+    </ul>
+    {% endif %}
+    <p class="govuk-body">{{ 'pages.contact.section1.guidance-for-helpers' | translate | safe }}</p>
+  </section>
+  <hr class="govuk-section-break govuk-section-break--m">
 
   {% if contactPhoneEnabled and contactWebchatEnabled %}
     <section>

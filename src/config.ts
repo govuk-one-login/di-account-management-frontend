@@ -177,30 +177,12 @@ function getProtocol(): string {
 
 export const activityLogItemsPerPage = 10;
 
-export function supportActivityLog(): boolean {
-  return process.env.SUPPORT_ACTIVITY_LOG === "1";
-}
-
-// reportSuspiciousActivity() turns the OLH-owned RSA journey on/off
-// supportReportingForm() turns the link into the auth-owned RSA journey on/off
-// reportSuspiciousActivity() and supportReportingForm() should never be on at the same time
-export function supportReportingForm(): boolean {
-  return (
-    process.env.REPORT_SUSPICIOUS_ACTIVITY === "0" &&
-    process.env.SUPPORT_REPORTING_FORM === "1"
-  );
-}
-
 export function reportSuspiciousActivity(): boolean {
   return process.env.REPORT_SUSPICIOUS_ACTIVITY === "1";
 }
 
 export function getDynamoActivityLogStoreTableName(): string {
   return process.env.ACTIVITY_LOG_STORE_TABLE_NAME;
-}
-
-export function supportTriagePage(): boolean {
-  return process.env.SUPPORT_TRIAGE_PAGE === "1";
 }
 
 export function getWebchatUrl(): string {
@@ -213,10 +195,6 @@ export function supportWebchatContact(): boolean {
 
 export function supportPhoneContact(): boolean {
   return process.env.SUPPORT_PHONE_CONTACT === "1";
-}
-
-export function showContactGuidance(): boolean {
-  return process.env.SHOW_CONTACT_GUIDANCE === "1";
 }
 
 export function showContactEmergencyMessage(): boolean {
@@ -253,18 +231,6 @@ export function supportSearchableList(): boolean {
 
 export function getDtRumUrl(): string {
   return process.env.DT_RUM_URL;
-}
-
-export function supportDeviceIntelligence(): boolean {
-  return process.env.DEVICE_INTELLIGENCE_TOGGLE === "1";
-}
-
-export function supportBrandRefresh(): boolean {
-  return process.env.BRAND_REFRESH_ENABLED === "1";
-}
-
-export function supportChangeOnIntervention(): boolean {
-  return process.env.ENABLE_CHANGE_ON_INTERVENTION === "1";
 }
 
 export function supportGlobalLogout(): boolean {

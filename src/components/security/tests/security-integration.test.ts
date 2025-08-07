@@ -77,8 +77,8 @@ describe("Integration:: security", () => {
       });
   });
 
-  it("should display link to activity log when supportActivityLog is true", async () => {
-    const app = await appWithMiddlewareSetup({ supportActivityLog: true });
+  it("should display link to activity log", async () => {
+    const app = await appWithMiddlewareSetup();
     await request(app)
       .get(url)
       .expect(function (res) {
@@ -88,22 +88,10 @@ describe("Integration:: security", () => {
       });
   });
 
-  it("should not display link to activity log when supportActivityLog is true and hasAllowedActivityLogServices is false", async () => {
+  it("should not display link to activity log when hasAllowedActivityLogServices is false", async () => {
     const app = await appWithMiddlewareSetup({
-      supportActivityLog: true,
       hasAllowedActivityLogServices: false,
     });
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("activity-log-section")).length).to.equal(0);
-      });
-  });
-
-  it("should not display link to activity log when supportActivityLog is false", async () => {
-    const app = await appWithMiddlewareSetup();
     await request(app)
       .get(url)
       .expect(function (res) {
@@ -181,10 +169,6 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
 
   sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
     return Promise.resolve({});
-  });
-
-  sandbox.stub(configFuncs, "supportActivityLog").callsFake(() => {
-    return config.supportActivityLog;
   });
 
   sandbox.stub(configFuncs, "supportGlobalLogout").callsFake(() => {

@@ -164,18 +164,14 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
-      SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
-      SUPPORTREPORTINGFORM: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
       LOGSLEVEL: "debug"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://dev-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SHOWCONTACTGUIDANCE: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       SUPPORTSEARCHABLELIST: "1"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
@@ -188,9 +184,6 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: ""
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
-      DEVICEINTELLIGENCETOGGLE: "1"
-      BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
     build:
@@ -201,18 +194,14 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
-      SUPPORTACTIVITYLOG: "1"
-      SUPPORTREPORTINGFORM: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
       LOGSLEVEL: "debug"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "0"
-      SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
@@ -225,9 +214,6 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: ""
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
-      DEVICEINTELLIGENCETOGGLE: "1"
-      BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
     staging:
@@ -238,18 +224,14 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.staging.publishing.service.gov.uk"
-      SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
-      SUPPORTREPORTINGFORM: "1"
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
       LOGSLEVEL: "info"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
@@ -262,9 +244,6 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/e87dc9cd0e7082fb_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
-      DEVICEINTELLIGENCETOGGLE: "1"
-      BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
     integration:
@@ -275,18 +254,14 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.integration.publishing.service.gov.uk"
-      SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
-      SUPPORTREPORTINGFORM: "1"
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
       LOGSLEVEL: "info"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://z7lornzyy5-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration/v1"
@@ -299,9 +274,6 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/416cd438acc3a6f_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
-      DEVICEINTELLIGENCETOGGLE: "1"
-      BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
     production:
@@ -312,18 +284,14 @@ Mappings:
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
       GOVACCOUNTSPUBLISHINGAPIURL: "https://account-api.publishing.service.gov.uk"
-      SUPPORTACTIVITYLOG: "1"
       REPORTSUSPICIOUSACTIVITY: "0"
-      SUPPORTREPORTINGFORM: "1"
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
-      SUPPORTTRIAGEPAGE: "1"
       WEBCHATSOURCEURL: "https://chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SHOWCONTACTGUIDANCE: "1"
       SUPPORTSEARCHABLELIST: "0"
       SUPPORTCLIENTREGISTRYLIBRARY: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
@@ -337,9 +305,6 @@ Mappings:
       LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf04188tda/b9835209cd235d3a_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
-      DEVICEINTELLIGENCETOGGLE: "1"
-      BRANDREFRESHENABLED: "1"
-      SUPPORTCHANGEONINTERVENTION: "1"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
 
@@ -664,26 +629,12 @@ Resources:
                     AMAPIBASEURL,
                   ],
                 ]
-            - Name: "SUPPORT_ACTIVITY_LOG"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTACTIVITYLOG,
-                ]
             - Name: "REPORT_SUSPICIOUS_ACTIVITY"
               Value:
                 !FindInMap [
                   EnvironmentVariables,
                   !Ref Environment,
                   REPORTSUSPICIOUSACTIVITY,
-                ]
-            - Name: "SUPPORT_REPORTING_FORM"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTREPORTINGFORM,
                 ]
             - Name: "BASE_URL"
               Value:
@@ -755,13 +706,6 @@ Resources:
               Value: !Ref ServiceStoreTableName
             - Name: "ACTIVITY_LOG_STORE_TABLE_NAME"
               Value: !Ref ActivityLogTableName
-            - Name: "SUPPORT_TRIAGE_PAGE"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTTRIAGEPAGE,
-                ]
             - Name: "WEBCHAT_SOURCE_URL"
               Value:
                 !FindInMap [
@@ -782,13 +726,6 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   SUPPORTPHONECONTACT,
-                ]
-            - Name: "SHOW_CONTACT_GUIDANCE"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SHOWCONTACTGUIDANCE,
                 ]
             - Name: "SHOW_CONTACT_EMERGENCY_MESSAGE"
               Value:
@@ -874,27 +811,6 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   MISSIONLABWEBSOCKETADDR,
-                ]
-            - Name: "DEVICE_INTELLIGENCE_TOGGLE"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  DEVICEINTELLIGENCETOGGLE,
-                ]
-            - Name: "BRAND_REFRESH_ENABLED"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  BRANDREFRESHENABLED,
-                ]
-            - Name: "ENABLE_CHANGE_ON_INTERVENTION"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  SUPPORTCHANGEONINTERVENTION,
                 ]
             - Name: "FINGERPRINT_COOKIE_DOMAIN"
               Value:
