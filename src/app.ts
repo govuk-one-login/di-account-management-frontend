@@ -84,6 +84,13 @@ import { readFileSync } from "node:fs";
 import { metricsMiddleware } from "./middleware/metrics-middlware";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
 import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware";
+import {
+  setBaseTranslations,
+  setFrontendUiTranslations,
+  frontendUiMiddleware,
+  frontendUiTranslationCy,
+  frontendUiTranslationEn,
+} from "@govuk-one-login/frontend-ui";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -187,8 +194,13 @@ async function createApp(): Promise<express.Application> {
       clientRegistry: {
         [getAppEnv()]: getTranslations(getAppEnv(), locale),
       },
+      FECTranslations:
+        locale === LOCALE.CY
+          ? frontendUiTranslationCy
+          : frontendUiTranslationEn,
     };
   };
+
   i18next.addResourceBundle(
     LOCALE.CY,
     "translation",
@@ -200,7 +212,11 @@ async function createApp(): Promise<express.Application> {
     getTranslationObject(LOCALE.EN)
   );
 
+  setBaseTranslations(i18next);
+  setFrontendUiTranslations(i18next);
   app.use(i18nextMiddleware.handle(i18next));
+  app.use(frontendUiMiddleware);
+
   if (supportWebchatContact()) {
     app.use(helmet(webchatHelmetConfiguration));
   } else {
