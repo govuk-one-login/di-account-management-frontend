@@ -8,8 +8,6 @@
     "warning": "Warning",
     "errorSummaryTitle": "There is a problem",
     "phaseBanner": {
-      "tag": "Beta",
-      "text": "This is a new service – your <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">feedback (opens in new tab)</a> will help us to improve it.",
       "testText": "This is a test environment."
     },
     "yes": "Yes",
@@ -18,37 +16,6 @@
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
-    "cookie": {
-      "cookieBanner": {
-        "title": "Cookies on GOV.UK One Login",
-        "heading": "Cookies on GOV.UK One Login",
-        "paragraph1": "We use some essential cookies to make this service work.",
-        "paragraph2": "We’d also like to use analytics cookies so we can understand how you use the service and make improvements.",
-        "buttonAcceptText": "Accept analytics cookies",
-        "buttonRejectText": "Reject analytics cookies",
-        "linkViewCookiesText": "View cookies",
-        "cookieBannerHideLink": "Hide this message",
-        "cookeBannerAccept": {
-          "paragraph1": "You’ve accepted additional cookies. You can ",
-          "paragraph2": " at any time."
-        },
-        "cookeBannerReject": {
-          "paragraph1": "You’ve rejected additional cookies. You can ",
-          "paragraph2": " at any time."
-        },
-        "changeCookiePreferencesLink": "change your cookie settings"
-      },
-      "cookieText": "GOV.UK uses cookies to make the site simpler.",
-      "cookieLink": "#",
-      "cookieLinkText": "Find out more about cookies"
-    },
-    "language": {
-      "english": "English",
-      "welsh": "Cymraeg (Welsh)"
-    },
-    "languageToggle": {
-      "ariaLabel": "Choose Language"
-    },
     "continue": {
       "label": "Continue"
     },
@@ -59,33 +26,6 @@
       "accountNavHomeLink": "Your services",
       "accountNavSecurityLink": "Security",
       "signOutLink": "Sign out"
-    },
-    "footer": {
-      "accessibilityStatement": {
-        "pageTitle": "Accessibility statement",
-        "linkText": "Accessibility statement"
-      },
-      "cookies": {
-        "pageTitle": "Cookie Policy",
-        "linkText": "Cookies"
-      },
-      "terms": {
-        "pageTitle": "Terms and conditions",
-        "linkText": "Terms and conditions"
-      },
-      "privacy": {
-        "pageTitle": "Privacy notice",
-        "linkText": "Privacy notice"
-      },
-      "support": {
-        "linkText": "Support (opens in new tab)"
-      },
-      "copyright": {
-        "linkText": "© Crown copyright"
-      },
-      "contentLicence": {
-        "linkText": "All content is available under the <a class=\"govuk-footer__link\" href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/\" rel=\"licence\">Open Government Licence v3.0</a>, except where otherwise stated"
-      }
     },
     "showPassword": {
       "show": "Show",
