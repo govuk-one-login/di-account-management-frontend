@@ -1,45 +1,45 @@
-{% set html %}
-<p class="govuk-body">{{ 'general.cookie.cookieBanner.paragraph1' | translate }}</p>
-<p class="govuk-body">{{ 'general.cookie.cookieBanner.paragraph2' | translate }}</p>
-{% endset %}
+  {% set html %}
+    <p class="govuk-body">{{ 'FECTranslations.cookieBanner.body1' | translate }}</p>
+    <p class="govuk-body">{{ 'FECTranslations.cookieBanner.body2' | translate }}</p>
+  {% endset %}
 
-{% set acceptHtml %}
-<p class="govuk-body">{{ 'general.cookie.cookieBanner.cookeBannerAccept.paragraph1' | translate }}
-    <a class="govuk-link" href="https://signin.account.gov.uk/cookies">{{ 'general.cookie.cookieBanner.changeCookiePreferencesLink' | translate }}</a>
-    {{ 'general.cookie.cookieBanner.cookeBannerAccept.paragraph2' | translate }}</p>
-{% endset %}
+  {% set acceptHtml %}
+    <p class="govuk-body">{{ 'FECTranslations.cookieBanner.cookieBannerAccept.body1' | translate }}
+      <a class="govuk-link" href="https://signin.account.gov.uk/cookies">{{ 'FECTranslations.cookieBanner.changeCookiePreferencesLink' | translate }}</a>
+    {{ 'FECTranslations.cookieBanner.cookieBannerAccept.body2' | translate }}</p>
+  {% endset %}
 
-{% set rejectedHtml %}
-<p class="govuk-body">{{ 'general.cookie.cookieBanner.cookeBannerReject.paragraph1' | translate }}
-    <a class="govuk-link" href="https://signin.account.gov.uk/cookies">{{ 'general.cookie.cookieBanner.changeCookiePreferencesLink' | translate }}</a>
-    {{ 'general.cookie.cookieBanner.cookeBannerReject.paragraph2' | translate }}</p>
-{% endset %}
+  {% set rejectedHtml %}
+  <p class="govuk-body">{{ 'FECTranslations.cookieBanner.cookieBannerReject.body1' | translate }}
+      <a class="govuk-link" href="https://signin.account.gov.uk/cookies">{{ 'FECTranslations.cookieBanner.changeCookiePreferencesLink' | translate }}</a>
+  {{ 'FECTranslations.cookieBanner.cookieBannerReject.body2' | translate }}</p>
+  {% endset %}
 
-{{ govukCookieBanner({
-    ariaLabel: 'general.cookie.cookieBanner.title' | translate,
+  {{ govukCookieBanner({
+    ariaLabel: 'FECTranslations.cookieBanner.ariaLabel' | translate,
     name: "gov-uk-cookie-banner",
     messages: [
         {
-            headingText: 'general.cookie.cookieBanner.heading' | translate,
+            headingText: 'FECTranslations.cookieBanner.headingText' | translate,
             html: html,
             attributes: {
             "id": "cookies-banner-main"
         },
             actions: [
             {
-                text: 'general.cookie.cookieBanner.buttonAcceptText' | translate,
+                text: 'FECTranslations.cookieBanner.acceptAdditionalCookies' | translate,
                 type: "button",
                 name: "cookiesAccept",
                 value: "accept"
             },
             {
-                text: 'general.cookie.cookieBanner.buttonRejectText' | translate,
+                text: 'FECTranslations.cookieBanner.rejectAdditionalCookies' | translate,
                 type: "button",
                 name: "cookiesReject",
                 value: "reject"
             },
             {
-                text: 'general.cookie.cookieBanner.linkViewCookiesText' | translate,
+                text: 'FECTranslations.cookieBanner.viewCookies' | translate,
                 href: authFrontEndUrl + "/cookies"
             }
         ]
@@ -51,7 +51,7 @@
         },
             actions: [
             {
-                text: 'general.cookie.cookieBanner.cookieBannerHideLink' | translate,
+                text: 'FECTranslations.cookieBanner.hideCookieMessage' | translate,
                 href: "#",
                 type: "button",
                 classes:"cookie-hide-button"
@@ -66,7 +66,7 @@
         },
             actions: [
             {
-                text: 'general.cookie.cookieBanner.cookieBannerHideLink' | translate,
+                text: 'FECTranslations.cookieBanner.hideCookieMessage' | translate,
                 href: "#",
                 type: "button",
                 classes:"cookie-hide-button"
@@ -75,4 +75,4 @@
             hidden: true
         }
     ],  hidden: true
-}) }}
+  }) }}

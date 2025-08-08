@@ -3,7 +3,7 @@ import * as nunjucks from "nunjucks";
 import { Environment } from "nunjucks";
 import i18next, { TFunction } from "i18next";
 import { EXTERNAL_URLS, LOCALE, PATH_DATA } from "../app.constants";
-import addLanguageParam from "@govuk-one-login/frontend-language-toggle";
+import { addLanguageParam } from "@govuk-one-login/frontend-ui";
 import { safeTranslate } from "../utils/safeTranslate";
 
 export function configureNunjucks(

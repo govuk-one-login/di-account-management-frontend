@@ -11,7 +11,7 @@ Then("the cookie consent banner shows", ({ page }) => {
   page.getByRole("heading", { name: "Cookies on GOV.UK One Login" });
   page.getByText("We use some essential cookies to make this service work.");
   page.getByText(
-    "We’d also like to use analytics cookies so we can understand how you use the service and make improvements."
+    "We'd like to set additional cookies so we can remember your settings, understand how people use the service and make improvements."
   );
 });
 
@@ -20,12 +20,12 @@ Then("the cookie consent banner looks as expected", async ({ page }) => {
 });
 
 Given("I click to accept cookies", async ({ page }) => {
-  await page.getByText("Accept analytics cookies").click();
+  await page.getByText("Accept additional cookies").click();
 });
 
 Then("I am shown a message confirming my acceptance", ({ page }) => {
   page.getByText(
-    "You’ve accepted additional cookies. You can change your cookie settings at any time."
+    "You've accepted additional cookies. You can change your cookie settings at any time."
   );
 });
 
@@ -37,12 +37,12 @@ Then(
 );
 
 Given("I click to reject cookies", async ({ page }) => {
-  await page.getByText("Reject analytics cookies").click();
+  await page.getByText("Reject additional cookies").click();
 });
 
 Then("I am shown a message confirming my rejection", ({ page }) => {
   page.getByText(
-    "You’ve rejected additional cookies. You can change your cookie settings at any time."
+    "You've rejected additional cookies. You can change your cookie settings at any time."
   );
 });
 

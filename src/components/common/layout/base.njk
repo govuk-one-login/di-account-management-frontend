@@ -1,8 +1,9 @@
 {% extends "govuk/template.njk" %}
 {% from "common/ga4-opl/macro.njk" import ga4OnPageLoad %}
-{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
-{% from "frontend-language-toggle/macro.njk" import languageSelect %}
+{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+{% from "frontend-ui/build/components/footer/macro.njk" import frontendUiFooter %}
+{% from "frontend-ui/build/components/language-select/macro.njk" import frontendUiLanguageSelect %}
 {%- set headerClasses -%}
 {%- if not hideAccountNavigation -%} govuk-header--with-account-navigation {%- endif -%}
 {%- if isUserLoggedIn %} govuk-header--with-signout {%- endif -%}
@@ -17,16 +18,23 @@
 {% endblock %}
 
 {% block pageTitle %}
-    {%- if error or errors %} {{ 'general.errorTitlePrefix' | translate }} - {% endif -%}
-    {%- if pageTitleName -%}
-        {{ pageTitleName }}
-        {%- if not hideTitleProductName %} - {% endif -%}
-    {% endif -%}
-    {{ 'general.serviceNameTitle' | translate if not hideTitleProductName}}
+  {%- if error or errors %} {{ 'general.errorTitlePrefix' | translate }} - {% endif -%}
+  {%- if pageTitleName -%}
+      {{ pageTitleName }}
+      {%- if not hideTitleProductName %} - {% endif -%}
+  {% endif -%}
+  {{ 'general.serviceNameTitle' | translate if not hideTitleProductName}}
 {%- endblock %}
 
 {% block bodyStart %}
-    {% include 'common/layout/banner.njk' %}
+  {% include 'common/layout/banner.njk' %}
+{% endblock %}
+
+{% block skipLink %}
+  {{ govukSkipLink({
+    text: "FECTranslations.skipLink.title" | translate,
+    href: "#main-content"
+  }) }}
 {% endblock %}
 
 {% block header %}
@@ -40,11 +48,14 @@
     <div class="govuk-width-container {{ containerClasses }}">
         {% if not hidePhaseBanner %}
           {% if isProd %}
+            {% set bannerHtml %}
+              {{ 'FECTranslations.phaseBanner.text' | translate }} <a href='{{ authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback" }}' class="govuk-link" rel="noreferrer noopener" target="_blank">{{ 'FECTranslations.phaseBanner.link' | translate | replace(".","") }}</a>.
+            {% endset %}
             {{ govukPhaseBanner({
                 tag: {
-                  text: 'general.phaseBanner.tag' | translate
+                  text: 'FECTranslations.phaseBanner.tag' | translate
                 },
-                html: 'general.phaseBanner.text' | translate | replace ("[supportUrl]", authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback")
+                html: bannerHtml
             })}}
           {% else %}
             {{ govukPhaseBanner({
@@ -56,25 +67,12 @@
             })}}
           {% endif %}
         {% endif %}
-        {% if showLanguageToggle %}
-          {{ languageSelect({
-            ariaLabel: 'general.languageToggle.ariaLabel' | translate,
+        {{ frontendUiLanguageSelect({
             url: currentUrl,
             activeLanguage: htmlLang,
-            languages: [
-            {
-              code: 'en',
-              text: 'English',
-              visuallyHidden: 'Change to English'
-            },
-            {
-              code:'cy',
-              text: 'Cymraeg',
-              visuallyHidden: 'Newid yr iaith ir Gymraeg'
-            }]
-          })
-          }}
-        {% endif %}
+            translations: 'FECTranslations.languageSelect' | translate
+          }) if showLanguageToggle
+        }}
         {% block backLinkBlock %}
         {% if backLink %}
           <a href="{{backLink}}" class="govuk-back-link js-back-link">
@@ -94,40 +92,7 @@
 {% endblock %}
 
 {% block footer %}
-    {{ govukFooter({
-        meta: {
-            items: [
-                {
-                    href: authFrontEndUrl + "/accessibility-statement",
-                    text: 'general.footer.accessibilityStatement.linkText' | translate
-                },
-                {
-                    href: authFrontEndUrl + "/cookies",
-                    text: 'general.footer.cookies.linkText' | translate
-                },
-                {
-                    href: authFrontEndUrl + "/terms-and-conditions",
-                    text: 'general.footer.terms.linkText' | translate
-                },
-                {
-                    href: "PRIVACY_NOTICE" | getExternalUrl,
-                    text: 'general.footer.privacy.linkText' | translate
-                },
-                {
-                    href: contactUsLinkUrl,
-                    attributes: {target: "_blank"},
-                    text: 'general.footer.support.linkText' | translate
-                }
-            ]
-        },
-        contentLicence: {
-          text: 'general.footer.contentLicence.linkText' | translate | safe
-        },
-        copyright: {
-          text: 'general.footer.copyright.linkText' | translate
-        }
-      })
-    }}
+  {{ frontendUiFooter({ translations: 'FECTranslations.footer' | translate({returnObjects: true}) })}}
 {% endblock %}
 
 {% block bodyEnd %}
