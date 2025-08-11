@@ -181,7 +181,6 @@ Mappings:
       GA4ENABLED: "true"
       SELECTTRACKINGENABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
-      LANGUAGETOGGLE: "1"
       DTRUMURL: ""
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
@@ -211,7 +210,6 @@ Mappings:
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
       SELECTTRACKINGENABLED: "true"
-      LANGUAGETOGGLE: "1"
       DTRUMURL: ""
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
@@ -241,7 +239,6 @@ Mappings:
       GA4ENABLED: "true"
       SELECTTRACKINGENABLED: "true"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
-      LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/e87dc9cd0e7082fb_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
@@ -271,7 +268,6 @@ Mappings:
       GA4ENABLED: "false"
       SELECTTRACKINGENABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
-      LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf01311dte/416cd438acc3a6f_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
@@ -302,7 +298,6 @@ Mappings:
       GA4ENABLED: "true"
       SELECTTRACKINGENABLED: "false"
       ACCESSIBILITYSTATEMENTURL: "https://signin.account.gov.uk/accessibility-statement"
-      LANGUAGETOGGLE: "1"
       DTRUMURL: "https://js-cdn.dynatrace.com/jstag/17177a07246/bf04188tda/b9835209cd235d3a_complete.js"
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
@@ -888,13 +883,6 @@ Resources:
                   EnvironmentVariables,
                   !Ref Environment,
                   ACCESSIBILITYSTATEMENTURL,
-                ]
-            - Name: "LANGUAGE_TOGGLE"
-              Value:
-                !FindInMap [
-                  EnvironmentVariables,
-                  !Ref Environment,
-                  LANGUAGETOGGLE,
                 ]
             - Name: "DT_RUM_URL"
               Value:
