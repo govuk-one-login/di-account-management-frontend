@@ -83,6 +83,7 @@ import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
 import { metricsMiddleware } from "./middleware/metrics-middlware";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
+import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -92,6 +93,7 @@ const APP_VIEWS = [
 
 async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
+
   const isDeployedEnvironment = !isLocalEnv();
   app.use(metricsMiddleware());
   app.enable("trust proxy");
@@ -142,6 +144,7 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
+  app.use(monkeyPatchRedirectToSaveSessionMiddleware);
 
   app.locals.sessionStore = sessionStore;
 
