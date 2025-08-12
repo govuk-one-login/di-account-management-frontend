@@ -11,9 +11,13 @@ export function monkeyPatchRedirectToSaveSessionMiddleware(
   // request have been saved.
   const originalRedirect = res.redirect;
   res.redirect = (...args: [number, string] | [string]) => {
-    req.session.save(() => {
+    if (req.session) {
+      req.session.save(() => {
+        originalRedirect.call(res, ...args);
+      });
+    } else {
       originalRedirect.call(res, ...args);
-    });
+    }
   };
   next();
 }

@@ -93,5 +93,20 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
 
       expect(originalRedirect).to.have.been.calledOnceWith("/test-url");
     });
+
+    it("should call original redirect immediately when session is not available", () => {
+      req.session = undefined;
+
+      monkeyPatchRedirectToSaveSessionMiddleware(
+        req as Request,
+        res as Response,
+        next
+      );
+
+      res.redirect!("/test-url");
+
+      expect(sessionSave).to.not.have.been.called;
+      expect(originalRedirect).to.have.been.calledOnceWith("/test-url");
+    });
   });
 });
