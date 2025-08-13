@@ -288,7 +288,7 @@ Mappings:
       WEBCHATSOURCEURL: "https://chat-loader.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
-      SUPPORTSEARCHABLELIST: "0"
+      SUPPORTSEARCHABLELIST: "1"
       SUPPORTCLIENTREGISTRYLIBRARY: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       METHODMANAGEMENTBASEURL: "https://63qq2dsjo5-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production/v1"
