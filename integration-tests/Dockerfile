@@ -1,4 +1,4 @@
-FROM node:20.19.4-bookworm@sha256:2c071012e93673d595e1399564c4a48a70a5c0a0acd7db8211d5e6f6316b431a
+FROM node:20.19.4-bookworm@sha256:5fe79eb196c563d65d0db21fa5cd5e170ef0869541ddc89808d7431a5a4498e6
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
