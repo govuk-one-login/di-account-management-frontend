@@ -22,7 +22,7 @@ If using Docker Desktop on Mac or Windows you will need to `Enable host networki
 
 Being connected to the VPN may make some webchat related tests fail.
 
-When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_TARGET` to one of `dev | build | staging | integration | production` to run tests against the corresponding deployment instead.
+When running tests locally they are run against `http://localhost:6001` by default. Change the value of the environment variable `TEST_ENVIRONMENT` to one of `dev | build | staging | integration | production` to run tests against the corresponding deployment instead.
 
 ### Steps to run the tests:
 
@@ -96,12 +96,12 @@ Tests can be tagged using the following custom tags to alter their behaviour:
 
 - `@postDeploy` - will run in post-deployment environment
 - `@skipPreDeploy` - will not run in pre-deployment environment
-- `@skipMobile` - will not against the mobile viewport
-- `@skipDesktop` - will not against the desktop viewport
-- `@skip-{target} e.g. @skip-local, @skip-build, @skip-staging` - will not run when the test target matches `{target}`
+- `@skipMobile` - will not run against the mobile viewport
+- `@skipDesktop` - will not run against the desktop viewport
+- `@skipTarget-{target} e.g. @skipTarget-local, @skipTarget-build, @skipTarget-staging` - will not run when the test target matches `{target}`
 - `@failMobile` - is expected to fail when run against the mobile viewport
 - `@failDesktop` - is expected to fail when run against the desktop viewport
-- `@fail-{target} e.g. @skip-local, @skip-build, @skip-staging` - is expected to fail when the test target matches `{target}`
+- `@failTarget-{target} e.g. @failTarget-local, @failTarget-build, @failTarget-staging` - is expected to fail when the test target matches `{target}`
 - `@noJs` - will run against a browser witb JavaScript disabled
 
 There are also tags made available by Playwright BDD. See https://vitalets.github.io/playwright-bdd/#/writing-features/special-tags.
