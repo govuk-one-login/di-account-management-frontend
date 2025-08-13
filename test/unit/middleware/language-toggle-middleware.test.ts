@@ -28,6 +28,9 @@ describe("lang middleware", () => {
       languageToggleMiddleware(req as Request, res as Response, next);
 
       expect(res.locals).to.have.property("htmlLang");
+      expect(res.locals)
+        .to.have.property("showLanguageToggle")
+        .that.equals(process.env.LANGUAGE_TOGGLE === "1");
       expect(next).to.have.been.called;
     });
 
@@ -37,6 +40,7 @@ describe("lang middleware", () => {
       languageToggleMiddleware(req as Request, res as Response, next);
 
       expect(res.locals).to.not.have.property("htmlLang");
+      expect(res.locals).to.not.have.property("showLanguageToggle");
       expect(next).to.have.been.called;
     });
   });

@@ -56,23 +56,25 @@
             })}}
           {% endif %}
         {% endif %}
-        {{ languageSelect({
-          ariaLabel: 'general.languageToggle.ariaLabel' | translate,
-          url: currentUrl,
-          activeLanguage: htmlLang,
-          languages: [
-          {
-            code: 'en',
-            text: 'English',
-            visuallyHidden: 'Change to English'
-          },
-          {
-            code:'cy',
-            text: 'Cymraeg',
-            visuallyHidden: 'Newid yr iaith ir Gymraeg'
-          }]
-        })
-        }}
+        {% if showLanguageToggle %}
+          {{ languageSelect({
+            ariaLabel: 'general.languageToggle.ariaLabel' | translate,
+            url: currentUrl,
+            activeLanguage: htmlLang,
+            languages: [
+            {
+              code: 'en',
+              text: 'English',
+              visuallyHidden: 'Change to English'
+            },
+            {
+              code:'cy',
+              text: 'Cymraeg',
+              visuallyHidden: 'Newid yr iaith ir Gymraeg'
+            }]
+          })
+          }}
+        {% endif %}
         {% block backLinkBlock %}
         {% if backLink %}
           <a href="{{backLink}}" class="govuk-back-link js-back-link">
