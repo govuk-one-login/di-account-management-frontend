@@ -3,30 +3,39 @@ import { getAppEnv, getClientsToShowInSearch } from "../../config";
 import { LOCALE } from "../../app.constants";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { Worker, Index } from "flexsearch";
+import { getTranslations } from "di-account-management-rp-registry";
 
 const TEMPLATE_NAME = "search-services/index.njk";
 
+const translations = {
+  [LOCALE.EN]: getTranslations(getAppEnv(), LOCALE.EN),
+  [LOCALE.CY]: getTranslations(getAppEnv(), LOCALE.CY),
+};
+
 export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
+  const env = getAppEnv();
   return getClientsToShowInSearch(locale)
-    .map((client) => {
-      const startTextKey = `clientRegistry.${getAppEnv()}.${client}.startText`;
+    .map((clientId) => {
+      const startTextKey = `clientRegistry.${env}.${clientId}.startText`;
       const startText = translate(startTextKey);
       const startTextForSearch = startText === startTextKey ? "" : startText;
-      const startUrlKey = `clientRegistry.${getAppEnv()}.${client}.startUrl`;
+      const startUrlKey = `clientRegistry.${env}.${clientId}.startUrl`;
       const startUrl = translate(startUrlKey);
       const startUrlForSearch = startUrl === startUrlKey ? "" : startUrl;
-      const additionalSearchTermsKey = `clientRegistry.${getAppEnv()}.${client}.additionalSearchTerms`;
-      const additionalSearchTerms = translate(additionalSearchTermsKey);
-      const additionalSearchTermsForSearch =
-        additionalSearchTerms === additionalSearchTermsKey
-          ? ""
-          : additionalSearchTerms;
 
+      let additionalSearchTerms: string;
+
+      if (translations[locale][clientId]?.additionalSearchTerms) {
+        const additionalSearchTermsKey = `clientRegistry.${env}.${clientId}.additionalSearchTerms`;
+        additionalSearchTerms = translate(additionalSearchTermsKey);
+      } else {
+        additionalSearchTerms = "";
+      }
       return {
-        client,
+        clientId,
         startText: startTextForSearch,
         startUrl: startUrlForSearch,
-        additionalSearchTerms: additionalSearchTermsForSearch,
+        additionalSearchTerms: additionalSearchTerms,
       };
     })
     .sort((a, b) => {
@@ -58,7 +67,7 @@ export const createSearchIndex = async (
             ? ` ${service.additionalSearchTerms}`
             : "";
         return index.add(
-          service.client,
+          service.clientId,
           `${service.startText}${additionalSearchTerms}`
         );
       })
@@ -74,7 +83,7 @@ export const searchServices = async (
   services: ReturnType<typeof getAllServices>
 ) => {
   return (await indexes[locale].searchAsync(query)).map((clientId) =>
-    services.find((service) => service.client === clientId)
+    services.find((service) => service.clientId === clientId)
   );
 };
 
