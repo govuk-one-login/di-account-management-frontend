@@ -9,12 +9,14 @@ import {
 import * as controller from "../search-services-controller";
 import { LOCALE } from "../../../app.constants";
 import * as config from "../../../config";
+import * as registry from "di-account-management-rp-registry";
 
 describe("getAllServices", () => {
   let sandbox: sinon.SinonSandbox;
   let mockTranslate: sinon.SinonStub;
   let getClientsToShowInSearchStub: sinon.SinonStub;
   let getAppEnvStub: sinon.SinonStub;
+  let getTranslationsStub: sinon.SinonStub;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -24,6 +26,7 @@ describe("getAllServices", () => {
       "getClientsToShowInSearch"
     );
     getAppEnvStub = sandbox.stub(config, "getAppEnv");
+    getTranslationsStub = sandbox.stub(registry, "getTranslations");
   });
 
   afterEach(() => {
@@ -32,16 +35,22 @@ describe("getAllServices", () => {
 
   it("should return services with translated text for English locale", () => {
     getAppEnvStub.returns("dev");
-    getClientsToShowInSearchStub.returns(["client1", "client2"]);
+    getClientsToShowInSearchStub.returns(["dbs", "client2"]);
+    getTranslationsStub.returns({
+      dbs: {
+        additionalSearchTerms: "terms1",
+      },
+      client2: {},
+    });
 
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startText")
+      .withArgs("clientRegistry.dev.dbs.startText")
       .returns("Service 1");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startUrl")
+      .withArgs("clientRegistry.dev.dbs.startUrl")
       .returns("https://service1.gov.uk");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.additionalSearchTerms")
+      .withArgs("clientRegistry.dev.dbs.additionalSearchTerms")
       .returns("terms1");
     mockTranslate
       .withArgs("clientRegistry.dev.client2.startText")
@@ -49,24 +58,21 @@ describe("getAllServices", () => {
     mockTranslate
       .withArgs("clientRegistry.dev.client2.startUrl")
       .returns("https://service2.gov.uk");
-    mockTranslate
-      .withArgs("clientRegistry.dev.client2.additionalSearchTerms")
-      .returns("terms2");
 
     const result = getAllServices(mockTranslate, LOCALE.EN);
 
     expect(result).to.have.length(2);
     expect(result[0]).to.deep.equal({
-      client: "client1",
+      clientId: "dbs",
       startText: "Service 1",
       startUrl: "https://service1.gov.uk",
       additionalSearchTerms: "terms1",
     });
     expect(result[1]).to.deep.equal({
-      client: "client2",
+      clientId: "client2",
       startText: "Service 2",
       startUrl: "https://service2.gov.uk",
-      additionalSearchTerms: "terms2",
+      additionalSearchTerms: "",
     });
   });
 
@@ -88,7 +94,7 @@ describe("getAllServices", () => {
 
     expect(result).to.have.length(1);
     expect(result[0]).to.deep.equal({
-      client: "client1",
+      clientId: "client1",
       startText: "",
       startUrl: "",
       additionalSearchTerms: "",
@@ -131,23 +137,29 @@ describe("getAllServices", () => {
 
   it("should work with Welsh locale", () => {
     getAppEnvStub.returns("dev");
-    getClientsToShowInSearchStub.returns(["client1"]);
+    getClientsToShowInSearchStub.returns(["dbs"]);
+    getTranslationsStub.returns({
+      dbs: {
+        additionalSearchTerms: "termau1",
+      },
+      client2: {},
+    });
 
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startText")
+      .withArgs("clientRegistry.dev.dbs.startText")
       .returns("Gwasanaeth 1");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startUrl")
+      .withArgs("clientRegistry.dev.dbs.startUrl")
       .returns("https://gwasanaeth1.gov.uk");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.additionalSearchTerms")
+      .withArgs("clientRegistry.dev.dbs.additionalSearchTerms")
       .returns("termau1");
 
     const result = getAllServices(mockTranslate, LOCALE.CY);
 
     expect(result).to.have.length(1);
     expect(result[0]).to.deep.equal({
-      client: "client1",
+      clientId: "dbs",
       startText: "Gwasanaeth 1",
       startUrl: "https://gwasanaeth1.gov.uk",
       additionalSearchTerms: "termau1",
@@ -168,19 +180,19 @@ describe("getAllServices", () => {
 describe("searchServices", async () => {
   const mockServices = [
     {
-      client: "client1",
+      clientId: "client1",
       startText: "Tax Service",
       startUrl: "https://tax.gov.uk",
       additionalSearchTerms: "HMRC revenue",
     },
     {
-      client: "client2",
+      clientId: "client2",
       startText: "Passport Service",
       startUrl: "https://passport.gov.uk",
       additionalSearchTerms: "travel documents",
     },
     {
-      client: "client3",
+      clientId: "client3",
       startText: "Benefits Service",
       startUrl: "https://benefits.gov.uk",
       additionalSearchTerms: "",
@@ -194,14 +206,14 @@ describe("searchServices", async () => {
     const result = await searchServices(LOCALE.EN, "tax", mockServices);
 
     expect(result).to.have.length(1);
-    expect(result[0]?.client).to.equal("client1");
+    expect(result[0]?.clientId).to.equal("client1");
   });
 
   it("should return matching services based on additionalSearchTerms", async () => {
     const result = await searchServices(LOCALE.EN, "HMRC", mockServices);
 
     expect(result).to.have.length(1);
-    expect(result[0]?.client).to.equal("client1");
+    expect(result[0]?.clientId).to.equal("client1");
   });
 
   it("should return multiple matching services", async () => {
@@ -232,14 +244,14 @@ describe("searchServices", async () => {
     const result = await searchServices(LOCALE.EN, "TAX", mockServices);
 
     expect(result).to.have.length(1);
-    expect(result[0]?.client).to.equal("client1");
+    expect(result[0]?.clientId).to.equal("client1");
   });
 
   it("should handle partial matches", async () => {
     const result = await searchServices(LOCALE.EN, "pass", mockServices);
 
     expect(result).to.have.length(1);
-    expect(result[0]?.client).to.equal("client2");
+    expect(result[0]?.clientId).to.equal("client2");
   });
 });
 
@@ -254,13 +266,13 @@ describe("searchServicesGet", () => {
 
   const mockServices = [
     {
-      client: "client1",
+      clientId: "client1",
       startText: "Service 1",
       startUrl: "",
       additionalSearchTerms: "",
     },
     {
-      client: "client2",
+      clientId: "client2",
       startText: "Service 2",
       startUrl: "",
       additionalSearchTerms: "",
