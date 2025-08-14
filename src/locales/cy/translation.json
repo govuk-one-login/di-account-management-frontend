@@ -8,8 +8,6 @@
     "warning": "Rhybudd",
     "errorSummaryTitle": "Mae problem",
     "phaseBanner": {
-      "tag": "Beta",
-      "text": "Mae hwn yn wasanaeth newydd – bydd eich <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">adborth (agor mewn tab newydd)</a> yn ein helpu i’w wella.",
       "testText": "Mae hwn yn amgylchedd profi."
     },
     "yes": "Yes",
@@ -18,74 +16,15 @@
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg.",
-    "cookie": {
-      "cookieBanner": {
-        "title": "Cwcis ar gyfrif GOV.UK",
-        "heading": "Cwcis ar gyfrif GOV.UK",
-        "paragraph1": "Rydym yn defnyddio rhai cwcis hanfodol i wneud i’r gwasanaeth hwn weithio.",
-        "paragraph2": "Hoffem hefyd ddefnyddio cwcis dadansoddi er mwyn i ni allu deall sut rydych yn defnyddio’r gwasanaeth a gwneud gwelliannau.",
-        "buttonAcceptText": "Derbyn cwcis dadansoddi",
-        "buttonRejectText": "Gwrthod cwcis dadansoddi",
-        "linkViewCookiesText": "Gweld cwcis",
-        "cookieBannerHideLink": "Cuddio’r neges yma",
-        "cookeBannerAccept": {
-          "paragraph1": "Rydych wedi derbyn cwcis ychwanegol. Gallwch ",
-          "paragraph2": " unrhyw bryd."
-        },
-        "cookeBannerReject": {
-          "paragraph1": "Rydych wedi gwrthod cwcis ychwanegol. Gallwch ",
-          "paragraph2": " unrhyw bryd."
-        },
-        "changeCookiePreferencesLink": "newid eich gosodiadau cwcis"
-      },
-      "cookieText": "Mae GOV.UK yn defnyddio cwcis i wneud y safle’n symlach.",
-      "cookieLink": "#",
-      "cookieLinkText": "Darganfyddwch fwy am gwcis"
-    },
-    "language": {
-      "english": "Saesneg",
-      "welsh": "Cymraeg"
-    },
-    "languageToggle": {
-      "ariaLabel": "Dewis iaith"
-    },
     "continue": {
       "label": "Parhau"
     },
     "header": {
       "homepageHref": "https://www.gov.uk/",
       "productName": "One Login",
-      "accountLink": "Eich GOV.UK One Login",
       "accountNavHomeLink": "Eich gwasanaethau",
       "accountNavSecurityLink": "Diogelwch",
       "signOutLink": "Allgofnodi"
-    },
-    "footer": {
-      "accessibilityStatement": {
-        "pageTitle": "Datganiad hygyrchedd",
-        "linkText": "Datganiad hygyrchedd"
-      },
-      "cookies": {
-        "pageTitle": "Polisi Cwcis",
-        "linkText": "Cwcis"
-      },
-      "terms": {
-        "pageTitle": "Telerau ac amodau",
-        "linkText": "Telerau ac amodau"
-      },
-      "privacy": {
-        "pageTitle": "Hysbysiad preifatrwydd",
-        "linkText": "Hysbysiad preifatrwydd"
-      },
-      "support": {
-        "linkText": "Cefnogaeth (agor mewn tab newydd)"
-      },
-      "copyright": {
-        "linkText": "© Hawlfraint y goron"
-      },
-      "contentLicence": {
-        "linkText": "Mae’r holl gynnwys ar gael o dan <a class=\"govuk-footer__link\" href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/\" rel=\"licence\">Trwydded Llywodraeth Agored v3.0</a>, oni nodir yn wahanol"
-      }
     },
     "showPassword": {
       "show": "Dangos",

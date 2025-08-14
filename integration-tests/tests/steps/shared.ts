@@ -41,7 +41,7 @@ Given("the page has finished loading", async ({ page }) => {
 Given("I accept cookies", async ({ page }) => {
   await page
     .getByRole("button", {
-      name: "Accept analytics cookies",
+      name: "Accept additional cookies",
     })
     .click();
   await page.getByRole("button", { name: "Hide this message" }).click();
