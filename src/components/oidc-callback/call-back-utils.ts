@@ -4,6 +4,7 @@ import { LOG_MESSAGES, PATH_DATA } from "../../app.constants";
 import { logger } from "../../utils/logger";
 import { deleteExpressSession } from "../../utils/session-store";
 import xss from "xss";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
 
@@ -92,6 +93,7 @@ export async function handleOidcCallbackError(
       "OIDC callback error received"
     );
   }
+  req.metrics?.addMetric("oidcCallbackError", MetricUnit.Count, 1);
   await deleteExpressSession(req);
   return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
 }
