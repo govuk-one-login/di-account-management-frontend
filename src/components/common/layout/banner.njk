@@ -1,78 +1,79 @@
-  {% set html %}
-    <p class="govuk-body">{{ 'FECTranslations.cookieBanner.body1' | translate }}</p>
-    <p class="govuk-body">{{ 'FECTranslations.cookieBanner.body2' | translate }}</p>
-  {% endset %}
+{% set html %}
+  <p class="govuk-body">{{ 'FECTranslations.cookieBanner.body1' | translate }}</p>
+  <p class="govuk-body">{{ 'FECTranslations.cookieBanner.body2' | translate }}</p>
+{% endset %}
 
-  {% set acceptHtml %}
-    <p class="govuk-body">{{ 'FECTranslations.cookieBanner.cookieBannerAccept.body1' | translate }}
-      <a class="govuk-link" href="https://signin.account.gov.uk/cookies">{{ 'FECTranslations.cookieBanner.changeCookiePreferencesLink' | translate }}</a>
-    {{ 'FECTranslations.cookieBanner.cookieBannerAccept.body2' | translate }}</p>
-  {% endset %}
+{% set acceptHtml %}
+  <p class="govuk-body">{{ 'FECTranslations.cookieBanner.cookieBannerAccept.body1' | translate }}
+  <a class="govuk-link" href="https://signin.account.gov.uk/cookies">{{ 'FECTranslations.cookieBanner.changeCookiePreferencesLink' | translate }}</a>
+  {{ 'FECTranslations.cookieBanner.cookieBannerAccept.body2' | translate }}</p>
+{% endset %}
 
-  {% set rejectedHtml %}
-  <p class="govuk-body">{{ 'FECTranslations.cookieBanner.cookieBannerReject.body1' | translate }}
-      <a class="govuk-link" href="https://signin.account.gov.uk/cookies">{{ 'FECTranslations.cookieBanner.changeCookiePreferencesLink' | translate }}</a>
-  {{ 'FECTranslations.cookieBanner.cookieBannerReject.body2' | translate }}</p>
-  {% endset %}
+{% set rejectedHtml %}
+<p class="govuk-body">{{ 'FECTranslations.cookieBanner.cookieBannerReject.body1' | translate }}
+  <a class="govuk-link" href="https://signin.account.gov.uk/cookies">{{ 'FECTranslations.cookieBanner.changeCookiePreferencesLink' | translate }}</a>
+  {{ 'FECTranslations.cookieBanner.cookieBannerReject.body2' | translate }}
+</p>
+{% endset %}
 
-  {{ govukCookieBanner({
-    ariaLabel: 'FECTranslations.cookieBanner.ariaLabel' | translate,
-    name: "gov-uk-cookie-banner",
-    messages: [
-        {
-            headingText: 'FECTranslations.cookieBanner.headingText' | translate,
-            html: html,
-            attributes: {
-            "id": "cookies-banner-main"
-        },
-            actions: [
-            {
-                text: 'FECTranslations.cookieBanner.acceptAdditionalCookies' | translate,
-                type: "button",
-                name: "cookiesAccept",
-                value: "accept"
-            },
-            {
-                text: 'FECTranslations.cookieBanner.rejectAdditionalCookies' | translate,
-                type: "button",
-                name: "cookiesReject",
-                value: "reject"
-            },
-            {
-                text: 'FECTranslations.cookieBanner.viewCookies' | translate,
-                href: authFrontEndUrl + "/cookies"
-            }
-        ]
-        },
-        {
-            html: acceptHtml,
-            attributes: {
-            "id": "cookies-accepted"
-        },
-            actions: [
-            {
-                text: 'FECTranslations.cookieBanner.hideCookieMessage' | translate,
-                href: "#",
-                type: "button",
-                classes:"cookie-hide-button"
-            }
-        ],
-            hidden: true
-        },
-        {
-            html: rejectedHtml,
-            attributes: {
-            "id": "cookies-rejected"
-        },
-            actions: [
-            {
-                text: 'FECTranslations.cookieBanner.hideCookieMessage' | translate,
-                href: "#",
-                type: "button",
-                classes:"cookie-hide-button"
-            }
-        ],
-            hidden: true
-        }
-    ],  hidden: true
-  }) }}
+{{ govukCookieBanner({
+  ariaLabel: 'FECTranslations.cookieBanner.ariaLabel' | translate,
+  name: "gov-uk-cookie-banner",
+  messages: [
+      {
+          headingText: 'FECTranslations.cookieBanner.headingText' | translate,
+          html: html,
+          attributes: {
+          "id": "cookies-banner-main"
+      },
+          actions: [
+          {
+              text: 'FECTranslations.cookieBanner.acceptAdditionalCookies' | translate,
+              type: "button",
+              name: "cookiesAccept",
+              value: "accept"
+          },
+          {
+              text: 'FECTranslations.cookieBanner.rejectAdditionalCookies' | translate,
+              type: "button",
+              name: "cookiesReject",
+              value: "reject"
+          },
+          {
+              text: 'FECTranslations.cookieBanner.viewCookies' | translate,
+              href: authFrontEndUrl + "/cookies"
+          }
+      ]
+      },
+      {
+          html: acceptHtml,
+          attributes: {
+          "id": "cookies-accepted"
+      },
+          actions: [
+          {
+              text: 'FECTranslations.cookieBanner.hideCookieMessage' | translate,
+              href: "#",
+              type: "button",
+              classes:"cookie-hide-button"
+          }
+      ],
+          hidden: true
+      },
+      {
+          html: rejectedHtml,
+          attributes: {
+          "id": "cookies-rejected"
+      },
+          actions: [
+          {
+              text: 'FECTranslations.cookieBanner.hideCookieMessage' | translate,
+              href: "#",
+              type: "button",
+              classes:"cookie-hide-button"
+          }
+      ],
+          hidden: true
+      }
+  ],  hidden: true
+}) }}

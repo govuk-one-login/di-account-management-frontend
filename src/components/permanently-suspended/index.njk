@@ -1,26 +1,19 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% set pageTitleName = 'pages.permanentlySuspendedScreen.title' | translate %}
+{% set continueLinkHref = 'SEARCH_SERVICES' | getPath if searchableListEnabled else 'pages.permanentlySuspendedScreen.section2.link.href' | translate %}
 
-{% block content %}
+{% block pageContent %}
+  <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.permanentlySuspendedScreen.header' | translate }}</h1>
 
-    <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.permanentlySuspendedScreen.header' | translate }}</h1>
+  <p class="govuk-body">{{'pages.permanentlySuspendedScreen.section1.paragraph1' | translate }}</p>
 
-    <p class="govuk-body">{{'pages.permanentlySuspendedScreen.section1.paragraph1' | translate }}</p>
+  <h2 class="govuk-heading-m">{{'pages.permanentlySuspendedScreen.section2.heading' | translate }}</h2>
 
-    <h3 class="govuk-heading-m">
-        {{'pages.permanentlySuspendedScreen.section2.heading' | translate}}
-    </h3>
-
-    <p class="govuk-body">{{'pages.permanentlySuspendedScreen.section2.paragraph1' | translate }}</p>
-
-    {% if searchableListEnabled %}
-        <a href="{{'SEARCH_SERVICES' | getPath }}" class="govuk-link govuk-body">
-        {{'pages.permanentlySuspendedScreen.section2.link.text' | translate}}
-        </a>
-    {% else %}
-        <a href="{{'pages.permanentlySuspendedScreen.section2.link.href' | translate}}" class="govuk-link govuk-body">
-        {{'pages.permanentlySuspendedScreen.section2.link.text' | translate}}
-        </a>
-    {% endif %}
-
+  <p class="govuk-body">{{'pages.permanentlySuspendedScreen.section2.paragraph1' | translate }}</p>
+  
+  <p class="govuk-body">
+    <a href="{{continueLinkHref}}" class="govuk-link">
+      {{'pages.permanentlySuspendedScreen.section2.link.text' | translate}}
+    </a>
+  </p>
 {% endblock %}
