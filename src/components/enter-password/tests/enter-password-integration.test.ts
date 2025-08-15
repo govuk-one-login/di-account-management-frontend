@@ -38,7 +38,6 @@ describe("Integration::enter password", () => {
     decache("../../../app");
     decache("../../../middleware/requires-auth-middleware");
     const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    const monkeyPatchRedirectToSaveSessionMiddleware = require("../../../middleware/monkey-patch-redirect-to-save-session-middleware");
     sandbox = sinon.createSandbox();
     sandbox
       .stub(sessionMiddleware, "requiresAuthMiddleware")
@@ -83,14 +82,6 @@ describe("Integration::enter password", () => {
             return url;
           },
         };
-        next();
-      });
-    sandbox
-      .stub(
-        monkeyPatchRedirectToSaveSessionMiddleware,
-        "monkeyPatchRedirectToSaveSessionMiddleware"
-      )
-      .callsFake(function (req: any, res: any, next: any): void {
         next();
       });
 
