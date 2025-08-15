@@ -10,11 +10,11 @@
 {%- endset-%}
 
 {% block head %}
-    {# Dynatrace RUM snippet #}
-    {% if dynatraceRumUrl %}
-    <script src='{{ dynatraceRumUrl }}' crossorigin="anonymous" nonce='{{ scriptNonce }}'></script>
-    {% endif %}
-    <link href="/public/style.css" rel="stylesheet">
+  {# Dynatrace RUM snippet #}
+  {% if dynatraceRumUrl %}
+  <script src='{{ dynatraceRumUrl }}' crossorigin="anonymous" nonce='{{ scriptNonce }}'></script>
+  {% endif %}
+  <link href="/public/style.css" rel="stylesheet">
 {% endblock %}
 
 {% block pageTitle %}
@@ -45,50 +45,47 @@
 {% endblock %}
 
 {% block main %}
-    <div class="govuk-width-container {{ containerClasses }}">
-        {% if not hidePhaseBanner %}
-          {% if isProd %}
-            {% set bannerHtml %}
-              {{ 'FECTranslations.phaseBanner.text' | translate }} <a href='{{ authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback" }}' class="govuk-link" rel="noreferrer noopener" target="_blank">{{ 'FECTranslations.phaseBanner.link' | translate | replace(".","") }}</a>.
-            {% endset %}
-            {{ govukPhaseBanner({
-                tag: {
-                  text: 'FECTranslations.phaseBanner.tag' | translate
-                },
-                html: bannerHtml
-            })}}
-          {% else %}
-            {{ govukPhaseBanner({
-                tag: {
-                  text: "TEST",
-                  classes: "govuk-tag--yellow"
-                },
-                text: 'general.phaseBanner.testText' | translate
-            })}}
-          {% endif %}
-        {% endif %}
-        {{ frontendUiLanguageSelect({
-            url: currentUrl,
-            activeLanguage: htmlLang,
-            translations: 'FECTranslations.languageSelect' | translate
-          }) 
-        }}
-        {% block backLinkBlock %}
+  <div class="govuk-width-container {{ containerClasses }}">
+      {% if isProd %}
+        {% set bannerHtml %}
+          {{ 'FECTranslations.phaseBanner.text' | translate }} <a href='{{ authFrontEndUrl + "/contact-us-questions?theme=suggestions_feedback" }}' class="govuk-link" rel="noreferrer noopener" target="_blank">{{ 'FECTranslations.phaseBanner.link' | translate | replace(".","") }}</a>.
+        {% endset %}
+        {{ govukPhaseBanner({
+            tag: {
+              text: 'FECTranslations.phaseBanner.tag' | translate
+            },
+            html: bannerHtml
+        })}}
+      {% else %}
+        {{ govukPhaseBanner({
+            tag: {
+              text: "TEST",
+              classes: "govuk-tag--yellow"
+            },
+            text: 'general.phaseBanner.testText' | translate
+        })}}
+      {% endif %}
+      {{ frontendUiLanguageSelect({
+          url: currentUrl,
+          activeLanguage: htmlLang,
+          translations: 'FECTranslations.languageSelect' | translate
+        }) 
+      }}
+      {% block backLinkBlock %}
         {% if backLink %}
           <a href="{{backLink}}" class="govuk-back-link js-back-link">
             {{ backLinkText }}
             {{'general.back' | translate if not backLinkText}}
           </a>
         {% endif %}
-        {% endblock %}
-        {% block beforeContent %}{% endblock %}
+      {% endblock %}
+      {% block beforeContent %}{% endblock %}
 
-        <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" {% if mainLang %} lang="{{ mainLang }}" {% endif %}>
-            {% block content %}{% endblock %}
-        </main>
-    </div>
-    {% block feedback %}{% endblock %}
-
+      <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" {% if mainLang %} lang="{{ mainLang }}" {% endif %}>
+          {% block content %}{% endblock %}
+      </main>
+  </div>
+  {% block feedback %}{% endblock %}
 {% endblock %}
 
 {% block footer %}

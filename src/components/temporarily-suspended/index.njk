@@ -1,9 +1,8 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% set pageTitleName = 'pages.temporarilySuspendedPageScreen.title' | translate %}
 
-{% block content %}
-
+{% block pageContent %}
     <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.temporarilySuspendedPageScreen.heading' | translate }}</h1>
 
     <p class="govuk-body">{{'pages.temporarilySuspendedPageScreen.section1.paragraph1' | translate }}</p>
@@ -13,6 +12,4 @@
         {{'pages.temporarilySuspendedPageScreen.section2.link.text' | translate -}}
       </a>.
     </p>
-
-
 {% endblock %}
