@@ -83,7 +83,6 @@ import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
 import { metricsMiddleware } from "./middleware/metrics-middlware";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
-import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware";
 import {
   setBaseTranslations,
   setFrontendUiTranslations,
@@ -151,7 +150,6 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
-  app.use(monkeyPatchRedirectToSaveSessionMiddleware);
 
   app.locals.sessionStore = sessionStore;
 
