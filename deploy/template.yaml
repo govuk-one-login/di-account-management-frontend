@@ -2145,6 +2145,24 @@ Resources:
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
 
+  OidcCallbackErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-OidcCallbackErrorsAlarm"
+      AlarmDescription: "Alarm when OIDC callback errors exceed 5 per minute for 3 minutes out of the last 5 minutes"
+      Namespace: !Sub "${AWS::StackName}/Account Home"
+      MetricName: oidcCallbackError
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 3
+      Threshold: 5
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+
   #
   # Canary Deployment
   #
