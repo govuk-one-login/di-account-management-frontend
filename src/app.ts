@@ -104,6 +104,8 @@ async function createApp(): Promise<express.Application> {
   app.use(metricsMiddleware());
   app.enable("trust proxy");
 
+  app.use(loggerMiddleware);
+
   if (isDeployedEnvironment) {
     const protect = applyOverloadProtection(isDeployedEnvironment);
     app.use(protect);
@@ -154,7 +156,6 @@ async function createApp(): Promise<express.Application> {
   app.locals.sessionStore = sessionStore;
 
   app.use(setLocalVarsMiddleware);
-  app.use(loggerMiddleware);
   app.use(outboundContactUsLinksMiddleware);
 
   app.use((req, res, next) => {
