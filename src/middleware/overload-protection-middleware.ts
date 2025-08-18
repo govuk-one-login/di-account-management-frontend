@@ -9,7 +9,7 @@ export const applyOverloadProtection = (isProduction: boolean) => {
     maxHeapUsedBytes: 0,
     maxRssBytes: 0,
     errorPropagationMode: false,
-    logging: false,
+    logging: "warn",
     logStatsOnReq: false,
   });
 };
