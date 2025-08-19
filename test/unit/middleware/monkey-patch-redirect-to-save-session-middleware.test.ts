@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { expect, sinon } from "../../utils/test-utils";
 import { describe } from "mocha";
 import { monkeyPatchRedirectToSaveSessionMiddleware } from "../../../src/middleware/monkey-patch-redirect-to-save-session-middleware";
+import * as loggerModule from "../../../src/utils/logger";
 
 describe("monkey-patch-redirect-to-save-session-middleware", () => {
   let req: Partial<Request>;
@@ -9,12 +10,15 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
   let next: NextFunction;
   let originalRedirect: sinon.SinonSpy;
   let sessionSave: sinon.SinonStub;
+  let loggerWarnStub: sinon.SinonStub;
 
   beforeEach(() => {
     originalRedirect = sinon.spy();
     sessionSave = sinon.stub();
+    loggerWarnStub = sinon.stub(loggerModule.logger, "warn");
 
     req = {
+      path: "/test-path",
       session: {
         save: sessionSave,
       } as any,
@@ -22,6 +26,10 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
 
     res = {
       redirect: originalRedirect,
+      headersSent: false,
+      locals: {
+        trace: "test-trace-id",
+      },
     };
 
     next = sinon.spy();
@@ -107,6 +115,53 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
 
       expect(sessionSave).to.not.have.been.called;
       expect(originalRedirect).to.have.been.calledOnceWith("/test-url");
+    });
+
+    it("should not redirect and log warning when headers are already sent", () => {
+      res.headersSent = true;
+      sessionSave.callsArg(0);
+
+      monkeyPatchRedirectToSaveSessionMiddleware(
+        req as Request,
+        res as Response,
+        next
+      );
+
+      res.redirect!("/test-url");
+
+      expect(originalRedirect).to.not.have.been.called;
+      expect(loggerWarnStub).to.have.been.calledOnce;
+      expect(loggerWarnStub.firstCall.args[0]).to.deep.include({
+        trace: "test-trace-id",
+        path: "/test-path",
+      });
+      expect(loggerWarnStub.firstCall.args[1]).to.equal(
+        "Unable to redirect as headers are already sent"
+      );
+    });
+
+    it("should not redirect when headers are sent even without session", () => {
+      req.session = undefined;
+      res.headersSent = true;
+
+      monkeyPatchRedirectToSaveSessionMiddleware(
+        req as Request,
+        res as Response,
+        next
+      );
+
+      res.redirect!("/test-url");
+
+      expect(sessionSave).to.not.have.been.called;
+      expect(originalRedirect).to.not.have.been.called;
+      expect(loggerWarnStub).to.have.been.calledOnce;
+      expect(loggerWarnStub.firstCall.args[0]).to.deep.include({
+        trace: "test-trace-id",
+        path: "/test-path",
+      });
+      expect(loggerWarnStub.firstCall.args[1]).to.equal(
+        "Unable to redirect as headers are already sent"
+      );
     });
   });
 });

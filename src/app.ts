@@ -90,6 +90,7 @@ import {
   frontendUiTranslationCy,
   frontendUiTranslationEn,
 } from "@govuk-one-login/frontend-ui";
+import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -152,6 +153,7 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
+  app.use(monkeyPatchRedirectToSaveSessionMiddleware);
 
   app.locals.sessionStore = sessionStore;
 

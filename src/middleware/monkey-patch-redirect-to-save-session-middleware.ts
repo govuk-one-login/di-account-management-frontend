@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { logger } from "../utils/logger";
 
 export function monkeyPatchRedirectToSaveSessionMiddleware(
   req: Request,
@@ -10,13 +11,33 @@ export function monkeyPatchRedirectToSaveSessionMiddleware(
   // subsequent request reads session before the changes to the session made in the previous
   // request have been saved.
   const originalRedirect = res.redirect;
+
   res.redirect = (...args: [number, string] | [string]) => {
-    if (req.session) {
-      req.session.save(() => {
+    const stack = new Error().stack;
+
+    const redirect = () => {
+      if (!res.headersSent) {
         originalRedirect.call(res, ...args);
+      } else {
+        logger.warn(
+          { trace: res?.locals?.trace, stack, path: req.path },
+          "Unable to redirect as headers are already sent"
+        );
+      }
+    };
+
+    if (req.session) {
+      req.session.save((err) => {
+        if (err) {
+          logger.warn(
+            { trace: res?.locals?.trace, stack, path: req.path, err },
+            "Unable to save session"
+          );
+        }
+        redirect();
       });
     } else {
-      originalRedirect.call(res, ...args);
+      redirect();
     }
   };
   next();
