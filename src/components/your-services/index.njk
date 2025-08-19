@@ -1,4 +1,4 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.yourServices.title' | translate %}
 {% set activeNav = 'your-services' %}
@@ -7,6 +7,7 @@
 {% set hasRPs = servicesList.length or accountsList.length %}
 {% set serviceListLink = 'pages.yourServices.informationBox.link' | translate | safe %}
 {% set searchableListLink = "SEARCH_SERVICES" | getPath %}
+{% set rowContainerId = 'your-services' %}
 
 {%- macro setKey(key, clientId) -%} 
   {{ ['clientRegistry.', env, '.', clientId, '.', key] | join }}
@@ -18,101 +19,97 @@
 </p> 
 {%- endmacro -%}
 
-{% block content %}
-  <div class="govuk-grid-row" id="your-services">
-    <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
-      <h1 class="govuk-heading-xl your-services__heading">{{ 'pages.yourServices.header' | translate }}</h1>
-      <div class="your-services__signed-in-status">
-        {% set emailAddressBlock %} <strong>{{ email }}</strong>. {% endset %}
-        {{ bodyParagraph({ content: 'pages.yourServices.signedInStatus', contentBlock: emailAddressBlock | safe }) }}
-        {{ bodyParagraph({ content: 'pages.yourServices.intro'}) if hasRPs }}
-        {{ bodyParagraph({ content: 'general.noWelshNoticeGlobal', testId: "no-welsh-notice-global"}) if hasEnglishOnlyServices and currentLngWelsh }}
-      </div>
-      {% if not hasRPs %}
-        {# Display an empty state when no accounts nor services have been used #}
-        {# This should be an edge case as the only pathways into the account would be signing up via other services #} 
-      <div class="your-services__card your-services__card--empty" data-test-id="empty-state">
-        <div class="your-services__card__content">
-          {{ bodyParagraph({ content: 'pages.yourServices.empty'}) }}
-        </div>
-      </div>
-      {% endif %}
-      {% if showSecondaryHeadings %}
-        {# Show heading ONLY when there are both accounts and services #}
-        <h2 class="govuk-heading-m" data-test-id="accounts-heading">{{ 'pages.yourServices.accountsList.heading' | translate }}</h2>
-      {% endif %}
-      {% if accountsList.length %}
-      <ul class="govuk-list your-services__list">
-        {% for account in accountsList %}
-          {# A lang attribute must be added if a service is displayed in English, on the Welsh language version of the page #}
-          {%- set EnglishOnlyService = true if (currentLngWelsh and not account.isAvailableInWelsh) -%}
-          {%- set clientId = account.client_id -%}
-          {%- set accountCardLink -%} <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId) | translate }}</a>{%- endset -%}
-          {# Begin Account card #}
-          <li class="your-services__card">
-            <{{serviceHeadingLevel}} class="govuk-heading-s your-services__card__heading" data-test-id="account-card-heading" {% if EnglishOnlyService %} lang="en"{% endif %}>{{ setKey('header', clientId) | translate }}</{{serviceHeadingLevel}}>
-            <div class="your-services__card__content">
-              {{ bodyParagraph({ content: setKey('description', clientId), EnglishOnlyService: EnglishOnlyService}) }}
-              {{ bodyParagraph({ content: 'general.noWelshNoticeInline', EnglishOnlyService: EnglishOnlyService, testId: "no-welsh-notice-inline"}) if EnglishOnlyService }}
-              {{ bodyParagraph({ EnglishOnlyService: EnglishOnlyService, contentBlock: accountCardLink | safe }) }}
-              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', account.last_accessed_readable_format] | join | safe }) }}              
-            </div>
-          </li>
-          {# End Account card #}
-        {% endfor %}
-      </ul>
-      {% endif %}
-      {% if showSecondaryHeadings %}
-        {# Show heading ONLY when there are both accounts and services #}
-        <h2 class="govuk-heading-m" data-test-id="services-heading">{{ 'pages.yourServices.servicesList.heading' | translate }}</h2>
-      {% endif %}
-      {% if servicesList.length %}
-      <ul class="govuk-list your-services__list">
-        {% for service in servicesList %}
-          {% set locale = ['clientRegistry.', env, '.', service.client_id, '.'] | join %}
-          {% set testIdValue = "service-card-long" if service.hasDetailedCard else "service-card-short" %}
-          {# A lang attribute must be added if a service is displayed in English, on the Welsh language version of the page #}
-          {%- set EnglishOnlyService = true if (currentLngWelsh and not service.isAvailableInWelsh) -%}
-          {%- set clientId = service.client_id -%}
-          {%- set serviceCardLink -%} <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId) | translate }}</a>{%- endset -%}
-          {# Begin Service card #}
-          <li class="your-services__card" data-test-id={{testIdValue}}>
-            <div class="your-services__card__content">
-            {% if service.hasDetailedCard %}
-            {# The HMRC service card contains more information than the regular ones #}
-              <{{serviceHeadingLevel}} class="govuk-heading-s" data-test-id="service-card-heading" {% if EnglishOnlyService %} lang="en"{% endif %}>
-                {{ setKey('header', clientId) | translate }}
-              </{{serviceHeadingLevel}}>
-              {{ bodyParagraph({ classes: "govuk-hint", content: setKey('hintText', clientId) })}}
-              <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-              {{ bodyParagraph({ content: setKey('paragraph1', clientId), EnglishOnlyService: EnglishOnlyService })}}
-              {{ bodyParagraph({ content: setKey('paragraph2', clientId), EnglishOnlyService: EnglishOnlyService })}}
-              {{ bodyParagraph({ EnglishOnlyService: EnglishOnlyService, contentBlock: serviceCardLink | safe })}}
-              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}              
-            {% else %}
-              <{{serviceHeadingLevel}} class="govuk-heading-s govuk-!-font-weight-regular" data-test-id="service-card-heading" {% if EnglishOnlyService %}lang="en"{% endif %}>
-                <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId)| translate }}</a>
-              </{{serviceHeadingLevel}}>
-              {{ bodyParagraph({ content: 'general.noWelshNoticeInline', testId: "no-welsh-notice-inline", EnglishOnlyService: EnglishOnlyService}) if EnglishOnlyService }}
-              {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}              
-            {% endif %}
-            </div>
-          </li>
-          {# End Service card #}
-        {% endfor %}
-      </ul>
-      {% endif %}
-
-      <div class="information-box">
-        <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
-        {{ bodyParagraph({ content: 'pages.yourServices.informationBox.paragraph1'}) }}
-        {{ bodyParagraph({ content: 'pages.yourServices.informationBox.paragraph2'}) }}
-        {% if searchableListEnabled %}
-          {{ bodyParagraph({ contentBlock: 'pages.yourServices.informationBox.paragraph3' | translate | replace("[serviceListLink]", searchableListLink) | safe })}}</p>
-        {% else %}
-          {{ bodyParagraph({ contentBlock: 'pages.yourServices.informationBox.paragraph3' | translate | replace("[serviceListLink]", serviceListLink) | safe })}}</p>
-        {% endif %}
-      </div>
+{% block pageContent %}
+  <h1 class="govuk-heading-xl your-services__heading">{{ 'pages.yourServices.header' | translate }}</h1>
+  <div class="your-services__signed-in-status">
+    {% set emailAddressBlock %} <strong>{{ email }}</strong>. {% endset %}
+    {{ bodyParagraph({ content: 'pages.yourServices.signedInStatus', contentBlock: emailAddressBlock | safe }) }}
+    {{ bodyParagraph({ content: 'pages.yourServices.intro'}) if hasRPs }}
+    {{ bodyParagraph({ content: 'general.noWelshNoticeGlobal', testId: "no-welsh-notice-global"}) if hasEnglishOnlyServices and currentLngWelsh }}
+  </div>
+  {% if not hasRPs %}
+    {# Display an empty state when no accounts nor services have been used #}
+    {# This should be an edge case as the only pathways into the account would be signing up via other services #} 
+  <div class="your-services__card your-services__card--empty" data-test-id="empty-state">
+    <div class="your-services__card__content">
+      {{ bodyParagraph({ content: 'pages.yourServices.empty'}) }}
     </div>
+  </div>
+  {% endif %}
+  {% if showSecondaryHeadings %}
+    {# Show heading ONLY when there are both accounts and services #}
+    <h2 class="govuk-heading-m" data-test-id="accounts-heading">{{ 'pages.yourServices.accountsList.heading' | translate }}</h2>
+  {% endif %}
+  {% if accountsList.length %}
+  <ul class="govuk-list your-services__list">
+    {% for account in accountsList %}
+      {# A lang attribute must be added if a service is displayed in English, on the Welsh language version of the page #}
+      {%- set EnglishOnlyService = true if (currentLngWelsh and not account.isAvailableInWelsh) -%}
+      {%- set clientId = account.client_id -%}
+      {%- set accountCardLink -%} <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId) | translate }}</a>{%- endset -%}
+      {# Begin Account card #}
+      <li class="your-services__card">
+        <{{serviceHeadingLevel}} class="govuk-heading-s your-services__card__heading" data-test-id="account-card-heading" {% if EnglishOnlyService %} lang="en"{% endif %}>{{ setKey('header', clientId) | translate }}</{{serviceHeadingLevel}}>
+        <div class="your-services__card__content">
+          {{ bodyParagraph({ content: setKey('description', clientId), EnglishOnlyService: EnglishOnlyService}) }}
+          {{ bodyParagraph({ content: 'general.noWelshNoticeInline', EnglishOnlyService: EnglishOnlyService, testId: "no-welsh-notice-inline"}) if EnglishOnlyService }}
+          {{ bodyParagraph({ EnglishOnlyService: EnglishOnlyService, contentBlock: accountCardLink | safe }) }}
+          {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', account.last_accessed_readable_format] | join | safe }) }}              
+        </div>
+      </li>
+      {# End Account card #}
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if showSecondaryHeadings %}
+    {# Show heading ONLY when there are both accounts and services #}
+    <h2 class="govuk-heading-m" data-test-id="services-heading">{{ 'pages.yourServices.servicesList.heading' | translate }}</h2>
+  {% endif %}
+  {% if servicesList.length %}
+  <ul class="govuk-list your-services__list">
+    {% for service in servicesList %}
+      {% set locale = ['clientRegistry.', env, '.', service.client_id, '.'] | join %}
+      {% set testIdValue = "service-card-long" if service.hasDetailedCard else "service-card-short" %}
+      {# A lang attribute must be added if a service is displayed in English, on the Welsh language version of the page #}
+      {%- set EnglishOnlyService = true if (currentLngWelsh and not service.isAvailableInWelsh) -%}
+      {%- set clientId = service.client_id -%}
+      {%- set serviceCardLink -%} <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId) | translate }}</a>{%- endset -%}
+      {# Begin Service card #}
+      <li class="your-services__card" data-test-id={{testIdValue}}>
+        <div class="your-services__card__content">
+        {% if service.hasDetailedCard %}
+        {# The HMRC service card contains more information than the regular ones #}
+          <{{serviceHeadingLevel}} class="govuk-heading-s" data-test-id="service-card-heading" {% if EnglishOnlyService %} lang="en"{% endif %}>
+            {{ setKey('header', clientId) | translate }}
+          </{{serviceHeadingLevel}}>
+          {{ bodyParagraph({ classes: "govuk-hint", content: setKey('hintText', clientId) })}}
+          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+          {{ bodyParagraph({ content: setKey('paragraph1', clientId), EnglishOnlyService: EnglishOnlyService })}}
+          {{ bodyParagraph({ content: setKey('paragraph2', clientId), EnglishOnlyService: EnglishOnlyService })}}
+          {{ bodyParagraph({ EnglishOnlyService: EnglishOnlyService, contentBlock: serviceCardLink | safe })}}
+          {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}              
+        {% else %}
+          <{{serviceHeadingLevel}} class="govuk-heading-s govuk-!-font-weight-regular" data-test-id="service-card-heading" {% if EnglishOnlyService %}lang="en"{% endif %}>
+            <a class="govuk-link" href="{{ setKey('linkUrl', clientId) | translate }}">{{ setKey('linkText', clientId)| translate }}</a>
+          </{{serviceHeadingLevel}}>
+          {{ bodyParagraph({ content: 'general.noWelshNoticeInline', testId: "no-welsh-notice-inline", EnglishOnlyService: EnglishOnlyService}) if EnglishOnlyService }}
+          {{ bodyParagraph({ classes: "your-services__card__last-used", contentBlock: ['pages.yourServices.lastUsed' | translate, ': ', service.last_accessed_readable_format] | join | safe }) }}              
+        {% endif %}
+        </div>
+      </li>
+      {# End Service card #}
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <div class="information-box">
+    <h2 class="govuk-heading-m">{{ 'pages.yourServices.informationBox.heading' | translate }}</h2>
+    {{ bodyParagraph({ content: 'pages.yourServices.informationBox.paragraph1'}) }}
+    {{ bodyParagraph({ content: 'pages.yourServices.informationBox.paragraph2'}) }}
+    {% if searchableListEnabled %}
+      {{ bodyParagraph({ contentBlock: 'pages.yourServices.informationBox.paragraph3' | translate | replace("[serviceListLink]", searchableListLink) | safe })}}</p>
+    {% else %}
+      {{ bodyParagraph({ contentBlock: 'pages.yourServices.informationBox.paragraph3' | translate | replace("[serviceListLink]", serviceListLink) | safe })}}</p>
+    {% endif %}
   </div>
 {% endblock %}

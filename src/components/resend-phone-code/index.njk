@@ -1,10 +1,10 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set pageTitleName = 'pages.resendMfaCode.title' | translate %}
 
-{% block content %}
+{% block pageContent %}
     <form action="{{ 'RESEND_PHONE_CODE' | getPath }}" method="post" novalidate="novalidate">
       <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
       <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>

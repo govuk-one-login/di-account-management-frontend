@@ -1,12 +1,8 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% set activeNav = '500' %}
 {% set pageTitleName = 'error.error500.title' | translate %}
 
-{% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l" data-test-id="error-heading">{{ 'error.error500.header' | translate }}</h1>
-      <p class="govuk-body">{{ 'error.error500.content.paragraph1' | translate }}</p>
-    </div>
-  </div>
+{% block pageContent %}
+  <h1 class="govuk-heading-l" data-test-id="error-heading">{{ 'error.error500.header' | translate }}</h1>
+  <p class="govuk-body">{{ 'error.error500.content.paragraph1' | translate }}</p>
 {% endblock %}
