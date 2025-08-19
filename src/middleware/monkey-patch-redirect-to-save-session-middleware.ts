@@ -27,7 +27,13 @@ export function monkeyPatchRedirectToSaveSessionMiddleware(
     };
 
     if (req.session) {
-      req.session.save(() => {
+      req.session.save((err) => {
+        if (err) {
+          logger.warn(
+            { trace: res?.locals?.trace, stack, path: req.path, err },
+            "Unable to save session"
+          );
+        }
         redirect();
       });
     } else {
