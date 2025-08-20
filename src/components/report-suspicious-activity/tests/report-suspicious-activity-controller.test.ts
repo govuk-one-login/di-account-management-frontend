@@ -128,6 +128,10 @@ describe("report suspicious activity controller", () => {
   });
 
   it("Should call next when report parameters don't pass validation", async () => {
+    const configFuncs = require("../../../config");
+    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+      return true;
+    });
     const nextFake = sinon.fake();
     req.query = {
       event: "",
@@ -371,6 +375,10 @@ describe("report suspicious activity controller", () => {
     });
 
     it("Should call next when report parameters don't pass validation", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return true;
+      });
       const nextFake = sinon.fake();
       req.query = {
         page: ["1"],

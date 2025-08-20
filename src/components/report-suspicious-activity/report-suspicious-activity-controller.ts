@@ -247,7 +247,7 @@ export async function reportSuspiciousActivityConfirmationGet(
     );
 
     res.render("report-suspicious-activity/success.njk", {
-      backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${req.query.page ?? "1"}`,
+      backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${req.query.page ?? 1}`,
       email: req.session.user.email,
       contactLink: PATH_DATA.CONTACT.url,
       changePasswordLink: PATH_DATA.SECURITY.url,
