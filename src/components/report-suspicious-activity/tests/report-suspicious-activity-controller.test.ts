@@ -346,7 +346,8 @@ describe("report suspicious activity controller", () => {
       // Act
       await reportSuspiciousActivityConfirmationGet(
         req as Request,
-        res as Response
+        res as Response,
+        () => {}
       );
 
       // Assert
