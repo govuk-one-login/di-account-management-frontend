@@ -23,7 +23,7 @@
 {% endfor %}
 
 {% block pageContent %}
-  <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.activityHistory.header' | translate }}</h1>
+  <h1 class="govuk-heading-l">{{ 'pages.activityHistory.header' | translate }}</h1>
   {% if data.length %} 
     <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
     {% if hasEnglishOnlyServices and currentLngWelsh %}<p class="govuk-body" data-test-id="no-welsh-notice">{{ 'pages.activityHistory.noWelshNotice' | translate }}</p>{% endif %}
