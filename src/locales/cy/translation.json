@@ -76,6 +76,17 @@
     }
   },
   "pages": {
+    "globalLogout": {
+      "title": "Allgofnodi o bob dyfais",
+      "paragraph1": "Allgofnodi o GOV.UK One Login ar bob dyfais.",
+      "paragraph2": "Efallai hoffech wneud hyn os:",
+      "listItem1": "rydych wedi colli eich ffôn",
+      "listItem2": "rydych yn meddwl y gallai rhywun arall gael mynediad at eich gwybodaeth",
+      "paragraph3": "Bydd allgofnodi yn helpu i gadw'ch gwybodaeth yn ddiogel.",
+      "button": "Allgofnodi o bob dyfais",
+      "cancelButton": "Canslo a mynd yn ôl i Diogelwch",
+      "pageTitle": "Allgofnodi o bob dyfais"
+    },
     "searchServices": {
       "title": "Gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login",
       "metaDescription": "Chwiliwch am wasanaethau llywodraeth y gallwch eu defnyddio gyda GOV.UK  One Login.",
@@ -153,6 +164,11 @@
         "heading": "Hanes gweithgaredd",
         "link": "Gweld eich hanes gweithgaredd",
         "info": "Gweld beth rydych chi wedi cael mynediad iddo gyda’ch GOV.UK One Login a phryd."
+      },
+      "globalLogout": {
+        "heading": "Allgofnodi o bob dyfais",
+        "link": "Allgofnodi o bob dyfais",
+        "info": "Gallwch allgofnodi o bob ddyfais i helpu i gadw'ch GOV.UK One Login yn ddiogel."
       }
     },
     "activityHistory": {
