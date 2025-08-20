@@ -26,13 +26,12 @@
         <input type='hidden' name='newBackup' value="{{currentDefault.mfaIdentifier}}" />
         <input type='hidden' name='newDefault' value="{{currentBackup.mfaIdentifier}}" />
         {{ govukButton({
-          "text": button_text|default('pages.switchBackupMethod.button' | translate, true),
-          "type": "Submit",
-          "preventDoubleClick": true,
-          "attributes": {
+          text: 'pages.switchBackupMethod.button' | translate,
+          preventDoubleClick: true,
+          attributes: {
             "data-nav": true,
             "data-link": "SWITCH_BACKUP_METHOD_CONFIRMATION" | getPath
-      }
+          }
         }) }}
     </form>
 

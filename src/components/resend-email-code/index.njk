@@ -19,13 +19,13 @@
     }) }}
     <p class="govuk-body">{{'pages.resendMfaCode.email.paragraph' | translate}}</p>
     {{ govukButton({
-    "text": 'pages.resendMfaCode.continue' | translate,
-    "type": "Submit",
-    "preventDoubleClick": true,
-    "attributes": {
-      "data-nav": true,
-      "data-link": "RESEND_EMAIL_CODE" | getPath
-    } 
-    }) }}
+      text: 'pages.resendMfaCode.continue' | translate,
+      preventDoubleClick: true,
+      attributes: {
+        "data-nav": true,
+        "data-link": "RESEND_EMAIL_CODE" | getPath
+      } 
+      }) 
+    }}
   </form>
 {% endblock %}

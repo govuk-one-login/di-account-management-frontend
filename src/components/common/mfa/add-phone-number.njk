@@ -65,9 +65,8 @@
     }) }}
 
     {{ govukButton({
-      "text": button_text|default('general.continue.label' | translate, true),
-      "type": "Submit",
-      "preventDoubleClick": true
+      text: 'general.continue.label' | translate,
+      preventDoubleClick: true
     }) }}
   </form>
 

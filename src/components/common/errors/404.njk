@@ -3,9 +3,9 @@
 {% set activeNav = null %}
 {% set pageTitleName = 'error.error404.title' | translate %}
 {% if isUserLoggedIn %}
-  {% set buttonText = button_text | default('error.error404.content.signInUserButtonText' | translate, true) %}
+  {% set buttonText = 'error.error404.content.signInUserButtonText' | translate %}
 {% else %}
-  {% set buttonText = button_text | default('error.error404.content.signOutUserButtonText' | translate, true) %}
+  {% set buttonText = 'error.error404.content.signOutUserButtonText' | translate %}
 {% endif %}
 
 {% block pageContent %}
@@ -13,8 +13,8 @@
   <p class="govuk-body">{{'error.error404.content.paragraph1' | translate }}</p>
   <p class="govuk-body">{{'error.error404.content.paragraph2' | translate }}</p>
   {{ govukButton({
-    "text": buttonText,
-    "href": accountHome,
-    "attributes": {"data-nav": true,"data-link": accountHome}
+    text: buttonText,
+    href: accountHome,
+    attributes: {"data-nav": true,"data-link": accountHome}
   }) }}
 {% endblock %}

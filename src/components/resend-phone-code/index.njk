@@ -19,13 +19,12 @@
       <p class="govuk-body">{{'pages.resendMfaCode.phoneNumber.paragraph' | translate}}</p>
 
       {{ govukButton({
-          "text": 'pages.resendMfaCode.continue' | translate,
-          "type": "Submit",
-          "preventDoubleClick": true,
-            attributes: {
-                "data-nav": true,
-                "data-link": "RESEND_PHONE_CODE" | getPath
-            } 
+          text: 'pages.resendMfaCode.continue' | translate,
+          preventDoubleClick: true,
+          attributes: {
+            "data-nav": true,
+            "data-link": "RESEND_PHONE_CODE" | getPath
+          } 
       }) }}
     </form>
 

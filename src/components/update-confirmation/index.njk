@@ -18,18 +18,18 @@
 
 {% if showGovUKButton %}
 {{ govukButton({
-  "text": button_text|default('general.backToGovUKButtonText' | translate, true),
-  "href": govUkLink,
-  "attributes": {
+  text: 'general.backToGovUKButtonText' | translate,
+  href: govUkLink,
+  attributes: {
     "data-nav": true,
     "data-link": govUkLink
   }
 }) }}
 {% else %}
 {{ govukButton({
-  "text": button_text|default('general.backToSecurityButtonText' | translate, true),
-  "href": "SECURITY" | getPath,
-  "attributes": {
+  text: 'general.backToSecurityButtonText' | translate,
+  href: "SECURITY" | getPath,
+  attributes: {
     "data-nav": true,
     "data-link": "SECURITY" | getPath
   }

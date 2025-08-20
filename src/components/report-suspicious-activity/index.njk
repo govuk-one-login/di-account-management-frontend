@@ -36,9 +36,8 @@
       <input type="hidden" name="event_id" value="{{eventId}}"/>
       <input type="hidden" name="page" value="{{page}}"/>
       {{ govukButton({
-        "text": 'pages.reportSuspiciousActivity.submitButtonText' | translate,
-        "type": "Submit",
-        "preventDoubleClick": true
+        text: 'pages.reportSuspiciousActivity.submitButtonText' | translate,
+        preventDoubleClick: true
       }) }}
     </form>
   {% endif %}
