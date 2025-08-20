@@ -13,9 +13,9 @@
   <p class="govuk-body">{{ 'error.timeoutError.content.paragraph2' | translate }}</p>
 
   {{ govukButton({
-      "text": button_text|default('error.timeoutError.content.signInButtonText' | translate, true),
-      "href": '/',
-      "attributes": {"data-nav": true,"data-link": "/"}
+      text: 'error.timeoutError.content.signInButtonText' | translate,
+      href: '/',
+      attributes: {"data-nav": true,"data-link": "/"}
   }) }}
 
   <p class="govuk-body">
