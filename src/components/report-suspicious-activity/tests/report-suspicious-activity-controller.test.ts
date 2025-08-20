@@ -127,6 +127,21 @@ describe("report suspicious activity controller", () => {
     expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
   });
 
+  it("Should call next when report parameters don't pass validation", async () => {
+    const nextFake = sinon.fake();
+    req.query = {
+      event: "",
+    };
+
+    await reportSuspiciousActivityGet(
+      req as Request,
+      res as Response,
+      nextFake
+    );
+
+    expect(nextFake).to.have.been.calledOnce;
+  });
+
   it("You've already reported this activity", async () => {
     const configFuncs = require("../../../config");
     sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
@@ -353,6 +368,21 @@ describe("report suspicious activity controller", () => {
       // Assert
       expect(res.status).to.have.been.calledOnceWith(404);
       expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
+    });
+
+    it("Should call next when report parameters don't pass validation", async () => {
+      const nextFake = sinon.fake();
+      req.query = {
+        page: ["1"],
+      };
+
+      await reportSuspiciousActivityConfirmationGet(
+        req as Request,
+        res as Response,
+        nextFake
+      );
+
+      expect(nextFake).to.have.been.calledOnce;
     });
   });
 });
