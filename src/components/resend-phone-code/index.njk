@@ -10,7 +10,7 @@
       <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
       <input type="hidden" name="intent" value="{{intent}}"/>
 
-      <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.resendMfaCode.header' | translate}}</h1>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.resendMfaCode.header' | translate}}</h1>
 
       {{ govukInsetText({
           text: 'pages.resendMfaCode.phoneNumber.insetText' | translate | replace("[mobile]", phoneNumberRedacted) | safe
