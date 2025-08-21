@@ -10,12 +10,7 @@ export function validateStateMiddleware(
     (key) => key.url === req.path
   );
 
-  if (
-    !Object.prototype.hasOwnProperty.call(
-      req.session.user.state,
-      pageState.type
-    )
-  ) {
+  if (!req.session.user.state?.[pageState.type]) {
     req.log.info(`state exists but no value for ${pageState.type}`);
     req.log.warn(`state exists but no value for ${pageState.type}`);
     return res.redirect(PATH_DATA.YOUR_SERVICES.url);
