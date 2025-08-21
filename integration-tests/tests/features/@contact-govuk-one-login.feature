@@ -4,7 +4,6 @@ Feature: "Contact GOV.UK One Login" page
   Scenario: Visit the "Contact GOV.UK One Login" page
     Given I go to the "Contact GOV.UK One Login" page
     And the page has finished loading
-    And I accept cookies
     Then the page title is "Contact GOV.UK One Login"
     And the page looks as expected
     And the page meets our accessibility standards
@@ -17,19 +16,19 @@ Feature: "Contact GOV.UK One Login" page
     And the page title is "Contact GOV.UK One Login"
     And the page displays the expected webchat content
 
+  @skipTarget-local @postDeploy
   Scenario: Access webchat via the inline button
     Given I go to the "Contact GOV.UK One Login" page
     And the page has finished loading
-    And I accept cookies
     When I click on the inline webchat button
     Then the webchat appears
     When I click on the minimise webchat button
     Then the webchat disappears
 
+  @skipTarget-local @postDeploy
   Scenario: Access webchat via the floating button
     Given I go to the "Contact GOV.UK One Login" page
     And the page has finished loading
-    And I accept cookies
     When I click on the floating webchat button
     Then the webchat appears
     When I click on the minimise webchat button
