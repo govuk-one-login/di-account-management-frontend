@@ -82,9 +82,13 @@ export async function reportSuspiciousActivityGet(
     res.render("common/errors/404.njk");
   } else {
     try {
-      assert.ok(
-        req.query.event !== undefined && req.query.event !== "",
+      assert(
+        typeof req.query.event === "string" && req.query.event !== "",
         "mandatory query parameter 'event' missing from request"
+      );
+      assert(
+        typeof req.query.page === "string" ||
+          typeof req.query.page === "undefined"
       );
     } catch (error) {
       req.log.error(error.message);
@@ -95,10 +99,7 @@ export async function reportSuspiciousActivityGet(
 
     try {
       const response = await dynamoDBService().queryItem(
-        activityLogDynamoDBRequest(
-          req.session.user_id,
-          req.query.event as string
-        )
+        activityLogDynamoDBRequest(req.session.user_id, req.query.event)
       );
       if (response.Items.length !== 1) {
         req.log.error(
@@ -212,7 +213,8 @@ export async function reportSuspiciousActivityPost(
 
 export async function reportSuspiciousActivityConfirmationGet(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   req.metrics?.addMetric(
     "reportSuspiciousActivityConfirmation",
@@ -226,6 +228,16 @@ export async function reportSuspiciousActivityConfirmationGet(
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     res.render("common/errors/404.njk");
   } else {
+    try {
+      assert(
+        typeof req.query.page === "string" ||
+          typeof req.query.page === "undefined"
+      );
+    } catch (error) {
+      req.log.error(error.message);
+      return next();
+    }
+
     setOplSettings(
       {
         ...ACTIVITY_COMMON_OPL_SETTINGS,
@@ -235,7 +247,7 @@ export async function reportSuspiciousActivityConfirmationGet(
     );
 
     res.render("report-suspicious-activity/success.njk", {
-      backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${req.query.page || 1}`,
+      backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${req.query.page ?? 1}`,
       email: req.session.user.email,
       contactLink: PATH_DATA.CONTACT.url,
       changePasswordLink: PATH_DATA.SECURITY.url,
