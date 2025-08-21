@@ -127,7 +127,7 @@ describe("report suspicious activity controller", () => {
     expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
   });
 
-  it("Should call next when report parameters don't pass validation", async () => {
+  it("Should call next when the event query string parameter fails validation", async () => {
     const configFuncs = require("../../../config");
     sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
       return true;
@@ -374,7 +374,7 @@ describe("report suspicious activity controller", () => {
       expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
     });
 
-    it("Should call next when report parameters don't pass validation", async () => {
+    it("Should call next when the page query string parameter fails validation", async () => {
       const configFuncs = require("../../../config");
       sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
         return true;
