@@ -128,6 +128,12 @@ export function eventService(
               defaultMethod.method.phoneNumber,
               "GB"
             ).countryCallingCode,
+          }
+        : {};
+
+    const defaultPhoneNumberObject =
+      defaultMethod?.method.mfaMethodType === mfaMethodTypes.sms
+        ? {
             phone: defaultMethod.method.phoneNumber,
           }
         : {};
@@ -139,6 +145,12 @@ export function eventService(
               backupMethod.method.phoneNumber,
               "GB"
             ).countryCallingCode,
+          }
+        : {};
+
+    const backupPhoneNumberObject =
+      backupMethod?.method.mfaMethodType === mfaMethodTypes.sms
+        ? {
             phone: backupMethod.method.phoneNumber,
           }
         : {};
@@ -156,6 +168,10 @@ export function eventService(
         break;
 
       case EventName.AUTH_MFA_METHOD_ADD_STARTED:
+        baseEvent.user = {
+          ...baseEvent.user,
+          ...defaultPhoneNumberObject,
+        };
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
           ...defaultPhoneNumberCountryCodeObject,
@@ -163,6 +179,10 @@ export function eventService(
         break;
 
       case EventName.AUTH_MFA_METHOD_SWITCH_STARTED:
+        baseEvent.user = {
+          ...baseEvent.user,
+          ...defaultPhoneNumberObject,
+        };
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
           "mfa-type": defaultMethod.method.mfaMethodType,
@@ -171,6 +191,10 @@ export function eventService(
         break;
 
       case EventName.AUTH_MFA_METHOD_DELETE_STARTED:
+        baseEvent.user = {
+          ...baseEvent.user,
+          ...backupPhoneNumberObject,
+        };
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
           "mfa-type": backupMethod.method.mfaMethodType,

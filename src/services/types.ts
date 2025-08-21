@@ -41,6 +41,7 @@ export interface User {
   email?: string;
   ip_address?: string;
   govuk_signin_journey_id?: string;
+  phone?: string;
 }
 
 export interface Platform {
@@ -56,7 +57,6 @@ export interface Extensions {
   "journey-type"?: "ACCOUNT_MANAGEMENT";
   "mfa-type"?: (typeof mfaMethodTypes)[keyof typeof mfaMethodTypes];
   phone_number_country_code?: string;
-  phone?: string;
 }
 
 export interface CurrentTimeDescriptor {
