@@ -10,7 +10,7 @@
 
 {% include "common/errors/errorSummary.njk" %}
 
-<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.changePassword.header' | translate}}</h1>
+<h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.changePassword.header' | translate}}</h1>
 
 <form action="/change-password" method="post" novalidate>
 
@@ -46,9 +46,8 @@
 }) }}
 
 {{ govukButton({
-    "text": button_text|default("general.continue.label" | translate, true),
-    "type": "Submit",
-    "preventDoubleClick": true
+    text: "general.continue.label" | translate,
+    preventDoubleClick: true
 }) }}
 
 </form>

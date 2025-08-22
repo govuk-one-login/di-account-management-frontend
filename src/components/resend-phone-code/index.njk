@@ -1,16 +1,16 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set pageTitleName = 'pages.resendMfaCode.title' | translate %}
 
-{% block content %}
+{% block pageContent %}
     <form action="{{ 'RESEND_PHONE_CODE' | getPath }}" method="post" novalidate="novalidate">
       <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
       <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
       <input type="hidden" name="intent" value="{{intent}}"/>
 
-      <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.resendMfaCode.header' | translate}}</h1>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.resendMfaCode.header' | translate}}</h1>
 
       {{ govukInsetText({
           text: 'pages.resendMfaCode.phoneNumber.insetText' | translate | replace("[mobile]", phoneNumberRedacted) | safe
@@ -19,13 +19,12 @@
       <p class="govuk-body">{{'pages.resendMfaCode.phoneNumber.paragraph' | translate}}</p>
 
       {{ govukButton({
-          "text": 'pages.resendMfaCode.continue' | translate,
-          "type": "Submit",
-          "preventDoubleClick": true,
-            attributes: {
-                "data-nav": true,
-                "data-link": "RESEND_PHONE_CODE" | getPath
-            } 
+          text: 'pages.resendMfaCode.continue' | translate,
+          preventDoubleClick: true,
+          attributes: {
+            "data-nav": true,
+            "data-link": "RESEND_PHONE_CODE" | getPath
+          } 
       }) }}
     </form>
 

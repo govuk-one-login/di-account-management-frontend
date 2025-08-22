@@ -1,9 +1,9 @@
 {% extends "common/layout/base.njk" %}
 {% block content %}
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds {{ rowClasses }}">
-    {% block pageContent %}
-    {% endblock %}
-    </div>
+<div class="govuk-grid-row" {% if rowContainerId %} id="{{ rowContainerId }}" data-test-id="{{ rowContainerId }}"{% endif %}>
+  <div class="govuk-grid-column-two-thirds">
+  {% block pageContent %}
+  {% endblock %}
+  </div>
 </div>
 {% endblock %}
