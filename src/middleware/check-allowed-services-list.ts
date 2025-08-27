@@ -27,22 +27,6 @@ export const hasAllowedActivityLogServices = async (
   );
 };
 
-export async function checkActivityLogAllowedServicesList(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  if (await hasAllowedActivityLogServices(req, res)) {
-    next();
-  } else {
-    req.log.info(
-      { trace: res.locals.trace },
-      LOG_MESSAGES.ILLEGAL_ATTEMPT_TO_ACCESS_ACTIVITY_LOG
-    );
-    res.redirect(PATH_DATA.SECURITY.url);
-  }
-}
-
 export async function checkRSAAllowedServicesList(
   req: Request,
   res: Response,
