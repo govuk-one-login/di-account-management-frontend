@@ -51,7 +51,7 @@ cd integration-tests
 npm run test:update-snapshots
 ```
 
-Before running the tests these commands will start the app and also start the test server in which the browsers will run. These servers are also stopped once the tests have run. Starting the servers can take some time. If you're writing or updating tests and will need to frequently run them whilst doing so then prefer starting the app and test server manually:
+Before running the tests these commands will start the app and also start the test server in which the browsers will run. These servers are also stopped once the tests have run. Starting the servers can take some time. If you’re writing or updating tests and will need to frequently run them whilst doing so then prefer starting the app and test server manually:
 
 To run the app:
 
@@ -69,7 +69,7 @@ npm run start-test-server
 
 With the servers already running the tests will execute more quickly as they don't need to wait for the servers to start.
 
-If you're using the VS Code Playwright extension (prefer using UI mode where possible) then you can run watch mode to automatically update the tests as changes are made:
+If you’re using the VS Code Playwright extension (prefer using UI mode where possible) then you can run watch mode to automatically update the tests as changes are made:
 
 ```
 cd integration-tests

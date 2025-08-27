@@ -541,7 +541,7 @@
             "text": "E-bost, neges destun neu alwad ffôn annisgwyl am eich GOV.UK One Login"
           }
         ],
-        "guidance-for-helpers": "Os ydych yn cael trafferth defnyddio GOV.UK One Login ar eich pen eich hun, gallwch gael help gan rywun rydych yn ei adnabod ac yn ymddiried ynddynt. Darganfyddwch <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login.cy\",>beth gall ac na all y person sy'n eich helpu ei wneud</a>."
+        "guidanceForHelpers": "Os ydych yn cael trafferth defnyddio GOV.UK One Login ar eich pen eich hun, gallwch gael help gan rywun rydych yn ei adnabod ac yn ymddiried ynddynt. Darganfyddwch <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login.cy\",>beth gall ac na all y person sy'n eich helpu ei wneud</a>."
       },
       "section2": {
         "heading": "Pan fyddwch yn cysylltu â ni"
