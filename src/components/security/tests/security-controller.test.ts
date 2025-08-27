@@ -10,7 +10,6 @@ describe("security controller", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let configFuncs: any;
-  let allowedServicesModule: any;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -22,7 +21,6 @@ describe("security controller", () => {
     };
     configFuncs = require("../../../config");
     sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
-    allowedServicesModule = require("../../../middleware/check-allowed-services-list");
   });
 
   afterEach(() => {
@@ -31,10 +29,6 @@ describe("security controller", () => {
 
   describe("securityGet", () => {
     it("should render security view with SMS MFA method", async () => {
-      sandbox
-        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
-        .resolves(true);
-
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -56,51 +50,6 @@ describe("security controller", () => {
 
       expect(res.render).to.have.calledWith("security/index.njk", {
         email: "test@test.com",
-        hasActivityLog: true,
-        supportGlobalLogout: false,
-        activityLogUrl: "/activity-history",
-        enterPasswordUrl: "/enter-password?from=security&edit=true",
-        mfaMethods: [
-          {
-            text: "pages.security.mfaSection.defaultMethod.phoneNumber.title",
-            linkHref:
-              "/enter-password?from=security&edit=true&type=changePhoneNumber",
-            linkText:
-              "pages.security.mfaSection.defaultMethod.phoneNumber.change",
-            priorityIdentifier: "DEFAULT",
-          },
-        ],
-        canChangeTypeofPrimary: true,
-      });
-    });
-
-    it("should render security view without activity log when the user doesn't have a supported service", async () => {
-      sandbox
-        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
-        .resolves(false);
-
-      req.session.user = {
-        email: "test@test.com",
-        phoneNumber: "xxxxxxx7898",
-        isPhoneNumberVerified: true,
-      } as any;
-      req.session.mfaMethods = [
-        {
-          mfaIdentifier: 1,
-          priorityIdentifier: "DEFAULT",
-          method: {
-            mfaMethodType: "SMS",
-            PhoneNumber: "xxxxxxx7898",
-          },
-          methodVerified: true,
-        },
-      ] as any;
-
-      await securityGet(req as Request, res as Response);
-
-      expect(res.render).to.have.calledWith("security/index.njk", {
-        email: "test@test.com",
-        hasActivityLog: false,
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
@@ -119,10 +68,6 @@ describe("security controller", () => {
     });
 
     it("throws an error when the mfaMethodType is undefined", async () => {
-      sandbox
-        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
-        .resolves(false);
-
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -146,10 +91,6 @@ describe("security controller", () => {
     });
 
     it("throws an error when the mfaMethodType is not unknown", async () => {
-      sandbox
-        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
-        .resolves(false);
-
       req.session.user = {
         email: "test@test.com",
         phoneNumber: "xxxxxxx7898",
@@ -172,55 +113,7 @@ describe("security controller", () => {
       ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: INVALID");
     });
 
-    it("should render security view with activity log when the user has a supported service and the feature flag is on", async () => {
-      sandbox
-        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
-        .resolves(true);
-
-      req.session.user = {
-        email: "test@test.com",
-        phoneNumber: "xxxxxxx7898",
-        isPhoneNumberVerified: true,
-      } as any;
-      req.session.mfaMethods = [
-        {
-          mfaIdentifier: 1,
-          priorityIdentifier: "DEFAULT",
-          method: {
-            mfaMethodType: "SMS",
-            PhoneNumber: "xxxxxxx7898",
-          },
-          methodVerified: true,
-        },
-      ] as any;
-
-      await securityGet(req as Request, res as Response);
-
-      expect(res.render).to.have.calledWith("security/index.njk", {
-        email: "test@test.com",
-        hasActivityLog: true,
-        supportGlobalLogout: false,
-        activityLogUrl: "/activity-history",
-        enterPasswordUrl: "/enter-password?from=security&edit=true",
-        mfaMethods: [
-          {
-            text: "pages.security.mfaSection.defaultMethod.phoneNumber.title",
-            linkHref:
-              "/enter-password?from=security&edit=true&type=changePhoneNumber",
-            linkText:
-              "pages.security.mfaSection.defaultMethod.phoneNumber.change",
-            priorityIdentifier: "DEFAULT",
-          },
-        ],
-        canChangeTypeofPrimary: true,
-      });
-    });
-
     it("should render security view with empty MFA methods when no MFA methods are set", async () => {
-      sandbox
-        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
-        .resolves(true);
-
       req.session.user = { email: "test@test.com" } as any;
       req.session.mfaMethods = [];
 
@@ -228,7 +121,6 @@ describe("security controller", () => {
 
       expect(res.render).to.have.been.calledWith("security/index.njk", {
         email: "test@test.com",
-        hasActivityLog: true,
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
@@ -238,10 +130,6 @@ describe("security controller", () => {
     });
 
     it("should render security view with AUTH_APP MFA method", async () => {
-      sandbox
-        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
-        .resolves(true);
-
       req.session.user = { email: "test@test.com" } as any;
       req.session.mfaMethods = [
         {
@@ -258,7 +146,6 @@ describe("security controller", () => {
 
       expect(res.render).to.have.been.calledWith("security/index.njk", {
         email: "test@test.com",
-        hasActivityLog: true,
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
         enterPasswordUrl: "/enter-password?from=security&edit=true",
@@ -295,10 +182,6 @@ describe("security controller", () => {
     });
 
     it("should set canChangeTypeofPrimary to false when MFA constraints apply", async () => {
-      sandbox
-        .stub(allowedServicesModule, "hasAllowedActivityLogServices")
-        .resolves(true);
-
       req.session.user = { email: "test@test.com" } as any;
       req.session.mfaMethods = [
         {

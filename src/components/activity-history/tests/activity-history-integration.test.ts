@@ -91,15 +91,6 @@ describe("Integration:: Activity history", () => {
       });
   });
 
-  it("should redirect if the user does not have allowed services on the list", async () => {
-    const app = await appWithMiddlewareSetup([], {
-      hasAllowedActivityLogServices: false,
-    });
-    const response = await request(app).get(url);
-    expect(response.status).to.equal(302);
-    expect(response.header.location).to.equal(PATH_DATA.SECURITY.url);
-  });
-
   it("should display without pagination when data is less than activityLogItemsPerPage", async () => {
     const dataShort = [
       {
@@ -261,7 +252,6 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   const reportSuspiciousActivity =
     !config?.reportSuspiciousActivityJourneyDisabled;
   const language = config?.language ?? "en";
-  const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
 
   const activity = data ?? [
     {
@@ -314,10 +304,6 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
     return reportSuspiciousActivity;
   });
-
-  sandbox
-    .stub(checkAllowedServicesList, "hasAllowedActivityLogServices")
-    .resolves(config?.hasAllowedActivityLogServices ?? true);
 
   return await require("../../../app").createApp();
 };

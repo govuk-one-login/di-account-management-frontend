@@ -99,13 +99,11 @@
 
   </div>
 
-  {% if hasActivityLog %}
-    <div class="summary-list-container" data-test-id="activity-log-section">
-      <h2 class="govuk-heading-m">{{ 'pages.security.activityHistory.heading' | translate }}</h2>
-      <p class="govuk-body">{{ 'pages.security.activityHistory.info' | translate }}</p>
-      <p class="govuk-body"><a href="{{activityLogUrl}}" class="govuk-link">{{ 'pages.security.activityHistory.link' | translate }}</a></p>
-    </div>
-  {% endif %}
+  <div class="summary-list-container" data-test-id="activity-log-section">
+    <h2 class="govuk-heading-m">{{ 'pages.security.activityHistory.heading' | translate }}</h2>
+    <p class="govuk-body">{{ 'pages.security.activityHistory.info' | translate }}</p>
+    <p class="govuk-body"><a href="{{activityLogUrl}}" class="govuk-link">{{ 'pages.security.activityHistory.link' | translate }}</a></p>
+  </div>
 
   {% if supportGlobalLogout %}
     <div class="summary-list-container" data-test-id="global-logout-section">
