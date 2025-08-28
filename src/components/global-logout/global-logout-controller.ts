@@ -4,7 +4,11 @@ import { EventName, LogoutState, PATH_DATA } from "../../app.constants";
 import { handleLogout } from "../../utils/logout";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { setOplSettings } from "../../utils/opl";
-import { UserJourney } from "../../utils/state-machine";
+import {
+  UserJourney,
+  EventType,
+  getNextState,
+} from "../../utils/state-machine";
 
 export function globalLogoutGet(req: Request, res: Response): void {
   setOplSettings(
@@ -31,5 +35,9 @@ export async function globalLogoutConfirmGet(req: Request, res: Response) {
   );
   service.send(auditEvent, res.locals.trace);
   req.metrics?.addMetric("globalLogoutPost", MetricUnit.Count, 1);
+  req.session.user.state.globalLogout = getNextState(
+    req.session.user.state.globalLogout.value,
+    EventType.ValueUpdated
+  );
   await handleLogout(req, res, LogoutState.Start);
 }

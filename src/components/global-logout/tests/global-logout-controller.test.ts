@@ -8,8 +8,10 @@ import {
 } from "../global-logout-controller";
 import * as eventServiceModule from "../../../services/event-service";
 import * as logoutUtils from "../../../utils/logout";
+import * as stateMachine from "../../../utils/state-machine";
 import { EventName, LogoutState, PATH_DATA } from "../../../app.constants";
 import { UserJourney } from "../../../utils/state-machine";
+import { RequestBuilder } from "../../../../test/utils/builders";
 
 describe("Global Logout Controller", () => {
   describe("globalLogoutGet", () => {
@@ -41,6 +43,7 @@ describe("Global Logout Controller", () => {
     let buildAuditEventStub: sinon.SinonStub;
     let sendStub: sinon.SinonStub;
     let handleLogoutStub: sinon.SinonStub;
+    let getNextStateStub: sinon.SinonStub;
 
     beforeEach(() => {
       buildAuditEventStub = sinon.stub().returns("dummyAuditEvent");
@@ -50,6 +53,13 @@ describe("Global Logout Controller", () => {
         send: sendStub,
       });
       handleLogoutStub = sinon.stub(logoutUtils, "handleLogout").resolves();
+      getNextStateStub = sinon.stub(stateMachine, "getNextState").returns({
+        value: "CONFIRMATION",
+        events: [
+          stateMachine.EventType.Authenticated,
+          stateMachine.EventType.ValueUpdated,
+        ],
+      });
     });
 
     afterEach(() => {
@@ -57,7 +67,11 @@ describe("Global Logout Controller", () => {
     });
 
     it("should send an audit event when the user logs out", async () => {
-      const req = {} as Request;
+      const req = new RequestBuilder()
+        .withSessionUserState({
+          globalLogout: { value: "CHANGE_VALUE" },
+        })
+        .build() as Request;
       const res = {
         locals: { trace: "dummyTrace" },
       } as unknown as Response;
@@ -79,6 +93,26 @@ describe("Global Logout Controller", () => {
         req,
         res,
         LogoutState.Start
+      );
+    });
+
+    it("should update the user's state", async () => {
+      const req = new RequestBuilder()
+        .withSessionUserState({
+          globalLogout: { value: "CHANGE_VALUE" },
+        })
+        .build() as Request;
+      const res = {
+        locals: { trace: "dummyTrace" },
+      } as unknown as Response;
+
+      await globalLogoutConfirmGet(req, res);
+
+      sinon.assert.calledOnce(getNextStateStub);
+      sinon.assert.calledWithExactly(
+        getNextStateStub,
+        "CHANGE_VALUE",
+        stateMachine.EventType.ValueUpdated
       );
     });
   });
