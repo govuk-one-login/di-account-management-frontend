@@ -94,7 +94,7 @@
       "heading": "Services you can use with GOV.UK One Login",
       "paragraphs": [
         "At the moment, you can only use GOV.UK One Login to access some government services.",
-        "In the future, you'll be able to use it to access all services on GOV.UK."
+        "In the future, you’ll be able to use it to access all services on GOV.UK."
       ],
       "searchLabel": "Search for a service",
       "searchButton": "Search for services using GOV.UK One Login",
@@ -175,8 +175,8 @@
       }
     },
     "confirmaddBackup": {
-      "title": "You've added a back-up method for getting security codes",
-      "heading": "You've added a back-up method for getting security codes",
+      "title": "You’ve added a back-up method for getting security codes",
+      "heading": "You’ve added a back-up method for getting security codes",
       "message": "If your default method for getting security codes is not available, you can get a code from this authenticator app instead."
     },
     "addBackup": {
@@ -189,7 +189,7 @@
         "title": "Authenticator app for smartphone, tablet or computer",
         "help": {
           "title": "What is an authenticator app?",
-          "text1": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
+          "text1": "An authenticator app creates a security code that helps confirm it’s you when you sign in.",
           "text2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer."
         }
       },
@@ -236,8 +236,8 @@
       "title": "Enter your mobile phone number",
       "heading": "Enter your mobile phone number",
       "confirm": {
-        "title": "You've added a back-up method for getting security codes",
-        "heading": "You've added a back-up method for getting security codes",
+        "title": "You’ve added a back-up method for getting security codes",
+        "heading": "You’ve added a back-up method for getting security codes",
         "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with <strong>[mobile]</strong> instead."
       }
     },
@@ -274,7 +274,7 @@
           }
         }
       },
-      "securityNoticeTitle": "If there's activity you do not recognise",
+      "securityNoticeTitle": "If there’s activity you do not recognise",
       "securityNoticeContent1": "You should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login safe.",
       "securityNoticeContent2": "You can also <a target='_blank' href='[reportActivityLink]' class='govuk-link'>report it to the GOV.UK One Login team (opens in new tab)</a>. The team reviews and acts on these reports but you will not get a personalised reply.",
       "noWelshNotice": "If a service you’ve visited is not available in Welsh it will appear here in English."
@@ -316,7 +316,7 @@
         "header": "You’ve already reported this activity",
         "paragraph": "You reported this on [date].",
         "paragraph2": "The report number is <strong>[reportNumber]</strong>.",
-        "noReportNo": "You'll get a confirmation email with your report number.",
+        "noReportNo": "You’ll get a confirmation email with your report number.",
         "contact": {
           "heading": "If you need to contact us",
           "paragraph1": "You can <a class=\"govuk-link\" href=\"[contactHref]\" target=\"_blank\">contact the GOV.UK One Login team (opens in a new tab)</a>.",
@@ -340,7 +340,7 @@
       "informationBox": {
         "heading": "Services you can use with GOV.UK One Login",
         "paragraph1": "GOV.UK One Login is new. At the moment you can only use it to access some government services.",
-        "paragraph2": "In the future, you'll be able to use GOV.UK One Login to access all services on GOV.UK.",
+        "paragraph2": "In the future, you’ll be able to use GOV.UK One Login to access all services on GOV.UK.",
         "paragraph3": "See the <a class=\"govuk-link\" href=\"[serviceListLink]\">services you can use with GOV.UK One Login</a>.",
         "link": "https://www.gov.uk/using-your-gov-uk-one-login/services"
       }
@@ -385,11 +385,11 @@
       },
       "removeBackup": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "changeDefaultMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "cancelText": "Cancel and go back to Security"
     },
@@ -630,7 +630,7 @@
       "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
-        "paragraphs": ["Read our guidance if you're having a problem with:"],
+        "paragraphs": ["Read our guidance if you’re having a problem with:"],
         "links": [
           {
             "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app",
@@ -665,7 +665,7 @@
             "text": "An unexpected email, text message or phone call about your GOV.UK One Login"
           }
         ],
-        "guidance-for-helpers": "If you're having trouble using GOV.UK One Login by yourself, you can get help from someone you know and trust. Find out <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login\">what the person who helps you can and cannot do</a>."
+        "guidanceForHelpers": "If you’re having trouble using GOV.UK One Login by yourself, you can get help from someone you know and trust. Find out <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login\">what the person who helps you can and cannot do</a>."
       },
       "section2": {
         "heading": "When you contact us"
@@ -732,7 +732,7 @@
         },
         "phone": {
           "heading": "Phone",
-          "paragraphs": ["You'll need your reference code when you call."],
+          "paragraphs": ["You’ll need your reference code when you call."],
           "insetText": {
             "paragraphs": [
               "<strong>From the UK:</strong><br>0300 373 9020",
@@ -761,7 +761,7 @@
       "title": "Your GOV.UK One Login has been permanently locked",
       "header": "Your GOV.UK One Login has been permanently locked",
       "section1": {
-        "paragraph1": "You've been signed out and you can no longer use your GOV.UK One Login."
+        "paragraph1": "You’ve been signed out and you can no longer use your GOV.UK One Login."
       },
       "section2": {
         "heading": "What you can do",
@@ -776,7 +776,7 @@
       "title": "Sorry, there is a problem",
       "heading": "Sorry, there is a problem",
       "section1": {
-        "paragraph1": "You've been signed out."
+        "paragraph1": "You’ve been signed out."
       },
       "section2": {
         "paragraph1": "You cannot use your GOV.UK One Login at the moment.",

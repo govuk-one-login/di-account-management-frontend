@@ -146,7 +146,7 @@ describe("report suspicious activity controller", () => {
     expect(nextFake).to.have.been.calledOnce;
   });
 
-  it("You've already reported this activity", async () => {
+  it("You’ve already reported this activity", async () => {
     const configFuncs = require("../../../config");
     sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
       return true;
