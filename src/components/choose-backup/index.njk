@@ -2,7 +2,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set helpText %}
     <p class="govuk-body">{{ 'pages.addBackup.app.help.text1' | translate }}</p>
@@ -27,8 +26,8 @@
 {% endif %}
 
 {% set pageTitleName = 'pages.addBackup.backup.title' | translate %}
+
 {% block pageContent %}
-    {% include "common/errors/errorSummary.njk" %}
     <form action="{{ "ADD_MFA_METHOD" | getPath }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
     {% if showSingleMethod %}
