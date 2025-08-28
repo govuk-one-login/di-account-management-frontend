@@ -14,11 +14,11 @@ export const PATH_DATA: Record<
   YOUR_SERVICES: { url: "/your-services" },
   ENTER_PASSWORD: { url: "/enter-password" },
   SEARCH_SERVICES: { url: "/services-using-one-login" },
-  GLOBAL_LOGOUT: { url: "/global-logout", type: UserJourney.GlobalLogout },
+  GLOBAL_LOGOUT: { url: "/global-logout" },
   GLOBAL_LOGOUT_CONFIRM: {
     url: "/global-logout/confirm",
     type: UserJourney.GlobalLogout,
-    event: EventType.Confirmation,
+    event: EventType.ValueUpdated,
   },
   ADD_MFA_METHOD: {
     url: "/choose-backup",

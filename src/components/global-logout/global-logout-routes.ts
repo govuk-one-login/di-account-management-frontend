@@ -1,6 +1,7 @@
 import { PATH_DATA } from "../../app.constants";
 import * as express from "express";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import {
   globalLogoutConfirmGet,
   globalLogoutGet,
@@ -24,6 +25,7 @@ router.post(
 router.get(
   PATH_DATA.GLOBAL_LOGOUT_CONFIRM.url,
   requiresAuthMiddleware,
+  validateStateMiddleware,
   globalLogoutConfirmGet
 );
 

@@ -19,3 +19,10 @@ Feature: Global logout
     And the page has finished loading
     Then I am on the sign in page
 
+  Scenario: Blocks a user in the wrong state
+    Given I go to the "Root" page
+    And I sign in as the "default" user
+    And the page has finished loading
+    And I go to the "Global logout confirm" page
+    And the page has finished loading
+    Then the page title is prefixed with "Your services"
