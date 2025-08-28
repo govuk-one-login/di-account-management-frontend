@@ -33,6 +33,10 @@ Given("I click the {string} link", async ({ page }, linkLabel: string) => {
   await page.getByRole("link", { name: linkLabel, exact: true }).click();
 });
 
+Given("I click the {string} button", async ({ page }, name: string) => {
+  await page.getByRole("button", { name, exact: true }).click();
+});
+
 Given("the page has finished loading", async ({ page }) => {
   // eslint-disable-next-line playwright/no-networkidle
   await page.waitForLoadState("networkidle");
@@ -64,6 +68,12 @@ Then(
 
 Then("the page title is {string}", async ({ page }, pageTitle: string) => {
   expect(await page.title()).toBe(pageTitle);
+});
+
+Then("I am on the sign in page", async ({ page }) => {
+  await expect(
+    page.getByText("API Simulation Tool", { exact: true })
+  ).toBeVisible();
 });
 
 Then("the page looks as expected", async ({ page }) => {
