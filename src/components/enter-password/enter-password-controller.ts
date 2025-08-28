@@ -43,6 +43,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.RemoveBackup]: PATH_DATA.DELETE_MFA_METHOD.url,
   [UserJourney.SwitchBackupMethod]: PATH_DATA.SWITCH_BACKUP_METHOD.url,
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+  [UserJourney.GlobalLogout]: PATH_DATA.GLOBAL_LOGOUT_CONFIRM.url,
 };
 
 const getOplValues = (): OplSettingsLookupObject => ({

@@ -15,6 +15,11 @@ export const PATH_DATA: Record<
   ENTER_PASSWORD: { url: "/enter-password" },
   SEARCH_SERVICES: { url: "/services-using-one-login" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
+  GLOBAL_LOGOUT_CONFIRM: {
+    url: "/global-logout/confirm",
+    type: UserJourney.GlobalLogout,
+    event: EventType.ValueUpdated,
+  },
   ADD_MFA_METHOD: {
     url: "/choose-backup",
     event: EventType.SelectedApp,
