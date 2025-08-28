@@ -77,6 +77,10 @@ Then("I am on the sign in page", async ({ page }) => {
   ).toBeVisible();
 });
 
+Then("the page contains {string}", async ({ page }, content: string) => {
+  await expect(page.getByText(content)).toBeVisible();
+});
+
 Then("the page looks as expected", async ({ page }) => {
   expect(
     await page.screenshot({
