@@ -1,7 +1,7 @@
 Feature: Global logout
 
   @failMobile
-  Scenario: Trigger a global logout
+  Scenario: A user triggers a global logout
     Given I go to the "Root" page
     And I sign in as the "default" user
     And the page has finished loading
@@ -15,11 +15,12 @@ Feature: Global logout
     Given I click the "Sign out of all devices" button
     And the page has finished loading
     And the page title is prefixed with "Enter your password"
+    And the page looks as expected
     Given I enter and submit my password "Pa55w0rd!"
     And the page has finished loading
     Then I am on the sign in page
 
-  Scenario: Blocks a user in the wrong state
+  Scenario: A user in the wrong state can't trigger a global logout
     Given I go to the "Root" page
     And I sign in as the "default" user
     And the page has finished loading
