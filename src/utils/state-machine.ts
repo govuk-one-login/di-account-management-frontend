@@ -16,6 +16,7 @@ enum UserJourney {
   RemoveBackup = "removeBackup",
   SwitchBackupMethod = "switchBackupMethod",
   ChangeDefaultMethod = "changeDefaultMethod",
+  GlobalLogout = "globalLogout",
 }
 
 enum EventType {

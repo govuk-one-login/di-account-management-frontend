@@ -1,10 +1,15 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import { Request, Response } from "express";
-import { globalLogoutGet, globalLogoutPost } from "../global-logout-controller";
+import {
+  globalLogoutGet,
+  globalLogoutPost,
+  globalLogoutConfirmGet,
+} from "../global-logout-controller";
 import * as eventServiceModule from "../../../services/event-service";
 import * as logoutUtils from "../../../utils/logout";
-import { EventName, LogoutState } from "../../../app.constants";
+import { EventName, LogoutState, PATH_DATA } from "../../../app.constants";
+import { UserJourney } from "../../../utils/state-machine";
 
 describe("Global Logout Controller", () => {
   describe("globalLogoutGet", () => {
@@ -20,6 +25,19 @@ describe("Global Logout Controller", () => {
   });
 
   describe("globalLogoutPost", () => {
+    it("should redirect the user to enter their password", () => {
+      const req = {} as Request;
+      const res = { redirect: sinon.spy(), locals: {} };
+      globalLogoutPost(req, res as unknown as Response);
+
+      expect(res.redirect.calledOnce).to.be.true;
+      expect(res.redirect.firstCall.args[0]).to.equal(
+        `${PATH_DATA.ENTER_PASSWORD.url}?type=${UserJourney.GlobalLogout}`
+      );
+    });
+  });
+
+  describe("globalLogoutConfirmGet", () => {
     let buildAuditEventStub: sinon.SinonStub;
     let sendStub: sinon.SinonStub;
     let handleLogoutStub: sinon.SinonStub;
@@ -44,7 +62,7 @@ describe("Global Logout Controller", () => {
         locals: { trace: "dummyTrace" },
       } as unknown as Response;
 
-      await globalLogoutPost(req, res);
+      await globalLogoutConfirmGet(req, res);
 
       sinon.assert.calledOnce(buildAuditEventStub);
       sinon.assert.calledWithExactly(

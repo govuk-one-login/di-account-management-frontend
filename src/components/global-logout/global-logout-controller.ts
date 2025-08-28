@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { eventService } from "../../services/event-service";
-import { EventName, LogoutState } from "../../app.constants";
+import { EventName, LogoutState, PATH_DATA } from "../../app.constants";
 import { handleLogout } from "../../utils/logout";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { setOplSettings } from "../../utils/opl";
+import { UserJourney } from "../../utils/state-machine";
 
 export function globalLogoutGet(req: Request, res: Response): void {
   setOplSettings(
@@ -15,7 +16,13 @@ export function globalLogoutGet(req: Request, res: Response): void {
   res.render("global-logout/index.njk", {});
 }
 
-export async function globalLogoutPost(req: Request, res: Response) {
+export function globalLogoutPost(req: Request, res: Response) {
+  res.redirect(
+    `${PATH_DATA.ENTER_PASSWORD.url}?type=${UserJourney.GlobalLogout}`
+  );
+}
+
+export async function globalLogoutConfirmGet(req: Request, res: Response) {
   const service = eventService();
   const auditEvent = service.buildAuditEvent(
     req,
