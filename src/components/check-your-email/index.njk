@@ -3,16 +3,12 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitleName = 'pages.checkYourEmail.title' | translate %}
 
 {% set backLink = 'pages.checkYourEmail.changeEmailLinkHref' | translate %}
 
 {% block pageContent %}
-
-{% include "common/errors/errorSummary.njk" %}
-
 <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.checkYourEmail.header' | translate}}</h1>
 
 {{ govukInsetText({

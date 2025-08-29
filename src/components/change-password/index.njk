@@ -1,14 +1,11 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "common/show-password/macro.njk" import govukInputWithShowPassword %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitleName = 'pages.changePassword.title' | translate %}
 
 {% block pageContent %}
-
-{% include "common/errors/errorSummary.njk" %}
 
 <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.changePassword.header' | translate}}</h1>
 

@@ -2,13 +2,10 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitleName = 'pages.addBackupApp.title' | translate %}
 
 {% block pageContent %}
-  {% include "common/errors/errorSummary.njk" %}
-
   <h1 class="govuk-heading-xl">{{ 'pages.addBackupApp.title' | translate }}</h1>
   <ol class="govuk-list">
     <li>
