@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
 import { eventService } from "../../services/event-service";
-import { EventName, LogoutState } from "../../app.constants";
+import { EventName, LogoutState, PATH_DATA } from "../../app.constants";
 import { handleLogout } from "../../utils/logout";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { setOplSettings } from "../../utils/opl";
+import {
+  UserJourney,
+  EventType,
+  getNextState,
+} from "../../utils/state-machine";
 
 export function globalLogoutGet(req: Request, res: Response): void {
   setOplSettings(
@@ -15,7 +20,18 @@ export function globalLogoutGet(req: Request, res: Response): void {
   res.render("global-logout/index.njk", {});
 }
 
-export async function globalLogoutPost(req: Request, res: Response) {
+export function globalLogoutPost(req: Request, res: Response) {
+  res.redirect(
+    `${PATH_DATA.ENTER_PASSWORD.url}?type=${UserJourney.GlobalLogout}`
+  );
+}
+
+// This GET handler performs a destructive action.
+// We need to do this because the screen immediately before this is the
+// 'enter your password' screen. The POST handler on that route is already
+// large and complicated. It's 'less bad' to leave that handler to just
+// perform the redirect back here, than adding a custom branch and behaviour.
+export async function globalLogoutConfirmGet(req: Request, res: Response) {
   const service = eventService();
   const auditEvent = service.buildAuditEvent(
     req,
@@ -24,5 +40,9 @@ export async function globalLogoutPost(req: Request, res: Response) {
   );
   service.send(auditEvent, res.locals.trace);
   req.metrics?.addMetric("globalLogoutPost", MetricUnit.Count, 1);
+  req.session.user.state.globalLogout = getNextState(
+    req.session.user.state.globalLogout.value,
+    EventType.ValueUpdated
+  );
   await handleLogout(req, res, LogoutState.Start);
 }

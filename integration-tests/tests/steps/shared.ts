@@ -11,6 +11,7 @@ const pageTitleToPath: Record<string, string> = {
   "Your services": "/your-services",
   "Contact GOV.UK One Login": "/contact-gov-uk-one-login",
   "Services you can use with GOV.UK One Login": "/services-using-one-login",
+  "Global logout confirm": "/global-logout/confirm",
 };
 
 Then("the page meets our accessibility standards", async ({ page }) => {
@@ -31,6 +32,10 @@ Given("I go to the {string} page", async ({ page }, pageTitle: string) => {
 
 Given("I click the {string} link", async ({ page }, linkLabel: string) => {
   await page.getByRole("link", { name: linkLabel, exact: true }).click();
+});
+
+Given("I click the {string} button", async ({ page }, name: string) => {
+  await page.getByRole("button", { name, exact: true }).click();
 });
 
 Given("the page has finished loading", async ({ page }) => {
@@ -65,6 +70,19 @@ Then(
 Then("the page title is {string}", async ({ page }, pageTitle: string) => {
   expect(await page.title()).toBe(pageTitle);
 });
+
+Then("I am on the sign in page", async ({ page }) => {
+  await expect(
+    page.getByText("API Simulation Tool", { exact: true })
+  ).toBeVisible();
+});
+
+Then(
+  "the page contains the text {string}",
+  async ({ page }, content: string) => {
+    await expect(page.getByText(content)).toBeVisible();
+  }
+);
 
 Then("the page looks as expected", async ({ page }) => {
   expect(
