@@ -32,7 +32,7 @@ Feature: Global logout
     Given I click the "Sign out of all devices" button
     And the page title is prefixed with "Enter your password"
     Given I enter and submit my password "Pa55w0rd!"
-    Then the page contains "You cannot use your GOV.UK One Login at the moment"
+    Then the page contains the text "You cannot use your GOV.UK One Login at the moment"
 
 
   Scenario: A permanently suspended user can't trigger a global logout
