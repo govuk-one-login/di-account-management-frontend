@@ -1,13 +1,10 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitleName = 'pages.changeEmail.title' | translate %}
 
 {% block pageContent %}
-
-{% include "common/errors/errorSummary.njk" %}
 
 <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.changeEmail.header' | translate}}</h1>
 
