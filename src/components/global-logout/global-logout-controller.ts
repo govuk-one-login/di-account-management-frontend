@@ -26,6 +26,11 @@ export function globalLogoutPost(req: Request, res: Response) {
   );
 }
 
+// This GET handler performs a destructive action.
+// We need to do this because the screen immediately before this is the
+// 'enter your password' screen. The POST handler on that route is already
+// large and complicated. It's 'less bad' to leave that handler to just
+// perform the redirect back here, than adding a custom branch and behaviour.
 export async function globalLogoutConfirmGet(req: Request, res: Response) {
   const service = eventService();
   const auditEvent = service.buildAuditEvent(
