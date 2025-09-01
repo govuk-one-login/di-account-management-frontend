@@ -84,6 +84,10 @@ Parameters:
   ActivityLogTableName:
     Type: String
     Default: activity_log
+  ForceUpdateValue:
+    Type: String
+    Default: "0"
+    Description: Dummy parameter to force stack updates
   DeploymentStrategy:
     Description: "Predefined deployment configuration for ECS application"
     Type: String
