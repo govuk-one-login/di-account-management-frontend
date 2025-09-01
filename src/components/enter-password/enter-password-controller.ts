@@ -95,6 +95,9 @@ const getOplValues = (): OplSettingsLookupObject => ({
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "acef67be-40e5-4ebf-83d6-b8bc8c414304",
   },
+  [UserJourney.GlobalLogout]: {
+    contentId: "cefa908b-d774-4da4-b8df-3d4bc6ec3323",
+  },
 });
 
 const getRenderOptions = (req: Request, requestType: UserJourney) => {
