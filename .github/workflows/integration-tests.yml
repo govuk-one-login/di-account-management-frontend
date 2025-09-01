@@ -1,9 +1,8 @@
 name: "Integration tests"
 
 on:
-  push:
-    branches-ignore:
-      - main
+  pull_request:
+  merge_group:
 
 jobs:
   end_to_end_tests:
