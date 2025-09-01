@@ -3,7 +3,7 @@ Feature: Global logout
   @failMobile
   Scenario: A user triggers a global logout
     Given I go to the "Root" page
-    And I sign in as the "default" user
+    And I sign in as the "userPerformanceTest" user
     And I go to the "Security" page
     Then the page title is prefixed with "Security"
     Given I click the "Sign out of all devices" link
@@ -18,7 +18,7 @@ Feature: Global logout
 
   Scenario: A user in the wrong state can't trigger a global logout
     Given I go to the "Root" page
-    And I sign in as the "default" user
+    And I sign in as the "userPerformanceTest" user
     And I go to the "Global logout confirm" page
     Then the page title is prefixed with "Your services"
 
