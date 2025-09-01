@@ -9,6 +9,8 @@ services:
       - SERVICES=kms,sns,dynamodb,sqs,stepfunctions,cloudwatch
       - LOCALSTACK_HOST=localhost
       - DYNAMODB_SHARE_DB=1 # Removes regions and allows NoSQL Workbench to work.
+      - DYNAMODB_REMOVE_EXPIRED_ITEMS=1
+      - DYNAMODB_IN_MEMORY=1
       - DEBUG=${DEBUG:-0}
       - AWS_ACCESS_KEY_ID=na
       - AWS_SECRET_ACCESS_KEY=na
