@@ -121,7 +121,10 @@ async function createApp(): Promise<express.Application> {
   app.use(
     "/assets",
     express.static(
-      path.resolve("node_modules/govuk-frontend/dist/govuk/assets")
+      path.resolve("node_modules/govuk-frontend/dist/govuk/assets"),
+      {
+        maxAge: "1d",
+      }
     )
   );
 
@@ -130,11 +133,19 @@ async function createApp(): Promise<express.Application> {
     express.static(
       path.resolve(
         "node_modules/@govuk-one-login/frontend-device-intelligence/build/esm"
-      )
+      ),
+      {
+        maxAge: "1d",
+      }
     )
   );
 
-  app.use("/public", express.static(path.join(__dirname, "public")));
+  app.use(
+    "/public",
+    express.static(path.join(__dirname, "public"), {
+      maxAge: "1d",
+    })
+  );
   app.use(cookieParser());
 
   const sessionStore = getSessionStore({ session: session });
