@@ -1911,6 +1911,75 @@ Resources:
     Properties:
       AliasName: !Sub "alias/${AWS::StackName}-DynamoDBKmsKey"
       TargetKeyId: !GetAtt DynamoDBKmsKey.Arn
+  #
+  # AWS Backup for Activity Log table
+  #
+  ActivityLogBackupVault:
+    Type: AWS::Backup::BackupVault
+    Properties:
+      BackupVaultName: !Sub "${AWS::StackName}-ActivityLogBackupVault"
+      BackupVaultTags:
+        Product: !Ref ProductTagValue
+        System: !Ref SystemTagValue
+        Environment: !Ref Environment
+        Owner: !Ref OwnerTagValue
+        Source: !Ref SourceTagValue
+
+  ActivityLogBackupRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-AWSBackupRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: backup.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-AWSBackupRole"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  ActivityLogBackupPlan:
+    Type: AWS::Backup::BackupPlan
+    Properties:
+      BackupPlan:
+        BackupPlanName: !Sub "${AWS::StackName}-ActivityLogBackupPlan"
+        Rules:
+          - RuleName: DailyActivityLogBackup
+            TargetBackupVault: !Ref ActivityLogBackupVault
+            ScheduleExpression: "cron(0 2 * * ? *)" # Daily at 02:00 UTC
+            StartWindowMinutes: 60
+            CompletionWindowMinutes: 180
+            Lifecycle:
+              DeleteAfterDays: 35
+
+  ActivityLogBackupSelection:
+    Type: AWS::Backup::BackupSelection
+    Properties:
+      BackupPlanId: !Ref ActivityLogBackupPlan
+      BackupSelection:
+        IamRoleArn: !GetAtt ActivityLogBackupRole.Arn
+        SelectionName: ActivityLogTableSelection
+        Resources:
+          - !Sub "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ActivityLogTableName}"
 
   #
   # App domain
@@ -2202,3 +2271,9 @@ Outputs:
   CloudFrontDistributionEndpoint:
     Description: The Application URL.
     Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+  ActivityLogBackupPlanId:
+    Description: ID of the AWS Backup plan for the activity_log table
+    Value: !Ref ActivityLogBackupPlan
+  ActivityLogBackupVaultName:
+    Description: Name of the AWS Backup vault used for activity_log backups
+    Value: !Ref ActivityLogBackupVault
