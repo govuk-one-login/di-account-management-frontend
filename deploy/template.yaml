@@ -84,10 +84,6 @@ Parameters:
   ActivityLogTableName:
     Type: String
     Default: activity_log
-  ForceUpdateValue:
-    Type: String
-    Default: "0"
-    Description: Dummy parameter to force stack updates
   DeploymentStrategy:
     Description: "Predefined deployment configuration for ECS application"
     Type: String
@@ -95,6 +91,10 @@ Parameters:
     AllowedValues:
       - CodeDeployDefault.ECSLinear10PercentEvery3Minutes
       - CodeDeployDefault.ECSAllAtOnce
+  LambdaCodeKey:
+    Type: String
+    Description: S3 key (path) to the Lambda ZIP file
+    Default: "lambda/ecs-metric.zip"
 
 Conditions:
   UseCodeSigning:
@@ -1672,6 +1672,37 @@ Resources:
         - Key: CheckovRulesToSkip
           Value: CKV_AWS_18
 
+  LambdaCodeBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-${Environment}-lambda-code"
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-LambdaCode"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+        - Key: CheckovRulesToSkip
+          Value: CKV_AWS_18
+
   AccessLogsBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -2365,6 +2396,72 @@ Resources:
           - ELB5XX10PercentAlarm: !Ref ELB5XX10PercentAlarm
             LoggerErrorRateAlarm: !Ref LoggerErrorRateAlarm
 
+  #
+  # Lambdas
+  #
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${Environment}-${AWS::StackName}-ecs-deployment-metric-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: AllowECSAndCloudWatch
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecs:DescribeServices
+                  - cloudwatch:PutMetricData
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+
+  ECSDeploymentMetricLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${Environment}-${AWS::StackName}-ecs-status
+      Runtime: nodejs22.x
+      Handler: handler/ecs-status.handler
+      Timeout: 30
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          ECS_CLUSTER: !Ref ECSCluster
+          ECS_SERVICE: !GetAtt ContainerService.Name
+          METRIC_NAMESPACE: !Sub "${AWS::StackName}/ECSDeploymentMetricLambda"
+      Code:
+        S3Bucket: !Ref LambdaCodeBucket
+        S3Key: !Ref LambdaCodeKey
+
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: rate(1 minute)
+      State: ENABLED
+      Targets:
+        - Id: ECSDeploymentMetricTarget
+          Arn: !GetAtt ECSDeploymentMetricLambda.Arn
+
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ECSDeploymentMetricLambda
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt ScheduledRule.Arn
+
 Outputs:
   ApiGatewayEndpoint:
     Description: The base URI for this application.
@@ -2372,3 +2469,5 @@ Outputs:
   CloudFrontDistributionEndpoint:
     Description: The Application URL.
     Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+  LambdaFunctionName:
+    Value: !Ref ECSDeploymentMetricLambda
