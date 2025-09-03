@@ -3,6 +3,7 @@ import {
   CloudWatchClient,
   PutMetricDataCommand,
 } from "@aws-sdk/client-cloudwatch";
+import { Logger } from "@aws-lambda-powertools/logger";
 
 const ecs = new ECSClient({});
 const cloudwatch = new CloudWatchClient({});
@@ -11,6 +12,8 @@ const CLUSTER_NAME = process.env.ECS_CLUSTER!;
 const SERVICE_NAME = process.env.ECS_SERVICE!;
 const METRIC_NAMESPACE = process.env.METRIC_NAMESPACE || "Custom/ECS";
 const METRIC_NAME = "DeploymentInProgress";
+
+const logger = new Logger();
 
 export const handler = async (): Promise<void> => {
   try {
@@ -23,7 +26,7 @@ export const handler = async (): Promise<void> => {
     const service = response.services?.[0];
 
     if (!service) {
-      console.warn(
+      logger.warn(
         `ECS service ${SERVICE_NAME} not found in cluster ${CLUSTER_NAME}`
       );
       return;
@@ -53,9 +56,9 @@ export const handler = async (): Promise<void> => {
 
     await cloudwatch.send(putMetricCommand);
 
-    console.log(`[ECS] Deployment in progress: ${metricValue}`);
+    logger.info(`[ECS] Deployment in progress: ${metricValue}`);
   } catch (err) {
-    console.error("[ERROR] Failed to publish ECS deployment status:", err);
+    logger.error("[ERROR] Failed to publish ECS deployment status:", err);
     throw err;
   }
 };

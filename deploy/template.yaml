@@ -2433,7 +2433,7 @@ Resources:
     Properties:
       FunctionName: !Sub ${Environment}-${AWS::StackName}-ecs-status
       Runtime: nodejs22.x
-      Handler: handler/ecs-status.handler
+      Handler: lambda-handlers/ecs-status.handler
       Timeout: 30
       Role: !GetAtt LambdaExecutionRole.Arn
       Environment:
