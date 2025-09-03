@@ -3,7 +3,7 @@ import {
   CloudWatchClient,
   PutMetricDataCommand,
 } from "@aws-sdk/client-cloudwatch";
-import { Logger } from "@aws-lambda-powertools/logger";
+import { logger } from "../utils/logger";
 
 const ecs = new ECSClient({});
 const cloudwatch = new CloudWatchClient({});
@@ -12,8 +12,6 @@ const CLUSTER_NAME = process.env.ECS_CLUSTER!;
 const SERVICE_NAME = process.env.ECS_SERVICE!;
 const METRIC_NAMESPACE = process.env.METRIC_NAMESPACE || "Custom/ECS";
 const METRIC_NAME = "DeploymentInProgress";
-
-const logger = new Logger();
 
 export const handler = async (): Promise<void> => {
   try {
