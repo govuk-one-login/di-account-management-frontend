@@ -16,7 +16,6 @@ Parameters:
     Type: String
     Description: >
       The ARN of the Code Signing Config to use, provided by the deployment pipeline.
-    Default: "none"
   PermissionsBoundary:
     Description: >
       The ARN of the permissions boundary to apply when creating IAM roles.
@@ -2451,6 +2450,7 @@ Resources:
       Code:
         S3Bucket: !Ref LambdaCodeBucket
         S3Key: !Ref LambdaCodeKey
+      CodeSigningConfigArn: !Ref CodeSigningConfigArn
 
   ScheduledRule:
     Type: AWS::Events::Rule
