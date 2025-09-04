@@ -2407,6 +2407,7 @@ Resources:
                 - lambda.amazonaws.com
             Action:
               - "sts:AssumeRole"
+      PermissionsBoundary: !Ref PermissionsBoundary
 
   AllowECSAndCloudWatch:
     Type: AWS::IAM::ManagedPolicy
