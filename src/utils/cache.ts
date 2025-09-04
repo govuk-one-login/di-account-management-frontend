@@ -1,5 +1,5 @@
 import LRUCache from "lru-cache";
-import { logger } from "./logger";
+import { logError, logger } from "./logger";
 
 const cache = new LRUCache<string, { data: any; expiresAt: number }>({
   max: 1000,
@@ -24,7 +24,7 @@ async function cacheWithExpiration<T>(
       return data;
     } catch (error) {
       invalidateCache(key);
-      logger.error("Cache: error fetching data:", error);
+      logError(logger, "Cache: error fetching data:", error);
       throw error;
     }
   });

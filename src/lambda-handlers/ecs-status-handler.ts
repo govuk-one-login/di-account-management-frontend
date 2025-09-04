@@ -3,7 +3,7 @@ import {
   CloudWatchClient,
   PutMetricDataCommand,
 } from "@aws-sdk/client-cloudwatch";
-import { logger } from "../utils/logger";
+import { logError, logger } from "../utils/logger";
 
 const ecs = new ECSClient({});
 const cloudwatch = new CloudWatchClient({});
@@ -56,7 +56,7 @@ export const handler = async (): Promise<void> => {
 
     logger.info(`[ECS] Deployment in progress: ${metricValue}`);
   } catch (err) {
-    logger.error("[ERROR] Failed to publish ECS deployment status:", err);
+    logError(logger, "[ERROR] Failed to publish ECS deployment status:", err);
     throw err;
   }
 };

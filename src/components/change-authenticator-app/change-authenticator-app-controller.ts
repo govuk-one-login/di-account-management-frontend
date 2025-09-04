@@ -3,7 +3,7 @@ import { PATH_DATA } from "../../app.constants";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { MfaMethod } from "../../utils/mfaClient/types";
 import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
-import { logger } from "../../utils/logger";
+import { logError, logger } from "../../utils/logger";
 import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
@@ -52,7 +52,7 @@ export async function changeAuthenticatorAppPost(
       if (!authAppMFAMethod) {
         const errorMessage =
           "Could not change authenticator app - no existing auth app method found";
-        logger.error(errorMessage, { trace: res.locals.trace });
+        logError(logger, errorMessage, res.locals.trace);
         throw new Error(errorMessage);
       }
 
@@ -71,7 +71,7 @@ export async function changeAuthenticatorAppPost(
           "Could not change authenticator app",
           response
         );
-        logger.error(errorMessage, { trace: res.locals.trace });
+        logError(logger, errorMessage, { trace: res.locals.trace });
         throw new Error(errorMessage);
       }
 

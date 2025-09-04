@@ -1,4 +1,4 @@
-import { logger } from "./logger";
+import { logger, logWarn } from "./logger";
 import { errors } from "openid-client";
 
 const RETRYABLE_ERRORS = [500, 502, 503, 504, 408, 429];
@@ -27,8 +27,8 @@ export async function retryableFunction<T, A extends any[]>(
     if (attemptsRemaining <= 0) {
       throw error;
     }
-
-    logger.warn(
+    logWarn(
+      logger,
       `function call failed, retrying. ${attemptsRemaining} attempt(s) remaining `,
       error
     );
