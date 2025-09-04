@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Session } from "express-session";
 import { ParamName } from "../app.constants";
 import { isSafeString, isValidUrl } from "../utils/strings";
-import { logError, logger, logWarn } from "../utils/logger";
+import { logger, logWarn } from "../utils/logger";
 import { generateReferenceCode } from "../utils/referenceCode";
 import { ParsedQs } from "qs";
 
@@ -40,8 +40,9 @@ export const updateSessionMiddleware = (
   } else {
     logWarn(
       logger,
-      `fromURL in request query for contact-govuk-one-login page did not pass validation: ${fromURL}`,
-      { trace: trace }
+      "fromURL in request query for contact-govuk-one-login page did not pass validation:",
+      { trace: trace },
+      fromURL
     );
   }
 
