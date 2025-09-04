@@ -21,7 +21,6 @@ Parameters:
     Description: >
       The ARN of the permissions boundary to apply when creating IAM roles.
     Type: String
-    Default: none
   Environment:
     Description: The name of the environment to deploy to
     Type: String
