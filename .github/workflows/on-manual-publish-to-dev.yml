@@ -126,4 +126,4 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 cp ecs-metric.zip s3://account-mgmt-frontend-dev-lambda-code/lambda/ecs-metric.zip
+          aws s3 cp ecs-metric.zip s3://$BUCKET_NAME/$S3_KEY
