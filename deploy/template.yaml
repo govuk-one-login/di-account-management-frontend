@@ -2116,6 +2116,39 @@ Resources:
             Period: 60
             Stat: Maximum
 
+  # Traffic spike detection (low severity)
+  # Triggers when API Gateway request count increases by >=1000 in the current 5-minute period compared to the previous 5-minute period
+  # and only when the current 5-minute period has >1000 requests to avoid noise on low traffic.
+  ApiGatewayTrafficSpikeAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ApiGatewayTrafficSpikeAlarm"
+      AlarmDescription: "Alert when API Gateway requests increase by >=1000 vs previous 5 minutes, only if current 5-minute Count > 1000. Period=300s"
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/LowAlertNotificationTopic/ARN}}"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1000
+      TreatMissingData: missing
+      Metrics:
+        - Id: spike
+          Label: spikeIncrease
+          ReturnData: true
+          Expression: IF((m1>1000) AND (DIFF(m1)>0), DIFF(m1), 0)
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApiGateway
+              MetricName: Count
+              Dimensions:
+                - Name: ApiId
+                  Value: !Ref ApiGateway
+            Period: 300
+            Stat: Sum
+
   LoggerErrorsFilter:
     Type: AWS::Logs::MetricFilter
     Properties:
@@ -2126,6 +2159,39 @@ Resources:
           MetricNamespace: !Sub "${AWS::StackName}/Logger"
           MetricValue: "1"
           Unit: Count
+
+  # ALB traffic spike detection (low severity)
+  # Triggers when ALB RequestCount increases by >=1000 in the current 5-minute period compared to the previous 5-minute period
+  # and only when the current 5-minute period has >1000 requests to avoid noise on low traffic.
+  ALBTrafficSpikeAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-ALBTrafficSpikeAlarm"
+      AlarmDescription: "Alert when ALB RequestCount increases by >=1000 vs previous 5 minutes, only if current 5-minute count > 1000. Period=300s"
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/LowAlertNotificationTopic/ARN}}"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1000
+      TreatMissingData: missing
+      Metrics:
+        - Id: spike
+          Label: spikeIncrease
+          ReturnData: true
+          Expression: IF((m1>1000) AND (DIFF(m1)>0), DIFF(m1), 0)
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApplicationELB
+              MetricName: RequestCount
+              Dimensions:
+                - Name: LoadBalancer
+                  Value: !Ref ApplicationLoadBalancer
+            Period: 300
+            Stat: Sum
 
   LoggerErrorRateAlarm:
     Type: AWS::CloudWatch::Alarm
