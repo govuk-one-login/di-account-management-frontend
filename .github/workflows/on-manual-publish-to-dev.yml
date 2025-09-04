@@ -99,3 +99,31 @@ jobs:
 
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
+
+  deploy_lambda:
+    name: Zip and Upload Lambda to S3 (Dev)
+    runs-on: ubuntu-latest
+
+    env:
+      BUCKET_NAME: ${{ secrets.FRONTEND_LAMBDA_BUCKET_NAME }}
+      S3_KEY: ${{ secrets.FRONTEND_LAMBDA_ZIP_KEY }}
+      AWS_REGION: eu-west-2
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
+
+      - name: Set up AWS creds
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # pin@v1-node16
+        with:
+          role-to-assume: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Zip Lambda function
+        run: |
+          cd src/lambda-handlers
+          zip -r ../../ecs-metric.zip .
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp ecs-metric.zip s3://${BUCKET_NAME}/${S3_KEY}
