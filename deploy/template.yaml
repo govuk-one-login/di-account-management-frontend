@@ -545,9 +545,6 @@ Resources:
     Properties:
       AlarmName: "ALB-RequestCount-High"
       MetricName: "RequestCount"
-      ActionsEnabled: true
-      AlarmActions:
-        - !Ref ALBRequestCountScaleOutPolicy
       AlarmDescription: "ALB-RequestCount-Above-200"
       DatapointsToAlarm: "1"
       Namespace: AWS/ApplicationELB
@@ -583,6 +580,47 @@ Resources:
       EvaluationPeriods: 1
       Threshold: "1000"
       TreatMissingData: "notBreaching"
+
+  ECSDeploymentInProgressAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: "ECS-Deployment-In-Progress"
+      Namespace: ECSService
+      MetricName: DeploymentInProgress
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSCluster
+        - Name: ServiceName
+          Value: !GetAtt ContainerService.Name
+      Statistic: Minimum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: breaching
+      AlarmDescription: Alarm is ALARM when ECS is deploying
+
+  ALBRequestCountScalingCompositeAlarm:
+    Type: AWS::CloudWatch::CompositeAlarm
+    Properties:
+      AlarmName: ECS-Scale-Up-If-High-Requests
+      AlarmDescription: Only scale if request count is high ECS is not deploying
+      AlarmRule: !Sub |
+        ALARM("${ALBRequestCountScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ALBRequestCountScaleOutPolicy
+
+  ECSStepScalingCompositeAlarm:
+    Type: AWS::CloudWatch::CompositeAlarm
+    Properties:
+      AlarmName: ECS-Scale-Up-If-High-CPU
+      AlarmDescription: Only scale if CPU is hihg and ECS is not deploying
+      AlarmRule: !Sub |
+        ALARM("${ECSStepScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ECSStepScaleOutPolicy
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
