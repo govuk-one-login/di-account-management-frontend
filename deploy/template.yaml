@@ -93,6 +93,10 @@ Parameters:
     Type: String
     Description: S3 key (path) to the Lambda ZIP file
     Default: "lambda/ecs-metric.zip"
+  LambdaCodeBucket:
+    Type: String
+    Description: S3 bucket name
+    Default: "account-mgmt-frontend-dev-lambda-code"
 
 Conditions:
   UseCodeSigning:
@@ -1657,37 +1661,6 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-AccessLogs"
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
-        - Key: CheckovRulesToSkip
-          Value: CKV_AWS_18
-
-  LambdaCodeBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub "${AWS::StackName}-${Environment}-lambda-code"
-      VersioningConfiguration:
-        Status: Enabled
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
-      Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-LambdaCode"
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
