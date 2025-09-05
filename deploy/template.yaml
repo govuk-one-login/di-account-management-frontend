@@ -605,8 +605,7 @@ Resources:
     Properties:
       AlarmName: ECS-Scale-Up-If-High-Requests
       AlarmDescription: Only scale if request count is high ECS is not deploying
-      AlarmRule: !Sub |
-        ALARM("${ALBRequestCountScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
+      AlarmRule: !Sub ALARM("${ALBRequestCountScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
       ActionsEnabled: true
       AlarmActions:
         - !Ref ALBRequestCountScaleOutPolicy
@@ -616,8 +615,7 @@ Resources:
     Properties:
       AlarmName: ECS-Scale-Up-If-High-CPU
       AlarmDescription: Only scale if CPU is hihg and ECS is not deploying
-      AlarmRule: !Sub |
-        ALARM("${ECSStepScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
+      AlarmRule: !Sub ALARM("${ECSStepScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
       ActionsEnabled: true
       AlarmActions:
         - !Ref ECSStepScaleOutPolicy
