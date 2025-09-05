@@ -74,4 +74,29 @@ const loggerMiddleware = PinoHttp({
   },
 });
 
+export const logError = (logger: any, message: string, meta?: object) => {
+  if (typeof logger.error === "function") {
+    try {
+      logger.error(meta, message); // pino-style
+    } catch {
+      logger.error(message, meta); // powertools-style
+    }
+  }
+};
+
+export const logWarn = (
+  logger: any,
+  message: string,
+  meta?: object,
+  value?: string
+) => {
+  if (typeof logger.warn === "function") {
+    try {
+      logger.warn(meta, message, value); // pino-style
+    } catch {
+      logger.warn(message, meta); // powertools-style
+    }
+  }
+};
+
 export { logger, loggerMiddleware };
