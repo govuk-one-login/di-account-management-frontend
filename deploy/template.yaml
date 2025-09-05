@@ -2423,7 +2423,6 @@ Resources:
       Code:
         S3Bucket: !Ref LambdaCodeBucket
         S3Key: !Ref LambdaCodeKey
-      CodeSigningConfigArn: !Ref CodeSigningConfigArn
 
   ScheduledRule:
     Type: AWS::Events::Rule
