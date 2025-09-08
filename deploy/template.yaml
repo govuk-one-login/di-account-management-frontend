@@ -626,8 +626,8 @@ Resources:
       Period: 60
       EvaluationPeriods: 1
       Threshold: 1
-      ComparisonOperator: LessThanThreshold
-      TreatMissingData: breaching
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
       AlarmDescription: Alarm is ALARM when ECS is deploying
 
   #  ALBRequestCountScalingCompositeAlarm:
