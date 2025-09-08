@@ -8,8 +8,8 @@ import { logError, logger } from "../utils/logger";
 const ecs = new ECSClient({});
 const cloudwatch = new CloudWatchClient({});
 
-const CLUSTER_NAME = process.env.ECS_CLUSTER!;
-const SERVICE_NAME = process.env.ECS_SERVICE!;
+const CLUSTER_NAME = process.env.ECS_CLUSTER;
+const SERVICE_NAME = process.env.ECS_SERVICE;
 const METRIC_NAMESPACE = process.env.METRIC_NAMESPACE || "Custom/ECS";
 const METRIC_NAME = "DeploymentInProgress";
 
