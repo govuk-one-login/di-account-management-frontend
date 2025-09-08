@@ -544,19 +544,49 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: "ALB-RequestCount-High"
-      MetricName: "RequestCount"
+      Metrics:
+        - Id: reqCount
+          Label: ALB Request Count
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApplicationELB
+              MetricName: RequestCount
+              Dimensions:
+                - Name: LoadBalancer
+                  Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+            Period: 60
+            Stat: Sum
+          ReturnData: false
+
+        - Id: deployFlag
+          Label: Deployment In Progress
+          MetricStat:
+            Metric:
+              Namespace: Custom/ECS
+              MetricName: DeploymentInProgress
+              Dimensions:
+                - Name: ClusterName
+                  Value: !Ref ECSCluster
+                - Name: ServiceName
+                  Value: !GetAtt ContainerService.Name
+            Period: 60
+            Stat: Minimum
+          ReturnData: false
+
+        # Metric 3: Adjusted CPU using metric math
+        - Id: adjustedReqCount
+          Label: High Request count If Not Deploying
+          Expression: IF(deployFlag > 0, 0, reqCount)
+          ReturnData: true
       AlarmDescription: "ALB-RequestCount-Above-200"
       DatapointsToAlarm: "1"
-      Namespace: AWS/ApplicationELB
       ComparisonOperator: "GreaterThanThreshold"
-      Dimensions:
-        - Name: LoadBalancer
-          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
-      Statistic: Sum
-      Period: "60"
       EvaluationPeriods: 1
       Threshold: "2000"
       TreatMissingData: "notBreaching"
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ALBRequestCountScaleOutPolicy
 
   ALBRequestCountScaleInAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -600,25 +630,31 @@ Resources:
       TreatMissingData: breaching
       AlarmDescription: Alarm is ALARM when ECS is deploying
 
-  ALBRequestCountScalingCompositeAlarm:
-    Type: AWS::CloudWatch::CompositeAlarm
-    Properties:
-      AlarmName: ECS-Scale-Up-If-High-Requests
-      AlarmDescription: Only scale if request count is high ECS is not deploying
-      AlarmRule: !Sub ALARM("${ALBRequestCountScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
-      ActionsEnabled: true
-      AlarmActions:
-        - !Ref ALBRequestCountScaleOutPolicy
-
-  ECSStepScalingCompositeAlarm:
-    Type: AWS::CloudWatch::CompositeAlarm
-    Properties:
-      AlarmName: ECS-Scale-Up-If-High-CPU
-      AlarmDescription: Only scale if CPU is hihg and ECS is not deploying
-      AlarmRule: !Sub ALARM("${ECSStepScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
-      ActionsEnabled: true
-      AlarmActions:
-        - !Ref ECSStepScaleOutPolicy
+  #  ALBRequestCountScalingCompositeAlarm:
+  #    Type: AWS::CloudWatch::CompositeAlarm
+  #    Properties:
+  #      AlarmName: ECS-Scale-Up-If-High-Requests
+  #      AlarmDescription: Only scale if request count is high ECS is not deploying
+  #      AlarmRule: !Sub ALARM("${ALBRequestCountScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
+  #      ActionsEnabled: true
+  #      AlarmActions:
+  #        - !Ref ALBRequestCountScaleOutPolicy
+  #      ActionsSuppressor: "ECSDeploymentInProgressAlarm"
+  #      ActionsSuppressorExtensionPeriod: 30
+  #      ActionsSuppressorWaitPeriod: 15000
+  #
+  #  ECSStepScalingCompositeAlarm:
+  #    Type: AWS::CloudWatch::CompositeAlarm
+  #    Properties:
+  #      AlarmName: ECS-Scale-Up-If-High-CPU
+  #      AlarmDescription: Only scale if CPU is hihg and ECS is not deploying
+  #      AlarmRule: !Sub ALARM("${ECSStepScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
+  #      ActionsEnabled: true
+  #      AlarmActions:
+  #        - !Ref ECSStepScaleOutPolicy
+  #      ActionsSuppressor: "ECSDeploymentInProgressAlarm"
+  #      ActionsSuppressorExtensionPeriod: 30
+  #      ActionsSuppressorWaitPeriod: 15000
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
