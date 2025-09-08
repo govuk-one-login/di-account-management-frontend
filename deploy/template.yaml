@@ -2491,7 +2491,7 @@ Resources:
         Variables:
           ECS_CLUSTER: !Ref ECSCluster
           ECS_SERVICE: !GetAtt ContainerService.Name
-          METRIC_NAMESPACE: !Sub "${AWS::StackName}/ECSDeploymentMetricLambda"
+          METRIC_NAMESPACE: Custom/ECS
       Code:
         S3Bucket: !Ref LambdaCodeBucket
         S3Key: !Ref LambdaCodeKey
