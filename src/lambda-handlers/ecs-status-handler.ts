@@ -1,4 +1,8 @@
-import { ECSClient, DescribeServicesCommand } from "@aws-sdk/client-ecs";
+import {
+  ECSClient,
+  DescribeServicesCommand,
+  DeploymentRolloutState,
+} from "@aws-sdk/client-ecs";
 import {
   CloudWatchClient,
   PutMetricDataCommand,
@@ -30,9 +34,24 @@ export const handler = async (): Promise<void> => {
     }
 
     const deployments = service.deployments ?? [];
-    const inProgress = deployments.some(
-      (d) => d.rolloutState === "IN_PROGRESS"
-    );
+
+    let inProgress = deployments.length > 1;
+
+    if (!inProgress) {
+      inProgress = deployments.some(
+        (d) => d.rolloutState === DeploymentRolloutState.IN_PROGRESS
+      );
+    }
+
+    deployments.forEach((d) => {
+      console.log({
+        id: d.id,
+        status: d.status,
+        rolloutState: d.rolloutState,
+        rolloutStateReason: d.rolloutStateReason,
+      });
+    });
+
     const metricValue = inProgress ? 1 : 0;
 
     const putMetricCommand = new PutMetricDataCommand({
