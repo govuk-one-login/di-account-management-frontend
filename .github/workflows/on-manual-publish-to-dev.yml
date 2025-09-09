@@ -133,6 +133,7 @@ jobs:
       - name: Zip Lambda function
         run: |
           cd dist/lambda-handlers
+          rm -rf test
           zip -r ../../ecs-metric.zip .
 
       - name: Upload to S3
