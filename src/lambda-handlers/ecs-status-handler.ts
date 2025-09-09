@@ -1,8 +1,4 @@
-import {
-  ECSClient,
-  DescribeServicesCommand,
-  DeploymentRolloutState,
-} from "@aws-sdk/client-ecs";
+import { ECSClient, DescribeServicesCommand } from "@aws-sdk/client-ecs";
 import {
   CloudWatchClient,
   PutMetricDataCommand,
@@ -26,6 +22,8 @@ export const handler = async (): Promise<void> => {
     const response = await ecs.send(describeCommand);
     const service = response.services?.[0];
 
+    console.log(`Service details are: ${JSON.stringify(service)}`);
+
     if (!service) {
       console.warn(
         `ECS service ${SERVICE_NAME} not found in cluster ${CLUSTER_NAME}`
@@ -33,23 +31,22 @@ export const handler = async (): Promise<void> => {
       return;
     }
 
-    const deployments = service.deployments ?? [];
+    const taskSets = service.taskSets ?? [];
 
-    let inProgress = deployments.length > 1;
+    console.log(`Total Deployments: ${taskSets.length}`);
+
+    let inProgress = taskSets.length > 1;
 
     if (!inProgress) {
-      inProgress = deployments.some(
-        (d) => d.rolloutState === DeploymentRolloutState.IN_PROGRESS
+      inProgress = taskSets.some(
+        (ts) => ts.status !== "PRIMARY" && ts.stabilityStatus !== "STEADY_STATE"
       );
     }
 
-    deployments.forEach((d) => {
-      console.log({
-        id: d.id,
-        status: d.status,
-        rolloutState: d.rolloutState,
-        rolloutStateReason: d.rolloutStateReason,
-      });
+    taskSets.forEach((ts) => {
+      console.log(`Task Set Info is: createdAt: ${ts.createdAt}, id: ${ts.id}, stabilityStatus: 
+      ${ts.stabilityStatus},status: ${ts.status},
+      computedDesiredCount: ${ts.computedDesiredCount}`);
     });
 
     const metricValue = inProgress ? 1 : 0;
