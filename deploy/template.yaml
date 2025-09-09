@@ -615,7 +615,7 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: "ECS-Deployment-In-Progress"
-      Namespace: ECSService
+      Namespace: "Custom/ECS"
       MetricName: DeploymentInProgress
       Dimensions:
         - Name: ClusterName
@@ -629,32 +629,6 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
       AlarmDescription: Alarm is ALARM when ECS is deploying
-
-  #  ALBRequestCountScalingCompositeAlarm:
-  #    Type: AWS::CloudWatch::CompositeAlarm
-  #    Properties:
-  #      AlarmName: ECS-Scale-Up-If-High-Requests
-  #      AlarmDescription: Only scale if request count is high ECS is not deploying
-  #      AlarmRule: !Sub ALARM("${ALBRequestCountScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
-  #      ActionsEnabled: true
-  #      AlarmActions:
-  #        - !Ref ALBRequestCountScaleOutPolicy
-  #      ActionsSuppressor: "ECSDeploymentInProgressAlarm"
-  #      ActionsSuppressorExtensionPeriod: 30
-  #      ActionsSuppressorWaitPeriod: 15000
-  #
-  #  ECSStepScalingCompositeAlarm:
-  #    Type: AWS::CloudWatch::CompositeAlarm
-  #    Properties:
-  #      AlarmName: ECS-Scale-Up-If-High-CPU
-  #      AlarmDescription: Only scale if CPU is hihg and ECS is not deploying
-  #      AlarmRule: !Sub ALARM("${ECSStepScaleOutAlarm}") AND OK("${ECSDeploymentInProgressAlarm}")
-  #      ActionsEnabled: true
-  #      AlarmActions:
-  #        - !Ref ECSStepScaleOutPolicy
-  #      ActionsSuppressor: "ECSDeploymentInProgressAlarm"
-  #      ActionsSuppressorExtensionPeriod: 30
-  #      ActionsSuppressorWaitPeriod: 15000
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
