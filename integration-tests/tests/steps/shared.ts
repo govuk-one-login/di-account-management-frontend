@@ -1,8 +1,13 @@
 import AxeBuilder from "@axe-core/playwright";
 import { bdd } from "./fixtures";
-import { expect } from "@playwright/test";
+import { expect, LocatorScreenshotOptions } from "@playwright/test";
 
 const { Then, Given } = bdd;
+
+export const defaultScreenshotOptions: LocatorScreenshotOptions = {
+  type: "jpeg",
+  quality: 25,
+};
 
 const pageTitleToPath: Record<string, string> = {
   Healthcheck: "/healthcheck",
@@ -87,6 +92,7 @@ Then(
 Then("the page looks as expected", async ({ page }) => {
   expect(
     await page.screenshot({
+      ...defaultScreenshotOptions,
       fullPage: true,
       mask: [page.locator(".contact-reference__code")],
     })

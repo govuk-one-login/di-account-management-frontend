@@ -1,5 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { bdd } from "./fixtures";
+import { defaultScreenshotOptions } from "./shared";
 
 const { Given, Then } = bdd;
 
@@ -16,7 +17,9 @@ Then("the cookie consent banner shows", ({ page }) => {
 });
 
 Then("the cookie consent banner looks as expected", async ({ page }) => {
-  expect(await getCookieBanner({ page }).screenshot()).toMatchSnapshot();
+  expect(
+    await getCookieBanner({ page }).screenshot(defaultScreenshotOptions)
+  ).toMatchSnapshot();
 });
 
 Given("I click to accept cookies", async ({ page }) => {
@@ -32,7 +35,9 @@ Then("I am shown a message confirming my acceptance", ({ page }) => {
 Then(
   "the message confirming my acceptance looks as expected",
   async ({ page }) => {
-    expect(await getCookieBanner({ page }).screenshot()).toMatchSnapshot();
+    expect(
+      await getCookieBanner({ page }).screenshot(defaultScreenshotOptions)
+    ).toMatchSnapshot();
   }
 );
 
@@ -49,7 +54,9 @@ Then("I am shown a message confirming my rejection", ({ page }) => {
 Then(
   "the message confirming my rejection looks as expected",
   async ({ page }) => {
-    expect(await getCookieBanner({ page }).screenshot()).toMatchSnapshot();
+    expect(
+      await getCookieBanner({ page }).screenshot(defaultScreenshotOptions)
+    ).toMatchSnapshot();
   }
 );
 
