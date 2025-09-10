@@ -137,27 +137,27 @@ Mappings:
     dev:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 3
+      MinCapacity: 4
       MaxCapacity: 40
     build:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 3
+      MinCapacity: 4
       MaxCapacity: 40
     staging:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 3
+      MinCapacity: 4
       MaxCapacity: 40
     integration:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 3
+      MinCapacity: 4
       MaxCapacity: 40
     production:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 3
+      MinCapacity: 4
       MaxCapacity: 40
   EnvironmentVariables:
     ### These environment variables are referenced further down the file.
