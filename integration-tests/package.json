@@ -1,6 +1,6 @@
 {
   "name": "integration-tests",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "run-app": "cd ../ && if [ -e .env.integration-tests ]; then docker compose --env-file ./.env.integration-tests build && docker compose --env-file ./.env.integration-tests up; else docker compose build && docker compose up; fi",
     "build": "docker build -t di-account-management-frontend-integration-test .",
