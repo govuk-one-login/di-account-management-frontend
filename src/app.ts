@@ -73,6 +73,7 @@ import { deleteMfaMethodRouter } from "./components/delete-mfa-method/delete-mfa
 import { switchBackupMethodRouter } from "./components/switch-backup-method/switch-backup-method-routes";
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { logoutRedirectRouter } from "./components/logout-redirect/logout-redirect-routes";
+import { deviceInformationRouter } from "./components/device-information/device-information-router";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
 import { getOIDCClient } from "./utils/oidc";
@@ -100,6 +101,8 @@ const APP_VIEWS = [
 
 async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
+
+  app.use(deviceInformationRouter);
 
   const isDeployedEnvironment = !isLocalEnv();
   app.use(metricsMiddleware());
