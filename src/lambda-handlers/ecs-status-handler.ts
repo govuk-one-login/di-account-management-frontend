@@ -33,14 +33,12 @@ export const handler = async (): Promise<void> => {
 
     const taskSets = service.taskSets ?? [];
 
-    console.log(`Total Deployments: ${taskSets.length}`);
+    console.log(`Total Task sets: ${taskSets.length}`);
 
     let inProgress = taskSets.length > 1;
 
     if (!inProgress) {
-      inProgress = taskSets.some(
-        (ts) => ts.status !== "PRIMARY" && ts.stabilityStatus !== "STEADY_STATE"
-      );
+      inProgress = taskSets.some((ts) => ts.status !== "PRIMARY");
     }
 
     taskSets.forEach((ts) => {
