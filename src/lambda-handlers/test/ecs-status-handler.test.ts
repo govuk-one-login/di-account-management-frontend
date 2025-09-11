@@ -25,13 +25,16 @@ describe("ECS Deployment Metric Lambda", () => {
     sinon.restore();
   });
 
-  it("should publish metric value 1 when deployment is in progress", async () => {
+  it("should publish metric value 1 when multiple taskSets are present ", async () => {
     ecsSendStub.resolves({
       services: [
         {
-          deployments: [
+          taskSets: [
             {
-              rolloutState: "IN_PROGRESS",
+              status: "PRIMARY",
+            },
+            {
+              status: "SECONDARY",
             },
           ],
         },
@@ -52,13 +55,13 @@ describe("ECS Deployment Metric Lambda", () => {
     expect(metric.Value).to.equal(1);
   });
 
-  it("should publish metric value 0 when no deployment is in progress", async () => {
+  it("should publish metric value 0 when only 1 taskSet is present and it is primary", async () => {
     ecsSendStub.resolves({
       services: [
         {
-          deployments: [
+          taskSets: [
             {
-              rolloutState: "COMPLETED",
+              status: "PRIMARY",
             },
           ],
         },
