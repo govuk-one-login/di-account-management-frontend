@@ -6,7 +6,10 @@ import {
   renderBadRequest,
 } from "../../utils/validation";
 import { checkYourEmailService } from "./check-your-email-service";
-import { CheckYourEmailServiceInterface } from "./types";
+import {
+  CheckYourEmailServiceError,
+  CheckYourEmailServiceInterface,
+} from "./types";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
@@ -53,12 +56,12 @@ export function checkYourEmailPost(
       otp: req.body["code"],
     };
 
-    const isEmailUpdated = await service.updateEmail(
+    const result = await service.updateEmail(
       updateInput,
       await getRequestConfigFromExpress(req, res)
     );
 
-    if (isEmailUpdated) {
+    if (result.success === true) {
       await publishingService
         .notifyEmailChanged({
           publicSubjectId: publicSubjectId,
@@ -82,10 +85,17 @@ export function checkYourEmailPost(
       return res.redirect(PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url);
     }
 
-    const error = formatValidationError(
+    let error = formatValidationError(
       "code",
       req.t("pages.checkYourEmail.code.validationError.invalidCode")
     );
+
+    if (result.error === CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED) {
+      req.metrics?.addMetric("emailAddress", 1);
+      req.metrics?.addMetric("changeDenied", MetricUnit.Count, 1);
+
+      error = formatValidationError("code", "TODO");
+    }
 
     setLocalOplSettings(res);
     renderBadRequest(res, req, TEMPLATE_NAME, error);
