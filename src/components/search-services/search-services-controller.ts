@@ -45,36 +45,28 @@ export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
 
 const indexes: Record<string, Index<true, false, true>> = {};
 
-// This is called on every GET request but because the indexes are module
-// scoped and are only created on the first request for a particular locale this
-// is okay. This first request is slightly slower as the index is created. Index
-// creation with ~10,000 items has been tested and the request time is acceptable.
-// ~100,000 is less acceptable but we are very unlikely to hit 10,000 items let alone
-// 100,000 items.
 export const createSearchIndex = async (
   locale: LOCALE,
   services: ReturnType<typeof getAllServices>
 ) => {
-  if (!indexes[locale]) {
-    const index = await new Worker({
-      tokenize: "forward",
-    });
+  const index = await new Worker({
+    tokenize: "forward",
+  });
 
-    await Promise.all(
-      services.map((service) => {
-        const additionalSearchTerms =
-          service.additionalSearchTerms !== ""
-            ? ` ${service.additionalSearchTerms}`
-            : "";
-        return index.add(
-          service.clientId,
-          `${service.startText}${additionalSearchTerms}`
-        );
-      })
-    );
+  await Promise.all(
+    services.map((service) => {
+      const additionalSearchTerms =
+        service.additionalSearchTerms !== ""
+          ? ` ${service.additionalSearchTerms}`
+          : "";
+      return index.add(
+        service.clientId,
+        `${service.startText}${additionalSearchTerms}`
+      );
+    })
+  );
 
-    indexes[locale] = index;
-  }
+  indexes[locale] = index;
 };
 
 export const searchServices = async (
