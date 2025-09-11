@@ -55,26 +55,75 @@ export const createSearchIndex = async (
   locale: LOCALE,
   services: ReturnType<typeof getAllServices>
 ) => {
-  if (!indexes[locale]) {
-    const index = await new Worker({
-      tokenize: "forward",
-    });
+  const index = await new Worker({
+    tokenize: "forward",
+  });
 
-    await Promise.all(
-      services.map((service) => {
-        const additionalSearchTerms =
-          service.additionalSearchTerms !== ""
-            ? ` ${service.additionalSearchTerms}`
-            : "";
-        return index.add(
-          service.clientId,
-          `${service.startText}${additionalSearchTerms}`
-        );
-      })
-    );
+  const lotsOfServices = [
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+    ...services,
+  ];
 
-    indexes[locale] = index;
-  }
+  await Promise.all(
+    lotsOfServices.map((service, i) => {
+      const additionalSearchTerms =
+        service.additionalSearchTerms !== ""
+          ? ` ${service.additionalSearchTerms}`
+          : "";
+      return index.add(
+        `${service.clientId}_${i}`,
+        `${i}${service.startText}${additionalSearchTerms}`
+      );
+    })
+  );
+
+  indexes[locale] = index;
 };
 
 export const searchServices = async (
