@@ -22,8 +22,6 @@ export const handler = async (): Promise<void> => {
     const response = await ecs.send(describeCommand);
     const service = response.services?.[0];
 
-    console.log(`Service details are: ${JSON.stringify(service)}`);
-
     if (!service) {
       console.warn(
         `ECS service ${SERVICE_NAME} not found in cluster ${CLUSTER_NAME}`
@@ -33,19 +31,13 @@ export const handler = async (): Promise<void> => {
 
     const taskSets = service.taskSets ?? [];
 
-    console.log(`Total Task sets: ${taskSets.length}`);
+    console.log(`[ECS] Total Task sets: ${taskSets.length}`);
 
     let inProgress = taskSets.length > 1;
 
     if (!inProgress) {
       inProgress = taskSets.some((ts) => ts.status !== "PRIMARY");
     }
-
-    taskSets.forEach((ts) => {
-      console.log(`Task Set Info is: createdAt: ${ts.createdAt}, id: ${ts.id}, stabilityStatus: 
-      ${ts.stabilityStatus},status: ${ts.status},
-      computedDesiredCount: ${ts.computedDesiredCount}`);
-    });
 
     const metricValue = inProgress ? 1 : 0;
 
