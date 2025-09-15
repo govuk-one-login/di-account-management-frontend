@@ -6,6 +6,7 @@ import {
   searchServices,
   searchServicesGet,
   createSearchIndex,
+  recreateSearchIndexes,
 } from "../search-services-controller";
 import * as controller from "../search-services-controller";
 import { LOCALE } from "../../../app.constants";
@@ -509,5 +510,55 @@ describe("searchServicesGet", () => {
         englishLanguageLink: "/search?param=value&lng=en",
       })
     );
+  });
+});
+
+describe("recreateSearchIndexes", () => {
+  let sandbox: sinon.SinonSandbox;
+  let createSearchIndexStub: sinon.SinonStub;
+  let clock: sinon.SinonFakeTimers;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    createSearchIndexStub = sandbox.stub(controller, "createSearchIndex");
+    clock = sandbox.useFakeTimers(new Date("2023-01-01T10:59:59.000Z"));
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should call createSearchIndex for both locales after timeout", () => {
+    recreateSearchIndexes();
+
+    expect(createSearchIndexStub).to.have.not.been.called;
+
+    clock.tick(1000);
+
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.EN,
+      false,
+      true
+    );
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.CY,
+      false,
+      true
+    );
+  });
+
+  it("should recreate indexes periodically", () => {
+    recreateSearchIndexes();
+
+    expect(createSearchIndexStub).to.have.not.been.called;
+
+    clock.tick(1000);
+    expect(createSearchIndexStub.callCount).to.equal(2);
+
+    clock.tick(60 * 60 * 1000);
+    expect(createSearchIndexStub.callCount).to.equal(4);
+
+    clock.tick(60 * 60 * 1000);
+    expect(createSearchIndexStub.callCount).to.equal(6);
   });
 });
