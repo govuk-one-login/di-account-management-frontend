@@ -4,6 +4,8 @@ import { LOCALE } from "../../app.constants";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { Worker, Index } from "flexsearch";
 import { getTranslations } from "di-account-management-rp-registry";
+import i18next, { TFunction } from "i18next";
+import { safeTranslate } from "../../utils/safeTranslate";
 
 const TEMPLATE_NAME = "search-services/index.njk";
 
@@ -47,36 +49,73 @@ const indexes: Record<string, Index<true, false, true>> = {};
 
 export const createSearchIndex = async (
   locale: LOCALE,
-  services: ReturnType<typeof getAllServices>
+  createIfDoesntExist: boolean,
+  recreateIfExists: boolean
 ) => {
-  const index = await new Worker({
-    tokenize: "forward",
-  });
+  if (
+    (!indexes[locale] && createIfDoesntExist) ||
+    (indexes[locale] && recreateIfExists)
+  ) {
+    const translate: TFunction<"translation", undefined> =
+      i18next.getFixedT(locale);
+    const t = (key: string) => safeTranslate(translate, key, locale).toString();
 
-  await Promise.all(
-    services.map((service) => {
-      const additionalSearchTerms =
-        service.additionalSearchTerms !== ""
-          ? ` ${service.additionalSearchTerms}`
-          : "";
-      return index.add(
-        service.clientId,
-        `${service.startText}${additionalSearchTerms}`
-      );
-    })
-  );
+    const services = getAllServices(t, locale);
 
-  indexes[locale] = index;
+    const index = await new Worker({
+      tokenize: "forward",
+    });
+
+    await Promise.all(
+      services.map((service) => {
+        const additionalSearchTerms =
+          service.additionalSearchTerms !== ""
+            ? ` ${service.additionalSearchTerms}`
+            : "";
+        return index.add(
+          service.clientId,
+          `${service.startText}${additionalSearchTerms}`
+        );
+      })
+    );
+
+    indexes[locale] = index;
+  }
 };
+
+export const recreateSearchIndexes = () => {
+  for (const locale of Object.values(LOCALE)) {
+    const now = new Date();
+    const delay = 60 * 60 * 1000; // 1 hour in msec
+    const start =
+      delay -
+      (now.getMinutes() * 60 + now.getSeconds()) * 1000 +
+      now.getMilliseconds();
+
+    setTimeout(() => {
+      void createSearchIndex(locale, false, true);
+      setInterval(() => {
+        void createSearchIndex(locale, false, true);
+      }, delay);
+    }, start);
+  }
+};
+recreateSearchIndexes();
 
 export const searchServices = async (
   locale: LOCALE,
   query: string,
   services: ReturnType<typeof getAllServices>
 ) => {
-  return (await indexes[locale].searchAsync(query)).map((clientId) =>
-    services.find((service) => service.clientId === clientId)
-  );
+  return (await indexes[locale].searchAsync(query)).reduce<
+    ReturnType<typeof getAllServices>
+  >((foundServices, clientId) => {
+    const service = services.find((service) => service.clientId === clientId);
+    if (service) {
+      foundServices.push(service);
+    }
+    return foundServices;
+  }, []);
 };
 
 export async function searchServicesGet(
@@ -90,7 +129,7 @@ export async function searchServicesGet(
 
   let services = getAllServices(req.t, locale);
 
-  await createSearchIndex(locale, services);
+  await createSearchIndex(locale, true, false);
 
   if (query.length) {
     services = await searchServices(locale, query, services);
