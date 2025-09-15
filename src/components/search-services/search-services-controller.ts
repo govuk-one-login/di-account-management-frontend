@@ -58,7 +58,7 @@ export const createSearchIndex = async (
   ) {
     const translate: TFunction<"translation", undefined> =
       i18next.getFixedT(locale);
-    const t = (key: string) => safeTranslate(translate, key, locale).toString();
+    const t = (key: string) => safeTranslate(translate, key, locale) as string;
 
     const services = getAllServices(t, locale);
 
