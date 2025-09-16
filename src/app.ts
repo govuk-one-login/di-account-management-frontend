@@ -244,6 +244,11 @@ async function createApp(): Promise<express.Application> {
   app.post("/*splat", sanitizeRequestMiddleware);
   app.use(csrfMiddleware);
 
+  app.use((req, res, next) => {
+    logger.info(req.headers, "MHTEST Headers");
+    next();
+  });
+
   app.use(securityRouter);
   app.use(yourServicesRouter);
   app.use(oidcAuthCallbackRouter);
