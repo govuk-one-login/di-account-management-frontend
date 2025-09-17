@@ -24,7 +24,7 @@ export const handler = async (): Promise<void> => {
 
     if (!service) {
       console.warn(
-        `ECS service ${SERVICE_NAME} not found in cluster ${CLUSTER_NAME}`
+        `ECS service with name ${SERVICE_NAME} not found in cluster ${CLUSTER_NAME}`
       );
       return;
     }
