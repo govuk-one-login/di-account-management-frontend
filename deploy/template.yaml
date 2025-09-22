@@ -1082,6 +1082,12 @@ Resources:
               - Effect: Allow
                 Action: sqs:SendMessage
                 Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/NotificationQueue/ARN}}"
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                  - kms:GenerateDataKey*
+                  - kms:ReEncrypt*
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/KMS/QueueKmsKey/ARN}}"
         - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
           PolicyDocument:
             Version: "2012-10-17"
