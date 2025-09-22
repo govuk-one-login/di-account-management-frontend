@@ -47,7 +47,7 @@ export async function globalLogoutConfirmGet(req: Request, res: Response) {
     process.env.NOTIFICATION_QUEUE_URL,
     JSON.stringify({
       notificationType: "GLOBAL_LOGOUT",
-      emailAddress: "michael.henson@digital.cabinet-office.gov.uk",
+      emailAddress: req.session.user.email,
       loggedOutAt: new Date().toISOString(),
       ...(() => {
         const txmaAuditEndoded = req.headers["txma-audit-encoded"] as string;
