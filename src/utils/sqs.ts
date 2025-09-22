@@ -78,7 +78,7 @@ async function sendToQueue(
 }
 
 function sqsService(): SqsService {
-  const send = async function (
+  const sendAuditEvent = async function (
     messageBody: string,
     trace: string
   ): Promise<any> {
@@ -100,7 +100,15 @@ function sqsService(): SqsService {
     }
   };
 
-  return { send };
+  const sendMessage = async function (
+    queueUrl: string,
+    messageBody: string,
+    trace: string
+  ) {
+    await sendToQueue(queueUrl, messageBody, trace);
+  };
+
+  return { sendAuditEvent, sendMessage };
 }
 
 export { sqsService };

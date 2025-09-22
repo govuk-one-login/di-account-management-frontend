@@ -43,3 +43,9 @@ export interface User {
   state?: UserState;
   authAppSecret?: string;
 }
+
+export interface DeviceIntelligence {
+  ip_address?: string;
+  user_agent?: string;
+  country_code?: string;
+}

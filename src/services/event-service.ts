@@ -214,7 +214,7 @@ export function eventService(
   };
 
   const send = (event: Event, trace: string): void => {
-    void sqs.send(JSON.stringify(event), trace);
+    void sqs.sendAuditEvent(JSON.stringify(event), trace);
   };
 
   return { buildAuditEvent, send };
