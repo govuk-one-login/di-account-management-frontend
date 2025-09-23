@@ -19,7 +19,7 @@ describe("eventService", () => {
 
   beforeEach(() => {
     sendSpy = sinon.spy();
-    sqs = { send: sendSpy } as any;
+    sqs = { sendAuditEvent: sendSpy } as any;
 
     sinon.replace(configModule, "getOIDCClientId", () => "test-client-id");
   });

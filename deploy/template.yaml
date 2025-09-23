@@ -843,6 +843,8 @@ Resources:
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
+            - Name: "NOTIFICATION_QUEUE_URL"
+              Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/NotificationQueue/URL}}"
             - Name: "AUDIT_QUEUE_DLQ_URL"
               Value: !Ref TxMAPublishErrorDeadLetterQueue
             - Name: "GENERATOR_KEY_ARN"
@@ -1077,6 +1079,13 @@ Resources:
               - Effect: Allow
                 Action: sqs:SendMessage
                 Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/ARN}}"
+              - Effect: Allow
+                Action: sqs:SendMessage
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/NotificationQueue/ARN}}"
+              - Effect: Allow
+                Action:
+                  - kms:GenerateDataKey*
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/KMS/QueueKmsKey/ARN}}"
         - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
           PolicyDocument:
             Version: "2012-10-17"

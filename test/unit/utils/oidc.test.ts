@@ -330,7 +330,7 @@ describe("OIDC Functions", () => {
     });
 
     it("should not update the token when token not expired", async () => {
-      const accessToken = createAccessToken(1758477938);
+      const accessToken = createAccessToken(17584779380);
       const refreshTokenToken = "refreshToken";
       const req: any = {
         session: {
