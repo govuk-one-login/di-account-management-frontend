@@ -91,7 +91,7 @@ describe("Global Logout Controller", () => {
       const res = {
         locals: { trace: "dummyTrace" },
       } as unknown as Response;
-      sinon.useFakeTimers(new Date(2025, 8, 23).getTime());
+      sinon.useFakeTimers(1758582000000);
       process.env.NOTIFICATION_QUEUE_URL = "https://notification-queue-url.com";
 
       await globalLogoutConfirmGet(req, res);
