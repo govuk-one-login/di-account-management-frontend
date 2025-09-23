@@ -93,7 +93,7 @@ export function eventService(
       platform: {
         user_agent: headers["user-agent"],
       },
-      ...(typeof txmaHeader === "undefined"
+      ...(txmaHeader === undefined
         ? {}
         : {
             restricted: {
