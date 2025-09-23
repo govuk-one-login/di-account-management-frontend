@@ -9,9 +9,10 @@ import {
 import * as eventServiceModule from "../../../services/event-service";
 import * as logoutUtils from "../../../utils/logout";
 import * as stateMachine from "../../../utils/state-machine";
+import * as sqsModule from "../../../utils/sqs";
 import { EventName, LogoutState, PATH_DATA } from "../../../app.constants";
 import { UserJourney } from "../../../utils/state-machine";
-import { RequestBuilder } from "../../../../test/utils/builders";
+import { CURRENT_EMAIL, RequestBuilder } from "../../../../test/utils/builders";
 
 describe("Global Logout Controller", () => {
   describe("globalLogoutGet", () => {
@@ -44,6 +45,7 @@ describe("Global Logout Controller", () => {
     let sendStub: sinon.SinonStub;
     let handleLogoutStub: sinon.SinonStub;
     let getNextStateStub: sinon.SinonStub;
+    let sendMessageStub: sinon.SinonStub;
 
     beforeEach(() => {
       buildAuditEventStub = sinon.stub().returns("dummyAuditEvent");
@@ -51,6 +53,11 @@ describe("Global Logout Controller", () => {
       sinon.stub(eventServiceModule, "eventService").returns({
         buildAuditEvent: buildAuditEventStub,
         send: sendStub,
+      });
+      sendMessageStub = sinon.stub().resolves();
+      sinon.stub(sqsModule, "sqsService").returns({
+        sendMessage: sendMessageStub,
+        sendAuditEvent: sinon.stub(),
       });
       handleLogoutStub = sinon.stub(logoutUtils, "handleLogout").resolves();
       getNextStateStub = sinon.stub(stateMachine, "getNextState").returns({
@@ -66,15 +73,26 @@ describe("Global Logout Controller", () => {
       sinon.restore();
     });
 
-    it("should send an audit event when the user logs out", async () => {
+    it("should send an audit event and notification event when the user logs out", async () => {
       const req = new RequestBuilder()
         .withSessionUserState({
           globalLogout: { value: "CHANGE_VALUE" },
+        })
+        .withHeaders({
+          "txma-audit-encoded": btoa(
+            JSON.stringify({
+              ip_address: "fake_ip_address",
+              country_code: "fake_country_code",
+              user_agent: "fake_user_agent",
+            })
+          ),
         })
         .build() as Request;
       const res = {
         locals: { trace: "dummyTrace" },
       } as unknown as Response;
+      sinon.useFakeTimers(new Date(2025, 8, 23).getTime());
+      process.env.NOTIFICATION_QUEUE_URL = "https://notification-queue-url.com";
 
       await globalLogoutConfirmGet(req, res);
 
@@ -87,6 +105,20 @@ describe("Global Logout Controller", () => {
       );
       sinon.assert.calledOnce(sendStub);
       sinon.assert.calledWithExactly(sendStub, "dummyAuditEvent", "dummyTrace");
+      sinon.assert.calledOnce(sendMessageStub);
+      sinon.assert.calledWith(
+        sendMessageStub,
+        "https://notification-queue-url.com",
+        JSON.stringify({
+          notificationType: "GLOBAL_LOGOUT",
+          emailAddress: CURRENT_EMAIL,
+          loggedOutAt: "2025-09-22T23:00:00.000Z",
+          ipAddress: "fake_ip_address",
+          countryCode: "fake_country_code",
+          userAgent: "fake_user_agent",
+        }),
+        "dummyTrace"
+      );
       sinon.assert.calledOnce(handleLogoutStub);
       sinon.assert.calledWithExactly(
         handleLogoutStub,
@@ -100,6 +132,15 @@ describe("Global Logout Controller", () => {
       const req = new RequestBuilder()
         .withSessionUserState({
           globalLogout: { value: "CHANGE_VALUE" },
+        })
+        .withHeaders({
+          "txma-audit-encoded": btoa(
+            JSON.stringify({
+              ip_address: "fake_ip_address",
+              country_code: "fake_country_code",
+              user_agent: "fake_user_agent",
+            })
+          ),
         })
         .build() as Request;
       const res = {
