@@ -77,37 +77,37 @@ async function sendToQueue(
   return false;
 }
 
-function sqsService(): SqsService {
-  const sendAuditEvent = async function (
-    messageBody: string,
-    trace: string
-  ): Promise<any> {
-    const { AUDIT_QUEUE_URL } = process.env;
-    const messageSent = await sendToQueue(AUDIT_QUEUE_URL, messageBody, trace);
+const sendAuditEvent = async function (
+  messageBody: string,
+  trace: string
+): Promise<any> {
+  const { AUDIT_QUEUE_URL } = process.env;
+  const messageSent = await sendToQueue(AUDIT_QUEUE_URL, messageBody, trace);
 
-    if (!messageSent) {
-      logger.error({ trace: trace }, FAILED_TO_SEND_TO_TXMA);
-      const { AUDIT_QUEUE_DLQ_URL } = process.env;
-      const messageSentToDLQ = await sendToQueue(
-        AUDIT_QUEUE_DLQ_URL,
-        messageBody,
-        trace
-      );
-      if (!messageSentToDLQ) {
-        logger.error({ trace: trace }, FAILED_SEND_TO_TXMA_DLQ);
-        logRedacted(messageBody, FIELDS_REDACTED_FROM_LOG_MESSAGES, trace);
-      }
+  if (!messageSent) {
+    logger.error({ trace: trace }, FAILED_TO_SEND_TO_TXMA);
+    const { AUDIT_QUEUE_DLQ_URL } = process.env;
+    const messageSentToDLQ = await sendToQueue(
+      AUDIT_QUEUE_DLQ_URL,
+      messageBody,
+      trace
+    );
+    if (!messageSentToDLQ) {
+      logger.error({ trace: trace }, FAILED_SEND_TO_TXMA_DLQ);
+      logRedacted(messageBody, FIELDS_REDACTED_FROM_LOG_MESSAGES, trace);
     }
-  };
+  }
+};
 
-  const sendMessage = async function (
-    queueUrl: string,
-    messageBody: string,
-    trace: string
-  ) {
-    await sendToQueue(queueUrl, messageBody, trace);
-  };
+const sendMessage = async function (
+  queueUrl: string,
+  messageBody: string,
+  trace: string
+) {
+  await sendToQueue(queueUrl, messageBody, trace);
+};
 
+function sqsService(): SqsService {
   return { sendAuditEvent, sendMessage };
 }
 
