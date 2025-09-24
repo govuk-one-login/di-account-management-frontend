@@ -5,11 +5,15 @@ import {
   getAllServices,
   searchServices,
   searchServicesGet,
+  createSearchIndex,
+  recreateSearchIndexes,
 } from "../search-services-controller";
 import * as controller from "../search-services-controller";
 import { LOCALE } from "../../../app.constants";
 import * as config from "../../../config";
 import * as registry from "di-account-management-rp-registry";
+import i18next from "i18next";
+import * as safeTranslateModule from "../../../utils/safeTranslate";
 
 describe("getAllServices", () => {
   let sandbox: sinon.SinonSandbox;
@@ -177,7 +181,94 @@ describe("getAllServices", () => {
   });
 });
 
-describe("searchServices", async () => {
+describe("createSearchIndex", () => {
+  let sandbox: sinon.SinonSandbox;
+  let i18nextStub: sinon.SinonStub;
+  let safeTranslateStub: sinon.SinonStub;
+  let getAllServicesStub: sinon.SinonStub;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    i18nextStub = sandbox.stub(i18next, "getFixedT");
+    safeTranslateStub = sandbox.stub(safeTranslateModule, "safeTranslate");
+    getAllServicesStub = sandbox.stub(controller, "getAllServices");
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should create index when createIfDoesntExist is true and index doesn't exist", async () => {
+    const mockTranslate = sandbox.stub();
+    i18nextStub.returns(mockTranslate);
+    safeTranslateStub.returns("translated");
+    getAllServicesStub.returns([
+      {
+        clientId: "client1",
+        startText: "Service 1",
+        additionalSearchTerms: "terms",
+      },
+    ]);
+
+    await createSearchIndex(LOCALE.EN, true, false);
+
+    expect(i18nextStub).to.have.been.calledWith(LOCALE.EN);
+    expect(getAllServicesStub).to.have.been.called;
+  });
+
+  it("should not create index when createIfDoesntExist is false and index doesn't exist", async () => {
+    await createSearchIndex(LOCALE.EN, false, false);
+
+    expect(i18nextStub).not.to.have.been.called;
+    expect(getAllServicesStub).not.to.have.been.called;
+  });
+});
+
+describe("searchServices", () => {
+  let sandbox: sinon.SinonSandbox;
+
+  beforeEach(async () => {
+    sandbox = sinon.createSandbox();
+    const i18nextStub = sandbox.stub(i18next, "getFixedT");
+    const safeTranslateStub = sandbox.stub(
+      safeTranslateModule,
+      "safeTranslate"
+    );
+    const getAllServicesStub = sandbox.stub(controller, "getAllServices");
+
+    const mockTranslate = sandbox.stub();
+    i18nextStub.returns(
+      mockTranslate as unknown as ReturnType<typeof i18nextStub>
+    );
+    safeTranslateStub.returns("translated");
+    getAllServicesStub.returns([
+      {
+        clientId: "client1",
+        startText: "Tax Service",
+        startUrl: "https://tax.gov.uk",
+        additionalSearchTerms: "HMRC revenue",
+      },
+      {
+        clientId: "client2",
+        startText: "Passport Service",
+        startUrl: "https://passport.gov.uk",
+        additionalSearchTerms: "travel documents",
+      },
+      {
+        clientId: "client3",
+        startText: "Benefits Service",
+        startUrl: "https://benefits.gov.uk",
+        additionalSearchTerms: "",
+      },
+    ]);
+
+    await createSearchIndex(LOCALE.EN, true, true);
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
   const mockServices = [
     {
       clientId: "client1",
@@ -198,9 +289,6 @@ describe("searchServices", async () => {
       additionalSearchTerms: "",
     },
   ];
-
-  await controller.createSearchIndex(LOCALE.EN, mockServices);
-  await controller.createSearchIndex(LOCALE.CY, []);
 
   it("should return matching services based on startText", async () => {
     const result = await searchServices(LOCALE.EN, "tax", mockServices);
@@ -235,7 +323,7 @@ describe("searchServices", async () => {
   });
 
   it("should handle empty services array", async () => {
-    const result = await searchServices(LOCALE.CY, "tax", []);
+    const result = await searchServices(LOCALE.EN, "tax", []);
 
     expect(result).to.have.length(0);
   });
@@ -312,7 +400,8 @@ describe("searchServicesGet", () => {
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.EN);
     expect(createSearchIndexStub).to.have.been.calledWith(
       LOCALE.EN,
-      mockServices
+      true,
+      false
     );
     expect(searchServicesStub).not.to.have.been.called;
     expect(mockRes.render).to.have.been.calledWith(
@@ -339,7 +428,8 @@ describe("searchServicesGet", () => {
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.EN);
     expect(createSearchIndexStub).to.have.been.calledWith(
       LOCALE.EN,
-      mockServices
+      true,
+      false
     );
     expect(searchServicesStub).to.have.been.calledWith(
       LOCALE.EN,
@@ -368,7 +458,8 @@ describe("searchServicesGet", () => {
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.CY);
     expect(createSearchIndexStub).to.have.been.calledWith(
       LOCALE.CY,
-      mockServices
+      true,
+      false
     );
     expect(mockRes.render).to.have.been.calledWith(
       "search-services/index.njk",
@@ -419,5 +510,55 @@ describe("searchServicesGet", () => {
         englishLanguageLink: "/search?param=value&lng=en",
       })
     );
+  });
+});
+
+describe("recreateSearchIndexes", () => {
+  let sandbox: sinon.SinonSandbox;
+  let createSearchIndexStub: sinon.SinonStub;
+  let clock: sinon.SinonFakeTimers;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    createSearchIndexStub = sandbox.stub(controller, "createSearchIndex");
+    clock = sandbox.useFakeTimers(new Date("2023-01-01T10:59:59.000Z"));
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should call createSearchIndex for both locales after timeout", () => {
+    recreateSearchIndexes();
+
+    expect(createSearchIndexStub).to.have.not.been.called;
+
+    clock.tick(1000);
+
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.EN,
+      false,
+      true
+    );
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.CY,
+      false,
+      true
+    );
+  });
+
+  it("should recreate indexes periodically", () => {
+    recreateSearchIndexes();
+
+    expect(createSearchIndexStub).to.have.not.been.called;
+
+    clock.tick(1000);
+    expect(createSearchIndexStub.callCount).to.equal(2);
+
+    clock.tick(60 * 60 * 1000);
+    expect(createSearchIndexStub.callCount).to.equal(4);
+
+    clock.tick(60 * 60 * 1000);
+    expect(createSearchIndexStub.callCount).to.equal(6);
   });
 });

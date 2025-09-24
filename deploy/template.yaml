@@ -843,6 +843,8 @@ Resources:
                 ]
             - Name: "AUDIT_QUEUE_URL"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/URL}}"
+            - Name: "NOTIFICATION_QUEUE_URL"
+              Value: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/NotificationQueue/URL}}"
             - Name: "AUDIT_QUEUE_DLQ_URL"
               Value: !Ref TxMAPublishErrorDeadLetterQueue
             - Name: "GENERATOR_KEY_ARN"
@@ -1077,6 +1079,13 @@ Resources:
               - Effect: Allow
                 Action: sqs:SendMessage
                 Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/AuditQueue/ARN}}"
+              - Effect: Allow
+                Action: sqs:SendMessage
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/SQS/NotificationQueue/ARN}}"
+              - Effect: Allow
+                Action:
+                  - kms:GenerateDataKey*
+                Resource: !Sub "{{resolve:ssm:/${BackendStackName}/KMS/QueueKmsKey/ARN}}"
         - PolicyName: !Sub "${AWS::StackName}-DynatraceSecretsPolicy"
           PolicyDocument:
             Version: "2012-10-17"
@@ -2208,26 +2217,26 @@ Resources:
             Stat: Maximum
 
   # Traffic spike detection (low severity)
-  # Triggers when API Gateway request count increases by >=1000 in the current 5-minute period compared to the previous 5-minute period
-  # and only when the current 5-minute period has >1000 requests to avoid noise on low traffic.
+  # Triggers when API Gateway request count increases by >=2500 in the current 5-minute period compared to the previous 5-minute period
+  # and only when the current 5-minute period has >2500 requests to avoid noise on low traffic.
   ApiGatewayTrafficSpikeAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: !Sub "${AWS::StackName}-ApiGatewayTrafficSpikeAlarm"
-      AlarmDescription: "Alert when API Gateway requests increase by >=1000 vs previous 5 minutes, only if current 5-minute Count > 1000. Period=300s"
+      AlarmDescription: "Alert when API Gateway requests increase by >=2500 vs previous 5 minutes, only if current 5-minute Count > 2500. Period=300s"
       ActionsEnabled: true
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/LowAlertNotificationTopic/ARN}}"
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
       DatapointsToAlarm: 1
-      Threshold: 1000
+      Threshold: 2500
       TreatMissingData: missing
       Metrics:
         - Id: spike
           Label: spikeIncrease
           ReturnData: true
-          Expression: IF((m1>1000) AND (DIFF(m1)>0), DIFF(m1), 0)
+          Expression: IF((m1>2500) AND (DIFF(m1)>0), DIFF(m1), 0)
         - Id: m1
           ReturnData: false
           MetricStat:

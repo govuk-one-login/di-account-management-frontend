@@ -69,7 +69,15 @@ export interface SnsService {
 }
 
 export interface SqsService {
-  send: (message: string, trace: string) => Promise<string | undefined>;
+  sendAuditEvent: (
+    message: string,
+    trace: string
+  ) => Promise<string | undefined>;
+  sendMessage: (
+    queueUrl: string,
+    messageBody: string,
+    trace: string
+  ) => Promise<void>;
 }
 
 export interface DynamoDBService {
