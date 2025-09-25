@@ -85,20 +85,21 @@ export function checkYourEmailPost(
       return res.redirect(PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url);
     }
 
-    let error = formatValidationError(
-      "code",
-      req.t("pages.checkYourEmail.code.validationError.invalidCode")
-    );
-
     if (result.error === CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED) {
-      req.metrics?.addMetric("emailAddress", 1);
-      req.metrics?.addMetric("changeDenied", MetricUnit.Count, 1);
-
-      error = formatValidationError("code", "TODO");
+      req.metrics?.addMetric("changeEmailAddressDenied", MetricUnit.Count, 1);
+      return res.redirect(`${PATH_DATA.CHANGE_EMAIL.url}?email_cant_be_used=1`);
     }
 
     setLocalOplSettings(res);
-    renderBadRequest(res, req, TEMPLATE_NAME, error);
+    renderBadRequest(
+      res,
+      req,
+      TEMPLATE_NAME,
+      formatValidationError(
+        "code",
+        req.t("pages.checkYourEmail.code.validationError.invalidCode")
+      )
+    );
   };
 }
 
