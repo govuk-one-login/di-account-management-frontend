@@ -15,7 +15,7 @@ export interface CheckYourEmailServiceInterface {
       }
     | {
         success: false;
-        error: CheckYourEmailServiceError;
+        error: CheckYourEmailServiceError | undefined;
       }
   >;
 }
