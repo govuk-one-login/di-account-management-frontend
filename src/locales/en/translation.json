@@ -407,7 +407,8 @@
           "length": "Email address must be 256 characters or fewer",
           "email": "Enter an email address in the correct format, like name@example.com",
           "alreadyInUse": "There’s already a GOV.UK One Login using that email address. Enter a different email address.",
-          "sameEmail": "You are already using that email address. Enter a different email address."
+          "sameEmail": "You are already using that email address. Enter a different email address.",
+          "emailCantBeUsed": "You are unable to use that email address. Enter a different email address."
         }
       },
       "dontWantTo": {

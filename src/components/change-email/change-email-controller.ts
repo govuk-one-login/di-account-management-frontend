@@ -28,6 +28,11 @@ const setLocalOplSettings = (res: Response) => {
 const TEMPLATE_NAME = "change-email/index.njk";
 export function changeEmailGet(req: Request, res: Response): void {
   req.metrics?.addMetric("changeEmailGet", MetricUnit.Count, 1);
+
+  if (req.query.email_cant_be_used === "1") {
+    return badRequest(req, res, "emailCantBeUsed");
+  }
+
   setLocalOplSettings(res);
   return res.render(TEMPLATE_NAME);
 }

@@ -35,6 +35,7 @@ export class RequestBuilder {
   private headers: object = {
     "txma-audit-encoded": TXMA_AUDIT_ENCODED,
   };
+  private query: object = {};
   private t: () => void;
 
   withBody(body: object): this {
@@ -92,12 +93,17 @@ export class RequestBuilder {
     return this;
   }
 
+  withQuery(query: object): this {
+    this.query = query;
+    return this;
+  }
+
   withI18n(i18n: object): this {
     this.i18n = i18n;
     return this;
   }
 
-  withTranslate(func: () => void): this {
+  withTranslate(func: (...args: any) => any): this {
     this.t = func;
     return this;
   }
@@ -122,6 +128,7 @@ export class RequestBuilder {
       cookies: this.cookies,
       i18n: this.i18n,
       headers: this.headers as IncomingHttpHeaders,
+      query: this.query as Request["query"],
       t: this.t as any,
       ip: this.ip,
     };

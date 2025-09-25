@@ -32,6 +32,7 @@ describe("change email controller", () => {
       .withBody({ email: NEW_EMAIL })
       .withTranslate(sandbox.fake())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+      .withTranslate((key: string) => key)
       .build();
 
     res = new ResponseBuilder()
@@ -59,6 +60,28 @@ describe("change email controller", () => {
 
       // Assert
       expect(res.render).to.have.been.calledWith("change-email/index.njk");
+    });
+
+    it("should render enter new email with email denied error message", () => {
+      req.query = { email_cant_be_used: "1" };
+      changeEmailGet(req as Request, res as Response);
+
+      expect(res.render).to.have.been.calledWith("change-email/index.njk", {
+        errors: {
+          email: {
+            text: "pages.changeEmail.email.validationError.emailCantBeUsed",
+            href: "#email",
+          },
+        },
+        errorList: [
+          {
+            text: "pages.changeEmail.email.validationError.emailCantBeUsed",
+            href: "#email",
+          },
+        ],
+        email: "new-email@test.com",
+        language: "en",
+      });
     });
   });
 
