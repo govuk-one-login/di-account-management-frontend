@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Metrics, MetricUnit } from "@aws-lambda-powertools/metrics";
-import { logger } from "../utils/logger";
+import { logError, logger } from "../utils/logger";
 
 export function metricsMiddleware(
   namespace = "Account Home",
@@ -21,7 +21,7 @@ export function metricsMiddleware(
       try {
         metrics.publishStoredMetrics();
       } catch (error) {
-        logger.error("Failed to publish metric", error);
+        logError(logger, "Failed to publish metric", error);
       }
     });
 
