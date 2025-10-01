@@ -121,7 +121,8 @@ async function createApp(): Promise<express.Application> {
   app.use(
     "/assets",
     express.static(
-      path.resolve("node_modules/govuk-frontend/dist/govuk/assets")
+      path.resolve("node_modules/govuk-frontend/dist/govuk/assets"),
+      { maxAge: "1y" }
     )
   );
 
