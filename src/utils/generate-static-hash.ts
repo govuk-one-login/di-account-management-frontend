@@ -1,14 +1,11 @@
 import { hashElement } from "folder-hash";
 import path from "node:path";
 import memoize from "fast-memoize";
+import { getStaticAssetsPath } from "../config";
 
-export const generateStaticHash = memoize(async function (
-  folder?: string
-): Promise<string> {
+export const generateStaticHash = memoize(async function (): Promise<string> {
   const hash = await hashElement(
-    folder
-      ? path.join(__dirname, folder)
-      : path.join(__dirname, "..", "public"),
+    path.join(__dirname, getStaticAssetsPath()),
     {}
   );
   return hash.hash;
