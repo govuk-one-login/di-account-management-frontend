@@ -2,7 +2,14 @@ import { hashElement } from "folder-hash";
 import path from "path";
 import memoize from "fast-memoize";
 
-export const generateStaticHash = memoize(async function (): Promise<string> {
-  const hash = await hashElement(path.join(__dirname, "..", "public"), {});
+export const generateStaticHash = memoize(async function (
+  folder?: string
+): Promise<string> {
+  const hash = await hashElement(
+    folder
+      ? path.join(__dirname, folder)
+      : path.join(__dirname, "..", "public"),
+    {}
+  );
   return hash.hash;
 });
