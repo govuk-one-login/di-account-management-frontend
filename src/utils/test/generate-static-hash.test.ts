@@ -2,7 +2,7 @@ import { describe } from "mocha";
 import { expect } from "chai";
 import { generateStaticHash } from "../generate-static-hash";
 
-let originalEnv = { ...process.env };
+const originalEnv = { ...process.env };
 
 describe("generateStaticHash", () => {
   beforeEach(() => {
