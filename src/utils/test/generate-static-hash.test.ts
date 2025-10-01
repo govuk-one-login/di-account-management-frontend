@@ -2,7 +2,7 @@ import { describe } from "mocha";
 import { expect } from "chai";
 import { generateStaticHash } from "../generate-static-hash";
 
-describe.only("generateStaticHash", () => {
+describe("generateStaticHash", () => {
   it("should return a non-empty hash string", async () => {
     const hash = await generateStaticHash(".");
     expect(hash).to.be.a("string").that.is.not.empty;
