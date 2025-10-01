@@ -134,7 +134,6 @@ async function createApp(): Promise<express.Application> {
     )
   );
 
-  //
   app.use(
     "/public",
     express.static(path.join(__dirname, "public"), { maxAge: "1y" })

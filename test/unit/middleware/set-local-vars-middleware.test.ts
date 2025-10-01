@@ -7,6 +7,7 @@ import {
   PERSISTENT_SESSION_ID_UNKNOWN,
 } from "../../../src/app.constants";
 import * as nonceModule from "../../../src/utils/strings";
+import * as hashModule from "../../../src/utils/generate-static-hash";
 
 describe("set-local-vars-middleware", () => {
   let sandbox: sinon.SinonSandbox;

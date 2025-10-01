@@ -1,5 +1,5 @@
 import { hashElement } from "folder-hash";
-import path from "path";
+import path from "node:path";
 import memoize from "fast-memoize";
 
 export const generateStaticHash = memoize(async function (
