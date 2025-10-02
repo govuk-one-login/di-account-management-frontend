@@ -35,9 +35,6 @@ describe("set-local-vars-middleware", () => {
       redirect: sandbox.fake(() => {}),
     };
     next = sandbox.fake(() => {});
-    sandbox
-      .stub(hashModule, "generateStaticHash")
-      .resolves("static-hash-12345");
   });
 
   afterEach(() => {
