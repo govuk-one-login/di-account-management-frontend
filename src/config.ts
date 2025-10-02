@@ -91,10 +91,6 @@ export function getAwsRegion(): string {
   return process.env.AWS_REGION ?? "eu-west-2";
 }
 
-export function getStaticAssetsPath(): string {
-  return process.env.STATIC_ASSETS_PATH || "../public/";
-}
-
 export function getKmsKeyId(): string {
   return process.env.KMS_KEY_ID;
 }
