@@ -75,7 +75,6 @@
     "express-validator": "^7.2.1",
     "fast-memoize": "^2.5.2",
     "flexsearch": "^0.8.205",
-    "folder-hash": "^4.1.1",
     "govuk-frontend": "^5.11.2",
     "helmet": "8.1.0",
     "i18next": "^24.2.3",
