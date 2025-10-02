@@ -122,7 +122,7 @@ async function createApp(): Promise<express.Application> {
     "/assets",
     express.static(
       path.resolve("node_modules/govuk-frontend/dist/govuk/assets"),
-      { maxAge: "1y" }
+      { maxAge: isLocalEnv() ? "0" : "1y" }
     )
   );
 
@@ -137,7 +137,9 @@ async function createApp(): Promise<express.Application> {
 
   app.use(
     "/public",
-    express.static(path.join(__dirname, "public"), { maxAge: "1y" })
+    express.static(path.join(__dirname, "public"), {
+      maxAge: isLocalEnv() ? "0" : "1y",
+    })
   );
   app.use(cookieParser());
 

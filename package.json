@@ -25,7 +25,7 @@
     "lint": "eslint .",
     "start": "node dist/server.js",
     "test:audit": "npm audit",
-    "test:integration-legacy": "rm -rf test/coverage && NODE_ENV=test STATIC_ASSETS_PATH=. nyc mocha -r dotenv/config -P tsconfig.mocha.json  \"src/**/*-integration.test.ts\"",
+    "test:integration-legacy": "rm -rf test/coverage && NODE_ENV=test nyc mocha -r dotenv/config -P tsconfig.mocha.json  \"src/**/*-integration.test.ts\"",
     "test:unit": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config --exclude \"src/**/*-integration.test.ts\"  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test": "rm -rf test/coverage && NODE_ENV=development nyc mocha -r dotenv/config  \"test/unit/**/*.test.ts\" --recursive \"src/**/*.test.ts\"",
     "test:coverage": "nyc --reporter=lcov --reporter=text-summary npm run test:unit",
