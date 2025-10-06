@@ -1204,6 +1204,9 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     DependsOn:
       - ContainerServiceSecurityGroup
+      - ApplicationLoadBalancerSecurityGroupEgress
+      - ApplicationLoadBalancerListenerHTTP
+      - ApplicationLoadBalancerListenerHTTPS
     Properties:
       Scheme: internal
       Type: application
