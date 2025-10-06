@@ -650,6 +650,10 @@
             "text": "Proving your identity with the GOV.UK One Login app"
           },
           {
+            "href": "https://www.gov.uk/guidance/adding-your-veteran-card-to-the-govuk-one-login-app",
+            "text": "Adding your Veteran Card to the GOV.UK One Login app"
+          },
+          {
             "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions",
             "text": "Proving your identity with GOV.UK One Login by answering security questions"
           },
