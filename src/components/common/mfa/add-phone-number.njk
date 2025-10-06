@@ -73,5 +73,5 @@
   </a>
 {% endblock %}
 {% block scripts %}
-  <script type="text/javascript" src="/public/scripts/international-phone.js" nonce='{{scriptNonce}}'></script>
+  <script type="text/javascript" src="/public/scripts/international-phone.js?{{ staticHash }}" nonce='{{scriptNonce}}'></script>
 {% endblock %}

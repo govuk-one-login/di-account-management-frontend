@@ -16,6 +16,7 @@ import { generateNonce } from "../utils/strings";
 import { PATH_DATA } from "../app.constants";
 import { getSessionIdsFrom } from "../utils/session-ids";
 import { getCurrentUrl } from "../utils/language-toggle";
+import { generateStaticHash } from "../utils/generate-static-hash";
 
 export async function setLocalVarsMiddleware(
   req: Request,
@@ -38,6 +39,7 @@ export async function setLocalVarsMiddleware(
   res.locals.isSelectContentTrackingEnabled = selectContentTrackingEnabled();
   res.locals.currentUrl = getCurrentUrl(req);
   res.locals.isProd = isProd();
+  res.locals.staticHash = await generateStaticHash();
 
   const sessionIds = getSessionIdsFrom(req);
   res.locals.sessionId = sessionIds.sessionId;
