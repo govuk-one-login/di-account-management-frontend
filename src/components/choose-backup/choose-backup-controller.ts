@@ -107,5 +107,4 @@ export function chooseBackupPost(
   );
 
   res.redirect(selectedMfaMethod.path.url);
-  res.end();
 }

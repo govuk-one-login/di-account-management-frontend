@@ -5,16 +5,22 @@ import {
   getAllServices,
   searchServices,
   searchServicesGet,
+  createSearchIndex,
+  recreateSearchIndexes,
 } from "../search-services-controller";
 import * as controller from "../search-services-controller";
 import { LOCALE } from "../../../app.constants";
 import * as config from "../../../config";
+import * as registry from "di-account-management-rp-registry";
+import i18next from "i18next";
+import * as safeTranslateModule from "../../../utils/safeTranslate";
 
 describe("getAllServices", () => {
   let sandbox: sinon.SinonSandbox;
   let mockTranslate: sinon.SinonStub;
   let getClientsToShowInSearchStub: sinon.SinonStub;
   let getAppEnvStub: sinon.SinonStub;
+  let getTranslationsStub: sinon.SinonStub;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -24,6 +30,7 @@ describe("getAllServices", () => {
       "getClientsToShowInSearch"
     );
     getAppEnvStub = sandbox.stub(config, "getAppEnv");
+    getTranslationsStub = sandbox.stub(registry, "getTranslations");
   });
 
   afterEach(() => {
@@ -32,16 +39,22 @@ describe("getAllServices", () => {
 
   it("should return services with translated text for English locale", () => {
     getAppEnvStub.returns("dev");
-    getClientsToShowInSearchStub.returns(["client1", "client2"]);
+    getClientsToShowInSearchStub.returns(["dbs", "client2"]);
+    getTranslationsStub.returns({
+      dbs: {
+        additionalSearchTerms: "terms1",
+      },
+      client2: {},
+    });
 
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startText")
+      .withArgs("clientRegistry.dev.dbs.startText")
       .returns("Service 1");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startUrl")
+      .withArgs("clientRegistry.dev.dbs.startUrl")
       .returns("https://service1.gov.uk");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.additionalSearchTerms")
+      .withArgs("clientRegistry.dev.dbs.additionalSearchTerms")
       .returns("terms1");
     mockTranslate
       .withArgs("clientRegistry.dev.client2.startText")
@@ -49,24 +62,21 @@ describe("getAllServices", () => {
     mockTranslate
       .withArgs("clientRegistry.dev.client2.startUrl")
       .returns("https://service2.gov.uk");
-    mockTranslate
-      .withArgs("clientRegistry.dev.client2.additionalSearchTerms")
-      .returns("terms2");
 
     const result = getAllServices(mockTranslate, LOCALE.EN);
 
     expect(result).to.have.length(2);
     expect(result[0]).to.deep.equal({
-      client: "client1",
+      clientId: "dbs",
       startText: "Service 1",
       startUrl: "https://service1.gov.uk",
       additionalSearchTerms: "terms1",
     });
     expect(result[1]).to.deep.equal({
-      client: "client2",
+      clientId: "client2",
       startText: "Service 2",
       startUrl: "https://service2.gov.uk",
-      additionalSearchTerms: "terms2",
+      additionalSearchTerms: "",
     });
   });
 
@@ -88,7 +98,7 @@ describe("getAllServices", () => {
 
     expect(result).to.have.length(1);
     expect(result[0]).to.deep.equal({
-      client: "client1",
+      clientId: "client1",
       startText: "",
       startUrl: "",
       additionalSearchTerms: "",
@@ -131,23 +141,29 @@ describe("getAllServices", () => {
 
   it("should work with Welsh locale", () => {
     getAppEnvStub.returns("dev");
-    getClientsToShowInSearchStub.returns(["client1"]);
+    getClientsToShowInSearchStub.returns(["dbs"]);
+    getTranslationsStub.returns({
+      dbs: {
+        additionalSearchTerms: "termau1",
+      },
+      client2: {},
+    });
 
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startText")
+      .withArgs("clientRegistry.dev.dbs.startText")
       .returns("Gwasanaeth 1");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startUrl")
+      .withArgs("clientRegistry.dev.dbs.startUrl")
       .returns("https://gwasanaeth1.gov.uk");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.additionalSearchTerms")
+      .withArgs("clientRegistry.dev.dbs.additionalSearchTerms")
       .returns("termau1");
 
     const result = getAllServices(mockTranslate, LOCALE.CY);
 
     expect(result).to.have.length(1);
     expect(result[0]).to.deep.equal({
-      client: "client1",
+      clientId: "dbs",
       startText: "Gwasanaeth 1",
       startUrl: "https://gwasanaeth1.gov.uk",
       additionalSearchTerms: "termau1",
@@ -165,43 +181,127 @@ describe("getAllServices", () => {
   });
 });
 
-describe("searchServices", async () => {
+describe("createSearchIndex", () => {
+  let sandbox: sinon.SinonSandbox;
+  let i18nextStub: sinon.SinonStub;
+  let safeTranslateStub: sinon.SinonStub;
+  let getAllServicesStub: sinon.SinonStub;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    i18nextStub = sandbox.stub(i18next, "getFixedT");
+    safeTranslateStub = sandbox.stub(safeTranslateModule, "safeTranslate");
+    getAllServicesStub = sandbox.stub(controller, "getAllServices");
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should create index when createIfDoesntExist is true and index doesn't exist", async () => {
+    const mockTranslate = sandbox.stub();
+    i18nextStub.returns(mockTranslate);
+    safeTranslateStub.returns("translated");
+    getAllServicesStub.returns([
+      {
+        clientId: "client1",
+        startText: "Service 1",
+        additionalSearchTerms: "terms",
+      },
+    ]);
+
+    await createSearchIndex(LOCALE.EN, true, false);
+
+    expect(i18nextStub).to.have.been.calledWith(LOCALE.EN);
+    expect(getAllServicesStub).to.have.been.called;
+  });
+
+  it("should not create index when createIfDoesntExist is false and index doesn't exist", async () => {
+    await createSearchIndex(LOCALE.EN, false, false);
+
+    expect(i18nextStub).not.to.have.been.called;
+    expect(getAllServicesStub).not.to.have.been.called;
+  });
+});
+
+describe("searchServices", () => {
+  let sandbox: sinon.SinonSandbox;
+
+  beforeEach(async () => {
+    sandbox = sinon.createSandbox();
+    const i18nextStub = sandbox.stub(i18next, "getFixedT");
+    const safeTranslateStub = sandbox.stub(
+      safeTranslateModule,
+      "safeTranslate"
+    );
+    const getAllServicesStub = sandbox.stub(controller, "getAllServices");
+
+    const mockTranslate = sandbox.stub();
+    i18nextStub.returns(
+      mockTranslate as unknown as ReturnType<typeof i18nextStub>
+    );
+    safeTranslateStub.returns("translated");
+    getAllServicesStub.returns([
+      {
+        clientId: "client1",
+        startText: "Tax Service",
+        startUrl: "https://tax.gov.uk",
+        additionalSearchTerms: "HMRC revenue",
+      },
+      {
+        clientId: "client2",
+        startText: "Passport Service",
+        startUrl: "https://passport.gov.uk",
+        additionalSearchTerms: "travel documents",
+      },
+      {
+        clientId: "client3",
+        startText: "Benefits Service",
+        startUrl: "https://benefits.gov.uk",
+        additionalSearchTerms: "",
+      },
+    ]);
+
+    await createSearchIndex(LOCALE.EN, true, true);
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
   const mockServices = [
     {
-      client: "client1",
+      clientId: "client1",
       startText: "Tax Service",
       startUrl: "https://tax.gov.uk",
       additionalSearchTerms: "HMRC revenue",
     },
     {
-      client: "client2",
+      clientId: "client2",
       startText: "Passport Service",
       startUrl: "https://passport.gov.uk",
       additionalSearchTerms: "travel documents",
     },
     {
-      client: "client3",
+      clientId: "client3",
       startText: "Benefits Service",
       startUrl: "https://benefits.gov.uk",
       additionalSearchTerms: "",
     },
   ];
 
-  await controller.createSearchIndex(LOCALE.EN, mockServices);
-  await controller.createSearchIndex(LOCALE.CY, []);
-
   it("should return matching services based on startText", async () => {
     const result = await searchServices(LOCALE.EN, "tax", mockServices);
 
     expect(result).to.have.length(1);
-    expect(result[0]?.client).to.equal("client1");
+    expect(result[0]?.clientId).to.equal("client1");
   });
 
   it("should return matching services based on additionalSearchTerms", async () => {
     const result = await searchServices(LOCALE.EN, "HMRC", mockServices);
 
     expect(result).to.have.length(1);
-    expect(result[0]?.client).to.equal("client1");
+    expect(result[0]?.clientId).to.equal("client1");
   });
 
   it("should return multiple matching services", async () => {
@@ -223,7 +323,7 @@ describe("searchServices", async () => {
   });
 
   it("should handle empty services array", async () => {
-    const result = await searchServices(LOCALE.CY, "tax", []);
+    const result = await searchServices(LOCALE.EN, "tax", []);
 
     expect(result).to.have.length(0);
   });
@@ -232,14 +332,14 @@ describe("searchServices", async () => {
     const result = await searchServices(LOCALE.EN, "TAX", mockServices);
 
     expect(result).to.have.length(1);
-    expect(result[0]?.client).to.equal("client1");
+    expect(result[0]?.clientId).to.equal("client1");
   });
 
   it("should handle partial matches", async () => {
     const result = await searchServices(LOCALE.EN, "pass", mockServices);
 
     expect(result).to.have.length(1);
-    expect(result[0]?.client).to.equal("client2");
+    expect(result[0]?.clientId).to.equal("client2");
   });
 });
 
@@ -254,13 +354,13 @@ describe("searchServicesGet", () => {
 
   const mockServices = [
     {
-      client: "client1",
+      clientId: "client1",
       startText: "Service 1",
       startUrl: "",
       additionalSearchTerms: "",
     },
     {
-      client: "client2",
+      clientId: "client2",
       startText: "Service 2",
       startUrl: "",
       additionalSearchTerms: "",
@@ -300,7 +400,8 @@ describe("searchServicesGet", () => {
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.EN);
     expect(createSearchIndexStub).to.have.been.calledWith(
       LOCALE.EN,
-      mockServices
+      true,
+      false
     );
     expect(searchServicesStub).not.to.have.been.called;
     expect(mockRes.render).to.have.been.calledWith(
@@ -327,7 +428,8 @@ describe("searchServicesGet", () => {
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.EN);
     expect(createSearchIndexStub).to.have.been.calledWith(
       LOCALE.EN,
-      mockServices
+      true,
+      false
     );
     expect(searchServicesStub).to.have.been.calledWith(
       LOCALE.EN,
@@ -356,7 +458,8 @@ describe("searchServicesGet", () => {
     expect(getAllServicesStub).to.have.been.calledWith(mockReq.t, LOCALE.CY);
     expect(createSearchIndexStub).to.have.been.calledWith(
       LOCALE.CY,
-      mockServices
+      true,
+      false
     );
     expect(mockRes.render).to.have.been.calledWith(
       "search-services/index.njk",
@@ -407,5 +510,55 @@ describe("searchServicesGet", () => {
         englishLanguageLink: "/search?param=value&lng=en",
       })
     );
+  });
+});
+
+describe("recreateSearchIndexes", () => {
+  let sandbox: sinon.SinonSandbox;
+  let createSearchIndexStub: sinon.SinonStub;
+  let clock: sinon.SinonFakeTimers;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    createSearchIndexStub = sandbox.stub(controller, "createSearchIndex");
+    clock = sandbox.useFakeTimers(new Date("2023-01-01T10:59:59.000Z"));
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should call createSearchIndex for both locales after timeout", () => {
+    recreateSearchIndexes();
+
+    expect(createSearchIndexStub).to.have.not.been.called;
+
+    clock.tick(1000);
+
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.EN,
+      false,
+      true
+    );
+    expect(createSearchIndexStub).to.have.been.calledWith(
+      LOCALE.CY,
+      false,
+      true
+    );
+  });
+
+  it("should recreate indexes periodically", () => {
+    recreateSearchIndexes();
+
+    expect(createSearchIndexStub).to.have.not.been.called;
+
+    clock.tick(1000);
+    expect(createSearchIndexStub.callCount).to.equal(2);
+
+    clock.tick(60 * 60 * 1000);
+    expect(createSearchIndexStub.callCount).to.equal(4);
+
+    clock.tick(60 * 60 * 1000);
+    expect(createSearchIndexStub.callCount).to.equal(6);
   });
 });

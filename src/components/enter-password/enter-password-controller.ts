@@ -43,6 +43,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.RemoveBackup]: PATH_DATA.DELETE_MFA_METHOD.url,
   [UserJourney.SwitchBackupMethod]: PATH_DATA.SWITCH_BACKUP_METHOD.url,
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+  [UserJourney.GlobalLogout]: PATH_DATA.GLOBAL_LOGOUT_CONFIRM.url,
 };
 
 const getOplValues = (): OplSettingsLookupObject => ({
@@ -93,6 +94,9 @@ const getOplValues = (): OplSettingsLookupObject => ({
   [UserJourney.SwitchBackupMethod]: {
     ...MFA_COMMON_OPL_SETTINGS,
     contentId: "acef67be-40e5-4ebf-83d6-b8bc8c414304",
+  },
+  [UserJourney.GlobalLogout]: {
+    contentId: "cefa908b-d774-4da4-b8df-3d4bc6ec3323",
   },
 });
 

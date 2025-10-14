@@ -1,4 +1,4 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
@@ -9,26 +9,23 @@
 
 {% set emailMessage = 'pages.resendMfaCode.email.recipientMessage' | translate %}
 
-{% block content %}
-    <form action="{{ 'RESEND_EMAIL_CODE' | getPath }}" method="post" novalidate="novalidate">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+{% block pageContent %}
+  <form action="{{ 'RESEND_EMAIL_CODE' | getPath }}" method="post" novalidate="novalidate">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
 
-        <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.resendMfaCode.header' | translate}}</h1>
-
-        {{ govukInsetText({
-            html: emailMessage + '<span class="govuk-body govuk-!-font-weight-bold">' + emailAddress + '</span>'
-        }) }}
-
-        <p class="govuk-body">{{'pages.resendMfaCode.email.paragraph' | translate}}</p>
-        {{ govukButton({
-        "text": 'pages.resendMfaCode.continue' | translate,
-        "type": "Submit",
-        "preventDoubleClick": true,
-            attributes: {
-                "data-nav": true,
-                "data-link": "RESEND_EMAIL_CODE" | getPath
-            } 
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.resendMfaCode.header' | translate}}</h1>
+    {{ govukInsetText({
+        html: emailMessage + '<span class="govuk-body govuk-!-font-weight-bold">' + emailAddress + '</span>'
     }) }}
-
-    </form>
+    <p class="govuk-body">{{'pages.resendMfaCode.email.paragraph' | translate}}</p>
+    {{ govukButton({
+      text: 'pages.resendMfaCode.continue' | translate,
+      preventDoubleClick: true,
+      attributes: {
+        "data-nav": true,
+        "data-link": "RESEND_EMAIL_CODE" | getPath
+      } 
+      }) 
+    }}
+  </form>
 {% endblock %}

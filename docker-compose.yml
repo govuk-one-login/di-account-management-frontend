@@ -9,6 +9,8 @@ services:
       - SERVICES=kms,sns,dynamodb,sqs,stepfunctions,cloudwatch
       - LOCALSTACK_HOST=localhost
       - DYNAMODB_SHARE_DB=1 # Removes regions and allows NoSQL Workbench to work.
+      - DYNAMODB_REMOVE_EXPIRED_ITEMS=1
+      - DYNAMODB_IN_MEMORY=1
       - DEBUG=${DEBUG:-0}
       - AWS_ACCESS_KEY_ID=na
       - AWS_SECRET_ACCESS_KEY=na
@@ -56,6 +58,7 @@ services:
       - LOCALSTACK_HOSTNAME=localstack
       - AWS_REGION=${AWS_REGION}
       - AUDIT_QUEUE_URL=http://localstack:4566/audit-events
+      - NOTIFICATION_QUEUE_URL=${NOTIFICATION_QUEUE_URL}
       - GENERATOR_KEY=${GENERATOR_KEY}
       - WRAPPING_KEY=${WRAPPING_KEY}
       - ACCOUNT_ID=${ACCOUNT_ID}

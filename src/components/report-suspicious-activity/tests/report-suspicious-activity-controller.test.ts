@@ -127,7 +127,26 @@ describe("report suspicious activity controller", () => {
     expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
   });
 
-  it("You've already reported this activity", async () => {
+  it("Should call next when the event query string parameter fails validation", async () => {
+    const configFuncs = require("../../../config");
+    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+      return true;
+    });
+    const nextFake = sinon.fake();
+    req.query = {
+      event: "",
+    };
+
+    await reportSuspiciousActivityGet(
+      req as Request,
+      res as Response,
+      nextFake
+    );
+
+    expect(nextFake).to.have.been.calledOnce;
+  });
+
+  it("You’ve already reported this activity", async () => {
     const configFuncs = require("../../../config");
     sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
       return true;
@@ -346,12 +365,32 @@ describe("report suspicious activity controller", () => {
       // Act
       await reportSuspiciousActivityConfirmationGet(
         req as Request,
-        res as Response
+        res as Response,
+        () => {}
       );
 
       // Assert
       expect(res.status).to.have.been.calledOnceWith(404);
       expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
+    });
+
+    it("Should call next when the page query string parameter fails validation", async () => {
+      const configFuncs = require("../../../config");
+      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+        return true;
+      });
+      const nextFake = sinon.fake();
+      req.query = {
+        page: ["1"],
+      };
+
+      await reportSuspiciousActivityConfirmationGet(
+        req as Request,
+        res as Response,
+        nextFake
+      );
+
+      expect(nextFake).to.have.been.calledOnce;
     });
   });
 });

@@ -106,7 +106,7 @@ create_and_populate_user_services_table() {
                     "N": "4"
                   },
                   "client_id": {
-                    "S": "connectFamilies"
+                    "S": "hoSubmitAPleasureCraftReport"
                   },
                   "last_accessed": {
                     "N": "1666169856"
@@ -287,7 +287,7 @@ create_and_populate_activity_log_table() {
           "user_id": {"S": "'"$BUILD_CLIENT_ID"'"},
           "timestamp": {"N": "'$TIMESTAMP'"},
           "session_id": {"S": "'$SESSION_ID'"},
-          "client_id": {"S": "vehicleOperatorLicense"},
+          "client_id": {"S": "hoSubmitAPleasureCraftReport"},
           "event_type": {"S": "AUTH_AUTH_CODE_ISSUED"},
           "event_id": {"S": "'$EVENT_ID'"},
           "reported_suspicious": {"BOOL": true}
@@ -375,6 +375,9 @@ create_session_store_table() {
 create_sqs_queues() {
   aws sqs --endpoint-url $ENDPOINT_URL create-queue --queue-name audit-events \
     --region "$REGION"
+
+  aws sqs --endpoint-url $ENDPOINT_URL create-queue --queue-name notification-queue \
+    --region "$REGION"    
 
   # SQS Queue listening to the SNS alarm topic which from which messages can be received to view the alarm details
   aws sqs --endpoint-url $ENDPOINT_URL create-queue --queue-name slack-alerts --region "$REGION"

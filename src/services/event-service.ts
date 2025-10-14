@@ -21,6 +21,19 @@ import { getOIDCClientId } from "../config";
 import { mfaMethodTypes } from "../utils/mfaClient/types";
 import { parsePhoneNumber } from "libphonenumber-js/mobile";
 
+/**
+ * A function for calculating and returning an object containing the current timestamp.
+ *
+ * @returns CurrentTimeDescriptor object, containing different formats of the current time
+ */
+function getCurrentTimestamp(date = new Date()): CurrentTimeDescriptor {
+  return {
+    milliseconds: date.valueOf(),
+    isoString: date.toISOString(),
+    seconds: Math.floor(date.valueOf() / 1000),
+  };
+}
+
 export function eventService(
   sqs: SqsService = sqsService()
 ): EventServiceInterface {
@@ -53,19 +66,6 @@ export function eventService(
   const isSignedIn = (session: Session): boolean =>
     session.user?.isAuthenticated ?? false;
 
-  /**
-   * A function for calculating and returning an object containing the current timestamp.
-   *
-   * @returns CurrentTimeDescriptor object, containing different formats of the current time
-   */
-  function getCurrentTimestamp(date = new Date()): CurrentTimeDescriptor {
-    return {
-      milliseconds: date.valueOf(),
-      isoString: date.toISOString(),
-      seconds: Math.floor(date.valueOf() / 1000),
-    };
-  }
-
   const buildBaseAuditEvent = (
     req: Request,
     res: Response,
@@ -93,15 +93,15 @@ export function eventService(
       platform: {
         user_agent: headers["user-agent"],
       },
-      ...(txmaHeader !== undefined
-        ? {
+      ...(txmaHeader === undefined
+        ? {}
+        : {
             restricted: {
               device_information: {
                 encoded: txmaHeader,
               },
             },
-          }
-        : {}),
+          }),
     };
   };
 
@@ -128,6 +128,12 @@ export function eventService(
               defaultMethod.method.phoneNumber,
               "GB"
             ).countryCallingCode,
+          }
+        : {};
+
+    const defaultPhoneNumberObject =
+      defaultMethod?.method.mfaMethodType === mfaMethodTypes.sms
+        ? {
             phone: defaultMethod.method.phoneNumber,
           }
         : {};
@@ -139,6 +145,12 @@ export function eventService(
               backupMethod.method.phoneNumber,
               "GB"
             ).countryCallingCode,
+          }
+        : {};
+
+    const backupPhoneNumberObject =
+      backupMethod?.method.mfaMethodType === mfaMethodTypes.sms
+        ? {
             phone: backupMethod.method.phoneNumber,
           }
         : {};
@@ -156,6 +168,10 @@ export function eventService(
         break;
 
       case EventName.AUTH_MFA_METHOD_ADD_STARTED:
+        baseEvent.user = {
+          ...baseEvent.user,
+          ...defaultPhoneNumberObject,
+        };
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
           ...defaultPhoneNumberCountryCodeObject,
@@ -163,6 +179,10 @@ export function eventService(
         break;
 
       case EventName.AUTH_MFA_METHOD_SWITCH_STARTED:
+        baseEvent.user = {
+          ...baseEvent.user,
+          ...defaultPhoneNumberObject,
+        };
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
           "mfa-type": defaultMethod.method.mfaMethodType,
@@ -171,6 +191,10 @@ export function eventService(
         break;
 
       case EventName.AUTH_MFA_METHOD_DELETE_STARTED:
+        baseEvent.user = {
+          ...baseEvent.user,
+          ...backupPhoneNumberObject,
+        };
         baseEvent.extensions = {
           "journey-type": "ACCOUNT_MANAGEMENT",
           "mfa-type": backupMethod.method.mfaMethodType,
@@ -190,7 +214,7 @@ export function eventService(
   };
 
   const send = (event: Event, trace: string): void => {
-    void sqs.send(JSON.stringify(event), trace);
+    void sqs.sendAuditEvent(JSON.stringify(event), trace);
   };
 
   return { buildAuditEvent, send };

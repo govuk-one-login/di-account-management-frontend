@@ -8,8 +8,6 @@
     "warning": "Warning",
     "errorSummaryTitle": "There is a problem",
     "phaseBanner": {
-      "tag": "Beta",
-      "text": "This is a new service – your <a  href=\"[supportUrl]\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">feedback (opens in new tab)</a> will help us to improve it.",
       "testText": "This is a test environment."
     },
     "yes": "Yes",
@@ -18,37 +16,6 @@
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
-    "cookie": {
-      "cookieBanner": {
-        "title": "Cookies on GOV.UK One Login",
-        "heading": "Cookies on GOV.UK One Login",
-        "paragraph1": "We use some essential cookies to make this service work.",
-        "paragraph2": "We’d also like to use analytics cookies so we can understand how you use the service and make improvements.",
-        "buttonAcceptText": "Accept analytics cookies",
-        "buttonRejectText": "Reject analytics cookies",
-        "linkViewCookiesText": "View cookies",
-        "cookieBannerHideLink": "Hide this message",
-        "cookeBannerAccept": {
-          "paragraph1": "You’ve accepted additional cookies. You can ",
-          "paragraph2": " at any time."
-        },
-        "cookeBannerReject": {
-          "paragraph1": "You’ve rejected additional cookies. You can ",
-          "paragraph2": " at any time."
-        },
-        "changeCookiePreferencesLink": "change your cookie settings"
-      },
-      "cookieText": "GOV.UK uses cookies to make the site simpler.",
-      "cookieLink": "#",
-      "cookieLinkText": "Find out more about cookies"
-    },
-    "language": {
-      "english": "English",
-      "welsh": "Cymraeg (Welsh)"
-    },
-    "languageToggle": {
-      "ariaLabel": "Choose Language"
-    },
     "continue": {
       "label": "Continue"
     },
@@ -59,33 +26,6 @@
       "accountNavHomeLink": "Your services",
       "accountNavSecurityLink": "Security",
       "signOutLink": "Sign out"
-    },
-    "footer": {
-      "accessibilityStatement": {
-        "pageTitle": "Accessibility statement",
-        "linkText": "Accessibility statement"
-      },
-      "cookies": {
-        "pageTitle": "Cookie Policy",
-        "linkText": "Cookies"
-      },
-      "terms": {
-        "pageTitle": "Terms and conditions",
-        "linkText": "Terms and conditions"
-      },
-      "privacy": {
-        "pageTitle": "Privacy notice",
-        "linkText": "Privacy notice"
-      },
-      "support": {
-        "linkText": "Support (opens in new tab)"
-      },
-      "copyright": {
-        "linkText": "© Crown copyright"
-      },
-      "contentLicence": {
-        "linkText": "All content is available under the <a class=\"govuk-footer__link\" href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/\" rel=\"licence\">Open Government Licence v3.0</a>, except where otherwise stated"
-      }
     },
     "showPassword": {
       "show": "Show",
@@ -138,13 +78,15 @@
   },
   "pages": {
     "globalLogout": {
-      "title": "Are you sure you want to sign out of all devices and apps?",
-      "paragraph1": "If you're signed in with GOV.UK One Login in more than one place you can sign out everywhere. Such as on web, mobile, apps and any services you were using.",
-      "paragraph2": "This will help keep your GOV.UK One Login safe. For example, if you've lost your phone.",
-      "warning": "If you're signed in to the GOV.UK One Login/Wallet app, signing out will delete all the information and digital documents saved in it",
-      "button": "Sign out of all devices and apps",
-      "cancelButton": "Cancel and go back to Activity history",
-      "pageTitle": "Sign out of all devices and apps"
+      "title": "Sign out of all devices",
+      "paragraph1": "Sign out of GOV.UK One Login on all devices.",
+      "paragraph2": "You might want to do this if:",
+      "listItem1": "you’ve lost your phone",
+      "listItem2": "you think someone else might have access to your information",
+      "paragraph3": "Signing out will help keep your information safe.",
+      "button": "Sign out of all devices",
+      "cancelButton": "Cancel and go back to Security",
+      "pageTitle": "Sign out of all devices"
     },
     "searchServices": {
       "title": "Services you can use with GOV.UK One Login",
@@ -152,7 +94,7 @@
       "heading": "Services you can use with GOV.UK One Login",
       "paragraphs": [
         "At the moment, you can only use GOV.UK One Login to access some government services.",
-        "In the future, you'll be able to use it to access all services on GOV.UK."
+        "In the future, you’ll be able to use it to access all services on GOV.UK."
       ],
       "searchLabel": "Search for a service",
       "searchButton": "Search for services using GOV.UK One Login",
@@ -229,12 +171,12 @@
       "globalLogout": {
         "heading": "Sign out of all devices",
         "link": "Sign out of all devices",
-        "info": "You can sign out of all devices and sessions to help keep your GOV.UK One Login safe."
+        "info": "You can sign out of all devices to help keep your GOV.UK One Login safe."
       }
     },
     "confirmaddBackup": {
-      "title": "You've added a back-up method for getting security codes",
-      "heading": "You've added a back-up method for getting security codes",
+      "title": "You’ve added a back-up method for getting security codes",
+      "heading": "You’ve added a back-up method for getting security codes",
       "message": "If your default method for getting security codes is not available, you can get a code from this authenticator app instead."
     },
     "addBackup": {
@@ -247,7 +189,7 @@
         "title": "Authenticator app for smartphone, tablet or computer",
         "help": {
           "title": "What is an authenticator app?",
-          "text1": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
+          "text1": "An authenticator app creates a security code that helps confirm it’s you when you sign in.",
           "text2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer."
         }
       },
@@ -294,8 +236,8 @@
       "title": "Enter your mobile phone number",
       "heading": "Enter your mobile phone number",
       "confirm": {
-        "title": "You've added a back-up method for getting security codes",
-        "heading": "You've added a back-up method for getting security codes",
+        "title": "You’ve added a back-up method for getting security codes",
+        "heading": "You’ve added a back-up method for getting security codes",
         "message": "If your default method for getting security codes is not available, you can get a code to your phone number ending with <strong>[mobile]</strong> instead."
       }
     },
@@ -332,7 +274,7 @@
           }
         }
       },
-      "securityNoticeTitle": "If there's activity you do not recognise",
+      "securityNoticeTitle": "If there’s activity you do not recognise",
       "securityNoticeContent1": "You should <a href='[changePasswordLink]' class='govuk-link'>change your password</a>. This is the best way to keep your GOV.UK One Login safe.",
       "securityNoticeContent2": "You can also <a target='_blank' href='[reportActivityLink]' class='govuk-link'>report it to the GOV.UK One Login team (opens in new tab)</a>. The team reviews and acts on these reports but you will not get a personalised reply.",
       "noWelshNotice": "If a service you’ve visited is not available in Welsh it will appear here in English."
@@ -374,7 +316,7 @@
         "header": "You’ve already reported this activity",
         "paragraph": "You reported this on [date].",
         "paragraph2": "The report number is <strong>[reportNumber]</strong>.",
-        "noReportNo": "You'll get a confirmation email with your report number.",
+        "noReportNo": "You’ll get a confirmation email with your report number.",
         "contact": {
           "heading": "If you need to contact us",
           "paragraph1": "You can <a class=\"govuk-link\" href=\"[contactHref]\" target=\"_blank\">contact the GOV.UK One Login team (opens in a new tab)</a>.",
@@ -398,7 +340,7 @@
       "informationBox": {
         "heading": "Services you can use with GOV.UK One Login",
         "paragraph1": "GOV.UK One Login is new. At the moment you can only use it to access some government services.",
-        "paragraph2": "In the future, you'll be able to use GOV.UK One Login to access all services on GOV.UK.",
+        "paragraph2": "In the future, you’ll be able to use GOV.UK One Login to access all services on GOV.UK.",
         "paragraph3": "See the <a class=\"govuk-link\" href=\"[serviceListLink]\">services you can use with GOV.UK One Login</a>.",
         "link": "https://www.gov.uk/using-your-gov-uk-one-login/services"
       }
@@ -426,6 +368,10 @@
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
+      "globalLogout": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
+      },
       "password": {
         "label": "Enter your password",
         "validationError": {
@@ -443,11 +389,11 @@
       },
       "removeBackup": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "changeDefaultMethod": {
         "header": "Enter your password",
-        "paragraph": "We need to make sure it's you before you can manage how you get security codes."
+        "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
       "cancelText": "Cancel and go back to Security"
     },
@@ -461,7 +407,8 @@
           "length": "Email address must be 256 characters or fewer",
           "email": "Enter an email address in the correct format, like name@example.com",
           "alreadyInUse": "There’s already a GOV.UK One Login using that email address. Enter a different email address.",
-          "sameEmail": "You are already using that email address. Enter a different email address."
+          "sameEmail": "You are already using that email address. Enter a different email address.",
+          "emailCantBeUsed": "You are unable to use that email address. Enter a different email address."
         }
       },
       "dontWantTo": {
@@ -688,7 +635,7 @@
       "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
-        "paragraphs": ["Read our guidance if you're having a problem with:"],
+        "paragraphs": ["Read our guidance if you’re having a problem with:"],
         "links": [
           {
             "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app",
@@ -701,6 +648,10 @@
           {
             "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app",
             "text": "Proving your identity with the GOV.UK One Login app"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/adding-your-veteran-card-to-the-govuk-one-login-app",
+            "text": "Adding your Veteran Card to the GOV.UK One Login app"
           },
           {
             "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions",
@@ -723,7 +674,7 @@
             "text": "An unexpected email, text message or phone call about your GOV.UK One Login"
           }
         ],
-        "guidance-for-helpers": "If you're having trouble using GOV.UK One Login by yourself, you can get help from someone you know and trust. Find out <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login\">what the person who helps you can and cannot do</a>."
+        "guidanceForHelpers": "If you’re having trouble using GOV.UK One Login by yourself, you can get help from someone you know and trust. Find out <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login\">what the person who helps you can and cannot do</a>."
       },
       "section2": {
         "heading": "When you contact us"
@@ -790,7 +741,7 @@
         },
         "phone": {
           "heading": "Phone",
-          "paragraphs": ["You'll need your reference code when you call."],
+          "paragraphs": ["You’ll need your reference code when you call."],
           "insetText": {
             "paragraphs": [
               "<strong>From the UK:</strong><br>0300 373 9020",
@@ -819,7 +770,7 @@
       "title": "Your GOV.UK One Login has been permanently locked",
       "header": "Your GOV.UK One Login has been permanently locked",
       "section1": {
-        "paragraph1": "You've been signed out and you can no longer use your GOV.UK One Login."
+        "paragraph1": "You’ve been signed out and you can no longer use your GOV.UK One Login."
       },
       "section2": {
         "heading": "What you can do",
@@ -834,7 +785,7 @@
       "title": "Sorry, there is a problem",
       "heading": "Sorry, there is a problem",
       "section1": {
-        "paragraph1": "You've been signed out."
+        "paragraph1": "You’ve been signed out."
       },
       "section2": {
         "paragraph1": "You cannot use your GOV.UK One Login at the moment.",

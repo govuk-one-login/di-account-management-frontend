@@ -3,15 +3,11 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitleName = 'pages.checkYourPhone.title' | translate %}
 
 {% block pageContent %}
-
-    {% include "common/errors/errorSummary.njk" %}
-
-    <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.checkYourPhone.header' | translate}}</h1>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.checkYourPhone.header' | translate}}</h1>
     {{ govukInsetText({
         text: 'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber) | safe
     })}}
@@ -44,9 +40,8 @@
         {% endset %}
 
         {{ govukButton({
-            "text": button_text|default("general.continue.label" | translate, true),
-            "type": "Submit",
-            "preventDoubleClick": true
+            text: "general.continue.label" | translate,
+            preventDoubleClick: true
         }) }}
 
         {{ govukDetails({

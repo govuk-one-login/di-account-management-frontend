@@ -19,7 +19,7 @@ describe("eventService", () => {
 
   beforeEach(() => {
     sendSpy = sinon.spy();
-    sqs = { send: sendSpy } as any;
+    sqs = { sendAuditEvent: sendSpy } as any;
 
     sinon.replace(configModule, "getOIDCClientId", () => "test-client-id");
   });
@@ -288,7 +288,7 @@ describe("eventService", () => {
       expect(result.platform.user_agent).to.equal("test-user-agent");
       expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
       expect(result.extensions.phone_number_country_code).to.equal("44");
-      expect(result.extensions.phone).to.equal("+447123456789");
+      expect(result.user.phone).to.equal("+447123456789");
       expect(result.event_timestamp_ms).to.equal(1726099200000);
       expect(result.event_timestamp_ms_formatted).to.equal(
         "2024-09-12T00:00:00.000Z"
@@ -366,7 +366,7 @@ describe("eventService", () => {
       expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
       expect(result.extensions["mfa-type"]).to.equal("SMS");
       expect(result.extensions.phone_number_country_code).to.equal("44");
-      expect(result.extensions.phone).to.equal("+447123456789");
+      expect(result.user.phone).to.equal("+447123456789");
       expect(result.event_timestamp_ms).to.equal(1726099200000);
       expect(result.event_timestamp_ms_formatted).to.equal(
         "2024-09-12T00:00:00.000Z"
@@ -489,7 +489,7 @@ describe("eventService", () => {
       expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
       expect(result.extensions["mfa-type"]).to.equal("SMS");
       expect(result.extensions.phone_number_country_code).to.equal("44");
-      expect(result.extensions.phone).to.equal("+447987654321");
+      expect(result.user.phone).to.equal("+447987654321");
       expect(result.event_timestamp_ms).to.equal(1726099200000);
       expect(result.event_timestamp_ms_formatted).to.equal(
         "2024-09-12T00:00:00.000Z"

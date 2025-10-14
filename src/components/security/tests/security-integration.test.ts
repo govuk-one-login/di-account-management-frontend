@@ -88,19 +88,6 @@ describe("Integration:: security", () => {
       });
   });
 
-  it("should not display link to activity log when hasAllowedActivityLogServices is false", async () => {
-    const app = await appWithMiddlewareSetup({
-      hasAllowedActivityLogServices: false,
-    });
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("activity-log-section")).length).to.equal(0);
-      });
-  });
-
   it("should display link to global logout page when supportGlobalLogout is true", async () => {
     const app = await appWithMiddlewareSetup({ supportGlobalLogout: true });
     await request(app)
@@ -131,7 +118,6 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   const sandbox = sinon.createSandbox();
   const oidc = require("../../../utils/oidc");
   const configFuncs = require("../../../config");
-  const checkAllowedServicesList = require("../../../middleware/check-allowed-services-list");
   const mfa = require("../../../utils/mfaClient");
   const methods: Record<string, MfaMethod> = {
     SMS: {
@@ -174,10 +160,6 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
   sandbox.stub(configFuncs, "supportGlobalLogout").callsFake(() => {
     return config.supportGlobalLogout;
   });
-
-  sandbox
-    .stub(checkAllowedServicesList, "hasAllowedActivityLogServices")
-    .resolves(config?.hasAllowedActivityLogServices ?? true);
 
   const stubMfaClient: sinon.SinonStubbedInstance<MfaClient> =
     sandbox.createStubInstance(mfa.MfaClient);

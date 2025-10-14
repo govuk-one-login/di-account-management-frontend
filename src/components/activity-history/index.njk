@@ -1,8 +1,9 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.activityHistory.title' | translate %}
+{% set rowContainerId = 'activity-history' %}
 {% set backLinkJS = true %}
 {% set paginationItems = [] %}
 {% if pagination.items and pagination.currentPage %}
@@ -21,70 +22,66 @@
   }), paginationItems) %}
 {% endfor %}
 
-{% block content %}
-  <div class="govuk-grid-row" id="activity-history" data-test-id="activity-history">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l govuk-!-margin-top-0">{{ 'pages.activityHistory.header' | translate }}</h1>
-      {% if data.length %} 
-        <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
-        {% if hasEnglishOnlyServices and currentLngWelsh %}<p class="govuk-body" data-test-id="no-welsh-notice">{{ 'pages.activityHistory.noWelshNotice' | translate }}</p>{% endif %}
+{% block pageContent %}
+  <h1 class="govuk-heading-l">{{ 'pages.activityHistory.header' | translate }}</h1>
+  {% if data.length %} 
+    <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
+    {% if hasEnglishOnlyServices and currentLngWelsh %}<p class="govuk-body" data-test-id="no-welsh-notice">{{ 'pages.activityHistory.noWelshNotice' | translate }}</p>{% endif %}
 
-        {%- if not reportSuspiciousActivity -%}
-          {{ govukDetails({ 
-            summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
-            html: securityNoticeHtml
-          }) }}
-        {% else %}
-        <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
-        {% endif %}
-      {% else %}
-        {# Fallback in case there is no activity history – this should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
-        {{ govukInsetText({
-          html: 'pages.activityHistory.empty' | translate | replace("[link]", contactLink)
-        }) }}
-      {% endif %}
+    {%- if not reportSuspiciousActivity -%}
+      {{ govukDetails({ 
+        summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
+        html: securityNoticeHtml
+      }) }}
+    {% else %}
+    <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
+    {% endif %}
+  {% else %}
+    {# Fallback in case there is no activity history – this should never be visible as the fact that one is logged in and able to see this page means they should already have activity history on their account #}
+    {{ govukInsetText({
+      html: 'pages.activityHistory.empty' | translate | replace("[link]", contactLink)
+    }) }}
+  {% endif %}
 
-      {% if data.length %}
-        <ul class="activity-history__list">
-          {%- for event in data -%}
-            <li class="activity-history__list-item">
-              {% include "common/activity-history/event.njk" %}
-              {% if reportSuspiciousActivity %}
-                  {# if the activity has already been reported, display "Activity reported on [time]" link #}
-                  {# if the activity has not already been reported, display "Report activity from [time]" link #}
-                  <p class="govuk-body"><a class="govuk-link" href="{{event.reportSuspiciousActivityUrl}}">
-                    {%- if event.reportedSuspicious -%}
-                    {{ 'pages.activityHistory.reported' | translate | replace("[time]", event.reportedSuspiciousTime) }}
-                    {%- else -%}
-                    {{ 'pages.activityHistory.report' | translate | replace("[time]", event.time) }}
-                    {%- endif -%}
-                  </a></p>
-              {% endif %}
-            </li>
-          {%- endfor -%}
-        </ul>
-      {% endif %}
+  {% if data.length %}
+    <ul class="activity-history__list">
+      {%- for event in data -%}
+        <li class="activity-history__list-item">
+          {% include "common/activity-history/event.njk" %}
+          {% if reportSuspiciousActivity %}
+              {# if the activity has already been reported, display "Activity reported on [time]" link #}
+              {# if the activity has not already been reported, display "Report activity from [time]" link #}
+              <p class="govuk-body"><a class="govuk-link" href="{{event.reportSuspiciousActivityUrl}}">
+                {%- if event.reportedSuspicious -%}
+                {{ 'pages.activityHistory.reported' | translate | replace("[time]", event.reportedSuspiciousTime) }}
+                {%- else -%}
+                {{ 'pages.activityHistory.report' | translate | replace("[time]", event.time) }}
+                {%- endif -%}
+              </a></p>
+          {% endif %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {% endif %}
 
-      {% if data.length and not pagination.nextPage %}
-        {# if this is the last page of the activity log, show an explanatory paragraph #}
-        {# the paragraph details when GOVUK One Login started showing activity history #}
-        <p class="govuk-body" data-test-id="activity-log-explainer">{{ 'pages.activityHistory.featureIntro' | translate }}</p>
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-      {% endif %}
+  {% if data.length and not pagination.nextPage %}
+    {# if this is the last page of the activity log, show an explanatory paragraph #}
+    {# the paragraph details when GOVUK One Login started showing activity history #}
+    <p class="govuk-body" data-test-id="activity-log-explainer">{{ 'pages.activityHistory.featureIntro' | translate }}</p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  {% endif %}
 
-      {{ govukPagination({
-        attributes: {
-          "data-test-id": "activity-log-pagination"
-        },
-        landmarkLabel: "pages",
-        previous: {
-          href: "?page=" + pagination.previousPage
-        } if pagination.previousPage,
-        next: {
-          href: "?page=" + pagination.nextPage
-        } if pagination.nextPage,
-        items: paginationItems
-      }) if pagination.items }}
-    </div>
-  </div>
+  {{ govukPagination({
+    attributes: {
+      "data-test-id": "activity-log-pagination"
+    },
+    landmarkLabel: "pages",
+    previous: {
+      href: "?page=" + pagination.previousPage
+    } if pagination.previousPage,
+    next: {
+      href: "?page=" + pagination.nextPage
+    } if pagination.nextPage,
+    items: paginationItems
+  }) if pagination.items }}
 {% endblock %}

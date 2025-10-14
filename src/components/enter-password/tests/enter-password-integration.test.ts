@@ -146,6 +146,8 @@ describe("Integration::enter password", () => {
     // exclude the account deletion flow, as the user will be logged out, so the usual tests wont work
     PATH_DATA.ACCOUNT_DELETED_CONFIRMATION,
     PATH_DATA.DELETE_ACCOUNT,
+    // Exclude global logout as the state is set mid-journey
+    PATH_DATA.GLOBAL_LOGOUT_CONFIRM,
   ];
 
   Object.entries(PATH_DATA)

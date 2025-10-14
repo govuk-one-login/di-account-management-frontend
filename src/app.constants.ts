@@ -15,6 +15,11 @@ export const PATH_DATA: Record<
   ENTER_PASSWORD: { url: "/enter-password" },
   SEARCH_SERVICES: { url: "/services-using-one-login" },
   GLOBAL_LOGOUT: { url: "/global-logout" },
+  GLOBAL_LOGOUT_CONFIRM: {
+    url: "/global-logout/confirm",
+    type: UserJourney.GlobalLogout,
+    event: EventType.ValueUpdated,
+  },
   ADD_MFA_METHOD: {
     url: "/choose-backup",
     event: EventType.SelectedApp,
@@ -305,6 +310,7 @@ export const ERROR_CODES = {
   NEW_PASSWORD_SAME_AS_EXISTING: 1024,
   PASSWORD_IS_COMMON: 1040,
   NEW_PHONE_NUMBER_SAME_AS_EXISTING: 1044,
+  EMAIL_ADDRESS_DENIED: 1089,
 };
 
 export const enum ENVIRONMENT_NAME {

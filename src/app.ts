@@ -83,6 +83,14 @@ import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
 import { metricsMiddleware } from "./middleware/metrics-middlware";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes";
+import {
+  setBaseTranslations,
+  setFrontendUiTranslations,
+  frontendUiMiddleware,
+  frontendUiTranslationCy,
+  frontendUiTranslationEn,
+} from "@govuk-one-login/frontend-ui";
+import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -92,9 +100,12 @@ const APP_VIEWS = [
 
 async function createApp(): Promise<express.Application> {
   const app: express.Application = express();
+
   const isDeployedEnvironment = !isLocalEnv();
   app.use(metricsMiddleware());
   app.enable("trust proxy");
+
+  app.use(loggerMiddleware);
 
   if (isDeployedEnvironment) {
     const protect = applyOverloadProtection(isDeployedEnvironment);
@@ -110,7 +121,8 @@ async function createApp(): Promise<express.Application> {
   app.use(
     "/assets",
     express.static(
-      path.resolve("node_modules/govuk-frontend/dist/govuk/assets")
+      path.resolve("node_modules/govuk-frontend/dist/govuk/assets"),
+      { maxAge: isLocalEnv() ? "0" : "1y" }
     )
   );
 
@@ -123,7 +135,12 @@ async function createApp(): Promise<express.Application> {
     )
   );
 
-  app.use("/public", express.static(path.join(__dirname, "public")));
+  app.use(
+    "/public",
+    express.static(path.join(__dirname, "public"), {
+      maxAge: isLocalEnv() ? "0" : "1y",
+    })
+  );
   app.use(cookieParser());
 
   const sessionStore = getSessionStore({ session: session });
@@ -142,11 +159,11 @@ async function createApp(): Promise<express.Application> {
       ),
     })
   );
+  app.use(monkeyPatchRedirectToSaveSessionMiddleware);
 
   app.locals.sessionStore = sessionStore;
 
   app.use(setLocalVarsMiddleware);
-  app.use(loggerMiddleware);
   app.use(outboundContactUsLinksMiddleware);
 
   app.use((req, res, next) => {
@@ -184,8 +201,13 @@ async function createApp(): Promise<express.Application> {
       clientRegistry: {
         [getAppEnv()]: getTranslations(getAppEnv(), locale),
       },
+      FECTranslations:
+        locale === LOCALE.CY
+          ? frontendUiTranslationCy
+          : frontendUiTranslationEn,
     };
   };
+
   i18next.addResourceBundle(
     LOCALE.CY,
     "translation",
@@ -197,7 +219,11 @@ async function createApp(): Promise<express.Application> {
     getTranslationObject(LOCALE.EN)
   );
 
+  setBaseTranslations(i18next);
+  setFrontendUiTranslations(i18next);
   app.use(i18nextMiddleware.handle(i18next));
+  app.use(frontendUiMiddleware);
+
   if (supportWebchatContact()) {
     app.use(helmet(webchatHelmetConfiguration));
   } else {

@@ -2,18 +2,14 @@
 {% set hideAccountNavigation = hideAccountNavigation %}
 {% set pageTitleName = 'pages.signedOut.title' | translate %}
 
-{% block content %}
+{% block pageContent %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.signedOut.header' | translate }}</h1>
 
-<input type="hidden" name="_csrf" value="{{csrfToken}}" />
-
-<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.signedOut.header' | translate }}</h1>
-
-<p class="govuk-body">
-  {{'pages.signedOut.paragraph1' | translate}} <a href="{{signinLink}}" class="govuk-link">{{'pages.signedOut.signInLinkText' | translate}}</a>.
-</p>
-
-<p class="govuk-body">
- {{'pages.signedOut.paragraph2' | translate}} <a href="{{'pages.signedOut.govukLinkHref' | translate}}" class="govuk-link">{{'pages.signedOut.govukLinkText' | translate}}</a>.
-</p>
+  <p class="govuk-body">
+    {{'pages.signedOut.paragraph1' | translate}} <a href="{{signinLink}}" class="govuk-link">{{'pages.signedOut.signInLinkText' | translate}}</a>.
+  </p>
+  <p class="govuk-body">
+  {{'pages.signedOut.paragraph2' | translate}} <a href="{{'pages.signedOut.govukLinkHref' | translate}}" class="govuk-link">{{'pages.signedOut.govukLinkText' | translate}}</a>.
+  </p>
 {% endblock %}
 

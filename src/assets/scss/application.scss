@@ -7,7 +7,6 @@
 // start Design System component imports
 @import "components/back-link/back-link";
 @import "components/button/button";
-@import "components/character-count/character-count";
 @import "components/checkboxes/checkboxes";
 @import "components/cookie-banner/cookie-banner";
 @import "components/details/details";
@@ -27,7 +26,7 @@
 // end Design System component imports
 
 // language toggle component import
-@import "../../../node_modules/@govuk-one-login/frontend-language-toggle/stylesheet/styles";
+@import "../../../node_modules/@govuk-one-login/frontend-ui/build/components/language-select";
 
 .information-box {
   margin-bottom: govuk-spacing(4);
@@ -114,12 +113,6 @@
   .govuk-template--rebranded & {
     .govuk-header__logo {
       width: 100%;
-    }
-  }
-
-  .govuk-header__navigation-list {
-    @include govuk-media-query($from: tablet) {
-      text-align: right;
     }
   }
 }
@@ -216,15 +209,11 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 .account-navigation__link {
   @extend .govuk-link;
   display: inline-block;
-  padding: $nav-link-padding-left 0 govuk-spacing(2);
+  padding: $nav-link-padding-left 0 $nav-link-padding;
   margin-top: $nav-link-outline-thickness;
 
   &:not(:hover) {
     text-decoration: none;
-  }
-
-  &:focus {
-    padding: $nav-link-padding-left 0 $nav-link-padding;
   }
 
   &:visited {
@@ -241,6 +230,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
   .account-navigation__list-item--active & {
     border-bottom: $nav-active-border-thickness solid $govuk-link-colour;
+    padding: $nav-link-padding-left 0 govuk-spacing(2);
 
     &:focus {
       border-bottom: none;

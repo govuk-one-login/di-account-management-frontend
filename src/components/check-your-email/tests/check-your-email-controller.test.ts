@@ -9,7 +9,10 @@ import {
   checkYourEmailGet,
   checkYourEmailPost,
 } from "../check-your-email-controller";
-import { CheckYourEmailServiceInterface } from "../types";
+import {
+  CheckYourEmailServiceError,
+  CheckYourEmailServiceInterface,
+} from "../types";
 import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
 import * as oidcModule from "../../../utils/oidc";
 
@@ -55,7 +58,7 @@ describe("check your email controller", () => {
   describe("checkYourEmailPost", () => {
     it("should redirect to /email-updated-confirmation when valid code entered", async () => {
       const fakeService: CheckYourEmailServiceInterface = {
-        updateEmail: sandbox.fake.resolves(true),
+        updateEmail: sandbox.fake.resolves({ success: true }),
       };
 
       const fakePublishingService: GovUkPublishingServiceInterface = {
@@ -80,7 +83,10 @@ describe("check your email controller", () => {
 
     it("should return error when invalid code entered", async () => {
       const fakeService: CheckYourEmailServiceInterface = {
-        updateEmail: sandbox.fake.resolves(false),
+        updateEmail: sandbox.fake.resolves({
+          success: false,
+          error: undefined,
+        }),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -92,6 +98,27 @@ describe("check your email controller", () => {
 
       expect(fakeService.updateEmail).to.have.been.calledOnce;
       expect(res.render).to.have.been.calledWith("check-your-email/index.njk");
+    });
+
+    it("should redirect email address is denied", async () => {
+      const fakeService: CheckYourEmailServiceInterface = {
+        updateEmail: sandbox.fake.resolves({
+          success: false,
+          error: CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED,
+        }),
+      };
+
+      req.session.user.tokens = { accessToken: "token" } as any;
+      req.t = sandbox.fake.returns("translated string");
+      req.body.code = "678988";
+      res.locals.sessionId = "123456-djjad";
+
+      await checkYourEmailPost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.updateEmail).to.have.been.calledOnce;
+      expect(res.redirect).to.have.calledWith(
+        `${PATH_DATA.CHANGE_EMAIL.url}?email_cant_be_used=1`
+      );
     });
   });
 });

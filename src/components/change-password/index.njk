@@ -1,16 +1,13 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "common/show-password/macro.njk" import govukInputWithShowPassword %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitleName = 'pages.changePassword.title' | translate %}
 
 {% block pageContent %}
 
-{% include "common/errors/errorSummary.njk" %}
-
-<h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{'pages.changePassword.header' | translate}}</h1>
+<h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.changePassword.header' | translate}}</h1>
 
 <form action="/change-password" method="post" novalidate>
 
@@ -46,9 +43,8 @@
 }) }}
 
 {{ govukButton({
-    "text": button_text|default("general.continue.label" | translate, true),
-    "type": "Submit",
-    "preventDoubleClick": true
+    text: "general.continue.label" | translate,
+    preventDoubleClick: true
 }) }}
 
 </form>

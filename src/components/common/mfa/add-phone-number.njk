@@ -1,4 +1,4 @@
-{% extends "common/layout/base.njk" %}
+{% extends "common/layout/base-page.njk" %}
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -6,10 +6,8 @@
 
 {% set pageTitleName = pathToTitleString | translate or 'pages.changePhoneNumber.title' | translate %}
 
-{% block content %}
-  {% include "common/errors/errorSummary.njk" %}
-
-  <h1 class="govuk-heading-l govuk-!-margin-top-0 govuk-!-margin-bottom-3">{{ pathToHeadingString | translate or 'pages.changePhoneNumber.header' |
+{% block pageContent %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pathToHeadingString | translate or 'pages.changePhoneNumber.header' |
     translate}}</h1>
 
   <form action="{{ formAction }}" method="post" novalidate>
@@ -65,9 +63,8 @@
     }) }}
 
     {{ govukButton({
-      "text": button_text|default('general.continue.label' | translate, true),
-      "type": "Submit",
-      "preventDoubleClick": true
+      text: 'general.continue.label' | translate,
+      preventDoubleClick: true
     }) }}
   </form>
 
@@ -76,5 +73,5 @@
   </a>
 {% endblock %}
 {% block scripts %}
-  <script type="text/javascript" src="/public/scripts/international-phone.js" nonce='{{scriptNonce}}'></script>
+  <script type="text/javascript" src="/public/scripts/international-phone.js?{{ staticHash }}" nonce='{{scriptNonce}}'></script>
 {% endblock %}
