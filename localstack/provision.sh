@@ -376,6 +376,9 @@ create_sqs_queues() {
   aws sqs --endpoint-url $ENDPOINT_URL create-queue --queue-name audit-events \
     --region "$REGION"
 
+  aws sqs --endpoint-url $ENDPOINT_URL create-queue --queue-name notification-queue \
+    --region "$REGION"    
+
   # SQS Queue listening to the SNS alarm topic which from which messages can be received to view the alarm details
   aws sqs --endpoint-url $ENDPOINT_URL create-queue --queue-name slack-alerts --region "$REGION"
 }

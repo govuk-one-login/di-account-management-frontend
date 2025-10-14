@@ -58,6 +58,7 @@ services:
       - LOCALSTACK_HOSTNAME=localstack
       - AWS_REGION=${AWS_REGION}
       - AUDIT_QUEUE_URL=http://localstack:4566/audit-events
+      - NOTIFICATION_QUEUE_URL=${NOTIFICATION_QUEUE_URL}
       - GENERATOR_KEY=${GENERATOR_KEY}
       - WRAPPING_KEY=${WRAPPING_KEY}
       - ACCOUNT_ID=${ACCOUNT_ID}

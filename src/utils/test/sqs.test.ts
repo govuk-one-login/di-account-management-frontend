@@ -64,7 +64,7 @@ describe("SQS service tests", (): void => {
     errorLoggerSpy.restore();
   });
 
-  it("can send a message to an SQS queue", async (): Promise<void> => {
+  it("can send a message to the audit event queue", async (): Promise<void> => {
     // Arrange
     const sqsResponse: SendMessageCommandOutput = {
       $metadata: undefined,
@@ -75,7 +75,7 @@ describe("SQS service tests", (): void => {
     const sqs: SqsService = sqsService();
 
     // Act
-    await sqs.send(JSON.stringify(expectedEvent), "trace-id");
+    await sqs.sendAuditEvent(JSON.stringify(expectedEvent), "trace-id");
 
     // Assert
     expect(sqsClientStub).to.have.been.calledOnce;
@@ -86,6 +86,30 @@ describe("SQS service tests", (): void => {
         process.env.AUDIT_QUEUE_URL,
         messageId
       )
+    );
+    expect(errorLoggerSpy).to.not.have.been.called;
+  });
+
+  it("can send a message to another queue", async (): Promise<void> => {
+    const sqsResponse: SendMessageCommandOutput = {
+      $metadata: undefined,
+      MessageId: messageId,
+      MD5OfMessageBody: "md5-hash",
+    };
+    sqsClientStub.returns(sqsResponse);
+    const sqs: SqsService = sqsService();
+
+    await sqs.sendMessage(
+      "https://fake.queue.com",
+      JSON.stringify(expectedEvent),
+      "trace-id"
+    );
+
+    expect(sqsClientStub).to.have.been.calledOnce;
+    expect(loggerSpy).to.have.been.calledOnce;
+    expect(loggerSpy).to.have.been.calledWith(
+      { trace: "trace-id" },
+      LOG_MESSAGES.EVENT_SENT_SUCCESSFULLY("https://fake.queue.com", messageId)
     );
     expect(errorLoggerSpy).to.not.have.been.called;
   });
@@ -103,7 +127,7 @@ describe("SQS service tests", (): void => {
     const sqs: SqsService = sqsService();
 
     // Act
-    await sqs.send(JSON.stringify(expectedEvent), "trace-id");
+    await sqs.sendAuditEvent(JSON.stringify(expectedEvent), "trace-id");
 
     // Assert
     expect(sqsClientStub).to.have.been.calledTwice;
@@ -138,7 +162,7 @@ describe("SQS service tests", (): void => {
     );
 
     // Act
-    await sqs.send(expectedEventAsJSONString, "trace-id");
+    await sqs.sendAuditEvent(expectedEventAsJSONString, "trace-id");
 
     // Assert
     expect(sqsClientStub).to.have.been.calledTwice;
@@ -179,7 +203,7 @@ describe("SQS service tests", (): void => {
     sqsClientStub.returns(sqsResponse);
 
     // Act
-    await sqs.send(expectedEventAsJSONString, "trace-id");
+    await sqs.sendAuditEvent(expectedEventAsJSONString, "trace-id");
 
     // Assert
     expect(sqsClientStub).to.have.been.calledOnce;
@@ -214,7 +238,7 @@ describe("SQS service tests", (): void => {
     );
 
     // Act
-    await sqs.send(expectedEventAsJSONString, "trace-id");
+    await sqs.sendAuditEvent(expectedEventAsJSONString, "trace-id");
 
     // Assert
     expect(sqsClientStub).to.have.been.calledOnce;
@@ -254,7 +278,7 @@ describe("SQS service tests", (): void => {
     const expectedEventAsJSONString = JSON.stringify(expectedEvent);
 
     // Act
-    await sqs.send(expectedEventAsJSONString, "trace-id");
+    await sqs.sendAuditEvent(expectedEventAsJSONString, "trace-id");
 
     // Assert
     expect(errorLoggerSpy).to.have.callCount(5);

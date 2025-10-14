@@ -56,6 +56,7 @@ jobs:
           echo "SHOW_CONTACT_EMERGENCY_MESSAGE=0" >> .env
           echo "CONTACT_EMAIL_SERVICE_URL=https://signin.staging.account.gov.uk/contact-us-from-triage-page" >> .env
           echo "AUDIT_QUEUE_URL=http://localhost:4566/000000000000/audit-queue" >> .env
+          echo "NOTIFICATION_QUEUE_URL=http://localhost:4566/notification-queue" >> .env
           echo "AWS_REGION=eu-west-2" >> .env
           echo "GENERATOR_KEY_ARN=" >> .env
           echo "WRAPPING_KEY_ARN=" >> .env

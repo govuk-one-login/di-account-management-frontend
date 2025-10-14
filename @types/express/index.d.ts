@@ -3,6 +3,7 @@ import { User } from "../../src/types";
 import { QueryParameters } from "../../src/app.constants";
 import { MfaMethod } from "../../src/utils/mfaClient/types";
 import { logger } from "../../src/utils/logger";
+import { Metrics } from "@aws-lambda-powertools/metrics";
 
 declare module "express-session" {
   interface Session {

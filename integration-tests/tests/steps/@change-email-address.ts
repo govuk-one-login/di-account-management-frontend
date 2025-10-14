@@ -35,3 +35,14 @@ Then(
     ).toHaveCount(1);
   }
 );
+
+Then(
+  "I am shown an error message explaining that this email address can't be used",
+  async ({ page }) => {
+    await expect(
+      page.getByRole("link", {
+        name: "You are unable to use that email address. Enter a different email address.",
+      })
+    ).toBeVisible();
+  }
+);

@@ -35,7 +35,7 @@ describe("checkYourEmailService", () => {
     const persistentSessionId = "persistentsession123";
     const userLanguage = "en";
 
-    nock(baseUrl, {
+    const updateEmailNock = nock(baseUrl, {
       reqheaders: {
         authorization: `Bearer ${token}`,
         "x-forwarded-for": sourceIp,
@@ -44,13 +44,13 @@ describe("checkYourEmailService", () => {
         "user-language": userLanguage,
         "txma-audit-encoded": TXMA_AUDIT_ENCODED,
       },
-    })
-      .post(API_ENDPOINTS.UPDATE_EMAIL, {
-        existingEmailAddress: existingEmailAddress,
-        replacementEmailAddress: replacementEmailAddress,
-        otp: otp,
-      })
-      .reply(HTTP_STATUS_CODES.NO_CONTENT);
+    }).post(API_ENDPOINTS.UPDATE_EMAIL, {
+      existingEmailAddress: existingEmailAddress,
+      replacementEmailAddress: replacementEmailAddress,
+      otp: otp,
+    });
+
+    updateEmailNock.reply(HTTP_STATUS_CODES.NO_CONTENT);
 
     const updateInput: UpdateInformationInput = {
       email: existingEmailAddress,
@@ -68,11 +68,40 @@ describe("checkYourEmailService", () => {
       txmaAuditEncoded: TXMA_AUDIT_ENCODED,
     };
 
-    const emailUpdated = await checkYourEmailService().updateEmail(
+    let emailUpdated = await checkYourEmailService().updateEmail(
       updateInput,
       requestConfig
     );
 
-    expect(emailUpdated).to.be.true;
+    expect(emailUpdated).to.deep.eq({
+      success: true,
+      error: undefined,
+    });
+
+    updateEmailNock.reply(HTTP_STATUS_CODES.FORBIDDEN, {
+      code: 1089,
+    });
+
+    emailUpdated = await checkYourEmailService().updateEmail(
+      updateInput,
+      requestConfig
+    );
+
+    expect(emailUpdated).to.deep.eq({
+      success: false,
+      error: "EMAIL_ADDRESS_DENIED",
+    });
+
+    updateEmailNock.reply(HTTP_STATUS_CODES.BAD_REQUEST);
+
+    emailUpdated = await checkYourEmailService().updateEmail(
+      updateInput,
+      requestConfig
+    );
+
+    expect(emailUpdated).to.deep.eq({
+      success: false,
+      error: undefined,
+    });
   });
 });
