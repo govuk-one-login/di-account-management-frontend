@@ -323,7 +323,8 @@
           "length": "Rhaid i gyfeiriad e-bost fod yn 256 nod neu lai",
           "email": "Rhowch gyfeiriad e-bost yn y ffurf cywir, fel name@example.com",
           "alreadyInUse": "Mae GOV.UK One Login eisoes yn defnyddio'r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol.",
-          "sameEmail": "Rydych eisoes yn defnyddio'r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol."
+          "sameEmail": "Rydych eisoes yn defnyddio'r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol.",
+          "emailCantBeUsed": "Ni allwch ddefnyddio'r cyfeiriad e-bost hwn. Rhowch gyfeiriad e-bost gwahanol."
         }
       },
       "dontWantTo": {
