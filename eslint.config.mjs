@@ -58,6 +58,7 @@ export default [
       "mocha/max-top-level-suites": "off",
       "mocha/no-top-level-hooks": "off",
       "mocha/no-sibling-hooks": "off",
+      "mocha/consistent-spacing-between-blocks": "off",
     },
   },
   {
