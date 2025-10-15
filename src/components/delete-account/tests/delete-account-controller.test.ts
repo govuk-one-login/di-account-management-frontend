@@ -80,7 +80,7 @@ describe("delete account controller", () => {
     });
 
     describe("deleteAccountGetWithoutServices", () => {
-      it("should render delete account page", async () => {
+      it("should render delete account page without services", async () => {
         req = validRequest();
         const yourServices = require("../../../utils/yourServices");
         sandbox

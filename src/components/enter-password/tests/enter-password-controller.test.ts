@@ -176,7 +176,7 @@ describe("enter password controller", () => {
   });
 
   describe("enterPasswordPost", () => {
-    it("should redirect to security when there is no 'type' query parameter", async () => {
+    it("should redirect to security when there is no 'type' query parameter in enter password post", async () => {
       const fakeService: EnterPasswordServiceInterface = {
         authenticated: sandbox.fake.resolves({ authenticated: true }),
       };
