@@ -99,7 +99,6 @@
     "@eslint/js": "^9.37.0",
     "@types/chai": "^4.3.6",
     "@types/chai-as-promised": "^7.1.8",
-    "@types/cheerio": "^1.0.0",
     "@types/cookie-parser": "^1.4.9",
     "@types/csurf": "^1.11.5",
     "@types/express": "^5.0.3",
