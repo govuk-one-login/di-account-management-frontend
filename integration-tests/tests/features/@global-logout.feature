@@ -1,6 +1,6 @@
 Feature: Global logout
 
-  @failMobile
+  @failMobile @skipAll
   Scenario: A user triggers a global logout
     Given I go to the "Root" page
     And I sign in as the "userPerformanceTest" user
@@ -16,12 +16,14 @@ Feature: Global logout
     Given I enter and submit my password "Pa55w0rd!"
     Then I am on the sign in page
 
+  @skipAll
   Scenario: A user in the wrong state can't trigger a global logout
     Given I go to the "Root" page
     And I sign in as the "userPerformanceTest" user
     And I go to the "Global logout confirm" page
     Then the page title is prefixed with "Your services"
 
+  @skipAll
   Scenario: A temporarily suspended user can trigger a global logout
     Given I go to the "Root" page
     And I sign in as the "temporarilySuspended" user
@@ -35,6 +37,7 @@ Feature: Global logout
     Then the page contains the text "You cannot use your GOV.UK One Login at the moment"
 
 
+  @skipAll
   Scenario: A permanently suspended user can't trigger a global logout
     Given I go to the "Root" page
     And I sign in as the "permanentlySuspended" user

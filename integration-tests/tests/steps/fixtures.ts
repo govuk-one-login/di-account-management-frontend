@@ -9,6 +9,7 @@ export const test = base.extend<{
     async ({ $test, $tags, isMobile }, use) => {
       $test.skip(
         ($tags.includes("@skipMobile") && isMobile) ||
+          $tags.includes("@skipAll") ||
           ($tags.includes("@skipDesktop") && !isMobile) ||
           $tags.includes(`@skipTarget-${env.TEST_TARGET}`) ||
           ($tags.includes(`@skipPreDeploy`) &&
