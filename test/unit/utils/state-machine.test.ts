@@ -55,7 +55,7 @@ describe("state-machine", () => {
   });
 
   describe("getNextState without code verification", () => {
-    it("should move state from initial state to change value state", () => {
+    it("should move state from initial state to change value state without code verification", () => {
       const state = getInitialState();
       const nextState = getNextState(state.value, EventType.Authenticated);
       expect(nextState.value).to.equal("CHANGE_VALUE");
@@ -76,7 +76,7 @@ describe("state-machine", () => {
   });
 
   describe("getNextState for mfa process", () => {
-    it("should move state from initial state to change value state", () => {
+    it("should move state from initial state to change value state when getting next state for mfa process", () => {
       const state = getInitialState();
       const nextState = getNextState(state.value, EventType.Authenticated);
       expect(nextState.value).to.equal("CHANGE_VALUE");

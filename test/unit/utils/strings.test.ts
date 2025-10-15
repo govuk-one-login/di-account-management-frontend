@@ -17,11 +17,11 @@ describe("string-helpers", () => {
       expect(containsNumber("test")).to.equal(false);
     });
 
-    it("should return false when string is empty", () => {
+    it("should return false when string is empty in containsNumber", () => {
       expect(containsNumber("")).to.equal(false);
     });
 
-    it("should return false when string is null", () => {
+    it("should return false when string is null in containerNumber", () => {
       expect(containsNumber(null)).to.equal(false);
     });
 
