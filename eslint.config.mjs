@@ -21,7 +21,7 @@ export default [
     },
   },
   pluginJs.configs.recommended,
-  mochaPlugin.configs.flat.recommended,
+  mochaPlugin.configs.recommended,
   ...tsEslint.configs.recommended,
   ...tsEslint.configs.stylistic,
   {
@@ -57,6 +57,7 @@ export default [
       "mocha/no-async-describe": "off",
       "mocha/max-top-level-suites": "off",
       "mocha/no-top-level-hooks": "off",
+      "mocha/no-sibling-hooks": "off",
     },
   },
   {

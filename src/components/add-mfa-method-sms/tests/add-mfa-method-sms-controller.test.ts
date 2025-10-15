@@ -141,7 +141,7 @@ describe("addMfaSmsMethodConfirmationGet", () => {
     sandbox.restore();
   });
 
-  it("should call render with the expected arguments", async () => {
+  it("should call render with the expected arguments when confirming", async () => {
     await addMfaSmsMethodConfirmationGet(req as Request, res as Response);
     expect(res.render).to.be.calledWith("update-confirmation/index.njk", {
       pageTitle: "pages.addBackupSms.confirm.title",

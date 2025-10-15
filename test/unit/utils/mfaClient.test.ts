@@ -226,7 +226,7 @@ describe("MfaClient", () => {
       expect(deleteStub.calledOnce).to.be.true;
     });
 
-    it("should include the MFA id in the URL", async () => {
+    it("should include the MFA id in the URL when deleting", async () => {
       const deleteStub = sinon.stub().resolves({ status: 204, data: null });
       axiosStub.delete = deleteStub;
 
