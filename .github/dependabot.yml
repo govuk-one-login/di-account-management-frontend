@@ -12,8 +12,9 @@ updates:
     ignore:
       - dependency-name: "node"
         versions: ["17.x", "18.x", "19.x"]
-      - dependency-name: *
-        update-types: ["version-update:semver-major"]
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
     commit-message:
       prefix: BAU
     groups:
