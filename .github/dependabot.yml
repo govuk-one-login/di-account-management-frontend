@@ -12,6 +12,8 @@ updates:
     ignore:
       - dependency-name: "node"
         versions: ["17.x", "18.x", "19.x"]
+      - dependency-name: *
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: BAU
     groups:
@@ -38,7 +40,7 @@ updates:
     commit-message:
       prefix: BAU
     ignore:
-      - dependency-name: "node"
+      - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
 
@@ -53,6 +55,10 @@ updates:
       - dependencies
     commit-message:
       prefix: BAU
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
     groups:
       production-dependencies:
         dependency-type: "production"
