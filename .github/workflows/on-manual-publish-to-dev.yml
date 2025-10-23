@@ -34,17 +34,17 @@ jobs:
 
       - name: Fetch Commit SHA
         id: gitRefSHA
-        if: ${{ github.event.inputs.choice }} == "Commit SHA"
+        if: github.event.inputs.refType == 'Commit SHA'
         run: echo GIT_REF_SHA=${{ inputs.gitRef }} >> $GITHUB_ENV
 
       - name: Fetch Commit SHA by Branch name
         id: gitRefBranch
-        if: ${{ github.event.inputs.choice }} == "Branch name"
+        if: github.event.inputs.refType == 'Branch name'
         run: echo GIT_REF_SHA=$(git log -1 ${{ inputs.gitRef }} --pretty=format:%H) >> $GITHUB_ENV
 
       - name: Fetch Commit SHA by Tag
         id: gitRefTag
-        if: ${{ github.event.inputs.choice }} == "Tag"
+        if: github.event.inputs.refType == 'Tag'
         run: echo GIT_REF_SHA=$(git rev-list -n 1 ${{ inputs.gitRef }}) >> $GITHUB_ENV
 
       - name: Set tag
