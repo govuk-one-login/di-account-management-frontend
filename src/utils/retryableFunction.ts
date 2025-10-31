@@ -29,8 +29,8 @@ export async function retryableFunction<T, A extends any[]>(
     }
 
     logger.warn(
-      `function call failed, retrying. ${attemptsRemaining} attempt(s) remaining `,
-      error
+      error,
+      `function call failed, retrying. ${attemptsRemaining} attempt(s) remaining `
     );
     return await retryableFunction(fn, args, attemptsRemaining);
   }

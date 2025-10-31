@@ -52,7 +52,7 @@ export async function changeAuthenticatorAppPost(
       if (!authAppMFAMethod) {
         const errorMessage =
           "Could not change authenticator app - no existing auth app method found";
-        logger.error(errorMessage, { trace: res.locals.trace });
+        logger.error({ trace: res.locals.trace }, errorMessage);
         throw new Error(errorMessage);
       }
 
@@ -71,7 +71,7 @@ export async function changeAuthenticatorAppPost(
           "Could not change authenticator app",
           response
         );
-        logger.error(errorMessage, { trace: res.locals.trace });
+        logger.error({ trace: res.locals.trace }, errorMessage);
         throw new Error(errorMessage);
       }
 
