@@ -21,7 +21,7 @@ export function metricsMiddleware(
       try {
         metrics.publishStoredMetrics();
       } catch (error) {
-        logger.error("Failed to publish metric", error);
+        logger.error(error, "Failed to publish metric");
       }
     });
 

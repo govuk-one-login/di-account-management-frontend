@@ -10,7 +10,7 @@ export const readEnvVar = (filename: string): string => {
       .trim();
     return keyValue;
   } catch (error) {
-    logger.error(`Error reading ${filename}:`, error);
+    logger.error(error, `Error reading ${filename}:`);
     return "";
   }
 };
