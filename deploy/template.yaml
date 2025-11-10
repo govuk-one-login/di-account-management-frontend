@@ -1675,6 +1675,18 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource:
+              - !Sub "arn:aws:s3:::${AccessLogsBucket}"
+              - !Sub "arn:aws:s3:::${AccessLogsBucket}/*"
+            Condition:
+              Bool:
+                aws:SecureTransport: false
+              NumericLessThan:
+                s3:TlsVersion: "1.2"
           - Sid: AllowLoadBalancerToLogToS3
             Effect: Allow
             Principal:
@@ -1689,9 +1701,6 @@ Resources:
             Action:
               - s3:PutObject
             Resource: !Sub "${AccessLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*"
-            Condition:
-              Bool:
-                "aws:SecureTransport": true
           - Sid: AllowAwsLogDeliveryToLogToS3
             Effect: Allow
             Principal:
@@ -1703,8 +1712,6 @@ Resources:
               StringEquals:
                 "s3:x-amz-acl": bucket-owner-full-control
                 "aws:SourceAccount": !Ref AWS::AccountId
-              Bool:
-                "aws:SecureTransport": true
           - Sid: AllowAwsLogDeliveryToReadBucketAcl
             Effect: Allow
             Principal:
@@ -1715,8 +1722,6 @@ Resources:
             Condition:
               StringEquals:
                 "aws:SourceAccount": !Ref AWS::AccountId
-              Bool:
-                "aws:SecureTransport": true
 
   ApiGatewayAccessLogGroupCSLSSubscription:
     Condition: ExportLogsToSplunk
