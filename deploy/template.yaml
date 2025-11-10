@@ -647,6 +647,7 @@ Resources:
             - ContainerPort: !Ref ContainerPort
               Protocol: tcp
           Essential: true
+          ReadonlyRootFilesystem: true
           LogConfiguration:
             LogDriver: awslogs
             Options:
