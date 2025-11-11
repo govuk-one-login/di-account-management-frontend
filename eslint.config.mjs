@@ -35,6 +35,7 @@ export default [
       "dev-app.js",
       "integration-tests",
       "eslint.config.mjs",
+      "src/lambda-handlers/ecs-status-handler.ts"
     ],
   },
   {
