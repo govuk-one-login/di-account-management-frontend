@@ -16,12 +16,10 @@ Parameters:
     Type: String
     Description: >
       The ARN of the Code Signing Config to use, provided by the deployment pipeline.
-    Default: "none"
   PermissionsBoundary:
     Description: >
       The ARN of the permissions boundary to apply when creating IAM roles.
     Type: String
-    Default: none
   Environment:
     Description: The name of the environment to deploy to
     Type: String
@@ -91,6 +89,14 @@ Parameters:
     AllowedValues:
       - CodeDeployDefault.ECSLinear10PercentEvery3Minutes
       - CodeDeployDefault.ECSAllAtOnce
+  LambdaCodeKey:
+    Type: String
+    Description: S3 key (path) to the Lambda ZIP file
+    Default: "lambda/ecs-metric.zip"
+  LambdaCodeBucket:
+    Type: String
+    Description: S3 bucket name
+    Default: "account-mgmt-frontend-dev-lambda-code"
 
 Conditions:
   UseCodeSigning:
@@ -538,22 +544,49 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: "ALB-RequestCount-High"
-      MetricName: "RequestCount"
-      ActionsEnabled: true
-      AlarmActions:
-        - !Ref ALBRequestCountScaleOutPolicy
+      Metrics:
+        - Id: reqCount
+          Label: ALB Request Count
+          MetricStat:
+            Metric:
+              Namespace: AWS/ApplicationELB
+              MetricName: RequestCount
+              Dimensions:
+                - Name: LoadBalancer
+                  Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+            Period: 60
+            Stat: Sum
+          ReturnData: false
+
+        - Id: deployFlag
+          Label: Deployment In Progress
+          MetricStat:
+            Metric:
+              Namespace: Custom/ECS
+              MetricName: DeploymentInProgress
+              Dimensions:
+                - Name: ClusterName
+                  Value: !Ref ECSCluster
+                - Name: ServiceName
+                  Value: !GetAtt ContainerService.Name
+            Period: 60
+            Stat: Minimum
+          ReturnData: false
+
+        # Metric 3: Adjusted CPU using metric math
+        - Id: adjustedReqCount
+          Label: High Request count If Not Deploying
+          Expression: IF(deployFlag > 0, 0, reqCount)
+          ReturnData: true
       AlarmDescription: "ALB-RequestCount-Above-200"
       DatapointsToAlarm: "1"
-      Namespace: AWS/ApplicationELB
       ComparisonOperator: "GreaterThanThreshold"
-      Dimensions:
-        - Name: LoadBalancer
-          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
-      Statistic: Sum
-      Period: "60"
       EvaluationPeriods: 1
       Threshold: "2000"
       TreatMissingData: "notBreaching"
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref ALBRequestCountScaleOutPolicy
 
   ALBRequestCountScaleInAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -577,6 +610,25 @@ Resources:
       EvaluationPeriods: 1
       Threshold: "1000"
       TreatMissingData: "notBreaching"
+
+  ECSDeploymentInProgressAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: "ECS-Deployment-In-Progress"
+      Namespace: "Custom/ECS"
+      MetricName: DeploymentInProgress
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSCluster
+        - Name: ServiceName
+          Value: !GetAtt ContainerService.Name
+      Statistic: Minimum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmDescription: Alarm is ALARM when ECS is deploying
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -2367,6 +2419,80 @@ Resources:
           - ELB5XX10PercentAlarm: !Ref ELB5XX10PercentAlarm
             LoggerErrorRateAlarm: !Ref LoggerErrorRateAlarm
 
+  #
+  # Lambdas
+  #
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-ecs-deployment-metric-role
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - !Ref AllowECSAndCloudWatch
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      PermissionsBoundary: !Ref PermissionsBoundary
+
+  AllowECSAndCloudWatch:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - ecs:DescribeServices
+              - cloudwatch:PutMetricData
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: "*"
+
+  ECSDeploymentMetricLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${Environment}-${AWS::StackName}-ecs-status
+      Runtime: nodejs22.x
+      Handler: ecs-status-handler.handler
+      Timeout: 30
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          ECS_CLUSTER: !Ref ECSCluster
+          ECS_SERVICE: !GetAtt ContainerService.Name
+          METRIC_NAMESPACE: Custom/ECS
+      Code:
+        S3Bucket: !Ref LambdaCodeBucket
+        S3Key: !Ref LambdaCodeKey
+
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: rate(1 minute)
+      State: ENABLED
+      Targets:
+        - Id: ECSDeploymentMetricTarget
+          Arn: !GetAtt ECSDeploymentMetricLambda.Arn
+
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ECSDeploymentMetricLambda
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt ScheduledRule.Arn
+
 Outputs:
   ApiGatewayEndpoint:
     Description: The base URI for this application.
@@ -2374,3 +2500,5 @@ Outputs:
   CloudFrontDistributionEndpoint:
     Description: The Application URL.
     Value: !FindInMap [EnvironmentVariables, !Ref Environment, BASEURL]
+  LambdaFunctionName:
+    Value: !Ref ECSDeploymentMetricLambda
