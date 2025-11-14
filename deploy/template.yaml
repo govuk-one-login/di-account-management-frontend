@@ -91,10 +91,10 @@ Parameters:
     AllowedValues:
       - CodeDeployDefault.ECSLinear10PercentEvery3Minutes
       - CodeDeployDefault.ECSAllAtOnce
-  RequestCountScalingTemplateBucket:
-    Type: String
-    Description: "Request count scaling template S3 bucket name"
-    Default: "request-count-scaling"
+#  RequestCountScalingTemplateBucket:
+#    Type: String
+#    Description: "Request count scaling template S3 bucket name"
+#    Default: "request-count-scaling"
 
 Conditions:
   UseCodeSigning:
