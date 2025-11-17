@@ -68,6 +68,7 @@
     "connect-dynamodb": "^3.0.5",
     "cookie-parser": "^1.4.7",
     "csrf-sync": "^4.2.1",
+    "di-account-management-client-registry": "github:govuk-one-login/di-account-management-client-registry#olh-2892-infected-blood",
     "di-account-management-rp-registry": "github:govuk-one-login/di-account-management-rp-registry#main",
     "dompurify": "^3.3.0",
     "express": "^5.1.0",
