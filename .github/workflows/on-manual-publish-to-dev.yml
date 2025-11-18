@@ -157,7 +157,7 @@ jobs:
       - name: Assume AWS role
         uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838
         with:
-          role-to-assume: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN_CORE }}
+          role-to-assume: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN }}
           aws-region: "eu-west-2"
 
       - name: Install dependencies
@@ -165,6 +165,19 @@ jobs:
 
       - name: Build app
         run: npm run build
+      - name: Install ESbuild
+        run: npm install -g esbuild@0.23
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # pin@v4
+        with:
+          python-version: "3.9"
+
+      - name: SAM validate
+        run: sam validate
+
+      - name: SAM build
+        run: sam build --manifest package.json
 
       - name: Deploy app
         uses: govuk-one-login/devplatform-upload-action@fda75612a1b0e5a8c84ae7c44a23340e50e5bbde
