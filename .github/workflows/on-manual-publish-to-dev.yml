@@ -171,5 +171,5 @@ jobs:
         with:
           artifact-bucket-name: ${{ secrets.FRONTEND_LAMBDA_BUCKET_NAME }}
           signing-profile-name: ${{ secrets.SIGNING_PROFILE_NAME }}
-          template-file: .aws-sam/build/RequestCountScalingStack/template.yaml
+          template-file: .aws-sam/build/template.yaml
 
