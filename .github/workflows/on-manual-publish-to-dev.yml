@@ -169,8 +169,8 @@ jobs:
       - name: Deploy app
         uses: govuk-one-login/devplatform-upload-action@fda75612a1b0e5a8c84ae7c44a23340e50e5bbde
         with:
-          artifact-bucket-name: ${{ secrets.DEV_ARTIFACT_BUCKET_NAME_CORE }}
-          signing-profile-name: ${{ secrets.DEV_SIGNING_PROFILE_NAME }}
+          artifact-bucket-name: ${{ secrets.FRONTEND_LAMBDA_BUCKET_NAME }}
+          signing-profile-name: ${{ secrets.SIGNING_PROFILE_NAME }}
           working-directory: ./src/lambda-handlers
           template-file: .aws-sam/build/template.yaml
 
