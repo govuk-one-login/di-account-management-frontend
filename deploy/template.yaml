@@ -2285,8 +2285,8 @@ Resources:
     Properties:
       TemplateURL: https://request-count-scaling-template.s3.eu-west-2.amazonaws.com/template.yaml
       Parameters:
-        VpcId:
-          Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+        VpcId: !Sub ${VpcStackName}-VpcId
+        VpcStackName: !Ref VpcStackName
         PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/account-mgmt-frontend-pipeline-RequestCountScalingBoundary"
         CodeSigningConfigArn: !If
           - UseCodeSigning
