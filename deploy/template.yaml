@@ -2283,8 +2283,8 @@ Resources:
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
-      #      TemplateURL: !Sub "arn:aws:s3:::${RequestCountScalingTemplateBucket}/template.yaml"
-      TemplateURL: ../sidecars/request-count-scaling/template.yaml
+      TemplateURL: https://request-count-scaling-template.s3.eu-west-2.amazonaws.com/template.yaml
+      #      TemplateURL: ../sidecars/request-count-scaling/template.yaml
       Parameters:
         VpcId: !Sub ${VpcStackName}-VpcId
         PermissionsBoundary:
