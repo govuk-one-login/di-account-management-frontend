@@ -25,10 +25,6 @@ Parameters:
     Description: >
       The ARN of the permissions boundary to apply to any role created by the template, provided by the deployment pipeline
     Default: "none"
-  VpcStackName:
-    Type: String
-    Description: >
-      The name of the stack that defines the VPC in which resources will be located, provided by the deployment pipeline
   ECSClusterName:
     Type: String
   ECSServiceName:
@@ -36,6 +32,12 @@ Parameters:
   ApplicationLoadBalancerName:
     Type: String
   ContainerAutoScalingTarget:
+    Type: String
+  SubnetIdA:
+    Type: String
+  SubnetIdB:
+    Type: String
+  SecurityGroupIds:
     Type: String
 
 Conditions:
@@ -83,11 +85,10 @@ Globals:
       - !Ref AWS::NoValue
     VpcConfig:
       SubnetIds:
-        - Fn::ImportValue: !Sub ${VpcStackName}-ProtectedSubnetIdA
-        - Fn::ImportValue: !Sub ${VpcStackName}-ProtectedSubnetIdB
-        - Fn::ImportValue: !Sub ${VpcStackName}-ProtectedSubnetIdC
+        - !Ref SubnetIdA
+        - !Ref SubnetIdB
       SecurityGroupIds:
-        - Fn::ImportValue: !Sub ${VpcStackName}-AWSServicesEndpointSecurityGroupId
+        - !Ref SecurityGroupIds
     Timeout: 15
     MemorySize: 128
     Architectures:
