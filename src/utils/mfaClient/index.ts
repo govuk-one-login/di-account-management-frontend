@@ -16,6 +16,31 @@ import {
 import { HTTP_STATUS_CODES } from "../../app.constants";
 import { validateCreate, validateUpdate } from "./validate";
 
+export function normalizeAuthHeader(
+  config: AxiosRequestConfig
+): AxiosRequestConfig {
+  const normalized = { ...config };
+
+  if (!normalized.headers) {
+    return normalized;
+  }
+
+  if (normalized.headers.Authorization) {
+    const authHeader = normalized.headers.Authorization;
+
+    if (typeof authHeader === "string" && authHeader.startsWith("Bearer ")) {
+      normalized.headers.Authorization = authHeader.replace(
+        "Bearer ",
+        "Bearer  "
+      );
+    } else if (typeof authHeader === "string") {
+      throw new Error("Authorization header must use Bearer scheme");
+    }
+  }
+
+  return normalized;
+}
+
 export class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;
   private readonly requestConfig: AxiosRequestConfig;
@@ -52,7 +77,7 @@ export class MfaClient implements MfaClientInterface {
     const response = await this.http.client.post<MfaMethod>(
       `/mfa-methods/${this.publicSubjectId}`,
       { mfaMethod: payload },
-      this.requestConfig
+      normalizeAuthHeader(this.requestConfig)
     );
 
     return buildResponse(response);
@@ -71,7 +96,7 @@ export class MfaClient implements MfaClientInterface {
     const response = await this.http.client.put<MfaMethod[]>(
       `/mfa-methods/${this.publicSubjectId}/${method.mfaIdentifier}`,
       { mfaMethod: method },
-      this.requestConfig
+      normalizeAuthHeader(this.requestConfig)
     );
 
     return buildResponse(response);
@@ -80,7 +105,7 @@ export class MfaClient implements MfaClientInterface {
   async delete(method: MfaMethod) {
     const response = await this.http.client.delete(
       `/mfa-methods/${this.publicSubjectId}/${method.mfaIdentifier}`,
-      this.requestConfig
+      normalizeAuthHeader(this.requestConfig)
     );
 
     return buildResponse(response);
@@ -90,7 +115,7 @@ export class MfaClient implements MfaClientInterface {
     const response = await this.http.client.put<MfaMethod[]>(
       `/mfa-methods/${this.publicSubjectId}/${mfaIdentifier}`,
       { mfaMethod: { priorityIdentifier: "DEFAULT" } },
-      this.requestConfig
+      normalizeAuthHeader(this.requestConfig)
     );
 
     return buildResponse(response);
