@@ -86,6 +86,7 @@ jobs:
         id: publish-template
         env:
           ARTIFACT_BUCKET_NAME: ${{ secrets.DEV_ARTIFACT_SOURCE_BUCKET_NAME }}
+          SIDECAR_BUCKET_NAME: ${{ secrets.FRONTEND_LAMBDA_BUCKET_NAME }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
         run: |
@@ -99,7 +100,7 @@ jobs:
           echo "Running sam build on sidecar file"
           sam build --template-file=./sidecars/request-count-scaling/template.yaml
           mv .aws-sam/build/template.yaml sidecar-template.yaml
-          aws s3 cp sidecar-template.yaml "s3://$FRONTEND_LAMBDA_BUCKET_NAME/sidecar-template.yaml" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
+          aws s3 cp sidecar-template.yaml "s3://$SIDECAR_BUCKET_NAME/sidecar-template.yaml" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
 
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
