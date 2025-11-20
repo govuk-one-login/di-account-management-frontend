@@ -17,7 +17,7 @@ import { PATH_DATA } from "../app.constants";
 import { getSessionIdsFrom } from "../utils/session-ids";
 import { getCurrentUrl } from "../utils/language-toggle";
 import { generateStaticHash } from "../utils/generate-static-hash";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "node:crypto";
 
 export async function setLocalVarsMiddleware(
   req: Request,
@@ -47,7 +47,7 @@ export async function setLocalVarsMiddleware(
   res.locals.clientSessionId = sessionIds.clientSessionId;
   res.locals.persistentSessionId = sessionIds.persistentSessionId;
 
-  const trace = req.session.trace ?? uuidv4();
+  const trace = req.session.trace ?? randomUUID();
   req.session.trace = trace;
   res.locals.trace = trace;
 
