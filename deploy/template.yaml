@@ -2285,7 +2285,6 @@ Resources:
     Properties:
       TemplateURL: https://account-mgmt-frontend-dev-lambda-code.s3.eu-west-2.amazonaws.com/sidecar-template.yaml
       Parameters:
-        VpcStackName: !Ref VpcStackName
         PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/account-mgmt-frontend-pipeline-RequestCountScalingBoundary"
         CodeSigningConfigArn: !If
           - UseCodeSigning
