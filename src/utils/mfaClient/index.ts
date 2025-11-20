@@ -15,6 +15,7 @@ import {
 } from "./types";
 import { HTTP_STATUS_CODES } from "../../app.constants";
 import { validateCreate, validateUpdate } from "./validate";
+import { logger } from "../logger";
 
 export function normalizeAuthHeader(
   config: AxiosRequestConfig
@@ -34,7 +35,7 @@ export function normalizeAuthHeader(
         "Bearer  "
       );
     } else if (typeof authHeader === "string") {
-      throw new Error("Authorization header must use Bearer scheme");
+      logger.error("Authorization header must use Bearer scheme");
     }
   }
 
