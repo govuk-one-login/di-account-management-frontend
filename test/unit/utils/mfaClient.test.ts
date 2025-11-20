@@ -8,6 +8,7 @@ import {
   buildResponse,
   createMfaClient,
   formatErrorMessage,
+  normalizeAuthHeader,
 } from "../../../src/utils/mfaClient";
 import {
   AuthAppMethod,
@@ -20,7 +21,7 @@ import {
   validateUpdate,
 } from "../../../src/utils/mfaClient/validate";
 import { getRequestConfig, Http } from "../../../src/utils/http";
-import { AxiosInstance, AxiosResponse } from "axios";
+import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import * as oidcModule from "../../../src/utils/oidc";
 
 const mfaMethod: MfaMethod = {
@@ -126,7 +127,7 @@ describe("MfaClient", () => {
             },
           },
         },
-        { headers: { Authorization: "Bearer token" }, proxy: false }
+        { headers: { Authorization: "Bearer  token" }, proxy: false }
       );
     });
 
@@ -145,7 +146,7 @@ describe("MfaClient", () => {
             method: authAppMethod.method,
           },
         },
-        { headers: { Authorization: "Bearer token" }, proxy: false }
+        { headers: { Authorization: "Bearer  token" }, proxy: false }
       );
     });
 
@@ -306,6 +307,49 @@ describe("buildRequest", () => {
     expect(apiResponse.status).to.eq(400);
     expect(apiResponse.success).to.be.false;
     expect(apiResponse.error).to.eq(response.data);
+  });
+});
+
+describe("normalizeAuthHeader", () => {
+  it("should return config unchanged when no headers present", () => {
+    const config: AxiosRequestConfig = { proxy: false };
+
+    const result = normalizeAuthHeader(config);
+
+    expect(result).to.deep.eq(config);
+  });
+
+  it("should return config unchanged when no Authorization header", () => {
+    const config: AxiosRequestConfig = {
+      headers: { "Content-Type": "application/json" },
+      proxy: false,
+    };
+
+    const result = normalizeAuthHeader(config);
+
+    expect(result).to.deep.eq(config);
+  });
+
+  it("should handle Authorization header that starts with Bearer", () => {
+    const config: AxiosRequestConfig = {
+      headers: { Authorization: "Bearer abc" },
+      proxy: false,
+    };
+
+    const result = normalizeAuthHeader(config);
+
+    expect(result.headers.Authorization).to.eq("Bearer  abc");
+  });
+
+  it("should throw error when Authorization header does not start with Bearer", () => {
+    const config: AxiosRequestConfig = {
+      headers: { Authorization: "Basic abc123" },
+      proxy: false,
+    };
+
+    expect(() => normalizeAuthHeader(config)).to.throw(
+      "Authorization header must use Bearer scheme"
+    );
   });
 });
 
