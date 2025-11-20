@@ -86,6 +86,7 @@ jobs:
         id: publish-template
         env:
           ARTIFACT_BUCKET_NAME: ${{ secrets.DEV_ARTIFACT_SOURCE_BUCKET_NAME }}
+          SIDECAR_BUCKET_NAME: ${{ secrets.FRONTEND_LAMBDA_BUCKET_NAME }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
         run: |
@@ -96,6 +97,91 @@ jobs:
           sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA|" cf-template.yaml
           zip template.zip cf-template.yaml
           aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
+          echo "Running sam build on sidecar file"
+          sam build --template-file=./sidecars/request-count-scaling/template.yaml
+          mv .aws-sam/build/template.yaml sidecar-template.yaml
+          aws s3 cp sidecar-template.yaml "s3://$SIDECAR_BUCKET_NAME/sidecar-template.yaml" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
 
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
+
+  build_and_deploy_lambda:
+    name: Deploy Lambda to Dev
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          persist-credentials: false
+          ref: ${{ inputs.gitRef }}
+
+      - name: Set up AWS creds
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # pin@v1-node16
+        with:
+          role-to-assume: ${{ secrets.DEV_GH_ACTIONS_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Set up Node
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903
+        with:
+          node-version-file: .nvmrc
+
+      - name: Set commit SHA
+        if: github.event.inputs.refType == 'Commit SHA'
+        run: echo GIT_REF_SHA=${GIT_REF} >> $GITHUB_ENV
+        env:
+          GIT_REF: ${{ inputs.gitRef }}
+
+      - name: Set commit SHA by branch name
+        if: github.event.inputs.refType == 'Branch name'
+        run: echo GIT_REF_SHA=$(git log -1 ${GIT_REF} --pretty=format:%H) >> $GITHUB_ENV
+        env:
+          GIT_REF: ${{ inputs.gitRef }}
+
+      - name: Set commit SHA by tag
+        if: github.event.inputs.refType == 'Tag'
+        run: echo GIT_REF_SHA=$(git rev-list -n 1 ${GIT_REF}) >> $GITHUB_ENV
+        env:
+          GIT_REF: ${{ inputs.gitRef }}
+
+      - name: Set tag
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
+      - name: Set current datetime
+        run: echo "date=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
+
+      - name: Set up SAM CLI
+        uses: aws-actions/setup-sam@c71dd89d980e49367c70391e8ada4353f52f2800
+        with:
+          use-installer: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+      - name: Install ESbuild
+        run: npm install -g esbuild@0.23
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # pin@v4
+        with:
+          python-version: "3.9"
+
+      - name: SAM validate
+        run: sam validate --template-file=./sidecars/request-count-scaling/template.yaml
+
+      - name: SAM build
+        run: sam build --manifest package.json --template-file=./sidecars/request-count-scaling/template.yaml
+
+      - name: Deploy app
+        uses: govuk-one-login/devplatform-upload-action@fda75612a1b0e5a8c84ae7c44a23340e50e5bbde
+        with:
+          artifact-bucket-name: ${{ secrets.FRONTEND_LAMBDA_BUCKET_NAME }}
+          signing-profile-name: ${{ secrets.DEV_SIGNING_PROFILE_NAME }}
+          template-file: .aws-sam/build/template.yaml
+
