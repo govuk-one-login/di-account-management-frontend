@@ -220,5 +220,5 @@ jobs:
           echo "Unzipping template yaml for sidecar"
           aws s3 cp "s3://$SIDECAR_BUCKET_NAME/template.zip" template.zip
           unzip template.zip
-          aws s3 cp cf-template.yaml  "s3://$SIDECAR_BUCKET_NAME/cf-template.yaml"
+          aws s3 cp cf-template.yaml  "s3://$SIDECAR_BUCKET_NAME/sidecar-template.yaml"
 
