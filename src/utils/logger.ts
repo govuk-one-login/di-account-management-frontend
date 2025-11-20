@@ -20,7 +20,7 @@ const logger = pino({
         sessionId: res.locals.sessionId,
         clientSessionId: res.locals.clientSessionId,
         persistentSessionId: res.locals.persistentSessionId,
-        trace: res.locals.persistentSessionId + "::" + res.locals.sessionId,
+        trace: res.locals.trace,
       };
     },
   },

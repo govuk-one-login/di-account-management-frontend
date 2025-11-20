@@ -134,5 +134,26 @@ describe("set-local-vars-middleware", () => {
         expect(next).to.be.calledOnce;
       });
     });
+
+    describe("trace", () => {
+      it("should generate a new trace when not in session", async () => {
+        await setLocalVarsMiddleware(req as Request, res as Response, next);
+
+        expect(req.session.trace).to.exist;
+        expect(res.locals.trace).to.equal(req.session.trace);
+        expect(next).to.be.calledOnce;
+      });
+
+      it("should reuse existing trace from session", async () => {
+        const existingTrace = "existing-trace-id-123";
+        req.session = { trace: existingTrace } as any;
+
+        await setLocalVarsMiddleware(req as Request, res as Response, next);
+
+        expect(req.session.trace).to.equal(existingTrace);
+        expect(res.locals.trace).to.equal(existingTrace);
+        expect(next).to.be.calledOnce;
+      });
+    });
   });
 });

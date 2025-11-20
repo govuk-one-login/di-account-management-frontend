@@ -24,6 +24,7 @@ declare module "express-session" {
       sessionId: string;
       clientSessionId: string;
     };
+    trace?: string;
   }
 }
 declare module "express-serve-static-core" {

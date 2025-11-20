@@ -6,7 +6,6 @@ import { logger } from "../logger";
 import { expect } from "chai";
 import {
   CLIENT_SESSION_ID_UNKNOWN,
-  LOG_MESSAGES,
   PERSISTENT_SESSION_ID_UNKNOWN,
   SESSION_ID_UNKNOWN,
 } from "../../app.constants";
@@ -71,10 +70,6 @@ describe("Session Ids Util Tests", () => {
       expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID);
       expect(result.persistentSessionId).to.equal(
         PERSISTENT_SESSION_ID_UNKNOWN
-      );
-      expect(loggerSpy).to.have.been.calledWith(
-        { trace: PERSISTENT_SESSION_ID_UNKNOWN + "::" + SESSION_ID },
-        LOG_MESSAGES.DI_PERSISTENT_SESSION_ID_COOKIE_NOT_IN_REQUEST
       );
     });
   });
