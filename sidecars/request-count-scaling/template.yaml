@@ -33,12 +33,6 @@ Parameters:
     Type: String
   ContainerAutoScalingTarget:
     Type: String
-  SubnetIdA:
-    Type: String
-  SubnetIdB:
-    Type: String
-  SecurityGroupIds:
-    Type: String
 
 Conditions:
   UseCodeSigning:
@@ -83,12 +77,6 @@ Globals:
       - UsePermissionsBoundary
       - !Ref PermissionsBoundary
       - !Ref AWS::NoValue
-    VpcConfig:
-      SubnetIds:
-        - !Ref SubnetIdA
-        - !Ref SubnetIdB
-      SecurityGroupIds:
-        - !Ref SecurityGroupIds
     Timeout: 15
     MemorySize: 128
     Architectures:

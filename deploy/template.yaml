@@ -2295,12 +2295,6 @@ Resources:
         ECSServiceName: !GetAtt ContainerService.Name
         ApplicationLoadBalancerName: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
         ContainerAutoScalingTarget: !Ref ContainerAutoScalingTarget
-        SubnetIdA:
-          - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdA"
-        SubnetIdB:
-          - Fn::ImportValue: !Sub "${VpcStackName}-ProtectedSubnetIdB"
-        SecurityGroupIds:
-          - Fn::ImportValue: !Sub "${VpcStackName}-AWSServicesEndpointSecurityGroupId"
 
 Outputs:
   ApiGatewayEndpoint:
