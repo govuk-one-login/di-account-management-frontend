@@ -173,10 +173,10 @@ jobs:
           python-version: "3.9"
 
       - name: SAM validate
-        run: sam validate --template-file --template-file=./sidecars/request-count-scaling/template.yaml
+        run: sam validate --template-file=./sidecars/request-count-scaling/template.yaml
 
       - name: SAM build
-        run: sam build --manifest package.json --template-file --template-file=./sidecars/request-count-scaling/template.yaml
+        run: sam build --manifest package.json --template-file=./sidecars/request-count-scaling/template.yaml
 
       - name: Deploy app
         uses: govuk-one-login/devplatform-upload-action@fda75612a1b0e5a8c84ae7c44a23340e50e5bbde
