@@ -96,6 +96,10 @@ jobs:
           sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA|" cf-template.yaml
           zip template.zip cf-template.yaml
           aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
+          echo "Running sam build on sidecar file"
+          sam build --template-file=./sidecars/request-count-scaling/template.yaml
+          mv .aws-sam/build/template.yaml sidecar-template.yaml
+          aws s3 cp sidecar-template.yaml "s3://$FRONTEND_LAMBDA_BUCKET_NAME/sidecar-template.yaml" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
 
       - name: "Delegated Deployment via AWS CodeDeploy"
         run: echo "Deployment has been delegated to AWS CodeDeploy"
@@ -168,10 +172,10 @@ jobs:
           python-version: "3.9"
 
       - name: SAM validate
-        run: sam validate --template-file deploy/template.yaml
+        run: sam validate --template-file --template-file=./sidecars/request-count-scaling/template.yaml
 
       - name: SAM build
-        run: sam build --manifest package.json --template-file deploy/template.yaml
+        run: sam build --manifest package.json --template-file --template-file=./sidecars/request-count-scaling/template.yaml
 
       - name: Deploy app
         uses: govuk-one-login/devplatform-upload-action@fda75612a1b0e5a8c84ae7c44a23340e50e5bbde
