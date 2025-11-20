@@ -10,6 +10,7 @@ import {
   formatErrorMessage,
   normalizeAuthHeader,
 } from "../../../src/utils/mfaClient";
+import * as loggerModule from "../../../src/utils/logger";
 import {
   AuthAppMethod,
   MfaMethod,
@@ -341,15 +342,19 @@ describe("normalizeAuthHeader", () => {
     expect(result.headers.Authorization).to.eq("Bearer  abc");
   });
 
-  it("should throw error when Authorization header does not start with Bearer", () => {
+  it("should log error when Authorization header does not start with Bearer", () => {
+    const loggerStub = sinon.stub(loggerModule.logger, "error");
     const config: AxiosRequestConfig = {
       headers: { Authorization: "Basic abc123" },
       proxy: false,
     };
 
-    expect(() => normalizeAuthHeader(config)).to.throw(
-      "Authorization header must use Bearer scheme"
-    );
+    normalizeAuthHeader(config);
+
+    expect(loggerStub.calledOnce).to.be.true;
+    expect(loggerStub.calledWith("Authorization header must use Bearer scheme"))
+      .to.be.true;
+    loggerStub.restore();
   });
 });
 
