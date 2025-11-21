@@ -52,25 +52,18 @@ Mappings:
   EnvConfig:
     dev:
       LambdaLogLevel: DEBUG
-      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables #pragma: allowlist secret
     build:
       LambdaLogLevel: INFO
-      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables #pragma: allowlist secret
     staging:
       LambdaLogLevel: INFO
-      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables #pragma: allowlist secret
     integration:
       LambdaLogLevel: INFO
-      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables #pragma: allowlist secret
     production:
       LambdaLogLevel: INFO
-      dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables #pragma: allowlist secret
 
 Globals:
   Function:
     AutoPublishAlias: live
-    Layers:
-      - "arn:aws:lambda:eu-west-2:216552277552:layer:Dynatrace_OneAgent_1_323_2_20250822-051314_with_collector_nodejs:1"
     CodeSigningConfigArn: !If
       - UseCodeSigning
       - !Ref CodeSigningConfigArn
@@ -92,31 +85,7 @@ Globals:
         POWERTOOLS_LOG_LEVEL:
           !FindInMap [EnvConfig, !Ref Environment, LambdaLogLevel]
         POWERTOOLS_SERVICE_NAME: !Ref AWS::StackName
-        AWS_LAMBDA_EXEC_WRAPPER: /opt/dynatrace
         AWS_XRAY_CONTEXT_MISSING: IGNORE_ERROR
-        DT_CONNECTION_AUTH_TOKEN: !Sub
-          - "{{resolve:secretsmanager:${SecretArn}:SecretString:DT_CONNECTION_AUTH_TOKEN}}" #pragma: allowlist secret
-          - SecretArn:
-              !FindInMap [EnvConfig, !Ref Environment, dynatraceSecretArn]
-        DT_CONNECTION_BASE_URL: !Sub
-          - "{{resolve:secretsmanager:${SecretArn}:SecretString:DT_CONNECTION_BASE_URL}}" #pragma: allowlist secret
-          - SecretArn:
-              !FindInMap [EnvConfig, !Ref Environment, dynatraceSecretArn]
-        DT_CLUSTER_ID: !Sub
-          - "{{resolve:secretsmanager:${SecretArn}:SecretString:DT_CLUSTER_ID}}" #pragma: allowlist secret
-          - SecretArn:
-              !FindInMap [EnvConfig, !Ref Environment, dynatraceSecretArn]
-        DT_LOG_COLLECTION_AUTH_TOKEN: !Sub
-          - "{{resolve:secretsmanager:${SecretArn}:SecretString:DT_LOG_COLLECTION_AUTH_TOKEN}}" #pragma: allowlist secret
-          - SecretArn:
-              !FindInMap [EnvConfig, !Ref Environment, dynatraceSecretArn]
-        DT_TENANT: !Sub
-          - "{{resolve:secretsmanager:${SecretArn}:SecretString:DT_TENANT}}" #pragma: allowlist secret
-          - SecretArn:
-              !FindInMap [EnvConfig, !Ref Environment, dynatraceSecretArn]
-        DT_LOGGING_NODEJS_FLAGS: Exporter=true,LambdaSensor=false
-        DT_OPEN_TELEMETRY_ENABLE_INTEGRATION: true
-        DT_OPEN_TELEMETRY_ALLOW_EXPLICIT_PARENT: true
 
 Resources:
   ALBRequestCountScaleOutPolicy:
