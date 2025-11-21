@@ -256,8 +256,9 @@ Resources:
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
+    DeletionPolicy: Retain
     Properties:
-      RoleName: !Sub ${AWS::StackName}-ecs-deployment-metric-role
+      RoleName: !Sub ${AWS::StackName}-metric
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
