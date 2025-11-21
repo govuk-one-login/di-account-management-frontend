@@ -257,6 +257,7 @@ Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       RoleName: !Sub ${AWS::StackName}-metric
       ManagedPolicyArns:
