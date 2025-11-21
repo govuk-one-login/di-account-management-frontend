@@ -82,7 +82,7 @@
     "i18next-http-middleware": "^3.8.2",
     "jose": "^5.9.6",
     "jsdom": "^25.0.1",
-    "libphonenumber-js": "^1.12.27",
+    "libphonenumber-js": "^1.12.28",
     "nunjucks": "^3.2.4",
     "openid-client": "^5.7.0",
     "otplib": "^12.0.1",
