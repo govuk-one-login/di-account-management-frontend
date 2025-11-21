@@ -208,7 +208,7 @@ Resources:
       DatapointsToAlarm: "1"
       ComparisonOperator: "GreaterThanThreshold"
       EvaluationPeriods: 1
-      Threshold: "1500"
+      Threshold: "1600"
       TreatMissingData: "notBreaching"
       ActionsEnabled: true
       AlarmActions:
