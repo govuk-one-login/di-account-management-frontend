@@ -33,6 +33,8 @@ Parameters:
     Type: String
   ContainerAutoScalingTarget:
     Type: String
+  ParentStackName:
+    Type: String
 
 Conditions:
   UseCodeSigning:
@@ -257,7 +259,7 @@ Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ecs-deployment-metric-role
+      RoleName: !Sub "${ParentStackName}-ecs-deployment-metric-role"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
