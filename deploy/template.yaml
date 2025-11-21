@@ -2294,6 +2294,7 @@ Resources:
         ECSServiceName: !GetAtt ContainerService.Name
         ApplicationLoadBalancerName: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
         ContainerAutoScalingTarget: !Ref ContainerAutoScalingTarget
+        ParentStackName: !Sub "${AWS::StackName}"
 
 Outputs:
   ApiGatewayEndpoint:
