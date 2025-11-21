@@ -2275,6 +2275,27 @@ Resources:
           - ELB5XX10PercentAlarm: !Ref ELB5XX10PercentAlarm
             LoggerErrorRateAlarm: !Ref LoggerErrorRateAlarm
 
+  #
+  # RequestCount Scaling Sidecar
+  #
+  RequestCountScalingStack:
+    Type: AWS::CloudFormation::Stack
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      TemplateURL: https://account-mgmt-frontend-dev-lambda-code.s3.eu-west-2.amazonaws.com/sidecar-template.yaml
+      Parameters:
+        PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/account-mgmt-frontend-pipeline-RequestCountScalingBoundary"
+        CodeSigningConfigArn: !If
+          - UseCodeSigning
+          - !Ref CodeSigningConfigArn
+          - !Ref AWS::NoValue
+        ECSClusterName: !Ref ECSCluster
+        ECSServiceName: !GetAtt ContainerService.Name
+        ApplicationLoadBalancerName: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+        ContainerAutoScalingTarget: !Ref ContainerAutoScalingTarget
+        ParentStackName: !Sub "${AWS::StackName}"
+
 Outputs:
   ApiGatewayEndpoint:
     Description: The base URI for this application.
