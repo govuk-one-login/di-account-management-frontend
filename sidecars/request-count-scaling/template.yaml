@@ -301,7 +301,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Description: "Creates a deployment metric lambda"
-      FunctionName: !Sub ${Environment}-${AWS::StackName}-ecs-status
+      FunctionName: !Sub "${ParentStackName}-ecs-status"
       Runtime: nodejs22.x
       Handler: ecs-status-handler.handler
       LoggingConfig:
