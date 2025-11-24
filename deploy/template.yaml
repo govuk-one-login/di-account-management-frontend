@@ -342,7 +342,6 @@ Resources:
     Type: AWS::ECS::Service
     Properties:
       Cluster: !Ref ECSCluster
-      TaskDefinition: !Ref TaskDefinition
       DeploymentController:
         Type: CODE_DEPLOY
       PropagateTags: SERVICE
