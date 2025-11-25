@@ -64,7 +64,7 @@
     "@govuk-one-login/frontend-vital-signs": "^0.1.4",
     "axios": "^1.13.2",
     "base64url": "3.0.1",
-    "body-parser": "^2.2.0",
+    "body-parser": "^2.2.1",
     "connect-dynamodb": "^3.0.5",
     "cookie-parser": "^1.4.7",
     "csrf-sync": "^4.2.1",
