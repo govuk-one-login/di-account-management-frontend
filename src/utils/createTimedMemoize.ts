@@ -5,15 +5,24 @@ export const createTimedMemoize = <T extends (...args: any[]) => any>(
   const cache = new Map();
 
   return ((...args: Parameters<T>) => {
-    const key = JSON.stringify(args);
-    const cached = cache.get(key);
+    let current = cache;
+
+    for (const arg of args) {
+      if (!current.has(arg)) {
+        current.set(arg, new Map());
+      }
+      current = current.get(arg);
+    }
+
+    const key = args.length === 0 ? "__no_args__" : "__result__";
+    const cached = current.get(key);
 
     if (cached && Date.now() - cached.timestamp < maxAge) {
       return cached.value;
     }
 
     const result = fn(...args);
-    cache.set(key, { value: result, timestamp: Date.now() });
+    current.set(key, { value: result, timestamp: Date.now() });
     return result;
   }) as T;
 };

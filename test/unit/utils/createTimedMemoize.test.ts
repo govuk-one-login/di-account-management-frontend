@@ -61,41 +61,53 @@ describe("createTimedMemoize", () => {
     expect(mockFn.callCount).to.equal(1);
   });
 
-  it("should handle null and undefined arguments", () => {
-    const mockFn = sinon.stub().callsFake((arg) => `result-${arg}`);
-    const memoized = createTimedMemoize(mockFn, 1000);
-
-    memoized(null);
-    memoized(undefined);
-    memoized(null);
-    memoized(undefined);
-
-    expect(mockFn.callCount).to.equal(2);
-  });
-
-  it("should handle object arguments", () => {
+  it("should handle object arguments by reference", () => {
     const mockFn = sinon.stub().returns("result");
     const memoized = createTimedMemoize(mockFn, 1000);
 
     const obj = { key: "value" };
     memoized(obj);
-    memoized({ key: "value" });
-    memoized(obj);
+    memoized({ key: "value" }); // Different object reference
+    memoized(obj); // Same reference, should use cache
 
     expect(mockFn.callCount).to.equal(2);
   });
 
-  it("should handle array arguments", () => {
+  it("should differentiate objects with different content", () => {
     const mockFn = sinon.stub().returns("result");
     const memoized = createTimedMemoize(mockFn, 1000);
 
-    memoized([1, 2, 3]);
-    memoized([1, 2, 3]);
+    memoized({ key: "value1" });
+    memoized({ key: "value2" });
+    memoized({ key: "value1" }); // Different reference, not cached
 
-    expect(mockFn.callCount).to.equal(1);
+    expect(mockFn.callCount).to.equal(3);
   });
 
-  it("should handle functions that throw errors", () => {
+  it("should treat null and undefined as different values", () => {
+    const mockFn = sinon.stub().returns("result");
+    const memoized = createTimedMemoize(mockFn, 1000);
+
+    memoized(null);
+    memoized(undefined);
+    memoized(null); // Should use cache
+
+    expect(mockFn.callCount).to.equal(2);
+  });
+
+  it("should handle array arguments by reference", () => {
+    const mockFn = sinon.stub().returns("result");
+    const memoized = createTimedMemoize(mockFn, 1000);
+
+    const arr = [1, 2, 3];
+    memoized(arr);
+    memoized([1, 2, 3]); // Different array reference
+    memoized(arr); // Same reference, should use cache
+
+    expect(mockFn.callCount).to.equal(2);
+  });
+
+  it("should not cache errors", () => {
     const mockFn = sinon.stub().throws(new Error("test error"));
     const memoized = createTimedMemoize(mockFn, 1000);
 
