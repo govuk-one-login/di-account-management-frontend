@@ -73,7 +73,6 @@
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "express-validator": "^7.3.1",
-    "fast-memoize": "^2.5.2",
     "flexsearch": "^0.8.212",
     "govuk-frontend": "^5.13.0",
     "helmet": "8.1.0",

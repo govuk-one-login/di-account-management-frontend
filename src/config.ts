@@ -1,6 +1,6 @@
 import { filterClients } from "di-account-management-rp-registry";
-import memoize from "fast-memoize";
 import { ENVIRONMENT_NAME, LOCALE } from "./app.constants";
+import { createTimedMemoize } from "./utils/createTimedMemoize";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -129,10 +129,11 @@ export function getAccessibilityStatementUrl(): string {
 
 export const ONE_LOGIN_HOME_NON_PROD = "oneLoginHome";
 
-export const getIdListFromFilter = memoize(
+export const getIdListFromFilter = createTimedMemoize(
   (filter: Parameters<typeof filterClients>[1]): string[] => {
     return filterClients(getAppEnv(), filter).map((client) => client.clientId);
-  }
+  },
+  5 * 60 * 1000 // Cache for 5 minutes (in milliseconds)
 );
 
 export const getListOfActivityHistoryClientIDs = getIdListFromFilter({
