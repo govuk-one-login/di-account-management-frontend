@@ -47,8 +47,10 @@ describe("createTimedMemoize", () => {
 
     memoized("arg1", "arg2", 123);
     memoized("arg1", "arg2", 123);
+    memoized("arg1", "arg2", 123, 567);
+    memoized("arg1", "arg2", 123, 567);
 
-    expect(mockFn.callCount).to.equal(1);
+    expect(mockFn.callCount).to.equal(2);
   });
 
   it("should handle functions with no arguments", () => {
