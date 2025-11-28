@@ -91,6 +91,10 @@ Parameters:
     AllowedValues:
       - CodeDeployDefault.ECSLinear10PercentEvery3Minutes
       - CodeDeployDefault.ECSAllAtOnce
+#  RequestCountScalingTemplateBucket:
+#    Type: String
+#    Description: "Request count scaling template S3 bucket name"
+#    Default: "request-count-scaling"
 
 Conditions:
   UseCodeSigning:
@@ -390,53 +394,6 @@ Resources:
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
 
-  ALBRequestCountScaleOutPolicy:
-    Type: AWS::ApplicationAutoScaling::ScalingPolicy
-    Properties:
-      PolicyName: ALBRequestCountScaleOutPolicy
-      PolicyType: StepScaling
-      ResourceId: !Join
-        - "/"
-        - - "service"
-          - !Ref ECSCluster
-          - !GetAtt ContainerService.Name
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
-      StepScalingPolicyConfiguration:
-        AdjustmentType: ChangeInCapacity
-        Cooldown: 30
-        StepAdjustments:
-          - MetricIntervalLowerBound: 0
-            MetricIntervalUpperBound: 100
-            ScalingAdjustment: 1 # Add 1 task if requests are 201–300
-          - MetricIntervalLowerBound: 100
-            MetricIntervalUpperBound: 300
-            ScalingAdjustment: 2 # Add 2 tasks if requests are 301–500
-          - MetricIntervalLowerBound: 300
-            ScalingAdjustment: 3 # Add 3 tasks if requests > 500
-
-  ALBRequestCountScaleInPolicy:
-    Type: AWS::ApplicationAutoScaling::ScalingPolicy
-    Properties:
-      PolicyName: ALBRequestCountScaleInPolicy
-      PolicyType: StepScaling
-      ResourceId: !Join
-        - "/"
-        - - "service"
-          - !Ref ECSCluster
-          - !GetAtt ContainerService.Name
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
-      StepScalingPolicyConfiguration:
-        AdjustmentType: ChangeInCapacity
-        Cooldown: 30
-        StepAdjustments:
-          - MetricIntervalUpperBound: -100
-            ScalingAdjustment: -2 # Requests < 100
-          - MetricIntervalLowerBound: -100
-            MetricIntervalUpperBound: 0
-            ScalingAdjustment: -1 # Requests between 100–200
-
   ECSStepScaleOutPolicy:
     DependsOn: ContainerAutoScalingTarget
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
@@ -533,50 +490,6 @@ Resources:
       Statistic: "Average"
       Period: "60"
       Threshold: "30"
-
-  ALBRequestCountScaleOutAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: "ALB-RequestCount-High"
-      MetricName: "RequestCount"
-      ActionsEnabled: true
-      AlarmActions:
-        - !Ref ALBRequestCountScaleOutPolicy
-      AlarmDescription: "ALB-RequestCount-Above-200"
-      DatapointsToAlarm: "1"
-      Namespace: AWS/ApplicationELB
-      ComparisonOperator: "GreaterThanThreshold"
-      Dimensions:
-        - Name: LoadBalancer
-          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
-      Statistic: Sum
-      Period: "60"
-      EvaluationPeriods: 1
-      Threshold: "2000"
-      TreatMissingData: "notBreaching"
-
-  ALBRequestCountScaleInAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: "ALB-RequestCount-Normal"
-      MetricName: "RequestCountPerTarget"
-      ActionsEnabled: true
-      AlarmActions:
-        - !Ref ALBRequestCountScaleInPolicy
-      AlarmDescription: "ALB-RequestCount-Below-200"
-      DatapointsToAlarm: "1"
-      Namespace: AWS/ApplicationELB
-      ComparisonOperator: "LessThanThreshold"
-      Dimensions:
-        - Name: LoadBalancer
-          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
-        - Name: TargetGroup
-          Value: !Ref ContainerAutoScalingTarget
-      Statistic: Sum
-      Period: "60"
-      EvaluationPeriods: 1
-      Threshold: "1000"
-      TreatMissingData: "notBreaching"
 
   ContainerServiceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -2079,10 +1992,6 @@ Resources:
     DependsOn:
       - AppFrontCustomDomain
 
-  #
-  # Metrics and Alarms
-  #
-
   # API Gateway Alarms
 
   # 4xx Status Code
@@ -2338,7 +2247,6 @@ Resources:
   #
   # Canary Deployment
   #
-
   ECSCanaryDeploymentStack:
     Type: AWS::CloudFormation::Stack
     DeletionPolicy: Delete
@@ -2366,6 +2274,27 @@ Resources:
           - "${ELB5XX10PercentAlarm},${LoggerErrorRateAlarm}"
           - ELB5XX10PercentAlarm: !Ref ELB5XX10PercentAlarm
             LoggerErrorRateAlarm: !Ref LoggerErrorRateAlarm
+
+  #
+  # RequestCount Scale Stack
+  #
+  RequestCountScaleStack:
+    Type: AWS::CloudFormation::Stack
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      TemplateURL: https://account-mgmt-frontend-dev-lambda-code.s3.eu-west-2.amazonaws.com/nested-stack-template.yaml
+      Parameters:
+        PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/account-mgmt-frontend-pipeline-RequestCountScalingBoundary"
+        CodeSigningConfigArn: !If
+          - UseCodeSigning
+          - !Ref CodeSigningConfigArn
+          - !Ref AWS::NoValue
+        ECSClusterName: !Ref ECSCluster
+        ECSServiceName: !GetAtt ContainerService.Name
+        ApplicationLoadBalancerName: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+        ContainerAutoScalingTarget: !Ref ContainerAutoScalingTarget
+        ParentStackName: !Sub "${AWS::StackName}"
 
 Outputs:
   ApiGatewayEndpoint:
