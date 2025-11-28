@@ -638,24 +638,16 @@
         "paragraphs": ["Read our guidance if you’re having a problem with:"],
         "links": [
           {
-            "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app",
-            "text": "Using the GOV.UK ID Check app"
-          },
-          {
-            "href": "https://www.gov.uk/guidance/linking-the-govuk-id-check-app-to-govuk",
-            "text": "Linking the GOV.UK ID Check app to GOV.UK"
-          },
-          {
             "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app",
             "text": "Proving your identity with the GOV.UK One Login app"
           },
           {
-            "href": "https://www.gov.uk/guidance/adding-your-veteran-card-to-the-govuk-one-login-app",
-            "text": "Help adding your Veteran Card to the GOV.UK One Login app"
-          },
-          {
             "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions",
             "text": "Proving your identity with GOV.UK One Login by answering security questions"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/adding-your-veteran-card-to-the-govuk-one-login-app",
+            "text": "Help adding your Veteran Card to the GOV.UK One Login app"
           },
           {
             "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login",
@@ -672,6 +664,14 @@
           {
             "href": "https://www.gov.uk/guidance/what-to-do-about-unexpected-messages-from-govuk-one-login",
             "text": "An unexpected email, text message or phone call about your GOV.UK One Login"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app",
+            "text": "Using the GOV.UK ID Check app"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/linking-the-govuk-id-check-app-to-govuk",
+            "text": "Linking the GOV.UK ID Check app to GOV.UK"
           }
         ],
         "guidanceForHelpers": "If you’re having trouble using GOV.UK One Login by yourself, you can get help from someone you know and trust. Find out <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login\">what the person who helps you can and cannot do</a>."

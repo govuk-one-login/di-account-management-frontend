@@ -514,24 +514,16 @@
         "paragraphs": ["Darllenwch ein canllaw os ydych yn cael problem gyda:"],
         "links": [
           {
-            "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app.cy",
-            "text": "Defnyddio'r ap GOV.UK ID Check app"
-          },
-          {
-            "href": "https://www.gov.uk/guidance/linking-the-govuk-id-check-app-to-govuk.cy",
-            "text": "Cysylltu'r ap GOV.UK  ID Check i GOV.UK"
-          },
-          {
             "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app.cy",
             "text": "Profi eich hunaniaeth gyda’r ap GOV.UK One Login"
           },
           {
-            "href": "https://www.gov.uk/guidance/adding-your-veteran-card-to-the-govuk-one-login-app.cy",
-            "text": "Help i ychwanegu eich Cerdyn Cyn-filwr digidol i'r ap GOV.UK One Login"
-          },
-          {
             "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions.cy",
             "text": "Profi eich hunaniaeth gyda GOV.UK One Login drwy ateb cwestiynau diogelwch"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/adding-your-veteran-card-to-the-govuk-one-login-app.cy",
+            "text": "Help i ychwanegu eich Cerdyn Cyn-filwr digidol i'r ap GOV.UK One Login"
           },
           {
             "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login.cy",
@@ -548,6 +540,14 @@
           {
             "href": "https://www.gov.uk/guidance/what-to-do-about-unexpected-messages-from-govuk-one-login.cy",
             "text": "E-bost, neges destun neu alwad ffôn annisgwyl am eich GOV.UK One Login"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app.cy",
+            "text": "Defnyddio'r ap GOV.UK ID Check app"
+          },
+          {
+            "href": "https://www.gov.uk/guidance/linking-the-govuk-id-check-app-to-govuk.cy",
+            "text": "Cysylltu'r ap GOV.UK  ID Check i GOV.UK"
           }
         ],
         "guidanceForHelpers": "Os ydych yn cael trafferth defnyddio GOV.UK One Login ar eich pen eich hun, gallwch gael help gan rywun rydych yn ei adnabod ac yn ymddiried ynddynt. Darganfyddwch <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login.cy\",>beth gall ac na all y person sy'n eich helpu ei wneud</a>."
