@@ -22,8 +22,16 @@ Then("the page meets our accessibility standards", async ({ page }) => {
 });
 
 Given("I sign in as the {string} user", async ({ page }, userType: string) => {
-  await page.getByRole("button", { name: userType, exact: true }).click();
-  await page.waitForURL(pageTitleToPath["Your services"]);
+  // Wait for the API Simulation Tool page to be visible to ensure the UI is ready
+  await expect(page.getByText("API Simulation Tool", { exact: true })).toBeVisible({ timeout: 60000 });
+
+  // Wait for the required user button to become visible, then click
+  const userButton = page.getByRole("button", { name: userType, exact: true });
+  await expect(userButton).toBeVisible({ timeout: 60000 });
+  await userButton.click();
+
+  // Wait for navigation to 'Your services'
+  await page.waitForURL(pageTitleToPath["Your services"], { timeout: 60000 });
 });
 
 Given("I go to the {string} page", async ({ page }, pageTitle: string) => {
