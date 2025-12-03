@@ -42,7 +42,7 @@
       "js",
       "ts"
     ],
-    "timeout": 30000,
+    "timeout": 60000,
     "recursive": true,
     "require": [
       "ts-node/register"

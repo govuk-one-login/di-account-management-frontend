@@ -31,7 +31,7 @@ export default defineConfig({
             reuseExistingServer: true,
             timeout: 300000,
             name: "app-server",
-            gracefulShutdown: { signal: "SIGTERM", timeout: 30000 },
+            gracefulShutdown: { signal: "SIGTERM", timeout: 60000 },
           },
           {
             command: "npm run start-test-server",
@@ -39,7 +39,7 @@ export default defineConfig({
             reuseExistingServer: true,
             timeout: 300000,
             name: "test-server",
-            gracefulShutdown: { signal: "SIGTERM", timeout: 30000 },
+            gracefulShutdown: { signal: "SIGTERM", timeout: 60000 },
           },
         ]
       : undefined,
