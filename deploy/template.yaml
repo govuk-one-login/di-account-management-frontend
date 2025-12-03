@@ -2295,6 +2295,7 @@ Resources:
         ApplicationLoadBalancerName: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
         ContainerAutoScalingTarget: !Ref ContainerAutoScalingTarget
         ParentStackName: !Sub "${AWS::StackName}"
+        VpcStackName: !Sub "${VpcStackName}"
 
 Outputs:
   ApiGatewayEndpoint:
