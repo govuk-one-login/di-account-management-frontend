@@ -217,7 +217,7 @@ Mappings:
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
-      AMAPIBASEURL: "https://a3bnrbtiga-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging"
+      AMAPIBASEURL: "https://9ntf0mlypd-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging"
       BASEURL: "home.staging.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
