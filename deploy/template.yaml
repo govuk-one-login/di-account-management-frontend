@@ -2283,7 +2283,7 @@ Resources:
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
-      TemplateURL: https://account-mgmt-frontend-dev-lambda-code.s3.eu-west-2.amazonaws.com/nested-stack-template.yaml
+      TemplateURL: https://template-bucket-templatebucket-civakigopbg2.s3.eu-west-2.amazonaws.com/request-count-scaling/template.yaml
       Parameters:
         PermissionsBoundary: !Sub "arn:aws:iam::${AWS::AccountId}:policy/account-mgmt-frontend-pipeline-RequestCountScalingBoundary"
         CodeSigningConfigArn: !If
