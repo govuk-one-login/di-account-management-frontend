@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import {
   formatService,
-  containsGovUkPublishingService,
   presentYourServices,
 } from "../../../src/utils/yourServices";
 import * as yourServices from "../../../src/utils/yourServices";
@@ -216,30 +215,6 @@ describe("YourService Util", () => {
   });
 
   describe("does GovUK Publishing service exist in array", async () => {
-    it("return false if array does not contain govUK publishing service", () => {
-      const serviceList: Service[] = [
-        {
-          client_id: "client_id",
-          count_successful_logins: 1,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-        },
-      ];
-      expect(containsGovUkPublishingService(serviceList)).equal(false);
-    });
-
-    it("return true if array contains govUK publishing service", () => {
-      const serviceList: Service[] = [
-        {
-          client_id: "gov-uk",
-          count_successful_logins: 1,
-          last_accessed: 14567776,
-          last_accessed_readable_format: "last_accessed_readable_format",
-        },
-      ];
-      expect(containsGovUkPublishingService(serviceList)).equal(true);
-    });
-
     it("should return a list of services for the user", async () => {
       const expectedResponse = {
         accountsList: [
