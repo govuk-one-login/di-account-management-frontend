@@ -4,18 +4,23 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.deleteAccount.title' | translate %}
 
+{% macro getServiceName(service) %}
+  {% set locale = ['clientRegistry.', env, '.', service.client_id, '.'] | join %}
+  {{- [locale, 'header'] | join | translate -}}
+{% endmacro %}
+
+{% macro langAttribute(service) %}
+  {%- if currentLngWelsh and not service.isAvailableInWelsh -%}lang="en"{%- endif -%}
+{% endmacro %}
+
 {% block pageContent %}
 <h1 class="govuk-heading-l">{{'pages.deleteAccount.header' | translate}}</h1>
-
-<p class="govuk-body">{{'pages.deleteAccount.paragraph1' | translate}}</p>
-
- {% if services.length %}
-  <p class="govuk-body">{{ 'pages.deleteAccount.paragraph2' | translate }}</p>
-
-  <ul class="govuk-list govuk-list--bullet">
+{% if services.length %}
+  {% if services.length > 1 %}
+    <p class="govuk-body">{{ 'pages.deleteAccount.paragraph2Many' | translate }}</p>
+    <ul class="govuk-list govuk-list--bullet" data-test-id="service-list">
     {% for service in services %}
-      {% set locale = ['clientRegistry.', env, '.', service.client_id, '.'] | join %}
-        <li {% if currentLngWelsh and not service.isAvailableInWelsh %}lang="en"{% endif %} data-test-id="service-list-item">{{ [locale, 'header'] | join | translate }}</li>
+        <li {{ langAttribute(service) }} data-test-id="service-list-item">{{ getServiceName(service) }}</li>
     {% endfor %}
     </ul>
 
@@ -29,25 +34,38 @@
         html: englishServicesInWelshExplanationHtml
       }) }}
     {% endif %}
-
-    {% if hasGovUkEmailSubscription %}
-      <p class="govuk-body" data-test-id="govuk-email-subscription-info">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
-    {% endif %}
-  <p class="govuk-body">{{ 'pages.deleteAccount.paragraph4b' | translate }}</p>
+  {% else %}
+    <p class="govuk-body" data-test-id="service-paragraph">{{ 'pages.deleteAccount.paragraph2One' | translate | safe | replace("[serviceName]", getServiceName(services[0])) | replace("[langPlaceholder]", langAttribute(services[0])) }}</p>
   {% endif %}
+  <p class="govuk-body">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
 
-  {% if not services.length %}
-    <p class="govuk-body", data-test-id="no-services-content">{{ 'pages.deleteAccount.paragraph4a' | translate }}</p>
-  {% endif %}
-  <p class="govuk-body">{{ 'pages.deleteAccount.paragraph5' | translate }}</p>
+  <h2 class="govuk-heading-m">{{'pages.deleteAccount.heading2a' | translate}}</h2>
+  
+  <p class="govuk-body">{{ 'pages.deleteAccount.explanationList' | translate }}</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>{{ 'pages.deleteAccount.explanationListItem1' | translate }}</li>
+    <li>{{ 'pages.deleteAccount.explanationListItem2' | translate }}</li>
+  </ul>
 
   {{ govukInsetText({
     text: 'pages.deleteAccount.details' | translate
   }) }}
+  <p class="govuk-body">{{ 'pages.deleteAccount.paragraph4' | translate }}</p>
+
+  <h2 class="govuk-heading-m">{{ 'pages.deleteAccount.heading2b' | translate}}</h2>
+{% else %}
+  <p class="govuk-body" data-test-id="no-services-content">{{ 'pages.deleteAccount.paragraph1' | translate }}</p>
+  {{ govukInsetText({
+    text: 'pages.deleteAccount.details' | translate
+  }) }}
+  <p class="govuk-body" data-test-id="no-services-content">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
+{% endif %}
 
 <form action="{{'DELETE_ACCOUNT' | getPath }}" method="post" novalidate>
   <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
   <input type="hidden" name="fromSecurity" value="{{fromSecurity}}"/>
+  
+  <p class="govuk-body">{{ 'pages.deleteAccount.paragraph5' | translate }}</p>
 
   {{ govukButton({
     text: 'pages.deleteAccount.deleteAccount' | translate,

@@ -32,9 +32,15 @@ describe("Integration:: delete account", () => {
     },
   ];
 
-  const manyServicesIncludingGovUkPublishing: Service[] = [
+  const manyServices: Service[] = [
     {
-      client_id: "client_id",
+      client_id: "hoSubmitAPleasureCraftReport",
+      count_successful_logins: 1,
+      last_accessed: 14567776,
+      last_accessed_readable_format: "last_accessed_readable_format",
+    },
+    {
+      client_id: "CMAD",
       count_successful_logins: 1,
       last_accessed: 14567776,
       last_accessed_readable_format: "last_accessed_readable_format",
@@ -146,37 +152,35 @@ describe("Integration:: delete account", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("no-services-content")).text()).to.not.be.empty;
-        expect($(testComponent("govuk-email-subscription-info")).text()).to.be
-          .empty;
         expect($(testComponent("service-list-item")).text()).to.be.empty;
       })
       .expect(200, done);
   });
 
-  it("should display GovUk subscription info if publishing service exists", (done) => {
-    stubGetAllowedListServicesToReturn(manyServicesIncludingGovUkPublishing);
+  it("should display a list of services if more than 1 service exists", (done) => {
+    stubGetAllowedListServicesToReturn(manyServices);
 
     request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("govuk-email-subscription-info")).text()).to.not
-          .be.empty;
+        expect($(testComponent("service-list")).text()).to.not.be.empty;
         expect($(testComponent("service-list-item")).text()).to.not.be.empty;
+        expect($(testComponent("service-paragraph")).text()).to.be.empty;
       })
       .expect(200, done);
   });
 
-  it("should not display subscription info if publishing service does not exists", (done) => {
+  it("should display a single paragraph when only 1 service exists", (done) => {
     stubGetAllowedListServicesToReturn(aSingleService);
 
     request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("service-list-item")).text()).to.not.be.empty;
-        expect($(testComponent("govuk-email-subscription-info")).text()).to.be
-          .empty;
+        expect($(testComponent("service-list")).text()).to.be.empty;
+        expect($(testComponent("service-list-item")).text()).to.be.empty;
+        expect($(testComponent("service-paragraph")).text()).to.contains("Your GOV.UK app");
       })
       .expect(200, done);
   });
