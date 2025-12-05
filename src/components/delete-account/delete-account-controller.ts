@@ -45,6 +45,7 @@ export async function deleteAccountGet(
       env: env,
       currentLngWelsh: req.i18n?.language === "cy",
       hasEnglishOnlyServices,
+      fromSecurity: req.query.from === "security",
     };
 
     if (services.length) {
