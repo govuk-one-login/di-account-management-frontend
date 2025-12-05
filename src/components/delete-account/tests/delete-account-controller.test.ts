@@ -91,7 +91,6 @@ describe("delete account controller", () => {
 
         await deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
-          hasGovUkEmailSubscription: false,
           services: [],
           env: getAppEnv(),
           currentLngWelsh: false,
@@ -123,7 +122,6 @@ describe("delete account controller", () => {
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
           services: serviceList,
           env: getAppEnv(),
-          hasGovUkEmailSubscription: false,
           currentLngWelsh: false,
           hasEnglishOnlyServices: true,
         });

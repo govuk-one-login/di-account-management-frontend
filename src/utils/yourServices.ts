@@ -132,19 +132,5 @@ export const getYourServicesForAccountDeletion = async (
   });
 };
 
-export const containsGovUkPublishingService = (
-  serviceList: Service[]
-): boolean => {
-  const govUkPublishingClientIds: string[] = [
-    "LcueBVCnGZw-YFdTZ4S07XbQx7I",
-    "CEr97IZfEPQFgBxq8QNcM8LFxw4",
-    "gov-uk",
-  ];
-
-  return serviceList.some((service) => {
-    return govUkPublishingClientIds.includes(service.client_id);
-  });
-};
-
 export const serviceIsAvailableInWelsh = (serviceId: string): boolean =>
   getIdListFromFilter({ isAvailableInWelsh: true }).includes(serviceId);
