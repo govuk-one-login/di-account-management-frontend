@@ -31,7 +31,7 @@ export const handler = async (): Promise<void> => {
 
     const taskSets = service.taskSets ?? [];
 
-    console.log(`[ECS] Total Task sets is: ${taskSets.length}`);
+    console.log(`[ECS] Total Task sets: ${taskSets.length}`);
 
     let inProgress = taskSets.length > 1;
 
