@@ -33,6 +33,7 @@ describe("delete account controller", () => {
       },
       body: {},
       cookies: {},
+      query: { from: "security" },
       session: {
         user: {
           subjectId: TEST_SUBJECT_ID,
@@ -91,11 +92,34 @@ describe("delete account controller", () => {
 
         await deleteAccountGet(req as Request, res as Response);
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
-          hasGovUkEmailSubscription: false,
           services: [],
           env: getAppEnv(),
           currentLngWelsh: false,
           hasEnglishOnlyServices: false,
+          fromSecurity: true,
+        });
+      });
+    });
+
+
+    describe("deleteAccountGetNotFromSecurity", () => {
+      it("should render delete page without fromSecurity parameter if query string not present/invalid", async () => {
+        req = validRequest();
+        req.query.from = "invalidValue";
+        const yourServices = require("../../../utils/yourServices");
+        sandbox
+          .stub(yourServices, "getYourServicesForAccountDeletion")
+          .callsFake(function (): Service[] {
+            return [];
+          });
+
+        await deleteAccountGet(req as Request, res as Response);
+        expect(res.render).to.have.calledWith("delete-account/index.njk", {
+          services: [],
+          env: getAppEnv(),
+          currentLngWelsh: false,
+          hasEnglishOnlyServices: false,
+          fromSecurity: false,
         });
       });
     });
@@ -123,9 +147,9 @@ describe("delete account controller", () => {
         expect(res.render).to.have.calledWith("delete-account/index.njk", {
           services: serviceList,
           env: getAppEnv(),
-          hasGovUkEmailSubscription: false,
           currentLngWelsh: false,
           hasEnglishOnlyServices: true,
+          fromSecurity: true,
         });
       });
     });

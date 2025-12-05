@@ -4,10 +4,7 @@ import { DeleteAccountServiceInterface } from "./types";
 import { deleteAccountService } from "./delete-account-service";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { getAppEnv, getSNSDeleteTopic } from "../../config";
-import {
-  containsGovUkPublishingService,
-  getYourServicesForAccountDeletion,
-} from "../../utils/yourServices";
+import { getYourServicesForAccountDeletion } from "../../utils/yourServices";
 import { handleLogout } from "../../utils/logout";
 import { LogoutState } from "../../app.constants";
 import { getRequestConfigFromExpress } from "../../utils/http";
@@ -42,14 +39,13 @@ export async function deleteAccountGet(
     const hasEnglishOnlyServices = services.some(
       (service) => !service.isAvailableInWelsh
     );
-    const hasGovUkEmailSubscription: boolean =
-      containsGovUkPublishingService(services);
+
     const data = {
-      hasGovUkEmailSubscription: hasGovUkEmailSubscription,
       services: services,
       env: env,
       currentLngWelsh: req.i18n?.language === "cy",
       hasEnglishOnlyServices,
+      fromSecurity: req.query.from === "security",
     };
 
     if (services.length) {

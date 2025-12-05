@@ -229,7 +229,8 @@ export function enterPasswordPost(
         req.session.user.state[requestType].value,
         EventType.Authenticated
       );
-      res.redirect(REDIRECT_PATHS[requestType]);
+      const redirectPath = getRenderOptions(req, requestType).fromSecurity ? `${REDIRECT_PATHS[requestType]}?from=security` : REDIRECT_PATHS[requestType];
+      res.redirect(redirectPath);
       return;
     }
 
