@@ -16,7 +16,11 @@ on:
         description: "Input branch name, commit SHA, or tag"
         required: true
         type: string
-        default: main
+        default: man
+      registryRef:
+        description: "Git ref of the rp-registry to use"
+        required: false
+        type: string
 
 permissions:
   id-token: write
@@ -71,6 +75,16 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@261a7de32bda11ba01f4d75c4ed6caf3739e54be # pin@v1
+
+      - name: Install specific version of di-account-management-rp-registry
+        if: ${{ inputs.registryRef != '' }}
+        run: |
+          echo "Installing Node.js 18"
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          echo "Installing di-account-management-rp-registry at ref ${{ inputs.registryRef }}"
+          npm install "github:govuk-one-login/di-account-management-rp-registry#${{ inputs.registryRef }}"
+          npm update di-account-management-rp-registry
 
       - name: Build & Publish Docker Image as latest
         id: build-image
