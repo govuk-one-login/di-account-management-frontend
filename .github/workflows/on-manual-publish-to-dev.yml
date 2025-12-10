@@ -16,7 +16,7 @@ on:
         description: "Input branch name, commit SHA, or tag"
         required: true
         type: string
-        default: man
+        default: main
       registryRef:
         description: "Git ref of the rp-registry to use"
         required: false
