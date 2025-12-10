@@ -85,7 +85,7 @@ jobs:
           echo "Installing di-account-management-rp-registry at ref ${{ inputs.registryRef }}"
           npm install "github:govuk-one-login/di-account-management-rp-registry#${{ inputs.registryRef }}"
           npm update di-account-management-rp-registry
-          GIT_REF_SHA=$(npm list di-account-management-rp-registry | grep di-account-management-rp-registry@ | awk -F# '{print $2}')
+          echo GIT_REF_SHA=$(npm list di-account-management-rp-registry | grep di-account-management-rp-registry@ | awk -F# '{print $2}') >> $GITHUB_ENV
 
       - name: Build & Publish Docker Image as latest
         id: build-image
