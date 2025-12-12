@@ -60,7 +60,7 @@
     "@aws-sdk/util-dynamodb": "^3.901.0",
     "@govuk-one-login/frontend-analytics": "^4.0.5",
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
-    "@govuk-one-login/frontend-ui": "^4.1.3",
+    "@govuk-one-login/frontend-ui": "^4.2.0",
     "@govuk-one-login/frontend-vital-signs": "^0.1.4",
     "axios": "^1.13.2",
     "base64url": "3.0.1",
