@@ -1,0 +1,99 @@
+{
+  "$schema": "https://raw.githubusercontent.com/govuk-one-login/quality-gates/refs/tags/v0.1.0/schemas/schema.json",
+  "services": [
+    {
+      "service-tag": "home",
+      "quality-gates": [
+        {
+          "check-types": ["secret scanning", "vulnerability detection"],
+          "provider": "GitHub",
+          "phase": "pre-merge",
+          "config": {
+            "file": ".pre-commit-config.yaml",
+            "name": "Run pre-commit"
+          }
+        },
+        {
+          "check-types": [
+            "unit",
+            "new feature",
+            "regression",
+            "code style and linting"
+          ],
+          "provider": "GitHub",
+          "phase": "pre-merge",
+          "config": {
+            "file": ".github/workflows/build-test-application.yml",
+            "path": "jobs.build_test_application",
+            "name": "Build & Test Application"
+          }
+        },
+        {
+          "check-types": ["integration", "accessibility", "regression"],
+          "provider": "GitHub",
+          "phase": "pre-merge",
+          "config": {
+            "file": ".github/workflows/integration-test.yml",
+            "path": "jobs.end_to_end_tests",
+            "name": "Integration tests"
+          }
+        },
+        {
+          "check-types": [
+            "unit",
+            "new feature",
+            "regression",
+            "code style and linting"
+          ],
+          "provider": "GitHub",
+          "phase": "build",
+          "config": {
+            "file": ".github/workflows/on-merge-to-main.yml",
+            "path": "jobs.validate_application",
+            "name": "Verify & Publish"
+          }
+        },
+        {
+          "check-types": ["code quality", "unit test coverage"],
+          "provider": "GitHub",
+          "phase": "pre-merge",
+          "config": {
+            "file": ".github/workflows/sonarcloud.yml",
+            "path": "jobs.sonarcloud",
+            "name": "SonarCloud"
+          }
+        },
+        {
+          "check-types": ["canary"],
+          "provider": "GitHub",
+          "phase": "staging",
+          "config": {
+            "file": ".github/workflows/on-merge-to-main.yml",
+            "path": "jobs.publish_artifacts",
+            "name": "Verify & Publish"
+          }
+        },
+        {
+          "check-types": ["canary"],
+          "provider": "GitHub",
+          "phase": "integration",
+          "config": {
+            "file": ".github/workflows/on-merge-to-main.yml",
+            "path": "jobs.publish_artifacts",
+            "name": "Verify & Publish"
+          }
+        },
+        {
+          "check-types": ["canary"],
+          "provider": "GitHub",
+          "phase": "production",
+          "config": {
+            "file": ".github/workflows/on-merge-to-main.yml",
+            "path": "jobs.publish_artifacts",
+            "name": "Verify & Publish"
+          }
+        }
+      ]
+    }
+  ]
+}
