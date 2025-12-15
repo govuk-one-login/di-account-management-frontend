@@ -32,3 +32,8 @@ variable "originCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN" {
   type        = string
   description = "CloudFront Origin Cloaking Header Managed Secret Notification SNS Topic KMS Key ARN"
 }
+
+variable "capabilities" {
+  type    = list(string)
+  default = ["CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
+}

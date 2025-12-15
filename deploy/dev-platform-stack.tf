@@ -30,9 +30,9 @@ resource "aws_cloudformation_stack" "cloudfront_stack" {
     OriginCloakingHeaderManagedSecretAlarmSNSTopicARN              = var.originCloakingHeaderManagedSecretAlarmSNSTopicARN
     OriginCloakingHeaderManagedSecretNotificationSNSTopicARN       = var.originCloakingHeaderManagedSecretNotificationSNSTopicARN
     OriginCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN = var.originCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN
-    OriginCloakingHeaderManagedSecretPreviousVersion               = "AWSPREVIOUS"
-    OriginCloakingHeaderManagedSecretRotationMonthWeekDaySchedule  = "THU#3"
-    OriginCloakingHeaderManagedSecretVersion                       = "AWSCURRENT"
+    OriginCloakingHeaderManagedSecretPreviousVersion               = "AWSPREVIOUS" #pragma: allowlist secret
+    OriginCloakingHeaderManagedSecretRotationMonthWeekDaySchedule  = "THU#3" #pragma: allowlist secret
+    OriginCloakingHeaderManagedSecretVersion                       = "AWSCURRENT" #pragma: allowlist secret
     PreviousOriginCloakingHeader                                   = "none"
     StandardLoggingEnabled                                         = "true"
     CloudFrontCertArn                                              = aws_cloudformation_stack.certificate_stack.outputs["CertificateARN"]
@@ -46,4 +46,25 @@ resource "aws_cloudformation_stack" "cloudfront_stack" {
   capabilities = ["CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
 
   depends_on = [aws_cloudformation_stack.certificate_stack]
+}
+
+resource "aws_cloudformation_stack" "vpc_stack" {
+  # See https://govukverify.atlassian.net/wiki/spaces/PLAT/pages/3531735041/VPC
+  name         = "vpc"
+  template_url = "https://template-storage-templatebucket-1upzyw6v9cs42.s3.amazonaws.com/vpc/template.yaml"
+
+  parameters = {
+    CloudWatchApiEnabled     = "Yes"
+    DynatraceApiEnabled      = "Yes"
+    KMSApiEnabled            = "Yes"
+    SSMApiEnabled            = "Yes"
+    DynamoDBApiEnabled       = "Yes"
+    AppConfigDataApiEnabled  = "Yes"
+    S3ApiEnabled             = "Yes"
+    AllowRules               = "pass tls $HOME_NET any -> $EXTERNAL_NET 443 (tls.sni; content:\"account.gov.uk\"; endswith; msg:\"Pass TLS to *.account.gov.uk\"; flow:established; sid:2001; rev:1;)"
+    AllowedDomains           = "*.account.gov.uk"
+    ExecuteApiGatewayEnabled = "Yes"
+  }
+
+  capabilities = var.capabilities
 }
