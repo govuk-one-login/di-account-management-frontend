@@ -50,20 +50,38 @@ resource "aws_cloudformation_stack" "cloudfront_stack" {
 
 resource "aws_cloudformation_stack" "vpc_stack" {
   # See https://govukverify.atlassian.net/wiki/spaces/PLAT/pages/3531735041/VPC
-  name         = "vpc"
+  name         = "vpc_enhanced"
   template_url = "https://template-storage-templatebucket-1upzyw6v9cs42.s3.amazonaws.com/vpc/template.yaml"
 
   parameters = {
-    CloudWatchApiEnabled     = "Yes"
-    DynatraceApiEnabled      = "Yes"
-    KMSApiEnabled            = "Yes"
-    SSMApiEnabled            = "Yes"
-    DynamoDBApiEnabled       = "Yes"
-    AppConfigDataApiEnabled  = "Yes"
-    S3ApiEnabled             = "Yes"
-    AllowRules               = "pass tls $HOME_NET any -> $EXTERNAL_NET 443 (tls.sni; content:\"account.gov.uk\"; endswith; msg:\"Pass TLS to *.account.gov.uk\"; flow:established; sid:2001; rev:1;)"
-    AllowedDomains           = "*.account.gov.uk"
-    ExecuteApiGatewayEnabled = "Yes"
+    AllowedDomains                = "*.account.gov.uk,*.service.gov.uk,*.settings.gov.uk,*.govuk.digital,*.zendesk.com,*.notifications.service.gov.uk,*.cloudfront.net"
+    AllowRules                    = "pass tls $HOME_NET any -> $EXTERNAL_NET 443 (tls.sni; content:\"gov.uk\"; endswith; msg:\"Pass TLS to *.gov.uk\"; flow:established; sid:2001; rev:1;) pass tls $HOME_NET any -> $EXTERNAL_NET 443 (tls.sni; content:\"api.notifications.service.gov.uk\"; endswith; msg:\"Pass TLS to *.notifications.service.gov.uk\"; flow:established; sid:2003; rev:1;) pass tls $HOME_NET any -> $EXTERNAL_NET 443 (tls.sni; content:\"govuk1620731396.zendesk.com\"; endswith; msg:\"Pass TLS to *.zendesk.com\"; flow:established; sid:2002; rev:1;)"
+    AvailabilityZoneCount         = "2"
+    CidrBlock                     = "10.0.0.0/16"
+    CloudFormationEndpointEnabled = "Yes"
+    CodeBuildApiEnabled           = "Yes"
+    DynamoDBApiEnabled            = "Yes"
+    DynatraceApiEnabled           = "Yes"
+    ECRApiEnabled                 = "Yes"
+    ExecuteApiGatewayEnabled      = "Yes"
+    KMSApiEnabled                 = "Yes"
+    LambdaApiEnabled              = "Yes"
+    LogsApiEnabled                = "Yes"
+    NibCrossZoneEnabled           = "Yes"
+    S3ApiEnabled                  = "Yes"
+    SecretsManagerApiEnabled      = "Yes" #pragma: allowlist secret
+    SNSApiEnabled                 = "Yes"
+    SQSApiEnabled                 = "Yes"
+    SSMApiEnabled                 = "Yes"
+    SSMParametersStoreEnabled     = "Yes"
+    StatesApiEnabled              = "Yes"
+    VPCLinkEnabled                = "Yes"
+    VPCPeeringConnectionId        = "none"
+    VPCPeeringRequesterCIDR       = "none"
+    XRayApiEnabled                = "Yes"
+    ZoneAEIPAllocationId          = "none"
+    ZoneBEIPAllocationId          = "none"
+    ZoneCEIPAllocationId          = "none"
   }
 
   capabilities = var.capabilities
