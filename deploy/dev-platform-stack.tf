@@ -67,7 +67,6 @@ resource "aws_cloudformation_stack" "vpc_stack" {
     KMSApiEnabled                 = "Yes"
     LambdaApiEnabled              = "Yes"
     LogsApiEnabled                = "Yes"
-    NibCrossZoneEnabled           = "Yes"
     S3ApiEnabled                  = "Yes"
     SecretsManagerApiEnabled      = "Yes" #pragma: allowlist secret
     SNSApiEnabled                 = "Yes"
@@ -75,9 +74,7 @@ resource "aws_cloudformation_stack" "vpc_stack" {
     SSMApiEnabled                 = "Yes"
     SSMParametersStoreEnabled     = "Yes"
     StatesApiEnabled              = "Yes"
-    VPCLinkEnabled                = "Yes"
-    VPCPeeringConnectionId        = "none"
-    VPCPeeringRequesterCIDR       = "none"
+    VpcLinkEnabled                = "Yes"
     XRayApiEnabled                = "Yes"
     ZoneAEIPAllocationId          = "none"
     ZoneBEIPAllocationId          = "none"

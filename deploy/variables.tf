@@ -37,3 +37,8 @@ variable "capabilities" {
   type    = list(string)
   default = ["CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
 }
+
+variable "vpcLinkId" {
+  type        = string
+  description = "API Gateway VPC Link ID"
+}
