@@ -6,3 +6,4 @@ originCloakingHeaderManagedSecretAlarmSNSTopicARN = "arn:aws:sns:eu-west-2:30157
 originCloakingHeaderManagedSecretNotificationSNSTopicARN = "arn:aws:sns:eu-west-2:301577035144:platform-alerting-BuildNotificationTopic" #pragma: allowlist secret
 originCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN = "arn:aws:kms:eu-west-2:301577035144:key/a54953e5-469c-4cd8-ad75-20a6f186718a" #pragma: allowlist secret
 vpcLinkId = "nsh4pl"
+environment = "build"
