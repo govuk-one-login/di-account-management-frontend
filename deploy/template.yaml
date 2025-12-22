@@ -245,7 +245,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
-      ENABLEJARAUTH: "0"
+      ENABLEJARAUTH: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -915,7 +915,11 @@ Resources:
                 ]
             - Name: "ENABLE_JAR_AUTH"
               Value:
-                !FindInMap [EnvironmentVariables, !Ref Environment, ENABLEJARAUTH]
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  ENABLEJARAUTH,
+                ]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
