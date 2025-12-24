@@ -4,8 +4,18 @@ import { sinon } from "../../utils/test-utils";
 import { requiresAuthMiddleware } from "../../../src/middleware/requires-auth-middleware";
 import { PATH_DATA } from "../../../src/app.constants";
 import { Request, Response, NextFunction } from "express";
+import { generators } from "openid-client";
+import { kmsService } from "../../../src/utils/kms";
+import type { SignCommandOutput } from "@aws-sdk/client-kms";
 
 describe("Requires auth middleware", () => {
+  beforeEach(() => {
+    process.env.ENABLE_JAR_AUTH = "0";
+  });
+
+  afterEach(() => {
+    delete process.env.ENABLE_JAR_AUTH;
+  });
   it("should redirect to signed out page if user logged out", async () => {
     const req: any = {
       session: {
@@ -113,13 +123,18 @@ describe("Requires auth middleware", () => {
     expect(res.mockCookies.lo).to.equal("false");
   });
 
-  it("should redirect to Log in page", async () => {
+  it("should redirect to Log in page with legacy parameters when ENABLE_JAR_AUTH is false", async () => {
+    process.env.ENABLE_JAR_AUTH = "0";
     const sandbox: sinon.SinonSandbox = sinon.createSandbox();
+    sandbox.stub(generators, "nonce").returns("generated");
+    
     const req: Partial<Request> = {
       body: {},
-      query: {},
-      session: { user: { isAuthenticated: undefined } as any } as any,
+      session: { 
+        user: { isAuthenticated: undefined } as any,
+      } as any,
       url: "/test_url",
+      query: { cookie_consent: "test" },
       oidc: {
         authorizationUrl: sandbox.spy(),
         metadata: {
@@ -138,8 +153,62 @@ describe("Requires auth middleware", () => {
 
     const nextFunction: NextFunction = sandbox.fake(() => {});
     await requiresAuthMiddleware(req as Request, res as Response, nextFunction);
+
     expect(res.redirect).to.have.called;
-    expect(req.oidc.authorizationUrl).to.have.been.calledOnce;
+    expect(req.oidc.authorizationUrl).to.have.been.calledOnceWith({
+      client_id: 'test-client',
+      response_type: 'code',
+      scope: 'openid',
+      state: 'generated',
+      nonce: 'generated',
+      redirect_uri: 'url',
+      cookie_consent: "test",
+      vtr: '["Cl.Cm"]',
+      _ga: undefined
+    })
+    sandbox.restore();
+  });
+
+  it("should redirect to Log in page with new parameters when ENABLE_JAR_AUTH is true", async () => {
+    process.env.ENABLE_JAR_AUTH = "1";
+    const sandbox: sinon.SinonSandbox = sinon.createSandbox();
+    sandbox.stub(generators, "nonce").returns("generated");
+    sandbox.stub(kmsService, "sign").resolves({ Signature: [1, 2, 3] as unknown as Uint8Array, KeyId: "", SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512", $metadata: {} }) as unknown as SignCommandOutput;
+    const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+    const req: Partial<Request> = {
+      body: {},
+      session: { 
+        user: { isAuthenticated: undefined } as any,
+      } as any,
+      url: "/test_url",
+      query: { cookie_consent: "test" },
+      oidc: {
+        authorizationUrl: sandbox.spy(),
+        metadata: {
+          scopes: "openid",
+          redirect_uris: ["url"],
+          client_id: "test-client",
+        },
+      } as any, // Bypass type checking for this part,
+    };
+
+    const res: Partial<Response> = {
+      render: sandbox.fake(),
+      redirect: sandbox.fake(() => {}),
+      locals: {},
+    };
+
+    const nextFunction: NextFunction = sandbox.fake(() => {});
+    await requiresAuthMiddleware(req as Request, res as Response, nextFunction);
+
+    expect(res.redirect).to.have.called;
+    expect(kmsService.sign).to.have.called;
+    expect(req.oidc.authorizationUrl).to.have.been.calledOnceWith({
+      client_id: 'test-client',
+      response_type: 'code',
+      scope: 'openid',
+      request: sinon.match(jwtRegex),
+    })
     sandbox.restore();
   });
 });
