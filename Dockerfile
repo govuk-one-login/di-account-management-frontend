@@ -1,4 +1,4 @@
-FROM node:20.19.6-alpine@sha256:643e7036aa985317ebfee460005e322aa550c6b6883000d01daefb58689a58e2 as builder
+FROM node:20.19.6-alpine@sha256:77312b5413fe7ae6af2a44aba4ab67711d64d3dbc0abba98aa7cc64917cf8b35 as builder
 
 ENV HUSKY=0
 
@@ -12,7 +12,7 @@ COPY ./@types ./@types
 
 RUN npm ci && npm run build && npm run clean-modules && npm ci --production=true
 
-FROM node:20.19.6-alpine@sha256:643e7036aa985317ebfee460005e322aa550c6b6883000d01daefb58689a58e2 as final
+FROM node:20.19.6-alpine@sha256:77312b5413fe7ae6af2a44aba4ab67711d64d3dbc0abba98aa7cc64917cf8b35 as final
 
 RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
