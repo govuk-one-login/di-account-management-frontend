@@ -1182,7 +1182,7 @@ Resources:
           "responseLength":"$context.responseLength",
           "responseLatency":"$context.responseLatency",
           "integrationStatus":"$context.integrationStatus",
-          "integrationLatency":"$context.integrationLatency"
+          "integrationLatency":"$context.integrationLatency",
           "integrationErrorMessage":"$context.integrationErrorMessage",
           "errorMessage":"$context.error.message",
           "errorResponseType":"$context.error.responseType"
