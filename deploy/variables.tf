@@ -32,3 +32,22 @@ variable "originCloakingHeaderManagedSecretNotificationSNSTopicKMSKeyARN" {
   type        = string
   description = "CloudFront Origin Cloaking Header Managed Secret Notification SNS Topic KMS Key ARN"
 }
+
+variable "capabilities" {
+  type    = list(string)
+  default = ["CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
+}
+
+variable "environment" {
+  type        = string
+  description = "The environment name"
+  validation {
+    condition     = contains(["dev", "build", "staging", "integration", "production"], var.environment)
+    error_message = "Valid values for var: environment are (dev, build, staging, integration, production)"
+  }
+}
+
+variable "vpcLinkId" {
+  type        = string
+  description = "API Gateway VPC Link ID"
+}
