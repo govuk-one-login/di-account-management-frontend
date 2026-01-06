@@ -185,6 +185,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
+      IDTOKENSIGNATURECHECK: "1"
       ENABLEJARAUTH: "1"
     build:
       NODEENV: "production"
@@ -215,6 +216,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
+      IDTOKENSIGNATURECHECK: "0"
       ENABLEJARAUTH: "1"
     staging:
       NODEENV: "production"
@@ -245,6 +247,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
+      IDTOKENSIGNATURECHECK: "0"
       ENABLEJARAUTH: "0"
     integration:
       NODEENV: "production"
@@ -275,6 +278,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
+      IDTOKENSIGNATURECHECK: "0"
       ENABLEJARAUTH: "0"
     production:
       NODEENV: "production"
@@ -306,6 +310,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
+      IDTOKENSIGNATURECHECK: "0"
       ENABLEJARAUTH: "0"
 
 Resources:
@@ -913,9 +918,20 @@ Resources:
                   !Ref Environment,
                   SUPPORTGLOBALLOGOUT,
                 ]
+            - Name: "ID_TOKEN_SIGNATURE_CHECK"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  IDTOKENSIGNATURECHECK,
+                ]
             - Name: "ENABLE_JAR_AUTH"
               Value:
-                !FindInMap [EnvironmentVariables, !Ref Environment, ENABLEJARAUTH]
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  ENABLEJARAUTH,
+                ]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
