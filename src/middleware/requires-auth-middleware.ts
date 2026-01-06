@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { generators } from "openid-client";
 import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants";
 import { logger } from "../utils/logger";
+import { kmsService, signingAlgorithm } from "../utils/kms";
+import base64url from "base64url";
+import { getApiBaseUrl } from "../config";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -33,18 +36,55 @@ async function redirectToLogIn(req: Request, res: Response): Promise<void> {
   req.session.nonce = generators.nonce(15);
   req.session.state = generators.nonce(10);
   req.session.currentURL = req.url;
-  const authUrl = req.oidc.authorizationUrl({
+  const includeToken = process.env.ENABLE_JAR_AUTH === "1";
+  const authorizationUrl = await generateAuthUrl(includeToken, req);
+
+  return res.redirect(authorizationUrl);
+}
+
+async function generateAuthUrl(includeToken: boolean, req: Request): Promise<string> {
+  const baseParams = {
     client_id: req.oidc.metadata.client_id,
     response_type: "code",
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    scope: req.oidc.metadata.scopes,
-    state: req.session.state,
-    nonce: req.session.nonce,
-    redirect_uri: req.oidc.metadata.redirect_uris[0],
-    cookie_consent: req.query.cookie_consent,
-    vtr: JSON.stringify([VECTORS_OF_TRUST.MEDIUM]),
-    _ga: req.query._ga,
-  });
-  return res.redirect(authUrl);
+    scope: req.oidc.metadata.scopes as string,
+  };
+
+  if (includeToken) {
+    const headers = { alg: signingAlgorithm, typ: "JWT" };
+    const claims = {
+      aud: `${ getApiBaseUrl() }/authorize`,
+      iss: req.oidc.metadata.client_id,
+      ...baseParams,
+      redirect_uri: req.oidc.metadata.redirect_uris[0],
+      state: req.session.state,
+      nonce: req.session.nonce,
+      vtr: JSON.stringify([VECTORS_OF_TRUST.MEDIUM]),
+      cookie_consent: req.query.cookie_consent,
+      _ga: req.query._ga  
+    }
+    const encodedHeader = base64url.encode(JSON.stringify(headers));
+    const encodedPayload = base64url.encode(JSON.stringify(claims));
+    const unsignedToken = `${encodedHeader}.${encodedPayload}`
+    const sig = await kmsService.sign(unsignedToken)
+    const base64Signature = Buffer.from(sig.Signature)
+      .toString("base64")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=/g, "");
+
+    return req.oidc.authorizationUrl({
+      ...baseParams,
+      request: `${unsignedToken}.${base64Signature}`,
+    });
+  } else {
+    return req.oidc.authorizationUrl({
+      ...baseParams,
+      state: req.session.state,
+      nonce: req.session.nonce,
+      redirect_uri: req.oidc.metadata.redirect_uris[0],
+      cookie_consent: req.query.cookie_consent,
+      vtr: JSON.stringify([VECTORS_OF_TRUST.MEDIUM]),
+      _ga: req.query._ga,
+    });
+  }
 }
