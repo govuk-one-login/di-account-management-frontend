@@ -239,5 +239,5 @@ export function supportGlobalLogout(): boolean {
 }
 
 export function supportIdTokenSignatureCheck(): boolean {
-  return process.env.IDTOKEN_SIGNATURE_CHECK === "1";
+  return process.env.ID_TOKEN_SIGNATURE_CHECK === "1";
 }
