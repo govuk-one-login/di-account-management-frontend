@@ -74,6 +74,7 @@ jobs:
           echo "FINGERPRINT_COOKIE_DOMAIN=localhost" >> .env
           echo "SUPPORT_GLOBAL_LOGOUT=1" >> .env
           echo "ID_TOKEN_SIGNATURE_CHECK=1" >> .env
+          echo "ENABLE_JAR_AUTH=1" >> .env
           npm run build
 
       - name: Install integration-tests dependencies
