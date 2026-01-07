@@ -216,7 +216,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
-      IDTOKENSIGNATURECHECK: "0"
+      IDTOKENSIGNATURECHECK: "1"
       ENABLEJARAUTH: "1"
     staging:
       NODEENV: "production"
