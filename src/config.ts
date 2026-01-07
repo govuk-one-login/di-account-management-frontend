@@ -237,3 +237,7 @@ export function getDtRumUrl(): string {
 export function supportGlobalLogout(): boolean {
   return process.env.SUPPORT_GLOBAL_LOGOUT === "1";
 }
+
+export function supportIdTokenSignatureCheck(): boolean {
+  return process.env.IDTOKEN_SIGNATURE_CHECK === "1";
+}
