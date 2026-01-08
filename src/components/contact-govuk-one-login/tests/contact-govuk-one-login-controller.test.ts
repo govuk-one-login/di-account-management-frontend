@@ -7,7 +7,6 @@ import { logger } from "../../../utils/logger";
 import * as reference from "../../../utils/referenceCode";
 import { SinonStub, stub } from "sinon";
 import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
-import { I18NextRequest } from "i18next-http-middleware";
 import { AuditEvent } from "../../../services/types";
 import { MISSING_APP_SESSION_ID_SPECIAL_CASE } from "../../../app.constants";
 
@@ -17,7 +16,7 @@ const MOCK_NONCE = "abcdef";
 
 describe("Contact GOV.UK One Login controller", () => {
   let sandbox: sinon.SinonSandbox;
-  let req: Partial<Request> & Partial<I18NextRequest>;
+  let req: Partial<Request>;
   let res: Partial<Response>;
   let loggerSpy: sinon.SinonSpy;
   let sqsClientStub: SinonStub;
