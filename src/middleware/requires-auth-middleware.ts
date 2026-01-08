@@ -4,7 +4,7 @@ import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants";
 import { logger } from "../utils/logger";
 import { kmsService, signingAlgorithm } from "../utils/kms";
 import base64url from "base64url";
-import { getApiBaseUrl } from "../config";
+import { getApiBaseUrl, enableJarAuth } from "../config";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -20,6 +20,7 @@ export async function requiresAuthMiddleware(
   );
   // if there is no session, then should create a session and redirect to auth to sign in
   if (isAuthenticated === undefined) {
+    req.session.currentURL = req.url;
     await redirectToLogIn(req, res);
   } else if (!isAuthenticated && isLoggedOut == "true") {
     return res.redirect(PATH_DATA.USER_SIGNED_OUT.url);
@@ -32,12 +33,10 @@ export async function requiresAuthMiddleware(
   }
 }
 
-async function redirectToLogIn(req: Request, res: Response): Promise<void> {
+export async function redirectToLogIn(req: Request, res: Response): Promise<void> {
   req.session.nonce = generators.nonce(15);
   req.session.state = generators.nonce(10);
-  req.session.currentURL = req.url;
-  const includeToken = process.env.ENABLE_JAR_AUTH === "1";
-  const authorizationUrl = await generateAuthUrl(includeToken, req);
+  const authorizationUrl = await generateAuthUrl(enableJarAuth(), req);
 
   return res.redirect(authorizationUrl);
 }

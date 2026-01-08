@@ -248,7 +248,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       IDTOKENSIGNATURECHECK: "0"
-      ENABLEJARAUTH: "0"
+      ENABLEJARAUTH: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
