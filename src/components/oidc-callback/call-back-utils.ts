@@ -95,7 +95,13 @@ export async function handleOidcCallbackError(
   }
   req.metrics?.addMetric("oidcCallbackError", MetricUnit.Count, 1);
   await deleteExpressSession(req);
-  return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
+
+  if (queryParams.error == "temporarily_unavailable") {
+      return res.redirect(PATH_DATA.UNAVAILABLE_TEMPORARY.url);
+  } else {
+      return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
+  }
+
 }
 
 export function populateSessionWithUserInfo(

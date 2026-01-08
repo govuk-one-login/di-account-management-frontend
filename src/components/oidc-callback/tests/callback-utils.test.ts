@@ -163,6 +163,31 @@ describe("callback-utils", () => {
       expect(deleteExpressSessionStub.calledWith(req)).to.be.true;
       expect(res.redirect.calledWith(PATH_DATA.SESSION_EXPIRED.url)).to.be.true;
     });
+
+    it("clears session and redirects to UNAVAILABLE_TEMPORARY", async () => {
+        const deleteExpressSessionStub = sinon.stub(
+            sessionStore,
+            "deleteExpressSession"
+        );
+        const loggerWarnStub = sinon.stub(logger, "warn");
+
+        const req: any = { session: {}, oidc: {}, cookies: {} };
+        const res: any = {
+            locals: { trace: "trace-id" },
+            redirect: sinon.fake(),
+        };
+
+        const queryParams = {
+            error: "temporarily_unavailable",
+            error_description: "The authorization server is temporarily unavailable",
+        };
+
+        await handleOidcCallbackError(req, res, queryParams);
+
+        expect(loggerWarnStub.calledOnce).to.be.true;
+        expect(deleteExpressSessionStub.calledWith(req)).to.be.true;
+        expect(res.redirect.calledWith(PATH_DATA.UNAVAILABLE_TEMPORARY.url)).to.be.true;
+    });
   });
 
   describe("populateSessionWithUserInfo", () => {
