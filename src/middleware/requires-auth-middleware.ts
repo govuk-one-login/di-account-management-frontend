@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { generators } from "openid-client";
 import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants";
 import { logger } from "../utils/logger";
-import { kmsService, signingAlgorithm } from "../utils/kms";
+import { kmsService } from "../utils/kms";
 import base64url from "base64url";
 import { getApiBaseUrl, enableJarAuth } from "../config";
 
@@ -49,7 +49,7 @@ async function generateAuthUrl(includeToken: boolean, req: Request): Promise<str
   };
 
   if (includeToken) {
-    const headers = { alg: signingAlgorithm, typ: "JWT" };
+    const headers = { alg: "RS512", typ: "JWT" };
     const claims = {
       aud: `${ getApiBaseUrl() }/authorize`,
       iss: req.oidc.metadata.client_id,
