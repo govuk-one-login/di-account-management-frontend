@@ -4,7 +4,7 @@ import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants";
 import { logger } from "../utils/logger";
 import { kmsService } from "../utils/kms";
 import base64url from "base64url";
-import { getApiBaseUrl, enableJarAuth } from "../config";
+import { getOIDCApiDiscoveryUrl, enableJarAuth } from "../config";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -51,7 +51,7 @@ async function generateAuthUrl(includeToken: boolean, req: Request): Promise<str
   if (includeToken) {
     const headers = { alg: "RS512", typ: "JWT" };
     const claims = {
-      aud: `${ getApiBaseUrl() }/authorize`,
+      aud: `${ getOIDCApiDiscoveryUrl() }/authorize`,
       iss: req.oidc.metadata.client_id,
       ...baseParams,
       redirect_uri: req.oidc.metadata.redirect_uris[0],
