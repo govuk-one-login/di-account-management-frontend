@@ -34,7 +34,8 @@
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --watch src/assets/scss/application.scss dist/public/style.css",
     "prepare": "husky install || true",
-    "precommit": "pre-commit run"
+    "precommit": "pre-commit run",
+    "audit": "npm audit --audit-level=moderate"
   },
   "mocha": {
     "diff": true,

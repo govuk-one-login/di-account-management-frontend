@@ -18,6 +18,7 @@ import base64url from "base64url";
 import { invalidateCache } from "../../../src/utils/cache";
 import { UnsecuredJWT } from "jose";
 import { ERROR_MESSAGES } from "../../../src/app.constants";
+import * as config from "../../../src/config";
 
 function createAccessToken(expiry = 1600711538) {
   return new UnsecuredJWT({ exp: expiry })
@@ -52,6 +53,7 @@ describe("OIDC Functions", () => {
         response_types: ["code"],
         token_endpoint_auth_method: "none",
         id_token_signed_response_alg: "ES256",
+        userinfo_signed_response_alg: "ES256",
         scopes: mockConfig.scopes,
       };
 
@@ -63,6 +65,7 @@ describe("OIDC Functions", () => {
       };
 
       discoverStub = sandbox.stub(Issuer, "discover").resolves(mockIssuer);
+      sandbox.stub(config, "supportIdTokenSignatureCheck").returns(true);
     });
 
     afterEach(() => {
@@ -86,12 +89,13 @@ describe("OIDC Functions", () => {
         response_types: ["code"],
         token_endpoint_auth_method: "none",
         id_token_signed_response_alg: "ES256",
+        userinfo_signed_response_alg: "ES256",
         scopes: mockConfig.scopes,
       });
     });
 
     it("should throw an error if Issuer discovery fails", async () => {
-      const errorMessage = "Issuer discovery failed";
+      const errorMessage = "OIDCDiscoveryUnavailable";
       discoverStub.rejects(new Error(errorMessage));
       const errorConfig = mockConfig;
       errorConfig.idp_url = "https://example.error.oidc.com";

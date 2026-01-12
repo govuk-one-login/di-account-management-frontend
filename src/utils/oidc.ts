@@ -9,7 +9,7 @@ import { cacheWithExpiration } from "./cache";
 import { Request } from "express";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { retryableFunction } from "./retryableFunction";
-import { ERROR_MESSAGES } from "../app.constants";
+import { ERROR_MESSAGES, OIDC_ERRORS } from "../app.constants";
 import { supportIdTokenSignatureCheck } from "../config";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
@@ -29,7 +29,12 @@ async function getCachedIssuer(discoveryUri: string): Promise<Issuer<Client>> {
 }
 
 async function getOIDCClient(config: OIDCConfig): Promise<Client> {
-  const issuer = await getCachedIssuer(config.idp_url);
+  let issuer;
+  try {
+    issuer = await getCachedIssuer(config.idp_url);
+  } catch {
+    throw new Error(OIDC_ERRORS.OIDC_DISCOVERY_UNAVAILABLE);
+  }
 
   const extraConfig = supportIdTokenSignatureCheck()
     ? { userinfo_signed_response_alg: "ES256" }

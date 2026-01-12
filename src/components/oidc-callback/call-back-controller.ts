@@ -46,10 +46,16 @@ export function oidcAuthCallbackGet(
         return res.redirect(PATH_DATA.START.url);
       }
 
-      const userInfoResponse = await req.oidc.userinfo<UserinfoResponse>(
-        tokenSet.access_token,
-        { method: "GET", via: "header" }
-      );
+      let userInfoResponse: UserinfoResponse;
+      try {
+        userInfoResponse = await req.oidc.userinfo<UserinfoResponse>(
+          tokenSet.access_token,
+          { method: "GET", via: "header" }
+        );
+      } catch {
+        req.metrics?.addMetric("UserInfoError", MetricUnit.Count, 1);
+        throw new Error("Failed to retrieve user info");
+      }
 
       populateSessionWithUserInfo(req, userInfoResponse, tokenSet);
 
