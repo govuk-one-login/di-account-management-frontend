@@ -311,7 +311,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
       IDTOKENSIGNATURECHECK: "0"
-      ENABLEJARAUTH: "0"
+      ENABLEJARAUTH: "1"
 
 Resources:
   #
