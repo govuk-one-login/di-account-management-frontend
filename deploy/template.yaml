@@ -230,7 +230,7 @@ Mappings:
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
-      LOGSLEVEL: "info"
+      LOGSLEVEL: "debug"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
