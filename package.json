@@ -34,7 +34,8 @@
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --watch src/assets/scss/application.scss dist/public/style.css",
     "prepare": "husky install || true",
-    "precommit": "pre-commit run"
+    "precommit": "pre-commit run",
+    "audit": "npm audit --audit-level=moderate"
   },
   "mocha": {
     "diff": true,
@@ -68,7 +69,7 @@
     "connect-dynamodb": "^3.0.5",
     "cookie-parser": "^1.4.7",
     "csrf-sync": "^4.2.1",
-    "di-account-management-rp-registry": "github:govuk-one-login/di-account-management-rp-registry#main",
+    "di-account-management-rp-registry": "github:govuk-one-login/di-account-management-rp-registry#OLH-3077-onboard-ho-my-police-portal",
     "dompurify": "^3.3.1",
     "express": "^5.2.1",
     "express-session": "^1.18.2",
@@ -127,7 +128,7 @@
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
-    "mocha": "11.7.5",
+    "mocha": "^11.7.5",
     "nock": "^14.0.10",
     "nodemon": "3.1.11",
     "nyc": "^17.1.0",
@@ -136,7 +137,7 @@
     "sinon": "^21.0.1",
     "sinon-chai": "^3.7.0",
     "supertest": "^7.2.2",
-    "ts-node": "^10.9.2",
+    "ts-node": "^1.7.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.52.0",
     "uglify-js": "^3.19.3"

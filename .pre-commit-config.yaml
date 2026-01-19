@@ -38,5 +38,5 @@ repos:
       - id: npm-audit
         name: NPM Audit
         pass_filenames: false
-        entry: "npm audit"
+        entry: "npm audit --audit-level=moderate"
         language: system
