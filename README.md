@@ -219,3 +219,5 @@ NODE_ENV=production clinic doctor -- node -r dotenv/config dist/server.js && ech
 # Wait for the performance test suite to complete.
 # Stop the server.
 ```
+
+_update to force new image tag_
