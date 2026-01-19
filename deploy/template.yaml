@@ -2359,6 +2359,60 @@ Resources:
       AlarmActions:
         - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
 
+  OidcDiscoveryUnavailableAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-OidcDiscoveryUnavailableAlarm"
+      AlarmDescription: "Alarm when OIDC discovery is unavailable more than once in a minute"
+      Namespace: !Sub "${AWS::StackName}/Account Home"
+      MetricName: OIDCDiscoveryUnavailable
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+
+  UserInfoErrorLowAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-UserInfoErrorLowAlarm"
+      AlarmDescription: "Alarm when UserInfoError occurs once in a minute"
+      Namespace: !Sub "${AWS::StackName}/Account Home"
+      MetricName: UserInfoError
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/LowAlertNotificationTopic/ARN}}"
+
+  UserInfoErrorHighAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-UserInfoErrorHighAlarm"
+      AlarmDescription: "Alarm when UserInfoError occurs once per minute for 5 consecutive minutes"
+      Namespace: !Sub "${AWS::StackName}/Account Home"
+      MetricName: UserInfoError
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 5
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Sub "{{resolve:ssm:/${AlertingStackName}/SNS/HighAlertNotificationTopic/ARN}}"
+
   #
   # Canary Deployment
   #

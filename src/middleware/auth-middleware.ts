@@ -1,10 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { ExpressRouteFunc } from "../types";
-import { Client } from "openid-client";
+import { ExpressRouteFunc, OIDCConfig } from "../types";
+import { getOIDCClient } from "../utils/oidc";
+import { OIDC_ERRORS } from "../app.constants";
+import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
-export function authMiddleware(oidcClient: Client): ExpressRouteFunc {
-  return (req: Request, res: Response, next: NextFunction) => {
-    req.oidc = oidcClient;
-    next();
+export function authMiddleware(config: OIDCConfig): ExpressRouteFunc {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      req.oidc = await getOIDCClient(config);
+      next();
+    } catch (error) {
+      if (error.message === OIDC_ERRORS.OIDC_DISCOVERY_UNAVAILABLE) {
+        req.metrics?.addMetric("OIDCDiscoveryUnavailable", MetricUnit.Count, 1);
+      }
+    }
   };
 }
