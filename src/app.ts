@@ -75,7 +75,6 @@ import { changeDefaultMethodRouter } from "./components/change-default-method/ch
 import { logoutRedirectRouter } from "./components/logout-redirect/logout-redirect-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
-import { getOIDCClient } from "./utils/oidc";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
 import { searchServicesRouter } from "./components/search-services/search-services-routes";
@@ -240,8 +239,7 @@ async function createApp(): Promise<express.Application> {
 
   app.use(languageToggleMiddleware);
 
-  const oidcClient = await getOIDCClient(getOIDCConfig());
-  app.use(authMiddleware(oidcClient));
+  app.use(authMiddleware(getOIDCConfig()));
 
   app.use(backchannelLogoutRouter);
   // Must be added to the app after the session is set up and before the routers

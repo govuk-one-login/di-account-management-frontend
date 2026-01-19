@@ -1,39 +1,71 @@
 import { expect } from "chai";
 import sinon from "sinon";
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { Client } from "openid-client";
 import { authMiddleware } from "../../../src/middleware/auth-middleware";
+import * as oidcUtils from "../../../src/utils/oidc";
 
 describe("authMiddleware", () => {
+  let middleware: ReturnType<typeof authMiddleware>;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let next: NextFunction;
+  let next: sinon.SinonSpy;
   let oidcClient: Client;
+  let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
+    oidcClient = {} as Client;
+    sandbox = sinon.createSandbox();
+    sandbox.replace(oidcUtils, "getOIDCClient", async () => oidcClient);
     req = {};
     res = {};
     next = sinon.spy();
-    oidcClient = {} as Client;
+    middleware = authMiddleware({
+      client_id: "test-client-id",
+      callback_url: "http://localhost/callback",
+      idp_url: "http://localhost/.well-known/openid-configuration",
+      scopes: ["openid", "profile", "email"],
+    });
   });
 
-  it("should attach oidcClient to req.oidc and call next()", async () => {
-    const middleware = authMiddleware(oidcClient);
+  afterEach(() => {
+    sandbox.restore();
+  });
 
+  it("registers the oidc client on the request object", async () => {
     await middleware(req as Request, res as Response, next);
 
     expect(req.oidc).to.equal(oidcClient);
-
-    expect(next).to.have.been.calledOnce;
+    expect(next).to.have.been.calledOnceWithExactly();
   });
 
-  it("should not modify the response object", async () => {
-    const middleware = authMiddleware(oidcClient);
+  it("does not mutate the response object", async () => {
+    const snapshot = { ...res };
 
     await middleware(req as Request, res as Response, next);
 
-    expect(res).to.be.empty;
+    expect(res).to.deep.equal(snapshot);
+    expect(next).to.have.been.calledOnceWithExactly();
+  });
 
-    expect(next).to.have.been.calledOnce;
+  it("thows an OIDC discovery unavailable error metric", async () => {
+    const errorMessage = "OIDCDiscoveryUnavailable";
+    sandbox.restore();
+    sandbox.replace(oidcUtils, "getOIDCClient", async () => {
+      throw new Error(errorMessage);
+    });
+    req.metrics = {
+      addMetric: sinon.spy(),
+    } as any;
+
+    await middleware(req as Request, res as Response, next);
+
+    expect(
+      (req.metrics!.addMetric as sinon.SinonSpy).calledOnceWithExactly(
+        "OIDCDiscoveryUnavailable",
+        sinon.match.string,
+        1
+      )
+    ).to.be.true;
   });
 });

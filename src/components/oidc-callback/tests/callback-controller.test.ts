@@ -259,5 +259,21 @@ describe("callback controller", () => {
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
       expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
+
+    it("should throw an error if the userinfo call fails", async () => {
+      req.oidc.userinfo = sandbox.fake.throws(new Error("Some userinfo error"));
+
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+      };
+
+      try {
+        await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+      } catch (error) {
+        expect((error as Error).message).to.equal(
+          "Failed to retrieve user info"
+        );
+      }
+    });
   });
 });

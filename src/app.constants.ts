@@ -349,6 +349,7 @@ export type ParamName = keyof QueryParameters;
 
 export const OIDC_ERRORS = {
   ACCESS_DENIED: "access_denied",
+  OIDC_DISCOVERY_UNAVAILABLE: "OIDCDiscoveryUnavailable",
 };
 
 export const SESSION_ID_UNKNOWN = "session-id-unknown";
