@@ -52,8 +52,7 @@ describe("OIDC Functions", () => {
         redirect_uris: [mockConfig.callback_url],
         response_types: ["code"],
         token_endpoint_auth_method: "none",
-        id_token_signed_response_alg: "ES256",
-        userinfo_signed_response_alg: "ES256",
+        id_token_signed_response_alg: "RS256",
         scopes: mockConfig.scopes,
       };
 
@@ -88,8 +87,7 @@ describe("OIDC Functions", () => {
         redirect_uris: [mockConfig.callback_url],
         response_types: ["code"],
         token_endpoint_auth_method: "none",
-        id_token_signed_response_alg: "ES256",
-        userinfo_signed_response_alg: "ES256",
+        id_token_signed_response_alg: "RS256",
         scopes: mockConfig.scopes,
       });
     });

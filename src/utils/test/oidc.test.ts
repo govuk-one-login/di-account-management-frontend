@@ -47,9 +47,8 @@ describe("getOIDCClient", () => {
       redirect_uris: ["https://example.com/callback"],
       response_types: ["code"],
       token_endpoint_auth_method: "none",
-      id_token_signed_response_alg: "ES256",
+      id_token_signed_response_alg: "RS256",
       scopes: ["openid", "profile", "email"],
-      userinfo_signed_response_alg: "ES256",
     });
   });
 
