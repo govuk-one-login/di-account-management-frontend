@@ -112,8 +112,8 @@
     "@types/sinon": "^21.0.0",
     "@types/sinon-chai": "^3.2.12",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.52.0",
-    "@typescript-eslint/parser": "^8.52.0",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
     "chai": "^4.5.0",
     "chai-as-promised": "^7.1.2",
     "cheerio": "^1.1.2",
@@ -139,7 +139,7 @@
     "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.52.0",
+    "typescript-eslint": "^8.53.0",
     "uglify-js": "^3.19.3"
   },
   "resolutions": {
