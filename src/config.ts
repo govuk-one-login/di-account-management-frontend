@@ -237,7 +237,3 @@ export function getDtRumUrl(): string {
 export function supportGlobalLogout(): boolean {
   return process.env.SUPPORT_GLOBAL_LOGOUT === "1";
 }
-
-export function enableJarAuth(): boolean {
-  return process.env.ENABLE_JAR_AUTH === "1";
-}
