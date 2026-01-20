@@ -230,7 +230,7 @@ Mappings:
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
-      LOGSLEVEL: "info"
+      LOGSLEVEL: "debug"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
       SUPPORTPHONECONTACT: "1"
@@ -247,7 +247,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
-      IDTOKENSIGNATURECHECK: "0"
+      IDTOKENSIGNATURECHECK: "1"
       ENABLEJARAUTH: "1"
     integration:
       NODEENV: "production"
