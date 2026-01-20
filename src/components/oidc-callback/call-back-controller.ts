@@ -14,7 +14,6 @@ import {
   populateSessionWithUserInfo,
   setPreferencesCookie,
 } from "./call-back-utils";
-import { logger } from "../../utils/logger";
 
 export function oidcAuthCallbackGet(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()
@@ -53,11 +52,7 @@ export function oidcAuthCallbackGet(
           tokenSet.access_token,
           { method: "GET", via: "header" }
         );
-      } catch (e) {
-        const error = e as Error;
-        logger.error(
-          `error getting user info + ${error.message} ${error.name}`
-        );
+      } catch {
         req.metrics?.addMetric("UserInfoError", MetricUnit.Count, 1);
         throw new Error("Failed to retrieve user info");
       }

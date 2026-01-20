@@ -23,7 +23,6 @@ async function getCachedIssuer(discoveryUri: string): Promise<Issuer<Client>> {
   const cacheKey = `oidc:issuer:${discoveryUri.toLowerCase()}`;
   return await cacheWithExpiration(
     cacheKey,
-
     () => Issuer.discover(discoveryUri),
     issuerCacheDuration
   );
