@@ -37,7 +37,7 @@ export const setOplSettings = (
   const mergedSettings: OplSettings = {
     loggedInStatus: settings?.loggedInStatus ?? true,
     dynamic: settings?.dynamic ?? true,
-    isPageDataSensitive: settings?.isPageDataSensitive ?? true,
+    isPageDataSensitive: settings?.isPageDataSensitive ?? false,
     taxonomyLevel1: settings?.taxonomyLevel1 ?? "accounts",
     taxonomyLevel2: settings?.taxonomyLevel2 ?? "home",
     taxonomyLevel3: settings?.taxonomyLevel3 ?? EMPTY_OPL_SETTING_VALUE,
