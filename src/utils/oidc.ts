@@ -10,7 +10,6 @@ import { Request } from "express";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { retryableFunction } from "./retryableFunction";
 import { ERROR_MESSAGES, OIDC_ERRORS } from "../app.constants";
-import { supportIdTokenSignatureCheck } from "../config";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
 const jwksRefreshInterval = 24 * 60 * 60 * 1000;
@@ -36,10 +35,6 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
     throw new Error(OIDC_ERRORS.OIDC_DISCOVERY_UNAVAILABLE);
   }
 
-  const extraConfig = supportIdTokenSignatureCheck()
-    ? { userinfo_signed_response_alg: "ES256" }
-    : {};
-
   return new issuer.Client({
     client_id: config.client_id,
     redirect_uris: [config.callback_url],
@@ -47,7 +42,6 @@ async function getOIDCClient(config: OIDCConfig): Promise<Client> {
     token_endpoint_auth_method: "none", //allows for a custom client_assertion
     id_token_signed_response_alg: "ES256",
     scopes: config.scopes,
-    ...extraConfig,
   });
 }
 

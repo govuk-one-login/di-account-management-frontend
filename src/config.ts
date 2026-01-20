@@ -238,10 +238,6 @@ export function supportGlobalLogout(): boolean {
   return process.env.SUPPORT_GLOBAL_LOGOUT === "1";
 }
 
-export function supportIdTokenSignatureCheck(): boolean {
-  return process.env.ID_TOKEN_SIGNATURE_CHECK === "1";
-}
-
 export function enableJarAuth(): boolean {
   return process.env.ENABLE_JAR_AUTH === "1";
 }

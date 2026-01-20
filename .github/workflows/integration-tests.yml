@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Build app
-        run: |
+        run: | # pragma: allowlist secret
           touch .env
           echo "AUTH_FRONTEND_URL=https://signin.build.account.gov.uk" >> .env
           echo "API_BASE_URL=https://oidc-stub.home.build.account.gov.uk" >> .env
@@ -73,7 +73,6 @@ jobs:
           echo "MISSION_LAB_WEBSOCKET_ADDR=wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com" >> .env
           echo "FINGERPRINT_COOKIE_DOMAIN=localhost" >> .env
           echo "SUPPORT_GLOBAL_LOGOUT=1" >> .env
-          echo "ID_TOKEN_SIGNATURE_CHECK=1" >> .env
           echo "ENABLE_JAR_AUTH=1" >> .env
           npm run build
 
