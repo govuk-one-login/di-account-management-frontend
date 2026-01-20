@@ -60,6 +60,7 @@ export async function generateTokenSet(
       },
     }
   );
+  logger.info(tokenSet);
   return tokenSet;
 }
 
@@ -97,11 +98,10 @@ export async function handleOidcCallbackError(
   await deleteExpressSession(req);
 
   if (queryParams.error == "temporarily_unavailable") {
-      return res.redirect(PATH_DATA.UNAVAILABLE_TEMPORARY.url);
+    return res.redirect(PATH_DATA.UNAVAILABLE_TEMPORARY.url);
   } else {
-      return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
+    return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
   }
-
 }
 
 export function populateSessionWithUserInfo(
