@@ -384,6 +384,7 @@ describe("searchServicesGet", () => {
 
     mockRes = {
       render: sandbox.stub(),
+      locals: {},
     };
 
     getAppEnvStub.returns("dev");
