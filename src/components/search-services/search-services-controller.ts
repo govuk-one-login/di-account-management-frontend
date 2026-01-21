@@ -6,6 +6,7 @@ import { Worker, Index } from "flexsearch";
 import { getTranslations } from "di-account-management-rp-registry";
 import i18next, { TFunction } from "i18next";
 import { safeTranslate } from "../../utils/safeTranslate";
+import { setOplSettings } from "../../utils/opl";
 
 const TEMPLATE_NAME = "search-services/index.njk";
 
@@ -139,6 +140,13 @@ export async function searchServicesGet(
   url.searchParams.set("lng", LOCALE.EN);
   url.searchParams.delete("q");
   const englishLanguageLink = url.pathname + url.search;
+
+  setOplSettings(
+    {
+      contentId: "5d679aab-737f-4e74-a5b1-c9389e884d10",
+    },
+    res
+  );
 
   res.render(TEMPLATE_NAME, {
     env: getAppEnv(),
