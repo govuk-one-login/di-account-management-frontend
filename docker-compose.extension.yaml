@@ -1,0 +1,12 @@
+services:
+  account-management-frontend:
+    volumes:
+      - ./:/app
+      - ./tmp/keys:/tmp/keys
+      - ../di-account-management-rp-registry:/di-account-management-rp-registry
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "npm ci && npm run link-registry && npm run copy-assets && npm run dev",
+      ]

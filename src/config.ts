@@ -162,15 +162,18 @@ export const getListOfShowInDeleteAccountClientIDs = getIdListFromFilter({
   showInDeleteAccount: true,
 });
 
-export const getClientsToShowInSearch = (language: LOCALE) => {
-  if (language === LOCALE.CY) {
-    return getIdListFromFilter({
-      showInSearchableList: true,
-      isAvailableInWelsh: true,
-    });
-  }
-  return getIdListFromFilter({ showInSearchableList: true });
-};
+export const getClientsToShowInSearch = createTimedMemoize(
+  (language: LOCALE) => {
+    if (language === LOCALE.CY) {
+      return filterClients(getAppEnv(), {
+        showInSearchableList: true,
+        isAvailableInWelsh: true,
+      });
+    }
+    return filterClients(getAppEnv(), { showInSearchableList: true });
+  },
+  5 * 60 * 1000
+);
 
 function getProtocol(): string {
   return getAppEnv() !== "local" ? "https://" : "http://";

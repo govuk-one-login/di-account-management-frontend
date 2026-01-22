@@ -18,7 +18,8 @@ const translations = {
 export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
   const env = getAppEnv();
   return getClientsToShowInSearch(locale)
-    .map((clientId) => {
+    .flatMap((client) => {
+      const clientId = client.clientId;
       const startTextKey = `clientRegistry.${env}.${clientId}.startText`;
       const startText = translate(startTextKey);
       const startTextForSearch = startText === startTextKey ? "" : startText;
@@ -34,12 +35,27 @@ export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
       } else {
         additionalSearchTerms = "";
       }
-      return {
-        clientId,
-        startText: startTextForSearch,
-        startUrl: startUrlForSearch,
-        additionalSearchTerms: additionalSearchTerms,
-      };
+
+      const alternativeClients = (client.alternativeClients || [])
+        .filter((client) => client.en.startText && client.en.startUrl)
+        .map((altClient, idx) => {
+          return {
+            clientId: `${clientId}_alt_${idx}`,
+            startText: altClient[locale]["startText"],
+            startUrl: altClient[locale]["startUrl"],
+            additionalSearchTerms:
+              altClient[locale]["additionalSearchTerms"] || "",
+          };
+        });
+
+      return [
+        {
+          clientId,
+          startText: startTextForSearch,
+          startUrl: startUrlForSearch,
+          additionalSearchTerms: additionalSearchTerms,
+        },
+      ].concat(alternativeClients);
     })
     .sort((a, b) => {
       return a.startText.localeCompare(b.startText, locale);
@@ -75,7 +91,7 @@ export const createSearchIndex = async (
             : "";
         return index.add(
           service.clientId,
-          `${service.startText}${additionalSearchTerms}`
+          `${service.startText} ${additionalSearchTerms}`
         );
       })
     );
