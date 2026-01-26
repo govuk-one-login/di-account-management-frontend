@@ -96,7 +96,7 @@ export async function handleMfaMethodPage(
     );
   }
 
-  const isValid = verifyMfaCode(authAppSecret, code);
+  const isValid = await verifyMfaCode(authAppSecret, code);
 
   if (!isValid) {
     return renderMfaMethodPage(

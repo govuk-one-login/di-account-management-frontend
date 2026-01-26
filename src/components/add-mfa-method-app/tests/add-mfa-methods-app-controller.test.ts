@@ -165,7 +165,7 @@ describe("addMfaAppMethodPost", () => {
 
     const res = { redirect: sinon.fake(() => {}), locals: {} };
 
-    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "verifyMfaCode", async () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
@@ -195,7 +195,7 @@ describe("addMfaAppMethodPost", () => {
 
     const res = { redirect: sinon.fake(() => {}), locals: {} };
 
-    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "verifyMfaCode", async () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     mfaClientStub.create.resolves({
@@ -232,7 +232,7 @@ describe("addMfaAppMethodPost", () => {
     };
     const res = { render: sinon.fake(), locals: {} };
 
-    sinon.replace(mfaModule, "verifyMfaCode", () => false);
+    sinon.replace(mfaModule, "verifyMfaCode", async () => false);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
@@ -268,7 +268,7 @@ describe("addMfaAppMethodPost", () => {
     };
     const res = { render: sinon.fake(), locals: {} };
 
-    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "verifyMfaCode", async () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
@@ -305,7 +305,7 @@ describe("addMfaAppMethodPost", () => {
     };
     const res = { render: sinon.fake(), locals: {} };
 
-    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "verifyMfaCode", async () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
@@ -345,7 +345,7 @@ describe("addMfaAppMethodPost", () => {
     };
     const res = { render: sinon.fake(), locals: {} };
 
-    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "verifyMfaCode", async () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     await addMfaAppMethodPost(
@@ -383,7 +383,7 @@ describe("addMfaAppMethodPost", () => {
 
     const res = { redirect: sinon.fake(() => {}), locals: { trace: "trace" } };
 
-    sinon.replace(mfaModule, "verifyMfaCode", () => true);
+    sinon.replace(mfaModule, "verifyMfaCode", async () => true);
     sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
 
     mfaClientStub.create.resolves({

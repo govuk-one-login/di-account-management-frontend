@@ -104,7 +104,7 @@ describe("change default method controller", () => {
     });
 
     it("should redirect to confirmation page when successful", async () => {
-      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
       mfaClientStub.update.resolves({
         success: true,
         status: 200,
@@ -127,7 +127,7 @@ describe("change default method controller", () => {
       //@ts-expect-error in test
       req.body.code = null;
 
-      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
 
       await changeDefaultMethodAppPost(
         req as unknown as Request,
@@ -144,7 +144,7 @@ describe("change default method controller", () => {
     it("should return an error if the code is less than 6 chars", async () => {
       //@ts-expect-error in test
       req.body.code = "1234";
-      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
 
       await changeDefaultMethodAppPost(
         req as unknown as Request,
@@ -159,7 +159,7 @@ describe("change default method controller", () => {
     });
 
     it("should return an error if the code is entered wrong", async () => {
-      sandbox.replace(mfaModule, "verifyMfaCode", () => false);
+      sandbox.replace(mfaModule, "verifyMfaCode", async () => false);
 
       await changeDefaultMethodAppPost(
         req as unknown as Request,
@@ -174,7 +174,7 @@ describe("change default method controller", () => {
     });
 
     it("should throw an error when a user has no current default method", async () => {
-      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
       req = new RequestBuilder()
         .withBody({ code: "123456", authAppSecret: "A".repeat(20) })
         .withSessionUserState({ changeDefaultMethod: { value: "APP" } })
@@ -195,7 +195,7 @@ describe("change default method controller", () => {
     });
 
     it("should throw an error when the API call fails", async () => {
-      sandbox.replace(mfaModule, "verifyMfaCode", () => true);
+      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
       const response = {
         success: false,
         status: 400,
