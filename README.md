@@ -219,3 +219,13 @@ NODE_ENV=production clinic doctor -- node -r dotenv/config dist/server.js && ech
 # Wait for the performance test suite to complete.
 # Stop the server.
 ```
+
+### Using a local version of the RP registry
+
+If you are making changes to the [RP Registry](https://github.com/govuk-one-login/di-account-management-rp-registry), you can use a local version. Make sure your RP registry repo is in a sibling directory to this repo, and this command.
+
+```shell script
+docker compose -f docker-compose.yml -f docker-compose.extension.yaml up
+```
+
+When you make changes to the RP registry, run `npm run build`, and then touch any typescript file in this repo (to trigger a restart)

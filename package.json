@@ -35,7 +35,8 @@
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --watch src/assets/scss/application.scss dist/public/style.css",
     "prepare": "husky install || true",
     "precommit": "pre-commit run",
-    "audit": "npm audit --audit-level=moderate"
+    "audit": "npm audit --audit-level=moderate",
+    "link-registry": "rm -rf node_modules/di-account-management-rp-registry && ln -s ../../di-account-management-rp-registry node_modules/di-account-management-rp-registry"
   },
   "dependencies": {
     "@aws-crypto/client-node": "^4.2.1",
