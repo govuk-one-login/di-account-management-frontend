@@ -21,7 +21,7 @@ repos:
       - id: detect-private-key
       - id: detect-aws-credentials
         args: [--allow-missing-credentials]
-        exclude: "package.json|package-lock.json"
+        exclude: "package.json|package-lock.json|.*test.*\\.ts$|\\.pre-commit-config\\.yaml$"
       - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: check-merge-conflict

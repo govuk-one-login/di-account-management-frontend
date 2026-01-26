@@ -1,8 +1,15 @@
 import { getAppEnv, isProd } from "../../config";
-import { authenticator } from "otplib";
+import { TOTP } from "otplib";
+import { NobleCryptoPlugin } from "otplib";
+import { ScureBase32Plugin } from "otplib";
+
+const totp = new TOTP({
+  crypto: new NobleCryptoPlugin(),
+  base32: new ScureBase32Plugin(),
+});
 
 export function generateMfaSecret(): string {
-  return authenticator.generateSecret(20);
+  return totp.generateSecret();
 }
 
 export function generateQRCodeValue(
@@ -11,9 +18,13 @@ export function generateQRCodeValue(
   issuerName: string
 ): string {
   const issuer = isProd() ? issuerName : `${issuerName} - ${getAppEnv()}`;
-  return authenticator.keyuri(email, issuer, secret);
+  return totp.toURI({ secret, label: email, issuer });
 }
 
-export function verifyMfaCode(secret: string, code: string): boolean {
-  return authenticator.check(code, secret);
+export async function verifyMfaCode(
+  secret: string,
+  code: string
+): Promise<boolean> {
+  const result = await totp.verify(code, { secret });
+  return result.valid;
 }

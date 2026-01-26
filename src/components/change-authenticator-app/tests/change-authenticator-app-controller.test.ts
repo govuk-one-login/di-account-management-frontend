@@ -151,7 +151,7 @@ describe("change authenticator app controller", () => {
 
     it("should redirect to /authenticator-app-updated-confirmation page", async () => {
       mfaClientStub.update.resolves({ success: true, status: 200, data: [] });
-      sinon.replace(mfaModule, "verifyMfaCode", () => true);
+      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
 
       // Act
       await changeAuthenticatorAppPost(
@@ -171,7 +171,7 @@ describe("change authenticator app controller", () => {
       req.body.code = "";
       const tSpy = sinon.spy();
       req.t = tSpy;
-      sinon.replace(mfaModule, "verifyMfaCode", () => true);
+      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
 
       await changeAuthenticatorAppPost(
         req as Request,
@@ -195,7 +195,7 @@ describe("change authenticator app controller", () => {
     });
 
     it("should render an error if the code is invalid", async () => {
-      sinon.replace(mfaModule, "verifyMfaCode", () => false);
+      sinon.replace(mfaModule, "verifyMfaCode", async () => false);
 
       await changeAuthenticatorAppPost(
         req as Request,
@@ -219,7 +219,7 @@ describe("change authenticator app controller", () => {
 
     it("should render an error if the code contains letters ", async () => {
       req.body.code = "abc123";
-      sinon.replace(mfaModule, "verifyMfaCode", () => true);
+      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
 
       await changeAuthenticatorAppPost(
         req as Request,
@@ -242,7 +242,7 @@ describe("change authenticator app controller", () => {
     });
 
     it("should throw an error if there's no current auth app method ", async () => {
-      sinon.replace(mfaModule, "verifyMfaCode", () => true);
+      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
       req.session.mfaMethods = [
         {
           mfaIdentifier: "111111",
@@ -263,7 +263,7 @@ describe("change authenticator app controller", () => {
     });
 
     it("should throw an error if the API response fails ", async () => {
-      sinon.replace(mfaModule, "verifyMfaCode", () => true);
+      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
       const response = {
         success: false,
         status: 400,
