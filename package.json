@@ -80,7 +80,7 @@
     "qrcode": "^1.5.4",
     "uuid": "^13.0.0",
     "xss": "^1.0.15",
-    "xstate": "^5.25.1p"
+    "xstate": "^5.25.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
