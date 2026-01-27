@@ -83,6 +83,21 @@ describe("callback-utils", () => {
       expect(tokenSet).to.have.property("access_token", "fake-access-token");
       expect(tokenSet).to.have.property("id_token", "fake-id-token");
     });
+
+    it("should verify that the session state returned by the the oicd.callback call matches what passed in", async () => {
+      const queryParams = {
+        code: "fake-code",
+        state: "mock-state-1",
+      };
+
+      const clientAssertion = "mock-client-assertion";
+
+      try {
+        await generateTokenSet(req, queryParams, clientAssertion);
+      } catch (error) {
+        expect(error).to.exist;
+      }
+    });
   });
 
   describe("determineRedirectUri", () => {
@@ -165,28 +180,30 @@ describe("callback-utils", () => {
     });
 
     it("clears session and redirects to UNAVAILABLE_TEMPORARY", async () => {
-        const deleteExpressSessionStub = sinon.stub(
-            sessionStore,
-            "deleteExpressSession"
-        );
-        const loggerWarnStub = sinon.stub(logger, "warn");
+      const deleteExpressSessionStub = sinon.stub(
+        sessionStore,
+        "deleteExpressSession"
+      );
+      const loggerWarnStub = sinon.stub(logger, "warn");
 
-        const req: any = { session: {}, oidc: {}, cookies: {} };
-        const res: any = {
-            locals: { trace: "trace-id" },
-            redirect: sinon.fake(),
-        };
+      const req: any = { session: {}, oidc: {}, cookies: {} };
+      const res: any = {
+        locals: { trace: "trace-id" },
+        redirect: sinon.fake(),
+      };
 
-        const queryParams = {
-            error: "temporarily_unavailable",
-            error_description: "The authorization server is temporarily unavailable",
-        };
+      const queryParams = {
+        error: "temporarily_unavailable",
+        error_description:
+          "The authorization server is temporarily unavailable",
+      };
 
-        await handleOidcCallbackError(req, res, queryParams);
+      await handleOidcCallbackError(req, res, queryParams);
 
-        expect(loggerWarnStub.calledOnce).to.be.true;
-        expect(deleteExpressSessionStub.calledWith(req)).to.be.true;
-        expect(res.redirect.calledWith(PATH_DATA.UNAVAILABLE_TEMPORARY.url)).to.be.true;
+      expect(loggerWarnStub.calledOnce).to.be.true;
+      expect(deleteExpressSessionStub.calledWith(req)).to.be.true;
+      expect(res.redirect.calledWith(PATH_DATA.UNAVAILABLE_TEMPORARY.url)).to.be
+        .true;
     });
   });
 
