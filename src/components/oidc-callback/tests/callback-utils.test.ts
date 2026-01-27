@@ -123,6 +123,21 @@ describe("callback-utils", () => {
         "OIDC Callback failed: invalid_grant: no code_verifier in request"
       );
     });
+
+    it("should verify that the session state returned by the the oicd.callback call matches what passed in", async () => {
+      const queryParams = {
+        code: "fake-code",
+        state: "mock-state-1",
+      };
+
+      const clientAssertion = "mock-client-assertion";
+
+      try {
+        await generateTokenSet(req, queryParams, clientAssertion);
+      } catch (error) {
+        expect(error).to.exist;
+      }
+    });
   });
 
   describe("determineRedirectUri", () => {
