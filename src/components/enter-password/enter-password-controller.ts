@@ -184,7 +184,7 @@ export async function enterPasswordGet(
   setLocalOplSettings(req, res, requestType);
 
   if (!requestType) {
-    res.redirect(PATH_DATA.SETTINGS.url);
+    res.redirect(PATH_DATA.SECURITY.url);
     return;
   }
   req.session.user.state[requestType] = getInitialState();
@@ -203,7 +203,7 @@ export function enterPasswordPost(
     setLocalOplSettings(req, res, requestType);
 
     if (!requestType) {
-      return res.redirect(PATH_DATA.SETTINGS.url);
+      return res.redirect(PATH_DATA.SECURITY.url);
     }
 
     const { password } = req.body;
@@ -229,7 +229,9 @@ export function enterPasswordPost(
         req.session.user.state[requestType].value,
         EventType.Authenticated
       );
-      const redirectPath = getRenderOptions(req, requestType).fromSecurity ? `${REDIRECT_PATHS[requestType]}?from=security` : REDIRECT_PATHS[requestType];
+      const redirectPath = getRenderOptions(req, requestType).fromSecurity
+        ? `${REDIRECT_PATHS[requestType]}?from=security`
+        : REDIRECT_PATHS[requestType];
       res.redirect(redirectPath);
       return;
     }

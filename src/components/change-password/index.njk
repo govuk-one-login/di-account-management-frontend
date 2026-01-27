@@ -2,53 +2,43 @@
 {% from "common/show-password/macro.njk" import govukInputWithShowPassword %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-
 {% set pageTitleName = 'pages.changePassword.title' | translate %}
 
 {% block pageContent %}
-
-<h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.changePassword.header' | translate}}</h1>
-
-<form action="/change-password" method="post" novalidate>
-
-  <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-
-  {{ govukInputWithShowPassword({
-    label: 'pages.changePassword.password.label' | translate,
-    id: "password",
-    errors: errors,
-    hint: 'pages.changePassword.password.hint' | translate,
-    showSettings: {
-      showFullText: 'general.showPassword.showFullText' | translate,
-      hideFullText: 'general.showPassword.hideFullText' | translate,
-      announceShown: 'general.showPassword.announceShown' | translate,
-      announceHidden: 'general.showPassword.announceHidden' | translate 
-    }
-  })}}
-  {{ govukInputWithShowPassword({
-    label: 'pages.changePassword.confirmPassword.label' | translate,
-    id: "confirm-password",
-    errors: errors,
-    showSettings: {
-      showFullText: 'pages.changePassword.showRetypedPassword.showFullText' | translate,
-      hideFullText: 'pages.changePassword.showRetypedPassword.hideFullText' | translate,
-      announceShown: 'pages.changePassword.showRetypedPassword.announceShown' | translate,
-      announceHidden: 'pages.changePassword.showRetypedPassword.announceHidden' | translate
-    }
-  })}}
-
-{{ govukDetails({
-  summaryText: 'pages.changePassword.securePasswordDetails.summary' | translate,
-  text: 'pages.changePassword.securePasswordDetails.text' | translate
-}) }}
-
-{{ govukButton({
-    text: "general.continue.label" | translate,
-    preventDoubleClick: true
-}) }}
-
-</form>
-
-<a href='{{ "SECURITY" | getPath }}' class="govuk-link govuk-body" rel="noreferrer noopener">{{'pages.changePassword.backLink' | translate }}</a>
-
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ 'pages.changePassword.header' | translate }}</h1>
+  <form action="{{ 'CHANGE_PASSWORD' | getPath }}" method="post" novalidate>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {{ govukInputWithShowPassword({
+      label: 'pages.changePassword.password.label' | translate,
+      id: "password",
+      errors: errors,
+      hint: 'pages.changePassword.password.hint' | translate,
+      showSettings: {
+        showFullText: 'general.showPassword.showFullText' | translate,
+        hideFullText: 'general.showPassword.hideFullText' | translate,
+        announceShown: 'general.showPassword.announceShown' | translate,
+        announceHidden: 'general.showPassword.announceHidden' | translate
+      }
+    }) }}
+    {{ govukInputWithShowPassword({
+      label: 'pages.changePassword.confirmPassword.label' | translate,
+      id: "confirm-password",
+      errors: errors,
+      showSettings: {
+        showFullText: 'pages.changePassword.showRetypedPassword.showFullText' | translate,
+        hideFullText: 'pages.changePassword.showRetypedPassword.hideFullText' | translate,
+        announceShown: 'pages.changePassword.showRetypedPassword.announceShown' | translate,
+        announceHidden: 'pages.changePassword.showRetypedPassword.announceHidden' | translate
+      }
+    }) }}
+    {{ govukDetails({
+      summaryText: 'pages.changePassword.securePasswordDetails.summary' | translate,
+      text: 'pages.changePassword.securePasswordDetails.text' | translate
+    }) }}
+    {{ govukButton({
+        text: "general.continue.label" | translate,
+        preventDoubleClick: true
+    }) }}
+  </form>
+  <a href='{{ "SECURITY" | getPath }}' class="govuk-link govuk-body" rel="noreferrer noopener">{{ 'pages.changePassword.backLink' | translate }}</a>
 {% endblock %}

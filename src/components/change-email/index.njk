@@ -1,37 +1,27 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
 {% set pageTitleName = 'pages.changeEmail.title' | translate %}
-
 {% block pageContent %}
-
-<h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.changeEmail.header' | translate}}</h1>
-
-<form action="/change-email" method="post" novalidate>
-
-<input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-
-{{ govukInput({
-    label: {
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ 'pages.changeEmail.header' | translate }}</h1>
+  <form action="{{ 'CHANGE_EMAIL' | getPath }}" method="post" novalidate>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {{ govukInput({
+      label: {
         text: 'pages.changeEmail.email.label' | translate
-    },
-    name: "email",
-    value: email,
-    errorMessage: {
-        attributes: { "data-test-id": "email-error"},
-        text: errors['email'].text
-    } if (errors['email'])})
-}}
-
-{{ govukButton({
-    text: "general.continue.label" | translate,
-    preventDoubleClick: true
-}) }}
-
-<p class="govuk-body">
-    <a href='{{ "SECURITY" | getPath }}' class="govuk-link" rel="noreferrer noopener">{{'pages.changeEmail.dontWantTo.changeEmailLinkText' | translate }}</a>
-</p>
-
-</form>
+      },
+      name: "email",
+      value: email,
+      errorMessage: {
+      attributes: { "data-test-id": "email-error"},
+      text: errors['email'].text
+    } if (errors['email'])}) }}
+    {{ govukButton({
+      text: "general.continue.label" | translate,
+      preventDoubleClick: true
+    }) }}
+    <p class="govuk-body">
+      <a href='{{ "SECURITY" | getPath }}' class="govuk-link" rel="noreferrer noopener">{{ 'pages.changeEmail.dontWantTo.changeEmailLinkText' | translate }}</a>
+    </p>
+  </form>
 {% endblock %}

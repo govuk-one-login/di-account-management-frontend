@@ -109,12 +109,12 @@ describe("Integration::enter password", () => {
     app = undefined;
   });
 
-  it("should redirect to settings when type not present (GET)", async () => {
+  it("should redirect to security when type not present (GET)", async () => {
     const response = await request(app).get(ENDPOINT).expect(302);
-    expect(response.header["location"]).to.equal("/settings");
+    expect(response.header["location"]).to.equal("/security");
   });
 
-  it("should redirect to settings when type not present (POST)", async () => {
+  it("should redirect to security when type not present (POST)", async () => {
     const response = await request(app)
       .post(ENDPOINT)
       .type("form")
@@ -124,7 +124,7 @@ describe("Integration::enter password", () => {
         password: "password",
       })
       .expect(302);
-    expect(response.header["location"]).to.equal("/settings");
+    expect(response.header["location"]).to.equal("/security");
   });
 
   it("should return enter password page", (done) => {

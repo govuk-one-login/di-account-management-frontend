@@ -3,50 +3,43 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-
 {% set pageTitleName = 'pages.checkYourPhone.title' | translate %}
-
 {% block pageContent %}
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{'pages.checkYourPhone.header' | translate}}</h1>
-    {{ govukInsetText({
-        text: 'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber) | safe
-    })}}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ 'pages.checkYourPhone.header' | translate }}</h1>
+  {{ govukInsetText({
+    text: 'pages.checkYourPhone.text' | translate | replace("[mobile]", phoneNumber) | safe
+  }) }}
+  <p class="govuk-body">{{ 'pages.checkYourPhone.info.paragraph' | translate }}</p>
 
-    <p class="govuk-body">{{'pages.checkYourPhone.info.paragraph' | translate}}</p>
-
-    <form action="/check-your-phone" method="post" novalidate="novalidate">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-        <input type="hidden" name="phoneNumber" value="{{phoneNumber}}"/>
-         {# These fields are needed when the page is re-rendered once an error has occurred #}
-        <input type="hidden" name="resendCodeLink" value="{{resendCodeLink}}"/>
-        <input type="hidden" name="useDifferentPhoneNumberLink" value="{{useDifferentPhoneNumberLink}}"/>
-        <input type="hidden" name="intent" value="{{intent}}"/>
-        {{ govukInput({
-            label: {
-                text: 'pages.checkYourPhone.code.label' | translate
-            },
-            classes:"govuk-input--width-5",
-            name: "code",
-            inputmode: "numeric",
-            spellcheck: false,
-            errorMessage: {
-                text: errors['code'].text,
-                attributes: { "data-test-id": "code-error"}
-            } if (errors['code'])})
-        }}
-
-        {% set detailsHTML %}
-            <p class="govuk-body">{{'pages.checkYourPhone.details.text' | translate | replace("[resendCodeLink]", resendCodeLink) | replace("[useDifferentPhoneNumberLink]", useDifferentPhoneNumberLink) | safe }}</p>
-        {% endset %}
-
-        {{ govukButton({
-            text: "general.continue.label" | translate,
-            preventDoubleClick: true
-        }) }}
-
-        {{ govukDetails({
-            summaryText: 'pages.checkYourPhone.details.summaryText' | translate,
-            html: detailsHTML
-        }) }}
-    </form>
+  <form action="{{ 'CHECK_YOUR_PHONE' | getPath }}" method="post" novalidate="novalidate">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <input type="hidden" name="phoneNumber" value="{{ phoneNumber }}"/> {# These fields are needed when the page is re-rendered once an error has occurred #}
+    <input type="hidden" name="resendCodeLink" value="{{ resendCodeLink }}"/>
+    <input type="hidden" name="useDifferentPhoneNumberLink" value="{{ useDifferentPhoneNumberLink }}"/>
+    <input type="hidden" name="intent" value="{{ intent }}"/>
+    {{ govukInput({
+      label: {
+        text: 'pages.checkYourPhone.code.label' | translate
+      },
+      classes:"govuk-input--width-5",
+      name: "code",
+      inputmode: "numeric",
+      spellcheck: false,
+      errorMessage: {
+        text: errors['code'].text,
+        attributes: { "data-test-id": "code-error"}
+      } if (errors['code'])})
+    }}
+    {% set detailsHTML %}
+      <p class="govuk-body">{{ 'pages.checkYourPhone.details.text' | translate | replace("[resendCodeLink]", resendCodeLink) | replace("[useDifferentPhoneNumberLink]", useDifferentPhoneNumberLink) | safe }}</p>
+    {% endset %}
+    {{ govukButton({
+      text: "general.continue.label" | translate,
+      preventDoubleClick: true
+    }) }}
+    {{ govukDetails({
+      summaryText: 'pages.checkYourPhone.details.summaryText' | translate,
+      html: detailsHTML
+    }) }}
+  </form>
 {% endblock %}

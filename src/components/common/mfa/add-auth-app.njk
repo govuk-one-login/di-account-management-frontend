@@ -2,7 +2,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-
 {% set pageTitleName = 'pages.addBackupApp.title' | translate %}
 
 {% block pageContent %}
@@ -11,22 +10,22 @@
     <li>
       <p class="govuk-body">{{ 'pages.addBackupApp.step1.text' | translate }}</p>
       {% set detailsHtml %}
-        {% set paragraphs =  "pages.addBackupApp.step1.hintText" | translate({ returnObjects: true }) %}
-          {% for paragraph in paragraphs %}
-            <p class="govuk-body">{{ paragraph }}</p>
-          {% endfor %}
+      {% set paragraphs =  "pages.addBackupApp.step1.hintText" | translate({ returnObjects: true }) %}
+        {% for paragraph in paragraphs %}
+          <p class="govuk-body">{{ paragraph }}</p>
+        {% endfor %}
       {% endset %}
       {{ govukDetails({
           summaryText: "pages.addBackupApp.step1.hintTitle" | translate,
           html: detailsHtml
-      })}}
+      }) }}
     </li>
     <li>
       <p class="govuk-body">{{ 'pages.addBackupApp.step2.text' | translate }}</p>
-      <img id="qr-code" src="{{qrCode}}" alt="{{ 'pages.addBackupApp.step2.altText' | translate }}">
+      <img id="qr-code" src="{{ qrCode }}" alt="{{ 'pages.addBackupApp.step2.altText' | translate }}">
       {{ govukDetails({
-          summaryText: "pages.addBackupApp.step2.hintTitle" | translate,
-          html: "pages.addBackupApp.step2.hintText" | translate | safe | replace ("[secretKey]", formattedSecret)
+        summaryText: "pages.addBackupApp.step2.hintTitle" | translate,
+        html: "pages.addBackupApp.step2.hintText" | translate | safe | replace ("[secretKey]", formattedSecret)
       }) }}
     </li>
     <li>
@@ -34,9 +33,8 @@
     </li>
     <li>
       <form method="post" action="{{ formAction }}">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-        <input type="hidden" name="authAppSecret" value="{{authAppSecret}}"/>
-
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <input type="hidden" name="authAppSecret" value="{{ authAppSecret }}"/>
         {{ govukInput({
           label: {
             text: 'pages.addBackupApp.step4.text' | translate
@@ -52,19 +50,15 @@
           errorMessage: {
             text: errors['code'].text
           } if (errors['code'])
-          })
-        }}
-
-          {{ govukButton({
-            text: "general.continue.label" | translate,
-            preventDoubleClick: true
-          }) }}
+        })}}
+        {{ govukButton({
+          text: "general.continue.label" | translate,
+          preventDoubleClick: true
+        })}}
       </form>
     </li>
   </ol>
-
-  <a href="/security" class="govuk-link govuk-body">
+  <a href="{{ 'SECURITY' | getPath }}" class="govuk-link govuk-body">
     {{ 'pages.addBackupApp.cancel' | translate }}
   </a>
-
 {% endblock %}
