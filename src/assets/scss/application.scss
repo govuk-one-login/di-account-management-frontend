@@ -358,35 +358,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   @include govuk-responsive-padding(4, "top");
 }
 
-// Temporarily over-write the CSS of the Tag with the old style preceding govuk-frontend v5
-// This is to keep the Phase banner cohesive while different parts of One Login upgrade to v5+
-
-.govuk-tag {
-  @include govuk-font($size: 16, $weight: bold, $line-height: 1);
-  display: inline-block;
-
-  padding-top: 5px;
-  padding-right: 8px;
-  padding-bottom: 4px;
-  padding-left: 8px;
-
-  // When a user customises their colours often the background is removed,
-  // by adding a outline we ensure that the tag component still keeps it's meaning.
-  // https://accessibility.blog.gov.uk/2017/03/27/how-users-change-colours-on-websites/
-  outline: 2px solid transparent;
-  outline-offset: -2px;
-  letter-spacing: 1px !important;
-  text-decoration: none !important;
-  text-transform: uppercase !important;
-
-  // the most important properties for keeping the phase banner looking the same have been !important-ed
-  // we use the yellow variation in non-prod environments
-  &:not(.govuk-tag--yellow) {
-    color: govuk-colour("white") !important;
-    background-color: govuk-colour("blue") !important;
-  }
-}
-
 .search-results {
   border-top: 1px solid $govuk-border-colour;
 }
