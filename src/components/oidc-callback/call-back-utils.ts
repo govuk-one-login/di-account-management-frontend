@@ -48,6 +48,11 @@ export async function generateTokenSet(
   queryParams: CallbackParamsType,
   clientAssertion: string
 ) {
+  logger.info(
+    { trace: req.res?.locals.trace },
+    `request session state: ${req.session.state}`
+  );
+
   const tokenSet: TokenSet = await req.oidc.callback(
     req.oidc.metadata.redirect_uris[0],
     queryParams,
@@ -59,6 +64,10 @@ export async function generateTokenSet(
         client_assertion: clientAssertion,
       },
     }
+  );
+  logger.info(
+    { trace: req.res?.locals.trace },
+    `Generated token session state: ${tokenSet.session_state}`
   );
   return tokenSet;
 }
