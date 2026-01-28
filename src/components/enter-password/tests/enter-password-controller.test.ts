@@ -65,7 +65,7 @@ describe("enter password controller", () => {
       await enterPasswordGet(req as Request, res as Response);
 
       expect(res.render).not.to.have.been.called;
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should send an AUTH_MFA_METHOD_ADD_STARTED audit event when journey type is addBackup", async () => {
@@ -186,7 +186,7 @@ describe("enter password controller", () => {
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
       expect(res.render).not.to.have.been.called;
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SETTINGS.url);
+      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should redirect to change-email when the password is correct", async () => {

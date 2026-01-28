@@ -476,7 +476,6 @@
       "title": "Check your email",
       "header": "Check your email",
       "text": "We have sent an email to: ",
-      "changeEmailLinkHref": "/change-email",
       "details": {
         "summaryText": "Problems with the code",
         "text1": "We can ",

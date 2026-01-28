@@ -232,7 +232,6 @@ export const API_ENDPOINTS = {
   SEND_NOTIFICATION: "/send-otp-notification",
   UPDATE_PASSWORD: "/update-password",
   UPDATE_EMAIL: "/update-email",
-  UPDATE_PHONE_NUMBER: "/update-phone-number",
   ALPHA_GOV_ACCOUNT: "/api/oidc-users/",
 };
 
