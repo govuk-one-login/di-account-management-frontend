@@ -26,6 +26,17 @@ export function oidcAuthCallbackGet(
       if (queryParams?.error) {
         return await handleOidcCallbackError(req, res, queryParams);
       }
+      if (queryParams.session_state !== req.session.state) {
+        await handleOidcCallbackError(
+          req,
+          req.res!,
+          {
+            error: "session_state_mismatch",
+            description: "Session state mismatch after OICD callback",
+          },
+          false
+        );
+      }
 
       const clientAssertion = await service.generateAssertionJwt(
         req.oidc.metadata.client_id,

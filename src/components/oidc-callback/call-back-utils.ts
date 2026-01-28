@@ -48,7 +48,7 @@ export async function generateTokenSet(
   queryParams: CallbackParamsType,
   clientAssertion: string
 ) {
-  logger.info(
+  logger.debug(
     { trace: req.res?.locals.trace },
     `request session state: ${req.session.state}`
   );
@@ -65,21 +65,10 @@ export async function generateTokenSet(
       },
     }
   );
-  logger.info(
+  logger.debug(
     { trace: req.res?.locals.trace },
     `Generated token session state: ${tokenSet.session_state}`
   );
-  if (tokenSet.session_state !== req.session.state) {
-    this.handleOidcCallbackError(
-      req,
-      req.res!,
-      {
-        error: "session_state_mismatch",
-        description: "Session state mismatch after OICD callback",
-      },
-      false
-    );
-  }
   return tokenSet;
 }
 
