@@ -13,9 +13,10 @@
       name: "email",
       value: email,
       errorMessage: {
-      attributes: { "data-test-id": "email-error"},
-      text: errors['email'].text
-    } if (errors['email'])}) }}
+        attributes: { "data-test-id": "email-error"},
+        text: errors['email'].text
+      } if (errors['email'])
+    })}}
     {{ govukButton({
       text: "general.continue.label" | translate,
       preventDoubleClick: true
