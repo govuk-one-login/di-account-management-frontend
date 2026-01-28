@@ -50,7 +50,7 @@ export async function generateTokenSet(
 ) {
   let tokenSet: TokenSet;
 
-  logger.info(
+  logger.debug(
     { trace: req.res?.locals.trace },
     `request session state: ${req.session.state}`
   );
@@ -80,7 +80,7 @@ export async function generateTokenSet(
   } catch (callbackError) {
     logger.error(`OIDC Callback failed: ${callbackError.message}`);
   }
-  logger.info(
+  logger.debug(
     { trace: req.res?.locals.trace },
     `Generated token session state: ${tokenSet.session_state}`
   );
