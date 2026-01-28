@@ -25,6 +25,7 @@ describe("callback-utils", () => {
       const mockTokenSet = {
         access_token: "fake-access-token",
         id_token: "fake-id-token",
+        session_state: "mock-state",
       } as TokenSet;
 
       callbackStub = vi.fn().mockResolvedValue(mockTokenSet);
@@ -130,10 +131,13 @@ describe("callback-utils", () => {
         state: "mock-state-1",
       };
 
+      req.session.state = "mock-state-2";
+
       const clientAssertion = "mock-client-assertion";
 
       try {
         await generateTokenSet(req, queryParams, clientAssertion);
+        expect.fail("Expected error was not thrown");
       } catch (error) {
         expect(error).to.exist;
       }
