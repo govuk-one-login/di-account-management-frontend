@@ -203,21 +203,30 @@ describe("getAllServices", () => {
     expect(result).to.have.length(0);
   });
 
-  it("should handle clients with alternativeClients", () => {
+  it("should handle alternative clients", () => {
     getAppEnvStub.returns("dev");
     getClientsToShowInSearchStub.returns([
       {
-        clientId: "client1",
+        clientId: "testClient",
         alternativeClients: [
           {
-            [LOCALE.EN]: {
-              startText: "Alt Service 1",
-              startUrl: "https://alt1.gov.uk",
+            en: {
+              startText: "Alternative Service 1",
               additionalSearchTerms: "alt terms 1",
             },
-            [LOCALE.CY]: {
-              startText: "Gwasanaeth Alt 1",
-              startUrl: "https://alt1.gov.uk/cy",
+            cy: {
+              startText: "Gwasanaeth Amgen 1",
+              additionalSearchTerms: "termau amgen 1",
+            },
+          },
+          {
+            en: {
+              startText: "Alternative Service 2",
+              additionalSearchTerms: "",
+            },
+            cy: {
+              startText: "Gwasanaeth Amgen 2",
+              additionalSearchTerms: "",
             },
           },
         ],
@@ -225,125 +234,24 @@ describe("getAllServices", () => {
     ]);
 
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startText")
-      .returns("Main Service 1");
+      .withArgs("clientRegistry.dev.testClient.startText")
+      .returns("Main Service");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.startUrl")
-      .returns("https://main1.gov.uk");
+      .withArgs("clientRegistry.dev.testClient.startUrl")
+      .returns("https://mainservice.gov.uk");
     mockTranslate
-      .withArgs("clientRegistry.dev.client1.additionalSearchTerms")
-      .returns("");
+      .withArgs("clientRegistry.dev.testClient.additionalSearchTerms")
+      .returns("main terms");
 
     const result = getAllServices(mockTranslate, LOCALE.EN);
 
-    expect(result).to.have.length(2);
+    expect(result).to.have.length(1);
     expect(result[0]).to.deep.equal({
-      clientId: "client1_alt_0",
-      startText: "Alt Service 1",
-      startUrl: "https://alt1.gov.uk",
-      additionalSearchTerms: "alt terms 1",
-    });
-    expect(result[1]).to.deep.equal({
-      clientId: "client1",
-      startText: "Main Service 1",
-      startUrl: "https://main1.gov.uk",
-      additionalSearchTerms: "",
-    });
-  });
-
-  it("should handle cases where alternativeClients lack additionalSearchTerms", () => {
-    getAppEnvStub.returns("dev");
-    getClientsToShowInSearchStub.returns([
-      {
-        clientId: "client1",
-        alternativeClients: [
-          {
-            [LOCALE.EN]: {
-              startText: "Alt Service 1",
-              startUrl: "https://alt1.gov.uk",
-            },
-          },
-        ],
-      },
-    ]);
-
-    mockTranslate
-      .withArgs("clientRegistry.dev.client1.startText")
-      .returns("Main Service 1");
-    mockTranslate
-      .withArgs("clientRegistry.dev.client1.startUrl")
-      .returns("https://main1.gov.uk");
-    mockTranslate
-      .withArgs("clientRegistry.dev.client1.additionalSearchTerms")
-      .returns("");
-
-    const result = getAllServices(mockTranslate, LOCALE.EN);
-
-    expect(result).to.have.length(2);
-    expect(result[0]).to.deep.equal({
-      clientId: "client1_alt_0",
-      startText: "Alt Service 1",
-      startUrl: "https://alt1.gov.uk",
-      additionalSearchTerms: "",
-    });
-    expect(result[1]).to.deep.equal({
-      clientId: "client1",
-      startText: "Main Service 1",
-      startUrl: "https://main1.gov.uk",
-      additionalSearchTerms: "",
-    });
-  });
-
-  it("should exlude alternativeClients missing startText or startUrl", () => {
-    getAppEnvStub.returns("dev");
-    getClientsToShowInSearchStub.returns([
-      {
-        clientId: "client1",
-        alternativeClients: [
-          {
-            [LOCALE.EN]: {
-              startText: "Alt Service 1",
-              startUrl: "https://alt1.gov.uk",
-            },
-          },
-          {
-            [LOCALE.EN]: {
-              startUrl: "https://alt2.gov.uk",
-            },
-          },
-          {
-            [LOCALE.EN]: {
-              startText: "Alt Service 3",
-            },
-          },
-        ],
-      },
-    ]);
-
-    mockTranslate
-      .withArgs("clientRegistry.dev.client1.startText")
-      .returns("Main Service 1");
-    mockTranslate
-      .withArgs("clientRegistry.dev.client1.startUrl")
-      .returns("https://main1.gov.uk");
-    mockTranslate
-      .withArgs("clientRegistry.dev.client1.additionalSearchTerms")
-      .returns("");
-
-    const result = getAllServices(mockTranslate, LOCALE.EN);
-
-    expect(result).to.have.length(2);
-    expect(result[0]).to.deep.equal({
-      clientId: "client1_alt_0",
-      startText: "Alt Service 1",
-      startUrl: "https://alt1.gov.uk",
-      additionalSearchTerms: "",
-    });
-    expect(result[1]).to.deep.equal({
-      clientId: "client1",
-      startText: "Main Service 1",
-      startUrl: "https://main1.gov.uk",
-      additionalSearchTerms: "",
+      clientId: "testClient",
+      startText: "Main Service",
+      startUrl: "https://mainservice.gov.uk",
+      additionalSearchTerms:
+        " Alternative Service 1 alt terms 1 Alternative Service 2",
     });
   });
 });

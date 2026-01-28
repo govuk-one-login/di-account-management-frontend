@@ -37,25 +37,25 @@ export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
       }
 
       const alternativeClients = (client.alternativeClients || [])
-        .filter((client) => client.en.startText && client.en.startUrl)
-        .map((altClient, idx) => {
-          return {
-            clientId: `${clientId}_alt_${idx}`,
-            startText: altClient[locale]["startText"],
-            startUrl: altClient[locale]["startUrl"],
-            additionalSearchTerms:
-              altClient[locale]["additionalSearchTerms"] || "",
-          };
-        });
+        .filter((client) => client.en.startText)
+        .flatMap((altClient) => {
+          const startText = altClient[locale].startText;
+          const searchTerms = altClient[locale].additionalSearchTerms;
+
+          return [startText, searchTerms];
+        })
+        .filter(Boolean)
+        .join(" ");
 
       return [
         {
           clientId,
           startText: startTextForSearch,
           startUrl: startUrlForSearch,
-          additionalSearchTerms: additionalSearchTerms,
+          additionalSearchTerms:
+            additionalSearchTerms + " " + alternativeClients,
         },
-      ].concat(alternativeClients);
+      ];
     })
     .sort((a, b) => {
       return a.startText.localeCompare(b.startText, locale);
