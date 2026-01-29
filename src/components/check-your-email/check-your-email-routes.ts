@@ -3,7 +3,6 @@ import { PATH_DATA } from "../../app.constants";
 import {
   checkYourEmailGet,
   checkYourEmailPost,
-  requestNewCodeGet,
 } from "./check-your-email-controller";
 import { validateCheckYourEmailRequest } from "./check-your-email-validation";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
@@ -16,13 +15,6 @@ router.get(
   requiresAuthMiddleware,
   validateStateMiddleware,
   checkYourEmailGet
-);
-
-router.get(
-  PATH_DATA.REQUEST_NEW_CODE_EMAIL.url,
-  requiresAuthMiddleware,
-  validateStateMiddleware,
-  requestNewCodeGet
 );
 
 router.post(
