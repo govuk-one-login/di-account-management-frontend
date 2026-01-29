@@ -100,11 +100,6 @@ export const PATH_DATA: Record<
     type: UserJourney.ChangeDefaultMethod,
     event: EventType.Confirmation,
   },
-  REQUEST_NEW_CODE_EMAIL: {
-    url: "/request-new-email-code",
-    event: EventType.ResendCode,
-    type: UserJourney.ChangeEmail,
-  },
   EMAIL_UPDATED_CONFIRMATION: {
     url: "/email-updated-confirmation",
     event: EventType.Confirmation,
