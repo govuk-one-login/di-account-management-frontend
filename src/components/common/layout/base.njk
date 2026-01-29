@@ -100,9 +100,9 @@
       import { initAll } from '/public/scripts/govuk-frontend.min.js'
       initAll()
     </script>
-    <script type="text/javascript" src="/public/scripts/analytics.js?{{ staticHash }}" nonce='{{scriptNonce}}'></script>
+    <script type="text/javascript" src="/public/scripts/analytics.js?{{ staticHash }}" nonce='{{scriptNonce}}' defer></script>
+    {% if backLinkJS %}
     <script type="text/javascript" nonce='{{scriptNonce}}'>
-      {% if backLinkJS %}
         var backLink = document.querySelector('.js-back-link');
         if (backLink) {
           backLink.addEventListener('click', function(e) {
@@ -114,9 +114,9 @@
             }
           });
         }
-      {% endif %}
     </script>
-    <script type="text/javascript" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
+    {% endif %}
+    <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
     if (window.DI) {
       window.DI.appInit({
         ga4ContainerId: "{{ga4ContainerId}}"
