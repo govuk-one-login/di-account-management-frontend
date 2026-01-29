@@ -565,11 +565,12 @@
       }
     },
     "changePhoneNumber": {
-      "title": "Enter your new mobile phone number",
-      "header": "Enter your new mobile phone number",
+      "title": "Enter your new UK mobile phone number",
+      "header": "Enter your new UK mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
-        "backLink": "Cancel and go back to Security"
+        "backLink": "Cancel and go back to Security",
+        "noUkPhone": "I do not have a UK mobile phone number"
       },
       "validationError": {
         "samePhoneNumber": "You’re already using that phone number. Enter a different phone number"

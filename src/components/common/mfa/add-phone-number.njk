@@ -28,46 +28,16 @@
       } if (errors['phoneNumber'])})
     }}
 
-    {% set internationalNumberHtml %}
-      {{ govukInput({
-        name: "internationalPhoneNumber",
-        type: "tel",
-        autocomplete: "tel",
-        classes: "govuk-input--width-20",
-        label: {
-          text: 'pages.changePhoneNumber.internationalPhoneNumber.label' | translate
-        },
-        hint: {
-          text: 'pages.changePhoneNumber.internationalPhoneNumber.hint' | translate
-        },
-        errorMessage: {
-          attributes: { "data-test-id": "internationalPhoneNumber-error"},
-          text: errors['internationalPhoneNumber'].text
-        } if (errors['internationalPhoneNumber'])
-      }) }}
-    {% endset -%}
-
-    {{ govukCheckboxes({
-      items: [
-        {
-          value: "true",
-          id: "hasInternationalPhoneNumber",
-          name: "hasInternationalPhoneNumber",
-          text: 'pages.changePhoneNumber.internationalPhoneNumber.checkBoxLabel' | translate,
-          conditional: {
-            html: internationalNumberHtml
-          },
-          checked: hasInternationalPhoneNumber === 'true'
-        }
-      ]
-    }) }}
-
     {{ govukButton({
       text: 'general.continue.label' | translate,
       preventDoubleClick: true
     }) }}
   </form>
 
+  <a href="{{"NO_UK_PHONE_NUMBER" | getPath}}" class="govuk-link govuk-body">
+    {{'pages.changePhoneNumber.info.noUkPhone' | translate}}
+  </a>
+  <p class="govuk-!-margin-top-4 govuk-body govuk-!-margin-bottom-4"></p>
   <a href="{{"SECURITY" | getPath}}" class="govuk-link govuk-body">
     {{'pages.changePhoneNumber.info.backLink' | translate}}
   </a>

@@ -97,3 +97,8 @@ export function changePhoneNumberPost(
     }
   };
 }
+
+export function noUkPhoneNumberGet(req: Request, res: Response): void {
+  req.metrics?.addMetric("noUkPhoneNumberGet", MetricUnit.Count, 1);
+  res.redirect(PATH_DATA.SECURITY.url);
+}
