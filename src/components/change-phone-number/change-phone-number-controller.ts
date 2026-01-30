@@ -102,5 +102,14 @@ export function changePhoneNumberPost(
 
 export function noUkPhoneNumberGet(req: Request, res: Response): void {
   req.metrics?.addMetric("noUkPhoneNumberGet", MetricUnit.Count, 1);
+  setLocalOplSettings(req, res);
+
+  if (req.query.type !== "changePhonenumber") {
+    const url = new URL(req.originalUrl, `https://${req.get("host")}`);
+    url.searchParams.set("type", "changePhonenumber");
+
+    return res.redirect(url.pathname + url.search);
+  }
+
   res.render(NO_UK_PHONE_NUMBER_TEMPLATE);
 }
