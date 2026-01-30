@@ -23,6 +23,7 @@
 @import "components/summary-list/summary-list";
 @import "components/warning-text/warning-text";
 @import "components/radios/radios";
+@import "components/service-navigation/service-navigation";
 // end Design System component imports
 
 // language toggle component import
@@ -110,20 +111,25 @@
 }
 
 .govuk-header--with-signout {
-  .govuk-template--rebranded & {
-    .govuk-header__logo {
-      width: 100%;
-    }
+  .govuk-header__logo {
+    width: 100%;
+  }
+}
+
+.govuk-header__container {
+  position: relative;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
   }
 }
 
 .account-navigation {
   background-color: govuk-colour("black", $variant: "tint-95");
-  .govuk-template--rebranded & {
-    background-color: $_govuk-rebrand-template-background-colour;
-    border-bottom: 1px solid $_govuk-rebrand-border-colour-on-blue-tint-95;
-  }
-  border-bottom: 1px solid govuk-functional-colour(border);
+  background-color: govuk-functional-colour(surface-background);
+  border-bottom: 1px solid govuk-functional-colour(surface-border);
   position: relative;
 }
 
@@ -207,25 +213,13 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 }
 
 .account-navigation__link {
-  @extend .govuk-link;
+  @extend .govuk-service-navigation__link;
   display: inline-block;
   padding: $nav-link-padding-left 0 $nav-link-padding;
   margin-top: $nav-link-outline-thickness;
 
   &:not(:hover) {
     text-decoration: none;
-  }
-
-  &:visited {
-    color: govuk-functional-colour(link);
-
-    &:hover {
-      color: govuk-functional-colour(link-hover);
-    }
-
-    &:focus {
-      color: govuk-functional-colour(focus-text);
-    }
   }
 
   .account-navigation__list-item--active & {
