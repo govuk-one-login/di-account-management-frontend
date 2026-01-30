@@ -18,6 +18,8 @@ import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
+const NO_UK_PHONE_NUMBER_TEMPLATE =
+  "change-phone-number/no-uk-phone-number.njk";
 
 const setLocalOplSettings = (req: Request, res: Response) => {
   setOplSettings(
@@ -100,5 +102,5 @@ export function changePhoneNumberPost(
 
 export function noUkPhoneNumberGet(req: Request, res: Response): void {
   req.metrics?.addMetric("noUkPhoneNumberGet", MetricUnit.Count, 1);
-  res.redirect(PATH_DATA.SECURITY.url);
+  res.render(NO_UK_PHONE_NUMBER_TEMPLATE);
 }

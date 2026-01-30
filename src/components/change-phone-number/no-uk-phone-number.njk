@@ -1,0 +1,22 @@
+{% extends "common/layout/base-page.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set pageTitleName = 'pages.changePhoneNumber.noUkPhoneNumber.title' | translate %}
+
+{% block pageContent %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ 'pages.changePhoneNumber.noUkPhoneNumber.header' | translate }}</h1>
+
+  <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph1' | translate }}</p>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-3">{{ 'pages.changePhoneNumber.noUkPhoneNumber.sub-heeader' | translate }}</h2>
+
+  <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph2' | translate }}</p>
+
+  {{ govukButton({
+    text: 'pages.changePhoneNumber.noUkPhoneNumber.backLinkButton' | translate,
+    href:  "SECURITY" | getPath,
+    preventDoubleClick: true
+  }) }}
+{% endblock %}

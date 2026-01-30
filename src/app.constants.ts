@@ -126,7 +126,7 @@ export const PATH_DATA: Record<
     type: UserJourney.ChangePhoneNumber,
   },
   NO_UK_PHONE_NUMBER: {
-    url: "/no-uk-phone-number",
+    url: "/no-uk-mobile-phone",
   },
   CHANGE_AUTHENTICATOR_APP: {
     url: "/change-authenticator-app",

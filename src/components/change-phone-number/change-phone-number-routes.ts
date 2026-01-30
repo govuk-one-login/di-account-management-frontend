@@ -30,9 +30,6 @@ router.get(
   PATH_DATA.NO_UK_PHONE_NUMBER.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  (req, res) => {
-    res.redirect(PATH_DATA.SECURITY.url);
-  },
   noUkPhoneNumberGet
 );
 

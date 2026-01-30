@@ -583,17 +583,15 @@
           "length": "Enter a UK mobile phone number, like 07700 900000",
           "plusNumericOnly": "Enter a UK mobile phone number using only numbers or the + symbol"
         }
-      },
-      "internationalPhoneNumber": {
-        "checkBoxLabel": "I do not have a UK mobile number",
-        "label": "Mobile phone number",
-        "hint": "Include the country code, for example +33 for France",
-        "validationError": {
-          "required": "Enter a mobile phone number",
-          "plusNumericOnly": "Enter a mobile phone number using only numbers or the + symbol",
-          "internationalFormat": "Enter a mobile phone number in the correct format, including the country code"
-        }
       }
+    },
+    "noUkPhoneNumber": {
+      "title": "If you do not have a UK mobile phone number - Gov.UK One Login",
+      "header": "If you do not have a UK mobile phone number",
+      "paragraph1": "To get security codes by text message, you need to use a UK mobile phone number.",
+      "sub-heeader": "What you can do",
+      "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
+      "backLinkButton": "Cancel and go back to Security"
     },
     "signedOut": {
       "title": "You have signed out",
