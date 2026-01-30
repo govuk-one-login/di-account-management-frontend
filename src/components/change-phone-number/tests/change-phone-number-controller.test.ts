@@ -9,6 +9,7 @@ import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import {
   changePhoneNumberGet,
   changePhoneNumberPost,
+  noUkPhoneNumberGet,
 } from "../change-phone-number-controller";
 import {
   CLIENT_SESSION_ID,
@@ -183,6 +184,47 @@ describe("change phone number controller", () => {
       });
       expect(res.redirect).to.have.calledWith(
         `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
+      );
+    });
+  });
+
+  describe("noUkPhoneNumberGet", () => {
+    it("should render no uk phone number page", () => {
+      // Arrange
+      req = new RequestBuilder()
+        .withBody({})
+        .withSessionUserState({ changePhoneNumber: {} })
+        .withTranslate(sandbox.fake())
+        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+        .withQuery({ type: "changePhoneNumber" })
+        .build();
+
+      // Act
+      noUkPhoneNumberGet(req as Request, res as Response);
+
+      // Assert
+      expect(res.render).to.have.calledWith(
+        "change-phone-number/no-uk-phone-number.njk"
+      );
+    });
+
+    it("should redirect to same page with type query param if not present", () => {
+      // Arrange
+      req = new RequestBuilder()
+        .withBody({})
+        .withSessionUserState({ changePhoneNumber: {} })
+        .withTranslate(sandbox.fake())
+        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+        .build();
+
+      (req as any).path = PATH_DATA.NO_UK_PHONE_NUMBER.url;
+
+      // Act
+      noUkPhoneNumberGet(req as Request, res as Response);
+
+      // Assert
+      expect(res.redirect).to.have.calledWith(
+        `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=changePhoneNumber`
       );
     });
   });
