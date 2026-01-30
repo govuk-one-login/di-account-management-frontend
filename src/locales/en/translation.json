@@ -583,15 +583,20 @@
           "length": "Enter a UK mobile phone number, like 07700 900000",
           "plusNumericOnly": "Enter a UK mobile phone number using only numbers or the + symbol"
         }
+      },
+      "noUkPhoneNumber": {
+        "title": "If you do not have a UK mobile phone number - Gov.UK One Login",
+        "header": "If you do not have a UK mobile phone number",
+        "paragraph1": "To get security codes by text message, you need to use a UK mobile phone number.",
+        "sub-heeader": "What you can do",
+        "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
+        "detailSummary": "What is an authenticator app?",
+        "detailText": "What is an authenticator app?\nAn authenticator app creates a security code that helps confirm it's you when you sign in.\n\nYou can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer.",
+        "paragraph3": "To set up an authenticator app to get security codes:",
+        "listItem1": "go back to <strong>Security</strong>",
+        "listItem2": "select <strong>Use a different default method</strong>",
+        "backLinkButton": "Cancel and go back to Security"
       }
-    },
-    "noUkPhoneNumber": {
-      "title": "If you do not have a UK mobile phone number - Gov.UK One Login",
-      "header": "If you do not have a UK mobile phone number",
-      "paragraph1": "To get security codes by text message, you need to use a UK mobile phone number.",
-      "sub-heeader": "What you can do",
-      "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
-      "backLinkButton": "Cancel and go back to Security"
     },
     "signedOut": {
       "title": "You have signed out",

@@ -14,6 +14,18 @@
 
   <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph2' | translate }}</p>
 
+  {{ govukDetails({
+  summaryText: 'pages.changePhoneNumber.noUkPhoneNumber.detailSummary' | translate,
+  text: 'pages.changePhoneNumber.noUkPhoneNumber.detailText' | translate | nl2br | safe
+  }) }}
+
+  <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph3' | translate }}</p>
+
+  <ol>
+    <li class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.listItem1' | translate | safe}}</li>
+    <li class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.listItem2' | translate | safe }}</li>
+  </ol>
+
   {{ govukButton({
     text: 'pages.changePhoneNumber.noUkPhoneNumber.backLinkButton' | translate,
     href:  "SECURITY" | getPath,
