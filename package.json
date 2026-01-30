@@ -63,7 +63,7 @@
     "express-session": "1.19.0",
     "express-validator": "^7.3.1",
     "flexsearch": "^0.8.212",
-    "govuk-frontend": "^6.0.0-beta.2",
+    "govuk-frontend": "^6.0.0-rc.0",
     "helmet": "8.1.0",
     "i18next": "^25.8.0",
     "i18next-fs-backend": "^2.6.1",
