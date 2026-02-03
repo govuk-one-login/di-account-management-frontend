@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe } from "mocha";
-import { shutdownProcess, startServer } from "../../src/app";
+import { shutdownProcess, startServer } from "../../src/app.js";
 import express from "express";
 import { expect, sinon } from "../utils/test-utils";
 
