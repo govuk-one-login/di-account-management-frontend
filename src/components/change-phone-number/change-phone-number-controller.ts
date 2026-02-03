@@ -9,13 +9,13 @@ import {
   isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
-import { convertInternationalPhoneNumberToE164Format } from "../../utils/phone-number";
 import { BadRequestError } from "../../utils/errors";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
 import { getRequestConfigFromExpress } from "../../utils/http";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { logger } from "../../utils/logger";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 const NO_UK_PHONE_NUMBER_TEMPLATE =
@@ -53,15 +53,35 @@ export function changePhoneNumberPost(
     }
 
     const { email } = req.session.user;
-    const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
-    let newPhoneNumber;
+    const newPhoneNumber = req.body.phoneNumber;
 
-    if (hasInternationalPhoneNumber === "true") {
-      newPhoneNumber = convertInternationalPhoneNumberToE164Format(
-        req.body.internationalPhoneNumber
+    if (!newPhoneNumber || newPhoneNumber.trim() === "") {
+      const error = formatValidationError(
+        "phoneNumber",
+        req.t("pages.changePhoneNumber.ukPhoneNumber.validationError.required")
       );
-    } else {
-      newPhoneNumber = req.body.phoneNumber;
+      return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);
+    }
+
+    if (
+      !RegExp(
+        /^\+440\d{10}$|^\+447\d{9}$|^440\d{10}$|^447\d{9}$|^07\d{9}$/
+      ).test(newPhoneNumber)
+    ) {
+      logger.info("Non-UK phone number detected in change phone number flow");
+      const error = formatValidationError(
+        "phoneNumber",
+        req.t(
+          "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
+        )
+      );
+      logger.info(
+        "error generated for non-UK phone number in change phone number flow.  Logging..."
+      );
+      logger.warn(error, "Non-UK phone number entered for change phone number");
+
+      logger.info("Redirecting to no UK phone number page");
+      return this.notUkPhoneNumberGet(req, res);
     }
 
     const response = await service.sendPhoneVerificationNotification(
@@ -84,13 +104,8 @@ export function changePhoneNumberPost(
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
-      const href: string =
-        hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true"
-          ? "internationalPhoneNumber"
-          : "phoneNumber";
-
       const error = formatValidationError(
-        href,
+        "phoneNumber",
         req.t("pages.changePhoneNumber.validationError.samePhoneNumber")
       );
       return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);

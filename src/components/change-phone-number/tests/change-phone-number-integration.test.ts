@@ -16,7 +16,7 @@ import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behav
 
 describe("Integration:: change phone number", () => {
   let sandbox: sinon.SinonSandbox;
-  let token: string | string[];
+  let token: string | string[] | undefined;
   let cookies: string;
   let app: any;
   let baseApi: string;
@@ -64,7 +64,7 @@ describe("Integration:: change phone number", () => {
     });
 
     app = await require("../../../app").createApp();
-    baseApi = process.env.AM_API_BASE_URL;
+    baseApi = process.env.AM_API_BASE_URL || "http://localhost:8080";
 
     await request(app)
       .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
@@ -303,58 +303,6 @@ describe("Integration:: change phone number", () => {
     expect(res.statusCode).to.eq(302);
   });
 
-  it("should return validation error when international phone number not entered", async () => {
-    const res = await request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(
-          $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains("Enter a mobile phone number");
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
-      })
-      .expect(400);
-    expect(res.statusCode).to.eq(400);
-  });
-
-  it("should return validation error when new international phone number entered is same as current phone number", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(400, { code: 1044 });
-
-    // Act
-    const res = await request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "+33645453322",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(
-          $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
-          "You’re already using that phone number. Enter a different phone number"
-        );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
-      })
-      .expect(400);
-    expect(res.statusCode).to.eq(400);
-  });
-
   it("should return validation error when new UK phone number is the same as curent phone number", async () => {
     // Arrange
     nock(baseApi)
@@ -382,99 +330,11 @@ describe("Integration:: change phone number", () => {
     expect(res.statusCode).to.eq(400);
   });
 
-  it("should return validation error when international phone number entered is not valid", async () => {
-    const res = await request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "123456789",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(
-          $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
-          "Enter a mobile phone number in the correct format, including the country code"
-        );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
-      })
-      .expect(400);
-    expect(res.statusCode).to.eq(400);
+  it("should return No UK phone number page", (done) => {
+    request(app).get(PATH_DATA.NO_UK_PHONE_NUMBER.url).expect(302, done);
   });
 
-  it("should return validation error when international phone number entered contains text", async () => {
-    const res = await request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "123456789dd",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(
-          $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
-          "Enter a mobile phone number using only numbers or the + symbol"
-        );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
-      })
-      .expect(400);
-    expect(res.statusCode).to.eq(400);
-  });
-
-  it("should return validation error when international phone number entered less than 8 characters", async () => {
-    const res = await request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "+33123",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(
-          $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
-          "Enter a mobile phone number in the correct format, including the country code"
-        );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
-      })
-      .expect(400);
-    expect(res.statusCode).to.eq(400);
-  });
-
-  it("should return validation error when international phone number entered greater than 16 characters", async () => {
-    const res = await request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "+3312345678901234567",
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(
-          $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
-          "Enter a mobile phone number in the correct format, including the country code"
-        );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
-      })
-      .expect(400);
-    expect(res.statusCode).to.eq(400);
-  });
-
-  it("should redirect to /check-your-phone page when valid international phone number entered", async () => {
+  it("should redirect to /no-uk-phone-number page when international phone number entered", async () => {
     // Arrange
     nock(baseApi)
       .post(API_ENDPOINTS.SEND_NOTIFICATION)
@@ -489,12 +349,37 @@ describe("Integration:: change phone number", () => {
       .set("Cookie", cookies)
       .send({
         _csrf: token,
-        hasInternationalPhoneNumber: true,
-        internationalPhoneNumber: "+33645453322",
+        phoneNumber: "+33645453322",
       })
-      .expect("Location", "/check-your-phone?intent=changePhoneNumber")
+      .expect("Location", "/no-uk-mobile-phone?type=changePhoneNumber")
       .expect(302);
     expect(res.statusCode).to.eq(302);
+  });
+
+  it("should return a bad request if no phone number is provided", async () => {
+    // Arrange
+    nock(baseApi)
+      .post(API_ENDPOINTS.SEND_NOTIFICATION)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
+      .once()
+      .reply(HTTP_STATUS_CODES.NO_CONTENT);
+
+    // Act
+    const res = await request(app)
+      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .type("form")
+      .set("Cookie", cookies)
+      .send({
+        _csrf: token,
+      })
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+          "Enter a UK mobile phone number"
+        );
+      })
+      .expect(400);
+    expect(res.statusCode).to.eq(400);
   });
 
   it("should return internal server error if send-otp-notification API call fails", async () => {
