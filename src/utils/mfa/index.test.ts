@@ -1,7 +1,5 @@
 import { expect } from "chai";
 import { describe, it } from "mocha";
-import * as sinon from "sinon";
-import * as config from "../../config.js";
 import {
   generateMfaSecret,
   generateQRCodeValue,
@@ -18,20 +16,25 @@ describe("MFA Utils", () => {
   });
 
   describe("generateQRCodeValue", () => {
-    afterEach(() => {
-      sinon.restore();
+    let originalAppEnv: string;
+
+    beforeEach(() => {
+      originalAppEnv = process.env.APP_ENV;
     });
 
-    it("should generate QR code value with issuer in production", () => {
-      sinon.stub(config, "isProd").returns(true);
+    afterEach(() => {
+      process.env.APP_ENV = originalAppEnv;
+    });
+
+    it("should generate QR code value with issuer in production", async () => {
+      process.env.APP_ENV = "production";
       const result = generateQRCodeValue("SECRET", "test@example.com", "MyApp");
       expect(result).to.include("otpauth://totp/");
       expect(result).to.include("SECRET");
     });
 
-    it("should generate QR code value with environment suffix in non-production", () => {
-      sinon.stub(config, "isProd").returns(false);
-      sinon.stub(config, "getAppEnv").returns("dev");
+    it("should generate QR code value with environment suffix in non-production", async () => {
+      process.env.APP_ENV = "dev";
       const result = generateQRCodeValue("SECRET", "test@example.com", "MyApp");
       expect(result).to.include("otpauth://totp/");
       expect(result).to.include("SECRET");
