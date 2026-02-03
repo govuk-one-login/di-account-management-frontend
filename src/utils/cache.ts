@@ -1,5 +1,5 @@
 import LRUCache from "lru-cache";
-import { logger } from "./logger";
+import { logger } from "./logger.js";
 
 const cache = new LRUCache<string, { data: any; expiresAt: number }>({
   max: 1000,

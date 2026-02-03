@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, UserinfoResponse } from "openid-client";
-import { PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { ClientAssertionServiceInterface } from "../../utils/types";
-import { clientAssertionGenerator } from "../../utils/oidc";
+import { PATH_DATA, VECTORS_OF_TRUST } from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { ClientAssertionServiceInterface } from "../../utils/types.js";
+import { clientAssertionGenerator } from "../../utils/oidc.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { detectOidcError } from "../../utils/detect-oidc-error";
+import { detectOidcError } from "../../utils/detect-oidc-error.js";
 import {
   attachSessionIdsFromGsCookie,
   determineRedirectUri,
@@ -13,7 +13,7 @@ import {
   handleOidcCallbackError,
   populateSessionWithUserInfo,
   setPreferencesCookie,
-} from "./call-back-utils";
+} from "./call-back-utils.js";
 
 export function oidcAuthCallbackGet(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()

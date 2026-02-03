@@ -1,7 +1,7 @@
-import { validateBodyMiddleware } from "../../middleware/form-validation-middleware";
-import { ValidationChainFunc } from "../../types";
+import { validateBodyMiddleware } from "../../middleware/form-validation-middleware.js";
+import { ValidationChainFunc } from "../../types.js";
 import { body } from "express-validator";
-import { containsNumbersOnly } from "../../utils/strings";
+import { containsNumbersOnly } from "../../utils/strings.js";
 
 export function validateCheckYourEmailRequest(): ValidationChainFunc {
   return [

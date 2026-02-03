@@ -2,7 +2,7 @@ import {
   isValidPhoneNumber,
   parsePhoneNumberWithError,
 } from "libphonenumber-js/mobile";
-import { logger } from "./logger";
+import { logger } from "./logger.js";
 
 export function containsUKMobileNumber(value: string): boolean {
   try {

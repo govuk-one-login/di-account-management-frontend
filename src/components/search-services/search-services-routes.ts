@@ -1,6 +1,6 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
-import { searchServicesGet } from "./search-services-controller";
+import { PATH_DATA } from "../../app.constants.js";
+import { searchServicesGet } from "./search-services-controller.js";
 
 const router = express.Router();
 

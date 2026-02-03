@@ -1,9 +1,9 @@
-import { PATH_DATA } from "../../app.constants";
-import { changeEmailPost, changeEmailGet } from "./change-email-controller";
+import { PATH_DATA } from "../../app.constants.js";
+import { changeEmailPost, changeEmailGet } from "./change-email-controller.js";
 import * as express from "express";
-import { validateChangeEmailRequest } from "./change-email-validation";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { validateChangeEmailRequest } from "./change-email-validation.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
 
 const router = express.Router();
 

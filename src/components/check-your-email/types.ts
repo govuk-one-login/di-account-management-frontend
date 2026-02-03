@@ -1,6 +1,6 @@
-import { RequestConfig } from "../../utils/http";
-import { UserJourney } from "../../utils/state-machine";
-import { UpdateInformationInput } from "../../utils/types";
+import { RequestConfig } from "../../utils/http.js";
+import { UserJourney } from "../../utils/state-machine.js";
+import { UpdateInformationInput } from "../../utils/types.js";
 
 export enum CheckYourEmailServiceError {
   EMAIL_ADDRESS_DENIED = "EMAIL_ADDRESS_DENIED",

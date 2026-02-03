@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { EventType, getNextState } from "../../utils/state-machine";
+import { PATH_DATA } from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { ChangeEmailServiceInterface } from "./types";
-import { changeEmailService } from "./change-email-service";
-import { getRequestConfigFromExpress } from "../../utils/http";
+} from "../../utils/validation.js";
+import { ChangeEmailServiceInterface } from "./types.js";
+import { changeEmailService } from "./change-email-service.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   CHANGE_EMAIL_COMMON_OPL_SETTINGS,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const setLocalOplSettings = (res: Response) => {

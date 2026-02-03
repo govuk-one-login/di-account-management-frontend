@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { handleLogout } from "../../utils/logout";
-import { LogoutState } from "../../app.constants";
+import { handleLogout } from "../../utils/logout.js";
+import { LogoutState } from "../../app.constants.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function logoutPost(req: Request, res: Response): Promise<void> {

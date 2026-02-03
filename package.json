@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "license": "ISC",
+  "type": "module",
   "scripts": {
     "bubbleprof": "NODE_ENV=production clinic bubbleprof --autocannon [ -c 10 -d 10 /healthcheck ] -- node -r dotenv/config dist/server.js && echo '\n\nRemember to clean up files in .clinic and node_trace.*.log\n'",
     "build-ts": "tsc",

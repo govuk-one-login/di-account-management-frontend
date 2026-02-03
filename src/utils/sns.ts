@@ -3,8 +3,8 @@ import {
   PublishCommandOutput,
   SNSClient,
 } from "@aws-sdk/client-sns";
-import { SnsService } from "./types";
-import { getSNSConfig, SnsConfig } from "../config/aws";
+import { SnsService } from "./types.js";
+import { getSNSConfig, SnsConfig } from "../config/aws.js";
 
 const config: SnsConfig = getSNSConfig();
 const client = new SNSClient(config.awsConfig as any);

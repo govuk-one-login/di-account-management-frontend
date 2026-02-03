@@ -1,4 +1,4 @@
-import { ERROR_MESSAGES } from "../app.constants";
+import { ERROR_MESSAGES } from "../app.constants.js";
 
 export function shouldLogError(error: any) {
   return (

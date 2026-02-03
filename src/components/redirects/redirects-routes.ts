@@ -1,7 +1,7 @@
 import * as express from "express";
 import { Request, Response } from "express";
-import { PATH_DATA, WELL_KNOWN_FILES } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+import { PATH_DATA, WELL_KNOWN_FILES } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const router = express.Router();

@@ -1,8 +1,12 @@
 import { expect } from "chai";
 import { describe, it } from "mocha";
 import * as sinon from "sinon";
-import * as config from "../../config";
-import { generateMfaSecret, generateQRCodeValue, verifyMfaCode } from "./index";
+import * as config from "../../config.js";
+import {
+  generateMfaSecret,
+  generateQRCodeValue,
+  verifyMfaCode,
+} from "./index.js";
 
 describe("MFA Utils", () => {
   describe("generateMfaSecret", () => {

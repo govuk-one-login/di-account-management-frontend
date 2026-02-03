@@ -3,9 +3,9 @@ import {
   ERROR_MESSAGES,
   HTTP_STATUS_CODES,
   PATH_DATA,
-} from "../../app.constants";
-import { logger } from "../../utils/logger";
-import { getLastNDigits } from "../../utils/phone-number";
+} from "../../app.constants.js";
+import { logger } from "../../utils/logger.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
@@ -13,11 +13,11 @@ import {
   CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
+} from "../../utils/mfaClient/types.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {

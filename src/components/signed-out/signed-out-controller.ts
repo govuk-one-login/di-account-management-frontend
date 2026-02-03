@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
-import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../../utils/opl";
+import { PATH_DATA } from "../../app.constants.js";
+import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function signedOutGet(req: Request, res: Response): void {

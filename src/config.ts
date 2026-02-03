@@ -1,6 +1,6 @@
 import { filterClients } from "di-account-management-rp-registry";
-import { ENVIRONMENT_NAME, LOCALE } from "./app.constants";
-import { createTimedMemoize } from "./utils/createTimedMemoize";
+import { ENVIRONMENT_NAME, LOCALE } from "./app.constants.js";
+import { createTimedMemoize } from "./utils/createTimedMemoize.js";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";

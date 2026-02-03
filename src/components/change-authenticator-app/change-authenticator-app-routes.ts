@@ -1,11 +1,11 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 import {
   changeAuthenticatorAppGet,
   changeAuthenticatorAppPost,
-} from "./change-authenticator-app-controller";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+} from "./change-authenticator-app-controller.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
 
 const router = express.Router();
 

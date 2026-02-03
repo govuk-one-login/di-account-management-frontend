@@ -1,5 +1,5 @@
-import { getActivityLogEntry } from "./activityHistory";
-import type { ActivityLogEntry } from "./types";
+import { getActivityLogEntry } from "./activityHistory.js";
+import type { ActivityLogEntry } from "./types.js";
 
 export const presentActivityHistory = async (
   subjectId: string,

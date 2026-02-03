@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { shouldLogError } from "../utils/shouldLogError";
+import { shouldLogError } from "../utils/shouldLogError.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function logErrorMiddleware(

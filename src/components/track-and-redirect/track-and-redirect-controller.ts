@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getContactEmailServiceUrl } from "../../config";
-import { logger } from "../../utils/logger";
+import { getContactEmailServiceUrl } from "../../config.js";
+import { logger } from "../../utils/logger.js";
 
 export enum ExpectedParams {
   FromURL = "fromURL",

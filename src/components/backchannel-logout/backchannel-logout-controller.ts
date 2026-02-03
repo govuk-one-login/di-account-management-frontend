@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { HTTP_STATUS_CODES } from "../../app.constants";
-import { LogoutToken } from "./types";
+import { HTTP_STATUS_CODES } from "../../app.constants.js";
+import { LogoutToken } from "./types.js";
 import { jwtVerify } from "jose";
 import {
   getLogoutTokenMaxAge,
   getTokenValidationClockSkew,
-} from "../../config";
-import { destroyUserSessions } from "../../utils/session-store";
-import { getOIDCConfig } from "../../config/oidc";
-import { getCachedJWKS } from "../../utils/oidc";
+} from "../../config.js";
+import { destroyUserSessions } from "../../utils/session-store.js";
+import { getOIDCConfig } from "../../config/oidc.js";
+import { getCachedJWKS } from "../../utils/oidc.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const BACK_CHANNEL_LOGOUT_EVENT =
