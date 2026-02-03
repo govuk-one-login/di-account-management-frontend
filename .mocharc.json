@@ -1,15 +1,7 @@
 {
   "diff": true,
-  "extension": ["js", "ts"],
+  "extension": ["js"],
   "timeout": 30000,
   "recursive": true,
-  "require": ["ts-node/register"],
-  "exit": true,
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "commonjs",
-      "esModuleInterop": true
-    }
-  }
+  "exit": true
 }

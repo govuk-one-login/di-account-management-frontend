@@ -11,21 +11,23 @@ import {
   MISSING_USER_ID_SPECIAL_CASE,
 } from "../app.constants.js";
 import { SinonFakeTimers } from "sinon";
-import * as configModule from "../config.js";
 
 describe("eventService", () => {
   let sqs: SqsService;
   let sendSpy: sinon.SinonSpy;
+  let originalClientId: string;
 
   beforeEach(() => {
     sendSpy = sinon.spy();
     sqs = { sendAuditEvent: sendSpy } as any;
 
-    sinon.replace(configModule, "getOIDCClientId", () => "test-client-id");
+    originalClientId = process.env.OIDC_CLIENT_ID;
+    process.env.OIDC_CLIENT_ID = "test-client-id";
   });
 
   afterEach(() => {
     sinon.restore();
+    process.env.OIDC_CLIENT_ID = originalClientId;
   });
 
   describe("buildAuditEvent", () => {
