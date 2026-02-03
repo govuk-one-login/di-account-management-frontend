@@ -334,54 +334,6 @@ describe("Integration:: change phone number", () => {
     request(app).get(PATH_DATA.NO_UK_PHONE_NUMBER.url).expect(302, done);
   });
 
-  it("should redirect to /no-uk-phone-number page when international phone number entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(HTTP_STATUS_CODES.NO_CONTENT);
-
-    // Act
-    const res = await request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-        phoneNumber: "+33645453322",
-      })
-      .expect("Location", "/no-uk-mobile-phone?type=changePhoneNumber")
-      .expect(302);
-    expect(res.statusCode).to.eq(302);
-  });
-
-  it("should return a bad request if no phone number is provided", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(HTTP_STATUS_CODES.NO_CONTENT);
-
-    // Act
-    const res = await request(app)
-      .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
-      .type("form")
-      .set("Cookie", cookies)
-      .send({
-        _csrf: token,
-      })
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
-          "Enter a UK mobile phone number"
-        );
-      })
-      .expect(400);
-    expect(res.statusCode).to.eq(400);
-  });
-
   it("should return internal server error if send-otp-notification API call fails", async () => {
     // Arrange
     nock(baseApi)

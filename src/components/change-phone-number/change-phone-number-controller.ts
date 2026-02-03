@@ -55,35 +55,6 @@ export function changePhoneNumberPost(
     const { email } = req.session.user;
     const newPhoneNumber = req.body.phoneNumber;
 
-    if (!newPhoneNumber || newPhoneNumber.trim() === "") {
-      const error = formatValidationError(
-        "phoneNumber",
-        req.t("pages.changePhoneNumber.ukPhoneNumber.validationError.required")
-      );
-      return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);
-    }
-
-    if (
-      !RegExp(
-        /^\+440\d{10}$|^\+447\d{9}$|^440\d{10}$|^447\d{9}$|^07\d{9}$/
-      ).test(newPhoneNumber)
-    ) {
-      logger.info("Non-UK phone number detected in change phone number flow");
-      const error = formatValidationError(
-        "phoneNumber",
-        req.t(
-          "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
-        )
-      );
-      logger.info(
-        "error generated for non-UK phone number in change phone number flow.  Logging..."
-      );
-      logger.warn(error, "Non-UK phone number entered for change phone number");
-
-      logger.info("Redirecting to no UK phone number page");
-      return this.notUkPhoneNumberGet(req, res);
-    }
-
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
