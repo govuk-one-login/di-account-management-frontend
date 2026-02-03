@@ -1,4 +1,4 @@
-import { getAppEnv, isProd } from "../../config";
+import { getAppEnv, isProd } from "../../config.js";
 import { NobleCryptoPlugin, ScureBase32Plugin, TOTP } from "otplib";
 
 const totp = new TOTP({

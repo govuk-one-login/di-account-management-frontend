@@ -1,6 +1,6 @@
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 import * as express from "express";
-import { permanentlySuspendedGet } from "./permanently-suspended-controller";
+import { permanentlySuspendedGet } from "./permanently-suspended-controller.js";
 
 const router = express.Router();
 

@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { generators } from "openid-client";
-import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants";
-import { logger } from "../utils/logger";
-import { kmsService } from "../utils/kms";
-import base64url from "base64url";
-import { getOIDCApiDiscoveryUrl } from "../config";
+import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants.js";
+import { logger } from "../utils/logger.js";
+import { kmsService } from "../utils/kms.js";
+import { getOIDCApiDiscoveryUrl } from "../config.js";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -33,7 +32,10 @@ export async function requiresAuthMiddleware(
   }
 }
 
-export async function redirectToLogIn(req: Request, res: Response): Promise<void> {
+export async function redirectToLogIn(
+  req: Request,
+  res: Response
+): Promise<void> {
   req.session.nonce = generators.nonce(15);
   req.session.state = generators.nonce(10);
   const authorizationUrl = await generateAuthUrl(req);
@@ -50,7 +52,7 @@ async function generateAuthUrl(req: Request): Promise<string> {
 
   const headers = { alg: "RS512", typ: "JWT" };
   const claims = {
-    aud: `${ getOIDCApiDiscoveryUrl() }/authorize`,
+    aud: `${getOIDCApiDiscoveryUrl()}/authorize`,
     iss: req.oidc.metadata.client_id,
     ...baseParams,
     redirect_uri: req.oidc.metadata.redirect_uris[0],
@@ -58,12 +60,18 @@ async function generateAuthUrl(req: Request): Promise<string> {
     nonce: req.session.nonce,
     vtr: JSON.stringify([VECTORS_OF_TRUST.MEDIUM]),
     cookie_consent: req.query.cookie_consent,
-    _ga: req.query._ga  
-  }
-  const encodedHeader = base64url.encode(JSON.stringify(headers));
-  const encodedPayload = base64url.encode(JSON.stringify(claims));
-  const unsignedToken = `${encodedHeader}.${encodedPayload}`
-  const sig = await kmsService.sign(unsignedToken)
+    _ga: req.query._ga,
+  };
+  const encodedHeader = Buffer.from(
+    JSON.stringify(headers),
+    "base64url"
+  ).toString(); //base64url.encode(JSON.stringify(headers));
+  const encodedPayload = Buffer.from(
+    JSON.stringify(claims),
+    "base64url"
+  ).toString(); //base64url.encode(JSON.stringify(claims));
+  const unsignedToken = `${encodedHeader}.${encodedPayload}`;
+  const sig = await kmsService.sign(unsignedToken);
   const base64Signature = Buffer.from(sig.Signature)
     .toString("base64")
     .replace(/\+/g, "-")

@@ -2,18 +2,18 @@ import { NextFunction, Request, Response } from "express";
 import {
   formatValidationError,
   generateErrorList,
-} from "../../../utils/validation";
+} from "../../../utils/validation.js";
 import assert from "node:assert";
 import {
   generateMfaSecret,
   generateQRCodeValue,
   verifyMfaCode,
-} from "../../../utils/mfa";
+} from "../../../utils/mfa/index.js";
 import QRCode from "qrcode";
 import {
   containsNumbersOnly,
   splitSecretKeyIntoFragments,
-} from "../../../utils/strings";
+} from "../../../utils/strings.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function renderMfaMethodPage(

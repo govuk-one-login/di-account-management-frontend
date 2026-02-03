@@ -1,5 +1,5 @@
 import { body, ValidationChain } from "express-validator";
-import { validateBodyMiddleware } from "../../middleware/form-validation-middleware";
+import { validateBodyMiddleware } from "../../middleware/form-validation-middleware.js";
 import { Request, Response, NextFunction } from "express";
 
 export function validateChooseBackupRequest(): (

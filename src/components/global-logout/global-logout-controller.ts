@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { eventService as createEventService } from "../../services/event-service";
-import { EventName, LogoutState, PATH_DATA } from "../../app.constants";
-import { handleLogout } from "../../utils/logout";
+import { eventService as createEventService } from "../../services/event-service.js";
+import { EventName, LogoutState, PATH_DATA } from "../../app.constants.js";
+import { handleLogout } from "../../utils/logout.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { setOplSettings } from "../../utils/opl";
+import { setOplSettings } from "../../utils/opl.js";
 import {
   UserJourney,
   EventType,
   getNextState,
-} from "../../utils/state-machine";
-import { sqsService as createSqsService } from "../..//utils/sqs";
-import { DeviceIntelligence } from "../../types";
+} from "../../utils/state-machine.js";
+import { sqsService as createSqsService } from "../..//utils/sqs.js";
+import { DeviceIntelligence } from "../../types.js";
 
 export function globalLogoutGet(req: Request, res: Response): void {
   setOplSettings(

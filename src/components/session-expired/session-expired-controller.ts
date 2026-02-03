@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../../utils/opl";
+import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function sessionExpiredGet(req: Request, res: Response): void {

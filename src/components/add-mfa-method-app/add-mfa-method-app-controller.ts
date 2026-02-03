@@ -1,10 +1,16 @@
 import { NextFunction, Request, Response } from "express";
-import { MAX_MFA_METHOD_COUNT, PATH_DATA } from "../../app.constants";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
-import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
-import { AuthAppMethod } from "../../utils/mfaClient/types";
-import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { MAX_MFA_METHOD_COUNT, PATH_DATA } from "../../app.constants.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import {
+  handleMfaMethodPage,
+  renderMfaMethodPage,
+} from "../common/mfa/index.js";
+import {
+  createMfaClient,
+  formatErrorMessage,
+} from "../../utils/mfaClient/index.js";
+import { AuthAppMethod } from "../../utils/mfaClient/types.js";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const ADD_MFA_METHOD_AUTH_APP_TEMPLATE = "add-mfa-method-app/index.njk";

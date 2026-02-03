@@ -1,6 +1,6 @@
 import * as express from "express";
-import { oidcAuthCallbackGet } from "./call-back-controller";
-import { PATH_DATA } from "../../app.constants";
+import { oidcAuthCallbackGet } from "./call-back-controller.js";
+import { PATH_DATA } from "../../app.constants.js";
 
 const router = express.Router();
 

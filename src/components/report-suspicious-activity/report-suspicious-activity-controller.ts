@@ -1,23 +1,26 @@
 import { Request, Response, NextFunction } from "express";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
+import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants.js";
 import {
   getAppEnv,
   getDynamoActivityLogStoreTableName,
   getOIDCClientId,
   reportSuspiciousActivity,
   getSNSSuspicousActivityTopic,
-} from "../../config";
+} from "../../config.js";
 import { QueryCommand } from "@aws-sdk/client-dynamodb";
-import { dynamoDBService } from "../../utils/dynamo";
-import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
+import { dynamoDBService } from "../../utils/dynamo.js";
+import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types.js";
 import assert from "node:assert";
-import { formatActivityLogs } from "../../utils/activityHistory";
-import { decryptData } from "../../utils/decrypt-data";
-import { snsService } from "../../utils/sns";
-import { getTxmaHeader } from "../../utils/txma-header";
+import { formatActivityLogs } from "../../utils/activityHistory.js";
+import { decryptData } from "../../utils/decrypt-data.js";
+import { snsService } from "../../utils/sns.js";
+import { getTxmaHeader } from "../../utils/txma-header.js";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { logger } from "../../utils/logger";
-import { ACTIVITY_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { logger } from "../../utils/logger.js";
+import {
+  ACTIVITY_COMMON_OPL_SETTINGS,
+  setOplSettings,
+} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const activityLogDynamoDBRequest = (

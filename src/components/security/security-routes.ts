@@ -1,8 +1,8 @@
 import * as express from "express";
-import { securityGet } from "./security-controller";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
+import { securityGet } from "./security-controller.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware.js";
 
 const router = express.Router();
 

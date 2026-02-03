@@ -1,13 +1,13 @@
-import { API_ENDPOINTS } from "../../../app.constants";
-import { getRequestConfig, Http } from "../../../utils/http";
+import { API_ENDPOINTS } from "../../../app.constants.js";
+import { getRequestConfig, Http } from "../../../utils/http.js";
 import {
   getGovPublishingBaseAPIToken,
   getGovPublishingBaseAPIUrl,
-} from "../../../config";
+} from "../../../config.js";
 import {
   GovUkPublishingServiceInterface,
   GovUkNotificationRequest,
-} from "./types";
+} from "./types.js";
 
 export function govUkPublishingService(
   axios: Http = new Http(getGovPublishingBaseAPIUrl())

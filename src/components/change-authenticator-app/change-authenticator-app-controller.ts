@@ -1,11 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { MfaMethod } from "../../utils/mfaClient/types";
-import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
-import { logger } from "../../utils/logger";
-import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
-import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { PATH_DATA } from "../../app.constants.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { MfaMethod } from "../../utils/mfaClient/types.js";
+import {
+  createMfaClient,
+  formatErrorMessage,
+} from "../../utils/mfaClient/index.js";
+import { logger } from "../../utils/logger.js";
+import {
+  handleMfaMethodPage,
+  renderMfaMethodPage,
+} from "../common/mfa/index.js";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const CHANGE_AUTHENTICATOR_APP_TEMPLATE = "change-authenticator-app/index.njk";

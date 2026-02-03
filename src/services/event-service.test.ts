@@ -1,17 +1,17 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import sinon from "sinon";
-import { SqsService } from "../utils/types";
-import { eventService } from "./event-service";
+import { SqsService } from "../utils/types.js";
+import { eventService } from "./event-service.js";
 import {
   EventName,
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
   MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
   MISSING_SESSION_ID_SPECIAL_CASE,
   MISSING_USER_ID_SPECIAL_CASE,
-} from "../app.constants";
+} from "../app.constants.js";
 import { SinonFakeTimers } from "sinon";
-import * as configModule from "../config";
+import * as configModule from "../config.js";
 
 describe("eventService", () => {
   let sqs: SqsService;

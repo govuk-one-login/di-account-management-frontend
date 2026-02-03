@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { LogoutRedirect, LogoutState } from "../../app.constants";
+import { LogoutRedirect, LogoutState } from "../../app.constants.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function logoutRedirectGet(

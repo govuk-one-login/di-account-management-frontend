@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { ExpressRouteFunc, OIDCConfig } from "../types";
-import { getOIDCClient } from "../utils/oidc";
-import { OIDC_ERRORS } from "../app.constants";
+import { ExpressRouteFunc, OIDCConfig } from "../types.js";
+import { getOIDCClient } from "../utils/oidc.js";
+import { OIDC_ERRORS } from "../app.constants.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export function authMiddleware(config: OIDCConfig): ExpressRouteFunc {

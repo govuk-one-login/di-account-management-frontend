@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { getListOfActivityHistoryClientIDs } from "../config";
-import { getServices } from "../utils/yourServices";
-import { LOG_MESSAGES, PATH_DATA } from "../app.constants";
-import type { Service } from "../utils/types";
+import { getListOfActivityHistoryClientIDs } from "../config.js";
+import { getServices } from "../utils/yourServices.js";
+import { LOG_MESSAGES, PATH_DATA } from "../app.constants.js";
+import type { Service } from "../utils/types.js";
 
 export const findClientInServices = (
   clientIds: string[],

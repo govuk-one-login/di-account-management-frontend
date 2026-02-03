@@ -1,5 +1,5 @@
-import { RequestConfig } from "../../utils/http";
-import { ApiResponseResult } from "../../utils/types";
+import { RequestConfig } from "../../utils/http.js";
+import { ApiResponseResult } from "../../utils/types.js";
 
 export interface ChangePhoneNumberServiceInterface {
   sendPhoneVerificationNotification: (

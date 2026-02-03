@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { AttributeValue, GetItemCommand } from "@aws-sdk/client-dynamodb";
-import { dynamoDBService } from "./dynamo";
+import { dynamoDBService } from "./dynamo.js";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import {
   getDynamoServiceStoreTableName,
@@ -10,10 +10,10 @@ import {
   getClientsWithDetailedCard,
   getAppEnv,
   getListOfShowInDeleteAccountClientIDs,
-} from "../config";
-import { prettifyDate } from "./prettifyDate";
-import type { YourServices, Service } from "./types";
-import { logger } from "./logger";
+} from "../config.js";
+import { prettifyDate } from "./prettifyDate.js";
+import type { YourServices, Service } from "./types.js";
+import { logger } from "./logger.js";
 
 const serviceStoreDynamoDBRequest = (subjectId: string): GetItemCommand => {
   const param = {
