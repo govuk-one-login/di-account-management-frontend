@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Metrics, MetricUnit } from "@aws-lambda-powertools/metrics";
-import { logger } from "../utils/logger";
+import { logger } from "../utils/logger.js";
 
 export function metricsMiddleware(
   namespace = "Account Home",

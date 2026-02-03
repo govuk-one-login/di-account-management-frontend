@@ -1,8 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { ERROR_MESSAGES } from "../app.constants";
-import { createMfaClient, formatErrorMessage } from "../utils/mfaClient";
+import { ERROR_MESSAGES } from "../app.constants.js";
+import {
+  createMfaClient,
+  formatErrorMessage,
+} from "../utils/mfaClient/index.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { shouldLogError } from "../utils/shouldLogError";
+import { shouldLogError } from "../utils/shouldLogError.js";
 
 export async function mfaMethodMiddleware(
   req: Request,

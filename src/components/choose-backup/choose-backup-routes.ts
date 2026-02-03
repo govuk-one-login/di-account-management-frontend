@@ -1,10 +1,13 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { chooseBackupGet, chooseBackupPost } from "./choose-backup-controller";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
-import { validateChooseBackupRequest } from "./choose-backup-validation";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import {
+  chooseBackupGet,
+  chooseBackupPost,
+} from "./choose-backup-controller.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware.js";
+import { validateChooseBackupRequest } from "./choose-backup-validation.js";
 
 const router = express.Router();
 

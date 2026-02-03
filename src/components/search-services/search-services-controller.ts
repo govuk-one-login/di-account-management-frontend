@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { getAppEnv, getClientsToShowInSearch } from "../../config";
-import { LOCALE } from "../../app.constants";
+import { getAppEnv, getClientsToShowInSearch } from "../../config.js";
+import { LOCALE } from "../../app.constants.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { Worker, Index } from "flexsearch";
 import { getTranslations } from "di-account-management-rp-registry";
 import i18next, { TFunction } from "i18next";
-import { safeTranslate } from "../../utils/safeTranslate";
-import { setOplSettings } from "../../utils/opl";
+import { safeTranslate } from "../../utils/safeTranslate.js";
+import { setOplSettings } from "../../utils/opl.js";
 
 const TEMPLATE_NAME = "search-services/index.njk";
 

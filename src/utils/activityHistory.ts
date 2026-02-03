@@ -4,18 +4,18 @@ import {
   activityLogItemsPerPage,
   getDynamoActivityLogStoreTableName,
   getListOfActivityHistoryClientIDs,
-} from "../config";
-import { prettifyDate } from "./prettifyDate";
-import { serviceIsAvailableInWelsh } from "./yourServices";
+} from "../config.js";
+import { prettifyDate } from "./prettifyDate.js";
+import { serviceIsAvailableInWelsh } from "./yourServices.js";
 import {
   ActivityLogEntry,
   allowedTxmaEvents,
   FormattedActivityLog,
-} from "./types";
-import { dynamoDBService } from "./dynamo";
-import { decryptData } from "./decrypt-data";
-import { PATH_DATA } from "../app.constants";
-import { logger } from "./logger";
+} from "./types.js";
+import { dynamoDBService } from "./dynamo.js";
+import { decryptData } from "./decrypt-data.js";
+import { PATH_DATA } from "../app.constants.js";
+import { logger } from "./logger.js";
 
 export const generatePagination = (dataLength: number, page: any): [] => {
   const pagination: any = {

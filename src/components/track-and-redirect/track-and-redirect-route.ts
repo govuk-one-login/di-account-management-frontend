@@ -1,9 +1,9 @@
 import * as express from "express";
-import { EventName, PATH_DATA } from "../../app.constants";
+import { EventName, PATH_DATA } from "../../app.constants.js";
 
-import { eventService } from "../../services/event-service";
-import { buildContactEmailServiceUrl } from "./track-and-redirect-controller";
-import { logger } from "../../utils/logger";
+import { eventService } from "../../services/event-service.js";
+import { buildContactEmailServiceUrl } from "./track-and-redirect-controller.js";
+import { logger } from "../../utils/logger.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const router = express.Router();

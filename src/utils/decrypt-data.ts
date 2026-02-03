@@ -4,10 +4,10 @@ import {
   KmsKeyringNode,
   buildDecrypt,
 } from "@aws-crypto/client-node";
-import buildKmsKeyring from "./kms-keyring-builder";
-import { logger } from "./logger";
+import buildKmsKeyring from "./kms-keyring-builder.js";
+import { logger } from "./logger.js";
 
-import { getHashedAccessCheckValue } from "./get-access-check-value";
+import { getHashedAccessCheckValue } from "./get-access-check-value.js";
 const MAX_ENCRYPTED_DATA_KEY = 5;
 const DECODING = "utf8";
 

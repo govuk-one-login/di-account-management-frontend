@@ -11,12 +11,12 @@ import {
   getDtRumUrl,
   missionLabsWebSocketAddress,
   isProd,
-} from "../config";
-import { generateNonce } from "../utils/strings";
-import { PATH_DATA } from "../app.constants";
-import { getSessionIdsFrom } from "../utils/session-ids";
-import { getCurrentUrl } from "../utils/language-toggle";
-import { generateStaticHash } from "../utils/generate-static-hash";
+} from "../config.js";
+import { generateNonce } from "../utils/strings.js";
+import { PATH_DATA } from "../app.constants.js";
+import { getSessionIdsFrom } from "../utils/session-ids.js";
+import { getCurrentUrl } from "../utils/language-toggle.js";
+import { generateStaticHash } from "../utils/generate-static-hash.js";
 import { randomUUID } from "node:crypto";
 
 export async function setLocalVarsMiddleware(

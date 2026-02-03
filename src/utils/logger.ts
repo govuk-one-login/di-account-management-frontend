@@ -1,6 +1,6 @@
 import pino from "pino";
-import PinoHttp from "pino-http";
-import { getLogLevel } from "../config";
+import { pinoHttp } from "pino-http";
+import { getLogLevel } from "../config.js";
 
 const logger = pino({
   name: "di-account-management-frontend",
@@ -56,14 +56,14 @@ const ignorePaths = [
 
 const loggerHttp = logger as pino.Logger<string>;
 
-const loggerMiddleware = PinoHttp({
+const loggerMiddleware = pinoHttp({
   logger: loggerHttp,
   wrapSerializers: false,
-  autoLogging: { ignore: (req) => ignorePaths.includes(req.url) },
-  customErrorMessage: function (error, res) {
-    return "request errored with status code: " + res.statusCode;
+  autoLogging: { ignore: (req: Request) => ignorePaths.includes(req.url) },
+  customErrorMessage: function (_error, res) {
+    return "request xrrored with status code: " + res.statusCode;
   },
-  customSuccessMessage: function (res) {
+  customSuccessMessage: function (req, res) {
     if (res.statusCode === 404) {
       return "resource not found";
     }

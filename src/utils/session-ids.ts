@@ -4,7 +4,7 @@ import {
   CLIENT_SESSION_ID_UNKNOWN,
   PERSISTENT_SESSION_ID_UNKNOWN,
   SESSION_ID_UNKNOWN,
-} from "../app.constants";
+} from "../app.constants.js";
 
 interface SessionIds {
   sessionId: string;

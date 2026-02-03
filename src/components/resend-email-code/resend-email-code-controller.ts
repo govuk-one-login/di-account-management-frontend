@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { PATH_DATA } from "../../app.constants";
-import { ChangeEmailServiceInterface } from "../change-email/types";
-import { changeEmailService } from "../change-email/change-email-service";
+import { ExpressRouteFunc } from "../../types.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { ChangeEmailServiceInterface } from "../change-email/types.js";
+import { changeEmailService } from "../change-email/change-email-service.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { getRequestConfigFromExpress } from "../../utils/http";
+} from "../../utils/validation.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   CHANGE_EMAIL_COMMON_OPL_SETTINGS,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "resend-email-code/index.njk";

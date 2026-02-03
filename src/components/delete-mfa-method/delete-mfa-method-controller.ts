@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
-import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants";
-import { getLastNDigits } from "../../utils/phone-number";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
-import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { HTTP_STATUS_CODES, PATH_DATA } from "../../app.constants.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import {
+  createMfaClient,
+  formatErrorMessage,
+} from "../../utils/mfaClient/index.js";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const setLocalOplSettings = (res: Response) => {

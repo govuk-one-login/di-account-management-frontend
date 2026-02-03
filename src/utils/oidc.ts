@@ -1,15 +1,15 @@
 import { Issuer, Client, custom, generators } from "openid-client";
-import { OIDCConfig } from "../types";
-import { ClientAssertionServiceInterface, KmsService } from "./types";
-import { kmsService } from "./kms";
-import base64url from "base64url";
+import { OIDCConfig } from "../types.js";
+import { ClientAssertionServiceInterface, KmsService } from "./types.js";
+import { kmsService } from "./kms.js";
+//import * as base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
-import { cacheWithExpiration } from "./cache";
+import { cacheWithExpiration } from "./cache.js";
 import { Request } from "express";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { retryableFunction } from "./retryableFunction";
-import { ERROR_MESSAGES, OIDC_ERRORS } from "../app.constants";
+import { retryableFunction } from "./retryableFunction.js";
+import { ERROR_MESSAGES, OIDC_ERRORS } from "../app.constants.js";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
 const jwksRefreshInterval = 24 * 60 * 60 * 1000;
@@ -86,8 +86,14 @@ const clientAssertionGenerator = (
       iat: Math.floor(Date.now() / 1000),
       jti: random(),
     };
-    const encodedHeader = base64url.encode(JSON.stringify(headers));
-    const encodedPayload = base64url.encode(JSON.stringify(payload));
+    const encodedHeader = Buffer.from(
+      JSON.stringify(headers),
+      "base64url"
+    ).toString(); //base64url.encode(JSON.stringify(headers));
+    const encodedPayload = Buffer.from(
+      JSON.stringify(payload),
+      "base64url"
+    ).toString(); //base64url.encode(JSON.stringify(payload));
     const message = `${encodedHeader}.${encodedPayload}`;
     const sig = await kms.sign(message);
     const base64Signature = Buffer.from(sig.Signature)

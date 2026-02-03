@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
-import { DeleteAccountServiceInterface } from "./types";
-import { deleteAccountService } from "./delete-account-service";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { getAppEnv, getSNSDeleteTopic } from "../../config";
-import { getYourServicesForAccountDeletion } from "../../utils/yourServices";
-import { handleLogout } from "../../utils/logout";
-import { LogoutState } from "../../app.constants";
-import { getRequestConfigFromExpress } from "../../utils/http";
+import { ExpressRouteFunc } from "../../types.js";
+import { DeleteAccountServiceInterface } from "./types.js";
+import { deleteAccountService } from "./delete-account-service.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { getAppEnv, getSNSDeleteTopic } from "../../config.js";
+import { getYourServicesForAccountDeletion } from "../../utils/yourServices.js";
+import { handleLogout } from "../../utils/logout.js";
+import { LogoutState } from "../../app.constants.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function deleteAccountGet(

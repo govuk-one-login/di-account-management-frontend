@@ -1,7 +1,7 @@
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 
 import express from "express";
-import { signedOutGet } from "./signed-out-controller";
+import { signedOutGet } from "./signed-out-controller.js";
 
 const router = express.Router();
 

@@ -1,24 +1,24 @@
 import { Request, Response } from "express";
-import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA } from "../../app.constants";
+import { ExpressRouteFunc } from "../../types.js";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { checkYourEmailService } from "./check-your-email-service";
+} from "../../utils/validation.js";
+import { checkYourEmailService } from "./check-your-email-service.js";
 import {
   CheckYourEmailServiceError,
   CheckYourEmailServiceInterface,
-} from "./types";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types";
-import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service";
-import { UpdateInformationInput } from "../../utils/types";
-import { getRequestConfigFromExpress } from "../../utils/http";
+} from "./types.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types.js";
+import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service.js";
+import { UpdateInformationInput } from "../../utils/types.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   CHANGE_EMAIL_COMMON_OPL_SETTINGS,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "check-your-email/index.njk";
