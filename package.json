@@ -33,7 +33,6 @@
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --watch src/assets/scss/application.scss dist/public/style.css",
-    "prepare": "husky install || true",
     "precommit": "pre-commit run",
     "audit": "npm audit --audit-level=moderate",
     "link-registry": "rm -rf node_modules/di-account-management-rp-registry && ln -s ../../di-account-management-rp-registry node_modules/di-account-management-rp-registry"
@@ -114,8 +113,6 @@
     "eslint-plugin-mocha": "^11.2.0",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^16.5.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.1",
     "mocha": "11.7.5",
     "nock": "^14.0.10",
     "nodemon": "3.1.11",
@@ -133,10 +130,5 @@
   "resolutions": {
     "minimist": "1.2.6",
     "json5": "2.2.3"
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,json,css,scss,md,yaml}": [
-      "npx prettier --write"
-    ]
   }
 }
