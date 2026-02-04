@@ -42,7 +42,7 @@ repos:
 
       - id: integration-tests-check
         name: Integration tests check
-        entry: bash -c "cd integration-tests && npm run check-types && npm run lint"
+        entry: npm --prefix integration-tests run validate
         language: system
         files: ^integration-tests/
         pass_filenames: false
