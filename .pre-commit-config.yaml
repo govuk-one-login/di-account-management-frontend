@@ -40,13 +40,6 @@ repos:
         entry: "npm run audit"
         language: system
 
-      # replace lint-staged
-      - id: prettier-fix
-        name: Prettier Fix
-        entry: npx prettier --write
-        language: system
-        files: \.(js|jsx|ts|tsx|json|css|scss|md|yaml)$
-
       - id: integration-tests-check
         name: Integration tests check
         entry: bash -c "cd integration-tests && npm run check-types && npm run lint"
