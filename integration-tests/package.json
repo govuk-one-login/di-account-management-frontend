@@ -14,14 +14,15 @@
     "test:ui:run": "playwright test --ui",
     "lint": "eslint . --report-unused-disable-directives",
     "lint:fix": "eslint . --fix --report-unused-disable-directives",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "validate": "npm run check-types && npm run lint"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.0",
+    "@axe-core/playwright": "^4.11.1",
     "@eslint/compat": "^1.4.1",
     "@eslint/js": "^9.39.2",
     "@playwright/test": "^1.58.1",
-    "@types/node": "^24.10.9",
+    "@types/node": "^24.10.10",
     "dotenv": "^17.2.3",
     "eslint": "^9.39.2",
     "eslint-plugin-playwright": "^2.5.1",

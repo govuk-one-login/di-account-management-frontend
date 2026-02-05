@@ -109,7 +109,6 @@ test/coverage
 functional-output
 output
 _output
-.huskyrc
 logs.json
 logs*.json
 *.csv
@@ -143,4 +142,3 @@ deploy/.terraform
 deploy/.terraform.lock.hcl
 deploy/terraform.tfstate
 deploy/terraform.tfstate.backup
-

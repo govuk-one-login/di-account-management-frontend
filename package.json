@@ -33,7 +33,6 @@
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --watch src/assets/scss/application.scss dist/public/style.css",
-    "prepare": "husky install || true",
     "precommit": "pre-commit run",
     "audit": "npm audit --audit-level=moderate",
     "link-registry": "rm -rf node_modules/di-account-management-rp-registry && ln -s ../../di-account-management-rp-registry node_modules/di-account-management-rp-registry"
@@ -51,7 +50,7 @@
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
     "@govuk-one-login/frontend-ui": "^4.2.2",
     "@govuk-one-login/frontend-vital-signs": "0.1.4",
-    "axios": "^1.13.3",
+    "axios": "^1.13.4",
     "base64url": "3.0.1",
     "body-parser": "^2.2.2",
     "connect-dynamodb": "^3.0.5",
@@ -81,7 +80,7 @@
     "qrcode": "^1.5.4",
     "uuid": "^13.0.0",
     "xss": "^1.0.15",
-    "xstate": "^5.25.1"
+    "xstate": "^5.26.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -100,8 +99,8 @@
     "@types/sinon": "^21.0.0",
     "@types/sinon-chai": "^3.2.12",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.53.1",
-    "@typescript-eslint/parser": "^8.53.1",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "chai": "^4.5.0",
     "chai-as-promised": "^7.1.2",
     "cheerio": "^1.2.0",
@@ -114,9 +113,7 @@
     "eslint-plugin-mocha": "^11.2.0",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^16.5.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.1",
-    "mocha": "^11.3.0",
+    "mocha": "11.7.5",
     "nock": "^14.0.10",
     "nodemon": "3.1.11",
     "nyc": "^17.1.0",
@@ -127,16 +124,11 @@
     "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.1",
+    "typescript-eslint": "^8.54.0",
     "uglify-js": "^3.19.3"
   },
   "resolutions": {
     "minimist": "1.2.6",
     "json5": "2.2.3"
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,json,css,scss,md,yaml}": [
-      "npx prettier --write"
-    ]
   }
 }
