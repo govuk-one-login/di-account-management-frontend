@@ -95,21 +95,6 @@
 {% block bodyEnd %}
     {% block scripts %}{% endblock %}
     <script type="text/javascript" src="/public/scripts/analytics.js?{{ staticHash }}" nonce='{{scriptNonce}}' defer></script>
-    {% if backLinkJS %}
-    <script type="text/javascript" nonce='{{scriptNonce}}'>
-        var backLink = document.querySelector('.js-back-link');
-        if (backLink) {
-          backLink.addEventListener('click', function(e) {
-            var referrer = new URL(document.referrer).hostname;
-
-            if (referrer === document.location.hostname && window.history.length > 2) {
-              event.preventDefault();
-              window.history.back();
-            }
-          });
-        }
-    </script>
-    {% endif %}
     <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
     if (window.DI) {
       window.DI.appInit({
@@ -127,7 +112,23 @@
         enableSelectContentTracking: {{isSelectContentTrackingEnabled}}
       });
     }
-  </script>
+    </script>
+    {% if backLinkJS %}
+    <script type="text/javascript" nonce='{{scriptNonce}}'>
+        var backLink = document.querySelector('.js-back-link');
+        if (backLink) {
+          backLink.addEventListener('click', function(e) {
+            var referrer = new URL(document.referrer).hostname;
+
+            if (referrer === document.location.hostname && window.history.length > 2) {
+              event.preventDefault();
+              window.history.back();
+            }
+          });
+        }
+    </script>
+    {% endif %}
+
   <script type="module" src="/public/scripts/govuk-frontend.min.js?{{ staticHash }}" {% if scriptNonce %} nonce="{{ scriptNonce }}"{% endif %}></script>
 
   <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
