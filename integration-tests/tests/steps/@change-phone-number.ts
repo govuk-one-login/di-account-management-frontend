@@ -11,14 +11,20 @@ Given(
   }
 );
 
-Given(
-  "I enter and submit the code {string} sent to my new mobile number ending {string}",
-  async ({ page }, otp: string, newPhoneNumber: string) => {
-    expect(
+Then(
+  "I am shown a message confirming a code has been sent to my new phone number ending {string}",
+  async ({ page }, newPhoneNumber: string) => {
+    await expect(
       page.getByText(
         `We have sent a code to your phone number ending with ${newPhoneNumber}`
       )
-    ).toBeVisible;
+    ).toBeVisible();
+  }
+);
+
+Given(
+  "I enter and submit the code {string} sent to my new mobile number ending {string}",
+  async ({ page }, otp: string) => {
     await page.getByLabel("Enter the 6 digit code").fill(otp);
     await page.getByRole("button", { name: "Continue" }).click();
   }
