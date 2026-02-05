@@ -94,12 +94,6 @@
 
 {% block bodyEnd %}
     {% block scripts %}{% endblock %}
-    <script type="module" src="/public/scripts/govuk-frontend.min.js?{{ staticHash }}" {% if scriptNonce %} nonce="{{ scriptNonce }}"{% endif %}></script>
-
-    <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
-      import { initAll } from '/public/scripts/govuk-frontend.min.js'
-      initAll()
-    </script>
     <script type="text/javascript" src="/public/scripts/analytics.js?{{ staticHash }}" nonce='{{scriptNonce}}' defer></script>
     {% if backLinkJS %}
     <script type="text/javascript" nonce='{{scriptNonce}}'>
@@ -133,6 +127,12 @@
         enableSelectContentTracking: {{isSelectContentTrackingEnabled}}
       });
     }
+  </script>
+  <script type="module" src="/public/scripts/govuk-frontend.min.js?{{ staticHash }}" {% if scriptNonce %} nonce="{{ scriptNonce }}"{% endif %}></script>
+
+  <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
+    import { initAll } from '/public/scripts/govuk-frontend.min.js'
+    initAll()
   </script>
   <script type="module" src="{{'FINGERPRINT' | getPath }}/index.js" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}></script>
   <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
