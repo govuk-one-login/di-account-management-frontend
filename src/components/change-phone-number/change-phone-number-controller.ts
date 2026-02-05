@@ -15,7 +15,6 @@ import { validationErrorFormatter } from "../../middleware/form-validation-middl
 import { getRequestConfigFromExpress } from "../../utils/http";
 import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { logger } from "../../utils/logger";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
 const NO_UK_PHONE_NUMBER_TEMPLATE =
