@@ -9,10 +9,14 @@
 {%- if isUserLoggedIn %} govuk-header--with-signout {%- endif -%}
 {%- endset-%}
 
+{%- macro nonce(nonce) -%}
+{% if nonce %} nonce="{{ nonce }}"{%  endif %}
+{%- endmacro -%}
+
 {% block head %}
   {# Dynatrace RUM snippet #}
   {% if dynatraceRumUrl %}
-  <script src='{{ dynatraceRumUrl }}' crossorigin="anonymous" nonce='{{ scriptNonce }}'></script>
+  <script src='{{ dynatraceRumUrl }}' crossorigin="anonymous" {{ nonce(scriptNonce) }}></script>
   {% endif %}
   <link href="/public/style.css?{{ staticHash }}" rel="stylesheet">
 {% endblock %}
@@ -94,8 +98,8 @@
 
 {% block bodyEnd %}
     {% block scripts %}{% endblock %}
-    <script type="text/javascript" src="/public/scripts/analytics.js?{{ staticHash }}" nonce='{{scriptNonce}}' defer></script>
-    <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
+    <script type="text/javascript" src="/public/scripts/analytics.js?{{ staticHash }}" {{ nonce(scriptNonce) }} defer></script>
+    <script type="module" {{ nonce(scriptNonce) }}>
     if (window.DI) {
       window.DI.appInit({
         ga4ContainerId: "{{ga4ContainerId}}"
@@ -114,7 +118,7 @@
     }
     </script>
     {% if backLinkJS %}
-    <script type="text/javascript" nonce='{{scriptNonce}}'>
+    <script type="text/javascript" {{ nonce(scriptNonce) }}>
         var backLink = document.querySelector('.js-back-link');
         if (backLink) {
           backLink.addEventListener('click', function(e) {
@@ -129,14 +133,14 @@
     </script>
     {% endif %}
 
-  <script type="module" src="/public/scripts/govuk-frontend.min.js?{{ staticHash }}" {% if scriptNonce %} nonce="{{ scriptNonce }}"{% endif %}></script>
+  <script type="module" src="/public/scripts/govuk-frontend.min.js?{{ staticHash }}" {{ nonce(scriptNonce) }}></script>
 
-  <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
+  <script type="module" {{ nonce(scriptNonce) }}>
     import { initAll } from '/public/scripts/govuk-frontend.min.js'
     initAll()
   </script>
-  <script type="module" src="{{'FINGERPRINT' | getPath }}/index.js" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}></script>
-  <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
+  <script type="module" src="{{'FINGERPRINT' | getPath }}/index.js" {{ nonce(scriptNonce) }}></script>
+  <script type="module" {{ nonce(scriptNonce) }}>
     import { setFingerprintCookie } from "{{'FINGERPRINT' | getPath }}/index.js";
     setFingerprintCookie("{{ fingerprintCookieDomain }}")
   </script>

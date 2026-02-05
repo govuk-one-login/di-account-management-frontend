@@ -1,16 +1,16 @@
-<script {% if params.nonce%} nonce='{{ params.nonce }}'{%  endif %}>
-    window.addEventListener('load', function () {
-        if (window.DI && window.DI.analyticsGa4) {
-            window.DI.analyticsGa4.pageViewTracker.trackOnPageLoad({
-                statusCode: '{{ params.statusCode }}',
-                englishPageTitle: '{{ params.englishPageTitle }}',
-                taxonomy_level1: '{{ params.taxonomyLevel1 }}',
-                taxonomy_level2: '{{ params.taxonomyLevel2 }}',
-                taxonomy_level3: '{{ params.taxonomyLevel3 }}',
-                content_id: '{{ params.contentId }}',
-                logged_in_status: {{ params.loggedInStatus }},
-                dynamic: {{ params.dynamic }}
-            });
-        }
-    });
+<script type="module" {% if params.nonce%} nonce='{{ params.nonce }}'{%  endif %}>
+  window.addEventListener('load', function () {
+    if (window.DI && window.DI.analyticsGa4) {
+      window.DI.analyticsGa4.pageViewTracker.trackOnPageLoad({
+        statusCode: '{{ params.statusCode }}',
+        englishPageTitle: '{{ params.englishPageTitle }}',
+        taxonomy_level1: '{{ params.taxonomyLevel1 }}',
+        taxonomy_level2: '{{ params.taxonomyLevel2 }}',
+        taxonomy_level3: '{{ params.taxonomyLevel3 }}',
+        content_id: '{{ params.contentId }}',
+        logged_in_status: {{ params.loggedInStatus }},
+        dynamic: {{ params.dynamic }}
+      });
+    }
+  });
 </script>
