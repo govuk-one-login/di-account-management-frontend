@@ -455,11 +455,12 @@
       }
     },
     "changePhoneNumber": {
-      "title": "Rhowch eich rhif ffôn symudol newydd",
-      "header": "Rhowch eich rhif ffôn symudol newydd",
+      "title": "Rhowch eich rhif ffôn symudol y DU newydd",
+      "header": "Rhowch eich rhif ffôn symudol y DU newydd",
       "info": {
         "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i’r rhif rydych yn ei roi i ni.",
-        "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
+        "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
+        "noUkPhone": "Nid oes gennyf rif ffôn symudol y DU"
       },
       "validationError": {
         "samePhoneNumber": "Rydych eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
@@ -473,15 +474,18 @@
           "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu’r symbol +"
         }
       },
-      "internationalPhoneNumber": {
-        "checkBoxLabel": "Rhif ffôn symudol",
-        "label": "Rhif ffôn symudol rhyngwladol",
-        "hint": "Dylech gynnwys y cod gwlad, er enghraifft +33 am Ffrainc",
-        "validationError": {
-          "required": "Rhowch rif ffôn symudol",
-          "plusNumericOnly": "Rhowch rif ffôn symudol gan ddefnyddio rhifau yn unig neu’r symbol +",
-          "internationalFormat": "Rhowch rif ffôn symudol yn y ffurf gywir, gan gynnwys y cod gwlad"
-        }
+      "noUkPhoneNumber": {
+        "title": "Os nad oes gennych rif ffôn symudol y DU",
+        "header": "Os nad oes gennych rif ffôn symudol y DU",
+        "paragraph1": "I gael codau diogelwch drwy neges destun, rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
+        "sub-heeader": "Beth allwch chi ei wneud",
+        "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
+        "detailSummary": "Beth yw ap dilysu?",
+        "detailText": "Beth yw ap dilysu?\nMae ap dilysydd yn creu cod diogelwch sy'n helpu i gadarnhau mai chi yw chi pan fyddwch yn mewngofnodi.\n\nGallwch ddefnyddio ap dilysydd ar eich ffôn clyfar, tabled neu gyfrifiadur. Lawrlwythwch ap dilysu ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau neu chwiliwch ar-lein am ap dilysu ar gyfer eich cyfrifiadur.",
+        "paragraph3": "I sefydlu ap dilysu i gael codau diogelwch:",
+        "listItem1": "Ewch yn ôl i <strong>Diogelwch</strong>",
+        "listItem2": "Dewiswch <strong>Defnyddio dull diofyn gwahanol</strong>",
+        "backLinkButton": "Yn ôl i Diogelwch"
       }
     },
     "signedOut": {
