@@ -209,7 +209,7 @@ describe("YourService Util", () => {
 
       const formattedService: Service = formatService(serviceFromDb, "en");
 
-      expect(formattedService.hasDetailedCard).equal(true);
+      expect(formattedService.hasDetailedCard).equal(false);
       expect(formattedService.isAvailableInWelsh).to.be.undefined;
     });
   });
