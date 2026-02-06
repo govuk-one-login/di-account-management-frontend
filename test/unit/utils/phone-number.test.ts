@@ -5,7 +5,7 @@ import {
   containsUKMobileNumber,
   lengthInRangeWithoutSpaces,
   convertInternationalPhoneNumberToE164Format,
-} from "../../../src/utils/phone-number";
+} from "../../../src/utils/phone-number.js";
 
 describe("phone-number", () => {
   describe("containsUKMobileNumber", () => {

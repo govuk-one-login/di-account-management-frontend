@@ -2,10 +2,10 @@ import { expect } from "chai";
 import { describe, it } from "mocha";
 import sinon from "sinon";
 import { TFunction } from "i18next";
-import { logger } from "../../../src/utils/logger";
+import { logger } from "../../../src/utils/logger.js";
 
-import { safeTranslate } from "../../../src/utils/safeTranslate";
-import { LOCALE } from "../../../src/app.constants";
+import { safeTranslate } from "../../../src/utils/safeTranslate.js";
+import { LOCALE } from "../../../src/app.constants.js";
 
 describe("safeTranslate", () => {
   let translate: sinon.SinonStub<[string, any?], string>;

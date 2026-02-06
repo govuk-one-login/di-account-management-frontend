@@ -4,7 +4,7 @@ import {
   EventType,
   getInitialState,
   getNextState,
-} from "../../../src/utils/state-machine";
+} from "../../../src/utils/state-machine.js";
 
 describe("state-machine", () => {
   describe("getInitialState", () => {

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { describe, it } from "mocha";
-import { createTimedMemoize } from "../../../src/utils/createTimedMemoize";
-import { sinon } from "../../utils/test-utils";
+import { createTimedMemoize } from "../../../src/utils/createTimedMemoize.js";
+import { sinon } from "../../utils/test-utils.js";
 
 describe("createTimedMemoize", () => {
   it("should return cached result within maxAge", () => {

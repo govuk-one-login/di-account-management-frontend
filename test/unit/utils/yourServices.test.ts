@@ -3,9 +3,9 @@ import { describe } from "mocha";
 import {
   formatService,
   presentYourServices,
-} from "../../../src/utils/yourServices";
-import * as yourServices from "../../../src/utils/yourServices";
-import type { DynamoDBService, Service } from "../../../src/utils/types";
+} from "../../../src/utils/yourServices.js";
+import * as yourServices from "../../../src/utils/yourServices.js";
+import type { DynamoDBService, Service } from "../../../src/utils/types.js";
 import sinon from "sinon";
 import {
   GetItemCommandOutput,

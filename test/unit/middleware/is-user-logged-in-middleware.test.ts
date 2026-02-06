@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction } from "express";
-import { sinon } from "../../utils/test-utils";
-import { isUserLoggedInMiddleware } from "../../../src/middleware/is-user-logged-in-middleware";
+import { sinon } from "../../utils/test-utils.js";
+import { isUserLoggedInMiddleware } from "../../../src/middleware/is-user-logged-in-middleware.js";
 
 describe("isUserLoggedInMiddleware", () => {
   let req: any;

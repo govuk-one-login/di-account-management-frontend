@@ -2,8 +2,8 @@ import { expect } from "chai";
 import sinon from "sinon";
 import { Request, Response } from "express";
 import { Client } from "openid-client";
-import { authMiddleware } from "../../../src/middleware/auth-middleware";
-import * as oidcUtils from "../../../src/utils/oidc";
+import { authMiddleware } from "../../../src/middleware/auth-middleware.js";
+import * as oidcUtils from "../../../src/utils/oidc.js";
 
 describe("authMiddleware", () => {
   let middleware: ReturnType<typeof authMiddleware>;

@@ -1,6 +1,6 @@
 import { Application } from "express";
 import request from "supertest";
-import { expect } from "./test-utils";
+import { expect } from "./test-utils.js";
 
 export async function checkFailedCSRFValidationBehaviour(
   app: Application,

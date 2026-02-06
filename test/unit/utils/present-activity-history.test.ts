@@ -2,8 +2,8 @@ import { describe } from "mocha";
 import { SinonStub, stub } from "sinon";
 import { expect } from "chai";
 
-import { presentActivityHistory } from "../../../src/utils/present-activity-history";
-import type { ActivityLogEntry } from "../../../src/utils/types";
+import { presentActivityHistory } from "../../../src/utils/present-activity-history.js";
+import type { ActivityLogEntry } from "../../../src/utils/types.js";
 
 const activityLogEntry: ActivityLogEntry = {
   event_type: "AUTH_AUTH_CODE_ISSUED",

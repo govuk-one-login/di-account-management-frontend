@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import { Request, Response, NextFunction } from "express";
-import { logErrorMiddleware } from "../../../src/middleware/log-error-middleware";
-import * as shouldLogErrorModule from "../../../src/utils/shouldLogError";
+import { logErrorMiddleware } from "../../../src/middleware/log-error-middleware.js";
+import * as shouldLogErrorModule from "../../../src/utils/shouldLogError.js";
 
 describe("logErrorMiddleware", () => {
   let req: Partial<Request>;

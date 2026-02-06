@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
 import { sinon } from "../../utils/test-utils";
-import { languageToggleMiddleware } from "../../../src/middleware/language-toggle-middleware";
+import { languageToggleMiddleware } from "../../../src/middleware/language-toggle-middleware.js";
 
 describe("lang middleware", () => {
   let sandbox: sinon.SinonSandbox;

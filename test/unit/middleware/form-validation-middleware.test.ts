@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
-import { sinon } from "../../utils/test-utils";
+import { sinon } from "../../utils/test-utils.js";
 import {
   validateBodyMiddleware,
   validationErrorFormatter,
-} from "../../../src/middleware/form-validation-middleware";
+} from "../../../src/middleware/form-validation-middleware.js";
 
 describe("HTML Lang middleware", () => {
   let sandbox: sinon.SinonSandbox;
