@@ -26,6 +26,7 @@ Feature: Change phone number
         And I am shown a message confirming that my phone number has been changed
         And I am shown a message confirming security codes will be sent to my phone number ending "3456"
 
+    @failMobile
     Scenario: Use a non-UK phone number
         Given I go to the "Root" page
         And I sign in as the "default" user
@@ -46,6 +47,7 @@ Feature: Change phone number
         And I am shown an error message saying "There is a problem"
         And there is a link to the phone number input field
 
+    @failMobile
     Scenario: Don't have a UK mobile phone number with no MFA
         Given I go to the "Root" page
         And I sign in as the "default" user

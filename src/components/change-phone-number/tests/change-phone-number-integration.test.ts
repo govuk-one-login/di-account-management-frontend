@@ -8,7 +8,6 @@ import decache from "decache";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
-  HTTP_STATUS_CODES,
   PATH_DATA,
 } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
