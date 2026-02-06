@@ -14,6 +14,7 @@ Feature: Change phone number
         And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your new UK mobile phone number"
+        And I am shown a message confirming a code has been sent to my new phone number ending "3456"
         Given I enter and submit my new mobile phone number "07890123456"
         And the page has finished loading
         Then the page meets our accessibility standards

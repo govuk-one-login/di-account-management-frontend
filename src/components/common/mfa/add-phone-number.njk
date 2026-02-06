@@ -37,11 +37,8 @@
   <a href="{{"NO_UK_PHONE_NUMBER" | getPath}}" class="govuk-link govuk-body">
     {{'pages.changePhoneNumber.info.noUkPhone' | translate}}
   </a>
-  <p class="govuk-!-margin-top-4 govuk-body govuk-!-margin-bottom-4"></p>
+  <div class="govuk-!-margin-top-4 govuk-body govuk-!-margin-bottom-4"></div>
   <a href="{{"SECURITY" | getPath}}" class="govuk-link govuk-body">
     {{'pages.changePhoneNumber.info.backLink' | translate}}
   </a>
-{% endblock %}
-{% block scripts %}
-  <script type="text/javascript" src="/public/scripts/international-phone.js?{{ staticHash }}" nonce='{{scriptNonce}}'></script>
 {% endblock %}

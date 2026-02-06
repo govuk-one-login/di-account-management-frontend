@@ -4,31 +4,35 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitleName = 'pages.changePhoneNumber.noUkPhoneNumber.title' | translate %}
+{% set detailBlockParagraphs %}
+  <p>{{ 'pages.changePhoneNumber.noUkPhoneNumber.detailTextLine1' | translate }}</p>
+  <p>{{ 'pages.changePhoneNumber.noUkPhoneNumber.detailTextLine2' | translate }}</p>
+  <p>{{ 'pages.changePhoneNumber.noUkPhoneNumber.detailTextLine3' | translate }}</p>
+{% endset %}
 
 {% block pageContent %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ 'pages.changePhoneNumber.noUkPhoneNumber.header' | translate }}</h1>
+  <h1 class="govuk-heading-l">{{ 'pages.changePhoneNumber.noUkPhoneNumber.header' | translate }}</h1>
 
   <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph1' | translate }}</p>
 
-  <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-3">{{ 'pages.changePhoneNumber.noUkPhoneNumber.sub-heeader' | translate }}</h2>
+  <h2 class="govuk-heading-m">{{ 'pages.changePhoneNumber.noUkPhoneNumber.sub-header' | translate }}</h2>
 
   <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph2' | translate }}</p>
 
   {{ govukDetails({
   summaryText: 'pages.changePhoneNumber.noUkPhoneNumber.detailSummary' | translate,
-  text: 'pages.changePhoneNumber.noUkPhoneNumber.detailText' | translate | nl2br | safe
+  html: detailBlockParagraphs
   }) }}
 
   <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph3' | translate }}</p>
 
-  <ol>
-    <li class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.listItem1' | translate | safe}}</li>
-    <li class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.listItem2' | translate | safe }}</li>
+  <ol class="govuk-list govuk-list--number">
+    <li >{{ 'pages.changePhoneNumber.noUkPhoneNumber.listItem1' | translate | safe}}</li>
+    <li >{{ 'pages.changePhoneNumber.noUkPhoneNumber.listItem2' | translate | safe }}</li>
   </ol>
 
   {{ govukButton({
     text: 'pages.changePhoneNumber.noUkPhoneNumber.backLinkButton' | translate,
     href:  "SECURITY" | getPath,
-    preventDoubleClick: true
   }) }}
 {% endblock %}
