@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { expect, sinon } from "../../utils/test-utils";
 import { describe } from "mocha";
-import { noCacheMiddleware } from "../../../src/middleware/no-cache-middleware";
+import { noCacheMiddleware } from "../../../src/middleware/no-cache-middleware.js";
 
 describe("no-cache-middleware", () => {
   let req: Partial<Request>;

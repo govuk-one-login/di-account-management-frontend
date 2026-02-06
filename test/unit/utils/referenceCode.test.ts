@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { generateReferenceCode } from "../../../src/utils/referenceCode";
+import { generateReferenceCode } from "../../../src/utils/referenceCode.js";
 
 describe("referenceCode", () => {
   describe("generateReferenceCode", () => {

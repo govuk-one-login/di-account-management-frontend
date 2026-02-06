@@ -2,9 +2,9 @@ import { expect } from "chai";
 import { describe } from "mocha";
 import { NextFunction, Request, Response } from "express";
 import { sinon } from "../../utils/test-utils";
-import { mfaMethodMiddleware } from "../../../src/middleware/mfa-method-middleware";
+import { mfaMethodMiddleware } from "../../../src/middleware/mfa-method-middleware.js";
 import * as mfaClient from "../../../src/utils/mfaClient";
-import { MfaMethod } from "../../../src/utils/mfaClient/types";
+import { MfaMethod } from "../../../src/utils/mfaClient/types.js";
 import Sinon from "sinon";
 
 describe("mfaMethodMiddleware", () => {

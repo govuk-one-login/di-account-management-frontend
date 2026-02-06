@@ -5,19 +5,19 @@ import {
   getCachedJWKS,
   getOIDCClient,
   initRefreshToken,
-} from "../../../src/utils/oidc";
-import { sinon, expect } from "../../utils/test-utils";
+} from "../../../src/utils/oidc.js";
+import { sinon, expect } from "../../utils/test-utils.js";
 import { generators, Issuer, ClientMetadata } from "openid-client";
 import { OIDCConfig } from "../../../src/types";
 import * as jose from "jose";
 import {
   ClientAssertionServiceInterface,
   KmsService,
-} from "../../../src/utils/types";
+} from "../../../src/utils/types.js";
 import base64url from "base64url";
-import { invalidateCache } from "../../../src/utils/cache";
+import { invalidateCache } from "../../../src/utils/cache.js";
 import { UnsecuredJWT } from "jose";
-import { ERROR_MESSAGES } from "../../../src/app.constants";
+import { ERROR_MESSAGES } from "../../../src/app.constants.js";
 
 function createAccessToken(expiry = 1600711538) {
   return new UnsecuredJWT({ exp: expiry })

@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils";
-import { requiresAuthMiddleware } from "../../../src/middleware/requires-auth-middleware";
-import { PATH_DATA } from "../../../src/app.constants";
+import { sinon } from "../../utils/test-utils.js";
+import { requiresAuthMiddleware } from "../../../src/middleware/requires-auth-middleware.js";
+import { PATH_DATA } from "../../../src/app.constants.js";
 import { Request, Response, NextFunction } from "express";
 import { generators } from "openid-client";
-import { kmsService } from "../../../src/utils/kms";
+import { kmsService } from "../../../src/utils/kms.js";
 import type { SignCommandOutput } from "@aws-sdk/client-kms";
 
 describe("Requires auth middleware", () => {
@@ -119,11 +119,16 @@ describe("Requires auth middleware", () => {
   it("should redirect to Log in page", async () => {
     const sandbox: sinon.SinonSandbox = sinon.createSandbox();
     sandbox.stub(generators, "nonce").returns("generated");
-    sandbox.stub(kmsService, "sign").resolves({ Signature: [1, 2, 3] as unknown as Uint8Array, KeyId: "", SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512", $metadata: {} }) as unknown as SignCommandOutput;
+    sandbox.stub(kmsService, "sign").resolves({
+      Signature: [1, 2, 3] as unknown as Uint8Array,
+      KeyId: "",
+      SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512",
+      $metadata: {},
+    }) as unknown as SignCommandOutput;
     const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
     const req: Partial<Request> = {
       body: {},
-      session: { 
+      session: {
         user: { isAuthenticated: undefined } as any,
       } as any,
       url: "/test_url",
@@ -135,7 +140,7 @@ describe("Requires auth middleware", () => {
           redirect_uris: ["url"],
           client_id: "test-client",
         },
-      } as any, 
+      } as any,
     };
 
     const res: Partial<Response> = {
@@ -150,11 +155,11 @@ describe("Requires auth middleware", () => {
     expect(res.redirect).to.have.called;
     expect(kmsService.sign).to.have.called;
     expect(req.oidc.authorizationUrl).to.have.been.calledOnceWith({
-      client_id: 'test-client',
-      response_type: 'code',
-      scope: 'openid',
+      client_id: "test-client",
+      response_type: "code",
+      scope: "openid",
       request: sinon.match(jwtRegex),
-    })
+    });
     sandbox.restore();
   });
 });

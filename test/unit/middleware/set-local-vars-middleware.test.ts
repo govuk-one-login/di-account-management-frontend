@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { expect, sinon } from "../../utils/test-utils";
+import { expect, sinon } from "../../utils/test-utils.js";
 import { describe } from "mocha";
-import { setLocalVarsMiddleware } from "../../../src/middleware/set-local-vars-middleware";
+import { setLocalVarsMiddleware } from "../../../src/middleware/set-local-vars-middleware.js";
 import {
   ENVIRONMENT_NAME,
   PERSISTENT_SESSION_ID_UNKNOWN,
-} from "../../../src/app.constants";
-import * as nonceModule from "../../../src/utils/strings";
+} from "../../../src/app.constants.js";
+import * as nonceModule from "../../../src/utils/strings.js";
 
 describe("set-local-vars-middleware", () => {
   let sandbox: sinon.SinonSandbox;
