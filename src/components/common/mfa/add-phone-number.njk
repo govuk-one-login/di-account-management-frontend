@@ -28,50 +28,18 @@
       } if (errors['phoneNumber'])})
     }}
 
-    {% set internationalNumberHtml %}
-      {{ govukInput({
-        name: "internationalPhoneNumber",
-        type: "tel",
-        autocomplete: "tel",
-        classes: "govuk-input--width-20",
-        label: {
-          text: 'pages.changePhoneNumber.internationalPhoneNumber.label' | translate
-        },
-        hint: {
-          text: 'pages.changePhoneNumber.internationalPhoneNumber.hint' | translate
-        },
-        errorMessage: {
-          attributes: { "data-test-id": "internationalPhoneNumber-error"},
-          text: errors['internationalPhoneNumber'].text
-        } if (errors['internationalPhoneNumber'])
-      }) }}
-    {% endset -%}
-
-    {{ govukCheckboxes({
-      items: [
-        {
-          value: "true",
-          id: "hasInternationalPhoneNumber",
-          name: "hasInternationalPhoneNumber",
-          text: 'pages.changePhoneNumber.internationalPhoneNumber.checkBoxLabel' | translate,
-          conditional: {
-            html: internationalNumberHtml
-          },
-          checked: hasInternationalPhoneNumber === 'true'
-        }
-      ]
-    }) }}
-
     {{ govukButton({
       text: 'general.continue.label' | translate,
       preventDoubleClick: true
     }) }}
   </form>
 
-  <a href="{{"SECURITY" | getPath}}" class="govuk-link govuk-body">
-    {{'pages.changePhoneNumber.info.backLink' | translate}}
+  <a href="{{"NO_UK_PHONE_NUMBER" | getPath}}" class="govuk-link govuk-body">
+    {{'pages.changePhoneNumber.info.noUkPhone' | translate}}
   </a>
-{% endblock %}
-{% block scripts %}
-  <script type="text/javascript" src="/public/scripts/international-phone.js?{{ staticHash }}" nonce='{{scriptNonce}}'></script>
+  <p class="govuk-body">
+    <a href="{{"SECURITY" | getPath}}" class="govuk-link">
+      {{'pages.changePhoneNumber.info.backLink' | translate}}
+    </a>
+  </p>
 {% endblock %}

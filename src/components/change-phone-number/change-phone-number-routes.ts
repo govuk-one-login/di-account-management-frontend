@@ -5,6 +5,7 @@ import { requiresAuthMiddleware } from "../../middleware/requires-auth-middlewar
 import {
   changePhoneNumberGet,
   changePhoneNumberPost,
+  noUkPhoneNumberGet,
 } from "./change-phone-number-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 
@@ -23,6 +24,13 @@ router.post(
   validateStateMiddleware,
   validatePhoneNumberRequest(),
   changePhoneNumberPost()
+);
+
+router.get(
+  PATH_DATA.NO_UK_PHONE_NUMBER.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  noUkPhoneNumberGet
 );
 
 export { router as changePhoneNumberRouter };

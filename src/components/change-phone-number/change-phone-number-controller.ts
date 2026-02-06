@@ -9,7 +9,6 @@ import {
   isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
-import { convertInternationalPhoneNumberToE164Format } from "../../utils/phone-number";
 import { BadRequestError } from "../../utils/errors";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
@@ -18,6 +17,8 @@ import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
+const NO_UK_PHONE_NUMBER_TEMPLATE =
+  "change-phone-number/no-uk-phone-number.njk";
 
 const setLocalOplSettings = (req: Request, res: Response) => {
   setOplSettings(
@@ -51,16 +52,7 @@ export function changePhoneNumberPost(
     }
 
     const { email } = req.session.user;
-    const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
-    let newPhoneNumber;
-
-    if (hasInternationalPhoneNumber === "true") {
-      newPhoneNumber = convertInternationalPhoneNumberToE164Format(
-        req.body.internationalPhoneNumber
-      );
-    } else {
-      newPhoneNumber = req.body.phoneNumber;
-    }
+    const newPhoneNumber = req.body.phoneNumber;
 
     const response = await service.sendPhoneVerificationNotification(
       email,
@@ -82,13 +74,8 @@ export function changePhoneNumberPost(
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
-      const href: string =
-        hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true"
-          ? "internationalPhoneNumber"
-          : "phoneNumber";
-
       const error = formatValidationError(
-        href,
+        "phoneNumber",
         req.t("pages.changePhoneNumber.validationError.samePhoneNumber")
       );
       return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);
@@ -96,4 +83,17 @@ export function changePhoneNumberPost(
       throw new BadRequestError(response.message, response.code);
     }
   };
+}
+
+export function noUkPhoneNumberGet(req: Request, res: Response): void {
+  req.metrics?.addMetric("noUkPhoneNumberGet", MetricUnit.Count, 1);
+  setLocalOplSettings(req, res);
+
+  if (req.query.type !== "changePhoneNumber") {
+    return res.redirect(
+      `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=changePhoneNumber`
+    );
+  }
+
+  res.render(NO_UK_PHONE_NUMBER_TEMPLATE);
 }

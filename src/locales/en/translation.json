@@ -527,7 +527,7 @@
       "switchToApp": "You can use an authenticator app instead.",
       "currentIsApp": "Your default method for getting security codes is currently using your authenticator app.",
       "switchToPhone": "You can get codes by text message instead.",
-      "setUpPhoneButton": "Add a mobile phone number",
+      "setUpPhoneButton": "Add a UK mobile phone number",
       "setUpAppButton": "Set up an authenticator app",
       "cancelButton": "Cancel and go back to Security",
       "confirmation": {
@@ -564,11 +564,12 @@
       }
     },
     "changePhoneNumber": {
-      "title": "Enter your new mobile phone number",
-      "header": "Enter your new mobile phone number",
+      "title": "Enter your new UK mobile phone number",
+      "header": "Enter your new UK mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
-        "backLink": "Cancel and go back to Security"
+        "backLink": "Cancel and go back to Security",
+        "noUkPhone": "I do not have a UK mobile phone number"
       },
       "validationError": {
         "samePhoneNumber": "You’re already using that phone number. Enter a different phone number"
@@ -582,15 +583,20 @@
           "plusNumericOnly": "Enter a UK mobile phone number using only numbers or the + symbol"
         }
       },
-      "internationalPhoneNumber": {
-        "checkBoxLabel": "I do not have a UK mobile number",
-        "label": "Mobile phone number",
-        "hint": "Include the country code, for example +33 for France",
-        "validationError": {
-          "required": "Enter a mobile phone number",
-          "plusNumericOnly": "Enter a mobile phone number using only numbers or the + symbol",
-          "internationalFormat": "Enter a mobile phone number in the correct format, including the country code"
-        }
+      "noUkPhoneNumber": {
+        "title": "If you do not have a UK mobile phone number",
+        "header": "If you do not have a UK mobile phone number",
+        "paragraph1": "To get security codes by text message, you need to use a UK mobile phone number.",
+        "sub-header": "What you can do",
+        "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
+        "detailSummary": "What is an authenticator app?",
+        "detailTextLine1": "What is an authenticator app?",
+        "detailTextLine2": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
+        "detailTextLine3": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer.",
+        "paragraph3": "To set up an authenticator app to get security codes:",
+        "listItem1": "go back to <strong>Security</strong>",
+        "listItem2": "select <strong>Use a different default method</strong>",
+        "backLinkButton": "Cancel and go back to Security"
       }
     },
     "signedOut": {
