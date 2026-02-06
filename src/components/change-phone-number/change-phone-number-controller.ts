@@ -90,7 +90,9 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
   setLocalOplSettings(req, res);
 
   if (req.query.type !== "changePhoneNumber") {
-    return res.redirect(`${req.path}?type=changePhoneNumber`);
+    return res.redirect(
+      `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=changePhoneNumber`
+    );
   }
 
   res.render(NO_UK_PHONE_NUMBER_TEMPLATE);
