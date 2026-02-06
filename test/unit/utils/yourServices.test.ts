@@ -143,7 +143,7 @@ describe("YourService Util", () => {
           last_accessed: 1696969856,
           client_id: "hmrc",
           last_accessed_pretty: "20 January 1970",
-          isAvailableInWelsh: false,
+          isAvailableInWelsh: true,
         },
       ]);
     });
