@@ -56,7 +56,7 @@
     "connect-dynamodb": "^3.0.5",
     "cookie-parser": "^1.4.7",
     "csrf-sync": "^4.2.1",
-    "di-account-management-rp-registry": "github:govuk-one-login/di-account-management-rp-registry#e8ac04ee55a98fca02a896deb07b1feb5d7e9107",
+    "di-account-management-rp-registry": "github:govuk-one-login/di-account-management-rp-registry#main",
     "dompurify": "^3.3.1",
     "express": "^5.2.1",
     "express-session": "1.19.0",
