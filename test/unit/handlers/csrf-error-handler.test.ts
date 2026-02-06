@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { expect, sinon } from "../../utils/test-utils";
+import { expect, sinon } from "../../utils/test-utils.js";
 import { describe } from "mocha";
-import { csrfErrorHandler } from "../../../src/handlers/csrf-error-handler";
-import { PATH_DATA } from "../../../src/app.constants";
+import { csrfErrorHandler } from "../../../src/handlers/csrf-error-handler.js";
+import { PATH_DATA } from "../../../src/app.constants.js";
 
 describe("csrf-error-handler", () => {
   let sandbox: sinon.SinonSandbox;

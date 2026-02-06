@@ -5,6 +5,7 @@ import {
   getOIDCClientId,
   getOIDCClientScopes,
 } from "../config.js";
+import { PATH_DATA } from "../app.constants.js";
 
 export function getOIDCConfig(): OIDCConfig {
   return {

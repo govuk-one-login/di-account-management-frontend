@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 import sinon from "sinon";
-import { getRefererFrom } from "../../../src/utils/logger";
+import { getRefererFrom } from "../../../src/utils/logger.js";
 
 describe("Logger", () => {
   let sandbox: sinon.SinonSandbox;

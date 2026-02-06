@@ -3,7 +3,6 @@ import { PATH_DATA } from "../../app.constants.js";
 import {
   checkYourEmailGet,
   checkYourEmailPost,
-  requestNewCodeGet,
 } from "./check-your-email-controller.js";
 import { validateCheckYourEmailRequest } from "./check-your-email-validation.js";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";

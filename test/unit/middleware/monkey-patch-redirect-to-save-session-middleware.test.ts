@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { expect, sinon } from "../../utils/test-utils";
+import { expect, sinon } from "../../utils/test-utils.js";
 import { describe } from "mocha";
-import { monkeyPatchRedirectToSaveSessionMiddleware } from "../../../src/middleware/monkey-patch-redirect-to-save-session-middleware";
-import * as loggerModule from "../../../src/utils/logger";
+import { monkeyPatchRedirectToSaveSessionMiddleware } from "../../../src/middleware/monkey-patch-redirect-to-save-session-middleware.js";
+import * as loggerModule from "../../../src/utils/logger.js";
 
 describe("monkey-patch-redirect-to-save-session-middleware", () => {
   let req: Partial<Request>;

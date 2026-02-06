@@ -5,10 +5,10 @@ import sinon from "sinon";
 import {
   checkRSAAllowedServicesList,
   findClientInServices,
-} from "../../../src/middleware/check-allowed-services-list";
-import * as yourServices from "../../../src/utils/yourServices";
-import * as allowListFuncs from "../../../src/middleware/check-allowed-services-list";
-import { LOG_MESSAGES, PATH_DATA } from "../../../src/app.constants";
+} from "../../../src/middleware/check-allowed-services-list.js";
+import * as yourServices from "../../../src/utils/yourServices.js";
+import * as allowListFuncs from "../../../src/middleware/check-allowed-services-list.js";
+import { LOG_MESSAGES, PATH_DATA } from "../../../src/app.constants.js";
 
 describe("activity history allowlist middleware", () => {
   let sandbox: sinon.SinonSandbox;
