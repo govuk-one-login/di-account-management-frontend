@@ -97,6 +97,15 @@ Then(
   }
 );
 
+Then(
+  "I am not shown a message expalining what an authenticator app is",
+  async ({ page }) => {
+    await expect(page.getByText("What is an authenticator app?")).toHaveCount(
+      0
+    );
+  }
+);
+
 Then("there is a {string} button", async ({ page }, buttonText: string) => {
   await expect(page.getByRole("button", { name: buttonText })).toBeVisible();
 });
