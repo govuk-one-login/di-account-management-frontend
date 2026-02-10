@@ -50,7 +50,7 @@
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
     "@govuk-one-login/frontend-ui": "^4.2.2",
     "@govuk-one-login/frontend-vital-signs": "0.1.4",
-    "axios": "^1.13.4",
+    "axios": "^1.13.5",
     "base64url": "3.0.1",
     "body-parser": "^2.2.2",
     "connect-dynamodb": "^3.0.5",
