@@ -3,7 +3,6 @@ import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-import { Session, SessionData } from "express-session";
 
 import { ChangePhoneNumberServiceInterface } from "../types";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
@@ -24,6 +23,10 @@ import {
   TOKEN,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
+import {
+  mfaMethodTypes,
+  mfaPriorityIdentifiers,
+} from "../../../utils/mfaClient/types";
 import * as oidcModule from "../../../utils/oidc";
 
 describe("change phone number controller", () => {
@@ -276,14 +279,12 @@ describe("change phone number controller", () => {
 
     it("should render no uk phone number page with hasBackupAuthApp true when user has auth app as backup", () => {
       // Arrange
-      const sessionData = {
-        changePhoneNumber: {},
-        mfaMethods: [{ method: { mfaMethodType: "AUTH_APP" } }],
-      };
-
       req = new RequestBuilder()
         .withBody({})
-        .withSessionUserState(sessionData)
+        .withSessionUserState({
+          changePhoneNumber: {},
+        })
+        .withBackupAuthAppMfaMethod()
         .withTranslate(sandbox.fake())
         .withHeaders({
           "txma-audit-encoded": TXMA_AUDIT_ENCODED,
@@ -291,9 +292,6 @@ describe("change phone number controller", () => {
         })
         .withQuery({ type: "changePhoneNumber" })
         .build();
-
-      // esllint-disable-next-line no-console
-      console.log(req.session?.mfaMethods);
 
       // Act
       noUkPhoneNumberGet(req as Request, res as Response);

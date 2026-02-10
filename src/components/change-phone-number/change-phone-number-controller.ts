@@ -95,14 +95,6 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
 
   const origin = req.headers["referer"] || "unknown origin";
 
-  // eslint-disable-next-line no-console
-  console.log("User MFA methods: ", req.session.mfaMethods);
-  // eslint-disable-next-line no-console
-  console.log(
-    "MFA Methods Type: ",
-    req.session.mfaMethods?.[0]?.method?.mfaMethodType
-  );
-
   const hasBackupAuthApp =
     req.session.mfaMethods?.some(
       (mfaMethod) =>

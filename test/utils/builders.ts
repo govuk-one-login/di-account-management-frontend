@@ -68,6 +68,36 @@ export class RequestBuilder {
     return this;
   }
 
+  withAuthAppMfaMethod(): this {
+    this.session.mfaMethods = [
+      {
+        mfaIdentifier: "1",
+        priorityIdentifier: "DEFAULT",
+        methodVerified: true,
+        method: {
+          mfaMethodType: "AUTH_APP",
+          credential: "fake-creds",
+        },
+      },
+    ];
+    return this;
+  }
+
+  withBackupAuthAppMfaMethod(): this {
+    this.session.mfaMethods = [
+      {
+        mfaIdentifier: "1",
+        priorityIdentifier: "BACKUP",
+        methodVerified: true,
+        method: {
+          mfaMethodType: "AUTH_APP",
+          credential: "fake-creds",
+        },
+      },
+    ];
+    return this;
+  }
+
   withNoDefaultMfaMethods(): this {
     this.session.mfaMethods = [
       {

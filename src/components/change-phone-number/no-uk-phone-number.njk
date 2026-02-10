@@ -19,13 +19,12 @@
 
   <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph2' | translate }}</p>
 
-  {{
-  if (hasAuthApp) {
+  {% if hasBackupAuthApp %}
     {{ govukDetails({
     summaryText: 'pages.changePhoneNumber.noUkPhoneNumber.detailSummary' | translate,
     html: detailBlockParagraphs
     }) }}
-  }}
+  {% endif %}
 
   <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph3' | translate }}</p>
 
