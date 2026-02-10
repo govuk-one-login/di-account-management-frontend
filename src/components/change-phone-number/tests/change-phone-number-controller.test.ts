@@ -3,6 +3,7 @@ import { describe } from "mocha";
 
 import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
+import { Session, SessionData } from "express-session";
 
 import { ChangePhoneNumberServiceInterface } from "../types";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
@@ -235,11 +236,12 @@ describe("change phone number controller", () => {
         .withBody({})
         .withSessionUserState({ changePhoneNumber: {} })
         .withTranslate(sandbox.fake())
-        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+        .withHeaders({
+          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+          referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+        })
         .withQuery({ type: "" })
         .build();
-
-      req.originalUrl = PATH_DATA.CHANGE_PHONE_NUMBER.url;
 
       // Act
       noUkPhoneNumberGet(req as Request, res as Response);
@@ -256,11 +258,12 @@ describe("change phone number controller", () => {
         .withBody({})
         .withSessionUserState({ changePhoneNumber: {} })
         .withTranslate(sandbox.fake())
-        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+        .withHeaders({
+          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+          referer: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+        })
         .withQuery({ type: "" })
         .build();
-
-      req.originalUrl = PATH_DATA.CHANGE_DEFAULT_METHOD.url;
 
       // Act
       noUkPhoneNumberGet(req as Request, res as Response);
@@ -273,16 +276,24 @@ describe("change phone number controller", () => {
 
     it("should render no uk phone number page with hasBackupAuthApp true when user has auth app as backup", () => {
       // Arrange
+      const sessionData = {
+        changePhoneNumber: {},
+        mfaMethods: [{ method: { mfaMethodType: "AUTH_APP" } }],
+      };
+
       req = new RequestBuilder()
         .withBody({})
-        .withSessionUserState({
-          changePhoneNumber: {},
-          mfaMethods: [{ method: { mfaMethodType: "AUTH_APP" } }],
-        })
+        .withSessionUserState(sessionData)
         .withTranslate(sandbox.fake())
-        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+        .withHeaders({
+          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+          referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+        })
         .withQuery({ type: "changePhoneNumber" })
         .build();
+
+      // esllint-disable-next-line no-console
+      console.log(req.session?.mfaMethods);
 
       // Act
       noUkPhoneNumberGet(req as Request, res as Response);

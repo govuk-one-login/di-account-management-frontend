@@ -93,6 +93,8 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
   req.metrics?.addMetric("noUkPhoneNumberGet", MetricUnit.Count, 1);
   setLocalOplSettings(req, res);
 
+  const origin = req.headers["referer"] || "unknown origin";
+
   // eslint-disable-next-line no-console
   console.log("User MFA methods: ", req.session.mfaMethods);
   // eslint-disable-next-line no-console
@@ -114,7 +116,7 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
   if (!req.query.type || req.query.type === "") {
     let queryType = "";
 
-    switch (req.originalUrl) {
+    switch (origin) {
       case PATH_DATA.CHANGE_PHONE_NUMBER.url:
         queryType = "changePhoneNumber";
         break;
