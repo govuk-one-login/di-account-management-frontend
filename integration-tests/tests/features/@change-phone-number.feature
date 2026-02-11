@@ -72,7 +72,7 @@ Feature: Change phone number
     @failMobile
     Scenario: Don't have a UK mobile phone number with Authenticator Backup
         Given I go to the "Root" page
-        And I sign in as the "default" user
+        And I sign in as the "userDEFAULTSmsBackupAuthApp" user
         And I go to the "Security" page
         Then the page title is prefixed with "Security"
         Given I click the "Change phone number" link

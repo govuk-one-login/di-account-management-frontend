@@ -98,7 +98,7 @@ Then(
 );
 
 Then(
-  "I am not shown a message expalining what an authenticator app is",
+  "I am not shown a message explaining what an authenticator app is",
   async ({ page }) => {
     await expect(page.getByText("What is an authenticator app?")).toHaveCount(
       0

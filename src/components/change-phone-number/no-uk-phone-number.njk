@@ -19,7 +19,7 @@
 
   <p class="govuk-body">{{ 'pages.changePhoneNumber.noUkPhoneNumber.paragraph2' | translate }}</p>
 
-  {% if hasBackupAuthApp %}
+  {% if not hasBackupAuthApp %}
     {{ govukDetails({
     summaryText: 'pages.changePhoneNumber.noUkPhoneNumber.detailSummary' | translate,
     html: detailBlockParagraphs
