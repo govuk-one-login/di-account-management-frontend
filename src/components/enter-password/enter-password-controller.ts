@@ -171,7 +171,7 @@ async function sendJourneyAuditEvent(
   if (eventName) {
     const service = eventService();
     const auditEvent = service.buildAuditEvent(req, res, eventName);
-    service.send(auditEvent, res.locals.trace);
+    void service.send(auditEvent, res.locals.trace);
   }
 }
 

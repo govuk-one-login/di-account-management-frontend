@@ -1,9 +1,6 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { checkYourPhonePost } from "../check-your-phone-controller";
+import { checkYourPhonePost } from "../check-your-phone-controller.js";
 import { PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import {
@@ -11,33 +8,33 @@ import {
   INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
 } from "../../check-your-email/types";
-import { logger } from "../../../utils/logger";
+import { logger } from "../../../utils/logger.js";
 import { MfaMethod } from "../../../utils/mfaClient/types";
-import * as mfaClient from "../../../utils/mfaClient";
-import * as oidcModule from "../../../utils/oidc";
+import * as mfaClient from "../../../utils/mfaClient/index.js";
+import * as oidcModule from "../../../utils/oidc.js";
+
+const NEW_PHONE_NUMBER = "07123456789";
+const mfaMethod: MfaMethod = {
+  mfaIdentifier: "111111",
+  methodVerified: true,
+  method: {
+    phoneNumber: "07123456789",
+    mfaMethodType: "SMS",
+  },
+  priorityIdentifier: "DEFAULT",
+};
 
 describe("check your phone controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let errorLoggerSpy: sinon.SinonSpy;
-  let stubMfaClient: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
-
-  const NEW_PHONE_NUMBER = "1234567890";
-
-  const mfaMethod: MfaMethod = {
-    mfaIdentifier: "1",
-    priorityIdentifier: "BACKUP",
-    methodVerified: true,
-    method: { mfaMethodType: "SMS", phoneNumber: NEW_PHONE_NUMBER },
-  };
+  let errorLoggerSpy: ReturnType<typeof vi.fn>;
+  let stubMfaClient: any;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    errorLoggerSpy = sinon.spy(logger, "error");
+    errorLoggerSpy = vi.spyOn(logger, "error");
     req = {
       body: {},
-      t: sandbox.fake((id) => id),
+      t: vi.fn((id) => id),
       session: {
         user: {
           state: {
@@ -69,22 +66,24 @@ describe("check your phone controller", () => {
       query: { intent: INTENT_CHANGE_PHONE_NUMBER },
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      status: sandbox.fake(),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
+      status: vi.fn(),
       locals: {
         trace: "trace-id",
       },
     };
 
-    stubMfaClient = sandbox.createStubInstance(mfaClient.MfaClient);
-    sandbox.stub(mfaClient, "createMfaClient").resolves(stubMfaClient);
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    stubMfaClient = {
+      update: vi.fn(),
+      create: vi.fn(),
+    };
+    vi.spyOn(mfaClient, "createMfaClient").mockResolvedValue(stubMfaClient);
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    errorLoggerSpy.restore();
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("checkYourPhonePost with mfa method management API", () => {
@@ -94,7 +93,7 @@ describe("check your phone controller", () => {
       req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       req.session.user.newPhoneNumber = "07111111111";
 
-      stubMfaClient.update.resolves({
+      stubMfaClient.update.mockResolvedValue({
         success: false,
         error: {
           code: 1020,
@@ -106,7 +105,7 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(req as Request, res as Response);
 
-      expect(stubMfaClient.update).to.have.calledWith(
+      expect(stubMfaClient.update).toHaveBeenCalledWith(
         {
           mfaIdentifier: "111111",
           method: {
@@ -117,7 +116,7 @@ describe("check your phone controller", () => {
         },
         req.body.code
       );
-      expect(res.render).to.have.been.calledWith("check-your-phone/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("check-your-phone/index.njk", {
         errors: {
           code: {
             text: "pages.checkYourPhone.code.validationError.invalidCode",
@@ -138,7 +137,7 @@ describe("check your phone controller", () => {
         backLink: "/change-phone-number",
         language: "en",
       });
-      expect(res.redirect).not.to.have.been.called;
+      expect(res.redirect).not.toHaveBeenCalled();
     });
 
     it("should redirect to 'Your services' when the user has the max number of MFA methods' for add MFA methods journey", async () => {
@@ -148,9 +147,9 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(req as Request, res as Response);
 
-      expect(stubMfaClient.create).not.to.have.been.called;
+      expect(stubMfaClient.create).not.toHaveBeenCalled();
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should redirect to /phone-number-updated-confirmation when valid code entered for change phone number journey", async () => {
@@ -159,7 +158,7 @@ describe("check your phone controller", () => {
       req.body.intent = INTENT_CHANGE_PHONE_NUMBER;
       req.session.user.newPhoneNumber = "07111111111";
 
-      stubMfaClient.update.resolves({
+      stubMfaClient.update.mockResolvedValue({
         success: true,
         status: 200,
         data: [mfaMethod],
@@ -167,7 +166,7 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(req as Request, res as Response);
 
-      expect(stubMfaClient.update).to.have.calledWith(
+      expect(stubMfaClient.update).toHaveBeenCalledWith(
         {
           mfaIdentifier: "111111",
           method: {
@@ -178,7 +177,7 @@ describe("check your phone controller", () => {
         },
         req.body.code
       );
-      expect(res.redirect).to.have.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url
       );
     });
@@ -189,7 +188,7 @@ describe("check your phone controller", () => {
       req.session.user.newPhoneNumber = NEW_PHONE_NUMBER;
       req.session.mfaMethods = [req.session.mfaMethods[0]];
 
-      stubMfaClient.create.resolves({
+      stubMfaClient.create.mockResolvedValue({
         success: true,
         status: 200,
         data: mfaMethod,
@@ -197,7 +196,7 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         PATH_DATA.ADD_MFA_METHOD_SMS_CONFIRMATION.url
       );
     });
@@ -207,7 +206,7 @@ describe("check your phone controller", () => {
       req.body.intent = INTENT_CHANGE_DEFAULT_METHOD;
       req.session.user.newPhoneNumber = NEW_PHONE_NUMBER;
 
-      stubMfaClient.update.resolves({
+      stubMfaClient.update.mockResolvedValue({
         success: true,
         status: 200,
         data: [mfaMethod],
@@ -215,7 +214,7 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
       );
     });
@@ -227,7 +226,7 @@ describe("check your phone controller", () => {
 
       await checkYourPhonePost(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should log an error when intent is not valid", async () => {
@@ -243,12 +242,12 @@ describe("check your phone controller", () => {
       try {
         await checkYourPhonePost(req as Request, res as Response);
       } catch {
-        expect(errorLoggerSpy).to.have.been.calledWith(
+        expect(errorLoggerSpy).toHaveBeenCalledWith(
           { trace: res.locals.trace },
           errorMessage
         );
-        expect(stubMfaClient.update).not.to.have.been.called;
-        expect(stubMfaClient.create).not.to.have.been.called;
+        expect(stubMfaClient.update).not.toHaveBeenCalled();
+        expect(stubMfaClient.create).not.toHaveBeenCalled();
       }
     });
 
@@ -263,13 +262,13 @@ describe("check your phone controller", () => {
         error: { code: 1, message: "Not authorized" },
         data: {} as MfaMethod,
       };
-      stubMfaClient.create.resolves(response);
+      stubMfaClient.create.mockResolvedValue(response);
 
       try {
         await checkYourPhonePost(req as Request, res as Response);
       } catch {
-        expect(stubMfaClient.update).not.to.have.been.called;
-        expect(errorLoggerSpy).to.have.been.calledWith(
+        expect(stubMfaClient.update).not.toHaveBeenCalled();
+        expect(errorLoggerSpy).toHaveBeenCalledWith(
           { trace: res.locals.trace },
           mfaClient.formatErrorMessage(
             "Could not change phone number",

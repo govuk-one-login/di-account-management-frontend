@@ -14,9 +14,7 @@ export function appendFromUrlWhenTriagePageUrl(
   contactUsLinkUrl: string,
   fromUrl: string
 ): string {
-  const triagePageUrlRegEx = /contact-gov-uk-one-login/;
-
-  if (triagePageUrlRegEx.test(contactUsLinkUrl)) {
+  if (contactUsLinkUrl.includes("contact-gov-uk-one-login")) {
     const encodedFromUrl = encodeURIComponent(fromUrl);
     contactUsLinkUrl = `${contactUsLinkUrl}?fromURL=${encodedFromUrl}`;
   }

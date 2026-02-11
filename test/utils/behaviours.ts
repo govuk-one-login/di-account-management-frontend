@@ -12,5 +12,5 @@ export async function checkFailedCSRFValidationBehaviour(
     .type("form")
     .send(payload)
     .expect(302);
-  expect(response.header["location"]).to.equal("/your-services");
+  expect(response.header.location).to.equal("/your-services");
 }

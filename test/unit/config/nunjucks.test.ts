@@ -1,14 +1,11 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils.js";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import * as nunjucks from "nunjucks";
 import express from "express";
 import i18next, { TFunction } from "i18next";
 import { configureNunjucks } from "../../../src/config/nunjucks.js";
-import { SinonStub } from "sinon";
 import { EXTERNAL_URLS } from "../../../src/app.constants.js";
 
-type MyStubType = TFunction & SinonStub;
+type MyStubType = TFunction & ReturnType<typeof vi.fn>;
 
 describe("configureNunjucks", () => {
   let app: express.Application;
@@ -16,17 +13,17 @@ describe("configureNunjucks", () => {
 
   beforeEach(() => {
     app = {
-      set: sinon.stub(),
+      set: vi.fn(),
     } as any; // Typecast to any to bypass TypeScript's strict typing
     nunjucksEnv = configureNunjucks(app, ["./views"]);
   });
 
   describe("translate filter", () => {
     it("should translate based on i18n language", () => {
-      const fixedTStub = sinon
-        .stub()
-        .returns("translated_value") as unknown as MyStubType;
-      sinon.stub(i18next, "getFixedT").returns(fixedTStub);
+      const fixedTStub = vi
+        .fn()
+        .mockReturnValue("translated_value") as unknown as MyStubType;
+      vi.spyOn(i18next, "getFixedT").mockReturnValue(fixedTStub);
 
       const translateFilter = nunjucksEnv.getFilter("translate");
       const result = translateFilter.call(
@@ -34,28 +31,28 @@ describe("configureNunjucks", () => {
         "test_key"
       );
 
-      expect(result).to.equal("translated_value");
-      expect(fixedTStub.calledWith("test_key")).to.be.true;
+      expect(result).toBe("translated_value");
+      expect(fixedTStub).toHaveBeenCalledWith("test_key", undefined);
     });
 
     it("should translate based on default language", () => {
-      const fixedTStub = sinon
-        .stub()
-        .returns("translated_value") as unknown as MyStubType;
-      sinon.stub(i18next, "getFixedT").returns(fixedTStub);
+      const fixedTStub = vi
+        .fn()
+        .mockReturnValue("translated_value") as unknown as MyStubType;
+      vi.spyOn(i18next, "getFixedT").mockReturnValue(fixedTStub);
 
       const translateFilter = nunjucksEnv.getFilter("translate");
       const result = translateFilter.call({}, "test_key");
 
-      expect(result).to.equal("translated_value");
-      expect(fixedTStub.calledWith("test_key")).to.be.true;
+      expect(result).toBe("translated_value");
+      expect(fixedTStub).toHaveBeenCalledWith("test_key", undefined);
     });
 
     it("should throw an error if translation key does no exist", () => {
-      const fixedTStub = sinon
-        .stub()
-        .returns(undefined) as unknown as MyStubType;
-      sinon.stub(i18next, "getFixedT").returns(fixedTStub);
+      const fixedTStub = vi
+        .fn()
+        .mockReturnValue(undefined) as unknown as MyStubType;
+      vi.spyOn(i18next, "getFixedT").mockReturnValue(fixedTStub);
 
       const translateFilter = nunjucksEnv.getFilter("translate");
       const result = translateFilter.call(
@@ -63,17 +60,17 @@ describe("configureNunjucks", () => {
         "test_key"
       );
 
-      expect(result).to.equal(undefined);
-      expect(fixedTStub.calledWith("test_key")).to.be.true;
+      expect(result).toBe(undefined);
+      expect(fixedTStub).toHaveBeenCalledWith("test_key", undefined);
     });
 
     it("should translate fallback to en if false lang is passed", () => {
-      const fixedTStub = sinon
-        .stub()
-        .returns("translated_value") as unknown as MyStubType;
-      const getFixedTStub = sinon
-        .stub(i18next, "getFixedT")
-        .returns(fixedTStub);
+      const fixedTStub = vi
+        .fn()
+        .mockReturnValue("translated_value") as unknown as MyStubType;
+      const getFixedTStub = vi
+        .spyOn(i18next, "getFixedT")
+        .mockReturnValue(fixedTStub);
 
       const translateFilter = nunjucksEnv.getFilter("translate");
       const result = translateFilter.call(
@@ -81,9 +78,9 @@ describe("configureNunjucks", () => {
         "test_key"
       );
 
-      expect(result).to.equal("translated_value");
-      expect(getFixedTStub.firstCall.args[0]).to.equal("en");
-      expect(fixedTStub.calledWith("test_key")).to.be.true;
+      expect(result).toBe("translated_value");
+      expect(getFixedTStub.mock.calls[0][0]).toBe("en");
+      expect(fixedTStub).toHaveBeenCalledWith("test_key", undefined);
     });
   });
 
@@ -92,7 +89,7 @@ describe("configureNunjucks", () => {
       const externalUrlFilter = nunjucksEnv.getFilter("getExternalUrl");
       const result = externalUrlFilter.call({}, "PRIVACY_NOTICE");
 
-      expect(result).to.equal(EXTERNAL_URLS.PRIVACY_NOTICE);
+      expect(result).toBe(EXTERNAL_URLS.PRIVACY_NOTICE);
     });
 
     it("should throw an error when the external URL does not exist", () => {
@@ -100,19 +97,19 @@ describe("configureNunjucks", () => {
 
       expect(() => {
         externalUrlFilter.call({}, "UNKNOWN_KEY");
-      }).to.throw("Unknown URL: UNKNOWN_KEY");
+      }).toThrow("Unknown URL: UNKNOWN_KEY");
     });
   });
 
   describe("rebrand flag", () => {
     it("should return true", () => {
       nunjucksEnv = configureNunjucks(app, ["./views"]);
-      expect(nunjucksEnv.getGlobal("govukRebrand")).to.equal(true);
+      expect(nunjucksEnv.getGlobal("govukRebrand")).toBe(true);
     });
   });
 
   afterEach(() => {
     // Restore the stubbed methods after each test
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 });

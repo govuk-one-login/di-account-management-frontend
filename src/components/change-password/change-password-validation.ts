@@ -52,7 +52,7 @@ export function validateChangePasswordRequest(): ValidationChainFunc {
         );
       })
       .custom((value, { req }) => {
-        if (value !== req.body["password"]) {
+        if (value !== req.body.password) {
           throw new Error(
             req.t(
               "pages.changePassword.confirmPassword.validationError.matches"

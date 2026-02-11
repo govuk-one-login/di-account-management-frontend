@@ -1,35 +1,33 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
-import { validateChooseBackupRequest } from "../choose-backup-validation";
-import { SinonSpy } from "sinon";
+import { validateChooseBackupRequest } from "../choose-backup-validation.js";
 
 describe("validateaddBackupRequest", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
-  let nextSpy: SinonSpy;
+  let nextSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     req = {
       body: {},
       session: {} as any,
-      t: sinon.stub().returns("Error message"),
+      t: vi.fn().mockReturnValue("Error message"),
     };
     res = {
-      render: sinon.stub(),
+      render: vi.fn(),
     };
-    nextSpy = sinon.spy();
+    nextSpy = vi.fn();
     next = nextSpy;
   });
 
   it("should return an array with two middleware functions", () => {
     const middlewareArray = validateChooseBackupRequest();
-    expect(middlewareArray).to.be.an("array").with.lengthOf(2);
-    expect(middlewareArray[0]).to.be.a("function");
-    expect(middlewareArray[1]).to.be.a("function");
+    expect(middlewareArray).toBeTypeOf("object");
+    expect(middlewareArray).toHaveLength(2);
+    expect(middlewareArray[0]).toBeTypeOf("function");
+    expect(middlewareArray[1]).toBeTypeOf("function");
   });
 
   it("should validate 'addBackup' field is not empty", async () => {
@@ -39,8 +37,8 @@ describe("validateaddBackupRequest", () => {
     await (validationMiddleware as any)(req, res, next);
 
     const errors = validationResult(req as Request);
-    expect(errors.isEmpty()).to.be.false;
-    expect(errors.array()[0].msg).to.equal("Error message");
+    expect(errors.isEmpty()).toBe(false);
+    expect(errors.array()[0].msg).toBe("Error message");
   });
 
   it("should call next() if no validation errors", () => {
@@ -48,6 +46,6 @@ describe("validateaddBackupRequest", () => {
 
     handleValidationErrors(req as Request, res as Response, next);
 
-    expect(nextSpy).to.have.been.calledOnce;
+    expect(nextSpy).toHaveBeenCalledOnce();
   });
 });

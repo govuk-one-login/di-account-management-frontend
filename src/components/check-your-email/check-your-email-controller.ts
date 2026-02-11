@@ -53,7 +53,7 @@ export function checkYourEmailPost(
     const updateInput: UpdateInformationInput = {
       email: email,
       updatedValue: newEmailAddress,
-      otp: req.body["code"],
+      otp: req.body.code,
     };
 
     const result = await service.updateEmail(

@@ -1,27 +1,21 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
-import { getInitialState } from "../../../utils/state-machine";
-import * as oidcModule from "../../../utils/oidc";
+import { getInitialState } from "../../../utils/state-machine.js";
+import * as oidcModule from "../../../utils/oidc.js";
 
 import {
   resendPhoneCodeGet,
   resendPhoneCodePost,
-} from "../resend-phone-code-controller";
+} from "../resend-phone-code-controller.js";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import { BadRequestError } from "../../../utils/errors";
 
 describe("resend phone code controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = {
       body: {},
       session: { user: {} } as any,
@@ -31,17 +25,17 @@ describe("resend phone code controller", () => {
       query: { intent: "changePhoneNumber" },
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      status: sandbox.fake(),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
+      status: vi.fn(),
       locals: {},
     };
 
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("resendPhoneCodeGet", () => {
@@ -51,7 +45,7 @@ describe("resend phone code controller", () => {
       } as any;
       resendPhoneCodeGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("resend-phone-code/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("resend-phone-code/index.njk", {
         phoneNumberRedacted: "1111",
         phoneNumber: "07111111111",
         intent: "changePhoneNumber",
@@ -63,7 +57,7 @@ describe("resend phone code controller", () => {
   describe("resendPhoneCodePost", () => {
     it("should redirect to /check-your-phone when Get security code is clicked", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.resolves({
+        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({
           success: true,
         }),
       };
@@ -77,16 +71,17 @@ describe("resend phone code controller", () => {
 
       await resendPhoneCodePost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.sendPhoneVerificationNotification).to.have.been
-        .calledOnce;
-      expect(res.redirect).to.have.calledWith(
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith(
         "/check-your-phone?intent=changePhoneNumber"
       );
     });
 
     it("should redirect to error /check-your-phone when invalid intent is passed", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.resolves({
+        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({
           success: true,
         }),
       };
@@ -100,10 +95,11 @@ describe("resend phone code controller", () => {
 
       try {
         await resendPhoneCodePost(fakeService)(req as Request, res as Response);
-        expect(fakeService.sendPhoneVerificationNotification).not.to.have.been
-          .called;
+        expect(
+          fakeService.sendPhoneVerificationNotification
+        ).not.toHaveBeenCalled();
       } catch (err) {
-        expect(err).to.be.instanceOf(BadRequestError);
+        expect(err).toBeInstanceOf(BadRequestError);
       }
     });
   });

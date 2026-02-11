@@ -1,6 +1,4 @@
-import { expect } from "chai";
-import sinon from "sinon";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   determineRedirectUri,
   COOKIE_CONSENT,
@@ -10,18 +8,18 @@ import {
   generateTokenSet,
 } from "../call-back-utils";
 import { PATH_DATA } from "../../../app.constants";
-import * as sessionStore from "../../../utils/session-store";
-import { logger } from "../../../utils/logger";
+import * as sessionStore from "../../../utils/session-store.js";
+import { logger } from "../../../utils/logger.js";
 import { TokenSet } from "openid-client";
 
 describe("callback-utils", () => {
   afterEach(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 
   describe("generateTokenSet", () => {
     let req: any;
-    let callbackStub: sinon.SinonStub;
+    let callbackStub: ReturnType<typeof vi.fn>;
 
     beforeEach(() => {
       const mockTokenSet = {
@@ -29,7 +27,7 @@ describe("callback-utils", () => {
         id_token: "fake-id-token",
       } as TokenSet;
 
-      callbackStub = sinon.stub().resolves(mockTokenSet);
+      callbackStub = vi.fn().mockResolvedValue(mockTokenSet);
 
       req = {
         oidc: {
@@ -46,7 +44,7 @@ describe("callback-utils", () => {
     });
 
     afterEach(() => {
-      sinon.restore();
+      vi.restoreAllMocks();
     });
 
     it("should call oidc.callback with correct arguments and return the token set", async () => {
@@ -63,16 +61,14 @@ describe("callback-utils", () => {
         clientAssertion
       );
 
-      expect(callbackStub.calledOnce).to.be.true;
-      expect(callbackStub.firstCall.args[0]).to.equal(
-        "http://localhost/callback"
-      );
-      expect(callbackStub.firstCall.args[1]).to.deep.equal(queryParams);
-      expect(callbackStub.firstCall.args[2]).to.deep.equal({
+      expect(callbackStub).toHaveBeenCalledOnce();
+      expect(callbackStub.mock.calls[0][0]).toBe("http://localhost/callback");
+      expect(callbackStub.mock.calls[0][1]).toEqual(queryParams);
+      expect(callbackStub.mock.calls[0][2]).toEqual({
         nonce: "mock-nonce",
         state: "mock-state",
       });
-      expect(callbackStub.firstCall.args[3]).to.deep.equal({
+      expect(callbackStub.mock.calls[0][3]).toEqual({
         exchangeBody: {
           client_assertion_type:
             "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
@@ -80,8 +76,8 @@ describe("callback-utils", () => {
         },
       });
 
-      expect(tokenSet).to.have.property("access_token", "fake-access-token");
-      expect(tokenSet).to.have.property("id_token", "fake-id-token");
+      expect(tokenSet).toHaveProperty("access_token", "fake-access-token");
+      expect(tokenSet).toHaveProperty("id_token", "fake-id-token");
     });
   });
 
@@ -92,7 +88,7 @@ describe("callback-utils", () => {
         query: {},
       };
       const result = determineRedirectUri(req);
-      expect(result).to.equal("/dashboard");
+      expect(result).toBe("/dashboard");
     });
 
     it("should return default path if currentURL not set", () => {
@@ -101,7 +97,7 @@ describe("callback-utils", () => {
         query: {},
       };
       const result = determineRedirectUri(req);
-      expect(result).to.equal(PATH_DATA.YOUR_SERVICES.url);
+      expect(result).toBe(PATH_DATA.YOUR_SERVICES.url);
     });
 
     it("should return default path if session is null", () => {
@@ -109,7 +105,7 @@ describe("callback-utils", () => {
         query: {},
       };
       const result = determineRedirectUri(req);
-      expect(result).to.equal(PATH_DATA.YOUR_SERVICES.url);
+      expect(result).toBe(PATH_DATA.YOUR_SERVICES.url);
     });
 
     it("should append _ga param to redirect URL if consent is accepted", () => {
@@ -121,9 +117,7 @@ describe("callback-utils", () => {
         },
       };
       const result = determineRedirectUri(req);
-      expect(result).to.equal(
-        `${PATH_DATA.YOUR_SERVICES.url}?_ga=GA1.2.123456`
-      );
+      expect(result).toBe(`${PATH_DATA.YOUR_SERVICES.url}?_ga=GA1.2.123456`);
     });
 
     it("should not append _ga if consent is not ACCEPT", () => {
@@ -135,22 +129,26 @@ describe("callback-utils", () => {
         },
       };
       const result = determineRedirectUri(req);
-      expect(result).to.equal(PATH_DATA.YOUR_SERVICES.url);
+      expect(result).toBe(PATH_DATA.YOUR_SERVICES.url);
     });
   });
 
   describe("handleOidcCallbackError", () => {
     it("clears session and redirects to SESSION_EXPIRED", async () => {
-      const deleteExpressSessionStub = sinon.stub(
+      const deleteExpressSessionStub = vi.spyOn(
         sessionStore,
         "deleteExpressSession"
       );
-      const loggerWarnStub = sinon.stub(logger, "warn");
+      const loggerWarnStub = vi.spyOn(logger, "warn");
 
-      const req: any = { session: {}, oidc: {}, cookies: {} };
+      const req: any = {
+        session: { destroy: vi.fn((cb) => cb()) },
+        oidc: {},
+        cookies: {},
+      };
       const res: any = {
         locals: { trace: "trace-id" },
-        redirect: sinon.fake(),
+        redirect: vi.fn(),
       };
       const queryParams = {
         error: "access_denied",
@@ -159,34 +157,41 @@ describe("callback-utils", () => {
 
       await handleOidcCallbackError(req, res, queryParams);
 
-      expect(loggerWarnStub.calledOnce).to.be.true;
-      expect(deleteExpressSessionStub.calledWith(req)).to.be.true;
-      expect(res.redirect.calledWith(PATH_DATA.SESSION_EXPIRED.url)).to.be.true;
+      expect(loggerWarnStub).toHaveBeenCalledOnce();
+      expect(deleteExpressSessionStub).toHaveBeenCalledWith(req);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
     it("clears session and redirects to UNAVAILABLE_TEMPORARY", async () => {
-        const deleteExpressSessionStub = sinon.stub(
-            sessionStore,
-            "deleteExpressSession"
-        );
-        const loggerWarnStub = sinon.stub(logger, "warn");
+      const deleteExpressSessionStub = vi.spyOn(
+        sessionStore,
+        "deleteExpressSession"
+      );
+      const loggerWarnStub = vi.spyOn(logger, "warn");
 
-        const req: any = { session: {}, oidc: {}, cookies: {} };
-        const res: any = {
-            locals: { trace: "trace-id" },
-            redirect: sinon.fake(),
-        };
+      const req: any = {
+        session: { destroy: vi.fn((cb) => cb()) },
+        oidc: {},
+        cookies: {},
+      };
+      const res: any = {
+        locals: { trace: "trace-id" },
+        redirect: vi.fn(),
+      };
 
-        const queryParams = {
-            error: "temporarily_unavailable",
-            error_description: "The authorization server is temporarily unavailable",
-        };
+      const queryParams = {
+        error: "temporarily_unavailable",
+        error_description:
+          "The authorization server is temporarily unavailable",
+      };
 
-        await handleOidcCallbackError(req, res, queryParams);
+      await handleOidcCallbackError(req, res, queryParams);
 
-        expect(loggerWarnStub.calledOnce).to.be.true;
-        expect(deleteExpressSessionStub.calledWith(req)).to.be.true;
-        expect(res.redirect.calledWith(PATH_DATA.UNAVAILABLE_TEMPORARY.url)).to.be.true;
+      expect(loggerWarnStub).toHaveBeenCalledOnce();
+      expect(deleteExpressSessionStub).toHaveBeenCalledWith(req);
+      expect(res.redirect).toHaveBeenCalledWith(
+        PATH_DATA.UNAVAILABLE_TEMPORARY.url
+      );
     });
   });
 
@@ -212,16 +217,16 @@ describe("callback-utils", () => {
 
       populateSessionWithUserInfo(req, userInfo as any, tokenSet as any);
 
-      expect(req.session.user.email).to.equal("user@example.com");
-      expect(req.session.user.tokens.accessToken).to.equal("access.token");
-      expect(req.session.user.legacySubjectId).to.equal("legacy123");
+      expect(req.session.user.email).toBe("user@example.com");
+      expect(req.session.user.tokens.accessToken).toBe("access.token");
+      expect(req.session.user.legacySubjectId).toBe("legacy123");
     });
   });
 
   describe("attachSessionIdsFromGsCookie", () => {
     it("logs warning if gs cookie is malformed", () => {
-      const loggerInfo = sinon.stub(logger, "info");
-      const loggerError = sinon.stub(logger, "error");
+      const loggerInfo = vi.spyOn(logger, "info");
+      const loggerError = vi.spyOn(logger, "error");
 
       const req: any = {
         cookies: {
@@ -236,13 +241,13 @@ describe("callback-utils", () => {
 
       attachSessionIdsFromGsCookie(req, res);
 
-      expect(loggerInfo.called).to.be.true;
-      expect(loggerError.calledOnce).to.be.true;
-      expect(req.session.authSessionIds).to.be.undefined;
+      expect(loggerInfo).toHaveBeenCalled();
+      expect(loggerError).toHaveBeenCalledOnce();
+      expect(req.session.authSessionIds).toBeUndefined();
     });
 
     it("sets session.authSessionIds when cookie is valid", () => {
-      const loggerInfo = sinon.stub(logger, "info");
+      const loggerInfo = vi.spyOn(logger, "info");
       const req: any = {
         cookies: {
           gs: "sess123.client456",
@@ -256,15 +261,15 @@ describe("callback-utils", () => {
 
       attachSessionIdsFromGsCookie(req, res);
 
-      expect(loggerInfo.calledOnce).to.be.true;
-      expect(req.session.authSessionIds).to.deep.equal({
+      expect(loggerInfo).toHaveBeenCalledOnce();
+      expect(req.session.authSessionIds).toEqual({
         sessionId: "sess123",
         clientSessionId: "client456",
       });
     });
 
     it("logs info if gs cookie is missing", () => {
-      const loggerInfo = sinon.stub(logger, "info");
+      const loggerInfo = vi.spyOn(logger, "info");
 
       const req: any = {
         cookies: {},
@@ -276,7 +281,7 @@ describe("callback-utils", () => {
 
       attachSessionIdsFromGsCookie(req, res);
 
-      expect(loggerInfo.calledOnce).to.be.true;
+      expect(loggerInfo).toHaveBeenCalledOnce();
     });
   });
 });

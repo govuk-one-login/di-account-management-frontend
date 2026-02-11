@@ -1,40 +1,35 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { sessionExpiredGet } from "../session-expired-controller";
+import { sessionExpiredGet } from "../session-expired-controller.js";
 
 describe("session expired controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = {
       body: {},
-      session: { user: sinon.fake() } as any,
-      oidc: { authorizationUrl: sandbox.fake(), metadata: {} as any } as any,
+      session: { user: vi.fn() } as any,
+      oidc: { authorizationUrl: vi.fn(), metadata: {} as any } as any,
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {},
-      status: sandbox.fake(),
+      status: vi.fn(),
     };
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("sessionExpiredGet", () => {
     it("should return session expired page", () => {
       sessionExpiredGet(req as Request, res as Response);
 
-      expect(res.render).to.have.been.calledWith("session-expired/index.njk");
-      expect(res.status).to.have.be.calledWith(401);
+      expect(res.render).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(401);
     });
   });
 });

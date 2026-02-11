@@ -1,37 +1,35 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { signedOutGet } from "../signed-out-controller";
+import { signedOutGet } from "../signed-out-controller.js";
 
 describe("signed out controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = {
       body: {},
     };
     res = {
-      render: sandbox.fake(),
-      status: sandbox.fake(),
+      render: vi.fn(),
+      status: vi.fn(),
       locals: {},
     };
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("signedOutGet", () => {
     it("should return signed out page", () => {
       signedOutGet(req as Request, res as Response);
 
-      expect(res.render).to.have.been.calledWith("signed-out/index.njk");
-      expect(res.status).to.have.be.calledWith(200);
+      expect(res.render).toHaveBeenCalledWith("signed-out/index.njk", {
+        hideAccountNavigation: true,
+        signinLink: "/",
+      });
+      expect(res.status).toHaveBeenCalledWith(200);
     });
   });
 });

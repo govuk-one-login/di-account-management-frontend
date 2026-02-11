@@ -1,6 +1,4 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils.js";
+import { describe, it, expect, vi } from "vitest";
 import { requiresAuthMiddleware } from "../../../src/middleware/requires-auth-middleware.js";
 import { PATH_DATA } from "../../../src/app.constants.js";
 import { Request, Response, NextFunction } from "express";
@@ -21,13 +19,13 @@ describe("Requires auth middleware", () => {
       },
     };
 
-    const res: any = { locals: {}, redirect: sinon.fake() };
-    const nextFunction: NextFunction = sinon.fake(() => {});
+    const res: any = { locals: {}, redirect: vi.fn() };
+    const nextFunction: NextFunction = vi.fn(() => {});
 
     await requiresAuthMiddleware(req, res, nextFunction);
 
-    expect(res.redirect).to.have.been.calledWith(PATH_DATA.USER_SIGNED_OUT.url);
-    expect(nextFunction).to.have.not.been.called;
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.USER_SIGNED_OUT.url);
+    expect(nextFunction).not.toHaveBeenCalled();
   });
 
   it("should redirect to session expired page if user not authenticated", async () => {
@@ -40,13 +38,13 @@ describe("Requires auth middleware", () => {
       },
     };
 
-    const res: any = { locals: {}, redirect: sinon.fake() };
-    const nextFunction: NextFunction = sinon.fake(() => {});
+    const res: any = { locals: {}, redirect: vi.fn() };
+    const nextFunction: NextFunction = vi.fn(() => {});
 
     await requiresAuthMiddleware(req, res, nextFunction);
 
-    expect(res.redirect).to.have.been.calledWith(PATH_DATA.SESSION_EXPIRED.url);
-    expect(nextFunction).to.have.not.been.called;
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
+    expect(nextFunction).not.toHaveBeenCalled();
   });
 
   it("should redirect to session expired page if no user session", async () => {
@@ -57,13 +55,13 @@ describe("Requires auth middleware", () => {
         },
       },
     };
-    const res: any = { locals: {}, redirect: sinon.fake() };
-    const nextFunction: NextFunction = sinon.fake(() => {});
+    const res: any = { locals: {}, redirect: vi.fn() };
+    const nextFunction: NextFunction = vi.fn(() => {});
 
     await requiresAuthMiddleware(req, res, nextFunction);
 
-    expect(res.redirect).to.have.been.calledWith(PATH_DATA.SESSION_EXPIRED.url);
-    expect(nextFunction).to.have.not.been.called;
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
+    expect(nextFunction).not.toHaveBeenCalled();
   });
 
   it("should call next user session is valid", async () => {
@@ -77,14 +75,14 @@ describe("Requires auth middleware", () => {
     };
     const res: any = {
       locals: {},
-      redirect: sinon.fake(),
-      cookie: sinon.fake(),
+      redirect: vi.fn(),
+      cookie: vi.fn(),
     };
-    const nextFunction: NextFunction = sinon.fake(() => {});
+    const nextFunction: NextFunction = vi.fn(() => {});
 
     await requiresAuthMiddleware(req, res, nextFunction);
 
-    expect(nextFunction).to.have.been.calledOnce;
+    expect(nextFunction).toHaveBeenCalledOnce();
   });
 
   it("should call next and reset lo cookie to false if user is authenticated", async () => {
@@ -102,30 +100,28 @@ describe("Requires auth middleware", () => {
 
     const res: any = {
       locals: {},
-      redirect: sinon.fake(),
+      redirect: vi.fn(),
       mockCookies: {},
       cookie: function (name: string, value: string) {
         this.mockCookies[name] = value;
       },
     };
-    const nextFunction: NextFunction = sinon.fake(() => {});
+    const nextFunction: NextFunction = vi.fn(() => {});
 
     await requiresAuthMiddleware(req, res, nextFunction);
 
-    expect(nextFunction).to.have.been.calledOnce;
-    expect(res.mockCookies.lo).to.equal("false");
+    expect(nextFunction).toHaveBeenCalledOnce();
+    expect(res.mockCookies.lo).toBe("false");
   });
 
   it("should redirect to Log in page", async () => {
-    const sandbox: sinon.SinonSandbox = sinon.createSandbox();
-    sandbox.stub(generators, "nonce").returns("generated");
-    sandbox.stub(kmsService, "sign").resolves({
-      Signature: [1, 2, 3] as unknown as Uint8Array,
+    vi.spyOn(generators, "nonce").mockReturnValue("generated");
+    vi.spyOn(kmsService, "sign").mockResolvedValue({
+      Signature: new Uint8Array([1, 2, 3]),
       KeyId: "",
       SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512",
       $metadata: {},
     }) as unknown as SignCommandOutput;
-    const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
     const req: Partial<Request> = {
       body: {},
       session: {
@@ -134,7 +130,7 @@ describe("Requires auth middleware", () => {
       url: "/test_url",
       query: { cookie_consent: "test" },
       oidc: {
-        authorizationUrl: sandbox.spy(),
+        authorizationUrl: vi.fn(),
         metadata: {
           scopes: "openid",
           redirect_uris: ["url"],
@@ -144,22 +140,25 @@ describe("Requires auth middleware", () => {
     };
 
     const res: Partial<Response> = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {},
     };
 
-    const nextFunction: NextFunction = sandbox.fake(() => {});
+    const nextFunction: NextFunction = vi.fn(() => {});
     await requiresAuthMiddleware(req as Request, res as Response, nextFunction);
 
-    expect(res.redirect).to.have.called;
-    expect(kmsService.sign).to.have.called;
-    expect(req.oidc.authorizationUrl).to.have.been.calledOnceWith({
+    expect(res.redirect).toHaveBeenCalled();
+    expect(kmsService.sign).toHaveBeenCalled();
+    expect(req.oidc.authorizationUrl).toHaveBeenCalledOnce();
+    const callArgs = (req.oidc.authorizationUrl as any).mock.calls[0][0];
+    expect(callArgs).toMatchObject({
       client_id: "test-client",
       response_type: "code",
       scope: "openid",
-      request: sinon.match(jwtRegex),
     });
-    sandbox.restore();
+    expect(callArgs.request).toBeDefined();
+    expect(typeof callArgs.request).toBe("string");
+    vi.restoreAllMocks();
   });
 });

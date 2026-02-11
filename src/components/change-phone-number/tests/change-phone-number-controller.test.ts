@@ -1,7 +1,4 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 
 import { ChangePhoneNumberServiceInterface } from "../types";
@@ -9,7 +6,7 @@ import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import {
   changePhoneNumberGet,
   changePhoneNumberPost,
-} from "../change-phone-number-controller";
+} from "../change-phone-number-controller.js";
 import {
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
@@ -22,34 +19,31 @@ import {
   TOKEN,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-import * as oidcModule from "../../../utils/oidc";
+import * as oidcModule from "../../../utils/oidc.js";
 
 describe("change phone number controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ changePhoneNumber: {} })
-      .withTranslate(sandbox.fake())
+      .withTranslate(vi.fn())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
     res = new ResponseBuilder()
-      .withRender(sandbox.fake())
-      .withRedirect(sandbox.fake(() => {}))
-      .withStatus(sandbox.fake())
+      .withRender(vi.fn())
+      .withRedirect(vi.fn(() => {}))
+      .withStatus(vi.fn())
       .build();
 
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("changePhoneNumberGet", () => {
@@ -58,7 +52,7 @@ describe("change phone number controller", () => {
       changePhoneNumberGet(req as Request, res as Response);
 
       // Assert
-      expect(res.render).to.have.calledWith("change-phone-number/index.njk");
+      expect(res.render).toHaveBeenCalledWith("change-phone-number/index.njk");
     });
   });
 
@@ -66,7 +60,7 @@ describe("change phone number controller", () => {
     it("should redirect to /phone-number-updated-confirmation page", async () => {
       // Arrange
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.resolves({
+        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({
           success: true,
         }),
       };
@@ -77,11 +71,12 @@ describe("change phone number controller", () => {
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
       // Assert
-      expect(fakeService.sendPhoneVerificationNotification).to.have.been
-        .calledOnce;
       expect(
         fakeService.sendPhoneVerificationNotification
-      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "12345678991", {
+      ).toHaveBeenCalledOnce();
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", {
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -90,7 +85,7 @@ describe("change phone number controller", () => {
         clientSessionId: CLIENT_SESSION_ID,
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
       });
-      expect(res.redirect).to.have.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
       );
     });
@@ -98,7 +93,7 @@ describe("change phone number controller", () => {
     it("should return validation error when same UK number", async () => {
       // Arrange
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.resolves({
+        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({
           success: false,
           code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
         }),
@@ -110,10 +105,10 @@ describe("change phone number controller", () => {
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
       // Assert
-      expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
+      expect(fakeService.sendPhoneVerificationNotification).toHaveBeenCalled();
       expect(
         fakeService.sendPhoneVerificationNotification
-      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "12345678991", {
+      ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", {
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -122,13 +117,28 @@ describe("change phone number controller", () => {
         clientSessionId: CLIENT_SESSION_ID,
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
       });
-      expect(res.render).to.have.calledWith("change-phone-number/index.njk");
+      expect(res.render).toHaveBeenCalledWith("change-phone-number/index.njk", {
+        errorList: [
+          {
+            href: "#phoneNumber",
+            text: undefined,
+          },
+        ],
+        errors: {
+          phoneNumber: {
+            href: "#phoneNumber",
+            text: undefined,
+          },
+        },
+        language: "en",
+        phoneNumber: "12345678991",
+      });
     });
 
     it("should return validation error when same international number", async () => {
       // Arrange
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.resolves({
+        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({
           success: false,
           code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
         }),
@@ -140,10 +150,10 @@ describe("change phone number controller", () => {
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
       // Assert
-      expect(fakeService.sendPhoneVerificationNotification).to.have.been.called;
+      expect(fakeService.sendPhoneVerificationNotification).toHaveBeenCalled();
       expect(
         fakeService.sendPhoneVerificationNotification
-      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "12345678991", {
+      ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", {
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -152,13 +162,29 @@ describe("change phone number controller", () => {
         clientSessionId: CLIENT_SESSION_ID,
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
       });
-      expect(res.render).to.have.calledWith("change-phone-number/index.njk");
+      expect(res.render).toHaveBeenCalledWith("change-phone-number/index.njk", {
+        errorList: [
+          {
+            href: "#phoneNumber",
+            text: undefined,
+          },
+        ],
+        errors: {
+          phoneNumber: {
+            href: "#phoneNumber",
+            text: undefined,
+          },
+        },
+        hasInternationalPhoneNumber: true,
+        language: "en",
+        phoneNumber: "12345678991",
+      });
     });
 
     it("should redirect to /phone-number-updated-confirmation when success with valid international number", async () => {
       // Arrange
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sandbox.fake.resolves({
+        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({
           success: true,
         }),
       };
@@ -168,11 +194,12 @@ describe("change phone number controller", () => {
       await changePhoneNumberPost(fakeService)(req as Request, res as Response);
 
       // Assert
-      expect(fakeService.sendPhoneVerificationNotification).to.have.been
-        .calledOnce;
       expect(
         fakeService.sendPhoneVerificationNotification
-      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "+33645453322", {
+      ).toHaveBeenCalledOnce();
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).toHaveBeenCalledWith(CURRENT_EMAIL, "+33645453322", {
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -181,7 +208,7 @@ describe("change phone number controller", () => {
         clientSessionId: CLIENT_SESSION_ID,
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
       });
-      expect(res.redirect).to.have.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
       );
     });
