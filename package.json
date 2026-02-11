@@ -50,6 +50,7 @@
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
     "@govuk-one-login/frontend-ui": "^4.2.3",
     "@govuk-one-login/frontend-vital-signs": "0.1.4",
+    "aws-lambda": "^1.0.7",
     "axios": "^1.13.5",
     "base64url": "3.0.1",
     "body-parser": "^2.2.2",
@@ -84,6 +85,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@types/aws-lambda": "^8.10.145",
     "@types/chai": "^4.3.6",
     "@types/chai-as-promised": "^7.1.8",
     "@types/cookie-parser": "^1.4.10",

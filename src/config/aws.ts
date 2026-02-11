@@ -7,6 +7,7 @@ import {
 } from "../config";
 import { SQSClient, SQSClientConfig } from "@aws-sdk/client-sqs";
 import { readEnvVar } from "../utils/read-envs";
+import { S3Client } from "@aws-sdk/client-s3";
 
 //refer to seed.yaml
 function getLocalKeyId() {
@@ -44,8 +45,8 @@ function getLocalStackAWSConfig(): AwsConfig {
   return {
     endpoint: getLocalStackBaseUrl(),
     credentials: {
-      accessKeyId: "na",
-      secretAccessKey: "na",
+      accessKeyId: "na", // pragma: allowlist secret
+      secretAccessKey: "na", // pragma: allowlist secret
     },
     region: getAwsRegion(),
   };
@@ -79,8 +80,8 @@ export function getSQSConfig(): SqsConfig {
         region: getAwsRegion(),
         endpoint: "http://localstack:4566", // NOSONAR: http used locally
         credentials: {
-          accessKeyId: "na",
-          secretAccessKey: "na",
+          accessKeyId: "na", // pragma: allowlist secret
+          secretAccessKey: "na", // pragma: allowlist secret
         },
       },
     };
@@ -97,6 +98,20 @@ export function getSQSConfig(): SqsConfig {
 }
 
 // Singleton
+
+export const s3Client = (() => {
+  let instance: S3Client;
+  return {
+    getClient: () => {
+      if (!instance) {
+        instance = new S3Client({
+          region: getAwsRegion(),
+        });
+      }
+      return instance;
+    },
+  };
+})();
 
 export const sqsClient = (() => {
   let instance: SQSClient;

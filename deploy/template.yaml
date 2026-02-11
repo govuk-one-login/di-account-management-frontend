@@ -1073,6 +1073,12 @@ Resources:
                   - !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
               - Effect: Allow
                 Action:
+                  - "kms:Sign"
+                  - "kms:DescribeKey"
+                Resource:
+                  - !GetAtt SigningKmsKey.Arn
+              - Effect: Allow
+                Action:
                   - "kms:GenerateDataKey*"
                   - "kms:Decrypt"
                 Resource:
@@ -2025,6 +2031,91 @@ Resources:
     Properties:
       AliasName: !Sub "alias/${AWS::StackName}-DynamoDBKmsKey"
       TargetKeyId: !GetAtt DynamoDBKmsKey.Arn
+
+  SigningKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub "ECC signing key for ${AWS::StackName}"
+      KeySpec: ECC_NIST_P256
+      KeyUsage: SIGN_VERIFY
+      Enabled: true
+      EnableKeyRotation: false
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action: kms:*
+            Resource: "*"
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-SigningKmsKey"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  SigningKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-SigningKmsKey"
+      TargetKeyId: !GetAtt SigningKmsKey.Arn
+
+  JwksBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-jwks"
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-JwksBucket"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  JwksBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref JwksBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource:
+              - !Sub "arn:aws:s3:::${JwksBucket}"
+              - !Sub "arn:aws:s3:::${JwksBucket}/*"
+            Condition:
+              Bool:
+                aws:SecureTransport: false
+              NumericLessThan:
+                s3:TlsVersion: "1.2"
 
   #
   # App domain
