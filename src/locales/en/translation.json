@@ -526,7 +526,7 @@
       "currentIsPhone": "Your default method for getting security codes is currently by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "switchToApp": "You can use an authenticator app instead.",
       "currentIsApp": "Your default method for getting security codes is currently using your authenticator app.",
-      "switchToPhone": "You can get codes by text message instead.",
+      "switchToPhone": "You can get codes by text message to a UK mobile phone number instead.",
       "setUpPhoneButton": "Add a UK mobile phone number",
       "setUpAppButton": "Set up an authenticator app",
       "cancelButton": "Cancel and go back to Security",
@@ -537,8 +537,8 @@
         "sms": "Your default method for getting security codes will be a text message to your phone number ending with <strong>[phoneNumber]</strong>."
       },
       "sms": {
-        "title": "Enter your mobile phone number",
-        "heading": "Enter your mobile phone number"
+        "title": "Enter your UK mobile phone number",
+        "heading": "Enter your UK mobile phone number"
       }
     },
     "deleteAccount": {

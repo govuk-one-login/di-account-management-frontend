@@ -102,6 +102,13 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
         mfaMethod.priorityIdentifier === mfaPriorityIdentifiers.backup
     ) || false;
 
+  const hasAuthApp =
+    req.session.mfaMethods?.some(
+      (mfaMethod) =>
+        mfaMethod.method.mfaMethodType === mfaMethodTypes.authApp &&
+        mfaMethod.priorityIdentifier === mfaPriorityIdentifiers.default
+    ) || false;
+
   // eslint-disable-next-line no-console
   console.log("User has backup auth app: ", hasBackupAuthApp);
 
@@ -127,5 +134,5 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
     );
   }
 
-  res.render(NO_UK_PHONE_NUMBER_TEMPLATE, { hasBackupAuthApp });
+  res.render(NO_UK_PHONE_NUMBER_TEMPLATE, { hasBackupAuthApp, hasAuthApp });
 }

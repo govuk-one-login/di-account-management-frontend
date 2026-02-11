@@ -302,5 +302,34 @@ describe("change phone number controller", () => {
         { hasBackupAuthApp: true }
       );
     });
+
+    it("should render no uk phone number page with hasAuthApp true when user has auth app as default", () => {
+      // Arrange
+      req = new RequestBuilder()
+        .withBody({})
+        .withSessionUserState({
+          changePhoneNumber: {},
+        })
+        .withAuthAppMfaMethod()
+        .withTranslate(sandbox.fake())
+        .withHeaders({
+          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+          referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+        })
+        .withQuery({ type: "changePhoneNumber" })
+        .build();
+
+      // Act
+      noUkPhoneNumberGet(req as Request, res as Response);
+
+      // Assert
+      expect(res.render).to.have.calledWith(
+        "change-phone-number/no-uk-phone-number.njk",
+        {
+          hasBackupAuthApp: false,
+          hasAuthApp: true,
+        }
+      );
+    });
   });
 });

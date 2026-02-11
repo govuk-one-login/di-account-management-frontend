@@ -37,6 +37,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeEmail]: PATH_DATA.CHANGE_EMAIL.url,
   [UserJourney.ChangePassword]: PATH_DATA.CHANGE_PASSWORD.url,
   [UserJourney.ChangePhoneNumber]: PATH_DATA.CHANGE_PHONE_NUMBER.url,
+  [UserJourney.NoUkMobilePhone]: PATH_DATA.NO_UK_PHONE_NUMBER.url,
   [UserJourney.ChangeAuthApp]: PATH_DATA.CHANGE_AUTHENTICATOR_APP.url,
   [UserJourney.DeleteAccount]: PATH_DATA.DELETE_ACCOUNT.url,
   [UserJourney.addBackup]: PATH_DATA.ADD_MFA_METHOD.url,
