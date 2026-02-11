@@ -2117,6 +2117,86 @@ Resources:
               NumericLessThan:
                 s3:TlsVersion: "1.2"
 
+  JwksCreatorFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-JwksCreator"
+      Runtime: nodejs20.x
+      Handler: lambda/jwks-creator.handler
+      Code:
+        ZipFile: |
+          exports.handler = async () => ({ statusCode: 200 });
+      Role: !GetAtt JwksCreatorRole.Arn
+      Timeout: 60
+      Environment:
+        Variables:
+          JAR_RSA_ENCRYPTION_KEY_ALIAS: !GetAtt SigningKmsKeyAlias.AliasName
+          BUCKET_NAME: !Ref JwksBucket
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-JwksCreator"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  JwksCreatorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-JwksCreatorRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: JwksCreatorPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - kms:GetPublicKey
+                  - kms:DescribeKey
+                Resource: !GetAtt SigningKmsKey.Arn
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                Resource: !Sub "${JwksBucket.Arn}/*"
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-JwksCreatorRole"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  JwksCreatorLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${JwksCreatorFunction}"
+      RetentionInDays: 30
+
   #
   # App domain
   #
