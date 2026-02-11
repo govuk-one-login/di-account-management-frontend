@@ -1,19 +1,17 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextFunction, Request, Response } from "express";
-import { sinon } from "../../utils/test-utils.js";
 import { validateStateMiddleware } from "../../../src/middleware/validate-state-middleware.js";
+import { PATH_DATA } from "../../../src/app.constants.js";
 
 describe("validate state middleware", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
-  const info: sinon.SinonSpy = sinon.spy();
+  const info: ReturnType<typeof vi.fn> = vi.fn();
+  const warn: ReturnType<typeof vi.fn> = vi.fn();
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    next = sinon.fake(() => {});
+    next = vi.fn(() => {});
 
     req = {
       url: "/choose-backup",
@@ -29,28 +27,68 @@ describe("validate state middleware", () => {
           },
         },
       } as any,
-      oidc: { authorizationUrl: sinon.fake(), metadata: {} as any } as any,
+      oidc: { authorizationUrl: vi.fn(), metadata: {} as any } as any,
       log: {
         info,
+        warn,
       } as any,
     };
     res = {
-      render: sinon.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: { trace: {} },
     };
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
-  it("should continue to next middleware and pass validation", async () => {
+  it("should continue to next middleware and pass validation", () => {
     res.locals.sessionId = "sessionId";
     res.locals.persistentSessionId = "persistentSessionId";
 
     validateStateMiddleware(req as Request, res as Response, next);
 
-    expect(next).to.have.been.called;
+    expect(next).toHaveBeenCalled();
+    expect(res.redirect).not.toHaveBeenCalled();
+  });
+
+  it("should redirect to your services when state does not exist for page type", () => {
+    req.session.user.state = {};
+
+    validateStateMiddleware(req as Request, res as Response, next);
+
+    expect(info).toHaveBeenCalledWith(
+      "state exists but no value for addBackup"
+    );
+    expect(warn).toHaveBeenCalledWith(
+      "state exists but no value for addBackup"
+    );
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.YOUR_SERVICES.url);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it("should redirect to your services when required event is not in events array", () => {
+    req.session.user.state = {
+      addBackup: { value: "CHANGE_VALUE", events: ["WRONG_EVENT"] },
+    };
+
+    validateStateMiddleware(req as Request, res as Response, next);
+
+    expect(req.session.user.state.addBackup).toBeUndefined();
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.YOUR_SERVICES.url);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it("should continue when events array is empty", () => {
+    req.session.user.state = {
+      addBackup: { value: "CHANGE_VALUE", events: [] },
+    };
+
+    validateStateMiddleware(req as Request, res as Response, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(res.redirect).not.toHaveBeenCalled();
   });
 });

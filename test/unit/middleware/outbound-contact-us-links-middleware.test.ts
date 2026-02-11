@@ -1,21 +1,20 @@
-import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils.js";
-import chai, { expect } from "chai";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+// import { sinon } from "../../utils/test-utils.js";
 import { Request, Response } from "express";
-import sinonChai from "sinon-chai";
+// import sinonChai from "sinon-chai";
 import {
   appendFromUrlWhenTriagePageUrl,
   buildUrlFromRequest,
   outboundContactUsLinksMiddleware,
 } from "../../../src/middleware/outbound-contact-us-links-middleware.js";
 
-chai.use(sinonChai);
+// chai.use(sinonChai);
 
 describe("Middleware", () => {
   describe("outboundContactUsLinksMiddleware", () => {
     let req: Request;
     let res: Response;
-    let next: sinon.SinonSpy;
+    let next: ReturnType<typeof vi.fn>;
 
     beforeEach(() => {
       req = {
@@ -27,15 +26,15 @@ describe("Middleware", () => {
         cookies: {},
         session: {
           id: "session-id",
-          destroy: sinon.stub().callsArg(0),
+          destroy: vi.fn().mockImplementation((...args) => args[0]()),
         },
         log: {
-          error: sinon.stub(),
-          info: sinon.stub(),
+          error: vi.fn(),
+          info: vi.fn(),
         },
         get: function (headerName: string) {
           if (headerName === "Referrer") {
-            return this.headers["referer"] ?? this.headers["referrer"];
+            return this.headers.referer ?? this.headers.referrer;
           }
           if (headerName === "host") {
             return "home.account.gov.uk";
@@ -44,31 +43,31 @@ describe("Middleware", () => {
       } as any;
       res = {
         locals: {},
-        status: sinon.stub().returns({
-          json: sinon.stub(),
+        status: vi.fn().mockReturnValue({
+          json: vi.fn(),
         }),
       } as any;
-      next = sinon.spy();
+      next = vi.fn();
     });
 
     it("should call next", () => {
       outboundContactUsLinksMiddleware(req, res, next);
-      expect(req.session.destroy).to.not.have.been.called;
-      expect(res.status).to.not.have.been.called;
-      expect(next).to.have.been.calledOnce;
+      expect(req.session.destroy).not.toHaveBeenCalled();
+      expect(res.status).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledOnce();
     });
 
     it("should set `res.locals.contactUsLinkUrl`", () => {
-      expect(res.locals).to.not.have.property("contactUsLinkUrl");
+      expect(res.locals).not.toHaveProperty("contactUsLinkUrl");
       outboundContactUsLinksMiddleware(req, res, next);
-      expect(res.locals).to.have.property("contactUsLinkUrl");
+      expect(res.locals).toHaveProperty("contactUsLinkUrl");
     });
 
     it("should set `res.locals.contactUsLinkUrl correct value`", () => {
-      expect(res.locals).to.not.have.property("contactUsLinkUrl");
+      expect(res.locals).not.toHaveProperty("contactUsLinkUrl");
       outboundContactUsLinksMiddleware(req, res, next);
-      expect(res.locals).to.have.property("contactUsLinkUrl");
-      expect(res.locals.contactUsLinkUrl).to.equal(
+      expect(res.locals).toHaveProperty("contactUsLinkUrl");
+      expect(res.locals.contactUsLinkUrl).toBe(
         "https://home.account.gov.uk/contact-gov-uk-one-login?" +
           "fromURL=https%3A%2F%2Fhome.account.gov.uk%2Fcontact-gov-uk-one-login"
       );
@@ -94,21 +93,21 @@ describe("Middleware", () => {
     it("should build the fromUrl as expected when fromURL is not present", () => {
       const builtUrl = buildUrlFromRequest(req),
         expectedUrl = "https://home.account.gov.uk/contact-gov-uk-one-login";
-      expect(builtUrl).to.equal(expectedUrl);
+      expect(builtUrl).toBe(expectedUrl);
     });
 
     it("should return the decoded fromURL if present in the query", () => {
       req.originalUrl =
         "/contact-gov-uk-one-login?fromURL=https%3A%2F%2Fsignin.account.gov.uk%2Fsecurity";
       const builtUrl = buildUrlFromRequest(req);
-      expect(builtUrl).to.equal("https://signin.account.gov.uk/security");
+      expect(builtUrl).toBe("https://signin.account.gov.uk/security");
     });
 
     it("should handle fromURL with encoded nested fromURL to return first fromURL", () => {
       req.originalUrl =
         "/contact-gov-uk-one-login?fromURL=https%3A%2F%2Fsignin.account.gov.uk%2Fsecurity%3FfromURL%3Dhttps%253A%252F%252Ffoo";
       const builtUrl = buildUrlFromRequest(req);
-      expect(builtUrl).to.equal(
+      expect(builtUrl).toBe(
         "https://signin.account.gov.uk/security?fromURL=https%3A%2F%2Ffoo"
       );
     });
@@ -122,7 +121,7 @@ describe("Middleware", () => {
 
       const result = appendFromUrlWhenTriagePageUrl(matchingUrl, fromUrl);
 
-      expect(result).to.equal(
+      expect(result).toBe(
         `${matchingUrl}?fromURL=${encodeURIComponent(fromUrl)}`
       );
     });
@@ -133,7 +132,7 @@ describe("Middleware", () => {
 
       const result = appendFromUrlWhenTriagePageUrl(nonMatchingUrl, fromUrl);
 
-      expect(result).to.not.contain(encodeURIComponent(fromUrl));
+      expect(result).not.toContain(encodeURIComponent(fromUrl));
     });
   });
 });

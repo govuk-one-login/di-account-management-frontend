@@ -1,5 +1,4 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, beforeEach } from "vitest";
 import { getCurrentUrl } from "../../../src/utils/language-toggle.js";
 import { Request } from "express";
 
@@ -21,6 +20,6 @@ describe("getCurrentUrl", () => {
     const url = getCurrentUrl(req as Request);
 
     // Check the result
-    expect(url.href).to.equal("https://example.com/test-path");
+    expect(url.href).toBe("https://example.com/test-path");
   });
 });

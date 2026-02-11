@@ -1,43 +1,34 @@
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   reportSuspiciousActivityConfirmationGet,
   reportSuspiciousActivityGet,
   reportSuspiciousActivityPost,
-} from "../report-suspicious-activity-controller";
+} from "../report-suspicious-activity-controller.js";
 import { Request, Response } from "express";
-import { sinon } from "../../../../test/utils/test-utils";
-import { expect } from "chai";
-import * as dynamo from "../../../utils/dynamo";
+import * as dynamo from "../../../utils/dynamo.js";
 import * as sns from "../../../utils/sns";
+import * as config from "../../../config.js";
 import { DynamoDBService } from "../../../utils/types";
 import {
   GetItemCommandOutput,
   QueryCommandOutput,
 } from "@aws-sdk/client-dynamodb";
-import { logger } from "../../../utils/logger";
-import { AwsConfig } from "../../../config/aws";
+import { logger } from "../../../utils/logger.js";
 
 describe("report suspicious activity controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: any;
   let dynamodbQueryOutput: QueryCommandOutput;
-  let loggerSpy: sinon.SinonSpy;
-  let errorLoggerSpy: sinon.SinonSpy;
+  let errorLoggerSpy: ReturnType<typeof vi.spyOn>;
   let mockDynamoDBService: DynamoDBService;
-  let dynamoDBServiceStub: sinon.SinonStub<
-    [awsConfig?: AwsConfig],
-    DynamoDBService
-  >;
-  let snsPublishSpy: sinon.SinonSpy;
-  let clock: sinon.SinonFakeTimers;
+  let dynamoDBServiceStub: ReturnType<typeof vi.spyOn>;
+  let snsPublishSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    loggerSpy = sinon.spy(logger, "info");
-    errorLoggerSpy = sinon.spy(logger, "error");
-    clock = sinon.useFakeTimers(new Date(101));
+    errorLoggerSpy = vi.spyOn(logger, "error");
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(101));
 
     req = {
       query: { event: "event-id", reported: "false" },
@@ -59,11 +50,11 @@ describe("report suspicious activity controller", () => {
         persistentSessionId: "persistent-session-id",
         sessionId: "session-id",
       },
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      status: sandbox.fake(),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
+      status: vi.fn(),
     };
-    next = sandbox.fake(() => {});
+    next = vi.fn(() => {});
     dynamodbQueryOutput = {
       $metadata: undefined,
       Items: [
@@ -85,73 +76,49 @@ describe("report suspicious activity controller", () => {
         return Promise.resolve(dynamodbQueryOutput);
       },
     };
-    dynamoDBServiceStub = sinon.stub(dynamo, "dynamoDBService");
-    dynamoDBServiceStub.returns(mockDynamoDBService);
+    dynamoDBServiceStub = vi.spyOn(dynamo, "dynamoDBService");
+    dynamoDBServiceStub.mockReturnValue(mockDynamoDBService);
 
-    snsPublishSpy = sinon.spy();
-    sinon.stub(sns, "snsService").returns({
+    snsPublishSpy = vi.fn();
+    vi.spyOn(sns, "snsService").mockReturnValue({
       publish: snsPublishSpy,
     });
   });
 
   afterEach(() => {
-    sandbox.restore();
-    sinon.restore();
-    loggerSpy.restore();
-    errorLoggerSpy.restore();
-    clock.restore();
+    vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   it("Report activity you do not recognise", async () => {
-    const configFuncs = require("../../../config");
-    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-      return true;
-    });
-    // Act
+    vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
     await reportSuspiciousActivityGet(req as Request, res as Response, next);
-
-    // Assert
-    expect(res.render).to.have.been.called;
+    expect(res.render).toHaveBeenCalled();
   });
 
   it("Should render 404 in GET view when report suspicious activity is false", async () => {
-    const configFuncs = require("../../../config");
-    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-      return false;
-    });
-    // Act
+    vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(false);
     await reportSuspiciousActivityGet(req as Request, res as Response, next);
-
-    // Assert
-    expect(res.status).to.have.been.calledOnceWith(404);
-    expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
+    expect(res.status).toHaveBeenCalledOnce();
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.render).toHaveBeenCalledOnce();
+    expect(res.render).toHaveBeenCalledWith("common/errors/404.njk");
   });
 
   it("Should call next when the event query string parameter fails validation", async () => {
-    const configFuncs = require("../../../config");
-    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-      return true;
-    });
-    const nextFake = sinon.fake();
-    req.query = {
-      event: "",
-    };
-
+    vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
+    const nextFake = vi.fn();
+    req.query = { event: "" };
     await reportSuspiciousActivityGet(
       req as Request,
       res as Response,
       nextFake
     );
-
-    expect(nextFake).to.have.been.calledOnce;
+    expect(nextFake).toHaveBeenCalledOnce();
   });
 
-  it("You’ve already reported this activity", async () => {
-    const configFuncs = require("../../../config");
-    sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-      return true;
-    });
-    // Arrange
+  it("You've already reported this activity", async () => {
+    vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
     req.query = { event: "event-id", reported: "true" };
     dynamodbQueryOutput = {
       $metadata: undefined,
@@ -167,60 +134,36 @@ describe("report suspicious activity controller", () => {
         },
       ],
     };
-
-    // Act
     await reportSuspiciousActivityGet(req as Request, res as Response, next);
-
-    // Assert
-    expect(res.render).to.have.been.called;
+    expect(res.render).toHaveBeenCalled();
   });
 
   describe("Page not found", () => {
     describe("Path param is missing", () => {
       it("event path param is missing", async () => {
-        // Arrange
         req.query = { reported: "false" };
-        const configFuncs = require("../../../config");
-        sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-          return true;
-        });
-
-        // Act
+        vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
         await reportSuspiciousActivityGet(
           req as Request,
           res as Response,
           next
         );
-
-        // Assert
-        expect(next).to.be.called;
+        expect(next).toHaveBeenCalled();
       });
     });
   });
 
   describe("Sorry, there is a problem with the service", () => {
     it("event param can't be found for this user", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-        return true;
-      });
-      // Arrange
+      vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
       dynamodbQueryOutput = { $metadata: undefined, Items: [] };
       req.query = { event: "event-id", reported: "false" };
-
-      // Act
       await reportSuspiciousActivityGet(req as Request, res as Response, next);
-
-      // Assert
-      expect(next).to.be.called;
+      expect(next).toHaveBeenCalled();
     });
 
     it("activity log can't be retrieved for this user", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-        return true;
-      });
-      // Arrange
+      vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
       mockDynamoDBService = {
         getItem(): Promise<GetItemCommandOutput> {
           throw new Error("DynamoDB error");
@@ -229,48 +172,30 @@ describe("report suspicious activity controller", () => {
           throw new Error("DynamoDB error");
         },
       };
-      dynamoDBServiceStub.returns(mockDynamoDBService);
-
+      dynamoDBServiceStub.mockReturnValue(mockDynamoDBService);
       req.query = { event: "event-id" };
-
-      // Act
       await reportSuspiciousActivityGet(req as Request, res as Response, next);
-
-      // Assert
-      expect(errorLoggerSpy).to.have.calledWith("DynamoDB error");
+      expect(errorLoggerSpy).toHaveBeenCalledWith("DynamoDB error");
     });
   });
 
   describe("Submit suspicious activity report", () => {
     it("should send event to SNS with device information", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-        return true;
-      });
-      // Arrange
+      vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
       req.body.page = "1";
       const TXMA_HEADER_VALUE = "TXMA_HEADER_VALUE";
-      req.headers = {
-        "txma-audit-encoded": TXMA_HEADER_VALUE,
-      };
-
-      // Act
+      req.headers = { "txma-audit-encoded": TXMA_HEADER_VALUE };
       await reportSuspiciousActivityPost(
         req as Request,
         res as Response,
         () => {}
       );
-
-      // Assert
-      expect(res.redirect).to.have.been.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         "/activity-history/report-activity/done?page=1"
       );
-
-      const snsCall = snsPublishSpy.getCalls()[0];
-      const [topic_arn, message] = snsCall.args;
-
-      expect(topic_arn).to.equal(process.env.SUSPICIOUS_ACTIVITY_TOPIC_ARN);
-      expect(JSON.parse(message)).to.deep.equal({
+      const [topic_arn, message] = snsPublishSpy.mock.calls[0];
+      expect(topic_arn).toBe(process.env.SUSPICIOUS_ACTIVITY_TOPIC_ARN);
+      expect(JSON.parse(message)).toEqual({
         user_id: "user-id",
         email: "test@email.moc",
         event_id: "event-id",
@@ -282,32 +207,20 @@ describe("report suspicious activity controller", () => {
     });
 
     it("should send event to SNS without device information", async () => {
-      // Arrange
       req.body.page = "1";
       req.headers = {};
-
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-        return true;
-      });
-
-      // Act
+      vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
       await reportSuspiciousActivityPost(
         req as Request,
         res as Response,
         () => {}
       );
-
-      // Assert
-      expect(res.redirect).to.have.been.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         "/activity-history/report-activity/done?page=1"
       );
-
-      const snsCall = snsPublishSpy.getCalls()[0];
-      const [topic_arn, message] = snsCall.args;
-
-      expect(topic_arn).to.equal(process.env.SUSPICIOUS_ACTIVITY_TOPIC_ARN);
-      expect(JSON.parse(message)).to.deep.equal({
+      const [topic_arn, message] = snsPublishSpy.mock.calls[0];
+      expect(topic_arn).toBe(process.env.SUSPICIOUS_ACTIVITY_TOPIC_ARN);
+      expect(JSON.parse(message)).toEqual({
         user_id: "user-id",
         email: "test@email.moc",
         event_id: "event-id",
@@ -318,79 +231,55 @@ describe("report suspicious activity controller", () => {
     });
 
     it("should send event to SNS without page information", async () => {
-      // Arrange
       req.body.page = "AAA";
       req.headers = {};
-
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-        return true;
-      });
-
-      // Act
+      vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
       await reportSuspiciousActivityPost(
         req as Request,
         res as Response,
         () => {}
       );
-
-      // Assert
-      expect(res.redirect).to.have.been.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         "/activity-history/report-activity/done"
       );
     });
 
     it("Should render 404 in POST view when report suspicious activity is false", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-        return false;
-      });
-      // Act
+      vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(false);
       await reportSuspiciousActivityPost(
         req as Request,
         res as Response,
         () => {}
       );
-
-      // Assert
-      expect(res.status).to.have.been.calledOnceWith(404);
-      expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
+      expect(res.status).toHaveBeenCalledOnce();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.render).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith("common/errors/404.njk");
     });
 
     it("Should render 404 in CONFIRMATION view when report suspicious activity is false", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-        return false;
-      });
-      // Act
+      vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(false);
       await reportSuspiciousActivityConfirmationGet(
         req as Request,
         res as Response,
         () => {}
       );
-
-      // Assert
-      expect(res.status).to.have.been.calledOnceWith(404);
-      expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
+      expect(res.status).toHaveBeenCalledOnce();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.render).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith("common/errors/404.njk");
     });
 
     it("Should call next when the page query string parameter fails validation", async () => {
-      const configFuncs = require("../../../config");
-      sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
-        return true;
-      });
-      const nextFake = sinon.fake();
-      req.query = {
-        page: ["1"],
-      };
-
+      vi.spyOn(config, "reportSuspiciousActivity").mockReturnValue(true);
+      const nextFake = vi.fn();
+      req.query = { page: ["1"] };
       await reportSuspiciousActivityConfirmationGet(
         req as Request,
         res as Response,
         nextFake
       );
-
-      expect(nextFake).to.have.been.calledOnce;
+      expect(nextFake).toHaveBeenCalledOnce();
     });
   });
 });

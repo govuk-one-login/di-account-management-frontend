@@ -126,7 +126,7 @@ export const formatActivityLog = (
   }?event=${activityLogEntry.event_id}&page=${pageNumber || 1}`;
 
   formattedActivityLog.time = prettifyDate({
-    dateEpoch: Number(activityLogEntry["timestamp"]),
+    dateEpoch: Number(activityLogEntry.timestamp),
     options: {
       month: "long",
       day: "numeric",
@@ -146,9 +146,9 @@ export const formatActivityLog = (
     activityLogEntry.client_id
   );
 
-  if (activityLogEntry["reported_suspicious_time"]) {
+  if (activityLogEntry.reported_suspicious_time) {
     formattedActivityLog.reportedSuspiciousTime = prettifyDate({
-      dateEpoch: Number(activityLogEntry["reported_suspicious_time"]),
+      dateEpoch: Number(activityLogEntry.reported_suspicious_time),
       options: {
         month: "long",
         day: "numeric",

@@ -55,7 +55,7 @@ export async function deleteMfaMethodPost(
     return req.body.methodId == m.mfaIdentifier;
   });
 
-  if (!methodToRemove || methodToRemove.priorityIdentifier !== "BACKUP") {
+  if (methodToRemove?.priorityIdentifier !== "BACKUP") {
     res.status(HTTP_STATUS_CODES.NOT_FOUND);
     return;
   }

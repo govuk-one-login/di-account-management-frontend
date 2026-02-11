@@ -1,8 +1,14 @@
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  beforeAll,
+  afterAll,
+} from "vitest";
 import request from "supertest";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
 import nock = require("nock");
-import decache from "decache";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
@@ -12,7 +18,6 @@ import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import * as cheerio from "cheerio";
 import { CURRENT_EMAIL } from "../../../../test/utils/builders";
-import { expect } from "chai";
 import { INTENT_CHANGE_PHONE_NUMBER } from "../../check-your-email/types";
 
 const PHONE_NUMBER = "07839490040";
@@ -20,20 +25,18 @@ const PHONE_NUMBER = "07839490040";
 describe("Integration:: request phone code", () => {
   let token: string | string[];
   let cookies: string;
-  let sandbox: sinon.SinonSandbox;
   let app: any;
   let baseApi: string;
 
   const TEST_SUBJECT_ID = "jkduasd";
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      function (req: any, res: any, next: any): void {
         req.session.user = {
           email: CURRENT_EMAIL,
           phoneNumber: PHONE_NUMBER,
@@ -58,18 +61,19 @@ describe("Integration:: request phone code", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     await request(app)
@@ -85,13 +89,16 @@ describe("Integration:: request phone code", () => {
     nock.cleanAll();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
-  it("should return resend phone code page", (done) => {
-    request(app).get(PATH_DATA.RESEND_PHONE_CODE.url).expect(200, done);
+  it("should return resend phone code page", async () => {
+    const res = await request(app)
+      .get(PATH_DATA.RESEND_PHONE_CODE.url)
+      .expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
@@ -140,6 +147,6 @@ describe("Integration:: request phone code", () => {
       })
       .expect(302);
 
-    expect(phoneNumberRequestedToChangeTo).to.equal(PHONE_NUMBER);
+    expect(phoneNumberRequestedToChangeTo).toBe(PHONE_NUMBER);
   });
 });

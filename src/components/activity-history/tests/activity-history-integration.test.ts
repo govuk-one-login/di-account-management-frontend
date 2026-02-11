@@ -1,11 +1,9 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
-import { describe } from "mocha";
-import { sinon, expect } from "../../../../test/utils/test-utils";
-import { testComponent } from "../../../../test/utils/helpers";
+import { testComponent } from "../../../../test/utils/helpers.js";
 import * as cheerio from "cheerio";
 import * as nock from "nock";
-import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA } from "../../../app.constants.js";
 
 const { url } = PATH_DATA.SIGN_IN_HISTORY;
 
@@ -33,7 +31,9 @@ describe("Integration:: Activity history", () => {
       .get(url)
       .expect(200)
       .expect(function (res) {
-        expect(cheerio.load(res.text)("[id='activity-history']").length).eq(1);
+        expect(cheerio.load(res.text)("[id='activity-history']").length).toBe(
+          1
+        );
       });
   });
 
@@ -57,10 +57,10 @@ describe("Integration:: Activity history", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
+        expect(res.status).toBe(200);
         expect(
           $(testComponent("content-for-reporting-form-enabled")).length
-        ).eq(0);
+        ).toBe(0);
       });
   });
 
@@ -84,10 +84,10 @@ describe("Integration:: Activity history", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
+        expect(res.status).toBe(200);
         expect(
           $(testComponent("content-for-reporting-form-enabled")).length
-        ).eq(1);
+        ).toBe(1);
       });
   });
 
@@ -116,8 +116,8 @@ describe("Integration:: Activity history", () => {
       .expect(200)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("activity-log-pagination")).length).eq(0);
-        expect($("ul.activity-history__list").find("li").length).eq(2);
+        expect($(testComponent("activity-log-pagination")).length).toBe(0);
+        expect($("ul.activity-history__list").find("li").length).toBe(2);
       });
   });
 
@@ -138,7 +138,7 @@ describe("Integration:: Activity history", () => {
       .expect(200)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("activity-log-pagination")).length).eq(1);
+        expect($(testComponent("activity-log-pagination")).length).toBe(1);
       });
   });
 
@@ -158,8 +158,8 @@ describe("Integration:: Activity history", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("activity-log-explainer")).length).eq(0);
+        expect(res.status).toBe(200);
+        expect($(testComponent("activity-log-explainer")).length).toBe(0);
       });
   });
 
@@ -182,11 +182,9 @@ describe("Integration:: Activity history", () => {
         .get(url)
         .expect(function (res) {
           const $ = cheerio.load(res.text);
-          expect(res.status).to.equal(200);
-          expect($(testComponent("no-welsh-notice")).length).eq(1);
-          expect($(testComponent("log-entry-heading")).prop("lang")).to.equal(
-            "en"
-          );
+          expect(res.status).toBe(200);
+          expect($(testComponent("no-welsh-notice")).length).toBe(1);
+          expect($(testComponent("log-entry-heading")).prop("lang")).toBe("en");
         });
     });
   });
@@ -206,11 +204,11 @@ describe("Integration:: Activity history", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("no-welsh-notice")).length).eq(0);
-        expect($(`[lang='en']${testComponent("log-entry-heading")}`).length).eq(
-          0
-        );
+        expect(res.status).toBe(200);
+        expect($(testComponent("no-welsh-notice")).length).toBe(0);
+        expect(
+          $(`[lang='en']${testComponent("log-entry-heading")}`).length
+        ).toBe(0);
       });
   });
 
@@ -232,23 +230,25 @@ describe("Integration:: Activity history", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("no-welsh-notice")).length).eq(0);
-        expect($(`[lang='en']${testComponent("log-entry-heading")}`).length).eq(
-          0
-        );
+        expect(res.status).toBe(200);
+        expect($(testComponent("no-welsh-notice")).length).toBe(0);
+        expect(
+          $(`[lang='en']${testComponent("log-entry-heading")}`).length
+        ).toBe(0);
       });
   });
 });
 
 const appWithMiddlewareSetup = async (data?: any, config?: any) => {
-  decache("../../../app");
-  decache("../../../middleware/requires-auth-middleware");
-  const oidc = require("../../../utils/oidc");
-  const configFuncs = require("../../../config");
-  const presentActivityHistory = require("../../../utils/present-activity-history");
-  const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-  const sandbox = sinon.createSandbox();
+  vi.resetModules();
+  const oidc = await import("../../../utils/oidc.js");
+  const configFuncs = await import("../../../config.js");
+  const presentActivityHistory = await import(
+    "../../../utils/present-activity-history.js"
+  );
+  const sessionMiddleware = await import(
+    "../../../middleware/requires-auth-middleware.js"
+  );
   const reportSuspiciousActivity =
     !config?.reportSuspiciousActivityJourneyDisabled;
   const language = config?.language ?? "en";
@@ -277,33 +277,31 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
     },
   ];
 
-  sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
-    req: any,
-    res: any,
-    next: any
-  ): void {
-    req.i18n.language = language;
-    req.session.user = DEFAULT_USER_SESSION;
-    next();
+  vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+    async function (req: any, res: any, next: any): Promise<void> {
+      req.i18n.language = language;
+      req.session.user = DEFAULT_USER_SESSION;
+      next();
+    }
+  );
+
+  vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
+    return Promise.resolve({} as any);
   });
 
-  sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-    return Promise.resolve({});
+  vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
+    return Promise.resolve({} as any);
   });
 
-  sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-    return Promise.resolve({});
-  });
-
-  sandbox
-    .stub(presentActivityHistory, "presentActivityHistory")
-    .callsFake(function () {
+  vi.spyOn(presentActivityHistory, "presentActivityHistory").mockImplementation(
+    function () {
       return activity;
-    });
+    }
+  );
 
-  sandbox.stub(configFuncs, "reportSuspiciousActivity").callsFake(() => {
+  vi.spyOn(configFuncs, "reportSuspiciousActivity").mockImplementation(() => {
     return reportSuspiciousActivity;
   });
 
-  return await require("../../../app").createApp();
+  return await (await import("../../../app.js")).createApp();
 };

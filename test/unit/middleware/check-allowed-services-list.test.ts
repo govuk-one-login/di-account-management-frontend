@@ -1,7 +1,5 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextFunction } from "express";
-import sinon from "sinon";
 import {
   checkRSAAllowedServicesList,
   findClientInServices,
@@ -11,14 +9,10 @@ import * as allowListFuncs from "../../../src/middleware/check-allowed-services-
 import { LOG_MESSAGES, PATH_DATA } from "../../../src/app.constants.js";
 
 describe("activity history allowlist middleware", () => {
-  let sandbox: sinon.SinonSandbox;
-
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("checkRSAAllowedServicesList function", () => {
@@ -45,9 +39,11 @@ describe("activity history allowlist middleware", () => {
         yourNewAllowlist,
         yourNewServices
       );
-      sandbox.stub(yourServices, "getServices").resolves(yourNewServices);
+      vi.spyOn(yourServices, "getServices").mockResolvedValue(yourNewServices);
 
-      sandbox.stub(allowListFuncs, "findClientInServices").returns(containsRps);
+      vi.spyOn(allowListFuncs, "findClientInServices").mockReturnValue(
+        containsRps
+      );
       const req: any = {
         session: {
           user: {
@@ -58,19 +54,19 @@ describe("activity history allowlist middleware", () => {
           lo: "true",
         },
         log: {
-          info: sinon.fake(),
+          info: vi.fn(),
         },
       };
 
-      const res: any = { locals: {}, redirect: sinon.fake() };
+      const res: any = { locals: {}, redirect: vi.fn() };
       expect(containsRps).equal(true);
-      const nextFunction: NextFunction = sinon.fake(() => {});
+      const nextFunction: NextFunction = vi.fn(() => {});
       await checkRSAAllowedServicesList(req, res, nextFunction);
-      expect(nextFunction).to.have.been.calledOnce;
+      expect(nextFunction).toHaveBeenCalledOnce();
     });
 
     it("redirects if list of user services does not contain RSA allowlisted RPs", async () => {
-      sandbox.stub(yourServices, "getServices").resolves([
+      vi.spyOn(yourServices, "getServices").mockResolvedValue([
         {
           client_id: "smokeTests",
           count_successful_logins: 1,
@@ -96,15 +92,15 @@ describe("activity history allowlist middleware", () => {
           lo: "true",
         },
         log: {
-          info: sinon.fake(),
+          info: vi.fn(),
         },
       };
 
-      const res: any = { locals: { trace: {} }, redirect: sinon.fake() };
-      const nextFunction: NextFunction = sinon.fake(() => {});
+      const res: any = { locals: { trace: {} }, redirect: vi.fn() };
+      const nextFunction: NextFunction = vi.fn(() => {});
       await checkRSAAllowedServicesList(req, res, nextFunction);
-      expect(res.redirect).to.have.been.calledWith(PATH_DATA.SECURITY.url);
-      expect(req.log.info).to.have.been.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SECURITY.url);
+      expect(req.log.info).toHaveBeenCalledWith(
         { trace: {} },
         LOG_MESSAGES.ILLEGAL_ATTEMPT_TO_ACCESS_RSA
       );

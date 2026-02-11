@@ -1,26 +1,21 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import {
   enterPasswordGet,
   enterPasswordPost,
-} from "../enter-password-controller";
+} from "../enter-password-controller.js";
 import { EnterPasswordServiceInterface } from "../types";
 import { HTTP_STATUS_CODES, PATH_DATA } from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
-import * as logout from "../../../utils/logout";
-import { UserJourney } from "../../../utils/state-machine";
-import * as oidcModule from "../../../utils/oidc";
+import * as logout from "../../../utils/logout.js";
+import { UserJourney } from "../../../utils/state-machine.js";
+import * as oidcModule from "../../../utils/oidc.js";
 
 describe("enter password controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = {
       body: {},
       cookies: {},
@@ -33,23 +28,27 @@ describe("enter password controller", () => {
             deleteAccount: {},
           },
         },
+        destroy: vi.fn((callback) => callback()),
       } as any,
-      t: sandbox.fake(),
+      t: vi.fn(),
       i18n: { language: "en" },
       query: {},
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
+      app: { locals: { sessionStore: vi.fn() } } as any,
+      oidc: { endSessionUrl: vi.fn() } as any,
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      status: sandbox.fake(),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
+      status: vi.fn(),
+      cookie: vi.fn(),
       locals: {},
     };
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("enterPasswordGet", () => {
@@ -58,140 +57,165 @@ describe("enter password controller", () => {
 
       await enterPasswordGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("enter-password/index.njk");
+      expect(res.render).toHaveBeenCalledWith(
+        "enter-password/index.njk",
+        expect.objectContaining({
+          requestType: "changePassword",
+        })
+      );
     });
 
     it("should redirect to security when there is no 'type' query parameter", async () => {
       await enterPasswordGet(req as Request, res as Response);
 
-      expect(res.render).not.to.have.been.called;
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
+      expect(res.render).not.toHaveBeenCalled();
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should send an AUTH_MFA_METHOD_ADD_STARTED audit event when journey type is addBackup", async () => {
       req.query.type = UserJourney.addBackup;
 
       const mockEventService = {
-        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
-        send: sandbox.fake(),
+        buildAuditEvent: vi.fn().mockReturnValue({ event: "test-event" }),
+        send: vi.fn(),
       };
 
-      const eventServiceStub = sandbox.stub().returns(mockEventService);
+      const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
       const eventServiceModule = await import(
         "../../../services/event-service"
       );
-      sandbox
-        .stub(eventServiceModule, "eventService")
-        .get(() => eventServiceStub);
+      vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
+        eventServiceStub
+      );
 
       await enterPasswordGet(req as Request, res as Response);
 
-      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
         "AUTH_MFA_METHOD_ADD_STARTED"
       );
-      expect(mockEventService.send).to.have.been.calledOnce;
-      expect(res.render).to.have.calledWith("enter-password/index.njk");
+      expect(mockEventService.send).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith(
+        "enter-password/index.njk",
+        expect.objectContaining({
+          requestType: "addBackup",
+        })
+      );
     });
 
     it("should send an AUTH_MFA_METHOD_SWITCH_STARTED audit event when journey type is SwitchBackupMethod", async () => {
       req.query.type = UserJourney.SwitchBackupMethod;
 
       const mockEventService = {
-        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
-        send: sandbox.fake(),
+        buildAuditEvent: vi.fn().mockReturnValue({ event: "test-event" }),
+        send: vi.fn(),
       };
 
-      const eventServiceStub = sandbox.stub().returns(mockEventService);
+      const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
       const eventServiceModule = await import(
         "../../../services/event-service"
       );
-      sandbox
-        .stub(eventServiceModule, "eventService")
-        .get(() => eventServiceStub);
+      vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
+        eventServiceStub
+      );
 
       await enterPasswordGet(req as Request, res as Response);
 
-      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
         "AUTH_MFA_METHOD_SWITCH_STARTED"
       );
-      expect(mockEventService.send).to.have.been.calledOnce;
-      expect(res.render).to.have.calledWith("enter-password/index.njk");
+      expect(mockEventService.send).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith(
+        "enter-password/index.njk",
+        expect.objectContaining({
+          requestType: "switchBackupMethod",
+        })
+      );
     });
 
     it("should send an AUTH_MFA_METHOD_DELETE_STARTED audit event when journey type is RemoveBackup", async () => {
       req.query.type = UserJourney.RemoveBackup;
 
       const mockEventService = {
-        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
-        send: sandbox.fake(),
+        buildAuditEvent: vi.fn().mockReturnValue({ event: "test-event" }),
+        send: vi.fn(),
       };
 
-      const eventServiceStub = sandbox.stub().returns(mockEventService);
+      const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
       const eventServiceModule = await import(
         "../../../services/event-service"
       );
-      sandbox
-        .stub(eventServiceModule, "eventService")
-        .get(() => eventServiceStub);
+      vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
+        eventServiceStub
+      );
 
       await enterPasswordGet(req as Request, res as Response);
 
-      expect(mockEventService.buildAuditEvent).to.have.been.calledWith(
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
         "AUTH_MFA_METHOD_DELETE_STARTED"
       );
-      expect(mockEventService.send).to.have.been.calledOnce;
-      expect(res.render).to.have.calledWith("enter-password/index.njk");
+      expect(mockEventService.send).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith(
+        "enter-password/index.njk",
+        expect.objectContaining({
+          requestType: "removeBackup",
+        })
+      );
     });
 
     it("should not send an audit event when journey type is change password", async () => {
       req.query.type = UserJourney.ChangePassword;
 
       const mockEventService = {
-        buildAuditEvent: sandbox.fake.returns({ event: "test-event" }),
-        send: sandbox.fake(),
+        buildAuditEvent: vi.fn().mockReturnValue({ event: "test-event" }),
+        send: vi.fn(),
       };
 
-      const eventServiceStub = sandbox.stub().returns(mockEventService);
+      const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
       const eventServiceModule = await import(
         "../../../services/event-service"
       );
-      sandbox
-        .stub(eventServiceModule, "eventService")
-        .get(() => eventServiceStub);
+      vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
+        eventServiceStub
+      );
 
       await enterPasswordGet(req as Request, res as Response);
-      expect(mockEventService.send).not.to.have.been.called;
-      expect(res.render).to.have.calledWith("enter-password/index.njk");
+      expect(mockEventService.send).not.toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalledWith(
+        "enter-password/index.njk",
+        expect.objectContaining({
+          requestType: "changePassword",
+        })
+      );
     });
   });
 
   describe("enterPasswordPost", () => {
     it("should redirect to security when there is no 'type' query parameter in enter password post", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
       };
 
-      req.body["password"] = "password";
+      req.body.password = "password";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(res.render).not.to.have.been.called;
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SECURITY.url);
+      expect(res.render).not.toHaveBeenCalled();
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SECURITY.url);
     });
 
     it("should redirect to change-email when the password is correct", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
       };
 
       req.session.user = {
@@ -201,31 +225,31 @@ describe("enter password controller", () => {
         tokens: { accessToken: "token" },
       } as any;
 
-      req.body["password"] = "password";
-      req.query["type"] = "changeEmail";
+      req.body.password = "password";
+      req.query.type = "changeEmail";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.CHANGE_EMAIL.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.CHANGE_EMAIL.url);
     });
 
     it("should bad request when user doesn't enter a password", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
       };
 
-      req.body["password"] = "";
-      req.query["type"] = "changeEmail";
-      req.query["from"] = "security";
-      req.query["edit"] = "true";
+      req.body.password = "";
+      req.query.type = "changeEmail";
+      req.query.from = "security";
+      req.query.edit = "true";
       req.url =
         "https://test.com/enter-password?from=security&edit=true&type=changeEmail";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.authenticated).not.to.have.been.called;
-      expect(res.render).to.have.been.called;
-      expect(res.render).to.have.been.calledWith("enter-password/index.njk", {
+      expect(fakeService.authenticated).not.toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalledWith("enter-password/index.njk", {
         requestType: "changeEmail",
         fromSecurity: true,
         formAction:
@@ -235,12 +259,12 @@ describe("enter password controller", () => {
         language: "en",
         password: "",
       });
-      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
     it("should bad request when user credentials are incorrect", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves({ authenticated: false }),
+        authenticated: vi.fn().mockResolvedValue({ authenticated: false }),
       };
 
       req.session.user = {
@@ -249,15 +273,15 @@ describe("enter password controller", () => {
         tokens: { accessToken: "token" },
       } as any;
 
-      req.body["password"] = "password";
-      req.query["type"] = "changeEmail";
-      req.query["edit"] = "true";
+      req.body.password = "password";
+      req.query.type = "changeEmail";
+      req.query.edit = "true";
       req.url = "https://test.com/enter-password?edit=true&type=changeEmail";
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(res.render).to.have.been.called;
-      expect(res.render).to.have.been.calledWith("enter-password/index.njk", {
+      expect(res.render).toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalledWith("enter-password/index.njk", {
         requestType: "changeEmail",
         fromSecurity: false,
         formAction:
@@ -267,12 +291,12 @@ describe("enter password controller", () => {
         language: "en",
         password: "password",
       });
-      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
     it("should logout and redirect to permanently suspended when intervention is BLOCKED", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves({
+        authenticated: vi.fn().mockResolvedValue({
           authenticated: false,
           intervention: "BLOCKED",
         }),
@@ -285,19 +309,19 @@ describe("enter password controller", () => {
         state: { changeEmail: { value: "CHANGE_VALUE" } },
       } as any;
 
-      req.body["password"] = "password";
-      req.query["type"] = "changeEmail";
+      req.body.password = "password";
+      req.query.type = "changeEmail";
 
-      const handleLogoutStub = sandbox.stub(logout, "handleLogout");
+      const handleLogoutStub = vi.spyOn(logout, "handleLogout");
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(handleLogoutStub).to.have.been.calledWith(req, res, "blocked");
+      expect(handleLogoutStub).toHaveBeenCalledWith(req, res, "blocked");
     });
 
     it("should logout and redirect to unavailable temporary when intervention is SUSPENDED", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: sandbox.fake.resolves({
+        authenticated: vi.fn().mockResolvedValue({
           authenticated: false,
           intervention: "SUSPENDED",
         }),
@@ -310,14 +334,14 @@ describe("enter password controller", () => {
         state: { changeEmail: { value: "CHANGE_VALUE" } },
       } as any;
 
-      req.body["password"] = "password";
-      req.query["type"] = "changeEmail";
+      req.body.password = "password";
+      req.query.type = "changeEmail";
 
-      const handleLogoutStub = sandbox.stub(logout, "handleLogout");
+      const handleLogoutStub = vi.spyOn(logout, "handleLogout");
 
       await enterPasswordPost(fakeService)(req as Request, res as Response);
 
-      expect(handleLogoutStub).to.have.been.calledWith(req, res, "suspended");
+      expect(handleLogoutStub).toHaveBeenCalledWith(req, res, "suspended");
     });
   });
 });

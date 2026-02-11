@@ -1,29 +1,26 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextFunction, Request, Response } from "express";
-import { sinon } from "../../utils/test-utils.js";
+// import { sinon } from "../../utils/test-utils.js";
 import {
   validateBodyMiddleware,
   validationErrorFormatter,
 } from "../../../src/middleware/form-validation-middleware.js";
 
 describe("HTML Lang middleware", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = {
       i18n: { language: "en" } as any,
     };
     res = { locals: {} };
-    next = sandbox.fake(() => {});
+    next = vi.fn(() => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("validationErrorFormatter", () => {
@@ -37,7 +34,7 @@ describe("HTML Lang middleware", () => {
 
       const formattedError = validationErrorFormatter(error);
 
-      expect(formattedError).to.be.eql({
+      expect(formattedError).toEqual({
         text: error.msg,
         href: `#${error.path}`,
       });
@@ -51,7 +48,7 @@ describe("HTML Lang middleware", () => {
         res as Response,
         next
       );
-      expect(next).to.have.been.called;
+      expect(next).toHaveBeenCalled();
     });
 
     it("should call next function", () => {
@@ -60,7 +57,7 @@ describe("HTML Lang middleware", () => {
         res as Response,
         next
       );
-      expect(next).to.have.been.called;
+      expect(next).toHaveBeenCalled();
     });
   });
 });

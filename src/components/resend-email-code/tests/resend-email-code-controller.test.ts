@@ -1,26 +1,20 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import * as oidcModule from "../../../utils/oidc";
+import * as oidcModule from "../../../utils/oidc.js";
 
 import {
   resendEmailCodeGet,
   resendEmailCodePost,
-} from "../resend-email-code-controller";
+} from "../resend-email-code-controller.js";
 import { ChangeEmailServiceInterface } from "../../change-email/types";
-import { getInitialState } from "../../../utils/state-machine";
+import { getInitialState } from "../../../utils/state-machine.js";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 
 describe("check your email controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = {
       body: {},
       session: { user: {} } as any,
@@ -29,17 +23,17 @@ describe("check your email controller", () => {
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      status: sandbox.fake(),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
+      status: vi.fn(),
       locals: {},
     };
 
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("resendEmailCodeGet", () => {
@@ -49,7 +43,7 @@ describe("check your email controller", () => {
       } as any;
       resendEmailCodeGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("resend-email-code/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("resend-email-code/index.njk", {
         emailAddress: "test@test.com",
       });
     });
@@ -58,7 +52,7 @@ describe("check your email controller", () => {
   describe("resendEmailCodePost", () => {
     it("should redirect to /check-your-email when get security code is executed", async () => {
       const fakeService: ChangeEmailServiceInterface = {
-        sendCodeVerificationNotification: sandbox.fake.resolves(true),
+        sendCodeVerificationNotification: vi.fn().mockResolvedValue(true),
       };
 
       req.session.user = {
@@ -71,9 +65,10 @@ describe("check your email controller", () => {
 
       await resendEmailCodePost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.sendCodeVerificationNotification).to.have.been
-        .calledOnce;
-      expect(res.redirect).to.have.calledWith("/check-your-email");
+      expect(
+        fakeService.sendCodeVerificationNotification
+      ).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith("/check-your-email");
     });
   });
 });

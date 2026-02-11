@@ -1,6 +1,5 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextFunction, Request, Response } from "express";
-import { expect, sinon } from "../../utils/test-utils.js";
-import { describe } from "mocha";
 import { setLocalVarsMiddleware } from "../../../src/middleware/set-local-vars-middleware.js";
 import {
   ENVIRONMENT_NAME,
@@ -9,13 +8,11 @@ import {
 import * as nonceModule from "../../../src/utils/strings.js";
 
 describe("set-local-vars-middleware", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = {
       session: {} as any,
       cookies: {} as any,
@@ -29,15 +26,15 @@ describe("set-local-vars-middleware", () => {
       },
     } as Partial<Request>;
     res = {
-      status: sandbox.stub(),
+      status: vi.fn(),
       locals: {},
-      redirect: sandbox.fake(() => {}),
+      redirect: vi.fn(() => {}),
     };
-    next = sandbox.fake(() => {});
+    next = vi.fn(() => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
     delete process.env.APP_ENV;
   });
 
@@ -50,14 +47,14 @@ describe("set-local-vars-middleware", () => {
       };
 
       const mockNonce = "mocked-nonce-value";
-      sandbox.stub(nonceModule, "generateNonce").resolves(mockNonce);
+      vi.spyOn(nonceModule, "generateNonce").mockResolvedValue(mockNonce);
 
       await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-      expect(res.locals).to.have.property("persistentSessionId");
-      expect(res.locals.scriptNonce).to.equal(mockNonce);
-      expect(res.locals.persistentSessionId).to.equal("psid123456xyz");
-      expect(next).to.be.calledOnce;
+      expect(res.locals).toHaveProperty("persistentSessionId");
+      expect(res.locals.scriptNonce).toBe(mockNonce);
+      expect(res.locals.persistentSessionId).toBe("psid123456xyz");
+      expect(next).toHaveBeenCalledOnce();
     });
 
     it("should not have persistent session id on response when no cookie present", async () => {
@@ -68,11 +65,11 @@ describe("set-local-vars-middleware", () => {
 
       await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-      expect(res.locals).to.have.property("persistentSessionId");
-      expect(res.locals.persistentSessionId).to.equal(
+      expect(res.locals).toHaveProperty("persistentSessionId");
+      expect(res.locals.persistentSessionId).toBe(
         PERSISTENT_SESSION_ID_UNKNOWN
       );
-      expect(next).to.be.calledOnce;
+      expect(next).toHaveBeenCalledOnce();
     });
 
     describe("isProd", () => {
@@ -84,54 +81,54 @@ describe("set-local-vars-middleware", () => {
         process.env.APP_ENV = ENVIRONMENT_NAME.PROD;
         await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-        expect(res.locals).to.have.property("isProd");
-        expect(res.locals.isProd).to.equal(true);
-        expect(next).to.be.calledOnce;
+        expect(res.locals).toHaveProperty("isProd");
+        expect(res.locals.isProd).toBe(true);
+        expect(next).toHaveBeenCalledOnce();
       });
 
       it("should be false when the value of APP_ENV is 'local'", async () => {
         process.env.APP_ENV = ENVIRONMENT_NAME.LOCAL;
         await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-        expect(res.locals).to.have.property("isProd");
-        expect(res.locals.isProd).to.equal(false);
-        expect(next).to.be.calledOnce;
+        expect(res.locals).toHaveProperty("isProd");
+        expect(res.locals.isProd).toBe(false);
+        expect(next).toHaveBeenCalledOnce();
       });
 
       it("should be false when the value of APP_ENV is 'development'", async () => {
         process.env.APP_ENV = ENVIRONMENT_NAME.DEV;
         await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-        expect(res.locals).to.have.property("isProd");
-        expect(res.locals.isProd).to.equal(false);
-        expect(next).to.be.calledOnce;
+        expect(res.locals).toHaveProperty("isProd");
+        expect(res.locals.isProd).toBe(false);
+        expect(next).toHaveBeenCalledOnce();
       });
 
       it("should be false when the value of APP_ENV is 'build'", async () => {
         process.env.APP_ENV = ENVIRONMENT_NAME.BUILD;
         await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-        expect(res.locals).to.have.property("isProd");
-        expect(res.locals.isProd).to.equal(false);
-        expect(next).to.be.calledOnce;
+        expect(res.locals).toHaveProperty("isProd");
+        expect(res.locals.isProd).toBe(false);
+        expect(next).toHaveBeenCalledOnce();
       });
 
       it("should be false when the value of APP_ENV is 'staging'", async () => {
         process.env.APP_ENV = ENVIRONMENT_NAME.STAGING;
         await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-        expect(res.locals).to.have.property("isProd");
-        expect(res.locals.isProd).to.equal(false);
-        expect(next).to.be.calledOnce;
+        expect(res.locals).toHaveProperty("isProd");
+        expect(res.locals.isProd).toBe(false);
+        expect(next).toHaveBeenCalledOnce();
       });
 
       it("should be false when the value of APP_ENV is 'integration'", async () => {
         process.env.APP_ENV = ENVIRONMENT_NAME.INTEGRATION;
         await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-        expect(res.locals).to.have.property("isProd");
-        expect(res.locals.isProd).to.equal(false);
-        expect(next).to.be.calledOnce;
+        expect(res.locals).toHaveProperty("isProd");
+        expect(res.locals.isProd).toBe(false);
+        expect(next).toHaveBeenCalledOnce();
       });
     });
 
@@ -139,9 +136,9 @@ describe("set-local-vars-middleware", () => {
       it("should generate a new trace when not in session", async () => {
         await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-        expect(req.session.trace).to.exist;
-        expect(res.locals.trace).to.equal(req.session.trace);
-        expect(next).to.be.calledOnce;
+        expect(req.session.trace).toBeDefined();
+        expect(res.locals.trace).toBe(req.session.trace);
+        expect(next).toHaveBeenCalledOnce();
       });
 
       it("should reuse existing trace from session", async () => {
@@ -150,9 +147,9 @@ describe("set-local-vars-middleware", () => {
 
         await setLocalVarsMiddleware(req as Request, res as Response, next);
 
-        expect(req.session.trace).to.equal(existingTrace);
-        expect(res.locals.trace).to.equal(existingTrace);
-        expect(next).to.be.calledOnce;
+        expect(req.session.trace).toBe(existingTrace);
+        expect(res.locals.trace).toBe(existingTrace);
+        expect(next).toHaveBeenCalledOnce();
       });
     });
   });

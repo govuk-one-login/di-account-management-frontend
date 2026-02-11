@@ -1,15 +1,12 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 
 import {
   changePasswordGet,
   changePasswordPost,
-} from "../change-password-controller";
+} from "../change-password-controller.js";
 import { ChangePasswordServiceInterface } from "../types";
-import * as oidcModule from "../../../utils/oidc";
+import * as oidcModule from "../../../utils/oidc.js";
 
 import {
   ERROR_CODES,
@@ -31,47 +28,44 @@ import {
 import { ApiResponseResult } from "../../../utils/types";
 
 describe("change password controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let fakeChangePasswordService: ChangePasswordServiceInterface;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ changePassword: {} })
-      .withTranslate(sandbox.fake())
+      .withTranslate(vi.fn())
       .withHeaders({
         "txma-audit-encoded": TXMA_AUDIT_ENCODED,
       })
       .build();
 
     res = new ResponseBuilder()
-      .withRender(sandbox.fake())
-      .withRedirect(sandbox.fake(() => {}))
-      .withStatus(sandbox.fake())
+      .withRender(vi.fn())
+      .withRedirect(vi.fn(() => {}))
+      .withStatus(vi.fn())
       .build();
 
     fakeChangePasswordService = {
-      updatePassword: sandbox.fake.returns({
+      updatePassword: vi.fn().mockReturnValue({
         success: true,
       } as unknown as Promise<ApiResponseResult>),
     };
 
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("changePasswordGet", () => {
     it("should render change password page", () => {
       changePasswordGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("change-password/index.njk");
+      expect(res.render).toHaveBeenCalledWith("change-password/index.njk");
     });
   });
 
@@ -89,27 +83,29 @@ describe("change password controller", () => {
       );
 
       // Assert
-      expect(fakeChangePasswordService.updatePassword).to.have.been.calledOnce;
-      expect(
-        fakeChangePasswordService.updatePassword
-      ).to.have.been.calledWithExactly(CURRENT_EMAIL, "Password1", {
-        token: TOKEN,
-        sourceIp: SOURCE_IP,
-        sessionId: SESSION_ID,
-        persistentSessionId: PERSISTENT_SESSION_ID,
-        userLanguage: ENGLISH,
-        clientSessionId: CLIENT_SESSION_ID,
-        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
-      });
-      expect(res.redirect).to.have.calledWith(
+      expect(fakeChangePasswordService.updatePassword).toHaveBeenCalledOnce();
+      expect(fakeChangePasswordService.updatePassword).toHaveBeenCalledWith(
+        CURRENT_EMAIL,
+        "Password1",
+        {
+          token: TOKEN,
+          sourceIp: SOURCE_IP,
+          sessionId: SESSION_ID,
+          persistentSessionId: PERSISTENT_SESSION_ID,
+          userLanguage: ENGLISH,
+          clientSessionId: CLIENT_SESSION_ID,
+          txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+        }
+      );
+      expect(res.redirect).toHaveBeenCalledWith(
         PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url
       );
     });
 
-    it("should render bad request when password are same ", async () => {
+    it("should render bad request when password are same", async () => {
       // Arrange
       const fakeFailingChangePasswordService: ChangePasswordServiceInterface = {
-        updatePassword: sandbox.fake.resolves({
+        updatePassword: vi.fn().mockResolvedValue({
           success: false,
           code: ERROR_CODES.NEW_PASSWORD_SAME_AS_EXISTING,
           message: "",
@@ -123,15 +119,16 @@ describe("change password controller", () => {
       );
 
       // Assert
-      expect(fakeFailingChangePasswordService.updatePassword).to.have.been
-        .called;
-      expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+      expect(
+        fakeFailingChangePasswordService.updatePassword
+      ).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
-    it("should render bad request when password is common ", async () => {
+    it("should render bad request when password is common", async () => {
       // Arrange
       const fakeFailingChangePasswordService: ChangePasswordServiceInterface = {
-        updatePassword: sandbox.fake.resolves({
+        updatePassword: vi.fn().mockResolvedValue({
           success: false,
           code: ERROR_CODES.PASSWORD_IS_COMMON,
           message: "",
@@ -146,9 +143,10 @@ describe("change password controller", () => {
       );
 
       // Assert
-      expect(fakeFailingChangePasswordService.updatePassword).to.have.been
-        .called;
-      expect(res.status).to.have.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+      expect(
+        fakeFailingChangePasswordService.updatePassword
+      ).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
   });
 });

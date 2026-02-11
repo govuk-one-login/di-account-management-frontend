@@ -1,26 +1,20 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
-import { changeEmailService } from "../change-email-service";
-import { expect } from "chai";
-import { describe } from "mocha";
+import { changeEmailService } from "../change-email-service.js";
 import {
   API_ENDPOINTS,
   NOTIFICATION_TYPE,
   HTTP_STATUS_CODES,
 } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
+import { getApiBaseUrl } from "../../../config.js";
 
 const baseUrl = getApiBaseUrl();
 
 describe("changeEmailService", () => {
-  let sandbox: sinon.SinonSandbox;
-
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
     nock.cleanAll();
   });
 
@@ -59,6 +53,6 @@ describe("changeEmailService", () => {
         txmaAuditEncoded: "",
       });
 
-    expect(sendCodeVerificationNotification).to.true;
+    expect(sendCodeVerificationNotification).toBe(true);
   });
 });

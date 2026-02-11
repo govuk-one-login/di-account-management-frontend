@@ -1,5 +1,4 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect } from "vitest";
 import { prettifyDate } from "../../../src/utils/prettifyDate.js";
 
 describe("PrettifyDate util", () => {

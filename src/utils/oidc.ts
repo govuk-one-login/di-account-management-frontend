@@ -2,7 +2,7 @@ import { Issuer, Client, custom, generators } from "openid-client";
 import { OIDCConfig } from "../types.js";
 import { ClientAssertionServiceInterface, KmsService } from "./types.js";
 import { kmsService } from "./kms.js";
-//import * as base64url from "base64url";
+import base64url from "base64url";
 import random = generators.random;
 import { decodeJwt, createRemoteJWKSet } from "jose";
 import { cacheWithExpiration } from "./cache.js";
@@ -86,14 +86,8 @@ const clientAssertionGenerator = (
       iat: Math.floor(Date.now() / 1000),
       jti: random(),
     };
-    const encodedHeader = Buffer.from(
-      JSON.stringify(headers),
-      "base64url"
-    ).toString(); //base64url.encode(JSON.stringify(headers));
-    const encodedPayload = Buffer.from(
-      JSON.stringify(payload),
-      "base64url"
-    ).toString(); //base64url.encode(JSON.stringify(payload));
+    const encodedHeader = base64url.default.encode(JSON.stringify(headers));
+    const encodedPayload = base64url.default.encode(JSON.stringify(payload));
     const message = `${encodedHeader}.${encodedPayload}`;
     const sig = await kms.sign(message);
     const base64Signature = Buffer.from(sig.Signature)

@@ -172,18 +172,22 @@ async function createApp(): Promise<express.Application> {
   app.use(outboundContactUsLinksMiddleware);
 
   app.use((req, res, next) => {
-    req.log = req.log.child({
-      trace: res.locals.trace,
-    });
-    next();
+    void (async () => {
+      req.log = req.log.child({
+        trace: res.locals.trace,
+      });
+      next();
+    })();
   });
 
   app.set("nunjucksEngine", configureNunjucks(app, APP_VIEWS));
   app.use((req, res, next) => {
-    const engine = res.app.get("nunjucksEngine");
-    engine.addGlobal("request", req);
-    engine.addGlobal("response", res);
-    next();
+    void (async () => {
+      const engine = res.app.get("nunjucksEngine");
+      engine.addGlobal("request", req);
+      engine.addGlobal("response", res);
+      next();
+    })();
   });
 
   app.use(noCacheMiddleware);
@@ -310,11 +314,14 @@ async function createApp(): Promise<express.Application> {
   return app;
 }
 
-async function startServer(app: Application): Promise<{
+async function startServer(
+  app: Application,
+  portOverride?: number | string
+): Promise<{
   server: Server;
   closeServer: (callback?: (err?: Error) => void) => Promise<void>;
 }> {
-  const port: number | string = process.env.PORT || 6001;
+  const port: number | string = portOverride ?? process.env.PORT ?? 6001;
   let server: Server;
   let stopVitalSigns: () => void;
 

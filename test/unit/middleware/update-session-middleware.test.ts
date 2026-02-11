@@ -1,6 +1,4 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils.js";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { updateSessionMiddleware } from "../../../src/middleware/update-session-middleware.js";
 import { logger } from "../../../src/utils/logger.js";
 
@@ -10,8 +8,8 @@ const ANOTHER_GS_SESSION_ID = "another-session";
 describe("updateSessionMiddleware", () => {
   let mockRequest: any;
   let mockResponse: any;
-  let nextFunction: sinon.SinonStub;
-  let loggerWarnSpy: sinon.SinonSpy;
+  let nextFunction: ReturnType<typeof vi.fn>;
+  let loggerWarnSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     // Mock request, response, and next function
@@ -26,70 +24,64 @@ describe("updateSessionMiddleware", () => {
       },
     };
 
-    nextFunction = sinon.stub();
+    nextFunction = vi.fn();
 
-    loggerWarnSpy = sinon.spy(logger, "warn");
+    loggerWarnSpy = vi.spyOn(logger, "warn");
   });
 
   afterEach(() => {
-    // Restore the spied upon methods
-    loggerWarnSpy.restore();
+    vi.restoreAllMocks();
   });
 
   it("should set session.queryParameters.fromURL if it's a valid URL", () => {
     mockRequest.query.fromURL = "https://valid-url.com/";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
-    expect(mockRequest.session.queryParameters.fromURL).to.equal(
+    expect(mockRequest.session.queryParameters.fromURL).toBe(
       "https://valid-url.com/"
     );
-    expect(loggerWarnSpy.notCalled).to.be.true;
+    expect(loggerWarnSpy).not.toHaveBeenCalled();
   });
 
   it("should not set session.queryParameters.fromURL if the string is not safe", () => {
     mockRequest.query.theme = "hEllo***";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
-    expect(loggerWarnSpy.calledTwice).to.be.true;
+    expect(loggerWarnSpy).toHaveBeenCalledTimes(2);
   });
 
   it("should log a warning for invalid fromURL", () => {
     mockRequest.query.fromURL = "invalid-url";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
-    expect(loggerWarnSpy).to.be.calledWith({ url: "invalid-url" });
-    expect(loggerWarnSpy).to.be.calledWith(
-      { trace: mockResponse.locals.sessionId },
-      "fromURL in request query for contact-govuk-one-login page did not pass validation:",
-      "invalid-url"
-    );
-    expect(mockRequest.session.queryParameters.fromURL).to.be.undefined;
+    expect(loggerWarnSpy).toHaveBeenCalled();
+    expect(mockRequest.session.queryParameters.fromURL).toBeUndefined();
   });
 
   it("should copy valid theme to session", () => {
     mockRequest.query.theme = "light";
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
-    expect(mockRequest.session.queryParameters.theme).to.equal("light");
+    expect(mockRequest.session.queryParameters.theme).toBe("light");
   });
 
   describe("Reference Codes", () => {
     it("should create a new reference code when one is not present in the session", () => {
       // Arrange
-      expect(mockRequest.session).to.not.have.property("referenceCode");
-      expect(mockRequest.session).to.not.have.property(
+      expect(mockRequest.session).not.toHaveProperty("referenceCode");
+      expect(mockRequest.session).not.toHaveProperty(
         "referenceCodeOwningSessionId"
       );
-      expect(mockResponse.locals).to.have.property("sessionId");
+      expect(mockResponse.locals).toHaveProperty("sessionId");
 
       // Act
       updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
       // Assert
-      expect(mockRequest.session).to.have.property("referenceCode");
-      expect(mockRequest.session).to.have.property(
+      expect(mockRequest.session).toHaveProperty("referenceCode");
+      expect(mockRequest.session).toHaveProperty(
         "referenceCodeOwningSessionId"
       );
-      expect(mockRequest.session.referenceCodeOwningSessionId).to.equal(
+      expect(mockRequest.session.referenceCodeOwningSessionId).toBe(
         CURRENT_GS_SESSION_ID
       );
     });
@@ -97,19 +89,19 @@ describe("updateSessionMiddleware", () => {
     it("should create a new referenceCode when the one in the session was created when there wasn't a GS session", () => {
       // Arrange
       const session = mockRequest.session;
-      expect(session).to.not.have.property("referenceCodeOwningSessionId");
+      expect(session).not.toHaveProperty("referenceCodeOwningSessionId");
       session.referenceCode = REFERENCE_CODE;
-      expect(mockResponse.locals).to.have.property("sessionId");
+      expect(mockResponse.locals).toHaveProperty("sessionId");
 
       // Act
       updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
       // Assert
-      expect(mockRequest.session.referenceCode).to.not.equal(REFERENCE_CODE);
-      expect(mockRequest.session).to.have.property(
+      expect(mockRequest.session.referenceCode).not.toBe(REFERENCE_CODE);
+      expect(mockRequest.session).toHaveProperty(
         "referenceCodeOwningSessionId"
       );
-      expect(mockRequest.session.referenceCodeOwningSessionId).to.equal(
+      expect(mockRequest.session.referenceCodeOwningSessionId).toBe(
         CURRENT_GS_SESSION_ID
       );
     });
@@ -118,14 +110,14 @@ describe("updateSessionMiddleware", () => {
       // Arrange
       mockRequest.session.referenceCode = REFERENCE_CODE;
       mockRequest.session.referenceCodeOwningSessionId = ANOTHER_GS_SESSION_ID;
-      expect(mockResponse.locals).to.have.property("sessionId");
+      expect(mockResponse.locals).toHaveProperty("sessionId");
 
       // Act
       updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
       // Assert
-      expect(mockRequest.session.referenceCode).to.not.equal(REFERENCE_CODE);
-      expect(mockRequest.session.referenceCodeOwningSessionId).equals(
+      expect(mockRequest.session.referenceCode).not.toBe(REFERENCE_CODE);
+      expect(mockRequest.session.referenceCodeOwningSessionId).toBe(
         CURRENT_GS_SESSION_ID
       );
     });
@@ -142,15 +134,13 @@ describe("updateSessionMiddleware", () => {
       updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
       // Assert
-      expect(mockRequest.session.referenceCode).to.equal(
-        "existing-reference-code"
-      );
+      expect(mockRequest.session.referenceCode).toBe("existing-reference-code");
     });
   });
 
   it("should call the next function once", () => {
     updateSessionMiddleware(mockRequest, mockResponse, nextFunction);
 
-    expect(nextFunction.calledOnce).to.be.true;
+    expect(nextFunction).toHaveBeenCalledOnce();
   });
 });

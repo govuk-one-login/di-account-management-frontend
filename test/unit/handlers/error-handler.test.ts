@@ -1,38 +1,35 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../utils/test-utils.js";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+// import { sinon } from "../../utils/test-utils.js";
 import { NextFunction, Request, Response } from "express";
 import { pageNotFoundHandler } from "../../../src/handlers/page-not-found-handler.js";
 import { serverErrorHandler } from "../../../src/handlers/internal-server-error-handler.js";
 import { PATH_DATA } from "../../../src/app.constants.js";
 
 describe("Error handlers", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = { app: { locals: {} } } as Partial<Request>;
     res = {
-      render: sandbox.fake(),
-      status: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      status: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {},
     };
-    next = sandbox.fake(() => {});
+    next = vi.fn(() => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("pageNotFoundHandler", () => {
     it("should render 404 view", () => {
       pageNotFoundHandler(req as Request, res as Response, next);
 
-      expect(res.locals?.opl).to.deep.eq({
+      expect(res.locals?.opl).toMatchObject({
         contentId: "undefined",
         dynamic: true,
         loggedInStatus: true,
@@ -41,19 +38,21 @@ describe("Error handlers", () => {
         taxonomyLevel2: "undefined",
         taxonomyLevel3: "undefined",
       });
-      expect(res.status).to.have.been.calledOnceWith(404);
-      expect(res.render).to.have.been.calledOnceWith("common/errors/404.njk");
+      expect(res.status).toHaveBeenCalledOnce();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.render).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith("common/errors/404.njk");
     });
   });
 
   describe("serverErrorHandler", () => {
     it("should render 500 view when csrf token is invalid", async () => {
       const err: any = new Error("invalid csrf token");
-      err["code"] = "EBADCSRFTOKEN";
+      err.code = "EBADCSRFTOKEN";
 
       await serverErrorHandler(err, req as Request, res as Response, next);
 
-      expect(res.locals?.opl).to.deep.eq({
+      expect(res.locals?.opl).toMatchObject({
         contentId: "undefined",
         dynamic: true,
         loggedInStatus: true,
@@ -62,8 +61,10 @@ describe("Error handlers", () => {
         taxonomyLevel2: "undefined",
         taxonomyLevel3: "undefined",
       });
-      expect(res.status).to.have.been.calledOnceWith(500);
-      expect(res.render).to.have.been.calledOnceWith("common/errors/500.njk");
+      expect(res.status).toHaveBeenCalledOnce();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.render).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");
     });
 
     it("should render 500 view when unexpected error", async () => {
@@ -71,7 +72,7 @@ describe("Error handlers", () => {
 
       await serverErrorHandler(err, req as Request, res as Response, next);
 
-      expect(res.locals?.opl).to.deep.eq({
+      expect(res.locals?.opl).toMatchObject({
         contentId: "undefined",
         dynamic: true,
         loggedInStatus: true,
@@ -80,8 +81,10 @@ describe("Error handlers", () => {
         taxonomyLevel2: "undefined",
         taxonomyLevel3: "undefined",
       });
-      expect(res.status).to.have.been.calledOnceWith(500);
-      expect(res.render).to.have.been.calledOnceWith("common/errors/500.njk");
+      expect(res.status).toHaveBeenCalledOnce();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.render).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");
     });
 
     it("should render timeout view when no session", async () => {
@@ -90,7 +93,7 @@ describe("Error handlers", () => {
 
       await serverErrorHandler(err, req as Request, res as Response, next);
 
-      expect(res.locals?.opl).to.deep.eq({
+      expect(res.locals?.opl).toMatchObject({
         contentId: "undefined",
         dynamic: true,
         loggedInStatus: true,
@@ -99,9 +102,8 @@ describe("Error handlers", () => {
         taxonomyLevel2: "undefined",
         taxonomyLevel3: "undefined",
       });
-      expect(res.redirect).to.have.been.calledOnceWith(
-        PATH_DATA.SESSION_EXPIRED.url
-      );
+      expect(res.redirect).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
   });
 });

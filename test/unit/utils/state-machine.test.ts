@@ -1,5 +1,4 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect } from "vitest";
 import {
   EventType,
   getInitialState,
@@ -11,8 +10,8 @@ describe("state-machine", () => {
     it("should get initial state object", () => {
       const state = getInitialState();
 
-      expect(state.value).to.equal("AUTHENTICATE");
-      expect(state.events).to.all.members([EventType.Authenticated]);
+      expect(state.value).toBe("AUTHENTICATE");
+      expect(state.events).toEqual([EventType.Authenticated]);
     });
   });
 
@@ -20,8 +19,8 @@ describe("state-machine", () => {
     it("should move state from initial state to change value state", () => {
       const state = getInitialState();
       const nextState = getNextState(state.value, EventType.Authenticated);
-      expect(nextState.value).to.equal("CHANGE_VALUE");
-      expect(nextState.events).to.all.members([
+      expect(nextState.value).toBe("CHANGE_VALUE");
+      expect(nextState.events).toEqual([
         EventType.ValueUpdated,
         EventType.VerifyCodeSent,
         EventType.SelectedApp,
@@ -32,8 +31,8 @@ describe("state-machine", () => {
 
     it("should move state from change value state to verify code state", () => {
       const nextState = getNextState("CHANGE_VALUE", EventType.VerifyCodeSent);
-      expect(nextState.value).to.equal("VERIFY_CODE");
-      expect(nextState.events).to.all.members([
+      expect(nextState.value).toBe("VERIFY_CODE");
+      expect(nextState.events).toEqual([
         EventType.ValueUpdated,
         "RESEND_CODE",
         EventType.VerifyCodeSent,
@@ -42,15 +41,15 @@ describe("state-machine", () => {
 
     it("should move state from verify code state to value updated state", () => {
       const nextState = getNextState("VERIFY_CODE", EventType.ValueUpdated);
-      expect(nextState.value).to.equal(EventType.Confirmation);
-      expect(nextState.events).to.all.members([]);
+      expect(nextState.value).toBe(EventType.Confirmation);
+      expect(nextState.events).toEqual([]);
     });
 
     it("should not allow getNext state to skip state", () => {
       const state = getInitialState();
       const nextState = getNextState(state.value, EventType.VerifyCodeSent);
-      expect(nextState.value).to.equal("AUTHENTICATE");
-      expect(nextState.events).to.all.members([EventType.Authenticated]);
+      expect(nextState.value).toBe("AUTHENTICATE");
+      expect(nextState.events).toEqual([EventType.Authenticated]);
     });
   });
 
@@ -58,8 +57,8 @@ describe("state-machine", () => {
     it("should move state from initial state to change value state without code verification", () => {
       const state = getInitialState();
       const nextState = getNextState(state.value, EventType.Authenticated);
-      expect(nextState.value).to.equal("CHANGE_VALUE");
-      expect(nextState.events).to.all.members([
+      expect(nextState.value).toBe("CHANGE_VALUE");
+      expect(nextState.events).toEqual([
         EventType.ValueUpdated,
         EventType.VerifyCodeSent,
         EventType.SelectedApp,
@@ -70,8 +69,8 @@ describe("state-machine", () => {
 
     it("should move state from   change value state to value updated state", () => {
       const nextState = getNextState("CHANGE_VALUE", EventType.ValueUpdated);
-      expect(nextState.value).to.equal(EventType.Confirmation);
-      expect(nextState.events).to.all.members([]);
+      expect(nextState.value).toBe(EventType.Confirmation);
+      expect(nextState.events).toEqual([]);
     });
   });
 
@@ -79,8 +78,8 @@ describe("state-machine", () => {
     it("should move state from initial state to change value state when getting next state for mfa process", () => {
       const state = getInitialState();
       const nextState = getNextState(state.value, EventType.Authenticated);
-      expect(nextState.value).to.equal("CHANGE_VALUE");
-      expect(nextState.events).to.all.members([
+      expect(nextState.value).toBe("CHANGE_VALUE");
+      expect(nextState.events).toEqual([
         EventType.ValueUpdated,
         EventType.VerifyCodeSent,
         EventType.SelectedApp,
@@ -89,34 +88,34 @@ describe("state-machine", () => {
       ]);
     });
 
-    it("should move state from CHANGE_VALUE state to APP state when SELECTED_APP action event ", () => {
+    it("should move state from CHANGE_VALUE state to APP state when SELECTED_APP action event", () => {
       const nextState = getNextState("CHANGE_VALUE", EventType.SelectedApp);
-      expect(nextState.value).to.equal("APP");
-      expect(nextState.events).to.all.members([
+      expect(nextState.value).toBe("APP");
+      expect(nextState.events).toEqual([
         EventType.ValueUpdated,
         EventType.GoBackToChooseBackup,
       ]);
     });
 
-    it("should move state from CHANGE_VALUE state to SMS state when SELECTED_SMS action event ", () => {
+    it("should move state from CHANGE_VALUE state to SMS state when SELECTED_SMS action event", () => {
       const nextState = getNextState("CHANGE_VALUE", EventType.SelectedSms);
-      expect(nextState.value).to.equal("SMS");
-      expect(nextState.events).to.all.members([
+      expect(nextState.value).toBe("SMS");
+      expect(nextState.events).toEqual([
         EventType.VerifyCodeSent,
         EventType.GoBackToChooseBackup,
       ]);
     });
 
-    it("should move state from APP state to CONFIRMATION state when VALUE_UPDATED action event ", () => {
+    it("should move state from APP state to CONFIRMATION state when VALUE_UPDATED action event", () => {
       const nextState = getNextState("APP", EventType.ValueUpdated);
-      expect(nextState.value).to.equal(EventType.Confirmation);
-      expect(nextState.events).to.all.members([]);
+      expect(nextState.value).toBe(EventType.Confirmation);
+      expect(nextState.events).toEqual([]);
     });
 
-    it("should move state from APP state to CHANGE_VALUE state when GO_BACK_TO_CHOOSE_BACKUP action event ", () => {
+    it("should move state from APP state to CHANGE_VALUE state when GO_BACK_TO_CHOOSE_BACKUP action event", () => {
       const nextState = getNextState("APP", EventType.GoBackToChooseBackup);
-      expect(nextState.value).to.equal("CHANGE_VALUE");
-      expect(nextState.events).to.all.members([
+      expect(nextState.value).toBe("CHANGE_VALUE");
+      expect(nextState.events).toEqual([
         EventType.ValueUpdated,
         EventType.VerifyCodeSent,
         EventType.SelectedApp,
@@ -125,10 +124,10 @@ describe("state-machine", () => {
       ]);
     });
 
-    it("should move state from SMS state to CHANGE_VALUE state when GO_BACK_TO_CHOOSE_BACKUP action event ", () => {
+    it("should move state from SMS state to CHANGE_VALUE state when GO_BACK_TO_CHOOSE_BACKUP action event", () => {
       const nextState = getNextState("SMS", EventType.GoBackToChooseBackup);
-      expect(nextState.value).to.equal("CHANGE_VALUE");
-      expect(nextState.events).to.all.members([
+      expect(nextState.value).toBe("CHANGE_VALUE");
+      expect(nextState.events).toEqual([
         EventType.ValueUpdated,
         EventType.VerifyCodeSent,
         EventType.SelectedApp,

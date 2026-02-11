@@ -41,10 +41,10 @@ export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
         .map((altClient, idx) => {
           return {
             clientId: `${clientId}_alt_${idx}`,
-            startText: altClient[locale]["startText"],
-            startUrl: altClient[locale]["startUrl"],
+            startText: altClient[locale].startText,
+            startUrl: altClient[locale].startUrl,
             additionalSearchTerms:
-              altClient[locale]["additionalSearchTerms"] || "",
+              altClient[locale].additionalSearchTerms || "",
           };
         });
 
@@ -58,7 +58,7 @@ export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
       ].concat(alternativeClients);
     })
     .sort((a, b) => {
-      return a.startText.localeCompare(b.startText, locale);
+      return (a.startText || "").localeCompare(b.startText || "", locale);
     });
 };
 

@@ -3,6 +3,7 @@ import { generators } from "openid-client";
 import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants.js";
 import { logger } from "../utils/logger.js";
 import { kmsService } from "../utils/kms.js";
+import base64url from "base64url";
 import { getOIDCApiDiscoveryUrl } from "../config.js";
 
 export async function requiresAuthMiddleware(
@@ -62,14 +63,8 @@ async function generateAuthUrl(req: Request): Promise<string> {
     cookie_consent: req.query.cookie_consent,
     _ga: req.query._ga,
   };
-  const encodedHeader = Buffer.from(
-    JSON.stringify(headers),
-    "base64url"
-  ).toString(); //base64url.encode(JSON.stringify(headers));
-  const encodedPayload = Buffer.from(
-    JSON.stringify(claims),
-    "base64url"
-  ).toString(); //base64url.encode(JSON.stringify(claims));
+  const encodedHeader = base64url.default.encode(JSON.stringify(headers));
+  const encodedPayload = base64url.default.encode(JSON.stringify(claims));
   const unsignedToken = `${encodedHeader}.${encodedPayload}`;
   const sig = await kmsService.sign(unsignedToken);
   const base64Signature = Buffer.from(sig.Signature)

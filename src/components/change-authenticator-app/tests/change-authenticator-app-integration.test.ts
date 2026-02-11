@@ -1,26 +1,21 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import request from "supertest";
-import { describe } from "mocha";
-import { sinon, expect } from "../../../../test/utils/test-utils";
 import * as cheerio from "cheerio";
-import decache from "decache";
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
 
 describe("Integration:: change authenticator app", () => {
   let token: string | string[];
-
   let cookies: string;
-  let sandbox: sinon.SinonSandbox;
   let app: Awaited<ReturnType<typeof appWithMiddlewareSetup>>;
 
   beforeEach(async () => {
-    sandbox = sinon.createSandbox();
     app = await appWithMiddlewareSetup();
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("should return change authenticator app page if feature flag is on", async () => {
@@ -30,7 +25,7 @@ describe("Integration:: change authenticator app", () => {
         const $ = cheerio.load(res.text);
         token = $("[name=_csrf]").val();
         cookies = res.headers["set-cookie"];
-        expect(res.status).to.equal(200);
+        expect(res.status).toBe(200);
       });
   });
 
@@ -63,22 +58,23 @@ describe("Integration:: change authenticator app", () => {
       })
       .set("Cookie", cookies)
       .then((res) => {
-        expect(res.headers.location).to.equal(
+        expect(res.headers.location).toBe(
           PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url
         );
-        expect(res.status).to.equal(302);
+        expect(res.status).toBe(302);
       });
   });
 
   const appWithMiddlewareSetup = async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    const mfaModule = require("../../../utils/mfa");
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    const mfaModule = await import("../../../utils/mfa/index.js");
+    const oidc = await import("../../../utils/oidc.js");
+    const mfa = await import("../../../utils/mfaClient/index.js");
 
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
           state: {
@@ -125,24 +121,33 @@ describe("Integration:: change authenticator app", () => {
           },
         ];
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    sandbox.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
-    sandbox.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+    vi.spyOn(mfaModule, "generateMfaSecret").mockImplementation(() =>
+      "A".repeat(20)
+    );
+    vi.spyOn(mfaModule, "generateQRCodeValue").mockImplementation(
+      () => "qrcode"
+    );
+    vi.spyOn(mfaModule, "verifyMfaCode").mockImplementation(() => true);
 
-    sandbox.replace(mfaModule, "verifyMfaCode", () => {
-      return true;
-    });
+    const stubMfaClient = {
+      retrieve: vi.fn().mockResolvedValue({ success: true, data: [] }),
+      update: vi.fn().mockResolvedValue({ success: true }),
+    };
 
-    return await require("../../../app").createApp();
+    vi.spyOn(mfa, "createMfaClient").mockResolvedValue(stubMfaClient);
+
+    const app = await import("../../../app.js");
+    return await app.createApp();
   };
 });

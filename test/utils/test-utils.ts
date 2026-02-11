@@ -1,13 +1,4 @@
-import chai from "chai";
-import sinon from "sinon";
-import sinonChai from "sinon-chai";
-import chaiAsPromised from "chai-as-promised";
+import { expect, vi } from "vitest";
 
-chai.should();
-chai.use(sinonChai);
-chai.use(chaiAsPromised);
-
-const expect = chai.expect;
-
-export { expect, sinon };
-export default { expect, sinon };
+export { expect, vi };
+export default { expect, vi };

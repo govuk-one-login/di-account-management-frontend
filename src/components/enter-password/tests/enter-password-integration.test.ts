@@ -1,21 +1,27 @@
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  beforeAll,
+  afterAll,
+} from "vitest";
 import request from "supertest";
-import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
-import { testComponent } from "../../../../test/utils/helpers";
-import nock = require("nock");
+import { testComponent } from "../../../../test/utils/helpers.js";
 import * as cheerio from "cheerio";
-import decache from "decache";
+
+const nock = require("nock");
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
   PATH_DATA,
-} from "../../../app.constants";
+} from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import { getBaseUrl } from "../../../config";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
+import { getBaseUrl } from "../../../config.js";
 
 describe("Integration::enter password", () => {
-  let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
   let app: any;
@@ -34,14 +40,13 @@ describe("Integration::enter password", () => {
 
   const ENDPOINT = PATH_DATA.ENTER_PASSWORD.url;
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      async function (req: any, _res: any, next: any): Promise<void> {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
@@ -70,6 +75,7 @@ describe("Integration::enter password", () => {
             refreshToken: "token",
           },
         };
+        req.session.mfaMethods = [];
         req.oidc = {
           endSessionUrl: (params: any) => {
             let url = "/oidc/logout";
@@ -83,18 +89,19 @@ describe("Integration::enter password", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return Promise.resolve({});
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
+      return Promise.resolve({} as any);
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return Promise.resolve({});
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
+      return Promise.resolve({} as any);
     });
 
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     await setTokenAndCookies();
@@ -104,14 +111,14 @@ describe("Integration::enter password", () => {
     nock.cleanAll();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
   it("should redirect to security when type not present (GET)", async () => {
     const response = await request(app).get(ENDPOINT).expect(302);
-    expect(response.header["location"]).to.equal("/security");
+    expect(response.header.location).toBe("/security");
   });
 
   it("should redirect to security when type not present (POST)", async () => {
@@ -124,11 +131,15 @@ describe("Integration::enter password", () => {
         password: "password",
       })
       .expect(302);
-    expect(response.header["location"]).to.equal("/security");
+    expect(response.header.location).toBe("/security");
   });
 
-  it("should return enter password page", (done) => {
-    request(app).get(ENDPOINT).query({ type: "changeEmail" }).expect(200, done);
+  it("should return enter password page", async () => {
+    const res = await request(app)
+      .get(ENDPOINT)
+      .query({ type: "changeEmail" })
+      .expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
@@ -138,12 +149,12 @@ describe("Integration::enter password", () => {
   });
 
   // This test checks that all routes that use the state machine
-  // are redirected to the your services page if the user has not entered their password.
-  // I am using the PATH_DATA object, so that if we add a new route that uses the state machine,
+  // are redirected to the Your Services page if the user has not entered their password.
+  // I am using the PATH_DATA object so that if we add a new route that uses the state machine,
   // we don't have to add a new test for it.
 
   const PATHS_TO_EXCLUDE = [
-    // exclude the account deletion flow, as the user will be logged out, so the usual tests wont work
+    // exclude the account deletion flow, as the user will be logged out, so the usual tests won't work
     PATH_DATA.ACCOUNT_DELETED_CONFIRMATION,
     PATH_DATA.DELETE_ACCOUNT,
     // Exclude global logout as the state is set mid-journey
@@ -163,10 +174,8 @@ describe("Integration::enter password", () => {
           .get(redirectPath.url)
           .set("Cookie", cookies)
           .then((res) => {
-            expect(res.status).to.equal(302);
-            expect(res.headers.location).to.contain(
-              PATH_DATA.YOUR_SERVICES.url
-            );
+            expect(res.status).toBe(302);
+            expect(res.headers.location).toContain(PATH_DATA.YOUR_SERVICES.url);
           });
       });
 
@@ -179,7 +188,7 @@ describe("Integration::enter password", () => {
           })
           .then((res) => {
             if (res.status === 302) {
-              expect(res.headers.location).to.contain(
+              expect(res.headers.location).toContain(
                 PATH_DATA.YOUR_SERVICES.url
               );
               return;
@@ -207,7 +216,7 @@ describe("Integration::enter password", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "Enter your password"
         );
       })
@@ -237,13 +246,15 @@ describe("Integration::enter password", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "Enter the correct password"
         );
       })
       .expect(400);
   });
 
+  // Note: The following tests have intentional duplication for clarity.
+  // Each test is self-contained to document different authentication scenarios.
   it("should redirect to change email when authenticated", async () => {
     // Arrange
     nock(baseApi)
@@ -359,14 +370,13 @@ describe("Integration::enter password", () => {
         password: "Password1",
       });
 
-    expect(res.headers.location, "Expected redirect location header").to.not.be
-      .undefined;
-    expect(res.headers.location).to.contain("/oidc/logout");
-    expect(res.headers.location).to.contain(
+    expect(res.headers.location).toBeDefined();
+    expect(res.headers.location).toContain("/oidc/logout");
+    expect(res.headers.location).toContain(
       `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.LOGOUT_REDIRECT.url)}`
     );
     await setTokenAndCookies();
-    expect(res.headers.location).to.contain(`state=blocked`);
+    expect(res.headers.location).toContain(`state=blocked`);
   });
 
   it("should redirect to unavailable temporary when intervention SUSPENDED", async () => {
@@ -388,14 +398,13 @@ describe("Integration::enter password", () => {
         password: "Password1",
       });
 
-    expect(res.headers.location, "Expected redirect location header").to.not.be
-      .undefined;
-    expect(res.headers.location).to.contain("/oidc/logout");
-    expect(res.headers.location).to.contain(
+    expect(res.headers.location).toBeDefined();
+    expect(res.headers.location).toContain("/oidc/logout");
+    expect(res.headers.location).toContain(
       `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.LOGOUT_REDIRECT.url)}`
     );
     await setTokenAndCookies();
-    expect(res.headers.location).to.contain(`state=suspended`);
+    expect(res.headers.location).toContain(`state=suspended`);
   });
 
   it("should show incorrect password error for unknown intervention", async () => {
@@ -418,7 +427,7 @@ describe("Integration::enter password", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "Enter the correct password"
         );
       })

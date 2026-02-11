@@ -1,21 +1,21 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   buildContactEmailServiceUrl,
   ExpectedParams,
-} from "../track-and-redirect-controller";
+} from "../track-and-redirect-controller.js";
 import { Request, Response } from "express";
-import { expect } from "chai";
-import { describe } from "mocha";
-import sinon from "sinon";
-import { logger } from "../../../utils/logger";
-import * as config from "../../../config";
+import { logger } from "../../../utils/logger.js";
+import * as config from "../../../config.js";
 
 describe("buildContactEmailServiceUrl", () => {
   let req: Partial<Request>;
   let res: any;
-  let logInfoSpy: sinon.SinonSpy;
+  let logInfoSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    sinon.stub(config, "getContactEmailServiceUrl").returns("http://base.url");
+    vi.spyOn(config, "getContactEmailServiceUrl").mockReturnValue(
+      "http://base.url"
+    );
     req = {
       session: {
         queryParameters: {},
@@ -24,11 +24,11 @@ describe("buildContactEmailServiceUrl", () => {
     res = {
       locals: { sessionId: "session-id", trace: "trace-id" },
     };
-    logInfoSpy = sinon.spy(logger, "info");
+    logInfoSpy = vi.spyOn(logger, "info");
   });
 
   afterEach(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 
   it("should append expected parameters to URL", () => {
@@ -42,7 +42,7 @@ describe("buildContactEmailServiceUrl", () => {
     const result = buildContactEmailServiceUrl(req as Request, res as Response);
 
     for (const paramValue of Object.values(ExpectedParams)) {
-      expect(result.searchParams.get(paramValue)).to.equal(
+      expect(result.searchParams.get(paramValue)).toBe(
         req.session.queryParameters[paramValue]
       );
     }
@@ -50,14 +50,12 @@ describe("buildContactEmailServiceUrl", () => {
 
   it("should log missing parameters", () => {
     buildContactEmailServiceUrl(req as Request, res as Response);
-    expect(logInfoSpy.callCount).to.equal(4);
+    expect(logInfoSpy).toHaveBeenCalledTimes(4);
     for (const paramValue of Object.values(ExpectedParams)) {
-      expect(
-        logInfoSpy.calledWith(
-          { trace: "trace-id" },
-          `Missing ${paramValue} in the request or session.`
-        )
-      ).to.be.true;
+      expect(logInfoSpy).toHaveBeenCalledWith(
+        { trace: "trace-id" },
+        `Missing ${paramValue} in the request or session.`
+      );
     }
   });
 });
