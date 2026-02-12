@@ -2123,9 +2123,6 @@ Resources:
       FunctionName: !Sub "${AWS::StackName}-JwksCreator"
       Runtime: nodejs20.x
       Handler: lambda/jwks-creator.handler
-      Code:
-        ZipFile: |
-          exports.handler = async () => ({ statusCode: 200 });
       Role: !GetAtt JwksCreatorRole.Arn
       Timeout: 60
       Environment:
