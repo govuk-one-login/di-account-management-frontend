@@ -4,7 +4,13 @@ import {
   QueryCommandOutput,
 } from "@aws-sdk/client-dynamodb";
 
-import { SignCommandOutput } from "@aws-sdk/client-kms";
+import {
+  DescribeKeyCommandInput,
+  DescribeKeyCommandOutput,
+  GetPublicKeyCommandInput,
+  GetPublicKeyCommandOutput,
+  SignCommandOutput,
+} from "@aws-sdk/client-kms";
 import { PublishCommandOutput } from "@aws-sdk/client-sns";
 import { MfaMethod } from "./mfaClient/types";
 import { GetCommandOutput } from "@aws-sdk/lib-dynamodb";
@@ -30,6 +36,12 @@ export interface YourServices {
 
 export interface KmsService {
   sign: (payload: string) => Promise<SignCommandOutput>;
+  getPublicKey: (
+    params: GetPublicKeyCommandInput
+  ) => Promise<GetPublicKeyCommandOutput>;
+  describeKey: (
+    params: DescribeKeyCommandInput
+  ) => Promise<DescribeKeyCommandOutput>;
 }
 
 export interface ActivityLogEntry {

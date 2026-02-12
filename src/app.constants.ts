@@ -377,3 +377,5 @@ export const LogoutRedirect = {
     url: getBaseUrl() + PATH_DATA.START.url,
   },
 };
+
+export const jarKeyEncryptionAlgorithm = "RSA-OAEP-256";
