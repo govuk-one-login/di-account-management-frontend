@@ -89,7 +89,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
         run: |
-          echo "Running sam build on template file"
+          echo "Running sam build on template file "
           sam build --template-file=./deploy/template.yaml
           mv .aws-sam/build/template.yaml cf-template.yaml
           echo "Replacing 'CONTAINER-IMAGE-PLACEHOLDER' with new ECR image ref"
