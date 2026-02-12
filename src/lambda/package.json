@@ -1,0 +1,8 @@
+{
+  "name": "jwks-creator-lambda",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "jose": "^5.10.0"
+  }
+}
