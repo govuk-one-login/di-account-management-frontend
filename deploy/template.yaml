@@ -2142,6 +2142,19 @@ Resources:
           Value: !Ref OwnerTagValue
         - Key: Source
           Value: !Ref SourceTagValue
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Format: esm
+        OutExtension:
+          - .js=.mjs
+        Target: es2024
+        Sourcemap: true
+        EntryPoints:
+          - src/lambda/jwks-creator.ts
+        Banner:
+          - js=import { createRequire } from 'module'; const require = createRequire(import.meta.url); # Required in order to use AWS Lambda Powertools
 
   JwksCreatorRole:
     Type: AWS::IAM::Role
