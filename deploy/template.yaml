@@ -2130,7 +2130,7 @@ Resources:
       Timeout: 60
       Environment:
         Variables:
-          JAR_RSA_ENCRYPTION_KEY_ALIAS: !GetAtt SigningKmsKeyAlias
+          JAR_RSA_ENCRYPTION_KEY_ALIAS: !Ref SigningKmsKeyAlias
           BUCKET_NAME: !Ref JwksBucket
       Tags:
         - Key: Name
