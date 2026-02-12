@@ -2122,7 +2122,7 @@ Resources:
     Properties:
       FunctionName: !Sub "${AWS::StackName}-JwksCreator"
       Runtime: nodejs20.x
-      Handler: lambda/jwks-creator.handler
+      Handler: handler
       Role: !GetAtt JwksCreatorRole.Arn
       Timeout: 60
       Environment:
@@ -2153,7 +2153,6 @@ Resources:
         Sourcemap: true
         EntryPoints:
           - ../src/lambda/jwks-creator.ts
-        ProjectRoot: ../
         Banner:
           - js=import { createRequire } from 'module'; const require = createRequire(import.meta.url); # Required in order to use AWS Lambda Powertools
 
