@@ -17,7 +17,7 @@ export const handler = async (
     if (event.RequestType === "Create" || event.RequestType === "Update") {
       assert.ok(
         process.env["JAR_RSA_ENCRYPTION_KEY_ALIAS"],
-        "JAR_RSA_ENCRYPTION_KEY_ALIAS not set"
+        "JAR_RSA_ENCRYPTION_KEY_ALIAS not sett"
       );
 
       const jwks = await generateJwksFromKmsPublicKey(
