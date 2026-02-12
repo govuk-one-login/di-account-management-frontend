@@ -83,6 +83,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build app
+        run: npm run build
+
       - name: Build & Publish Docker Image as latest
         id: build-image
         env:
