@@ -1,7 +1,0 @@
-{
-  "diff": true,
-  "extension": ["js"],
-  "timeout": 30000,
-  "recursive": true,
-  "exit": true
-}
