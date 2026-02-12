@@ -1,39 +1,7 @@
-import { describe } from "mocha";
-import { validatePhoneNumberRequest } from "../change-phone-number-validation";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { validatePhoneNumberRequest } from "../change-phone-number-validation.js";
 import { RequestBuilder } from "../../../../test/utils/builders";
 import { Request } from "express";
-import { sinon } from "../../../../test/utils/test-utils";
-import { Assertion, expect } from "chai";
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Chai {
-    interface Assertion {
-      validationError(msg: string): Promise<void>;
-    }
-  }
-}
-
-function validationError(msg: string) {
-  let messageFound = false;
-  for (const resultArray of this._obj) {
-    messageFound = resultArray.some((res: any) => res.msg === msg);
-    if (messageFound) break;
-  }
-
-  this.assert(
-    messageFound,
-    `
-  Expected to find error with message "${msg}" in one of the following arrays:
-  ${this._obj.reduce(
-    (append: string, resultArray: any[]) => `${append}
-    ${JSON.stringify(resultArray, null, 2)}`,
-    ""
-  )}
-  `.trim()
-  );
-}
-
-Assertion.addMethod("validationError", validationError);
 
 const validate = async (req: Partial<Request>) => {
   const validations = validatePhoneNumberRequest();
@@ -48,17 +16,23 @@ const validate = async (req: Partial<Request>) => {
   return resultsArrays;
 };
 
+const hasValidationError = (resultsArrays: any[], msg: string): boolean => {
+  for (const resultArray of resultsArrays) {
+    const messageFound = resultArray.some((res: any) => res.msg === msg);
+    if (messageFound) return true;
+  }
+  return false;
+};
+
 describe("validatePhoneNumberRequest", () => {
-  let sandbox: sinon.SinonSandbox;
   let reqBuilder: RequestBuilder;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    reqBuilder = new RequestBuilder().withTranslate(sandbox.fake((id) => id));
+    reqBuilder = new RequestBuilder().withTranslate(vi.fn((id) => id));
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("errors as expected when no phone number is provided", async () => {
@@ -68,9 +42,13 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.ukPhoneNumber.validationError.required"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.ukPhoneNumber.validationError.required"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when phone number contains invalid characters", async () => {
@@ -80,9 +58,13 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "@12345",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.ukPhoneNumber.validationError.plusNumericOnly"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.ukPhoneNumber.validationError.plusNumericOnly"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when phone number is not long enough", async () => {
@@ -92,9 +74,13 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "123456789",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when phone number is too long", async () => {
@@ -104,9 +90,13 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "123456789101112",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.ukPhoneNumber.validationError.length"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when phone number is not a UK number", async () => {
@@ -116,9 +106,13 @@ describe("validatePhoneNumberRequest", () => {
         phoneNumber: "+33612345678",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.ukPhoneNumber.validationError.international"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when no international phone number is provided", async () => {
@@ -128,9 +122,13 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.internationalPhoneNumber.validationError.required"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.internationalPhoneNumber.validationError.required"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when international phone number contains invalid characters", async () => {
@@ -140,9 +138,13 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "@12345",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.internationalPhoneNumber.validationError.plusNumericOnly"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.internationalPhoneNumber.validationError.plusNumericOnly"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when international phone number is not long enough", async () => {
@@ -152,9 +154,13 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "1234",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when international phone number is too long", async () => {
@@ -164,9 +170,13 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "123456789123456789123456789",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+      )
+    ).toBe(true);
   });
 
   it("errors as expected when international phone number is not an international number", async () => {
@@ -176,8 +186,12 @@ describe("validatePhoneNumberRequest", () => {
         internationalPhoneNumber: "07123456789",
       })
       .build();
-    await expect(await validate(req)).to.have.validationError(
-      "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
-    );
+    const results = await validate(req);
+    expect(
+      hasValidationError(
+        results,
+        "pages.changePhoneNumber.internationalPhoneNumber.validationError.internationalFormat"
+      )
+    ).toBe(true);
   });
 });

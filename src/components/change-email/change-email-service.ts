@@ -2,9 +2,14 @@ import {
   API_ENDPOINTS,
   HTTP_STATUS_CODES,
   NOTIFICATION_TYPE,
-} from "../../app.constants";
-import { getRequestConfig, Http, http, RequestConfig } from "../../utils/http";
-import { ChangeEmailServiceInterface } from "./types";
+} from "../../app.constants.js";
+import {
+  getRequestConfig,
+  Http,
+  http,
+  RequestConfig,
+} from "../../utils/http.js";
+import { ChangeEmailServiceInterface } from "./types.js";
 
 export function changeEmailService(
   axios: Http = http

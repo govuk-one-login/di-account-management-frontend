@@ -1,42 +1,42 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import sinon from "sinon";
-import { SqsService } from "../utils/types";
-import { eventService } from "./event-service";
+import { expect, vi, describe, it, beforeEach, afterEach } from "vitest";
+import { SqsService } from "../utils/types.js";
+import { eventService } from "./event-service.js";
 import {
   EventName,
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
   MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
   MISSING_SESSION_ID_SPECIAL_CASE,
   MISSING_USER_ID_SPECIAL_CASE,
-} from "../app.constants";
-import { SinonFakeTimers } from "sinon";
-import * as configModule from "../config";
+} from "../app.constants.js";
 
 describe("eventService", () => {
   let sqs: SqsService;
-  let sendSpy: sinon.SinonSpy;
+  let sendSpy: ReturnType<typeof vi.fn>;
+  let originalClientId: string;
 
   beforeEach(() => {
-    sendSpy = sinon.spy();
+    sendSpy = vi.fn();
     sqs = { sendAuditEvent: sendSpy } as any;
 
-    sinon.replace(configModule, "getOIDCClientId", () => "test-client-id");
+    originalClientId = process.env.OIDC_CLIENT_ID;
+    process.env.OIDC_CLIENT_ID = "test-client-id";
   });
 
   afterEach(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
+    process.env.OIDC_CLIENT_ID = originalClientId;
   });
 
   describe("buildAuditEvent", () => {
-    let clock: SinonFakeTimers;
+    let clock: ReturnType<typeof vi.useFakeTimers>;
 
     beforeEach(() => {
-      clock = sinon.useFakeTimers(new Date(Date.UTC(2023, 20, 12)));
+      clock = vi.useFakeTimers();
+      clock.setSystemTime(new Date(Date.UTC(2023, 20, 12)));
     });
 
     afterEach(() => {
-      clock.restore();
+      clock.restoreAllMocks();
     });
 
     it("should build a HOME_TRIAGE_PAGE_EMAIL audit event correctly", () => {
@@ -77,30 +77,30 @@ describe("eventService", () => {
         EventName.HOME_TRIAGE_PAGE_EMAIL
       );
 
-      expect(result.component_id).to.equal("HOME");
-      expect(result.event_name).to.equal("HOME_TRIAGE_PAGE_EMAIL");
-      expect(result.user.session_id).to.equal("test-session-id");
-      expect(result.user.persistent_session_id).to.equal(
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("HOME_TRIAGE_PAGE_EMAIL");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
         "test-persistent-session-id"
       );
-      expect(result.user.user_id).to.equal("test-user-id");
-      expect(result.user.email).to.equal("test@example.com");
-      expect(result.user.ip_address).to.equal("127.0.0.1");
-      expect(result.user.govuk_signin_journey_id).to.equal(
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
         "test-client-session-id"
       );
-      expect(result.platform.user_agent).to.equal("test-user-agent");
-      expect(result.extensions.from_url).to.equal("test-from-url");
-      expect(result.extensions.app_error_code).to.equal("test-error-code");
-      expect(result.extensions.app_session_id).to.equal("test-app-session-id");
-      expect(result.extensions.reference_code).to.equal("test-reference-code");
-      expect(result.extensions.is_signed_in).to.equal(true);
-      expect(result.event_timestamp_ms).to.equal(1726099200000);
-      expect(result.event_timestamp_ms_formatted).to.equal(
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions.from_url).toBe("test-from-url");
+      expect(result.extensions.app_error_code).toBe("test-error-code");
+      expect(result.extensions.app_session_id).toBe("test-app-session-id");
+      expect(result.extensions.reference_code).toBe("test-reference-code");
+      expect(result.extensions.is_signed_in).toBe(true);
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
         "2024-09-12T00:00:00.000Z"
       );
-      expect(result.timestamp).to.equal(1726099200);
-      expect(atob(result.restricted.device_information.encoded)).to.equal(
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
         "test-txma-header"
       );
     });
@@ -123,12 +123,12 @@ describe("eventService", () => {
         EventName.HOME_TRIAGE_PAGE_EMAIL
       );
 
-      expect(result.user.session_id).to.equal(MISSING_SESSION_ID_SPECIAL_CASE);
-      expect(result.user.persistent_session_id).to.equal(
+      expect(result.user.session_id).toBe(MISSING_SESSION_ID_SPECIAL_CASE);
+      expect(result.user.persistent_session_id).toBe(
         MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE
       );
-      expect(result.user.user_id).to.equal(MISSING_USER_ID_SPECIAL_CASE);
-      expect(result.extensions.app_session_id).to.equal(
+      expect(result.user.user_id).toBe(MISSING_USER_ID_SPECIAL_CASE);
+      expect(result.extensions.app_session_id).toBe(
         MISSING_APP_SESSION_ID_SPECIAL_CASE
       );
     });
@@ -156,12 +156,12 @@ describe("eventService", () => {
         EventName.HOME_TRIAGE_PAGE_EMAIL
       );
 
-      expect(result.extensions.from_url).to.be.undefined;
-      expect(result.extensions.app_error_code).to.be.undefined;
-      expect(result.extensions.app_session_id).to.equal(
+      expect(result.extensions.from_url).toBeUndefined();
+      expect(result.extensions.app_error_code).toBeUndefined();
+      expect(result.extensions.app_session_id).toBe(
         MISSING_APP_SESSION_ID_SPECIAL_CASE
       );
-      expect(result.restricted).to.be.undefined;
+      expect(result.restricted).toBeUndefined();
     });
 
     it("should build a HOME_TRIAGE_PAGE_VISIT event correctly", () => {
@@ -202,30 +202,30 @@ describe("eventService", () => {
         EventName.HOME_TRIAGE_PAGE_VISIT
       );
 
-      expect(result.component_id).to.equal("HOME");
-      expect(result.event_name).to.equal("HOME_TRIAGE_PAGE_VISIT");
-      expect(result.user.session_id).to.equal("test-session-id");
-      expect(result.user.persistent_session_id).to.equal(
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("HOME_TRIAGE_PAGE_VISIT");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
         "test-persistent-session-id"
       );
-      expect(result.user.user_id).to.equal("test-user-id");
-      expect(result.user.email).to.equal("test@example.com");
-      expect(result.user.ip_address).to.equal("127.0.0.1");
-      expect(result.user.govuk_signin_journey_id).to.equal(
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
         "test-client-session-id"
       );
-      expect(result.platform.user_agent).to.equal("test-user-agent");
-      expect(result.extensions.from_url).to.equal("test-from-url");
-      expect(result.extensions.app_error_code).to.equal("test-error-code");
-      expect(result.extensions.app_session_id).to.equal("test-app-session-id");
-      expect(result.extensions.reference_code).to.equal("test-reference-code");
-      expect(result.extensions.is_signed_in).to.equal(true);
-      expect(result.event_timestamp_ms).to.equal(1726099200000);
-      expect(result.event_timestamp_ms_formatted).to.equal(
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions.from_url).toBe("test-from-url");
+      expect(result.extensions.app_error_code).toBe("test-error-code");
+      expect(result.extensions.app_session_id).toBe("test-app-session-id");
+      expect(result.extensions.reference_code).toBe("test-reference-code");
+      expect(result.extensions.is_signed_in).toBe(true);
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
         "2024-09-12T00:00:00.000Z"
       );
-      expect(result.timestamp).to.equal(1726099200);
-      expect(atob(result.restricted.device_information.encoded)).to.equal(
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
         "test-txma-header"
       );
     });
@@ -273,28 +273,28 @@ describe("eventService", () => {
         EventName.AUTH_MFA_METHOD_ADD_STARTED
       );
 
-      expect(result.component_id).to.equal("HOME");
-      expect(result.event_name).to.equal("AUTH_MFA_METHOD_ADD_STARTED");
-      expect(result.user.session_id).to.equal("test-session-id");
-      expect(result.user.persistent_session_id).to.equal(
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("AUTH_MFA_METHOD_ADD_STARTED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
         "test-persistent-session-id"
       );
-      expect(result.user.user_id).to.equal("test-user-id");
-      expect(result.user.email).to.equal("test@example.com");
-      expect(result.user.ip_address).to.equal("127.0.0.1");
-      expect(result.user.govuk_signin_journey_id).to.equal(
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
         "test-client-session-id"
       );
-      expect(result.platform.user_agent).to.equal("test-user-agent");
-      expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
-      expect(result.extensions.phone_number_country_code).to.equal("44");
-      expect(result.user.phone).to.equal("+447123456789");
-      expect(result.event_timestamp_ms).to.equal(1726099200000);
-      expect(result.event_timestamp_ms_formatted).to.equal(
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.extensions.phone_number_country_code).toBe("44");
+      expect(result.user.phone).toBe("+447123456789");
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
         "2024-09-12T00:00:00.000Z"
       );
-      expect(result.timestamp).to.equal(1726099200);
-      expect(atob(result.restricted.device_information.encoded)).to.equal(
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
         "test-txma-header"
       );
     });
@@ -350,29 +350,29 @@ describe("eventService", () => {
         EventName.AUTH_MFA_METHOD_SWITCH_STARTED
       );
 
-      expect(result.component_id).to.equal("HOME");
-      expect(result.event_name).to.equal("AUTH_MFA_METHOD_SWITCH_STARTED");
-      expect(result.user.session_id).to.equal("test-session-id");
-      expect(result.user.persistent_session_id).to.equal(
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("AUTH_MFA_METHOD_SWITCH_STARTED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
         "test-persistent-session-id"
       );
-      expect(result.user.user_id).to.equal("test-user-id");
-      expect(result.user.email).to.equal("test@example.com");
-      expect(result.user.ip_address).to.equal("127.0.0.1");
-      expect(result.user.govuk_signin_journey_id).to.equal(
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
         "test-client-session-id"
       );
-      expect(result.platform.user_agent).to.equal("test-user-agent");
-      expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
-      expect(result.extensions["mfa-type"]).to.equal("SMS");
-      expect(result.extensions.phone_number_country_code).to.equal("44");
-      expect(result.user.phone).to.equal("+447123456789");
-      expect(result.event_timestamp_ms).to.equal(1726099200000);
-      expect(result.event_timestamp_ms_formatted).to.equal(
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.extensions["mfa-type"]).toBe("SMS");
+      expect(result.extensions.phone_number_country_code).toBe("44");
+      expect(result.user.phone).toBe("+447123456789");
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
         "2024-09-12T00:00:00.000Z"
       );
-      expect(result.timestamp).to.equal(1726099200);
-      expect(atob(result.restricted.device_information.encoded)).to.equal(
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
         "test-txma-header"
       );
     });
@@ -402,21 +402,21 @@ describe("eventService", () => {
         mockRes,
         EventName.HOME_GLOBAL_LOGOUT_REQUESTED
       );
-      expect(result.component_id).to.equal("HOME");
-      expect(result.event_name).to.equal("HOME_GLOBAL_LOGOUT_REQUESTED");
-      expect(result.user.session_id).to.equal("test-session-id");
-      expect(result.user.persistent_session_id).to.equal(
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("HOME_GLOBAL_LOGOUT_REQUESTED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
         "test-persistent-session-id"
       );
-      expect(result.user.user_id).to.equal("test-user-id");
-      expect(result.platform.user_agent).to.equal("test-user-agent");
-      expect(result.client_id).to.equal("test-client-id");
-      expect(result.event_timestamp_ms).to.equal(1726099200000);
-      expect(result.event_timestamp_ms_formatted).to.equal(
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.client_id).toBe("test-client-id");
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
         "2024-09-12T00:00:00.000Z"
       );
-      expect(result.timestamp).to.equal(1726099200);
-      expect(atob(result.restricted.device_information.encoded)).to.equal(
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
         "test-txma-header"
       );
     });
@@ -473,29 +473,29 @@ describe("eventService", () => {
         EventName.AUTH_MFA_METHOD_DELETE_STARTED
       );
 
-      expect(result.component_id).to.equal("HOME");
-      expect(result.event_name).to.equal("AUTH_MFA_METHOD_DELETE_STARTED");
-      expect(result.user.session_id).to.equal("test-session-id");
-      expect(result.user.persistent_session_id).to.equal(
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("AUTH_MFA_METHOD_DELETE_STARTED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
         "test-persistent-session-id"
       );
-      expect(result.user.user_id).to.equal("test-user-id");
-      expect(result.user.email).to.equal("test@example.com");
-      expect(result.user.ip_address).to.equal("127.0.0.1");
-      expect(result.user.govuk_signin_journey_id).to.equal(
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
         "test-client-session-id"
       );
-      expect(result.platform.user_agent).to.equal("test-user-agent");
-      expect(result.extensions["journey-type"]).to.equal("ACCOUNT_MANAGEMENT");
-      expect(result.extensions["mfa-type"]).to.equal("SMS");
-      expect(result.extensions.phone_number_country_code).to.equal("44");
-      expect(result.user.phone).to.equal("+447987654321");
-      expect(result.event_timestamp_ms).to.equal(1726099200000);
-      expect(result.event_timestamp_ms_formatted).to.equal(
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.extensions["mfa-type"]).toBe("SMS");
+      expect(result.extensions.phone_number_country_code).toBe("44");
+      expect(result.user.phone).toBe("+447987654321");
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
         "2024-09-12T00:00:00.000Z"
       );
-      expect(result.timestamp).to.equal(1726099200);
-      expect(atob(result.restricted.device_information.encoded)).to.equal(
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
         "test-txma-header"
       );
     });
@@ -510,12 +510,11 @@ describe("eventService", () => {
         "session-id"
       );
 
-      expect(sendSpy.calledOnce).to.be.true;
-      expect(
-        sendSpy.calledWith(
-          JSON.stringify({ event_name: "HOME_TRIAGE_PAGE_EMAIL" })
-        )
-      ).to.be.true;
+      expect(sendSpy).toHaveBeenCalledOnce();
+      expect(sendSpy).toHaveBeenCalledWith(
+        JSON.stringify({ event_name: "HOME_TRIAGE_PAGE_EMAIL" }),
+        "session-id"
+      );
     });
 
     it("should stringify the event object before sending", () => {
@@ -524,7 +523,10 @@ describe("eventService", () => {
       const mockEvent = { event_name: EventName.HOME_TRIAGE_PAGE_EMAIL };
       service.send(mockEvent, "session-id");
 
-      expect(sendSpy.calledOnceWith(JSON.stringify(mockEvent))).to.be.true;
+      expect(sendSpy).toHaveBeenCalledWith(
+        JSON.stringify(mockEvent),
+        "session-id"
+      );
     });
   });
 });

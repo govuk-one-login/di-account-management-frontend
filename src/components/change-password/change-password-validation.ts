@@ -1,7 +1,7 @@
 import { body } from "express-validator";
-import { containsNumber, containsNumbersOnly } from "../../utils/strings";
-import { validateBodyMiddleware } from "../../middleware/form-validation-middleware";
-import { ValidationChainFunc } from "../../types";
+import { containsNumber, containsNumbersOnly } from "../../utils/strings.js";
+import { validateBodyMiddleware } from "../../middleware/form-validation-middleware.js";
+import { ValidationChainFunc } from "../../types.js";
 
 export function validateChangePasswordRequest(): ValidationChainFunc {
   return [
@@ -52,7 +52,7 @@ export function validateChangePasswordRequest(): ValidationChainFunc {
         );
       })
       .custom((value, { req }) => {
-        if (value !== req.body["password"]) {
+        if (value !== req.body.password) {
           throw new Error(
             req.t(
               "pages.changePassword.confirmPassword.validationError.matches"

@@ -1,6 +1,5 @@
-import { describe } from "mocha";
-import { redact } from "../redact";
-import { expect } from "chai";
+import { describe, it, expect } from "vitest";
+import { redact } from "../redact.js";
 
 describe("Redact tests", (): void => {
   it("Redacts a field from a JSON document.", (): void => {
@@ -23,7 +22,7 @@ describe("Redact tests", (): void => {
 
     // Assert
     const resultAsObject: any = JSON.parse(result);
-    expect(resultAsObject["name"]).to.equal("REDACTED");
+    expect(resultAsObject.name).toBe("REDACTED");
   });
 
   it("Redacts multiple fields with the same name from a JSON document.", (): void => {
@@ -47,8 +46,8 @@ describe("Redact tests", (): void => {
 
     // Assert
     const resultAsObject: any = JSON.parse(result);
-    expect(resultAsObject["name"]).to.equal("REDACTED");
-    expect(resultAsObject["address"]["name"]).to.equal("REDACTED");
+    expect(resultAsObject.name).toBe("REDACTED");
+    expect(resultAsObject.address.name).toBe("REDACTED");
   });
 
   it("Redacts multiple fields with different names from a JSON document.", (): void => {
@@ -71,8 +70,8 @@ describe("Redact tests", (): void => {
 
     // Assert
     const resultAsObject: any = JSON.parse(result);
-    expect(resultAsObject["name"]).to.equal("REDACTED");
-    expect(resultAsObject["address"]["house"]).to.equal("REDACTED");
+    expect(resultAsObject.name).toBe("REDACTED");
+    expect(resultAsObject.address.house).toBe("REDACTED");
   });
 
   it("Redacts multiple fields from a list of names from a JSON document.", (): void => {
@@ -96,9 +95,9 @@ describe("Redact tests", (): void => {
 
     // Assert
     const resultAsObject: any = JSON.parse(result);
-    expect(resultAsObject["name"]).to.equal("REDACTED");
-    expect(resultAsObject["address"]["name"]).to.equal("REDACTED");
-    expect(resultAsObject["address"]["town"]).to.equal("REDACTED");
+    expect(resultAsObject.name).toBe("REDACTED");
+    expect(resultAsObject.address.name).toBe("REDACTED");
+    expect(resultAsObject.address.town).toBe("REDACTED");
   });
 
   it("Does not redact objects.", (): void => {
@@ -121,7 +120,7 @@ describe("Redact tests", (): void => {
 
     // Assert
     const resultAsObject: any = JSON.parse(result);
-    expect(resultAsObject["name"]).to.equal("REDACTED");
-    expect(resultAsObject["address"]["town"]).to.equal("REDACTED");
+    expect(resultAsObject.name).toBe("REDACTED");
+    expect(resultAsObject.address.town).toBe("REDACTED");
   });
 });

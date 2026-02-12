@@ -4,8 +4,8 @@ import {
   QueryCommand,
   QueryCommandOutput,
 } from "@aws-sdk/client-dynamodb";
-import { DynamoDBService } from "./types";
-import { getAWSConfig, AwsConfig } from "../config/aws";
+import { DynamoDBService } from "./types.js";
+import { getAWSConfig, AwsConfig } from "../config/aws.js";
 import { GetCommandOutput } from "@aws-sdk/lib-dynamodb";
 
 const awsConfig: AwsConfig = getAWSConfig();

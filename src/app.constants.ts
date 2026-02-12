@@ -1,5 +1,5 @@
-import { getBaseUrl } from "./config";
-import { EventType, UserJourney } from "./utils/state-machine";
+import { getBaseUrl } from "./config.js";
+import { EventType, UserJourney } from "./utils/state-machine.js";
 
 export const PATH_DATA: Record<
   string,

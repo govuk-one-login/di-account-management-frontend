@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "target": "es2020",

@@ -1,6 +1,6 @@
-import { LOCALE } from "../app.constants";
-import { getServiceDomain } from "../config";
-import type { InitOptions } from "i18next/typescript/options";
+import { LOCALE } from "../app.constants.js";
+import { getServiceDomain } from "../config.js";
+import type { InitOptions } from "i18next";
 
 export function i18nextConfigurationOptions(): InitOptions {
   return {

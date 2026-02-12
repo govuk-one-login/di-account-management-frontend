@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { destroyUserSessions } from "./session-store";
-import { getBaseUrl } from "../config";
-import { LogoutState, LogoutStateType, PATH_DATA } from "../app.constants";
+import { destroyUserSessions } from "./session-store.js";
+import { getBaseUrl } from "../config.js";
+import { LogoutState, LogoutStateType, PATH_DATA } from "../app.constants.js";
 import { EndSessionParameters } from "openid-client";
 
 export async function handleLogout(

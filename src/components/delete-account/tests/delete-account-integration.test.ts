@@ -1,25 +1,30 @@
 import request from "supertest";
-import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
+import {
+  describe,
+  beforeAll,
+  afterAll,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+} from "vitest";
 import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
-import decache from "decache";
 import { API_ENDPOINTS, PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
-import { getBaseUrl } from "../../../config";
+import { getBaseUrl } from "../../../config.js";
 import { Service } from "../../../utils/types";
-import { SinonStub } from "sinon";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: delete account", () => {
-  let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
   let app: any;
   let baseApi: string;
   let govUkPublishingBaseApi: string;
-  let yourServicesStub: SinonStub<any[], any>;
+  let yourServicesStub: ReturnType<typeof vi.fn>;
   const idToken = "Idtoken";
   const TEST_SUBJECT_ID = "sub";
 
@@ -54,21 +59,25 @@ describe("Integration:: delete account", () => {
   ];
 
   function stubGetAllowedListServicesToReturn(serviceList: Service[]) {
-    yourServicesStub.callsFake(function (): Service[] {
+    yourServicesStub.mockImplementation(function (): Service[] {
       return serviceList;
     });
   }
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    const yourServices = require("../../../utils/yourServices");
-    sandbox = sinon.createSandbox();
-    yourServicesStub = sandbox.stub(yourServices, "getServices");
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    const yourServices = await import("../../../utils/yourServices.js");
+    yourServicesStub = vi.spyOn(
+      yourServices,
+      "getYourServicesForAccountDeletion"
+    );
+    stubGetAllowedListServicesToReturn(aSingleService);
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
@@ -93,26 +102,28 @@ describe("Integration:: delete account", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({
         endSessionUrl: function (params: any = {}) {
+          const stateParam = params.state ? `&state=${params.state}` : "";
           return `${process.env.API_BASE_URL}/logout?id_token_hint=${
             params.id_token_hint
           }&post_logout_redirect_uri=${encodeURIComponent(
             params.post_logout_redirect_uri
-          )}`;
+          )}${stateParam}`;
         },
       });
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
 
     baseApi = process.env.AM_API_BASE_URL;
     govUkPublishingBaseApi = process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
@@ -131,58 +142,63 @@ describe("Integration:: delete account", () => {
   });
 
   afterEach(() => {
-    yourServicesStub.reset();
+    yourServicesStub.mockClear();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
-  it("should return delete account page", (done) => {
+  it("should return delete account page", async () => {
     stubGetAllowedListServicesToReturn(aSingleService);
-    request(app).get(PATH_DATA.DELETE_ACCOUNT.url).expect(200, done);
+    const res = await request(app)
+      .get(PATH_DATA.DELETE_ACCOUNT.url)
+      .expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
-  it("should display generic content if no services exist", (done) => {
+  it("should display generic content if no services exist", async () => {
     stubGetAllowedListServicesToReturn([]);
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("no-services-content")).text()).to.not.be.empty;
-        expect($(testComponent("service-list-item")).text()).to.be.empty;
+        expect($(testComponent("no-services-content")).text()).not.toBe("");
+        expect($(testComponent("service-list-item")).text()).toBe("");
       })
-      .expect(200, done);
+      .expect(200);
   });
 
-  it("should display a list of services if more than 1 service exists", (done) => {
+  it("should display a list of services if more than 1 service exists", async () => {
     stubGetAllowedListServicesToReturn(manyServices);
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("service-list")).text()).to.not.be.empty;
-        expect($(testComponent("service-list-item")).text()).to.not.be.empty;
-        expect($(testComponent("service-paragraph")).text()).to.be.empty;
+        expect($(testComponent("service-list")).text()).not.toBe("");
+        expect($(testComponent("service-list-item")).text()).not.toBe("");
+        expect($(testComponent("service-paragraph")).text()).toBe("");
       })
-      .expect(200, done);
+      .expect(200);
   });
 
-  it("should display a single paragraph when only 1 service exists", (done) => {
+  it("should display a single paragraph when only 1 service exists", async () => {
     stubGetAllowedListServicesToReturn(aSingleService);
 
-    request(app)
+    await request(app)
       .get(PATH_DATA.DELETE_ACCOUNT.url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("service-list")).text()).to.be.empty;
-        expect($(testComponent("service-list-item")).text()).to.be.empty;
-        expect($(testComponent("service-paragraph")).text()).to.contains("Your GOV.UK app");
+        expect($(testComponent("service-list")).text()).toBe("");
+        expect($(testComponent("service-list-item")).text()).toBe("");
+        expect($(testComponent("service-paragraph")).text()).toContain(
+          "Your GOV.UK app"
+        );
       })
-      .expect(200, done);
+      .expect(200);
   });
 
   it("post redirect to your services when csrf not present", async () => {
@@ -203,7 +219,7 @@ describe("Integration:: delete account", () => {
     const opApi = process.env.API_BASE_URL;
     const baseUrl = getBaseUrl();
 
-    request(app)
+    const res = await request(app)
       .post(PATH_DATA.DELETE_ACCOUNT.url)
       .type("form")
       .set("Cookie", cookies)
@@ -217,5 +233,6 @@ describe("Integration:: delete account", () => {
         )}&state=accountDeletion`
       )
       .expect(302);
+    expect(res.statusCode).toBe(302);
   });
 });

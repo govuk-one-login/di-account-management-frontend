@@ -1,8 +1,6 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { changeEmailGet, changeEmailPost } from "../change-email-controller";
+import { changeEmailGet, changeEmailPost } from "../change-email-controller.js";
 import { ChangeEmailServiceInterface } from "../types";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
 import {
@@ -18,39 +16,37 @@ import {
   TOKEN,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-import * as oidcModule from "../../../utils/oidc";
+import * as oidcModule from "../../../utils/oidc.js";
 
 describe("change email controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let fakeService: ChangeEmailServiceInterface;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = new RequestBuilder()
       .withBody({ email: NEW_EMAIL })
-      .withTranslate(sandbox.fake())
+      .withTranslate(vi.fn())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .withTranslate((key: string) => key)
       .build();
 
     res = new ResponseBuilder()
-      .withRender(sandbox.fake())
-      .withRedirect(sandbox.fake(() => {}))
-      .withStatus(sandbox.fake())
+      .withRender(vi.fn())
+      .withRedirect(vi.fn(() => {}))
+      .withStatus(vi.fn())
       .build();
 
     fakeService = {
-      sendCodeVerificationNotification: sandbox.fake.returns(
-        true as unknown as Promise<boolean>
-      ),
+      sendCodeVerificationNotification: vi
+        .fn()
+        .mockReturnValue(true as unknown as Promise<boolean>),
     };
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("changeEmailGet", () => {
@@ -59,14 +55,14 @@ describe("change email controller", () => {
       changeEmailGet(req as Request, res as Response);
 
       // Assert
-      expect(res.render).to.have.been.calledWith("change-email/index.njk");
+      expect(res.render).toHaveBeenCalledWith("change-email/index.njk");
     });
 
     it("should render enter new email with email denied error message", () => {
       req.query = { email_cant_be_used: "1" };
       changeEmailGet(req as Request, res as Response);
 
-      expect(res.render).to.have.been.calledWith("change-email/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("change-email/index.njk", {
         errors: {
           email: {
             text: "pages.changeEmail.email.validationError.emailCantBeUsed",
@@ -91,19 +87,22 @@ describe("change email controller", () => {
       await changeEmailPost(fakeService)(req as Request, res as Response);
 
       // Assert
-      expect(fakeService.sendCodeVerificationNotification).calledOnce;
       expect(
         fakeService.sendCodeVerificationNotification
-      ).to.have.been.calledWithExactly(NEW_EMAIL, {
-        token: TOKEN,
-        sourceIp: SOURCE_IP,
-        sessionId: SESSION_ID,
-        persistentSessionId: PERSISTENT_SESSION_ID,
-        userLanguage: ENGLISH,
-        clientSessionId: CLIENT_SESSION_ID,
-        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
-      });
-      expect(res.redirect).to.have.calledWith("/check-your-email");
+      ).toHaveBeenCalledTimes(1);
+      expect(fakeService.sendCodeVerificationNotification).toHaveBeenCalledWith(
+        NEW_EMAIL,
+        {
+          token: TOKEN,
+          sourceIp: SOURCE_IP,
+          sessionId: SESSION_ID,
+          persistentSessionId: PERSISTENT_SESSION_ID,
+          userLanguage: ENGLISH,
+          clientSessionId: CLIENT_SESSION_ID,
+          txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+        }
+      );
+      expect(res.redirect).toHaveBeenCalledWith("/check-your-email");
     });
 
     it("rejects request to change email to existing email address as bad request", async () => {
@@ -114,7 +113,7 @@ describe("change email controller", () => {
       await changeEmailPost(fakeService)(req as Request, res as Response);
 
       // Assert
-      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
   });
 });

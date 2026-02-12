@@ -1,6 +1,5 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { setOplSettings } from "../opl";
+import { describe, it, expect } from "vitest";
+import { setOplSettings } from "../opl.js";
 import { Response } from "express";
 
 describe("setOplSettings", () => {
@@ -22,7 +21,7 @@ describe("setOplSettings", () => {
       res
     );
 
-    expect(res.locals.opl).to.deep.eq({
+    expect(res.locals.opl).toEqual({
       contentId: "test_content_id",
       dynamic: false,
       isPageDataSensitive: true,
@@ -40,7 +39,7 @@ describe("setOplSettings", () => {
 
     setOplSettings({}, res);
 
-    expect(res.locals.opl).to.deep.eq({
+    expect(res.locals.opl).toEqual({
       contentId: "undefined",
       dynamic: true,
       isPageDataSensitive: false,

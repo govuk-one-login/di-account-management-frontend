@@ -1,10 +1,7 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
-import { backchannelLogoutPost } from "../backchannel-logout-controller";
+import { backchannelLogoutPost } from "../backchannel-logout-controller.js";
 
 import {
   createLocalJWKSet,
@@ -19,17 +16,17 @@ import {
 } from "jose";
 
 import { GetKeyFunction } from "jose/dist/types/types";
-import { logger } from "../../../utils/logger";
-import * as SessionStore from "../../../utils/session-store";
+import { logger } from "../../../utils/logger.js";
+import * as SessionStore from "../../../utils/session-store.js";
+import * as oidc from "../../../utils/oidc.js";
 
 describe("global logout controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let issuerJWKS: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
   let keySet: GenerateKeyPairResult;
-  let loggerSpy: sinon.SinonSpy;
-  let destroyUserSessionsSpy: sinon.SinonSpy;
+  let loggerSpy: ReturnType<typeof vi.fn>;
+  let destroyUserSessionsSpy: ReturnType<typeof vi.fn>;
 
   const validIssuer = "urn:example:issuer";
   const validAudience = "urn:example:audience";
@@ -46,7 +43,7 @@ describe("global logout controller", () => {
       app: {
         locals: {
           sessionStore: {
-            destroy: sandbox.fake(),
+            destroy: vi.fn(),
           },
         },
       },
@@ -79,10 +76,7 @@ describe("global logout controller", () => {
   }
 
   beforeEach(async () => {
-    sandbox = sinon.createSandbox();
-
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({});
     });
 
@@ -92,31 +86,29 @@ describe("global logout controller", () => {
       keys: [await exportJWK(keySet.publicKey)],
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").returns(issuerJWKS);
+    vi.spyOn(oidc, "getCachedJWKS").mockReturnValue(issuerJWKS);
 
     res = {
-      status: sandbox.stub().returnsThis(),
-      send: sandbox.fake(),
+      status: vi.fn().mockReturnThis(),
+      send: vi.fn(),
     };
 
-    loggerSpy = sandbox.spy(logger, "error");
-    destroyUserSessionsSpy = sandbox.spy(SessionStore, "destroyUserSessions");
+    loggerSpy = vi.spyOn(logger, "error");
+    destroyUserSessionsSpy = vi.spyOn(SessionStore, "destroyUserSessions");
   });
 
   afterEach(async () => {
-    sandbox.restore();
-    loggerSpy.restore();
-    destroyUserSessionsSpy.restore();
+    vi.restoreAllMocks();
   });
 
-  describe("backchannelLogoutPost", async () => {
+  describe("backchannelLogoutPost", () => {
     it("should return 401 if no logout_token present", async () => {
       req = {
         body: {},
       };
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
     });
 
     it("should return 401 if logout_token not a valid JWT", async () => {
@@ -128,8 +120,8 @@ describe("global logout controller", () => {
       };
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token is present but not signed", async () => {
@@ -144,8 +136,8 @@ describe("global logout controller", () => {
 
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token signed by wrong key", async () => {
@@ -163,8 +155,8 @@ describe("global logout controller", () => {
 
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token contains invalid issuer", async () => {
@@ -180,8 +172,8 @@ describe("global logout controller", () => {
 
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token contains invalid audience", async () => {
@@ -196,8 +188,8 @@ describe("global logout controller", () => {
       req = validRequest(logoutJwt);
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token is too old", async () => {
@@ -212,8 +204,8 @@ describe("global logout controller", () => {
       req = validRequest(logoutJwt);
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token does not contain a subject", async () => {
@@ -227,16 +219,16 @@ describe("global logout controller", () => {
       req = validRequest(logoutJwt);
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token is blank", async () => {
       req = validRequest(await generateValidToken(validLogoutToken, " "));
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token does not contain correct event", async () => {
@@ -252,8 +244,8 @@ describe("global logout controller", () => {
 
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token does not any events", async () => {
@@ -266,8 +258,8 @@ describe("global logout controller", () => {
 
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token contains invalid event", async () => {
@@ -283,8 +275,8 @@ describe("global logout controller", () => {
 
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 401 if logout_token contains valid but non-empty event", async () => {
@@ -301,8 +293,8 @@ describe("global logout controller", () => {
       req = validRequest(await generateValidToken(invalidLogoutToken));
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
-      sandbox.assert.calledOnce(loggerSpy);
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.UNAUTHORIZED);
+      expect(loggerSpy).toHaveBeenCalledOnce();
     });
 
     it("should return 200 if logout_token is present and valid", async () => {
@@ -310,8 +302,12 @@ describe("global logout controller", () => {
 
       await backchannelLogoutPost(req as Request, res as Response);
 
-      expect(res.send).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
-      expect(destroyUserSessionsSpy).to.have.been.calledWith(req, "123456");
+      expect(res.send).toHaveBeenCalledWith(HTTP_STATUS_CODES.OK);
+      expect(destroyUserSessionsSpy).toHaveBeenCalledWith(
+        req,
+        "123456",
+        expect.objectContaining({ destroy: expect.any(Function) })
+      );
     });
   });
 });

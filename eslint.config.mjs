@@ -1,7 +1,7 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import tsEslint from "typescript-eslint";
-import mochaPlugin from "eslint-plugin-mocha";
+import vitestPlugin from "eslint-plugin-vitest";
 import eslintConfigPrettier from "eslint-config-prettier";
 import tsEslintParser from "@typescript-eslint/parser";
 
@@ -14,14 +14,17 @@ export default [
       ecmaVersion: 2022,
       sourceType: "module",
       parserOptions: {
-        project: ["./test/tsconfig.json"],
+        project: [
+          "./tsconfig.json",
+          "./tsconfig.test.json",
+          "./integration-tests/tsconfig.json",
+        ],
         ecmaVersion: "latest",
         sourceType: "module",
       },
     },
   },
   pluginJs.configs.recommended,
-  mochaPlugin.configs.recommended,
   ...tsEslint.configs.recommended,
   ...tsEslint.configs.stylistic,
   {
@@ -35,41 +38,54 @@ export default [
       "dev-app.js",
       "integration-tests",
       "eslint.config.mjs",
+      "vitest.setup.ts",
+      "vitest.config.ts",
+      "fix-errors.cjs",
+      "fix-unused-imports.mjs",
+      "fix-all-unused.mjs",
     ],
   },
   {
     rules: {
-      "no-console": 2,
-      "@typescript-eslint/no-explicit-any": "off",
+      "no-console": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
           vars: "all",
           args: "after-used",
           ignoreRestSiblings: true,
-          caughtErrors: "none", // Add this line to ignore unused variables in catch blocks
+          caughtErrors: "none",
         },
       ],
       "@typescript-eslint/no-floating-promises": "error",
-      "mocha/no-exclusive-tests": "error",
-      "mocha/no-mocha-arrows": "off",
-      "mocha/no-setup-in-describe": "off",
-      "mocha/no-async-describe": "off",
-      "mocha/max-top-level-suites": "off",
-      "mocha/no-top-level-hooks": "off",
-      "mocha/no-sibling-hooks": "off",
-      "mocha/consistent-spacing-between-blocks": "off",
+      "@typescript-eslint/await-thenable": "error",
+      "@typescript-eslint/no-misused-promises": "error",
+      "@typescript-eslint/require-await": "warn",
     },
   },
   {
     plugins: {
       tsEslint,
+      vitest: vitestPlugin,
     },
     files: ["**/*.test.ts", "**/*.test.js"],
     rules: {
+      ...vitestPlugin.configs.recommended.rules,
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-unused-expressions": "off",
       "@typescript-eslint/no-empty-function": "off",
+      "vitest/expect-expect": [
+        "error",
+        {
+          assertFunctionNames: [
+            "expect",
+            "checkFailedCSRFValidationBehaviour",
+            "performTest",
+            "request.**.expect",
+          ],
+        },
+      ],
     },
   },
   eslintConfigPrettier,

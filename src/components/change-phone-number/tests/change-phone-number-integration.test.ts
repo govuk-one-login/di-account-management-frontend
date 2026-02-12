@@ -1,10 +1,16 @@
 import request from "supertest";
-import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
+import {
+  describe,
+  beforeAll,
+  afterAll,
+  it,
+  expect,
+  vi,
+  beforeEach,
+} from "vitest";
 import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import * as cheerio from "cheerio";
-import decache from "decache";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
@@ -15,20 +21,18 @@ import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: change phone number", () => {
-  let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
   let app: any;
   let baseApi: string;
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
@@ -52,18 +56,19 @@ describe("Integration:: change phone number", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     await request(app)
@@ -79,13 +84,16 @@ describe("Integration:: change phone number", () => {
     nock.cleanAll();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
-  it("should return change phone number page", (done) => {
-    request(app).get(PATH_DATA.CHANGE_PHONE_NUMBER.url).expect(200, done);
+  it("should return change phone number page", async () => {
+    const res = await request(app)
+      .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
@@ -109,12 +117,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when uk phone number entered is not valid", async () => {
@@ -128,12 +136,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when uk phone number entered contains text", async () => {
@@ -147,12 +155,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number using only numbers or the + symbol"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when uk phone number entered less than 12 characters", async () => {
@@ -166,12 +174,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number, like 07700 900000"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when uk phone number entered greater than 12 characters", async () => {
@@ -185,12 +193,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number, like 07700 900000"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number entered", async () => {
@@ -212,7 +220,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", async () => {
@@ -234,7 +242,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with 447 is entered", async () => {
@@ -256,7 +264,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with 440 is entered", async () => {
@@ -278,7 +286,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +440 is entered", async () => {
@@ -300,7 +308,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should return validation error when international phone number not entered", async () => {
@@ -317,11 +325,11 @@ describe("Integration:: change phone number", () => {
         const $ = cheerio.load(res.text);
         expect(
           $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains("Enter a mobile phone number");
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
+        ).toContain("Enter a mobile phone number");
+        expect($(testComponent("phoneNumber-error")).text()).toContain("");
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when new international phone number entered is same as current phone number", async () => {
@@ -346,13 +354,13 @@ describe("Integration:: change phone number", () => {
         const $ = cheerio.load(res.text);
         expect(
           $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
+        ).toContain(
           "You’re already using that phone number. Enter a different phone number"
         );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).toContain("");
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when new UK phone number is the same as curent phone number", async () => {
@@ -374,12 +382,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "You’re already using that phone number. Enter a different phone number"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when international phone number entered is not valid", async () => {
@@ -396,13 +404,13 @@ describe("Integration:: change phone number", () => {
         const $ = cheerio.load(res.text);
         expect(
           $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
+        ).toContain(
           "Enter a mobile phone number in the correct format, including the country code"
         );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).toContain("");
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when international phone number entered contains text", async () => {
@@ -419,13 +427,13 @@ describe("Integration:: change phone number", () => {
         const $ = cheerio.load(res.text);
         expect(
           $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
+        ).toContain(
           "Enter a mobile phone number using only numbers or the + symbol"
         );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).toContain("");
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when international phone number entered less than 8 characters", async () => {
@@ -442,13 +450,13 @@ describe("Integration:: change phone number", () => {
         const $ = cheerio.load(res.text);
         expect(
           $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
+        ).toContain(
           "Enter a mobile phone number in the correct format, including the country code"
         );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).toContain("");
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when international phone number entered greater than 16 characters", async () => {
@@ -465,13 +473,13 @@ describe("Integration:: change phone number", () => {
         const $ = cheerio.load(res.text);
         expect(
           $(testComponent("internationalPhoneNumber-error")).text()
-        ).to.contains(
+        ).toContain(
           "Enter a mobile phone number in the correct format, including the country code"
         );
-        expect($(testComponent("phoneNumber-error")).text()).to.contains("");
+        expect($(testComponent("phoneNumber-error")).text()).toContain("");
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should redirect to /check-your-phone page when valid international phone number entered", async () => {
@@ -494,7 +502,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should return internal server error if send-otp-notification API call fails", async () => {
@@ -517,6 +525,6 @@ describe("Integration:: change phone number", () => {
         phoneNumber: "07738394991",
       })
       .expect(500);
-    expect(res.statusCode).to.eq(500);
+    expect(res.statusCode).toBe(500);
   });
 });

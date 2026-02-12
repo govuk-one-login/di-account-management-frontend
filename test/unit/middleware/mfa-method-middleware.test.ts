@@ -1,54 +1,54 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextFunction, Request, Response } from "express";
-import { sinon } from "../../utils/test-utils";
-import { mfaMethodMiddleware } from "../../../src/middleware/mfa-method-middleware";
-import * as mfaClient from "../../../src/utils/mfaClient";
-import { MfaMethod } from "../../../src/utils/mfaClient/types";
-import Sinon from "sinon";
+import { mfaMethodMiddleware } from "../../../src/middleware/mfa-method-middleware.js";
+import * as mfaClient from "../../../src/utils/mfaClient/index.js";
+import { MfaMethod } from "../../../src/utils/mfaClient/types.js";
 
 describe("mfaMethodMiddleware", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
-  let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
-  const sandbox = sinon.createSandbox();
+  let mfaClientStub: any;
 
   const mfaMethod: MfaMethod = {
     mfaIdentifier: "1",
     priorityIdentifier: "DEFAULT",
     methodVerified: true,
     method: {
-      mfaMethodType: "AUTH_APP",
-      credential: "1234567890",
+      mfaMethodType: "SMS",
+      phoneNumber: "0123456789",
     },
   };
 
   beforeEach(() => {
-    next = sinon.fake(() => {});
-    mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
-    sinon.stub(mfaClient, "createMfaClient").resolves(mfaClientStub);
+    next = vi.fn(() => {});
+    mfaClientStub = {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+      retrieve: vi.fn(),
+    } as any;
+    vi.spyOn(mfaClient, "createMfaClient").mockResolvedValue(mfaClientStub);
 
     req = {
       session: {} as any,
       log: {
-        error: sinon.fake(),
+        error: vi.fn(),
       } as any,
     };
     res = {
-      render: sinon.fake(),
-      redirect: sinon.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: { trace: "trace" },
     };
   });
 
   afterEach(() => {
-    sinon.restore();
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("should set mfaMethods in session on successful retrieval", async () => {
-    mfaClientStub.retrieve.resolves({
+    mfaClientStub.retrieve.mockResolvedValue({
       success: true,
       status: 200,
       data: [mfaMethod],
@@ -56,11 +56,11 @@ describe("mfaMethodMiddleware", () => {
 
     await mfaMethodMiddleware(req as Request, res as Response, next);
 
-    expect(req.session.mfaMethods).to.deep.eq([mfaMethod]);
+    expect(req.session.mfaMethods).toEqual([mfaMethod]);
   });
 
   it("should call next middleware with an error when request to retrieve MFA fails", async () => {
-    mfaClientStub.retrieve.resolves({
+    mfaClientStub.retrieve.mockResolvedValue({
       success: false,
       status: 403,
       error: { message: "Forbidden", code: 1 },
@@ -68,19 +68,15 @@ describe("mfaMethodMiddleware", () => {
     });
 
     await mfaMethodMiddleware(req as Request, res as Response, next);
-    expect(req.log.error).to.have.been.calledOnce;
-    expect((next as Sinon.SinonSpy).getCalls()[0].args[0]).to.be.instanceOf(
-      Error
-    );
+    expect(req.log.error).toHaveBeenCalledOnce();
+    expect((next as any).mock.calls[0][0]).toBeInstanceOf(Error);
   });
 
   it("should call next middleware with an error when mfa retrieval throws an error", async () => {
-    mfaClientStub.retrieve.rejects();
+    mfaClientStub.retrieve.mockRejectedValue(new Error("Test error"));
 
     await mfaMethodMiddleware(req as Request, res as Response, next);
-    expect(req.log.error).to.have.been.calledOnce;
-    expect((next as Sinon.SinonSpy).getCalls()[0].args[0]).to.be.instanceOf(
-      Error
-    );
+    expect(req.log.error).toHaveBeenCalledOnce();
+    expect((next as any).mock.calls[0][0]).toBeInstanceOf(Error);
   });
 });

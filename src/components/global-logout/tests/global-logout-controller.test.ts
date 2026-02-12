@@ -1,76 +1,79 @@
-import { expect } from "chai";
-import sinon from "sinon";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import {
   globalLogoutGet,
   globalLogoutPost,
   globalLogoutConfirmGet,
-} from "../global-logout-controller";
-import * as eventServiceModule from "../../../services/event-service";
-import * as logoutUtils from "../../../utils/logout";
-import * as stateMachine from "../../../utils/state-machine";
+} from "../global-logout-controller.js";
+import * as eventServiceModule from "../../../services/event-service.js";
+import * as logoutUtils from "../../../utils/logout.js";
+import * as stateMachine from "../../../utils/state-machine.js";
 import * as sqsModule from "../../../utils/sqs";
 import { EventName, LogoutState, PATH_DATA } from "../../../app.constants";
-import { UserJourney } from "../../../utils/state-machine";
+import { UserJourney } from "../../../utils/state-machine.js";
 import { CURRENT_EMAIL, RequestBuilder } from "../../../../test/utils/builders";
 
 describe("Global Logout Controller", () => {
   describe("globalLogoutGet", () => {
     it("should render the correct view", () => {
       const req = {} as Request;
-      const res = { render: sinon.spy(), locals: {} };
+      const res = { render: vi.fn(), locals: {} };
       globalLogoutGet(req, res as unknown as Response);
 
-      expect(res.render.calledOnce).to.be.true;
-      expect(res.render.firstCall.args[0]).to.equal("global-logout/index.njk");
-      expect(res.render.firstCall.args[1]).to.deep.equal({});
+      expect(res.render).toHaveBeenCalledOnce();
+      expect(res.render.mock.calls[0][0]).toBe("global-logout/index.njk");
+      expect(res.render.mock.calls[0][1]).toEqual({});
     });
   });
 
   describe("globalLogoutPost", () => {
     it("should redirect the user to enter their password", () => {
       const req = {} as Request;
-      const res = { redirect: sinon.spy(), locals: {} };
+      const res = { redirect: vi.fn(), locals: {} };
       globalLogoutPost(req, res as unknown as Response);
 
-      expect(res.redirect.calledOnce).to.be.true;
-      expect(res.redirect.firstCall.args[0]).to.equal(
+      expect(res.redirect).toHaveBeenCalledOnce();
+      expect(res.redirect.mock.calls[0][0]).toBe(
         `${PATH_DATA.ENTER_PASSWORD.url}?type=${UserJourney.GlobalLogout}`
       );
     });
   });
 
   describe("globalLogoutConfirmGet", () => {
-    let buildAuditEventStub: sinon.SinonStub;
-    let sendStub: sinon.SinonStub;
-    let handleLogoutStub: sinon.SinonStub;
-    let getNextStateStub: sinon.SinonStub;
-    let sendMessageStub: sinon.SinonStub;
+    let buildAuditEventStub: ReturnType<typeof vi.fn>;
+    let sendStub: ReturnType<typeof vi.fn>;
+    let handleLogoutStub: ReturnType<typeof vi.fn>;
+    let getNextStateStub: ReturnType<typeof vi.fn>;
+    let sendMessageStub: ReturnType<typeof vi.fn>;
 
     beforeEach(() => {
-      buildAuditEventStub = sinon.stub().returns("dummyAuditEvent");
-      sendStub = sinon.stub();
-      sinon.stub(eventServiceModule, "eventService").returns({
+      buildAuditEventStub = vi.fn().mockReturnValue("dummyAuditEvent");
+      sendStub = vi.fn();
+      vi.spyOn(eventServiceModule, "eventService").mockReturnValue({
         buildAuditEvent: buildAuditEventStub,
         send: sendStub,
       });
-      sendMessageStub = sinon.stub().resolves();
-      sinon.stub(sqsModule, "sqsService").returns({
+      sendMessageStub = vi.fn().mockResolvedValue();
+      vi.spyOn(sqsModule, "sqsService").mockReturnValue({
         sendMessage: sendMessageStub,
-        sendAuditEvent: sinon.stub(),
+        sendAuditEvent: vi.fn(),
       });
-      handleLogoutStub = sinon.stub(logoutUtils, "handleLogout").resolves();
-      getNextStateStub = sinon.stub(stateMachine, "getNextState").returns({
-        value: "CONFIRMATION",
-        events: [
-          stateMachine.EventType.Authenticated,
-          stateMachine.EventType.ValueUpdated,
-        ],
-      });
+      handleLogoutStub = vi
+        .spyOn(logoutUtils, "handleLogout")
+        .mockResolvedValue();
+      getNextStateStub = vi
+        .spyOn(stateMachine, "getNextState")
+        .mockReturnValue({
+          value: "CONFIRMATION",
+          events: [
+            stateMachine.EventType.Authenticated,
+            stateMachine.EventType.ValueUpdated,
+          ],
+        });
     });
 
     afterEach(() => {
-      sinon.restore();
+      vi.restoreAllMocks();
     });
 
     it("should send an audit event and notification event when the user logs out", async () => {
@@ -91,23 +94,21 @@ describe("Global Logout Controller", () => {
       const res = {
         locals: { trace: "dummyTrace" },
       } as unknown as Response;
-      sinon.useFakeTimers(1758582000000);
+      vi.setSystemTime(new Date(1758582000000));
       process.env.NOTIFICATION_QUEUE_URL = "https://notification-queue-url.com";
 
       await globalLogoutConfirmGet(req, res);
 
-      sinon.assert.calledOnce(buildAuditEventStub);
-      sinon.assert.calledWithExactly(
-        buildAuditEventStub,
+      expect(buildAuditEventStub).toHaveBeenCalledTimes(1);
+      expect(buildAuditEventStub).toHaveBeenCalledWith(
         req,
         res,
         EventName.HOME_GLOBAL_LOGOUT_REQUESTED
       );
-      sinon.assert.calledOnce(sendStub);
-      sinon.assert.calledWithExactly(sendStub, "dummyAuditEvent", "dummyTrace");
-      sinon.assert.calledOnce(sendMessageStub);
-      sinon.assert.calledWith(
-        sendMessageStub,
+      expect(sendStub).toHaveBeenCalledTimes(1);
+      expect(sendStub).toHaveBeenCalledWith("dummyAuditEvent", "dummyTrace");
+      expect(sendMessageStub).toHaveBeenCalledTimes(1);
+      expect(sendMessageStub).toHaveBeenCalledWith(
         "https://notification-queue-url.com",
         JSON.stringify({
           notificationType: "GLOBAL_LOGOUT",
@@ -119,13 +120,13 @@ describe("Global Logout Controller", () => {
         }),
         "dummyTrace"
       );
-      sinon.assert.calledOnce(handleLogoutStub);
-      sinon.assert.calledWithExactly(
-        handleLogoutStub,
+      expect(handleLogoutStub).toHaveBeenCalledTimes(1);
+      expect(handleLogoutStub).toHaveBeenCalledWith(
         req,
         res,
         LogoutState.Start
       );
+      vi.useRealTimers();
     });
 
     it("should update the user's state", async () => {
@@ -149,9 +150,8 @@ describe("Global Logout Controller", () => {
 
       await globalLogoutConfirmGet(req, res);
 
-      sinon.assert.calledOnce(getNextStateStub);
-      sinon.assert.calledWithExactly(
-        getNextStateStub,
+      expect(getNextStateStub).toHaveBeenCalledTimes(1);
+      expect(getNextStateStub).toHaveBeenCalledWith(
         "CHANGE_VALUE",
         stateMachine.EventType.ValueUpdated
       );

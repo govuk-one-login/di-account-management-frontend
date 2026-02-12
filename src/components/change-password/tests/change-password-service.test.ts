@@ -1,10 +1,8 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
-import { changePasswordService } from "../change-password-service";
-import { expect } from "chai";
+import { changePasswordService } from "../change-password-service.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
-import { describe } from "mocha";
+import { getApiBaseUrl } from "../../../config.js";
 import {
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
@@ -19,14 +17,10 @@ import {
 const baseUrl = getApiBaseUrl();
 
 describe("changePasswordService", () => {
-  let sandbox: sinon.SinonSandbox;
-
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
     nock.cleanAll();
   });
 
@@ -62,6 +56,6 @@ describe("changePasswordService", () => {
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
       }
     );
-    expect(updatePasswordResult.success).to.be.true;
+    expect(updatePasswordResult.success).toBe(true);
   });
 });

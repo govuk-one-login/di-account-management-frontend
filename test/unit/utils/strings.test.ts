@@ -1,5 +1,4 @@
-import { expect } from "chai";
-import { beforeEach, describe } from "mocha";
+import { beforeEach, describe, it, expect, vi, afterEach } from "vitest";
 import {
   containsNumber,
   containsNumbersOnly,
@@ -7,53 +6,53 @@ import {
   isSafeString,
   isValidUrl,
   zeroPad,
-} from "../../../src/utils/strings";
-import { sinon } from "../../utils/test-utils";
-import { logger } from "../../../src/utils/logger";
+} from "../../../src/utils/strings.js";
+// import { sinon } from "../../utils/test-utils.js";
+import { logger } from "../../../src/utils/logger.js";
 
 describe("string-helpers", () => {
   describe("containsNumber", () => {
     it("should return false when string contains no numeric characters", () => {
-      expect(containsNumber("test")).to.equal(false);
+      expect(containsNumber("test")).toBe(false);
     });
 
     it("should return false when string is empty in containsNumber", () => {
-      expect(containsNumber("")).to.equal(false);
+      expect(containsNumber("")).toBe(false);
     });
 
     it("should return false when string is null in containerNumber", () => {
-      expect(containsNumber(null)).to.equal(false);
+      expect(containsNumber(null)).toBe(false);
     });
 
     it("should return true when string contains numeric characters", () => {
-      expect(containsNumber("test123")).to.equal(true);
+      expect(containsNumber("test123")).toBe(true);
     });
   });
 
   describe("hasNumbersOnly", () => {
     it("should return false when string contains text characters", () => {
-      expect(containsNumbersOnly("test")).to.equal(false);
+      expect(containsNumbersOnly("test")).toBe(false);
     });
 
     it("should return false when string is empty", () => {
-      expect(containsNumbersOnly("")).to.equal(false);
+      expect(containsNumbersOnly("")).toBe(false);
     });
 
     it("should return false when string is null", () => {
-      expect(containsNumbersOnly(null)).to.equal(false);
+      expect(containsNumbersOnly(null)).toBe(false);
     });
 
     it("should return false when string contains alphanumeric characters", () => {
-      expect(containsNumbersOnly("test123456")).to.equal(false);
+      expect(containsNumbersOnly("test123456")).toBe(false);
     });
 
     it("should return true when string contains numeric characters only", () => {
-      expect(containsNumbersOnly("123456")).to.equal(true);
+      expect(containsNumbersOnly("123456")).toBe(true);
     });
   });
 
   describe("isValidUrl", () => {
-    let loggerWarnSpy: sinon.SinonSpy;
+    let loggerWarnSpy: ReturnType<typeof vi.fn>;
     // Optional: Utility function to generate test URLs
     function generateTestUrls(baseUrl: string, iterations = 5): string[] {
       const urls: string[] = [baseUrl];
@@ -66,90 +65,91 @@ describe("string-helpers", () => {
     }
 
     beforeEach(() => {
-      loggerWarnSpy = sinon.spy(logger, "warn");
+      loggerWarnSpy = vi.spyOn(logger, "warn");
     });
 
     afterEach(() => {
-      loggerWarnSpy.restore();
+      loggerWarnSpy.mockRestore();
     });
 
     it("should return true if valid", () => {
-      expect(isValidUrl("www.home.account.gov.uk")).to.be.false;
-      expect(isValidUrl("home.account.gov.uk")).to.be.false;
-      expect(isValidUrl("https://home.account.gov.uk")).to.be.true;
-      expect(isValidUrl("https://home.account.gov.uk/security")).to.be.true;
-      expect(isValidUrl("https://home.account.gov.uk/security?foo=bar&bar=foo"))
-        .to.be.true;
-      expect(loggerWarnSpy).to.be.callCount(2);
+      expect(isValidUrl("www.home.account.gov.uk")).toBe(false);
+      expect(isValidUrl("home.account.gov.uk")).toBe(false);
+      expect(isValidUrl("https://home.account.gov.uk")).toBe(true);
+      expect(isValidUrl("https://home.account.gov.uk/security")).toBe(true);
+      expect(
+        isValidUrl("https://home.account.gov.uk/security?foo=bar&bar=foo")
+      ).toBe(true);
+      expect(loggerWarnSpy).toHaveBeenCalledTimes(2);
     });
 
     it("should return false if url is invalid", () => {
-      expect(isValidUrl("")).to.be.false;
-      expect(isValidUrl("1")).to.be.false;
-      expect(isValidUrl("qwerty")).to.be.false;
-      expect(isValidUrl("qwerty.gov.&^")).to.be.false;
-      expect(isValidUrl("https:///home.account.gov.uk")).to.be.true;
-      expect(loggerWarnSpy).to.be.callCount(3);
+      expect(isValidUrl("")).toBe(false);
+      expect(isValidUrl("1")).toBe(false);
+      expect(isValidUrl("qwerty")).toBe(false);
+      expect(isValidUrl("qwerty.gov.&^")).toBe(false);
+      expect(isValidUrl("https:///home.account.gov.uk")).toBe(true);
+      expect(loggerWarnSpy).toHaveBeenCalledTimes(3);
     });
 
     it("should return true if string is safe is invalid", () => {
-      expect(isValidUrl("")).to.be.false;
-      expect(isValidUrl("1")).to.be.false;
-      expect(isValidUrl("qwerty")).to.be.false;
-      expect(isValidUrl("qwerty.gov.&^")).to.be.false;
-      expect(isValidUrl("https:///home.account.gov.uk")).to.be.true;
-      expect(isValidUrl("http://localhost:6001")).to.be.false;
-      expect(loggerWarnSpy).to.be.callCount(3);
+      expect(isValidUrl("")).toBe(false);
+      expect(isValidUrl("1")).toBe(false);
+      expect(isValidUrl("qwerty")).toBe(false);
+      expect(isValidUrl("qwerty.gov.&^")).toBe(false);
+      expect(isValidUrl("https:///home.account.gov.uk")).toBe(true);
+      expect(isValidUrl("http://localhost:6001")).toBe(false);
+      expect(loggerWarnSpy).toHaveBeenCalledTimes(3);
     });
 
     const testUrls = generateTestUrls("https://www.example.com?start=1", 3);
     testUrls.forEach((url, index) => {
       it(`should handle generated URL level ${index}`, () => {
         const result = isValidUrl(url);
-        expect(result).to.equal(true);
+        expect(result).toBe(true);
       });
     });
   });
 
   describe("isSafeString", () => {
     it("letters numbers hyphens and underscores should be accepted", () => {
-      expect(isSafeString("hEllo-12_3")).to.be.true;
+      expect(isSafeString("hEllo-12_3")).toBe(true);
     });
 
     it("should return false if contains special characters", () => {
-      expect(isSafeString("hEllo***")).to.be.false;
+      expect(isSafeString("hEllo***")).toBe(false);
     });
 
     it("should return false if over 50 characters", () => {
       expect(
         isSafeString("qqqqqqqqqqaaaaaaaaaahhhhhhhhhhhddddddddddooooooooooojjj")
-      ).to.be.false;
+      ).toBe(false);
     });
   });
 
   describe("zeroPad", () => {
     it("should return a string of the correct length", () => {
       const expectedLength = 6;
-      expect(zeroPad("abc", expectedLength).length).to.equal(expectedLength);
+      expect(zeroPad("abc", expectedLength).length).toBe(expectedLength);
     });
 
     it("should pad a short string with zeros", () => {
-      expect(zeroPad("123", 6)).to.equal("000123");
+      expect(zeroPad("123", 6)).toBe("000123");
     });
   });
 
   describe("generateNonce", () => {
     it("should generate a 32-character hexadecimal nonce", async () => {
       const nonce = await generateNonce();
-      expect(nonce).to.be.a("string");
-      expect(nonce).to.have.lengthOf(32);
-      expect(nonce).to.match(/^[0-9a-f]+$/);
+      expect(nonce).toBeTypeOf("string");
+      expect(nonce).toHaveLength(32);
+      expect(nonce).toMatch(/^[0-9a-f]+$/);
     });
 
     it("should generate unique nonces", async () => {
       const nonce1 = await generateNonce();
       const nonce2 = await generateNonce();
-      expect(nonce1).to.not.equal(nonce2);
+      expect(nonce1).not.toBe(nonce2);
     });
   });
 });

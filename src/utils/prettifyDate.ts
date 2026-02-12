@@ -1,4 +1,4 @@
-import { LANGUAGE_CODES } from "../app.constants";
+import { LANGUAGE_CODES } from "../app.constants.js";
 
 export const prettifyDate = ({
   dateEpoch,

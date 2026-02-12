@@ -1,36 +1,31 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { healthcheckGet } from "../healthcheck-controller";
+import { healthcheckGet } from "../healthcheck-controller.js";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
 
 describe("healthcheck controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = {
       body: {},
     };
     res = {
-      status: sandbox.stub().returnsThis(),
-      send: sandbox.fake(),
+      status: vi.fn().mockReturnThis(),
+      send: vi.fn(),
     };
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("healthcheckGet", () => {
     it("should return 200", () => {
       healthcheckGet(req as Request, res as Response);
 
-      expect(res.status).to.have.been.calledWith(HTTP_STATUS_CODES.OK);
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.OK);
     });
   });
 });

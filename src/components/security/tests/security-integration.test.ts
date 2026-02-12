@@ -1,14 +1,11 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
-import { describe } from "mocha";
-import { sinon, expect } from "../../../../test/utils/test-utils";
 import { testComponent } from "../../../../test/utils/helpers";
 import * as cheerio from "cheerio";
 import * as nock from "nock";
-import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
-import { getLastNDigits } from "../../../utils/phone-number";
-import { MfaMethod } from "../../../utils/mfaClient/types";
-import { MfaClient } from "../../../utils/mfaClient";
+import { getLastNDigits } from "../../../utils/phone-number.js";
+
 import { UnsecuredJWT } from "jose";
 
 const { url } = PATH_DATA.SECURITY;
@@ -40,7 +37,8 @@ describe("Integration:: security", () => {
 
   it("should return security page", async () => {
     const app = await appWithMiddlewareSetup();
-    await request(app).get(url).expect(200);
+    const response = await request(app).get(url);
+    expect(response.status).toBe(200);
   });
 
   it("should display a redacted phone number when one is available", async () => {
@@ -50,8 +48,8 @@ describe("Integration:: security", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("mfa-summary-list")).text()).to.contains(
+        expect(res.status).toBe(200);
+        expect($(testComponent("mfa-summary-list")).text()).toContain(
           phoneNumberLastFourDigits
         );
       });
@@ -72,8 +70,8 @@ describe("Integration:: security", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("change-phone-number")).length).to.equal(0);
+        expect(res.status).toBe(200);
+        expect($(testComponent("change-phone-number")).length).toBe(0);
       });
   });
 
@@ -83,8 +81,8 @@ describe("Integration:: security", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("activity-log-section")).length).to.equal(1);
+        expect(res.status).toBe(200);
+        expect($(testComponent("activity-log-section")).length).toBe(1);
       });
   });
 
@@ -94,8 +92,8 @@ describe("Integration:: security", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("global-logout-section")).length).to.equal(1);
+        expect(res.status).toBe(200);
+        expect($(testComponent("global-logout-section")).length).toBe(1);
       });
   });
 
@@ -105,72 +103,60 @@ describe("Integration:: security", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("global-logout-section")).length).to.equal(0);
+        expect(res.status).toBe(200);
+        expect($(testComponent("global-logout-section")).length).toBe(0);
       });
   });
 });
 
 const appWithMiddlewareSetup = async (config: any = {}) => {
-  decache("../../../app");
-  decache("../../../middleware/requires-auth-middleware");
-  const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-  const sandbox = sinon.createSandbox();
-  const oidc = require("../../../utils/oidc");
-  const configFuncs = require("../../../config");
-  const mfa = require("../../../utils/mfaClient");
-  const methods: Record<string, MfaMethod> = {
-    SMS: {
-      mfaIdentifier: "1",
-      priorityIdentifier: "DEFAULT",
-      method: {
-        mfaMethodType: "SMS",
-        phoneNumber: TEST_USER_PHONE_NUMBER,
-      },
-      methodVerified: true,
-    },
-    AUTH_APP: {
-      mfaIdentifier: "123456",
-      priorityIdentifier: "DEFAULT",
-      method: {
-        mfaMethodType: "AUTH_APP",
-        credential: "abc123",
-      },
-      methodVerified: true,
-    },
-  };
+  const sessionMiddleware = await import(
+    "../../../middleware/requires-auth-middleware.js"
+  );
+  const oidc = await import("../../../utils/oidc.js");
+  const configFuncs = await import("../../../config.js");
+  const mfa = await import("../../../utils/mfaClient/index.js");
 
-  sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
-    req: any,
-    res: any,
-    next: any
-  ): void {
-    req.session.user = config.customUserSession ?? DEFAULT_USER_SESSION;
-    next();
-  });
+  vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+    function (req: any, res: any, next: any): void {
+      req.session.user = config.customUserSession ?? DEFAULT_USER_SESSION;
+      next();
+    }
+  );
 
-  sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+  vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
     return Promise.resolve({});
   });
 
-  sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+  vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
     return Promise.resolve({});
   });
 
-  sandbox.stub(configFuncs, "supportGlobalLogout").callsFake(() => {
+  vi.spyOn(configFuncs, "supportGlobalLogout").mockImplementation(() => {
     return config.supportGlobalLogout;
   });
 
-  const stubMfaClient: sinon.SinonStubbedInstance<MfaClient> =
-    sandbox.createStubInstance(mfa.MfaClient);
+  const mfaMethods =
+    config.mfaMethodType === "SMS"
+      ? [
+          {
+            mfaIdentifier: "1",
+            priorityIdentifier: "DEFAULT",
+            method: {
+              mfaMethodType: "SMS",
+              phoneNumber: TEST_USER_PHONE_NUMBER,
+            },
+            methodVerified: true,
+          },
+        ]
+      : [];
 
-  stubMfaClient.retrieve.resolves({
-    success: true,
-    status: 200,
-    data: [methods[config.mfaMethodType ?? "AUTH_APP"]],
-  });
+  const stubMfaClient = {
+    retrieve: vi.fn().mockResolvedValue({ success: true, data: mfaMethods }),
+  };
 
-  sandbox.stub(mfa, "createMfaClient").resolves(stubMfaClient);
+  vi.spyOn(mfa, "createMfaClient").mockResolvedValue(stubMfaClient);
 
-  return await require("../../../app").createApp();
+  const app = await import("../../../app.js");
+  return await app.createApp();
 };

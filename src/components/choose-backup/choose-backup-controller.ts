@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { MFA_METHODS } from "../../app.constants";
-import { getNextState } from "../../utils/state-machine";
+import { MFA_METHODS } from "../../app.constants.js";
+import { getNextState } from "../../utils/state-machine.js";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
+} from "../../utils/mfaClient/types.js";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 type MfaMethods = keyof typeof MFA_METHODS;

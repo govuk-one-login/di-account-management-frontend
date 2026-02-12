@@ -1,32 +1,32 @@
 import { Request, Response } from "express";
-import { ERROR_CODES, PATH_DATA } from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
-import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
-import { BadRequestError } from "../../utils/errors";
-import { getLastNDigits } from "../../utils/phone-number";
-import { EventType, getNextState } from "../../utils/state-machine";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types.js";
+import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service.js";
+import { BadRequestError } from "../../utils/errors.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { getRequestConfigFromExpress } from "../../utils/http";
+} from "../../utils/validation.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
+} from "../../utils/mfaClient/types.js";
 import {
   ALL_INTENTS,
   Intent,
   INTENT_ADD_BACKUP,
   INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
-} from "../check-your-email/types";
+} from "../check-your-email/types.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "resend-phone-code/index.njk";

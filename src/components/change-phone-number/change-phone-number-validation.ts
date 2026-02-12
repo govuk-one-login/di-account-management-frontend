@@ -1,11 +1,11 @@
 import { body } from "express-validator";
-import { ValidationChainFunc } from "../../types";
+import { ValidationChainFunc } from "../../types.js";
 import {
   containsInternationalMobileNumber,
   containsLeadingPlusNumbersOrSpacesOnly,
   containsUKMobileNumber,
   lengthInRangeWithoutSpaces,
-} from "../../utils/phone-number";
+} from "../../utils/phone-number.js";
 
 export function validatePhoneNumberRequest(): ValidationChainFunc {
   return [

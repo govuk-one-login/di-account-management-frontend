@@ -1,31 +1,28 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextFunction, Request, Response } from "express";
-import { expect, sinon } from "../../utils/test-utils";
-import { describe } from "mocha";
-import { csrfErrorHandler } from "../../../src/handlers/csrf-error-handler";
-import { PATH_DATA } from "../../../src/app.constants";
+import { csrfErrorHandler } from "../../../src/handlers/csrf-error-handler.js";
+import { PATH_DATA } from "../../../src/app.constants.js";
 
 describe("csrf-error-handler", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = {
       log: {
-        info: sandbox.fake(),
+        info: vi.fn(),
       },
     } as Partial<Request>;
     res = {
-      redirect: sandbox.fake(() => {}),
+      redirect: vi.fn(() => {}),
       headersSent: false,
     };
-    next = sandbox.fake(() => {});
+    next = vi.fn(() => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("csrfErrorHandler", () => {
@@ -35,8 +32,8 @@ describe("csrf-error-handler", () => {
 
       csrfErrorHandler(error, req as Request, res as Response, next);
 
-      expect(next).to.have.been.calledOnce;
-      expect(res.redirect).to.not.have.been.called;
+      expect(next).toHaveBeenCalledOnce();
+      expect(res.redirect).not.toHaveBeenCalled();
     });
 
     it("should redirect to your services page when CSRF token is invalid", () => {
@@ -44,13 +41,13 @@ describe("csrf-error-handler", () => {
 
       csrfErrorHandler(error, req as Request, res as Response, next);
 
-      expect((req as any).log.info).to.have.been.calledOnceWith({
+      expect((req as any).log.info).toHaveBeenCalledOnce();
+      expect((req as any).log.info).toHaveBeenCalledWith({
         msg: "Failed CSRF validation, redirecting to your services page.  Original error: invalid csrf token",
       });
-      expect(res.redirect).to.have.been.calledOnceWith(
-        PATH_DATA.YOUR_SERVICES.url
-      );
-      expect(next).to.not.have.been.called;
+      expect(res.redirect).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.YOUR_SERVICES.url);
+      expect(next).not.toHaveBeenCalled();
     });
 
     it("should call next with error when error code is not EBADCSRFTOKEN", () => {
@@ -58,9 +55,10 @@ describe("csrf-error-handler", () => {
 
       csrfErrorHandler(error, req as Request, res as Response, next);
 
-      expect(next).to.have.been.calledOnceWith(error);
-      expect(res.redirect).to.not.have.been.called;
-      expect((req as any).log.info).to.not.have.been.called;
+      expect(next).toHaveBeenCalledOnce();
+      expect(next).toHaveBeenCalledWith(error);
+      expect(res.redirect).not.toHaveBeenCalled();
+      expect((req as any).log.info).not.toHaveBeenCalled();
     });
   });
 });

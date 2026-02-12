@@ -1,12 +1,12 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 import {
   switchBackupMfaMethodGet,
   switchBackupMfaMethodPost,
-} from "./switch-backup-method-controller";
-import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+} from "./switch-backup-method-controller.js";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
 
 const router = express.Router();
 

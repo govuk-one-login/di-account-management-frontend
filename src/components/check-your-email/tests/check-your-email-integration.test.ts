@@ -1,19 +1,24 @@
 import request from "supertest";
-import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
+import {
+  describe,
+  beforeAll,
+  afterAll,
+  it,
+  expect,
+  vi,
+  beforeEach,
+} from "vitest";
 import nock = require("nock");
 import * as cheerio from "cheerio";
-import decache from "decache";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
   PATH_DATA,
-} from "../../../app.constants";
+} from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
 
 describe("Integration:: check your email", () => {
-  let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
   let app: any;
@@ -21,14 +26,13 @@ describe("Integration:: check your email", () => {
   let govUkPublishingBaseApi: string;
   const TEST_SUBJECT_ID = "jkduasd";
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      async function (req: any, res: any, next: any): Promise<void> {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
@@ -53,18 +57,19 @@ describe("Integration:: check your email", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return Promise.resolve({});
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
+      return Promise.resolve({} as any);
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return Promise.resolve({});
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
+      return Promise.resolve({} as any);
     });
 
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
     baseApi = process.env.AM_API_BASE_URL;
     govUkPublishingBaseApi = process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
 
@@ -81,13 +86,16 @@ describe("Integration:: check your email", () => {
     nock.cleanAll();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
-  it("should return check your email page", (done) => {
-    request(app).get(PATH_DATA.CHECK_YOUR_EMAIL.url).expect(200, done);
+  it("should return check your email page", async () => {
+    const res = await request(app)
+      .get(PATH_DATA.CHECK_YOUR_EMAIL.url)
+      .expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
@@ -111,7 +119,7 @@ describe("Integration:: check your email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains("Enter the code");
+        expect($("#code-error").text()).toContain("Enter the code");
       })
       .expect(400);
   });
@@ -127,7 +135,7 @@ describe("Integration:: check your email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains(
+        expect($("#code-error").text()).toContain(
           "Enter the code using only 6 digits"
         );
       })
@@ -145,7 +153,7 @@ describe("Integration:: check your email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains(
+        expect($("#code-error").text()).toContain(
           "Enter the code using only 6 digits"
         );
       })
@@ -163,7 +171,7 @@ describe("Integration:: check your email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains(
+        expect($("#code-error").text()).toContain(
           "Enter the code using only 6 digits"
         );
       })
@@ -184,7 +192,7 @@ describe("Integration:: check your email", () => {
       .reply(200);
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")
       .set("Cookie", cookies)
@@ -194,6 +202,7 @@ describe("Integration:: check your email", () => {
       })
       .expect("Location", PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url)
       .expect(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should return validation error when incorrect code entered", async () => {
@@ -215,7 +224,7 @@ describe("Integration:: check your email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($("#code-error").text()).to.contains(
+        expect($("#code-error").text()).toContain(
           "The code you entered is not correct, or may have expired, try entering it again or request a new code."
         );
       })

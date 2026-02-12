@@ -1,22 +1,15 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import * as mfaModule from "../../../../utils/mfa";
+import * as mfaModule from "../../../../utils/mfa/index.js";
 import QRCode from "qrcode";
-import { renderMfaMethodPage } from "../index";
-import { formatValidationError } from "../../../../utils/validation";
+import { renderMfaMethodPage } from "../index.js";
+import { formatValidationError } from "../../../../utils/validation.js";
 
 describe("render mfa page", () => {
-  let sandbox: sinon.SinonSandbox;
-
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("should render mfa page", async () => {
@@ -33,7 +26,7 @@ describe("render mfa page", () => {
           state: { changeAuthApp: ["VALUE_UPDATED"] },
         },
       },
-      log: { error: sinon.fake() },
+      log: { error: vi.fn() },
       ip: "127.0.0.1",
       t: (t: string) => t,
     };
@@ -41,13 +34,17 @@ describe("render mfa page", () => {
       locals: {
         persistentSessionId: "persistentSessionId",
       },
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
     };
-    const next = sinon.spy();
+    const next = vi.fn();
 
-    sandbox.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
-    sandbox.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+    vi.spyOn(mfaModule, "generateMfaSecret").mockImplementation(() =>
+      "A".repeat(20)
+    );
+    vi.spyOn(mfaModule, "generateQRCodeValue").mockImplementation(
+      () => "qrcode"
+    );
     const templateFilePath = "abc.njk";
     await renderMfaMethodPage(
       templateFilePath,
@@ -57,7 +54,7 @@ describe("render mfa page", () => {
       {}
     );
 
-    expect(res.render).to.have.been.calledWith(templateFilePath, {
+    expect(res.render).toHaveBeenCalledWith(templateFilePath, {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
@@ -81,7 +78,7 @@ describe("render mfa page", () => {
           state: { changeAuthApp: ["VALUE_UPDATED"] },
         },
       },
-      log: { error: sinon.fake() },
+      log: { error: vi.fn() },
       ip: "127.0.0.1",
       t: (t: string) => t,
     };
@@ -89,13 +86,17 @@ describe("render mfa page", () => {
       locals: {
         persistentSessionId: "persistentSessionId",
       },
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
     };
-    const next = sinon.spy();
+    const next = vi.fn();
 
-    sandbox.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
-    sandbox.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+    vi.spyOn(mfaModule, "generateMfaSecret").mockImplementation(() =>
+      "A".repeat(20)
+    );
+    vi.spyOn(mfaModule, "generateQRCodeValue").mockImplementation(
+      () => "qrcode"
+    );
     const templateFilePath = "abc.njk";
     await renderMfaMethodPage(
       templateFilePath,
@@ -108,7 +109,7 @@ describe("render mfa page", () => {
       )
     );
 
-    expect(res.render).to.have.been.calledWith(templateFilePath, {
+    expect(res.render).toHaveBeenCalledWith(templateFilePath, {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
@@ -142,7 +143,7 @@ describe("render mfa page", () => {
           state: { changeAuthenticatorApp: ["VALUE_UPDATED"] },
         },
       },
-      log: { error: sinon.fake() },
+      log: { error: vi.fn() },
       ip: "127.0.0.1",
       t: (t: string) => t,
     };
@@ -150,13 +151,17 @@ describe("render mfa page", () => {
       locals: {
         persistentSessionId: "persistentSessionId",
       },
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
     };
-    const next = sinon.spy();
+    const next = vi.fn();
 
-    sandbox.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
-    sandbox.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+    vi.spyOn(mfaModule, "generateMfaSecret").mockImplementation(() =>
+      "A".repeat(20)
+    );
+    vi.spyOn(mfaModule, "generateQRCodeValue").mockImplementation(
+      () => "qrcode"
+    );
     const templateFilePath = "abc.njk";
     await renderMfaMethodPage(
       templateFilePath,
@@ -167,7 +172,7 @@ describe("render mfa page", () => {
       "backlink"
     );
 
-    expect(res.render).to.have.been.calledWith(templateFilePath, {
+    expect(res.render).toHaveBeenCalledWith(templateFilePath, {
       authAppSecret: "A".repeat(20),
       qrCode: await QRCode.toDataURL("qrcode"),
       formattedSecret: "AAAA AAAA AAAA AAAA AAAA",

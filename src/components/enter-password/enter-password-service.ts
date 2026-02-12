@@ -1,6 +1,11 @@
-import { getRequestConfig, http, Http, RequestConfig } from "../../utils/http";
-import { EnterPasswordServiceInterface } from "./types";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
+import {
+  getRequestConfig,
+  http,
+  Http,
+  RequestConfig,
+} from "../../utils/http.js";
+import { EnterPasswordServiceInterface } from "./types.js";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
 
 const interventionMap: Record<string, string> = {
   "1083": "SUSPENDED",

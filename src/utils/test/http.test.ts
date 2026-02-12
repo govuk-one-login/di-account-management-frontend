@@ -1,26 +1,21 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import { RequestBuilder, ResponseBuilder } from "../../../test/utils/builders";
-import { getRequestConfigFromExpress } from "../http";
-import * as oidcModule from "../oidc";
+import { getRequestConfigFromExpress } from "../http.js";
+import * as oidcModule from "../oidc.js";
 
 describe("getRequestConfigFromExpress", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = new RequestBuilder().build();
     res = new ResponseBuilder().build();
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("returns the expected request config", async () => {
@@ -31,7 +26,7 @@ describe("getRequestConfigFromExpress", () => {
       res as Response
     );
 
-    expect(requestConfig).to.deep.eq({
+    expect(requestConfig).toEqual({
       token: "token",
       clientSessionId: "clientsessionid",
       persistentSessionId: "persistentsessionid",

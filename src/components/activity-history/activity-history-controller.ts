@@ -4,23 +4,23 @@ import {
   activityLogItemsPerPage,
   getOIDCClientId,
   reportSuspiciousActivity,
-} from "../../config";
+} from "../../config.js";
 import {
   PATH_DATA,
   HTTP_STATUS_CODES,
   EXTERNAL_URLS,
-} from "../../app.constants";
+} from "../../app.constants.js";
 
 import {
   generatePagination,
   formatActivityLogs,
   filterAndDecryptActivity,
-} from "../../utils/activityHistory";
-import { serviceIsAvailableInWelsh } from "../../utils/yourServices";
-import { presentActivityHistory } from "../../utils/present-activity-history";
-import { logger } from "../../utils/logger";
-import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types";
-import { setOplSettings } from "../../utils/opl";
+} from "../../utils/activityHistory.js";
+import { serviceIsAvailableInWelsh } from "../../utils/yourServices.js";
+import { presentActivityHistory } from "../../utils/present-activity-history.js";
+import { logger } from "../../utils/logger.js";
+import { ActivityLogEntry, FormattedActivityLog } from "../../utils/types.js";
+import { setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 export async function activityHistoryGet(

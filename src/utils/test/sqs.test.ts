@@ -1,26 +1,18 @@
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SqsService } from "../types";
 import { AuditEvent } from "../../services/types";
 import { sqsService } from "../sqs";
 import { SQSClient, SendMessageCommandOutput } from "@aws-sdk/client-sqs";
-import sinon, { SinonStub, stub } from "sinon";
-import chai from "chai";
-import sinonChai from "sinon-chai";
-import { logger } from "../logger";
-import * as redact from "../redact";
-import chaiAsPromised from "chai-as-promised";
+import { logger } from "../logger.js";
+import * as redact from "../redact.js";
 import { EventName, ERROR_MESSAGES, LOG_MESSAGES } from "../../app.constants";
-
-chai.use(sinonChai);
-chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 const messageId = "message-id";
 
 describe("SQS service tests", (): void => {
-  let sqsClientStub: SinonStub;
-  let loggerSpy: sinon.SinonSpy;
-  let errorLoggerSpy: sinon.SinonSpy;
+  let sqsClientStub: ReturnType<typeof vi.spyOn>;
+  let loggerSpy: ReturnType<typeof vi.spyOn>;
+  let errorLoggerSpy: ReturnType<typeof vi.spyOn>;
   const expectedEvent: AuditEvent = {
     timestamp: undefined,
     event_timestamp_ms: 1,
@@ -51,43 +43,38 @@ describe("SQS service tests", (): void => {
   };
 
   beforeEach((): void => {
-    sqsClientStub = stub(SQSClient.prototype, "send");
-    loggerSpy = sinon.spy(logger, "info");
-    errorLoggerSpy = sinon.spy(logger, "error");
+    sqsClientStub = vi.spyOn(SQSClient.prototype, "send");
+    loggerSpy = vi.spyOn(logger, "info");
+    errorLoggerSpy = vi.spyOn(logger, "error");
     process.env.AUDIT_QUEUE_URL = "queue";
     process.env.AUDIT_QUEUE_DLQ_URL = "dlq";
   });
 
   afterEach((): void => {
-    sqsClientStub.restore();
-    loggerSpy.restore();
-    errorLoggerSpy.restore();
+    vi.restoreAllMocks();
   });
 
   it("can send a message to the audit event queue", async (): Promise<void> => {
-    // Arrange
     const sqsResponse: SendMessageCommandOutput = {
       $metadata: undefined,
       MessageId: messageId,
       MD5OfMessageBody: "md5-hash",
     };
-    sqsClientStub.returns(sqsResponse);
+    sqsClientStub.mockResolvedValue(sqsResponse);
     const sqs: SqsService = sqsService();
 
-    // Act
     await sqs.sendAuditEvent(JSON.stringify(expectedEvent), "trace-id");
 
-    // Assert
-    expect(sqsClientStub).to.have.been.calledOnce;
-    expect(loggerSpy).to.have.been.calledOnce;
-    expect(loggerSpy).to.have.been.calledWith(
+    expect(sqsClientStub).toHaveBeenCalledOnce();
+    expect(loggerSpy).toHaveBeenCalledOnce();
+    expect(loggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       LOG_MESSAGES.EVENT_SENT_SUCCESSFULLY(
         process.env.AUDIT_QUEUE_URL,
         messageId
       )
     );
-    expect(errorLoggerSpy).to.not.have.been.called;
+    expect(errorLoggerSpy).not.toHaveBeenCalled();
   });
 
   it("can send a message to another queue", async (): Promise<void> => {
@@ -96,7 +83,7 @@ describe("SQS service tests", (): void => {
       MessageId: messageId,
       MD5OfMessageBody: "md5-hash",
     };
-    sqsClientStub.returns(sqsResponse);
+    sqsClientStub.mockResolvedValue(sqsResponse);
     const sqs: SqsService = sqsService();
 
     await sqs.sendMessage(
@@ -105,43 +92,40 @@ describe("SQS service tests", (): void => {
       "trace-id"
     );
 
-    expect(sqsClientStub).to.have.been.calledOnce;
-    expect(loggerSpy).to.have.been.calledOnce;
-    expect(loggerSpy).to.have.been.calledWith(
+    expect(sqsClientStub).toHaveBeenCalledOnce();
+    expect(loggerSpy).toHaveBeenCalledOnce();
+    expect(loggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       LOG_MESSAGES.EVENT_SENT_SUCCESSFULLY("https://fake.queue.com", messageId)
     );
-    expect(errorLoggerSpy).to.not.have.been.called;
+    expect(errorLoggerSpy).not.toHaveBeenCalled();
   });
 
   it("sends audit event to DLQ when error sending to TxMA", async (): Promise<void> => {
-    // Arrange
     const expectedError: Error = new Error("simulated error");
     const dlqSqsResponse: SendMessageCommandOutput = {
       $metadata: undefined,
       MessageId: messageId,
       MD5OfMessageBody: "md5-hash",
     };
-    sqsClientStub.onFirstCall().throws(expectedError);
-    sqsClientStub.onSecondCall().returns(dlqSqsResponse);
+    sqsClientStub.mockRejectedValueOnce(expectedError);
+    sqsClientStub.mockResolvedValueOnce(dlqSqsResponse);
     const sqs: SqsService = sqsService();
 
-    // Act
     await sqs.sendAuditEvent(JSON.stringify(expectedEvent), "trace-id");
 
-    // Assert
-    expect(sqsClientStub).to.have.been.calledTwice;
-    expect(errorLoggerSpy).to.have.been.calledTwice;
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(sqsClientStub).toHaveBeenCalledTimes(2);
+    expect(errorLoggerSpy).toHaveBeenCalledTimes(2);
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.FAILED_TO_SEND_TO_TXMA
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       expectedError.toString()
     );
-    expect(loggerSpy).to.have.been.calledOnce;
-    expect(loggerSpy).to.have.been.calledWith(
+    expect(loggerSpy).toHaveBeenCalledOnce();
+    expect(loggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       LOG_MESSAGES.EVENT_SENT_SUCCESSFULLY(
         process.env.AUDIT_QUEUE_DLQ_URL,
@@ -151,47 +135,43 @@ describe("SQS service tests", (): void => {
   });
 
   it("logs redacted event when fails to send to DLQ", async (): Promise<void> => {
-    // Arrange
     const expectedError: Error = new Error("simulated error");
-    sqsClientStub.onFirstCall().throws(expectedError);
-    sqsClientStub.onSecondCall().throws(expectedError);
+    sqsClientStub.mockRejectedValueOnce(expectedError);
+    sqsClientStub.mockRejectedValueOnce(expectedError);
     const sqs: SqsService = sqsService();
     const expectedEventAsJSONString = JSON.stringify(expectedEvent);
     const redactedExpectedEventAsJSONString = JSON.stringify(
       redactedExpectedEvent
     );
 
-    // Act
     await sqs.sendAuditEvent(expectedEventAsJSONString, "trace-id");
 
-    // Assert
-    expect(sqsClientStub).to.have.been.calledTwice;
-    expect(errorLoggerSpy).to.have.callCount(5);
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(sqsClientStub).toHaveBeenCalledTimes(2);
+    expect(errorLoggerSpy).toHaveBeenCalledTimes(5);
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       expectedError.toString()
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.FAILED_TO_SEND_TO_TXMA
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       expectedError.toString()
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.FAILED_SEND_TO_TXMA_DLQ
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.REDACTED_EVENT(redactedExpectedEventAsJSONString)
     );
-    expect(loggerSpy).to.not.have.been.called;
+    expect(loggerSpy).not.toHaveBeenCalled();
   });
 
   it("sends to dlq when audit queue url is not defined", async (): Promise<void> => {
-    // Arrange
     const sqs: SqsService = sqsService();
     const expectedEventAsJSONString = JSON.stringify(expectedEvent);
     delete process.env.AUDIT_QUEUE_URL;
@@ -200,24 +180,22 @@ describe("SQS service tests", (): void => {
       MessageId: messageId,
       MD5OfMessageBody: "md5-hash",
     };
-    sqsClientStub.returns(sqsResponse);
+    sqsClientStub.mockResolvedValue(sqsResponse);
 
-    // Act
     await sqs.sendAuditEvent(expectedEventAsJSONString, "trace-id");
 
-    // Assert
-    expect(sqsClientStub).to.have.been.calledOnce;
-    expect(errorLoggerSpy).to.have.callCount(2);
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(sqsClientStub).toHaveBeenCalledOnce();
+    expect(errorLoggerSpy).toHaveBeenCalledTimes(2);
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.QUEUE_URL_MISSING
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.FAILED_TO_SEND_TO_TXMA
     );
-    expect(loggerSpy).to.have.been.calledOnce;
-    expect(loggerSpy).to.have.been.calledWith(
+    expect(loggerSpy).toHaveBeenCalledOnce();
+    expect(loggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       LOG_MESSAGES.EVENT_SENT_SUCCESSFULLY(
         process.env.AUDIT_QUEUE_DLQ_URL,
@@ -227,82 +205,77 @@ describe("SQS service tests", (): void => {
   });
 
   it("does not send when audit queue dlq url is not defined", async (): Promise<void> => {
-    // Arrange
     const sqs: SqsService = sqsService();
     const expectedEventAsJSONString = JSON.stringify(expectedEvent);
     delete process.env.AUDIT_QUEUE_DLQ_URL;
     const expectedError: Error = new Error("simulated error");
-    sqsClientStub.onFirstCall().throws(expectedError);
+    sqsClientStub.mockRejectedValueOnce(expectedError);
     const redactedExpectedEventAsJSONString = JSON.stringify(
       redactedExpectedEvent
     );
 
-    // Act
     await sqs.sendAuditEvent(expectedEventAsJSONString, "trace-id");
 
-    // Assert
-    expect(sqsClientStub).to.have.been.calledOnce;
-    expect(loggerSpy).to.not.have.been.called;
-    expect(errorLoggerSpy).to.have.callCount(5);
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(sqsClientStub).toHaveBeenCalledOnce();
+    expect(loggerSpy).not.toHaveBeenCalled();
+    expect(errorLoggerSpy).toHaveBeenCalledTimes(5);
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       expectedError.toString()
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.FAILED_TO_SEND_TO_TXMA
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.QUEUE_URL_MISSING
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.FAILED_SEND_TO_TXMA_DLQ
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.REDACTED_EVENT(redactedExpectedEventAsJSONString)
     );
   });
 
   it("does not log the audit event when redaction fails", async (): Promise<void> => {
-    // Arrange
     const redactError: Error = new Error("a json error");
-    const sinonStub: SinonStub = stub(redact, "redact");
-    sinonStub.throws(redactError);
+    const redactStub = vi.spyOn(redact, "redact");
+    redactStub.mockImplementation(() => {
+      throw redactError;
+    });
     const expectedError: Error = new Error("simulated error");
-    sqsClientStub.onFirstCall().throws(expectedError);
-    sqsClientStub.onSecondCall().throws(expectedError);
+    sqsClientStub.mockRejectedValueOnce(expectedError);
+    sqsClientStub.mockRejectedValueOnce(expectedError);
     const sqs: SqsService = sqsService();
     const expectedEventAsJSONString = JSON.stringify(expectedEvent);
 
-    // Act
     await sqs.sendAuditEvent(expectedEventAsJSONString, "trace-id");
 
-    // Assert
-    expect(errorLoggerSpy).to.have.callCount(5);
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledTimes(5);
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       expectedError.toString()
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.FAILED_TO_SEND_TO_TXMA
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       expectedError.toString()
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.FAILED_SEND_TO_TXMA_DLQ
     );
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       { trace: "trace-id" },
       ERROR_MESSAGES.MESSAGE_COULD_NOT_BE_REDACTED(redactError as any)
     );
-    expect(loggerSpy).to.not.have.been.called;
-    sinonStub.restore();
+    expect(loggerSpy).not.toHaveBeenCalled();
   });
 });

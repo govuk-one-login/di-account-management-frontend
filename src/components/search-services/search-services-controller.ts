@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { getAppEnv, getClientsToShowInSearch } from "../../config";
-import { LOCALE } from "../../app.constants";
+import { getAppEnv, getClientsToShowInSearch } from "../../config.js";
+import { LOCALE } from "../../app.constants.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { Worker, Index } from "flexsearch";
 import { getTranslations } from "di-account-management-rp-registry";
 import i18next, { TFunction } from "i18next";
-import { safeTranslate } from "../../utils/safeTranslate";
-import { setOplSettings } from "../../utils/opl";
+import { safeTranslate } from "../../utils/safeTranslate.js";
+import { setOplSettings } from "../../utils/opl.js";
 
 const TEMPLATE_NAME = "search-services/index.njk";
 
@@ -41,10 +41,10 @@ export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
         .map((altClient, idx) => {
           return {
             clientId: `${clientId}_alt_${idx}`,
-            startText: altClient[locale]["startText"],
-            startUrl: altClient[locale]["startUrl"],
+            startText: altClient[locale].startText,
+            startUrl: altClient[locale].startUrl,
             additionalSearchTerms:
-              altClient[locale]["additionalSearchTerms"] || "",
+              altClient[locale].additionalSearchTerms || "",
           };
         });
 
@@ -58,7 +58,7 @@ export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
       ].concat(alternativeClients);
     })
     .sort((a, b) => {
-      return a.startText.localeCompare(b.startText, locale);
+      return (a.startText || "").localeCompare(b.startText || "", locale);
     });
 };
 

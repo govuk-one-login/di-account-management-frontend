@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { logger } from "../../utils/logger";
-import { eventService } from "../../services/event-service";
-import { AuditEvent } from "../../services/types";
+import { logger } from "../../utils/logger.js";
+import { eventService } from "../../services/event-service.js";
+import { AuditEvent } from "../../services/types.js";
 import {
   getWebchatUrl,
   showContactEmergencyMessage,
   supportPhoneContact,
   supportWebchatContact,
   getAccessibilityStatementUrl,
-} from "../../config";
-import { setOplSettings } from "../../utils/opl";
-import { EventName, PATH_DATA } from "../../app.constants";
+} from "../../config.js";
+import { setOplSettings } from "../../utils/opl.js";
+import { EventName, PATH_DATA } from "../../app.constants.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";

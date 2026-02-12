@@ -1,30 +1,28 @@
-import { describe } from "mocha";
-import { expect, sinon } from "../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 describe("applyOverloadProtection", () => {
   let overloadProtectionStub: any;
   let applyOverloadProtection: any;
 
-  beforeEach(() => {
-    delete require.cache[require.resolve("overload-protection")];
-    delete require.cache[
-      require.resolve("../../../src/middleware/overload-protection-middleware")
-    ];
+  beforeEach(async () => {
+    vi.resetModules();
 
-    overloadProtectionStub = sinon.stub();
+    overloadProtectionStub = vi.fn();
 
-    require.cache[require.resolve("overload-protection")] = {
-      exports: overloadProtectionStub,
-    } as NodeJS.Module;
+    vi.doMock("overload-protection", () => ({
+      default: overloadProtectionStub,
+    }));
 
-    applyOverloadProtection =
-      require("../../../src/middleware/overload-protection-middleware").applyOverloadProtection;
+    const module = await import(
+      "../../../src/middleware/overload-protection-middleware.js"
+    );
+    applyOverloadProtection = module.applyOverloadProtection;
   });
 
   it("should call overloadProtection with correct options in production mode", () => {
     const isProduction = true;
     applyOverloadProtection(isProduction);
-    expect(overloadProtectionStub).to.be.calledOnceWith(
+    expect(overloadProtectionStub).toHaveBeenCalledWith(
       "express",
       expectedOverloadProtectionConfig(true)
     );
@@ -33,7 +31,7 @@ describe("applyOverloadProtection", () => {
   it("should call overloadProtection with correct options in non-production mode", () => {
     const isProduction = false;
     applyOverloadProtection(isProduction);
-    expect(overloadProtectionStub).to.be.calledOnceWith(
+    expect(overloadProtectionStub).toHaveBeenCalledWith(
       "express",
       expectedOverloadProtectionConfig(false)
     );

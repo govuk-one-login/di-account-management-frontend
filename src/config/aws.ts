@@ -4,9 +4,9 @@ import {
   getAwsRegion,
   getKmsKeyId,
   getLocalStackBaseUrl,
-} from "../config";
+} from "../config.js";
 import { SQSClient, SQSClientConfig } from "@aws-sdk/client-sqs";
-import { readEnvVar } from "../utils/read-envs";
+import { readEnvVar } from "../utils/read-envs.js";
 
 //refer to seed.yaml
 function getLocalKeyId() {
@@ -45,7 +45,7 @@ function getLocalStackAWSConfig(): AwsConfig {
     endpoint: getLocalStackBaseUrl(),
     credentials: {
       accessKeyId: "na",
-      secretAccessKey: "na",
+      secretAccessKey: "na", //pragma: allowlist secret
     },
     region: getAwsRegion(),
   };
@@ -80,7 +80,7 @@ export function getSQSConfig(): SqsConfig {
         endpoint: "http://localstack:4566", // NOSONAR: http used locally
         credentials: {
           accessKeyId: "na",
-          secretAccessKey: "na",
+          secretAccessKey: "na", //pragma: allowlist secret
         },
       },
     };
@@ -141,7 +141,7 @@ export function getDBConfig(
   if (config.credentials?.accessKeyId || config.credentials?.secretAccessKey) {
     dbConfig.credentials = {
       accessKeyId: config.credentials.accessKeyId || "",
-      secretAccessKey: config.credentials.secretAccessKey || "",
+      secretAccessKey: config.credentials.secretAccessKey || "", //pragma: allowlist secret
     };
   }
 
