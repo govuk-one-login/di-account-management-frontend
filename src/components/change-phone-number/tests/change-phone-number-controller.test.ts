@@ -23,10 +23,6 @@ import {
   TOKEN,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-import {
-  mfaMethodTypes,
-  mfaPriorityIdentifiers,
-} from "../../../utils/mfaClient/types";
 import * as oidcModule from "../../../utils/oidc";
 
 describe("change phone number controller", () => {
@@ -193,143 +189,25 @@ describe("change phone number controller", () => {
   });
 
   describe("noUkPhoneNumberGet", () => {
-    it("should render no uk phone number page", () => {
+    it("should redirect to the no uk phone number page", () => {
       // Arrange
       req = new RequestBuilder()
-        .withBody({})
-        .withSessionUserState({ changePhoneNumber: {} })
-        .withTranslate(sandbox.fake())
-        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
-        .withQuery({ type: "changePhoneNumber" })
-        .build();
-
-      // Act
-      noUkPhoneNumberGet(req as Request, res as Response);
-
-      // Assert
-      expect(res.render).to.have.calledWith(
-        "change-phone-number/no-uk-phone-number.njk",
-        { hasBackupAuthApp: false }
-      );
-    });
-
-    it("should redirect to same page with type query param if not present", () => {
-      // Arrange
-      req = new RequestBuilder()
-        .withBody({})
-        .withSessionUserState({ changePhoneNumber: {} })
-        .withTranslate(sandbox.fake())
-        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
-        .build();
-
-      (req as any).path = PATH_DATA.NO_UK_PHONE_NUMBER.url;
-
-      // Act
-      noUkPhoneNumberGet(req as Request, res as Response);
-
-      // Assert
-      expect(res.redirect).to.have.calledWith(
-        `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=unknownType`
-      );
-    });
-
-    it("should redirect with ?type=changePhoneNumber query param if origin is change phone number path", () => {
-      // Arrange
-      req = new RequestBuilder()
-        .withBody({})
-        .withSessionUserState({ changePhoneNumber: {} })
-        .withTranslate(sandbox.fake())
         .withHeaders({
           "txma-audit-encoded": TXMA_AUDIT_ENCODED,
           referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
         })
-        .withQuery({ type: "" })
-        .build();
-
-      // Act
-      noUkPhoneNumberGet(req as Request, res as Response);
-
-      // Assert
-      expect(res.redirect).to.have.calledWith(
-        `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=changePhoneNumber`
-      );
-    });
-
-    it("should redirect with ?type=changeDefaultMethod query param if origin is change default method path", () => {
-      // Arrange
-      req = new RequestBuilder()
-        .withBody({})
-        .withSessionUserState({ changePhoneNumber: {} })
-        .withTranslate(sandbox.fake())
-        .withHeaders({
-          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-          referer: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
-        })
-        .withQuery({ type: "" })
-        .build();
-
-      // Act
-      noUkPhoneNumberGet(req as Request, res as Response);
-
-      // Assert
-      expect(res.redirect).to.have.calledWith(
-        `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=changeDefaultMethod`
-      );
-    });
-
-    it("should render no uk phone number page with hasBackupAuthApp true when user has auth app as backup", () => {
-      // Arrange
-      req = new RequestBuilder()
-        .withBody({})
         .withSessionUserState({
-          changePhoneNumber: {},
+          changePhoneNumber: {
+            value: "CHANGE_VALUE",
+          },
         })
-        .withBackupAuthAppMfaMethod()
-        .withTranslate(sandbox.fake())
-        .withHeaders({
-          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-          referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
-        })
-        .withQuery({ type: "changePhoneNumber" })
         .build();
 
       // Act
       noUkPhoneNumberGet(req as Request, res as Response);
 
       // Assert
-      expect(res.render).to.have.calledWith(
-        "change-phone-number/no-uk-phone-number.njk",
-        { hasBackupAuthApp: true }
-      );
-    });
-
-    it("should render no uk phone number page with hasAuthApp true when user has auth app as default", () => {
-      // Arrange
-      req = new RequestBuilder()
-        .withBody({})
-        .withSessionUserState({
-          changePhoneNumber: {},
-        })
-        .withAuthAppMfaMethod()
-        .withTranslate(sandbox.fake())
-        .withHeaders({
-          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-          referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
-        })
-        .withQuery({ type: "changePhoneNumber" })
-        .build();
-
-      // Act
-      noUkPhoneNumberGet(req as Request, res as Response);
-
-      // Assert
-      expect(res.render).to.have.calledWith(
-        "change-phone-number/no-uk-phone-number.njk",
-        {
-          hasBackupAuthApp: false,
-          hasAuthApp: true,
-        }
-      );
+      expect(res.redirect).to.be.calledWith("/no-uk-mobile-phone");
     });
   });
 });

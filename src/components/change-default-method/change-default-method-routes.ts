@@ -12,6 +12,7 @@ import {
 import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
 import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
 import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
+import { noUkPhoneNumberGet } from "../no-uk-mobile-phone/no-uk-mobile-phone-controller";
 
 const router = express.Router();
 
@@ -54,6 +55,13 @@ router.post(
   validatePhoneNumberRequest(),
   mfaMethodMiddleware,
   changeDefaultMethodSmsPost(changePhoneNumberService())
+);
+
+router.get(
+  PATH_DATA.NO_UK_PHONE_NUMBER.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  noUkPhoneNumberGet
 );
 
 export { router as changeDefaultMethodRouter };

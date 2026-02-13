@@ -122,8 +122,8 @@ export const PATH_DATA: Record<
   },
   NO_UK_PHONE_NUMBER: {
     url: "/no-uk-mobile-phone",
+    type: UserJourney.NoUKMobilePhone,
     event: EventType.SelectedApp,
-    type: UserJourney.NoUkMobilePhone || UserJourney.ChangeDefaultMethod,
   },
   CHANGE_AUTHENTICATOR_APP: {
     url: "/change-authenticator-app",

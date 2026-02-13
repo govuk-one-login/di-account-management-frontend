@@ -10,7 +10,7 @@ enum UserJourney {
   ChangeEmail = "changeEmail",
   ChangePassword = "changePassword", //pragma: allowlist secret
   ChangePhoneNumber = "changePhoneNumber",
-  NoUkMobilePhone = "noUkMobilePhone",
+  NoUKMobilePhone = "noUkMobilePhone",
   ChangeAuthApp = "changeAuthApp",
   DeleteAccount = "deleteAccount",
   addBackup = "addBackup",

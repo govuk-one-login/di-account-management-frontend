@@ -23,6 +23,7 @@ import { MfaMethod } from "../../../utils/mfaClient/types";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 import * as oidcModule from "../../../utils/oidc";
+import { noUkPhoneNumberGet } from "../../no-uk-mobile-phone/no-uk-mobile-phone-controller";
 
 describe("change default method controller", () => {
   let sandbox: sinon.SinonSandbox;
@@ -287,6 +288,27 @@ describe("change default method controller", () => {
       expect(res.render).to.be.calledWithMatch(
         "change-default-method/change-to-sms.njk",
         sinon.match.hasNested("errors.phoneNumber.href", "#phoneNumber")
+      );
+    });
+  });
+
+  describe("noUkPhoneNumberGet", () => {
+    it("should redirect to the no uk phone number page", () => {
+      // Arrange
+      req = new RequestBuilder()
+        .withHeaders({
+          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+          referer: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
+        })
+        .withSessionUserState({ changeDefaultMethod: {} })
+        .build();
+
+      // Act
+      noUkPhoneNumberGet(req as Request, res as Response);
+
+      // Assert
+      expect(res.redirect).to.be.calledWith(
+        "/no-uk-mobile-phone?type=changeDefaultMethod"
       );
     });
   });

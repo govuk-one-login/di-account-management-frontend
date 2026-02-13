@@ -3,10 +3,6 @@ import { ERROR_CODES, PATH_DATA } from "../../app.constants";
 import { ExpressRouteFunc } from "../../types";
 import { ChangePhoneNumberServiceInterface } from "./types";
 import { changePhoneNumberService } from "./change-phone-number-service";
-import {
-  mfaMethodTypes,
-  mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
 import { EventType, getNextState } from "../../utils/state-machine";
 import {
   formatValidationError,
@@ -21,8 +17,6 @@ import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";
-const NO_UK_PHONE_NUMBER_TEMPLATE =
-  "change-phone-number/no-uk-phone-number.njk";
 
 const setLocalOplSettings = (req: Request, res: Response) => {
   setOplSettings(
@@ -93,46 +87,5 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
   req.metrics?.addMetric("noUkPhoneNumberGet", MetricUnit.Count, 1);
   setLocalOplSettings(req, res);
 
-  const origin = req.headers["referer"] || "unknown origin";
-
-  const hasBackupAuthApp =
-    req.session.mfaMethods?.some(
-      (mfaMethod) =>
-        mfaMethod.method.mfaMethodType === mfaMethodTypes.authApp &&
-        mfaMethod.priorityIdentifier === mfaPriorityIdentifiers.backup
-    ) || false;
-
-  const hasAuthApp =
-    req.session.mfaMethods?.some(
-      (mfaMethod) =>
-        mfaMethod.method.mfaMethodType === mfaMethodTypes.authApp &&
-        mfaMethod.priorityIdentifier === mfaPriorityIdentifiers.default
-    ) || false;
-
-  // eslint-disable-next-line no-console
-  console.log("User has backup auth app: ", hasBackupAuthApp);
-
-  if (!req.query.type || req.query.type === "") {
-    let queryType = "";
-
-    switch (origin) {
-      case PATH_DATA.CHANGE_PHONE_NUMBER.url:
-        queryType = "changePhoneNumber";
-        break;
-      case PATH_DATA.CHANGE_DEFAULT_METHOD.url:
-      case PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url:
-        queryType = "changeDefaultMethod";
-        break;
-      default:
-        queryType = "unknownType";
-    }
-
-    const hasBackUpQuery = hasBackupAuthApp ? "&BackupAuthApp" : "";
-
-    return res.redirect(
-      `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=${queryType}${hasBackUpQuery}`
-    );
-  }
-
-  res.render(NO_UK_PHONE_NUMBER_TEMPLATE, { hasBackupAuthApp, hasAuthApp });
+  res.redirect(PATH_DATA.NO_UK_PHONE_NUMBER.url);
 }
