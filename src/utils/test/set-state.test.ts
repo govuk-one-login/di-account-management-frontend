@@ -72,7 +72,6 @@ describe("setState", () => {
           value: "VALUE_UPDATED",
         },
       })
-      .withLogger()
       .build();
 
     const setStateHandler = SetState(
