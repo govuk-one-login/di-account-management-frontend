@@ -5,7 +5,7 @@ import { sinon } from "../../../test/utils/test-utils";
 import { Request, Response } from "express";
 import { RequestBuilder, ResponseBuilder } from "../../../test/utils/builders";
 import { UserJourney, EventType } from "../state-machine";
-// import * as stateMachine from "../state-machine";
+import * as stateMachine from "../state-machine";
 
 import { SetState } from "../set-state";
 
@@ -81,13 +81,13 @@ describe("setState", () => {
       "VALUE_UPDATED"
     );
 
-    // const nextStateSpy = sandbox.spy(stateMachine, 'getNextState');
+    const nextStateSpy = sandbox.spy(stateMachine, "getNextState");
 
     // Act
     await setStateHandler(req as Request, res as Response, next);
 
     // Assert
-    // expect(nextStateSpy).to.have.callCount(0);
+    expect(nextStateSpy).to.have.callCount(0);
     expect(next).to.have.been.calledOnce;
   });
 });
