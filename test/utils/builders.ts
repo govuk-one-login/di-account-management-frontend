@@ -36,6 +36,7 @@ export class RequestBuilder {
     "txma-audit-encoded": TXMA_AUDIT_ENCODED,
   };
   private query: object = {};
+  private log: object = {};
   private t: () => void;
 
   withBody(body: object): this {

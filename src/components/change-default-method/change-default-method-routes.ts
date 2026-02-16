@@ -1,6 +1,8 @@
 import * as express from "express";
 import { PATH_DATA } from "../../app.constants";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+import { UserJourney, EventType } from "../../utils/state-machine";
+import { SetState } from "../../utils/set-state";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
 import {
   changeDefaultMethodAppGet,
@@ -60,6 +62,12 @@ router.post(
 router.get(
   PATH_DATA.NO_UK_PHONE_NUMBER.url,
   requiresAuthMiddleware,
+  SetState(
+    UserJourney.ChangeDefaultMethod,
+    UserJourney.NoUKMobilePhone,
+    EventType.ValueUpdated,
+    "VALUE_UPDATED"
+  ),
   validateStateMiddleware,
   noUkPhoneNumberGet
 );

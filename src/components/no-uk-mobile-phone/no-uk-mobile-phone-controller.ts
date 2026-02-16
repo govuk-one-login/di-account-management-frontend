@@ -39,9 +39,6 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
         mfaMethod.priorityIdentifier === mfaPriorityIdentifiers.default
     ) || false;
 
-  // eslint-disable-next-line no-console
-  console.log("User has backup auth app: ", hasBackupAuthApp);
-
   if (!req.query.type || req.query.type === "") {
     let queryType = "";
 

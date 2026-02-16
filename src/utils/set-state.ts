@@ -1,22 +1,34 @@
-import { Request, NextFunction } from "express";
-import { EventType, getNextState, UserJourney } from "./state-machine";
+import { Request, Response, NextFunction, RequestHandler } from "express";
+import { UserJourney, EventType, getNextState } from "./state-machine";
 
 export function SetState(
-  req: Request,
   currentStateType: UserJourney,
   nextStateType: UserJourney,
   eventType: EventType,
-  next: NextFunction
-): void {
-  if (!req.session.user.state) {
-    req.log.error("User state is not initialized");
-    return;
-  }
+  targetState: string
+): RequestHandler {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    if (!req.session?.user?.state) {
+      req.log.error(
+        { trace: res.locals.trace },
+        "User state is not initialized"
+      );
+      return next();
+    }
 
-  req.session.user.state[nextStateType] = getNextState(
-    req.session.user.state[currentStateType]?.value,
-    eventType
-  );
+    if (req.session.user.state[nextStateType]?.value === targetState) {
+      return next();
+    }
 
-  next();
+    try {
+      req.session.user.state[nextStateType] = getNextState(
+        req.session.user.state[currentStateType]?.value || targetState,
+        eventType
+      );
+      next();
+    } catch (error) {
+      req.log.error({ trace: res.locals.trace }, "State update failed.");
+      next(error);
+    }
+  };
 }

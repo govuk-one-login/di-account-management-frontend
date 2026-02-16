@@ -273,10 +273,5 @@ export async function noUKPhoneNumberGet(
     ];
   setOplSettings(oplSettings, res);
 
-  req.session.user.state.noUkMobilePhone = getNextState(
-    req.session.user.state.changeDefaultMethod?.value,
-    EventType.SelectedApp
-  );
-
   res.redirect(PATH_DATA.NO_UK_PHONE_NUMBER.url);
 }
