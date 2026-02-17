@@ -66,7 +66,7 @@ router.get(
     UserJourney.ChangeDefaultMethod,
     UserJourney.NoUKMobilePhone,
     EventType.ValueUpdated,
-    "VALUE_UPDATED"
+    "VERIFY_CODE"
   ),
   validateStateMiddleware,
   noUkPhoneNumberGet
