@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { UserJourney, EventType, getNextState } from "./state-machine";
 
 export function SetState(
-  currentStateType: UserJourney,
+  currentStateTypes: UserJourney[],
   nextStateType: UserJourney,
   eventType: EventType,
   targetState: string
@@ -15,6 +15,10 @@ export function SetState(
       );
       return next();
     }
+
+    const currentStateType = currentStateTypes.find((stateType) =>
+      Object.keys(req.session.user.state).includes(stateType)
+    );
 
     if (req.session.user.state[nextStateType]?.value === targetState) {
       return next();

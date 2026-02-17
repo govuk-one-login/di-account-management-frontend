@@ -82,10 +82,3 @@ export function changePhoneNumberPost(
     }
   };
 }
-
-export function noUkPhoneNumberGet(req: Request, res: Response): void {
-  req.metrics?.addMetric("noUkPhoneNumberGet", MetricUnit.Count, 1);
-  setLocalOplSettings(req, res);
-
-  res.redirect(PATH_DATA.NO_UK_PHONE_NUMBER.url);
-}

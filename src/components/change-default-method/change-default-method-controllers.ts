@@ -148,16 +148,9 @@ export function changeDefaultMethodSmsPost(
       );
     }
 
-    const {
-      hasInternationalPhoneNumber,
-      internationalPhoneNumber,
-      phoneNumber,
-    } = req.body;
+    const { phoneNumber } = req.body;
     const { email } = req.session.user;
-    const newPhoneNumber =
-      hasInternationalPhoneNumber === "true"
-        ? convertInternationalPhoneNumberToE164Format(internationalPhoneNumber)
-        : phoneNumber;
+    const newPhoneNumber = phoneNumber;
 
     const response = await service.sendPhoneVerificationNotification(
       email,
@@ -178,10 +171,7 @@ export function changeDefaultMethodSmsPost(
       );
     }
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
-      const href: string =
-        hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true"
-          ? "internationalPhoneNumber"
-          : "phoneNumber";
+      const href: string = "phoneNumber";
 
       const error = formatValidationError(
         href,
@@ -255,23 +245,4 @@ export async function changeDefaultMethodAppPost(
     },
     backLink
   );
-}
-
-export async function noUKPhoneNumberGet(
-  req: Request,
-  res: Response
-): Promise<void> {
-  req.metrics?.addMetric("noUKPhoneNumberGet", MetricUnit.Count, 1);
-
-  const defaultMethod = req.session.mfaMethods.find(
-    (method) => method.priorityIdentifier === "DEFAULT"
-  );
-
-  const oplSettings =
-    CHANGE_DEFAULT_METHOD_OPL_VALUES[
-      `${mfaPriorityIdentifiers.default}_${defaultMethod.method.mfaMethodType}`
-    ];
-  setOplSettings(oplSettings, res);
-
-  res.redirect(PATH_DATA.NO_UK_PHONE_NUMBER.url);
 }

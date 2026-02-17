@@ -9,7 +9,6 @@ import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import {
   changePhoneNumberGet,
   changePhoneNumberPost,
-  noUkPhoneNumberGet,
 } from "../change-phone-number-controller";
 import {
   CLIENT_SESSION_ID,
@@ -185,29 +184,6 @@ describe("change phone number controller", () => {
       expect(res.redirect).to.have.calledWith(
         `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
       );
-    });
-  });
-
-  describe("noUkPhoneNumberGet", () => {
-    it("should redirect to the no uk phone number page", () => {
-      // Arrange
-      req = new RequestBuilder()
-        .withHeaders({
-          "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-          referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
-        })
-        .withSessionUserState({
-          changePhoneNumber: {
-            value: "CHANGE_VALUE",
-          },
-        })
-        .build();
-
-      // Act
-      noUkPhoneNumberGet(req as Request, res as Response);
-
-      // Assert
-      expect(res.redirect).to.be.calledWith("/no-uk-mobile-phone");
     });
   });
 });

@@ -16,16 +16,6 @@ export function validateStateMiddleware(
     return res.redirect(PATH_DATA.YOUR_SERVICES.url);
   }
 
-  // eslint-disable-next-line no-console
-  console.log(`Page state: ${JSON.stringify(pageState)}`);
-  // eslint-disable-next-line no-console
-  console.log(`Page State Type: ${pageState.type}`);
-  // eslint-disable-next-line no-console
-  console.log(`Page State Evnet: ${pageState.event}`);
-
-  // eslint-disable-next-line no-console
-  console.log(req.session.user.state[pageState.type].events);
-
   if (
     req.session.user.state[pageState.type].events.length > 0 &&
     !req.session.user.state[pageState.type].events.includes(pageState.event)

@@ -42,16 +42,15 @@ export function noUkPhoneNumberGet(req: Request, res: Response): void {
   if (!req.query.type || req.query.type === "") {
     let queryType = "";
 
-    switch (origin) {
-      case PATH_DATA.CHANGE_PHONE_NUMBER.url:
-        queryType = "changePhoneNumber";
-        break;
-      case PATH_DATA.CHANGE_DEFAULT_METHOD.url:
-      case PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url:
-        queryType = "changeDefaultMethod";
-        break;
-      default:
-        queryType = "unknownType";
+    if (origin.includes(PATH_DATA.CHANGE_PHONE_NUMBER.url)) {
+      queryType = "changePhoneNumber";
+    } else if (
+      origin.includes(PATH_DATA.CHANGE_DEFAULT_METHOD.url) ||
+      origin.includes(PATH_DATA.CHANGE_DEFAULT_METHOD_SMS.url)
+    ) {
+      queryType = "changeDefaultMethod";
+    } else {
+      queryType = "unknownType";
     }
 
     const hasBackUpQuery = hasBackupAuthApp ? "&BackupAuthApp" : "";

@@ -42,7 +42,7 @@ describe("setState", () => {
     // Arrange
     const next = sandbox.fake();
     const setStateHandler = SetState(
-      UserJourney.ChangePhoneNumber,
+      [UserJourney.ChangePhoneNumber],
       UserJourney.NoUKMobilePhone,
       EventType.SelectedApp,
       "APP"
@@ -75,7 +75,7 @@ describe("setState", () => {
       .build();
 
     const setStateHandler = SetState(
-      UserJourney.ChangePhoneNumber,
+      [UserJourney.ChangePhoneNumber],
       UserJourney.NoUKMobilePhone,
       EventType.ValueUpdated,
       "VALUE_UPDATED"
