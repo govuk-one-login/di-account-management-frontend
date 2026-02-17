@@ -1,19 +1,18 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import {
   deleteAccountGet,
   deleteAccountPost,
-} from "../delete-account-controller";
+} from "../delete-account-controller.js";
 import { DeleteAccountServiceInterface } from "../types";
-import { getAppEnv } from "../../../config";
+import { getAppEnv } from "../../../config.js";
 import { Service } from "../../../utils/types";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
-import * as oidcModule from "../../../utils/oidc";
+import * as oidcModule from "../../../utils/oidc.js";
+import * as yourServicesModule from "../../../utils/yourServices";
+import * as sessionStoreModule from "../../../utils/session-store.js";
 
 describe("delete account controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: any;
   const TEST_SUBJECT_ID = "testSubjectId";
@@ -23,11 +22,11 @@ describe("delete account controller", () => {
       app: {
         locals: {
           sessionStore: {
-            destroy: sandbox.fake(),
+            destroy: vi.fn(),
           },
           subjectSessionIndexService: {
-            removeSession: sandbox.fake(),
-            getSessions: sandbox.stub().resolves(["session-1"]),
+            removeSession: vi.fn(),
+            getSessions: vi.fn().mockResolvedValue(["session-1"]),
           },
         },
       },
@@ -40,26 +39,24 @@ describe("delete account controller", () => {
           email: "test@test.com",
           state: { deleteAccount: {} },
         },
-        destroy: sandbox.fake(),
+        destroy: vi.fn(),
       },
-      log: { error: sandbox.fake() },
+      log: { error: vi.fn() },
       headers: { "txma-audit-encoded": TXMA_AUDIT_ENCODED },
     };
   }
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {},
     };
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("deleteAccountGet", () => {
@@ -69,12 +66,12 @@ describe("delete account controller", () => {
           body: {},
           session: {
             user: { email: "test@test.com" },
-            destroy: sandbox.fake(),
+            destroy: vi.fn(),
           },
         };
 
         await deleteAccountGet(req as Request, res as Response);
-        expect(res.render).to.have.calledWith("delete-account/index.njk", {
+        expect(res.render).toHaveBeenCalledWith("delete-account/index.njk", {
           env: getAppEnv(),
         });
       });
@@ -83,15 +80,13 @@ describe("delete account controller", () => {
     describe("deleteAccountGetWithoutServices", () => {
       it("should render delete account page without services", async () => {
         req = validRequest();
-        const yourServices = require("../../../utils/yourServices");
-        sandbox
-          .stub(yourServices, "getYourServicesForAccountDeletion")
-          .callsFake(function (): Service[] {
-            return [];
-          });
+        vi.spyOn(
+          yourServicesModule,
+          "getYourServicesForAccountDeletion"
+        ).mockReturnValue([]);
 
         await deleteAccountGet(req as Request, res as Response);
-        expect(res.render).to.have.calledWith("delete-account/index.njk", {
+        expect(res.render).toHaveBeenCalledWith("delete-account/index.njk", {
           services: [],
           env: getAppEnv(),
           currentLngWelsh: false,
@@ -101,20 +96,17 @@ describe("delete account controller", () => {
       });
     });
 
-
     describe("deleteAccountGetNotFromSecurity", () => {
       it("should render delete page without fromSecurity parameter if query string not present/invalid", async () => {
         req = validRequest();
         req.query.from = "invalidValue";
-        const yourServices = require("../../../utils/yourServices");
-        sandbox
-          .stub(yourServices, "getYourServicesForAccountDeletion")
-          .callsFake(function (): Service[] {
-            return [];
-          });
+        vi.spyOn(
+          yourServicesModule,
+          "getYourServicesForAccountDeletion"
+        ).mockReturnValue([]);
 
         await deleteAccountGet(req as Request, res as Response);
-        expect(res.render).to.have.calledWith("delete-account/index.njk", {
+        expect(res.render).toHaveBeenCalledWith("delete-account/index.njk", {
           services: [],
           env: getAppEnv(),
           currentLngWelsh: false,
@@ -136,15 +128,13 @@ describe("delete account controller", () => {
 
       it("should render the delete account page with list of services used", async () => {
         req = validRequest();
-        const yourServices = require("../../../utils/yourServices");
-        sandbox
-          .stub(yourServices, "getYourServicesForAccountDeletion")
-          .callsFake(function (): Service[] {
-            return serviceList;
-          });
+        vi.spyOn(
+          yourServicesModule,
+          "getYourServicesForAccountDeletion"
+        ).mockReturnValue(serviceList);
 
         await deleteAccountGet(req as Request, res as Response);
-        expect(res.render).to.have.calledWith("delete-account/index.njk", {
+        expect(res.render).toHaveBeenCalledWith("delete-account/index.njk", {
           services: serviceList,
           env: getAppEnv(),
           currentLngWelsh: false,
@@ -160,8 +150,8 @@ describe("delete account controller", () => {
       it("should redirect to deletion confirmed page", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {
-          deleteAccount: sandbox.fake.resolves(true),
-          publishToDeleteTopic: sandbox.fake(),
+          deleteAccount: vi.fn().mockResolvedValue(true),
+          publishToDeleteTopic: vi.fn(),
         };
 
         req.session.user.email = "test@test.com";
@@ -169,23 +159,22 @@ describe("delete account controller", () => {
         req.session.user.tokens = { accessToken: "token" } as any;
         req.session.user.state.deleteAccount.value = "CHANGE_VALUE";
         req.oidc = {
-          endSessionUrl: sandbox.fake.returns("logout-url"),
+          endSessionUrl: vi.fn().mockReturnValue("logout-url"),
         } as any;
 
-        const sessionStore = require("../../../utils/session-store");
-        sandbox.stub(sessionStore, "destroyUserSessions").resolves();
+        vi.spyOn(sessionStoreModule, "destroyUserSessions").mockResolvedValue();
 
         await deleteAccountPost(fakeService)(req as Request, res as Response);
 
-        expect(fakeService.deleteAccount).to.have.been.calledOnce;
-        expect(fakeService.publishToDeleteTopic).to.have.been.calledOnce;
-        expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
-        expect(res.redirect).to.have.been.calledWith("logout-url");
-        expect(sessionStore.destroyUserSessions).to.have.been.calledWith(
+        expect(fakeService.deleteAccount).toHaveBeenCalledTimes(1);
+        expect(fakeService.publishToDeleteTopic).toHaveBeenCalledTimes(1);
+        expect(req.oidc.endSessionUrl).toHaveBeenCalledTimes(1);
+        expect(res.redirect).toHaveBeenCalledWith("logout-url");
+        expect(sessionStoreModule.destroyUserSessions).toHaveBeenCalledWith(
           req,
-          "public-subject-id"
+          "public-subject-id",
+          expect.anything()
         );
-        sessionStore.destroyUserSessions.restore();
       });
     });
   });

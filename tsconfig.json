@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "target": "es2020",
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "skipLibCheck": true,
-    // do not check types in node_modules folder
     "sourceMap": true,
     "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": ".",
     "typeRoots": ["@types", "/node_modules/@types"]
   },
+  "include": ["src/**/*"],
   "exclude": [
     "test",
     "coverage",

@@ -1,38 +1,38 @@
 import { Request, Response } from "express";
-import { ERROR_CODES, PATH_DATA } from "../../app.constants";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants.js";
 import {
   convertInternationalPhoneNumberToE164Format,
   getLastNDigits,
-} from "../../utils/phone-number";
+} from "../../utils/phone-number.js";
 import {
   EventType,
   getNextState,
   UserJourney,
-} from "../../utils/state-machine";
-import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
-import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
+} from "../../utils/state-machine.js";
+import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types.js";
+import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service.js";
 import {
   formatValidationError,
   isObjectEmpty,
   renderBadRequest,
-} from "../../utils/validation";
-import { BadRequestError } from "../../utils/errors";
+} from "../../utils/validation.js";
+import { BadRequestError } from "../../utils/errors.js";
 import { validationResult } from "express-validator";
-import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
-import { getRequestConfigFromExpress } from "../../utils/http";
+import { validationErrorFormatter } from "../../middleware/form-validation-middleware.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
+} from "../../utils/mfaClient/types.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { logger } from "../../utils/logger";
+import { logger } from "../../utils/logger.js";
 
-const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
+const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk.js";
 
 const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
 
@@ -117,7 +117,8 @@ export function addMfaSmsMethodPost(
         `Add MFA Method SMS POST controller req.session.user.newPhoneNumber: ${
           req.session.user.newPhoneNumber?.replace(
             /^(.{2})(.*)/,
-            (_, first2, rest) => first2 + rest.replace(/./g, "*")
+            (_: string, first2: string, rest: string) =>
+              first2 + rest.replace(/./g, "*")
           ) ?? JSON.stringify(req.session.user.newPhoneNumber)
         }`
       );

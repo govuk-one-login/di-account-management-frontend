@@ -1,29 +1,23 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 
 import { PATH_DATA } from "../../../app.constants";
 import {
   checkYourEmailGet,
   checkYourEmailPost,
-} from "../check-your-email-controller";
+} from "../check-your-email-controller.js";
 import {
   CheckYourEmailServiceError,
   CheckYourEmailServiceInterface,
 } from "../types";
 import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
-import * as oidcModule from "../../../utils/oidc";
+import * as oidcModule from "../../../utils/oidc.js";
 
 describe("check your email controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = {
       body: {},
       session: {
@@ -31,39 +25,41 @@ describe("check your email controller", () => {
       } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
-      log: { error: sandbox.fake() },
+      log: { error: vi.fn() },
       headers: { "txma-audit-encoded": "encoded" },
     } as any;
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      status: sandbox.fake(),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
+      status: vi.fn(),
       locals: {},
     };
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("checkYourEmailGet", () => {
     it("should render check your phone view", () => {
       checkYourEmailGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("check-your-email/index.njk");
+      expect(res.render).toHaveBeenCalledWith("check-your-email/index.njk", {
+        email: undefined,
+      });
     });
   });
 
   describe("checkYourEmailPost", () => {
     it("should redirect to /email-updated-confirmation when valid code entered", async () => {
       const fakeService: CheckYourEmailServiceInterface = {
-        updateEmail: sandbox.fake.resolves({ success: true }),
+        updateEmail: vi.fn().mockResolvedValue({ success: true }),
       };
 
       const fakePublishingService: GovUkPublishingServiceInterface = {
-        notifyAccountDeleted: sandbox.fake(),
-        notifyEmailChanged: sandbox.fake.returns(Promise.resolve()),
+        notifyAccountDeleted: vi.fn(),
+        notifyEmailChanged: vi.fn().mockReturnValue(Promise.resolve()),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
@@ -74,49 +70,64 @@ describe("check your email controller", () => {
         res as Response
       );
 
-      expect(fakeService.updateEmail).to.have.been.calledOnce;
-      expect(fakePublishingService.notifyEmailChanged).to.have.been.calledOnce;
-      expect(res.redirect).to.have.calledWith(
+      expect(fakeService.updateEmail).toHaveBeenCalledOnce();
+      expect(fakePublishingService.notifyEmailChanged).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith(
         PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url
       );
     });
 
     it("should return error when invalid code entered", async () => {
       const fakeService: CheckYourEmailServiceInterface = {
-        updateEmail: sandbox.fake.resolves({
+        updateEmail: vi.fn().mockResolvedValue({
           success: false,
           error: undefined,
         }),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
-      req.t = sandbox.fake.returns("translated string");
+      req.t = vi.fn().mockReturnValue("translated string");
       req.body.code = "678988";
       res.locals.sessionId = "123456-djjad";
 
       await checkYourEmailPost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.updateEmail).to.have.been.calledOnce;
-      expect(res.render).to.have.been.calledWith("check-your-email/index.njk");
+      expect(fakeService.updateEmail).toHaveBeenCalledOnce();
+      expect(res.render).toHaveBeenCalledWith("check-your-email/index.njk", {
+        code: "678988",
+        errorList: [
+          {
+            href: "#code",
+            text: "translated string",
+          },
+        ],
+        errors: {
+          code: {
+            href: "#code",
+            text: "translated string",
+          },
+        },
+        language: "en",
+      });
     });
 
     it("should redirect email address is denied", async () => {
       const fakeService: CheckYourEmailServiceInterface = {
-        updateEmail: sandbox.fake.resolves({
+        updateEmail: vi.fn().mockResolvedValue({
           success: false,
           error: CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED,
         }),
       };
 
       req.session.user.tokens = { accessToken: "token" } as any;
-      req.t = sandbox.fake.returns("translated string");
+      req.t = vi.fn().mockReturnValue("translated string");
       req.body.code = "678988";
       res.locals.sessionId = "123456-djjad";
 
       await checkYourEmailPost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.updateEmail).to.have.been.calledOnce;
-      expect(res.redirect).to.have.calledWith(
+      expect(fakeService.updateEmail).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith(
         `${PATH_DATA.CHANGE_EMAIL.url}?email_cant_be_used=1`
       );
     });

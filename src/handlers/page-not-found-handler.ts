@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { HTTP_STATUS_CODES } from "../app.constants";
-import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../utils/opl";
+import { HTTP_STATUS_CODES } from "../app.constants.js";
+import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../utils/opl.js";
 
 export function pageNotFoundHandler(
   req: Request,

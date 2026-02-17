@@ -1,30 +1,24 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { securityGet } from "../security-controller";
+import { securityGet } from "../security-controller.js";
+import * as config from "../../../config.js";
 
 describe("security controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let configFuncs: any;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = { body: {}, session: { user: {} } as any, t: (k) => k };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {},
     };
-    configFuncs = require("../../../config");
-    sandbox.stub(configFuncs, "supportGlobalLogout").returns(false);
+    vi.spyOn(config, "supportGlobalLogout").mockReturnValue(false);
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("securityGet", () => {
@@ -48,7 +42,7 @@ describe("security controller", () => {
 
       await securityGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("security/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("security/index.njk", {
         email: "test@test.com",
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
@@ -78,16 +72,16 @@ describe("security controller", () => {
           mfaIdentifier: 1,
           priorityIdentifier: "DEFAULT",
           method: {
-            mfaMethodType: "SMS",
-            PhoneNumber: "xxxxxxx7898",
+            mfaMethodType: undefined,
+            phoneNumber: "xxxxxxx7898",
           },
           methodVerified: true,
         },
       ] as any;
 
-      expect(
+      await expect(
         securityGet(req as Request, res as Response)
-      ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: undefined");
+      ).rejects.toThrow("Unexpected mfaMethodType: undefined");
     });
 
     it("throws an error when the mfaMethodType is not unknown", async () => {
@@ -108,9 +102,9 @@ describe("security controller", () => {
         },
       ] as any;
 
-      expect(
+      await expect(
         securityGet(req as Request, res as Response)
-      ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: INVALID");
+      ).rejects.toThrow("Unexpected mfaMethodType: INVALID");
     });
 
     it("should render security view with empty MFA methods when no MFA methods are set", async () => {
@@ -119,7 +113,7 @@ describe("security controller", () => {
 
       await securityGet(req as Request, res as Response);
 
-      expect(res.render).to.have.been.calledWith("security/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("security/index.njk", {
         email: "test@test.com",
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
@@ -144,7 +138,7 @@ describe("security controller", () => {
 
       await securityGet(req as Request, res as Response);
 
-      expect(res.render).to.have.been.calledWith("security/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("security/index.njk", {
         email: "test@test.com",
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
@@ -178,7 +172,7 @@ describe("security controller", () => {
 
       await expect(
         securityGet(req as Request, res as Response)
-      ).to.eventually.be.rejectedWith("Unexpected mfaMethodType: UNKNOWN");
+      ).rejects.toThrow("Unexpected mfaMethodType: UNKNOWN");
     });
 
     it("should set canChangeTypeofPrimary to false when MFA constraints apply", async () => {
@@ -200,9 +194,13 @@ describe("security controller", () => {
 
       await securityGet(req as Request, res as Response);
 
-      expect(res.render).to.have.been.calledWithMatch("security/index.njk", {
-        canChangeTypeofPrimary: false, // Should be false due to constraints
-      });
+      expect(res.render).toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalledWith(
+        "security/index.njk",
+        expect.objectContaining({
+          canChangeTypeofPrimary: false,
+        })
+      );
     });
   });
 });

@@ -1,11 +1,8 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { sinon } from "../../../../test/utils/test-utils";
-import { contactGet } from "../contact-govuk-one-login-controller";
-import { logger } from "../../../utils/logger";
-import * as reference from "../../../utils/referenceCode";
-import { SinonStub, stub } from "sinon";
+import { contactGet } from "../contact-govuk-one-login-controller.js";
+import { logger } from "../../../utils/logger.js";
+import * as reference from "../../../utils/referenceCode.js";
 import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { AuditEvent } from "../../../services/types";
 import { MISSING_APP_SESSION_ID_SPECIAL_CASE } from "../../../app.constants";
@@ -15,16 +12,14 @@ const MOCK_REFERENCE_CODE = "123456";
 const MOCK_NONCE = "abcdef";
 
 describe("Contact GOV.UK One Login controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let loggerSpy: sinon.SinonSpy;
-  let sqsClientStub: SinonStub;
+  let loggerSpy: ReturnType<typeof vi.fn>;
+  let sqsClientStub: ReturnType<typeof vi.fn>;
   const baseUrl = "https://home.account.gov.uk";
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    loggerSpy = sinon.spy(logger, "info");
+    loggerSpy = vi.spyOn(logger, "info");
 
     req = {
       body: {},
@@ -43,25 +38,25 @@ describe("Contact GOV.UK One Login controller", () => {
       language: "en",
       log: logger,
       oidc: {
-        authorizationUrl: sinon.fake(),
+        authorizationUrl: vi.fn(),
         metadata: { client_id: "test-client-id" } as any,
       } as any,
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {
         sessionId: "sessionId",
         persistentSessionId: "persistentSessionId",
         scriptNonce: MOCK_NONCE,
         trace: "trace-id",
       },
-      status: sandbox.fake(),
+      status: vi.fn(),
     };
 
-    sandbox
-      .stub(reference, "generateReferenceCode")
-      .returns(MOCK_REFERENCE_CODE);
+    vi.spyOn(reference, "generateReferenceCode").mockReturnValue(
+      MOCK_REFERENCE_CODE
+    );
 
     process.env.SUPPORT_PHONE_CONTACT = "1";
     process.env.SHOW_CONTACT_EMERGENCY_MESSAGE = "1";
@@ -75,8 +70,7 @@ describe("Contact GOV.UK One Login controller", () => {
   });
 
   afterEach(() => {
-    sandbox.restore();
-    loggerSpy.restore();
+    vi.restoreAllMocks();
     delete process.env.SUPPORT_PHONE_CONTACT;
     delete process.env.SHOW_CONTACT_EMERGENCY_MESSAGE;
     delete process.env.SUPPORT_WEBCHAT_CONTACT;
@@ -96,7 +90,7 @@ describe("Contact GOV.UK One Login controller", () => {
       req.query.fromURL = "https://home.account.gov.uk/security";
       contactGet(req as Request, res as Response);
       // query data should be passed to the page render
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+      expect(res.render).toHaveBeenCalledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactEmergencyMessage: true,
@@ -111,7 +105,7 @@ describe("Contact GOV.UK One Login controller", () => {
       });
     });
 
-    it("should render contact centre triage page with fromURL from session and signedOut = false ", () => {
+    it("should render contact centre triage page with fromURL from session and signedOut = false", () => {
       const validUrl = "https://home.account.gov.uk/security";
       req.session = {
         referenceCode: MOCK_REFERENCE_CODE,
@@ -127,7 +121,7 @@ describe("Contact GOV.UK One Login controller", () => {
         lo: JSON.stringify({ user: null }),
       };
       contactGet(req as Request, res as Response);
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+      expect(res.render).toHaveBeenCalledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactEmergencyMessage: true,
@@ -161,7 +155,7 @@ describe("Contact GOV.UK One Login controller", () => {
       } as any;
       contactGet(req as Request, res as Response);
       // query data should be passed to the page render
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+      expect(res.render).toHaveBeenCalledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
         accessibilityStatementUrl:
           "https://signin.account.gov.uk/accessibility-statement",
@@ -175,10 +169,10 @@ describe("Contact GOV.UK One Login controller", () => {
         nonce: MOCK_NONCE,
       });
       // query data should be saved into session
-      expect(req.session.queryParameters.fromURL).to.equal(fromURL);
-      expect(req.session.queryParameters.appSessionId).to.equal(appSessionId);
-      expect(req.session.queryParameters.appErrorCode).to.equal(appErrorCode);
-      expect(req.session.queryParameters.theme).to.equal(theme);
+      expect(req.session.queryParameters.fromURL).toBe(fromURL);
+      expect(req.session.queryParameters.appSessionId).toBe(appSessionId);
+      expect(req.session.queryParameters.appErrorCode).toBe(appErrorCode);
+      expect(req.session.queryParameters.theme).toBe(theme);
     });
 
     it("should render contact centre triage page ignoring invalid fields from the mobile app", () => {
@@ -200,7 +194,7 @@ describe("Contact GOV.UK One Login controller", () => {
       } as any;
       contactGet(req as Request, res as Response);
       // invalid query data not should be passed to the page render
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+      expect(res.render).toHaveBeenCalledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
         accessibilityStatementUrl:
           "https://signin.account.gov.uk/accessibility-statement",
@@ -214,10 +208,10 @@ describe("Contact GOV.UK One Login controller", () => {
         nonce: MOCK_NONCE,
       });
       // invalid query data should not be saved into session
-      expect(req.session.queryParameters.fromURL).to.equal(validUrl);
-      expect(req.session.queryParameters.appSessionId).to.be.undefined;
-      expect(req.session.queryParameters.appErrorCode).to.be.undefined;
-      expect(req.session.queryParameters.theme).to.be.undefined;
+      expect(req.session.queryParameters.fromURL).toBe(validUrl);
+      expect(req.session.queryParameters.appSessionId).toBeUndefined();
+      expect(req.session.queryParameters.appErrorCode).toBeUndefined();
+      expect(req.session.queryParameters.theme).toBeUndefined();
     });
 
     it("should render centre triage page when invalid fromURL is present", () => {
@@ -231,7 +225,7 @@ describe("Contact GOV.UK One Login controller", () => {
         },
       } as any;
       contactGet(req as Request, res as Response);
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+      expect(res.render).toHaveBeenCalledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
         accessibilityStatementUrl:
           "https://signin.account.gov.uk/accessibility-statement",
@@ -244,7 +238,7 @@ describe("Contact GOV.UK One Login controller", () => {
         language: "en",
         nonce: MOCK_NONCE,
       });
-      expect(loggerSpy).to.have.calledWith(
+      expect(loggerSpy).toHaveBeenCalledWith(
         {
           trace: res.locals.trace,
           fromURL: undefined,
@@ -267,7 +261,7 @@ describe("Contact GOV.UK One Login controller", () => {
         },
       } as any;
       contactGet(req as Request, res as Response);
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+      expect(res.render).toHaveBeenCalledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactEmailServiceUrl: "/track-and-redirect",
         accessibilityStatementUrl:
           "https://signin.account.gov.uk/accessibility-statement",
@@ -290,7 +284,7 @@ describe("Contact GOV.UK One Login controller", () => {
         },
       } as any;
       contactGet(req as Request, res as Response);
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+      expect(res.render).toHaveBeenCalledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactEmergencyMessage: true,
@@ -314,7 +308,7 @@ describe("Contact GOV.UK One Login controller", () => {
       } as any;
       req.cookies.lo = "true";
       contactGet(req as Request, res as Response);
-      expect(res.render).to.have.calledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
+      expect(res.render).toHaveBeenCalledWith(CONTACT_ONE_LOGIN_TEMPLATE, {
         contactWebchatEnabled: true,
         contactPhoneEnabled: true,
         showContactEmergencyMessage: true,
@@ -354,7 +348,7 @@ describe("Contact GOV.UK One Login controller", () => {
 
       contactGet(req as Request, res as Response);
 
-      expect(loggerSpy).to.have.calledWith(
+      expect(loggerSpy).toHaveBeenCalledWith(
         {
           trace: res.locals.trace,
           fromURL,
@@ -379,14 +373,14 @@ describe("Contact GOV.UK One Login controller", () => {
       const expectedFromURL = "https://gov.uk/ogd";
       const expectedUserAgent = "expectedUserAgent";
 
-      sqsClientStub = stub(SQSClient.prototype, "send");
+      sqsClientStub = vi.spyOn(SQSClient.prototype, "send");
       const sqsResponse: SendMessageCommandOutput = {
         $metadata: undefined,
         MessageId: "message-id",
         MD5OfMessageBody: "md5-hash",
       };
       process.env.AUDIT_QUEUE_URL = "queue";
-      sqsClientStub.returns(sqsResponse);
+      sqsClientStub.mockReturnValue(sqsResponse);
 
       req.session = {
         user: {
@@ -414,31 +408,28 @@ describe("Contact GOV.UK One Login controller", () => {
       contactGet(req as Request, res as Response);
 
       // Assert
-      expect(sqsClientStub.called).to.eq(true);
+      expect(sqsClientStub).toHaveBeenCalled();
       const publishedEvent = JSON.parse(
-        sqsClientStub.getCall(0).firstArg.input.MessageBody
+        sqsClientStub.mock.calls[0][0].input.MessageBody
       ) as AuditEvent;
-      expect(publishedEvent.event_name).to.equal("HOME_TRIAGE_PAGE_VISIT");
-      expect(publishedEvent.timestamp).to.be.a("number");
-      expect(publishedEvent.component_id).to.equal("HOME");
-      expect(publishedEvent.user.session_id).to.equal(expectedSessionId);
-      expect(publishedEvent.user.persistent_session_id).to.equal(
+      expect(publishedEvent.event_name).toBe("HOME_TRIAGE_PAGE_VISIT");
+      expect(typeof publishedEvent.timestamp).toBe("number");
+      expect(publishedEvent.component_id).toBe("HOME");
+      expect(publishedEvent.user.session_id).toBe(expectedSessionId);
+      expect(publishedEvent.user.persistent_session_id).toBe(
         expectedPersistentSessionId
       );
-      expect(publishedEvent.platform.user_agent).to.equal("expectedUserAgent");
-      expect(publishedEvent.extensions.app_error_code).to.equal(
+      expect(publishedEvent.platform.user_agent).toBe("expectedUserAgent");
+      expect(publishedEvent.extensions.app_error_code).toBe(
         expectedAppErrorCode
       );
-      expect(publishedEvent.extensions.app_session_id).to.equal(
+      expect(publishedEvent.extensions.app_session_id).toBe(
         expectedAppSessionId
       );
-      expect(publishedEvent.extensions.reference_code).to.equal(
+      expect(publishedEvent.extensions.reference_code).toBe(
         expectedReferenceCode
       );
-      expect(publishedEvent.extensions.from_url).to.equal(expectedFromURL);
-
-      // Tidy up
-      sqsClientStub.restore();
+      expect(publishedEvent.extensions.from_url).toBe(expectedFromURL);
     });
   });
 });

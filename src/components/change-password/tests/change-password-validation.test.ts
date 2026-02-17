@@ -1,11 +1,10 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request } from "express";
 import { validationResult } from "express-validator";
-import { sinon } from "../../../../test/utils/test-utils";
 import { RequestBuilder } from "../../../../test/utils/builders";
-import { validateChangePasswordRequest } from "../change-password-validation";
+import { validateChangePasswordRequest } from "../change-password-validation.js";
 import { ValidationChainFunc } from "../../../types";
+import * as formValidationMiddleware from "../../../middleware/form-validation-middleware.js";
 
 describe("change password validation", () => {
   let req: Partial<Request>;
@@ -13,18 +12,17 @@ describe("change password validation", () => {
 
   beforeEach(() => {
     req = new RequestBuilder()
-      .withTranslate(sinon.fake.returns("validation error"))
+      .withTranslate(vi.fn().mockReturnValue("validation error"))
       .build();
 
-    const validateBodyMiddleware = require("../../../middleware/form-validation-middleware");
-    const stub = sinon.stub(validateBodyMiddleware, "validateBodyMiddleware");
-    stub.returns(() => {});
+    const stub = vi.spyOn(formValidationMiddleware, "validateBodyMiddleware");
+    stub.mockReturnValue(() => {});
 
     validators = validateChangePasswordRequest();
   });
 
   afterEach(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 
   describe("validateChangePasswordRequest", () => {
@@ -39,7 +37,7 @@ describe("change password validation", () => {
       }
 
       const errors = validationResult(req as Request);
-      expect(errors.isEmpty()).to.be.true;
+      expect(errors.isEmpty()).toBe(true);
     });
 
     it("should fail validation when password is empty", async () => {
@@ -53,9 +51,10 @@ describe("change password validation", () => {
       }
 
       const errors = validationResult(req as Request);
-      expect(errors.isEmpty()).to.be.false;
-      expect((req as any).t).to.have.been.calledWith(
-        "pages.changePassword.password.validationError.required"
+      expect(errors.isEmpty()).toBe(false);
+      expect((req as any).t).toHaveBeenCalledWith(
+        "pages.changePassword.password.validationError.required",
+        expect.anything()
       );
     });
 
@@ -71,9 +70,10 @@ describe("change password validation", () => {
       }
 
       const errors = validationResult(req as Request);
-      expect(errors.isEmpty()).to.be.false;
-      expect((req as any).t).to.have.been.calledWith(
-        "pages.changePassword.password.validationError.maxLength"
+      expect(errors.isEmpty()).toBe(false);
+      expect((req as any).t).toHaveBeenCalledWith(
+        "pages.changePassword.password.validationError.maxLength",
+        expect.anything()
       );
     });
 
@@ -88,8 +88,8 @@ describe("change password validation", () => {
       }
 
       const errors = validationResult(req as Request);
-      expect(errors.isEmpty()).to.be.false;
-      expect((req as any).t).to.have.been.calledWith(
+      expect(errors.isEmpty()).toBe(false);
+      expect((req as any).t).toHaveBeenCalledWith(
         "pages.changePassword.password.validationError.alphaNumeric"
       );
     });
@@ -105,8 +105,8 @@ describe("change password validation", () => {
       }
 
       const errors = validationResult(req as Request);
-      expect(errors.isEmpty()).to.be.false;
-      expect((req as any).t).to.have.been.calledWith(
+      expect(errors.isEmpty()).toBe(false);
+      expect((req as any).t).toHaveBeenCalledWith(
         "pages.changePassword.password.validationError.alphaNumeric"
       );
     });
@@ -122,8 +122,8 @@ describe("change password validation", () => {
       }
 
       const errors = validationResult(req as Request);
-      expect(errors.isEmpty()).to.be.false;
-      expect((req as any).t).to.have.been.calledWith(
+      expect(errors.isEmpty()).toBe(false);
+      expect((req as any).t).toHaveBeenCalledWith(
         "pages.changePassword.password.validationError.alphaNumeric"
       );
     });
@@ -139,8 +139,8 @@ describe("change password validation", () => {
       }
 
       const errors = validationResult(req as Request);
-      expect(errors.isEmpty()).to.be.false;
-      expect((req as any).t).to.have.been.calledWith(
+      expect(errors.isEmpty()).toBe(false);
+      expect((req as any).t).toHaveBeenCalledWith(
         "pages.changePassword.confirmPassword.validationError.matches"
       );
     });
@@ -156,9 +156,10 @@ describe("change password validation", () => {
       }
 
       const errors = validationResult(req as Request);
-      expect(errors.isEmpty()).to.be.false;
-      expect((req as any).t).to.have.been.calledWith(
-        "pages.changePassword.confirmPassword.validationError.required"
+      expect(errors.isEmpty()).toBe(false);
+      expect((req as any).t).toHaveBeenCalledWith(
+        "pages.changePassword.confirmPassword.validationError.required",
+        expect.anything()
       );
     });
   });

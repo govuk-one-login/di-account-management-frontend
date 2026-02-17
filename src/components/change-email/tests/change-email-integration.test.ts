@@ -1,21 +1,19 @@
 import request from "supertest";
-import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
-import { testComponent } from "../../../../test/utils/helpers";
+import { describe, beforeAll, afterAll, it, vi, beforeEach } from "vitest";
+import { expect } from "../../../../test/utils/test-utils.js";
+import { testComponent } from "../../../../test/utils/helpers.js";
 import nock = require("nock");
 import * as cheerio from "cheerio";
-import decache from "decache";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
   NOTIFICATION_TYPE,
   PATH_DATA,
-} from "../../../app.constants";
+} from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
 
 describe("Integration:: change email", () => {
-  let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
   let app: any;
@@ -25,14 +23,13 @@ describe("Integration:: change email", () => {
 
   const TEST_SUBJECT_ID = "jkduasd";
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
@@ -57,21 +54,18 @@ describe("Integration:: change email", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return Promise.resolve({});
-    });
+    oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockReturnValue(Promise.resolve({} as any));
+    oidcGetCachedJWKS = await import("../../../utils/oidc.js");
+    vi.spyOn(oidcGetCachedJWKS, "getCachedJWKS").mockReturnValue(
+      Promise.resolve({} as any)
+    );
 
-    oidcGetCachedJWKS = require("../../../utils/oidc");
-    sandbox.stub(oidcGetCachedJWKS, "getCachedJWKS").callsFake(() => {
-      return Promise.resolve({});
-    });
-
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
     baseApi = process.env.AM_API_BASE_URL;
-
     await request(app)
       .get(PATH_DATA.CHANGE_EMAIL.url)
       .query({ type: "changeEmail" })
@@ -86,19 +80,25 @@ describe("Integration:: change email", () => {
     nock.cleanAll();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
-  it("should return change email page", (done) => {
-    request(app).get(PATH_DATA.CHANGE_EMAIL.url).expect(200, done);
+  it("should return change email page", async () => {
+    const res = await request(app).get(PATH_DATA.CHANGE_EMAIL.url).expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to Your services when csrf not present", async () => {
-    await checkFailedCSRFValidationBehaviour(app, PATH_DATA.CHANGE_EMAIL.url, {
-      email: "123456",
-    });
+    const res = await checkFailedCSRFValidationBehaviour(
+      app,
+      PATH_DATA.CHANGE_EMAIL.url,
+      {
+        email: "123456",
+      }
+    );
+    expect(res).toBeUndefined();
   });
 
   it("should return validation error when email not entered", async () => {
@@ -112,12 +112,12 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("email-error")).text()).to.contains(
+        expect($(testComponent("email-error")).text()).toContain(
           "Enter your email address"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when email too long", async () => {
@@ -132,12 +132,12 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("email-error")).text()).to.contains(
+        expect($(testComponent("email-error")).text()).toContain(
           "Email address must be 256 characters or fewer"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when invalid email entered", async () => {
@@ -151,12 +151,12 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page(testComponent("email-error")).text()).to.contains(
+        expect(page(testComponent("email-error")).text()).toContain(
           "Enter an email address in the correct format, like name@example.com"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when same email used", async () => {
@@ -170,12 +170,12 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page(testComponent("email-error")).text()).to.contains(
+        expect(page(testComponent("email-error")).text()).toContain(
           "You are already using that email address. Enter a different email address."
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when same email used by another user", async () => {
@@ -197,12 +197,12 @@ describe("Integration:: change email", () => {
       })
       .expect(function (res) {
         const page = cheerio.load(res.text);
-        expect(page(testComponent("email-error")).text()).to.contains(
+        expect(page(testComponent("email-error")).text()).toContain(
           "There’s already a GOV.UK One Login using that email address. Enter a different email address."
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should redirect to /check-your-email when valid email", async () => {
@@ -224,7 +224,7 @@ describe("Integration:: change email", () => {
       })
       .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url)
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   describe("Email Normalization Tests", () => {
@@ -268,7 +268,7 @@ describe("Integration:: change email", () => {
         .expect("Location", PATH_DATA.CHECK_YOUR_EMAIL.url);
 
       // Assert
-      expect(receivedEmail).to.equal(expectedNormalisedEmail);
+      expect(receivedEmail).toBe(expectedNormalisedEmail);
     };
 
     it("should normalise email to all lowercase", async () => {

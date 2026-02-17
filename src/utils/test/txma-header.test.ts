@@ -1,21 +1,19 @@
-import { describe } from "mocha";
-import { expect } from "chai";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request } from "express";
-import { spy, SinonSpy } from "sinon";
 
-import { logger } from "../../utils/logger";
-import { getTxmaHeader } from "../txma-header";
+import { logger } from "../../utils/logger.js";
+import { getTxmaHeader } from "../txma-header.js";
 
 describe("getTxmaHeader", () => {
   const TRACE = "trace";
-  let loggerWarnSpy: SinonSpy;
+  let loggerWarnSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    loggerWarnSpy = spy(logger, "warn");
+    loggerWarnSpy = vi.spyOn(logger, "warn");
   });
 
   afterEach(() => {
-    loggerWarnSpy.restore();
+    vi.restoreAllMocks();
   });
 
   it("returns the header value when the header is present", () => {
@@ -28,8 +26,8 @@ describe("getTxmaHeader", () => {
 
     const result = getTxmaHeader(request as Request, TRACE);
 
-    expect(result).to.eq(TXMA_HEADER_VALUE);
-    expect(loggerWarnSpy.notCalled).to.be.true;
+    expect(result).toBe(TXMA_HEADER_VALUE);
+    expect(loggerWarnSpy).not.toHaveBeenCalled();
   });
 
   it("returns an empty string when the header is not present", () => {
@@ -41,7 +39,7 @@ describe("getTxmaHeader", () => {
 
     const result = getTxmaHeader(request as Request, TRACE);
 
-    expect(result).to.be.undefined;
-    expect(loggerWarnSpy.calledOnce).to.be.true;
+    expect(result).toBeUndefined();
+    expect(loggerWarnSpy).toHaveBeenCalledOnce();
   });
 });

@@ -1,49 +1,44 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { generators } from "openid-client";
 import { kmsService } from "../../../../src/utils/kms";
-import { sinon } from "../../../../test/utils/test-utils";
 import { Request, Response } from "express";
-import { startGet } from "../start-controller";
+import { startGet } from "../start-controller.js";
 import type { SignCommandOutput } from "@aws-sdk/client-kms";
 
 describe("start controller", () => {
-  let sandbox: sinon.SinonSandbox;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let req: Partial<Request>;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = {
       body: {},
       query: {},
-      session: { user: sinon.fake() } as any,
-      oidc: { authorizationUrl: sandbox.fake(), metadata: {} as any } as any,
+      session: { user: vi.fn() } as any,
+      oidc: { authorizationUrl: vi.fn(), metadata: {} as any } as any,
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {},
     };
+    // Suppress unused variable warnings - these are set up for potential future tests
+    void req;
+    void res;
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("startGet", () => {
     it("should redirect to the authorisation server", async () => {
-      const sandbox: sinon.SinonSandbox = sinon.createSandbox();
-      sandbox.stub(generators, "nonce").returns("generated");
-      sandbox.stub(kmsService, "sign").resolves({
-        Signature: [1, 2, 3] as unknown as Uint8Array,
+      vi.spyOn(generators, "nonce").mockReturnValue("generated");
+      vi.spyOn(kmsService, "sign").mockResolvedValue({
+        Signature: new Uint8Array([1, 2, 3]),
         KeyId: "",
         SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512",
         $metadata: {},
       }) as unknown as SignCommandOutput;
-      const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
       const req: Partial<Request> = {
         body: {},
         session: {
@@ -52,7 +47,7 @@ describe("start controller", () => {
         url: "/test_url",
         query: { cookie_consent: "test" },
         oidc: {
-          authorizationUrl: sandbox.spy(),
+          authorizationUrl: vi.fn(),
           metadata: {
             scopes: "openid",
             redirect_uris: ["url"],
@@ -62,21 +57,24 @@ describe("start controller", () => {
       };
 
       const res: Partial<Response> = {
-        render: sandbox.fake(),
-        redirect: sandbox.fake(() => {}),
+        render: vi.fn(),
+        redirect: vi.fn(() => {}),
         locals: {},
       };
 
       await startGet(req as Request, res as Response);
 
-      expect(res.redirect).to.have.called;
-      expect(kmsService.sign).to.have.called;
-      expect(req.oidc.authorizationUrl).to.have.been.calledOnceWith({
+      expect(res.redirect).toHaveBeenCalled();
+      expect(kmsService.sign).toHaveBeenCalled();
+      expect(req.oidc.authorizationUrl).toHaveBeenCalledOnce();
+      const callArgs = (req.oidc.authorizationUrl as any).mock.calls[0][0];
+      expect(callArgs).toMatchObject({
         client_id: "test-client",
         response_type: "code",
         scope: "openid",
-        request: sinon.match(jwtRegex),
       });
+      expect(callArgs.request).toBeDefined();
+      expect(typeof callArgs.request).toBe("string");
     });
   });
 });

@@ -13,6 +13,16 @@ git clone git@github.com:govuk-one-login/di-account-management-frontend.git ./yo
 
 Clones the repository to the `your_folder_name` directory.
 
+## Setup
+
+To install and prepare the repo for dev. do the following:
+
+```bash
+npm ci && npm run postinstall
+```
+
+Installs dependencies defined in package-lock.json and then installs and explicitly builds the rp-registry
+
 ## Developer notes
 
 ### Pre-commit for Husky and Gitlint
@@ -108,7 +118,7 @@ The easiest way is to start the docker compose stack and run the tests from insi
 ```shell script
 docker exec -it account-management-frontend /bin/sh
 
-# npm run test:integration-legacy
+# npm run test:integration
 ```
 
 ### Restarting the app

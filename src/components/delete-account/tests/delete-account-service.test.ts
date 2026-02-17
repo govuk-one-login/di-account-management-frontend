@@ -1,22 +1,17 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SnsService } from "../../../utils/types";
-import { sinon } from "../../../../test/utils/test-utils";
-import { http } from "../../../utils/http";
+import { http } from "../../../utils/http.js";
 
-import { deleteAccountService } from "../delete-account-service";
+import { deleteAccountService } from "../delete-account-service.js";
 
 describe("deleteAccountService", () => {
-  let sandbox: sinon.SinonSandbox;
-
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     process.env.DELETE_TOPIC_ARN = "UserAccountDeletionEnv";
   });
 
   afterEach(() => {
     delete process.env.DELETE_TOPIC_ARN;
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("deleteServiceData", () => {
@@ -26,26 +21,28 @@ describe("deleteAccountService", () => {
     });
 
     it("fills the topic ARN from config if not provided", async () => {
-      const fakeSnsService: SnsService = { publish: sandbox.fake() };
+      const fakeSnsService: SnsService = { publish: vi.fn() };
       await deleteAccountService(http, fakeSnsService).publishToDeleteTopic(
         "abc",
         "def"
       );
-      expect(fakeSnsService.publish).to.have.been.calledOnceWith(
+      expect(fakeSnsService.publish).toHaveBeenCalledOnce();
+      expect(fakeSnsService.publish).toHaveBeenCalledWith(
         "UserAccountDeletionEnv",
         expected_message
       );
     });
 
     it("calls snsService.publish with a topic ARN and message JSON", async () => {
-      const fakeSnsService: SnsService = { publish: sandbox.fake() };
+      const fakeSnsService: SnsService = { publish: vi.fn() };
       await deleteAccountService(http, fakeSnsService).publishToDeleteTopic(
         "abc",
         "def",
         undefined,
         "UserAccountDeletion"
       );
-      expect(fakeSnsService.publish).to.have.been.calledOnceWith(
+      expect(fakeSnsService.publish).toHaveBeenCalledOnce();
+      expect(fakeSnsService.publish).toHaveBeenCalledWith(
         "UserAccountDeletion",
         expected_message
       );

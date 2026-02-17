@@ -1,8 +1,13 @@
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  beforeAll,
+  afterAll,
+} from "vitest";
 import request from "supertest";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
-import nock = require("nock");
-import decache from "decache";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
@@ -12,25 +17,24 @@ import {
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 import * as cheerio from "cheerio";
-import { expect } from "chai";
+
+const nock = require("nock");
 
 describe("Integration:: request email code", () => {
   let token: string | string[];
   let cookies: string;
-  let sandbox: sinon.SinonSandbox;
   let app: any;
   let baseApi: string;
 
   const TEST_SUBJECT_ID = "jkduasd";
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
           newEmailAddress: "new@test.com",
@@ -56,18 +60,19 @@ describe("Integration:: request email code", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return Promise.resolve({});
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
+      return Promise.resolve({} as any);
     });
 
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     await request(app)
@@ -83,13 +88,16 @@ describe("Integration:: request email code", () => {
     nock.cleanAll();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
-  it("should return resend email code page", (done) => {
-    request(app).get(PATH_DATA.RESEND_EMAIL_CODE.url).expect(200, done);
+  it("should return resend email code page", async () => {
+    const res = await request(app)
+      .get(PATH_DATA.RESEND_EMAIL_CODE.url)
+      .expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
@@ -134,6 +142,6 @@ describe("Integration:: request email code", () => {
       .expect(302);
 
     // Assert
-    expect(receivedEmail).to.equal("new@test.com");
+    expect(receivedEmail).toBe("new@test.com");
   });
 });

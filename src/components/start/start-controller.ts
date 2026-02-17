@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { redirectToLogIn } from "../../middleware/requires-auth-middleware";
+import { redirectToLogIn } from "../../middleware/requires-auth-middleware.js";
 
 export async function startGet(req: Request, res: Response): Promise<void> {
   req.metrics?.addMetric("signedOutGet", MetricUnit.Count, 1);

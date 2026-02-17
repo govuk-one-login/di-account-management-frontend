@@ -1,5 +1,5 @@
-import { mfaMethodTypes } from "../utils/mfaClient/types";
-import { EventName } from "../app.constants";
+import { mfaMethodTypes } from "../utils/mfaClient/types.js";
+import { EventName } from "../app.constants.js";
 import { Request, Response } from "express";
 
 export interface EventServiceInterface {

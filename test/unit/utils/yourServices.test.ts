@@ -1,75 +1,134 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import {
-  formatService,
-  presentYourServices,
-} from "../../../src/utils/yourServices";
-import * as yourServices from "../../../src/utils/yourServices";
-import type { DynamoDBService, Service } from "../../../src/utils/types";
-import sinon from "sinon";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import type { DynamoDBService, Service } from "../../../src/utils/types.js";
 import {
   GetItemCommandOutput,
   QueryCommandOutput,
 } from "@aws-sdk/client-dynamodb";
-import * as dynamo from "../../../src/utils/dynamo";
+import * as dynamo from "../../../src/utils/dynamo.js";
+import * as config from "../../../src/config.js";
+
+vi.mock("../../../src/config", async () => {
+  const actual = await vi.importActual<typeof config>("../../../src/config");
+  return {
+    ...actual,
+    getIdListFromFilter: vi.fn((filter: any) => {
+      if (filter.showInAccounts)
+        return ["prisonVisits", "dfeApplyForTeacherTraining"];
+      if (filter.showInServices)
+        return ["mortgageDeed", "vehicleOperatorLicense"];
+      if (filter.showInDeleteAccount)
+        return [
+          "dfeApplyForTeacherTraining",
+          "mortgageDeed",
+          "prisonVisits",
+          "vehicleOperatorLicense",
+        ];
+      if (filter.showDetailedCard) return [];
+      if (filter.isAvailableInWelsh) return ["hmrc", "vehicleOperatorLicense"];
+      return [];
+    }),
+    getAppEnv: vi.fn(() => "local"),
+  };
+});
+
+import {
+  formatService,
+  presentYourServices,
+} from "../../../src/utils/yourServices.js";
+import * as yourServices from "../../../src/utils/yourServices.js";
 
 describe("YourService Util", () => {
-  let sandbox: sinon.SinonSandbox;
+  let dynamoDBServiceStub: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(yourServices, "getServices").resolves([
-      {
-        client_id: "prisonVisits",
-        count_successful_logins: 1,
-        last_accessed: 14567776,
-        last_accessed_readable_format: "last_accessed_readable_format",
-        hasDetailedCard: true,
-        isAvailableInWelsh: false,
+    const mockDynamoDBService: DynamoDBService = {
+      getItem(): Promise<GetItemCommandOutput> {
+        return Promise.resolve({
+          $metadata: { httpStatusCode: 200 },
+          Item: {
+            user_id: { S: "test" },
+            services: {
+              L: [
+                {
+                  M: {
+                    client_id: { S: "prisonVisits" },
+                    count_successful_logins: { N: "1" },
+                    last_accessed: { N: "14567776" },
+                    last_accessed_readable_format: {
+                      S: "last_accessed_readable_format",
+                    },
+                    hasDetailedCard: { BOOL: true },
+                    isAvailableInWelsh: { BOOL: false },
+                  },
+                },
+                {
+                  M: {
+                    client_id: { S: "mortgageDeed" },
+                    count_successful_logins: { N: "1" },
+                    last_accessed: { N: "14567776" },
+                    last_accessed_readable_format: {
+                      S: "last_accessed_readable_format",
+                    },
+                    hasDetailedCard: { BOOL: true },
+                    isAvailableInWelsh: { BOOL: false },
+                  },
+                },
+                {
+                  M: {
+                    client_id: { S: "dfeApplyForTeacherTraining" },
+                    count_successful_logins: { N: "2" },
+                    last_accessed: { N: "14567776" },
+                    last_accessed_readable_format: {
+                      S: "last_accessed_readable_format",
+                    },
+                    hasDetailedCard: { BOOL: false },
+                    isAvailableInWelsh: { BOOL: false },
+                  },
+                },
+                {
+                  M: {
+                    client_id: { S: "vehicleOperatorLicense" },
+                    count_successful_logins: { N: "3" },
+                    last_accessed: { N: "14567776" },
+                    last_accessed_readable_format: {
+                      S: "last_accessed_readable_format",
+                    },
+                    hasDetailedCard: { BOOL: false },
+                    isAvailableInWelsh: { BOOL: true },
+                  },
+                },
+                {
+                  M: {
+                    client_id: { S: "nonExistent" },
+                    count_successful_logins: { N: "1" },
+                    last_accessed: { N: "14567776" },
+                    last_accessed_readable_format: {
+                      S: "last_accessed_readable_format",
+                    },
+                    hasDetailedCard: { BOOL: true },
+                    isAvailableInWelsh: { BOOL: true },
+                  },
+                },
+              ],
+            },
+          },
+        });
       },
-      {
-        client_id: "mortgageDeed",
-        count_successful_logins: 1,
-        last_accessed: 14567776,
-        last_accessed_readable_format: "last_accessed_readable_format",
-        hasDetailedCard: true,
-        isAvailableInWelsh: false,
+      queryItem(): Promise<QueryCommandOutput> {
+        return Promise.resolve({} as QueryCommandOutput);
       },
-      {
-        client_id: "dfeApplyForTeacherTraining",
-        count_successful_logins: 2,
-        last_accessed: 14567776,
-        last_accessed_readable_format: "last_accessed_readable_format",
-        hasDetailedCard: false,
-        isAvailableInWelsh: false,
-      },
-      {
-        client_id: "vehicleOperatorLicense",
-        count_successful_logins: 3,
-        last_accessed: 14567776,
-        last_accessed_readable_format: "last_accessed_readable_format",
-        hasDetailedCard: false,
-        isAvailableInWelsh: true,
-      },
-      {
-        client_id: "nonExistent",
-        count_successful_logins: 1,
-        last_accessed: 14567776,
-        last_accessed_readable_format: "last_accessed_readable_format",
-        hasDetailedCard: true,
-        isAvailableInWelsh: true,
-      },
-    ]);
+    };
+    dynamoDBServiceStub = vi.spyOn(dynamo, "dynamoDBService");
+    dynamoDBServiceStub.mockReturnValue(mockDynamoDBService);
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.clearAllMocks();
   });
 
   describe("get services", () => {
     it("gets services and returns the expected date", async () => {
-      sandbox.restore();
-
+      dynamoDBServiceStub.mockRestore();
       const dynamodbGetItemOutput = {
         $metadata: {
           httpStatusCode: 200,
@@ -125,12 +184,12 @@ describe("YourService Util", () => {
           return Promise.resolve({} as QueryCommandOutput);
         },
       };
-      const dynamoDBServiceStub = sandbox.stub(dynamo, "dynamoDBService");
-      dynamoDBServiceStub.returns(mockDynamoDBService);
+      dynamoDBServiceStub = vi.spyOn(dynamo, "dynamoDBService");
+      dynamoDBServiceStub.mockReturnValue(mockDynamoDBService);
 
       const services = await yourServices.getServices("subjectId", "trace");
 
-      expect(services).to.deep.equal([
+      expect(services).toEqual([
         {
           count_successful_logins: 4,
           last_accessed: 1666169856,
@@ -149,8 +208,7 @@ describe("YourService Util", () => {
     });
 
     it("gets services has no match", async () => {
-      sandbox.restore();
-
+      dynamoDBServiceStub.mockRestore();
       const dynamodbGetItemOutput = {
         $metadata: {
           httpStatusCode: 200,
@@ -168,17 +226,17 @@ describe("YourService Util", () => {
           return Promise.resolve({} as QueryCommandOutput);
         },
       };
-      const dynamoDBServiceStub = sandbox.stub(dynamo, "dynamoDBService");
-      dynamoDBServiceStub.returns(mockDynamoDBService);
+      dynamoDBServiceStub = vi.spyOn(dynamo, "dynamoDBService");
+      dynamoDBServiceStub.mockReturnValue(mockDynamoDBService);
 
       const services = await yourServices.getServices("subjectId", "trace");
 
-      expect(services).to.deep.equal([]);
+      expect(services).toEqual([]);
     });
   });
 
   describe("format service information to diplay", () => {
-    it("It takes a date epoch in seconds and returns a pretty formatted date", async () => {
+    it("takes a date epoch in seconds and returns a pretty formatted date", async () => {
       const dateEpochInSeconds = 1673358736;
       const serviceFromDb: Service = {
         client_id: "a_client_id",
@@ -195,7 +253,7 @@ describe("YourService Util", () => {
       expect(formattedService.last_accessed_readable_format).equal(
         "10 January 2023"
       );
-      expect(formattedService.isAvailableInWelsh).to.be.true;
+      expect(formattedService.isAvailableInWelsh).toBe(true);
     });
 
     it("format service object with hasDetailedCard if service is hmrc", async () => {
@@ -210,11 +268,11 @@ describe("YourService Util", () => {
       const formattedService: Service = formatService(serviceFromDb, "en");
 
       expect(formattedService.hasDetailedCard).equal(false);
-      expect(formattedService.isAvailableInWelsh).to.be.undefined;
+      expect(formattedService.isAvailableInWelsh).toBeUndefined();
     });
   });
 
-  describe("does GovUK Publishing service exist in array", async () => {
+  describe("does GovUK Publishing service exist in array", () => {
     it("should return a list of services for the user", async () => {
       const expectedResponse = {
         accountsList: [
@@ -256,13 +314,13 @@ describe("YourService Util", () => {
       };
 
       const services = await presentYourServices("subjectId", "trace");
-      expect(services).to.deep.equal(expectedResponse);
+      expect(services).toEqual(expectedResponse);
     });
   });
 
   describe("getYourServicesForAccountDeletion", () => {
     it("returns a list of services in the expected format", async () => {
-      const mockTranslate = sinon.stub().callsFake((id) => id);
+      const mockTranslate = vi.fn().mockImplementation((id) => id);
 
       const expectedResponse: Service[] = [
         {
@@ -304,7 +362,7 @@ describe("YourService Util", () => {
         "trace",
         mockTranslate
       );
-      expect(services).to.deep.equal(expectedResponse);
+      expect(services).toEqual(expectedResponse);
     });
   });
 });

@@ -1,7 +1,11 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Request, Response } from "express";
-import { getRequestConfig, getRequestConfigFromExpress, Http } from "../http";
-import { getMfaServiceUrl } from "../../config";
+import {
+  getRequestConfig,
+  getRequestConfigFromExpress,
+  Http,
+} from "../http.js";
+import { getMfaServiceUrl } from "../../config.js";
 
 import {
   ApiResponse,
@@ -12,9 +16,9 @@ import {
   CreateMfaPayload,
   SimpleError,
   UpdateMfaPayload,
-} from "./types";
-import { HTTP_STATUS_CODES } from "../../app.constants";
-import { validateCreate, validateUpdate } from "./validate";
+} from "./types.js";
+import { HTTP_STATUS_CODES } from "../../app.constants.js";
+import { validateCreate, validateUpdate } from "./validate.js";
 
 export class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;

@@ -1,10 +1,8 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
-import { enterPasswordService } from "../enter-password-service";
-import { expect } from "chai";
+import { enterPasswordService } from "../enter-password-service.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
-import { describe } from "mocha";
+import { getApiBaseUrl } from "../../../config.js";
 import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
@@ -13,18 +11,14 @@ import {
 const baseUrl = getApiBaseUrl();
 
 describe("enterPasswordService", () => {
-  let sandbox: sinon.SinonSandbox;
-
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
     nock.cleanAll();
   });
 
-  it("Check if Authenticated  ", async () => {
+  it("Check if Authenticated", async () => {
     const accessToken = "1234";
     const email = "something@test.com";
     const password = "password";
@@ -65,7 +59,7 @@ describe("enterPasswordService", () => {
       }
     );
 
-    expect(response.authenticated).to.be.true;
+    expect(response.authenticated).toBe(true);
   });
 
   it("Check if intervention BLOCKED", async () => {
@@ -112,8 +106,8 @@ describe("enterPasswordService", () => {
       }
     );
 
-    expect(response.authenticated).to.be.false;
-    expect(response.intervention).to.equal("BLOCKED");
+    expect(response.authenticated).toBe(false);
+    expect(response.intervention).toBe("BLOCKED");
   });
 
   it("Check if intervention SUSPENDED", async () => {
@@ -160,7 +154,7 @@ describe("enterPasswordService", () => {
       }
     );
 
-    expect(response.authenticated).to.be.false;
-    expect(response.intervention).to.equal("SUSPENDED");
+    expect(response.authenticated).toBe(false);
+    expect(response.intervention).toBe("SUSPENDED");
   });
 });

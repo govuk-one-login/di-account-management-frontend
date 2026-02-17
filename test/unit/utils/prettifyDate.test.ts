@@ -1,6 +1,5 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { prettifyDate } from "../../../src/utils/prettifyDate";
+import { describe, it, expect } from "vitest";
+import { prettifyDate } from "../../../src/utils/prettifyDate.js";
 
 describe("PrettifyDate util", () => {
   it("takes a date epoch in seconds and returns a pretty formatted date", async () => {

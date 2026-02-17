@@ -5,8 +5,8 @@ import {
   SignCommandOutput,
   SigningAlgorithmSpec,
 } from "@aws-sdk/client-kms";
-import { KmsService } from "./types";
-import { getKMSConfig, KmsConfig } from "../config/aws";
+import { KmsService } from "./types.js";
+import { getKMSConfig, KmsConfig } from "../config/aws.js";
 
 const config: KmsConfig = getKMSConfig();
 const client = new KMSClient(config.awsConfig as any);

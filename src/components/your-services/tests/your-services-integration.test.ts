@@ -1,10 +1,8 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
-import { describe } from "mocha";
 import { testComponent } from "../../../../test/utils/helpers";
-import { expect, sinon } from "../../../../test/utils/test-utils";
 import * as cheerio from "cheerio";
 import * as nock from "nock";
-import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
 import type { Service } from "../../../../src/utils/types";
 
@@ -33,8 +31,8 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("empty-state")).length).to.not.equal(0);
+        expect(res.status).toBe(200);
+        expect($(testComponent("empty-state")).length).not.toBe(0);
       });
   });
 
@@ -44,11 +42,11 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(`h2${testComponent("accounts-heading")}`).length).to.equal(0);
-        expect(
-          $(`h2${testComponent("account-card-heading")}`).length
-        ).to.not.equal(0);
+        expect(res.status).toBe(200);
+        expect($(`h2${testComponent("accounts-heading")}`).length).toBe(0);
+        expect($(`h2${testComponent("account-card-heading")}`).length).not.toBe(
+          0
+        );
       });
   });
 
@@ -58,11 +56,11 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(`h2${testComponent("services-heading")}`).length).to.equal(0);
-        expect(
-          $(`h2${testComponent("service-card-heading")}`).length
-        ).to.not.equal(0);
+        expect(res.status).toBe(200);
+        expect($(`h2${testComponent("services-heading")}`).length).toBe(0);
+        expect($(`h2${testComponent("service-card-heading")}`).length).not.toBe(
+          0
+        );
       });
   });
 
@@ -75,19 +73,15 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect(
-          $(`h3${testComponent("account-card-heading")}`).length
-        ).to.not.equal(0);
-        expect(
-          $(`h3${testComponent("service-card-heading")}`).length
-        ).to.not.equal(0);
-        expect($(`h2${testComponent("services-heading")}`).length).to.not.equal(
+        expect(res.status).toBe(200);
+        expect($(`h3${testComponent("account-card-heading")}`).length).not.toBe(
           0
         );
-        expect($(`h2${testComponent("accounts-heading")}`).length).to.not.equal(
+        expect($(`h3${testComponent("service-card-heading")}`).length).not.toBe(
           0
         );
+        expect($(`h2${testComponent("services-heading")}`).length).not.toBe(0);
+        expect($(`h2${testComponent("accounts-heading")}`).length).not.toBe(0);
       });
   });
 
@@ -101,9 +95,9 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("service-card-long")).length).to.not.equal(0);
-        expect($(testComponent("service-card-short")).length).to.equal(0);
+        expect(res.status).toBe(200);
+        expect($(testComponent("service-card-long")).length).not.toBe(0);
+        expect($(testComponent("service-card-short")).length).toBe(0);
       });
   });
 
@@ -116,9 +110,9 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("service-card-short")).length).to.not.equal(0);
-        expect($(testComponent("service-card-long")).length).to.equal(0);
+        expect(res.status).toBe(200);
+        expect($(testComponent("service-card-short")).length).not.toBe(0);
+        expect($(testComponent("service-card-long")).length).toBe(0);
       });
   });
 
@@ -139,8 +133,8 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("no-welsh-notice-global")).length).to.equal(0);
+        expect(res.status).toBe(200);
+        expect($(testComponent("no-welsh-notice-global")).length).toBe(0);
       });
   });
 
@@ -162,8 +156,8 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("no-welsh-notice-global")).length).to.equal(1);
+        expect(res.status).toBe(200);
+        expect($(testComponent("no-welsh-notice-global")).length).toBe(1);
       });
   });
 
@@ -201,8 +195,8 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("no-welsh-notice-inline")).length).to.equal(0);
+        expect(res.status).toBe(200);
+        expect($(testComponent("no-welsh-notice-inline")).length).toBe(0);
       });
   });
 
@@ -241,8 +235,8 @@ describe("Integration:: your services", () => {
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect(res.status).to.equal(200);
-        expect($(testComponent("no-welsh-notice-inline")).length).to.equal(2);
+        expect(res.status).toBe(200);
+        expect($(testComponent("no-welsh-notice-inline")).length).toBe(2);
       });
   });
 });
@@ -255,12 +249,11 @@ const appWithMiddlewareSetup = async (data?: {
   hasHMRC?: boolean;
   language?: string;
 }) => {
-  decache("../../../app");
-  decache("../../../middleware/requires-auth-middleware");
-  const sandbox = sinon.createSandbox();
-  const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-  const yourServices = require("../../../utils/yourServices");
-  const oidc = require("../../../utils/oidc");
+  const sessionMiddleware = await import(
+    "../../../middleware/requires-auth-middleware.js"
+  );
+  const yourServices = await import("../../../utils/yourServices.js");
+  const oidc = await import("../../../utils/oidc.js");
   const params = data || {};
   const hasHMRC = params.hasHMRC || false;
   const language = params.language || "en";
@@ -293,29 +286,28 @@ const appWithMiddlewareSetup = async (data?: {
     },
   ];
 
-  sandbox.stub(sessionMiddleware, "requiresAuthMiddleware").callsFake(function (
-    req: any,
-    res: any,
-    next: any
-  ): void {
-    req.i18n.language = language;
-    req.session.user = DEFAULT_USER_SESSION;
-    next();
-  });
+  vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+    function (req: any, res: any, next: any): void {
+      req.i18n.language = language;
+      req.session.user = DEFAULT_USER_SESSION;
+      next();
+    }
+  );
 
-  sandbox.stub(yourServices, "presentYourServices").callsFake(function () {
+  vi.spyOn(yourServices, "presentYourServices").mockImplementation(function () {
     return {
       accountsList: accounts ? accountsList : [],
       servicesList: services ? serviceList : [],
     };
   });
-  sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+  vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
     return Promise.resolve({});
   });
 
-  sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+  vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
     return Promise.resolve({});
   });
 
-  return await require("../../../app").createApp();
+  const app = await import("../../../app.js");
+  return await app.createApp();
 };

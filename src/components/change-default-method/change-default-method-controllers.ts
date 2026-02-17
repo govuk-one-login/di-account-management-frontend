@@ -2,32 +2,38 @@ import { NextFunction, Request, Response } from "express";
 import {
   convertInternationalPhoneNumberToE164Format,
   getLastNDigits,
-} from "../../utils/phone-number";
-import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
-import { EventType, getNextState } from "../../utils/state-machine";
-import { ERROR_CODES, PATH_DATA } from "../../app.constants";
-import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types";
-import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
+} from "../../utils/phone-number.js";
+import {
+  handleMfaMethodPage,
+  renderMfaMethodPage,
+} from "../common/mfa/index.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants.js";
+import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types.js";
+import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service.js";
 import {
   formatValidationError,
   isObjectEmpty,
   renderBadRequest,
-} from "../../utils/validation";
-import { BadRequestError } from "../../utils/errors";
-import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient";
-import { logger } from "../../utils/logger";
+} from "../../utils/validation.js";
+import { BadRequestError } from "../../utils/errors.js";
+import {
+  createMfaClient,
+  formatErrorMessage,
+} from "../../utils/mfaClient/index.js";
+import { logger } from "../../utils/logger.js";
 import { validationResult } from "express-validator";
-import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
-import { getRequestConfigFromExpress } from "../../utils/http";
+import { validationErrorFormatter } from "../../middleware/form-validation-middleware.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
+} from "../../utils/mfaClient/types.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const ADD_APP_TEMPLATE = "change-default-method/change-to-app.njk";

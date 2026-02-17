@@ -1,21 +1,21 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextFunction, Request, Response } from "express";
-import { expect, sinon } from "../../utils/test-utils";
-import { describe } from "mocha";
-import { monkeyPatchRedirectToSaveSessionMiddleware } from "../../../src/middleware/monkey-patch-redirect-to-save-session-middleware";
-import * as loggerModule from "../../../src/utils/logger";
+// import { expect, sinon } from "../../utils/test-utils.js";
+import { monkeyPatchRedirectToSaveSessionMiddleware } from "../../../src/middleware/monkey-patch-redirect-to-save-session-middleware.js";
+import * as loggerModule from "../../../src/utils/logger.js";
 
 describe("monkey-patch-redirect-to-save-session-middleware", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
-  let originalRedirect: sinon.SinonSpy;
-  let sessionSave: sinon.SinonStub;
-  let loggerWarnStub: sinon.SinonStub;
+  let originalRedirect: ReturnType<typeof vi.fn>;
+  let sessionSave: ReturnType<typeof vi.fn>;
+  let loggerWarnStub: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    originalRedirect = sinon.spy();
-    sessionSave = sinon.stub();
-    loggerWarnStub = sinon.stub(loggerModule.logger, "warn");
+    originalRedirect = vi.fn();
+    sessionSave = vi.fn();
+    loggerWarnStub = vi.spyOn(loggerModule.logger, "warn");
 
     req = {
       path: "/test-path",
@@ -32,11 +32,11 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
       },
     };
 
-    next = sinon.spy();
+    next = vi.fn();
   });
 
   afterEach(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 
   describe("monkeyPatchRedirectToSaveSessionMiddleware", () => {
@@ -47,12 +47,12 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
         next
       );
 
-      expect(res.redirect).to.not.equal(originalRedirect);
-      expect(next).to.have.been.calledOnce;
+      expect(res.redirect).not.toBe(originalRedirect);
+      expect(next).toHaveBeenCalledOnce();
     });
 
     it("should save session before calling original redirect with string argument", () => {
-      sessionSave.callsArg(0);
+      sessionSave.mockImplementation((...args) => args[0]());
 
       monkeyPatchRedirectToSaveSessionMiddleware(
         req as Request,
@@ -60,14 +60,15 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
         next
       );
 
-      res.redirect!("/test-url");
+      res.redirect("/test-url");
 
-      expect(sessionSave).to.have.been.calledOnce;
-      expect(originalRedirect).to.have.been.calledOnceWith("/test-url");
+      expect(sessionSave).toHaveBeenCalledOnce();
+      expect(originalRedirect).toHaveBeenCalledOnce();
+      expect(originalRedirect).toHaveBeenCalledWith("/test-url");
     });
 
     it("should save session before calling original redirect with status and string arguments", () => {
-      sessionSave.callsArg(0);
+      sessionSave.mockImplementation((...args) => args[0]());
 
       monkeyPatchRedirectToSaveSessionMiddleware(
         req as Request,
@@ -75,15 +76,16 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
         next
       );
 
-      res.redirect!(302, "/test-url");
+      res.redirect(302, "/test-url");
 
-      expect(sessionSave).to.have.been.calledOnce;
-      expect(originalRedirect).to.have.been.calledOnceWith(302, "/test-url");
+      expect(sessionSave).toHaveBeenCalledOnce();
+      expect(originalRedirect).toHaveBeenCalledOnce();
+      expect(originalRedirect).toHaveBeenCalledWith(302, "/test-url");
     });
 
     it("should call original redirect only after session save completes", () => {
       let saveCallback: () => void;
-      sessionSave.callsFake((callback: () => void) => {
+      sessionSave.mockImplementation((callback: () => void) => {
         saveCallback = callback;
       });
 
@@ -93,13 +95,14 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
         next
       );
 
-      res.redirect!("/test-url");
+      res.redirect("/test-url");
 
-      expect(originalRedirect).to.not.have.been.called;
+      expect(originalRedirect).not.toHaveBeenCalled();
 
-      saveCallback!();
+      saveCallback();
 
-      expect(originalRedirect).to.have.been.calledOnceWith("/test-url");
+      expect(originalRedirect).toHaveBeenCalledOnce();
+      expect(originalRedirect).toHaveBeenCalledWith("/test-url");
     });
 
     it("should call original redirect immediately when session is not available", () => {
@@ -111,15 +114,16 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
         next
       );
 
-      res.redirect!("/test-url");
+      res.redirect("/test-url");
 
-      expect(sessionSave).to.not.have.been.called;
-      expect(originalRedirect).to.have.been.calledOnceWith("/test-url");
+      expect(sessionSave).not.toHaveBeenCalled();
+      expect(originalRedirect).toHaveBeenCalledOnce();
+      expect(originalRedirect).toHaveBeenCalledWith("/test-url");
     });
 
     it("should not redirect and log warning when headers are already sent", () => {
       res.headersSent = true;
-      sessionSave.callsArg(0);
+      sessionSave.mockImplementation((...args) => args[0]());
 
       monkeyPatchRedirectToSaveSessionMiddleware(
         req as Request,
@@ -127,15 +131,15 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
         next
       );
 
-      res.redirect!("/test-url");
+      res.redirect("/test-url");
 
-      expect(originalRedirect).to.not.have.been.called;
-      expect(loggerWarnStub).to.have.been.calledOnce;
-      expect(loggerWarnStub.firstCall.args[0]).to.deep.include({
+      expect(originalRedirect).not.toHaveBeenCalled();
+      expect(loggerWarnStub).toHaveBeenCalledOnce();
+      expect(loggerWarnStub.mock.calls[0][0]).toMatchObject({
         trace: "test-trace-id",
         path: "/test-path",
       });
-      expect(loggerWarnStub.firstCall.args[1]).to.equal(
+      expect(loggerWarnStub.mock.calls[0][1]).toBe(
         "Unable to redirect as headers are already sent"
       );
     });
@@ -150,16 +154,16 @@ describe("monkey-patch-redirect-to-save-session-middleware", () => {
         next
       );
 
-      res.redirect!("/test-url");
+      res.redirect("/test-url");
 
-      expect(sessionSave).to.not.have.been.called;
-      expect(originalRedirect).to.not.have.been.called;
-      expect(loggerWarnStub).to.have.been.calledOnce;
-      expect(loggerWarnStub.firstCall.args[0]).to.deep.include({
+      expect(sessionSave).not.toHaveBeenCalled();
+      expect(originalRedirect).not.toHaveBeenCalled();
+      expect(loggerWarnStub).toHaveBeenCalledOnce();
+      expect(loggerWarnStub.mock.calls[0][0]).toMatchObject({
         trace: "test-trace-id",
         path: "/test-path",
       });
-      expect(loggerWarnStub.firstCall.args[1]).to.equal(
+      expect(loggerWarnStub.mock.calls[0][1]).toBe(
         "Unable to redirect as headers are already sent"
       );
     });

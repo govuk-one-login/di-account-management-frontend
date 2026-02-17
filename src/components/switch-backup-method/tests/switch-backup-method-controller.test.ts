@@ -1,17 +1,15 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import {
   switchBackupMfaMethodPost,
   switchBackupMfaMethodGet,
-} from "../switch-backup-method-controller";
-import * as mfaClient from "../../../utils/mfaClient";
-import { AuthAppMethod, MfaMethod } from "../../../utils/mfaClient/types";
+} from "../switch-backup-method-controller.js";
+import * as mfaClient from "../../../utils/mfaClient/index.js";
+import { MfaMethod } from "../../../utils/mfaClient/types";
 
 describe("change default method", () => {
-  const statusFn = sinon.spy();
-  const redirectFn = sinon.spy();
+  const statusFn = vi.fn();
+  const redirectFn = vi.fn();
 
   const generateRequest = (id: string, noBackup = true, noDefault = true) => {
     const mfaMethods: any[] = [];
@@ -65,7 +63,7 @@ describe("change default method", () => {
       //@ts-expect-error req and res aren't valid objects since they are mocked
       await switchBackupMfaMethodGet(req as Request, res as Response);
 
-      expect(statusFn).to.be.calledWith(404);
+      expect(statusFn).toHaveBeenCalledWith(404);
     });
 
     it("should return a 404 if there is no default method", async () => {
@@ -75,15 +73,16 @@ describe("change default method", () => {
       //@ts-expect-error req and res aren't valid objects since they are mocked
       await switchBackupMfaMethodGet(req as Request, res as Response);
 
-      expect(statusFn).to.be.calledWith(404);
+      expect(statusFn).toHaveBeenCalledWith(404);
     });
   });
 
   describe("POST", () => {
-    let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
-    const appMethod: AuthAppMethod = {
-      mfaMethodType: "AUTH_APP",
-      credential: "1234567890",
+    let mfaClientStub: any;
+
+    const appMethod = {
+      mfaMethodType: "AUTH_APP" as const,
+      credential: "test-credential",
     };
 
     const mfaMethod: MfaMethod = {
@@ -94,12 +93,18 @@ describe("change default method", () => {
     };
 
     beforeEach(() => {
-      mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
-      sinon.stub(mfaClient, "createMfaClient").resolves(mfaClientStub);
+      mfaClientStub = {
+        create: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
+        retrieve: vi.fn(),
+        makeDefault: vi.fn(),
+      } as any;
+      vi.spyOn(mfaClient, "createMfaClient").mockResolvedValue(mfaClientStub);
     });
 
     afterEach(() => {
-      sinon.restore();
+      vi.restoreAllMocks();
     });
 
     it("should change the DEFAULT MFA method", async () => {
@@ -121,7 +126,7 @@ describe("change default method", () => {
       };
       const res = generateResponse();
 
-      mfaClientStub.makeDefault.resolves({
+      mfaClientStub.makeDefault.mockResolvedValue({
         data: [mfaMethod],
         success: true,
         status: 200,
@@ -130,10 +135,10 @@ describe("change default method", () => {
       //@ts-expect-error req and res aren't valid objects since they are mocked
       await switchBackupMfaMethodPost(req as Request, res as Response);
 
-      expect(mfaClientStub.makeDefault).to.be.calledWith(
+      expect(mfaClientStub.makeDefault).toHaveBeenCalledWith(
         mfaMethod.mfaIdentifier
       );
-      expect(redirectFn).to.be.calledWith("/switch-methods-confirmation");
+      expect(redirectFn).toHaveBeenCalledWith("/switch-methods-confirmation");
     });
 
     it("should return a 404 if the new default method doesn't exist", async () => {
@@ -143,11 +148,11 @@ describe("change default method", () => {
       //@ts-expect-error req and res aren't valid objects since they are mocked
       await switchBackupMfaMethodPost(req as Request, res as Response);
 
-      expect(statusFn).to.be.calledWith(404);
+      expect(statusFn).toHaveBeenCalledWith(404);
     });
 
     it("should throw an error if the request to the API fails", async () => {
-      mfaClientStub.makeDefault.resolves({
+      mfaClientStub.makeDefault.mockResolvedValue({
         data: [mfaMethod],
         success: false,
         status: 500,
@@ -157,10 +162,10 @@ describe("change default method", () => {
       const req = generateRequest("1", false);
       const res = generateResponse();
 
-      expect(
+      await expect(
         //@ts-expect-error req and res aren't valid objects since they are mocked
         switchBackupMfaMethodPost(req, res)
-      ).to.be.rejectedWith(
+      ).rejects.toThrow(
         "Switch backup method controller: error updating default MFA method. Status code: 500, API error code: 1, API error message: Internal server error"
       );
     });

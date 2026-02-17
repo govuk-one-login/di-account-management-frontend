@@ -1,6 +1,6 @@
 import * as express from "express";
-import { startGet } from "./start-controller";
-import { PATH_DATA } from "../../app.constants";
+import { startGet } from "./start-controller.js";
+import { PATH_DATA } from "../../app.constants.js";
 
 const router = express.Router();
 

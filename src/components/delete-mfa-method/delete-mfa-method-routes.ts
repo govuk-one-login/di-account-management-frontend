@@ -1,12 +1,12 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware.js";
 import {
   deleteMfaMethodGet,
   deleteMfaMethodPost,
-} from "./delete-mfa-method-controller";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+} from "./delete-mfa-method-controller.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
 
 const router = express.Router();
 

@@ -1,12 +1,12 @@
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 import * as express from "express";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
 import {
   globalLogoutConfirmGet,
   globalLogoutGet,
   globalLogoutPost,
-} from "./global-logout-controller";
+} from "./global-logout-controller.js";
 
 const router = express.Router();
 

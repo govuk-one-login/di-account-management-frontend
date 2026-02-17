@@ -5,12 +5,12 @@ import {
   ScalarAttributeType,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { getSessionStoreTableName } from "../config";
-import { logger } from "./logger";
+import { getSessionStoreTableName } from "../config.js";
+import { logger } from "./logger.js";
 import connect_dynamodb from "connect-dynamodb";
 import { Store } from "express-session";
-import { ERROR_MESSAGES } from "../app.constants";
-import { AwsConfig, getAWSConfig } from "../config/aws";
+import { ERROR_MESSAGES } from "../app.constants.js";
+import { AwsConfig, getAWSConfig } from "../config/aws.js";
 
 // the value of the USER_IDENTIFIER_IDX_ATTRIBUTE must match the indexed attribute in SessionsDynamoDB table
 // defined in `../../deploy/template.yaml`.

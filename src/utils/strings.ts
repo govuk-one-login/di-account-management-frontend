@@ -1,7 +1,7 @@
 import { promisify } from "util";
 import { randomBytes } from "crypto";
 
-import { logger } from "./logger";
+import { logger } from "./logger.js";
 
 const lowerAndUpperCaseLettersAndNumbersMax50 = /^[a-zA-Z0-9_-]{1,50}$/;
 

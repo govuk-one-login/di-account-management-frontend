@@ -1,9 +1,7 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request } from "express";
-import { describe } from "mocha";
-import sinon from "sinon";
-import { logger } from "../logger";
+import { logger } from "../logger.js";
 
-import { expect } from "chai";
 import {
   CLIENT_SESSION_ID_UNKNOWN,
   PERSISTENT_SESSION_ID_UNKNOWN,
@@ -15,20 +13,17 @@ import { RequestBuilder } from "../../../test/utils/builders";
 
 describe("Session Ids Util Tests", () => {
   describe("Extract session ids from Request", () => {
-    let loggerSpy: sinon.SinonSpy;
-    let errorLoggerSpy: sinon.SinonSpy;
     const SESSION_ID = "session-id";
     const CLIENT_SESSION_ID = "client-session-id";
     const PERSISTENT_SESSION_ID = "persistent-session-id";
 
     beforeEach(() => {
-      loggerSpy = sinon.spy(logger, "info");
-      errorLoggerSpy = sinon.spy(logger, "error");
+      vi.spyOn(logger, "info");
+      vi.spyOn(logger, "error");
     });
 
     afterEach(() => {
-      loggerSpy.restore();
-      errorLoggerSpy.restore();
+      vi.restoreAllMocks();
     });
 
     it("should extract all three session ids and return a SessionIds object", () => {
@@ -41,9 +36,9 @@ describe("Session Ids Util Tests", () => {
 
       const result = getSessionIdsFrom(mockRequest as Request);
 
-      expect(result.sessionId).to.equal(SESSION_ID);
-      expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID);
-      expect(result.persistentSessionId).to.equal(PERSISTENT_SESSION_ID);
+      expect(result.sessionId).toBe(SESSION_ID);
+      expect(result.clientSessionId).toBe(CLIENT_SESSION_ID);
+      expect(result.persistentSessionId).toBe(PERSISTENT_SESSION_ID);
     });
 
     it("should handle missing session.authSessionIds", () => {
@@ -54,9 +49,9 @@ describe("Session Ids Util Tests", () => {
         .build();
       const result = getSessionIdsFrom(mockRequest as Request);
 
-      expect(result.sessionId).to.equal(SESSION_ID_UNKNOWN);
-      expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID_UNKNOWN);
-      expect(result.persistentSessionId).to.equal(PERSISTENT_SESSION_ID);
+      expect(result.sessionId).toBe(SESSION_ID_UNKNOWN);
+      expect(result.clientSessionId).toBe(CLIENT_SESSION_ID_UNKNOWN);
+      expect(result.persistentSessionId).toBe(PERSISTENT_SESSION_ID);
     });
 
     it("should handle missing di persistent session id cookie", () => {
@@ -66,11 +61,9 @@ describe("Session Ids Util Tests", () => {
 
       const result = getSessionIdsFrom(mockRequest as Request);
 
-      expect(result.sessionId).to.equal(SESSION_ID);
-      expect(result.clientSessionId).to.equal(CLIENT_SESSION_ID);
-      expect(result.persistentSessionId).to.equal(
-        PERSISTENT_SESSION_ID_UNKNOWN
-      );
+      expect(result.sessionId).toBe(SESSION_ID);
+      expect(result.clientSessionId).toBe(CLIENT_SESSION_ID);
+      expect(result.persistentSessionId).toBe(PERSISTENT_SESSION_ID_UNKNOWN);
     });
   });
 });

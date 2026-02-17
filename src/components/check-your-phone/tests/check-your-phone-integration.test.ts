@@ -1,28 +1,23 @@
+import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
 import request from "supertest";
-import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
 import { testComponent } from "../../../../test/utils/helpers";
 import * as cheerio from "cheerio";
-import decache from "decache";
 import { PATH_DATA } from "../../../app.constants";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
-import { MfaClient } from "../../../utils/mfaClient";
 
 describe("Integration:: check your phone", () => {
-  let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
   let app: any;
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
           publicSubjectId: "publicSubjectId",
@@ -60,57 +55,41 @@ describe("Integration:: check your phone", () => {
           },
         ];
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    app = await require("../../../app").createApp();
+    const mfaClient = await import("../../../utils/mfaClient/index.js");
 
-    const mfaClient = require("../../../utils/mfaClient");
-
-    const stubMfaClient: sinon.SinonStubbedInstance<MfaClient> =
-      sandbox.createStubInstance(mfaClient.MfaClient);
-
-    stubMfaClient.retrieve.resolves({
-      success: true,
-      status: 200,
-      data: [
-        {
-          mfaIdentifier: "123456",
-          priorityIdentifier: "DEFAULT",
-          methodVerified: true,
-          method: {
-            mfaMethodType: "SMS",
-            phoneNumber: "12345678",
+    const stubMfaClient = {
+      retrieve: vi.fn().mockResolvedValue({
+        success: true,
+        data: [
+          {
+            mfaIdentifier: 111111,
+            methodVerified: true,
+            method: {
+              phoneNumber: "070",
+              mfaMethodType: "SMS",
+            },
+            priorityIdentifier: "DEFAULT",
           },
-        },
-      ],
-    });
+        ],
+      }),
+      update: vi.fn().mockResolvedValue({ success: true }),
+    };
 
-    stubMfaClient.update.resolves({
-      success: true,
-      status: 200,
-      data: [
-        {
-          mfaIdentifier: "123456",
-          priorityIdentifier: "DEFAULT",
-          method: {
-            mfaMethodType: "AUTH_APP",
-            credential: "abc123",
-          },
-          methodVerified: true,
-        },
-      ],
-    });
+    vi.spyOn(mfaClient, "createMfaClient").mockResolvedValue(stubMfaClient);
 
-    sandbox.stub(mfaClient, "createMfaClient").resolves(stubMfaClient);
+    app = await (await import("../../../app.js")).createApp();
 
     await request(app)
       .get(PATH_DATA.CHECK_YOUR_PHONE.url)
@@ -124,8 +103,8 @@ describe("Integration:: check your phone", () => {
       });
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
@@ -133,17 +112,18 @@ describe("Integration:: check your phone", () => {
     const res = await request(app).get(PATH_DATA.CHECK_YOUR_PHONE.url).query({
       intent: "changePhoneNumber",
     });
-    expect(res.statusCode).to.eq(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
-    await checkFailedCSRFValidationBehaviour(
+    const res = await checkFailedCSRFValidationBehaviour(
       app,
       PATH_DATA.CHECK_YOUR_PHONE.url,
       {
         code: "123456",
       }
     );
+    expect(res).toBeUndefined();
   });
 
   it("should return validation error when code not entered", async () => {
@@ -159,7 +139,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("code-error")).text()).to.contains(
+        expect($(testComponent("code-error")).text()).toContain(
           "Enter the code"
         );
       })
@@ -178,7 +158,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("code-error")).text()).to.contains(
+        expect($(testComponent("code-error")).text()).toContain(
           "Enter the code using only 6 digits"
         );
       })
@@ -197,7 +177,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("code-error")).text()).to.contains(
+        expect($(testComponent("code-error")).text()).toContain(
           "Enter the code using only 6 digits"
         );
       })
@@ -216,7 +196,7 @@ describe("Integration:: check your phone", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("code-error")).text()).to.contains(
+        expect($(testComponent("code-error")).text()).toContain(
           "Enter the code using only 6 digits"
         );
       })
@@ -224,16 +204,32 @@ describe("Integration:: check your phone", () => {
   });
 
   it("should redirect to /update confirmation when valid code entered", async () => {
+    // Get fresh token and cookies for this test
+    let freshToken: string | string[];
+    let freshCookies: string;
+
     await request(app)
+      .get(PATH_DATA.CHECK_YOUR_PHONE.url)
+      .query({
+        intent: "changePhoneNumber",
+      })
+      .then((res) => {
+        const $ = cheerio.load(res.text);
+        freshToken = $("[name=_csrf]").val();
+        freshCookies = res.headers["set-cookie"];
+      });
+
+    const res = await request(app)
       .post(PATH_DATA.CHECK_YOUR_PHONE.url)
       .type("form")
-      .set("Cookie", cookies)
+      .set("Cookie", freshCookies)
       .send({
-        _csrf: token,
+        _csrf: freshToken,
         code: "111111",
         intent: "changePhoneNumber",
       })
       .expect("Location", PATH_DATA.PHONE_NUMBER_UPDATED_CONFIRMATION.url)
       .expect(302);
+    expect(res.statusCode).toBe(302);
   });
 });

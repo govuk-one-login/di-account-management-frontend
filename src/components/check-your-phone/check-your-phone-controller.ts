@@ -1,40 +1,40 @@
 import { Request, Response } from "express";
-import { MAX_MFA_METHOD_COUNT, PATH_DATA } from "../../app.constants";
+import { MAX_MFA_METHOD_COUNT, PATH_DATA } from "../../app.constants.js";
 import {
   EventType,
   getNextState,
   UserJourney,
-} from "../../utils/state-machine";
+} from "../../utils/state-machine.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
-import { getLastNDigits } from "../../utils/phone-number";
+} from "../../utils/validation.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
 import {
   Intent,
   INTENT_ADD_BACKUP,
   INTENT_CHANGE_DEFAULT_METHOD,
   INTENT_CHANGE_PHONE_NUMBER,
-} from "../check-your-email/types";
-import { logger } from "../../utils/logger";
+} from "../check-your-email/types.js";
+import { logger } from "../../utils/logger.js";
 import {
   createMfaClient,
   formatErrorMessage,
   ERROR_CODES,
-} from "../../utils/mfaClient";
+} from "../../utils/mfaClient/index.js";
 import {
   ApiResponse,
   MfaClientInterface,
   MfaMethod,
   mfaMethodTypes,
   mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
-import { containsNumbersOnly } from "../../utils/strings";
+} from "../../utils/mfaClient/types.js";
+import { containsNumbersOnly } from "../../utils/strings.js";
 import {
   MFA_COMMON_OPL_SETTINGS,
   OplSettingsLookupObject,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE_NAME = "check-your-phone/index.njk";
@@ -120,7 +120,8 @@ export function checkYourPhoneGet(req: Request, res: Response): void {
     `Check your phone GET controller newPhoneNumber: ${
       req.session.user.newPhoneNumber?.replace(
         /^(.{2})(.*)/,
-        (_, first2, rest) => first2 + rest.replace(/./g, "*")
+        (_: string, first2: string, rest: string) =>
+          first2 + rest.replace(/./g, "*")
       ) ?? JSON.stringify(req.session.user.newPhoneNumber)
     }`
   );
@@ -204,7 +205,8 @@ export async function checkYourPhonePost(req: Request, res: Response) {
     `Check your phone POST controller newPhoneNumber: ${
       req.session.user.newPhoneNumber?.replace(
         /^(.{2})(.*)/,
-        (_, first2, rest) => first2 + rest.replace(/./g, "*")
+        (_: string, first2: string, rest: string) =>
+          first2 + rest.replace(/./g, "*")
       ) ?? JSON.stringify(req.session.user.newPhoneNumber)
     }`
   );

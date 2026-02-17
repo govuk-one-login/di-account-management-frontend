@@ -1,4 +1,4 @@
-import { RequestConfig } from "../../utils/http";
+import { RequestConfig } from "../../utils/http.js";
 
 export interface DeleteAccountServiceInterface {
   deleteAccount: (

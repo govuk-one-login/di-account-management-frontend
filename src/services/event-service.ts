@@ -4,9 +4,9 @@ import {
   AuditEvent,
   Event,
   CurrentTimeDescriptor,
-} from "./types";
-import { SqsService } from "../utils/types";
-import { sqsService } from "../utils/sqs";
+} from "./types.js";
+import { SqsService } from "../utils/types.js";
+import { sqsService } from "../utils/sqs.js";
 import {
   EventName,
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
@@ -14,11 +14,11 @@ import {
   MISSING_SESSION_ID_SPECIAL_CASE,
   MISSING_USER_EMAIL_SPECIAL_CASE,
   MISSING_USER_ID_SPECIAL_CASE,
-} from "../app.constants";
+} from "../app.constants.js";
 import { Session } from "express-session";
-import { getTxmaHeader } from "../utils/txma-header";
-import { getOIDCClientId } from "../config";
-import { mfaMethodTypes } from "../utils/mfaClient/types";
+import { getTxmaHeader } from "../utils/txma-header.js";
+import { getOIDCClientId } from "../config.js";
+import { mfaMethodTypes } from "../utils/mfaClient/types.js";
 import { parsePhoneNumber } from "libphonenumber-js/mobile";
 
 /**

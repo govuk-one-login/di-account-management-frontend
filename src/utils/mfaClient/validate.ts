@@ -1,4 +1,4 @@
-import { AuthAppMethod, MfaMethod, SmsMethod } from "./types";
+import { AuthAppMethod, MfaMethod, SmsMethod } from "./types.js";
 
 export function validateCreate(
   method: AuthAppMethod | SmsMethod,
