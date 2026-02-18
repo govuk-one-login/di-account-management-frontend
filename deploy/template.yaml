@@ -245,7 +245,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
-      AMCJWKSURL: "https://api.manage.staging.account.gov.uk/well-known/jwks.json"
+      AMCJWKSURL: "https://api.manage.staging.account.gov.uk/.well-known/jwks.json"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -275,7 +275,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
-      AMCJWKSURL: "https://api.manage.integration.account.gov.uk/well-known/jwks.json"
+      AMCJWKSURL: "https://api.manage.integration.account.gov.uk/.well-known/jwks.json"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -306,7 +306,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
-      AMCJWKSURL: "https://api.manage.account.gov.uk/well-known/jwks.json"
+      AMCJWKSURL: "https://api.manage.account.gov.uk/.well-known/jwks.json"
 
 Resources:
   #
