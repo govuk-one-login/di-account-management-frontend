@@ -185,6 +185,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
+      AMCJWKSURL: "https://amc-stub.home.dev.account.gov.uk/.well-known/jwks.json"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -214,6 +215,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
+      AMCJWKSURL: "https://amc-stub.home.build.account.gov.uk/.well-known/jwks.json"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -243,6 +245,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
+      AMCJWKSURL: "https://api.manage.staging.account.gov.uk/well-known/jwks.json"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -272,6 +275,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
+      AMCJWKSURL: "https://api.manage.integration.account.gov.uk/well-known/jwks.json"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -302,6 +306,7 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
+      AMCJWKSURL: "https://api.manage.account.gov.uk/well-known/jwks.json"
 
 Resources:
   #
@@ -908,6 +913,9 @@ Resources:
                   !Ref Environment,
                   SUPPORTGLOBALLOGOUT,
                 ]
+            - Name: "AMC_JWKS_URL"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, AMCJWKSURL]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn

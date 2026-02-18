@@ -240,3 +240,7 @@ export function getDtRumUrl(): string {
 export function supportGlobalLogout(): boolean {
   return process.env.SUPPORT_GLOBAL_LOGOUT === "1";
 }
+
+export function getAmcJwksUrl(): string {
+  return process.env.AMC_JWKS_URL;
+}
