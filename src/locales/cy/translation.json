@@ -473,22 +473,28 @@
           "length": "Rhowch rif ffôn symudol yn y DU, fel 07700 900000",
           "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu’r symbol +"
         }
-      },
-      "noUkPhoneNumber": {
-        "title": "Os nad oes gennych rif ffôn symudol y DU",
-        "header": "Os nad oes gennych rif ffôn symudol y DU",
-        "paragraph1": "I gael codau diogelwch drwy neges destun, rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
-        "sub-header": "Beth allwch chi ei wneud",
-        "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
-        "detailSummary": "Beth yw ap dilysu?",
-        "detailTextLine1": "Beth yw ap dilysu?",
-        "detailTextLine2": "Mae ap dilysydd yn creu cod diogelwch sy'n helpu i gadarnhau mai chi yw chi pan fyddwch yn mewngofnodi.",
-        "detailTextLine3": "Gallwch ddefnyddio ap dilysydd ar eich ffôn clyfar, tabled neu gyfrifiadur. Lawrlwythwch ap dilysu ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau neu chwiliwch ar-lein am ap dilysu ar gyfer eich cyfrifiadur.",
-        "paragraph3": "I sefydlu ap dilysu i gael codau diogelwch:",
-        "listItem1": "Ewch yn ôl i <strong>Diogelwch</strong>",
-        "listItem2": "Dewiswch <strong>Defnyddio dull diofyn gwahanol</strong>",
-        "backLinkButton": "Yn ôl i Diogelwch"
       }
+    },
+    "noUkPhoneNumber": {
+      "title": "Os nad oes gennych rif ffôn symudol y DU",
+      "header": "Os nad oes gennych rif ffôn symudol y DU",
+      "paragraph1": "I gael codau diogelwch drwy neges destun, rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
+      "sub-header": "Beth allwch chi ei wneud",
+      "paragraph2": "Os nad oes gennych rif ffôn symudol yn y DU, gallwch gael codau diogelwch drwy ddefnyddio ap dilysu yn lle hynny.",
+      "paragraph2hasAuthApp": "Os nad oes gennych rif ffôn symudol y DU, gallwch gael codau diogelwch drwy ddefnyddio ap dilysu yn lle hynny.",
+      "hasAuthApp": "Rydych eisoes yn defnyddio'ch ap dilysu i gael codau.",
+      "useDifferentAuthApp": "Os ydych chi am ddefnyddio ap dilysu gwahanol:",
+      "detailSummary": "Beth yw ap dilysu?",
+      "detailTextLine1": "Beth yw ap dilysu?",
+      "detailTextLine2": "Mae ap dilysydd yn creu cod diogelwch sy'n helpu i gadarnhau mai chi yw chi pan fyddwch yn mewngofnodi.",
+      "detailTextLine3": "Gallwch ddefnyddio ap dilysydd ar eich ffôn clyfar, tabled neu gyfrifiadur. Lawrlwythwch ap dilysu ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau neu chwiliwch ar-lein am ap dilysu ar gyfer eich cyfrifiadur.",
+      "paragraph3": "I sefydlu ap dilysu i gael codau diogelwch:",
+      "paragraph3hasBackupAuthApp": "I gael codau diogelwch gan ddefnyddio'ch ap dilysu:",
+      "listItem1": "Ewch yn ôl i <strong>Diogelwch</strong>",
+      "listItem2": "Dewiswch <strong>Defnyddio dull diofyn gwahanol</strong>",
+      "listItem2hasBackupAuthApp": "Dewiswch <strong>Newid dulliau wrth gefn a diofyn</strong>",
+      "listItem2hasAuthApp": "Dewiswch <strong>Newid ap dilysu</strong>",
+      "backLinkButton": "Yn ôl i Diogelwch"
     },
     "signedOut": {
       "title": "Rydych wedi allgofnodi",
@@ -739,6 +745,10 @@
     "addBackupSms": {
       "title": "Rhowch eich rhif ffôn symudol",
       "heading": "Rhowch eich rhif ffôn symudol",
+      "detailSummary": "I do not have a UK mobile phone number",
+      "detailTextLine1": "To get security codes by text message you must use a UK mobile phone number.",
+      "detailTextLine2": "Or you can use an authenticator app to get codes instead.",
+      "detailLink": "Go back to choose authenticator app",
       "confirm": {
         "title": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
@@ -769,8 +779,8 @@
       "currentIsPhone": "Eich dull diofyn ar gyfer cael codau diogelwch ar hyn o bryd yw trwy neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
       "switchToApp": "Gallwch ddefnyddio ap dilysydd yn lle hynny.",
       "currentIsApp": "Eich dull diofyn ar gyfer cael codau diogelwch ar hyn o bryd yw trwy eich ap dilysydd.",
-      "switchToPhone": "Gallwch gael codau trwy neges destun yn lle hynny.",
-      "setUpPhoneButton": "Ychwanegu rhif ffôn symudol",
+      "switchToPhone": "Gallwch gael codau drwy neges destun i rif ffôn symudol y DU yn lle hynny.",
+      "setUpPhoneButton": "Ychwanegu rhif ffôn symudol y DU",
       "setUpAppButton": "Sefydlu ap dilysydd",
       "cancelButton": "Canslo a mynd yn ôl i Diogelwch",
       "confirmation": {
@@ -780,8 +790,8 @@
         "sms": "Eich dull diofyn ar gyfer cael codau diogelwch fydd neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>."
       },
       "sms": {
-        "title": "Rhowch eich rhif ffôn symudol",
-        "heading": "Rhowch eich rhif ffôn symudol"
+        "title": "Rhowch eich rhif ffôn symudol y DU",
+        "heading": "Rhowch eich rhif ffôn symudol y DU"
       }
     },
     "switchBackupMethod": {

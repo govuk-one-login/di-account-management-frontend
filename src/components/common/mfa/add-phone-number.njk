@@ -3,6 +3,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitleName = pathToTitleString | translate or 'pages.changePhoneNumber.title' | translate %}
 
@@ -34,9 +35,17 @@
     }) }}
   </form>
 
-  <a href="{{"NO_UK_PHONE_NUMBER" | getPath}}" class="govuk-link govuk-body">
-    {{'pages.changePhoneNumber.info.noUkPhone' | translate}}
-  </a>
+  {% if isAddMfaMethodSms %}
+    {{ govukDetails({
+      summaryText: 'pages.addBackupSms.detailSummary' | translate,
+      html: addMfaMethodSMSDetailsBlock
+    }) }}
+  {% else %}
+    <a href="{{"NO_UK_PHONE_NUMBER" | getPath}}" class="govuk-link govuk-body">
+      {{'pages.changePhoneNumber.info.noUkPhone' | translate}}
+    </a>
+  {% endif %}
+
   <p class="govuk-body govuk-!-margin-top-4">
     <a href="{{"SECURITY" | getPath}}" class="govuk-link">
       {{'pages.changePhoneNumber.info.backLink' | translate}}
