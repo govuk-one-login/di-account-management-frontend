@@ -463,7 +463,7 @@
         "noUkPhone": "Nid oes gennyf rif ffôn symudol y DU"
       },
       "validationError": {
-        "samePhoneNumber": "Rydych eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
+        "samePhoneNumber": "Rydych eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn symudol y DU gwahanol."
       },
       "ukPhoneNumber": {
         "label": "Rhif ffôn symudol y DU",
@@ -471,7 +471,7 @@
           "required": "Rhowch rif ffôn symudol y DU",
           "international": "Rhowch rif ffôn symudol y DU",
           "length": "Rhowch rif ffôn symudol yn y DU, fel 07700 900000",
-          "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu’r symbol +"
+          "plusNumericOnly": "Rhowch rif ffôn symudol y DU gan ddefnyddio rhifau yn unig"
         }
       }
     },
@@ -695,8 +695,8 @@
     "addBackup": {
       "title": "Dewiswch ddull wrth gefn",
       "sms": {
-        "title": "Rhif ffôn wrth gefn",
-        "hint": "Cael neges destun i ffôn symudol gwahanol"
+        "title": "Rhif ffôn symudol y DU",
+        "hint": "Cael neges destun i rif ffôn symudol y DU gwahanol"
       },
       "app": {
         "title": "Ap dilysydd ar gyfer ffôn clyfar, tabled neu gyfrifiadur",
@@ -711,8 +711,11 @@
       "backup": {
         "title": "Ychwanegu  dull wrth gefn",
         "sms": {
-          "message": "Gallwch gael codau diogelwch drwy neges destun fel eich dull wrth gefn.",
-          "button": "Ychwanegu rhif ffôn symudol"
+          "message": "Gallwch gael codau diogelwch drwy neges destun i rif ffôn symudol y DU fel eich dull wrth gefn.",
+          "button": "Ychwanegu rhif ffôn symudol y DU",
+          "detailSummary": "Nid oes gennyf rif ffôn symudol y DU",
+          "detailTextLine1": "I gael codau diogelwch drwy neges destun, rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
+          "detailTextLine2": "Gan eich bod eisoes yn defnyddio ap dilysu i gael codau diogelwch, ni allwch ychwanegu un arall fel dull wrth gefn."
         }
       },
       "errors": { "required": "Dewiswch ffordd i gael codau diogelwch" }
@@ -743,12 +746,12 @@
       "cancel": "Canslo a mynd yn ôl i Diogelwch"
     },
     "addBackupSms": {
-      "title": "Rhowch eich rhif ffôn symudol",
-      "heading": "Rhowch eich rhif ffôn symudol",
-      "detailSummary": "I do not have a UK mobile phone number",
-      "detailTextLine1": "To get security codes by text message you must use a UK mobile phone number.",
-      "detailTextLine2": "Or you can use an authenticator app to get codes instead.",
-      "detailLink": "Go back to choose authenticator app",
+      "title": "Rhowch eich rhif ffôn symudol y DU",
+      "heading": "Rhowch eich rhif ffôn symudol y DU",
+      "detailSummary": "Nid oes gennyf rif ffôn symudol y DU",
+      "detailTextLine1": "I gael codau diogelwch drwy neges destun, rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
+      "detailTextLine2": "Neu gallwch ddefnyddio ap dilysu i gael codau yn lle hynny.",
+      "detailLink": "Ewch yn ôl i ddewis ap dilysu",
       "confirm": {
         "title": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
