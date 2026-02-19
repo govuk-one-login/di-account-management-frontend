@@ -5,7 +5,9 @@ Feature: Change Default MFA Method From Authenticator App
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthApp" user
         And I go to the "Security" page
-        Then the page title is prefixed with "Security"
+        And the page has finished loading
+        Then the page meets our accessibility standards
+        And the page title is prefixed with "Security"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -37,7 +39,9 @@ Feature: Change Default MFA Method From Authenticator App
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthApp" user
         And I go to the "Security" page
-        Then the page title is prefixed with "Security"
+        And the page has finished loading
+        Then the page meets our accessibility standards
+        And the page title is prefixed with "Security"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -59,7 +63,9 @@ Feature: Change Default MFA Method From Authenticator App
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthApp" user
         And I go to the "Security" page
-        Then the page title is prefixed with "Security"
+        And the page has finished loading
+        Then the page meets our accessibility standards
+        And the page title is prefixed with "Security"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -85,7 +91,9 @@ Feature: Change Default MFA Method From Authenticator App
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthAppBackupSms" user
         And I go to the "Security" page
-        Then the page title is prefixed with "Security"
+        And the page has finished loading
+        Then the page meets our accessibility standards
+        And the page title is prefixed with "Security"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -116,7 +124,9 @@ Feature: Change Default MFA Method From Authenticator App
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthAppBackupSms" user
         And I go to the "Security" page
-        Then the page title is prefixed with "Security"
+        And the page has finished loading
+        Then the page meets our accessibility standards
+        And the page title is prefixed with "Security"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -138,7 +148,9 @@ Feature: Change Default MFA Method From Authenticator App
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthAppBackupSms" user
         And I go to the "Security" page
-        Then the page title is prefixed with "Security"
+        And the page has finished loading
+        Then the page meets our accessibility standards
+        And the page title is prefixed with "Security"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
