@@ -8,7 +8,6 @@ import { UserJourney, EventType } from "../state-machine";
 import * as stateMachine from "../state-machine";
 
 import { SetState } from "../set-state";
-import { log } from "console";
 
 describe("setState", () => {
   let sandbox: sinon.SinonSandbox;

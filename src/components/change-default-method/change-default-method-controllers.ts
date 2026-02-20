@@ -168,7 +168,7 @@ export function changeDefaultMethodSmsPost(
       );
     }
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
-      const href: string = "phoneNumber";
+      const href = "phoneNumber";
 
       const error = formatValidationError(
         href,
