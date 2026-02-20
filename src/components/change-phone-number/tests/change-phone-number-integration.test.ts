@@ -322,7 +322,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("phoneNumber-error")).text()).to.contains(
-          "You’re already using that phone number. Enter a different phone number"
+          "You’re already using that phone number. Enter a different UK mobile phone number"
         );
       })
       .expect(400);
