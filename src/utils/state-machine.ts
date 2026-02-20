@@ -8,8 +8,9 @@ import {
 
 enum UserJourney {
   ChangeEmail = "changeEmail",
-  ChangePassword = "changePassword",
+  ChangePassword = "changePassword", //pragma: allowlist secret
   ChangePhoneNumber = "changePhoneNumber",
+  NoUKMobilePhone = "noUkMobilePhone",
   ChangeAuthApp = "changeAuthApp",
   DeleteAccount = "deleteAccount",
   addBackup = "addBackup",

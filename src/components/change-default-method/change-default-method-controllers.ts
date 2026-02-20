@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  convertInternationalPhoneNumberToE164Format,
-  getLastNDigits,
-} from "../../utils/phone-number";
+import { getLastNDigits } from "../../utils/phone-number";
 import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { ERROR_CODES, PATH_DATA } from "../../app.constants";
@@ -148,16 +145,9 @@ export function changeDefaultMethodSmsPost(
       );
     }
 
-    const {
-      hasInternationalPhoneNumber,
-      internationalPhoneNumber,
-      phoneNumber,
-    } = req.body;
+    const { phoneNumber } = req.body;
     const { email } = req.session.user;
-    const newPhoneNumber =
-      hasInternationalPhoneNumber === "true"
-        ? convertInternationalPhoneNumberToE164Format(internationalPhoneNumber)
-        : phoneNumber;
+    const newPhoneNumber = phoneNumber;
 
     const response = await service.sendPhoneVerificationNotification(
       email,
@@ -178,10 +168,7 @@ export function changeDefaultMethodSmsPost(
       );
     }
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
-      const href: string =
-        hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true"
-          ? "internationalPhoneNumber"
-          : "phoneNumber";
+      const href = "phoneNumber";
 
       const error = formatValidationError(
         href,

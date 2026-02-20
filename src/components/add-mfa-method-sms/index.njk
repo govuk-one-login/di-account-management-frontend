@@ -1,4 +1,13 @@
 {% set formAction =  "ADD_MFA_METHOD_SMS" | getPath %}
 {% set pathToTitleString =  "pages.addBackupSms.title" %}
 {% set pathToHeadingString =  "pages.addBackupSms.heading" %}
+{% set addMfaMethodSMSDetailsBlock %}
+    <p class="govuk-body">{{ 'pages.addBackupSms.detailTextLine1' | translate }}</p>
+    {% if hasAuthApp %}
+      <p class="govuk-body">{{ 'pages.addBackup.backup.sms.detailTextLine2' | translate }}</p>
+    {% else %}
+      <p class="govuk-body">{{ 'pages.addBackupSms.detailTextLine2' | translate }}</p>
+      <a class="govuk-body govuk-link" href="{{ "ADD_MFA_METHOD_GO_BACK" | getPath }}">{{ 'pages.addBackupSms.detailLink' | translate }}</a>
+    {% endif %}
+{% endset %}
 {% include "common/mfa/add-phone-number.njk" %}

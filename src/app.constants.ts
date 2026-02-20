@@ -120,6 +120,11 @@ export const PATH_DATA: Record<
     event: EventType.VerifyCodeSent,
     type: UserJourney.ChangePhoneNumber,
   },
+  NO_UK_PHONE_NUMBER: {
+    url: "/no-uk-mobile-phone",
+    type: UserJourney.NoUKMobilePhone,
+    event: EventType.ValueUpdated,
+  },
   CHANGE_AUTHENTICATOR_APP: {
     url: "/change-authenticator-app",
     event: EventType.ValueUpdated,
