@@ -51,23 +51,25 @@ Then("I can see two radio buttons", async ({ page }) => {
 });
 
 Then(
-  "I can see a collapsed explanation of an authenticator app",
-  async ({ page }) => {
-    await expect(page.getByText("What is an authenticator app?")).toBeVisible();
+  "I can see a collapsed detail block {string}",
+  async ({ page }, detailBlockTitle: string) => {
+    await expect(page.getByText(detailBlockTitle)).toBeVisible();
   }
 );
 
-Given("I click the explanation", async ({ page }) => {
-  await page.getByText("What is an authenticator app?").click();
-});
+Given(
+  "I click the detail block {string}",
+  async ({ page }, detailBlockTitle: string) => {
+    await page.getByText(detailBlockTitle).click();
+  }
+);
 
-Then("I can see the explanation details", async ({ page }) => {
-  await expect(
-    page.getByText(
-      "An authenticator app creates a security code that helps confirm it’s you when you sign in."
-    )
-  ).toBeVisible();
-});
+Then(
+  "I can see the explanation details {string}",
+  async ({ page }, explanationDetails: string) => {
+    await expect(page.getByText(explanationDetails)).toBeVisible();
+  }
+);
 
 Given(
   "I select {string} and click the {string} button",
@@ -99,17 +101,6 @@ Then(
 
 Then("I can see the {string} button", async ({ page }, buttonText: string) => {
   await expect(page.getByRole("button", { name: buttonText })).toBeVisible();
-});
-
-Then(
-  "I can see a collapsed prompt {string}",
-  async ({ page }, promptText: string) => {
-    await expect(page.getByText(promptText)).toBeVisible();
-  }
-);
-
-Given("I click the prompt {string}", async ({ page }, promptText: string) => {
-  await page.getByText(promptText).click();
 });
 
 Then(
