@@ -147,7 +147,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("phoneNumber-error")).text()).to.contains(
-          "Enter a UK mobile phone number using only numbers or the + symbol"
+          "Enter a UK mobile phone number using numbers only"
         );
       })
       .expect(400);
