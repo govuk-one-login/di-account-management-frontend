@@ -8,11 +8,12 @@ import { UserJourney, EventType } from "../state-machine";
 import * as stateMachine from "../state-machine";
 
 import { SetState } from "../set-state";
+import { log } from "console";
 
 describe("setState", () => {
   let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
-  let res: object;
+  let res: Partial<Response>;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -89,5 +90,77 @@ describe("setState", () => {
     // Assert
     expect(nextStateSpy).to.have.callCount(0);
     expect(next).to.have.been.calledOnce;
+  });
+
+  it("should call next with an error if state update fails", async () => {
+    // Arrange
+    req = new RequestBuilder()
+      .withSessionUserState({
+        changePhoneNumber: {
+          value: "CHANGE_VALUE",
+        },
+      })
+      .withLog({
+        error: sandbox.fake(),
+      })
+      .build();
+
+    req.log = {
+      error: sandbox.fake(),
+    };
+
+    const next = sandbox.fake();
+    const error = new Error("State update failed");
+    const getNextStateStub = sandbox
+      .stub(stateMachine, "getNextState")
+      .throws(error);
+
+    const setStateHandler = SetState(
+      [UserJourney.ChangePhoneNumber],
+      UserJourney.NoUKMobilePhone,
+      EventType.ValueUpdated,
+      "VALUE_UPDATED"
+    );
+
+    // Act
+    await setStateHandler(req as Request, res as Response, next);
+
+    // Assert
+    expect(getNextStateStub).to.have.been.calledOnce;
+    expect(next).to.have.been.calledWith(error);
+  });
+
+  it("should call next with error if user state is not initialized", async () => {
+    // Arrange
+    req = new RequestBuilder().withLog({}).build();
+
+    req.session.user.state = undefined;
+
+    const logErrorSpy = sandbox.fake();
+    req.log = {
+      error: logErrorSpy,
+    };
+
+    const next = sandbox.fake();
+    const setStateHandler = SetState(
+      [UserJourney.ChangePhoneNumber],
+      UserJourney.NoUKMobilePhone,
+      EventType.ValueUpdated,
+      "VALUE_UPDATED"
+    );
+
+    // Act
+    await setStateHandler(req as Request, res as Response, next);
+
+    // Assert
+    expect(logErrorSpy).to.have.been.calledWith(
+      { trace: res.locals.trace },
+      "User state is not initialized"
+    );
+    expect(next).to.have.been.calledOnceWith(
+      sinon.match
+        .instanceOf(Error)
+        .and(sinon.match.has("message", "User state is not initialized"))
+    );
   });
 });

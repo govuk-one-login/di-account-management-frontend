@@ -129,6 +129,11 @@ export class RequestBuilder {
     return this;
   }
 
+  withLog(log: object): this {
+    this.log = log;
+    return this;
+  }
+
   withI18n(i18n: object): this {
     this.i18n = i18n;
     return this;

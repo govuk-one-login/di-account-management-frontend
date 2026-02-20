@@ -9,11 +9,9 @@ export function SetState(
 ): RequestHandler {
   return (req: Request, res: Response, next: NextFunction): void => {
     if (!req.session?.user?.state) {
-      req.log.error(
-        { trace: res.locals.trace },
-        "User state is not initialized"
-      );
-      return next();
+      const error = new Error("User state is not initialized");
+      req.log.error({ trace: res.locals.trace }, error.message);
+      return next(error);
     }
 
     const currentStateType = currentStateTypes.find((stateType) =>

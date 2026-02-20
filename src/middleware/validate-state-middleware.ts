@@ -20,12 +20,6 @@ export function validateStateMiddleware(
     req.session.user.state[pageState.type].events.length > 0 &&
     !req.session.user.state[pageState.type].events.includes(pageState.event)
   ) {
-    // eslint-disable-next-line no-console
-    console.log("validateStateMiddleware grabs you by the scruff.");
-    // eslint-disable-next-line no-console
-    console.log(
-      `Oi, you don't have a ${pageState.event}!  Get back to yer services!`
-    );
     delete req.session.user.state[pageState.type];
     return res.redirect(PATH_DATA.YOUR_SERVICES.url);
   }
