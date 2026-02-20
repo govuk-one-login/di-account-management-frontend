@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  convertInternationalPhoneNumberToE164Format,
-  getLastNDigits,
-} from "../../utils/phone-number";
+import { getLastNDigits } from "../../utils/phone-number";
 import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa";
 import { EventType, getNextState } from "../../utils/state-machine";
 import { ERROR_CODES, PATH_DATA } from "../../app.constants";

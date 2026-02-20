@@ -120,7 +120,7 @@ describe("addMfaSmsMethodGet", () => {
     });
   });
 
-  it.only("should set the hasAuthApp variable to true if the user has an authenticator app MFA method", async () => {
+  it("should set the hasAuthApp variable to true if the user has an authenticator app MFA method", async () => {
     req = new RequestBuilder().withAuthAppMfaMethod().build();
 
     await addMfaSmsMethodGet(req as Request, res as Response);

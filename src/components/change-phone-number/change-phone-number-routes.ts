@@ -7,7 +7,6 @@ import {
   changePhoneNumberPost,
 } from "./change-phone-number-controller";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { EventType, UserJourney } from "../../utils/state-machine";
 
 const router = express.Router();
 
