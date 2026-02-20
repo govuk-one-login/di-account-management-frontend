@@ -40,11 +40,11 @@
   "dependencies": {
     "@aws-crypto/client-node": "^4.2.1",
     "@aws-lambda-powertools/metrics": "^2.31.0",
-    "@aws-sdk/client-dynamodb": "^3.987.0",
-    "@aws-sdk/client-kms": "^3.987.0",
-    "@aws-sdk/client-sns": "^3.987.0",
-    "@aws-sdk/client-sqs": "^3.987.0",
-    "@aws-sdk/lib-dynamodb": "^3.987.0",
+    "@aws-sdk/client-dynamodb": "^3.989.0",
+    "@aws-sdk/client-kms": "^3.989.0",
+    "@aws-sdk/client-sns": "^3.989.0",
+    "@aws-sdk/client-sqs": "^3.989.0",
+    "@aws-sdk/lib-dynamodb": "^3.989.0",
     "@aws-sdk/util-dynamodb": "^3.985.0",
     "@govuk-one-login/frontend-analytics": "^4.0.7",
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
@@ -64,7 +64,7 @@
     "flexsearch": "^0.8.212",
     "govuk-frontend": "^5.14.0",
     "helmet": "8.1.0",
-    "i18next": "^25.8.4",
+    "i18next": "^25.8.6",
     "i18next-fs-backend": "^2.6.1",
     "i18next-http-middleware": "^3.9.2",
     "jose": "^5.10.0",
@@ -72,7 +72,7 @@
     "libphonenumber-js": "^1.12.36",
     "nunjucks": "^3.2.4",
     "openid-client": "^5.7.1",
-    "otplib": "^13.2.1",
+    "otplib": "^13.3.0",
     "overload-protection": "^1.2.3",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
@@ -80,7 +80,7 @@
     "qrcode": "^1.5.4",
     "uuid": "^13.0.0",
     "xss": "^1.0.15",
-    "xstate": "^5.26.0"
+    "xstate": "^5.28.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
