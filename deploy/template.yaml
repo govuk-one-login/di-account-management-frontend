@@ -2125,6 +2125,11 @@ Resources:
       Handler: handler
       Role: !GetAtt JwksCreatorRole.Arn
       Timeout: 60
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            return { statusCode: 200, body: 'Hello World' };
+          };
       Environment:
         Variables:
           JAR_RSA_ENCRYPTION_KEY_ALIAS: !Ref SigningKmsKeyAlias
