@@ -28,7 +28,7 @@
     "lint:fix": "eslint . --fix",
     "start": "node dist/server.js",
     "test:audit": "npm audit",
-    "test:integration": "vitest run --config vitest.config.ts --reporter=verbose --exclude 'src/**/!(tests)/*.test.ts' --exclude 'test/unit/**/*.test.ts'",
+    "test:integration-legacy": "vitest run --config vitest.config.ts --reporter=verbose --exclude 'src/**/!(tests)/*.test.ts' --exclude 'test/unit/**/*.test.ts'",
     "test:unit": "vitest run --config vitest.config.ts --exclude \"src/**/tests/*-integration.test.ts\"",
     "test": "vitest run --config vitest.config.ts",
     "test:coverage": "vitest run --config vitest.config.ts --exclude \"src/**/tests/*-integration.test.ts\" --coverage",
