@@ -140,7 +140,7 @@ async function putContentToS3(content: string) {
     );
 
     logger.info(
-      `Successfully uploaded JWKS to S3, Bucket: ${process.env["BUCKET_NAME"]}, Key: ${key}, Response: ${response}`
+      `Successfully uploaded JWKS to S3, Bucket: ${process.env["BUCKET_NAME"]}, Key: ${key}`
     );
     return response;
   } catch (err) {
