@@ -2163,56 +2163,24 @@ Resources:
         External:
           - "@aws-sdk/*"
 
-  JwksCreatorRole:
-    Type: AWS::IAM::Role
+  JwksCreatorLambdaPermission:
+    Type: AWS::Lambda::Permission
     Properties:
-      RoleName: !Sub "${AWS::StackName}-JwksCreatorRole"
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      Policies:
-        - PolicyName: JwksCreatorPolicy
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - kms:GetPublicKey
-                  - kms:DescribeKey
-                Resource: !GetAtt SigningKmsKey.Arn
-              - Effect: Allow
-                Action:
-                  - s3:PutObject
-                Resource: !Sub "${JwksBucket.Arn}/*"
-      PermissionsBoundary: !If
-        - UsePermissionsBoundary
-        - !Ref PermissionsBoundary
-        - !Ref AWS::NoValue
-      Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-JwksCreatorRole"
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
+      FunctionName: !Ref JwksCreatorFunction
+      Action: lambda:InvokeFunction
+      Principal: cloudformation.amazonaws.com
 
   JwksCreatorLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${JwksCreatorFunction}"
       RetentionInDays: 30
+
+  JwksGeneratorTrigger:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken: !GetAtt JwksCreatorFunction.Arn
+      ForceUpdate: !Ref JwksCreatorFunction
 
   #
   # App domain
