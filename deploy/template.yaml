@@ -2152,7 +2152,7 @@ Resources:
         Target: es2024
         Sourcemap: true
         EntryPoints:
-          - src/lambda/jwks-creator.ts
+          - ../src/lambda/jwks-creator.ts
         Banner:
           - js=import { createRequire } from 'module'; const require = createRequire(import.meta.url); # Required in order to use AWS Lambda Powertools
         External:
