@@ -330,7 +330,7 @@ describe("Integration:: change phone number", () => {
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect($(testComponent("phoneNumber-error")).text()).toContain(
-          "You’re already using that phone number. Enter a different phone number"
+          "You’re already using that phone number. Enter a different UK mobile phone number"
         );
       })
       .expect(400);
@@ -338,8 +338,11 @@ describe("Integration:: change phone number", () => {
   });
 
 
-  it("should return No UK phone number page", (done) => {
-    request(app).get(PATH_DATA.NO_UK_PHONE_NUMBER.url).expect(302, done);
+  it("should return No UK phone number page", async () => {
+    const res = await request(app)
+      .get(PATH_DATA.NO_UK_PHONE_NUMBER.url)
+      .expect(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should return internal server error if send-otp-notification API call fails", async () => {
