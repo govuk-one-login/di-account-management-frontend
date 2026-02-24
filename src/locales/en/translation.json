@@ -202,7 +202,7 @@
           "button": "Add a UK mobile phone number",
           "detailSummary": "I do not have a UK mobile phone number",
           "detailTextLine1": "To get security codes by text message you must use a UK mobile phone number.",
-          "detailTextLine2": "As you already use an authenticator app to get security codes, you cannot add another one as a backup method."
+          "detailTextLine2": "As you already use an authenticator app to get security codes, you cannot add another one as a back-up method."
         }
       },
       "errors": {
@@ -594,23 +594,22 @@
     "noUkPhoneNumber": {
       "title": "If you do not have a UK mobile phone number",
       "header": "If you do not have a UK mobile phone number",
-      "paragraph1": "To get security codes by text message, you need to use a UK mobile phone number.",
+      "paragraph1": "To get security codes by text message, you must use a UK mobile phone number.",
       "sub-header": "What you can do",
       "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
       "paragraph2hasAuthApp": "If you do not have a UK mobile phone number, you can only get security codes using an authenticator app.",
       "hasAuthApp": "You already use your authenticator app to get codes.",
       "useDifferentAuthApp": "If you want to use a different authenticator app:",
       "detailSummary": "What is an authenticator app?",
-      "detailTextLine1": "What is an authenticator app?",
-      "detailTextLine2": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
-      "detailTextLine3": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer.",
+      "detailTextLine1": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
+      "detailTextLine2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer.",
       "paragraph3": "To set up an authenticator app to get security codes:",
       "paragraph3hasBackupAuthAppp": "To get security codes using your authenticator app:",
       "listItem1": "Go back to <strong>Security</strong>",
       "listItem2": "Select <strong>Use a different default method</strong>",
       "listItem2hasBackupAuthApp": "Select <strong>Switch back-up and default methods</strong>",
       "listItem2hasAuthApp": "Select <strong>Change authenticator app</strong>",
-      "backLinkButton": "Cancel and go back to Security"
+      "backLinkButton": "Go back to Security"
     },
     "signedOut": {
       "title": "You have signed out",
