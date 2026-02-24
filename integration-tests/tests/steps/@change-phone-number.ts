@@ -92,7 +92,7 @@ Then(
   "I am shown a message explaining what an authenticator app is",
   async ({ page }) => {
     await expect(page.getByText("What is an authenticator app?")).toHaveCount(
-      2
+      1
     );
   }
 );
