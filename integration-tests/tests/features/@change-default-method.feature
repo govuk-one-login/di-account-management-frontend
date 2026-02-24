@@ -141,7 +141,7 @@ Feature: Change Default MFA Method From Authenticator App
         And the page title is prefixed with "If you do not have a UK mobile phone number"
         And I am shown a message explaining what I can do
         And I am shown a message explaining how to change to a different authenticator app
-        And there is a "Cancel and go back to Security" button
+        And there is a "Go back to Security" button
 
     @failMobile
     Scenario: Change Default Method with SMS Backup leaving at Enter your UK mobile phone number screen
@@ -169,4 +169,4 @@ Feature: Change Default MFA Method From Authenticator App
         And the page title is prefixed with "If you do not have a UK mobile phone number"
         And I am shown a message explaining what I can do
         And I am shown a message explaining how to change to a different authenticator app
-        And there is a "Cancel and go back to Security" button
+        And there is a "Go back to Security" button
