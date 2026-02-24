@@ -594,7 +594,7 @@
     "noUkPhoneNumber": {
       "title": "If you do not have a UK mobile phone number",
       "header": "If you do not have a UK mobile phone number",
-      "paragraph1": "To get security codes by text message, you must use a UK mobile phone number.",
+      "paragraph1": "To get security codes by text message you must use a UK mobile phone number.",
       "sub-header": "What you can do",
       "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
       "paragraph2hasAuthApp": "If you do not have a UK mobile phone number, you can only get security codes using an authenticator app.",
