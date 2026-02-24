@@ -1,21 +1,15 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { RequestBuilder, ResponseBuilder } from "../../../test/utils/builders";
-import { UserJourney, EventType } from "../state-machine";
-import * as stateMachine from "../state-machine";
-
-import { SetState } from "../set-state";
+import { RequestBuilder, ResponseBuilder } from "../../../test/utils/builders.js";
+import { UserJourney, EventType } from "../state-machine.js";
+import * as stateMachine from "../state-machine.js";
+import { SetState } from "../set-state.js";
 
 describe("setState", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = new RequestBuilder()
       .withSessionUserState({
         changePhoneNumber: {
@@ -25,9 +19,9 @@ describe("setState", () => {
       .build();
 
     res = new ResponseBuilder()
-      .withRender(sandbox.fake())
-      .withRedirect(sandbox.fake(() => {}))
-      .withStatus(sandbox.fake())
+      .withRender(vi.fn())
+      .withRedirect(vi.fn())
+      .withStatus(vi.fn())
       .withLocals({
         trace: "fake-trace",
       })
@@ -35,12 +29,12 @@ describe("setState", () => {
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("should set the state value correctly", async () => {
     // Arrange
-    const next = sandbox.fake();
+    const next = vi.fn();
     const setStateHandler = SetState(
       [UserJourney.ChangePhoneNumber],
       UserJourney.NoUKMobilePhone,
@@ -52,17 +46,17 @@ describe("setState", () => {
     await setStateHandler(req as Request, res as Response, next);
 
     // Assert
-    expect(Object.keys(req.session.user.state)).to.include(
+    expect(Object.keys(req.session.user.state)).toContain(
       UserJourney.NoUKMobilePhone
     );
-    expect(req.session.user.state[UserJourney.NoUKMobilePhone].value).to.equal(
+    expect(req.session.user.state[UserJourney.NoUKMobilePhone].value).toBe(
       "APP"
     );
   });
 
   it("should only set the state if the target state is not already reached", async () => {
     // Arrange
-    const next = sandbox.fake();
+    const next = vi.fn();
     req = new RequestBuilder()
       .withSessionUserState({
         changePhoneNumber: {
@@ -81,14 +75,14 @@ describe("setState", () => {
       "VALUE_UPDATED"
     );
 
-    const nextStateSpy = sandbox.spy(stateMachine, "getNextState");
+    const nextStateSpy = vi.spyOn(stateMachine, "getNextState");
 
     // Act
     await setStateHandler(req as Request, res as Response, next);
 
     // Assert
-    expect(nextStateSpy).to.have.callCount(0);
-    expect(next).to.have.been.calledOnce;
+    expect(nextStateSpy).toHaveBeenCalledTimes(0);
+    expect(next).toHaveBeenCalledOnce();
   });
 
   it("should call next with an error if state update fails", async () => {
@@ -100,19 +94,21 @@ describe("setState", () => {
         },
       })
       .withLog({
-        error: sandbox.fake(),
+        error: vi.fn(),
       })
       .build();
 
     req.log = {
-      error: sandbox.fake(),
+      error: vi.fn(),
     };
 
-    const next = sandbox.fake();
+    const next = vi.fn();
     const error = new Error("State update failed");
-    const getNextStateStub = sandbox
-      .stub(stateMachine, "getNextState")
-      .throws(error);
+    const getNextStateStub = vi
+      .spyOn(stateMachine, "getNextState")
+      .mockImplementation(() => {
+        throw error;
+      });
 
     const setStateHandler = SetState(
       [UserJourney.ChangePhoneNumber],
@@ -125,8 +121,8 @@ describe("setState", () => {
     await setStateHandler(req as Request, res as Response, next);
 
     // Assert
-    expect(getNextStateStub).to.have.been.calledOnce;
-    expect(next).to.have.been.calledWith(error);
+    expect(getNextStateStub).toHaveBeenCalledOnce();
+    expect(next).toHaveBeenCalledWith(error);
   });
 
   it("should call next with error if user state is not initialized", async () => {
@@ -135,12 +131,12 @@ describe("setState", () => {
 
     req.session.user.state = undefined;
 
-    const logErrorSpy = sandbox.fake();
+    const logErrorSpy = vi.fn();
     req.log = {
       error: logErrorSpy,
     };
 
-    const next = sandbox.fake();
+    const next = vi.fn();
     const setStateHandler = SetState(
       [UserJourney.ChangePhoneNumber],
       UserJourney.NoUKMobilePhone,
@@ -152,14 +148,12 @@ describe("setState", () => {
     await setStateHandler(req as Request, res as Response, next);
 
     // Assert
-    expect(logErrorSpy).to.have.been.calledWith(
+    expect(logErrorSpy).toHaveBeenCalledWith(
       { trace: res.locals.trace },
       "User state is not initialized"
     );
-    expect(next).to.have.been.calledOnceWith(
-      sinon.match
-        .instanceOf(Error)
-        .and(sinon.match.has("message", "User state is not initialized"))
-    );
+    expect(next).toHaveBeenCalledOnce();
+    expect(next.mock.calls[0][0]).toBeInstanceOf(Error);
+    expect(next.mock.calls[0][0].message).toBe("User state is not initialized");
   });
 });

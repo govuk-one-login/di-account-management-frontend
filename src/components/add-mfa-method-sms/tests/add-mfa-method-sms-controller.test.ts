@@ -69,7 +69,7 @@ describe("addMfaSmsMethodPost", () => {
 
     await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
     expect(req.session?.save).not.toHaveBeenCalled();
-    expect(res.render).toHaveBeenCalledWith("add-mfa-method-sms/index.njk.js", {
+    expect(res.render).toHaveBeenCalledWith("add-mfa-method-sms/index.njk", {
       errors: {
         phoneNumber: {
           text: "pages.changePhoneNumber.validationError.samePhoneNumber",

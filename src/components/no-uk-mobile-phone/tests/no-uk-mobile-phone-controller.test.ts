@@ -1,46 +1,37 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-
-import { PATH_DATA } from "../../../app.constants";
-
+import { PATH_DATA } from "../../../app.constants.js";
 import {
   RequestBuilder,
   ResponseBuilder,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
-import * as oidcModule from "../../../utils/oidc";
-
-import { noUkPhoneNumberGet } from "../no-uk-mobile-phone-controller";
+} from "../../../../test/utils/builders.js";
+import * as oidcModule from "../../../utils/oidc.js";
+import { noUkPhoneNumberGet } from "../no-uk-mobile-phone-controller.js";
 
 describe("NoUkMobilePhoneController", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ changePhoneNumber: {} })
-      .withTranslate(sandbox.fake())
+      .withTranslate(vi.fn())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
     res = new ResponseBuilder()
-      .withRender(sandbox.fake())
-      .withRedirect(sandbox.fake(() => {}))
-      .withStatus(sandbox.fake())
+      .withRender(vi.fn())
+      .withRedirect(vi.fn())
+      .withStatus(vi.fn())
       .build();
 
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("noUkPhoneNumberGet", () => {
@@ -49,7 +40,7 @@ describe("NoUkMobilePhoneController", () => {
       req = new RequestBuilder()
         .withBody({})
         .withSessionUserState({ changePhoneNumber: {} })
-        .withTranslate(sandbox.fake())
+        .withTranslate(vi.fn())
         .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
         .withQuery({ type: "changePhoneNumber" })
         .build();
@@ -58,7 +49,7 @@ describe("NoUkMobilePhoneController", () => {
       noUkPhoneNumberGet(req as Request, res as Response);
 
       // Assert
-      expect(res.render).to.have.calledWith("no-uk-mobile-phone/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("no-uk-mobile-phone/index.njk", {
         hasBackupAuthApp: false,
         hasAuthApp: false,
       });
@@ -69,7 +60,7 @@ describe("NoUkMobilePhoneController", () => {
       req = new RequestBuilder()
         .withBody({})
         .withSessionUserState({ changePhoneNumber: {} })
-        .withTranslate(sandbox.fake())
+        .withTranslate(vi.fn())
         .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
         .build();
 
@@ -79,7 +70,7 @@ describe("NoUkMobilePhoneController", () => {
       noUkPhoneNumberGet(req as Request, res as Response);
 
       // Assert
-      expect(res.redirect).to.have.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=unknownType`
       );
     });
@@ -89,7 +80,7 @@ describe("NoUkMobilePhoneController", () => {
       req = new RequestBuilder()
         .withBody({})
         .withSessionUserState({ changePhoneNumber: {} })
-        .withTranslate(sandbox.fake())
+        .withTranslate(vi.fn())
         .withHeaders({
           "txma-audit-encoded": TXMA_AUDIT_ENCODED,
           referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
@@ -101,7 +92,7 @@ describe("NoUkMobilePhoneController", () => {
       noUkPhoneNumberGet(req as Request, res as Response);
 
       // Assert
-      expect(res.redirect).to.have.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=changePhoneNumber`
       );
     });
@@ -111,7 +102,7 @@ describe("NoUkMobilePhoneController", () => {
       req = new RequestBuilder()
         .withBody({})
         .withSessionUserState({ changePhoneNumber: {} })
-        .withTranslate(sandbox.fake())
+        .withTranslate(vi.fn())
         .withHeaders({
           "txma-audit-encoded": TXMA_AUDIT_ENCODED,
           referer: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
@@ -123,7 +114,7 @@ describe("NoUkMobilePhoneController", () => {
       noUkPhoneNumberGet(req as Request, res as Response);
 
       // Assert
-      expect(res.redirect).to.have.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         `${PATH_DATA.NO_UK_PHONE_NUMBER.url}?type=changeDefaultMethod`
       );
     });
@@ -136,7 +127,7 @@ describe("NoUkMobilePhoneController", () => {
           changePhoneNumber: {},
         })
         .withBackupAuthAppMfaMethod()
-        .withTranslate(sandbox.fake())
+        .withTranslate(vi.fn())
         .withHeaders({
           "txma-audit-encoded": TXMA_AUDIT_ENCODED,
           referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
@@ -148,7 +139,7 @@ describe("NoUkMobilePhoneController", () => {
       noUkPhoneNumberGet(req as Request, res as Response);
 
       // Assert
-      expect(res.render).to.have.calledWith("no-uk-mobile-phone/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("no-uk-mobile-phone/index.njk", {
         hasBackupAuthApp: true,
         hasAuthApp: false,
       });
@@ -162,7 +153,7 @@ describe("NoUkMobilePhoneController", () => {
           changePhoneNumber: {},
         })
         .withAuthAppMfaMethod()
-        .withTranslate(sandbox.fake())
+        .withTranslate(vi.fn())
         .withHeaders({
           "txma-audit-encoded": TXMA_AUDIT_ENCODED,
           referer: PATH_DATA.CHANGE_PHONE_NUMBER.url,
@@ -174,7 +165,7 @@ describe("NoUkMobilePhoneController", () => {
       noUkPhoneNumberGet(req as Request, res as Response);
 
       // Assert
-      expect(res.render).to.have.calledWith("no-uk-mobile-phone/index.njk", {
+      expect(res.render).toHaveBeenCalledWith("no-uk-mobile-phone/index.njk", {
         hasBackupAuthApp: false,
         hasAuthApp: true,
       });

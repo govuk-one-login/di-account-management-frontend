@@ -32,7 +32,7 @@ import {
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { logger } from "../../utils/logger.js";
 
-const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk.js";
+const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
 const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
 
