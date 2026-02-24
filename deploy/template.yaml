@@ -2133,6 +2133,10 @@ Resources:
       Runtime: nodejs20.x
       Handler: handler
       Timeout: 60
+      VpcConfig:
+        SubnetIds:
+          - Fn::ImportValue: !Sub ${VpcStackName}-PrivateSubnetIdA
+          - Fn::ImportValue: !Sub ${VpcStackName}-PrivateSubnetIdB
       Role: !GetAtt JwksCreatorRole.Arn
       Environment:
         Variables:
@@ -2148,7 +2152,7 @@ Resources:
         Target: es2024
         Sourcemap: true
         EntryPoints:
-          - ../dist/lambda/jwks-creator.ts
+          - src/lambda/jwks-creator.ts
         Banner:
           - js=import { createRequire } from 'module'; const require = createRequire(import.meta.url); # Required in order to use AWS Lambda Powertools
         External:
