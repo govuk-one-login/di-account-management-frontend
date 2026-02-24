@@ -1,4 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
 Description: >-
   This creates the necessary components to deploy the Account Management
   Frontend onto ECS Fargate.
@@ -2125,35 +2127,17 @@ Resources:
                 s3:TlsVersion: "1.2"
 
   JwksCreatorFunction:
-    Type: AWS::Lambda::Function
+    Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub "${AWS::StackName}-JwksCreator"
       Runtime: nodejs20.x
       Handler: handler
       Timeout: 60
       Role: !GetAtt JwksCreatorRole.Arn
-      Code:
-        ZipFile: |
-          exports.handler = async (event) => {
-            return { statusCode: 200, body: 'Hello World' };
-          };
       Environment:
         Variables:
           JAR_RSA_ENCRYPTION_KEY_ALIAS: !Ref SigningKmsKeyAlias
           BUCKET_NAME: !Ref JwksBucket
-      Tags:
-        - Key: Name
-          Value: !Sub "${AWS::StackName}-JwksCreator"
-        - Key: Product
-          Value: !Ref ProductTagValue
-        - Key: System
-          Value: !Ref SystemTagValue
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref OwnerTagValue
-        - Key: Source
-          Value: !Ref SourceTagValue
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
