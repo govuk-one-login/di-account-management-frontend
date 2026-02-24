@@ -125,7 +125,7 @@ Feature: Add Backup SMS MFA Method
         And I can see a collapsed detail block "I do not have a UK mobile phone number"
         Given I click the detail block "I do not have a UK mobile phone number"
         Then I can see the explanation details "To get security codes by text message you must use a UK mobile phone number."
-        And I can see the explanation details "As you already use an authenticator app to get security codes, you cannot add another one as a backup method."
+        And I can see the explanation details "As you already use an authenticator app to get security codes, you cannot add another one as a back-up method."
         Given I click the "Cancel and go back to security" link
         And the page has finished loading
         Then the page meets our accessibility standards
