@@ -18,6 +18,8 @@
 
   {% if hasAuthApp %}
     <p class="govuk-body">{{ 'pages.noUkPhoneNumber.paragraph2hasAuthApp' | translate }}</p>
+  {% elif hasBackupAuthApp %}
+    <p class="govuk-body">{{ 'pages.noUkPhoneNumber.paragraph2hasBackupAuthApp' | translate }}</p>
   {% else %}
     <p class="govuk-body">{{ 'pages.noUkPhoneNumber.paragraph2' | translate }}</p>
   {% endif %}

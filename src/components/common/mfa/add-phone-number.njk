@@ -41,9 +41,11 @@
       html: addMfaMethodSMSDetailsBlock
     }) }}
   {% else %}
-    <a href="{{"NO_UK_PHONE_NUMBER" | getPath}}" class="govuk-link govuk-body">
-      {{'pages.changePhoneNumber.info.noUkPhone' | translate}}
-    </a>
+    <p class="govuk-body">
+      <a href="{{"NO_UK_PHONE_NUMBER" | getPath}}" class="govuk-link">
+        {{'pages.changePhoneNumber.info.noUkPhone' | translate}}
+      </a>
+    </p>
   {% endif %}
 
   <p class="govuk-body govuk-!-margin-top-4">

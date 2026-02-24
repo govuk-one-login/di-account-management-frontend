@@ -597,6 +597,7 @@
       "paragraph1": "To get security codes by text message you must use a UK mobile phone number.",
       "sub-header": "What you can do",
       "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
+      "paragraph2hasBackupAuthApp": "If you do not have a UK mobile phone number, you can get security codes using your authenticator app instead.",
       "paragraph2hasAuthApp": "If you do not have a UK mobile phone number, you can only get security codes using an authenticator app.",
       "hasAuthApp": "You already use your authenticator app to get codes.",
       "useDifferentAuthApp": "If you want to use a different authenticator app:",
