@@ -133,12 +133,10 @@
   "resolutions": {
     "minimist": "1.2.6",
     "json5": "2.2.3",
-    "minimatch": "^10.2.1",
     "diff": "^8.0.3",
     "bn.js": "^5.2.3"
   },
   "overrides": {
-    "minimatch": "^10.2.1",
     "diff": "^8.0.3",
     "bn.js": "^5.2.3",
     "aws-sdk": "^2.1691.0"

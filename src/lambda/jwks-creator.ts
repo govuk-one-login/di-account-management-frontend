@@ -3,11 +3,11 @@ import type { JWK } from "jose";
 import type { Context, CloudFormationCustomResourceEvent } from "aws-lambda";
 import { createPublicKey } from "node:crypto";
 import assert from "node:assert";
-import { s3Client } from "../config/aws.js";
-import { kmsService } from "../utils/kms.js";
+import { s3Client } from "../config/aws";
+import { kmsService } from "../utils/kms";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { jarKeyEncryptionAlgorithm } from "../app.constants.js";
-import { logger } from "../utils/logger.js";
+import { jarKeyEncryptionAlgorithm } from "../app.constants";
+import { logger } from "../utils/logger";
 
 export const handler = async (
   event: CloudFormationCustomResourceEvent,
