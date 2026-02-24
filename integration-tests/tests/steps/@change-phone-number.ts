@@ -83,7 +83,7 @@ Given(
 Then("I am shown a message explaining what I can do", async ({ page }) => {
   await expect(
     page.getByText(
-      "To get security codes by text message, you need to use a UK mobile phone number."
+      "To get security codes by text message, you must use a UK mobile phone number."
     )
   ).toBeVisible();
 });
