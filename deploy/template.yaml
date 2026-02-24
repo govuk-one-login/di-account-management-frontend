@@ -916,6 +916,8 @@ Resources:
             - Name: "AMC_JWKS_URL"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, AMCJWKSURL]
+            - Name: "JWKS_BUCKET_NAME"
+              Value: !Ref JwksBucket
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
@@ -1077,6 +1079,11 @@ Resources:
                   - "kms:DescribeKey"
                 Resource:
                   - !GetAtt SigningKmsKey.Arn
+              - Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                Resource:
+                  - !Sub "${JwksBucket.Arn}/jwks.json"
               - Effect: Allow
                 Action:
                   - "kms:GenerateDataKey*"

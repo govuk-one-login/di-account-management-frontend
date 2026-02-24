@@ -74,6 +74,7 @@ import { switchBackupMethodRouter } from "./components/switch-backup-method/swit
 import { changeDefaultMethodRouter } from "./components/change-default-method/change-default-method-routes";
 import { logoutRedirectRouter } from "./components/logout-redirect/logout-redirect-routes";
 import { isUserLoggedInMiddleware } from "./middleware/is-user-logged-in-middleware";
+import { jwksRouter } from "./components/jwks/jwks-routes";
 import { applyOverloadProtection } from "./middleware/overload-protection-middleware";
 import { frontendVitalSignsInit } from "@govuk-one-login/frontend-vital-signs";
 import { Server } from "node:http";
@@ -242,6 +243,7 @@ async function createApp(): Promise<express.Application> {
   app.use(authMiddleware(getOIDCConfig()));
 
   app.use(backchannelLogoutRouter);
+  app.use(jwksRouter);
   // Must be added to the app after the session is set up and before the routers
   app.use(csrfSynchronisedProtection);
 
