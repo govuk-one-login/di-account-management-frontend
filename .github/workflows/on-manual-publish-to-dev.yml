@@ -111,7 +111,7 @@ jobs:
           cp -R .aws-sam/build/JwksCreatorFunction sam-package/JwksCreatorFunction
           echo "Replacing 'CONTAINER-IMAGE-PLACEHOLDER' with new ECR image ref"
           sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA|" sam-package/cf-template.yaml
-          cd sam-package && zip -r ../template.zip cf-template.yaml JwksCreatorFunction
+          (cd sam-package && zip -r ../template.zip cf-template.yaml JwksCreatorFunction)
           aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
 
       - name: "Delegated Deployment via AWS CodeDeploy"
