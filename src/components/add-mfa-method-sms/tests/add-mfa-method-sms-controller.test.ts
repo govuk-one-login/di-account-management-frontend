@@ -114,6 +114,19 @@ describe("addMfaSmsMethodGet", () => {
   it("should call render with the expected arguments", async () => {
     await addMfaSmsMethodGet(req as Request, res as Response);
     expect(res.render).to.be.calledWith("add-mfa-method-sms/index.njk", {
+      isAddMfaMethodSms: true,
+      hasAuthApp: false,
+      backLink: "/back-from-set-up-method",
+    });
+  });
+
+  it("should set the hasAuthApp variable to true if the user has an authenticator app MFA method", async () => {
+    req = new RequestBuilder().withAuthAppMfaMethod().build();
+
+    await addMfaSmsMethodGet(req as Request, res as Response);
+    expect(res.render).to.be.calledWith("add-mfa-method-sms/index.njk", {
+      isAddMfaMethodSms: true,
+      hasAuthApp: true,
       backLink: "/back-from-set-up-method",
     });
   });

@@ -36,6 +36,7 @@ export class RequestBuilder {
     "txma-audit-encoded": TXMA_AUDIT_ENCODED,
   };
   private query: object = {};
+  private log: object = {};
   private t: () => void;
 
   withBody(body: object): this {
@@ -62,6 +63,36 @@ export class RequestBuilder {
         method: {
           mfaMethodType: "SMS",
           phoneNumber: "0123456789",
+        },
+      },
+    ];
+    return this;
+  }
+
+  withAuthAppMfaMethod(): this {
+    this.session.mfaMethods = [
+      {
+        mfaIdentifier: "1",
+        priorityIdentifier: "DEFAULT",
+        methodVerified: true,
+        method: {
+          mfaMethodType: "AUTH_APP",
+          credential: "fake-creds",
+        },
+      },
+    ];
+    return this;
+  }
+
+  withBackupAuthAppMfaMethod(): this {
+    this.session.mfaMethods = [
+      {
+        mfaIdentifier: "1",
+        priorityIdentifier: "BACKUP",
+        methodVerified: true,
+        method: {
+          mfaMethodType: "AUTH_APP",
+          credential: "fake-creds",
         },
       },
     ];
@@ -95,6 +126,11 @@ export class RequestBuilder {
 
   withQuery(query: object): this {
     this.query = query;
+    return this;
+  }
+
+  withLog(log: object): this {
+    this.log = log;
     return this;
   }
 
