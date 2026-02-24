@@ -2131,6 +2131,7 @@ Resources:
       Runtime: nodejs20.x
       Handler: handler
       Timeout: 60
+      Role: !GetAtt JwksCreatorRole.Arn
       Code:
         ZipFile: |
           exports.handler = async (event) => {
@@ -2168,6 +2169,51 @@ Resources:
           - js=import { createRequire } from 'module'; const require = createRequire(import.meta.url); # Required in order to use AWS Lambda Powertools
         External:
           - "@aws-sdk/*"
+
+  JwksCreatorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-JwksCreatorRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: JwksCreatorPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - kms:GetPublicKey
+                  - kms:DescribeKey
+                Resource: !GetAtt SigningKmsKey.Arn
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                Resource: !Sub "${JwksBucket.Arn}/*"
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-JwksCreatorRole"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
 
   JwksCreatorLambdaPermission:
     Type: AWS::Lambda::Permission
