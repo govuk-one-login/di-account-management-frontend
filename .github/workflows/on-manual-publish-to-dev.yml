@@ -96,7 +96,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA
 
-      - name: Upload SAM Template to Bucket
+      - name: Upload SAM Template to  Bucket
         id: publish-template
         env:
           ARTIFACT_BUCKET_NAME: ${{ secrets.DEV_ARTIFACT_SOURCE_BUCKET_NAME }}
