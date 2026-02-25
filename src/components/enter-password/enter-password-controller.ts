@@ -49,11 +49,11 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
 const getOplValues = (): OplSettingsLookupObject => ({
   [UserJourney.ChangeEmail]: {
     ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
-    contentId: "e00e882b-f54a-40d3-ac84-85737424471c",
+    contentId: "ce832c9d-a0b8-4949-8215-d70ca285fa46",
   },
   [UserJourney.ChangePassword]: {
     ...CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
-    contentId: "23d51dca-51ca-44ad-86e0-b7599ce14412",
+    contentId: "0a6233f9-0a40-48c2-b7c1-98916a01f31e",
   },
   [UserJourney.ChangePhoneNumber]: {
     ...MFA_COMMON_OPL_SETTINGS,
@@ -61,7 +61,7 @@ const getOplValues = (): OplSettingsLookupObject => ({
   },
   [UserJourney.DeleteAccount]: {
     ...DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
-    contentId: "c69af4c7-5496-4c11-9d22-97bd3d2e9349",
+    contentId: "c37f049b-4144-441a-bc50-e53f02640cf3",
   },
   [`${UserJourney.addBackup}_${mfaPriorityIdentifiers.default}_${mfaMethodTypes.authApp}`]:
     {
