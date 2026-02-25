@@ -182,8 +182,8 @@
     "addBackup": {
       "title": "Choose a back-up method",
       "sms": {
-        "title": "Back-up phone number",
-        "hint": "Get a text message to a different mobile phone"
+        "title": "UK mobile phone number",
+        "hint": "Get a text message to a different UK mobile phone number"
       },
       "app": {
         "title": "Authenticator app for smartphone, tablet or computer",
@@ -198,8 +198,11 @@
       "backup": {
         "title": "Add a back-up method",
         "sms": {
-          "message": "You can get security codes by text message as your back-up method.",
-          "button": "Add a mobile phone number"
+          "message": "You can get security codes by text message to a UK mobile phone number as your back-up method.",
+          "button": "Add a UK mobile phone number",
+          "detailSummary": "I do not have a UK mobile phone number",
+          "detailTextLine1": "To get security codes by text message you must use a UK mobile phone number.",
+          "detailTextLine2": "As you already use an authenticator app to get security codes, you cannot add another one as a back-up method."
         }
       },
       "errors": {
@@ -233,8 +236,12 @@
       "cancel": "Cancel and go back to Security"
     },
     "addBackupSms": {
-      "title": "Enter your mobile phone number",
-      "heading": "Enter your mobile phone number",
+      "title": "Enter your UK mobile phone number",
+      "heading": "Enter your UK mobile phone number",
+      "detailSummary": "I do not have a UK mobile phone number",
+      "detailTextLine1": "To get security codes by text message you must use a UK mobile phone number.",
+      "detailTextLine2": "Or you can use an authenticator app to get codes instead.",
+      "detailLink": "Go back to choose authenticator app",
       "confirm": {
         "title": "You’ve added a back-up method for getting security codes",
         "heading": "You’ve added a back-up method for getting security codes",
@@ -526,8 +533,8 @@
       "currentIsPhone": "Your default method for getting security codes is currently by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "switchToApp": "You can use an authenticator app instead.",
       "currentIsApp": "Your default method for getting security codes is currently using your authenticator app.",
-      "switchToPhone": "You can get codes by text message instead.",
-      "setUpPhoneButton": "Add a mobile phone number",
+      "switchToPhone": "You can get codes by text message to a UK mobile number instead.",
+      "setUpPhoneButton": "Add a UK mobile phone number",
       "setUpAppButton": "Set up an authenticator app",
       "cancelButton": "Cancel and go back to Security",
       "confirmation": {
@@ -537,8 +544,8 @@
         "sms": "Your default method for getting security codes will be a text message to your phone number ending with <strong>[phoneNumber]</strong>."
       },
       "sms": {
-        "title": "Enter your mobile phone number",
-        "heading": "Enter your mobile phone number"
+        "title": "Enter your UK mobile phone number",
+        "heading": "Enter your UK mobile phone number"
       }
     },
     "deleteAccount": {
@@ -564,14 +571,15 @@
       }
     },
     "changePhoneNumber": {
-      "title": "Enter your new mobile phone number",
-      "header": "Enter your new mobile phone number",
+      "title": "Enter your new UK mobile phone number",
+      "header": "Enter your new UK mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
-        "backLink": "Cancel and go back to Security"
+        "backLink": "Cancel and go back to Security",
+        "noUkPhone": "I do not have a UK mobile phone number"
       },
       "validationError": {
-        "samePhoneNumber": "You’re already using that phone number. Enter a different phone number"
+        "samePhoneNumber": "You’re already using that phone number. Enter a different UK mobile phone number"
       },
       "ukPhoneNumber": {
         "label": "UK mobile phone number",
@@ -579,19 +587,30 @@
           "required": "Enter a UK mobile phone number",
           "international": "Enter a UK mobile phone number",
           "length": "Enter a UK mobile phone number, like 07700 900000",
-          "plusNumericOnly": "Enter a UK mobile phone number using only numbers or the + symbol"
-        }
-      },
-      "internationalPhoneNumber": {
-        "checkBoxLabel": "I do not have a UK mobile number",
-        "label": "Mobile phone number",
-        "hint": "Include the country code, for example +33 for France",
-        "validationError": {
-          "required": "Enter a mobile phone number",
-          "plusNumericOnly": "Enter a mobile phone number using only numbers or the + symbol",
-          "internationalFormat": "Enter a mobile phone number in the correct format, including the country code"
+          "plusNumericOnly": "Enter a UK mobile phone number using numbers only"
         }
       }
+    },
+    "noUkPhoneNumber": {
+      "title": "If you do not have a UK mobile phone number",
+      "header": "If you do not have a UK mobile phone number",
+      "paragraph1": "To get security codes by text message you must use a UK mobile phone number.",
+      "sub-header": "What you can do",
+      "paragraph2": "If you do not have a UK mobile phone number, you can get security codes using an authenticator app instead.",
+      "paragraph2hasBackupAuthApp": "If you do not have a UK mobile phone number, you can get security codes using your authenticator app instead.",
+      "paragraph2hasAuthApp": "If you do not have a UK mobile phone number, you can only get security codes using an authenticator app.",
+      "hasAuthApp": "You already use your authenticator app to get codes.",
+      "useDifferentAuthApp": "If you want to use a different authenticator app:",
+      "detailSummary": "What is an authenticator app?",
+      "detailTextLine1": "An authenticator app creates a security code that helps confirm it's you when you sign in.",
+      "detailTextLine2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer.",
+      "paragraph3": "To set up an authenticator app to get security codes:",
+      "paragraph3hasBackupAuthAppp": "To get security codes using your authenticator app:",
+      "listItem1": "Go back to <strong>Security</strong>",
+      "listItem2": "Select <strong>Use a different default method</strong>",
+      "listItem2hasBackupAuthApp": "Select <strong>Switch back-up and default methods</strong>",
+      "listItem2hasAuthApp": "Select <strong>Change authenticator app</strong>",
+      "backLinkButton": "Go back to Security"
     },
     "signedOut": {
       "title": "You have signed out",

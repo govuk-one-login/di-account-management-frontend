@@ -66,7 +66,19 @@ export async function addMfaSmsMethodGet(
 ): Promise<void> {
   req.metrics?.addMetric("addMfaSmsMethodGet", MetricUnit.Count, 1);
   setAddMfaSmsMethodGetOplSettings(req, res);
-  res.render(ADD_MFA_METHOD_SMS_TEMPLATE, { backLink });
+
+  const hasAuthApp =
+    req.session.mfaMethods?.some(
+      (mfaMethod) =>
+        mfaMethod.method.mfaMethodType === mfaMethodTypes.authApp &&
+        mfaMethod.priorityIdentifier === mfaPriorityIdentifiers.default
+    ) || false;
+
+  res.render(ADD_MFA_METHOD_SMS_TEMPLATE, {
+    isAddMfaMethodSms: true,
+    hasAuthApp,
+    backLink,
+  });
 }
 
 export function addMfaSmsMethodPost(

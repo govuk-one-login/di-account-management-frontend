@@ -9,7 +9,6 @@ import {
   isObjectEmpty,
   renderBadRequest,
 } from "../../utils/validation";
-import { convertInternationalPhoneNumberToE164Format } from "../../utils/phone-number";
 import { BadRequestError } from "../../utils/errors";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
@@ -51,16 +50,7 @@ export function changePhoneNumberPost(
     }
 
     const { email } = req.session.user;
-    const hasInternationalPhoneNumber = req.body.hasInternationalPhoneNumber;
-    let newPhoneNumber;
-
-    if (hasInternationalPhoneNumber === "true") {
-      newPhoneNumber = convertInternationalPhoneNumberToE164Format(
-        req.body.internationalPhoneNumber
-      );
-    } else {
-      newPhoneNumber = req.body.phoneNumber;
-    }
+    const newPhoneNumber = req.body.phoneNumber;
 
     const response = await service.sendPhoneVerificationNotification(
       email,
@@ -82,13 +72,8 @@ export function changePhoneNumberPost(
     }
 
     if (response.code === ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING) {
-      const href: string =
-        hasInternationalPhoneNumber && hasInternationalPhoneNumber === "true"
-          ? "internationalPhoneNumber"
-          : "phoneNumber";
-
       const error = formatValidationError(
-        href,
+        "phoneNumber",
         req.t("pages.changePhoneNumber.validationError.samePhoneNumber")
       );
       return renderBadRequest(res, req, CHANGE_PHONE_NUMBER_TEMPLATE, error);
