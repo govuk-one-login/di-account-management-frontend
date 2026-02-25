@@ -455,14 +455,15 @@
       }
     },
     "changePhoneNumber": {
-      "title": "Rhowch eich rhif ffôn symudol newydd",
-      "header": "Rhowch eich rhif ffôn symudol newydd",
+      "title": "Rhowch eich rhif ffôn symudol y DU newydd",
+      "header": "Rhowch eich rhif ffôn symudol y DU newydd",
       "info": {
         "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i’r rhif rydych yn ei roi i ni.",
-        "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
+        "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
+        "noUkPhone": "Nid oes gennyf rif ffôn symudol y DU"
       },
       "validationError": {
-        "samePhoneNumber": "Rydych eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn gwahanol."
+        "samePhoneNumber": "Rydych eisoes yn defnyddio'r rhif ffôn hwnnw. Rhowch rif ffôn symudol y DU gwahanol."
       },
       "ukPhoneNumber": {
         "label": "Rhif ffôn symudol y DU",
@@ -470,19 +471,29 @@
           "required": "Rhowch rif ffôn symudol y DU",
           "international": "Rhowch rif ffôn symudol y DU",
           "length": "Rhowch rif ffôn symudol yn y DU, fel 07700 900000",
-          "plusNumericOnly": "Rhowch rif ffôn symudol yn y DU gan ddefnyddio rhifau yn unig neu’r symbol +"
-        }
-      },
-      "internationalPhoneNumber": {
-        "checkBoxLabel": "Rhif ffôn symudol",
-        "label": "Rhif ffôn symudol rhyngwladol",
-        "hint": "Dylech gynnwys y cod gwlad, er enghraifft +33 am Ffrainc",
-        "validationError": {
-          "required": "Rhowch rif ffôn symudol",
-          "plusNumericOnly": "Rhowch rif ffôn symudol gan ddefnyddio rhifau yn unig neu’r symbol +",
-          "internationalFormat": "Rhowch rif ffôn symudol yn y ffurf gywir, gan gynnwys y cod gwlad"
+          "plusNumericOnly": "Rhowch rif ffôn symudol y DU gan ddefnyddio rhifau yn unig"
         }
       }
+    },
+    "noUkPhoneNumber": {
+      "title": "Os nad oes gennych rif ffôn symudol y DU",
+      "header": "Os nad oes gennych rif ffôn symudol y DU",
+      "paragraph1": "I gael codau diogelwch drwy neges destun, rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
+      "sub-header": "Beth allwch chi ei wneud",
+      "paragraph2": "Os nad oes gennych rif ffôn symudol yn y DU, gallwch gael codau diogelwch drwy ddefnyddio ap dilysu yn lle hynny.",
+      "paragraph2hasAuthApp": "Os nad oes gennych rif ffôn symudol y DU, gallwch gael codau diogelwch drwy ddefnyddio ap dilysu yn lle hynny.",
+      "hasAuthApp": "Rydych eisoes yn defnyddio'ch ap dilysu i gael codau.",
+      "useDifferentAuthApp": "Os ydych chi am ddefnyddio ap dilysu gwahanol:",
+      "detailSummary": "Beth yw ap dilysu?",
+      "detailTextLine1": "Mae ap dilysydd yn creu cod diogelwch sy'n helpu i gadarnhau mai chi yw chi pan fyddwch yn mewngofnodi.",
+      "detailTextLine2": "Gallwch ddefnyddio ap dilysydd ar eich ffôn clyfar, tabled neu gyfrifiadur. Lawrlwythwch ap dilysu ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau neu chwiliwch ar-lein am ap dilysu ar gyfer eich cyfrifiadur.",
+      "paragraph3": "I sefydlu ap dilysu i gael codau diogelwch:",
+      "paragraph3hasBackupAuthApp": "I gael codau diogelwch gan ddefnyddio'ch ap dilysu:",
+      "listItem1": "Ewch yn ôl i <strong>Diogelwch</strong>",
+      "listItem2": "Dewiswch <strong>Defnyddio dull diofyn gwahanol</strong>",
+      "listItem2hasBackupAuthApp": "Dewiswch <strong>Newid dulliau wrth gefn a diofyn</strong>",
+      "listItem2hasAuthApp": "Dewiswch <strong>Newid ap dilysu</strong>",
+      "backLinkButton": "Yn ôl i Diogelwch"
     },
     "signedOut": {
       "title": "Rydych wedi allgofnodi",
@@ -683,8 +694,8 @@
     "addBackup": {
       "title": "Dewiswch ddull wrth gefn",
       "sms": {
-        "title": "Rhif ffôn wrth gefn",
-        "hint": "Cael neges destun i ffôn symudol gwahanol"
+        "title": "Rhif ffôn symudol y DU",
+        "hint": "Cael neges destun i rif ffôn symudol y DU gwahanol"
       },
       "app": {
         "title": "Ap dilysydd ar gyfer ffôn clyfar, tabled neu gyfrifiadur",
@@ -699,8 +710,11 @@
       "backup": {
         "title": "Ychwanegu  dull wrth gefn",
         "sms": {
-          "message": "Gallwch gael codau diogelwch drwy neges destun fel eich dull wrth gefn.",
-          "button": "Ychwanegu rhif ffôn symudol"
+          "message": "Gallwch gael codau diogelwch drwy neges destun i rif ffôn symudol y DU fel eich dull wrth gefn.",
+          "button": "Ychwanegu rhif ffôn symudol y DU",
+          "detailSummary": "Nid oes gennyf rif ffôn symudol y DU",
+          "detailTextLine1": "I gael codau diogelwch drwy neges destun, rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
+          "detailTextLine2": "Gan eich bod eisoes yn defnyddio ap dilysu i gael codau diogelwch, ni allwch ychwanegu un arall fel dull wrth gefn."
         }
       },
       "errors": { "required": "Dewiswch ffordd i gael codau diogelwch" }
@@ -731,8 +745,12 @@
       "cancel": "Canslo a mynd yn ôl i Diogelwch"
     },
     "addBackupSms": {
-      "title": "Rhowch eich rhif ffôn symudol",
-      "heading": "Rhowch eich rhif ffôn symudol",
+      "title": "Rhowch eich rhif ffôn symudol y DU",
+      "heading": "Rhowch eich rhif ffôn symudol y DU",
+      "detailSummary": "Nid oes gennyf rif ffôn symudol y DU",
+      "detailTextLine1": "I gael codau diogelwch drwy neges destun, rhaid i chi ddefnyddio rhif ffôn symudol y DU.",
+      "detailTextLine2": "Neu gallwch ddefnyddio ap dilysu i gael codau yn lle hynny.",
+      "detailLink": "Ewch yn ôl i ddewis ap dilysu",
       "confirm": {
         "title": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
@@ -763,8 +781,8 @@
       "currentIsPhone": "Eich dull diofyn ar gyfer cael codau diogelwch ar hyn o bryd yw trwy neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
       "switchToApp": "Gallwch ddefnyddio ap dilysydd yn lle hynny.",
       "currentIsApp": "Eich dull diofyn ar gyfer cael codau diogelwch ar hyn o bryd yw trwy eich ap dilysydd.",
-      "switchToPhone": "Gallwch gael codau trwy neges destun yn lle hynny.",
-      "setUpPhoneButton": "Ychwanegu rhif ffôn symudol",
+      "switchToPhone": "Gallwch gael codau drwy neges destun i rif ffôn symudol y DU yn lle hynny.",
+      "setUpPhoneButton": "Ychwanegu rhif ffôn symudol y DU",
       "setUpAppButton": "Sefydlu ap dilysydd",
       "cancelButton": "Canslo a mynd yn ôl i Diogelwch",
       "confirmation": {
@@ -774,8 +792,8 @@
         "sms": "Eich dull diofyn ar gyfer cael codau diogelwch fydd neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>."
       },
       "sms": {
-        "title": "Rhowch eich rhif ffôn symudol",
-        "heading": "Rhowch eich rhif ffôn symudol"
+        "title": "Rhowch eich rhif ffôn symudol y DU",
+        "heading": "Rhowch eich rhif ffôn symudol y DU"
       }
     },
     "switchBackupMethod": {

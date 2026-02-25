@@ -91,6 +91,7 @@ import {
   frontendUiTranslationEn,
 } from "@govuk-one-login/frontend-ui";
 import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware";
+import { noUkMobilePhoneRouter } from "./components/no-uk-mobile-phone/no-uk-mobile-phone-routes";
 
 const APP_VIEWS = [
   path.join(__dirname, "components"),
@@ -263,6 +264,7 @@ async function createApp(): Promise<express.Application> {
   app.use(changePasswordRouter);
   app.use(checkYourEmailRouter);
   app.use(changePhoneNumberRouter);
+  app.use(noUkMobilePhoneRouter);
   app.use(deleteAccountRouter);
   app.use(checkYourPhoneRouter);
   app.use(sessionExpiredRouter);
