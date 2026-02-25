@@ -2137,6 +2137,8 @@ Resources:
         SubnetIds:
           - Fn::ImportValue: !Sub ${VpcStackName}-PrivateSubnetIdA
           - Fn::ImportValue: !Sub ${VpcStackName}-PrivateSubnetIdB
+        SecurityGroupIds:
+          - !Ref JwksCreatorSecurityGroup
       Role: !GetAtt JwksCreatorRole.Arn
       Environment:
         Variables:
@@ -2171,6 +2173,7 @@ Resources:
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
       Policies:
         - PolicyName: JwksCreatorPolicy
           PolicyDocument:
@@ -2192,6 +2195,26 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-JwksCreatorRole"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  JwksCreatorSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for the JWKS creator Lambda
+      VpcId:
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-JwksCreatorSecurityGroup"
         - Key: Product
           Value: !Ref ProductTagValue
         - Key: System
