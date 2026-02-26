@@ -1,6 +1,6 @@
 import { Application } from "express";
 import request from "supertest";
-import { expect } from "./test-utils.js";
+import { expect } from "vitest";
 
 export async function checkFailedCSRFValidationBehaviour(
   app: Application,
@@ -12,5 +12,5 @@ export async function checkFailedCSRFValidationBehaviour(
     .type("form")
     .send(payload)
     .expect(302);
-  expect(response.header.location).to.equal("/your-services");
+  expect(response.header.location).toBe("/your-services");
 }

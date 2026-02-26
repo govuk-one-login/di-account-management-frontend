@@ -1,6 +1,13 @@
 import request from "supertest";
-import { describe, beforeAll, afterAll, it, vi, beforeEach } from "vitest";
-import { expect } from "../../../../test/utils/test-utils.js";
+import {
+  describe,
+  beforeAll,
+  afterAll,
+  it,
+  expect,
+  vi,
+  beforeEach,
+} from "vitest";
 import { testComponent } from "../../../../test/utils/helpers.js";
 import nock = require("nock");
 import * as cheerio from "cheerio";
@@ -29,7 +36,7 @@ describe("Integration:: change email", () => {
       "../../../middleware/requires-auth-middleware.js"
     );
     vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
-      function (req: any, res: any, next: any): void {
+      async function (req: any, res: any, next: any): Promise<void> {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
