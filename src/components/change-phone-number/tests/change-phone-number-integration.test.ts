@@ -8,16 +8,16 @@ import {
   vi,
   beforeEach,
 } from "vitest";
-import { testComponent } from "../../../../test/utils/helpers";
+import { testComponent } from "../../../../test/utils/helpers.js";
 import nock = require("nock");
 import * as cheerio from "cheerio";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
   PATH_DATA,
-} from "../../../app.constants";
+} from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
 
 describe("Integration:: change phone number", () => {
   let token: string | string[];
@@ -31,7 +31,7 @@ describe("Integration:: change phone number", () => {
       "../../../middleware/requires-auth-middleware.js"
     );
     vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
-      function (req: any, res: any, next: any): void {
+      async function (req: any, res: any, next: any): Promise<void> {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
@@ -60,15 +60,15 @@ describe("Integration:: change phone number", () => {
 
     const oidc = await import("../../../utils/oidc.js");
     vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
-      return Promise.resolve({});
+      return Promise.resolve({} as any);
     });
 
     vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
-      return Promise.resolve({});
+      return Promise.resolve({} as any);
     });
 
     app = await (await import("../../../app.js")).createApp();
-    baseApi = process.env.AM_API_BASE_URL  || "http://localhost:8080";
+    baseApi = process.env.AM_API_BASE_URL || "http://localhost:8080";
 
     await request(app)
       .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
@@ -336,7 +336,6 @@ describe("Integration:: change phone number", () => {
       .expect(400);
     expect(res.statusCode).toBe(400);
   });
-
 
   it("should return No UK phone number page", async () => {
     const res = await request(app)

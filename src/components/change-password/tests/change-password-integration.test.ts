@@ -212,6 +212,11 @@ describe("Integration:: change password", () => {
   });
 
   it("should return validation error when password is all letters", async () => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_PASSWORD)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
+      .reply(204);
+
     await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
