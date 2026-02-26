@@ -8,7 +8,7 @@ export function sessionExpiredGet(req: Request, res: Response): void {
 
   setOplSettings(
     {
-      contentId: "cb2b2652-caa0-4aca-9b41-53c8bf9e1cd1",
+      contentId: "e7dc72c9-74e8-4924-bd0f-dc113f14db35",
       taxonomyLevel2: EMPTY_OPL_SETTING_VALUE,
     },
     res

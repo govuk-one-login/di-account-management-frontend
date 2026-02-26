@@ -9,7 +9,7 @@ export function signedOutGet(req: Request, res: Response): void {
 
   setOplSettings(
     {
-      contentId: "e7dc72c9-74e8-4924-bd0f-dc113f14db35",
+      contentId: "b6b2d8d6-47f4-4dad-801c-142267366252",
       taxonomyLevel2: EMPTY_OPL_SETTING_VALUE,
     },
     res
