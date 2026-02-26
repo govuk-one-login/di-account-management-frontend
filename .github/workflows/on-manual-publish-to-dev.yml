@@ -72,6 +72,20 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@261a7de32bda11ba01f4d75c4ed6caf3739e54be # pin@v1
 
+      - name: Install Node.js
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # pin@v3
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install ESbuild
+        run: npm install -g esbuild@0.23
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+
       - name: Build & Publish Docker Image as latest
         id: build-image
         env:
@@ -82,19 +96,22 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA
 
-      - name: Upload SAM Template to Bucket
+      - name: Upload SAM Template to  Bucket
         id: publish-template
         env:
           ARTIFACT_BUCKET_NAME: ${{ secrets.DEV_ARTIFACT_SOURCE_BUCKET_NAME }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.DEV_ECR_REPOSITORY }}
         run: |
-          echo "Running sam build on template file"
+          echo "Running sam build on template file "
           sam build --template-file=./deploy/template.yaml
-          mv .aws-sam/build/template.yaml cf-template.yaml
+          rm -rf sam-package template.zip
+          mkdir -p sam-package
+          mv .aws-sam/build/template.yaml sam-package/cf-template.yaml
+          cp -R .aws-sam/build/JwksCreatorFunction sam-package/JwksCreatorFunction
           echo "Replacing 'CONTAINER-IMAGE-PLACEHOLDER' with new ECR image ref"
-          sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA|" cf-template.yaml
-          zip template.zip cf-template.yaml
+          sed -i "s|CONTAINER-IMAGE-PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$GIT_REF_SHA|" sam-package/cf-template.yaml
+          (cd sam-package && zip -r ../template.zip cf-template.yaml JwksCreatorFunction)
           aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GIT_REF_SHA"
 
       - name: "Delegated Deployment via AWS CodeDeploy"

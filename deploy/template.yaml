@@ -1,4 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
 Description: >-
   This creates the necessary components to deploy the Account Management
   Frontend onto ECS Fargate.
@@ -916,6 +918,8 @@ Resources:
             - Name: "AMC_JWKS_URL"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, AMCJWKSURL]
+            - Name: "JWKS_BUCKET_NAME"
+              Value: !Ref JwksBucket
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
@@ -1071,6 +1075,17 @@ Resources:
                   - "kms:GetPublicKey"
                 Resource:
                   - !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/{{resolve:ssm:/${AWS::StackName}/KMS/JwtSigningKey/Id}}"
+              - Effect: Allow
+                Action:
+                  - "kms:Sign"
+                  - "kms:DescribeKey"
+                Resource:
+                  - !GetAtt SigningKmsKey.Arn
+              - Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                Resource:
+                  - !Sub "${JwksBucket.Arn}/jwks.json"
               - Effect: Allow
                 Action:
                   - "kms:GenerateDataKey*"
@@ -2025,6 +2040,210 @@ Resources:
     Properties:
       AliasName: !Sub "alias/${AWS::StackName}-DynamoDBKmsKey"
       TargetKeyId: !GetAtt DynamoDBKmsKey.Arn
+
+  SigningKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub "ECC signing key for ${AWS::StackName}"
+      KeySpec: ECC_NIST_P256
+      KeyUsage: SIGN_VERIFY
+      Enabled: true
+      EnableKeyRotation: false
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action: kms:*
+            Resource: "*"
+      Tags:
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-SigningKmsKey"
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  SigningKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/${AWS::StackName}-SigningKmsKey"
+      TargetKeyId: !GetAtt SigningKmsKey.Arn
+
+  JwksBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-jwks"
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-JwksBucket"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  JwksBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref JwksBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource:
+              - !Sub "arn:aws:s3:::${JwksBucket}"
+              - !Sub "arn:aws:s3:::${JwksBucket}/*"
+            Condition:
+              Bool:
+                aws:SecureTransport: false
+              NumericLessThan:
+                s3:TlsVersion: "1.2"
+
+  JwksCreatorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-JwksCreator"
+      Runtime: nodejs20.x
+      Handler: handler
+      Timeout: 60
+      VpcConfig:
+        SubnetIds:
+          - Fn::ImportValue: !Sub ${VpcStackName}-PrivateSubnetIdA
+          - Fn::ImportValue: !Sub ${VpcStackName}-PrivateSubnetIdB
+        SecurityGroupIds:
+          - !Ref JwksCreatorSecurityGroup
+      Role: !GetAtt JwksCreatorRole.Arn
+      Environment:
+        Variables:
+          JAR_RSA_ENCRYPTION_KEY_ALIAS: !Ref SigningKmsKeyAlias
+          BUCKET_NAME: !Ref JwksBucket
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Format: esm
+        OutExtension:
+          - .js=.mjs
+        Target: es2024
+        Sourcemap: true
+        EntryPoints:
+          - ../dist/lambda/jwks-creator.js
+        Banner:
+          - js=import { createRequire } from 'module'; const require = createRequire(import.meta.url); # Required in order to use AWS Lambda Powertools
+        External:
+          - "@aws-sdk/*"
+
+  JwksCreatorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-JwksCreatorRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+      Policies:
+        - PolicyName: JwksCreatorPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - kms:GetPublicKey
+                  - kms:DescribeKey
+                Resource: !GetAtt SigningKmsKey.Arn
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                Resource: !Sub "${JwksBucket.Arn}/*"
+      PermissionsBoundary: !If
+        - UsePermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref AWS::NoValue
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-JwksCreatorRole"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  JwksCreatorSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for the JWKS creator Lambda
+      VpcId:
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-JwksCreatorSecurityGroup"
+        - Key: Product
+          Value: !Ref ProductTagValue
+        - Key: System
+          Value: !Ref SystemTagValue
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerTagValue
+        - Key: Source
+          Value: !Ref SourceTagValue
+
+  JwksCreatorLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref JwksCreatorFunction
+      Action: lambda:InvokeFunction
+      Principal: cloudformation.amazonaws.com
+
+  JwksCreatorLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${JwksCreatorFunction}"
+      RetentionInDays: 30
+
+  JwksGeneratorTrigger:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken: !GetAtt JwksCreatorFunction.Arn
+      ForceUpdate: !Ref JwksCreatorFunction
 
   #
   # App domain

@@ -184,6 +184,9 @@ export const PATH_DATA: Record<
   THANKS_TXT: {
     url: "/.well-known/thanks.txt",
   },
+  JWKS_JSON: {
+    url: "/.well-known/jwks.json",
+  },
   TRACK_AND_REDIRECT: {
     url: "/track-and-redirect",
   },
@@ -382,3 +385,5 @@ export const LogoutRedirect = {
     url: getBaseUrl() + PATH_DATA.START.url,
   },
 };
+
+export const jarKeyEncryptionAlgorithm = "RSA-OAEP-256";
