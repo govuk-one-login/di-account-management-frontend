@@ -39,6 +39,7 @@ describe("enter password controller", () => {
     };
     res = {
       render: vi.fn(),
+      clearCookie: vi.fn(),
       redirect: vi.fn(() => {}),
       status: vi.fn(),
       cookie: vi.fn(),
@@ -82,9 +83,8 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule = await import(
-        "../../../services/event-service"
-      );
+      const eventServiceModule =
+        await import("../../../services/event-service");
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -115,9 +115,8 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule = await import(
-        "../../../services/event-service"
-      );
+      const eventServiceModule =
+        await import("../../../services/event-service");
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -148,9 +147,8 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule = await import(
-        "../../../services/event-service"
-      );
+      const eventServiceModule =
+        await import("../../../services/event-service");
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -181,9 +179,8 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule = await import(
-        "../../../services/event-service"
-      );
+      const eventServiceModule =
+        await import("../../../services/event-service");
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );

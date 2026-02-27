@@ -18,6 +18,7 @@ describe("logout controller", () => {
     };
     res = {
       render: vi.fn(),
+      clearCookie: vi.fn(),
       redirect: vi.fn(() => {}),
       locals: {
         sessionId: "session-id",
