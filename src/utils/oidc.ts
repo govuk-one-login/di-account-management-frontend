@@ -10,6 +10,7 @@ import { Request } from "express";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { retryableFunction } from "./retryableFunction.js";
 import { ERROR_MESSAGES, OIDC_ERRORS } from "../app.constants.js";
+import { getKMSConfig } from "../config/aws.js";
 
 const issuerCacheDuration = 24 * 60 * 60 * 1000;
 const jwksRefreshInterval = 24 * 60 * 60 * 1000;
@@ -77,7 +78,9 @@ const clientAssertionGenerator = (
     clientId: string,
     tokenEndpointUri: string
   ): Promise<string> => {
-    const headers = { alg: "RS512", typ: "JWT" };
+    const keyId = getKMSConfig().kmsKeyId;
+    const kid = keyId.includes("/") ? keyId.split("/").pop() : keyId;
+    const headers = { alg: "RS512", typ: "JWT", kid };
     const payload = {
       iss: clientId,
       sub: clientId,

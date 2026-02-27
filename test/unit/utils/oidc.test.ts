@@ -14,6 +14,7 @@ import {
 import { invalidateCache } from "../../../src/utils/cache.js";
 import { UnsecuredJWT } from "jose";
 import { ERROR_MESSAGES } from "../../../src/app.constants.js";
+import * as awsConfig from "../../../src/config/aws.js";
 
 function createAccessToken(expiry = 1600711538) {
   return new UnsecuredJWT({ exp: expiry })
@@ -166,6 +167,10 @@ describe("OIDC Functions", () => {
     ) => Promise<string>;
 
     beforeEach(() => {
+      vi.spyOn(awsConfig, "getKMSConfig").mockReturnValue({
+        awsConfig: { region: "eu-west-2" },
+        kmsKeyId: "arn:aws:kms:eu-west-2:123456789012:key/ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
+      });
       mockKmsService = {
         sign: vi.fn().mockResolvedValue({
           Signature: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]),
