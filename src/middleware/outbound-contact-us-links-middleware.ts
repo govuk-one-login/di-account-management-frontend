@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { PATH_DATA } from "../app.constants";
+import { PATH_DATA } from "../app.constants.js";
 
 export function buildUrlFromRequest(req: Request): string {
   const url = new URL(`${req.protocol}://${req.get("host")}${req.originalUrl}`);
@@ -14,9 +14,7 @@ export function appendFromUrlWhenTriagePageUrl(
   contactUsLinkUrl: string,
   fromUrl: string
 ): string {
-  const triagePageUrlRegEx = /contact-gov-uk-one-login/;
-
-  if (triagePageUrlRegEx.test(contactUsLinkUrl)) {
+  if (contactUsLinkUrl.includes("contact-gov-uk-one-login")) {
     const encodedFromUrl = encodeURIComponent(fromUrl);
     contactUsLinkUrl = `${contactUsLinkUrl}?fromURL=${encodedFromUrl}`;
   }

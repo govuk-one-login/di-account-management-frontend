@@ -1,7 +1,7 @@
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 
 import * as express from "express";
-import { sessionExpiredGet } from "./session-expired-controller";
+import { sessionExpiredGet } from "./session-expired-controller.js";
 
 const router = express.Router();
 

@@ -1,25 +1,21 @@
-import { expect } from "chai";
-import sinon from "sinon";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import { Client } from "openid-client";
-import { authMiddleware } from "../../../src/middleware/auth-middleware";
-import * as oidcUtils from "../../../src/utils/oidc";
+import { authMiddleware } from "../../../src/middleware/auth-middleware.js";
+import * as oidcUtils from "../../../src/utils/oidc.js";
 
 describe("authMiddleware", () => {
   let middleware: ReturnType<typeof authMiddleware>;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let next: sinon.SinonSpy;
+  let next: ReturnType<typeof vi.fn>;
   let oidcClient: Client;
-  let sandbox: sinon.SinonSandbox;
-
   beforeEach(() => {
     oidcClient = {} as Client;
-    sandbox = sinon.createSandbox();
-    sandbox.replace(oidcUtils, "getOIDCClient", async () => oidcClient);
+    vi.spyOn(oidcUtils, "getOIDCClient").mockResolvedValue(oidcClient);
     req = {};
     res = {};
-    next = sinon.spy();
+    next = vi.fn();
     middleware = authMiddleware({
       client_id: "test-client-id",
       callback_url: "http://localhost/callback",
@@ -29,14 +25,14 @@ describe("authMiddleware", () => {
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("registers the oidc client on the request object", async () => {
     await middleware(req as Request, res as Response, next);
 
-    expect(req.oidc).to.equal(oidcClient);
-    expect(next).to.have.been.calledOnceWithExactly();
+    expect(req.oidc).toBe(oidcClient);
+    expect(next).toHaveBeenCalledOnce();
   });
 
   it("does not mutate the response object", async () => {
@@ -44,28 +40,26 @@ describe("authMiddleware", () => {
 
     await middleware(req as Request, res as Response, next);
 
-    expect(res).to.deep.equal(snapshot);
-    expect(next).to.have.been.calledOnceWithExactly();
+    expect(res).toEqual(snapshot);
+    expect(next).toHaveBeenCalledOnce();
   });
 
   it("thows an OIDC discovery unavailable error metric", async () => {
     const errorMessage = "OIDCDiscoveryUnavailable";
-    sandbox.restore();
-    sandbox.replace(oidcUtils, "getOIDCClient", async () => {
-      throw new Error(errorMessage);
-    });
+    vi.restoreAllMocks();
+    vi.spyOn(oidcUtils, "getOIDCClient").mockRejectedValue(
+      new Error(errorMessage)
+    );
     req.metrics = {
-      addMetric: sinon.spy(),
+      addMetric: vi.fn(),
     } as any;
 
     await middleware(req as Request, res as Response, next);
 
-    expect(
-      (req.metrics!.addMetric as sinon.SinonSpy).calledOnceWithExactly(
-        "OIDCDiscoveryUnavailable",
-        sinon.match.string,
-        1
-      )
-    ).to.be.true;
+    expect(req.metrics.addMetric).toHaveBeenCalledWith(
+      "OIDCDiscoveryUnavailable",
+      expect.any(String),
+      1
+    );
   });
 });

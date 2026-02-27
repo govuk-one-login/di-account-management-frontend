@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { supportGlobalLogout } from "../../config";
-import { PATH_DATA } from "../../app.constants";
-import { getLastNDigits } from "../../utils/phone-number";
-import { MfaMethod } from "src/utils/mfaClient/types";
-import { setOplSettings } from "../../utils/opl";
+import { supportGlobalLogout } from "../../config.js";
+import { PATH_DATA } from "../../app.constants.js";
+import { getLastNDigits } from "../../utils/phone-number.js";
+import { MfaMethod } from "src/utils/mfaClient/types.js";
+import { setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 function handleSmsMethod(

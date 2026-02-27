@@ -1,12 +1,12 @@
 import { TFunction, TFunctionDetailedResult } from "i18next";
-import { logger } from "./logger";
-import { LOCALE } from "../app.constants";
-import { $SpecialObject } from "i18next/typescript/helpers";
+import { logger } from "./logger.js";
+import { LOCALE } from "../app.constants.js";
 
 export type translateResult =
   | string
   | TFunctionDetailedResult<string, any>
-  | $SpecialObject;
+  | object
+  | (string | object)[];
 
 export const safeTranslate = (
   translate: TFunction<"translation", undefined>,

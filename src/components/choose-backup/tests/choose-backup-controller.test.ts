@@ -1,21 +1,18 @@
-import { expect } from "chai";
-import { describe, it } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { SinonSandbox } from "sinon";
-import { sinon } from "../../../../test/utils/test-utils";
 
-import { chooseBackupGet, chooseBackupPost } from "../choose-backup-controller";
+import {
+  chooseBackupGet,
+  chooseBackupPost,
+} from "../choose-backup-controller.js";
 import { PATH_DATA } from "../../../app.constants";
-import { EventType } from "../../../utils/state-machine";
+import { EventType } from "../../../utils/state-machine.js";
 
 describe("addBackupGet", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = {
       body: {},
       session: {
@@ -23,29 +20,28 @@ describe("addBackupGet", () => {
       } as any,
       cookies: { lng: "en" },
       i18n: { language: "en" },
-      t: sandbox.fake(),
-      log: { error: sandbox.fake() },
+      t: vi.fn(),
+      log: { error: vi.fn() },
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {},
-      status: sandbox.stub().returnsThis() as sinon.SinonStub<
-        [number],
-        Response
-      >,
-      end: sandbox.stub().returnsThis(),
+      status: vi.fn().mockReturnThis() as ReturnType<typeof vi.fn>,
+      end: vi.fn().mockReturnThis(),
     };
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("should add mfa method page", () => {
     chooseBackupGet(req as Request, res as Response);
 
-    expect(res.render).to.have.calledWith("choose-backup/index.njk");
+    expect(res.render).toHaveBeenCalledWith("choose-backup/index.njk", {
+      mfaMethods: [],
+    });
   });
 
   it("should handle a single mfa method", () => {
@@ -62,7 +58,7 @@ describe("addBackupGet", () => {
     ];
     chooseBackupGet(req as Request, res as Response);
 
-    expect(res.render).to.have.calledWith("choose-backup/index.njk", {
+    expect(res.render).toHaveBeenCalledWith("choose-backup/index.njk", {
       mfaMethods: [],
       showSingleMethod: true,
     });
@@ -91,7 +87,7 @@ describe("addBackupGet", () => {
     ];
     chooseBackupGet(req as Request, res as Response);
 
-    expect(res.render).to.have.calledWith("choose-backup/index.njk", {
+    expect(res.render).toHaveBeenCalledWith("choose-backup/index.njk", {
       mfaMethods: req.session.mfaMethods,
     });
   });
@@ -128,51 +124,47 @@ describe("addBackupGet", () => {
     ];
     chooseBackupGet(req as Request, res as Response);
 
-    expect(res.status).to.have.calledWith(500);
+    expect(res.status).toHaveBeenCalledWith(500);
   });
 });
 
 describe("addBackupPost", () => {
-  let sandbox: SinonSandbox;
   let req: any;
   let res: Partial<Response>;
-  let next: sinon.SinonSpy;
+  let next: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    const endFake = sandbox.fake(
-      (chunk?: any, encoding?: any, cb?: () => void) => {
-        if (typeof chunk === "function") {
-          // Called as end(cb)
-          chunk();
-        } else if (typeof encoding === "function") {
-          // Called as end(chunk, cb)
-          encoding();
-        } else if (cb) {
-          // Called as end(chunk, encoding, cb)
-          cb();
-        }
-        return {} as Response; // You should return a proper type here, matching your test environment needs
+    const endFake = vi.fn((chunk?: any, encoding?: any, cb?: () => void) => {
+      if (typeof chunk === "function") {
+        // Called as end(cb)
+        chunk();
+      } else if (typeof encoding === "function") {
+        // Called as end(chunk, cb)
+        encoding();
+      } else if (cb) {
+        // Called as end(chunk, encoding, cb)
+        cb();
       }
-    );
+      return {} as Response; // You should return a proper type here, matching your test environment needs
+    });
     req = {
       body: {},
-      log: { error: sandbox.fake() } as any,
+      log: { error: vi.fn() } as any,
       session: {
         user: { state: { addBackup: { value: "SMS" } } },
       } as any,
     };
     res = {
-      status: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      status: vi.fn(),
+      redirect: vi.fn(() => {}),
       end: endFake,
       locals: {},
     } as Partial<Response>;
-    next = sinon.spy();
+    next = vi.fn();
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("should take the use to the add backup phone number page when that option is selected", () => {
@@ -180,9 +172,7 @@ describe("addBackupPost", () => {
 
     chooseBackupPost(req as Request, res as Response, next);
 
-    expect(res.redirect).to.have.been.calledWith(
-      PATH_DATA.ADD_MFA_METHOD_SMS.url
-    );
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.ADD_MFA_METHOD_SMS.url);
   });
 
   it("should take the user to the add auth app page when the user selects that option", () => {
@@ -190,9 +180,7 @@ describe("addBackupPost", () => {
 
     chooseBackupPost(req as Request, res as Response, next);
 
-    expect(res.redirect).to.have.been.calledWith(
-      PATH_DATA.ADD_MFA_METHOD_APP.url
-    );
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.ADD_MFA_METHOD_APP.url);
   });
 
   it("should call next with an error when addBackup is unknown", () => {
@@ -200,8 +188,10 @@ describe("addBackupPost", () => {
 
     chooseBackupPost(req as Request, res as Response, next);
 
-    const call: sinon.SinonSpyCall<Error[], unknown> = next.getCall(0);
-
-    expect(call.args[0].message).to.equal("Unknown addBackup: unknown");
+    expect(next).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Unknown addBackup: unknown",
+      })
+    );
   });
 });

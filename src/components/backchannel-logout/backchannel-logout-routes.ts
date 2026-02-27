@@ -1,6 +1,6 @@
 import * as express from "express";
-import { backchannelLogoutPost } from "./backchannel-logout-controller";
-import { PATH_DATA } from "../../app.constants";
+import { backchannelLogoutPost } from "./backchannel-logout-controller.js";
+import { PATH_DATA } from "../../app.constants.js";
 
 const router = express.Router();
 

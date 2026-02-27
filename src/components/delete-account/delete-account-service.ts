@@ -1,10 +1,15 @@
-import { getRequestConfig, Http, http, RequestConfig } from "../../utils/http";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants";
-import { snsService } from "../../utils/sns";
-import { SnsService } from "../../utils/types";
-import { getSNSDeleteTopic } from "../../config";
+import {
+  getRequestConfig,
+  Http,
+  http,
+  RequestConfig,
+} from "../../utils/http.js";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
+import { snsService } from "../../utils/sns.js";
+import { SnsService } from "../../utils/types.js";
+import { getSNSDeleteTopic } from "../../config.js";
 
-import { DeleteAccountServiceInterface } from "./types";
+import { DeleteAccountServiceInterface } from "./types.js";
 
 export function deleteAccountService(
   axios: Http = http,

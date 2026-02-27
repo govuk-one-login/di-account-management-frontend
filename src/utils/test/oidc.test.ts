@@ -1,31 +1,31 @@
-import { describe, it, beforeEach } from "mocha";
-import { expect } from "chai";
-import sinon from "sinon";
+import { describe, it, beforeEach, expect, vi, afterEach } from "vitest";
 import { OIDCConfig } from "../../types";
-import { getOIDCClient } from "../oidc";
+import { getOIDCClient } from "../oidc.js";
+import { Issuer } from "openid-client";
 
 describe("getOIDCClient", () => {
-  let sandbox: sinon.SinonSandbox;
-  let constructorStub: sinon.SinonStub;
+  let constructorStub: ReturnType<typeof vi.fn>;
+  let mockIssuer: any;
+
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    constructorStub = sinon.stub();
-    sandbox.stub(require("../cache"), "cacheWithExpiration").returns(
-      Promise.resolve({
-        metadata: {
-          jwks_uri: "https://example.com/.well-known/jwks.json",
-        },
-        Client: class {
-          constructor(public config: any) {
-            constructorStub(config);
-          }
-        },
-      })
-    );
+    constructorStub = vi.fn();
+
+    mockIssuer = {
+      metadata: {
+        jwks_uri: "https://example.com/.well-known/jwks.json",
+      },
+      Client: class {
+        constructor(public config: any) {
+          constructorStub(config);
+        }
+      },
+    };
+
+    vi.spyOn(Issuer, "discover").mockResolvedValue(mockIssuer);
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   it("should create OIDC client with id token signature check", async () => {
@@ -38,7 +38,8 @@ describe("getOIDCClient", () => {
 
     await getOIDCClient(config);
 
-    expect(constructorStub).to.be.calledOnceWithExactly({
+    expect(constructorStub).toHaveBeenCalledOnce();
+    expect(constructorStub).toHaveBeenCalledWith({
       client_id: "test-client-id",
       redirect_uris: ["https://example.com/callback"],
       response_types: ["code"],

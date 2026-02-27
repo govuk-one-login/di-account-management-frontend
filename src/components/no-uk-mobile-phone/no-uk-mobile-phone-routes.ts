@@ -1,10 +1,10 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { noUkPhoneNumberGet } from "./no-uk-mobile-phone-controller";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
-import { SetState } from "../../utils/set-state";
-import { EventType, UserJourney } from "../../utils/state-machine";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { noUkPhoneNumberGet } from "./no-uk-mobile-phone-controller.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
+import { SetState } from "../../utils/set-state.js";
+import { EventType, UserJourney } from "../../utils/state-machine.js";
 
 const router = express.Router();
 

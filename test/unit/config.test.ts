@@ -1,10 +1,8 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
+import { describe, it, expect } from "vitest";
 import {
   getListOfAccountClientIDs,
   getListOfServiceClientIDs,
-} from "../../src/config";
+} from "../../src/config.js";
 
 describe("config", () => {
   describe("Service configuration", () => {
@@ -13,7 +11,7 @@ describe("config", () => {
         getListOfAccountClientIDs.filter((service) =>
           getListOfServiceClientIDs.includes(service)
         ).length
-      ).to.eq(0);
+      ).toBe(0);
     });
 
     it("should have no services in the other services list that are in the accounts list", () => {
@@ -21,7 +19,7 @@ describe("config", () => {
         getListOfServiceClientIDs.filter((service) =>
           getListOfAccountClientIDs.includes(service)
         ).length
-      ).to.eq(0);
+      ).toBe(0);
     });
   });
 });

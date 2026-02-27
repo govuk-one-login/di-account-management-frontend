@@ -1,14 +1,11 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
-import { logoutRedirectGet } from "../logout-redirect-controller";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { logoutRedirectGet } from "../logout-redirect-controller.js";
 
 import {
   RequestBuilder,
   ResponseBuilder,
-} from "../../../../test/utils/builders";
-import { LogoutState, PATH_DATA } from "../../../app.constants";
-import { getBaseUrl } from "../../../config";
+} from "../../../../test/utils/builders.js";
+import { PATH_DATA } from "../../../app.constants.js";
 
 describe("logout redirect controller", () => {
   let req: any;
@@ -17,50 +14,50 @@ describe("logout redirect controller", () => {
   beforeEach(() => {
     req = new RequestBuilder().build();
 
-    res = new ResponseBuilder().withRedirect(sinon.fake(() => {})).build();
+    res = new ResponseBuilder().withRedirect(vi.fn(() => {})).build();
   });
 
   afterEach(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 
   it("should redirect to suspended", async () => {
-    req.query = { state: LogoutState.Suspended };
+    req.query = { state: "suspended" };
 
     await logoutRedirectGet(req, res);
 
-    expect(res.redirect).to.have.calledWith(
-      `${getBaseUrl() + PATH_DATA.UNAVAILABLE_TEMPORARY.url}`
+    expect(res.redirect).toHaveBeenCalledWith(
+      expect.stringContaining(PATH_DATA.UNAVAILABLE_TEMPORARY.url)
     );
   });
 
   it("should redirect to blocked", async () => {
-    req.query = { state: LogoutState.Blocked };
+    req.query = { state: "blocked" };
 
     await logoutRedirectGet(req, res);
 
-    expect(res.redirect).to.have.calledWith(
-      `${getBaseUrl() + PATH_DATA.UNAVAILABLE_PERMANENT.url}`
+    expect(res.redirect).toHaveBeenCalledWith(
+      expect.stringContaining(PATH_DATA.UNAVAILABLE_PERMANENT.url)
     );
   });
 
   it("should redirect to account deletion", async () => {
-    req.query = { state: LogoutState.AccountDeletion };
+    req.query = { state: "accountDeletion" };
 
     await logoutRedirectGet(req, res);
 
-    expect(res.redirect).to.have.calledWith(
-      `${getBaseUrl() + PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url}`
+    expect(res.redirect).toHaveBeenCalledWith(
+      expect.stringContaining(PATH_DATA.ACCOUNT_DELETED_CONFIRMATION.url)
     );
   });
 
   it("should redirect to start", async () => {
-    req.query = { state: LogoutState.Start };
+    req.query = { state: "start" };
 
     await logoutRedirectGet(req, res);
 
-    expect(res.redirect).to.have.calledWith(
-      `${getBaseUrl() + PATH_DATA.START.url}`
+    expect(res.redirect).toHaveBeenCalledWith(
+      expect.stringContaining(PATH_DATA.START.url)
     );
   });
 
@@ -69,8 +66,8 @@ describe("logout redirect controller", () => {
 
     await logoutRedirectGet(req, res);
 
-    expect(res.redirect).to.have.calledWith(
-      `${getBaseUrl() + PATH_DATA.USER_SIGNED_OUT.url}`
+    expect(res.redirect).toHaveBeenCalledWith(
+      expect.stringContaining(PATH_DATA.USER_SIGNED_OUT.url)
     );
   });
 });

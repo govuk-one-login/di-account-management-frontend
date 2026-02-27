@@ -1,13 +1,13 @@
-import { SqsService } from "./types";
+import { SqsService } from "./types.js";
 import {
   SendMessageCommand,
   SendMessageCommandOutput,
   SendMessageRequest,
 } from "@aws-sdk/client-sqs";
-import { logger } from "./logger";
-import { sqsClient } from "../config/aws";
-import { redact } from "./redact";
-import { ERROR_MESSAGES, LOG_MESSAGES } from "../app.constants";
+import { logger } from "./logger.js";
+import { sqsClient } from "../config/aws.js";
+import { redact } from "./redact.js";
+import { ERROR_MESSAGES, LOG_MESSAGES } from "../app.constants.js";
 
 const { EVENT_SENT_SUCCESSFULLY } = LOG_MESSAGES;
 

@@ -1,9 +1,7 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { permanentlySuspendedGet } from "../permanently-suspended-controller";
+import { permanentlySuspendedGet } from "../permanently-suspended-controller.js";
+import * as config from "../../../config.js";
 import {
   RequestBuilder,
   ResponseBuilder,
@@ -11,36 +9,41 @@ import {
 } from "../../../../test/utils/builders";
 
 describe("temporarily suspended controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
+    vi.spyOn(config, "supportSearchableList").mockReturnValue(false);
+
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ addBackup: { value: "CHANGE_VALUE" } })
-      .withTranslate(sandbox.fake((id) => id))
+      .withTranslate(vi.fn((id) => id))
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
     res = new ResponseBuilder()
-      .withRender(sandbox.fake())
-      .withRedirect(sandbox.fake())
-      .withStatus(sandbox.fake())
+      .withRender(vi.fn())
+      .withRedirect(vi.fn())
+      .withStatus(vi.fn())
       .build();
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("permanentlySuspendedGet", () => {
     it("should render the permanently suspended view", () => {
       permanentlySuspendedGet(req as Request, res as Response);
 
-      expect(res.render).to.have.calledWith("permanently-suspended/index.njk");
-      expect(res.status).to.have.calledWith(401);
+      expect(res.render).toHaveBeenCalledWith(
+        "permanently-suspended/index.njk",
+        {
+          searchableListEnabled: false,
+        }
+      );
+      expect(res.status).toHaveBeenCalledWith(401);
     });
   });
 });

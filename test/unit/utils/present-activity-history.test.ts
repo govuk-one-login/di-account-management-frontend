@@ -1,9 +1,8 @@
-import { describe } from "mocha";
-import { SinonStub, stub } from "sinon";
-import { expect } from "chai";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { presentActivityHistory } from "../../../src/utils/present-activity-history";
-import type { ActivityLogEntry } from "../../../src/utils/types";
+import { presentActivityHistory } from "../../../src/utils/present-activity-history.js";
+import type { ActivityLogEntry } from "../../../src/utils/types.js";
+import * as activityHistoryModule from "../../../src/utils/activityHistory.js";
 
 const activityLogEntry: ActivityLogEntry = {
   event_type: "AUTH_AUTH_CODE_ISSUED",
@@ -17,37 +16,38 @@ const activityLogEntry: ActivityLogEntry = {
 };
 
 describe("presentActivityHistory", () => {
-  let getActivityLogEntryStub: SinonStub;
+  let getActivityLogEntryStub: ReturnType<typeof vi.fn>;
   const subjectId = "subject-id";
   const trace = "trace";
 
-  const activityHistoryModule = require("../../../src/utils/activityHistory");
-
   beforeEach(() => {
-    getActivityLogEntryStub = stub(
+    getActivityLogEntryStub = vi.spyOn(
       activityHistoryModule,
       "getActivityLogEntry"
     );
   });
 
   afterEach(() => {
-    getActivityLogEntryStub.restore();
+    vi.restoreAllMocks();
   });
 
   it("returns an empty list when there is no history", async () => {
-    getActivityLogEntryStub.resolves([]);
+    getActivityLogEntryStub.mockResolvedValue([]);
 
     const history = await presentActivityHistory(subjectId, trace);
 
-    expect(history.length).to.eq(0);
+    expect(history.length).toBe(0);
   });
 
   it("returns the history if it exists", async () => {
-    getActivityLogEntryStub.resolves([activityLogEntry, activityLogEntry]);
+    getActivityLogEntryStub.mockResolvedValue([
+      activityLogEntry,
+      activityLogEntry,
+    ]);
 
     const history = await presentActivityHistory(subjectId, trace);
 
-    expect(history.length).to.eq(2);
+    expect(history.length).toBe(2);
   });
 
   it("sorts the history in descending order by timestamp", async () => {
@@ -56,12 +56,12 @@ describe("presentActivityHistory", () => {
     newest.timestamp = oldest.timestamp - 1000;
 
     // oldest first - opposite to what we need
-    getActivityLogEntryStub.resolves([oldest, newest]);
+    getActivityLogEntryStub.mockResolvedValue([oldest, newest]);
 
     const history = await presentActivityHistory(subjectId, trace);
 
-    expect(history.length).to.eq(2);
+    expect(history.length).toBe(2);
     // expecting newest item first in the list
-    expect(history[0].timestamp).to.eq(newest.timestamp);
+    expect(history[0].timestamp).toBe(newest.timestamp);
   });
 });

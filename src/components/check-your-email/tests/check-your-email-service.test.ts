@@ -1,11 +1,9 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import nock from "nock";
-import { sinon } from "../../../../test/utils/test-utils";
-import { checkYourEmailService } from "../check-your-email-service";
-import { expect } from "chai";
+import { checkYourEmailService } from "../check-your-email-service.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
+import { getApiBaseUrl } from "../../../config.js";
 import { UpdateInformationInput } from "../../../utils/types";
-import { describe } from "mocha";
 import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
@@ -14,18 +12,14 @@ import {
 const baseUrl = getApiBaseUrl();
 
 describe("checkYourEmailService", () => {
-  let sandbox: sinon.SinonSandbox;
-
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
     nock.cleanAll();
   });
 
-  it("update the email ", async () => {
+  it("update the email", async () => {
     const token = "1234";
     const existingEmailAddress = "something@test.com";
     const replacementEmailAddress = "something@test.com";
@@ -73,7 +67,7 @@ describe("checkYourEmailService", () => {
       requestConfig
     );
 
-    expect(emailUpdated).to.deep.eq({
+    expect(emailUpdated).toEqual({
       success: true,
       error: undefined,
     });
@@ -87,7 +81,7 @@ describe("checkYourEmailService", () => {
       requestConfig
     );
 
-    expect(emailUpdated).to.deep.eq({
+    expect(emailUpdated).toEqual({
       success: false,
       error: "EMAIL_ADDRESS_DENIED",
     });
@@ -99,7 +93,7 @@ describe("checkYourEmailService", () => {
       requestConfig
     );
 
-    expect(emailUpdated).to.deep.eq({
+    expect(emailUpdated).toEqual({
       success: false,
       error: undefined,
     });

@@ -5,14 +5,14 @@ import axios, {
   AxiosResponse,
   RawAxiosRequestHeaders,
 } from "axios";
-import { ApiResponseResult } from "./types";
-import { getApiBaseUrl } from "../config";
-import { HTTP_STATUS_CODES } from "../app.constants";
-import { ApiError } from "./errors";
+import { ApiResponseResult } from "./types.js";
+import { getApiBaseUrl } from "../config.js";
+import { HTTP_STATUS_CODES } from "../app.constants.js";
+import { ApiError } from "./errors.js";
 import { Request, Response } from "express";
 import xss from "xss";
-import { getTxmaHeader } from "./txma-header";
-import { refreshToken } from "./oidc";
+import { getTxmaHeader } from "./txma-header.js";
+import { refreshToken } from "./oidc.js";
 
 const headers: RawAxiosRequestHeaders = {
   Accept: "application/json",

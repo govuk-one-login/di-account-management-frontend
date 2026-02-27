@@ -1,13 +1,13 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
 import {
   checkYourPhoneGet,
   checkYourPhonePost,
   requestNewOTPCodeGet,
-} from "./check-your-phone-controller";
-import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
+} from "./check-your-phone-controller.js";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware.js";
 
 const router = express.Router();
 

@@ -1,45 +1,40 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { oidcAuthCallbackGet } from "../call-back-controller";
+import { oidcAuthCallbackGet } from "../call-back-controller.js";
 import { PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants";
 import { ClientAssertionServiceInterface } from "../../../utils/types";
-import { logger } from "../../../utils/logger";
+import { logger } from "../../../utils/logger.js";
 
 describe("callback controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let loggerInfoSpy: sinon.SinonSpy;
-  let loggerErrorSpy: sinon.SinonSpy;
+  let loggerInfoSpy: ReturnType<typeof vi.fn>;
+  let loggerErrorSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    loggerInfoSpy = sinon.spy(logger, "info");
-    loggerErrorSpy = sinon.spy(logger, "error");
+    loggerInfoSpy = vi.spyOn(logger, "info");
+    loggerErrorSpy = vi.spyOn(logger, "error");
 
     req = {
       body: {},
       query: {},
       session: {
         user: {},
-        destroy: sandbox.fake(),
-        state: sandbox.fake(),
-        nonce: sandbox.fake(),
+        destroy: vi.fn(),
+        state: vi.fn(),
+        nonce: vi.fn(),
       } as any,
-      t: sandbox.fake(),
+      t: vi.fn(),
       oidc: {
-        callbackParams: sandbox.fake(),
-        callback: sandbox.fake.returns({
+        callbackParams: vi.fn(),
+        callback: vi.fn().mockReturnValue({
           accessToken: "accessToken",
           idToken: "idtoken",
           claims: () => {
             return { vot: VECTORS_OF_TRUST.MEDIUM };
           },
         }),
-        userinfo: sandbox.fake.returns({
+        userinfo: vi.fn().mockReturnValue({
           email: "ad@ad.com",
           phoneNumber: "12345678999",
         }),
@@ -51,16 +46,16 @@ describe("callback controller", () => {
       app: {
         locals: {
           sessionStore: {
-            destroy: sandbox.fake(),
+            destroy: vi.fn(),
           },
         },
       } as any,
     };
     res = {
-      render: sandbox.fake(),
-      status: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
-      cookie: sandbox.fake(),
+      render: vi.fn(),
+      status: vi.fn(),
+      redirect: vi.fn(() => {}),
+      cookie: vi.fn(),
       locals: {
         trace: "fake_trace",
       },
@@ -68,33 +63,31 @@ describe("callback controller", () => {
   });
 
   afterEach(() => {
-    sandbox.restore();
-    loggerInfoSpy.restore();
-    loggerErrorSpy.restore();
+    vi.restoreAllMocks();
   });
 
   describe("oidcAuthCallbackGet", () => {
     it("should redirect to /manage-your-account", async () => {
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.YOUR_SERVICES.url);
     });
 
     it("should redirect to /manage-your-account and set cookie when consent query param present", async () => {
       req.query.cookie_consent = "accept";
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(res.cookie).to.have.calledOnce;
-      expect(res.redirect).to.have.calledWith(PATH_DATA.YOUR_SERVICES.url);
+      expect(res.cookie).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.YOUR_SERVICES.url);
     });
 
     it("should redirect to /manage-your-account and have _ga as query param when cookie consent accepted", async () => {
@@ -102,20 +95,20 @@ describe("callback controller", () => {
       req.query._ga = "2.172053219.3232.1636392870-444224.1635165988";
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(res.cookie).to.have.calledOnce;
-      expect(res.redirect).to.have.calledWith(
+      expect(res.cookie).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith(
         PATH_DATA.YOUR_SERVICES.url +
           "?_ga=2.172053219.3232.1636392870-444224.1635165988"
       );
     });
 
     it("should redirect to /start when not medium level auth", async () => {
-      req.oidc.callback = sandbox.fake.resolves({
+      req.oidc.callback = vi.fn().mockResolvedValue({
         accessToken: "accessToken",
         idToken: "idtoken",
         claims: () => {
@@ -133,37 +126,37 @@ describe("callback controller", () => {
         },
       });
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.START.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.START.url);
     });
 
     it("redirect to session expired when access denied error received", async () => {
-      req.oidc.callbackParams = sandbox.fake.returns({
+      req.oidc.callbackParams = vi.fn().mockReturnValue({
         error: "access_denied",
         state: "m0H_2VvrhKR0qA",
       });
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
       };
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
-      expect(res.redirect).to.have.calledOnce;
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
+      expect(res.redirect).toHaveBeenCalledOnce();
     });
 
     it("redirect to session expired when any error occurs", async () => {
-      req.oidc.callbackParams = sandbox.fake.returns({
+      req.oidc.callbackParams = vi.fn().mockReturnValue({
         error: "server_error",
         error_description: "Unexpected server error",
       });
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
       };
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
     it("should populate req.session.authSessionIds", async () => {
@@ -172,13 +165,13 @@ describe("callback controller", () => {
       };
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake(),
+        generateAssertionJwt: vi.fn(),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(req.session.authSessionIds.sessionId).to.eq("fake_session_id");
-      expect(req.session.authSessionIds.clientSessionId).to.eq(
+      expect(req.session.authSessionIds.sessionId).toBe("fake_session_id");
+      expect(req.session.authSessionIds.clientSessionId).toBe(
         "fake_client_session_id"
       );
     });
@@ -189,13 +182,13 @@ describe("callback controller", () => {
       };
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake(),
+        generateAssertionJwt: vi.fn(),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(req.session.authSessionIds).to.eq(undefined);
-      expect(loggerErrorSpy).to.have.been.calledWith(
+      expect(req.session.authSessionIds).toBe(undefined);
+      expect(loggerErrorSpy).toHaveBeenCalledWith(
         { trace: "fake_trace" },
         "Malformed gs cookie contained: invalid_format"
       );
@@ -203,13 +196,13 @@ describe("callback controller", () => {
 
     it("should not populate req.session.authSessionIds when gs cookie is not set", async () => {
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake(),
+        generateAssertionJwt: vi.fn(),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(req.session.authSessionIds).to.eq(undefined);
-      expect(loggerInfoSpy).to.have.been.calledWith(
+      expect(req.session.authSessionIds).toBe(undefined);
+      expect(loggerInfoSpy).toHaveBeenCalledWith(
         { trace: "fake_trace" },
         "gs cookie not in request."
       );
@@ -219,60 +212,62 @@ describe("callback controller", () => {
       req.session.state = undefined;
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake(),
+        generateAssertionJwt: vi.fn(),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
     it("should redirect to session expired if session nonce is missing", async () => {
       req.session.nonce = undefined;
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake(),
+        generateAssertionJwt: vi.fn(),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
     it("should redirect to session expired if session is missing", async () => {
       req.session = undefined;
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake(),
+        generateAssertionJwt: vi.fn(),
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
 
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
     it("redirect to session expired when access denied error is thrown", async () => {
-      req.oidc.callbackParams = sandbox.fake.throws(new Error("access_denied"));
+      req.oidc.callbackParams = vi.fn().mockImplementation(() => {
+        throw new Error("access_denied");
+      });
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
       };
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
-      expect(res.redirect).to.have.calledWith(PATH_DATA.SESSION_EXPIRED.url);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
     });
 
     it("should throw an error if the userinfo call fails", async () => {
-      req.oidc.userinfo = sandbox.fake.throws(new Error("Some userinfo error"));
+      req.oidc.userinfo = vi.fn().mockImplementation(() => {
+        throw new Error("Some userinfo error");
+      });
 
       const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: sandbox.fake.resolves("testassert"),
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
       };
 
       try {
         await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
       } catch (error) {
-        expect((error as Error).message).to.equal(
-          "Failed to retrieve user info"
-        );
+        expect((error as Error).message).toBe("Failed to retrieve user info");
       }
     });
   });

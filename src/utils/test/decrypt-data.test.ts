@@ -1,15 +1,10 @@
-import sinon from "sinon";
-import chai, { expect } from "chai";
-import chaiAsPromised from "chai-as-promised";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   generateExpectedContext,
   validateEncryptionContext,
-} from "../decrypt-data";
-import { logger } from "../logger";
-import * as getHashedAccessCheckValueModule from "../get-access-check-value";
-
-chai.use(chaiAsPromised);
+} from "../decrypt-data.js";
+import { logger } from "../logger.js";
+import * as getHashedAccessCheckValueModule from "../get-access-check-value.js";
 
 describe("generateExpectedContext", () => {
   const awsRegion = "aws-region";
@@ -17,18 +12,18 @@ describe("generateExpectedContext", () => {
   const environment = "environment";
   const accessCheckValue = "accessCheckValue";
   const userId = "user-id";
-  let errorLoggerSpy: sinon.SinonSpy;
-  let stub: sinon.SinonStub;
+  let errorLoggerSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    stub = sinon
-      .stub(getHashedAccessCheckValueModule, "getHashedAccessCheckValue")
-      .returns(Promise.resolve(accessCheckValue));
+    vi.spyOn(
+      getHashedAccessCheckValueModule,
+      "getHashedAccessCheckValue"
+    ).mockResolvedValue(accessCheckValue);
     process.env.AWS_REGION = awsRegion;
     process.env.ACCOUNT_ID = accountId;
     process.env.ENVIRONMENT = environment;
     process.env.VERIFY_ACCESS_VALUE = accessCheckValue;
-    errorLoggerSpy = sinon.spy(logger, "error");
+    errorLoggerSpy = vi.spyOn(logger, "error");
   });
 
   afterEach(() => {
@@ -36,8 +31,7 @@ describe("generateExpectedContext", () => {
     delete process.env.ACCOUNT_ID;
     delete process.env.ENVIRONMENT;
     delete process.env.VERIFY_ACCESS_VALUE;
-    errorLoggerSpy.restore();
-    stub.restore();
+    vi.restoreAllMocks();
   });
 
   ["AWS_REGION", "ACCOUNT_ID", "VERIFY_ACCESS_VALUE", "ENVIRONMENT"].forEach(
@@ -48,7 +42,7 @@ describe("generateExpectedContext", () => {
           await generateExpectedContext(userId);
           expect.fail("Expected function to throw an error but it did not");
         } catch {
-          expect(errorLoggerSpy).to.have.been.calledWith(
+          expect(errorLoggerSpy).toHaveBeenCalledWith(
             `Decrypt data: failed with the error Missing ${variable} environment variable`
           );
         }
@@ -65,7 +59,7 @@ describe("generateExpectedContext", () => {
       userId,
       accessCheckValue,
     };
-    expect(result).to.deep.equal(expected);
+    expect(result).toEqual(expected);
   });
 });
 
@@ -76,19 +70,19 @@ describe("validateEncryptionContext", () => {
   const environment = "environment";
   const accessCheckValue = "accessCheckValue";
   const userId = "user-id";
-  let errorLoggerSpy: sinon.SinonSpy;
-  let stub: sinon.SinonStub;
+  let errorLoggerSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(async () => {
-    stub = sinon
-      .stub(getHashedAccessCheckValueModule, "getHashedAccessCheckValue")
-      .returns(Promise.resolve(accessCheckValue));
+    vi.spyOn(
+      getHashedAccessCheckValueModule,
+      "getHashedAccessCheckValue"
+    ).mockResolvedValue(accessCheckValue);
     process.env.AWS_REGION = awsRegion;
     process.env.ACCOUNT_ID = accountId;
     process.env.ENVIRONMENT = environment;
     process.env.VERIFY_ACCESS_VALUE = accessCheckValue;
     expected = await generateExpectedContext(userId);
-    errorLoggerSpy = sinon.spy(logger, "error");
+    errorLoggerSpy = vi.spyOn(logger, "error");
   });
 
   afterEach(() => {
@@ -96,14 +90,13 @@ describe("validateEncryptionContext", () => {
     delete process.env.ACCOUNT_ID;
     delete process.env.ENVIRONMENT;
     delete process.env.VERIFY_ACCESS_VALUE;
-    errorLoggerSpy.restore();
-    stub.restore();
+    vi.restoreAllMocks();
   });
 
   it("logs an error when the context is empty", () => {
     validateEncryptionContext({}, expected);
 
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       "Decrypt data: encryption context is empty or undefined"
     );
   });
@@ -119,13 +112,13 @@ describe("validateEncryptionContext", () => {
 
     validateEncryptionContext(wrongContext, expected);
 
-    expect(errorLoggerSpy).to.have.been.calledWith(
+    expect(errorLoggerSpy).toHaveBeenCalledWith(
       "Decrypt data: encryption context mismatch: userId"
     );
   });
 
   it("doesn't throw an error when context matches", () => {
     validateEncryptionContext(expected, expected);
-    expect(errorLoggerSpy).to.not.have.been.called;
+    expect(errorLoggerSpy).not.toHaveBeenCalled();
   });
 });

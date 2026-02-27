@@ -1,5 +1,5 @@
-import { hash } from "./static-hash.json";
+import staticHash from "./static-hash.json" with { type: "json" };
 
 export const generateStaticHash = async (): Promise<string> => {
-  return hash;
+  return staticHash.hash;
 };

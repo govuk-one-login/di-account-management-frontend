@@ -1,35 +1,27 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import * as sessionStore from "../../../utils/session-store";
-import { sinon } from "../../../../test/utils/test-utils";
-import { logoutPost } from "../logout-controller";
-import { logger } from "../../../utils/logger";
-
-const TEST_TRACE_ID = "trace-id";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import * as sessionStore from "../../../utils/session-store.js";
+import { logoutPost } from "../logout-controller.js";
 
 describe("logout controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: any;
   let res: any;
-  let loggerSpy: sinon.SinonSpy;
-  let errorLoggerSpy: sinon.SinonSpy;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    loggerSpy = sinon.spy(logger, "info");
-    errorLoggerSpy = sinon.spy(logger, "error");
     req = {
       body: {},
-      session: { user: { subjectId: "subject-id" } } as any,
-      oidc: { endSessionUrl: sandbox.fake() },
-      app: { locals: { sessionStore: sandbox.fake() } },
+      session: {
+        user: { subjectId: "subject-id" },
+        destroy: vi.fn((callback) => callback()),
+      } as any,
+      oidc: { endSessionUrl: vi.fn() },
+      app: { locals: { sessionStore: vi.fn() } },
     };
     res = {
-      render: sandbox.fake(),
-      redirect: sandbox.fake(() => {}),
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
       locals: {
         sessionId: "session-id",
-        trace: TEST_TRACE_ID,
+        trace: "trace-id",
       },
       mockCookies: {},
       cookie: function (name: string, value: string) {
@@ -39,9 +31,7 @@ describe("logout controller", () => {
   });
 
   afterEach(() => {
-    sandbox.restore();
-    loggerSpy.restore();
-    errorLoggerSpy.restore();
+    vi.restoreAllMocks();
   });
 
   it("should execute logout process", async () => {
@@ -49,18 +39,15 @@ describe("logout controller", () => {
       idToken: "id-token",
     } as any;
 
-    req.session.destroy = sandbox.fake();
-
-    const destroyUserSessionsStub = sinon.stub(
+    const destroyUserSessionsStub = vi.spyOn(
       sessionStore,
       "destroyUserSessions"
     );
     await logoutPost(req, res);
 
-    expect(res.mockCookies.lo).to.equal("true");
-    expect(req.oidc.endSessionUrl).to.have.been.calledOnce;
-    expect(res.redirect).to.have.called;
-    expect(destroyUserSessionsStub).to.have.been.called;
-    destroyUserSessionsStub.restore();
+    expect(res.mockCookies.lo).toBe("true");
+    expect(req.oidc.endSessionUrl).toHaveBeenCalledOnce();
+    expect(res.redirect).toHaveBeenCalled();
+    expect(destroyUserSessionsStub).toHaveBeenCalled();
   });
 });

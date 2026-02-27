@@ -4,9 +4,9 @@ import {
   HTTP_STATUS_CODES,
   LogoutState,
   PATH_DATA,
-} from "../app.constants";
-import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../utils/opl";
-import { handleLogout } from "../utils/logout";
+} from "../app.constants.js";
+import { EMPTY_OPL_SETTING_VALUE, setOplSettings } from "../utils/opl.js";
+import { handleLogout } from "../utils/logout.js";
 
 export async function serverErrorHandler(
   err: any,

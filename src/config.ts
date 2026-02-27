@@ -1,6 +1,6 @@
 import { filterClients } from "di-account-management-rp-registry";
-import { ENVIRONMENT_NAME, LOCALE } from "./app.constants";
-import { createTimedMemoize } from "./utils/createTimedMemoize";
+import { LOCALE } from "./app.constants.js";
+import { createTimedMemoize } from "./utils/createTimedMemoize.js";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -35,15 +35,15 @@ export function getOIDCClientScopes(): string {
 }
 
 export function getAppEnv(): string {
-  return process.env.APP_ENV || ENVIRONMENT_NAME.LOCAL;
+  return process.env.APP_ENV || "local";
 }
 
 export function isLocalEnv(): boolean {
-  return getAppEnv() === ENVIRONMENT_NAME.LOCAL;
+  return getAppEnv() === "local";
 }
 
 export function isProd(): boolean {
-  return getAppEnv() === ENVIRONMENT_NAME.PROD;
+  return getAppEnv() === "production";
 }
 
 export function getGtmId(): string {

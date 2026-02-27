@@ -1,19 +1,19 @@
 import { Request, Response } from "express";
-import { ERROR_CODES, PATH_DATA } from "../../app.constants";
-import { ExpressRouteFunc } from "../../types";
-import { ChangePhoneNumberServiceInterface } from "./types";
-import { changePhoneNumberService } from "./change-phone-number-service";
-import { EventType, getNextState } from "../../utils/state-machine";
+import { ERROR_CODES, PATH_DATA } from "../../app.constants.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { ChangePhoneNumberServiceInterface } from "./types.js";
+import { changePhoneNumberService } from "./change-phone-number-service.js";
+import { EventType, getNextState } from "../../utils/state-machine.js";
 import {
   formatValidationError,
   isObjectEmpty,
   renderBadRequest,
-} from "../../utils/validation";
-import { BadRequestError } from "../../utils/errors";
+} from "../../utils/validation.js";
+import { BadRequestError } from "../../utils/errors.js";
 import { validationResult } from "express-validator";
-import { validationErrorFormatter } from "../../middleware/form-validation-middleware";
-import { getRequestConfigFromExpress } from "../../utils/http";
-import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+import { validationErrorFormatter } from "../../middleware/form-validation-middleware.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const CHANGE_PHONE_NUMBER_TEMPLATE = "change-phone-number/index.njk";

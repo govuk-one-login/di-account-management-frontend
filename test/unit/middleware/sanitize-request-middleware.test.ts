@@ -1,23 +1,21 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { NextFunction, Request, Response } from "express";
-import { describe } from "mocha";
-import { sanitizeRequestMiddleware } from "../../../src/middleware/sanitize-request-middleware";
-import { expect, sinon } from "../../utils/test-utils";
+import { sanitizeRequestMiddleware } from "../../../src/middleware/sanitize-request-middleware.js";
+// import { expect, sinon } from "../../utils/test-utils.js";
 
 describe("sanitize-request-middleware", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
     req = { body: {} };
     res = {};
-    next = sandbox.fake(() => {});
+    next = vi.fn(() => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
   describe("sanitizeRequestMiddleware", () => {
@@ -30,8 +28,8 @@ describe("sanitize-request-middleware", () => {
 
       sanitizeRequestMiddleware(req as Request, res as Response, next);
 
-      expect(req.body.name).to.eql("Test123");
-      expect(next).to.be.called;
+      expect(req.body.name).toEqual("Test123");
+      expect(next).toHaveBeenCalled();
     });
 
     it("should remove entire script block returning an empty string", () => {
@@ -43,8 +41,8 @@ describe("sanitize-request-middleware", () => {
 
       sanitizeRequestMiddleware(req as Request, res as Response, next);
 
-      expect(req.body.name).to.eql("");
-      expect(next).to.be.called;
+      expect(req.body.name).toEqual("");
+      expect(next).toHaveBeenCalled();
     });
 
     it("should remove entire input returning an empty string", () => {
@@ -56,8 +54,8 @@ describe("sanitize-request-middleware", () => {
 
       sanitizeRequestMiddleware(req as Request, res as Response, next);
 
-      expect(req.body.name).to.eql("");
-      expect(next).to.be.called;
+      expect(req.body.name).toEqual("");
+      expect(next).toHaveBeenCalled();
     });
 
     it("handles multiple fields", () => {
@@ -70,9 +68,9 @@ describe("sanitize-request-middleware", () => {
 
       sanitizeRequestMiddleware(req as Request, res as Response, next);
 
-      expect(req.body.name).to.eql("Test12");
-      expect(req.body.email).to.eql("test@test.com");
-      expect(next).to.be.called;
+      expect(req.body.name).toEqual("Test12");
+      expect(req.body.email).toEqual("test@test.com");
+      expect(next).toHaveBeenCalled();
     });
 
     it("should trim whitespace from form field", () => {
@@ -84,8 +82,8 @@ describe("sanitize-request-middleware", () => {
 
       sanitizeRequestMiddleware(req as Request, res as Response, next);
 
-      expect(req.body.name).to.eql("James Mc'oy");
-      expect(next).to.be.called;
+      expect(req.body.name).toEqual("James Mc'oy");
+      expect(next).toHaveBeenCalled();
     });
   });
 });

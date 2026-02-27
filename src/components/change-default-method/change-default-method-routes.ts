@@ -1,17 +1,17 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
-import { validateStateMiddleware } from "../../middleware/validate-state-middleware";
+import { PATH_DATA } from "../../app.constants.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
+import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
 import {
   changeDefaultMethodAppGet,
   changeDefaultMethodAppPost,
   changeDefaultMethodGet,
   changeDefaultMethodSmsGet,
   changeDefaultMethodSmsPost,
-} from "./change-default-method-controllers";
-import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware";
-import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation";
-import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service";
+} from "./change-default-method-controllers.js";
+import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware.js";
+import { validatePhoneNumberRequest } from "../change-phone-number/change-phone-number-validation.js";
+import { changePhoneNumberService } from "../change-phone-number/change-phone-number-service.js";
 
 const router = express.Router();
 

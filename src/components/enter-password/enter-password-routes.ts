@@ -1,10 +1,10 @@
 import * as express from "express";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   enterPasswordPost,
   enterPasswordGet,
-} from "./enter-password-controller";
-import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware";
+} from "./enter-password-controller.js";
+import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 
 const router = express.Router();
 

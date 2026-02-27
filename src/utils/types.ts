@@ -6,7 +6,7 @@ import {
 
 import { SignCommandOutput } from "@aws-sdk/client-kms";
 import { PublishCommandOutput } from "@aws-sdk/client-sns";
-import { MfaMethod } from "./mfaClient/types";
+import { MfaMethod } from "./mfaClient/types.js";
 import { GetCommandOutput } from "@aws-sdk/lib-dynamodb";
 
 export interface UserServices {

@@ -1,7 +1,4 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 
 import {
@@ -16,45 +13,51 @@ import {
   ResponseBuilder,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-import * as mfaModule from "../../../utils/mfa";
-import * as commonMfaModule from "../../common/mfa";
-import * as mfaClient from "../../../utils/mfaClient";
+import * as mfaModule from "../../../utils/mfa/index.js";
+import * as commonMfaModule from "../../common/mfa/index.js";
+import * as mfaClient from "../../../utils/mfaClient/index.js";
 import { MfaMethod } from "../../../utils/mfaClient/types";
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
-import * as oidcModule from "../../../utils/oidc";
+import * as oidcModule from "../../../utils/oidc.js";
 
 describe("change default method controller", () => {
-  let sandbox: sinon.SinonSandbox;
   let req: object;
   let res: Partial<Response>;
+  let mfaClientStub: any;
+  let next: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    sandbox = sinon.createSandbox();
-
     req = new RequestBuilder()
       .withBody({ code: "123456", authAppSecret: "A".repeat(20) })
       .withSessionUserState({ changeDefaultMethod: { value: "APP" } })
-      .withTranslate(sandbox.fake())
+      .withTranslate(vi.fn())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .withMfaMethods()
       .build();
 
     res = new ResponseBuilder()
-      .withRender(sandbox.fake())
-      .withRedirect(sandbox.fake(() => {}))
-      .withStatus(sandbox.fake())
+      .withRender(vi.fn())
+      .withRedirect(vi.fn(() => {}))
+      .withStatus(vi.fn())
       .withLocals({})
       .build();
 
-    sandbox.replace(oidcModule, "refreshToken", async () => {});
+    mfaClientStub = {
+      update: vi.fn(),
+      create: vi.fn(),
+    };
+    vi.spyOn(mfaClient, "createMfaClient").mockResolvedValue(mfaClientStub);
+    next = vi.fn();
+
+    vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
 
   afterEach(() => {
-    sandbox.restore();
+    vi.restoreAllMocks();
   });
 
-  describe("changeDefaultMethodGet", async () => {
+  describe("changeDefaultMethodGet", () => {
     it("should correctly render the page", async () => {
       //@ts-expect-error in test
       req.session = {
@@ -72,10 +75,13 @@ describe("change default method controller", () => {
         req as unknown as Request,
         res as unknown as Response
       );
-      expect(res.render).to.be.calledWith("change-default-method/index.njk", {
-        currentMethodType: "SMS",
-        phoneNumber: "5678",
-      });
+      expect(res.render).toHaveBeenCalledWith(
+        "change-default-method/index.njk",
+        {
+          currentMethodType: "SMS",
+          phoneNumber: "5678",
+        }
+      );
     });
 
     it("should return 404 if there is no default method", async () => {
@@ -87,25 +93,14 @@ describe("change default method controller", () => {
         res as unknown as Response
       );
 
-      expect(res.status).to.be.calledWith(404);
+      expect(res.status).toHaveBeenCalledWith(404);
     });
   });
 
-  describe("changeDefaultMethodAppPost", async () => {
-    let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
-    let next: sinon.SinonSpy;
-
-    beforeEach(() => {
-      mfaClientStub = sandbox.createStubInstance(mfaClient.MfaClient);
-      sandbox.replace(mfaClient, "createMfaClient", () =>
-        Promise.resolve(mfaClientStub)
-      );
-      next = sandbox.spy();
-    });
-
+  describe("changeDefaultMethodAppPost", () => {
     it("should redirect to confirmation page when successful", async () => {
-      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
-      mfaClientStub.update.resolves({
+      vi.spyOn(mfaModule, "verifyMfaCode").mockImplementation(async () => true);
+      mfaClientStub.update.mockResolvedValue({
         success: true,
         status: 200,
         data: [],
@@ -117,17 +112,17 @@ describe("change default method controller", () => {
         next
       );
 
-      expect(res.redirect).to.be.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         PATH_DATA.CHANGE_DEFAULT_METHOD_CONFIRMATION.url
       );
-      expect(mfaClientStub.update).to.be.calledOnce;
+      expect(mfaClientStub.update).toHaveBeenCalledOnce();
     });
 
     it("should return error if there is no code entered", async () => {
       //@ts-expect-error in test
       req.body.code = null;
 
-      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
+      vi.spyOn(mfaModule, "verifyMfaCode").mockImplementation(async () => true);
 
       await changeDefaultMethodAppPost(
         req as unknown as Request,
@@ -135,16 +130,22 @@ describe("change default method controller", () => {
         next
       );
 
-      expect(res.render).to.be.calledWithMatch(
+      expect(res.render).toHaveBeenCalledWith(
         "change-default-method/change-to-app.njk",
-        sinon.match.hasNested("errors.code.href", "#code")
+        expect.objectContaining({
+          errors: expect.objectContaining({
+            code: expect.objectContaining({
+              href: "#code",
+            }),
+          }),
+        })
       );
     });
 
     it("should return an error if the code is less than 6 chars", async () => {
       //@ts-expect-error in test
       req.body.code = "1234";
-      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
+      vi.spyOn(mfaModule, "verifyMfaCode").mockImplementation(async () => true);
 
       await changeDefaultMethodAppPost(
         req as unknown as Request,
@@ -152,14 +153,22 @@ describe("change default method controller", () => {
         next
       );
 
-      expect(res.render).to.be.calledWithMatch(
+      expect(res.render).toHaveBeenCalledWith(
         "change-default-method/change-to-app.njk",
-        sinon.match.hasNested("errors.code.href", "#code")
+        expect.objectContaining({
+          errors: expect.objectContaining({
+            code: expect.objectContaining({
+              href: "#code",
+            }),
+          }),
+        })
       );
     });
 
     it("should return an error if the code is entered wrong", async () => {
-      sandbox.replace(mfaModule, "verifyMfaCode", async () => false);
+      vi.spyOn(mfaModule, "verifyMfaCode").mockImplementation(
+        async () => false
+      );
 
       await changeDefaultMethodAppPost(
         req as unknown as Request,
@@ -167,35 +176,41 @@ describe("change default method controller", () => {
         next
       );
 
-      expect(res.render).to.be.calledWithMatch(
+      expect(res.render).toHaveBeenCalledWith(
         "change-default-method/change-to-app.njk",
-        sinon.match.hasNested("errors.code.href", "#code")
+        expect.objectContaining({
+          errors: expect.objectContaining({
+            code: expect.objectContaining({
+              href: "#code",
+            }),
+          }),
+        })
       );
     });
 
     it("should throw an error when a user has no current default method", async () => {
-      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
+      vi.spyOn(mfaModule, "verifyMfaCode").mockImplementation(async () => true);
       req = new RequestBuilder()
         .withBody({ code: "123456", authAppSecret: "A".repeat(20) })
         .withSessionUserState({ changeDefaultMethod: { value: "APP" } })
-        .withTranslate(sandbox.fake())
+        .withTranslate(vi.fn())
         .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
         .withNoDefaultMfaMethods()
         .build();
 
-      expect(
+      await expect(
         changeDefaultMethodAppPost(
           req as unknown as Request,
           res as unknown as Response,
           next
         )
-      ).to.eventually.be.rejectedWith(
+      ).rejects.toThrow(
         "Could not change default method - no current default method found"
       );
     });
 
     it("should throw an error when the API call fails", async () => {
-      sandbox.replace(mfaModule, "verifyMfaCode", async () => true);
+      vi.spyOn(mfaModule, "verifyMfaCode").mockImplementation(async () => true);
       const response = {
         success: false,
         status: 400,
@@ -205,15 +220,15 @@ describe("change default method controller", () => {
           message: "Bad request",
         },
       };
-      mfaClientStub.update.resolves(response);
+      mfaClientStub.update.mockResolvedValue(response);
 
-      expect(
+      await expect(
         changeDefaultMethodAppPost(
           req as unknown as Request,
           res as unknown as Response,
           next
         )
-      ).to.eventually.be.rejectedWith(
+      ).rejects.toThrow(
         mfaClient.formatErrorMessage(
           "Could not change default method",
           response
@@ -224,14 +239,14 @@ describe("change default method controller", () => {
 
   describe("changeDefaultMethodAppGet", () => {
     it("should render the app page correctly", async () => {
-      sandbox.stub(commonMfaModule, "renderMfaMethodPage");
+      vi.spyOn(commonMfaModule, "renderMfaMethodPage");
       const next = () => {};
       await changeDefaultMethodAppGet(
         req as unknown as Request,
         res as unknown as Response,
         next
       );
-      expect(commonMfaModule.renderMfaMethodPage).to.be.calledWith(
+      expect(commonMfaModule.renderMfaMethodPage).toHaveBeenCalledWith(
         "change-default-method/change-to-app.njk",
         req,
         res,
@@ -248,7 +263,7 @@ describe("change default method controller", () => {
         req as unknown as Request,
         res as unknown as Response
       );
-      expect(res.render).to.be.calledWith(
+      expect(res.render).toHaveBeenCalledWith(
         "change-default-method/change-to-sms.njk",
         { backLink: "/change-default-method" }
       );
@@ -258,7 +273,7 @@ describe("change default method controller", () => {
   describe("changeDefaultMethodSmsPost", () => {
     it("should send phone verification number correctly", async () => {
       const serviceMock: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sinon.stub().returns({
+        sendPhoneVerificationNotification: vi.fn().mockReturnValue({
           success: true,
         }),
       };
@@ -267,14 +282,14 @@ describe("change default method controller", () => {
 
       await handler(req as unknown as Request, res as unknown as Response);
 
-      expect(res.redirect).to.be.calledWith(
+      expect(res.redirect).toHaveBeenCalledWith(
         "/check-your-phone?intent=changeDefaultMethod"
       );
     });
 
     it("should show an error if the user tries to use the same number", async () => {
       const serviceMock: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: sinon.stub().returns({
+        sendPhoneVerificationNotification: vi.fn().mockReturnValue({
           success: false,
           code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
         }),
@@ -284,9 +299,15 @@ describe("change default method controller", () => {
 
       await handler(req as unknown as Request, res as unknown as Response);
 
-      expect(res.render).to.be.calledWithMatch(
+      expect(res.render).toHaveBeenCalledWith(
         "change-default-method/change-to-sms.njk",
-        sinon.match.hasNested("errors.phoneNumber.href", "#phoneNumber")
+        expect.objectContaining({
+          errors: expect.objectContaining({
+            phoneNumber: expect.objectContaining({
+              href: "#phoneNumber",
+            }),
+          }),
+        })
       );
     });
   });

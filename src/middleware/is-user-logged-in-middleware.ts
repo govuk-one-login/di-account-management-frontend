@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import isUserLoggedIn from "../utils/isUserLoggedIn";
+import isUserLoggedIn from "../utils/isUserLoggedIn.js";
 
 export const isUserLoggedInMiddleware = (
   req: Request,

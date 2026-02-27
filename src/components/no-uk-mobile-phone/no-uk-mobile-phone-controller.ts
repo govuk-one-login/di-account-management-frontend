@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants";
+import { PATH_DATA } from "../../app.constants.js";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
-import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl";
+} from "../../utils/mfaClient/types.js";
+import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const NO_UK_PHONE_NUMBER_TEMPLATE = "no-uk-mobile-phone/index.njk";

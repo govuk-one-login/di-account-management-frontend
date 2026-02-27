@@ -1,13 +1,12 @@
+import { describe, it, expect } from "vitest";
 import nock from "nock";
-import { changePhoneNumberService } from "../change-phone-number-service";
-import { expect } from "chai";
+import { changePhoneNumberService } from "../change-phone-number-service.js";
 import {
   API_ENDPOINTS,
   HTTP_STATUS_CODES,
   NOTIFICATION_TYPE,
 } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config";
-import { describe } from "mocha";
+import { getApiBaseUrl } from "../../../config.js";
 import {
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
@@ -57,6 +56,6 @@ describe("changePhoneNumberService", () => {
         }
       );
 
-    expect(changePhoneNumberResponse.success).to.be.true;
+    expect(changePhoneNumberResponse.success).toBe(true);
   });
 });

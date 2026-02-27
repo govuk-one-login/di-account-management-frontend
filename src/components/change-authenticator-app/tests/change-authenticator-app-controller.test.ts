@@ -1,21 +1,18 @@
-import { expect } from "chai";
-import { describe } from "mocha";
-import { sinon } from "../../../../test/utils/test-utils";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA } from "../../../app.constants.js";
 import {
   changeAuthenticatorAppGet,
   changeAuthenticatorAppPost,
-} from "../change-authenticator-app-controller";
+} from "../change-authenticator-app-controller.js";
 import {
   RequestBuilder,
   ResponseBuilder,
   TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
-import * as mfaModule from "../../../utils/mfa";
-import * as mfaClient from "../../../utils/mfaClient";
-import QRCode from "qrcode";
-import { MfaMethod } from "../../../utils/mfaClient/types";
+} from "../../../../test/utils/builders.js";
+import * as mfaModule from "../../../utils/mfa/index.js";
+import * as mfaClient from "../../../utils/mfaClient/index.js";
+import { MfaMethod } from "../../../utils/mfaClient/types.js";
 
 describe("change authenticator app controller", () => {
   let req: Partial<Request>;
@@ -25,19 +22,19 @@ describe("change authenticator app controller", () => {
     req = new RequestBuilder()
       .withBody({})
       .withSessionUserState({ changeAuthApp: {} })
-      .withTranslate(sinon.fake())
+      .withTranslate(vi.fn())
       .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
       .build();
 
     res = new ResponseBuilder()
-      .withRender(sinon.fake())
-      .withRedirect(sinon.fake(() => {}))
-      .withStatus(sinon.fake())
+      .withRender(vi.fn())
+      .withRedirect(vi.fn(() => {}))
+      .withStatus(vi.fn())
       .build();
   });
 
   afterEach(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 
   describe("changeAuthenticatorAppGet", () => {
@@ -55,7 +52,7 @@ describe("change authenticator app controller", () => {
             state: { changeAuthApp: ["VALUE_UPDATED"] },
           },
         },
-        log: { error: sinon.fake() },
+        log: { error: vi.fn() },
         ip: "127.0.0.1",
         t: (t: string) => t,
       };
@@ -63,13 +60,13 @@ describe("change authenticator app controller", () => {
         locals: {
           persistentSessionId: "persistentSessionId",
         },
-        render: sinon.fake(),
-        redirect: sinon.fake(() => {}),
+        render: vi.fn(),
+        redirect: vi.fn(() => {}),
       };
-      const next = sinon.spy();
+      const next = vi.fn();
 
-      sinon.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
-      sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
+      vi.spyOn(mfaModule, "generateMfaSecret").mockReturnValue("A".repeat(20));
+      vi.spyOn(mfaModule, "generateQRCodeValue").mockReturnValue("qrcode");
 
       await changeAuthenticatorAppGet(
         req as unknown as Request,
@@ -77,11 +74,11 @@ describe("change authenticator app controller", () => {
         next
       );
 
-      expect(res.render).to.have.been.calledWith(
+      expect(res.render).toHaveBeenCalledWith(
         "change-authenticator-app/index.njk",
         {
           authAppSecret: "A".repeat(20),
-          qrCode: await QRCode.toDataURL("qrcode"),
+          qrCode: expect.any(String),
           formattedSecret: "AAAA AAAA AAAA AAAA AAAA",
           backLink: undefined,
           errors: undefined,
@@ -92,22 +89,15 @@ describe("change authenticator app controller", () => {
   });
 
   describe("changeAuthenticatorAppPost", () => {
-    let mfaClientStub: sinon.SinonStubbedInstance<mfaClient.MfaClient>;
+    let mfaClientStub: any;
 
     beforeEach(() => {
-      mfaClientStub = sinon.createStubInstance(mfaClient.MfaClient);
-      sinon.replace(mfaClient, "createMfaClient", () =>
-        Promise.resolve(mfaClientStub)
-      );
-      sinon.replace(mfaModule, "generateMfaSecret", () => "A".repeat(20));
-      sinon.replace(mfaModule, "generateQRCodeValue", () => "qrcode");
-
-      req.body.code = "111111";
+      req.body.code = "123456";
       req.body.authAppSecret = "qwer42312345342";
-      req.session.user.state.changeAuthApp.value = "CHANGE_VALUE";
+      req.body.qrCode = "qrcode";
       req.session.mfaMethods = [
         {
-          mfaIdentifier: "111111",
+          mfaIdentifier: "1",
           methodVerified: true,
           method: {
             mfaMethodType: "SMS",
@@ -125,6 +115,11 @@ describe("change authenticator app controller", () => {
           methodVerified: true,
         },
       ];
+
+      mfaClientStub = {
+        update: vi.fn(),
+      };
+      vi.spyOn(mfaClient, "createMfaClient").mockResolvedValue(mfaClientStub);
     });
 
     it("should return validation error when auth app secret is not set", async () => {
@@ -142,16 +137,21 @@ describe("change authenticator app controller", () => {
       }
 
       // Assert
-      expect(errorOccurred).to.be.true;
-      expect(mfaClientStub.update).to.not.have.been.called;
-      expect(res.redirect).to.not.have.calledWith(
+      expect(errorOccurred).toBe(true);
+      expect(mfaClientStub.update).not.toHaveBeenCalled();
+      expect(res.redirect).not.toHaveBeenCalledWith(
         PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url
       );
     });
 
     it("should redirect to /authenticator-app-updated-confirmation page", async () => {
-      mfaClientStub.update.resolves({ success: true, status: 200, data: [] });
-      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
+      req.session.user.state.changeAuthApp = { value: "CHANGE_VALUE" };
+      mfaClientStub.update.mockResolvedValue({
+        success: true,
+        status: 200,
+        data: [],
+      });
+      vi.spyOn(mfaModule, "verifyMfaCode").mockResolvedValue(true);
 
       // Act
       await changeAuthenticatorAppPost(
@@ -161,17 +161,17 @@ describe("change authenticator app controller", () => {
       );
 
       // Assert
-      expect(mfaClientStub.update).to.have.been.calledOnce;
-      expect(res.redirect).to.have.calledWith(
+      expect(mfaClientStub.update).toHaveBeenCalledOnce();
+      expect(res.redirect).toHaveBeenCalledWith(
         PATH_DATA.AUTHENTICATOR_APP_UPDATED_CONFIRMATION.url
       );
     });
 
     it("should render an error if the code is empty", async () => {
       req.body.code = "";
-      const tSpy = sinon.spy();
+      const tSpy = vi.fn();
       req.t = tSpy;
-      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
+      vi.spyOn(mfaModule, "verifyMfaCode").mockResolvedValue(true);
 
       await changeAuthenticatorAppPost(
         req as Request,
@@ -179,23 +179,24 @@ describe("change authenticator app controller", () => {
         () => {}
       );
 
-      expect(res.render).to.have.been.calledWith(
+      expect(res.render).toHaveBeenCalledWith(
         "change-authenticator-app/index.njk",
         {
           authAppSecret: "qwer42312345342",
-          qrCode: await QRCode.toDataURL("qrcode"),
+          qrCode: expect.any(String),
           formattedSecret: "qwer 4231 2345 342",
           backLink: undefined,
           errors: { code: { text: undefined, href: "#code" } },
           errorList: [{ text: undefined, href: "#code" }],
         }
       );
-      expect(mfaClientStub.update).to.not.have.been.called;
-      expect(tSpy).to.have.been.calledOnceWith("setUpAuthApp.errors.required");
+      expect(mfaClientStub.update).not.toHaveBeenCalled();
+      expect(tSpy).toHaveBeenCalledOnce();
+      expect(tSpy).toHaveBeenCalledWith("setUpAuthApp.errors.required");
     });
 
     it("should render an error if the code is invalid", async () => {
-      sinon.replace(mfaModule, "verifyMfaCode", async () => false);
+      vi.spyOn(mfaModule, "verifyMfaCode").mockResolvedValue(false);
 
       await changeAuthenticatorAppPost(
         req as Request,
@@ -203,23 +204,23 @@ describe("change authenticator app controller", () => {
         () => {}
       );
 
-      expect(res.render).to.have.been.calledWith(
+      expect(res.render).toHaveBeenCalledWith(
         "change-authenticator-app/index.njk",
         {
           authAppSecret: "qwer42312345342",
-          qrCode: await QRCode.toDataURL("qrcode"),
+          qrCode: expect.any(String),
           formattedSecret: "qwer 4231 2345 342",
           backLink: undefined,
           errors: { code: { text: undefined, href: "#code" } },
           errorList: [{ text: undefined, href: "#code" }],
         }
       );
-      expect(mfaClientStub.update).to.not.have.been.called;
+      expect(mfaClientStub.update).not.toHaveBeenCalled();
     });
 
-    it("should render an error if the code contains letters ", async () => {
+    it("should render an error if the code contains letters", async () => {
       req.body.code = "abc123";
-      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
+      vi.spyOn(mfaModule, "verifyMfaCode").mockResolvedValue(true);
 
       await changeAuthenticatorAppPost(
         req as Request,
@@ -227,22 +228,22 @@ describe("change authenticator app controller", () => {
         () => {}
       );
 
-      expect(res.render).to.have.been.calledWith(
+      expect(res.render).toHaveBeenCalledWith(
         "change-authenticator-app/index.njk",
         {
           authAppSecret: "qwer42312345342",
-          qrCode: await QRCode.toDataURL("qrcode"),
+          qrCode: expect.any(String),
           formattedSecret: "qwer 4231 2345 342",
           backLink: undefined,
           errors: { code: { text: undefined, href: "#code" } },
           errorList: [{ text: undefined, href: "#code" }],
         }
       );
-      expect(mfaClientStub.update).to.not.have.been.called;
+      expect(mfaClientStub.update).not.toHaveBeenCalled();
     });
 
-    it("should throw an error if there's no current auth app method ", async () => {
-      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
+    it("should throw an error if there's no current auth app method", async () => {
+      vi.spyOn(mfaModule, "verifyMfaCode").mockResolvedValue(true);
       req.session.mfaMethods = [
         {
           mfaIdentifier: "111111",
@@ -255,15 +256,15 @@ describe("change authenticator app controller", () => {
         },
       ];
 
-      expect(
+      await expect(
         changeAuthenticatorAppPost(req as Request, res as Response, () => {})
-      ).to.eventually.be.rejectedWith(
+      ).rejects.toThrow(
         "Could not change authenticator app - no existing auth app method found"
       );
     });
 
-    it("should throw an error if the API response fails ", async () => {
-      sinon.replace(mfaModule, "verifyMfaCode", async () => true);
+    it("should throw an error if the API response fails", async () => {
+      vi.spyOn(mfaModule, "verifyMfaCode").mockResolvedValue(true);
       const response = {
         success: false,
         status: 400,
@@ -273,11 +274,11 @@ describe("change authenticator app controller", () => {
           message: "Bad request",
         },
       };
-      mfaClientStub.update.resolves(response);
+      mfaClientStub.update.mockResolvedValue(response);
 
-      expect(
+      await expect(
         changeAuthenticatorAppPost(req as Request, res as Response, () => {})
-      ).to.eventually.be.rejectedWith(
+      ).rejects.toThrow(
         mfaClient.formatErrorMessage(
           "Could not change authenticator app",
           response

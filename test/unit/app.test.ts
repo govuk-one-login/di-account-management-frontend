@@ -1,53 +1,76 @@
-import { afterEach, beforeEach, describe } from "mocha";
-import { shutdownProcess, startServer } from "../../src/app";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
+import { shutdownProcess, startServer, createApp } from "../../src/app.js";
 import express from "express";
-import { expect, sinon } from "../utils/test-utils";
+
+vi.mock("@govuk-one-login/frontend-vital-signs", () => ({
+  frontendVitalSignsInit: vi.fn(() => vi.fn()),
+}));
+
+import * as frontendVitalSigns from "@govuk-one-login/frontend-vital-signs";
 
 describe("app", () => {
+  describe("createApp", () => {
+    it("should create an Express application", async () => {
+      const app = await createApp();
+
+      expect(app).toBeDefined();
+      expect(typeof app).toBe("function");
+      expect(app.listen).toBeDefined();
+    });
+
+    it("should enable trust proxy", async () => {
+      const app = await createApp();
+
+      expect(app.get("trust proxy")).toBeTruthy();
+    });
+
+    it("should have nunjucks engine configured", async () => {
+      const app = await createApp();
+
+      expect(app.get("nunjucksEngine")).toBeDefined();
+    });
+
+    it("should have session store in locals", async () => {
+      const app = await createApp();
+
+      expect(app.locals.sessionStore).toBeDefined();
+    });
+  });
+
   describe("startServer", () => {
     let app: express.Application;
+    const testPort = 6066;
 
     beforeEach(() => {
-      process.env.PORT = "6001";
       app = express();
     });
 
     afterEach(() => {
-      sinon.restore();
-      delete require.cache[require.resolve("../../src/app")];
-      delete require.cache[
-        require.resolve("@govuk-one-login/frontend-vital-signs")
-      ];
+      vi.restoreAllMocks();
     });
 
     it("should start server on expected port", async () => {
-      const listenSpy = sinon.spy(app, "listen");
-      const { closeServer } = await startServer(app);
+      const listenSpy = vi.spyOn(app, "listen");
+      const { closeServer } = await startServer(app, testPort);
 
-      expect(listenSpy).to.be.calledOnceWith(process.env.PORT);
+      expect(listenSpy).toHaveBeenCalledWith(testPort, expect.any(Function));
 
       await closeServer();
     });
 
     it("should start server with expected timeouts", async () => {
-      const { server, closeServer } = await startServer(app);
+      const { server, closeServer } = await startServer(app, testPort);
 
-      expect(server.keepAliveTimeout).to.be.eq(61 * 1000);
-      expect(server.headersTimeout).to.be.eq(91 * 1000);
+      expect(server.keepAliveTimeout).toBe(61 * 1000);
+      expect(server.headersTimeout).toBe(91 * 1000);
 
       await closeServer();
     });
 
     it("should start server with vital-signs package", async () => {
-      const frontendVitalSigns = require("@govuk-one-login/frontend-vital-signs");
-      sinon
-        .stub(frontendVitalSigns, "frontendVitalSignsInit")
-        .callsFake(() => () => {});
-      const { startServer } = require("../../src/app");
+      const { server, closeServer } = await startServer(app, testPort);
 
-      const { server, closeServer } = await startServer(app);
-
-      expect(frontendVitalSigns.frontendVitalSignsInit).to.be.calledOnceWith(
+      expect(frontendVitalSigns.frontendVitalSignsInit).toHaveBeenCalledWith(
         server,
         { staticPaths: [/^\/assets\/.*/, /^\/public\/.*/] }
       );
@@ -55,48 +78,43 @@ describe("app", () => {
     });
 
     it("should close server properly", async () => {
-      const frontendVitalSigns = require("@govuk-one-login/frontend-vital-signs");
-      const stopVitalSigns = sinon.fake();
-      sinon
-        .stub(frontendVitalSigns, "frontendVitalSignsInit")
-        .callsFake(() => stopVitalSigns);
-
-      const { startServer } = require("../../src/app");
-      const { closeServer } = await startServer(app);
+      const { closeServer } = await startServer(app, testPort);
 
       await closeServer();
 
-      expect(stopVitalSigns).to.be.calledOnce;
+      const stopVitalSigns = vi.mocked(
+        frontendVitalSigns.frontendVitalSignsInit
+      ).mock.results[0].value;
+      expect(stopVitalSigns).toHaveBeenCalledOnce();
     });
   });
 
   describe("shutdownProcess", () => {
-    let exitStub: sinon.SinonStub<
-      [code?: string | number | null | undefined],
-      never
-    >;
+    let exitStub: ReturnType<typeof vi.spyOn<typeof process, any>>;
 
     beforeEach(() => {
-      exitStub = sinon.stub(process, "exit");
+      exitStub = vi
+        .spyOn(process, "exit")
+        .mockImplementation(() => undefined as never);
     });
 
     afterEach(() => {
-      sinon.restore();
+      vi.restoreAllMocks();
     });
 
     it("executes closeServer callback before exiting successfully", async () => {
-      const callback = sinon.fake();
+      const callback = vi.fn();
       await shutdownProcess(callback)();
-      expect(callback).to.be.calledOnce;
-      expect(exitStub).to.be.calledOnceWith(0);
+      expect(callback).toHaveBeenCalledOnce();
+      expect(exitStub).toHaveBeenCalledWith(0);
     });
 
     it("exits with error if callback throws error", async () => {
-      const callback = sinon.fake(() => {
+      const callback = vi.fn(() => {
         throw new Error("Something unexpected happened");
       });
       await shutdownProcess(callback)();
-      expect(exitStub).to.be.calledOnceWith(1);
+      expect(exitStub).toHaveBeenCalledWith(1);
     });
   });
 });

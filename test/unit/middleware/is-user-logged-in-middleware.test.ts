@@ -1,13 +1,12 @@
-import { expect } from "chai";
-import { describe } from "mocha";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextFunction } from "express";
-import { sinon } from "../../utils/test-utils";
-import { isUserLoggedInMiddleware } from "../../../src/middleware/is-user-logged-in-middleware";
+// import { sinon } from "../../utils/test-utils.js";
+import { isUserLoggedInMiddleware } from "../../../src/middleware/is-user-logged-in-middleware.js";
 
 describe("isUserLoggedInMiddleware", () => {
   let req: any;
-  const res: any = { locals: {}, redirect: sinon.fake() };
-  const nextFunction: NextFunction = sinon.fake(() => {});
+  const res: any = { locals: {}, redirect: vi.fn() };
+  const nextFunction: NextFunction = vi.fn(() => {});
 
   beforeEach(() => {
     req = {
@@ -24,11 +23,11 @@ describe("isUserLoggedInMiddleware", () => {
 
   it("should set isUserLoggedIn in res.locals", () => {
     isUserLoggedInMiddleware(req, res, nextFunction);
-    expect(res.locals).to.have.property("isUserLoggedIn");
+    expect(res.locals).toHaveProperty("isUserLoggedIn");
   });
 
   it("should call next function", () => {
     isUserLoggedInMiddleware(req, res, nextFunction);
-    expect(nextFunction).to.have.been.called;
+    expect(nextFunction).toHaveBeenCalled();
   });
 });

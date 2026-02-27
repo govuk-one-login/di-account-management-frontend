@@ -1,33 +1,37 @@
 import request from "supertest";
-import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
-import { testComponent } from "../../../../test/utils/helpers";
+import {
+  describe,
+  beforeAll,
+  afterAll,
+  it,
+  expect,
+  vi,
+  beforeEach,
+} from "vitest";
+import { testComponent } from "../../../../test/utils/helpers.js";
 import nock = require("nock");
 import * as cheerio from "cheerio";
-import decache from "decache";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
   PATH_DATA,
-} from "../../../app.constants";
+} from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
-import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
+import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
 
 describe("Integration:: change phone number", () => {
-  let sandbox: sinon.SinonSandbox;
-  let token: string | string[] | undefined;
+  let token: string | string[];
   let cookies: string;
   let app: any;
   let baseApi: string;
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      async function (req: any, res: any, next: any): Promise<void> {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
@@ -51,18 +55,19 @@ describe("Integration:: change phone number", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
-      return Promise.resolve({});
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
+      return Promise.resolve({} as any);
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
-      return Promise.resolve({});
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
+      return Promise.resolve({} as any);
     });
 
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
     baseApi = process.env.AM_API_BASE_URL || "http://localhost:8080";
 
     await request(app)
@@ -78,13 +83,16 @@ describe("Integration:: change phone number", () => {
     nock.cleanAll();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
-  it("should return change phone number page", (done) => {
-    request(app).get(PATH_DATA.CHANGE_PHONE_NUMBER.url).expect(200, done);
+  it("should return change phone number page", async () => {
+    const res = await request(app)
+      .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
+      .expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to your services when csrf not present", async () => {
@@ -108,12 +116,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when uk phone number entered is not valid", async () => {
@@ -127,12 +135,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when uk phone number entered contains text", async () => {
@@ -146,12 +154,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number using numbers only"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when uk phone number entered less than 12 characters", async () => {
@@ -165,12 +173,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number, like 07700 900000"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should return validation error when uk phone number entered greater than 12 characters", async () => {
@@ -184,12 +192,12 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "Enter a UK mobile phone number, like 07700 900000"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number entered", async () => {
@@ -211,7 +219,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", async () => {
@@ -233,7 +241,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with 447 is entered", async () => {
@@ -255,7 +263,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with 440 is entered", async () => {
@@ -277,7 +285,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +440 is entered", async () => {
@@ -299,7 +307,7 @@ describe("Integration:: change phone number", () => {
       })
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
-    expect(res.statusCode).to.eq(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should return validation error when new UK phone number is the same as curent phone number", async () => {
@@ -321,16 +329,19 @@ describe("Integration:: change phone number", () => {
       })
       .expect(function (res) {
         const $ = cheerio.load(res.text);
-        expect($(testComponent("phoneNumber-error")).text()).to.contains(
+        expect($(testComponent("phoneNumber-error")).text()).toContain(
           "You’re already using that phone number. Enter a different UK mobile phone number"
         );
       })
       .expect(400);
-    expect(res.statusCode).to.eq(400);
+    expect(res.statusCode).toBe(400);
   });
 
-  it("should return No UK phone number page", (done) => {
-    request(app).get(PATH_DATA.NO_UK_PHONE_NUMBER.url).expect(302, done);
+  it("should return No UK phone number page", async () => {
+    const res = await request(app)
+      .get(PATH_DATA.NO_UK_PHONE_NUMBER.url)
+      .expect(302);
+    expect(res.statusCode).toBe(302);
   });
 
   it("should return internal server error if send-otp-notification API call fails", async () => {
@@ -353,6 +364,6 @@ describe("Integration:: change phone number", () => {
         phoneNumber: "07738394991",
       })
       .expect(500);
-    expect(res.statusCode).to.eq(500);
+    expect(res.statusCode).toBe(500);
   });
 });

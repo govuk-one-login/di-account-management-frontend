@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { UserJourney, EventType, getNextState } from "./state-machine";
+import { UserJourney, EventType, getNextState } from "./state-machine.js";
 
 export function SetState(
   currentStateTypes: UserJourney[],

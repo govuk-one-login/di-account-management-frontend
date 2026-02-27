@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
-import { EnterPasswordServiceInterface } from "./types";
-import { enterPasswordService } from "./enter-password-service";
-import { ExpressRouteFunc } from "../../types";
-import { PATH_DATA, LogoutState, EventName } from "../../app.constants";
+import { EnterPasswordServiceInterface } from "./types.js";
+import { enterPasswordService } from "./enter-password-service.js";
+import { ExpressRouteFunc } from "../../types.js";
+import { PATH_DATA, LogoutState, EventName } from "../../app.constants.js";
 import {
   formatValidationError,
   renderBadRequest,
-} from "../../utils/validation";
+} from "../../utils/validation.js";
 import {
   EventType,
   getInitialState,
   getNextState,
   UserJourney,
-} from "../../utils/state-machine";
-import { handleLogout } from "../../utils/logout";
-import { getRequestConfigFromExpress } from "../../utils/http";
+} from "../../utils/state-machine.js";
+import { handleLogout } from "../../utils/logout.js";
+import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   EMPTY_OPL_SETTING_VALUE,
   MFA_COMMON_OPL_SETTINGS,
@@ -23,12 +23,12 @@ import {
   CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
-} from "../../utils/opl";
+} from "../../utils/opl.js";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
-} from "../../utils/mfaClient/types";
-import { eventService } from "../../services/event-service";
+} from "../../utils/mfaClient/types.js";
+import { eventService } from "../../services/event-service.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const TEMPLATE = "enter-password/index.njk";
@@ -171,7 +171,7 @@ async function sendJourneyAuditEvent(
   if (eventName) {
     const service = eventService();
     const auditEvent = service.buildAuditEvent(req, res, eventName);
-    service.send(auditEvent, res.locals.trace);
+    void service.send(auditEvent, res.locals.trace);
   }
 }
 

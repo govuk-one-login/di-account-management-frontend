@@ -1,6 +1,6 @@
 import * as express from "express";
-import { logoutRedirectGet } from "./logout-redirect-controller";
-import { PATH_DATA } from "../../app.constants";
+import { logoutRedirectGet } from "./logout-redirect-controller.js";
+import { PATH_DATA } from "../../app.constants.js";
 
 const router = express.Router();
 

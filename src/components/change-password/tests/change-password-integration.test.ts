@@ -1,10 +1,16 @@
 import request from "supertest";
-import { describe } from "mocha";
-import { expect, sinon } from "../../../../test/utils/test-utils";
+import {
+  describe,
+  beforeAll,
+  afterAll,
+  it,
+  expect,
+  vi,
+  beforeEach,
+} from "vitest";
 import { testComponent } from "../../../../test/utils/helpers";
 import nock = require("nock");
 import { load } from "cheerio";
-import decache from "decache";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
@@ -14,20 +20,18 @@ import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours";
 
 describe("Integration:: change password", () => {
-  let sandbox: sinon.SinonSandbox;
   let token: string | string[];
   let cookies: string;
   let app: any;
   let baseApi: string;
 
-  before(async () => {
-    decache("../../../app");
-    decache("../../../middleware/requires-auth-middleware");
-    const sessionMiddleware = require("../../../middleware/requires-auth-middleware");
-    sandbox = sinon.createSandbox();
-    sandbox
-      .stub(sessionMiddleware, "requiresAuthMiddleware")
-      .callsFake(function (req: any, res: any, next: any): void {
+  beforeAll(async () => {
+    vi.resetModules();
+    const sessionMiddleware = await import(
+      "../../../middleware/requires-auth-middleware.js"
+    );
+    vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
+      function (req: any, res: any, next: any): void {
         req.session.user = {
           email: "test@test.com",
           phoneNumber: "07839490040",
@@ -51,18 +55,19 @@ describe("Integration:: change password", () => {
           },
         };
         next();
-      });
+      }
+    );
 
-    const oidc = require("../../../utils/oidc");
-    sandbox.stub(oidc, "getOIDCClient").callsFake(() => {
+    const oidc = await import("../../../utils/oidc.js");
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    sandbox.stub(oidc, "getCachedJWKS").callsFake(() => {
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
       return Promise.resolve({});
     });
 
-    app = await require("../../../app").createApp();
+    app = await (await import("../../../app.js")).createApp();
     baseApi = process.env.AM_API_BASE_URL;
 
     await request(app)
@@ -78,13 +83,16 @@ describe("Integration:: change password", () => {
     nock.cleanAll();
   });
 
-  after(() => {
-    sandbox.restore();
+  afterAll(() => {
+    vi.restoreAllMocks();
     app = undefined;
   });
 
-  it("should return change password page", (done) => {
-    request(app).get(PATH_DATA.CHANGE_PASSWORD.url).expect(200, done);
+  it("should return change password page", async () => {
+    const res = await request(app)
+      .get(PATH_DATA.CHANGE_PASSWORD.url)
+      .expect(200);
+    expect(res.statusCode).toBe(200);
   });
 
   it("should redirect to Your services when csrf not present", async () => {
@@ -109,10 +117,10 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "Enter your new password"
         );
-        expect($(testComponent("confirm-password-error")).text()).to.contains(
+        expect($(testComponent("confirm-password-error")).text()).toContain(
           "Re-type your new password"
         );
       })
@@ -131,7 +139,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent("confirm-password-error")).text()).to.contains(
+        expect($(testComponent("confirm-password-error")).text()).toContain(
           "Enter the same password in both fields"
         );
       })
@@ -150,7 +158,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -169,7 +177,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -196,7 +204,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "Enter a stronger password. Do not use very common passwords, such as ‘password’ or a sequence of numbers"
         );
       })
@@ -204,6 +212,11 @@ describe("Integration:: change password", () => {
   });
 
   it("should return validation error when password is all letters", async () => {
+    nock(baseApi)
+      .post(API_ENDPOINTS.UPDATE_PASSWORD)
+      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
+      .reply(204);
+
     await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
@@ -215,7 +228,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "Your password must be at least 8 characters long and must include letters and numbers"
         );
       })
@@ -242,7 +255,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent("password-error")).text()).to.contains(
+        expect($(testComponent("password-error")).text()).toContain(
           "You are already using that password. Enter a different password"
         );
       })
@@ -269,7 +282,7 @@ describe("Integration:: change password", () => {
       })
       .expect(function (res) {
         const $ = load(res.text);
-        expect($(testComponent("error-heading")).text()).to.not.be.empty;
+        expect($(testComponent("error-heading")).text()).not.toBe("");
       })
       .expect(500);
   });
@@ -283,7 +296,7 @@ describe("Integration:: change password", () => {
       .reply(204);
 
     // Act
-    await request(app)
+    const res = await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
@@ -294,5 +307,6 @@ describe("Integration:: change password", () => {
       })
       .expect("Location", PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url)
       .expect(302);
+    expect(res.statusCode).toBe(302);
   });
 });

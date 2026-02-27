@@ -1,60 +1,67 @@
-import { expect } from "chai";
-import sinon from "sinon";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response, NextFunction } from "express";
-import { logErrorMiddleware } from "../../../src/middleware/log-error-middleware";
-import * as shouldLogErrorModule from "../../../src/utils/shouldLogError";
+import { logErrorMiddleware } from "../../../src/middleware/log-error-middleware.js";
+import * as shouldLogErrorModule from "../../../src/utils/shouldLogError.js";
 
 describe("logErrorMiddleware", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next: NextFunction;
-  let shouldLogErrorStub: sinon.SinonStub;
+  let shouldLogErrorStub: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     req = {
       log: {
-        error: sinon.spy(),
+        error: vi.fn(),
       },
     } as any;
     res = {};
-    next = sinon.spy();
-    shouldLogErrorStub = sinon.stub(shouldLogErrorModule, "shouldLogError");
+    next = vi.fn();
+    shouldLogErrorStub = vi.spyOn(shouldLogErrorModule, "shouldLogError");
   });
 
   afterEach(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 
   it("should log error when shouldLogError returns true", () => {
     const error = new Error("Test error");
-    shouldLogErrorStub.returns(true);
+    shouldLogErrorStub.mockReturnValue(true);
 
     logErrorMiddleware(error, req as Request, res as Response, next);
 
-    expect(shouldLogErrorStub).to.have.been.calledOnceWith(error);
-    expect(req.log.error).to.have.been.calledOnceWith(error, "Test error");
-    expect(next).to.have.been.calledOnceWith(error);
+    expect(shouldLogErrorStub).toHaveBeenCalledOnce();
+    expect(shouldLogErrorStub).toHaveBeenCalledWith(error);
+    expect(req.log.error).toHaveBeenCalledOnce();
+    expect(req.log.error).toHaveBeenCalledWith(error, "Test error");
+    expect(next).toHaveBeenCalledOnce();
+    expect(next).toHaveBeenCalledWith(error);
   });
 
   it("should not log error when shouldLogError returns false", () => {
     const error = new Error("Test error");
-    shouldLogErrorStub.returns(false);
+    shouldLogErrorStub.mockReturnValue(false);
 
     logErrorMiddleware(error, req as Request, res as Response, next);
 
-    expect(shouldLogErrorStub).to.have.been.calledOnceWith(error);
-    expect(req.log.error).to.not.have.been.called;
-    expect(next).to.have.been.calledOnceWith(error);
+    expect(shouldLogErrorStub).toHaveBeenCalledOnce();
+    expect(shouldLogErrorStub).toHaveBeenCalledWith(error);
+    expect(req.log.error).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalledOnce();
+    expect(next).toHaveBeenCalledWith(error);
   });
 
   it("should handle non-Error objects", () => {
     const error = "string error";
-    shouldLogErrorStub.returns(true);
+    shouldLogErrorStub.mockReturnValue(true);
 
     logErrorMiddleware(error, req as Request, res as Response, next);
 
-    expect(shouldLogErrorStub).to.have.been.calledOnceWith(error);
-    expect(req.log.error).to.have.been.calledOnceWith(error, undefined);
-    expect(next).to.have.been.calledOnceWith(error);
+    expect(shouldLogErrorStub).toHaveBeenCalledOnce();
+    expect(shouldLogErrorStub).toHaveBeenCalledWith(error);
+    expect(req.log.error).toHaveBeenCalledOnce();
+    expect(req.log.error).toHaveBeenCalledWith(error, undefined);
+    expect(next).toHaveBeenCalledOnce();
+    expect(next).toHaveBeenCalledWith(error);
   });
 });

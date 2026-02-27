@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { presentYourServices } from "../../utils/yourServices";
-import { getAppEnv, supportSearchableList } from "../../config";
-import { setOplSettings } from "../../utils/opl";
+import { presentYourServices } from "../../utils/yourServices.js";
+import { getAppEnv, supportSearchableList } from "../../config.js";
+import { setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const defaultContentId = "04566d1b-d791-4e2a-9154-26787fb60516";

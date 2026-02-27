@@ -1,6 +1,6 @@
+import { describe, it, expect } from "vitest";
 import { KmsKeyringNode } from "@aws-crypto/client-node";
-import buildKmsKeyring from "../kms-keyring-builder";
-import { expect } from "chai";
+import buildKmsKeyring from "../kms-keyring-builder.js";
 
 const exampleArn =
   "arn:aws:kms:eu-west-2:111122223333:key/bc436485-5092-42b8-92a3-0aa8b93536dc";
@@ -15,7 +15,7 @@ describe("kmsKeyringBuilder", () => {
     process.env.GENERATOR_KEY_ARN = exampleArn;
     process.env.WRAPPING_KEY_ARN = "not-valid-arn";
 
-    await expect(buildKmsKeyring()).to.be.rejectedWith(
+    await expect(buildKmsKeyring()).rejects.toThrow(
       "Invalid configuration - ARN for main envelope encryption wrapping key is invalid."
     );
   });
@@ -24,7 +24,7 @@ describe("kmsKeyringBuilder", () => {
     process.env.GENERATOR_KEY_ARN = exampleArn;
     delete process.env.WRAPPING_KEY_ARN;
 
-    await expect(buildKmsKeyring()).to.be.rejectedWith(
+    await expect(buildKmsKeyring()).rejects.toThrow(
       "Invalid configuration - ARN for main envelope encryption wrapping key is undefined."
     );
   });
@@ -33,7 +33,7 @@ describe("kmsKeyringBuilder", () => {
     delete process.env.GENERATOR_KEY_ARN;
     process.env.WRAPPING_KEY_ARN = exampleArn;
 
-    await expect(buildKmsKeyring()).to.be.rejectedWith(
+    await expect(buildKmsKeyring()).rejects.toThrow(
       "Invalid configuration - ARN for envelope encryption Generator key is undefined"
     );
   });
@@ -42,7 +42,7 @@ describe("kmsKeyringBuilder", () => {
     process.env.GENERATOR_KEY_ARN = "not-valid-arn";
     process.env.WRAPPING_KEY_ARN = exampleArn;
 
-    await expect(buildKmsKeyring()).to.be.rejectedWith(
+    await expect(buildKmsKeyring()).rejects.toThrow(
       "Invalid configuration - ARN for envelope encryption Generator key is invalid."
     );
   });
@@ -52,8 +52,8 @@ describe("kmsKeyringBuilder", () => {
     process.env.WRAPPING_KEY_ARN = exampleArn;
 
     const kmsKeyring: KmsKeyringNode = await buildKmsKeyring();
-    expect(kmsKeyring.keyIds).to.have.lengthOf(1);
-    expect(kmsKeyring.generatorKeyId).to.deep.equal(exampleArn);
-    expect(kmsKeyring.keyIds[0]).to.deep.equal(exampleArn);
+    expect(kmsKeyring.keyIds).toHaveLength(1);
+    expect(kmsKeyring.generatorKeyId).toEqual(exampleArn);
+    expect(kmsKeyring.keyIds[0]).toEqual(exampleArn);
   });
 });
