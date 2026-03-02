@@ -159,7 +159,7 @@ Mappings:
     dev:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
-      AMAPIBASEURL: "https://manage.staging.account.gov.uk"
+      AMAPIBASEURL: ""
       BASEURL: "home.dev.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
@@ -189,7 +189,7 @@ Mappings:
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
-      AMAPIBASEURL: "https://manage.build.account.gov.uk"
+      AMAPIBASEURL: ""
       BASEURL: "home.build.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"

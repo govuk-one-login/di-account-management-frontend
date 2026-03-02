@@ -49,6 +49,7 @@ describe("delete account controller", () => {
   beforeEach(() => {
     res = {
       render: vi.fn(),
+      clearCookie: vi.fn(),
       redirect: vi.fn(() => {}),
       locals: {},
     };
