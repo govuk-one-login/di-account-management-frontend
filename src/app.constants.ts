@@ -178,6 +178,9 @@ export const PATH_DATA: Record<
     event: EventType.ValueUpdated,
     type: UserJourney.ChangePhoneNumber,
   },
+  JWKS: {
+    url: "/.well-known/jwks.json",
+  },
   SECURITY_TXT: {
     url: "/.well-known/security.txt",
   },

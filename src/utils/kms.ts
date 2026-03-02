@@ -1,4 +1,5 @@
 import {
+  GetPublicKeyCommand,
   KMSClient,
   MessageType,
   SignCommand,
@@ -20,5 +21,9 @@ export const kmsService: KmsService = {
     };
     const request: SignCommand = new SignCommand(params);
     return await client.send(request);
+  },
+  getPublicKey: async () => {
+    const command = new GetPublicKeyCommand({ KeyId: config.kmsKeyId });
+    return await client.send(command);
   },
 };
