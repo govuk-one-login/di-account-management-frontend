@@ -117,6 +117,8 @@ Conditions:
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
 
+  IsNotDevOrBuild: !Not [Condition: UseStubServices]
+
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, integration]
@@ -186,6 +188,12 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://amc-stub.home.dev.account.gov.uk/.well-known/jwks.json"
+      AMCAUTHORIZEURL: "https://amc-stub.home.dev.account.gov.uk/authorize"
+      AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.dev.account.gov.uk/journeyoutcome"
+      AMCTOKENURL: "https://amc-stub.home.dev.account.gov.uk/token"
+      AMCCLIENTID: "fake_dev_amc_client_id"
+      AMCAPIDOMAINARN: "test"
+      AMCAPIDOMAIN: api.manage.dev.account.gov.uk
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -216,6 +224,12 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://amc-stub.home.build.account.gov.uk/.well-known/jwks.json"
+      AMCAUTHORIZEURL: "https://amc-stub.home.build.account.gov.uk/authorize"
+      AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.build.account.gov.uk/journeyoutcome"
+      AMCTOKENURL: "https://amc-stub.home.build.account.gov.uk/token"
+      AMCCLIENTID: "fake_build_amc_client_id"
+      AMCAPIDOMAINARN: "test"
+      AMCAPIDOMAIN: api.manage.build.account.gov.uk
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -246,6 +260,12 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://api.manage.staging.account.gov.uk/.well-known/jwks.json"
+      AMCAUTHORIZEURL: "https://api.manage.home.staging.account.gov.uk/authorize"
+      AMCJOURNEYOUTCOMEURL: "https://api.manage.home.staging.account.gov.uk/journeyoutcome"
+      AMCTOKENURL: "https://api.manage.home.staging.account.gov.uk/token"
+      AMCCLIENTID: "63385eefbc1649f9bc50eb9fd7c04de0" # pragma: allowlist secret
+      AMCAPIDOMAINARN: "arn:aws:apigateway:eu-west-2:837553126879:/domainnames/api.manage.staging.account.gov.uk+w5wonzhu0a"
+      AMCAPIDOMAIN: api.manage.staging.account.gov.uk
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -276,6 +296,12 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
       AMCJWKSURL: "https://api.manage.integration.account.gov.uk/.well-known/jwks.json"
+      AMCAUTHORIZEURL: "https://api.manage.home.integration.account.gov.uk/authorize"
+      AMCJOURNEYOUTCOMEURL: "https://api.manage.home.integration.account.gov.uk/journeyoutcome"
+      AMCTOKENURL: "https://api.manage.home.account.gov.uk/token"
+      AMCCLIENTID: "cdf0311ea91648d4a25214415e521ef5" # pragma: allowlist secret
+      AMCAPIDOMAINARN: "arn:aws:apigateway:eu-west-2:549834518434:/domainnames/api.manage.integration.account.gov.uk+zfryo0wgka"
+      AMCAPIDOMAIN: api.manage.integration.account.gov.uk
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -307,6 +333,12 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
       AMCJWKSURL: "https://api.manage.account.gov.uk/.well-known/jwks.json"
+      AMCAUTHORIZEURL: "https://api.manage.home.account.gov.uk/authorize"
+      AMCJOURNEYOUTCOMEURL: "https://api.manage.home.account.gov.uk/journeyoutcome"
+      AMCTOKENURL: "https://api.manage.home.account.gov.uk/token"
+      AMCCLIENTID: "261b31a23ea2408094b7f8480d486fad" # pragma: allowlist secret
+      AMCAPIDOMAINARN: "arn:aws:apigateway:eu-west-2:494066295151:/domainnames/api.manage.account.gov.uk+m6buyb58yb"
+      AMCAPIDOMAIN: api.manage.account.gov.uk
 
 Resources:
   #
@@ -916,6 +948,26 @@ Resources:
             - Name: "AMC_JWKS_URL"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, AMCJWKSURL]
+            - Name: "AMC_AUTHORIZE_URL"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  AMCAUTHORIZEURL,
+                ]
+            - Name: "AMC_JOURNEY_OUTCOME_URL"
+              Value:
+                !FindInMap [
+                  EnvironmentVariables,
+                  !Ref Environment,
+                  AMCJOURNEYOUTCOMEURL,
+                ]
+            - Name: "AMC_TOKEN_URL"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, AMCTOKENURL]
+            - Name: "AMC_CLIENT_ID"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, AMCCLIENTID]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
@@ -2077,6 +2129,29 @@ Resources:
           Fn::ImportValue: "devplatform-cloudfront-DistributionDomain"
         HostedZoneId: "Z2FDTNDATAQYW2"
         EvaluateTargetHealth: false
+
+  AmcApiRecord:
+    Type: AWS::Route53::RecordSet
+    Condition: IsNotDevOrBuild
+    Properties:
+      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
+      Name: !FindInMap [EnvironmentVariables, !Ref Environment, AMCAPIDOMAIN]
+      Type: A
+      AliasTarget:
+        DNSName:
+          Fn::ImportValue: !Sub "${VpcStackName}-ExecuteApiGatewayVpcEndpointPrimaryDnsEntry"
+        HostedZoneId:
+          Fn::ImportValue: !Sub "${VpcStackName}-ExecuteApiGatewayVpcEndpointHostedZoneId"
+
+  AmcApiDomainNameAccessAssociation:
+    Type: AWS::ApiGateway::DomainNameAccessAssociation
+    Condition: IsNotDevOrBuild
+    Properties:
+      DomainNameArn:
+        !FindInMap [EnvironmentVariables, !Ref Environment, AMCAPIDOMAINARN]
+      AccessAssociationSource:
+        Fn::ImportValue: !Sub "${VpcStackName}-ExecuteApiGatewayEndpointId"
+      AccessAssociationSourceType: VPCE
 
   AppFrontApiMapping:
     Type: AWS::ApiGatewayV2::ApiMapping
