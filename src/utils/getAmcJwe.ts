@@ -55,7 +55,8 @@ export const getAmcJwe = async (
 
   const jwe = await new jose.CompactEncrypt(new TextEncoder().encode(jws))
     .setProtectedHeader({
-      alg: "RSA-OAEP-256",
+      alg: encryptionJWK.alg,
+      kid: encryptionJWK.kid,
       enc: "A256GCM",
     })
     .encrypt(publicKey);

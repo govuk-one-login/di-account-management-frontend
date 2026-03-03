@@ -45,7 +45,7 @@ describe("getAmcJwe", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    vi.setSystemTime(new Date('2024-01-01T00:00:00Z'));
+    vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
     vi.spyOn(config, "getHomeBaseUrl").mockReturnValue(
       "https://home.example.com"
@@ -56,7 +56,7 @@ describe("getAmcJwe", () => {
     } as any);
 
     vi.mocked(fetch).mockResolvedValue({
-      json: vi.fn().mockResolvedValue([mockEncryptionJWK]),
+      json: vi.fn().mockResolvedValue({ keys: [mockEncryptionJWK] }),
     } as any);
   });
 
@@ -220,11 +220,13 @@ describe("getAmcJwe", () => {
   });
 
   it("should find encryption key with use=enc from JWKS", async () => {
-    const mockJwks = [
-      { kty: "RSA", use: "sig", alg: "RS256" },
-      mockEncryptionJWK,
-      { kty: "RSA", use: "sig", alg: "RS512" },
-    ];
+    const mockJwks = {
+      keys: [
+        { kty: "RSA", use: "sig", alg: "RS256" },
+        mockEncryptionJWK,
+        { kty: "RSA", use: "sig", alg: "RS512" },
+      ],
+    };
 
     vi.mocked(fetch).mockResolvedValue({
       json: vi.fn().mockResolvedValue(mockJwks),
