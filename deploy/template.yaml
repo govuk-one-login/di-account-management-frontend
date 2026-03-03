@@ -186,6 +186,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://amc-stub.home.dev.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.dev.account.gov.uk"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -216,6 +217,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://amc-stub.home.build.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.build.account.gov.uk"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -246,6 +248,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://api.manage.staging.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.staging.account.gov.uk"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -276,6 +279,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
       AMCJWKSURL: "https://api.manage.integration.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.integration.account.gov.uk"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -307,6 +311,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
       AMCJWKSURL: "https://api.manage.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.account.gov.uk"
 
 Resources:
   #
@@ -916,6 +921,9 @@ Resources:
             - Name: "AMC_JWKS_URL"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, AMCJWKSURL]
+            - Name: "HOME_BASE_URL"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, HOMEBASEURL]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn

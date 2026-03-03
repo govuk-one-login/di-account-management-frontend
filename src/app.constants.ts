@@ -5,6 +5,7 @@ export const PATH_DATA: Record<
   string,
   { url: string; event?: EventType; type?: UserJourney }
 > = {
+  AMC_CALLBACK: { url: "/amc/callback" },
   CONTACT: { url: "/contact-gov-uk-one-login" },
   SIGN_IN_HISTORY: { url: "/activity-history" },
   REPORT_SUSPICIOUS_ACTIVITY: { url: "/activity-history/report-activity" },

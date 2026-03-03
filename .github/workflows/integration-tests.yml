@@ -73,6 +73,8 @@ jobs:
           echo "MISSION_LAB_WEBSOCKET_ADDR=wss://s9hlnv7y91.execute-api.eu-west-2.amazonaws.com" >> .env
           echo "FINGERPRINT_COOKIE_DOMAIN=localhost" >> .env
           echo "SUPPORT_GLOBAL_LOGOUT=1" >> .env
+          echo "AMC_JWKS_URL=https://amc-stub.home.dev.account.gov.uk/.well-known/jwks.json" >> .env
+          echo "HOME_BASE_URL=https://home.dev.account.gov.uk" >> .env
           npm run build
 
       - name: Install integration-tests dependencies

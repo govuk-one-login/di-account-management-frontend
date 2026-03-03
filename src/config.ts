@@ -244,3 +244,7 @@ export function supportGlobalLogout(): boolean {
 export function getAmcJwksUrl(): string {
   return process.env.AMC_JWKS_URL;
 }
+
+export function getHomeBaseUrl(): string {
+  return process.env.HOME_BASE_URL;
+}
