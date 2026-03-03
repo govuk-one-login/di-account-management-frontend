@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { generators } from "openid-client";
-import { kmsService } from "../../../../src/utils/kms";
+import { kmsService } from "../../../../src/utils/kms.js";
 import { Request, Response } from "express";
 import { startGet } from "../start-controller.js";
 import type { SignCommandOutput } from "@aws-sdk/client-kms";

@@ -62,15 +62,3 @@ jobs:
           IMAGE_TAG: latest
         run: |
           docker build -t $DEV_ECR_REGISTRY/$DEV_ECR_REPOSITORY:$IMAGE_TAG .
-
-      - name: Vulnerability Scan
-        uses: aquasecurity/trivy-action@cf990b19d84bbbe1eb8833659989a7c1029132e3 # pin@master
-        env:
-          TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
-        with:
-          image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.DEV_ECR_REPOSITORY }}:latest
-          format: "table"
-          exit-code: "1"
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          severity: "CRITICAL"

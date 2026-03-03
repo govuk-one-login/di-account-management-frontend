@@ -84,14 +84,15 @@ describe("Activity history controller", () => {
       vi.spyOn(
         presentActivityHistoryModule,
         "presentActivityHistory"
-      ).mockReturnValue([
+      ).mockResolvedValue([
         {
           event_type: "AUTH_AUTH_CODE_ISSUED",
           session_id: "asdf",
           user_id: "string",
-          timestamp: "1689210000",
+          timestamp: 1689210000,
           truncated: false,
           client_id: "apprenticeshipsService",
+          event_id: "test-event-id",
         },
       ]);
 
@@ -134,12 +135,12 @@ describe("Activity history controller", () => {
           data: [
             {
               eventType: "signedIn",
-              eventId: undefined,
+              eventId: "test-event-id",
               sessionId: "asdf",
               clientId: "apprenticeshipsService",
               reportedSuspicious: undefined,
               reportSuspiciousActivityUrl:
-                "/activity-history/report-activity?event=undefined&page=1",
+                "/activity-history/report-activity?event=test-event-id&page=1",
               time: "13 July 2023 at 2:00 am",
               visitedService: "apprenticeshipsService",
               visitedServiceId: "apprenticeshipsService",
@@ -206,7 +207,7 @@ describe("Activity history controller", () => {
       vi.spyOn(
         presentActivityHistoryModule,
         "presentActivityHistory"
-      ).mockResolvedValue(new Error("An error occurred") as any);
+      ).mockRejectedValue(new Error("An error occurred"));
 
       const clientId = "clientId";
       vi.spyOn(
@@ -242,7 +243,7 @@ describe("Activity history controller", () => {
       };
       await activityHistoryGet(req as Request, res as Response).then(() => {
         expect(errorLoggerSpy).toHaveBeenCalledWith(
-          "Activity-history-controller: Error during activity history get TypeError: activityLogs is not iterable"
+          "Activity-history-controller: Error during activity history get Error: An error occurred"
         );
         expect(res.render).toHaveBeenCalled();
         expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");

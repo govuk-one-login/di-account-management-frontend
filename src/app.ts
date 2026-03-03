@@ -93,6 +93,7 @@ import {
 } from "@govuk-one-login/frontend-ui";
 import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware.js";
 import { noUkMobilePhoneRouter } from "./components/no-uk-mobile-phone/no-uk-mobile-phone-routes.js";
+import { jwksRouter } from "./components/jwks/jwks-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -125,6 +126,7 @@ async function createApp(): Promise<express.Application> {
   // Define the healthcheck and static routes first
   // Do not define a route or middleware before these unless there's a very good reason
   app.use(healthcheckRouter);
+  app.use(jwksRouter);
   app.use(
     "/assets",
     express.static(

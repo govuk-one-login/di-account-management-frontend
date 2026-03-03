@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 import { generators } from "openid-client";
 import { kmsService } from "../../../src/utils/kms.js";
 import type { SignCommandOutput } from "@aws-sdk/client-kms";
+import * as awsConfig from "../../../src/config/aws.js";
 
 describe("Requires auth middleware", () => {
   it("should redirect to signed out page if user logged out", async () => {
@@ -116,12 +117,16 @@ describe("Requires auth middleware", () => {
 
   it("should redirect to Log in page", async () => {
     vi.spyOn(generators, "nonce").mockReturnValue("generated");
+    vi.spyOn(awsConfig, "getKMSConfig").mockReturnValue({
+      awsConfig: { region: "eu-west-2" },
+      kmsKeyId: "arn:aws:kms:eu-west-2:123456789012:key/ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
+    });
     vi.spyOn(kmsService, "sign").mockResolvedValue({
       Signature: new Uint8Array([1, 2, 3]),
-      KeyId: "",
+      KeyId: "ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
       SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512",
       $metadata: {},
-    }) as unknown as SignCommandOutput;
+    } as unknown as SignCommandOutput);
     const req: Partial<Request> = {
       body: {},
       session: {
@@ -159,6 +164,17 @@ describe("Requires auth middleware", () => {
     });
     expect(callArgs.request).toBeDefined();
     expect(typeof callArgs.request).toBe("string");
+    
+    const [header] = callArgs.request.split(".");
+    const decodedHeader = JSON.parse(Buffer.from(header, "base64url").toString());
+    expect(decodedHeader).toMatchObject({
+      alg: "RS512",
+      typ: "JWT",
+      kid: expect.any(String),
+    });
+    expect(decodedHeader.kid).not.toContain("/");
+    expect(decodedHeader.kid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+    
     vi.restoreAllMocks();
   });
 });

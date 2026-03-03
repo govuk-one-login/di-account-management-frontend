@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { destroyUserSessions } from "./session-store.js";
-import { getBaseUrl } from "../config.js";
+import { getBaseUrl, getServiceDomain } from "../config.js";
 import { LogoutState, LogoutStateType, PATH_DATA } from "../app.constants.js";
 import { EndSessionParameters } from "openid-client";
 
@@ -16,6 +16,8 @@ export async function handleLogout(
   if (state !== LogoutState.AccountDeletion) {
     res.cookie("lo", "true");
   }
+
+  res.clearCookie("amc_sess", { domain: getServiceDomain() });
 
   const endSessionParams: EndSessionParameters = {
     id_token_hint: idToken,
