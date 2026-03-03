@@ -5,6 +5,7 @@ import { logger } from "../utils/logger.js";
 import { kmsService } from "../utils/kms.js";
 import base64url from "base64url";
 import { getOIDCApiDiscoveryUrl } from "../config.js";
+import { getKMSConfig } from "../config/aws.js";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -51,7 +52,9 @@ async function generateAuthUrl(req: Request): Promise<string> {
     scope: req.oidc.metadata.scopes as string,
   };
 
-  const headers = { alg: "RS512", typ: "JWT" };
+  const keyId = getKMSConfig().kmsKeyId;
+  const kid = keyId.includes("/") ? keyId.split("/").pop() : keyId;
+  const headers = { alg: "RS512", typ: "JWT", kid };
   const claims = {
     aud: `${getOIDCApiDiscoveryUrl()}/authorize`,
     iss: req.oidc.metadata.client_id,
