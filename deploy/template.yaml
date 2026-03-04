@@ -117,8 +117,6 @@ Conditions:
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
 
-  IsNotDevOrBuild: !Not [Condition: UseStubServices]
-
   ExportLogsToSplunk:
     Fn::Or:
       - !Equals [!Ref Environment, integration]
