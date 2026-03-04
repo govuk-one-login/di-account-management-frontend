@@ -1,6 +1,5 @@
 Feature: "Security" page
 
-  @failMobile
   Scenario: Visit the "Security" page
     Given I go to the "Root" page
     And I sign in as the "default" user
@@ -9,4 +8,4 @@ Feature: "Security" page
     And I accept cookies
     Then the page title is prefixed with "Security"
     And the page looks as expected
-    And the page meets our accessibility standards
+    And the accessibility scan passes
