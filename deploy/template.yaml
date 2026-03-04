@@ -227,7 +227,7 @@ Mappings:
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
-      AMAPIBASEURL: "https://a3bnrbtiga-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging"
+      AMAPIBASEURL: "https://9ntf0mlypd-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging"
       BASEURL: "home.staging.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.staging.publishing.service.gov.uk/account/home"
@@ -243,7 +243,7 @@ Mappings:
       SUPPORTSEARCHABLELIST: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
       CONTACTEMAILSERVICEURL: "https://signin.staging.account.gov.uk/contact-us-from-triage-page"
-      METHODMANAGEMENTBASEURL: "https://a3bnrbtiga-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging/v1"
+      METHODMANAGEMENTBASEURL: "https://9ntf0mlypd-vpce-0c9ce65be09f99db7.execute-api.eu-west-2.amazonaws.com/staging/v1"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables # pragma: allowlist secret
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-KD86CMZ"
       GA4ENABLED: "true"
@@ -261,7 +261,7 @@ Mappings:
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
-      AMAPIBASEURL: "https://z7lornzyy5-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration"
+      AMAPIBASEURL: "https://0boxndhikk-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration"
       BASEURL: "home.integration.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.integration.publishing.service.gov.uk/account/home"
@@ -276,7 +276,7 @@ Mappings:
       SUPPORTPHONECONTACT: "1"
       SUPPORTSEARCHABLELIST: "0"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
-      METHODMANAGEMENTBASEURL: "https://z7lornzyy5-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration/v1"
+      METHODMANAGEMENTBASEURL: "https://0boxndhikk-vpce-0e594accb3d775457.execute-api.eu-west-2.amazonaws.com/integration/v1"
       CONTACTEMAILSERVICEURL: "https://signin.integration.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceNonProductionVariables # pragma: allowlist secret
       GOOGLEANALYTICS4GTMCONTAINERID: "TBD"
