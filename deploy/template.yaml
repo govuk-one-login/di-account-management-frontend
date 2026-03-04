@@ -192,9 +192,6 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.dev.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://amc-stub.home.dev.account.gov.uk/token"
       AMCCLIENTID: "fake_dev_amc_client_id"
-      AMCAPIDOMAINARN: "test"
-      AMCAPIDOMAIN: api.manage.dev.account.gov.uk
-      VPCENDPOINTPRIMARYDNSENTRY: "test"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -229,9 +226,6 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.build.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://amc-stub.home.build.account.gov.uk/token"
       AMCCLIENTID: "fake_build_amc_client_id"
-      AMCAPIDOMAINARN: "test"
-      AMCAPIDOMAIN: api.manage.build.account.gov.uk
-      VPCENDPOINTPRIMARYDNSENTRY: "test"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -266,9 +260,6 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.staging.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.staging.account.gov.uk/token"
       AMCCLIENTID: "63385eefbc1649f9bc50eb9fd7c04de0" # pragma: allowlist secret
-      AMCAPIDOMAINARN: "arn:aws:apigateway:eu-west-2:837553126879:/domainnames/api.manage.staging.account.gov.uk+w5wonzhu0a"
-      AMCAPIDOMAIN: api.manage.staging.account.gov.uk
-      VPCENDPOINTPRIMARYDNSENTRY: "vpce-0c9ce65be09f99db7-9p6k5646.execute-api.eu-west-2.vpce.amazonaws.com"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -303,9 +294,6 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.integration.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.integration.account.gov.uk/token"
       AMCCLIENTID: "cdf0311ea91648d4a25214415e521ef5" # pragma: allowlist secret
-      AMCAPIDOMAINARN: "arn:aws:apigateway:eu-west-2:549834518434:/domainnames/api.manage.integration.account.gov.uk+zfryo0wgka"
-      AMCAPIDOMAIN: api.manage.integration.account.gov.uk
-      VPCENDPOINTPRIMARYDNSENTRY: "vpce-0e594accb3d775457-paires47.execute-api.eu-west-2.vpce.amazonaws.com"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -341,9 +329,6 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.account.gov.uk/token"
       AMCCLIENTID: "261b31a23ea2408094b7f8480d486fad" # pragma: allowlist secret
-      AMCAPIDOMAINARN: "arn:aws:apigateway:eu-west-2:494066295151:/domainnames/api.manage.account.gov.uk+m6buyb58yb"
-      AMCAPIDOMAIN: api.manage.account.gov.uk
-      VPCENDPOINTPRIMARYDNSENTRY: "vpce-0d7972874707185a0-6785s40h.execute-api.eu-west-2.vpce.amazonaws.com"
 
 Resources:
   #
@@ -2134,33 +2119,6 @@ Resources:
           Fn::ImportValue: "devplatform-cloudfront-DistributionDomain"
         HostedZoneId: "Z2FDTNDATAQYW2"
         EvaluateTargetHealth: false
-
-  AmcApiRecord:
-    Type: AWS::Route53::RecordSet
-    Condition: IsNotDevOrBuild
-    Properties:
-      HostedZoneId: !Sub "{{resolve:ssm:/${Environment}/Platform/Route53/HostedZone/Home}}"
-      Name: !FindInMap [EnvironmentVariables, !Ref Environment, AMCAPIDOMAIN]
-      Type: A
-      AliasTarget:
-        DNSName:
-          !FindInMap [
-            EnvironmentVariables,
-            !Ref Environment,
-            VPCENDPOINTPRIMARYDNSENTRY,
-          ]
-        HostedZoneId: "Z7K1066E3PUKB"
-        EvaluateTargetHealth: false
-
-  AmcApiDomainNameAccessAssociation:
-    Type: AWS::ApiGateway::DomainNameAccessAssociation
-    Condition: IsNotDevOrBuild
-    Properties:
-      DomainNameArn:
-        !FindInMap [EnvironmentVariables, !Ref Environment, AMCAPIDOMAINARN]
-      AccessAssociationSource:
-        Fn::ImportValue: !Sub "${VpcStackName}-ExecuteApiGatewayEndpointId"
-      AccessAssociationSourceType: VPCE
 
   AppFrontApiMapping:
     Type: AWS::ApiGatewayV2::ApiMapping
