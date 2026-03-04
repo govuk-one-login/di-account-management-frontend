@@ -5,25 +5,25 @@
 @import "overrides/index";
 
 // start Design System component imports
-@import "components/back-link/back-link";
-@import "components/button/button";
-@import "components/checkboxes/checkboxes";
-@import "components/cookie-banner/cookie-banner";
-@import "components/details/details";
-@import "components/error-summary/error-summary";
-@import "components/footer/footer";
-@import "components/header/header";
-@import "components/input/input";
-@import "components/inset-text/inset-text";
-@import "components/pagination/pagination";
-@import "components/panel/panel";
-@import "components/password-input/password-input";
-@import "components/phase-banner/phase-banner";
-@import "components/skip-link/skip-link";
-@import "components/summary-list/summary-list";
-@import "components/warning-text/warning-text";
-@import "components/radios/radios";
-@import "components/service-navigation/service-navigation";
+@import "components/back-link";
+@import "components/button";
+@import "components/checkboxes";
+@import "components/cookie-banner";
+@import "components/details";
+@import "components/error-summary";
+@import "components/footer";
+@import "components/header";
+@import "components/input";
+@import "components/inset-text";
+@import "components/pagination";
+@import "components/panel";
+@import "components/password-input";
+@import "components/phase-banner";
+@import "components/skip-link";
+@import "components/summary-list";
+@import "components/warning-text";
+@import "components/radios";
+@import "components/service-navigation";
 // end Design System component imports
 
 // language toggle component import
@@ -135,7 +135,7 @@
 
 .account-navigation__list {
   @include govuk-font($size: 19);
-  @include govuk-text-colour;
+  color: govuk-functional-colour(text);
   list-style-type: none;
   padding: 0;
   margin: 0;
