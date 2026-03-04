@@ -7,7 +7,7 @@ Feature: Global logout
     And I go to the "Security" page
     Then the page title is prefixed with "Security"
     Given I click the "Sign out of all devices" link
-    Then the page meets our accessibility standards
+    Then the accessibility scan passes
     And the page looks as expected
     And the page title is prefixed with "Sign out of all devices"
     Given I click the "Sign out of all devices" button
