@@ -199,6 +199,7 @@ export const PATH_DATA: Record<
   LOGOUT_REDIRECT: {
     url: "/logout-redirect",
   },
+  AMC_CALLBACK: { url: "/amc/callback" },
 };
 
 export const EXTERNAL_URLS = {

@@ -186,6 +186,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://amc-stub.home.dev.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.dev.account.gov.uk"
       AMCAUTHORIZEURL: "https://amc-stub.home.dev.account.gov.uk/authorize"
       AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.dev.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://amc-stub.home.dev.account.gov.uk/token"
@@ -220,6 +221,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://amc-stub.home.build.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.build.account.gov.uk"
       AMCAUTHORIZEURL: "https://amc-stub.home.build.account.gov.uk/authorize"
       AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.build.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://amc-stub.home.build.account.gov.uk/token"
@@ -254,6 +256,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
       AMCJWKSURL: "https://api.manage.staging.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.staging.account.gov.uk"
       AMCAUTHORIZEURL: "https://api.manage.staging.account.gov.uk/authorize"
       AMCJOURNEYOUTCOMEURL: "https://api.manage.staging.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.staging.account.gov.uk/token"
@@ -288,6 +291,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
       AMCJWKSURL: "https://api.manage.integration.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.integration.account.gov.uk"
       AMCAUTHORIZEURL: "https://api.manage.integration.account.gov.uk/authorize"
       AMCJOURNEYOUTCOMEURL: "https://api.manage.integration.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.integration.account.gov.uk/token"
@@ -323,6 +327,7 @@ Mappings:
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
       AMCJWKSURL: "https://api.manage.account.gov.uk/.well-known/jwks.json"
+      HOMEBASEURL: "https://home.account.gov.uk"
       AMCAUTHORIZEURL: "https://api.manage.account.gov.uk/authorize"
       AMCJOURNEYOUTCOMEURL: "https://api.manage.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.account.gov.uk/token"
@@ -936,6 +941,9 @@ Resources:
             - Name: "AMC_JWKS_URL"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, AMCJWKSURL]
+            - Name: "HOME_BASE_URL"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, HOMEBASEURL]
             - Name: "AMC_AUTHORIZE_URL"
               Value:
                 !FindInMap [
