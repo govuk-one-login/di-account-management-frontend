@@ -6,7 +6,7 @@ import axios, {
   RawAxiosRequestHeaders,
 } from "axios";
 import { ApiResponseResult } from "./types.js";
-import { getApiBaseUrl } from "../config.js";
+import { getApiBaseUrl, getPkceEnabled } from "../config.js";
 import { HTTP_STATUS_CODES } from "../app.constants.js";
 import { ApiError } from "./errors.js";
 import { Request, Response } from "express";
@@ -41,6 +41,7 @@ export interface RequestConfig {
   userLanguage?: string;
   clientSessionId?: string;
   txmaAuditEncoded?: string;
+  pkceEnabled: boolean;
 }
 
 export async function getRequestConfigFromExpress(
@@ -57,6 +58,7 @@ export async function getRequestConfigFromExpress(
     userLanguage: xss(req.cookies.lng as string),
     clientSessionId: res.locals.clientSessionId,
     txmaAuditEncoded: getTxmaHeader(req, res.locals.trace),
+    pkceEnabled: getPkceEnabled(),
   };
 }
 

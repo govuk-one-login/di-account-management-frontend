@@ -84,6 +84,7 @@ describe("change phone number controller", () => {
         userLanguage: ENGLISH,
         clientSessionId: CLIENT_SESSION_ID,
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+        pkceEnabled: false,
       });
       expect(res.redirect).toHaveBeenCalledWith(
         `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`
@@ -116,6 +117,7 @@ describe("change phone number controller", () => {
         userLanguage: ENGLISH,
         clientSessionId: CLIENT_SESSION_ID,
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+        pkceEnabled: false,
       });
       expect(res.render).toHaveBeenCalledWith("change-phone-number/index.njk", {
         errorList: [
@@ -161,6 +163,7 @@ describe("change phone number controller", () => {
         userLanguage: ENGLISH,
         clientSessionId: CLIENT_SESSION_ID,
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+        pkceEnabled: false,
       });
       expect(res.render).toHaveBeenCalledWith("change-phone-number/index.njk", {
         errorList: [
@@ -207,6 +210,7 @@ describe("change phone number controller", () => {
         userLanguage: ENGLISH,
         clientSessionId: CLIENT_SESSION_ID,
         txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+        pkceEnabled: false,
       });
       expect(res.redirect).toHaveBeenCalledWith(
         `${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=changePhoneNumber`

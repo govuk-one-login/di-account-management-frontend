@@ -17,6 +17,7 @@ import {
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 import * as oidcModule from "../../../utils/oidc.js";
+import { getPkceEnabled } from "../../../config.js";
 
 describe("change email controller", () => {
   let req: Partial<Request>;
@@ -100,6 +101,7 @@ describe("change email controller", () => {
           userLanguage: ENGLISH,
           clientSessionId: CLIENT_SESSION_ID,
           txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+          pkceEnabled: false,
         }
       );
       expect(res.redirect).toHaveBeenCalledWith("/check-your-email");
