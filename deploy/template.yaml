@@ -295,7 +295,7 @@ Mappings:
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
-      AMAPIBASEURL: "https://63qq2dsjo5-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production"
+      AMAPIBASEURL: "https://p303w5w1m0-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production"
       BASEURL: "home.account.gov.uk"
       SESSIONEXPIRY: "7200000"
       AMYOURACCOUNTURL: "https://www.gov.uk/account/home"
@@ -311,7 +311,7 @@ Mappings:
       SUPPORTSEARCHABLELIST: "1"
       SUPPORTCLIENTREGISTRYLIBRARY: "1"
       SHOWCONTACTEMERGENCYMESSAGE: "0"
-      METHODMANAGEMENTBASEURL: "https://63qq2dsjo5-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production/v1"
+      METHODMANAGEMENTBASEURL: "https://p303w5w1m0-vpce-0d7972874707185a0.execute-api.eu-west-2.amazonaws.com/production/v1"
       CONTACTEMAILSERVICEURL: "https://signin.account.gov.uk/contact-us-from-triage-page"
       dynatraceSecretArn: arn:aws:secretsmanager:eu-west-2:216552277552:secret:DynatraceProductionVariables # pragma: allowlist secret
       GOOGLEANALYTICS4GTMCONTAINERID: "GTM-K4PBJH3"
