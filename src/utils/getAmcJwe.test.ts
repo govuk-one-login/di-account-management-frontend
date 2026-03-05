@@ -12,6 +12,9 @@ vi.mock("../config/aws.js", () => ({
 }));
 vi.mock("../config.js", () => ({
   getHomeBaseUrl: vi.fn(),
+  getAmcAuthorizeUrl: vi.fn(),
+  getAmcClientId: vi.fn(),
+  getAmcJwksUrl: vi.fn(),
   getLogLevel: vi.fn(() => "info"),
 }));
 vi.mock("./kms.js");
@@ -49,6 +52,13 @@ describe("getAmcJwe", () => {
 
     vi.spyOn(config, "getHomeBaseUrl").mockReturnValue(
       "https://home.example.com"
+    );
+    vi.spyOn(config, "getAmcAuthorizeUrl").mockReturnValue(
+      "https://amc.example.com/authorize"
+    );
+    vi.spyOn(config, "getAmcClientId").mockReturnValue("test-client-id");
+    vi.spyOn(config, "getAmcJwksUrl").mockReturnValue(
+      "https://amc.example.com/.well-known/jwks.json"
     );
 
     vi.mocked(kmsModule.kmsService.sign).mockResolvedValue({
@@ -127,6 +137,9 @@ describe("getAmcJwe", () => {
       Buffer.from(payloadPart, "base64url").toString()
     );
 
+    expect(decodedPayload.client_id).toBe("test-client-id");
+    expect(decodedPayload.iss).toBe("test-client-id");
+    expect(decodedPayload.aud).toBe("https://amc.example.com/authorize");
     expect(decodedPayload.scope).toBe(scope);
     expect(decodedPayload.state).toBe(state);
     expect(decodedPayload.email).toBe(mockUser.email);
@@ -216,7 +229,9 @@ describe("getAmcJwe", () => {
     await getAmcJwe("openid", "state-123", mockUser);
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith(expect.any(URL));
+    expect(fetch).toHaveBeenCalledWith(
+      new URL("https://amc.example.com/.well-known/jwks.json")
+    );
   });
 
   it("should find encryption key with use=enc from JWKS", async () => {
