@@ -92,7 +92,7 @@
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.18.2",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.19.11",
+    "@types/node": "^22.19.13",
     "@types/nunjucks": "^3.2.6",
     "@types/overload-protection": "^1.2.4",
     "@types/qrcode": "^1.5.6",
