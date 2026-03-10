@@ -122,5 +122,8 @@
   "resolutions": {
     "minimist": "1.2.6",
     "json5": "2.2.3"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.59.0"
   }
 }
