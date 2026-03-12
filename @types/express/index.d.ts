@@ -25,6 +25,7 @@ declare module "express-session" {
       clientSessionId: string;
     };
     trace?: string;
+    amcStates?: string[];
   }
 }
 declare module "express-serve-static-core" {
