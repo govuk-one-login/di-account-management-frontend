@@ -94,6 +94,7 @@ import {
 import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-patch-redirect-to-save-session-middleware.js";
 import { noUkMobilePhoneRouter } from "./components/no-uk-mobile-phone/no-uk-mobile-phone-routes.js";
 import { jwksRouter } from "./components/jwks/jwks-routes.js";
+import { amcCallbackRouter } from "./components/amc-callback/amc-callback-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -306,6 +307,7 @@ async function createApp(): Promise<express.Application> {
     app.use(searchServicesRouter);
   }
   app.use(trackAndRedirectRouter);
+  app.use(amcCallbackRouter);
 
   // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy
