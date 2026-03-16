@@ -248,3 +248,23 @@ export function getAmcJwksUrl(): string {
 export function getPkceEnabled(): boolean {
   return process.env.ENABLE_PKCE === "1";
 }
+
+export function getHomeBaseUrl(): string {
+  return process.env.HOME_BASE_URL;
+}
+
+export function getAmcTokenUrl(): string {
+  return process.env.AMC_TOKEN_URL;
+}
+
+export function getAmcAuthorizeUrl(): string {
+  return process.env.AMC_AUTHORIZE_URL;
+}
+
+export function getAmcJourneyOutcomeUrl(): string {
+  return process.env.AMC_JOURNEY_OUTCOME_URL;
+}
+
+export function getAmcClientId(): string {
+  return process.env.AMC_CLIENT_ID;
+}

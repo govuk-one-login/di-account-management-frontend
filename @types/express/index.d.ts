@@ -25,6 +25,7 @@ declare module "express-session" {
       clientSessionId: string;
     };
     trace?: string;
+    amcStates?: string[];
   }
 }
 declare module "express-serve-static-core" {
@@ -33,7 +34,7 @@ declare module "express-serve-static-core" {
       language?: string;
     };
     language?: LOCALE;
-    t?: (string) => string;
+    t?: (key: string) => string;
     csrfToken?: () => string;
     oidc?: Client;
     issuerJWKS?: any;
