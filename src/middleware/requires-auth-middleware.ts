@@ -1,11 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { generators } from "openid-client";
-import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants.js";
+import {
+  PATH_DATA,
+  VECTORS_OF_TRUST,
+  CODE_CHALLENGE_VALUES,
+} from "../app.constants.js";
 import { logger } from "../utils/logger.js";
 import { kmsService } from "../utils/kms.js";
 import base64url from "base64url";
-import { getOIDCApiDiscoveryUrl } from "../config.js";
+import { getOIDCApiDiscoveryUrl, getPkceEnabled } from "../config.js";
 import { getKMSConfig } from "../config/aws.js";
+import { getRandomValues, subtle } from "crypto";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -51,6 +56,12 @@ async function generateAuthUrl(req: Request): Promise<string> {
     response_type: "code",
     scope: req.oidc.metadata.scopes as string,
   };
+  let codeVerifier, codeChallenge;
+  if (getPkceEnabled()) {
+    codeVerifier = generateCodeVerifier();
+    codeChallenge = await generateCodeChallenge(codeVerifier);
+    req.session.user.code_verifier = codeVerifier;
+  }
 
   const keyId = getKMSConfig().kmsKeyId;
   const kid = keyId.includes("/") ? keyId.split("/").pop() : keyId;
@@ -65,6 +76,10 @@ async function generateAuthUrl(req: Request): Promise<string> {
     vtr: JSON.stringify([VECTORS_OF_TRUST.MEDIUM]),
     cookie_consent: req.query.cookie_consent,
     _ga: req.query._ga,
+    code_challenge_method: codeChallenge
+      ? CODE_CHALLENGE_VALUES.CODE_CHALLENGE_METHOD
+      : undefined,
+    code_challenge: codeChallenge,
   };
   const encodedHeader = base64url.default.encode(JSON.stringify(headers));
   const encodedPayload = base64url.default.encode(JSON.stringify(claims));
@@ -76,8 +91,39 @@ async function generateAuthUrl(req: Request): Promise<string> {
     .replace(/\//g, "_")
     .replace(/=/g, "");
 
-  return req.oidc.authorizationUrl({
+  return req.oidc?.authorizationUrl({
     ...baseParams,
     request: `${unsignedToken}.${base64Signature}`,
   });
+}
+
+function generateCodeVerifier(): string {
+  const cryptoArray = new Uint8Array(
+    CODE_CHALLENGE_VALUES.CODE_VERIFIER_LENGTH
+  );
+  getRandomValues(cryptoArray);
+
+  let codeVerifier = "";
+  for (let x = 0; x < CODE_CHALLENGE_VALUES.CODE_VERIFIER_LENGTH; x++) {
+    codeVerifier += CODE_CHALLENGE_VALUES.CODE_VERIFIER_CHAR_SET.charAt(
+      cryptoArray[x] % CODE_CHALLENGE_VALUES.CODE_VERIFIER_CHAR_SET.length
+    );
+  }
+
+  return codeVerifier;
+}
+async function generateCodeChallenge(verifier: string): Promise<string> {
+  const verifierBuffer = new TextEncoder().encode(verifier);
+
+  const hashBuffer = await subtle.digest("SHA256", verifierBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashString = String.fromCharCode(...hashArray);
+
+  const base64binary = Buffer.from(hashString, "base64");
+  const codeChallengeString = base64binary.toString();
+
+  return codeChallengeString
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
 }
