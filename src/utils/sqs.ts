@@ -57,7 +57,7 @@ async function sendToQueue(
 ): Promise<boolean> {
   const request: SendMessageRequest = buildMessage(queue, messageBody, trace);
 
-  if (request === null || request === undefined) {
+  if (request === undefined) {
     return false;
   }
 
