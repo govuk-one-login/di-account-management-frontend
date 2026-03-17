@@ -123,7 +123,7 @@ async function generateCodeChallenge(verifier: string): Promise<string> {
   const codeChallengeString = base64binary.toString();
 
   return codeChallengeString
-    .replaceAll(/\+/g, "-")
-    .replaceAll(/\//g, "_")
+    .replaceAll("+", "-")
+    .replaceAll("/", "_")
     .replaceAll(/=+$/g, "");
 }
