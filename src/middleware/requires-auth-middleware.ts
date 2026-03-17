@@ -10,7 +10,7 @@ import { kmsService } from "../utils/kms.js";
 import base64url from "base64url";
 import { getOIDCApiDiscoveryUrl, getPkceEnabled } from "../config.js";
 import { getKMSConfig } from "../config/aws.js";
-import { getRandomValues, subtle } from "crypto";
+import { getRandomValues, subtle } from "node:crypto";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -117,7 +117,7 @@ async function generateCodeChallenge(verifier: string): Promise<string> {
 
   const hashBuffer = await subtle.digest("SHA-256", verifierBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashString = String.fromCharCode(...hashArray);
+  const hashString = String.fromCodePoint(...hashArray);
 
   const base64binary = Buffer.from(hashString, "base64");
   const codeChallengeString = base64binary.toString();
