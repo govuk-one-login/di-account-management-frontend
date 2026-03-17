@@ -125,5 +125,5 @@ async function generateCodeChallenge(verifier: string): Promise<string> {
   return codeChallengeString
     .replaceAll("+", "-")
     .replaceAll("/", "_")
-    .replaceAll(/=+$/g, "");
+    .replaceAll(/((?=(=+))\2)+$/g, "");
 }
