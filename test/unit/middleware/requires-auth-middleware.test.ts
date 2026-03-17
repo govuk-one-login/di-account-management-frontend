@@ -183,7 +183,7 @@ describe("Requires auth middleware", () => {
     vi.restoreAllMocks();
   });
 
-  it("should include the Code Challenge if PKCE is enabled", () => {
+  it("should include the Code Challenge if PKCE is enabled", async () => {
     process.env.ENABLE_PKCE = "1";
 
     vi.spyOn(generators, "nonce").mockReturnValue("generated");
