@@ -115,7 +115,7 @@ function generateCodeVerifier(): string {
 async function generateCodeChallenge(verifier: string): Promise<string> {
   const verifierBuffer = new TextEncoder().encode(verifier);
 
-  const hashBuffer = await subtle.digest("SHA256", verifierBuffer);
+  const hashBuffer = await subtle.digest("SHA-256", verifierBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashString = String.fromCharCode(...hashArray);
 
