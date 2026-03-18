@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-
+import { HTTP_STATUS_CODES } from "../../app.constants.js";
 import {
   getRequestConfig,
   getRequestConfigFromExpress,
@@ -19,23 +19,25 @@ export async function amcCallbackGet(
 ): Promise<void> {
   const { code, error, error_description } =
     req.query as ValidQueryStringParams;
-  const userState = req.session.user.state.journey;
+  const { amcStates } = req.session;
   const expressConfig = await getRequestConfigFromExpress(req, res);
   const requestConfig = getRequestConfig({ ...expressConfig });
 
   try {
-    validateQueryParams(req.query, userState);
+    validateQueryParams(req.query, amcStates);
   } catch (error) {
     req.log.error(error.message);
-    res.redirect("/handle-invalid-query-params");
+    res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+    res.render("common/errors/500.njk");
     return;
   }
 
-  delete req.session.user.state.journey;
+  req.session.amcStates = amcStates.filter((item) => item !== req.query.state);
 
   if (error || error_description) {
     req.log.error(`amcCallbackGet: ${error} - ${error_description}`);
-    res.redirect("/todo-redirect-on-err");
+    res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+    res.render("common/errors/500.njk");
     return;
   }
 

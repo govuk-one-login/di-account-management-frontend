@@ -9,7 +9,11 @@ import {
 } from "../../config.js";
 import { Request, Response } from "express";
 import { handleLogout } from "../../utils/logout.js";
-import { LogoutState } from "../../app.constants.js";
+import {
+  LogoutState,
+  PATH_DATA,
+  HTTP_STATUS_CODES,
+} from "../../app.constants.js";
 import { http } from "../../utils/http.js";
 import { randomUUID } from "node:crypto";
 import * as jose from "jose";
@@ -33,6 +37,7 @@ interface JourneyOutcome {
     success: boolean;
     details: {
       error?: {
+        code: number;
         description: string;
       };
     };
@@ -59,8 +64,10 @@ export function isValidTokenResponse(data: TokenResponse): boolean {
 
 export function validateQueryParams(
   query: ParsedQs,
-  userState: string
+  userStates: string[]
 ): asserts query is ValidQueryStringParams {
+  const queryStateIsValid =
+    typeof query.state === "string" && userStates.includes(query.state);
   const hasCode = typeof query.code === "string";
   const hasError =
     typeof query.error === "string" &&
@@ -70,7 +77,7 @@ export function validateQueryParams(
     throw new Error("Invalid request: Must provide 'state'");
   }
 
-  if (query.state !== userState) {
+  if (!queryStateIsValid) {
     throw new Error(
       "Invalid request: 'state' parameter and user session state are different"
     );
@@ -116,7 +123,7 @@ export async function exchangeCodeForToken(
   const clientAssertion = `${tokenParts}.${base64Signature}`;
   const body = new URLSearchParams({
     grant_type: "authorization_code",
-    redirect_uri: `${getHomeBaseUrl()}/amc/callback`,
+    redirect_uri: `${getHomeBaseUrl()}${PATH_DATA.AMC_CALLBACK.url}`,
     code: code,
     client_assertion_type:
       "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
@@ -161,17 +168,14 @@ export async function handleJourneyOutcomeResponse(
 
   if (success && isPasskeyJourney) {
     return res.redirect("/todo-passkey-confirmation");
-  } else if (!success && error?.description?.includes("UserSignedOut")) {
+  } else if (!success && error?.code === 1001) {
     await handleLogout(req, res, LogoutState.AmcSignedOut);
-  } else if (
-    !success &&
-    isPasskeyJourney &&
-    error?.description?.includes("UserAbortedJourney")
-  ) {
+  } else if (!success && isPasskeyJourney && error?.code === 1002) {
     return res.redirect("/todo-user-aborted");
   } else {
     req.metrics?.addMetric("UnrecognisedJourneyOutcome", MetricUnit.Count, 1);
     req.log.error(`UnrecognisedJourneyOutcome with outcome_id ${outcome_id}`);
-    return res.redirect("/todo-handle-unrecognized-journey");
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+    res.render("common/errors/500.njk");
   }
 }

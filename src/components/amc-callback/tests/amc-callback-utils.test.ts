@@ -67,15 +67,15 @@ describe("AMC call back util tests", () => {
   });
 
   describe("validateQueryParams", () => {
-    it("should throw if 'state' not provided", () => {
-      expect(() => validateQueryParams({ code: "123" }, "test")).toThrow(
+    it("should throw if 'state' query param not provided", () => {
+      expect(() => validateQueryParams({ code: "123" }, ["test"])).toThrow(
         "Invalid request: Must provide 'state'"
       );
     });
 
     it("should throw if 'state' not equal to user state", () => {
       expect(() =>
-        validateQueryParams({ state: "foo", code: "123" }, "test")
+        validateQueryParams({ state: "foo", code: "123" }, ["test"])
       ).toThrow(
         "Invalid request: 'state' parameter and user session state are different"
       );
@@ -83,7 +83,7 @@ describe("AMC call back util tests", () => {
 
     it("should allow 'code' only", () => {
       expect(() =>
-        validateQueryParams({ state: "foo", code: "123" }, "foo")
+        validateQueryParams({ state: "foo", code: "123" }, ["foo"])
       ).not.toThrow();
     });
 
@@ -95,16 +95,16 @@ describe("AMC call back util tests", () => {
             error: "denied",
             error_description: "user cancelled",
           },
-          "foo"
+          ["foo"]
         )
       ).not.toThrow();
     });
 
     it("should throw if neither code nor error pair is present", () => {
       expect(() =>
-        validateQueryParams({ state: "foo", error: "missing-desc" }, "foo")
+        validateQueryParams({ state: "foo", error: "missing-desc" }, ["foo"])
       ).toThrow("Invalid request");
-      expect(() => validateQueryParams({ state: "foo" }, "foo")).toThrow(
+      expect(() => validateQueryParams({ state: "foo" }, ["foo"])).toThrow(
         "Invalid request"
       );
     });
@@ -235,7 +235,11 @@ describe("AMC call back util tests", () => {
         metrics: { addMetric: vi.fn() },
         log: { error: vi.fn() },
       };
-      res = { redirect: vi.fn() };
+      res = {
+        redirect: vi.fn(),
+        render: vi.fn(),
+        status: vi.fn(),
+      };
     });
 
     it("should redirect to confirmation on successful creation", async () => {
@@ -262,7 +266,7 @@ describe("AMC call back util tests", () => {
         journeys: [
           {
             journey: "passkey-create",
-            details: { error: { description: "UserSignedOut" } },
+            details: { error: { description: "UserSignedOut", code: 1001 } },
           },
         ],
       };
@@ -282,7 +286,9 @@ describe("AMC call back util tests", () => {
         journeys: [
           {
             journey: "passkey-create",
-            details: { error: { description: "UserAbortedJourney" } },
+            details: {
+              error: { description: "UserAbortedJourney", code: 1002 },
+            },
           },
         ],
       };
@@ -309,9 +315,8 @@ describe("AMC call back util tests", () => {
       expect(req.log.error).toHaveBeenCalledWith(
         "UnrecognisedJourneyOutcome with outcome_id foo"
       );
-      expect(res.redirect).toHaveBeenCalledWith(
-        "/todo-handle-unrecognized-journey"
-      );
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");
     });
 
     it("should log error for unrecognised outcome", async () => {
@@ -332,9 +337,7 @@ describe("AMC call back util tests", () => {
       expect(req.log.error).toHaveBeenCalledWith(
         "UnrecognisedJourneyOutcome with outcome_id bar"
       );
-      expect(res.redirect).toHaveBeenCalledWith(
-        "/todo-handle-unrecognized-journey"
-      );
+      expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");
     });
   });
 });

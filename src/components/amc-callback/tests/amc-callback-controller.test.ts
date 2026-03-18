@@ -18,13 +18,14 @@ describe("amcCallbackGet", () => {
     req = {
       query: {},
       session: {
-        user: { state: { journey: "state-test" } },
+        amcStates: ["state-test"],
       },
       log: { error: vi.fn() },
       metrics: { addMetric: vi.fn() },
     };
     res = {
-      redirect: vi.fn(),
+      render: vi.fn(),
+      status: vi.fn(),
     };
 
     vi.mocked(requestConfigUtils.getRequestConfigFromExpress).mockResolvedValue(
@@ -44,14 +45,11 @@ describe("amcCallbackGet", () => {
 
     await amcCallbackGet(req, res);
 
-    expect(res.redirect).not.toHaveBeenCalledWith(
-      "/handle-invalid-query-params"
-    );
     expect(req.log.error).not.toHaveBeenCalledWith(
       "Invalid request: Must provide 'state'"
     );
 
-    expect(req.session.user.state.journey).toBeUndefined();
+    expect(req.session.amcStates).toEqual([]);
   });
 
   it("should log error and redirect if query parameter validation fails", async () => {
@@ -62,9 +60,9 @@ describe("amcCallbackGet", () => {
     await amcCallbackGet(req, res);
 
     expect(req.log.error).toHaveBeenCalledWith("Mock error thrown");
-    expect(res.redirect).toHaveBeenCalledWith("/handle-invalid-query-params");
+    expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");
 
-    expect(req.session.user.state.journey).toEqual("state-test");
+    expect(req.session.amcStates).toEqual(["state-test"]);
   });
 
   it("should redirect if an error or error_description is present in query", async () => {
@@ -75,7 +73,8 @@ describe("amcCallbackGet", () => {
     expect(req.log.error).toHaveBeenCalledWith(
       expect.stringContaining("access_denied")
     );
-    expect(res.redirect).toHaveBeenCalledWith("/todo-redirect-on-err");
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");
   });
 
   it("should exchange code for token and handle journey outcome on success", async () => {
