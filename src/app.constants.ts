@@ -372,6 +372,7 @@ export const LogoutState = {
   AccountDeletion: "accountDeletion",
   Default: "default",
   Start: "start",
+  AmcSignedOut: "amcSignedOut",
 } as const;
 
 export type LogoutStateType = (typeof LogoutState)[keyof typeof LogoutState];
@@ -391,5 +392,8 @@ export const LogoutRedirect = {
   },
   [LogoutState.Start]: {
     url: getBaseUrl() + PATH_DATA.START.url,
+  },
+  [LogoutState.AmcSignedOut]: {
+    url: getBaseUrl() + PATH_DATA.USER_SIGNED_OUT.url,
   },
 };
