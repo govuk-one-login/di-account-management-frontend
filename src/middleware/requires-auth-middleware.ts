@@ -91,7 +91,7 @@ async function generateAuthUrl(req: Request): Promise<string> {
     .replace(/\//g, "_")
     .replace(/=/g, "");
 
-  return req.oidc?.authorizationUrl({
+  return req.oidc.authorizationUrl({
     ...baseParams,
     request: `${unsignedToken}.${base64Signature}`,
   });
@@ -112,15 +112,13 @@ function generateCodeVerifier(): string {
 
   return codeVerifier;
 }
+
 async function generateCodeChallenge(verifier: string): Promise<string> {
   const verifierBuffer = new TextEncoder().encode(verifier);
 
   const hashBuffer = await subtle.digest("SHA-256", verifierBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashString = String.fromCodePoint(...hashArray);
 
-  const base64binary = Buffer.from(hashString, "base64");
-  const codeChallengeString = base64binary.toString();
+  const codeChallengeString = base64url.default.encode(Buffer.from(hashBuffer));
 
   return codeChallengeString
     .replaceAll("+", "-")

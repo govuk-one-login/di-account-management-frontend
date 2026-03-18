@@ -252,8 +252,13 @@ describe("Requires auth middleware", () => {
 
     const claims = callArgs.request.split(".")[1];
     const decodedClaims = JSON.parse(Buffer.from(claims, "base64").toString());
+
     expect(decodedClaims.code_challenge).toBeDefined();
+    expect(decodedClaims.code_challenge).toBeTypeOf("string");
+    expect(decodedClaims.code_challenge.length).toEqual(43);
+
     expect(decodedClaims.code_challenge_method).toBeDefined();
+    expect(decodedClaims.code_challenge_method).toEqual("S256");
 
     delete process.env.ENABLE_PKCE;
     vi.restoreAllMocks();
