@@ -10,7 +10,8 @@ import { kmsService } from "../utils/kms.js";
 import base64url from "base64url";
 import { getOIDCApiDiscoveryUrl, getPkceEnabled } from "../config.js";
 import { getKMSConfig } from "../config/aws.js";
-import { getRandomValues, subtle } from "node:crypto";
+import generateCodeVerifier from "../utils/code-challenge/generate-code-verifier.js";
+import generateCodeChallenge from "../utils/code-challenge/generate-code-challenge.js";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -95,33 +96,4 @@ async function generateAuthUrl(req: Request): Promise<string> {
     ...baseParams,
     request: `${unsignedToken}.${base64Signature}`,
   });
-}
-
-function generateCodeVerifier(): string {
-  const cryptoArray = new Uint8Array(
-    CODE_CHALLENGE_VALUES.CODE_VERIFIER_LENGTH
-  );
-  getRandomValues(cryptoArray);
-
-  let codeVerifier = "";
-  for (let x = 0; x < CODE_CHALLENGE_VALUES.CODE_VERIFIER_LENGTH; x++) {
-    codeVerifier += CODE_CHALLENGE_VALUES.CODE_VERIFIER_CHAR_SET.charAt(
-      cryptoArray[x] % CODE_CHALLENGE_VALUES.CODE_VERIFIER_CHAR_SET.length
-    );
-  }
-
-  return codeVerifier;
-}
-
-async function generateCodeChallenge(verifier: string): Promise<string> {
-  const verifierBuffer = new TextEncoder().encode(verifier);
-
-  const hashBuffer = await subtle.digest("SHA-256", verifierBuffer);
-
-  const codeChallengeString = base64url.default.encode(Buffer.from(hashBuffer));
-
-  return codeChallengeString
-    .replaceAll("+", "-")
-    .replaceAll("/", "_")
-    .replaceAll("=", "");
 }
