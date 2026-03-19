@@ -26,7 +26,6 @@ export function govUkPublishingService(
       },
       getRequestConfig({
         token: getGovPublishingBaseAPIToken(),
-        pkceEnabled: getPkceEnabled(),
       })
     );
   };
@@ -44,7 +43,6 @@ export function govUkPublishingService(
       deleteUrl,
       getRequestConfig({
         token: getGovPublishingBaseAPIToken(),
-        pkceEnabled: getPkceEnabled(),
       })
     );
   };
