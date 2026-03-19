@@ -439,7 +439,7 @@
     "updateAuthenticatorAppConfirmation": {
       "title": "You’ve changed your authenticator app",
       "panelText": "You’ve changed your authenticator app",
-      "summaryText": "We’ll send security codes to your new authenticator app."
+      "summaryText": "You’ll get security codes using your new authenticator app."
     },
     "deleteAccountConfirmation": {
       "title": "You’ve deleted your GOV.UK One Login",
