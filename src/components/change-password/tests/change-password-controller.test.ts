@@ -95,7 +95,6 @@ describe("change password controller", () => {
           userLanguage: ENGLISH,
           clientSessionId: CLIENT_SESSION_ID,
           txmaAuditEncoded: TXMA_AUDIT_ENCODED,
-          pkceEnabled: false,
         }
       );
       expect(res.redirect).toHaveBeenCalledWith(

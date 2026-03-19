@@ -34,7 +34,6 @@ describe("getRequestConfigFromExpress", () => {
       sourceIp: "sourceip",
       txmaAuditEncoded: "txma-audit-encoded",
       userLanguage: "en",
-      pkceEnabled: false,
     });
   });
 });
