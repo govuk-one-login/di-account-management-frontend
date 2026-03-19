@@ -6,7 +6,7 @@ describe("Integration:: JWKS endpoint", () => {
 
   beforeAll(async () => {
     vi.resetModules();
-    
+
     const oidc = await import("../../../utils/oidc.js");
     vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
       return Promise.resolve({} as any);
@@ -37,22 +37,20 @@ describe("Integration:: JWKS endpoint", () => {
   });
 
   it("should have valid JWK structure per RFC 7517", async () => {
-    const res = await request(app)
-      .get("/.well-known/jwks.json")
-      .expect(200);
+    const res = await request(app).get("/.well-known/jwks.json").expect(200);
 
     const jwk = res.body.keys[0];
-    
+
     // Required fields per RFC 7517
     expect(jwk).toHaveProperty("kty");
     expect(jwk.kty).toBe("RSA");
-    
+
     // RSA-specific fields per RFC 7518
     expect(jwk).toHaveProperty("n");
     expect(jwk).toHaveProperty("e");
     expect(typeof jwk.n).toBe("string");
     expect(typeof jwk.e).toBe("string");
-    
+
     // Optional but recommended fields
     expect(jwk).toHaveProperty("use");
     expect(jwk.use).toBe("sig");
@@ -61,18 +59,14 @@ describe("Integration:: JWKS endpoint", () => {
   });
 
   it("should set cache control headers", async () => {
-    const res = await request(app)
-      .get("/.well-known/jwks.json")
-      .expect(200);
+    const res = await request(app).get("/.well-known/jwks.json").expect(200);
 
     expect(res.headers["cache-control"]).toContain("public");
     expect(res.headers["cache-control"]).toContain("max-age=3600");
   });
 
   it("should not require authentication", async () => {
-    const res = await request(app)
-      .get("/.well-known/jwks.json")
-      .expect(200);
+    const res = await request(app).get("/.well-known/jwks.json").expect(200);
 
     expect(res.statusCode).toBe(200);
   });
