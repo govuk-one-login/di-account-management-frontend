@@ -39,7 +39,10 @@ describe("jwks-controller", () => {
 
       await jwksGet(req as Request, res as Response, next);
 
-      expect(res.setHeader).toHaveBeenCalledWith("Cache-Control", "public, max-age=3600");
+      expect(res.setHeader).toHaveBeenCalledWith(
+        "Cache-Control",
+        "public, max-age=3600"
+      );
       expect(res.json).toHaveBeenCalledWith(mockJWKS);
     });
   });
