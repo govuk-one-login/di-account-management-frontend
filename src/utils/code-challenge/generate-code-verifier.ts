@@ -1,5 +1,5 @@
 import { CODE_CHALLENGE_VALUES } from "../../app.constants.js";
-import { getRandomValues } from "crypto";
+import { getRandomValues } from "node:crypto";
 
 export default function generateCodeVerifier(): string {
   const cryptoArray = new Uint8Array(

@@ -1,4 +1,4 @@
-import { subtle } from "crypto";
+import { subtle } from "node:crypto";
 import base64url from "base64url";
 
 export default async function generateCodeChallenge(
