@@ -3,7 +3,6 @@ import { getRequestConfig, Http } from "../../../utils/http.js";
 import {
   getGovPublishingBaseAPIToken,
   getGovPublishingBaseAPIUrl,
-  getPkceEnabled,
 } from "../../../config.js";
 import {
   GovUkPublishingServiceInterface,
