@@ -263,7 +263,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.staging.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.staging.account.gov.uk/token"
       AMCCLIENTID: "63385eefbc1649f9bc50eb9fd7c04de0" # pragma: allowlist secret
-      ENABLEPKCE: "1"
+      ENABLEPKCE: "0"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
