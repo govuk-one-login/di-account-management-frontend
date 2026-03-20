@@ -39,9 +39,8 @@ describe("callback-utils", () => {
         session: {
           nonce: "mock-nonce",
           state: "mock-state",
-          user: {
-            code_verifier: "mock-verifier",
-          },
+          user: {},
+          code_verifier: "mock-verifier",
         },
       } as any;
     });
