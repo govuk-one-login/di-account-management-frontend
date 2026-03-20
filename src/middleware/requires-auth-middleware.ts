@@ -61,7 +61,7 @@ async function generateAuthUrl(req: Request): Promise<string> {
   if (getPkceEnabled()) {
     codeVerifier = generateCodeVerifier();
     codeChallenge = await generateCodeChallenge(codeVerifier);
-    req.session.user.code_verifier = codeVerifier;
+    req.session.code_verifier = codeVerifier;
   }
 
   const keyId = getKMSConfig().kmsKeyId;
