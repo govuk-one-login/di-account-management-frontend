@@ -39,6 +39,9 @@ describe("callback-utils", () => {
         session: {
           nonce: "mock-nonce",
           state: "mock-state",
+          user: {
+            code_verifier: "mock-verifier",
+          },
         },
       } as any;
     });
@@ -73,6 +76,7 @@ describe("callback-utils", () => {
           client_assertion_type:
             "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
           client_assertion: clientAssertion,
+          code_verifier: "mock-verifier",
         },
       });
 

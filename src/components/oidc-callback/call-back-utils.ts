@@ -48,6 +48,8 @@ export async function generateTokenSet(
   queryParams: CallbackParamsType,
   clientAssertion: string
 ) {
+  const codeVerifier = req.session.user?.code_verifier;
+
   const tokenSet: TokenSet = await req.oidc.callback(
     req.oidc.metadata.redirect_uris[0],
     queryParams,
@@ -57,9 +59,11 @@ export async function generateTokenSet(
         client_assertion_type:
           "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
         client_assertion: clientAssertion,
+        ...(codeVerifier ? { code_verifier: codeVerifier } : {}),
       },
     }
   );
+
   return tokenSet;
 }
 

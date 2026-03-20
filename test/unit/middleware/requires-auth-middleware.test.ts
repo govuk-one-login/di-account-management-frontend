@@ -119,7 +119,8 @@ describe("Requires auth middleware", () => {
     vi.spyOn(generators, "nonce").mockReturnValue("generated");
     vi.spyOn(awsConfig, "getKMSConfig").mockReturnValue({
       awsConfig: { region: "eu-west-2" },
-      kmsKeyId: "arn:aws:kms:eu-west-2:123456789012:key/ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
+      kmsKeyId:
+        "arn:aws:kms:eu-west-2:123456789012:key/ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
     });
     vi.spyOn(kmsService, "sign").mockResolvedValue({
       Signature: new Uint8Array([1, 2, 3]),
@@ -164,17 +165,102 @@ describe("Requires auth middleware", () => {
     });
     expect(callArgs.request).toBeDefined();
     expect(typeof callArgs.request).toBe("string");
-    
+
     const [header] = callArgs.request.split(".");
-    const decodedHeader = JSON.parse(Buffer.from(header, "base64url").toString());
+    const decodedHeader = JSON.parse(
+      Buffer.from(header, "base64url").toString()
+    );
     expect(decodedHeader).toMatchObject({
       alg: "RS512",
       typ: "JWT",
       kid: expect.any(String),
     });
     expect(decodedHeader.kid).not.toContain("/");
-    expect(decodedHeader.kid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
-    
+    expect(decodedHeader.kid).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    );
+
+    vi.restoreAllMocks();
+  });
+
+  it("should include the Code Challenge if PKCE is enabled", async () => {
+    process.env.ENABLE_PKCE = "1";
+
+    vi.spyOn(generators, "nonce").mockReturnValue("generated");
+    vi.spyOn(awsConfig, "getKMSConfig").mockReturnValue({
+      awsConfig: { region: "eu-west-2" },
+      kmsKeyId:
+        "arn:aws:kms:eu-west-2:123456789012:key/ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
+    });
+    vi.spyOn(kmsService, "sign").mockResolvedValue({
+      Signature: new Uint8Array([1, 2, 3]),
+      KeyId: "ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
+      SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512",
+      $metadata: {},
+    } as unknown as SignCommandOutput);
+    const req: Partial<Request> = {
+      body: {},
+      session: {
+        user: { isAuthenticated: undefined } as any,
+      } as any,
+      url: "/test_url",
+      query: { cookie_consent: "test" },
+      oidc: {
+        authorizationUrl: vi.fn(),
+        metadata: {
+          scopes: "openid",
+          redirect_uris: ["url"],
+          client_id: "test-client",
+        },
+      } as any,
+    };
+
+    const res: Partial<Response> = {
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
+      locals: {},
+    };
+
+    const nextFunction: NextFunction = vi.fn(() => {});
+    await requiresAuthMiddleware(req as Request, res as Response, nextFunction);
+
+    expect(res.redirect).toHaveBeenCalled();
+    expect(kmsService.sign).toHaveBeenCalled();
+    expect(req.oidc.authorizationUrl).toHaveBeenCalledOnce();
+    const callArgs = (req.oidc.authorizationUrl as any).mock.calls[0][0];
+    expect(callArgs).toMatchObject({
+      client_id: "test-client",
+      response_type: "code",
+      scope: "openid",
+    });
+    expect(callArgs.request).toBeDefined();
+    expect(typeof callArgs.request).toBe("string");
+
+    const [header] = callArgs.request.split(".");
+    const decodedHeader = JSON.parse(
+      Buffer.from(header, "base64url").toString()
+    );
+    expect(decodedHeader).toMatchObject({
+      alg: "RS512",
+      typ: "JWT",
+      kid: expect.any(String),
+    });
+    expect(decodedHeader.kid).not.toContain("/");
+    expect(decodedHeader.kid).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    );
+
+    const claims = callArgs.request.split(".")[1];
+    const decodedClaims = JSON.parse(Buffer.from(claims, "base64").toString());
+
+    expect(decodedClaims.code_challenge).toBeDefined();
+    expect(decodedClaims.code_challenge).toBeTypeOf("string");
+    expect(decodedClaims.code_challenge.length).toEqual(43);
+
+    expect(decodedClaims.code_challenge_method).toBeDefined();
+    expect(decodedClaims.code_challenge_method).toEqual("S256");
+
+    delete process.env.ENABLE_PKCE;
     vi.restoreAllMocks();
   });
 });

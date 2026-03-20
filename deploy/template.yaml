@@ -191,6 +191,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.dev.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://amc-stub.home.dev.account.gov.uk/token"
       AMCCLIENTID: "fake_dev_amc_client_id"
+      ENABLEPKCE: "1"
     build:
       NODEENV: "production"
       APIBASEURL: "https://oidc.build.account.gov.uk"
@@ -226,6 +227,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.build.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://amc-stub.home.build.account.gov.uk/token"
       AMCCLIENTID: "fake_build_amc_client_id"
+      ENABLEPKCE: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
@@ -261,6 +263,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.staging.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.staging.account.gov.uk/token"
       AMCCLIENTID: "63385eefbc1649f9bc50eb9fd7c04de0" # pragma: allowlist secret
+      ENABLEPKCE: "0"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
@@ -296,6 +299,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.integration.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.integration.account.gov.uk/token"
       AMCCLIENTID: "cdf0311ea91648d4a25214415e521ef5" # pragma: allowlist secret
+      ENABLEPKCE: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -332,6 +336,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.account.gov.uk/token"
       AMCCLIENTID: "261b31a23ea2408094b7f8480d486fad" # pragma: allowlist secret
+      ENABLEPKCE: "0"
 
 Resources:
   #
@@ -964,6 +969,9 @@ Resources:
             - Name: "AMC_CLIENT_ID"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, AMCCLIENTID]
+            - Name: "ENABLE_PKCE"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, ENABLEPKCE]
       Cpu: !FindInMap [Container, !Ref Environment, CPU]
       Memory: !FindInMap [Container, !Ref Environment, Memory]
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn

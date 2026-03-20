@@ -1,11 +1,17 @@
 import { NextFunction, Request, Response } from "express";
 import { generators } from "openid-client";
-import { PATH_DATA, VECTORS_OF_TRUST } from "../app.constants.js";
+import {
+  PATH_DATA,
+  VECTORS_OF_TRUST,
+  CODE_CHALLENGE_VALUES,
+} from "../app.constants.js";
 import { logger } from "../utils/logger.js";
 import { kmsService } from "../utils/kms.js";
 import base64url from "base64url";
-import { getOIDCApiDiscoveryUrl } from "../config.js";
+import { getOIDCApiDiscoveryUrl, getPkceEnabled } from "../config.js";
 import { getKMSConfig } from "../config/aws.js";
+import generateCodeVerifier from "../utils/code-challenge/generate-code-verifier.js";
+import generateCodeChallenge from "../utils/code-challenge/generate-code-challenge.js";
 
 export async function requiresAuthMiddleware(
   req: Request,
@@ -51,6 +57,12 @@ async function generateAuthUrl(req: Request): Promise<string> {
     response_type: "code",
     scope: req.oidc.metadata.scopes as string,
   };
+  let codeVerifier, codeChallenge;
+  if (getPkceEnabled()) {
+    codeVerifier = generateCodeVerifier();
+    codeChallenge = await generateCodeChallenge(codeVerifier);
+    req.session.user.code_verifier = codeVerifier;
+  }
 
   const keyId = getKMSConfig().kmsKeyId;
   const kid = keyId.includes("/") ? keyId.split("/").pop() : keyId;
@@ -65,6 +77,10 @@ async function generateAuthUrl(req: Request): Promise<string> {
     vtr: JSON.stringify([VECTORS_OF_TRUST.MEDIUM]),
     cookie_consent: req.query.cookie_consent,
     _ga: req.query._ga,
+    code_challenge_method: codeChallenge
+      ? CODE_CHALLENGE_VALUES.CODE_CHALLENGE_METHOD
+      : undefined,
+    code_challenge: codeChallenge,
   };
   const encodedHeader = base64url.default.encode(JSON.stringify(headers));
   const encodedPayload = base64url.default.encode(JSON.stringify(claims));
