@@ -227,7 +227,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://amc-stub.home.build.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://amc-stub.home.build.account.gov.uk/token"
       AMCCLIENTID: "fake_build_amc_client_id"
-      ENABLEPKCE: "1"
+      ENABLEPKCE: "0"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
