@@ -48,7 +48,7 @@ export async function generateTokenSet(
   queryParams: CallbackParamsType,
   clientAssertion: string
 ) {
-  const codeVerifier = req.session.user?.code_verifier;
+  const codeVerifier = req.session.code_verifier;
 
   const tokenSet: TokenSet = await req.oidc.callback(
     req.oidc.metadata.redirect_uris[0],
