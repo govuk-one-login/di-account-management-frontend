@@ -50,19 +50,25 @@ export async function generateTokenSet(
 ) {
   let tokenSet: TokenSet;
 
-  try {
-    const codeVerifier = req.session.code_verifier;
+  const checks: Record<string, unknown> = {
+    nonce: req.session.nonce,
+    state: req.session.state,
+  };
 
+  if (req.session.code_verifier) {
+    checks.code_verifier = req.session.code_verifier;
+  }
+
+  try {
     tokenSet = await req.oidc.callback(
       req.oidc.metadata.redirect_uris[0],
       queryParams,
-      { nonce: req.session.nonce, state: req.session.state },
+      checks,
       {
         exchangeBody: {
           client_assertion_type:
             "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
           client_assertion: clientAssertion,
-          ...(codeVerifier ? { code_verifier: codeVerifier } : {}),
         },
       }
     );

@@ -6,8 +6,8 @@ import {
   populateSessionWithUserInfo,
   attachSessionIdsFromGsCookie,
   generateTokenSet,
-} from "../call-back-utils";
-import { PATH_DATA } from "../../../app.constants";
+} from "../call-back-utils.js";
+import { PATH_DATA } from "../../../app.constants.js";
 import * as sessionStore from "../../../utils/session-store.js";
 import { logger } from "../../../utils/logger.js";
 import { TokenSet } from "openid-client";
@@ -69,13 +69,13 @@ describe("callback-utils", () => {
       expect(callbackStub.mock.calls[0][2]).toEqual({
         nonce: "mock-nonce",
         state: "mock-state",
+        code_verifier: "mock-verifier",
       });
       expect(callbackStub.mock.calls[0][3]).toEqual({
         exchangeBody: {
           client_assertion_type:
             "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
           client_assertion: clientAssertion,
-          code_verifier: "mock-verifier",
         },
       });
 
