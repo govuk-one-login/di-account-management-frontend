@@ -6,6 +6,7 @@ import { generators } from "openid-client";
 import { kmsService } from "../../../src/utils/kms.js";
 import type { SignCommandOutput } from "@aws-sdk/client-kms";
 import * as awsConfig from "../../../src/config/aws.js";
+import * as generateCodeVerifier from "../../../src/utils/code-challenge/generate-code-verifier.js";
 
 describe("Requires auth middleware", () => {
   it("should redirect to signed out page if user logged out", async () => {
@@ -262,5 +263,56 @@ describe("Requires auth middleware", () => {
 
     delete process.env.ENABLE_PKCE;
     vi.restoreAllMocks();
+  });
+
+  it("Saves the code verfier to the session successfully", async () => {
+    process.env.ENABLE_PKCE = "1";
+
+    vi.spyOn(generators, "nonce").mockReturnValue("generated");
+    vi.spyOn(awsConfig, "getKMSConfig").mockReturnValue({
+      awsConfig: { region: "eu-west-2" },
+      kmsKeyId:
+        "arn:aws:kms:eu-west-2:123456789012:key/ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
+    });
+    vi.spyOn(kmsService, "sign").mockResolvedValue({
+      Signature: new Uint8Array([1, 2, 3]),
+      KeyId: "ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
+      SigningAlgorithm: "RSASSA_PKCS1_V1_5_SHA_512",
+      $metadata: {},
+    } as unknown as SignCommandOutput);
+
+    vi.spyOn(generateCodeVerifier, "default").mockImplementation(() => {
+      return "fake-verifier";
+    });
+
+    const req: Partial<Request> = {
+      body: {},
+      session: {
+        user: { isAuthenticated: undefined } as any,
+      } as any,
+      url: "/test_url",
+      query: { cookie_consent: "test" },
+      oidc: {
+        authorizationUrl: vi.fn(),
+        metadata: {
+          scopes: "openid",
+          redirect_uris: ["url"],
+          client_id: "test-client",
+        },
+      } as any,
+      code_verifier: undefined,
+    };
+
+    const res: Partial<Response> = {
+      render: vi.fn(),
+      redirect: vi.fn(() => {}),
+      locals: {},
+    };
+
+    const nextFunction: NextFunction = vi.fn(() => {});
+    await requiresAuthMiddleware(req as Request, res as Response, nextFunction);
+
+    expect(req.session?.code_verifier).toBeDefined();
+    expect(req.session?.code_verifier).toEqual("fake-verifier");
   });
 });
