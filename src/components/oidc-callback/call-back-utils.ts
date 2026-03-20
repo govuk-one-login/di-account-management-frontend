@@ -66,8 +66,8 @@ export async function generateTokenSet(
         },
       }
     );
-  } catch (Error) {
-    logger.error(`OIDC Callback failed: ${Error.message}`);
+  } catch (callbackError) {
+    logger.error(`OIDC Callback failed: ${callbackError.message}`);
   }
 
   return tokenSet;
