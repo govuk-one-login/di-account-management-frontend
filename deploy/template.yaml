@@ -299,7 +299,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.integration.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.integration.account.gov.uk/token"
       AMCCLIENTID: "cdf0311ea91648d4a25214415e521ef5" # pragma: allowlist secret
-      ENABLEPKCE: "0"
+      ENABLEPKCE: "1"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -336,7 +336,7 @@ Mappings:
       AMCJOURNEYOUTCOMEURL: "https://api.manage.account.gov.uk/journeyoutcome"
       AMCTOKENURL: "https://api.manage.account.gov.uk/token"
       AMCCLIENTID: "261b31a23ea2408094b7f8480d486fad" # pragma: allowlist secret
-      ENABLEPKCE: "0"
+      ENABLEPKCE: "1"
 
 Resources:
   #
