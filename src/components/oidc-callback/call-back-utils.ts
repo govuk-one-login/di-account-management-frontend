@@ -82,7 +82,7 @@ export async function generateTokenSet(
   }
   logger.debug(
     { trace: req.res?.locals.trace },
-    `Generated token session state: ${tokenSet.session_state}`
+    `Generated token session state: ${tokenSet?.session_state ? tokenSet.session_state : "Session State not generated"}`
   );
   if (tokenSet.session_state !== req.session.state) {
     this.handleOidcCallbackError(

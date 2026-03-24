@@ -134,6 +134,25 @@ describe("callback controller", () => {
       expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.START.url);
     });
 
+    it("should redirect to session expired if the session state returned by the the oicd.callbackParams call does not match what passed in", async () => {
+      const queryParams = {
+        code: "fake-code",
+        state: "mock-state-1",
+      };
+
+      req.session.state = vi.fn().mockReturnValue("mock-state-2");
+
+      req.oidc.callbackParams = vi.fn().mockReturnValue(queryParams);
+
+      const fakeService: ClientAssertionServiceInterface = {
+        generateAssertionJwt: vi.fn().mockResolvedValue("testassert"),
+      };
+
+      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+      expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
+      expect(res.redirect).toHaveBeenCalledOnce();
+    });
+
     it("redirect to session expired when access denied error received", async () => {
       req.oidc.callbackParams = vi.fn().mockReturnValue({
         error: "access_denied",

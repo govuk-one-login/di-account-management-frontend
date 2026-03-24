@@ -26,10 +26,14 @@ export function oidcAuthCallbackGet(
       if (queryParams?.error) {
         return await handleOidcCallbackError(req, res, queryParams);
       }
-      if (queryParams.session_state !== req.session.state) {
-        await handleOidcCallbackError(
+
+      if (
+        queryParams !== undefined &&
+        queryParams?.session_state !== req.session.state
+      ) {
+        return await handleOidcCallbackError(
           req,
-          req.res!,
+          res,
           {
             error: "session_state_mismatch",
             description: "Session state mismatch after OICD callback",
