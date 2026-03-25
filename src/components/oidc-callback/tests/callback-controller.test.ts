@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import { oidcAuthCallbackGet } from "../call-back-controller.js";
-import { PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants";
-import { ClientAssertionServiceInterface } from "../../../utils/types";
+import { PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants.js";
+import { ClientAssertionServiceInterface } from "../../../utils/types.js";
 import { logger } from "../../../utils/logger.js";
+import * as callBackUtils from "../call-back-utils.js";
 
 describe("callback controller", () => {
   let req: Partial<Request>;
@@ -21,12 +22,12 @@ describe("callback controller", () => {
       session: {
         user: {},
         destroy: vi.fn(),
-        state: vi.fn(),
-        nonce: vi.fn(),
+        state: "mock-state",
+        nonce: "mock-nonce",
       } as any,
       t: vi.fn(),
       oidc: {
-        callbackParams: vi.fn(),
+        callbackParams: vi.fn().mockReturnValue({ state: "mock-state" }),
         callback: vi.fn().mockReturnValue({
           accessToken: "accessToken",
           idToken: "idtoken",
@@ -134,13 +135,18 @@ describe("callback controller", () => {
       expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.START.url);
     });
 
-    it("should redirect to session expired if the session state returned by the the oicd.callbackParams call does not match what passed in", async () => {
+    it("should redirect to session expired if the session state returned by the the oidc.callbackParams call does not match what passed in", async () => {
+      const handleOidcCallbackErrorSpy = vi.spyOn(
+        callBackUtils,
+        "handleOidcCallbackError"
+      );
+
       const queryParams = {
         code: "fake-code",
         state: "mock-state-1",
       };
 
-      req.session.state = vi.fn().mockReturnValue("mock-state-2");
+      req.session.state = "mock-state-2";
 
       req.oidc.callbackParams = vi.fn().mockReturnValue(queryParams);
 
@@ -149,6 +155,11 @@ describe("callback controller", () => {
       };
 
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
+      expect(handleOidcCallbackErrorSpy).toHaveBeenCalledOnce();
+      expect(handleOidcCallbackErrorSpy).toHaveBeenCalledWith(req, res, {
+        error: "session_state_mismatch",
+        error_description: "Session state mismatch after OIDC callback",
+      });
       expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
       expect(res.redirect).toHaveBeenCalledOnce();
     });

@@ -50,11 +50,6 @@ export async function generateTokenSet(
 ) {
   let tokenSet: TokenSet;
 
-  logger.debug(
-    { trace: req.res?.locals.trace },
-    `request session state: ${req.session.state}`
-  );
-
   const checks: Record<string, unknown> = {
     nonce: req.session.nonce,
     state: req.session.state,
@@ -80,21 +75,7 @@ export async function generateTokenSet(
   } catch (callbackError) {
     logger.error(`OIDC Callback failed: ${callbackError.message}`);
   }
-  logger.debug(
-    { trace: req.res?.locals.trace },
-    `Generated token session state: ${tokenSet?.session_state ? tokenSet.session_state : "Session State not generated"}`
-  );
-  if (tokenSet.session_state !== req.session.state) {
-    this.handleOidcCallbackError(
-      req,
-      req.res!,
-      {
-        error: "session_state_mismatch",
-        description: "Session state mismatch after OICD callback",
-      },
-      false
-    );
-  }
+
   return tokenSet;
 }
 
