@@ -774,7 +774,7 @@
     "updateAuthenticatorAppConfirmation": {
       "title": "Rydych wedi newid eich ap dilysydd",
       "panelText": "Rydych wedi newid eich ap dilysydd",
-      "summaryText": "Byddwn yn anfon codau diogelwch i'ch ap dilysydd newydd."
+      "summaryText": "Byddwch yn cael codau diogelwch gan ddefnyddio'ch ap dilysydd newydd."
     },
     "changeDefaultMethod": {
       "title": "Defnyddiwch ddull diofyn gwahanol",

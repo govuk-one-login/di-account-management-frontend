@@ -40,7 +40,9 @@ export function govUkPublishingService(
 
     await axios.client.delete<void>(
       deleteUrl,
-      getRequestConfig({ token: getGovPublishingBaseAPIToken() })
+      getRequestConfig({
+        token: getGovPublishingBaseAPIToken(),
+      })
     );
   };
 

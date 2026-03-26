@@ -6,8 +6,8 @@ import {
   populateSessionWithUserInfo,
   attachSessionIdsFromGsCookie,
   generateTokenSet,
-} from "../call-back-utils";
-import { PATH_DATA } from "../../../app.constants";
+} from "../call-back-utils.js";
+import { PATH_DATA } from "../../../app.constants.js";
 import * as sessionStore from "../../../utils/session-store.js";
 import { logger } from "../../../utils/logger.js";
 import { TokenSet } from "openid-client";
@@ -25,6 +25,7 @@ describe("callback-utils", () => {
       const mockTokenSet = {
         access_token: "fake-access-token",
         id_token: "fake-id-token",
+        session_state: "mock-state",
       } as TokenSet;
 
       callbackStub = vi.fn().mockResolvedValue(mockTokenSet);
@@ -39,6 +40,8 @@ describe("callback-utils", () => {
         session: {
           nonce: "mock-nonce",
           state: "mock-state",
+          user: {},
+          code_verifier: "mock-verifier",
         },
       } as any;
     });
@@ -67,6 +70,7 @@ describe("callback-utils", () => {
       expect(callbackStub.mock.calls[0][2]).toEqual({
         nonce: "mock-nonce",
         state: "mock-state",
+        code_verifier: "mock-verifier",
       });
       expect(callbackStub.mock.calls[0][3]).toEqual({
         exchangeBody: {
@@ -78,6 +82,47 @@ describe("callback-utils", () => {
 
       expect(tokenSet).toHaveProperty("access_token", "fake-access-token");
       expect(tokenSet).toHaveProperty("id_token", "fake-id-token");
+    });
+
+    it("should log an error if there is a problem with the Code Verifier", async () => {
+      callbackStub = vi
+        .fn()
+        .mockThrow(new Error("invalid_grant: no code_verifier in request"));
+
+      req = {
+        oidc: {
+          metadata: {
+            redirect_uris: ["http://localhost/callback"],
+          },
+          callback: callbackStub,
+        },
+        session: {
+          nonce: "mock-nonce",
+          state: "mock-state",
+          user: {},
+          code_verifier: undefined,
+        },
+      } as any;
+
+      const queryParams = {
+        code: "fake-code",
+        state: "mock-state",
+      };
+
+      const clientAssertion = "mock-client-assertion";
+
+      const loggerSpy = vi.spyOn(logger, "error");
+
+      const tokenSet = await generateTokenSet(
+        req,
+        queryParams,
+        clientAssertion
+      );
+
+      expect(tokenSet).toBeUndefined();
+      expect(loggerSpy).toHaveBeenCalledWith(
+        "OIDC Callback failed: invalid_grant: no code_verifier in request"
+      );
     });
   });
 

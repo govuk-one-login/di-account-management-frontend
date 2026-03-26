@@ -27,14 +27,21 @@ export function oidcAuthCallbackGet(
         return await handleOidcCallbackError(req, res, queryParams);
       }
 
+      if (!req.session?.state || !req.session?.nonce) {
+        return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
+      }
+
+      if (queryParams?.state !== req.session.state) {
+        return await handleOidcCallbackError(req, res, {
+          error: "session_state_mismatch",
+          error_description: "Session state mismatch after OIDC callback",
+        });
+      }
+
       const clientAssertion = await service.generateAssertionJwt(
         req.oidc.metadata.client_id,
         req.oidc.issuer.metadata.token_endpoint
       );
-
-      if (!req.session?.state || !req.session?.nonce) {
-        return res.redirect(PATH_DATA.SESSION_EXPIRED.url);
-      }
 
       const tokenSet = await generateTokenSet(
         req,

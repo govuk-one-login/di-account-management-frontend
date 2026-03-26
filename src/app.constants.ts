@@ -251,6 +251,13 @@ export enum NOTIFICATION_TYPE {
   VERIFY_PHONE_NUMBER = "VERIFY_PHONE_NUMBER",
 }
 
+export const CODE_CHALLENGE_VALUES = {
+  CODE_CHALLENGE_METHOD: "S256",
+  CODE_VERIFIER_CHAR_SET:
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~",
+  CODE_VERIFIER_LENGTH: 128,
+};
+
 export const VECTORS_OF_TRUST = {
   MEDIUM: "Cl.Cm",
   LOW: "Cl",
@@ -365,6 +372,7 @@ export const LogoutState = {
   AccountDeletion: "accountDeletion",
   Default: "default",
   Start: "start",
+  AmcSignedOut: "amcSignedOut",
 } as const;
 
 export type LogoutStateType = (typeof LogoutState)[keyof typeof LogoutState];
@@ -384,5 +392,8 @@ export const LogoutRedirect = {
   },
   [LogoutState.Start]: {
     url: getBaseUrl() + PATH_DATA.START.url,
+  },
+  [LogoutState.AmcSignedOut]: {
+    url: getBaseUrl() + PATH_DATA.USER_SIGNED_OUT.url,
   },
 };

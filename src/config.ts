@@ -245,6 +245,10 @@ export function getAmcJwksUrl(): string {
   return process.env.AMC_JWKS_URL;
 }
 
+export function getPkceEnabled(): boolean {
+  return process.env.ENABLE_PKCE === "1";
+}
+
 export function getHomeBaseUrl(): string {
   return process.env.HOME_BASE_URL;
 }
