@@ -8,6 +8,6 @@ WORKDIR /app
 
 EXPOSE $PORT
 
-RUN apk add --no-cache git
+RUN apk add --no-cache git && git config --global --add safe.directory /app
 
 CMD npm run install-all && npm run copy-assets && npm run dev
