@@ -238,4 +238,4 @@ If you are making changes to the [RP Registry](https://github.com/govuk-one-logi
 docker compose -f docker-compose.yml -f docker-compose.extension.yaml up
 ```
 
-When you make changes to the RP registry, run `npm run build`, and then touch any typescript file in this repo (to trigger a restart)
+When you make changes to the RP registry, run `npm run build-rp-registry`, and then touch any typescript file in this repo (to trigger a restart)
