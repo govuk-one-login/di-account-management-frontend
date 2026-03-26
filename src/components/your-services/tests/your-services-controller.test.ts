@@ -4,7 +4,6 @@ import { yourServicesGet } from "../your-services-controller.js";
 import { getAppEnv } from "../../../config.js";
 import * as configModule from "../../../config.js";
 import * as yourServicesModule from "../../../utils/yourServices";
-import * as passkeysMetadataModule from "../../../utils/passkeysConvenienceMetadata/index.js";
 
 describe("your services controller", () => {
   let req: Partial<Request>;
@@ -35,14 +34,6 @@ describe("your services controller", () => {
 
   beforeEach(() => {
     vi.spyOn(configModule, "supportSearchableList").mockReturnValue(true);
-    vi.spyOn(
-      passkeysMetadataModule,
-      "getPasskeyConvenienceMetadataByAaguid"
-    ).mockResolvedValue({
-      name: "Test Authenticator",
-      icon_dark: "data:image/png;base64,test",
-      icon_light: "data:image/png;base64,test",
-    });
 
     res = {
       render: vi.fn(),
@@ -67,11 +58,6 @@ describe("your services controller", () => {
         env: getAppEnv(),
         hasEnglishOnlyServices: false,
         searchableListEnabled: true,
-        temp: JSON.stringify({
-          name: "Test Authenticator",
-          icon_dark: "data:image/png;base64,test",
-          icon_light: "data:image/png;base64,test",
-        }),
       });
     });
 
@@ -89,11 +75,6 @@ describe("your services controller", () => {
         email: "test@test.com",
         env: getAppEnv(),
         currentLngWelsh: false,
-        temp: JSON.stringify({
-          name: "Test Authenticator",
-          icon_dark: "data:image/png;base64,test",
-          icon_light: "data:image/png;base64,test",
-        }),
       });
     });
 
@@ -150,11 +131,6 @@ describe("your services controller", () => {
         currentLngWelsh: false,
         hasEnglishOnlyServices: true,
         searchableListEnabled: true,
-        temp: JSON.stringify({
-          name: "Test Authenticator",
-          icon_dark: "data:image/png;base64,test",
-          icon_light: "data:image/png;base64,test",
-        }),
       });
     });
 
@@ -211,11 +187,6 @@ describe("your services controller", () => {
         currentLngWelsh: false,
         hasEnglishOnlyServices: true,
         searchableListEnabled: true,
-        temp: JSON.stringify({
-          name: "Test Authenticator",
-          icon_dark: "data:image/png;base64,test",
-          icon_light: "data:image/png;base64,test",
-        }),
       });
     });
 
@@ -259,27 +230,7 @@ describe("your services controller", () => {
         currentLngWelsh: false,
         hasEnglishOnlyServices: true,
         searchableListEnabled: true,
-        temp: JSON.stringify({
-          name: "Test Authenticator",
-          icon_dark: "data:image/png;base64,test",
-          icon_light: "data:image/png;base64,test",
-        }),
       });
-    });
-
-    it("should call getPasskeyConvenienceMetadataByAaguid with correct parameters", async () => {
-      req = validRequest();
-      const spy = vi.spyOn(
-        passkeysMetadataModule,
-        "getPasskeyConvenienceMetadataByAaguid"
-      );
-
-      await yourServicesGet(req as Request, res as Response);
-
-      expect(spy).toHaveBeenCalledWith(
-        req,
-        "ea9b8d66-4d01-1d21-3ce4-b6b48cb575d4"
-      );
     });
   });
 });
