@@ -3,6 +3,7 @@ import { presentYourServices } from "../../utils/yourServices.js";
 import { getAppEnv, supportSearchableList } from "../../config.js";
 import { setOplSettings } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { getPasskeyConvenienceMetadataByAaguid } from "../../utils/passkeysConvenienceMetadata/index.js";
 
 const defaultContentId = "04566d1b-d791-4e2a-9154-26787fb60516";
 const contentIds: Record<string, string> = {
@@ -22,6 +23,11 @@ export async function yourServicesGet(
       contentId: defaultContentId,
     },
     res
+  );
+
+  const metadata = await getPasskeyConvenienceMetadataByAaguid(
+    req,
+    "ea9b8d66-4d01-1d21-3ce4-b6b48cb575d4"
   );
 
   const { user } = req.session;
@@ -64,8 +70,12 @@ export async function yourServicesGet(
       servicesList: serviceData.servicesList,
       hasEnglishOnlyServices,
       searchableListEnabled: supportSearchableList(),
+      temp: JSON.stringify(metadata),
     });
   } else {
-    res.render("your-services/index.njk", data);
+    res.render("your-services/index.njk", {
+      ...data,
+      temp: JSON.stringify(metadata),
+    });
   }
 }

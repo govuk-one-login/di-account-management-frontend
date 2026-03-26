@@ -27,7 +27,7 @@ jobs:
       - name: Validate passkeys convenience metadata
         run: |
           npx tsx -e '
-            import { getAllPasskeyConvenienceMetadata } from "./solutions/commons/utils/passkeysConvenienceMetadata/index.ts";
+            import { getAllPasskeyConvenienceMetadata } from "./src/utils/passkeysConvenienceMetadata/index.ts";
 
             getAllPasskeyConvenienceMetadata().then((metadata) => {
               console.log("Metadata is valid");
