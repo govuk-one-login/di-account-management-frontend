@@ -2,11 +2,7 @@ FROM node:20.20.1-alpine@sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de0414
 
 WORKDIR /app
 
-COPY package.json ./
-COPY package-lock.json ./
-COPY tsconfig.json ./
-COPY ./src ./src
-COPY ./@types ./@types
+COPY . .
 
 RUN apk add --no-cache git && npm run install-all && npm run build && npm run clean-modules && npm ci --production=true
 
