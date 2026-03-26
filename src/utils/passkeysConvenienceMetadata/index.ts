@@ -7,24 +7,30 @@ const iconDataUriPattern = /^data:image\/.+/;
 
 let obscenityMatcher: RegExpMatcher | undefined;
 
-const passkeysConvenienceMetadataSchema = v.recordAsync(
-  v.string(),
-  v.pipeAsync(
-    v.objectAsync({
-      name: v.string(),
-      icon_dark: v.nullish(v.pipe(v.string(), v.regex(iconDataUriPattern))),
-      icon_light: v.nullish(v.pipe(v.string(), v.regex(iconDataUriPattern))),
-    }),
-    v.checkAsync(async (input) => {
-      if (!obscenityMatcher) {
-        const obscenity = await import("obscenity");
-        obscenityMatcher = new obscenity.RegExpMatcher({
-          ...obscenity.englishDataset.build(),
-          ...obscenity.englishRecommendedTransformers,
-        });
-      }
-      return !obscenityMatcher.hasMatch(input.name);
-    }, "The name field contains an obscenity")
+const passkeysConvenienceMetadataSchema = v.pipeAsync(
+  v.recordAsync(
+    v.string(),
+    v.pipeAsync(
+      v.objectAsync({
+        name: v.string(),
+        icon_dark: v.nullish(v.pipe(v.string(), v.regex(iconDataUriPattern))),
+        icon_light: v.nullish(v.pipe(v.string(), v.regex(iconDataUriPattern))),
+      }),
+      v.checkAsync(async (input) => {
+        if (!obscenityMatcher) {
+          const obscenity = await import("obscenity");
+          obscenityMatcher = new obscenity.RegExpMatcher({
+            ...obscenity.englishDataset.build(),
+            ...obscenity.englishRecommendedTransformers,
+          });
+        }
+        return !obscenityMatcher.hasMatch(input.name);
+      }, "The name field contains an obscenity")
+    )
+  ),
+  v.check(
+    (input) => Object.keys(input).length > 0,
+    "Must contain at least one entry"
   )
 );
 
