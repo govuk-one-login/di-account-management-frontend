@@ -1,0 +1,40 @@
+name: Validate passkeys convenience metadata
+
+permissions: {}
+
+on:
+  pull_request:
+  merge_group:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: npm run install-all
+
+      - name: Validate passkeys convenience metadata
+        run: |
+          npx tsx -e '
+            import { getAllPasskeyConvenienceMetadata } from "./solutions/commons/utils/passkeysConvenienceMetadata/index.ts";
+
+            getAllPasskeyConvenienceMetadata().then((metadata) => {
+              if (!Object.entries(metadata).length) {
+                throw new Error("Metadata contains no entries");
+              }
+              console.log("Metadata is valid");
+            }).catch((err: unknown) => {
+              throw err
+            });
+          '

@@ -8,4 +8,6 @@ WORKDIR /app
 
 EXPOSE $PORT
 
-CMD npm ci && npm run copy-assets && npm run dev
+RUN apk add --no-cache git
+
+CMD npm run install-all && npm run copy-assets && npm run dev

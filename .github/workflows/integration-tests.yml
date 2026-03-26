@@ -24,7 +24,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Install app dependencies
-        run: npm ci
+        run: npm run install-all
 
       - name: Build app
         run: | # pragma: allowlist secret
