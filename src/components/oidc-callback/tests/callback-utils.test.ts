@@ -25,6 +25,7 @@ describe("callback-utils", () => {
       const mockTokenSet = {
         access_token: "fake-access-token",
         id_token: "fake-id-token",
+        session_state: "mock-state",
       } as TokenSet;
 
       callbackStub = vi.fn().mockResolvedValue(mockTokenSet);
