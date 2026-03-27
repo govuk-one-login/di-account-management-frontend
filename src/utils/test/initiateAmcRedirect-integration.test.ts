@@ -85,7 +85,16 @@ describe("Integration:: initiateAmcRedirect", () => {
     });
 
     const response = await request(app).get("/test-amc");
-    const location = new URL(response.headers.location);
+    expect(response.headers.location).toBeDefined();
+    expect(typeof response.headers.location).toBe("string");
+    let location: URL;
+    try {
+      location = new URL(response.headers.location as string);
+    } catch (err) {
+      // Make the test failure explicit if the Location header is not a valid URL
+      expect(err).toBeUndefined();
+      return;
+    }
 
     expect(location.searchParams.get("client_id")).toBe("test-client-id");
     expect(location.searchParams.get("scope")).toBe("openid email");
