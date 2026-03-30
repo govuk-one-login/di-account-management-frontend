@@ -79,11 +79,23 @@ describe("getRequestConfig", () => {
     });
   });
 
+  it("returns config without X-ADAPI-AccessToken when accountDataApiToken is not provided", () => {
+    const config = getRequestConfig({
+      token: "test-token",
+    });
+
+    expect(config).toEqual({
+      headers: {
+        Authorization: "Bearer test-token",
+      },
+      proxy: false,
+    });
+  });
+
   it("includes validation statuses when provided", () => {
     const validationStatuses = [200, 400];
     const config = getRequestConfig({
       token: "test-token",
-      accountDataApiToken: "api-token",
       validationStatuses,
     });
 
@@ -115,6 +127,29 @@ describe("getRequestConfig", () => {
       "Client-Session-Id": "client-123",
       "txma-audit-encoded": "audit-data",
     });
+  });
+
+  it("excludes X-ADAPI-AccessToken when accountDataApiToken is not provided", () => {
+    const config = getRequestConfig({
+      token: "test-token",
+      sourceIp: "192.168.1.1",
+      persistentSessionId: "persistent-123",
+      sessionId: "session-123",
+      userLanguage: "en",
+      clientSessionId: "client-123",
+      txmaAuditEncoded: "audit-data",
+    });
+
+    expect(config.headers).toEqual({
+      Authorization: "Bearer test-token",
+      "X-Forwarded-For": "192.168.1.1",
+      "di-persistent-session-id": "persistent-123",
+      "Session-Id": "session-123",
+      "User-Language": "en",
+      "Client-Session-Id": "client-123",
+      "txma-audit-encoded": "audit-data",
+    });
+    expect(config.headers).not.toHaveProperty("X-ADAPI-AccessToken");
   });
 });
 

@@ -34,7 +34,7 @@ export function createApiResponse(
 
 export interface RequestConfig {
   token: string;
-  accountDataApiToken: string;
+  accountDataApiToken?: string;
   validationStatuses?: number[];
   sourceIp?: string;
   persistentSessionId?: string;
@@ -76,10 +76,13 @@ export function getRequestConfig({
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
-      "X-ADAPI-AccessToken": accountDataApiToken,
     },
     proxy: false,
   };
+
+  if (accountDataApiToken) {
+    config.headers["X-ADAPI-AccessToken"] = accountDataApiToken;
+  }
 
   if (validationStatuses) {
     config.validateStatus = function (status: number) {
