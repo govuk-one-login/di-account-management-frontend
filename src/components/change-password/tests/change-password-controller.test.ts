@@ -88,6 +88,7 @@ describe("change password controller", () => {
         CURRENT_EMAIL,
         "Password1",
         {
+          accountDataApiToken: "TODO",
           token: TOKEN,
           sourceIp: SOURCE_IP,
           sessionId: SESSION_ID,

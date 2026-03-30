@@ -10,6 +10,7 @@ import {
 import {
   AuthAppMethod,
   MfaMethod,
+  Passkey,
   SimpleError,
   SmsMethod,
 } from "../../../src/utils/mfaClient/types";
@@ -17,7 +18,7 @@ import {
   validateCreate,
   validateUpdate,
 } from "../../../src/utils/mfaClient/validate";
-import { getRequestConfig, Http } from "../../../src/utils/http";
+import { getRequestConfig, Http, RequestConfig } from "../../../src/utils/http";
 import { AxiosInstance, AxiosResponse } from "axios";
 import * as oidcModule from "../../../src/utils/oidc";
 
@@ -53,6 +54,20 @@ const authAppMethod: MfaMethod = {
 
 const OTP = "123456";
 
+const passkey: Passkey = {
+  credential: "credential123",
+  id: "passkey-id-123",
+  aaguid: "aaguid-123",
+  isAttested: true,
+  signCount: 5,
+  transports: ["usb", "nfc"],
+  isBackUpEligible: true,
+  isBackedUp: false,
+  isResidentKey: true,
+  createdAt: "2023-01-01T00:00:00Z",
+  lastUsedAt: "2023-01-02T00:00:00Z",
+};
+
 describe("MfaClient", () => {
   const axiosStub = {} as AxiosInstance;
   let client: MfaClient;
@@ -60,7 +75,7 @@ describe("MfaClient", () => {
   beforeEach(() => {
     client = new MfaClient(
       "publicSubjectId",
-      getRequestConfig({ token: "token" }),
+      getRequestConfig({ token: "token" } as RequestConfig),
       new Http("http://example.com", axiosStub)
     );
   });
@@ -275,6 +290,36 @@ describe("MfaClient", () => {
       );
     });
   });
+
+  describe("getPasskeys", () => {
+    it("should GET passkeys from the endpoint", async () => {
+      const getStub = vi.fn().mockResolvedValue({ data: [passkey] });
+      axiosStub.get = getStub;
+
+      const response = await client.getPasskeys();
+
+      expect(response.data.length).toBe(1);
+      expect(response.data[0]).toBe(passkey);
+      expect(getStub).toHaveBeenCalledWith(
+        "/passkeys/publicSubjectId",
+        expect.any(Object)
+      );
+    });
+  });
+
+  describe("deletePasskey", () => {
+    it("should DELETE passkey from the endpoint", async () => {
+      const deleteStub = vi.fn().mockResolvedValue({ status: 204, data: null });
+      axiosStub.delete = deleteStub;
+
+      await client.deletePasskey("passkey-id-123");
+
+      expect(deleteStub).toHaveBeenCalledWith(
+        "/passkeys/publicSubjectId/passkey-id-123",
+        expect.any(Object)
+      );
+    });
+  });
 });
 
 describe("buildRequest", () => {
@@ -358,6 +403,8 @@ describe("createMfaClient", () => {
     expect(client.create).toBeTypeOf("function");
     expect(client.update).toBeTypeOf("function");
     expect(client.delete).toBeTypeOf("function");
+    expect(client.getPasskeys).toBeTypeOf("function");
+    expect(client.deletePasskey).toBeTypeOf("function");
   });
 });
 

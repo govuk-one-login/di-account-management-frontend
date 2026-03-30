@@ -77,6 +77,7 @@ describe("change phone number controller", () => {
       expect(
         fakeService.sendPhoneVerificationNotification
       ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", {
+        accountDataApiToken: "TODO",
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -109,6 +110,7 @@ describe("change phone number controller", () => {
       expect(
         fakeService.sendPhoneVerificationNotification
       ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", {
+        accountDataApiToken: "TODO",
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -154,6 +156,7 @@ describe("change phone number controller", () => {
       expect(
         fakeService.sendPhoneVerificationNotification
       ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", {
+        accountDataApiToken: "TODO",
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -200,6 +203,7 @@ describe("change phone number controller", () => {
       expect(
         fakeService.sendPhoneVerificationNotification
       ).toHaveBeenCalledWith(CURRENT_EMAIL, "+33645453322", {
+        accountDataApiToken: "TODO",
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
