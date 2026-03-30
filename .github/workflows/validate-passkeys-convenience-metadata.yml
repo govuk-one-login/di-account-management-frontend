@@ -3,15 +3,12 @@ name: Validate passkeys convenience metadata
 permissions: {}
 
 on:
-  push:
-    paths:
-      - ".github/workflows/validate-passkeys-convenience-metadata.yml"
-      - "submodules/passkeys-convenience-metadata/**"
   pull_request:
   merge_group:
 
 jobs:
   check:
+    name: Validate passkeys convenience metadata
     runs-on: ubuntu-latest
 
     steps:
