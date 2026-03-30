@@ -34,6 +34,7 @@ export function createApiResponse(
 
 export interface RequestConfig {
   token: string;
+  accountDataApiToken: string;
   validationStatuses?: number[];
   sourceIp?: string;
   persistentSessionId?: string;
@@ -51,6 +52,7 @@ export async function getRequestConfigFromExpress(
 
   return {
     token: req.session.user.tokens.accessToken,
+    accountDataApiToken: "TODO",
     sourceIp: req.ip,
     sessionId: res.locals.sessionId,
     persistentSessionId: res.locals.persistentSessionId,
@@ -62,6 +64,7 @@ export async function getRequestConfigFromExpress(
 
 export function getRequestConfig({
   token,
+  accountDataApiToken,
   validationStatuses,
   sourceIp,
   persistentSessionId,
@@ -73,6 +76,7 @@ export function getRequestConfig({
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
+      "X-ADAPI-AccessToken": accountDataApiToken,
     },
     proxy: false,
   };

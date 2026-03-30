@@ -93,6 +93,7 @@ describe("change email controller", () => {
       expect(fakeService.sendCodeVerificationNotification).toHaveBeenCalledWith(
         NEW_EMAIL,
         {
+          accountDataApiToken: "TODO",
           token: TOKEN,
           sourceIp: SOURCE_IP,
           sessionId: SESSION_ID,
