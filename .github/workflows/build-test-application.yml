@@ -62,7 +62,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Install dependencies defined in package.json as a clean install
-        run: npm ci
+        run: npm run install-all
 
       - name: Build app
         run: npm run build

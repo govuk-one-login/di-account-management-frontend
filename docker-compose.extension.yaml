@@ -8,5 +8,5 @@ services:
       [
         "/bin/sh",
         "-c",
-        "npm ci && npm run link-registry && npm run copy-assets && npm run dev",
+        "npm run install-all && npm run link-registry && npm run build-rp-registry && npm run copy-assets && npm run dev",
       ]

@@ -43,6 +43,7 @@ export default [
       "fix-errors.cjs",
       "fix-unused-imports.mjs",
       "fix-all-unused.mjs",
+      "submodules",
     ],
   },
   {

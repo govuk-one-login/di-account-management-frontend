@@ -18,7 +18,7 @@ Clones the repository to the `your_folder_name` directory.
 To install and prepare the repo for dev. do the following:
 
 ```bash
-npm ci && npm run postinstall
+npm run install-all
 ```
 
 Installs dependencies defined in package-lock.json and then installs and explicitly builds the rp-registry
@@ -180,10 +180,10 @@ the build directory.
 
 ### Install dependencies
 
-> To install dependencies, run npm ci
+> To install dependencies, run npm run install-all
 
 ```shell script
-npm ci
+npm run install-all
 ```
 
 Installs the dependencies required to run the application.
@@ -238,4 +238,4 @@ If you are making changes to the [RP Registry](https://github.com/govuk-one-logi
 docker compose -f docker-compose.yml -f docker-compose.extension.yaml up
 ```
 
-When you make changes to the RP registry, run `npm run build`, and then touch any typescript file in this repo (to trigger a restart)
+When you make changes to the RP registry, run `npm run build-rp-registry`, and then touch any typescript file in this repo (to trigger a restart)
