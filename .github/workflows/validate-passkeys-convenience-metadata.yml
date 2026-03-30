@@ -8,6 +8,7 @@ on:
 
 jobs:
   check:
+    name: Validate passkeys convenience metadata
     runs-on: ubuntu-latest
 
     steps:
