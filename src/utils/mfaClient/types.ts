@@ -79,5 +79,5 @@ export interface Passkey {
   isBackedUp: boolean;
   isResidentKey: boolean;
   createdAt: string;
-  lastUsedAt: string;
+  lastUsedAt?: string;
 }
