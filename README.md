@@ -196,7 +196,7 @@ Installs the dependencies required to run the application.
 npm run test:coverage
 ```
 
-### Linting
+### Linting -
 
 > To run lint checks
 
