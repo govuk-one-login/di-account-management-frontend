@@ -10,6 +10,8 @@ export interface MfaClientInterface {
   ) => Promise<ApiResponse<MfaMethod[]>>;
   delete: (method: MfaMethod) => Promise<ApiResponse<any>>;
   makeDefault: (mfaIdentifier: string) => Promise<ApiResponse<MfaMethod[]>>;
+  getPasskeys: () => Promise<ApiResponse<Passkey[]>>;
+  deletePasskey: (passkeyIdentifier: string) => Promise<ApiResponse<any>>;
 }
 
 export interface MfaMethod {
@@ -64,4 +66,18 @@ export interface UpdateMfaPayload {
 export interface SimpleError {
   code: number;
   message: string;
+}
+
+export interface Passkey {
+  credential: string;
+  id: string;
+  aaguid: string;
+  isAttested: boolean;
+  signCount: number;
+  transports: string[];
+  isBackUpEligible: boolean;
+  isBackedUp: boolean;
+  isResidentKey: boolean;
+  createdAt: string;
+  lastUsedAt: string;
 }

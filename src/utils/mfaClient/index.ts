@@ -16,6 +16,7 @@ import {
   CreateMfaPayload,
   SimpleError,
   UpdateMfaPayload,
+  Passkey,
 } from "./types.js";
 import { HTTP_STATUS_CODES } from "../../app.constants.js";
 import { validateCreate, validateUpdate } from "./validate.js";
@@ -94,6 +95,24 @@ export class MfaClient implements MfaClientInterface {
     const response = await this.http.client.put<MfaMethod[]>(
       `/mfa-methods/${this.publicSubjectId}/${mfaIdentifier}`,
       { mfaMethod: { priorityIdentifier: "DEFAULT" } },
+      this.requestConfig
+    );
+
+    return buildResponse(response);
+  }
+
+  async getPasskeys() {
+    const response = await this.http.client.get<Passkey[]>(
+      `/passkeys/${this.publicSubjectId}`,
+      this.requestConfig
+    );
+
+    return buildResponse(response);
+  }
+
+  async deletePasskey(id: string) {
+    const response = await this.http.client.delete(
+      `/passkeys/${this.publicSubjectId}/${id}`,
       this.requestConfig
     );
 
