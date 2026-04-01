@@ -18,6 +18,8 @@ enum UserJourney {
   SwitchBackupMethod = "switchBackupMethod",
   ChangeDefaultMethod = "changeDefaultMethod",
   GlobalLogout = "globalLogout",
+  CreatePasskey = "createPasskey",
+  RemovePasskey = "removePasskey",
 }
 
 enum EventType {

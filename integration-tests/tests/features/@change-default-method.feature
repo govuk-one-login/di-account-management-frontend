@@ -4,10 +4,10 @@ Feature: Change Default MFA Method From Authenticator App
     Scenario: Change Default Method with no SMS backup
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthApp" user
-        And I go to the "Security" page
+        And I go to the "Sign in details" page
         And the page has finished loading
         Then the page meets our accessibility standards
-        And the page title is prefixed with "Security"
+        And the page title is prefixed with "Sign in details"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -38,10 +38,10 @@ Feature: Change Default MFA Method From Authenticator App
     Scenario: Change Default Method with no SMS Backup leaving at Use a different default method screen
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthApp" user
-        And I go to the "Security" page
+        And I go to the "Sign in details" page
         And the page has finished loading
         Then the page meets our accessibility standards
-        And the page title is prefixed with "Security"
+        And the page title is prefixed with "Sign in details"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -56,16 +56,16 @@ Feature: Change Default MFA Method From Authenticator App
         And the page title is prefixed with "If you do not have a UK mobile phone number"
         And I am shown a message explaining what I can do
         And I am shown a message explaining how to change to a different authenticator app
-        And there is a "Go back to Security" button
+        And there is a "Go back to Sign in details" button
 
     @failMobile
     Scenario: Change Default Method with no SMS Backup leaving at Enter your UK mobile phone number screen
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthApp" user
-        And I go to the "Security" page
+        And I go to the "Sign in details" page
         And the page has finished loading
         Then the page meets our accessibility standards
-        And the page title is prefixed with "Security"
+        And the page title is prefixed with "Sign in details"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -84,16 +84,16 @@ Feature: Change Default MFA Method From Authenticator App
         And the page title is prefixed with "If you do not have a UK mobile phone number"
         And I am shown a message explaining what I can do
         And I am shown a message explaining how to change to a different authenticator app
-        And there is a "Go back to Security" button
+        And there is a "Go back to Sign in details" button
 
     @failMobile
     Scenario: Change Default Method with SMS Backup
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthAppBackupSms" user
-        And I go to the "Security" page
+        And I go to the "Sign in details" page
         And the page has finished loading
         Then the page meets our accessibility standards
-        And the page title is prefixed with "Security"
+        And the page title is prefixed with "Sign in details"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -123,10 +123,10 @@ Feature: Change Default MFA Method From Authenticator App
     Scenario: Change Default Method with SMS Backup leaving at Use a different default method screen
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthAppBackupSms" user
-        And I go to the "Security" page
+        And I go to the "Sign in details" page
         And the page has finished loading
         Then the page meets our accessibility standards
-        And the page title is prefixed with "Security"
+        And the page title is prefixed with "Sign in details"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -141,16 +141,16 @@ Feature: Change Default MFA Method From Authenticator App
         And the page title is prefixed with "If you do not have a UK mobile phone number"
         And I am shown a message explaining what I can do
         And I am shown a message explaining how to change to a different authenticator app
-        And there is a "Go back to Security" button
+        And there is a "Go back to Sign in details" button
 
     @failMobile
     Scenario: Change Default Method with SMS Backup leaving at Enter your UK mobile phone number screen
         Given I go to the "Root" page
         And I sign in as the "userDEFAULTAuthAppBackupSms" user
-        And I go to the "Security" page
+        And I go to the "Sign in details" page
         And the page has finished loading
         Then the page meets our accessibility standards
-        And the page title is prefixed with "Security"
+        And the page title is prefixed with "Sign in details"
         Given I click the "Use a different default method" link
         And the page has finished loading
         Then the page meets our accessibility standards
@@ -169,4 +169,4 @@ Feature: Change Default MFA Method From Authenticator App
         And the page title is prefixed with "If you do not have a UK mobile phone number"
         And I am shown a message explaining what I can do
         And I am shown a message explaining how to change to a different authenticator app
-        And there is a "Go back to Security" button
+        And there is a "Go back to Sign in details" button

@@ -4,8 +4,8 @@ Feature: Change email address
   Scenario: Change email address
     Given I go to the "Root" page
     And I sign in as the "default" user
-    And I go to the "Security" page
-    Then the page title is prefixed with "Security"
+    And I go to the "Sign in details" page
+    Then the page title is prefixed with "Sign in details"
     Given I click the "Change email address" link
     And the page has finished loading
     Then the page meets our accessibility standards
@@ -27,7 +27,7 @@ Feature: Change email address
   Scenario: Email address can't be used
     Given I go to the "Root" page
     And I sign in as the "default" user
-    Then I go to the "Security" page
+    Then I go to the "Sign in details" page
     And I click the "Change email address" link
     Then I enter and submit my password "Pa55w0rd!"
     Then I enter and submit my new email address "fail.email.check@test.com"

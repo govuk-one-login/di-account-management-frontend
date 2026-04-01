@@ -2,7 +2,6 @@
 {% from "common/show-password/macro.njk" import govukInputWithShowPassword %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% set paragraph = ['pages.enterPassword.', requestType, '.paragraph'] | join | translate %}
-{% set cancelText = 'pages.enterPassword.cancelText' | translate %}
 {% set header = ['pages.enterPassword.', requestType, '.header'] | join | translate %}
 
 {% if requestType == 'changePassword' %}
@@ -10,8 +9,8 @@
 {% else %}
   {% set pageTitleName = 'pages.enterPassword.title' | translate %}
 {% endif %}
-{% if fromSecurity %}
-  {% set backLink = "SECURITY" | getPath %}
+{% if fromDetails %}
+  {% set backLink = fromDetails.url %}
 {% endif %}
 
 {% block pageContent %}
@@ -39,8 +38,8 @@
           text: 'general.continue.label' | translate,
           preventDoubleClick: true
         })}}
-        {% if fromSecurity %}
-        <p class="govuk-body"> <a href='{{ "SECURITY" | getPath }}' class="govuk-link" rel="noreferrer noopener">{{cancelText}}</a></p>
+        {% if fromDetails %}
+        <p class="govuk-body"> <a href='{{ fromDetails.url }}' class="govuk-link" rel="noreferrer noopener">{{ fromDetails.translationKey | translate }}</a></p>
         {% endif %}
     </form>
 

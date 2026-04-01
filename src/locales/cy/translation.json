@@ -13,6 +13,11 @@
     "yes": "Yes",
     "no": "Na",
     "backToSecurityButtonText": "Yn ôl i’r dudalen Ddiogelwch",
+    "backToSignInDetailsButtonText": "Yn ôl i fanylion mewngofnodi",
+    "cancelAndBackToSecurityText": "Canslo a mynd yn ôl i Diogelwch",
+    "cancelAndBackToSignInDetailsText": "Canslo a mynd yn ôl",
+    "backSecurity": "Yn ôl i Diogelwch",
+    "backSignInDetails": "Go back to Sign in details",
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg.",
@@ -169,6 +174,11 @@
         "heading": "Allgofnodi o bob dyfais",
         "link": "Allgofnodi o bob dyfais",
         "info": "Gallwch allgofnodi o bob ddyfais i helpu i gadw'ch GOV.UK One Login yn ddiogel."
+      },
+      "signInDetails": {
+        "heading": "Manylion mewngofnodi",
+        "link": "Rheoli eich manylion mewngofnodi",
+        "info": "Rheoli sut rydych yn mewngofnodi, gan gynnwys eich cyfeiriad e-bost, cyfrinair, rhif ffôn a'ch allwedd mynediad."
       }
     },
     "activityHistory": {
@@ -310,8 +320,7 @@
       "changeDefaultMethod": {
         "header": "Rhowch eich cyfrinair",
         "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
-      },
-      "cancelText": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
+      }
     },
     "changeEmail": {
       "title": "Rhowch eich cyfeiriad e-bost newydd",
@@ -326,9 +335,6 @@
           "sameEmail": "Rydych eisoes yn defnyddio'r cyfeiriad e-bost hwnnw. Rhowch gyfeiriad e-bost gwahanol.",
           "emailCantBeUsed": "Ni allwch ddefnyddio'r cyfeiriad e-bost hwn. Rhowch gyfeiriad e-bost gwahanol."
         }
-      },
-      "dontWantTo": {
-        "changeEmailLinkText": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
       }
     },
     "updateEmailConfirmation": {
@@ -380,8 +386,7 @@
       "securePasswordDetails": {
         "summary": "Sut i greu cyfrinair diogel",
         "text": "Ffordd dda o greu cyfrinair diogel a chofiadwy yw defnyddio 3 gair ar hap. Gallwch ddefnyddio rhifau, symbolau a gofodau."
-      },
-      "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
+      }
     },
     "checkYourEmail": {
       "title": "Gwiriwch eich e-bost",
@@ -459,7 +464,6 @@
       "header": "Rhowch eich rhif ffôn symudol y DU newydd",
       "info": {
         "paragraph1": "Byddwn yn anfon cod diogelwch 6 digid i’r rhif rydych yn ei roi i ni.",
-        "backLink": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
         "noUkPhone": "Nid oes gennyf rif ffôn symudol y DU"
       },
       "validationError": {
@@ -492,8 +496,7 @@
       "listItem1": "Ewch yn ôl i <strong>Diogelwch</strong>",
       "listItem2": "Dewiswch <strong>Defnyddio dull diofyn gwahanol</strong>",
       "listItem2hasBackupAuthApp": "Dewiswch <strong>Newid dulliau wrth gefn a diofyn</strong>",
-      "listItem2hasAuthApp": "Dewiswch <strong>Newid ap dilysu</strong>",
-      "backLinkButton": "Yn ôl i Diogelwch"
+      "listItem2hasAuthApp": "Dewiswch <strong>Newid ap dilysu</strong>"
     },
     "signedOut": {
       "title": "Rydych wedi allgofnodi",
@@ -509,7 +512,6 @@
       "header": "Cael cod diogelwch",
       "continue": "Cael cod diogelwch",
       "message": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd.",
-      "cancel": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
       "phoneNumber": {
         "insetText": "Byddwn yn anfon cod i'ch rhif ffôn sy'n gorffen gyda <strong>[mobile]</strong>.",
         "paragraph": "Gall negeseuon testun weithiau gymryd ychydig funudau i gyrraedd."
@@ -686,6 +688,63 @@
         }
       }
     },
+    "signInDetails": {
+      "title": "Manylion mewngofnodi",
+      "header": "Manylion mewngofnodi",
+      "paragraph": "Rheoli sut rydych yn mewngofnodi i'ch GOV.UK One Login.",
+      "backLinkText": "Yn ôl i Diogelwch",
+      "email": {
+        "heading": "Cyfeiriad e-bost",
+        "changeLink": "Newid cyfeiriad e-bost"
+      },
+      "password": {
+        "heading": "Cyfrinair",
+        "changeLink": "Newid cyfrinair"
+      },
+      "noPasskey": {
+        "heading": "Sefydlu allwedd mynediad",
+        "paragraph": "Mewngofnodi'n gyflymach gyda'ch wyneb, olion bysedd neu god mynediad.",
+        "linkText": "Sefydlu allwedd mynediad"
+      },
+      "passkeys": {
+        "heading": "Allweddi mynediad",
+        "paragraph1": "Mae allweddi mynediad yn gadael i chi fewngofnodi gyda'ch wyneb neu'ch olion bysedd, neu gyda'ch cod mynediad, PIN neu batrwm.",
+        "setUpAnotherPasskey": "Sefydlu allwedd mynediad arall",
+        "setUpAnotherPasskeyLinkText": "Sefydlu allwedd mynediad",
+        "subheadingOne": "Eich allwedd mynediad",
+        "subheadingMany": "Eich allwedd mynediad",
+        "savedTo": "Wedi'i arbed i: ",
+        "lastUsed": "Defnyddiwyd ddiwethaf: ",
+        "setUp": "Sefydlwyd: ",
+        "remove": "Tynnu allwedd mynediad",
+        "removeWithHiddenText": "Tynnu <span class='govuk-visually-hidden'>[passkeyName]</span>allwedd mynediad",
+        "unknownProvider": "Darparwr anhysbys"
+      },
+      "mfaSection": {
+        "heading": "Sut rydych yn cael codau diogelwch i fewngofnodi",
+        "defaultMethod": {
+          "heading": "Eich dull diofyn",
+          "phoneNumber": {
+            "title": "Neges destun i'ch rhif ffôn sy'n gorffen gyda [phoneNumber]",
+            "change": "Newid rhif ffôn"
+          },
+          "app": {
+            "title": "Ap dilysydd",
+            "change": "Newid ap dilysydd"
+          },
+          "change": "Defnyddio dull diofyn gwahanol"
+        },
+        "backup": {
+          "heading": "Eich dull wrth gefn",
+          "headingNoBackup": "Ychwanegu  dull wrth gefn",
+          "paragraph": "Rydym yn argymell eich bod yn ychwanegu dull wrth gefn ar gyfer cael codau diogelwch.",
+          "paragraph2": "Bydd hyn yn gwneud yn siŵr y gallwch fewngofnodi bob amser, hyd yn oed os na allwch gael codau diogelwch drwy ddefnyddio'ch dull diofyn.",
+          "link": "Ychwanegu  dull wrth gefn",
+          "removeLink": "Tynnu dull wrth gefn",
+          "switchLink": "Newid dulliau dull wrth gefn a diofyn"
+        }
+      }
+    },
     "confirmaddBackup": {
       "title": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
       "heading": "Rydych wedi ychwanegu dull wrth gefn ar gyfer cael codau diogelwch",
@@ -705,7 +764,6 @@
           "text2": "Gallwch ddefnyddio ap dilysydd ar eich ffôn clyfar, tabled neu gyfrifiadur. Lawrlwythwch ap dilysydd ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau neu chwiliwch ar-lein am ap dilysydd ar gyfer eich cyfrifiadur."
         }
       },
-      "backLink": "Canslo a mynd yn ôl i Diogelwch",
       "continue": "Parhau",
       "backup": {
         "title": "Ychwanegu  dull wrth gefn",
@@ -741,8 +799,7 @@
       "step4": {
         "text": "4. Rhowch y cod.",
         "hint": "Dyma'r rhif 6 digid a ddangosir yn eich ap dilysydd"
-      },
-      "cancel": "Canslo a mynd yn ôl i Diogelwch"
+      }
     },
     "addBackupSms": {
       "title": "Rhowch eich rhif ffôn symudol y DU",
@@ -763,7 +820,6 @@
       "sms": "Ni fyddwn bellach yn anfon codau diogelwch trwy neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
       "app": "Ni fyddwn bellach yn anfon codau diogelwch i'ch ap dilysydd.",
       "button": "Tynnu dull wrth gefn",
-      "cancelBackLink": "Canslo a mynd yn ôl i Diogelwch",
       "confirm": {
         "title": "Rydych wedi tynnu eich dull wrth gefn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi tynnu eich dull wrth gefn ar gyfer cael codau diogelwch.",
@@ -784,7 +840,6 @@
       "switchToPhone": "Gallwch gael codau drwy neges destun i rif ffôn symudol y DU yn lle hynny.",
       "setUpPhoneButton": "Ychwanegu rhif ffôn symudol y DU",
       "setUpAppButton": "Sefydlu ap dilysydd",
-      "cancelButton": "Canslo a mynd yn ôl i Diogelwch",
       "confirmation": {
         "title": "Rydych wedi newid eich dull diofyn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi newid eich dull diofyn ar gyfer cael codau diogelwch",
@@ -803,7 +858,6 @@
       "newBackupApp": "Bydd eich ap dilysydd yn dod yn eich dull wrth gefn.",
       "newBackupSms": "Bydd eich dull wrth gefn yn neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
       "button": "Newid dulliau",
-      "cancelLinkText": "Canslo a mynd yn ôl i Diogelwch",
       "confirm": {
         "title": "Rydych wedi newid eich dulliau wrth gefn a diofyn ar gyfer cael codau diogelwch",
         "heading": "Rydych wedi newid eich dulliau wrth gefn a diofyn ar gyfer cael codau diogelwch",

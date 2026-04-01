@@ -5,6 +5,7 @@ import i18next, { TFunction } from "i18next";
 import { EXTERNAL_URLS, LOCALE, PATH_DATA } from "../app.constants.js";
 import { addLanguageParam } from "@govuk-one-login/frontend-ui";
 import { safeTranslate } from "../utils/safeTranslate.js";
+import { passkeysEnabled } from "../config.js";
 
 export function configureNunjucks(
   app: express.Application,
@@ -31,6 +32,17 @@ export function configureNunjucks(
 
   nunjucksEnv.addGlobal("addLanguageParam", addLanguageParam);
   nunjucksEnv.addGlobal("govukRebrand", true);
+  nunjucksEnv.addGlobal("passkeysEnabled", passkeysEnabled());
+  nunjucksEnv.addGlobal(
+    "cancelAMJourneyHref",
+    passkeysEnabled() ? PATH_DATA.SIGN_IN_DETAILS.url : PATH_DATA.SECURITY.url
+  );
+  nunjucksEnv.addGlobal(
+    "cancelAMJourneyTextKey",
+    passkeysEnabled()
+      ? "general.cancelAndBackToSignInDetailsText"
+      : "general.cancelAndBackToSecurityText"
+  );
 
   nunjucksEnv.addFilter("getPath", function (route: string) {
     if (!PATH_DATA[route]) {

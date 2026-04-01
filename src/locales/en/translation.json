@@ -13,6 +13,11 @@
     "yes": "Yes",
     "no": "No",
     "backToSecurityButtonText": "Back to Security",
+    "backToSignInDetailsButtonText": "Back to sign in details",
+    "cancelAndBackToSecurityText": "Cancel and go back to Security",
+    "cancelAndBackToSignInDetailsText": "Cancel and go back",
+    "backSecurity": "Go back to Security",
+    "backSignInDetails": "Go back to Sign in details",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
@@ -172,6 +177,68 @@
         "heading": "Sign out of all devices",
         "link": "Sign out of all devices",
         "info": "You can sign out of all devices to help keep your GOV.UK One Login safe."
+      },
+      "signInDetails": {
+        "heading": "Sign in details",
+        "link": "Manage your sign in details",
+        "info": "Manage how you sign in, including your email address, password, phone number and passkey."
+      }
+    },
+    "signInDetails": {
+      "title": "Sign in details",
+      "header": "Sign in details",
+      "paragraph": "Manage how you sign in to your GOV.UK One Login.",
+      "backLinkText": "Back to Security",
+      "email": {
+        "heading": "Email address",
+        "changeLink": "Change email address"
+      },
+      "password": {
+        "heading": "Password",
+        "changeLink": "Change password"
+      },
+      "noPasskey": {
+        "heading": "Set up a passkey",
+        "paragraph": "Sign in faster with your face, fingerprint or passcode.",
+        "linkText": "Set up a passkey"
+      },
+      "passkeys": {
+        "heading": "Passkeys",
+        "paragraph1": "Passkeys let you sign in with your face or fingerprint, or with your device passcode, PIN or pattern.",
+        "setUpAnotherPasskey": "Set up another passkey",
+        "setUpAnotherPasskeyLinkText": "Set up a passkey",
+        "subheadingOne": "Your passkey",
+        "subheadingMany": "Your passkeys",
+        "savedTo": "Saved to: ",
+        "lastUsed": "Last used: ",
+        "setUp": "Set up: ",
+        "remove": "Remove passkey",
+        "removeWithHiddenText": "Remove <span class='govuk-visually-hidden'>[passkeyName]</span>passkey",
+        "unknownProvider": "Provider unknown"
+      },
+      "mfaSection": {
+        "heading": "How you get security codes to sign in",
+        "defaultMethod": {
+          "heading": "Your default method",
+          "phoneNumber": {
+            "title": "Text message to your phone number ending with [phoneNumber]",
+            "change": "Change phone number"
+          },
+          "app": {
+            "title": "Authenticator app",
+            "change": "Change authenticator app"
+          },
+          "change": "Use a different default method"
+        },
+        "backup": {
+          "heading": "Your back-up method",
+          "headingNoBackup": "Add a back-up method",
+          "paragraph": "We recommend you add a back-up method for getting security codes.",
+          "paragraph2": "This will make sure you can always sign in, even if you cannot get security codes using your default method.",
+          "link": "Add a back-up method",
+          "removeLink": "Remove back-up method",
+          "switchLink": "Switch back-up and default methods"
+        }
       }
     },
     "confirmaddBackup": {
@@ -193,7 +260,6 @@
           "text2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer."
         }
       },
-      "backLink": "Cancel and go back to Security",
       "continue": "Continue",
       "backup": {
         "title": "Add a back-up method",
@@ -232,8 +298,7 @@
       "step4": {
         "text": "4. Enter the code.",
         "hint": "This is the 6-digit number shown in your authenticator app"
-      },
-      "cancel": "Cancel and go back to Security"
+      }
     },
     "addBackupSms": {
       "title": "Enter your UK mobile phone number",
@@ -254,7 +319,6 @@
       "sms": "We’ll no longer send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "app": "We’ll no longer send security codes to your authenticator app.",
       "button": "Remove back-up method",
-      "cancelBackLink": "Cancel and go back to Security",
       "confirm": {
         "title": "You’ve removed your back-up method for getting security codes",
         "heading": "You’ve removed your back-up method for getting security codes.",
@@ -401,8 +465,7 @@
       "changeDefaultMethod": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
-      },
-      "cancelText": "Cancel and go back to Security"
+      }
     },
     "changeEmail": {
       "title": "Enter your new email address",
@@ -417,9 +480,6 @@
           "sameEmail": "You are already using that email address. Enter a different email address.",
           "emailCantBeUsed": "You are unable to use that email address. Enter a different email address."
         }
-      },
-      "dontWantTo": {
-        "changeEmailLinkText": "Cancel and go back to Security"
       }
     },
     "updateEmailConfirmation": {
@@ -476,8 +536,7 @@
       "securePasswordDetails": {
         "summary": "How to create a secure password",
         "text": "A good way to create a secure and memorable password is to use 3 random words. You can use numbers, symbols and spaces."
-      },
-      "backLink": "Cancel and go back to Security"
+      }
     },
     "checkYourEmail": {
       "title": "Check your email",
@@ -536,7 +595,6 @@
       "switchToPhone": "You can get codes by text message to a UK mobile number instead.",
       "setUpPhoneButton": "Add a UK mobile phone number",
       "setUpAppButton": "Set up an authenticator app",
-      "cancelButton": "Cancel and go back to Security",
       "confirmation": {
         "title": "You’ve changed your default method for getting security codes",
         "heading": "You’ve changed your default method for getting security codes",
@@ -575,7 +633,6 @@
       "header": "Enter your new UK mobile phone number",
       "info": {
         "paragraph1": "We will send a 6 digit security code to the number you give us.",
-        "backLink": "Cancel and go back to Security",
         "noUkPhone": "I do not have a UK mobile phone number"
       },
       "validationError": {
@@ -609,8 +666,7 @@
       "listItem1": "Go back to <strong>Security</strong>",
       "listItem2": "Select <strong>Use a different default method</strong>",
       "listItem2hasBackupAuthApp": "Select <strong>Switch back-up and default methods</strong>",
-      "listItem2hasAuthApp": "Select <strong>Change authenticator app</strong>",
-      "backLinkButton": "Go back to Security"
+      "listItem2hasAuthApp": "Select <strong>Change authenticator app</strong>"
     },
     "signedOut": {
       "title": "You have signed out",
@@ -626,7 +682,6 @@
       "header": "Get security code",
       "continue": "Get security code",
       "message": "Text messages can sometimes take a few minutes to arrive.",
-      "cancel": "Cancel and go back to Security",
       "phoneNumber": {
         "insetText": "We will send a code to your phone number ending with <strong>[mobile]</strong>.",
         "paragraph": "Text messages can sometimes take a few minutes to arrive."
@@ -643,7 +698,6 @@
       "newBackupApp": "Your authenticator app will become your back-up method.",
       "newBackupSms": "Your back-up method will be a text message to your phone number ending with <strong>[phoneNumber]</strong>.",
       "button": "Switch methods",
-      "cancelLinkText": "Cancel and go back to Security",
       "confirm": {
         "title": "You’ve switched your back-up and default methods for getting security codes",
         "heading": "You’ve switched your back-up and default methods for getting security codes",

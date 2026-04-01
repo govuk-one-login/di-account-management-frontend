@@ -5,9 +5,11 @@ import * as cheerio from "cheerio";
 import * as nock from "nock";
 import { PATH_DATA } from "../../../app.constants";
 import { getLastNDigits } from "../../../utils/phone-number.js";
+import * as config from "../../../config.js";
+
 import { UnsecuredJWT } from "jose";
 
-const { url } = PATH_DATA.SECURITY;
+const { url } = PATH_DATA.SIGN_IN_DETAILS;
 const TEST_USER_EMAIL = "test@test.com";
 const TEST_USER_PHONE_NUMBER = "07839490040";
 const DEFAULT_USER_SESSION = {
@@ -29,12 +31,21 @@ const DEFAULT_USER_SESSION = {
   },
 };
 
-describe("Integration:: security", () => {
+describe("Integration:: signInDetails", () => {
   beforeEach(() => {
     nock.cleanAll();
+    vi.spyOn(config, "passkeysEnabled").mockReturnValue(true);
   });
 
-  it("should return security page", async () => {
+  it("should not return signInDetails page when feature flag is off", async () => {
+    vi.spyOn(config, "passkeysEnabled").mockReturnValue(false);
+
+    const app = await appWithMiddlewareSetup();
+    const response = await request(app).get(url);
+    expect(response.status).toBe(404);
+  });
+
+  it("should return signInDetails page", async () => {
     const app = await appWithMiddlewareSetup();
     const response = await request(app).get(url);
     expect(response.status).toBe(200);
@@ -74,61 +85,14 @@ describe("Integration:: security", () => {
       });
   });
 
-  it("should display link to activity log", async () => {
+  it("should display passkeys", async () => {
     const app = await appWithMiddlewareSetup();
     await request(app)
       .get(url)
       .expect(function (res) {
         const $ = cheerio.load(res.text);
         expect(res.status).toBe(200);
-        expect($(testComponent("activity-log-section")).length).toBe(1);
-      });
-  });
-
-  it("should display link to global logout page when supportGlobalLogout is true", async () => {
-    const app = await appWithMiddlewareSetup({ supportGlobalLogout: true });
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).toBe(200);
-        expect($(testComponent("global-logout-section")).length).toBe(1);
-      });
-  });
-
-  it("should not display link to global logout page when supportGlobalLogout is false", async () => {
-    const app = await appWithMiddlewareSetup({ supportGlobalLogout: false });
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).toBe(200);
-        expect($(testComponent("global-logout-section")).length).toBe(0);
-      });
-  });
-
-  it("should display link to sign in details page and NOT show account management options when passkeys flag is true", async () => {
-    const app = await appWithMiddlewareSetup({ passkeysEnabled: true });
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).toBe(200);
-        expect($(testComponent("sign-in-details-section")).length).toBe(1);
-        expect($(testComponent("account-management-options")).length).toBe(0);
-      });
-  });
-
-  it("should NOT display link to sign in details page, and show account management options when passkeysEnabled is false", async () => {
-    const app = await appWithMiddlewareSetup({ passkeysEnabled: false });
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).toBe(200);
-
-        expect($(testComponent("sign-in-details-section")).length).toBe(0);
-        expect($(testComponent("account-management-options")).length).toBe(2);
+        expect($(testComponent("passkey")).length).toBe(4);
       });
   });
 });
@@ -138,7 +102,6 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     "../../../middleware/requires-auth-middleware.js"
   );
   const oidc = await import("../../../utils/oidc.js");
-  const configFuncs = await import("../../../config.js");
   const mfa = await import("../../../utils/mfaClient/index.js");
 
   vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
@@ -156,14 +119,54 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
     return Promise.resolve({});
   });
 
-  vi.spyOn(configFuncs, "supportGlobalLogout").mockImplementation(() => {
-    return config.supportGlobalLogout;
-  });
-
-  vi.spyOn(configFuncs, "passkeysEnabled").mockImplementation(() => {
-    return config.passkeysEnabled;
-  });
-
+  const passkeys = [
+    {
+      credential: "fake-credential-1",
+      id: "f5cf86e0-6eb5-4965-8c5e-2516b8f1c625",
+      aaguid: "1ac71f64-468d-4fe0-bef1-0e5f2f551f18",
+      isAttested: false,
+      signCount: 1,
+      transports: ["usb"],
+      isBackUpEligible: false,
+      isBackedUp: false,
+      createdAt: "2026-01-25T19:04:16.341Z",
+      lastUsedAt: "2026-02-08T09:33:10.341Z",
+    },
+    {
+      credential: "fake-credential-2",
+      id: "2250f2de-2add-4d2d-bb0c-4e67f2a7d4bf",
+      aaguid: "00000000-0000-0000-0000-000000000000",
+      isAttested: false,
+      signCount: 0,
+      transports: ["internal"],
+      isBackUpEligible: true,
+      isBackedUp: true,
+      createdAt: "2025-11-05T05:09:01.341Z",
+    },
+    {
+      credential: "fake-credential-3",
+      id: "8518d6e1-a126-463f-b682-103b7f8b1852",
+      aaguid: "dd4ec289-e01d-41c9-bb89-70fa845d4bf2",
+      isAttested: false,
+      signCount: 0,
+      transports: ["internal"],
+      isBackUpEligible: true,
+      isBackedUp: true,
+      createdAt: "2026-01-19T19:04:16.341Z",
+      lastUsedAt: "2026-02-25T20:06:19.341Z",
+    },
+    {
+      credential: "fake-credential-4",
+      id: "7b83b06f-f5a7-495b-9f1c-5485c66b19ee",
+      aaguid: "ea9b8d66-4d01-1d21-3ce4-b6b48cb575d4",
+      isAttested: false,
+      signCount: 0,
+      transports: ["internal"],
+      isBackUpEligible: true,
+      isBackedUp: false,
+      createdAt: "2025-12-19T12:32:19.341Z",
+    },
+  ];
   const mfaMethods =
     config.mfaMethodType === "SMS"
       ? [
@@ -181,6 +184,7 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
 
   const stubMfaClient = {
     retrieve: vi.fn().mockResolvedValue({ success: true, data: mfaMethods }),
+    getPasskeys: vi.fn().mockResolvedValue({ success: true, data: passkeys }),
   };
 
   vi.spyOn(mfa, "createMfaClient").mockResolvedValue(stubMfaClient);

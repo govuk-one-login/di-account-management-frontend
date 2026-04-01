@@ -83,8 +83,9 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule =
-        await import("../../../services/event-service");
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -115,8 +116,9 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule =
-        await import("../../../services/event-service");
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -147,8 +149,9 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule =
-        await import("../../../services/event-service");
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -179,8 +182,9 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule =
-        await import("../../../services/event-service");
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -248,7 +252,11 @@ describe("enter password controller", () => {
       expect(res.render).toHaveBeenCalled();
       expect(res.render).toHaveBeenCalledWith("enter-password/index.njk", {
         requestType: "changeEmail",
-        fromSecurity: true,
+        from: "security",
+        fromDetails: {
+          translationKey: "pages.cancelAndBackToSecurityText",
+          url: "/security",
+        },
         formAction:
           "https://test.com/enter-password?from=security&edit=true&type=changeEmail",
         errors: { password: { text: undefined, href: "#password" } },
@@ -280,7 +288,8 @@ describe("enter password controller", () => {
       expect(res.render).toHaveBeenCalled();
       expect(res.render).toHaveBeenCalledWith("enter-password/index.njk", {
         requestType: "changeEmail",
-        fromSecurity: false,
+        from: undefined,
+        fromDetails: undefined,
         formAction:
           "https://test.com/enter-password?edit=true&type=changeEmail",
         errors: { password: { text: undefined, href: "#password" } },

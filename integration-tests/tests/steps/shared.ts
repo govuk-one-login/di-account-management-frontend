@@ -12,6 +12,7 @@ const pageTitleToPath: Record<string, string> = {
   "Contact GOV.UK One Login": "/contact-gov-uk-one-login",
   "Services you can use with GOV.UK One Login": "/services-using-one-login",
   "Global logout confirm": "/global-logout/confirm",
+  "Sign in details": "/sign-in-details",
 };
 
 Then("the page meets our accessibility standards", async ({ page }) => {
@@ -88,7 +89,10 @@ Then("the page looks as expected", async ({ page }) => {
   expect(
     await page.screenshot({
       fullPage: true,
-      mask: [page.locator(".contact-reference__code")],
+      mask: [
+        page.locator(".contact-reference__code"),
+        page.getByTestId("passkey"),
+      ],
     })
   ).toMatchSnapshot();
 });

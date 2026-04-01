@@ -3,7 +3,8 @@ import * as nunjucks from "nunjucks";
 import express from "express";
 import i18next, { TFunction } from "i18next";
 import { configureNunjucks } from "../../../src/config/nunjucks.js";
-import { EXTERNAL_URLS } from "../../../src/app.constants.js";
+import { EXTERNAL_URLS, PATH_DATA } from "../../../src/app.constants.js";
+import * as config from "../../../src/config.js";
 
 type MyStubType = TFunction & ReturnType<typeof vi.fn>;
 
@@ -105,6 +106,32 @@ describe("configureNunjucks", () => {
     it("should return true", () => {
       nunjucksEnv = configureNunjucks(app, ["./views"]);
       expect(nunjucksEnv.getGlobal("govukRebrand")).toBe(true);
+    });
+  });
+
+  describe("global navigational variables", () => {
+    it("should navigate back to security when passkey flag is off", () => {
+      vi.spyOn(config, "passkeysEnabled").mockReturnValue(false);
+
+      nunjucksEnv = configureNunjucks(app, ["./views"]);
+      expect(nunjucksEnv.getGlobal("cancelAMJourneyHref")).toEqual(
+        PATH_DATA.SECURITY.url
+      );
+      expect(nunjucksEnv.getGlobal("cancelAMJourneyTextKey")).toEqual(
+        "general.cancelAndBackToSecurityText"
+      );
+    });
+
+    it("should navigate back to sign in details when passkey flag is on", () => {
+      vi.spyOn(config, "passkeysEnabled").mockReturnValue(true);
+
+      nunjucksEnv = configureNunjucks(app, ["./views"]);
+      expect(nunjucksEnv.getGlobal("cancelAMJourneyHref")).toEqual(
+        PATH_DATA.SIGN_IN_DETAILS.url
+      );
+      expect(nunjucksEnv.getGlobal("cancelAMJourneyTextKey")).toEqual(
+        "general.cancelAndBackToSignInDetailsText"
+      );
     });
   });
 
