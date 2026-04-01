@@ -257,11 +257,11 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://sqs8l2bqn1.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "1"
-      AMCJWKSURL: "https://api.manage.staging.account.gov.uk/.well-known/jwks.json"
+      AMCJWKSURL: "https://kvys7gq7h4.execute-api.eu-west-2.amazonaws.com/v1/.well-known/jwks.json"
       HOMEBASEURL: "https://home.staging.account.gov.uk"
-      AMCAUTHORIZEURL: "https://api.manage.staging.account.gov.uk/authorize"
-      AMCJOURNEYOUTCOMEURL: "https://api.manage.staging.account.gov.uk/journeyoutcome"
-      AMCTOKENURL: "https://api.manage.staging.account.gov.uk/token"
+      AMCAUTHORIZEURL: "https://kvys7gq7h4.execute-api.eu-west-2.amazonaws.com/v1/authorize"
+      AMCJOURNEYOUTCOMEURL: "https://kvys7gq7h4.execute-api.eu-west-2.amazonaws.com/v1/journeyoutcome"
+      AMCTOKENURL: "https://kvys7gq7h4.execute-api.eu-west-2.amazonaws.com/v1/token"
       AMCCLIENTID: "63385eefbc1649f9bc50eb9fd7c04de0" # pragma: allowlist secret
       ENABLEPKCE: "1"
     integration:
@@ -293,11 +293,11 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
-      AMCJWKSURL: "https://api.manage.integration.account.gov.uk/.well-known/jwks.json"
+      AMCJWKSURL: "https://rxkn8gwqb8.execute-api.eu-west-2.amazonaws.com/v1/.well-known/jwks.json"
       HOMEBASEURL: "https://home.integration.account.gov.uk"
-      AMCAUTHORIZEURL: "https://api.manage.integration.account.gov.uk/authorize"
-      AMCJOURNEYOUTCOMEURL: "https://api.manage.integration.account.gov.uk/journeyoutcome"
-      AMCTOKENURL: "https://api.manage.integration.account.gov.uk/token"
+      AMCAUTHORIZEURL: "https://rxkn8gwqb8.execute-api.eu-west-2.amazonaws.com/v1/authorize"
+      AMCJOURNEYOUTCOMEURL: "https://rxkn8gwqb8.execute-api.eu-west-2.amazonaws.com/v1/journeyoutcome"
+      AMCTOKENURL: "https://rxkn8gwqb8.execute-api.eu-west-2.amazonaws.com/v1/token"
       AMCCLIENTID: "cdf0311ea91648d4a25214415e521ef5" # pragma: allowlist secret
       ENABLEPKCE: "1"
     production:
@@ -330,11 +330,11 @@ Mappings:
       MISSIONLABWEBSOCKETADDR: "wss://jxcr697tal.execute-api.eu-west-2.amazonaws.com"
       FINGERPRINTCOOKIEDOMAIN: "account.gov.uk"
       SUPPORTGLOBALLOGOUT: "0"
-      AMCJWKSURL: "https://api.manage.account.gov.uk/.well-known/jwks.json"
+      AMCJWKSURL: "https://hkzy726xx0.execute-api.eu-west-2.amazonaws.com/v1/.well-known/jwks.json"
       HOMEBASEURL: "https://home.account.gov.uk"
-      AMCAUTHORIZEURL: "https://api.manage.account.gov.uk/authorize"
-      AMCJOURNEYOUTCOMEURL: "https://api.manage.account.gov.uk/journeyoutcome"
-      AMCTOKENURL: "https://api.manage.account.gov.uk/token"
+      AMCAUTHORIZEURL: "https://hkzy726xx0.execute-api.eu-west-2.amazonaws.com/v1/authorize"
+      AMCJOURNEYOUTCOMEURL: "https://hkzy726xx0.execute-api.eu-west-2.amazonaws.com/v1/journeyoutcome"
+      AMCTOKENURL: "https://hkzy726xx0.execute-api.eu-west-2.amazonaws.com/v1/token"
       AMCCLIENTID: "261b31a23ea2408094b7f8480d486fad" # pragma: allowlist secret
       ENABLEPKCE: "1"
 
