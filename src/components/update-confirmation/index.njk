@@ -9,12 +9,15 @@
 {% block pageContent %}
 
 {{ govukPanel({
-    titleText: panelText
+  titleText: panelText
 }) }}
 
 {% if summaryText %}
-<p class="govuk-body">{{summaryText | safe }}</p>
+  <p class="govuk-body">{{summaryText | safe }}</p>
 {% endif %}
+
+{{ summaryHtml | safe }}
+
 
 {% if showGovUKButton %}
 {{ govukButton({

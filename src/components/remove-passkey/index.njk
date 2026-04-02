@@ -1,0 +1,46 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitleName = 'pages.removePasskey.title' | translate %}
+
+{% block pageContent %}
+  <form action="{{ 'REMOVE_PASSKEY' | getPath }}" method="post" novalidate="novalidate">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+    <input type="hidden" name="TBD" value="{{passkey.id}}"/>
+
+    <h1 class="govuk-heading-l">{{'pages.removePasskey.header' | translate}}</h1>
+    <p class="govuk-body">
+    {%- if passkey.name -%}
+      {{- 'pages.removePasskey.removePasskeyKnown' | translate | safe | replace("[passkeyName]", passkey.name) -}}
+    {%- else -%}
+      {{- 'pages.removePasskey.removePasskeyUnknown' | translate -}}
+    {%- endif -%}
+    </p>
+
+    {%- if hasOtherPasskey -%}
+      <p class="govuk-body">{{ 'pages.removePasskey.fallbackPasskey' | translate }}</p>
+    {%- else -%}
+      <p class="govuk-body">{{ 'pages.removePasskey.fallbackMfa1' | translate }}</p>
+      <p class="govuk-body">
+        {%- if authIsDefaultMfa -%}
+          {{- 'pages.removePasskey.fallbackMfaAuthApp' | translate -}}
+        {%- elseif truncatedPhoneNumber -%}
+          {{- 'pages.removePasskey.fallbackMfaSms' | translate | safe | replace("[number]", truncatedPhoneNumber) -}}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+
+    {{ govukButton({
+      text: 'pages.removePasskey.continue' | translate,
+      preventDoubleClick: true,
+      attributes: {
+        "data-nav": true,
+        "data-link": "REMOVE_PASSKEY" | getPath
+      } 
+    }) }}
+  </form>
+
+  <a href="{{ cancelAMJourneyHref }}" class="govuk-link govuk-body">
+    {{ cancelAMJourneyTextKey | translate }}
+  </a>
+{% endblock %}

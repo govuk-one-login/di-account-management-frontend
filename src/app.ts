@@ -25,6 +25,7 @@ import {
   supportSearchableList,
   supportWebchatContact,
   supportGlobalLogout,
+  passkeysEnabled
 } from "./config.js";
 import { logErrorMiddleware } from "./middleware/log-error-middleware.js";
 import { pageNotFoundHandler } from "./handlers/page-not-found-handler.js";
@@ -95,6 +96,7 @@ import { monkeyPatchRedirectToSaveSessionMiddleware } from "./middleware/monkey-
 import { noUkMobilePhoneRouter } from "./components/no-uk-mobile-phone/no-uk-mobile-phone-routes.js";
 import { jwksRouter } from "./components/jwks/jwks-routes.js";
 import { amcCallbackRouter } from "./components/amc-callback/amc-callback-routes.js";
+import { removePasskeyRouter } from "./components/remove-passkey/remove-passkey-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -308,6 +310,9 @@ async function createApp(): Promise<express.Application> {
   }
   app.use(trackAndRedirectRouter);
   app.use(amcCallbackRouter);
+  if (passkeysEnabled()) {
+    app.use(removePasskeyRouter);
+  }
 
   // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy

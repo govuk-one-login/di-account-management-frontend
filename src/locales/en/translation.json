@@ -13,6 +13,8 @@
     "yes": "Yes",
     "no": "No",
     "backToSecurityButtonText": "Back to Security",
+    "cancelAndBackToSecurityText": "Cancel and go back to Security",
+    "cancelAndBackToSignInDetailsText": "Cancel and go back",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
@@ -402,7 +404,16 @@
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
       },
-      "cancelText": "Cancel and go back to Security"
+      "createPasskey": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can set up a passkey."
+      },
+      "removePasskey": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can remove your passkey."
+      },
+      "cancelTextSecurity": "Cancel and go back to Security",
+      "cancelTextSignInDetails": "Cancel and go back"
     },
     "changeEmail": {
       "title": "Enter your new email address",
@@ -445,6 +456,23 @@
       "title": "You’ve deleted your GOV.UK One Login",
       "panelText": "You’ve deleted your GOV.UK One Login",
       "summaryText": "If you need to use a GOV.UK One Login in the future, you’ll have to create a new one."
+    },
+    "removePasskeyConfirmation": {
+      "title": "You’ve removed your passkey",
+      "panelText": "You’ve removed your passkey",
+      "summaryTextOtherPasskey": "Next time you sign in, you’ll need to use another passkey.",
+      "summaryTextNoOtherPasskey": "Next time you sign in, you’ll need to enter your password and a security code."
+    },
+    "removePasskey": {
+      "title": "Remove your passkey",
+      "header": "Remove your passkey",
+      "removePasskeyUnknown": "This will remove the passkey from your GOV.UK One Login.",
+      "removePasskeyKnown": "The passkey saved to <strong>[passkeyName]</strong> will be removed from your GOV.UK One Login.",
+      "fallbackPasskey": "Next time you sign in, you can use another passkey.",
+      "fallbackMfa1": "Next time you sign in you’ll need to enter a password and security code instead.",
+      "fallbackMfaAuthApp": "You’ll use your authenticator app to get security codes.",
+      "fallbackMfaSms": "We’ll send security codes by text message to your phone number ending with <strong>[number]</strong>.",
+      "continue": "Remove passkey"
     },
     "changePassword": {
       "title": "Enter your new password",
@@ -657,7 +685,9 @@
       "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
-        "paragraphs": ["Read our guidance if you’re having a problem with:"],
+        "paragraphs": [
+          "Read our guidance if you’re having a problem with:"
+        ],
         "links": [
           {
             "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app",
@@ -763,7 +793,9 @@
         },
         "phone": {
           "heading": "Phone",
-          "paragraphs": ["You’ll need your reference code when you call."],
+          "paragraphs": [
+            "You’ll need your reference code when you call."
+          ],
           "insetText": {
             "paragraphs": [
               "<strong>From the UK:</strong><br>0300 373 9020",

@@ -11,6 +11,7 @@ import {
   removeMfaMethodConfirmationGet,
   changeDefaultMfaMethodConfirmationGet,
   changeDefaultMethodConfirmationGet,
+  removePasskeyConfirmationGet,
 } from "./update-confirmation-controller.js";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
@@ -75,6 +76,13 @@ router.get(
   mfaMethodMiddleware,
   validateStateMiddleware,
   changeDefaultMethodConfirmationGet
+);
+
+router.get(
+  PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url,
+  requiresAuthMiddleware,
+  validateStateMiddleware,
+  removePasskeyConfirmationGet
 );
 
 export { router as updateConfirmationRouter };

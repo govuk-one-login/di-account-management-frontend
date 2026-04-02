@@ -160,6 +160,16 @@ export const PATH_DATA: Record<
     event: EventType.Confirmation,
     type: UserJourney.DeleteAccount,
   },
+  PASSKEY_REMOVED_CONFIRMATION: {
+    url: "/remove-passkey-confirmation",
+    event: EventType.Confirmation,
+    type: UserJourney.RemovePasskey,
+  },
+  REMOVE_PASSKEY: {
+    url: "/remove-passkey",
+    event: EventType.Confirmation,
+    type: UserJourney.RemovePasskey,
+  },
   AUTH_CALLBACK: { url: "/auth/callback" },
   SESSION_EXPIRED: { url: "/session-expired" },
   USER_SIGNED_OUT: { url: "/signed-out" },
@@ -200,6 +210,7 @@ export const PATH_DATA: Record<
     url: "/logout-redirect",
   },
   AMC_CALLBACK: { url: "/amc/callback" },
+  SIGN_IN_DETAILS: { url: "/sign-in-details" },
 };
 
 export const EXTERNAL_URLS = {

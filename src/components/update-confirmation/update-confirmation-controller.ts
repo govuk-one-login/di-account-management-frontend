@@ -308,3 +308,17 @@ export async function changeDefaultMethodConfirmationGet(
     summaryText: message,
   });
 }
+
+export function removePasskeyConfirmationGet(req: Request, res: Response): void {
+  req.metrics?.addMetric("removePasskeyConfirmationGet", MetricUnit.Count, 1);
+  // TODO setOplSettings
+  //  TODO check if user has other passkeys
+  const hasOtherPasskeys = true;
+  // delete req.session.user.state.removePasskey;
+
+  res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.removePasskeyConfirmation.title"),
+    panelText: req.t("pages.removePasskeyConfirmation.panelText"),
+    summaryText: hasOtherPasskeys ? req.t("pages.removePasskeyConfirmation.summaryTextOtherPasskey") : req.t("pages.removePasskeyConfirmation.summaryTextNoOtherPasskey")
+  });
+}

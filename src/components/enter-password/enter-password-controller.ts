@@ -45,6 +45,18 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.SwitchBackupMethod]: PATH_DATA.SWITCH_BACKUP_METHOD.url,
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   [UserJourney.GlobalLogout]: PATH_DATA.GLOBAL_LOGOUT_CONFIRM.url,
+  [UserJourney.CreatePasskey]: "/todo-create",
+  [UserJourney.RemovePasskey]: PATH_DATA.REMOVE_PASSKEY.url,
+};
+
+const VALID_BACK_ROUTES: Record<"security" | "sign-in-details", { url: string, translationKey: string}> = {
+  "security": { 
+    url: PATH_DATA.SECURITY.url, 
+    translationKey: "pages.enterPassword.cancelTextSecurity" },
+  "sign-in-details": { 
+    url: PATH_DATA.SIGN_IN_DETAILS.url, 
+    translationKey: "pages.enterPassword.cancelTextSignInDetails"
+  },
 };
 
 const getOplValues = (): OplSettingsLookupObject => ({
@@ -102,10 +114,16 @@ const getOplValues = (): OplSettingsLookupObject => ({
 });
 
 const getRenderOptions = (req: Request, requestType: UserJourney) => {
+  let from: keyof typeof VALID_BACK_ROUTES | undefined;
+
+  from = (typeof req.query.from === "string" && req.query.from in VALID_BACK_ROUTES) 
+  ? req.query.from as keyof typeof VALID_BACK_ROUTES 
+  : undefined;
   return {
     requestType,
-    fromSecurity: req.query.from == "security",
     formAction: req.url,
+    from,
+    fromDetails: VALID_BACK_ROUTES[from],
   };
 };
 
@@ -230,8 +248,9 @@ export function enterPasswordPost(
         req.session.user.state[requestType].value,
         EventType.Authenticated
       );
-      const redirectPath = getRenderOptions(req, requestType).fromSecurity
-        ? `${REDIRECT_PATHS[requestType]}?from=security`
+      const from = getRenderOptions(req, requestType).from
+      const redirectPath = from
+        ? `${REDIRECT_PATHS[requestType]}?from=${from}`
         : REDIRECT_PATHS[requestType];
       res.redirect(redirectPath);
       return;

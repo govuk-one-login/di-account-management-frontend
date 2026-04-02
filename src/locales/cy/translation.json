@@ -13,6 +13,8 @@
     "yes": "Yes",
     "no": "Na",
     "backToSecurityButtonText": "Yn ôl i’r dudalen Ddiogelwch",
+    "cancelAndBackToSecurityText": "Canslo a mynd yn ôl i Diogelwch",
+    "cancelAndBackToSignInDetailsText": "Cancel and go back",
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg.",
@@ -311,7 +313,8 @@
         "header": "Rhowch eich cyfrinair",
         "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
       },
-      "cancelText": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch"
+      "cancelTextSecurity": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
+      "cancelTextSignInDetails": "Cancel and go back to Sign in details"
     },
     "changeEmail": {
       "title": "Rhowch eich cyfeiriad e-bost newydd",
@@ -349,6 +352,23 @@
       "title": "Rydych wedi dileu eich GOV.UK One Login",
       "panelText": "Rydych wedi dileu eich GOV.UK One Login",
       "summaryText": "Os byddwch angen defnyddio GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd."
+    },
+    "removePasskeyConfirmation": {
+      "title": "You’ve removed your passkey",
+      "panelText": "You’ve removed your passkey",
+      "summaryTextOtherPasskey": "Next time you sign in, you can use another passkey.",
+      "summaryTextNoOtherPasskey": "Next time you sign in, you’ll need to enter your password and a security code."
+    },
+    "removePasskey": {
+      "title": "Remove your passkey",
+      "panelText": "Remove your passkey",
+      "removePasskeyUnknown": "This will remove the passkey from your GOV.UK One Login.",
+      "removePasskeyKnown": "The passkey saved to [passkeyName] will be removed from your GOV.UK One Login.",
+      "fallbackPasskey": "Next time you sign in, you can use another passkey.",
+      "fallbackMfa1": "Next time you sign in you’ll need to enter a password and security code instead.",
+      "fallbackMfaAuthApp": "You’ll use your authenticator app to get security codes.",
+      "fallbackMfaSms": "We’ll send security codes by text message to your phone number ending with [number].",
+      "continue": "Remove passkey"
     },
     "changePassword": {
       "title": "Rhowch eich cyfrinair newydd",
