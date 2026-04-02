@@ -14,7 +14,7 @@ const pageTitleToPath: Record<string, string> = {
   "Global logout confirm": "/global-logout/confirm",
 };
 
-Then("the page meets our accessibility standards", async ({ page }) => {
+Then("the accessibility scan passes", async ({ page }) => {
   const accessibilityScanResults = await new AxeBuilder({ page })
     .withTags(["wcag22aa"])
     .analyze();

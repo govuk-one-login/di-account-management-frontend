@@ -5,24 +5,25 @@
 @import "overrides/index";
 
 // start Design System component imports
-@import "components/back-link/back-link";
-@import "components/button/button";
-@import "components/checkboxes/checkboxes";
-@import "components/cookie-banner/cookie-banner";
-@import "components/details/details";
-@import "components/error-summary/error-summary";
-@import "components/footer/footer";
-@import "components/header/header";
-@import "components/input/input";
-@import "components/inset-text/inset-text";
-@import "components/pagination/pagination";
-@import "components/panel/panel";
-@import "components/password-input/password-input";
-@import "components/phase-banner/phase-banner";
-@import "components/skip-link/skip-link";
-@import "components/summary-list/summary-list";
-@import "components/warning-text/warning-text";
-@import "components/radios/radios";
+@import "components/back-link";
+@import "components/button";
+@import "components/checkboxes";
+@import "components/cookie-banner";
+@import "components/details";
+@import "components/error-summary";
+@import "components/footer";
+@import "components/header";
+@import "components/input";
+@import "components/inset-text";
+@import "components/pagination";
+@import "components/panel";
+@import "components/password-input";
+@import "components/phase-banner";
+@import "components/skip-link";
+@import "components/summary-list";
+@import "components/warning-text";
+@import "components/radios";
+@import "components/service-navigation";
 // end Design System component imports
 
 // language toggle component import
@@ -31,7 +32,7 @@
 .information-box {
   margin-bottom: govuk-spacing(4);
   padding: govuk-spacing(3);
-  background: govuk-colour("light-grey");
+  background: govuk-colour("black", $variant: "tint-95");
   @include govuk-media-query($from: tablet) {
     padding: govuk-spacing(6);
     margin-top: govuk-spacing(2);
@@ -42,7 +43,7 @@
 .summary-list-container {
   padding: govuk-spacing(4) govuk-spacing(4) 0 govuk-spacing(4);
   margin-bottom: govuk-spacing(6);
-  border: 1px solid $govuk-border-colour;
+  border: 1px solid govuk-functional-colour(border);
 
   .govuk-summary-list {
     @include govuk-media-query($until: "tablet") {
@@ -62,7 +63,7 @@
 
 .summary-list-container__content {
   &:not(:last-child) {
-    border-bottom: 1px solid $govuk-border-colour;
+    border-bottom: 1px solid govuk-functional-colour(border);
   }
 
   &:not(:first-child) {
@@ -90,7 +91,7 @@
 }
 
 .govuk-input--disabled {
-  background-color: govuk-colour("light-grey", $legacy: "grey-3");
+  background-color: govuk-colour("black", $variant: "tint-95");
 }
 
 // the modifier below is in place to remove the non-optional blue border at the bottom of the Design System header component
@@ -110,26 +111,31 @@
 }
 
 .govuk-header--with-signout {
-  .govuk-template--rebranded & {
-    .govuk-header__logo {
-      width: 100%;
-    }
+  .govuk-header__logo {
+    width: 100%;
+  }
+}
+
+.govuk-header__container {
+  position: relative;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
   }
 }
 
 .account-navigation {
-  background-color: govuk-colour("light-grey");
-  .govuk-template--rebranded & {
-    background-color: $_govuk-rebrand-template-background-colour;
-    border-bottom: 1px solid $_govuk-rebrand-border-colour-on-blue-tint-95;
-  }
-  border-bottom: 1px solid $govuk-border-colour;
+  background-color: govuk-colour("black", $variant: "tint-95");
+  background-color: govuk-functional-colour(surface-background);
+  border-bottom: 1px solid govuk-functional-colour(surface-border);
   position: relative;
 }
 
 .account-navigation__list {
   @include govuk-font($size: 19);
-  @include govuk-text-colour;
+  color: govuk-functional-colour(text);
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -207,7 +213,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 }
 
 .account-navigation__link {
-  @extend .govuk-link;
+  @extend .govuk-service-navigation__link;
   display: inline-block;
   padding: $nav-link-padding-left 0 $nav-link-padding;
   margin-top: $nav-link-outline-thickness;
@@ -216,20 +222,9 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
     text-decoration: none;
   }
 
-  &:visited {
-    color: $govuk-link-colour;
-
-    &:hover {
-      color: $govuk-link-hover-colour;
-    }
-
-    &:focus {
-      color: $govuk-focus-text-colour;
-    }
-  }
-
   .account-navigation__list-item--active & {
-    border-bottom: $nav-active-border-thickness solid $govuk-link-colour;
+    border-bottom: $nav-active-border-thickness solid
+      govuk-functional-colour(link);
     padding: $nav-link-padding-left 0 govuk-spacing(2);
 
     &:focus {
@@ -239,7 +234,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
     }
 
     &:hover {
-      border-color: $govuk-link-hover-colour;
+      border-color: govuk-functional-colour(link-hover);
     }
   }
 }
@@ -253,7 +248,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 }
 
 .your-services__card {
-  border: 1px solid $govuk-border-colour;
+  border: 1px solid govuk-functional-colour(border);
 
   // this degree of specificity is required to overrule the default govuk-list style
   .govuk-list > & {
@@ -267,7 +262,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
 .your-services__card__heading {
   padding: govuk-spacing(3) govuk-spacing(3) govuk-spacing(4) govuk-spacing(3);
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
   margin: 0;
 }
 
@@ -278,7 +273,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 }
 
 .your-services__card__last-used {
-  color: $govuk-secondary-text-colour;
+  color: govuk-functional-colour(secondary-text);
 }
 
 .your-services__list {
@@ -287,8 +282,8 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
 .contact-reference {
   padding: govuk-spacing(3);
-  background-color: govuk-colour("light-grey");
-  border-left: 5px solid $govuk-border-colour;
+  background-color: govuk-colour("black", $variant: "tint-95");
+  border-left: 5px solid govuk-functional-colour(border);
 }
 
 .contact-reference__code {
@@ -312,7 +307,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   background: none;
   cursor: pointer;
   font-size: inherit;
-  color: $govuk-link-colour;
+  color: govuk-functional-colour(link);
 
   @include govuk-link-common;
   @include govuk-link-style-default;
@@ -350,22 +345,22 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   list-style: none;
   padding: 0;
   margin: govuk-spacing(4) 0;
-  border-top: 1px solid $govuk-border-colour;
+  border-top: 1px solid govuk-functional-colour(border);
 }
 
 .activity-history__list-item {
-  border-bottom: 1px solid $govuk-border-colour;
+  border-bottom: 1px solid govuk-functional-colour(border);
   @include govuk-responsive-padding(4, "top");
 }
 
 .search-results {
-  border-top: 1px solid $govuk-border-colour;
+  border-top: 1px solid govuk-functional-colour(border);
 }
 
 .search-results__list-item {
   margin-top: govuk-spacing(3);
   padding-bottom: govuk-spacing(3);
-  border-bottom: 1px solid $govuk-border-colour;
+  border-bottom: 1px solid govuk-functional-colour(border);
 }
 
 .search-services__input:not(:focus) {
@@ -393,7 +388,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   }
   &:focus {
     z-index: 2;
-    outline: $govuk-focus-width solid $govuk-focus-colour;
+    outline: $govuk-focus-width solid govuk-functional-colour(focus);
     // Double the border by adding its width again. Use `box-shadow` for this // instead of changing `border-width` - this is for consistency with
     // Also, `outline` cannot be utilised
     // here as it is already used for the yellow focus state.
