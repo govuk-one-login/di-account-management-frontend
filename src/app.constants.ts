@@ -160,6 +160,11 @@ export const PATH_DATA: Record<
     event: EventType.Confirmation,
     type: UserJourney.DeleteAccount,
   },
+  PASSKEY_CREATED_CONFIRMATION: {
+    url: "/passkey-created-confirmation",
+    event: EventType.Confirmation,
+    type: UserJourney.CreatePasskey,
+  },
   AUTH_CALLBACK: { url: "/auth/callback" },
   SESSION_EXPIRED: { url: "/session-expired" },
   USER_SIGNED_OUT: { url: "/signed-out" },

@@ -308,3 +308,23 @@ export async function changeDefaultMethodConfirmationGet(
     summaryText: message,
   });
 }
+
+export function createPasskeyConfirmationGet(req: Request, res: Response): void {
+  req.metrics?.addMetric("createPasskeyConfirmationGet", MetricUnit.Count, 1);
+  // TODO get the actual passkey name using the passkey metadata util
+  const passkeyName = "My passkey";
+  const baseHtml = req.t("pages.createPasskeyConfirmation.summaryHtml2");
+  const summaryHtml = passkeyName ? req.t("pages.createPasskeyConfirmation.summaryHtml1").replace(
+      "[passkeyName]",
+      passkeyName
+    ).concat(baseHtml) : baseHtml;
+  // TODO setOplSettings
+
+  // delete req.session.user.state.createPasskey;
+
+  res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.createPasskeyConfirmation.title"),
+    panelText: req.t("pages.createPasskeyConfirmation.panelText"),
+    summaryHtml: summaryHtml,
+  });
+}
