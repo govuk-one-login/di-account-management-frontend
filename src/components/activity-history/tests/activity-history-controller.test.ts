@@ -13,6 +13,7 @@ describe("Activity history controller", () => {
 
   beforeEach(() => {
     process.env.APP_ENV = "local";
+    process.env.PASSKEYS = "1";
     res = {
       render: vi.fn(),
       locals: { sessionId: "testSessionId" },
