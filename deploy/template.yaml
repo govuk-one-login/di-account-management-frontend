@@ -229,7 +229,7 @@ Mappings:
       AMCTOKENURL: "https://amc-stub.home.build.account.gov.uk/token"
       AMCCLIENTID: "fake_build_amc_client_id"
       ENABLEPKCE: "1"
-      PASSKEYS: "0"
+      PASSKEYS: "1"
     staging:
       NODEENV: "production"
       APIBASEURL: "https://oidc.staging.account.gov.uk"
