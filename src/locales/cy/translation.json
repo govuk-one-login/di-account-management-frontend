@@ -714,11 +714,13 @@
         "subheadingOne": "Eich allwedd mynediad",
         "subheadingMany": "Eich allwedd mynediad",
         "savedTo": "Wedi'i arbed i: ",
+        "savedToUnknownProvider": "Wedi'i arbed i: Darparwr anhysbys",
+        "savedToMultiple": "Allwedd mynediad: wedi'i arbed i ",
+        "savedToMultipleUnknownProvider": "Allwedd mynediad: wedi'i arbed i ddarparwr anhysbys",
         "lastUsed": "Defnyddiwyd ddiwethaf: ",
         "setUp": "Sefydlwyd: ",
         "remove": "Tynnu allwedd mynediad",
-        "removeWithHiddenText": "Tynnu <span class='govuk-visually-hidden'>[passkeyName]</span>allwedd mynediad",
-        "unknownProvider": "Darparwr anhysbys"
+        "removeWithHiddenText": "Tynnu <span class='govuk-visually-hidden'>[passkeyName]</span>allwedd mynediad"
       },
       "mfaSection": {
         "heading": "Sut rydych yn cael codau diogelwch i fewngofnodi",

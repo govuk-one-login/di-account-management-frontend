@@ -21,16 +21,6 @@ interface PrettyPasskey {
   id: string;
 }
 
-const formatDate = (string?: string): string => {
-  if (!string) return;
-
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(string));
-};
-
 export async function formatPasskeysForRender(
   req: Request,
   passkeys: Passkey[]
@@ -56,6 +46,16 @@ export async function formatPasskeysForRender(
 
   const sortedPasskeys = [...sortedLastUsed, ...sortedCreatedAt];
 
+  const formatDate = (lang: string, string?: string): string => {
+    if (!string) return "";
+
+    return new Intl.DateTimeFormat(lang === "cy" ? "cy" : "en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(string));
+  };
+
   const formattedPasskeys = await Promise.all(
     sortedPasskeys.map(async (passkey) => {
       const metadata = await getPasskeyConvenienceMetadataByAaguid(
@@ -65,8 +65,9 @@ export async function formatPasskeysForRender(
       return {
         id: passkey.id,
         name: metadata?.name,
-        createdAt: formatDate(passkey.createdAt),
-        lastUsedAt: passkey.lastUsedAt && formatDate(passkey.lastUsedAt),
+        createdAt: formatDate(req.language, passkey.createdAt),
+        lastUsedAt:
+          passkey.lastUsedAt && formatDate(req.language, passkey.lastUsedAt),
       };
     })
   );

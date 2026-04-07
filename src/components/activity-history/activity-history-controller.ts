@@ -4,6 +4,7 @@ import {
   activityLogItemsPerPage,
   getOIDCClientId,
   reportSuspiciousActivity,
+  passkeysEnabled,
 } from "../../config.js";
 import {
   PATH_DATA,
@@ -83,7 +84,10 @@ export async function activityHistoryGet(
       env: env,
       pagination: pagination,
       backLink: PATH_DATA.SECURITY.url,
-      changePasswordLink: PATH_DATA.SECURITY.url,
+      changePasswordLink:
+        (passkeysEnabled()
+          ? PATH_DATA.SIGN_IN_DETAILS.url
+          : PATH_DATA.SECURITY.url) + "#password-details",
       contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
       homeClientId: getOIDCClientId(),
       currentLngWelsh: req.i18n?.language === "cy",

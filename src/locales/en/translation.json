@@ -210,11 +210,13 @@
         "subheadingOne": "Your passkey",
         "subheadingMany": "Your passkeys",
         "savedTo": "Saved to: ",
+        "savedToUnknownProvider": "Saved to: Provider unknown",
+        "savedToMultiple": "Passkey: saved to ",
+        "savedToMultipleUnknownProvider": "Passkey: saved to provider unknown",
         "lastUsed": "Last used: ",
         "setUp": "Set up: ",
         "remove": "Remove passkey",
-        "removeWithHiddenText": "Remove <span class='govuk-visually-hidden'>[passkeyName]</span>passkey",
-        "unknownProvider": "Provider unknown"
+        "removeWithHiddenText": "Remove <span class='govuk-visually-hidden'>[passkeyName]</span>passkey"
       },
       "mfaSection": {
         "heading": "How you get security codes to sign in",

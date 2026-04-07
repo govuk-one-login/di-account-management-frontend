@@ -55,11 +55,11 @@ const VALID_BACK_ROUTES: Record<
 > = {
   security: {
     url: PATH_DATA.SECURITY.url,
-    translationKey: "pages.cancelAndBackToSecurityText",
+    translationKey: "general.cancelAndBackToSecurityText",
   },
   "sign-in-details": {
     url: PATH_DATA.SIGN_IN_DETAILS.url,
-    translationKey: "pages.cancelAndBackToSignInDetailsText",
+    translationKey: "general.cancelAndBackToSignInDetailsText",
   },
 };
 

@@ -8,7 +8,7 @@ vi.mock("../passkeysConvenienceMetadata/index.js", () => ({
 }));
 
 describe("formatPasskeysForRender", () => {
-  const mockReq = {} as Request;
+  const mockReq = { language: "en" } as Request;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -64,17 +64,45 @@ describe("formatPasskeysForRender", () => {
       },
     ] as any;
 
+    const reqEn = { language: "en" } as Request;
+
     vi.mocked(getPasskeyConvenienceMetadataByAaguid).mockResolvedValue({
       name: "iPhone",
     });
 
-    const result = await formatPasskeysForRender(mockReq, passkeys);
+    const result = await formatPasskeysForRender(reqEn, passkeys);
 
     expect(result[0]).toEqual({
       id: "1",
       name: "iPhone",
       createdAt: "1 January 2023",
       lastUsedAt: "25 December 2023",
+    });
+  });
+
+  it("should format dates correctly using Welsh locale", async () => {
+    const passkeys = [
+      {
+        id: "1",
+        aaguid: "abc",
+        createdAt: "2023-01-01T12:00:00Z",
+        lastUsedAt: "2023-12-25T12:00:00Z",
+      },
+    ] as any;
+
+    const reqCy = { language: "cy" } as Request;
+
+    vi.mocked(getPasskeyConvenienceMetadataByAaguid).mockResolvedValue({
+      name: "iPhone",
+    });
+
+    const result = await formatPasskeysForRender(reqCy, passkeys);
+
+    expect(result[0]).toEqual({
+      id: "1",
+      name: "iPhone",
+      createdAt: "1 Ionawr 2023",
+      lastUsedAt: "25 Rhagfyr 2023",
     });
   });
 
@@ -91,5 +119,28 @@ describe("formatPasskeysForRender", () => {
 
     expect(result[0].name).toBeUndefined();
     expect(result[0].id).toBe("1");
+  });
+
+  it("should handle empty lastUsedAt gracefully", async () => {
+    const passkeys = [
+      {
+        id: "1",
+        aaguid: "abc",
+        createdAt: "2023-01-01T12:00:00Z",
+      },
+    ] as any;
+
+    vi.mocked(getPasskeyConvenienceMetadataByAaguid).mockResolvedValue({
+      name: "iPhone",
+    });
+
+    const result = await formatPasskeysForRender(mockReq, passkeys);
+
+    expect(result[0]).toEqual({
+      id: "1",
+      name: "iPhone",
+      createdAt: "1 January 2023",
+      lastUsedAt: undefined,
+    });
   });
 });

@@ -24,27 +24,35 @@
       <p class="govuk-body">{{ 'pages.signInDetails.passkeys.paragraph1' | translate }}</p>
     </div>
 
-    <div class="summary-list-container__content">
+    <div class="summary-list-container__content no-bottom-border" id="passkeys-list-box">
       <h3 class="govuk-heading-m">{% if passkeys.length > 1 %}{{ 'pages.signInDetails.passkeys.subheadingMany' | translate }}{% else %}{{ 'pages.signInDetails.passkeys.subheadingOne' | translate }}{% endif %}</h3>
 
       <ul class="govuk-list">
         {%- for passkey in passkeys -%}
         <li class="summary-list-container__content" data-test-id="passkey">
-          <p class="govuk-body govuk-!-margin-bottom-0">{{ 'pages.signInDetails.passkeys.savedTo' | translate }}
-            {%- if passkey.name -%}
-              {{passkey.name}}
-            {%- else -%}
-              {{- 'pages.signInDetails.passkeys.unknownProvider' | translate -}}
-            {%- endif -%}
-          </p>
           <p class="govuk-body govuk-!-margin-bottom-0">
-            {{ 'pages.signInDetails.passkeys.setUp' | translate }} {{ passkey.createdAt }}
+            {%- if passkeys.length > 1 -%}
+              {%- if passkey.name -%}
+                {{- 'pages.signInDetails.passkeys.savedToMultiple' | translate -}} {{passkey.name}}
+              {%- else -%}
+                {{- 'pages.signInDetails.passkeys.savedToMultipleUnknownProvider' | translate -}}
+              {%- endif -%}
+            {%- else -%}
+              {%- if passkey.name -%}
+                {{- 'pages.signInDetails.passkeys.savedTo' | translate -}} {{passkey.name}}
+              {%- else -%}
+                {{- 'pages.signInDetails.passkeys.savedToUnknownProvider' | translate -}}
+              {%- endif -%}
+            {%- endif -%}
           </p>
           {% if passkey.lastUsedAt %}
             <p class="govuk-body govuk-!-margin-bottom-0">
               {{- 'pages.signInDetails.passkeys.lastUsed' | translate -}} {{ passkey.lastUsedAt }}
             </p>
-          {% endif %}
+          {% endif %}          
+          <p class="govuk-body govuk-!-margin-bottom-0">
+            {{ 'pages.signInDetails.passkeys.setUp' | translate }} {{ passkey.createdAt }}
+          </p>
           <p class="govuk-body">
             <a href="{{[enterPasswordUrls.removePasskey, "&passkeyId=", passkey.id] | join }}" class="govuk-link">
             {{- 'pages.signInDetails.passkeys.removeWithHiddenText' | translate | safe | replace("[passkeyName]", passkey.name) if passkey.name -}}
@@ -64,7 +72,7 @@
   </div>
   {% endif %}
 
-  <div class="summary-list-container">
+  <div class="summary-list-container" id="password-details">
     <h2 class={{h2Class}}>{{ 'pages.signInDetails.password.heading' | translate }}</h2>
     <p class="govuk-body">••••••••••••••••</p>
     <p class="govuk-body">
@@ -136,11 +144,15 @@
 
     <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
       if (SimpleWebAuthnBrowser.browserSupportsWebAuthn()) {
-        const passkeyBox = document.getElementById("create-passkey-box");
-        if (passkeyBox) {
-          passkeyBox.classList.remove("govuk-!-display-none");
-          passkeyBox.removeAttribute("hidden");
+        const createPasskeyBox = document.getElementById("create-passkey-box");
+        if (createPasskeyBox) {
+          createPasskeyBox.classList.remove("govuk-!-display-none");
+          createPasskeyBox.removeAttribute("hidden");
         }
+        const passkeysListBox = document.getElementById("passkeys-list-box");
+        if (passkeysListBox) {
+          passkeysListBox.classList.remove("no-bottom-border");
+        }        
       }
     </script>
 {% endblock %}

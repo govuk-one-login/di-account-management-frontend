@@ -3,14 +3,15 @@ import { securityGet } from "./security-controller.js";
 import { PATH_DATA } from "../../app.constants.js";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 import { mfaMethodMiddleware } from "../../middleware/mfa-method-middleware.js";
+import { passkeysEnabled } from "../../config.js";
 
 const router = express.Router();
 
 router.get(
   PATH_DATA.SECURITY.url,
-  requiresAuthMiddleware,
-  mfaMethodMiddleware,
-  securityGet
+  ...(passkeysEnabled()
+    ? [requiresAuthMiddleware, securityGet]
+    : [requiresAuthMiddleware, mfaMethodMiddleware, securityGet])
 );
 
 export { router as securityRouter };
