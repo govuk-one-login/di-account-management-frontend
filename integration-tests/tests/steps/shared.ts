@@ -89,10 +89,7 @@ Then("the page looks as expected", async ({ page }) => {
   expect(
     await page.screenshot({
       fullPage: true,
-      mask: [
-        page.locator(".contact-reference__code"),
-        page.getByTestId("passkey"),
-      ],
+      mask: [page.locator(".contact-reference__code")],
     })
   ).toMatchSnapshot();
 });
