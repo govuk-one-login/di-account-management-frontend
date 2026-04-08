@@ -1,5 +1,6 @@
 Feature: "Sign in details" page
 
+  # Expected to fail on mobile due to known accessibility issues
   @failMobile
   Scenario: Visit the "Sign in details" page as a user with no passkeys
     Given I go to the "Root" page
@@ -23,6 +24,7 @@ Feature: "Sign in details" page
     And the option to create a passkey is hidden
     And the page looks as expected    
 
+  # Expected to fail on mobile due to known accessibility issues
   @failMobile
   Scenario: Visit the "Sign in details" page as a user with one passkey
     Given I go to the "Root" page
@@ -46,6 +48,7 @@ Feature: "Sign in details" page
     And the option to create a passkey is hidden
     And the page looks as expected    
 
+  # Expected to fail on mobile due to known accessibility issues
   @failMobile
   Scenario: Visit the "Sign in details" page as a user with one passkey with no display name
     Given I go to the "Root" page
@@ -69,6 +72,7 @@ Feature: "Sign in details" page
     And the option to create a passkey is hidden
     And the page looks as expected    
 
+  # Expected to fail on mobile due to known accessibility issues
   @failMobile
   Scenario: Visit the "Sign in details" page as a user with fewer than the maximum number of passkeys
     Given I go to the "Root" page
@@ -92,6 +96,7 @@ Feature: "Sign in details" page
     And the option to create a passkey is hidden
     And the page looks as expected    
 
+  # Expected to fail on mobile due to known accessibility issues
   @failMobile
   Scenario: Visit the "Sign in details" page as a user with the maximum number of passkeys
     Given I go to the "Root" page
