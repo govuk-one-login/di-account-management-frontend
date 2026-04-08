@@ -52,8 +52,19 @@ export const getAmcJwe = async (
 
   const jwksUrl = new URL(getAmcJwksUrl());
   const jwksResponse = await fetch(jwksUrl);
+  if (!jwksResponse.ok) {
+    throw new Error(
+      `Failed to fetch JWKS from ${jwksUrl.toString()}: ${jwksResponse.status} ${jwksResponse.statusText}`,
+    );
+  }
   const jwks = await jwksResponse.json();
+  if (!jwks || !Array.isArray(jwks.keys)) {
+    throw new Error("Invalid JWKS: 'keys' array is missing or malformed");
+  }
   const encryptionJWK = jwks.keys.find((key: any) => key.use === "enc");
+  if (!encryptionJWK) {
+    throw new Error("No encryption key (use === 'enc') found in JWKS");
+  }
   const publicKey = await jose.importJWK(encryptionJWK, encryptionJWK.alg);
 
   const jwe = await new jose.CompactEncrypt(new TextEncoder().encode(jws))
