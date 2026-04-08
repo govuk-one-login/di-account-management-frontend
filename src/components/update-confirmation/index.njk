@@ -9,12 +9,15 @@
 {% block pageContent %}
 
 {{ govukPanel({
-    titleText: panelText
+  titleText: panelText
 }) }}
 
 {% if summaryText %}
-<p class="govuk-body">{{summaryText | safe }}</p>
+  <p class="govuk-body">{{summaryText | safe }}</p>
 {% endif %}
+
+{{ summaryHtml | safe }}
+
 
 {% if showGovUKButton %}
 {{ govukButton({
@@ -27,11 +30,11 @@
 }) }}
 {% else %}
 {{ govukButton({
-  text: 'general.backToSecurityButtonText' | translate,
-  href: "SECURITY" | getPath,
+  text: 'general.backToSignInDetailsButtonText' | translate if passkeysEnabled else 'general.backToSecurityButtonText' | translate,
+  href: cancelAMJourneyHref,
   attributes: {
     "data-nav": true,
-    "data-link": "SECURITY" | getPath
+    "data-link": cancelAMJourneyHref
   }
 }) }}
 {% endif %}

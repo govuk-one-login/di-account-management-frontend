@@ -52,7 +52,7 @@
   </ol>
 
   {{ govukButton({
-    text: 'pages.noUkPhoneNumber.backLinkButton' | translate,
-    href:  "SECURITY" | getPath
+    text: 'general.backSignInDetails' | translate if passkeysEnabled else 'general.backSecurity' | translate,
+    href: cancelAMJourneyHref
   }) }}
 {% endblock %}

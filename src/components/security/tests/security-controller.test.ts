@@ -15,6 +15,7 @@ describe("security controller", () => {
       locals: {},
     };
     vi.spyOn(config, "supportGlobalLogout").mockReturnValue(false);
+    vi.spyOn(config, "passkeysEnabled").mockReturnValue(false);
   });
 
   afterEach(() => {

@@ -13,6 +13,7 @@ describe("Activity history controller", () => {
 
   beforeEach(() => {
     process.env.APP_ENV = "local";
+    process.env.PASSKEYS = "1";
     res = {
       render: vi.fn(),
       locals: { sessionId: "testSessionId" },
@@ -71,7 +72,8 @@ describe("Activity history controller", () => {
           data: [],
           pagination: {},
           backLink: PATH_DATA.SECURITY.url,
-          changePasswordLink: PATH_DATA.SECURITY.url,
+          changePasswordLink:
+            PATH_DATA.SIGN_IN_DETAILS.url + "#password-details",
           contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
           homeClientId: "test-client-id",
           hasEnglishOnlyServices: false,
@@ -150,7 +152,8 @@ describe("Activity history controller", () => {
           ],
           pagination: {},
           backLink: PATH_DATA.SECURITY.url,
-          changePasswordLink: PATH_DATA.SECURITY.url,
+          changePasswordLink:
+            PATH_DATA.SIGN_IN_DETAILS.url + "#password-details",
           contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
           homeClientId: "test-client-id",
           hasEnglishOnlyServices: true,

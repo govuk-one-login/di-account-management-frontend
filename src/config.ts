@@ -268,3 +268,9 @@ export function getAmcJourneyOutcomeUrl(): string {
 export function getAmcClientId(): string {
   return process.env.AMC_CLIENT_ID;
 }
+
+export function passkeysEnabled(): boolean {
+  return process.env.PASSKEYS === "1";
+}
+
+export const maxNumberOfPasskeys = 5;

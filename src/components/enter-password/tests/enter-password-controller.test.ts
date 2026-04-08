@@ -248,7 +248,11 @@ describe("enter password controller", () => {
       expect(res.render).toHaveBeenCalled();
       expect(res.render).toHaveBeenCalledWith("enter-password/index.njk", {
         requestType: "changeEmail",
-        fromSecurity: true,
+        from: "security",
+        fromDetails: {
+          translationKey: "general.cancelAndBackToSecurityText",
+          url: "/security",
+        },
         formAction:
           "https://test.com/enter-password?from=security&edit=true&type=changeEmail",
         errors: { password: { text: undefined, href: "#password" } },
@@ -280,7 +284,8 @@ describe("enter password controller", () => {
       expect(res.render).toHaveBeenCalled();
       expect(res.render).toHaveBeenCalledWith("enter-password/index.njk", {
         requestType: "changeEmail",
-        fromSecurity: false,
+        from: undefined,
+        fromDetails: undefined,
         formAction:
           "https://test.com/enter-password?edit=true&type=changeEmail",
         errors: { password: { text: undefined, href: "#password" } },

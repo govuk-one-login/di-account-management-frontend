@@ -5,7 +5,6 @@ import * as cheerio from "cheerio";
 import * as nock from "nock";
 import { PATH_DATA } from "../../../app.constants";
 import { getLastNDigits } from "../../../utils/phone-number.js";
-
 import { UnsecuredJWT } from "jose";
 
 const { url } = PATH_DATA.SECURITY;
@@ -107,6 +106,31 @@ describe("Integration:: security", () => {
         expect($(testComponent("global-logout-section")).length).toBe(0);
       });
   });
+
+  it("should display link to sign in details page and NOT show account management options when passkeys flag is true", async () => {
+    const app = await appWithMiddlewareSetup({ passkeysEnabled: true });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).toBe(200);
+        expect($(testComponent("sign-in-details-section")).length).toBe(1);
+        expect($(testComponent("account-management-options")).length).toBe(0);
+      });
+  });
+
+  it("should NOT display link to sign in details page, and show account management options when passkeysEnabled is false", async () => {
+    const app = await appWithMiddlewareSetup({ passkeysEnabled: false });
+    await request(app)
+      .get(url)
+      .expect(function (res) {
+        const $ = cheerio.load(res.text);
+        expect(res.status).toBe(200);
+
+        expect($(testComponent("sign-in-details-section")).length).toBe(0);
+        expect($(testComponent("account-management-options")).length).toBe(2);
+      });
+  });
 });
 
 const appWithMiddlewareSetup = async (config: any = {}) => {
@@ -134,6 +158,10 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
 
   vi.spyOn(configFuncs, "supportGlobalLogout").mockImplementation(() => {
     return config.supportGlobalLogout;
+  });
+
+  vi.spyOn(configFuncs, "passkeysEnabled").mockImplementation(() => {
+    return config.passkeysEnabled;
   });
 
   const mfaMethods =

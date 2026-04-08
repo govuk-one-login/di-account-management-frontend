@@ -80,6 +80,7 @@ jobs:
           echo "AMC_TOKEN_URL=https://amc-stub.home.dev.account.gov.uk/token" >> .env
           echo "AMC_CLIENT_ID=fake_local_amc_client_id" >> .env
           echo "ENABLE_PKCE=1" >> .env
+          echo "PASSKEYS=1" >> .env
           npm run build
 
       - name: Install integration-tests dependencies

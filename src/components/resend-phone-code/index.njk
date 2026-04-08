@@ -24,11 +24,11 @@
           attributes: {
             "data-nav": true,
             "data-link": "RESEND_PHONE_CODE" | getPath
-          } 
+          }
       }) }}
     </form>
 
-    <a href="{{"SECURITY" | getPath}}" class="govuk-link govuk-body">
-        {{'pages.resendMfaCode.cancel' | translate}}
+    <a href="{{ cancelAMJourneyHref }}" class="govuk-link govuk-body">
+        {{cancelAMJourneyTextKey | translate}}
     </a>
 {% endblock %}
