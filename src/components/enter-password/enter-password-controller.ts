@@ -45,8 +45,8 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.SwitchBackupMethod]: PATH_DATA.SWITCH_BACKUP_METHOD.url,
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   [UserJourney.GlobalLogout]: PATH_DATA.GLOBAL_LOGOUT_CONFIRM.url,
-  [UserJourney.CreatePasskey]: "/todo-create",
-  [UserJourney.RemovePasskey]: "/todo-remove"
+  [UserJourney.CreatePasskey]: PATH_DATA.CREATE_NEW_PASSKEY.url,
+  [UserJourney.RemovePasskey]: "/todo-remove",
 };
 
 const VALID_BACK_ROUTES: Record<
@@ -61,7 +61,6 @@ const VALID_BACK_ROUTES: Record<
     url: PATH_DATA.SIGN_IN_DETAILS.url,
     translationKey: "general.cancelAndBackToSignInDetailsText",
   },
-  [UserJourney.CreatePasskey]: "/todo-create",
 };
 
 const getOplValues = (): OplSettingsLookupObject => ({

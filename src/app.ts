@@ -97,6 +97,7 @@ import { noUkMobilePhoneRouter } from "./components/no-uk-mobile-phone/no-uk-mob
 import { jwksRouter } from "./components/jwks/jwks-routes.js";
 import { amcCallbackRouter } from "./components/amc-callback/amc-callback-routes.js";
 import { signInDetailsRouter } from "./components/sign-in-details/sign-in-details-routes.js";
+import { createNewPasskeyRouter } from "./components/create-new-passkey/create-new-passkey-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -312,6 +313,7 @@ async function createApp(): Promise<express.Application> {
   app.use(amcCallbackRouter);
   if (passkeysEnabled()) {
     app.use(signInDetailsRouter);
+    app.use(createNewPasskeyRouter);
   }
 
   // Router for all previously used URLs, that we want to redirect on

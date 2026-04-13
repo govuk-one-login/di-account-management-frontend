@@ -206,6 +206,11 @@ export const PATH_DATA: Record<
   },
   AMC_CALLBACK: { url: "/amc/callback" },
   SIGN_IN_DETAILS: { url: "/sign-in-details" },
+  CREATE_NEW_PASSKEY: {
+    url: "/create-new-passkey",
+    event: EventType.ValueUpdated,
+    type: UserJourney.CreatePasskey,
+  },
 };
 
 export const EXTERNAL_URLS = {
