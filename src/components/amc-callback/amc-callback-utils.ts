@@ -167,7 +167,7 @@ export async function handleJourneyOutcomeResponse(
   const isPasskeyJourney = scope === Scope.passkeyCreate;
 
   if (success && isPasskeyJourney) {
-    return res.redirect("/todo-passkey-confirmation");
+    return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
   } else if (!success && error?.code === 1001) {
     await handleLogout(req, res, LogoutState.AmcSignedOut);
   } else if (!success && isPasskeyJourney && error?.code === 1002) {

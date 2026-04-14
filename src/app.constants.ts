@@ -204,7 +204,11 @@ export const PATH_DATA: Record<
   LOGOUT_REDIRECT: {
     url: "/logout-redirect",
   },
-  AMC_CALLBACK: { url: "/amc/callback" },
+  AMC_CALLBACK: {
+    url: "/amc/callback",
+    event: EventType.ValueUpdated,
+    type: UserJourney.CreatePasskey,
+  },
   SIGN_IN_DETAILS: { url: "/sign-in-details" },
   CREATE_NEW_PASSKEY: {
     url: "/create-new-passkey",
