@@ -27,6 +27,7 @@ declare module "express-session" {
     trace?: string;
     amcStates?: string[];
     code_verifier?: string;
+    createdPasskeyAaguid?: string;
   }
 }
 declare module "express-serve-static-core" {

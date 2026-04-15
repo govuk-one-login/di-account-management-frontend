@@ -29,6 +29,9 @@ export const DELETE_ACCOUNT_COMMON_OPL_SETTINGS: Partial<OplSettings> = {
 export const ACTIVITY_COMMON_OPL_SETTINGS: Partial<OplSettings> = {
   taxonomyLevel2: "activity",
 };
+export const PASSKEY_COMMON_OPL_SETTINGS: Partial<OplSettings> = {
+  taxonomyLevel2: "passkey",
+};
 
 export const setOplSettings = (
   settings: Partial<OplSettings> | undefined,

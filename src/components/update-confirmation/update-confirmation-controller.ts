@@ -13,12 +13,14 @@ import {
   CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
+  PASSKEY_COMMON_OPL_SETTINGS,
 } from "../../utils/opl.js";
 import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { getPasskeyConvenienceMetadataByAaguid } from "../../utils/passkeysConvenienceMetadata/index.js";
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
   req.metrics?.addMetric("updateEmailConfirmationGet", MetricUnit.Count, 1);
@@ -309,18 +311,33 @@ export async function changeDefaultMethodConfirmationGet(
   });
 }
 
-export function createPasskeyConfirmationGet(req: Request, res: Response): void {
+export async function createPasskeyConfirmationGet(
+  req: Request,
+  res: Response
+): Promise<void> {
   req.metrics?.addMetric("createPasskeyConfirmationGet", MetricUnit.Count, 1);
-  // TODO get the actual passkey name using the passkey metadata util
-  const passkeyName = "My passkey";
-  const baseHtml = req.t("pages.createPasskeyConfirmation.summaryHtml2");
-  const summaryHtml = passkeyName ? req.t("pages.createPasskeyConfirmation.summaryHtml1").replace(
-      "[passkeyName]",
-      passkeyName
-    ).concat(baseHtml) : baseHtml;
-  // TODO setOplSettings
 
-  // delete req.session.user.state.createPasskey;
+  const passkeyName = (
+    await getPasskeyConvenienceMetadataByAaguid(
+      req,
+      req.session.createdPasskeyAaguid
+    )
+  )?.name;
+  const baseHtml = req.t("pages.createPasskeyConfirmation.summaryHtml2");
+  const summaryHtml = passkeyName
+    ? req
+        .t("pages.createPasskeyConfirmation.summaryHtml1")
+        .replace("[passkeyName]", passkeyName)
+        .concat(baseHtml)
+    : baseHtml;
+
+  setOplSettings(
+    {
+      ...PASSKEY_COMMON_OPL_SETTINGS,
+      contentId: "d9c3e311-1c8b-4a5c-9cbd-7f0a1b2e3110",
+    },
+    res
+  );
 
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.createPasskeyConfirmation.title"),
