@@ -174,7 +174,7 @@ export async function handleJourneyOutcomeResponse(
   } else if (!success && error?.code === 1001) {
     await handleLogout(req, res, LogoutState.AmcSignedOut);
   } else if (!success && isPasskeyJourney && error?.code === 1002) {
-    return res.redirect(PATH_DATA.START.url);
+    return res.redirect(PATH_DATA.YOUR_SERVICES.url);
   } else {
     req.metrics?.addMetric("UnrecognisedJourneyOutcome", MetricUnit.Count, 1);
     req.log.error(`UnrecognisedJourneyOutcome with outcome_id ${outcome_id}`);
