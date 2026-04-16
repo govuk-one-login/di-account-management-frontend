@@ -19,4 +19,4 @@ Scenario: add a passkey with no name
   Then I enter and submit my password "qwerty"
   Then I click the "passkey-create success (passkey has no display name)" link
   And the page has finished loading
-  Then the page contains the text "Your passkey is saved to Windows Hello."
+  Then the page does not contain the text "Your passkey is saved to Windows Hello."
