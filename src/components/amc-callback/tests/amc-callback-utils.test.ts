@@ -234,6 +234,7 @@ describe("AMC call back util tests", () => {
       req = {
         metrics: { addMetric: vi.fn() },
         log: { error: vi.fn() },
+        session: { createdPasskeyAaguid: undefined },
       };
       res = {
         redirect: vi.fn(),
@@ -256,7 +257,9 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
-      expect(res.redirect).toHaveBeenCalledWith("/todo-passkey-confirmation");
+      expect(res.redirect).toHaveBeenCalledWith(
+        "/passkey-created-confirmation"
+      );
     });
 
     it("should call handleLogout when error is UserSignedOut", async () => {
@@ -294,7 +297,7 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
-      expect(res.redirect).toHaveBeenCalledWith("/todo-user-aborted");
+      expect(res.redirect).toHaveBeenCalledWith("/your-services");
     });
 
     it("should log error when journey does not match scope", async () => {
