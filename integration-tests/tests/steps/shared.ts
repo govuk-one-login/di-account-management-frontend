@@ -13,6 +13,7 @@ const pageTitleToPath: Record<string, string> = {
   "Services you can use with GOV.UK One Login": "/services-using-one-login",
   "Global logout confirm": "/global-logout/confirm",
   "Sign in details": "/sign-in-details",
+  "Activity history": "/activity-history",
 };
 
 Then("the page meets our accessibility standards", async ({ page }) => {
@@ -78,10 +79,21 @@ Then("I am on the sign in page", async ({ page }) => {
   ).toBeVisible();
 });
 
+Then("I am on the {string} page", async ({ page }, pageTitle: string) => {
+  await expect(page.getByRole("heading", { name: pageTitle })).toBeVisible();
+});
+
 Then(
   "the page contains the text {string}",
   async ({ page }, content: string) => {
     await expect(page.getByText(content)).toBeVisible();
+  }
+);
+
+Then(
+  "the page does not contain the text {string}",
+  async ({ page }, content: string) => {
+    await expect(page.getByText(content)).toBeHidden();
   }
 );
 
