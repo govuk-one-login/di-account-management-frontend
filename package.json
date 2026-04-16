@@ -62,7 +62,7 @@
     "cookie-parser": "^1.4.7",
     "csrf-sync": "^4.2.1",
     "di-account-management-rp-registry": "github:govuk-one-login/di-account-management-rp-registry#main",
-    "dompurify": "^3.3.3",
+    "dompurify": "^3.4.0",
     "express": "^5.2.1",
     "express-session": "1.19.0",
     "express-validator": "^7.3.2",
