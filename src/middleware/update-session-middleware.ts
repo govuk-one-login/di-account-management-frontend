@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Session } from "express-session";
+import { Session, SessionData } from "express-session";
 import { ParamName } from "../app.constants.js";
 import { isSafeString, isValidUrl } from "../utils/strings.js";
 import { logger } from "../utils/logger.js";
@@ -7,7 +7,7 @@ import { generateReferenceCode } from "../utils/referenceCode.js";
 import { ParsedQs } from "qs";
 
 const copySafeQueryParamToSession = (
-  session: Session,
+  session: Session & Partial<SessionData>,
   queryParams: ParsedQs,
   paramName: ParamName,
   sessionId: string
