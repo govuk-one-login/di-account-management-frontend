@@ -38,6 +38,7 @@ describe("changePhoneNumberService", () => {
         email: CURRENT_EMAIL,
         phoneNumber: phoneNumber,
         notificationType: NOTIFICATION_TYPE.VERIFY_PHONE_NUMBER,
+        priorityIdentifier: "DEFAULT",
       })
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
@@ -45,6 +46,7 @@ describe("changePhoneNumberService", () => {
       await changePhoneNumberService().sendPhoneVerificationNotification(
         CURRENT_EMAIL,
         phoneNumber,
+        "DEFAULT",
         {
           token: TOKEN,
           sourceIp: SOURCE_IP,

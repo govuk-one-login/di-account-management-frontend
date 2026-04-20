@@ -113,6 +113,7 @@ export function addMfaSmsMethodPost(
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
+      mfaPriorityIdentifiers.backup,
       await getRequestConfigFromExpress(req, res)
     );
 

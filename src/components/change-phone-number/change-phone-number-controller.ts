@@ -4,6 +4,7 @@ import { ExpressRouteFunc } from "../../types.js";
 import { ChangePhoneNumberServiceInterface } from "./types.js";
 import { changePhoneNumberService } from "./change-phone-number-service.js";
 import { EventType, getNextState } from "../../utils/state-machine.js";
+import { mfaPriorityIdentifiers } from "../../utils/mfaClient/types.js";
 import {
   formatValidationError,
   isObjectEmpty,
@@ -55,6 +56,7 @@ export function changePhoneNumberPost(
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
+      mfaPriorityIdentifiers.default,
       await getRequestConfigFromExpress(req, res)
     );
 

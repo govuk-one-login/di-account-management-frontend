@@ -97,6 +97,9 @@ export function resendPhoneCodePost(
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
+      intent === INTENT_ADD_BACKUP
+        ? mfaPriorityIdentifiers.backup
+        : mfaPriorityIdentifiers.default,
       await getRequestConfigFromExpress(req, res)
     );
 

@@ -152,6 +152,7 @@ export function changeDefaultMethodSmsPost(
     const response = await service.sendPhoneVerificationNotification(
       email,
       newPhoneNumber,
+      mfaPriorityIdentifiers.default,
       await getRequestConfigFromExpress(req, res)
     );
 
