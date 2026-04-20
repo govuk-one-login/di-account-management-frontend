@@ -160,7 +160,7 @@ describe("Integration::enter password", () => {
     // Exclude global logout as the state is set mid-journey
     PATH_DATA.GLOBAL_LOGOUT_CONFIRM,
 
-    ...(passkeysEnabled() ? [PATH_DATA.CREATE_NEW_PASSKEY] : []),
+    ...(!passkeysEnabled() ? [PATH_DATA.CREATE_NEW_PASSKEY] : []),
   ];
 
   Object.entries(PATH_DATA)
