@@ -19,6 +19,7 @@ describe("amcCallbackGet", () => {
       query: {},
       session: {
         amcStates: ["state-test"],
+        user: { state: { createPasskey: { value: "AUTHENTICATE" } } },
       },
       log: { error: vi.fn() },
       metrics: { addMetric: vi.fn() },
