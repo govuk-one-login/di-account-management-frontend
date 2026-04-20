@@ -235,6 +235,24 @@ describe("change default method controller", () => {
         )
       );
     });
+    it("should call sendPhoneVerificationNotification with DEFAULT priority", async () => {
+      const serviceMock: ChangePhoneNumberServiceInterface = {
+        sendPhoneVerificationNotification: vi.fn().mockReturnValue({ success: true }),
+      };
+
+      //@ts-expect-error in test
+      req.body.phoneNumber = "07123456789";
+      await changeDefaultMethodSmsPost(serviceMock)(req as unknown as Request, res as unknown as Response);
+
+      expect(serviceMock.sendPhoneVerificationNotification).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(String),
+        "DEFAULT",
+        expect.any(Object)
+      );
+    });
+
+
   });
 
   describe("changeDefaultMethodAppGet", () => {

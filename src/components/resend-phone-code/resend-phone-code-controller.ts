@@ -90,6 +90,10 @@ export function resendPhoneCodePost(
     req.metrics?.addMetric("resendPhoneCodePost", MetricUnit.Count, 1);
     const intent = req.body.intent;
 
+    if (!Object.values(ALL_INTENTS).includes(intent)) {
+      throw new BadRequestError("Invalid intent", 400);
+    }
+
     setLocalOplSettings(intent, req, res);
 
     const { email } = req.session.user;
@@ -110,9 +114,6 @@ export function resendPhoneCodePost(
         req.session.user.state.changePhoneNumber.value,
         EventType.VerifyCodeSent
       );
-      if (!Object.values(ALL_INTENTS).includes(intent)) {
-        throw new BadRequestError("Invalid intent", 400);
-      }
       return res.redirect(`${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${intent}`);
     }
 

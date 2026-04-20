@@ -60,4 +60,43 @@ describe("changePhoneNumberService", () => {
 
     expect(changePhoneNumberResponse.success).toBe(true);
   });
+
+  it("should include priorityIdentifier BACKUP in the request body", async () => {
+    const phoneNumber = "newPhoneNumber";
+
+    nock(baseUrl, {
+      reqheaders: {
+        authorization: `Bearer ${TOKEN}`,
+        "x-forwarded-for": SOURCE_IP,
+        "di-persistent-session-id": PERSISTENT_SESSION_ID,
+        "session-id": SESSION_ID,
+        "user-language": ENGLISH,
+        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+      },
+    })
+      .post(API_ENDPOINTS.SEND_NOTIFICATION, {
+        email: CURRENT_EMAIL,
+        phoneNumber: phoneNumber,
+        notificationType: NOTIFICATION_TYPE.VERIFY_PHONE_NUMBER,
+        priorityIdentifier: "BACKUP",
+      })
+      .reply(HTTP_STATUS_CODES.NO_CONTENT);
+
+    const result = await changePhoneNumberService().sendPhoneVerificationNotification(
+      CURRENT_EMAIL,
+      phoneNumber,
+      "BACKUP",
+      {
+        token: TOKEN,
+        sourceIp: SOURCE_IP,
+        sessionId: SESSION_ID,
+        persistentSessionId: PERSISTENT_SESSION_ID,
+        userLanguage: ENGLISH,
+        clientSessionId: CLIENT_SESSION_ID,
+        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+      }
+    );
+
+    expect(result.success).toBe(true);
+  });
 });

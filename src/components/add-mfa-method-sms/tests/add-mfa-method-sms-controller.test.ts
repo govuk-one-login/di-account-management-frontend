@@ -13,6 +13,7 @@ import {
 import { ERROR_CODES, PATH_DATA } from "../../../app.constants";
 import { ChangePhoneNumberServiceInterface } from "../../change-phone-number/types";
 import * as oidcModule from "../../../utils/oidc.js";
+import { mfaPriorityIdentifiers } from "../../../utils/mfaClient/types.js";
 
 describe("addMfaSmsMethodPost", () => {
   let req: Partial<Request>;
@@ -86,6 +87,27 @@ describe("addMfaSmsMethodPost", () => {
       language: "en",
     });
     expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it("should call sendPhoneVerificationNotification with Backup priority", async () => {
+    const fakeService: ChangePhoneNumberServiceInterface = {
+      sendPhoneVerificationNotification: vi.fn().mockResolvedValue({
+        success: true,
+      }),
+    };
+    req.body.phoneNumber = "07123456789";
+    req.body.intent = "addBackup";
+
+    await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
+
+    expect(
+      fakeService.sendPhoneVerificationNotification
+    ).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      mfaPriorityIdentifiers.backup,
+      expect.any(Object)
+    );
   });
 });
 

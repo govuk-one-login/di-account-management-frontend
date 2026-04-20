@@ -103,4 +103,50 @@ describe("resend phone code controller", () => {
       }
     });
   });
+
+  describe("priorityIdentifier in resendPhoneCodePost", () => {
+    it("should call sendPhoneVerificationNotification with BACKUP priority when intent is addBackup", async () => {
+      const fakeService: ChangePhoneNumberServiceInterface = {
+        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({ success: true }),
+      };
+      
+      res.locals.sessionId = "123456-djdsa";
+      req.session.user.tokens = { accessToken: "token" } as any;
+      req.body.phoneNumber = "+33645453322";
+      req.body.intent = "addBackup";
+      req.session.user.email = "test@test.com";
+      req.session.user.state = { changePhoneNumber: getInitialState() };
+
+      await resendPhoneCodePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.sendPhoneVerificationNotification).toHaveBeenCalledWith(
+        "test@test.com",
+        "+33645453322",
+        "BACKUP",
+        expect.any(Object)
+      );
+    });
+
+    it("should call sendPhoneVerificationNotification with DEFAULT priority when intent is changePhoneNumber", async () => {
+      const fakeService: ChangePhoneNumberServiceInterface = {
+        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({ success: true }),
+      };
+      
+      res.locals.sessionId = "123456-djdsb";
+      req.session.user.tokens = { accessToken: "token" } as any;
+      req.body.phoneNumber = "+33645453322";
+      req.body.intent = "changePhoneNumber";
+      req.session.user.email = "test@test.com";
+      req.session.user.state = { changePhoneNumber: getInitialState() };
+
+      await resendPhoneCodePost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.sendPhoneVerificationNotification).toHaveBeenCalledWith(
+        "test@test.com",
+        "+33645453322",
+        "DEFAULT",
+        expect.any(Object)
+      );
+    });
+  });
 });
