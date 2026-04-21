@@ -19,7 +19,7 @@ import {
 } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
-import { getBaseUrl } from "../../../config.js";
+import { getBaseUrl, passkeysEnabled } from "../../../config.js";
 
 describe("Integration::enter password", () => {
   let token: string | string[];
@@ -159,6 +159,8 @@ describe("Integration::enter password", () => {
     PATH_DATA.DELETE_ACCOUNT,
     // Exclude global logout as the state is set mid-journey
     PATH_DATA.GLOBAL_LOGOUT_CONFIRM,
+
+    ...(!passkeysEnabled() ? [PATH_DATA.CREATE_NEW_PASSKEY] : []),
   ];
 
   Object.entries(PATH_DATA)

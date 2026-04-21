@@ -19,6 +19,7 @@ import {
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { getPasskeyConvenienceMetadataByAaguid } from "../../utils/passkeysConvenienceMetadata/index.js";
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
   req.metrics?.addMetric("updateEmailConfirmationGet", MetricUnit.Count, 1);
@@ -306,5 +307,32 @@ export async function changeDefaultMethodConfirmationGet(
     pageTitle: req.t("pages.changeDefaultMethod.confirmation.title"),
     panelText: req.t("pages.changeDefaultMethod.confirmation.heading"),
     summaryText: message,
+  });
+}
+
+export async function createPasskeyConfirmationGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  req.metrics?.addMetric("createPasskeyConfirmationGet", MetricUnit.Count, 1);
+
+  const passkeyName = (
+    await getPasskeyConvenienceMetadataByAaguid(
+      req,
+      req.session.createdPasskeyAaguid
+    )
+  )?.name;
+  const baseHtml = req.t("pages.createPasskeyConfirmation.summaryHtml2");
+  const summaryHtml = passkeyName
+    ? req
+        .t("pages.createPasskeyConfirmation.summaryHtml1")
+        .replace("[passkeyName]", passkeyName)
+        .concat(baseHtml)
+    : baseHtml;
+
+  res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.createPasskeyConfirmation.title"),
+    panelText: req.t("pages.createPasskeyConfirmation.panelText"),
+    summaryHtml: summaryHtml,
   });
 }

@@ -467,7 +467,13 @@
       "changeDefaultMethod": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can manage how you get security codes."
-      }
+      },
+      "createPasskey": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can set up a passkey."
+      },
+      "cancelTextSecurity": "Cancel and go back to Security",
+      "cancelTextSignInDetails": "Cancel and go back"
     },
     "changeEmail": {
       "title": "Enter your new email address",
@@ -507,6 +513,12 @@
       "title": "You’ve deleted your GOV.UK One Login",
       "panelText": "You’ve deleted your GOV.UK One Login",
       "summaryText": "If you need to use a GOV.UK One Login in the future, you’ll have to create a new one."
+    },
+    "createPasskeyConfirmation": {
+      "title": "You’ve set up a passkey",
+      "panelText": "You’ve set up a passkey",
+      "summaryHtml1": "<p class='govuk-body'>Your passkey is saved to <strong>[passkeyName]</strong>.</p>",
+      "summaryHtml2": "<p class='govuk-body'>Next time, you’ll sign in with your passkey - for example your face or fingerprint.</p>"
     },
     "changePassword": {
       "title": "Enter your new password",
@@ -713,7 +725,9 @@
       "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
-        "paragraphs": ["Read our guidance if you’re having a problem with:"],
+        "paragraphs": [
+          "Read our guidance if you’re having a problem with:"
+        ],
         "links": [
           {
             "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app",
@@ -819,7 +833,9 @@
         },
         "phone": {
           "heading": "Phone",
-          "paragraphs": ["You’ll need your reference code when you call."],
+          "paragraphs": [
+            "You’ll need your reference code when you call."
+          ],
           "insetText": {
             "paragraphs": [
               "<strong>From the UK:</strong><br>0300 373 9020",

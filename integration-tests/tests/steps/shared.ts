@@ -85,6 +85,13 @@ Then(
   }
 );
 
+Then(
+  "the page does not contain the text {string}",
+  async ({ page }, content: string) => {
+    await expect(page.getByText(content)).toBeHidden();
+  }
+);
+
 Then("the page looks as expected", async ({ page }) => {
   expect(
     await page.screenshot({

@@ -36,6 +36,7 @@ interface JourneyOutcome {
     timestamp: number;
     success: boolean;
     details: {
+      aaguid?: string;
       error?: {
         code: number;
         description: string;
@@ -166,12 +167,14 @@ export async function handleJourneyOutcomeResponse(
   const success = currentJourney?.success;
   const isPasskeyJourney = scope === Scope.passkeyCreate;
 
+  req.session.createdPasskeyAaguid = currentJourney?.details?.aaguid;
+
   if (success && isPasskeyJourney) {
-    return res.redirect("/todo-passkey-confirmation");
+    return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
   } else if (!success && error?.code === 1001) {
     await handleLogout(req, res, LogoutState.AmcSignedOut);
   } else if (!success && isPasskeyJourney && error?.code === 1002) {
-    return res.redirect("/todo-user-aborted");
+    return res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
   } else {
     req.metrics?.addMetric("UnrecognisedJourneyOutcome", MetricUnit.Count, 1);
     req.log.error(`UnrecognisedJourneyOutcome with outcome_id ${outcome_id}`);

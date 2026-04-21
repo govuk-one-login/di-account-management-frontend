@@ -1,5 +1,5 @@
 import * as express from "express";
-import { amcCallbackGet } from "./amc-callback-controller.js";
+import { createNewPasskeyGet } from "./create-new-passkey-controller.js";
 import { PATH_DATA } from "../../app.constants.js";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
@@ -7,10 +7,10 @@ import { validateStateMiddleware } from "../../middleware/validate-state-middlew
 const router = express.Router();
 
 router.get(
-  PATH_DATA.AMC_CALLBACK.url,
+  PATH_DATA.CREATE_NEW_PASSKEY.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  amcCallbackGet
+  createNewPasskeyGet
 );
 
-export { router as amcCallbackRouter };
+export { router as createNewPasskeyRouter };

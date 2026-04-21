@@ -45,7 +45,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.SwitchBackupMethod]: PATH_DATA.SWITCH_BACKUP_METHOD.url,
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   [UserJourney.GlobalLogout]: PATH_DATA.GLOBAL_LOGOUT_CONFIRM.url,
-  [UserJourney.CreatePasskey]: "/todo-create",
+  [UserJourney.CreatePasskey]: PATH_DATA.CREATE_NEW_PASSKEY.url,
   [UserJourney.RemovePasskey]: "/todo-remove",
 };
 

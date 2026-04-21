@@ -15,7 +15,7 @@ import {
   MISSING_USER_EMAIL_SPECIAL_CASE,
   MISSING_USER_ID_SPECIAL_CASE,
 } from "../app.constants.js";
-import { Session } from "express-session";
+import { Session, SessionData } from "express-session";
 import { getTxmaHeader } from "../utils/txma-header.js";
 import { getOIDCClientId } from "../config.js";
 import { mfaMethodTypes } from "../utils/mfaClient/types.js";
@@ -37,10 +37,12 @@ function getCurrentTimestamp(date = new Date()): CurrentTimeDescriptor {
 export function eventService(
   sqs: SqsService = sqsService()
 ): EventServiceInterface {
+  type RequestSession = Session & Partial<SessionData>;
+
   const userHasSignedIntoHomeRelyingParty = (res: Response): boolean =>
     !!res.locals?.sessionId;
 
-  const userHasComeFromTheApp = (session: Session): boolean =>
+  const userHasComeFromTheApp = (session: RequestSession): boolean =>
     !!session.queryParameters?.appSessionId;
 
   const getSessionId = (res: Response): string =>
@@ -52,18 +54,18 @@ export function eventService(
     res.locals.persistentSessionId ??
     MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE;
 
-  const getUserId = (session: Session): string =>
+  const getUserId = (session: RequestSession): string =>
     session.user_id ?? MISSING_USER_ID_SPECIAL_CASE;
 
-  const getUserEmail = (session: Session): string =>
+  const getUserEmail = (session: RequestSession): string =>
     session.user?.email ?? MISSING_USER_EMAIL_SPECIAL_CASE;
 
-  const getAppSessionId = (session: Session): string =>
+  const getAppSessionId = (session: RequestSession): string =>
     userHasComeFromTheApp(session)
       ? session.queryParameters?.appSessionId
       : MISSING_APP_SESSION_ID_SPECIAL_CASE;
 
-  const isSignedIn = (session: Session): boolean =>
+  const isSignedIn = (session: RequestSession): boolean =>
     session.user?.isAuthenticated ?? false;
 
   const buildBaseAuditEvent = (

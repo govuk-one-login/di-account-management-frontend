@@ -12,6 +12,11 @@ import {
   handleJourneyOutcomeResponse,
   ValidQueryStringParams,
 } from "./amc-callback-utils.js";
+import {
+  EventType,
+  getNextState,
+  UserJourney,
+} from "../../utils/state-machine.js";
 
 export async function amcCallbackGet(
   req: Request,
@@ -49,6 +54,13 @@ export async function amcCallbackGet(
         tokenResponse.access_token,
         requestConfig
       );
+
+      const journeyType = UserJourney.CreatePasskey;
+      req.session.user.state[journeyType] = getNextState(
+        req.session.user.state[journeyType].value,
+        EventType.ValueUpdated
+      );
+
       try {
         await handleJourneyOutcomeResponse(req, res, journeyOutcomeResponse);
       } catch (err) {

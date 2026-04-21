@@ -81,6 +81,7 @@ jobs:
           echo "AMC_CLIENT_ID=fake_local_amc_client_id" >> .env
           echo "ENABLE_PKCE=1" >> .env
           echo "PASSKEYS=1" >> .env
+          echo "AMC_CALLBACK_BASE_URL=http://localhost:6001" >> .env
           npm run build
 
       - name: Install integration-tests dependencies

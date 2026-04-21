@@ -6,7 +6,7 @@ import { logger } from "../../src/utils/logger";
 import { Metrics } from "@aws-lambda-powertools/metrics";
 
 declare module "express-session" {
-  interface Session {
+  interface SessionData {
     timestamp?: number;
     nonce?: string;
     state?: string;
@@ -19,7 +19,7 @@ declare module "express-session" {
     sessionId?: string;
     mfaMethods?: MfaMethod[];
     removedMfaMethod?: MfaMethod;
-    newDefaultMfaMethodId: string | number;
+    newDefaultMfaMethodId?: string | number;
     authSessionIds?: {
       sessionId: string;
       clientSessionId: string;
@@ -27,6 +27,7 @@ declare module "express-session" {
     trace?: string;
     amcStates?: string[];
     code_verifier?: string;
+    createdPasskeyAaguid?: string;
   }
 }
 declare module "express-serve-static-core" {

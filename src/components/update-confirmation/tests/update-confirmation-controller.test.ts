@@ -12,6 +12,7 @@ import {
   changeDefaultMethodConfirmationGet,
   removeMfaMethodConfirmationGet,
   changeDefaultMfaMethodConfirmationGet,
+  createPasskeyConfirmationGet,
 } from "../update-confirmation-controller.js";
 import {
   AuthAppMethod,
@@ -19,6 +20,11 @@ import {
   SmsMethod,
 } from "../../../utils/mfaClient/types";
 import { RequestBuilder } from "../../../../test/utils/builders";
+import { getPasskeyConvenienceMetadataByAaguid } from "../../../utils/passkeysConvenienceMetadata/index.js";
+
+vi.mock("../../../utils/passkeysConvenienceMetadata/index.js", () => ({
+  getPasskeyConvenienceMetadataByAaguid: vi.fn(),
+}));
 
 describe("update confirmation controller", () => {
   let req: any;
@@ -307,5 +313,59 @@ describe("addBackupAppConfirmationGet", () => {
   it("should clear the user's state", async () => {
     await addMfaAppMethodConfirmationGet(req as Request, res as Response);
     expect(req.session.user.state.addBackup).toBeUndefined();
+  });
+});
+
+describe("createPasskeyConfirmationGet", () => {
+  let req: any;
+  let res: Partial<Response>;
+
+  beforeEach(() => {
+    req = new RequestBuilder()
+      .withBody({})
+      .withSessionUserState({ addBackup: { value: "PASSKEY" } })
+      .withTranslate(vi.fn((id) => id))
+      .build();
+
+    res = {
+      render: vi.fn(),
+      locals: {},
+      status: vi.fn(),
+    };
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("should render create passkey confirmation page", async () => {
+    await createPasskeyConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.createPasskeyConfirmation.title",
+      panelText: "pages.createPasskeyConfirmation.panelText",
+      summaryHtml: "pages.createPasskeyConfirmation.summaryHtml2",
+    });
+  });
+
+  it("should render create passkey confirmation page with convenience metadata", async () => {
+    req.t = (t: string) => {
+      if (t === "pages.createPasskeyConfirmation.summaryHtml1") {
+        return "[passkeyName]";
+      }
+      return t;
+    };
+    vi.mocked(getPasskeyConvenienceMetadataByAaguid).mockReturnValue(
+      Promise.resolve({
+        name: "testPhone",
+      })
+    );
+    await createPasskeyConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.createPasskeyConfirmation.title",
+      panelText: "pages.createPasskeyConfirmation.panelText",
+      summaryHtml: "testPhonepages.createPasskeyConfirmation.summaryHtml2",
+    });
   });
 });
