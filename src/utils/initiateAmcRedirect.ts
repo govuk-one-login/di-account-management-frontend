@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { getAmcJwe } from "./getAmcJwe.js";
 import {
   getAmcAuthorizeUrl,
+  getAmcBaseUrl,
   getAmcClientId,
   getHomeBaseUrl,
   getServiceDomain,
@@ -29,7 +30,7 @@ export async function initiateAmcRedirect(
     email,
   });
 
-  const redirectUri = `${getHomeBaseUrl()}${PATH_DATA.AMC_CALLBACK.url}`;
+  const redirectUri = `${getAmcBaseUrl()}${PATH_DATA.AMC_CALLBACK.url}`;
 
   const url = new URL(getAmcAuthorizeUrl());
   url.searchParams.set("client_id", getAmcClientId());
