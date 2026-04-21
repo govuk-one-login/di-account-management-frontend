@@ -253,8 +253,8 @@ export function getHomeBaseUrl(): string {
   return process.env.HOME_BASE_URL;
 }
 
-export function getAmcBaseUrl(): string {
-  return process.env.AMC_BASE_URL || getHomeBaseUrl();
+export function getAmcCallbackBaseUrl(): string {
+  return process.env.AMC_CALLBACK_BASE_URL || getHomeBaseUrl();
 }
 
 export function getAmcTokenUrl(): string {
