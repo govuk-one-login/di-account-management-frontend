@@ -16,6 +16,7 @@ vi.mock("../../config.js", () => ({
   getAmcClientId: vi.fn(() => "test-client-id"),
   getHomeBaseUrl: vi.fn(() => "https://home.example.com"),
   getServiceDomain: vi.fn(() => "example.com"),
+  getAmcBaseUrl: vi.fn(() => "https://home.example.com"),
 }));
 
 vi.mock("../../app.constants.js", () => ({
