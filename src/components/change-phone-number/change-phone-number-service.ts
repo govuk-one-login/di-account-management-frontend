@@ -12,6 +12,7 @@ import {
 } from "../../app.constants.js";
 import { ChangePhoneNumberServiceInterface } from "./types.js";
 import { ApiResponse, ApiResponseResult } from "../../utils/types.js";
+import { PriorityIdentifier } from "../../utils/mfaClient/types.js";
 
 export function changePhoneNumberService(
   axios: Http = http
@@ -19,6 +20,7 @@ export function changePhoneNumberService(
   const sendPhoneVerificationNotification = async function (
     email: string,
     phoneNumber: string,
+    priorityIdentifier: PriorityIdentifier,
     requestConfig: RequestConfig
   ): Promise<ApiResponseResult> {
     const response = await axios.client.post<ApiResponse>(
@@ -27,6 +29,7 @@ export function changePhoneNumberService(
         email,
         phoneNumber,
         notificationType: NOTIFICATION_TYPE.VERIFY_PHONE_NUMBER,
+        priorityIdentifier,
       },
       getRequestConfig({
         ...requestConfig,

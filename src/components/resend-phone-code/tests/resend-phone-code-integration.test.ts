@@ -120,6 +120,7 @@ describe("Integration:: request phone code", () => {
         email: CURRENT_EMAIL,
         phoneNumber: PHONE_NUMBER,
         notificationType: "VERIFY_PHONE_NUMBER",
+        priorityIdentifier: "DEFAULT",
       })
       .reply(
         204,
