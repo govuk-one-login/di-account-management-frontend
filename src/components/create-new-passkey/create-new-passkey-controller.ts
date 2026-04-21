@@ -12,7 +12,7 @@ export async function createNewPasskeyGet(
   const passkeys = await mfaClient.getPasskeys();
 
   if (passkeys.data.length >= maxNumberOfPasskeys) {
-    res.redirect(PATH_DATA.START.url);
+    res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
     return;
   }
 

@@ -36,7 +36,7 @@ describe("createNewPasskeyGet", () => {
 
     await createNewPasskeyGet(req as Request, res as Response);
 
-    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.START.url);
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SIGN_IN_DETAILS.url);
     expect(
       initiateAmcRedirectModule.initiateAmcRedirect
     ).not.toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe("createNewPasskeyGet", () => {
 
     await createNewPasskeyGet(req as Request, res as Response);
 
-    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.START.url);
+    expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SIGN_IN_DETAILS.url);
     expect(
       initiateAmcRedirectModule.initiateAmcRedirect
     ).not.toHaveBeenCalled();

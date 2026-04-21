@@ -297,7 +297,7 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
-      expect(res.redirect).toHaveBeenCalledWith("/your-services");
+      expect(res.redirect).toHaveBeenCalledWith("/sign-in-details");
     });
 
     it("should log error when journey does not match scope", async () => {
