@@ -5,7 +5,6 @@ import {
   getAmcAuthorizeUrl,
   getAmcBaseUrl,
   getAmcClientId,
-  getHomeBaseUrl,
   getServiceDomain,
 } from "../config.js";
 import { PATH_DATA } from "../app.constants.js";
