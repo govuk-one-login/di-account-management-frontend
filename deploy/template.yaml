@@ -266,7 +266,7 @@ Mappings:
       AMCTOKENURL: "https://kvys7gq7h4.execute-api.eu-west-2.amazonaws.com/v1/token"
       AMCCLIENTID: "63385eefbc1649f9bc50eb9fd7c04de0" # pragma: allowlist secret
       ENABLEPKCE: "1"
-      PASSKEYS: "0"
+      PASSKEYS: "1"
     integration:
       NODEENV: "production"
       APIBASEURL: "https://oidc.integration.account.gov.uk"
