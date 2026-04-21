@@ -320,13 +320,7 @@
       "changeDefaultMethod": {
         "header": "Rhowch eich cyfrinair",
         "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
-      },
-      "createPasskey": {
-        "header": "Enter your password",
-        "paragraph": "We need to make sure it’s you before you can set up a passkey."
-      },
-      "cancelTextSecurity": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
-      "cancelTextSignInDetails": "Cancel and go back to Sign in details"
+      }
     },
     "changeEmail": {
       "title": "Rhowch eich cyfeiriad e-bost newydd",
@@ -361,12 +355,6 @@
       "title": "Rydych wedi dileu eich GOV.UK One Login",
       "panelText": "Rydych wedi dileu eich GOV.UK One Login",
       "summaryText": "Os byddwch angen defnyddio GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd."
-    },
-    "createPasskeyConfirmation": {
-      "title": "You’ve set up a passkey",
-      "panelText": "You’ve set up a passkey",
-      "summaryHtml1": "<p class='govuk-body'>Your passkey is saved to <strong>[passkeyName]</strong>.</p>",
-      "summaryHtml2": "<p class='govuk-body'>Next time, you’ll sign in with your passkey - for example your face or fingerprint.</p>"
     },
     "changePassword": {
       "title": "Rhowch eich cyfrinair newydd",
