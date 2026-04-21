@@ -81,6 +81,7 @@ Then("I am on the sign in page", async ({ page }) => {
 Then(
   "the page contains the text {string}",
   async ({ page }, content: string) => {
+    console.log(page.url());
     await expect(page.getByText(content)).toBeVisible();
   }
 );
