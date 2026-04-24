@@ -94,7 +94,7 @@
     "@types/cookie-parser": "^1.4.10",
     "@types/csurf": "^1.11.5",
     "@types/express": "^5.0.6",
-    "@types/express-session": "^1.18.2",
+    "@types/express-session": "^1.19.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.19.17",
     "@types/nunjucks": "^3.2.6",
