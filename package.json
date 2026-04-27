@@ -71,7 +71,7 @@
     "helmet": "8.1.0",
     "i18next": "^25.10.10",
     "i18next-fs-backend": "^2.6.4",
-    "i18next-http-middleware": "^3.9.2",
+    "i18next-http-middleware": "^3.9.3",
     "jose": "^5.10.0",
     "jsdom": "^27.4.0",
     "libphonenumber-js": "^1.12.41",
