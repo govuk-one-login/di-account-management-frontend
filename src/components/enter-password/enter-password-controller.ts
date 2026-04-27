@@ -46,7 +46,7 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.ChangeDefaultMethod]: PATH_DATA.CHANGE_DEFAULT_METHOD.url,
   [UserJourney.GlobalLogout]: PATH_DATA.GLOBAL_LOGOUT_CONFIRM.url,
   [UserJourney.CreatePasskey]: PATH_DATA.CREATE_NEW_PASSKEY.url,
-  [UserJourney.RemovePasskey]: "/todo-remove",
+  [UserJourney.RemovePasskey]: PATH_DATA.REMOVE_PASSKEY.url,
 };
 
 const VALID_BACK_ROUTES: Record<
@@ -252,10 +252,27 @@ export function enterPasswordPost(
         EventType.Authenticated
       );
       const from = getRenderOptions(req, requestType).from;
-      const redirectPath = from
-        ? `${REDIRECT_PATHS[requestType]}?from=${from}`
-        : REDIRECT_PATHS[requestType];
-      res.redirect(redirectPath);
+
+      const searchParams = new URLSearchParams();
+
+      if (from) {
+        searchParams.set("from", from);
+      }
+
+      if (requestType === UserJourney.RemovePasskey) {
+        const raw = req.query.passkeyId;
+
+        if (typeof raw === "string") {
+          searchParams.set("id", raw);
+        } else if (Array.isArray(raw) && typeof raw[0] === "string") {
+          searchParams.set("id", raw[0]);
+        }
+      }
+
+      const searchString =
+        searchParams.size > 0 ? `?${searchParams.toString()}` : "";
+
+      res.redirect(`${REDIRECT_PATHS[requestType]}${searchString}`);
       return;
     }
 

@@ -26,6 +26,7 @@ describe("state-machine", () => {
         EventType.SelectedApp,
         EventType.SelectedSms,
         EventType.RemoveBackup,
+        EventType.RemovePasskey,
       ]);
     });
 
@@ -64,6 +65,7 @@ describe("state-machine", () => {
         EventType.SelectedApp,
         EventType.SelectedSms,
         EventType.RemoveBackup,
+        EventType.RemovePasskey,
       ]);
     });
 
@@ -85,6 +87,7 @@ describe("state-machine", () => {
         EventType.SelectedApp,
         EventType.SelectedSms,
         EventType.RemoveBackup,
+        EventType.RemovePasskey,
       ]);
     });
 
@@ -121,6 +124,7 @@ describe("state-machine", () => {
         EventType.SelectedApp,
         EventType.SelectedSms,
         EventType.RemoveBackup,
+        EventType.RemovePasskey,
       ]);
     });
 
@@ -133,6 +137,7 @@ describe("state-machine", () => {
         EventType.SelectedApp,
         EventType.SelectedSms,
         EventType.RemoveBackup,
+        EventType.RemovePasskey,
       ]);
     });
   });
