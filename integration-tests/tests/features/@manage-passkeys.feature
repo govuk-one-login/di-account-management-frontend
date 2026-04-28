@@ -28,5 +28,17 @@ Scenario: remove a passkey
   Then I click the "Manage your sign in details" link
   Then I click the "Remove passkey" link
   Then I enter and submit my password "qwerty"
+  Then the page looks as expected
+  Then I click the "Remove passkey" button
+  Then the page looks as expected
+
+Scenario: remove a passkey without a name
+  Given I go to the "Root" page
+  And I sign in as the "onePasskeyNoDisplayName" user
+  And I go to the "Security" page
+  Then I click the "Manage your sign in details" link
+  Then I click the "Remove passkey" link
+  Then I enter and submit my password "qwerty"
+  Then the page looks as expected
   Then I click the "Remove passkey" button
   Then the page looks as expected
