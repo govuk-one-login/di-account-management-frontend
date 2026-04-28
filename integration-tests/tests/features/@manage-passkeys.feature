@@ -26,7 +26,7 @@ Scenario: remove a passkey
   And I sign in as the "fourPasskeys" user
   And I go to the "Security" page
   Then I click the "Manage your sign in details" link
-  Then I click the "Remove passkey" link
+  Then I click the "Remove iCloud Keychain (Managed) passkey" link
   Then I enter and submit my password "qwerty"
   Then the page looks as expected
   Then I click the "Remove passkey" button
