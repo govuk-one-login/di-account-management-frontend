@@ -82,6 +82,26 @@
     }
   },
   "pages": {
+    "removePasskey": {
+      "title": "Remove your passkey",
+      "heading": "Remove your passkey",
+      "description": "The passkey saved to <strong>[passkeyName]</strong> will be removed from your GOV.UK Login.",
+      "descriptionNoName": "This passkey will be removed from your GOV.UK One Login.",
+      "alternativePasskey": "Next time you sign in, you can use another passkey.",
+      "noPasskey": "Next time you sign in you'll need to enter a password and security code instead.",
+      "defaultMfa": {
+        "SMS": "We'll send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
+        "APP": "You'll use your authenticator app to get security codes."
+      },
+      "button": "Remove passkey",
+      "cancelButton": "Cancel and go back"
+    },
+    "removePasskeyConfirmation": {
+      "title": "You've removed your paskey",
+      "panelText": "You’ve removed your passkey",
+      "summaryText": "Next time you sign in, you can use another passkey",
+      "summaryTextNoPasskeys": "Next time you sign in, you'll need to enter your password and security code."
+    },
     "globalLogout": {
       "title": "Sign out of all devices",
       "paragraph1": "Sign out of GOV.UK One Login on all devices.",
@@ -472,6 +492,10 @@
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can set up a passkey."
       },
+      "removePasskey": {
+        "header": "Enter your password",
+        "paragraph": "We need to make sure it’s you before you can remove your passkey."
+      },
       "cancelTextSecurity": "Cancel and go back to Security",
       "cancelTextSignInDetails": "Cancel and go back"
     },
@@ -725,9 +749,7 @@
       "metaDescription": "Contact us for help using your GOV.UK One Login including problems signing in, proving your identity or managing your details. Call or talk to us online.",
       "section1": {
         "heading": "Before you contact us",
-        "paragraphs": [
-          "Read our guidance if you’re having a problem with:"
-        ],
+        "paragraphs": ["Read our guidance if you’re having a problem with:"],
         "links": [
           {
             "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app",
@@ -833,9 +855,7 @@
         },
         "phone": {
           "heading": "Phone",
-          "paragraphs": [
-            "You’ll need your reference code when you call."
-          ],
+          "paragraphs": ["You’ll need your reference code when you call."],
           "insetText": {
             "paragraphs": [
               "<strong>From the UK:</strong><br>0300 373 9020",

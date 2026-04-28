@@ -42,9 +42,8 @@ describe("Integration::enter password", () => {
 
   beforeAll(async () => {
     vi.resetModules();
-    const sessionMiddleware = await import(
-      "../../../middleware/requires-auth-middleware.js"
-    );
+    const sessionMiddleware =
+      await import("../../../middleware/requires-auth-middleware.js");
     vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
       async function (req: any, _res: any, next: any): Promise<void> {
         req.session.user = {
@@ -160,7 +159,9 @@ describe("Integration::enter password", () => {
     // Exclude global logout as the state is set mid-journey
     PATH_DATA.GLOBAL_LOGOUT_CONFIRM,
 
-    ...(!passkeysEnabled() ? [PATH_DATA.CREATE_NEW_PASSKEY] : []),
+    ...(!passkeysEnabled()
+      ? [PATH_DATA.CREATE_NEW_PASSKEY, PATH_DATA.REMOVE_PASSKEY]
+      : []),
   ];
 
   Object.entries(PATH_DATA)

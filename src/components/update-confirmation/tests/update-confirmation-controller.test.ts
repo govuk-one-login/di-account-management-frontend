@@ -13,6 +13,7 @@ import {
   removeMfaMethodConfirmationGet,
   changeDefaultMfaMethodConfirmationGet,
   createPasskeyConfirmationGet,
+  removePasskeyConfirmationGet,
 } from "../update-confirmation-controller.js";
 import {
   AuthAppMethod,
@@ -21,9 +22,14 @@ import {
 } from "../../../utils/mfaClient/types";
 import { RequestBuilder } from "../../../../test/utils/builders";
 import { getPasskeyConvenienceMetadataByAaguid } from "../../../utils/passkeysConvenienceMetadata/index.js";
+import { createMfaClient, MfaClient } from "../../../utils/mfaClient/index.js";
 
 vi.mock("../../../utils/passkeysConvenienceMetadata/index.js", () => ({
   getPasskeyConvenienceMetadataByAaguid: vi.fn(),
+}));
+
+vi.mock("../../../utils/mfaClient/index.js", () => ({
+  createMfaClient: vi.fn(),
 }));
 
 describe("update confirmation controller", () => {
@@ -366,6 +372,86 @@ describe("createPasskeyConfirmationGet", () => {
       pageTitle: "pages.createPasskeyConfirmation.title",
       panelText: "pages.createPasskeyConfirmation.panelText",
       summaryHtml: "testPhonepages.createPasskeyConfirmation.summaryHtml2",
+    });
+  });
+});
+
+describe("removePasskeyConfirmationGet", () => {
+  let req: any;
+  let res: Partial<Response>;
+
+  it("should render remove passkey confirmation page when the user has another passkey", async () => {
+    const mockClient: Partial<MfaClient> = {
+      getPasskeys: vi.fn().mockResolvedValue({
+        data: [
+          {
+            credentialId: "credential-id-1",
+            aaguid: "aaguid",
+          },
+        ],
+      }),
+    };
+    vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
+
+    req = new RequestBuilder()
+      .withSession({
+        mfaMethods: [
+          {
+            method: {
+              mfaMethodType: "APP",
+            },
+          },
+        ],
+      })
+      .withTranslate(vi.fn((id) => id))
+      .build();
+
+    res = {
+      render: vi.fn(),
+      locals: {},
+    };
+
+    await removePasskeyConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.removePasskeyConfirmation.title",
+      panelText: "pages.removePasskeyConfirmation.panelText",
+      summaryText: "pages.removePasskeyConfirmation.summaryText",
+    });
+  });
+
+  it("should render remove passkey confirmation page when the user has no other passkeys but has another mfa method", async () => {
+    const mockClient: Partial<MfaClient> = {
+      getPasskeys: vi.fn().mockResolvedValue({
+        data: [],
+      }),
+    };
+    vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
+
+    req = new RequestBuilder()
+      .withSession({
+        mfaMethods: [
+          {
+            method: {
+              mfaMethodType: "SMS",
+            },
+          },
+        ],
+      })
+      .withTranslate(vi.fn((id) => id))
+      .build();
+
+    res = {
+      render: vi.fn(),
+      locals: {},
+    };
+
+    await removePasskeyConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.removePasskeyConfirmation.title",
+      panelText: "pages.removePasskeyConfirmation.panelText",
+      summaryText: "pages.removePasskeyConfirmation.summaryTextNoPasskeys",
     });
   });
 });

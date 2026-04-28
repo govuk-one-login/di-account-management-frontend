@@ -32,6 +32,7 @@ enum EventType {
   Confirmation = "CONFIRMATION",
   RemoveBackup = "REMOVE_BACKUP",
   GoBackToChooseBackup = "GO_BACK_TO_CHOOSE_BACKUP",
+  RemovePasskey = "REMOVE_PASSKEY",
 }
 
 interface Event {
@@ -74,6 +75,9 @@ export const amStateMachine = createMachine({
           target: "SMS",
         },
         REMOVE_BACKUP: {
+          target: "CONFIRMATION",
+        },
+        REMOVE_PASSKEY: {
           target: "CONFIRMATION",
         },
       },

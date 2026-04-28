@@ -20,6 +20,7 @@ import {
 } from "../../utils/mfaClient/types.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { getPasskeyConvenienceMetadataByAaguid } from "../../utils/passkeysConvenienceMetadata/index.js";
+import { createMfaClient } from "../../utils/mfaClient/index.js";
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
   req.metrics?.addMetric("updateEmailConfirmationGet", MetricUnit.Count, 1);
@@ -334,5 +335,25 @@ export async function createPasskeyConfirmationGet(
     pageTitle: req.t("pages.createPasskeyConfirmation.title"),
     panelText: req.t("pages.createPasskeyConfirmation.panelText"),
     summaryHtml: summaryHtml,
+  });
+}
+
+export async function removePasskeyConfirmationGet(
+  req: Request,
+  res: Response
+): Promise<void> {
+  req.metrics?.addMetric("removePasskeyConfirmationGet", MetricUnit.Count, 1);
+
+  const mfaClient = await createMfaClient(req, res);
+  const hasPasskeys = (await mfaClient.getPasskeys()).data.length > 0;
+
+  const summaryText = hasPasskeys
+    ? req.t("pages.removePasskeyConfirmation.summaryText")
+    : req.t("pages.removePasskeyConfirmation.summaryTextNoPasskeys");
+
+  res.render("update-confirmation/index.njk", {
+    pageTitle: req.t("pages.removePasskeyConfirmation.title"),
+    panelText: req.t("pages.removePasskeyConfirmation.panelText"),
+    summaryText,
   });
 }

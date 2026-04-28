@@ -215,6 +215,16 @@ export const PATH_DATA: Record<
     event: EventType.ValueUpdated,
     type: UserJourney.CreatePasskey,
   },
+  PASSKEY_REMOVED_CONFIRMATION: {
+    url: "/remove-passkey-confirmation",
+    event: EventType.Confirmation,
+    type: UserJourney.RemovePasskey,
+  },
+  REMOVE_PASSKEY: {
+    url: "/remove-passkey",
+    event: EventType.RemovePasskey,
+    type: UserJourney.RemovePasskey,
+  },
 };
 
 export const EXTERNAL_URLS = {

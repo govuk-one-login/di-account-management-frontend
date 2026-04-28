@@ -1,0 +1,31 @@
+{% extends "common/layout/base-page.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% set pageTitleName = 'pages.removePasskey.title' | translate %}
+{% block pageContent %}
+  <h1 class="govuk-heading-xl landing-page__heading">{{ 'pages.removePasskey.heading' | translate }}</h1>
+  {% if passkey.name %}
+    <p class="govuk-body">{{ 'pages.removePasskey.description' | translate | safe | replace('[passkeyName]', passkey.name) }}</p>
+  {% else %}
+    <p class="govuk-body">{{ 'pages.removePasskey.descriptionNoName' | translate }}</p>
+  {% endif %}
+  {% if hasAlternativePasskey %}
+    <p class="govuk-body">{{ 'pages.removePasskey.alternativePasskey' | translate }}</p>
+  {% else %}
+    <p class="govuk-body">{{ 'pages.removePasskey.noPasskey' | translate }}</p>
+    {% if defaultMfaType === 'SMS' %}
+      <p class="govuk-body">{{ 'pages.removePasskey.defaultMfa.SMS' | translate | safe | replace('[phoneNumber]', phoneNumber) }}</p>
+    {% elif defaultMfaType === 'APP' %}
+      <p class="govuk-body">{{ 'pages.removePasskey.defaultMfa.APP' | translate }}</p>
+    {% endif %}
+  {% endif %}
+  <form action="{{ 'REMOVE_PASSKEY' | getPath }}" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <input type="hidden" name="passkeyId" value="{{ passkey.id }}"/> {{ govukButton({
+      text: "pages.removePasskey.button" | translate,
+      preventDoubleClick: true
+    }) }}
+  </form>
+  <a href='{{ "SIGN_IN_DETAILS" | getPath }}' class="govuk-link govuk-body">
+    {{ 'pages.removePasskey.cancelButton' | translate }}
+  </a>
+{% endblock %}

@@ -345,5 +345,29 @@ describe("enter password controller", () => {
 
       expect(handleLogoutStub).toHaveBeenCalledWith(req, res, "suspended");
     });
+
+    it("should pass on parameters when redirecting after successful authentication", async () => {
+      const fakeService: EnterPasswordServiceInterface = {
+        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+      };
+
+      req.session.user = {
+        state: { removePasskey: { value: "CHANGE_VALUE" } },
+        tokens: { accessToken: "token" },
+      } as any;
+
+      req.body.password = "password";
+      req.query = {
+        type: "removePasskey",
+        from: "security",
+        passkeyId: "12345",
+      };
+
+      await enterPasswordPost(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        "/remove-passkey?from=security&id=12345"
+      );
+    });
   });
 });
