@@ -44,18 +44,18 @@
   "dependencies": {
     "@aws-crypto/client-node": "^4.2.1",
     "@aws-lambda-powertools/metrics": "^2.33.0",
-    "@aws-sdk/client-dynamodb": "^3.1031.0",
-    "@aws-sdk/client-kms": "^3.1031.0",
-    "@aws-sdk/client-sns": "^3.1031.0",
-    "@aws-sdk/client-sqs": "^3.1031.0",
-    "@aws-sdk/lib-dynamodb": "^3.1031.0",
+    "@aws-sdk/client-dynamodb": "^3.1032.0",
+    "@aws-sdk/client-kms": "^3.1032.0",
+    "@aws-sdk/client-sns": "^3.1032.0",
+    "@aws-sdk/client-sqs": "^3.1032.0",
+    "@aws-sdk/lib-dynamodb": "^3.1032.0",
     "@aws-sdk/util-dynamodb": "^3.985.0",
     "@govuk-one-login/frontend-analytics": "^4.0.7",
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
     "@govuk-one-login/frontend-ui": "^4.2.3",
     "@govuk-one-login/frontend-vital-signs": "0.1.4",
     "@simplewebauthn/browser": "^13.3.0",
-    "axios": "^1.15.0",
+    "axios": "^1.15.1",
     "base64url": "3.0.1",
     "body-parser": "^2.2.2",
     "connect-dynamodb": "^3.0.5",
@@ -129,6 +129,6 @@
     "json5": "2.2.3"
   },
   "optionalDependencies": {
-    "@rollup/rollup-darwin-arm64": "^4.60.1"
+    "@rollup/rollup-darwin-arm64": "^4.60.2"
   }
 }
