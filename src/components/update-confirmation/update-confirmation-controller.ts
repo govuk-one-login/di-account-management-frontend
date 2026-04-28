@@ -317,6 +317,9 @@ export async function createPasskeyConfirmationGet(
 ): Promise<void> {
   req.metrics?.addMetric("createPasskeyConfirmationGet", MetricUnit.Count, 1);
 
+  const mfaClient = await createMfaClient(req, res);
+  const isFirstPasskey = (await mfaClient.getPasskeys()).data.length === 1;
+
   const passkeyName = (
     await getPasskeyConvenienceMetadataByAaguid(
       req,
@@ -331,10 +334,14 @@ export async function createPasskeyConfirmationGet(
         .concat(baseHtml)
     : baseHtml;
 
+  const finalHtml = isFirstPasskey
+    ? summaryHtml + req.t("pages.createPasskeyConfirmation.firstPasskey")
+    : summaryHtml;
+
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.createPasskeyConfirmation.title"),
     panelText: req.t("pages.createPasskeyConfirmation.panelText"),
-    summaryHtml: summaryHtml,
+    summaryHtml: finalHtml,
   });
 }
 
