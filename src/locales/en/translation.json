@@ -542,7 +542,8 @@
       "title": "You’ve set up a passkey",
       "panelText": "You’ve set up a passkey",
       "summaryHtml1": "<p class='govuk-body'>Your passkey is saved to <strong>[passkeyName]</strong>.</p>",
-      "summaryHtml2": "<p class='govuk-body'>Next time, you’ll sign in with your passkey - for example your face or fingerprint.</p>"
+      "summaryHtml2": "<p class='govuk-body'>Next time, you’ll sign in with your passkey - for example your face or fingerprint.</p>",
+      "firstPasskey": "<p class='govuk-body'>This is instead of entering your GOV.UK Login password and security code.</p>"
     },
     "changePassword": {
       "title": "Enter your new password",

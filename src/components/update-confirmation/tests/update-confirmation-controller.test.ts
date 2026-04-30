@@ -345,6 +345,21 @@ describe("createPasskeyConfirmationGet", () => {
   });
 
   it("should render create passkey confirmation page", async () => {
+    const mockClient: Partial<MfaClient> = {
+      getPasskeys: vi.fn().mockResolvedValue({
+        data: [
+          {
+            credentialId: "credential-id-1",
+            aaguid: "aaguid",
+          },
+          {
+            credentialId: "credential-id-2",
+            aaguid: "aaguid-2",
+          },
+        ],
+      }),
+    };
+    vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
     await createPasskeyConfirmationGet(req as Request, res as Response);
 
     expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
@@ -355,6 +370,21 @@ describe("createPasskeyConfirmationGet", () => {
   });
 
   it("should render create passkey confirmation page with convenience metadata", async () => {
+    const mockClient: Partial<MfaClient> = {
+      getPasskeys: vi.fn().mockResolvedValue({
+        data: [
+          {
+            credentialId: "credential-id-1",
+            aaguid: "aaguid",
+          },
+          {
+            credentialId: "credential-id-2",
+            aaguid: "aaguid-2",
+          },
+        ],
+      }),
+    };
+    vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
     req.t = (t: string) => {
       if (t === "pages.createPasskeyConfirmation.summaryHtml1") {
         return "[passkeyName]";
@@ -372,6 +402,39 @@ describe("createPasskeyConfirmationGet", () => {
       pageTitle: "pages.createPasskeyConfirmation.title",
       panelText: "pages.createPasskeyConfirmation.panelText",
       summaryHtml: "testPhonepages.createPasskeyConfirmation.summaryHtml2",
+    });
+  });
+
+  it("should render create passkey confirmation page with extra info for the first passkey", async () => {
+    const mockClient: Partial<MfaClient> = {
+      getPasskeys: vi.fn().mockResolvedValue({
+        data: [
+          {
+            credentialId: "credential-id-1",
+            aaguid: "aaguid",
+          },
+        ],
+      }),
+    };
+    vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
+    req.t = (t: string) => {
+      if (t === "pages.createPasskeyConfirmation.summaryHtml1") {
+        return "[passkeyName]";
+      }
+      return t;
+    };
+    vi.mocked(getPasskeyConvenienceMetadataByAaguid).mockReturnValue(
+      Promise.resolve({
+        name: "testPhone",
+      })
+    );
+    await createPasskeyConfirmationGet(req as Request, res as Response);
+
+    expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
+      pageTitle: "pages.createPasskeyConfirmation.title",
+      panelText: "pages.createPasskeyConfirmation.panelText",
+      summaryHtml:
+        "testPhonepages.createPasskeyConfirmation.summaryHtml2pages.createPasskeyConfirmation.firstPasskey",
     });
   });
 });
