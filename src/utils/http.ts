@@ -13,6 +13,7 @@ import { Request, Response } from "express";
 import xss from "xss";
 import { getTxmaHeader } from "./txma-header.js";
 import { refreshToken } from "./oidc.js";
+import { logger } from "./logger.js";
 
 const headers: RawAxiosRequestHeaders = {
   Accept: "application/json",
@@ -135,6 +136,13 @@ export class Http {
   private static handleError(error: AxiosError) {
     let apiError: ApiError;
 
+    if (error.code === "ECONNABORTED") {
+      logger.error(
+        { url: error.config?.url, timeout: error.config?.timeout },
+        "HTTP request timed out"
+      );
+    }
+
     if (error?.response?.data) {
       apiError = new ApiError(
         error.message,
@@ -152,6 +160,7 @@ export class Http {
     const http = axios.create({
       baseURL: this.baseUrl,
       headers: headers,
+      timeout: 10000,
     });
 
     http.interceptors.response.use(

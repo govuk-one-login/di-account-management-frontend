@@ -249,6 +249,7 @@ describe("Http", () => {
           "Access-Control-Allow-Credentials": "true",
           "X-Requested-With": "XMLHttpRequest",
         },
+        timeout: 10000,
       });
       expect(mockAxiosInstance.interceptors.response.use).toHaveBeenCalled();
     });
