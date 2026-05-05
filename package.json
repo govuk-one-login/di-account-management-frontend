@@ -42,7 +42,7 @@
     "link-registry": "rm -rf node_modules/di-account-management-rp-registry && ln -s ../../di-account-management-rp-registry node_modules/di-account-management-rp-registry"
   },
   "dependencies": {
-    "@aws-crypto/client-node": "^4.2.1",
+    "@aws-crypto/client-node": "^5.0.0",
     "@aws-lambda-powertools/metrics": "^2.33.0",
     "@aws-sdk/client-dynamodb": "^3.1032.0",
     "@aws-sdk/client-kms": "^3.1032.0",
@@ -123,6 +123,9 @@
     "typescript-eslint": "^8.59.1",
     "uglify-js": "^3.19.3",
     "vitest": "^4.0.18"
+  },
+  "overrides": {
+    "uuid": "^14.0.0"
   },
   "resolutions": {
     "minimist": "1.2.6",
