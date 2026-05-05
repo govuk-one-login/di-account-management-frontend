@@ -6,7 +6,6 @@ import {
   getOIDCClientId,
   reportSuspiciousActivity,
   getSNSSuspicousActivityTopic,
-  passkeysEnabled,
 } from "../../config.js";
 import { QueryCommand } from "@aws-sdk/client-dynamodb";
 import { dynamoDBService } from "../../utils/dynamo.js";
@@ -254,10 +253,7 @@ export async function reportSuspiciousActivityConfirmationGet(
       backLink: `${PATH_DATA.SIGN_IN_HISTORY.url}?page=${req.query.page ?? 1}`,
       email: req.session.user.email,
       contactLink: PATH_DATA.CONTACT.url,
-      changePasswordLink:
-        (passkeysEnabled()
-          ? PATH_DATA.SIGN_IN_DETAILS.url
-          : PATH_DATA.SECURITY.url) + "#password-details",
+      changePasswordLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changePassword`,
     });
   }
 }
