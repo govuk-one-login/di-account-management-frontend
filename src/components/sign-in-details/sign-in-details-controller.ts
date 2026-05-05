@@ -9,6 +9,10 @@ import {
   mapMfaMethods,
   canChangePrimaryMethod,
 } from "../../utils/mfa/index.js";
+import {
+  PASSKEYS_COMMON_OPL_SETTINGS,
+  setOplSettings,
+} from "../../utils/opl.js";
 
 export async function signInDetailsGet(
   req: Request,
@@ -39,6 +43,14 @@ export async function signInDetailsGet(
     : false;
 
   const formattedPasskeys = await formatPasskeysForRender(req, passkeys.data);
+
+  setOplSettings(
+    {
+      contentId: "e675b9e8-2bfd-43d8-bf43-1f4868a93630",
+      ...PASSKEYS_COMMON_OPL_SETTINGS,
+    },
+    res
+  );
 
   res.render("sign-in-details/index.njk", {
     email,

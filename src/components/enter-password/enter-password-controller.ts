@@ -23,6 +23,7 @@ import {
   CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
+  PASSKEYS_COMMON_OPL_SETTINGS,
 } from "../../utils/opl.js";
 import {
   mfaMethodTypes,
@@ -114,6 +115,14 @@ const getOplValues = (): OplSettingsLookupObject => ({
   },
   [UserJourney.GlobalLogout]: {
     contentId: "cefa908b-d774-4da4-b8df-3d4bc6ec3323",
+  },
+  [UserJourney.CreatePasskey]: {
+    contentId: "8da218a5-f0a4-4e43-aa0c-a83a389742ee",
+    ...PASSKEYS_COMMON_OPL_SETTINGS,
+  },
+  [UserJourney.RemovePasskey]: {
+    contentId: "87a6d285-f42a-43ba-8d24-88a9febacd1a",
+    ...PASSKEYS_COMMON_OPL_SETTINGS,
   },
 });
 

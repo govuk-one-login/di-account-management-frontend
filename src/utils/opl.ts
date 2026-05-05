@@ -30,6 +30,10 @@ export const ACTIVITY_COMMON_OPL_SETTINGS: Partial<OplSettings> = {
   taxonomyLevel2: "activity",
 };
 
+export const PASSKEYS_COMMON_OPL_SETTINGS: Partial<OplSettings> = {
+  taxonomyLevel3: "passkeys",
+};
+
 export const setOplSettings = (
   settings: Partial<OplSettings> | undefined,
   res: Response
