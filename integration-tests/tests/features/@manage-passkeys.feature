@@ -28,8 +28,10 @@ Scenario: remove a passkey
   Then I click the "Manage your sign in details" link
   Then I click the "Remove iCloud Keychain (Managed) passkey" link
   Then I enter and submit my password "qwerty"
+  And the page has finished loading
   Then the page looks as expected
   Then I click the "Remove passkey" button
+  And the page has finished loading
   Then the page looks as expected
 
 Scenario: remove a passkey without a name
@@ -39,6 +41,8 @@ Scenario: remove a passkey without a name
   Then I click the "Manage your sign in details" link
   Then I click the "Remove passkey" link
   Then I enter and submit my password "qwerty"
+  And the page has finished loading
   Then the page looks as expected
   Then I click the "Remove passkey" button
+  And the page has finished loading
   Then the page looks as expected
