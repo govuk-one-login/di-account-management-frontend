@@ -57,6 +57,9 @@ describe("removePasskeyGet", () => {
     const res = {
       render: vi.fn(),
       status: vi.fn(),
+      locals: {
+        opl: {},
+      },
     };
 
     await removePasskeyGet(
@@ -107,6 +110,7 @@ describe("removePasskeyGet", () => {
     const res = {
       render: vi.fn(),
       status: vi.fn(),
+      locals: { opl: {} },
     };
 
     await removePasskeyGet(

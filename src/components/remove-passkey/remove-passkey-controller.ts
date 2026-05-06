@@ -7,6 +7,10 @@ import {
 import { formatPasskeysForRender } from "../../utils/passkeys/index.js";
 import { getLastNDigits } from "../../utils/phone-number.js";
 import { EventType, getNextState } from "../../utils/state-machine.js";
+import {
+  PASSKEYS_COMMON_OPL_SETTINGS,
+  setOplSettings,
+} from "../../utils/opl.js";
 
 export async function removePasskeyGet(
   req: Request,
@@ -27,6 +31,14 @@ export async function removePasskeyGet(
   const hasAlternativePasskey = passkeys.data.length > 1;
   const defaultMfaMethod = req.session.mfaMethods.find(
     (method) => method.priorityIdentifier === "DEFAULT"
+  );
+
+  setOplSettings(
+    {
+      ...PASSKEYS_COMMON_OPL_SETTINGS,
+      contentId: "b75a90f1-0f70-4908-8661-fc89fb64c67d",
+    },
+    res
   );
 
   res.render("remove-passkey/index.njk", {

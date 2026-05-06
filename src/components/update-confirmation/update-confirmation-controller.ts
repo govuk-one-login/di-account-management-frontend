@@ -13,6 +13,7 @@ import {
   CHANGE_PASSWORD_COMMON_OPL_SETTINGS,
   DELETE_ACCOUNT_COMMON_OPL_SETTINGS,
   setOplSettings,
+  PASSKEYS_COMMON_OPL_SETTINGS,
 } from "../../utils/opl.js";
 import {
   mfaMethodTypes,
@@ -338,6 +339,14 @@ export async function createPasskeyConfirmationGet(
     ? summaryHtml + req.t("pages.createPasskeyConfirmation.firstPasskey")
     : summaryHtml;
 
+  setOplSettings(
+    {
+      ...PASSKEYS_COMMON_OPL_SETTINGS,
+      contentId: "f1643694-9bf5-4657-a99b-16f1daee2bc7",
+    },
+    res
+  );
+
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.createPasskeyConfirmation.title"),
     panelText: req.t("pages.createPasskeyConfirmation.panelText"),
@@ -357,6 +366,14 @@ export async function removePasskeyConfirmationGet(
   const summaryText = hasPasskeys
     ? req.t("pages.removePasskeyConfirmation.summaryText")
     : req.t("pages.removePasskeyConfirmation.summaryTextNoPasskeys");
+
+  setOplSettings(
+    {
+      ...PASSKEYS_COMMON_OPL_SETTINGS,
+      contentId: "fe8c2df3-63b0-47d5-860b-b96a17e527f6",
+    },
+    res
+  );
 
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.removePasskeyConfirmation.title"),
