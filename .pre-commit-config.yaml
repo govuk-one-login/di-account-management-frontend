@@ -20,7 +20,7 @@ repos:
       - id: detect-private-key
       - id: detect-aws-credentials
         args: [--allow-missing-credentials]
-        exclude: "package.json|package-lock.json|.*test.*\\.ts$|\\.pre-commit-config\\.yaml$|\\.github/workflows/checkov\\.yml$|quality-gate\\.manifest\\.json$"
+        exclude: "package.json|package-lock.json|.*test.*\\.ts$|\\.pre-commit-config\\.yaml$|\\.github/workflows/checkov\\.yml$"
       - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: check-merge-conflict
@@ -30,7 +30,7 @@ repos:
     rev: v1.4.0
     hooks:
       - id: detect-secrets
-        exclude: "package.json|package-lock.json|src/.*/.*.test.ts|locales/.*.json|.github/workflows/checkov.yml"
+        exclude: "package.json|package-lock.json|src/.*/.*.test.ts|locales/.*.json"
 
   - repo: local
     hooks:
