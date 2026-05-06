@@ -67,7 +67,7 @@ describe("getRequestConfig", () => {
   it("returns basic config with required headers", () => {
     const config = getRequestConfig({
       token: "test-token",
-      accountDataApiToken: "api-token",
+      accountDataApiAccessToken: "api-token",
     });
 
     expect(config).toEqual({
@@ -79,7 +79,7 @@ describe("getRequestConfig", () => {
     });
   });
 
-  it("returns config without X-ADAPI-AccessToken when accountDataApiToken is not provided", () => {
+  it("returns config without X-ADAPI-AccessToken when accountDataApiAccessToken is not provided", () => {
     const config = getRequestConfig({
       token: "test-token",
     });
@@ -108,7 +108,7 @@ describe("getRequestConfig", () => {
   it("includes optional headers when provided", () => {
     const config = getRequestConfig({
       token: "test-token",
-      accountDataApiToken: "api-token",
+      accountDataApiAccessToken: "api-token",
       sourceIp: "192.168.1.1",
       persistentSessionId: "persistent-123",
       sessionId: "session-123",
@@ -129,7 +129,7 @@ describe("getRequestConfig", () => {
     });
   });
 
-  it("excludes X-ADAPI-AccessToken when accountDataApiToken is not provided", () => {
+  it("excludes X-ADAPI-AccessToken when accountDataApiAccessToken is not provided", () => {
     const config = getRequestConfig({
       token: "test-token",
       sourceIp: "192.168.1.1",
@@ -171,7 +171,10 @@ describe("getRequestConfigFromExpress", () => {
   });
 
   it("returns the expected request config", async () => {
-    (req.session as any).user.tokens = { accessToken: "token" } as any;
+    (req.session as any).user.tokens = {
+      accessToken: "token",
+      accountDataApiAccessToken: "accountDataApiAccessToken",
+    } as any;
 
     const requestConfig = await getRequestConfigFromExpress(
       req as Request,
@@ -180,7 +183,7 @@ describe("getRequestConfigFromExpress", () => {
 
     expect(requestConfig).toEqual({
       token: "token",
-      accountDataApiToken: "TODO",
+      accountDataApiAccessToken: "accountDataApiAccessToken",
       clientSessionId: "clientsessionid",
       persistentSessionId: "persistentsessionid",
       sessionId: "sessionid",

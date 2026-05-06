@@ -25,6 +25,7 @@ interface UserTokens {
   idToken: string;
   accessToken: string;
   refreshToken: string;
+  accountDataApiAccessToken?: string;
 }
 
 type UserState = Partial<Record<UserJourney, StateAction>>;

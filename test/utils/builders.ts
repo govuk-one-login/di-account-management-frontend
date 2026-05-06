@@ -6,6 +6,7 @@ import { IncomingHttpHeaders } from "http";
 export const CURRENT_EMAIL = "current-email@dl.com";
 export const NEW_EMAIL = "new-email@test.com";
 export const TOKEN = "token";
+export const ACCOUNT_DATA_API_ACCESS_TOKEN = "accountDataApiAccessToken";
 export const SOURCE_IP = "sourceip";
 export const ENGLISH = "en";
 
@@ -23,6 +24,7 @@ export class RequestBuilder {
         accessToken: TOKEN,
         idToken: "",
         refreshToken: "",
+        accountDataApiAccessToken: ACCOUNT_DATA_API_ACCESS_TOKEN,
       },
       email: CURRENT_EMAIL,
       state: { changeEmail: getInitialState() },

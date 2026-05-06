@@ -4,6 +4,7 @@ import { changeEmailGet, changeEmailPost } from "../change-email-controller.js";
 import { ChangeEmailServiceInterface } from "../types";
 import { HTTP_STATUS_CODES } from "../../../app.constants";
 import {
+  ACCOUNT_DATA_API_ACCESS_TOKEN,
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
   ENGLISH,
@@ -93,7 +94,7 @@ describe("change email controller", () => {
       expect(fakeService.sendCodeVerificationNotification).toHaveBeenCalledWith(
         NEW_EMAIL,
         {
-          accountDataApiToken: "TODO",
+          accountDataApiAccessToken: ACCOUNT_DATA_API_ACCESS_TOKEN,
           token: TOKEN,
           sourceIp: SOURCE_IP,
           sessionId: SESSION_ID,
