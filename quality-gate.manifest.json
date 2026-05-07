@@ -5,15 +5,6 @@
       "service-tag": "home",
       "quality-gates": [
         {
-          "check-types": ["secret scanning", "vulnerability detection"],
-          "provider": "GitHub",
-          "phase": "pre-merge",
-          "config": {
-            "file": ".pre-commit-config.yaml",
-            "name": "Run pre-commit"
-          }
-        },
-        {
           "check-types": [
             "unit",
             "new feature",
@@ -33,7 +24,7 @@
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
-            "file": ".github/workflows/integration-test.yml",
+            "file": ".github/workflows/integration-tests.yml",
             "path": "jobs.end_to_end_tests",
             "name": "Integration tests"
           }
@@ -61,36 +52,6 @@
             "file": ".github/workflows/sonarcloud.yml",
             "path": "jobs.sonarcloud",
             "name": "SonarCloud"
-          }
-        },
-        {
-          "check-types": ["canary"],
-          "provider": "GitHub",
-          "phase": "staging",
-          "config": {
-            "file": ".github/workflows/on-merge-to-main.yml",
-            "path": "jobs.publish_artifacts",
-            "name": "Verify & Publish"
-          }
-        },
-        {
-          "check-types": ["canary"],
-          "provider": "GitHub",
-          "phase": "integration",
-          "config": {
-            "file": ".github/workflows/on-merge-to-main.yml",
-            "path": "jobs.publish_artifacts",
-            "name": "Verify & Publish"
-          }
-        },
-        {
-          "check-types": ["canary"],
-          "provider": "GitHub",
-          "phase": "production",
-          "config": {
-            "file": ".github/workflows/on-merge-to-main.yml",
-            "path": "jobs.publish_artifacts",
-            "name": "Verify & Publish"
           }
         }
       ]
