@@ -17,6 +17,7 @@ import {
   SESSION_ID,
   SOURCE_IP,
   TOKEN,
+  ACCOUNT_DATA_API_ACCESS_TOKEN,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 import * as oidcModule from "../../../utils/oidc.js";
@@ -77,7 +78,7 @@ describe("change phone number controller", () => {
       expect(
         fakeService.sendPhoneVerificationNotification
       ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", "DEFAULT", {
-        accountDataApiToken: "TODO",
+        accountDataApiAccessToken: ACCOUNT_DATA_API_ACCESS_TOKEN,
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -99,7 +100,6 @@ describe("change phone number controller", () => {
           code: ERROR_CODES.NEW_PHONE_NUMBER_SAME_AS_EXISTING,
         }),
       };
-      req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "12345678991";
 
       // Act
@@ -110,7 +110,7 @@ describe("change phone number controller", () => {
       expect(
         fakeService.sendPhoneVerificationNotification
       ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", "DEFAULT", {
-        accountDataApiToken: "TODO",
+        accountDataApiAccessToken: ACCOUNT_DATA_API_ACCESS_TOKEN,
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -156,7 +156,7 @@ describe("change phone number controller", () => {
       expect(
         fakeService.sendPhoneVerificationNotification
       ).toHaveBeenCalledWith(CURRENT_EMAIL, "12345678991", "DEFAULT", {
-        accountDataApiToken: "TODO",
+        accountDataApiAccessToken: ACCOUNT_DATA_API_ACCESS_TOKEN,
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
@@ -203,7 +203,7 @@ describe("change phone number controller", () => {
       expect(
         fakeService.sendPhoneVerificationNotification
       ).toHaveBeenCalledWith(CURRENT_EMAIL, "+33645453322", "DEFAULT", {
-        accountDataApiToken: "TODO",
+        accountDataApiAccessToken: ACCOUNT_DATA_API_ACCESS_TOKEN,
         token: TOKEN,
         sourceIp: SOURCE_IP,
         sessionId: SESSION_ID,
