@@ -135,6 +135,7 @@ export function populateSessionWithUserInfo(
       idToken: tokenSet.id_token,
       accessToken: tokenSet.access_token,
       refreshToken: tokenSet.refresh_token,
+      accountDataApiAccessToken: userInfoResponse.account_data_api_access_token,
     },
     isAuthenticated: true,
     state: {},

@@ -14,6 +14,7 @@ import {
   PATH_DATA,
 } from "../../../app.constants";
 import {
+  ACCOUNT_DATA_API_ACCESS_TOKEN,
   CLIENT_SESSION_ID,
   CURRENT_EMAIL,
   ENGLISH,
@@ -72,7 +73,6 @@ describe("change password controller", () => {
   describe("changePasswordPost", () => {
     it("should redirect to /password-updated-confirmation page", async () => {
       // Arrange
-      req.session.user.tokens = { accessToken: "token" } as any;
       req.session.user.state.changePassword.value = "CHANGE_VALUE";
       req.body.password = "Password1";
 
@@ -88,7 +88,7 @@ describe("change password controller", () => {
         CURRENT_EMAIL,
         "Password1",
         {
-          accountDataApiToken: "TODO",
+          accountDataApiAccessToken: ACCOUNT_DATA_API_ACCESS_TOKEN,
           token: TOKEN,
           sourceIp: SOURCE_IP,
           sessionId: SESSION_ID,
@@ -135,7 +135,6 @@ describe("change password controller", () => {
           message: "",
         }),
       };
-      req.session.user.tokens = { accessToken: "token" } as any;
 
       // Act
       await changePasswordPost(fakeFailingChangePasswordService)(

@@ -35,7 +35,7 @@ export function createApiResponse(
 
 export interface RequestConfig {
   token: string;
-  accountDataApiToken?: string;
+  accountDataApiAccessToken?: string;
   validationStatuses?: number[];
   sourceIp?: string;
   persistentSessionId?: string;
@@ -53,7 +53,8 @@ export async function getRequestConfigFromExpress(
 
   return {
     token: req.session.user.tokens.accessToken,
-    accountDataApiToken: "TODO",
+    accountDataApiAccessToken:
+      req.session.user.tokens.accountDataApiAccessToken,
     sourceIp: req.ip,
     sessionId: res.locals.sessionId,
     persistentSessionId: res.locals.persistentSessionId,
@@ -65,7 +66,7 @@ export async function getRequestConfigFromExpress(
 
 export function getRequestConfig({
   token,
-  accountDataApiToken,
+  accountDataApiAccessToken,
   validationStatuses,
   sourceIp,
   persistentSessionId,
@@ -81,8 +82,8 @@ export function getRequestConfig({
     proxy: false,
   };
 
-  if (accountDataApiToken) {
-    config.headers["X-ADAPI-AccessToken"] = accountDataApiToken;
+  if (accountDataApiAccessToken) {
+    config.headers["X-ADAPI-AccessToken"] = accountDataApiAccessToken;
   }
 
   if (validationStatuses) {
