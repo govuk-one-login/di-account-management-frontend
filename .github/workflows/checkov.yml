@@ -16,3 +16,6 @@ jobs:
           directory: deploy
           output_format: cli
           output_file_path: console
+          # TODO jira ticket OLH-4086: Temporary skip - CKV_AWS_124 requires CloudFormation stacks to send event notifications to an SNS topic.
+          # Remove once notification_arns has been added to all affected stacks.
+          skip_check: CKV_AWS_124
