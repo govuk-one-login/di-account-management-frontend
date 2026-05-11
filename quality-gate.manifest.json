@@ -45,6 +45,16 @@
           }
         },
         {
+          "check-types": ["code quality"],
+          "provider": "GitHub",
+          "phase": "pre-merge",
+          "config": {
+            "file": ".github/workflows/checkov.yml",
+            "path": "jobs.checkov",
+            "name": "Checkov"
+          }
+        },
+        {
           "check-types": ["code quality", "unit test coverage"],
           "provider": "GitHub",
           "phase": "pre-merge",

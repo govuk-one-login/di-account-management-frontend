@@ -1,0 +1,21 @@
+name: Checkov
+
+on:
+  pull_request:
+  merge_group:
+
+jobs:
+  checkov:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # pragma: allowlist secret
+
+      - name: Checkov GitHub Action
+        uses: bridgecrewio/checkov-action@eec884fd62682f5f2b33e303e160d5e2fe8d89ec # pragma: allowlist secret
+        with:
+          directory: deploy
+          output_format: cli
+          output_file_path: console
+          # TODO jira ticket OLH-4086: Temporary skip - CKV_AWS_124 requires CloudFormation stacks to send event notifications to an SNS topic.
+          # Remove once notification_arns has been added to all affected stacks.
+          skip_check: CKV_AWS_124
