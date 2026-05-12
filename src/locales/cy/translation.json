@@ -527,46 +527,68 @@
       "metaDescription": "Cysylltwch â ni am help i ddefnyddio’ch GOV.UK One Login gan gynnwys problemau mewngofnodi, profi eich hunaniaeth neu reoli eich manylion. Ffoniwch neu siaradwch â ni ar-lein.",
       "section1": {
         "heading": "Cyn i chi gysylltu â ni",
-        "paragraphs": ["Darllenwch ein canllaw os ydych yn cael problem gyda:"],
-        "links": [
+        "paragraph": "Darllenwch ein canllaw ar y cwestiynau mwyaf cyffredin.",
+        "sections": [
           {
-            "href": "https://gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app.cy",
-            "text": "Profi eich hunaniaeth gyda’r ap GOV.UK One Login"
+            "heading": "Mewngofnodi neu ddileu eich GOV.UK One Login",
+            "links": [
+              {
+                "href": "https://www.gov.uk/guidance/getting-a-security-code-for-govuk-one-login.cy",
+                "text": "Cael cod diogelwch ar gyfer GOV.UK One Login"
+              },
+              {
+                "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login.cy",
+                "text": "Newid y manylion mewngofnodi ar gyfer eich GOV.UK One Login"
+              },
+              {
+                "href": "https://www.gov.uk/guidance/deleting-your-govuk-one-login.cy",
+                "text": "Dileu eich GOV.UK One Login"
+              }
+            ]
           },
           {
-            "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions.cy",
-            "text": "Profi eich hunaniaeth gyda GOV.UK One Login drwy ateb cwestiynau diogelwch"
+            "heading": "Profi eich hunaniaeth gyda GOV.UK One Login",
+            "links": [
+              {
+                "href": "https://www.gov.uk/guidance/proving-your-identity-with-the-govuk-one-login-app.cy",
+                "text": "Profi eich hunaniaeth gyda'r ap GOV.UK One Login"
+              },
+              {
+                "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions.cy",
+                "text": "Profi eich hunaniaeth gyda GOV.UK One Login drwy ateb cwestiynau diogelwch"
+              }
+            ]
           },
           {
-            "href": "https://www.gov.uk/guidance/adding-your-veteran-card-to-the-govuk-one-login-app.cy",
-            "text": "Help i ychwanegu eich Cerdyn Cyn-filwr digidol i'r ap GOV.UK One Login"
+            "heading": "Profi eich hunaniaeth i ddefnyddio gwasanaethau CThEF",
+            "links": [
+              {
+                "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app.cy",
+                "text": "Defnyddio'r ap GOV.UK ID Check app"
+              },
+              {
+                "href": "https://www.gov.uk/guidance/linking-the-govuk-id-check-app-to-govuk.cy",
+                "text": "Cysylltu'r ap GOV.UK ID Check i GOV.UK"
+              }
+            ]
           },
           {
-            "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login.cy",
-            "text": "Newid y manylion mewngofnodi ar gyfer eich GOV.UK One Login"
+            "heading": "Cael Cerdyn Cyn-filwr digidol",
+            "links": [
+              {
+                "href": "https://www.gov.uk/guidance/adding-your-veteran-card-to-the-govuk-one-login-app.cy",
+                "text": "Help i ychwanegu eich Cerdyn Cyn-filwr digidol i'r ap GOV.UK One Login"
+              }
+            ]
           },
           {
-            "href": "https://www.gov.uk/guidance/getting-a-security-code-for-govuk-one-login.cy",
-            "text": "Cael cod diogelwch ar gyfer GOV.UK One Login"
-          },
-          {
-            "href": "https://www.gov.uk/guidance/deleting-your-govuk-one-login.cy",
-            "text": "Dileu eich GOV.UK One Login"
-          },
-          {
-            "href": "https://www.gov.uk/guidance/what-to-do-about-unexpected-messages-from-govuk-one-login.cy",
-            "text": "E-bost, neges destun neu alwad ffôn annisgwyl am eich GOV.UK One Login"
-          },
-          {
-            "href": "https://www.gov.uk/guidance/using-the-govuk-id-check-app.cy",
-            "text": "Defnyddio'r ap GOV.UK ID Check app"
-          },
-          {
-            "href": "https://www.gov.uk/guidance/linking-the-govuk-id-check-app-to-govuk.cy",
-            "text": "Cysylltu'r ap GOV.UK  ID Check i GOV.UK"
+            "heading": "Cael help neu gyngor",
+            "paragraphs": [
+              "Cael help gan rywun rydych yn ei adnabod ac yn ymddiried ynddynt i ddefnyddio GOV.UK One Login. Darganfyddwch <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login.cy\">beth gall ac na all y person sy'n eich helpu ei wneud</a>.",
+              "Darganfyddwch beth i'w wneud os ydych yn <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/what-to-do-about-unexpected-messages-from-govuk-one-login.cy\">derbyn e-bost, neges destun neu alwad ffôn annisgwyl am eich GOV.UK One Login</a>."
+            ]
           }
-        ],
-        "guidanceForHelpers": "Os ydych yn cael trafferth defnyddio GOV.UK One Login ar eich pen eich hun, gallwch gael help gan rywun rydych yn ei adnabod ac yn ymddiried ynddynt. Darganfyddwch <a class=\"govuk-link\" href=\"https://www.gov.uk/guidance/help-someone-use-govuk-one-login.cy\",>beth gall ac na all y person sy'n eich helpu ei wneud</a>."
+        ]
       },
       "section2": {
         "heading": "Pan fyddwch yn cysylltu â ni"
