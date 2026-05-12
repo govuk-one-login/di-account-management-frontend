@@ -81,6 +81,26 @@
     }
   },
   "pages": {
+    "removePasskey": {
+      "title": "Tynnwch eich allwedd mynediad",
+      "heading": "Tynnwch eich allwedd mynediad",
+      "description": "Bydd yr allwedd mynediad sydd wedi'i arbed i <strong>[passkeyName]</strong> yn cael ei dynnu o'ch GOV.UK One Login.",
+      "descriptionNoName": "Bydd hyn yn tynnu'r allwedd mynediad o'ch GOV.UK One Login.",
+      "alternativePasskey": "Y tro nesaf y byddwch yn mewngofnodi, gallwch ddefnyddio allwedd mynediad arall.",
+      "noPasskey": "Y tro nesaf y byddwch yn mewngofnodi, bydd angen i chi nodi cyfrinair a chod diogelwch yn lle hynny.",
+      "defaultMfa": {
+        "SMS": "Byddwn yn anfon codau diogelwch trwy neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
+        "APP": "Byddwch yn defnyddio'ch ap dilysydd i gael codau diogelwch."
+      },
+      "button": "Tynnu allwedd mynediad",
+      "cancelButton": "Canslo a mynd yn ôl"
+    },
+    "removePasskeyConfirmation": {
+      "title": "Rydych wedi tynnu eich allwedd mynediad",
+      "panelText": "Rydych wedi tynnu eich allwedd mynediad",
+      "summaryText": "Y tro nesaf y byddwch yn mewngofnodi, gallwch ddefnyddio allwedd mynediad arall.",
+      "summaryTextNoPasskeys": "Y tro nesaf y byddwch yn mewngofnodi, bydd angen i chi roi eich cyfrinair a chod diogelwch."
+    },
     "globalLogout": {
       "title": "Allgofnodi o bob dyfais",
       "paragraph1": "Allgofnodi o GOV.UK One Login ar bob dyfais.",
@@ -320,7 +340,17 @@
       "changeDefaultMethod": {
         "header": "Rhowch eich cyfrinair",
         "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn i chi allu rheoli sut rydych yn cael codau diogelwch."
-      }
+      },
+      "createPasskey": {
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn y gallwch sefydlu allwedd mynediad."
+      },
+      "removePasskey": {
+        "header": "Rhowch eich cyfrinair",
+        "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn y gallwch dynnu'ch allwedd mynediad."
+      },
+      "cancelTextSecurity": "Canslo a mynd yn ôl i Diogelwch",
+      "cancelTextSignInDetails": "Canslo a mynd yn ôl"
     },
     "changeEmail": {
       "title": "Rhowch eich cyfeiriad e-bost newydd",
@@ -355,6 +385,13 @@
       "title": "Rydych wedi dileu eich GOV.UK One Login",
       "panelText": "Rydych wedi dileu eich GOV.UK One Login",
       "summaryText": "Os byddwch angen defnyddio GOV.UK One Login yn y dyfodol, bydd yn rhaid i chi greu un newydd."
+    },
+    "createPasskeyConfirmation": {
+      "title": "Rydych wedi sefydlu allwedd mynediad",
+      "panelText": "Rydych wedi sefydlu allwedd mynediad",
+      "summaryHtml1": "<p class='govuk-body'>Mae eich allwedd cod mynediad wedi'i arbed i <strong>[passkeyName]</strong>.</p>",
+      "summaryHtml2": "<p class='govuk-body'>Y tro nesaf, byddwch yn mewngofnodi gyda'ch allwedd mynediad, er enghraifft eich wyneb, eich olion bysedd neu god mynediad dyfais.</p>",
+      "firstPasskey": "<p class='govuk-body'>Mae hyn yn lle rhoi eich cyfrinair a'ch cod diogelwch GOV.UK One Login.</p>"
     },
     "changePassword": {
       "title": "Rhowch eich cyfrinair newydd",
@@ -734,7 +771,7 @@
         "setUpAnotherPasskey": "Sefydlu allwedd mynediad arall",
         "setUpAnotherPasskeyLinkText": "Sefydlu allwedd mynediad",
         "subheadingOne": "Eich allwedd mynediad",
-        "subheadingMany": "Eich allwedd mynediad",
+        "subheadingMany": "Eich allweddi mynediad",
         "savedTo": "Wedi'i arbed i: ",
         "savedToUnknownProvider": "Wedi'i arbed i: Darparwr anhysbys",
         "savedToMultiple": "Allwedd mynediad: wedi'i arbed i ",
