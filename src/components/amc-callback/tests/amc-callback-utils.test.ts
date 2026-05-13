@@ -247,11 +247,10 @@ describe("AMC call back util tests", () => {
       const outcome = {
         success: true,
         scope: "passkey-create",
-        journeys: [
+        actions: [
           {
-            journey: "passkey-create",
+            action: "passkey-create",
             details: {},
-            success: true,
           },
         ],
       };
@@ -266,9 +265,9 @@ describe("AMC call back util tests", () => {
       const outcome = {
         success: false,
         scope: "passkey-create",
-        journeys: [
+        actions: [
           {
-            journey: "passkey-create",
+            action: "passkey-create",
             details: { error: { description: "UserSignedOut", code: 1001 } },
           },
         ],
@@ -286,9 +285,9 @@ describe("AMC call back util tests", () => {
       const outcome = {
         success: false,
         scope: "passkey-create",
-        journeys: [
+        actions: [
           {
-            journey: "passkey-create",
+            action: "passkey-create",
             details: {
               error: { description: "UserAbortedJourney", code: 1002 },
             },
@@ -300,13 +299,12 @@ describe("AMC call back util tests", () => {
       expect(res.redirect).toHaveBeenCalledWith("/sign-in-details");
     });
 
-    it("should log error when journey does not match scope", async () => {
-      const errorObj = { description: "UnknownError" };
+    it("should log error for unrecognised outcome when scope is unknown", async () => {
       const outcome = {
         outcome_id: "foo",
         success: true,
-        scope: "passkey-create",
-        journeys: [{ journey: "not-matching", details: { error: errorObj } }],
+        scope: "unknown-scope",
+        actions: [{ action: "not-matching", details: {} }],
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
@@ -328,7 +326,7 @@ describe("AMC call back util tests", () => {
         outcome_id: "bar",
         success: false,
         scope: "invalid",
-        journeys: [{ journey: "invalid", details: { error: errorObj } }],
+        actions: [{ action: "invalid", details: { error: errorObj } }],
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);

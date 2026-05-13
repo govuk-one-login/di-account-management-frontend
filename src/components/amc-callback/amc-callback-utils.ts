@@ -31,10 +31,10 @@ interface JourneyOutcome {
   email: string;
   scope: Scope;
   success: boolean;
-  journeys: {
-    journey: Scope;
+  actions: {
+    action: string;
     timestamp: number;
-    success: boolean;
+    success?: boolean;
     details: {
       aaguid?: string;
       error?: {
@@ -161,13 +161,14 @@ export async function handleJourneyOutcomeResponse(
   res: Response,
   outcome: JourneyOutcome
 ): Promise<void> {
-  const { scope, journeys, outcome_id } = outcome;
-  const currentJourney = journeys.find((item) => item.journey === scope);
-  const error = currentJourney?.details?.error;
-  const success = currentJourney?.success;
+  const { scope, actions, outcome_id, success } = outcome;
+  const passkeyAction = actions.find(
+    (item) => item.action === Scope.passkeyCreate
+  );
+  const error = passkeyAction?.details?.error;
   const isPasskeyJourney = scope === Scope.passkeyCreate;
 
-  req.session.createdPasskeyAaguid = currentJourney?.details?.aaguid;
+  req.session.createdPasskeyAaguid = passkeyAction?.details?.aaguid;
 
   if (success && isPasskeyJourney) {
     return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
