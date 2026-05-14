@@ -171,7 +171,7 @@ export async function handleJourneyOutcomeResponse(
   );
   const isPasskeyCreateJourney = scope === Scope.passkeyCreate;
   const passkeyCreateUserAbortedJourney =
-    passkeyCreateAction?.details?.error.code === 1002;
+    passkeyCreateAction?.details?.error?.code === 1002;
   const userSignedOut = actions.find(
     (item) => item.details.error?.code === 1001
   );
