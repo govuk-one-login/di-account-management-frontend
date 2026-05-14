@@ -169,7 +169,7 @@ export async function handleJourneyOutcomeResponse(
   const passkeyCreateAction = actions.find(
     (item) => item.action === Action.passkeyCreate
   );
-  const isPasskeyJourney = scope === Scope.passkeyCreate;
+  const isPasskeyCreateJourney = scope === Scope.passkeyCreate;
   const passkeyCreateUserAbortedJourney =
     passkeyCreateAction?.details?.error.code === 1002;
   const userSignedOut = actions.find(
@@ -178,11 +178,15 @@ export async function handleJourneyOutcomeResponse(
 
   req.session.createdPasskeyAaguid = passkeyCreateAction?.details?.aaguid;
 
-  if (success && isPasskeyJourney) {
+  if (success && isPasskeyCreateJourney) {
     return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
   } else if (!success && userSignedOut) {
     await handleLogout(req, res, LogoutState.AmcSignedOut);
-  } else if (!success && isPasskeyJourney && passkeyCreateUserAbortedJourney) {
+  } else if (
+    !success &&
+    isPasskeyCreateJourney &&
+    passkeyCreateUserAbortedJourney
+  ) {
     return res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
   } else {
     req.metrics?.addMetric("UnrecognisedJourneyOutcome", MetricUnit.Count, 1);
