@@ -25,6 +25,10 @@ enum Scope {
   passkeyCreate = "passkey-create",
 }
 
+enum Action {
+  passkeyCreate = "passkey-create",
+}
+
 interface JourneyOutcome {
   outcome_id: string;
   sub: string;
@@ -162,19 +166,23 @@ export async function handleJourneyOutcomeResponse(
   outcome: JourneyOutcome
 ): Promise<void> {
   const { scope, actions, outcome_id, success } = outcome;
-  const passkeyAction = actions.find(
-    (item) => item.action === Scope.passkeyCreate
+  const passkeyCreateAction = actions.find(
+    (item) => item.action === Action.passkeyCreate
   );
-  const error = passkeyAction?.details?.error;
   const isPasskeyJourney = scope === Scope.passkeyCreate;
+  const passkeyCreateUserAbortedJourney =
+    passkeyCreateAction?.details?.error.code === 1002;
+  const userSignedOut = actions.find(
+    (item) => item.details.error?.code === 1001
+  );
 
-  req.session.createdPasskeyAaguid = passkeyAction?.details?.aaguid;
+  req.session.createdPasskeyAaguid = passkeyCreateAction?.details?.aaguid;
 
   if (success && isPasskeyJourney) {
     return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
-  } else if (!success && error?.code === 1001) {
+  } else if (!success && userSignedOut) {
     await handleLogout(req, res, LogoutState.AmcSignedOut);
-  } else if (!success && isPasskeyJourney && error?.code === 1002) {
+  } else if (!success && isPasskeyJourney && passkeyCreateUserAbortedJourney) {
     return res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
   } else {
     req.metrics?.addMetric("UnrecognisedJourneyOutcome", MetricUnit.Count, 1);
