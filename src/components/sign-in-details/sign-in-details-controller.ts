@@ -42,6 +42,9 @@ export async function signInDetailsGet(
     ? canChangePrimaryMethod(req.session.mfaMethods)
     : false;
 
+  console.log("MHTEST1", passkeys);
+  console.log("MHTEST2", passkeys.data);
+
   const formattedPasskeys = await formatPasskeysForRender(req, passkeys.data);
 
   setOplSettings(
