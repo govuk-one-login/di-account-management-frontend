@@ -44,6 +44,8 @@ export async function signInDetailsGet(
 
   console.log("MHTEST1", passkeys);
   console.log("MHTEST2", passkeys.data);
+  console.log("MHTEST3", JSON.stringify(passkeys.data, null, 2));
+  console.log("MHTEST4", passkeys.status);
 
   const formattedPasskeys = await formatPasskeysForRender(req, passkeys.data);
 
