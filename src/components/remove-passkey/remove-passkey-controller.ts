@@ -57,7 +57,7 @@ export async function removePasskeyPost(
   res: Response
 ): Promise<void> {
   const mfaClient = await createMfaClient(req, res);
-  const response = await mfaClient.deletePasskey(req.body.id);
+  const response = await mfaClient.deletePasskey(req.body.passkeyId);
 
   if (response.success) {
     req.session.user.state.removePasskey = getNextState(
