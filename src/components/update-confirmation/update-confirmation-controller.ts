@@ -319,7 +319,8 @@ export async function createPasskeyConfirmationGet(
   req.metrics?.addMetric("createPasskeyConfirmationGet", MetricUnit.Count, 1);
 
   const mfaClient = await createMfaClient(req, res);
-  const isFirstPasskey = (await mfaClient.getPasskeys()).data.length === 1;
+  const isFirstPasskey =
+    (await mfaClient.getPasskeys()).data.passkeys.length === 1;
 
   const passkeyName = (
     await getPasskeyConvenienceMetadataByAaguid(
@@ -361,7 +362,7 @@ export async function removePasskeyConfirmationGet(
   req.metrics?.addMetric("removePasskeyConfirmationGet", MetricUnit.Count, 1);
 
   const mfaClient = await createMfaClient(req, res);
-  const hasPasskeys = (await mfaClient.getPasskeys()).data.length > 0;
+  const hasPasskeys = (await mfaClient.getPasskeys()).data.passkeys.length > 0;
 
   const summaryText = hasPasskeys
     ? req.t("pages.removePasskeyConfirmation.summaryText")

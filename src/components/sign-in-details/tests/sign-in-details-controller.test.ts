@@ -57,7 +57,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -85,7 +85,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -119,7 +119,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -161,7 +161,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -189,7 +189,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -220,7 +220,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -250,7 +250,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 

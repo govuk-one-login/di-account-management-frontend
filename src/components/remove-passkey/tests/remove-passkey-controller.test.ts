@@ -28,20 +28,22 @@ describe("removePasskeyGet", () => {
   it("should render remove passkey confirmation page when there is another passkey", async () => {
     const mfaClient: Partial<MfaClient> = {
       getPasskeys: vi.fn().mockResolvedValue({
-        data: [
-          {
-            id: "12345",
-            lastUsedAt: "2024-01-01T00:00:00Z",
-            createdAt: "2024-01-01T00:00:00Z",
-            metadata: { name: "Test Passkey", aaguid: "aaguid" },
-          },
-          {
-            id: "67890",
-            lastUsedAt: "2024-01-01T00:01:00Z",
-            createdAt: "2024-01-01T00:01:00Z",
-            metadata: { name: "Test Passkey 2", aaguid: "aaguid2" },
-          },
-        ],
+        data: {
+          passkeys: [
+            {
+              id: "12345",
+              lastUsedAt: "2024-01-01T00:00:00Z",
+              createdAt: "2024-01-01T00:00:00Z",
+              metadata: { name: "Test Passkey", aaguid: "aaguid" },
+            },
+            {
+              id: "67890",
+              lastUsedAt: "2024-01-01T00:01:00Z",
+              createdAt: "2024-01-01T00:01:00Z",
+              metadata: { name: "Test Passkey 2", aaguid: "aaguid2" },
+            },
+          ],
+        },
       }),
     };
 
@@ -79,14 +81,16 @@ describe("removePasskeyGet", () => {
   it("should render remove passkey confirmation page when there is no other passkey but there is another mfa method", async () => {
     const mfaClient: Partial<MfaClient> = {
       getPasskeys: vi.fn().mockResolvedValue({
-        data: [
-          {
-            id: "12345",
-            lastUsedAt: "2024-01-01T00:00:00Z",
-            createdAt: "2024-01-01T00:00:00Z",
-            metadata: { name: "Test Passkey", aaguid: "aaguid" },
-          },
-        ],
+        data: {
+          passkeys: [
+            {
+              id: "12345",
+              lastUsedAt: "2024-01-01T00:00:00Z",
+              createdAt: "2024-01-01T00:00:00Z",
+              metadata: { name: "Test Passkey", aaguid: "aaguid" },
+            },
+          ],
+        },
       }),
     };
 
@@ -130,7 +134,7 @@ describe("removePasskeyGet", () => {
   it("should return 404 when passkey is not found", async () => {
     const mfaClient: Partial<MfaClient> = {
       getPasskeys: vi.fn().mockResolvedValue({
-        data: [],
+        data: { passkeys: [] },
       }),
     };
 

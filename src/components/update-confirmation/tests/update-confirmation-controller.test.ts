@@ -347,16 +347,18 @@ describe("createPasskeyConfirmationGet", () => {
   it("should render create passkey confirmation page", async () => {
     const mockClient: Partial<MfaClient> = {
       getPasskeys: vi.fn().mockResolvedValue({
-        data: [
-          {
-            credentialId: "credential-id-1",
-            aaguid: "aaguid",
-          },
-          {
-            credentialId: "credential-id-2",
-            aaguid: "aaguid-2",
-          },
-        ],
+        data: {
+          passkeys: [
+            {
+              credentialId: "credential-id-1",
+              aaguid: "aaguid",
+            },
+            {
+              credentialId: "credential-id-2",
+              aaguid: "aaguid-2",
+            },
+          ],
+        },
       }),
     };
     vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
@@ -372,16 +374,18 @@ describe("createPasskeyConfirmationGet", () => {
   it("should render create passkey confirmation page with convenience metadata", async () => {
     const mockClient: Partial<MfaClient> = {
       getPasskeys: vi.fn().mockResolvedValue({
-        data: [
-          {
-            credentialId: "credential-id-1",
-            aaguid: "aaguid",
-          },
-          {
-            credentialId: "credential-id-2",
-            aaguid: "aaguid-2",
-          },
-        ],
+        data: {
+          passkeys: [
+            {
+              credentialId: "credential-id-1",
+              aaguid: "aaguid",
+            },
+            {
+              credentialId: "credential-id-2",
+              aaguid: "aaguid-2",
+            },
+          ],
+        },
       }),
     };
     vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
@@ -408,12 +412,14 @@ describe("createPasskeyConfirmationGet", () => {
   it("should render create passkey confirmation page with extra info for the first passkey", async () => {
     const mockClient: Partial<MfaClient> = {
       getPasskeys: vi.fn().mockResolvedValue({
-        data: [
-          {
-            credentialId: "credential-id-1",
-            aaguid: "aaguid",
-          },
-        ],
+        data: {
+          passkeys: [
+            {
+              credentialId: "credential-id-1",
+              aaguid: "aaguid",
+            },
+          ],
+        },
       }),
     };
     vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
@@ -446,12 +452,14 @@ describe("removePasskeyConfirmationGet", () => {
   it("should render remove passkey confirmation page when the user has another passkey", async () => {
     const mockClient: Partial<MfaClient> = {
       getPasskeys: vi.fn().mockResolvedValue({
-        data: [
-          {
-            credentialId: "credential-id-1",
-            aaguid: "aaguid",
-          },
-        ],
+        data: {
+          passkeys: [
+            {
+              credentialId: "credential-id-1",
+              aaguid: "aaguid",
+            },
+          ],
+        },
       }),
     };
     vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
@@ -486,7 +494,7 @@ describe("removePasskeyConfirmationGet", () => {
   it("should render remove passkey confirmation page when the user has no other passkeys but has another mfa method", async () => {
     const mockClient: Partial<MfaClient> = {
       getPasskeys: vi.fn().mockResolvedValue({
-        data: [],
+        data: { passkeys: [] },
       }),
     };
     vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);

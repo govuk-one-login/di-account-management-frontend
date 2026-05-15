@@ -98,9 +98,8 @@ describe("Integration:: signInDetails", () => {
 });
 
 const appWithMiddlewareSetup = async (config: any = {}) => {
-  const sessionMiddleware = await import(
-    "../../../middleware/requires-auth-middleware.js"
-  );
+  const sessionMiddleware =
+    await import("../../../middleware/requires-auth-middleware.js");
   const oidc = await import("../../../utils/oidc.js");
   const mfa = await import("../../../utils/mfaClient/index.js");
 
@@ -184,7 +183,9 @@ const appWithMiddlewareSetup = async (config: any = {}) => {
 
   const stubMfaClient = {
     retrieve: vi.fn().mockResolvedValue({ success: true, data: mfaMethods }),
-    getPasskeys: vi.fn().mockResolvedValue({ success: true, data: passkeys }),
+    getPasskeys: vi
+      .fn()
+      .mockResolvedValue({ success: true, data: { passkeys } }),
   };
 
   vi.spyOn(mfa, "createMfaClient").mockResolvedValue(stubMfaClient);

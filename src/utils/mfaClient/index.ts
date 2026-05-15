@@ -102,10 +102,9 @@ export class MfaClient implements MfaClientInterface {
   }
 
   async getPasskeys() {
-    const response = await this.http.client.get<Passkey[]>(
-      `/passkeys/${this.publicSubjectId}`,
-      this.requestConfig
-    );
+    const response = await this.http.client.get<{
+      passkeys: Passkey[];
+    }>(`/passkeys/${this.publicSubjectId}`, this.requestConfig);
 
     return buildResponse(response);
   }
