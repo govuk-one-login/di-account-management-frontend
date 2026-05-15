@@ -4,7 +4,10 @@ import {
   QueryCommandOutput,
 } from "@aws-sdk/client-dynamodb";
 
-import { GetPublicKeyCommandOutput, SignCommandOutput } from "@aws-sdk/client-kms";
+import {
+  GetPublicKeyCommandOutput,
+  SignCommandOutput,
+} from "@aws-sdk/client-kms";
 import { PublishCommandOutput } from "@aws-sdk/client-sns";
 import { MfaMethod } from "./mfaClient/types.js";
 import { GetCommandOutput } from "@aws-sdk/lib-dynamodb";
@@ -19,7 +22,6 @@ export interface Service {
   count_successful_logins: number;
   last_accessed: number;
   last_accessed_readable_format: string;
-  hasDetailedCard?: boolean;
   isAvailableInWelsh?: boolean;
 }
 

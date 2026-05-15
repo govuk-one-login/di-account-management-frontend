@@ -85,37 +85,6 @@ describe("Integration:: your services", () => {
       });
   });
 
-  it("should display long service card for detailed card service", async () => {
-    const app = await appWithMiddlewareSetup({
-      hasAccounts: true,
-      hasServices: true,
-      hasHMRC: true,
-    });
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).toBe(200);
-        expect($(testComponent("service-card-long")).length).not.toBe(0);
-        expect($(testComponent("service-card-short")).length).toBe(0);
-      });
-  });
-
-  it("should display short service card for non-detailed card services", async () => {
-    const app = await appWithMiddlewareSetup({
-      hasAccounts: true,
-      hasServices: true,
-    });
-    await request(app)
-      .get(url)
-      .expect(function (res) {
-        const $ = cheerio.load(res.text);
-        expect(res.status).toBe(200);
-        expect($(testComponent("service-card-short")).length).not.toBe(0);
-        expect($(testComponent("service-card-long")).length).toBe(0);
-      });
-  });
-
   it("should not display a global notice paragraph when the page is being viewed in English, and English-only services have been visited", async () => {
     const app = await appWithMiddlewareSetup({
       hasAccounts: true,
@@ -266,7 +235,6 @@ const appWithMiddlewareSetup = async (data?: {
           count_successful_logins: "1",
           last_accessed: "",
           last_accessed_readable_format: "",
-          hasDetailedCard: true,
         },
       ]
     : [

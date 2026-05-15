@@ -149,10 +149,6 @@ export const getListOfAccountClientIDs = getIdListFromFilter({
   isOffboarded: false,
 });
 
-export const getClientsWithDetailedCard = getIdListFromFilter({
-  showDetailedCard: true,
-});
-
 export const getListOfServiceClientIDs = getIdListFromFilter({
   showInServices: true,
   isOffboarded: false,

@@ -23,7 +23,6 @@ vi.mock("../../../src/config", async () => {
           "prisonVisits",
           "vehicleOperatorLicense",
         ];
-      if (filter.showDetailedCard) return [];
       if (filter.isAvailableInWelsh) return ["hmrc", "vehicleOperatorLicense"];
       return [];
     }),
@@ -57,7 +56,6 @@ describe("YourService Util", () => {
                     last_accessed_readable_format: {
                       S: "last_accessed_readable_format",
                     },
-                    hasDetailedCard: { BOOL: true },
                     isAvailableInWelsh: { BOOL: false },
                   },
                 },
@@ -69,7 +67,6 @@ describe("YourService Util", () => {
                     last_accessed_readable_format: {
                       S: "last_accessed_readable_format",
                     },
-                    hasDetailedCard: { BOOL: true },
                     isAvailableInWelsh: { BOOL: false },
                   },
                 },
@@ -81,7 +78,6 @@ describe("YourService Util", () => {
                     last_accessed_readable_format: {
                       S: "last_accessed_readable_format",
                     },
-                    hasDetailedCard: { BOOL: false },
                     isAvailableInWelsh: { BOOL: false },
                   },
                 },
@@ -93,7 +89,6 @@ describe("YourService Util", () => {
                     last_accessed_readable_format: {
                       S: "last_accessed_readable_format",
                     },
-                    hasDetailedCard: { BOOL: false },
                     isAvailableInWelsh: { BOOL: true },
                   },
                 },
@@ -105,7 +100,6 @@ describe("YourService Util", () => {
                     last_accessed_readable_format: {
                       S: "last_accessed_readable_format",
                     },
-                    hasDetailedCard: { BOOL: true },
                     isAvailableInWelsh: { BOOL: true },
                   },
                 },
@@ -255,21 +249,6 @@ describe("YourService Util", () => {
       );
       expect(formattedService.isAvailableInWelsh).toBe(true);
     });
-
-    it("format service object with hasDetailedCard if service is hmrc", async () => {
-      const dateEpochInSeconds = 1673358736;
-      const serviceFromDb: Service = {
-        client_id: "hmrc",
-        count_successful_logins: 1,
-        last_accessed: dateEpochInSeconds,
-        last_accessed_readable_format: "1673356836",
-      };
-
-      const formattedService: Service = formatService(serviceFromDb, "en");
-
-      expect(formattedService.hasDetailedCard).equal(false);
-      expect(formattedService.isAvailableInWelsh).toBeUndefined();
-    });
   });
 
   describe("does GovUK Publishing service exist in array", () => {
@@ -279,7 +258,6 @@ describe("YourService Util", () => {
           {
             client_id: "prisonVisits",
             count_successful_logins: 1,
-            hasDetailedCard: false,
             isAvailableInWelsh: false,
             last_accessed: 14567776,
             last_accessed_readable_format: "1 January 1970",
@@ -287,7 +265,6 @@ describe("YourService Util", () => {
           {
             client_id: "dfeApplyForTeacherTraining",
             count_successful_logins: 2,
-            hasDetailedCard: false,
             isAvailableInWelsh: false,
             last_accessed: 14567776,
             last_accessed_readable_format: "1 January 1970",
@@ -297,7 +274,6 @@ describe("YourService Util", () => {
           {
             client_id: "mortgageDeed",
             count_successful_logins: 1,
-            hasDetailedCard: false,
             last_accessed: 14567776,
             last_accessed_readable_format: "1 January 1970",
             isAvailableInWelsh: false,
@@ -305,7 +281,6 @@ describe("YourService Util", () => {
           {
             client_id: "vehicleOperatorLicense",
             count_successful_logins: 3,
-            hasDetailedCard: false,
             isAvailableInWelsh: true,
             last_accessed: 14567776,
             last_accessed_readable_format: "1 January 1970",
@@ -326,7 +301,6 @@ describe("YourService Util", () => {
         {
           client_id: "dfeApplyForTeacherTraining",
           count_successful_logins: 2,
-          hasDetailedCard: false,
           isAvailableInWelsh: false,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
@@ -334,7 +308,6 @@ describe("YourService Util", () => {
         {
           client_id: "mortgageDeed",
           count_successful_logins: 1,
-          hasDetailedCard: true,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
           isAvailableInWelsh: false,
@@ -342,7 +315,6 @@ describe("YourService Util", () => {
         {
           client_id: "prisonVisits",
           count_successful_logins: 1,
-          hasDetailedCard: true,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
           isAvailableInWelsh: false,
@@ -350,7 +322,6 @@ describe("YourService Util", () => {
         {
           client_id: "vehicleOperatorLicense",
           count_successful_logins: 3,
-          hasDetailedCard: false,
           isAvailableInWelsh: true,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
