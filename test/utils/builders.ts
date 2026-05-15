@@ -169,6 +169,7 @@ export class RequestBuilder {
       query: this.query as Request["query"],
       t: this.t as any,
       ip: this.ip,
+      log: this.log,
     };
   }
 }
