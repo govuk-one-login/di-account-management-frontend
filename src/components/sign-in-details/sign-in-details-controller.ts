@@ -42,12 +42,10 @@ export async function signInDetailsGet(
     ? canChangePrimaryMethod(req.session.mfaMethods)
     : false;
 
-  req.log.info("MHTEST1", passkeys);
-  req.log.info("MHTEST2", passkeys.data);
-  req.log.info("MHTEST3", JSON.stringify(passkeys.data, null, 2));
-  req.log.info("MHTEST4", passkeys.status);
-
-  const formattedPasskeys = await formatPasskeysForRender(req, passkeys.data);
+  const formattedPasskeys = await formatPasskeysForRender(
+    req,
+    passkeys.data.passkeys
+  );
 
   setOplSettings(
     {

@@ -31,7 +31,7 @@ describe("createNewPasskeyGet", () => {
 
   it("should redirect to start page when passkeys are at max limit", async () => {
     mfaClientStub.getPasskeys.mockResolvedValue({
-      data: new Array(maxNumberOfPasskeys),
+      data: { passkeys: new Array(maxNumberOfPasskeys) },
     });
 
     await createNewPasskeyGet(req as Request, res as Response);
@@ -44,7 +44,7 @@ describe("createNewPasskeyGet", () => {
 
   it("should redirect to start page when passkeys exceed max limit", async () => {
     mfaClientStub.getPasskeys.mockResolvedValue({
-      data: new Array(maxNumberOfPasskeys + 1),
+      data: { passkeys: new Array(maxNumberOfPasskeys + 1) },
     });
 
     await createNewPasskeyGet(req as Request, res as Response);
@@ -57,7 +57,7 @@ describe("createNewPasskeyGet", () => {
 
   it("should initiate AMC redirect with passkey-create scope when under max passkeys", async () => {
     mfaClientStub.getPasskeys.mockResolvedValue({
-      data: [],
+      data: { passkeys: [] },
     });
 
     await createNewPasskeyGet(req as Request, res as Response);
@@ -72,7 +72,7 @@ describe("createNewPasskeyGet", () => {
 
   it("should initiate AMC redirect when passkeys are one below max", async () => {
     mfaClientStub.getPasskeys.mockResolvedValue({
-      data: new Array(maxNumberOfPasskeys - 1),
+      data: { passkeys: new Array(maxNumberOfPasskeys - 1) },
     });
 
     await createNewPasskeyGet(req as Request, res as Response);

@@ -10,7 +10,7 @@ export interface MfaClientInterface {
   ) => Promise<ApiResponse<MfaMethod[]>>;
   delete: (method: MfaMethod) => Promise<ApiResponse<any>>;
   makeDefault: (mfaIdentifier: string) => Promise<ApiResponse<MfaMethod[]>>;
-  getPasskeys: () => Promise<ApiResponse<Passkey[]>>;
+  getPasskeys: () => Promise<ApiResponse<{ passkeys: Passkey[] }>>;
   deletePasskey: (passkeyIdentifier: string) => Promise<ApiResponse<any>>;
 }
 

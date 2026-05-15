@@ -19,7 +19,7 @@ export async function removePasskeyGet(
   const mfaClient = await createMfaClient(req, res);
   const passkeys = await mfaClient.getPasskeys();
 
-  const passkey = passkeys.data.find((p) => p.id === req.query.id);
+  const passkey = passkeys.data.passkeys.find((p) => p.id === req.query.id);
 
   if (!passkey) {
     res.status(404);
@@ -28,7 +28,7 @@ export async function removePasskeyGet(
 
   const formattedPasskey = (await formatPasskeysForRender(req, [passkey]))[0];
 
-  const hasAlternativePasskey = passkeys.data.length > 1;
+  const hasAlternativePasskey = passkeys.data.passkeys.length > 1;
   const defaultMfaMethod = req.session.mfaMethods.find(
     (method) => method.priorityIdentifier === "DEFAULT"
   );

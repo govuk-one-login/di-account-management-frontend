@@ -12,7 +12,6 @@ describe("signInDetailsGet Controller", () => {
   let mockRender: any;
   let mockMetrics: any;
   let mockT: any;
-  let mockLog: any;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -23,9 +22,6 @@ describe("signInDetailsGet Controller", () => {
 
     mockRender = vi.fn();
     mockT = vi.fn((key: string) => key);
-    mockLog = {
-      info: vi.fn(),
-    };
 
     req = new RequestBuilder()
       .withSession({
@@ -47,7 +43,6 @@ describe("signInDetailsGet Controller", () => {
           },
         ],
       } as any)
-      .withLog(mockLog)
       .build();
 
     req.metrics = mockMetrics;
@@ -62,7 +57,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -90,7 +85,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -124,7 +119,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -162,12 +157,11 @@ describe("signInDetailsGet Controller", () => {
 
   it("should handle missing metrics gracefully", async () => {
     delete req.metrics;
-    req.log = mockLog; // Ensure log is still available
 
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -191,12 +185,11 @@ describe("signInDetailsGet Controller", () => {
   it("should handle different email addresses", async () => {
     const testEmail = "different@example.com";
     req.session!.user.email = testEmail;
-    req.log = mockLog; // Ensure log is available
 
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -223,12 +216,11 @@ describe("signInDetailsGet Controller", () => {
 
   it("should handle non-array MFA methods", async () => {
     req.session!.mfaMethods = null as any;
-    req.log = mockLog; // Ensure log is available
 
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -258,7 +250,7 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: [] }),
+        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
