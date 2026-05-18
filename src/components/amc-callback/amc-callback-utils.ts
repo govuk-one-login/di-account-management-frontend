@@ -108,7 +108,7 @@ export async function exchangeCodeForToken(
   const now = Math.floor(Date.now() / 1000);
 
   const header = {
-    alg: "RS256",
+    alg: "RS512",
     typ: "JWT",
     kid: kmsService.getPublicKey(),
   };
