@@ -171,7 +171,7 @@ describe("removePasskeyPost", () => {
     vi.mocked(createMfaClient).mockResolvedValue(mfaClient as MfaClient);
 
     const req = {
-      body: { id: "12345" },
+      body: { passkeyId: "12345" },
       session: {
         user: {
           state: {
@@ -206,7 +206,7 @@ describe("removePasskeyPost", () => {
     vi.mocked(createMfaClient).mockResolvedValue(mfaClient as MfaClient);
 
     const req = {
-      body: { id: "12345" },
+      body: { passkeyId: "12345" },
       session: {
         user: {
           state: {
