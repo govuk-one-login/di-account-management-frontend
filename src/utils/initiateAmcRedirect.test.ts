@@ -44,6 +44,9 @@ describe("initiateAmcRedirect", () => {
           publicSubjectId: "public-sub-456",
           email: "user@example.com",
           isAuthenticated: true,
+          tokens: {
+            accountDataApiAccessToken: "test-account-data-token",
+          },
         },
       } as any,
     };
@@ -86,7 +89,9 @@ describe("initiateAmcRedirect", () => {
         internalPairwiseId: "internal-sub-123",
         publicSubjectId: "public-sub-456",
         email: "user@example.com",
-      }
+      },
+      undefined,
+      "test-account-data-token"
     );
   });
 

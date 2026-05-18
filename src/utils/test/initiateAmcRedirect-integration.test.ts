@@ -64,6 +64,9 @@ describe("Integration:: initiateAmcRedirect", () => {
         publicSubjectId: "pub-456",
         email: "user@example.com",
         isAuthenticated: true,
+        tokens: {
+          accountDataApiAccessToken: "test-token",
+        },
       },
     });
 
@@ -82,6 +85,9 @@ describe("Integration:: initiateAmcRedirect", () => {
         publicSubjectId: "pub-456",
         email: "user@example.com",
         isAuthenticated: true,
+        tokens: {
+          accountDataApiAccessToken: "test-token",
+        },
       },
     });
 
@@ -107,6 +113,9 @@ describe("Integration:: initiateAmcRedirect", () => {
         publicSubjectId: "pub-456",
         email: "user@example.com",
         isAuthenticated: true,
+        tokens: {
+          accountDataApiAccessToken: "test-token",
+        },
       },
     });
 
@@ -134,6 +143,9 @@ describe("Integration:: initiateAmcRedirect", () => {
           publicSubjectId: "pub-456",
           email: "user@example.com",
           isAuthenticated: true,
+          tokens: {
+            accountDataApiAccessToken: "test-token",
+          },
         },
         save: (cb?: (err?: any) => void) => cb?.(),
       } as any;
@@ -162,6 +174,9 @@ describe("Integration:: initiateAmcRedirect", () => {
           publicSubjectId: "pub-456",
           email: "user@example.com",
           isAuthenticated: true,
+          tokens: {
+            accountDataApiAccessToken: "test-token",
+          },
         },
         amcStates: ["pre-existing-state"],
         save: (cb?: (err?: any) => void) => cb?.(),
