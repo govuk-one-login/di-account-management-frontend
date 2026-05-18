@@ -23,11 +23,17 @@ export async function initiateAmcRedirect(
 
   const { subjectId, publicSubjectId, email } = req.session.user;
 
-  const { jws, jwe } = await getAmcJwe(scope, state, {
-    internalPairwiseId: subjectId,
-    publicSubjectId,
-    email,
-  });
+  const { jws, jwe } = await getAmcJwe(
+    scope,
+    state,
+    {
+      internalPairwiseId: subjectId,
+      publicSubjectId,
+      email,
+    },
+    undefined,
+    req.session.user.tokens.accountDataApiAccessToken
+  );
 
   const redirectUri = `${getAmcCallbackBaseUrl()}${PATH_DATA.AMC_CALLBACK.url}`;
 
