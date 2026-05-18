@@ -123,6 +123,10 @@ export function getServiceDomain(): string {
   return process.env.SERVICE_DOMAIN ?? "";
 }
 
+export function getRootDomain(): string {
+  return process.env.ROOT_DOMAIN ?? "";
+}
+
 export function getAccessibilityStatementUrl(): string {
   return process.env.ACCESSIBILITY_STATEMENT_URL;
 }

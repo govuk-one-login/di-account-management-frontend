@@ -20,7 +20,7 @@ vi.mock("../config.js", () => ({
   getAmcAuthorizeUrl: vi.fn(() => "https://amc.example.com/authorize"),
   getAmcClientId: vi.fn(() => "test-client-id"),
   getHomeBaseUrl: vi.fn(() => "https://home.example.com"),
-  getServiceDomain: vi.fn(() => "example.com"),
+  getRootDomain: vi.fn(() => "example.com"),
   getAmcCallbackBaseUrl: vi.fn(() => "https://home.example.com"),
 }));
 
@@ -127,8 +127,8 @@ describe("initiateAmcRedirect", () => {
     );
   });
 
-  it("should set the cookie domain from getServiceDomain()", async () => {
-    vi.spyOn(config, "getServiceDomain").mockReturnValue("account.gov.uk");
+  it("should set the cookie domain from getRootDomain()", async () => {
+    vi.spyOn(config, "getRootDomain").mockReturnValue("account.gov.uk");
 
     await initiateAmcRedirect("openid email", req as Request, res as Response);
 

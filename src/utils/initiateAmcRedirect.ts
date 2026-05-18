@@ -5,7 +5,7 @@ import {
   getAmcAuthorizeUrl,
   getAmcCallbackBaseUrl,
   getAmcClientId,
-  getServiceDomain,
+  getRootDomain,
 } from "../config.js";
 import { PATH_DATA } from "../app.constants.js";
 
@@ -50,7 +50,7 @@ export async function initiateAmcRedirect(
     secure: true,
     httpOnly: true,
     sameSite: "strict",
-    domain: getServiceDomain(),
+    domain: getRootDomain(),
   });
 
   res.redirect(url.toString());
