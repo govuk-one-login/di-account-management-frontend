@@ -74,7 +74,7 @@
     "i18next-http-middleware": "^3.9.3",
     "jose": "^5.10.0",
     "jsdom": "^27.4.0",
-    "libphonenumber-js": "^1.12.43",
+    "libphonenumber-js": "^1.13.0",
     "nunjucks": "^3.2.4",
     "obscenity": "^0.4.6",
     "openid-client": "^5.7.1",
@@ -87,7 +87,7 @@
     "uuid": "^14.0.0",
     "valibot": "^1.4.0",
     "xss": "^1.0.15",
-    "xstate": "^5.31.0"
+    "xstate": "^5.31.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.3",
