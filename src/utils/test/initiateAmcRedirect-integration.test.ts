@@ -15,7 +15,7 @@ vi.mock("../../config.js", () => ({
   getAmcAuthorizeUrl: vi.fn(() => "https://amc.example.com/authorize"),
   getAmcClientId: vi.fn(() => "test-client-id"),
   getHomeBaseUrl: vi.fn(() => "https://home.example.com"),
-  getServiceDomain: vi.fn(() => "example.com"),
+  getRootDomain: vi.fn(() => "example.com"),
   getAmcCallbackBaseUrl: vi.fn(() => "https://home.example.com"),
 }));
 

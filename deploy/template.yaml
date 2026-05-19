@@ -168,6 +168,7 @@ Mappings:
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "dev.account.gov.uk"
       SERVICEDOMAIN: "dev.account.gov.uk"
+      ROOTDOMAIN: "account.gov.uk"
       LOGSLEVEL: "debug"
       WEBCHATSOURCEURL: "https://dev-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
@@ -205,6 +206,7 @@ Mappings:
       AUTHFRONTENDURL: "signin.build.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "build.account.gov.uk"
       SERVICEDOMAIN: "build.account.gov.uk"
+      ROOTDOMAIN: "account.gov.uk"
       LOGSLEVEL: "debug"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
@@ -242,6 +244,7 @@ Mappings:
       AUTHFRONTENDURL: "signin.staging.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "staging.account.gov.uk"
       SERVICEDOMAIN: "staging.account.gov.uk"
+      ROOTDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
@@ -279,6 +282,7 @@ Mappings:
       AUTHFRONTENDURL: "signin.integration.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "integration.account.gov.uk"
       SERVICEDOMAIN: "integration.account.gov.uk"
+      ROOTDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
       WEBCHATSOURCEURL: "https://uat-chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
@@ -316,6 +320,7 @@ Mappings:
       AUTHFRONTENDURL: "signin.account.gov.uk"
       ANALYTICSCOOKIEDOMAIN: "account.gov.uk"
       SERVICEDOMAIN: "account.gov.uk"
+      ROOTDOMAIN: "account.gov.uk"
       LOGSLEVEL: "info"
       WEBCHATSOURCEURL: "https://chat-loader-hgsgds.smartagent.app"
       SUPPORTWEBCHATCONTACT: "1"
@@ -822,6 +827,9 @@ Resources:
                   !Ref Environment,
                   SERVICEDOMAIN,
                 ]
+            - Name: "ROOT_DOMAIN"
+              Value:
+                !FindInMap [EnvironmentVariables, !Ref Environment, ROOTDOMAIN]
             - Name: "LOGS_LEVEL"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL]
