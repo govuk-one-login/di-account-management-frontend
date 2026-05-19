@@ -1,7 +1,5 @@
 Feature: "Sign in details" page
 
-  # Expected to fail on mobile due to known accessibility issues
-  @failMobile
   Scenario: Visit the "Sign in details" page as a user with no passkeys
     Given I go to the "Root" page
     And I sign in as the "noPasskeys" user
@@ -22,10 +20,8 @@ Feature: "Sign in details" page
     Then the page title is prefixed with "Sign in details"
     And there are 0 passkeys in the list
     And the option to create a passkey is hidden
-    And the page looks as expected    
+    And the page looks as expected
 
-  # Expected to fail on mobile due to known accessibility issues
-  @failMobile
   Scenario: Visit the "Sign in details" page as a user with one passkey
     Given I go to the "Root" page
     And I sign in as the "onePasskey" user
@@ -46,10 +42,8 @@ Feature: "Sign in details" page
     Then the page title is prefixed with "Sign in details"
     And there are 1 passkeys in the list
     And the option to create a passkey is hidden
-    And the page looks as expected    
+    And the page looks as expected
 
-  # Expected to fail on mobile due to known accessibility issues
-  @failMobile
   Scenario: Visit the "Sign in details" page as a user with one passkey with no display name
     Given I go to the "Root" page
     And I sign in as the "onePasskeyNoDisplayName" user
@@ -70,10 +64,8 @@ Feature: "Sign in details" page
     Then the page title is prefixed with "Sign in details"
     And there are 1 passkeys in the list
     And the option to create a passkey is hidden
-    And the page looks as expected    
+    And the page looks as expected
 
-  # Expected to fail on mobile due to known accessibility issues
-  @failMobile
   Scenario: Visit the "Sign in details" page as a user with fewer than the maximum number of passkeys
     Given I go to the "Root" page
     And I sign in as the "fourPasskeys" user
@@ -94,10 +86,8 @@ Feature: "Sign in details" page
     Then the page title is prefixed with "Sign in details"
     And there are 4 passkeys in the list
     And the option to create a passkey is hidden
-    And the page looks as expected    
+    And the page looks as expected
 
-  # Expected to fail on mobile due to known accessibility issues
-  @failMobile
   Scenario: Visit the "Sign in details" page as a user with the maximum number of passkeys
     Given I go to the "Root" page
     And I sign in as the "fivePasskeys" user
@@ -119,4 +109,4 @@ Feature: "Sign in details" page
     Then the page title is prefixed with "Sign in details"
     And there are 5 passkeys in the list
     And the option to create a passkey is hidden
-    And the page looks as expected    
+    And the page looks as expected
