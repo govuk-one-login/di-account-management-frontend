@@ -7,7 +7,6 @@ import {
   getListOfAccountClientIDs,
   getListOfServiceClientIDs,
   getIdListFromFilter,
-  getClientsWithDetailedCard,
   getAppEnv,
   getListOfShowInDeleteAccountClientIDs,
 } from "../config.js";
@@ -88,16 +87,12 @@ export const formatService = (
     dateEpoch: service.last_accessed,
     locale: currentLanguage,
   });
-  const hasDetailedCard = getClientsWithDetailedCard.includes(
-    service.client_id
-  );
 
   return {
     client_id: service.client_id,
     count_successful_logins: service.count_successful_logins,
     last_accessed: service.last_accessed,
     last_accessed_readable_format: readable_format_date,
-    hasDetailedCard,
     isAvailableInWelsh: service.isAvailableInWelsh,
   };
 };

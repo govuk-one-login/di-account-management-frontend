@@ -24,14 +24,12 @@ describe("activity history allowlist middleware", () => {
           count_successful_logins: 1,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
-          hasDetailedCard: true,
         },
         {
           client_id: "mortgageDeed",
           count_successful_logins: 1,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
-          hasDetailedCard: true,
         },
       ];
       const yourNewAllowlist = ["prisonVisits"];
@@ -72,14 +70,12 @@ describe("activity history allowlist middleware", () => {
           count_successful_logins: 1,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
-          hasDetailedCard: true,
         },
         {
           client_id: "relyingPartyStub",
           count_successful_logins: 1,
           last_accessed: 14567776,
           last_accessed_readable_format: "last_accessed_readable_format",
-          hasDetailedCard: true,
         },
       ]);
       const req: any = {
