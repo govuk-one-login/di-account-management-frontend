@@ -1,5 +1,5 @@
 {% extends "common/layout/base-page.njk" %}
-{% from "common/show-password/macro.njk" import govukInputWithShowPassword %}
+{% from "common/show-password/macro.njk" import govukInputWithShowPassword with context %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% set paragraph = ['pages.enterPassword.', requestType, '.paragraph'] | join | translate %}
 {% set header = ['pages.enterPassword.', requestType, '.header'] | join | translate %}
@@ -21,7 +21,6 @@
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
 
         <p class="govuk-body">{{paragraph}}</p>
-
         {{ govukInputWithShowPassword({
           label: 'pages.enterPassword.password.label' | translate,
           id: "password",
