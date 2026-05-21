@@ -2,7 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% set pageTitleName = 'pages.removePasskey.title' | translate %}
 {% block pageContent %}
-  <h1 class="govuk-heading-xl landing-page__heading">{{ 'pages.removePasskey.heading' | translate }}</h1>
+  <h1 class="govuk-heading-l">{{ 'pages.removePasskey.heading' | translate }}</h1>
   {% if passkey.name %}
     <p class="govuk-body">{{ 'pages.removePasskey.description' | translate | safe | replace('[passkeyName]', passkey.name) }}</p>
   {% else %}
