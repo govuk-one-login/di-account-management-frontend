@@ -15,7 +15,7 @@ const pageTitleToPath: Record<string, string> = {
   "Sign in details": "/sign-in-details",
 };
 
-Then("the page meets our accessibility standards", async ({ page }) => {
+Then("the accessibility scan passes", async ({ page }) => {
   const accessibilityScanResults = await new AxeBuilder({ page })
     .withTags(["wcag22aa"])
     .analyze();

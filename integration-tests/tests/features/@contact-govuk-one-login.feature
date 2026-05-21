@@ -1,12 +1,11 @@
 Feature: "Contact GOV.UK One Login" page
 
-  @failMobile
   Scenario: Visit the "Contact GOV.UK One Login" page
     Given I go to the "Contact GOV.UK One Login" page
     And the page has finished loading
     Then the page title is "Contact GOV.UK One Login"
     And the page looks as expected
-    And the page meets our accessibility standards
+    And the accessibility scan passes
     And the page displays the expected webchat content
 
   @noJs
@@ -32,4 +31,4 @@ Feature: "Contact GOV.UK One Login" page
     When I click on the floating webchat button
     Then the webchat appears
     When I click on the minimise webchat button
-    Then the webchat disappears    
+    Then the webchat disappears
