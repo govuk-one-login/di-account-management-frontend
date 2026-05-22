@@ -1,5 +1,5 @@
 import { LOCALE } from "../app.constants.js";
-import { getRootDomain } from "../config.js";
+import { getServiceDomain } from "../config.js";
 import type { InitOptions } from "i18next";
 
 export function i18nextConfigurationOptions(): InitOptions {
@@ -15,7 +15,7 @@ export function i18nextConfigurationOptions(): InitOptions {
       caches: ["cookie"],
       ignoreCase: true,
       cookieSecure: true,
-      cookieDomain: getRootDomain(),
+      cookieDomain: getServiceDomain(),
       cookieSameSite: "",
     },
   };
