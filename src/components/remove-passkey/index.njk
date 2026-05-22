@@ -14,7 +14,7 @@
     <p class="govuk-body">{{ 'pages.removePasskey.noPasskey' | translate }}</p>
     {% if defaultMfaType === 'SMS' %}
       <p class="govuk-body">{{ 'pages.removePasskey.defaultMfa.SMS' | translate | safe | replace('[phoneNumber]', phoneNumber) }}</p>
-    {% elif defaultMfaType === 'APP' %}
+    {% elif defaultMfaType === 'AUTH_APP' %}
       <p class="govuk-body">{{ 'pages.removePasskey.defaultMfa.APP' | translate }}</p>
     {% endif %}
   {% endif %}
