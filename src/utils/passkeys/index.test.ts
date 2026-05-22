@@ -54,6 +54,34 @@ describe("formatPasskeysForRender", () => {
     ]);
   });
 
+  it("should sort passkeys used on same day by createdAt (desc)", async () => {
+    const passkeys = [
+      {
+        id: "same-day-older-created",
+        aaguid: "1",
+        createdAt: "2023-01-01T08:00:00Z",
+        lastUsedAt: "2023-05-01T10:00:00Z",
+      },
+      {
+        id: "same-day-newer-created",
+        aaguid: "2",
+        createdAt: "2023-01-01T12:00:00Z",
+        lastUsedAt: "2023-05-01T14:00:00Z", // Same day, different time
+      },
+    ] as any;
+
+    vi.mocked(getPasskeyConvenienceMetadataByAaguid).mockResolvedValue({
+      name: "Mock Device",
+    });
+
+    const result = await formatPasskeysForRender(mockReq, passkeys);
+
+    expect(result.map((p) => p.id)).toEqual([
+      "same-day-newer-created", // Should come first due to newer createdAt
+      "same-day-older-created",
+    ]);
+  });
+
   it("should format dates correctly using en-GB locale", async () => {
     const passkeys = [
       {

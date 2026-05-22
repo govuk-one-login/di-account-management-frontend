@@ -11,12 +11,12 @@ interface Passkey {
   isBackUpEligible: boolean;
   isBackedUp: boolean;
   createdAt: string;
-  lastUsedAt?: string;
+  lastUsedAt?: string | null;
 }
 
 interface PrettyPasskey {
   name: string;
-  lastUsedAt?: string;
+  lastUsedAt?: string | null;
   createdAt: string;
   id: string;
 }
@@ -26,18 +26,31 @@ export async function formatPasskeysForRender(
   passkeys: Passkey[]
 ): Promise<PrettyPasskey[]> {
   const sortedLastUsed = passkeys
-    .filter((passkey) => Object.hasOwnProperty.call(passkey, "lastUsedAt"))
+    .filter((passkey) => passkey.lastUsedAt)
     .sort((a, b) => {
-      const timeA = new Date(a.lastUsedAt).getTime();
-      const timeB = new Date(b.lastUsedAt).getTime();
-      return timeB - timeA;
+      const dateA = new Date(a.lastUsedAt);
+      const dateB = new Date(b.lastUsedAt);
+
+      const dayA = new Date(
+        dateA.getFullYear(),
+        dateA.getMonth(),
+        dateA.getDate()
+      ).getTime();
+      const dayB = new Date(
+        dateB.getFullYear(),
+        dateB.getMonth(),
+        dateB.getDate()
+      ).getTime();
+
+      if (dayB !== dayA) {
+        return dayB - dayA;
+      }
+      const createdA = new Date(a.createdAt).getTime();
+      const createdB = new Date(b.createdAt).getTime();
+      return createdB - createdA;
     });
   const sortedCreatedAt = passkeys
-    .filter(
-      (passkey) =>
-        !Object.hasOwnProperty.call(passkey, "lastUsedAt") &&
-        Object.hasOwnProperty.call(passkey, "createdAt")
-    )
+    .filter((passkey) => !passkey.lastUsedAt)
     .sort((a, b) => {
       const timeA = new Date(a.createdAt).getTime();
       const timeB = new Date(b.createdAt).getTime();

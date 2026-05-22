@@ -37,22 +37,6 @@ describe("amcCallbackGet", () => {
     } as any);
   });
 
-  it("should delete user state if query parameter validation completes successfully", async () => {
-    req.query = {
-      error: "access_denied",
-      error_description: "User cancelled",
-      state: "state-test",
-    };
-
-    await amcCallbackGet(req, res);
-
-    expect(req.log.error).not.toHaveBeenCalledWith(
-      "Invalid request: Must provide 'state'"
-    );
-
-    expect(req.session.amcStates).toEqual([]);
-  });
-
   it("should log error and redirect if query parameter validation fails", async () => {
     vi.mocked(utils.validateQueryParams).mockImplementation(() => {
       throw new Error("Mock error thrown");

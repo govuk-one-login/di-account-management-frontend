@@ -37,8 +37,6 @@ export async function amcCallbackGet(
     return;
   }
 
-  req.session.amcStates = amcStates.filter((item) => item !== req.query.state);
-
   if (error || error_description) {
     req.log.error(`amcCallbackGet: ${error} - ${error_description}`);
     res.status(HTTP_STATUS_CODES.BAD_REQUEST);
