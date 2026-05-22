@@ -11,12 +11,12 @@ interface Passkey {
   isBackUpEligible: boolean;
   isBackedUp: boolean;
   createdAt: string;
-  lastUsedAt?: string;
+  lastUsedAt?: string | null;
 }
 
 interface PrettyPasskey {
   name: string;
-  lastUsedAt?: string;
+  lastUsedAt?: string | null;
   createdAt: string;
   id: string;
 }
@@ -28,8 +28,8 @@ export async function formatPasskeysForRender(
   const sortedLastUsed = passkeys
     .filter((passkey) => passkey.lastUsedAt)
     .sort((a, b) => {
-      const dateA = new Date(a.lastUsedAt!);
-      const dateB = new Date(b.lastUsedAt!);
+      const dateA = new Date(a.lastUsedAt);
+      const dateB = new Date(b.lastUsedAt);
 
       const dayA = new Date(
         dateA.getFullYear(),
