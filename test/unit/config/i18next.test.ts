@@ -14,7 +14,7 @@ describe("i18next config", () => {
 
   describe("i18nextConfigurationOptions", () => {
     it("should return configuration object", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -23,7 +23,7 @@ describe("i18next config", () => {
     });
 
     it("should have debug set to false", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -31,7 +31,7 @@ describe("i18next config", () => {
     });
 
     it("should have fallbackLng set to EN", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -39,7 +39,7 @@ describe("i18next config", () => {
     });
 
     it("should have preload set to EN only", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -47,7 +47,7 @@ describe("i18next config", () => {
     });
 
     it("should have supportedLngs with EN and CY", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -55,7 +55,7 @@ describe("i18next config", () => {
     });
 
     it("should have detection configuration with lookupCookie", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -63,7 +63,7 @@ describe("i18next config", () => {
     });
 
     it("should have detection configuration with lookupQuerystring", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -71,7 +71,7 @@ describe("i18next config", () => {
     });
 
     it("should have detection order set to querystring then cookie", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -79,7 +79,7 @@ describe("i18next config", () => {
     });
 
     it("should have detection caches set to cookie", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -87,7 +87,7 @@ describe("i18next config", () => {
     });
 
     it("should have ignoreCase set to true", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
@@ -95,15 +95,15 @@ describe("i18next config", () => {
     });
 
     it("should have cookieSecure set to true", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
       expect(result.detection?.cookieSecure).toBe(true);
     });
 
-    it("should set cookieDomain from getRootDomain", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("test.gov.uk");
+    it("should set cookieDomain from getServiceDomain", () => {
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("test.gov.uk");
 
       const result = i18nextConfigurationOptions();
 
@@ -111,7 +111,9 @@ describe("i18next config", () => {
     });
 
     it("should handle different service domains", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("another-domain.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue(
+        "another-domain.com"
+      );
 
       const result = i18nextConfigurationOptions();
 
@@ -119,16 +121,16 @@ describe("i18next config", () => {
     });
 
     it("should have cookieSameSite set to empty string", () => {
-      vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
+      vi.spyOn(config, "getServiceDomain").mockReturnValue("example.com");
 
       const result = i18nextConfigurationOptions();
 
       expect(result.detection?.cookieSameSite).toBe("");
     });
 
-    it("should call getRootDomain once", () => {
+    it("should call getServiceDomain once", () => {
       const spy = vi
-        .spyOn(config, "getRootDomain")
+        .spyOn(config, "getServiceDomain")
         .mockReturnValue("example.com");
 
       i18nextConfigurationOptions();
