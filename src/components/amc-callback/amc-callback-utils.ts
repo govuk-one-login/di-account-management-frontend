@@ -20,7 +20,7 @@ import { http } from "../../utils/http.js";
 import { randomUUID } from "node:crypto";
 import * as jose from "jose";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-import { eventService } from "src/services/event-service.js";
+import { eventService } from "../../services/event-service.js";
 
 enum Scope {
   testingJourney = "testing-journey",

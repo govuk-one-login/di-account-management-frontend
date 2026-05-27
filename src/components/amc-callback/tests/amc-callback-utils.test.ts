@@ -11,9 +11,10 @@ import { kmsService } from "../../../utils/kms.js";
 import { SignCommandOutput } from "@aws-sdk/client-kms";
 import { GetPublicKeyCommandOutput } from "@aws-sdk/client-kms";
 import * as config from "../../../config.js";
-import { LogoutState } from "../../../app.constants.js";
+import { LogoutState, EventName, JourneyAction } from "../../../app.constants.js";
 import { handleLogout } from "../../../utils/logout.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { eventService } from "../../../services/event-service.js";
 
 vi.mock("../../../utils/http.js", () => ({
   http: { client: { post: vi.fn(), get: vi.fn() } },
@@ -30,6 +31,8 @@ vi.mock("../../../utils/kms.js", () => ({
 vi.mock("../../../utils/logout.js", () => ({
   handleLogout: vi.fn(),
 }));
+
+vi.mock("../../../services/event-service.js");
 
 describe("AMC call back util tests", () => {
   vi.spyOn(config, "getAmcTokenUrl").mockReturnValue("https://test.com");
@@ -228,9 +231,19 @@ describe("AMC call back util tests", () => {
   describe("handleJourneyOutcomeResponse", () => {
     let req: any;
     let res: any;
+    let mockEventService: {
+      buildAuditEvent: ReturnType<typeof vi.fn>;
+      send: ReturnType<typeof vi.fn>;
+    };
 
     beforeEach(() => {
       vi.clearAllMocks();
+      mockEventService = {
+        buildAuditEvent: vi.fn().mockReturnValue({ event_name: "test-event" }),
+        send: vi.fn(),
+      };
+      vi.mocked(eventService).mockReturnValue(mockEventService as any);
+
       req = {
         metrics: { addMetric: vi.fn() },
         log: { error: vi.fn() },
@@ -240,10 +253,11 @@ describe("AMC call back util tests", () => {
         redirect: vi.fn(),
         render: vi.fn(),
         status: vi.fn(),
+        locals: { trace: "test-trace" },
       };
     });
 
-    it("should redirect to confirmation on successful creation", async () => {
+    it("should redirect to confirmation on successful creation and send success audit event", async () => {
       const outcome = {
         success: true,
         scope: "passkey-create",
@@ -256,12 +270,26 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
+      
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_ACTION_COMPLETED,
+        {
+          account_action: JourneyAction.PASSKEY_CREATE,
+          account_action_overall_outcome: true,
+        }
+      );
+      expect(mockEventService.send).toHaveBeenCalledWith(
+        { event_name: "test-event" },
+        "test-trace"
+      );
       expect(res.redirect).toHaveBeenCalledWith(
         "/passkey-created-confirmation"
       );
     });
 
-    it("should call handleLogout when error is UserSignedOut", async () => {
+    it("should call handleLogout when error is UserSignedOut and send failure audit event", async () => {
       const outcome = {
         success: false,
         scope: "passkey-create",
@@ -274,6 +302,21 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
+      
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_ACTION_COMPLETED,
+        {
+          account_action: JourneyAction.PASSKEY_CREATE,
+          account_action_overall_outcome: false,
+          account_action_error: "User logged out",
+        }
+      );
+      expect(mockEventService.send).toHaveBeenCalledWith(
+        { event_name: "test-event" },
+        "test-trace"
+      );
       expect(handleLogout).toHaveBeenCalledWith(
         req,
         res,
@@ -281,7 +324,7 @@ describe("AMC call back util tests", () => {
       );
     });
 
-    it("should redirect when passkey creation aborted", async () => {
+    it("should redirect when passkey creation aborted and send failure audit event", async () => {
       const outcome = {
         success: false,
         scope: "passkey-create",
@@ -296,10 +339,25 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
+      
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_ACTION_COMPLETED,
+        {
+          account_action: JourneyAction.PASSKEY_CREATE,
+          account_action_overall_outcome: false,
+          account_action_error: "User aborted journey",
+        }
+      );
+      expect(mockEventService.send).toHaveBeenCalledWith(
+        { event_name: "test-event" },
+        "test-trace"
+      );
       expect(res.redirect).toHaveBeenCalledWith("/sign-in-details");
     });
 
-    it("should log error for unrecognised outcome when scope is unknown", async () => {
+    it("should log error for unrecognised outcome when scope is unknown and send failure audit event", async () => {
       const outcome = {
         outcome_id: "foo",
         success: true,
@@ -308,6 +366,21 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
+      
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_ACTION_COMPLETED,
+        {
+          account_action: undefined,
+          account_action_overall_outcome: false,
+          account_action_error: "Unknown error",
+        }
+      );
+      expect(mockEventService.send).toHaveBeenCalledWith(
+        { event_name: "test-event" },
+        "test-trace"
+      );
       expect(req.metrics.addMetric).toHaveBeenCalledWith(
         "UnrecognisedJourneyOutcome",
         MetricUnit.Count,
@@ -320,7 +393,7 @@ describe("AMC call back util tests", () => {
       expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");
     });
 
-    it("should log error for unrecognised outcome", async () => {
+    it("should log error for unrecognised outcome and send failure audit event", async () => {
       const errorObj = { description: "UnknownError" };
       const outcome = {
         outcome_id: "bar",
@@ -330,6 +403,21 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
+      
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_ACTION_COMPLETED,
+        {
+          account_action: undefined,
+          account_action_overall_outcome: false,
+          account_action_error: "Unknown error",
+        }
+      );
+      expect(mockEventService.send).toHaveBeenCalledWith(
+        { event_name: "test-event" },
+        "test-trace"
+      );
       expect(req.metrics.addMetric).toHaveBeenCalledWith(
         "UnrecognisedJourneyOutcome",
         MetricUnit.Count,

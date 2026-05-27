@@ -11,7 +11,7 @@ import {
   PASSKEYS_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl.js";
-import { eventService } from "src/services/event-service.js";
+import { eventService } from "../../services/event-service.js";
 
 export async function removePasskeyGet(
   req: Request,

@@ -4,6 +4,7 @@ import {
   AuditEvent,
   Event,
   CurrentTimeDescriptor,
+  Extensions,
 } from "./types.js";
 import { SqsService } from "../utils/types.js";
 import { sqsService } from "../utils/sqs.js";
@@ -111,7 +112,7 @@ export function eventService(
     req: Request,
     res: Response,
     eventName: EventName,
-    extensions?: AuditEvent["extensions"]
+    extensions?: Extensions
   ): AuditEvent => {
     const baseEvent = buildBaseAuditEvent(req, res, eventName);
 
