@@ -77,7 +77,7 @@ export async function removePasskeyPost(
         account_action_overall_outcome: true,
       }
     );
-    void service.send(auditEvent, res.locals.trace);
+    service.send(auditEvent, res.locals.trace);
 
     res.redirect(PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url);
   } else if (response.error) {
@@ -96,7 +96,7 @@ export async function removePasskeyPost(
         account_action_error: response.error.message,
       }
     );
-    void service.send(auditEvent, res.locals.trace);
+    service.send(auditEvent, res.locals.trace);
 
     throw new Error(response.error.message);
   } else {
@@ -113,7 +113,7 @@ export async function removePasskeyPost(
         account_action_error: errorMessage,
       }
     );
-    void service.send(auditEvent, res.locals.trace);
+    service.send(auditEvent, res.locals.trace);
 
     throw new Error("Error deleting passkey");
   }

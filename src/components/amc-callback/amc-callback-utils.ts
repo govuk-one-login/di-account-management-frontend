@@ -199,7 +199,7 @@ export async function handleJourneyOutcomeResponse(
         account_action_overall_outcome: true,
       }
     );
-    void service.send(auditEvent, res.locals.trace);
+    service.send(auditEvent, res.locals.trace);
 
     return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
   } else if (!success && userSignedOut) {
@@ -213,7 +213,7 @@ export async function handleJourneyOutcomeResponse(
         account_action_error: "User logged out",
       }
     );
-    void service.send(auditEvent, res.locals.trace);
+    service.send(auditEvent, res.locals.trace);
 
     await handleLogout(req, res, LogoutState.AmcSignedOut);
   } else if (
@@ -231,7 +231,7 @@ export async function handleJourneyOutcomeResponse(
         account_action_error: "User aborted journey",
       }
     );
-    void service.send(auditEvent, res.locals.trace);
+    service.send(auditEvent, res.locals.trace);
 
     return res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
   } else {
@@ -245,7 +245,7 @@ export async function handleJourneyOutcomeResponse(
         account_action_error: "Unknown error",
       }
     );
-    void service.send(auditEvent, res.locals.trace);
+    service.send(auditEvent, res.locals.trace);
 
     req.metrics?.addMetric("UnrecognisedJourneyOutcome", MetricUnit.Count, 1);
     req.log.error(`UnrecognisedJourneyOutcome with outcome_id ${outcome_id}`);

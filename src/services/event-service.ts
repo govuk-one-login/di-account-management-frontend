@@ -215,12 +215,6 @@ export function eventService(
         break;
 
       case EventName.HOME_ACTION_STARTED:
-        baseEvent.extensions = {
-          ...baseEvent.extensions,
-          "journey-type": "ACCOUNT_MANAGEMENT",
-        };
-        break;
-
       case EventName.HOME_ACTION_COMPLETED:
         baseEvent.extensions = {
           ...baseEvent.extensions,

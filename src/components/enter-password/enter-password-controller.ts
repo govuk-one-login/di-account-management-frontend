@@ -206,7 +206,7 @@ async function sendJourneyAuditEvent(
   if (eventName) {
     const service = eventService();
     const auditEvent = service.buildAuditEvent(req, res, eventName);
-    void service.send(auditEvent, res.locals.trace);
+    service.send(auditEvent, res.locals.trace);
   }
 }
 
@@ -215,7 +215,7 @@ function sendActionStartedAuditEvent(
   res: Response,
   requestType: UserJourney
 ): void {
-  let action: JourneyAction;
+  let action: JourneyAction | undefined = undefined;
 
   switch (requestType) {
     case UserJourney.CreatePasskey:
@@ -226,14 +226,16 @@ function sendActionStartedAuditEvent(
       break;
   }
 
-  const service = eventService();
-  const auditEvent = service.buildAuditEvent(
-    req,
-    res,
-    EventName.HOME_ACTION_STARTED,
-    { account_action: action }
-  );
-  void service.send(auditEvent, res.locals.trace);
+  if (action) {
+    const service = eventService();
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_STARTED,
+      { account_action: action }
+    );
+    service.send(auditEvent, res.locals.trace);
+  }
 }
 
 export async function enterPasswordGet(

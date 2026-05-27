@@ -5,7 +5,12 @@ import {
   enterPasswordPost,
 } from "../enter-password-controller.js";
 import { EnterPasswordServiceInterface } from "../types";
-import { HTTP_STATUS_CODES, PATH_DATA, EventName, JourneyAction } from "../../../app.constants";
+import {
+  HTTP_STATUS_CODES,
+  PATH_DATA,
+  EventName,
+  JourneyAction,
+} from "../../../app.constants";
 import { TXMA_AUDIT_ENCODED } from "../../../../test/utils/builders";
 import * as logout from "../../../utils/logout.js";
 import { UserJourney } from "../../../utils/state-machine.js";
@@ -109,8 +114,7 @@ describe("enter password controller", () => {
         res,
         "AUTH_MFA_METHOD_ADD_STARTED"
       );
-      // Should be called twice: once for journey audit event, once for action started event
-      expect(mockEventService.send).toHaveBeenCalledTimes(2);
+      expect(mockEventService.send).toHaveBeenCalledTimes(1);
       expect(res.render).toHaveBeenCalledWith(
         "enter-password/index.njk",
         expect.objectContaining({
@@ -142,8 +146,7 @@ describe("enter password controller", () => {
         res,
         "AUTH_MFA_METHOD_SWITCH_STARTED"
       );
-      // Should be called twice: once for journey audit event, once for action started event
-      expect(mockEventService.send).toHaveBeenCalledTimes(2);
+      expect(mockEventService.send).toHaveBeenCalledTimes(1);
       expect(res.render).toHaveBeenCalledWith(
         "enter-password/index.njk",
         expect.objectContaining({
@@ -175,8 +178,7 @@ describe("enter password controller", () => {
         res,
         "AUTH_MFA_METHOD_DELETE_STARTED"
       );
-      // Should be called twice: once for journey audit event, once for action started event
-      expect(mockEventService.send).toHaveBeenCalledTimes(2);
+      expect(mockEventService.send).toHaveBeenCalledTimes(1);
       expect(res.render).toHaveBeenCalledWith(
         "enter-password/index.njk",
         expect.objectContaining({
@@ -202,8 +204,7 @@ describe("enter password controller", () => {
       );
 
       await enterPasswordGet(req as Request, res as Response);
-      // Should be called once for the action started event (with undefined action)
-      expect(mockEventService.send).toHaveBeenCalledTimes(1);
+      expect(mockEventService.send).not.toHaveBeenCalled();
       expect(res.render).toHaveBeenCalledWith(
         "enter-password/index.njk",
         expect.objectContaining({
@@ -263,14 +264,8 @@ describe("enter password controller", () => {
 
       await enterPasswordGet(req as Request, res as Response);
 
-      // Should be called once for the action started event (with undefined action)
-      expect(mockEventService.buildAuditEvent).toHaveBeenCalledTimes(1);
-      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
-        req,
-        res,
-        EventName.HOME_ACTION_STARTED,
-        { account_action: undefined }
-      );
+      expect(mockEventService.buildAuditEvent).not.toHaveBeenCalled();
+      expect(mockEventService.send).not.toHaveBeenCalled();
     });
   });
 
