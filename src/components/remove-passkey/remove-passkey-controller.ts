@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PATH_DATA } from "../../app.constants.js";
+import { EventName } from "../../app.constants.js";
 import {
   createMfaClient,
   formatErrorMessage,
@@ -11,6 +12,7 @@ import {
   PASSKEYS_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl.js";
+import { eventService as createEventService } from "../../services/event-service.js";
 
 export async function removePasskeyGet(
   req: Request,
@@ -58,8 +60,18 @@ export async function removePasskeyPost(
 ): Promise<void> {
   const mfaClient = await createMfaClient(req, res);
   const response = await mfaClient.deletePasskey(req.body.passkeyId);
+  const eventService = createEventService();
 
   if (response.success) {
+    eventService.send(
+      eventService.buildAuditEvent(
+        req,
+        res,
+        EventName.HOME_PASSKEY_DELETE_SUCCESSFUL
+      ),
+      res.locals.trace
+    );
+
     req.session.user.state.removePasskey = getNextState(
       req.session.user.state.removePasskey.value,
       EventType.RemovePasskey
@@ -67,12 +79,30 @@ export async function removePasskeyPost(
 
     res.redirect(PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url);
   } else if (response.error) {
+    eventService.send(
+      eventService.buildAuditEvent(
+        req,
+        res,
+        EventName.HOME_PASSKEY_DELETE_FAILED
+      ),
+      res.locals.trace
+    );
+
     req.log.error(
       { trace: res.locals.trace },
       formatErrorMessage("Failed delete passkey", response)
     );
     throw new Error(response.error.message);
   } else {
+    eventService.send(
+      eventService.buildAuditEvent(
+        req,
+        res,
+        EventName.HOME_PASSKEY_DELETE_FAILED
+      ),
+      res.locals.trace
+    );
+
     req.log.error({ trace: res.locals.trace }, "Failed delete passkey");
     throw new Error("Error deleting passkey");
   }

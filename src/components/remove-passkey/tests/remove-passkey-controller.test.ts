@@ -6,9 +6,11 @@ import {
 } from "../remove-passkey-controller";
 import { formatPasskeysForRender } from "../../../utils/passkeys";
 import { Request, Response } from "express";
+import { eventService as createEventService } from "../../../services/event-service";
 
 vi.mock("../../../utils/mfaClient/index.js");
 vi.mock("../../../utils/passkeys/index.js");
+vi.mock("../../../services/event-service.js");
 
 describe("removePasskeyGet", () => {
   beforeEach(() => {
@@ -163,7 +165,19 @@ describe("removePasskeyGet", () => {
 });
 
 describe("removePasskeyPost", () => {
-  it("should delete the passkey and redirect to confirmation page", async () => {
+  let mockBuildAuditEvent: ReturnType<typeof vi.fn>;
+  let mockSend: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    mockBuildAuditEvent = vi.fn().mockReturnValue({ event_name: "test" });
+    mockSend = vi.fn();
+    vi.mocked(createEventService).mockReturnValue({
+      buildAuditEvent: mockBuildAuditEvent,
+      send: mockSend,
+    } as any);
+  });
+
+  it("should delete the passkey, send HOME_PASSKEY_DELETE_SUCCESSFUL and redirect to confirmation page", async () => {
     const mfaClient: Partial<MfaClient> = {
       deletePasskey: vi.fn().mockResolvedValue({ success: true }),
     };
@@ -192,10 +206,16 @@ describe("removePasskeyPost", () => {
     );
 
     expect(mfaClient.deletePasskey).toHaveBeenCalledWith("12345");
+    expect(mockBuildAuditEvent).toHaveBeenCalledWith(
+      req,
+      res,
+      "HOME_PASSKEY_DELETE_SUCCESSFUL"
+    );
+    expect(mockSend).toHaveBeenCalledWith({ event_name: "test" }, "trace-id");
     expect(res.redirect).toHaveBeenCalledWith("/remove-passkey-confirmation");
   });
 
-  it("should log an error when delete passkey fails", async () => {
+  it("should send HOME_PASSKEY_DELETE_FAILED and throw when delete passkey fails with error", async () => {
     const mfaClient: Partial<MfaClient> = {
       deletePasskey: vi.fn().mockResolvedValue({
         success: false,
@@ -229,6 +249,50 @@ describe("removePasskeyPost", () => {
       );
     }).rejects.toThrow("Failed to delete passkey");
 
-    expect(mfaClient.deletePasskey).toHaveBeenCalledWith("12345");
+    expect(mockBuildAuditEvent).toHaveBeenCalledWith(
+      req,
+      res,
+      "HOME_PASSKEY_DELETE_FAILED"
+    );
+    expect(mockSend).toHaveBeenCalledWith({ event_name: "test" }, "trace-id");
+  });
+
+  it("should send HOME_PASSKEY_DELETE_FAILED and throw when delete passkey fails without error object", async () => {
+    const mfaClient: Partial<MfaClient> = {
+      deletePasskey: vi.fn().mockResolvedValue({ success: false }),
+    };
+
+    vi.mocked(createMfaClient).mockResolvedValue(mfaClient as MfaClient);
+
+    const req = {
+      body: { passkeyId: "12345" },
+      session: {
+        user: {
+          state: {
+            removePasskey: { value: "CONFIRMATION" },
+          },
+        },
+      },
+      log: { error: vi.fn() },
+    };
+
+    const res = {
+      redirect: vi.fn(),
+      locals: { trace: "trace-id" },
+    };
+
+    await expect(async () => {
+      await removePasskeyPost(
+        req as unknown as Request,
+        res as unknown as Response
+      );
+    }).rejects.toThrow("Error deleting passkey");
+
+    expect(mockBuildAuditEvent).toHaveBeenCalledWith(
+      req,
+      res,
+      "HOME_PASSKEY_DELETE_FAILED"
+    );
+    expect(mockSend).toHaveBeenCalledWith({ event_name: "test" }, "trace-id");
   });
 });
