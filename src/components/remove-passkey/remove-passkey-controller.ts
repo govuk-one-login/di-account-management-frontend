@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants.js";
-import { EventName } from "../../app.constants.js";
+import { PATH_DATA, EventName } from "../../app.constants.js";
 import {
   createMfaClient,
   formatErrorMessage,
