@@ -636,8 +636,8 @@ describe("eventService", () => {
       };
 
       const customExtensions = {
-        "custom-field": "custom-value",
-        "another-field": 123,
+        reference_code: "custom-value",
+        app_error_code: "123",
       };
 
       const result = service.buildAuditEvent(
@@ -648,8 +648,8 @@ describe("eventService", () => {
       );
 
       expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
-      expect(result.extensions["custom-field"]).toBe("custom-value");
-      expect(result.extensions["another-field"]).toBe(123);
+      expect(result.extensions["reference_code"]).toBe("custom-value");
+      expect(result.extensions["app_error_code"]).toBe("123");
     });
   });
 
