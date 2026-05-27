@@ -371,7 +371,7 @@ export const enum EventName {
 
 export const enum JourneyAction {
   PASSKEY_CREATE = "passkey-create",
-  PASSKEY_REMOVE = "passkey-remove",
+  PASSKEY_REMOVE = "passkey-delete",
 }
 export interface QueryParameters {
   fromURL?: string;
