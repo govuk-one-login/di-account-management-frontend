@@ -59,7 +59,7 @@ export interface Extensions {
   "mfa-type"?: (typeof mfaMethodTypes)[keyof typeof mfaMethodTypes];
   phone_number_country_code?: string;
   account_action?: JourneyAction;
-  account_action_overall_outcome?: boolean;
+  account_action_overall_success?: boolean;
   account_action_error?: string;
 }
 

@@ -196,7 +196,7 @@ export async function handleJourneyOutcomeResponse(
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: JourneyAction.PASSKEY_CREATE,
-        account_action_overall_outcome: true,
+        account_action_overall_success: true,
       }
     );
     service.send(auditEvent, res.locals.trace);
@@ -209,7 +209,7 @@ export async function handleJourneyOutcomeResponse(
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: journeyAction,
-        account_action_overall_outcome: false,
+        account_action_overall_success: false,
         account_action_error: "User logged out",
       }
     );
@@ -227,7 +227,7 @@ export async function handleJourneyOutcomeResponse(
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: JourneyAction.PASSKEY_CREATE,
-        account_action_overall_outcome: false,
+        account_action_overall_success: false,
         account_action_error: "User aborted journey",
       }
     );
@@ -241,7 +241,7 @@ export async function handleJourneyOutcomeResponse(
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: journeyAction,
-        account_action_overall_outcome: false,
+        account_action_overall_success: false,
         account_action_error: "Unknown error",
       }
     );

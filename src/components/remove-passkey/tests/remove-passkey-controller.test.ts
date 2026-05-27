@@ -214,7 +214,7 @@ describe("removePasskeyPost", () => {
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: JourneyAction.PASSKEY_REMOVE,
-        account_action_overall_outcome: true,
+        account_action_overall_success: true,
       }
     );
     expect(mockEventService.send).toHaveBeenCalledWith(
@@ -265,7 +265,7 @@ describe("removePasskeyPost", () => {
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: JourneyAction.PASSKEY_REMOVE,
-        account_action_overall_outcome: false,
+        account_action_overall_success: false,
         account_action_error: "Failed to delete passkey",
       }
     );
@@ -315,7 +315,7 @@ describe("removePasskeyPost", () => {
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: JourneyAction.PASSKEY_REMOVE,
-        account_action_overall_outcome: false,
+        account_action_overall_success: false,
         account_action_error: "Failed delete passkey",
       }
     );

@@ -74,7 +74,7 @@ export async function removePasskeyPost(
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: JourneyAction.PASSKEY_REMOVE,
-        account_action_overall_outcome: true,
+        account_action_overall_success: true,
       }
     );
     service.send(auditEvent, res.locals.trace);
@@ -92,7 +92,7 @@ export async function removePasskeyPost(
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: JourneyAction.PASSKEY_REMOVE,
-        account_action_overall_outcome: false,
+        account_action_overall_success: false,
         account_action_error: response.error.message,
       }
     );
@@ -109,7 +109,7 @@ export async function removePasskeyPost(
       EventName.HOME_ACTION_COMPLETED,
       {
         account_action: JourneyAction.PASSKEY_REMOVE,
-        account_action_overall_outcome: false,
+        account_action_overall_success: false,
         account_action_error: errorMessage,
       }
     );

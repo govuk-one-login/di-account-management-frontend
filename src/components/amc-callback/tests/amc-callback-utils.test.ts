@@ -11,7 +11,11 @@ import { kmsService } from "../../../utils/kms.js";
 import { SignCommandOutput } from "@aws-sdk/client-kms";
 import { GetPublicKeyCommandOutput } from "@aws-sdk/client-kms";
 import * as config from "../../../config.js";
-import { LogoutState, EventName, JourneyAction } from "../../../app.constants.js";
+import {
+  LogoutState,
+  EventName,
+  JourneyAction,
+} from "../../../app.constants.js";
 import { handleLogout } from "../../../utils/logout.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { eventService } from "../../../services/event-service.js";
@@ -270,14 +274,14 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
-      
+
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
         EventName.HOME_ACTION_COMPLETED,
         {
           account_action: JourneyAction.PASSKEY_CREATE,
-          account_action_overall_outcome: true,
+          account_action_overall_success: true,
         }
       );
       expect(mockEventService.send).toHaveBeenCalledWith(
@@ -302,14 +306,14 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
-      
+
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
         EventName.HOME_ACTION_COMPLETED,
         {
           account_action: JourneyAction.PASSKEY_CREATE,
-          account_action_overall_outcome: false,
+          account_action_overall_success: false,
           account_action_error: "User logged out",
         }
       );
@@ -339,14 +343,14 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
-      
+
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
         EventName.HOME_ACTION_COMPLETED,
         {
           account_action: JourneyAction.PASSKEY_CREATE,
-          account_action_overall_outcome: false,
+          account_action_overall_success: false,
           account_action_error: "User aborted journey",
         }
       );
@@ -366,14 +370,14 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
-      
+
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
         EventName.HOME_ACTION_COMPLETED,
         {
           account_action: undefined,
-          account_action_overall_outcome: false,
+          account_action_overall_success: false,
           account_action_error: "Unknown error",
         }
       );
@@ -403,14 +407,14 @@ describe("AMC call back util tests", () => {
       };
 
       await handleJourneyOutcomeResponse(req, res, outcome as any);
-      
+
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
         EventName.HOME_ACTION_COMPLETED,
         {
           account_action: undefined,
-          account_action_overall_outcome: false,
+          account_action_overall_success: false,
           account_action_error: "Unknown error",
         }
       );
