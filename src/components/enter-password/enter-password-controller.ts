@@ -2,7 +2,12 @@ import { Request, Response } from "express";
 import { EnterPasswordServiceInterface } from "./types.js";
 import { enterPasswordService } from "./enter-password-service.js";
 import { ExpressRouteFunc } from "../../types.js";
-import { PATH_DATA, LogoutState, EventName } from "../../app.constants.js";
+import {
+  PATH_DATA,
+  LogoutState,
+  EventName,
+  JourneyAction,
+} from "../../app.constants.js";
 import {
   formatValidationError,
   renderBadRequest,
@@ -205,6 +210,32 @@ async function sendJourneyAuditEvent(
   }
 }
 
+function sendActionStartedAuditEvent(
+  req: Request,
+  res: Response,
+  requestType: UserJourney
+): void {
+  let action: JourneyAction;
+
+  switch (requestType) {
+    case UserJourney.CreatePasskey:
+      action = JourneyAction.PASSKEY_CREATE;
+      break;
+    case UserJourney.RemovePasskey:
+      action = JourneyAction.PASSKEY_REMOVE;
+      break;
+  }
+
+  const service = eventService();
+  const auditEvent = service.buildAuditEvent(
+    req,
+    res,
+    EventName.HOME_ACTION_STARTED,
+    { account_action: action }
+  );
+  void service.send(auditEvent, res.locals.trace);
+}
+
 export async function enterPasswordGet(
   req: Request,
   res: Response
@@ -221,6 +252,7 @@ export async function enterPasswordGet(
   req.session.user.state[requestType] = getInitialState();
 
   await sendJourneyAuditEvent(req, res, requestType);
+  sendActionStartedAuditEvent(req, res, requestType);
   res.render(TEMPLATE, getRenderOptions(req, requestType));
 }
 

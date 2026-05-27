@@ -13,11 +13,14 @@ import {
   LogoutState,
   PATH_DATA,
   HTTP_STATUS_CODES,
+  EventName,
+  JourneyAction,
 } from "../../app.constants.js";
 import { http } from "../../utils/http.js";
 import { randomUUID } from "node:crypto";
 import * as jose from "jose";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { eventService } from "src/services/event-service.js";
 
 enum Scope {
   testingJourney = "testing-journey",
@@ -178,17 +181,72 @@ export async function handleJourneyOutcomeResponse(
 
   req.session.createdPasskeyAaguid = passkeyCreateAction?.details?.aaguid;
 
+  const service = eventService();
+
+  let journeyAction: JourneyAction | undefined = undefined;
+
+  if (isPasskeyCreateJourney) {
+    journeyAction = JourneyAction.PASSKEY_CREATE;
+  }
+
   if (success && isPasskeyCreateJourney) {
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_CREATE,
+        account_action_overall_outcome: true,
+      }
+    );
+    void service.send(auditEvent, res.locals.trace);
+
     return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
   } else if (!success && userSignedOut) {
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: journeyAction,
+        account_action_overall_outcome: false,
+        account_action_error: "User logged out",
+      }
+    );
+    void service.send(auditEvent, res.locals.trace);
+
     await handleLogout(req, res, LogoutState.AmcSignedOut);
   } else if (
     !success &&
     isPasskeyCreateJourney &&
     passkeyCreateUserAbortedJourney
   ) {
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_CREATE,
+        account_action_overall_outcome: false,
+        account_action_error: "User aborted journey",
+      }
+    );
+    void service.send(auditEvent, res.locals.trace);
+
     return res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
   } else {
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: journeyAction,
+        account_action_overall_outcome: false,
+        account_action_error: "Unknown error",
+      }
+    );
+    void service.send(auditEvent, res.locals.trace);
+
     req.metrics?.addMetric("UnrecognisedJourneyOutcome", MetricUnit.Count, 1);
     req.log.error(`UnrecognisedJourneyOutcome with outcome_id ${outcome_id}`);
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);

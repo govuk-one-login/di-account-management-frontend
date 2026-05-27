@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants.js";
+import { EventName, JourneyAction, PATH_DATA } from "../../app.constants.js";
 import {
   createMfaClient,
   formatErrorMessage,
@@ -11,6 +11,7 @@ import {
   PASSKEYS_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl.js";
+import { eventService } from "src/services/event-service.js";
 
 export async function removePasskeyGet(
   req: Request,
@@ -59,11 +60,24 @@ export async function removePasskeyPost(
   const mfaClient = await createMfaClient(req, res);
   const response = await mfaClient.deletePasskey(req.body.passkeyId);
 
+  const service = eventService();
+
   if (response.success) {
     req.session.user.state.removePasskey = getNextState(
       req.session.user.state.removePasskey.value,
       EventType.RemovePasskey
     );
+
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_outcome: true,
+      }
+    );
+    void service.send(auditEvent, res.locals.trace);
 
     res.redirect(PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url);
   } else if (response.error) {
@@ -71,9 +85,36 @@ export async function removePasskeyPost(
       { trace: res.locals.trace },
       formatErrorMessage("Failed delete passkey", response)
     );
+
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_outcome: false,
+        account_action_error: response.error.message,
+      }
+    );
+    void service.send(auditEvent, res.locals.trace);
+
     throw new Error(response.error.message);
   } else {
-    req.log.error({ trace: res.locals.trace }, "Failed delete passkey");
+    const errorMessage = "Failed delete passkey";
+    req.log.error({ trace: res.locals.trace }, errorMessage);
+
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_outcome: false,
+        account_action_error: errorMessage,
+      }
+    );
+    void service.send(auditEvent, res.locals.trace);
+
     throw new Error("Error deleting passkey");
   }
 }

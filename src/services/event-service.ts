@@ -110,9 +110,15 @@ export function eventService(
   const buildAuditEvent = (
     req: Request,
     res: Response,
-    eventName: EventName
+    eventName: EventName,
+    extensions?: AuditEvent["extensions"]
   ): AuditEvent => {
     const baseEvent = buildBaseAuditEvent(req, res, eventName);
+
+    baseEvent.extensions = {
+      ...baseEvent.extensions,
+      ...extensions,
+    };
 
     const { session } = req;
     const defaultMethod = session.mfaMethods?.find(
@@ -205,6 +211,20 @@ export function eventService(
         break;
 
       case EventName.HOME_GLOBAL_LOGOUT_REQUESTED:
+        break;
+
+      case EventName.HOME_ACTION_STARTED:
+        baseEvent.extensions = {
+          ...baseEvent.extensions,
+          "journey-type": "ACCOUNT_MANAGEMENT",
+        };
+        break;
+
+      case EventName.HOME_ACTION_COMPLETED:
+        baseEvent.extensions = {
+          ...baseEvent.extensions,
+          "journey-type": "ACCOUNT_MANAGEMENT",
+        };
         break;
 
       default: {
