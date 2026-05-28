@@ -7,6 +7,7 @@ import {
 import { formatPasskeysForRender } from "../../../utils/passkeys";
 import { Request, Response } from "express";
 import { eventService as createEventService } from "../../../services/event-service";
+import { EventName, JourneyAction } from "../../../app.constants";
 
 vi.mock("../../../utils/mfaClient/index.js");
 vi.mock("../../../utils/passkeys/index.js");
@@ -165,19 +166,22 @@ describe("removePasskeyGet", () => {
 });
 
 describe("removePasskeyPost", () => {
-  let mockBuildAuditEvent: ReturnType<typeof vi.fn>;
-  let mockSend: ReturnType<typeof vi.fn>;
+  let mockEventService: {
+    buildAuditEvent: ReturnType<typeof vi.fn>;
+    send: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
-    mockBuildAuditEvent = vi.fn().mockReturnValue({ event_name: "test" });
-    mockSend = vi.fn();
-    vi.mocked(createEventService).mockReturnValue({
-      buildAuditEvent: mockBuildAuditEvent,
-      send: mockSend,
-    } as any);
+    vi.clearAllMocks();
+    
+    mockEventService = {
+      buildAuditEvent: vi.fn().mockReturnValue({ event_name: "test-event" }),
+      send: vi.fn(),
+    };
+    vi.mocked(createEventService).mockReturnValue(mockEventService as any);
   });
 
-  it("should delete the passkey, send HOME_PASSKEY_DELETE_SUCCESSFUL and redirect to confirmation page", async () => {
+  it("should delete passkey successfully and send both HOME_PASSKEY_DELETE_SUCCESSFUL and HOME_ACTION_COMPLETED events", async () => {
     const mfaClient: Partial<MfaClient> = {
       deletePasskey: vi.fn().mockResolvedValue({ success: true }),
     };
@@ -206,16 +210,34 @@ describe("removePasskeyPost", () => {
     );
 
     expect(mfaClient.deletePasskey).toHaveBeenCalledWith("12345");
-    expect(mockBuildAuditEvent).toHaveBeenCalledWith(
+    
+    // Should send HOME_PASSKEY_DELETE_SUCCESSFUL event
+    expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
       res,
-      "HOME_PASSKEY_DELETE_SUCCESSFUL"
+      EventName.HOME_PASSKEY_DELETE_SUCCESSFUL
     );
-    expect(mockSend).toHaveBeenCalledWith({ event_name: "test" }, "trace-id");
+    
+    // Should send HOME_ACTION_COMPLETED event with success details
+    expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_success: true,
+      }
+    );
+    
+    expect(mockEventService.send).toHaveBeenCalledTimes(2);
+    expect(mockEventService.send).toHaveBeenCalledWith(
+      { event_name: "test-event" },
+      "trace-id"
+    );
     expect(res.redirect).toHaveBeenCalledWith("/remove-passkey-confirmation");
   });
 
-  it("should send HOME_PASSKEY_DELETE_FAILED and throw when delete passkey fails with error", async () => {
+  it("should send HOME_PASSKEY_DELETE_FAILED and HOME_ACTION_COMPLETED events when delete fails with error message", async () => {
     const mfaClient: Partial<MfaClient> = {
       deletePasskey: vi.fn().mockResolvedValue({
         success: false,
@@ -249,17 +271,39 @@ describe("removePasskeyPost", () => {
       );
     }).rejects.toThrow("Failed to delete passkey");
 
-    expect(mockBuildAuditEvent).toHaveBeenCalledWith(
+    expect(mfaClient.deletePasskey).toHaveBeenCalledWith("12345");
+    
+    // Should send HOME_PASSKEY_DELETE_FAILED event
+    expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
       res,
-      "HOME_PASSKEY_DELETE_FAILED"
+      EventName.HOME_PASSKEY_DELETE_FAILED
     );
-    expect(mockSend).toHaveBeenCalledWith({ event_name: "test" }, "trace-id");
+    
+    // Should send HOME_ACTION_COMPLETED event with failure details
+    expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_success: false,
+        account_action_error: "Failed to delete passkey",
+      }
+    );
+    
+    expect(mockEventService.send).toHaveBeenCalledTimes(2);
+    expect(mockEventService.send).toHaveBeenCalledWith(
+      { event_name: "test-event" },
+      "trace-id"
+    );
   });
 
-  it("should send HOME_PASSKEY_DELETE_FAILED and throw when delete passkey fails without error object", async () => {
+  it("should send both HOME_PASSKEY_DELETE_FAILED and HOME_ACTION_COMPLETED events when delete fails without error message", async () => {
     const mfaClient: Partial<MfaClient> = {
-      deletePasskey: vi.fn().mockResolvedValue({ success: false }),
+      deletePasskey: vi.fn().mockResolvedValue({
+        success: false,
+      }),
     };
 
     vi.mocked(createMfaClient).mockResolvedValue(mfaClient as MfaClient);
@@ -288,11 +332,31 @@ describe("removePasskeyPost", () => {
       );
     }).rejects.toThrow("Error deleting passkey");
 
-    expect(mockBuildAuditEvent).toHaveBeenCalledWith(
+    expect(mfaClient.deletePasskey).toHaveBeenCalledWith("12345");
+    
+    // Should send HOME_ACTION_COMPLETED event first
+    expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
       res,
-      "HOME_PASSKEY_DELETE_FAILED"
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_success: false,
+        account_action_error: "Failed delete passkey",
+      }
     );
-    expect(mockSend).toHaveBeenCalledWith({ event_name: "test" }, "trace-id");
+    
+    // Should send HOME_PASSKEY_DELETE_FAILED event second
+    expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+      req,
+      res,
+      EventName.HOME_PASSKEY_DELETE_FAILED
+    );
+    
+    expect(mockEventService.send).toHaveBeenCalledTimes(2);
+    expect(mockEventService.send).toHaveBeenCalledWith(
+      { event_name: "test-event" },
+      "trace-id"
+    );
   });
 });

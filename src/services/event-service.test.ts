@@ -557,6 +557,158 @@ describe("eventService", () => {
         "test-txma-header"
       );
     });
+
+    it("should build a HOME_ACTION_STARTED event correctly", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: {
+          "user-agent": "test-user-agent",
+          "txma-audit-encoded": btoa("test-txma-header"),
+        },
+        ip: "127.0.0.1",
+        session: {
+          user_id: "test-user-id",
+          user: {
+            isAuthenticated: true,
+            email: "test@example.com",
+          },
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
+        },
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_ACTION_STARTED
+      );
+
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("HOME_ACTION_STARTED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
+        "test-persistent-session-id"
+      );
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
+        "test-client-session-id"
+      );
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
+        "2024-09-12T00:00:00.000Z"
+      );
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
+        "test-txma-header"
+      );
+    });
+
+    it("should build a HOME_ACTION_COMPLETED event correctly", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: {
+          "user-agent": "test-user-agent",
+          "txma-audit-encoded": btoa("test-txma-header"),
+        },
+        ip: "127.0.0.1",
+        session: {
+          user_id: "test-user-id",
+          user: {
+            isAuthenticated: true,
+            email: "test@example.com",
+          },
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
+        },
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_ACTION_COMPLETED
+      );
+
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("HOME_ACTION_COMPLETED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
+        "test-persistent-session-id"
+      );
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
+        "test-client-session-id"
+      );
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
+        "2024-09-12T00:00:00.000Z"
+      );
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
+        "test-txma-header"
+      );
+    });
+
+    it("should merge custom extensions with event-specific extensions", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: {
+          "user-agent": "test-user-agent",
+        },
+        session: {
+          user_id: "test-user-id",
+          user: {
+            isAuthenticated: true,
+            email: "test@example.com",
+          },
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+        },
+      };
+
+      const customExtensions = {
+        reference_code: "custom-value",
+        app_error_code: "123",
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_ACTION_STARTED,
+        customExtensions
+      );
+
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.extensions["reference_code"]).toBe("custom-value");
+      expect(result.extensions["app_error_code"]).toBe("123");
+    });
   });
 
   describe("send", () => {

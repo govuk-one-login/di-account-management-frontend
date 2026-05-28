@@ -4,6 +4,7 @@ import {
   AuditEvent,
   Event,
   CurrentTimeDescriptor,
+  Extensions,
 } from "./types.js";
 import { SqsService } from "../utils/types.js";
 import { sqsService } from "../utils/sqs.js";
@@ -110,9 +111,15 @@ export function eventService(
   const buildAuditEvent = (
     req: Request,
     res: Response,
-    eventName: EventName
+    eventName: EventName,
+    extensions?: Extensions
   ): AuditEvent => {
     const baseEvent = buildBaseAuditEvent(req, res, eventName);
+
+    baseEvent.extensions = {
+      ...baseEvent.extensions,
+      ...extensions,
+    };
 
     const { session } = req;
     const defaultMethod = session.mfaMethods?.find(
@@ -207,9 +214,12 @@ export function eventService(
       case EventName.HOME_GLOBAL_LOGOUT_REQUESTED:
         break;
 
+      case EventName.HOME_ACTION_STARTED:
+      case EventName.HOME_ACTION_COMPLETED:
       case EventName.HOME_PASSKEY_DELETE_SUCCESSFUL:
       case EventName.HOME_PASSKEY_DELETE_FAILED:
         baseEvent.extensions = {
+          ...baseEvent.extensions,
           "journey-type": "ACCOUNT_MANAGEMENT",
         };
         break;

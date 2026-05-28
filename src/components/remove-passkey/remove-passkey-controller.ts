@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PATH_DATA, EventName } from "../../app.constants.js";
+import { EventName, JourneyAction, PATH_DATA } from "../../app.constants.js";
 import {
   createMfaClient,
   formatErrorMessage,
@@ -76,6 +76,17 @@ export async function removePasskeyPost(
       EventType.RemovePasskey
     );
 
+    const auditEvent = eventService.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_success: true,
+      }
+    );
+    eventService.send(auditEvent, res.locals.trace);
+
     res.redirect(PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url);
   } else if (response.error) {
     eventService.send(
@@ -91,8 +102,36 @@ export async function removePasskeyPost(
       { trace: res.locals.trace },
       formatErrorMessage("Failed delete passkey", response)
     );
+
+    const auditEvent = eventService.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_success: false,
+        account_action_error: response.error.message,
+      }
+    );
+    eventService.send(auditEvent, res.locals.trace);
+
     throw new Error(response.error.message);
   } else {
+    const errorMessage = "Failed delete passkey";
+    req.log.error({ trace: res.locals.trace }, errorMessage);
+
+    const auditEvent = eventService.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_ACTION_COMPLETED,
+      {
+        account_action: JourneyAction.PASSKEY_REMOVE,
+        account_action_overall_success: false,
+        account_action_error: errorMessage,
+      }
+    );
+    eventService.send(auditEvent, res.locals.trace);
+
     eventService.send(
       eventService.buildAuditEvent(
         req,
@@ -102,7 +141,6 @@ export async function removePasskeyPost(
       res.locals.trace
     );
 
-    req.log.error({ trace: res.locals.trace }, "Failed delete passkey");
     throw new Error("Error deleting passkey");
   }
 }
