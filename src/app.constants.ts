@@ -350,7 +350,6 @@ export const ERROR_CODES = {
 
 export const enum ENVIRONMENT_NAME {
   LOCAL = "local",
-  TEST = "test",
   DEV = "development",
   BUILD = "build",
   STAGING = "staging",
@@ -367,6 +366,8 @@ export const enum EventName {
   HOME_GLOBAL_LOGOUT_REQUESTED = "HOME_GLOBAL_LOGOUT_REQUESTED",
   HOME_ACTION_STARTED = "HOME_ACTION_STARTED",
   HOME_ACTION_COMPLETED = "HOME_ACTION_COMPLETED",
+  HOME_PASSKEY_DELETE_SUCCESSFUL = "HOME_PASSKEY_DELETE_SUCCESSFUL",
+  HOME_PASSKEY_DELETE_FAILED = "HOME_PASSKEY_DELETE_FAILED",
 }
 
 export const enum JourneyAction {

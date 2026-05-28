@@ -421,6 +421,64 @@ describe("eventService", () => {
       );
     });
 
+    it("should build a HOME_PASSKEY_DELETE_SUCCESSFUL event correctly", () => {
+      const service = eventService(sqs);
+      const mockReq: any = {
+        headers: { "user-agent": "test-user-agent" },
+        ip: "127.0.0.1",
+        session: {
+          user_id: "test-user-id",
+          user: { email: "test@example.com" },
+        },
+      };
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+        },
+      };
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_PASSKEY_DELETE_SUCCESSFUL
+      );
+      expect(result.event_name).toBe("HOME_PASSKEY_DELETE_SUCCESSFUL");
+      expect(result.component_id).toBe("HOME");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.extensions).toEqual({
+        "journey-type": "ACCOUNT_MANAGEMENT",
+      });
+    });
+
+    it("should build a HOME_PASSKEY_DELETE_FAILED event correctly", () => {
+      const service = eventService(sqs);
+      const mockReq: any = {
+        headers: { "user-agent": "test-user-agent" },
+        ip: "127.0.0.1",
+        session: {
+          user_id: "test-user-id",
+          user: { email: "test@example.com" },
+        },
+      };
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+        },
+      };
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_PASSKEY_DELETE_FAILED
+      );
+      expect(result.event_name).toBe("HOME_PASSKEY_DELETE_FAILED");
+      expect(result.component_id).toBe("HOME");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.extensions).toEqual({
+        "journey-type": "ACCOUNT_MANAGEMENT",
+      });
+    });
+
     it("should build an AUTH_MFA_METHOD_DELETE_STARTED event correctly", () => {
       const service = eventService(sqs);
 

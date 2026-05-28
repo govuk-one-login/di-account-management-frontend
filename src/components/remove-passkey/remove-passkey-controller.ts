@@ -11,7 +11,7 @@ import {
   PASSKEYS_COMMON_OPL_SETTINGS,
   setOplSettings,
 } from "../../utils/opl.js";
-import { eventService } from "../../services/event-service.js";
+import { eventService as createEventService } from "../../services/event-service.js";
 
 export async function removePasskeyGet(
   req: Request,
@@ -59,16 +59,24 @@ export async function removePasskeyPost(
 ): Promise<void> {
   const mfaClient = await createMfaClient(req, res);
   const response = await mfaClient.deletePasskey(req.body.passkeyId);
-
-  const service = eventService();
+  const eventService = createEventService();
 
   if (response.success) {
+    eventService.send(
+      eventService.buildAuditEvent(
+        req,
+        res,
+        EventName.HOME_PASSKEY_DELETE_SUCCESSFUL
+      ),
+      res.locals.trace
+    );
+
     req.session.user.state.removePasskey = getNextState(
       req.session.user.state.removePasskey.value,
       EventType.RemovePasskey
     );
 
-    const auditEvent = service.buildAuditEvent(
+    const auditEvent = eventService.buildAuditEvent(
       req,
       res,
       EventName.HOME_ACTION_COMPLETED,
@@ -77,16 +85,25 @@ export async function removePasskeyPost(
         account_action_overall_success: true,
       }
     );
-    service.send(auditEvent, res.locals.trace);
+    eventService.send(auditEvent, res.locals.trace);
 
     res.redirect(PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url);
   } else if (response.error) {
+    eventService.send(
+      eventService.buildAuditEvent(
+        req,
+        res,
+        EventName.HOME_PASSKEY_DELETE_FAILED
+      ),
+      res.locals.trace
+    );
+
     req.log.error(
       { trace: res.locals.trace },
       formatErrorMessage("Failed delete passkey", response)
     );
 
-    const auditEvent = service.buildAuditEvent(
+    const auditEvent = eventService.buildAuditEvent(
       req,
       res,
       EventName.HOME_ACTION_COMPLETED,
@@ -96,14 +113,14 @@ export async function removePasskeyPost(
         account_action_error: response.error.message,
       }
     );
-    service.send(auditEvent, res.locals.trace);
+    eventService.send(auditEvent, res.locals.trace);
 
     throw new Error(response.error.message);
   } else {
     const errorMessage = "Failed delete passkey";
     req.log.error({ trace: res.locals.trace }, errorMessage);
 
-    const auditEvent = service.buildAuditEvent(
+    const auditEvent = eventService.buildAuditEvent(
       req,
       res,
       EventName.HOME_ACTION_COMPLETED,
@@ -113,7 +130,16 @@ export async function removePasskeyPost(
         account_action_error: errorMessage,
       }
     );
-    service.send(auditEvent, res.locals.trace);
+    eventService.send(auditEvent, res.locals.trace);
+
+    eventService.send(
+      eventService.buildAuditEvent(
+        req,
+        res,
+        EventName.HOME_PASSKEY_DELETE_FAILED
+      ),
+      res.locals.trace
+    );
 
     throw new Error("Error deleting passkey");
   }
