@@ -445,7 +445,9 @@ describe("eventService", () => {
       expect(result.event_name).toBe("HOME_PASSKEY_DELETE_SUCCESSFUL");
       expect(result.component_id).toBe("HOME");
       expect(result.user.session_id).toBe("test-session-id");
-      expect(result.extensions).toBeUndefined();
+      expect(result.extensions).toEqual({
+        "journey-type": "ACCOUNT_MANAGEMENT",
+      });
     });
 
     it("should build a HOME_PASSKEY_DELETE_FAILED event correctly", () => {
@@ -472,7 +474,9 @@ describe("eventService", () => {
       expect(result.event_name).toBe("HOME_PASSKEY_DELETE_FAILED");
       expect(result.component_id).toBe("HOME");
       expect(result.user.session_id).toBe("test-session-id");
-      expect(result.extensions).toBeUndefined();
+      expect(result.extensions).toEqual({
+        "journey-type": "ACCOUNT_MANAGEMENT",
+      });
     });
 
     it("should build an AUTH_MFA_METHOD_DELETE_STARTED event correctly", () => {
