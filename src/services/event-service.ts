@@ -207,6 +207,13 @@ export function eventService(
       case EventName.HOME_GLOBAL_LOGOUT_REQUESTED:
         break;
 
+      case EventName.HOME_PASSKEY_DELETE_SUCCESSFUL:
+      case EventName.HOME_PASSKEY_DELETE_FAILED:
+        baseEvent.extensions = {
+          "journey-type": "ACCOUNT_MANAGEMENT",
+        };
+        break;
+
       default: {
         throw new Error(`Unknown event name: ${eventName}`);
       }
