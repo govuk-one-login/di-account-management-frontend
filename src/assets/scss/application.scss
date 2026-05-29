@@ -97,22 +97,6 @@
   background-color: govuk-colour("light-grey", $legacy: "grey-3");
 }
 
-// the modifier below is in place to remove the non-optional blue border at the bottom of the Design System header component
-// this is not ideal, however since there is no option/flag to remove the border from the component, it is the only way
-.govuk-header--with-account-navigation {
-  border-bottom: 0;
-
-  .govuk-header__container {
-    margin-bottom: 0;
-    border-bottom: 0;
-  }
-
-  .govuk-header__logo {
-    float: left;
-    width: 100%;
-  }
-}
-
 .govuk-header--with-signout {
   .govuk-template--rebranded & {
     .govuk-header__logo {
@@ -205,7 +189,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
 
   @include govuk-media-query($until: 480px) {
     position: relative;
-    padding-top: govuk-spacing(1);
+    padding-top: 0;
     transform: none;
   }
 }

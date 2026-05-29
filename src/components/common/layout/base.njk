@@ -5,7 +5,6 @@
 {% from "frontend-ui/build/components/footer/macro.njk" import frontendUiFooter %}
 {% from "frontend-ui/build/components/language-select/macro.njk" import frontendUiLanguageSelect %}
 {%- set headerClasses -%}
-{%- if not hideAccountNavigation -%} govuk-header--with-account-navigation {%- endif -%}
 {%- if isUserLoggedIn %} govuk-header--with-signout {%- endif -%}
 {%- endset-%}
 
