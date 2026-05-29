@@ -3,6 +3,9 @@ import request from "supertest";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { initiateAmcRedirect } from "../initiateAmcRedirect.js";
+import { eventService } from "../../services/event-service.js";
+
+vi.mock("../../services/event-service.js");
 
 vi.mock("../getAmcJwe.js", () => ({
   getAmcJwe: vi.fn().mockResolvedValue({
@@ -16,15 +19,25 @@ vi.mock("../../config.js", () => ({
   getAmcAuthorizeUrl: vi.fn(() => "https://amc.example.com/authorize"),
   getAmcClientId: vi.fn(() => "test-client-id"),
   getHomeBaseUrl: vi.fn(() => "https://home.example.com"),
+  getBaseUrl: vi.fn(() => "https://home.example.com"),
   getRootDomain: vi.fn(() => "example.com"),
   getAmcCallbackBaseUrl: vi.fn(() => "https://home.example.com"),
+  getLogLevel: vi.fn(() => "info"),
+  isLocalEnv: vi.fn(() => false),
 }));
 
-vi.mock("../../app.constants.js", () => ({
-  PATH_DATA: {
-    AMC_CALLBACK: { url: "/amc/callback" },
-  },
-}));
+vi.mock("../../app.constants.js", async (importOriginal) => {
+  const original =
+    await importOriginal<typeof import("../../app.constants.js")>();
+  return {
+    ...original,
+    PATH_DATA: {
+      AMC_CALLBACK: { url: "/amc/callback" },
+    },
+    LOG_MESSAGES: vi.fn(),
+    ERROR_MESSAGES: vi.fn(),
+  };
+});
 
 vi.mock("node:crypto", async (importOriginal) => {
   const actual = await importOriginal<typeof import("node:crypto")>();
@@ -54,8 +67,18 @@ function buildApp(initialSession: Record<string, any> = {}) {
 }
 
 describe("Integration:: initiateAmcRedirect", () => {
+  let mockEventService: {
+    buildAuditEvent: ReturnType<typeof vi.fn>;
+    send: ReturnType<typeof vi.fn>;
+  };
   beforeEach(() => {
     vi.clearAllMocks();
+
+    mockEventService = {
+      buildAuditEvent: vi.fn().mockReturnValue({ event_name: "test-event" }),
+      send: vi.fn(),
+    };
+    vi.mocked(eventService).mockReturnValue(mockEventService as any);
   });
 
   it("should redirect to the AMC authorize URL", async () => {

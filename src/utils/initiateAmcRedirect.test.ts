@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { initiateAmcRedirect } from "./initiateAmcRedirect.js";
 import * as getAmcJweModule from "./getAmcJwe.js";
 import * as config from "../config.js";
+import { eventService } from "../services/event-service.js";
+import { EventName } from "../app.constants.js";
 
 vi.mock("node:crypto", () => ({
   randomUUID: vi.fn(() => "test-state-uuid"),
@@ -22,9 +24,15 @@ vi.mock("../config.js", () => ({
   getHomeBaseUrl: vi.fn(() => "https://home.example.com"),
   getRootDomain: vi.fn(() => "example.com"),
   getAmcCallbackBaseUrl: vi.fn(() => "https://home.example.com"),
+  getLogLevel: vi.fn(() => "info"),
 }));
 
+vi.mock("../services/event-service.js");
+
 vi.mock("../app.constants.js", () => ({
+  EventName: vi.fn(() => ""),
+  ERROR_MESSAGES: vi.fn(() => ""),
+  LOG_MESSAGES: vi.fn(() => ""),
   PATH_DATA: {
     AMC_CALLBACK: { url: "/amc/callback" },
   },
@@ -34,8 +42,19 @@ describe("initiateAmcRedirect", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
 
+  let mockEventService: {
+    buildAuditEvent: ReturnType<typeof vi.fn>;
+    send: ReturnType<typeof vi.fn>;
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
+
+    mockEventService = {
+      buildAuditEvent: vi.fn().mockReturnValue({ event_name: "test-event" }),
+      send: vi.fn(),
+    };
+    vi.mocked(eventService).mockReturnValue(mockEventService as any);
 
     req = {
       session: {
@@ -49,11 +68,13 @@ describe("initiateAmcRedirect", () => {
           },
         },
       } as any,
+      log: { error: vi.fn() },
     };
 
     res = {
       cookie: vi.fn(),
       redirect: vi.fn(),
+      locals: { trace: "test-trace" },
     };
 
     vi.mocked(getAmcJweModule.getAmcJwe).mockResolvedValue({
@@ -179,6 +200,29 @@ describe("initiateAmcRedirect", () => {
       expect.any(String),
       expect.objectContaining({ domain: "account.gov.uk" })
     );
+  });
+
+  it("should send HOME_AMC_AUTHORISATION_REQUESTED event", async () => {
+    await initiateAmcRedirect(
+      "passkey-create",
+      req as Request,
+      res as Response
+    );
+
+    expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+      req,
+      res,
+      EventName.HOME_AMC_AUTHORISATION_REQUESTED,
+      {
+        amc_scope: "passkey-create",
+      }
+    );
+
+    expect(mockEventService.send).toHaveBeenCalledWith(
+      { event_name: "test-event" },
+      "test-trace"
+    );
+    expect(res.redirect).toHaveBeenCalledTimes(1);
   });
 
   it("should call res.redirect exactly once", async () => {

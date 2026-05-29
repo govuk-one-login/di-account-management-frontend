@@ -4,9 +4,11 @@ import { amcCallbackGet } from "../amc-callback-controller.js";
 import * as utils from "../amc-callback-utils.js";
 import * as requestConfigUtils from "../../../utils/http.js";
 import type { TokenResponse } from "../amc-callback-utils.js";
+import { eventService } from "../../../services/event-service.js";
 
 vi.mock("../amc-callback-utils");
 vi.mock("../../../utils/http.js");
+vi.mock("../../../services/event-service.js");
 
 describe("amcCallbackGet", () => {
   let req: any;
@@ -27,13 +29,20 @@ describe("amcCallbackGet", () => {
     res = {
       render: vi.fn(),
       status: vi.fn(),
+      locals: { trace: "test-trace" },
     };
 
     vi.mocked(requestConfigUtils.getRequestConfigFromExpress).mockResolvedValue(
       { some: "config" } as any
     );
+
     vi.mocked(requestConfigUtils.getRequestConfig).mockReturnValue({
       axios: "config",
+    } as any);
+
+    vi.mocked(eventService).mockReturnValue({
+      buildAuditEvent: vi.fn().mockReturnValue({ event_name: "test-event" }),
+      send: vi.fn(),
     } as any);
   });
 

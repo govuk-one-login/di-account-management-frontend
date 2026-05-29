@@ -87,20 +87,22 @@ describe("AMC call back util tests", () => {
 
   describe("validateQueryParams", () => {
     it("should throw if 'scope' query param not provided", () => {
-      expect(() => validateQueryParams({ state: "test", code: "123" }, ["test"])).toThrow(
-        "Invalid request: Must provide 'scope'"
-      );
+      expect(() =>
+        validateQueryParams({ state: "test", code: "123" }, ["test"])
+      ).toThrow("Invalid request: Must provide 'scope'");
     });
 
     it("should throw if 'state' query param not provided", () => {
-      expect(() => validateQueryParams({ scope: "openid", code: "123" }, ["test"])).toThrow(
-        "Invalid request: Must provide 'state'"
-      );
+      expect(() =>
+        validateQueryParams({ scope: "openid", code: "123" }, ["test"])
+      ).toThrow("Invalid request: Must provide 'state'");
     });
 
     it("should throw if 'state' not equal to user state", () => {
       expect(() =>
-        validateQueryParams({ scope: "openid", state: "foo", code: "123" }, ["test"])
+        validateQueryParams({ scope: "openid", state: "foo", code: "123" }, [
+          "test",
+        ])
       ).toThrow(
         "Invalid request: 'state' parameter and user session state are different"
       );
@@ -108,7 +110,9 @@ describe("AMC call back util tests", () => {
 
     it("should allow 'code' only with scope and state", () => {
       expect(() =>
-        validateQueryParams({ scope: "openid", state: "foo", code: "123" }, ["foo"])
+        validateQueryParams({ scope: "openid", state: "foo", code: "123" }, [
+          "foo",
+        ])
       ).not.toThrow();
     });
 
@@ -128,11 +132,14 @@ describe("AMC call back util tests", () => {
 
     it("should throw if neither code nor error pair is present", () => {
       expect(() =>
-        validateQueryParams({ scope: "openid", state: "foo", error: "missing-desc" }, ["foo"])
+        validateQueryParams(
+          { scope: "openid", state: "foo", error: "missing-desc" },
+          ["foo"]
+        )
       ).toThrow("Invalid request");
-      expect(() => validateQueryParams({ scope: "openid", state: "foo" }, ["foo"])).toThrow(
-        "Invalid request"
-      );
+      expect(() =>
+        validateQueryParams({ scope: "openid", state: "foo" }, ["foo"])
+      ).toThrow("Invalid request");
     });
   });
 
@@ -307,6 +314,18 @@ describe("AMC call back util tests", () => {
           account_action_overall_success: true,
         }
       );
+
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_AMC_AUTHORISATION_RECEIVED,
+        {
+          account_action_overall_success: true,
+          account_actions: ["passkey-create"],
+          amc_scope: "passkey-create",
+        }
+      );
+
       expect(mockEventService.send).toHaveBeenCalledWith(
         { event_name: "test-event" },
         "test-trace"
@@ -340,6 +359,18 @@ describe("AMC call back util tests", () => {
           account_action_error: "User logged out",
         }
       );
+
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_AMC_AUTHORISATION_RECEIVED,
+        {
+          amc_scope: "passkey-create",
+          account_action_overall_success: false,
+          account_actions: [JourneyAction.PASSKEY_CREATE],
+        }
+      );
+
       expect(mockEventService.send).toHaveBeenCalledWith(
         { event_name: "test-event" },
         "test-trace"
@@ -358,6 +389,7 @@ describe("AMC call back util tests", () => {
         actions: [
           {
             action: "passkey-create",
+            success: false,
             details: {
               error: { description: "UserAbortedJourney", code: 1002 },
             },
@@ -377,6 +409,20 @@ describe("AMC call back util tests", () => {
           account_action_error: "User aborted journey",
         }
       );
+
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_AMC_AUTHORISATION_RECEIVED,
+        {
+          amc_scope: JourneyAction.PASSKEY_CREATE,
+          account_action_overall_success: false,
+          account_actions: ["passkey-create"],
+          account_actions_failed: ["passkey-create"],
+          account_actions_errors: ["UserAbortedJourney"],
+        }
+      );
+
       expect(mockEventService.send).toHaveBeenCalledWith(
         { event_name: "test-event" },
         "test-trace"
@@ -404,6 +450,18 @@ describe("AMC call back util tests", () => {
           account_action_error: "Unknown error",
         }
       );
+
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_AMC_AUTHORISATION_RECEIVED,
+        {
+          amc_scope: "unknown-scope",
+          account_action_overall_success: false,
+          account_actions: ["not-matching"],
+        }
+      );
+
       expect(mockEventService.send).toHaveBeenCalledWith(
         { event_name: "test-event" },
         "test-trace"
@@ -439,6 +497,17 @@ describe("AMC call back util tests", () => {
           account_action: undefined,
           account_action_overall_success: false,
           account_action_error: "Unknown error",
+        }
+      );
+
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_AMC_AUTHORISATION_RECEIVED,
+        {
+          amc_scope: "invalid",
+          account_action_overall_success: false,
+          account_actions: ["invalid"],
         }
       );
       expect(mockEventService.send).toHaveBeenCalledWith(

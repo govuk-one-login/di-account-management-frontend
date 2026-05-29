@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HTTP_STATUS_CODES } from "../../app.constants.js";
+import { HTTP_STATUS_CODES, EventName } from "../../app.constants.js";
 import {
   getRequestConfig,
   getRequestConfigFromExpress,
@@ -17,16 +17,18 @@ import {
   getNextState,
   UserJourney,
 } from "../../utils/state-machine.js";
+import { eventService } from "../../services/event-service.js";
 
 export async function amcCallbackGet(
   req: Request,
   res: Response
 ): Promise<void> {
-  const { code, error, error_description } =
+  const { code, error, error_description, scope } =
     req.query as ValidQueryStringParams;
   const { amcStates } = req.session;
   const expressConfig = await getRequestConfigFromExpress(req, res);
   const requestConfig = getRequestConfig({ ...expressConfig });
+  const service = eventService();
 
   try {
     validateQueryParams(req.query, amcStates);
@@ -40,6 +42,16 @@ export async function amcCallbackGet(
   if (error || error_description) {
     req.log.error(`amcCallbackGet: ${error} - ${error_description}`);
     res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_AMC_AUTHORISATION_ERROR_RECEIVED,
+      {
+        amc_scope: scope,
+      }
+    );
+    service.send(auditEvent, res.locals.trace);
+
     res.render("common/errors/500.njk");
     return;
   }

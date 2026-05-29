@@ -21,6 +21,7 @@ import * as jose from "jose";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { eventService } from "../../services/event-service.js";
 import { getAmcRedirectUri } from "../../utils/getAmcRedirectUri.js";
+import { EventServiceInterface, Extensions } from "src/services/types.js";
 
 enum Scope {
   testingJourney = "testing-journey",
@@ -202,72 +203,109 @@ export async function handleJourneyOutcomeResponse(
   const service = eventService();
 
   let journeyAction: JourneyAction | undefined = undefined;
+  const accountActionsFailed =
+    actions.filter((obj) => obj.success === false).map((obj) => obj.action)
+      .length > 0;
 
   if (isPasskeyCreateJourney) {
     journeyAction = JourneyAction.PASSKEY_CREATE;
   }
 
+  const actionCompletedAuditEventParams: Extensions = {
+    account_action: journeyAction,
+    account_action_overall_success: success,
+  };
+
+  const homeAmcAuthorisationReceivedEventParams: Extensions = {
+    amc_scope: scope,
+    account_action_overall_success: success,
+    account_actions: actions.map((obj) => obj.action),
+    ...(accountActionsFailed && {
+      account_actions_failed: actions
+        .filter((obj) => obj.success === false)
+        .map((obj) => obj.action),
+      account_actions_errors: actions.map(
+        (obj) => obj.details.error?.description
+      ),
+    }),
+  };
+
   if (success && isPasskeyCreateJourney) {
-    const auditEvent = service.buildAuditEvent(
+    sendJourneyOutcomeEvents(
       req,
       res,
-      EventName.HOME_ACTION_COMPLETED,
-      {
-        account_action: JourneyAction.PASSKEY_CREATE,
-        account_action_overall_success: true,
-      }
+      service,
+      actionCompletedAuditEventParams,
+      homeAmcAuthorisationReceivedEventParams
     );
-    service.send(auditEvent, res.locals.trace);
-
     return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
   } else if (!success && userSignedOut) {
-    const auditEvent = service.buildAuditEvent(
+    actionCompletedAuditEventParams.account_action_error = "User logged out";
+    sendJourneyOutcomeEvents(
       req,
       res,
-      EventName.HOME_ACTION_COMPLETED,
-      {
-        account_action: journeyAction,
-        account_action_overall_success: false,
-        account_action_error: "User logged out",
-      }
+      service,
+      actionCompletedAuditEventParams,
+      homeAmcAuthorisationReceivedEventParams
     );
-    service.send(auditEvent, res.locals.trace);
-
     await handleLogout(req, res, LogoutState.AmcSignedOut);
   } else if (
     !success &&
     isPasskeyCreateJourney &&
     passkeyCreateUserAbortedJourney
   ) {
-    const auditEvent = service.buildAuditEvent(
+    actionCompletedAuditEventParams.account_action_error =
+      "User aborted journey";
+    sendJourneyOutcomeEvents(
       req,
       res,
-      EventName.HOME_ACTION_COMPLETED,
-      {
-        account_action: JourneyAction.PASSKEY_CREATE,
-        account_action_overall_success: false,
-        account_action_error: "User aborted journey",
-      }
+      service,
+      actionCompletedAuditEventParams,
+      homeAmcAuthorisationReceivedEventParams
     );
-    service.send(auditEvent, res.locals.trace);
-
     return res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
   } else {
-    const auditEvent = service.buildAuditEvent(
+    actionCompletedAuditEventParams.account_action_overall_success = false;
+    homeAmcAuthorisationReceivedEventParams.account_action_overall_success =
+      false;
+    actionCompletedAuditEventParams.account_action_error = "Unknown error";
+    sendJourneyOutcomeEvents(
       req,
       res,
-      EventName.HOME_ACTION_COMPLETED,
-      {
-        account_action: journeyAction,
-        account_action_overall_success: false,
-        account_action_error: "Unknown error",
-      }
+      service,
+      actionCompletedAuditEventParams,
+      homeAmcAuthorisationReceivedEventParams
     );
-    service.send(auditEvent, res.locals.trace);
-
     req.metrics?.addMetric("UnrecognisedJourneyOutcome", MetricUnit.Count, 1);
     req.log.error(`UnrecognisedJourneyOutcome with outcome_id ${outcome_id}`);
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
     res.render("common/errors/500.njk");
   }
+}
+
+function sendJourneyOutcomeEvents(
+  req: Request,
+  res: Response,
+  service: EventServiceInterface,
+  sharedExtensionParams: Extensions,
+  amcAuthReceivedExtensionParams: Extensions
+): void {
+  const homeActionEvent = service.buildAuditEvent(
+    req,
+    res,
+    EventName.HOME_ACTION_COMPLETED,
+    { ...sharedExtensionParams }
+  );
+  service.send(homeActionEvent, res.locals.trace);
+
+  const homeAmcAuthorisationReceivedEvent = service.buildAuditEvent(
+    req,
+    res,
+    EventName.HOME_AMC_AUTHORISATION_RECEIVED,
+    {
+      ...amcAuthReceivedExtensionParams,
+    }
+  );
+
+  service.send(homeAmcAuthorisationReceivedEvent, res.locals.trace);
 }
