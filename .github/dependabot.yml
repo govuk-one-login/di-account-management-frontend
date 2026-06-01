@@ -3,8 +3,10 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: daily
+      interval: "cron"
+      cronjob: "0 3 1,15 * *"
       time: "03:00"
+      timezone: "Europe/London"
     cooldown:
       default-days: 7
     target-branch: main
@@ -34,8 +36,12 @@ updates:
   - package-ecosystem: docker
     directory: "/"
     schedule:
-      interval: daily
+      interval: "cron"
+      cronjob: "0 3 1,15 * *"
       time: "03:00"
+      timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     target-branch: main
     labels:
       - dependabot
@@ -50,8 +56,12 @@ updates:
   - package-ecosystem: "npm"
     directory: "/integration-tests"
     schedule:
-      interval: daily
+      interval: "cron"
+      cronjob: "0 3 1,15 * *"
       time: "03:00"
+      timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     target-branch: main
     labels:
       - dependabot
@@ -77,8 +87,12 @@ updates:
   - package-ecosystem: docker
     directory: "/integration-tests"
     schedule:
-      interval: daily
+      interval: "cron"
+      cronjob: "0 3 1,15 * *"
       time: "03:00"
+      timezone: "Europe/London"
+    cooldown:
+      default-days: 7
     target-branch: main
     labels:
       - dependabot
