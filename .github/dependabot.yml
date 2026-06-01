@@ -36,6 +36,8 @@ updates:
     schedule:
       interval: daily
       time: "03:00"
+    cooldown:
+      default-days: 7
     target-branch: main
     labels:
       - dependabot
@@ -52,6 +54,8 @@ updates:
     schedule:
       interval: daily
       time: "03:00"
+    cooldown:
+      default-days: 7
     target-branch: main
     labels:
       - dependabot
@@ -79,6 +83,8 @@ updates:
     schedule:
       interval: daily
       time: "03:00"
+    cooldown:
+      default-days: 7
     target-branch: main
     labels:
       - dependabot
