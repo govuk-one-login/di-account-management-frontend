@@ -14,10 +14,9 @@
     "no": "No",
     "backToSecurityButtonText": "Back to Security",
     "backToSignInDetailsButtonText": "Back to sign in details",
-    "cancelAndBackToSecurityText": "Cancel and go back to Security",
-    "cancelAndBackToSignInDetailsText": "Cancel and go back",
+    "cancelAndGoBackText": "Cancel and go back",
     "backSecurity": "Go back to Security",
-    "backSignInDetails": "Go back to Sign in details",
+    "backSignInDetails": "Go back to sign in details",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "If a service you’ve accessed is not available in Welsh it will appear here in English.",
@@ -495,9 +494,7 @@
       "removePasskey": {
         "header": "Enter your password",
         "paragraph": "We need to make sure it’s you before you can remove your passkey."
-      },
-      "cancelTextSecurity": "Cancel and go back to Security",
-      "cancelTextSignInDetails": "Cancel and go back"
+      }
     },
     "changeEmail": {
       "title": "Enter your new email address",
@@ -661,7 +658,6 @@
       "explanationListItem2": "the record of which services you’ve accessed with GOV.UK One Login and when",
       "details": "If you use the GOV.UK One Login app, any digital documents in it will be removed. For example, a digital Veteran Card.",
       "deleteAccount": "Delete your GOV.UK One Login",
-      "doNotDeleteAccount": "Cancel and go back to Security",
       "englishServicesInWelshExplanation": {
         "title": "Why are some services listed in English?",
         "body": "If a service you’ve accessed is not available in Welsh it will appear here in English."
@@ -702,7 +698,8 @@
       "detailTextLine2": "You can use an authenticator app on your smartphone, tablet or desktop computer. Download an authenticator app for your smartphone or tablet from your app store or search online for an authenticator app for your computer.",
       "paragraph3": "To set up an authenticator app to get security codes:",
       "paragraph3hasBackupAuthAppp": "To get security codes using your authenticator app:",
-      "listItem1": "Go back to <strong>Security</strong>",
+      "listItem1Security": "Go back to <strong>Security</strong>",
+      "listItem1SignInDetails": "Go back to <strong>sign in details</strong>",
       "listItem2": "Select <strong>Use a different default method</strong>",
       "listItem2hasBackupAuthApp": "Select <strong>Switch back-up and default methods</strong>",
       "listItem2hasAuthApp": "Select <strong>Change authenticator app</strong>"

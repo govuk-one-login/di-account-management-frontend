@@ -29,8 +29,8 @@
         <p class="govuk-body">{{ 'pages.deleteAccount.englishServicesInWelshExplanation.body' | translate }}</p>
       {% endset %}
 
-      {{ govukDetails({ 
-        summaryText: 'pages.deleteAccount.englishServicesInWelshExplanation.title' | translate, 
+      {{ govukDetails({
+        summaryText: 'pages.deleteAccount.englishServicesInWelshExplanation.title' | translate,
         html: englishServicesInWelshExplanationHtml
       }) }}
     {% endif %}
@@ -40,7 +40,7 @@
   <p class="govuk-body">{{ 'pages.deleteAccount.paragraph3' | translate }}</p>
 
   <h2 class="govuk-heading-m">{{'pages.deleteAccount.heading2a' | translate}}</h2>
-  
+
   <p class="govuk-body">{{ 'pages.deleteAccount.explanationList' | translate }}</p>
   <ul class="govuk-list govuk-list--bullet">
     <li>{{ 'pages.deleteAccount.explanationListItem1' | translate }}</li>
@@ -64,7 +64,7 @@
 <form action="{{'DELETE_ACCOUNT' | getPath }}" method="post" novalidate>
   <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
   <input type="hidden" name="fromSecurity" value="{{fromSecurity}}"/>
-  
+
   <p class="govuk-body">{{ 'pages.deleteAccount.paragraph5' | translate }}</p>
 
   {{ govukButton({
@@ -76,7 +76,7 @@
 
 {% if fromSecurity %}
   <a href='{{ "SECURITY" | getPath }}' class="govuk-link govuk-body">
-    {{ 'pages.deleteAccount.doNotDeleteAccount' | translate }}
+    {{ 'general.cancelAndGoBackText' | translate }}
   </a>
 {% endif %}
 {% endblock %}

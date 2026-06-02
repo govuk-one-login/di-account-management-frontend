@@ -41,7 +41,7 @@
 
 
   <ol class="govuk-list govuk-list--number">
-    <li >{{ 'pages.noUkPhoneNumber.listItem1' | translate | safe }}</li>
+    <li >{{ 'pages.noUkPhoneNumber.listItem1SignInDetails' | translate | safe if passkeysEnabled else 'pages.noUkPhoneNumber.listItem1Security' | translate | safe }}</li>
     {% if hasAuthApp %}
       <li >{{ 'pages.noUkPhoneNumber.listItem2hasAuthApp' | translate | safe }}</li>
     {% elif hasBackupAuthApp %}

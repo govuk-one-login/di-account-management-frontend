@@ -81,7 +81,7 @@ Then(
       page.getByText("If you want to use a different authenticator app:")
     ).toBeVisible();
     await expect(
-      page.getByRole("listitem").getByText("Go back to Security")
+      page.getByRole("listitem").getByText("Go back to sign in details")
     ).toBeVisible();
     await expect(
       page.getByRole("listitem").getByText("Select Change authenticator app")
