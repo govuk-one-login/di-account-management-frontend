@@ -8,6 +8,7 @@ vi.mock("../getAmcJwe.js", () => ({
   getAmcJwe: vi.fn().mockResolvedValue({
     jws: "header.payload.signature",
     jwe: "encrypted.jwe.token.value.here",
+    redirectUri: "https://home.example.com/amc/callback",
   }),
 }));
 

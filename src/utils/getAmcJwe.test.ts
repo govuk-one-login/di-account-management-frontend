@@ -15,6 +15,7 @@ vi.mock("../config.js", () => ({
   getAmcAuthorizeUrl: vi.fn(),
   getAmcClientId: vi.fn(),
   getAmcJwksUrl: vi.fn(),
+  getAmcCallbackBaseUrl: vi.fn(),
   getLogLevel: vi.fn(() => "info"),
 }));
 vi.mock("./kms.js");
@@ -59,6 +60,9 @@ describe("getAmcJwe", () => {
     vi.spyOn(config, "getAmcClientId").mockReturnValue("test-client-id");
     vi.spyOn(config, "getAmcJwksUrl").mockReturnValue(
       "https://amc.example.com/.well-known/jwks.json"
+    );
+    vi.spyOn(config, "getAmcCallbackBaseUrl").mockReturnValue(
+      "https://home.example.com"
     );
 
     vi.mocked(kmsModule.kmsService.sign).mockResolvedValue({
@@ -191,8 +195,10 @@ describe("getAmcJwe", () => {
     expect(decodedPayload.exp).toBe(1704067320);
   });
 
-  it("should construct redirect_uri from base URL and callback path", async () => {
-    vi.spyOn(config, "getHomeBaseUrl").mockReturnValue("https://test.gov.uk");
+  it("should construct redirect_uri from callback base URL and path", async () => {
+    vi.spyOn(config, "getAmcCallbackBaseUrl").mockReturnValue(
+      "https://callback.example.com"
+    );
 
     await getAmcJwe("openid", "state-123", mockUser);
 
@@ -203,7 +209,31 @@ describe("getAmcJwe", () => {
     );
 
     expect(decodedPayload.redirect_uri).toBe(
-      "https://test.gov.uk/amc-callback"
+      "https://callback.example.com/amc-callback?scope=openid"
+    );
+  });
+
+  it("should include scope parameter in redirect_uri", async () => {
+    const scope = "openid profile email";
+    await getAmcJwe(scope, "state-123", mockUser);
+
+    const signCall = vi.mocked(kmsModule.kmsService.sign).mock.calls[0][0];
+    const [, payloadPart] = signCall.split(".");
+    const decodedPayload = JSON.parse(
+      Buffer.from(payloadPart, "base64url").toString()
+    );
+
+    expect(decodedPayload.redirect_uri).toBe(
+      "https://home.example.com/amc-callback?scope=openid+profile+email"
+    );
+  });
+
+  it("should return redirect URI in result object", async () => {
+    const scope = "openid email";
+    const result = await getAmcJwe(scope, "state-123", mockUser);
+
+    expect(result.redirectUri).toBe(
+      "https://home.example.com/amc-callback?scope=openid+email"
     );
   });
 

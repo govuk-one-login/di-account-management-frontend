@@ -3,9 +3,9 @@ import { kmsService } from "./kms.js";
 import { randomUUID } from "node:crypto";
 import {
   getAmcAuthorizeUrl,
+  getAmcCallbackBaseUrl,
   getAmcClientId,
   getAmcJwksUrl,
-  getHomeBaseUrl,
 } from "../config.js";
 import * as jose from "jose";
 import { PATH_DATA } from "../app.constants.js";
@@ -25,6 +25,10 @@ export const getAmcJwe = async (
   const kid = keyId.includes("/") ? keyId.split("/").pop() : keyId;
   const headers = { alg: "RS512", typ: "JWT", kid };
 
+  const redirectUri = `${getAmcCallbackBaseUrl()}${PATH_DATA.AMC_CALLBACK.url}`;
+  const redirectUrl = new URL(redirectUri);
+  redirectUrl.searchParams.set("scope", scope);
+
   const payload = {
     client_id: getAmcClientId(),
     iss: getAmcClientId(),
@@ -40,7 +44,7 @@ export const getAmcJwe = async (
     public_sub: user.publicSubjectId,
     sub: user.internalPairwiseId,
     state,
-    redirect_uri: getHomeBaseUrl() + PATH_DATA.AMC_CALLBACK.url,
+    redirect_uri: redirectUrl.toString(),
   };
 
   const encodedHeader = jose.base64url.encode(JSON.stringify(headers));
@@ -67,5 +71,6 @@ export const getAmcJwe = async (
   return {
     jws,
     jwe,
+    redirectUri: redirectUrl.toString(),
   };
 };
