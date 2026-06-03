@@ -465,15 +465,7 @@ describe("removePasskeyConfirmationGet", () => {
     vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
 
     req = new RequestBuilder()
-      .withSession({
-        mfaMethods: [
-          {
-            method: {
-              mfaMethodType: "APP",
-            },
-          },
-        ],
-      })
+      .withSessionUserState({ removePasskey: { value: "CHANGE_VALUE" } })
       .withTranslate(vi.fn((id) => id))
       .build();
 
@@ -500,15 +492,7 @@ describe("removePasskeyConfirmationGet", () => {
     vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
 
     req = new RequestBuilder()
-      .withSession({
-        mfaMethods: [
-          {
-            method: {
-              mfaMethodType: "SMS",
-            },
-          },
-        ],
-      })
+      .withSessionUserState({ removePasskey: { value: "CHANGE_VALUE" } })
       .withTranslate(vi.fn((id) => id))
       .build();
 
@@ -524,5 +508,23 @@ describe("removePasskeyConfirmationGet", () => {
       panelText: "pages.removePasskeyConfirmation.panelText",
       summaryText: "pages.removePasskeyConfirmation.summaryTextNoPasskeys",
     });
+  });
+
+  it("should clear the removePasskey state", async () => {
+    const mockClient: Partial<MfaClient> = {
+      getPasskeys: vi.fn().mockResolvedValue({ data: { passkeys: [] } }),
+    };
+    vi.mocked(createMfaClient).mockResolvedValue(mockClient as MfaClient);
+
+    req = new RequestBuilder()
+      .withSessionUserState({ removePasskey: { value: "CHANGE_VALUE" } })
+      .withTranslate(vi.fn((id) => id))
+      .build();
+
+    res = { render: vi.fn(), locals: {} };
+
+    await removePasskeyConfirmationGet(req as Request, res as Response);
+
+    expect(req.session.user.state.removePasskey).toBeUndefined();
   });
 });

@@ -46,3 +46,17 @@ Scenario: remove a passkey without a name
   Then I click the "Remove passkey" button
   And the page has finished loading
   Then the page looks as expected
+
+Scenario: pressing back from remove passkey confirmation redirects to your services
+  Given I go to the "Root" page
+  And I sign in as the "fourPasskeys" user
+  And I go to the "Security" page
+  Then I click the "Manage your sign in details" link
+  Then I click the "Remove iCloud Keychain (Managed) passkey" link
+  Then I enter and submit my password "qwerty"
+  And the page has finished loading
+  Then I click the "Remove passkey" button
+  And the page has finished loading
+  Then I navigate back
+  And the page has finished loading
+  Then the page title is prefixed with "Your services"

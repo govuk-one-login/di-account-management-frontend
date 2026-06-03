@@ -376,6 +376,8 @@ export async function removePasskeyConfirmationGet(
     res
   );
 
+  delete req.session.user.state.removePasskey;
+
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.removePasskeyConfirmation.title"),
     panelText: req.t("pages.removePasskeyConfirmation.panelText"),
