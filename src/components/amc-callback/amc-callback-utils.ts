@@ -5,7 +5,6 @@ import {
   getAmcTokenUrl,
   getAmcJourneyOutcomeUrl,
   getAmcClientId,
-  getHomeBaseUrl,
 } from "../../config.js";
 import { Request, Response } from "express";
 import { handleLogout } from "../../utils/logout.js";
@@ -21,6 +20,7 @@ import { randomUUID } from "node:crypto";
 import * as jose from "jose";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { eventService } from "../../services/event-service.js";
+import { getAmcRedirectUri } from "../../utils/getAmcRedirectUri.js";
 
 enum Scope {
   testingJourney = "testing-journey",
@@ -53,8 +53,20 @@ interface JourneyOutcome {
 }
 
 export type ValidQueryStringParams =
-  | { state: string; code: string; error?: never; error_description?: never }
-  | { state: string; error: string; error_description: string; code?: never };
+  | {
+      scope: string;
+      state: string;
+      code: string;
+      error?: never;
+      error_description?: never;
+    }
+  | {
+      scope: string;
+      state: string;
+      error: string;
+      error_description: string;
+      code?: never;
+    };
 
 export interface TokenResponse {
   access_token: string;
@@ -77,9 +89,14 @@ export function validateQueryParams(
   const queryStateIsValid =
     typeof query.state === "string" && userStates.includes(query.state);
   const hasCode = typeof query.code === "string";
+  const hasScope = typeof query.scope === "string";
   const hasError =
     typeof query.error === "string" &&
     typeof query.error_description === "string";
+
+  if (!hasScope) {
+    throw new Error("Invalid request: Must provide 'scope'");
+  }
 
   if (!query.state) {
     throw new Error("Invalid request: Must provide 'state'");
@@ -100,6 +117,7 @@ export function validateQueryParams(
 
 export async function exchangeCodeForToken(
   code: string,
+  scope: string,
   requestConfig: AxiosRequestConfig
 ): Promise<TokenResponse> {
   requestConfig.headers = {
@@ -131,7 +149,7 @@ export async function exchangeCodeForToken(
   const clientAssertion = `${tokenParts}.${base64Signature}`;
   const body = new URLSearchParams({
     grant_type: "authorization_code",
-    redirect_uri: `${getHomeBaseUrl()}${PATH_DATA.AMC_CALLBACK.url}`,
+    redirect_uri: getAmcRedirectUri(scope),
     code: code,
     client_assertion_type:
       "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",

@@ -51,7 +51,7 @@ describe("amcCallbackGet", () => {
   });
 
   it("should redirect if an error or error_description is present in query", async () => {
-    req.query = { error: "access_denied", error_description: "User cancelled" };
+    req.query = { scope: "openid", error: "access_denied", error_description: "User cancelled" };
     vi.mocked(utils.validateQueryParams).mockReturnValue(undefined);
     await amcCallbackGet(req, res);
 
@@ -63,14 +63,14 @@ describe("amcCallbackGet", () => {
   });
 
   it("should exchange code for token and handle journey outcome on success", async () => {
-    req.query = { code: "valid-code" };
+    req.query = { scope: "openid", code: "valid-code" };
     vi.mocked(utils.validateQueryParams).mockReturnValue(undefined);
     const mockToken: TokenResponse = {
       access_token: "fake-token",
       token_type: "Bearer",
       expires_in: 3600,
     };
-    const mockOutcome = { success: true };
+    const mockOutcome = { success: true, scope: "openid" };
 
     vi.mocked(utils.exchangeCodeForToken).mockResolvedValue(mockToken);
     vi.mocked(utils.isValidTokenResponse).mockReturnValue(true);
@@ -82,6 +82,7 @@ describe("amcCallbackGet", () => {
 
     expect(utils.exchangeCodeForToken).toHaveBeenCalledWith(
       "valid-code",
+      "openid",
       expect.anything()
     );
     expect(utils.handleJourneyOutcomeResponse).toHaveBeenCalledWith(
@@ -92,12 +93,34 @@ describe("amcCallbackGet", () => {
   });
 
   it("should throw error if token response is invalid", async () => {
-    req.query = { code: "valid-code" };
+    req.query = { scope: "openid", code: "valid-code" };
+    vi.mocked(utils.validateQueryParams).mockReturnValue(undefined);
     vi.mocked(utils.exchangeCodeForToken).mockResolvedValue({} as any);
     vi.mocked(utils.isValidTokenResponse).mockReturnValue(false);
 
     await expect(amcCallbackGet(req, res)).rejects.toThrow(
       "Response did not match expected TokenResponse"
+    );
+  });
+
+  it("should throw error if journey outcome scope does not match query scope", async () => {
+    req.query = { scope: "openid", code: "valid-code" };
+    vi.mocked(utils.validateQueryParams).mockReturnValue(undefined);
+    const mockToken: TokenResponse = {
+      access_token: "fake-token",
+      token_type: "Bearer",
+      expires_in: 3600,
+    };
+    const mockOutcome = { success: true, scope: "different-scope" };
+
+    vi.mocked(utils.exchangeCodeForToken).mockResolvedValue(mockToken);
+    vi.mocked(utils.isValidTokenResponse).mockReturnValue(true);
+    vi.mocked(utils.getJourneyOutcomeResponse).mockResolvedValue(
+      mockOutcome as any
+    );
+
+    await expect(amcCallbackGet(req, res)).rejects.toThrow(
+      "The scope in the journey outcome does not match the scope from the query parameters"
     );
   });
 });

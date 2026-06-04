@@ -45,13 +45,23 @@ export async function amcCallbackGet(
   }
 
   if (typeof code === "string") {
-    const tokenResponse = await exchangeCodeForToken(code, requestConfig);
+    const tokenResponse = await exchangeCodeForToken(
+      code,
+      req.query.scope,
+      requestConfig
+    );
 
     if (isValidTokenResponse(tokenResponse)) {
       const journeyOutcomeResponse = await getJourneyOutcomeResponse(
         tokenResponse.access_token,
         requestConfig
       );
+
+      if (journeyOutcomeResponse.scope !== req.query.scope) {
+        throw new Error(
+          "The scope in the journey outcome does not match the scope from the query parameters"
+        );
+      }
 
       const journeyType = UserJourney.CreatePasskey;
       req.session.user.state[journeyType] = getNextState(
