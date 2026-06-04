@@ -59,7 +59,15 @@ describe("initiateAmcRedirect", () => {
     vi.mocked(getAmcJweModule.getAmcJwe).mockResolvedValue({
       jws: "test.jws.value",
       jwe: "test.jwe.value",
+      redirectUri: "https://home.example.com/amc/callback",
     });
+
+    // Reset all config mocks to default values
+    vi.spyOn(config, "getAmcAuthorizeUrl").mockReturnValue(
+      "https://amc.example.com/authorize"
+    );
+    vi.spyOn(config, "getAmcClientId").mockReturnValue("test-client-id");
+    vi.spyOn(config, "getRootDomain").mockReturnValue("example.com");
   });
 
   it("should generate a state and push it into session.amcStates", async () => {
@@ -112,6 +120,40 @@ describe("initiateAmcRedirect", () => {
     );
   });
 
+  it("should use redirectUri from getAmcJwe result", async () => {
+    vi.mocked(getAmcJweModule.getAmcJwe).mockResolvedValue({
+      jws: "test.jws.value", 
+      jwe: "test.jwe.value",
+      redirectUri: "https://custom.domain.com/callback?scope=openid"
+    });
+
+    await initiateAmcRedirect("openid", req as Request, res as Response);
+
+    const redirectUrl = String(vi.mocked(res.redirect).mock.calls[0][0]);
+    const url = new URL(redirectUrl);
+
+    expect(url.searchParams.get("redirect_uri")).toBe(
+      "https://custom.domain.com/callback?scope=openid"
+    );
+  });
+
+  it("should handle different scopes correctly", async () => {
+    const scope = "openid profile email";
+    await initiateAmcRedirect(scope, req as Request, res as Response);
+
+    expect(getAmcJweModule.getAmcJwe).toHaveBeenCalledWith(
+      scope,
+      "test-state-uuid",
+      expect.any(Object),
+      undefined,
+      "test-account-data-token"
+    );
+
+    const redirectUrl = String(vi.mocked(res.redirect).mock.calls[0][0]);
+    const url = new URL(redirectUrl);
+    expect(url.searchParams.get("scope")).toBe(scope);
+  });
+
   it("should set the amc cookie with a SHA256 hash of the JWS", async () => {
     await initiateAmcRedirect("openid email", req as Request, res as Response);
 
@@ -143,6 +185,39 @@ describe("initiateAmcRedirect", () => {
     await initiateAmcRedirect("openid email", req as Request, res as Response);
 
     expect(res.redirect).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle missing account data token gracefully", async () => {
+    req.session.user.tokens = {};
+
+    await initiateAmcRedirect("openid email", req as Request, res as Response);
+
+    expect(getAmcJweModule.getAmcJwe).toHaveBeenCalledWith(
+      "openid email",
+      "test-state-uuid",
+      {
+        internalPairwiseId: "internal-sub-123",
+        publicSubjectId: "public-sub-456",
+        email: "user@example.com",
+      },
+      undefined,
+      undefined
+    );
+  });
+
+  it("should create SHA256 hash of JWS correctly", async () => {
+    await initiateAmcRedirect("openid email", req as Request, res as Response);
+
+    expect(res.cookie).toHaveBeenCalledWith(
+      "amc",
+      "hashed-jws-value",
+      expect.objectContaining({
+        secure: true,
+        httpOnly: true,
+        sameSite: "strict",
+        domain: "example.com",
+      })
+    );
   });
 
   it("should propagate errors thrown by getAmcJwe", async () => {

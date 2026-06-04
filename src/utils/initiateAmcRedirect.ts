@@ -3,11 +3,9 @@ import { Request, Response } from "express";
 import { getAmcJwe } from "./getAmcJwe.js";
 import {
   getAmcAuthorizeUrl,
-  getAmcCallbackBaseUrl,
   getAmcClientId,
   getRootDomain,
 } from "../config.js";
-import { PATH_DATA } from "../app.constants.js";
 
 export async function initiateAmcRedirect(
   scope: string,
@@ -23,7 +21,7 @@ export async function initiateAmcRedirect(
 
   const { subjectId, publicSubjectId, email } = req.session.user;
 
-  const { jws, jwe } = await getAmcJwe(
+  const { jws, jwe, redirectUri } = await getAmcJwe(
     scope,
     state,
     {
@@ -34,8 +32,6 @@ export async function initiateAmcRedirect(
     undefined,
     req.session.user.tokens.accountDataApiAccessToken
   );
-
-  const redirectUri = `${getAmcCallbackBaseUrl()}${PATH_DATA.AMC_CALLBACK.url}`;
 
   const url = new URL(getAmcAuthorizeUrl());
   url.searchParams.set("client_id", getAmcClientId());
