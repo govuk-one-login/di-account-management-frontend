@@ -18,6 +18,7 @@ export default tseslint.config(
     rules: {
       ...playwright.configs["flat/recommended"].rules,
       "playwright/no-standalone-expect": "off",
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },
   {

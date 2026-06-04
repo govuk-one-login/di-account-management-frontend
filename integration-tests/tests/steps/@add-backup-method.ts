@@ -39,7 +39,7 @@ Then(
 
 Given(
   "I enter and submit the code {string} sent to my new mobile number ending {string}",
-  async ({ page }, otp: string) => {
+  async ({ page }, otp: string, _phoneEnding: string) => {
     await page.getByLabel("Enter the 6 digit code").fill(otp);
     await page.getByRole("button", { name: "Continue" }).click();
   }
