@@ -3,6 +3,7 @@ import { getAmcJwe } from "./getAmcJwe.js";
 import * as awsConfig from "../config/aws.js";
 import * as config from "../config.js";
 import * as kmsModule from "./kms.js";
+import { getAmcRedirectUri as mockGetAmcRedirectUri } from "./getAmcRedirectUri.js";
 
 vi.mock("../config/aws.js", () => ({
   getKMSConfig: vi.fn(() => ({
@@ -19,9 +20,12 @@ vi.mock("../config.js", () => ({
   getLogLevel: vi.fn(() => "info"),
 }));
 vi.mock("./kms.js");
+vi.mock("./getAmcRedirectUri.js", () => ({
+  getAmcRedirectUri: vi.fn(),
+}));
 vi.mock("../app.constants.js", () => ({
   PATH_DATA: {
-    AMC_CALLBACK: { url: "/amc-callback" },
+    AMC_CALLBACK: { url: "/amc/callback" },
   },
 }));
 vi.mock("node:crypto", () => ({
@@ -64,6 +68,11 @@ describe("getAmcJwe", () => {
     vi.spyOn(config, "getAmcCallbackBaseUrl").mockReturnValue(
       "https://home.example.com"
     );
+
+    // Mock getAmcRedirectUri to return a consistent value
+    vi.mocked(mockGetAmcRedirectUri).mockImplementation((scope: string) => {
+      return `https://home.example.com/amc/callback?scope=${encodeURIComponent(scope).replace(/%20/g, '+')}`;
+    });
 
     vi.mocked(kmsModule.kmsService.sign).mockResolvedValue({
       Signature: mockSignature,
@@ -196,11 +205,13 @@ describe("getAmcJwe", () => {
   });
 
   it("should construct redirect_uri from callback base URL and path", async () => {
-    vi.spyOn(config, "getAmcCallbackBaseUrl").mockReturnValue(
-      "https://callback.example.com"
+    vi.mocked(mockGetAmcRedirectUri).mockReturnValue(
+      "https://callback.example.com/amc/callback?scope=openid"
     );
 
     await getAmcJwe("openid", "state-123", mockUser);
+
+    expect(mockGetAmcRedirectUri).toHaveBeenCalledWith("openid");
 
     const signCall = vi.mocked(kmsModule.kmsService.sign).mock.calls[0][0];
     const [, payloadPart] = signCall.split(".");
@@ -209,7 +220,7 @@ describe("getAmcJwe", () => {
     );
 
     expect(decodedPayload.redirect_uri).toBe(
-      "https://callback.example.com/amc-callback?scope=openid"
+      "https://callback.example.com/amc/callback?scope=openid"
     );
   });
 
@@ -217,6 +228,8 @@ describe("getAmcJwe", () => {
     const scope = "openid profile email";
     await getAmcJwe(scope, "state-123", mockUser);
 
+    expect(mockGetAmcRedirectUri).toHaveBeenCalledWith(scope);
+
     const signCall = vi.mocked(kmsModule.kmsService.sign).mock.calls[0][0];
     const [, payloadPart] = signCall.split(".");
     const decodedPayload = JSON.parse(
@@ -224,17 +237,27 @@ describe("getAmcJwe", () => {
     );
 
     expect(decodedPayload.redirect_uri).toBe(
-      "https://home.example.com/amc-callback?scope=openid+profile+email"
+      "https://home.example.com/amc/callback?scope=openid+profile+email"
     );
   });
 
   it("should return redirect URI in result object", async () => {
     const scope = "openid email";
+    const expectedUri = "https://home.example.com/amc/callback?scope=openid+email";
+    vi.mocked(mockGetAmcRedirectUri).mockReturnValue(expectedUri);
+
     const result = await getAmcJwe(scope, "state-123", mockUser);
 
-    expect(result.redirectUri).toBe(
-      "https://home.example.com/amc-callback?scope=openid+email"
-    );
+    expect(mockGetAmcRedirectUri).toHaveBeenCalledWith(scope);
+    expect(result.redirectUri).toBe(expectedUri);
+  });
+
+  it("should call getAmcRedirectUri with provided scope", async () => {
+    const scope = "testing-journey";
+    await getAmcJwe(scope, "state-456", mockUser);
+
+    expect(mockGetAmcRedirectUri).toHaveBeenCalledTimes(1);
+    expect(mockGetAmcRedirectUri).toHaveBeenCalledWith(scope);
   });
 
   it("should call kmsService.sign with correct signing input", async () => {

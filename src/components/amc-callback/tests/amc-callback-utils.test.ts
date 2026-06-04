@@ -38,13 +38,25 @@ vi.mock("../../../utils/logout.js", () => ({
 
 vi.mock("../../../services/event-service.js");
 
+vi.mock("../../../utils/getAmcRedirectUri.js", () => ({
+  getAmcRedirectUri: vi.fn(),
+}));
+
+import { getAmcRedirectUri as mockGetAmcRedirectUri } from "../../../utils/getAmcRedirectUri.js";
+
 describe("AMC call back util tests", () => {
   vi.spyOn(config, "getAmcTokenUrl").mockReturnValue("https://test.com");
   vi.spyOn(config, "getAmcClientId").mockReturnValue("test-client");
-  vi.spyOn(config, "getHomeBaseUrl").mockReturnValue("https://app.com");
   vi.spyOn(config, "getAmcJourneyOutcomeUrl").mockReturnValue(
     "https://journey-outcome.co.uk"
   );
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(mockGetAmcRedirectUri).mockReturnValue(
+      "https://app.com/amc/callback?scope=openid"
+    );
+  });
 
   const mockPublicKey: Partial<GetPublicKeyCommandOutput> = {
     KeyId:
@@ -74,30 +86,37 @@ describe("AMC call back util tests", () => {
   });
 
   describe("validateQueryParams", () => {
+    it("should throw if 'scope' query param not provided", () => {
+      expect(() => validateQueryParams({ state: "test", code: "123" }, ["test"])).toThrow(
+        "Invalid request: Must provide 'scope'"
+      );
+    });
+
     it("should throw if 'state' query param not provided", () => {
-      expect(() => validateQueryParams({ code: "123" }, ["test"])).toThrow(
+      expect(() => validateQueryParams({ scope: "openid", code: "123" }, ["test"])).toThrow(
         "Invalid request: Must provide 'state'"
       );
     });
 
     it("should throw if 'state' not equal to user state", () => {
       expect(() =>
-        validateQueryParams({ state: "foo", code: "123" }, ["test"])
+        validateQueryParams({ scope: "openid", state: "foo", code: "123" }, ["test"])
       ).toThrow(
         "Invalid request: 'state' parameter and user session state are different"
       );
     });
 
-    it("should allow 'code' only", () => {
+    it("should allow 'code' only with scope and state", () => {
       expect(() =>
-        validateQueryParams({ state: "foo", code: "123" }, ["foo"])
+        validateQueryParams({ scope: "openid", state: "foo", code: "123" }, ["foo"])
       ).not.toThrow();
     });
 
-    it("should allow 'error' and 'error_description' together", () => {
+    it("should allow 'error' and 'error_description' together with scope and state", () => {
       expect(() =>
         validateQueryParams(
           {
+            scope: "openid",
             state: "foo",
             error: "denied",
             error_description: "user cancelled",
@@ -109,9 +128,9 @@ describe("AMC call back util tests", () => {
 
     it("should throw if neither code nor error pair is present", () => {
       expect(() =>
-        validateQueryParams({ state: "foo", error: "missing-desc" }, ["foo"])
+        validateQueryParams({ scope: "openid", state: "foo", error: "missing-desc" }, ["foo"])
       ).toThrow("Invalid request");
-      expect(() => validateQueryParams({ state: "foo" }, ["foo"])).toThrow(
+      expect(() => validateQueryParams({ scope: "openid", state: "foo" }, ["foo"])).toThrow(
         "Invalid request"
       );
     });
@@ -151,6 +170,7 @@ describe("AMC call back util tests", () => {
 
       const result = await exchangeCodeForToken(
         "auth-code-123",
+        "openid",
         mockExpressConfig
       );
 
@@ -176,6 +196,9 @@ describe("AMC call back util tests", () => {
       expect(bodyParams.get("code")).toBe("auth-code-123");
       expect(bodyParams.get("client_assertion")).toBeDefined();
       expect(bodyParams.get("client_assertion")).toContain(".");
+      expect(bodyParams.get("redirect_uri")).toBe(
+        "https://app.com/amc/callback?scope=openid"
+      );
     });
 
     it("should fail if the HTTP request fails", async () => {
@@ -186,7 +209,7 @@ describe("AMC call back util tests", () => {
       vi.mocked(http.client.post).mockRejectedValue(new Error("Network Error"));
 
       await expect(
-        exchangeCodeForToken("code", mockExpressConfig)
+        exchangeCodeForToken("code", "openid", mockExpressConfig)
       ).rejects.toThrow("Network Error");
     });
   });
