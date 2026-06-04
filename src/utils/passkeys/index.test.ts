@@ -54,19 +54,19 @@ describe("formatPasskeysForRender", () => {
     ]);
   });
 
-  it("should sort passkeys used on same day by createdAt (desc)", async () => {
+  it("should sort passkeys with lastUsedAt by lastUsedAt only", async () => {
     const passkeys = [
       {
-        id: "same-day-older-created",
+        id: "used-earlier",
         aaguid: "1",
-        createdAt: "2023-01-01T08:00:00Z",
-        lastUsedAt: "2023-05-01T10:00:00Z",
+        createdAt: "2023-01-01T12:00:00Z", // Newer creation date
+        lastUsedAt: "2023-05-01T10:00:00Z", // Earlier use
       },
       {
-        id: "same-day-newer-created",
+        id: "used-later",
         aaguid: "2",
-        createdAt: "2023-01-01T12:00:00Z",
-        lastUsedAt: "2023-05-01T14:00:00Z", // Same day, different time
+        createdAt: "2023-01-01T08:00:00Z", // Older creation date
+        lastUsedAt: "2023-05-01T14:00:00Z", // Later use
       },
     ] as any;
 
@@ -77,8 +77,8 @@ describe("formatPasskeysForRender", () => {
     const result = await formatPasskeysForRender(mockReq, passkeys);
 
     expect(result.map((p) => p.id)).toEqual([
-      "same-day-newer-created", // Should come first due to newer createdAt
-      "same-day-older-created",
+      "used-later", // Should come first due to later lastUsedAt
+      "used-earlier",
     ]);
   });
 
