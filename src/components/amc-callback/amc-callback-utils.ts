@@ -203,9 +203,7 @@ export async function handleJourneyOutcomeResponse(
   const service = eventService();
 
   let journeyAction: JourneyAction | undefined = undefined;
-  const accountActionsFailed =
-    actions.filter((obj) => obj.success === false).map((obj) => obj.action)
-      .length > 0;
+  const accountActionsFailed = actions.some((obj) => obj.success === false);
 
   if (isPasskeyCreateJourney) {
     journeyAction = JourneyAction.PASSKEY_CREATE;
@@ -213,7 +211,6 @@ export async function handleJourneyOutcomeResponse(
 
   const actionCompletedAuditEventParams: Extensions = {
     account_action: journeyAction,
-    account_action_overall_success: success,
   };
 
   const homeAmcAuthorisationReceivedEventParams: Extensions = {
@@ -231,6 +228,7 @@ export async function handleJourneyOutcomeResponse(
   };
 
   if (success && isPasskeyCreateJourney) {
+    actionCompletedAuditEventParams.account_action_overall_success = true;
     sendJourneyOutcomeEvents(
       req,
       res,
@@ -240,6 +238,7 @@ export async function handleJourneyOutcomeResponse(
     );
     return res.redirect(PATH_DATA.PASSKEY_CREATED_CONFIRMATION.url);
   } else if (!success && userSignedOut) {
+    actionCompletedAuditEventParams.account_action_overall_success = false;
     actionCompletedAuditEventParams.account_action_error = "User logged out";
     sendJourneyOutcomeEvents(
       req,
@@ -254,6 +253,7 @@ export async function handleJourneyOutcomeResponse(
     isPasskeyCreateJourney &&
     passkeyCreateUserAbortedJourney
   ) {
+    actionCompletedAuditEventParams.account_action_overall_success = false;
     actionCompletedAuditEventParams.account_action_error =
       "User aborted journey";
     sendJourneyOutcomeEvents(
@@ -266,8 +266,6 @@ export async function handleJourneyOutcomeResponse(
     return res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
   } else {
     actionCompletedAuditEventParams.account_action_overall_success = false;
-    homeAmcAuthorisationReceivedEventParams.account_action_overall_success =
-      false;
     actionCompletedAuditEventParams.account_action_error = "Unknown error";
     sendJourneyOutcomeEvents(
       req,
@@ -287,14 +285,14 @@ function sendJourneyOutcomeEvents(
   req: Request,
   res: Response,
   service: EventServiceInterface,
-  sharedExtensionParams: Extensions,
-  amcAuthReceivedExtensionParams: Extensions
+  actionCompletedAuditEventParams: Extensions,
+  amcAuthReceivedEventParams: Extensions
 ): void {
   const homeActionEvent = service.buildAuditEvent(
     req,
     res,
     EventName.HOME_ACTION_COMPLETED,
-    { ...sharedExtensionParams }
+    actionCompletedAuditEventParams
   );
   service.send(homeActionEvent, res.locals.trace);
 
@@ -302,9 +300,7 @@ function sendJourneyOutcomeEvents(
     req,
     res,
     EventName.HOME_AMC_AUTHORISATION_RECEIVED,
-    {
-      ...amcAuthReceivedExtensionParams,
-    }
+    amcAuthReceivedEventParams
   );
 
   service.send(homeAmcAuthorisationReceivedEvent, res.locals.trace);

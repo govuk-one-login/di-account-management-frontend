@@ -457,7 +457,7 @@ describe("AMC call back util tests", () => {
         EventName.HOME_AMC_AUTHORISATION_RECEIVED,
         {
           amc_scope: "unknown-scope",
-          account_action_overall_success: false,
+          account_action_overall_success: true,
           account_actions: ["not-matching"],
         }
       );
