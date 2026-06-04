@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { getAmcRedirectUri } from "./getAmcRedirectUri.js";
 import * as config from "../config.js";
-import { PATH_DATA } from "../app.constants.js";
 
 vi.mock("../config.js", () => ({
   getAmcCallbackBaseUrl: vi.fn(),
