@@ -28,26 +28,9 @@ export async function formatPasskeysForRender(
   const sortedLastUsed = passkeys
     .filter((passkey) => passkey.lastUsedAt)
     .sort((a, b) => {
-      const dateA = new Date(a.lastUsedAt);
-      const dateB = new Date(b.lastUsedAt);
-
-      const dayA = new Date(
-        dateA.getFullYear(),
-        dateA.getMonth(),
-        dateA.getDate()
-      ).getTime();
-      const dayB = new Date(
-        dateB.getFullYear(),
-        dateB.getMonth(),
-        dateB.getDate()
-      ).getTime();
-
-      if (dayB !== dayA) {
-        return dayB - dayA;
-      }
-      const createdA = new Date(a.createdAt).getTime();
-      const createdB = new Date(b.createdAt).getTime();
-      return createdB - createdA;
+      const timeA = new Date(a.lastUsedAt).getTime();
+      const timeB = new Date(b.lastUsedAt).getTime();
+      return timeB - timeA;
     });
   const sortedCreatedAt = passkeys
     .filter((passkey) => !passkey.lastUsedAt)
