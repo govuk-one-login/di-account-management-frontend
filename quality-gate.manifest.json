@@ -20,6 +20,18 @@
           }
         },
         {
+          "check-types": [
+            "secret scanning"
+          ],
+          "provider": "GitHub",
+          "phase": "pre-merge",
+          "config": {
+            "file": ".github/workflows/detect-secrets.yaml",
+            "path": "jobs.detect-secrets",
+            "name": "Detect secrets"
+          }
+        },          
+        {
           "check-types": ["integration", "accessibility", "regression"],
           "provider": "GitHub",
           "phase": "pre-merge",
