@@ -35,7 +35,7 @@ jobs:
           python-version: "3.9"
 
       - name: Set up SAM cli
-        uses: aws-actions/setup-sam@b42eb7a54dac4039080975e32860b1b30935c9af # pin@v2
+        uses: aws-actions/setup-sam@89ddb14d60e682855e3fea4be85b3c56485de310 # pin@v2
 
       - name: Set up AWS creds
         uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # pin@v1-node16
