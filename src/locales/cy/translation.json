@@ -16,7 +16,7 @@
     "backToSignInDetailsButtonText": "Yn ôl i fanylion mewngofnodi",
     "cancelAndGoBackText": "Canslo a mynd yn ôl",
     "backSecurity": "Yn ôl i Diogelwch",
-    "backSignInDetails": "Go back to sign in details",
+    "backSignInDetails": "Ewch yn ôl i fanylion mewngofnodi",
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg.",
@@ -526,7 +526,8 @@
       "detailTextLine2": "Gallwch ddefnyddio ap dilysydd ar eich ffôn clyfar, tabled neu gyfrifiadur. Lawrlwythwch ap dilysu ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau neu chwiliwch ar-lein am ap dilysu ar gyfer eich cyfrifiadur.",
       "paragraph3": "I sefydlu ap dilysu i gael codau diogelwch:",
       "paragraph3hasBackupAuthApp": "I gael codau diogelwch gan ddefnyddio'ch ap dilysu:",
-      "listItem1": "Ewch yn ôl i <strong>Diogelwch</strong>",
+      "listItem1Security": "Ewch yn ôl i <strong>Diogelwch</strong>",
+      "listItem1SignInDetails": "Ewch yn ôl i <strong>fanylion mewngofnodi</strong>",
       "listItem2": "Dewiswch <strong>Defnyddio dull diofyn gwahanol</strong>",
       "listItem2hasBackupAuthApp": "Dewiswch <strong>Newid dulliau wrth gefn a diofyn</strong>",
       "listItem2hasAuthApp": "Dewiswch <strong>Newid ap dilysu</strong>"
