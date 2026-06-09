@@ -14,10 +14,9 @@
     "no": "Na",
     "backToSecurityButtonText": "Yn ôl i’r dudalen Ddiogelwch",
     "backToSignInDetailsButtonText": "Yn ôl i fanylion mewngofnodi",
-    "cancelAndBackToSecurityText": "Canslo a mynd yn ôl i Diogelwch",
-    "cancelAndBackToSignInDetailsText": "Canslo a mynd yn ôl",
+    "cancelAndGoBackText": "Canslo a mynd yn ôl",
     "backSecurity": "Yn ôl i Diogelwch",
-    "backSignInDetails": "Go back to Sign in details",
+    "backSignInDetails": "Ewch yn ôl i fanylion mewngofnodi",
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg.",
@@ -348,9 +347,7 @@
       "removePasskey": {
         "header": "Rhowch eich cyfrinair",
         "paragraph": "Mae angen i ni wneud yn siŵr mai chi yw chi cyn y gallwch dynnu'ch allwedd mynediad."
-      },
-      "cancelTextSecurity": "Canslo a mynd yn ôl i Diogelwch",
-      "cancelTextSignInDetails": "Canslo a mynd yn ôl"
+      }
     },
     "changeEmail": {
       "title": "Rhowch eich cyfeiriad e-bost newydd",
@@ -490,7 +487,6 @@
       "explanationListItem2": "y cofnod o ba wasanaethau rydych wedi cael mynediad iddynt gyda GOV.UK One Login a phryd",
       "details": "Os ydych yn defnyddio'r ap GOV.UK One Login, bydd unrhyw ddogfennau digidol ynddo yn cael eu tynnu i ffwrdd. Er enghraifft, Cerdyn Cyn-filwr digidol.",
       "deleteAccount": "Dileu eich GOV.UK One Login",
-      "doNotDeleteAccount": "Canslo a mynd yn ôl i’r dudalen Ddiogelwch",
       "englishServicesInWelshExplanation": {
         "title": "Pam fod rhai gwasanaethau wedi eu rhestru yn Saesneg?",
         "body": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg."
@@ -530,7 +526,8 @@
       "detailTextLine2": "Gallwch ddefnyddio ap dilysydd ar eich ffôn clyfar, tabled neu gyfrifiadur. Lawrlwythwch ap dilysu ar gyfer eich ffôn clyfar neu dabled o'ch siop apiau neu chwiliwch ar-lein am ap dilysu ar gyfer eich cyfrifiadur.",
       "paragraph3": "I sefydlu ap dilysu i gael codau diogelwch:",
       "paragraph3hasBackupAuthApp": "I gael codau diogelwch gan ddefnyddio'ch ap dilysu:",
-      "listItem1": "Ewch yn ôl i <strong>Diogelwch</strong>",
+      "listItem1Security": "Ewch yn ôl i <strong>Diogelwch</strong>",
+      "listItem1SignInDetails": "Ewch yn ôl i <strong>fanylion mewngofnodi</strong>",
       "listItem2": "Dewiswch <strong>Defnyddio dull diofyn gwahanol</strong>",
       "listItem2hasBackupAuthApp": "Dewiswch <strong>Newid dulliau wrth gefn a diofyn</strong>",
       "listItem2hasAuthApp": "Dewiswch <strong>Newid ap dilysu</strong>"

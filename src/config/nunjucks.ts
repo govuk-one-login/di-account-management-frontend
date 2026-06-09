@@ -37,12 +37,6 @@ export function configureNunjucks(
     "cancelAMJourneyHref",
     passkeysEnabled() ? PATH_DATA.SIGN_IN_DETAILS.url : PATH_DATA.SECURITY.url
   );
-  nunjucksEnv.addGlobal(
-    "cancelAMJourneyTextKey",
-    passkeysEnabled()
-      ? "general.cancelAndBackToSignInDetailsText"
-      : "general.cancelAndBackToSecurityText"
-  );
 
   nunjucksEnv.addFilter("getPath", function (route: string) {
     if (!PATH_DATA[route]) {

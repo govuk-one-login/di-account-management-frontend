@@ -101,8 +101,9 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule =
-        await import("../../../services/event-service");
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -133,8 +134,9 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule =
-        await import("../../../services/event-service");
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -165,8 +167,9 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule =
-        await import("../../../services/event-service");
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -197,8 +200,9 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule =
-        await import("../../../services/event-service");
+      const eventServiceModule = await import(
+        "../../../services/event-service"
+      );
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -323,7 +327,7 @@ describe("enter password controller", () => {
         requestType: "changeEmail",
         from: "security",
         fromDetails: {
-          translationKey: "general.cancelAndBackToSecurityText",
+          translationKey: "general.cancelAndGoBackText",
           url: "/security",
         },
         formAction:

@@ -117,9 +117,6 @@ describe("configureNunjucks", () => {
       expect(nunjucksEnv.getGlobal("cancelAMJourneyHref")).toEqual(
         PATH_DATA.SECURITY.url
       );
-      expect(nunjucksEnv.getGlobal("cancelAMJourneyTextKey")).toEqual(
-        "general.cancelAndBackToSecurityText"
-      );
     });
 
     it("should navigate back to sign in details when passkey flag is on", () => {
@@ -128,9 +125,6 @@ describe("configureNunjucks", () => {
       nunjucksEnv = configureNunjucks(app, ["./views"]);
       expect(nunjucksEnv.getGlobal("cancelAMJourneyHref")).toEqual(
         PATH_DATA.SIGN_IN_DETAILS.url
-      );
-      expect(nunjucksEnv.getGlobal("cancelAMJourneyTextKey")).toEqual(
-        "general.cancelAndBackToSignInDetailsText"
       );
     });
   });
