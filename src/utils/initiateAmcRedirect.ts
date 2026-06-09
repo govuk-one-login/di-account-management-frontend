@@ -6,6 +6,8 @@ import {
   getAmcClientId,
   getRootDomain,
 } from "../config.js";
+import { EventName } from "../app.constants.js";
+import { eventService } from "../services/event-service.js";
 
 export async function initiateAmcRedirect(
   scope: string,
@@ -48,6 +50,18 @@ export async function initiateAmcRedirect(
     sameSite: "strict",
     domain: getRootDomain(),
   });
+
+  const service = eventService();
+  const audit_event = service.buildAuditEvent(
+    req,
+    res,
+    EventName.HOME_AMC_AUTHORISATION_REQUESTED,
+    {
+      amc_scope: scope
+    }
+  );
+
+  service.send(audit_event, res.locals.trace);
 
   res.redirect(url.toString());
 }

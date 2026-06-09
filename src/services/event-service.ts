@@ -218,6 +218,9 @@ export function eventService(
       case EventName.HOME_ACTION_COMPLETED:
       case EventName.HOME_PASSKEY_DELETE_SUCCESSFUL:
       case EventName.HOME_PASSKEY_DELETE_FAILED:
+      case EventName.HOME_AMC_AUTHORISATION_REQUESTED:
+      case EventName.HOME_AMC_AUTHORISATION_RECEIVED:
+      case EventName.HOME_AMC_AUTHORISATION_ERROR_RECEIVED:
         baseEvent.extensions = {
           ...baseEvent.extensions,
           "journey-type": "ACCOUNT_MANAGEMENT",

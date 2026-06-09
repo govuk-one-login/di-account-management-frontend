@@ -3,6 +3,7 @@ import { SqsService } from "../utils/types.js";
 import { eventService } from "./event-service.js";
 import {
   EventName,
+  JourneyAction,
   MISSING_APP_SESSION_ID_SPECIAL_CASE,
   MISSING_PERSISTENT_SESSION_ID_SPECIAL_CASE,
   MISSING_SESSION_ID_SPECIAL_CASE,
@@ -708,6 +709,196 @@ describe("eventService", () => {
       expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
       expect(result.extensions["reference_code"]).toBe("custom-value");
       expect(result.extensions["app_error_code"]).toBe("123");
+    });
+
+    it("should build a HOME_AMC_AUTHORISATION_REQUESTED event correctly", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: {
+          "user-agent": "test-user-agent",
+          "txma-audit-encoded": btoa("test-txma-header"),
+        },
+        ip: "127.0.0.1",
+        session: {
+          user_id: "test-user-id",
+          user: {
+            isAuthenticated: true,
+            email: "test@example.com",
+          },
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
+        },
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_AMC_AUTHORISATION_REQUESTED,
+        {
+          amc_scope: "passkey-create",
+        }
+      );
+
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("HOME_AMC_AUTHORISATION_REQUESTED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
+        "test-persistent-session-id"
+      );
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
+        "test-client-session-id"
+      );
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.extensions["amc_scope"]).toBe("passkey-create");
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
+        "2024-09-12T00:00:00.000Z"
+      );
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
+        "test-txma-header"
+      );
+    });
+
+    it("should build a HOME_AMC_AUTHORISATION_RECEIVED event correctly", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: {
+          "user-agent": "test-user-agent",
+          "txma-audit-encoded": btoa("test-txma-header"),
+        },
+        ip: "127.0.0.1",
+        session: {
+          user_id: "test-user-id",
+          user: {
+            isAuthenticated: true,
+            email: "test@example.com",
+          },
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
+        },
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_AMC_AUTHORISATION_RECEIVED,
+        {
+          amc_scope: JourneyAction.PASSKEY_CREATE,
+          account_action_overall_success: false,
+          account_actions: [JourneyAction.PASSKEY_CREATE],
+          account_actions_errors: ["User logged out"],
+        }
+      );
+
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("HOME_AMC_AUTHORISATION_RECEIVED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
+        "test-persistent-session-id"
+      );
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
+        "test-client-session-id"
+      );
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.extensions["amc_scope"]).toBe("passkey-create");
+      expect(result.extensions["account_actions"]).toStrictEqual([
+        "passkey-create",
+      ]);
+      expect(result.extensions["account_actions_errors"]).toStrictEqual([
+        "User logged out",
+      ]);
+      expect(result.extensions["account_action_overall_success"]).toBe(false);
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
+        "2024-09-12T00:00:00.000Z"
+      );
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
+        "test-txma-header"
+      );
+    });
+
+    it("should build a HOME_AMC_AUTHORISATION_ERROR_RECEIVED event correctly", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: {
+          "user-agent": "test-user-agent",
+          "txma-audit-encoded": btoa("test-txma-header"),
+        },
+        ip: "127.0.0.1",
+        session: {
+          user_id: "test-user-id",
+          user: {
+            isAuthenticated: true,
+            email: "test@example.com",
+          },
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
+        },
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_AMC_AUTHORISATION_REQUESTED,
+        {
+          amc_scope: "passkey-create",
+        }
+      );
+
+      expect(result.component_id).toBe("HOME");
+      expect(result.event_name).toBe("HOME_AMC_AUTHORISATION_REQUESTED");
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.persistent_session_id).toBe(
+        "test-persistent-session-id"
+      );
+      expect(result.user.user_id).toBe("test-user-id");
+      expect(result.user.email).toBe("test@example.com");
+      expect(result.user.ip_address).toBe("127.0.0.1");
+      expect(result.user.govuk_signin_journey_id).toBe(
+        "test-client-session-id"
+      );
+      expect(result.platform.user_agent).toBe("test-user-agent");
+      expect(result.extensions["journey-type"]).toBe("ACCOUNT_MANAGEMENT");
+      expect(result.extensions["amc_scope"]).toBe("passkey-create");
+      expect(result.event_timestamp_ms).toBe(1726099200000);
+      expect(result.event_timestamp_ms_formatted).toBe(
+        "2024-09-12T00:00:00.000Z"
+      );
+      expect(result.timestamp).toBe(1726099200);
+      expect(atob(result.restricted.device_information.encoded)).toBe(
+        "test-txma-header"
+      );
     });
   });
 

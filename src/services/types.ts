@@ -57,10 +57,14 @@ export interface Extensions {
   is_signed_in?: boolean;
   "journey-type"?: "ACCOUNT_MANAGEMENT";
   "mfa-type"?: (typeof mfaMethodTypes)[keyof typeof mfaMethodTypes];
+  amc_scope?: string;
   phone_number_country_code?: string;
   account_action?: JourneyAction;
   account_action_overall_success?: boolean;
   account_action_error?: string;
+  account_actions?: string[];
+  account_actions_errors?: string[];
+  account_actions_failed?: string[];
 }
 
 export interface CurrentTimeDescriptor {
