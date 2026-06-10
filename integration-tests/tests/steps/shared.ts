@@ -8,6 +8,7 @@ const pageTitleToPath: Record<string, string> = {
   Healthcheck: "/healthcheck",
   Root: "/",
   Security: "/security",
+  "Activity history": "/activity-history",
   "Your services": "/your-services",
   "Contact GOV.UK One Login": "/contact-gov-uk-one-login",
   "Services you can use with GOV.UK One Login": "/services-using-one-login",
@@ -103,4 +104,10 @@ Then("the page looks as expected", async ({ page }) => {
       mask: [page.locator(".contact-reference__code")],
     })
   ).toMatchSnapshot();
+});
+
+Then("the page has the {string} link", async ({ page }, content: string) => {
+  await expect(
+    page.getByRole("link", { name: content, exact: true })
+  ).toBeVisible();
 });

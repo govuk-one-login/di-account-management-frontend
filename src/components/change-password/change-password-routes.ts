@@ -4,6 +4,7 @@ import {
   changePasswordGet,
   changePasswordPost,
 } from "./change-password-controller.js";
+import { getPasswordJourneyRenderOptions } from "../../utils/getPasswordJourneyRenderOptions.js";
 import { validateChangePasswordRequest } from "./change-password-validation.js";
 import { requiresAuthMiddleware } from "../../middleware/requires-auth-middleware.js";
 import { validateStateMiddleware } from "../../middleware/validate-state-middleware.js";
@@ -21,7 +22,7 @@ router.post(
   PATH_DATA.CHANGE_PASSWORD.url,
   requiresAuthMiddleware,
   validateStateMiddleware,
-  validateChangePasswordRequest(),
+  validateChangePasswordRequest((req) => getPasswordJourneyRenderOptions(req)),
   changePasswordPost()
 );
 

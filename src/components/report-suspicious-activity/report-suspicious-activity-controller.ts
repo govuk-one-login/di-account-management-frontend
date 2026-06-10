@@ -202,7 +202,7 @@ export async function reportSuspiciousActivityPost(
 
     let pageUrlParam = "";
     if (req.body.page !== undefined) {
-      const pageNum = parseInt(req.body.page, 10);
+      const pageNum = Number.parseInt(req.body.page, 10);
       if (Number.isInteger(pageNum) && pageNum > 0) {
         pageUrlParam = `?page=${pageNum}`;
       }

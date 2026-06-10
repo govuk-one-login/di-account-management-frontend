@@ -34,6 +34,7 @@ describe("addMfaSmsMethodPost", () => {
       .build();
 
     vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
+    process.env.PASSKEYS = "1";
   });
 
   afterEach(() => {
@@ -100,9 +101,7 @@ describe("addMfaSmsMethodPost", () => {
 
     await addMfaSmsMethodPost(fakeService)(req as Request, res as Response);
 
-    expect(
-      fakeService.sendPhoneVerificationNotification
-    ).toHaveBeenCalledWith(
+    expect(fakeService.sendPhoneVerificationNotification).toHaveBeenCalledWith(
       expect.any(String),
       expect.any(String),
       mfaPriorityIdentifiers.backup,
@@ -171,6 +170,10 @@ describe("addMfaSmsMethodConfirmationGet", () => {
       pageTitle: "pages.addBackupSms.confirm.title",
       panelText: "pages.addBackupSms.confirm.heading",
       summaryText: "pages.addBackupSms.confirm.message",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
   });
 

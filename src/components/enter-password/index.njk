@@ -3,7 +3,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% set paragraph = ['pages.enterPassword.', requestType, '.paragraph'] | join | translate %}
 {% set header = ['pages.enterPassword.', requestType, '.header'] | join | translate %}
-
 {% if requestType == 'changePassword' %}
   {% set pageTitleName = 'pages.enterPassword.changePassword.title' | translate %}
 {% else %}
@@ -17,9 +16,7 @@
     <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{header}}</h1>
 
     <form action="{{formAction}}" method="post" novalidate>
-
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-
         <p class="govuk-body">{{paragraph}}</p>
         {{ govukInputWithShowPassword({
           label: 'pages.enterPassword.password.label' | translate,
@@ -41,5 +38,4 @@
         <p class="govuk-body"> <a href='{{ fromDetails.url }}' class="govuk-link" rel="noreferrer noopener">{{ fromDetails.translationKey | translate }}</a></p>
         {% endif %}
     </form>
-
 {% endblock %}

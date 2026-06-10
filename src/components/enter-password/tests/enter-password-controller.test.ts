@@ -101,9 +101,8 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule = await import(
-        "../../../services/event-service"
-      );
+      const eventServiceModule =
+        await import("../../../services/event-service");
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -134,9 +133,8 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule = await import(
-        "../../../services/event-service"
-      );
+      const eventServiceModule =
+        await import("../../../services/event-service");
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -167,9 +165,8 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule = await import(
-        "../../../services/event-service"
-      );
+      const eventServiceModule =
+        await import("../../../services/event-service");
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -200,9 +197,8 @@ describe("enter password controller", () => {
 
       const eventServiceStub = vi.fn().mockReturnValue(mockEventService);
 
-      const eventServiceModule = await import(
-        "../../../services/event-service"
-      );
+      const eventServiceModule =
+        await import("../../../services/event-service");
       vi.spyOn(eventServiceModule, "eventService", "get").mockReturnValue(
         eventServiceStub
       );
@@ -287,6 +283,30 @@ describe("enter password controller", () => {
       expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SECURITY.url);
     });
 
+    it("should redirect to change-email with page parameter when the journey starts on activity history", async () => {
+      const fakeService: EnterPasswordServiceInterface = {
+        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+      };
+
+      req.session.user = {
+        email: "test@test.com",
+        phoneNumber: "xxxxxxx7898",
+        state: { changeEmail: { value: "CHANGE_VALUE" } },
+        tokens: { accessToken: "token" },
+      } as any;
+
+      req.body.password = "password";
+      req.query.type = "changeEmail";
+      req.query.from = "activity-history";
+      req.query.page = "4";
+
+      await enterPasswordPost(fakeService)(req as Request, res as Response);
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `${PATH_DATA.CHANGE_EMAIL.url}?from=activity-history&page=4`
+      );
+    });
+
     it("should redirect to change-email when the password is correct", async () => {
       const fakeService: EnterPasswordServiceInterface = {
         authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
@@ -361,8 +381,6 @@ describe("enter password controller", () => {
       expect(res.render).toHaveBeenCalled();
       expect(res.render).toHaveBeenCalledWith("enter-password/index.njk", {
         requestType: "changeEmail",
-        from: undefined,
-        fromDetails: undefined,
         formAction:
           "https://test.com/enter-password?edit=true&type=changeEmail",
         errors: { password: { text: undefined, href: "#password" } },
@@ -370,6 +388,37 @@ describe("enter password controller", () => {
         language: "en",
         password: "password",
       });
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+    });
+
+    it("include `from` and `page` when rendering bad request", async () => {
+      const fakeService: EnterPasswordServiceInterface = {
+        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+      };
+
+      req.body.password = "";
+      req.query.type = "changePassword";
+      req.query.from = "activity-history";
+      req.query.page = "5";
+      req.url =
+        "https://test.com/enter-password?from=security&edit=true&type=changePassword";
+
+      await enterPasswordPost(fakeService)(req as Request, res as Response);
+
+      expect(fakeService.authenticated).not.toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalledWith(
+        "enter-password/index.njk",
+        expect.objectContaining({
+          requestType: "changePassword",
+          from: "activity-history",
+          page: 5,
+          fromDetails: {
+            translationKey: "general.cancelAndGoBackText",
+            url: "/activity-history?page=5",
+          },
+        })
+      );
       expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 

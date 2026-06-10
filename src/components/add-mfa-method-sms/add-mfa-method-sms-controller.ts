@@ -31,7 +31,10 @@ import {
 } from "../../utils/mfaClient/types.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { logger } from "../../utils/logger.js";
-
+import {
+  passkeyEnabledBackRoute,
+  passkeyEnabledBackButtonText,
+} from "../update-confirmation/update-confirmation-controller.js";
 const ADD_MFA_METHOD_SMS_TEMPLATE = "add-mfa-method-sms/index.njk";
 
 const backLink = PATH_DATA.ADD_MFA_METHOD_GO_BACK.url;
@@ -196,5 +199,9 @@ export async function addMfaSmsMethodConfirmationGet(
     summaryText: req
       .t("pages.addBackupSms.confirm.message")
       .replace("[mobile]", getLastNDigits(req.session.user.phoneNumber, 4)),
+    backButton: {
+      text: passkeyEnabledBackButtonText(req),
+      url: passkeyEnabledBackRoute(req),
+    },
   });
 }
