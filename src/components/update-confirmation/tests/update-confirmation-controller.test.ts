@@ -481,6 +481,9 @@ describe("removePasskeyConfirmationGet", () => {
       panelText: "pages.removePasskeyConfirmation.panelText",
       summaryText: "pages.removePasskeyConfirmation.summaryText",
     });
+    expect(res.locals?.opl.contentId).toBe(
+      "fe8c2df3-63b0-47d5-860b-b96a17e527f6"
+    );
   });
 
   it("should render remove passkey confirmation page when the user has no other passkeys but has another mfa method", async () => {
@@ -508,6 +511,9 @@ describe("removePasskeyConfirmationGet", () => {
       panelText: "pages.removePasskeyConfirmation.panelText",
       summaryText: "pages.removePasskeyConfirmation.summaryTextNoPasskeys",
     });
+    expect(res.locals?.opl.contentId).toBe(
+      "af92dec6-5a8a-439f-9130-973ffc6eccf0"
+    );
   });
 
   it("should clear the removePasskey state", async () => {
