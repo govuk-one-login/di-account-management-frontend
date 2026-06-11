@@ -371,7 +371,9 @@ export async function removePasskeyConfirmationGet(
   setOplSettings(
     {
       ...PASSKEYS_COMMON_OPL_SETTINGS,
-      contentId: "fe8c2df3-63b0-47d5-860b-b96a17e527f6",
+      contentId: hasPasskeys
+        ? "fe8c2df3-63b0-47d5-860b-b96a17e527f6"
+        : "af92dec6-5a8a-439f-9130-973ffc6eccf0",
     },
     res
   );
