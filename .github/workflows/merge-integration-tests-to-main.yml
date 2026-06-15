@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # pin@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # pin@v1-node16
+        uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # pin@v1-node16
         with:
           role-to-assume: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
           aws-region: eu-west-2
