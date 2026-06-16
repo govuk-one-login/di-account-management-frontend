@@ -7,20 +7,13 @@ import {
   removePasskeyGet,
   removePasskeyPost,
 } from "./remove-passkey-controller.js";
-import { passkeysEnabled } from "../../config.js";
+import { blockPasskeyRoutesIfNotEnabled } from "../../middleware/block-passkeys-routes-if-not-enabled.js";
 
 const router = express.Router();
 
 router.get(
   `${PATH_DATA.REMOVE_PASSKEY.url}`,
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!passkeysEnabled(req)) {
-      res.status(404);
-      res.send();
-      return;
-    }
-    next();
-  },
+  blockPasskeyRoutesIfNotEnabled,
   requiresAuthMiddleware,
   validateStateMiddleware,
   mfaMethodMiddleware,
@@ -29,14 +22,7 @@ router.get(
 
 router.post(
   `${PATH_DATA.REMOVE_PASSKEY.url}`,
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!passkeysEnabled(req)) {
-      res.status(404);
-      res.send();
-      return;
-    }
-    next();
-  },
+  blockPasskeyRoutesIfNotEnabled,
   requiresAuthMiddleware,
   validateStateMiddleware,
   removePasskeyPost
