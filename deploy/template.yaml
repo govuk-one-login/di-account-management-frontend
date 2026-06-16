@@ -84,6 +84,9 @@ Parameters:
   ActivityLogTableName:
     Type: String
     Default: activity_log
+  UserNotificationsTableName:
+    Type: String
+    Default: user_notifications
   DeploymentStrategy:
     Description: "Predefined deployment configuration for ECS application"
     Type: String
@@ -841,6 +844,8 @@ Resources:
               Value: !Ref ServiceStoreTableName
             - Name: "ACTIVITY_LOG_STORE_TABLE_NAME"
               Value: !Ref ActivityLogTableName
+            - Name: "USER_NOTIFICATIONS_TABLE_NAME"
+              Value: !Ref UserNotificationsTableName
             - Name: "WEBCHAT_SOURCE_URL"
               Value:
                 !FindInMap [
@@ -1125,6 +1130,12 @@ Resources:
                 Resource:
                   - !Sub "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ServiceStoreTableName}"
                   - !Sub "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ActivityLogTableName}"
+              - Effect: Allow
+                Action:
+                  - dynamodb:DeleteItem
+                  - dynamodb:GetItem
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${UserNotificationsTableName}"
               - Effect: Allow
                 Action:
                   - dynamodb:DescribeTable

@@ -1,5 +1,6 @@
 {% extends "common/layout/base-page.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% set pageTitleName = 'pages.yourServices.title' | translate %}
 {% set activeNav = 'your-services' %}
 {% set showSecondaryHeadings = servicesList.length and accountsList.length %}
@@ -8,6 +9,14 @@
 {% set serviceListLink = 'pages.yourServices.informationBox.link' | translate | safe %}
 {% set searchableListLink = "SEARCH_SERVICES" | getPath %}
 {% set rowContainerId = 'your-services' %}
+
+{% set notificationBannerHtml %}
+  <h3 class="govuk-notification-banner__heading">{{ "pages.yourServices.accountKeptSuccess.heading" | translate }}</h3>
+  <p class="govuk-body">{{ "pages.yourServices.accountKeptSuccess.paragraph1" | translate }}</p>
+  <p class="govuk-body">{{ "pages.yourServices.accountKeptSuccess.paragraph2" | translate }}</p>
+  <p class="govuk-body">{{ "pages.yourServices.accountKeptSuccess.paragraph3" | translate | safe | replace("[manageLink]", "SECURITY" | getPath )}}</p>
+{% endset %}
+
 
 {%- macro setKey(key, clientId) -%}
   {{ ['clientRegistry.', env, '.', clientId, '.', key] | join }}
@@ -20,6 +29,13 @@
 {%- endmacro -%}
 
 {% block pageContent %}
+  {{ govukNotificationBanner({
+    html: notificationBannerHtml,
+    type: "success",
+    role: "region",
+    disableAutoFocus: true
+  }) if accountKeptNotification }}
+
   <h1 class="govuk-heading-xl landing-page__heading">{{ 'pages.yourServices.header' | translate }}</h1>
   <div class="landing-page__summary">
     {% set emailAddressBlock %} <strong>{{ email }}</strong>. {% endset %}

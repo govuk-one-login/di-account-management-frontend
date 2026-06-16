@@ -435,6 +435,12 @@
         "paragraph2": "In the future, you’ll be able to use GOV.UK One Login to access all services on GOV.UK.",
         "paragraph3": "See the <a class=\"govuk-link\" href=\"[serviceListLink]\">services you can use with GOV.UK One Login</a>.",
         "link": "https://www.gov.uk/using-your-gov-uk-one-login/services"
+      },
+      "accountKeptSuccess": {
+        "heading": "You’ve successfully signed in to keep your GOV.UK One Login",
+        "paragraph1": "Your GOV.UK One Login will no longer be deleted.",
+        "paragraph2": "If you do not sign in for the next 5 years, we’ll remind you again.",
+        "paragraph3": "You can go to Security to <a href='[manageLink]' class='govuk-link'>manage your GOV.UK One Login</a>."
       }
     },
     "enterPassword": {
