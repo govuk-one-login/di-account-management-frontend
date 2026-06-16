@@ -7,11 +7,20 @@ import { passkeysEnabled } from "../../config.js";
 
 const router = express.Router();
 
-router.get(
-  PATH_DATA.SECURITY.url,
-  ...(passkeysEnabled()
-    ? [requiresAuthMiddleware, securityGet]
-    : [requiresAuthMiddleware, mfaMethodMiddleware, securityGet])
-);
+router.get(PATH_DATA.SECURITY.url, [
+  requiresAuthMiddleware,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    if (!passkeysEnabled(req)) {
+      await mfaMethodMiddleware(req, res, next);
+    } else {
+      next();
+    }
+  },
+  securityGet,
+]);
 
 export { router as securityRouter };

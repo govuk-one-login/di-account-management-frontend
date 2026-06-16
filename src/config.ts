@@ -1,6 +1,7 @@
 import { filterClients } from "di-account-management-rp-registry";
 import { LOCALE } from "./app.constants.js";
 import { createTimedMemoize } from "./utils/createTimedMemoize.js";
+import { Request } from "express";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -273,8 +274,11 @@ export function getAmcClientId(): string {
   return process.env.AMC_CLIENT_ID;
 }
 
-export function passkeysEnabled(): boolean {
-  return process.env.PASSKEYS === "1";
+export function passkeysEnabled(req: Request): boolean {
+  return (
+    process.env.PASSKEYS === "1" &&
+    (!isProd() || req.cookies?.passkeys_live_proving === "1")
+  );
 }
 
 export const maxNumberOfPasskeys = 5;
