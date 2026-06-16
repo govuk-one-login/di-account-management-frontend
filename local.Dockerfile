@@ -10,4 +10,8 @@ EXPOSE $PORT
 
 RUN apk add --no-cache git && git config --global --add safe.directory /app
 
+HEALTHCHECK NONE
+
+USER node
+
 CMD npm run install-all && npm run copy-assets && npm run dev
