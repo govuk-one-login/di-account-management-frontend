@@ -14,11 +14,11 @@ router.get(PATH_DATA.SECURITY.url, [
     res: express.Response,
     next: express.NextFunction
   ) => {
-    if (!passkeysEnabled(req)) {
-      await mfaMethodMiddleware(req, res, next);
-    } else {
+    if (passkeysEnabled(req)) {
       next();
+      return;
     }
+    await mfaMethodMiddleware(req, res, next);
   },
   securityGet,
 ]);
