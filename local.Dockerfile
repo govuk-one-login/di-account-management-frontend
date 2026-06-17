@@ -5,17 +5,17 @@ ENV PORT 6001
 
 RUN apk add --no-cache git
 
-RUN mkdir -p /app && chown -R node:node /app
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
 
+VOLUME ["/app"]
 WORKDIR /app
 
-USER node
+RUN chown -R nodejs:nodejs /app
+USER nodejs
 
 RUN git config --global --add safe.directory /app
 
-VOLUME ["/app"]
 EXPOSE $PORT
-
-HEALTHCHECK NONE
 
 CMD npm run install-all && npm run copy-assets && npm run dev
