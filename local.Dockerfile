@@ -18,4 +18,6 @@ RUN git config --global --add safe.directory /app
 
 EXPOSE $PORT
 
+HEALTHCHECK NONE
+
 CMD npm run install-all && npm run copy-assets && npm run dev
