@@ -43,6 +43,8 @@ describe("Integration::enter password", () => {
   beforeAll(async () => {
     vi.resetModules();
 
+    process.env.PASSKEYS = "1";
+
     vi.spyOn(config, "passkeysEnabled").mockReturnValue(true);
 
     const sessionMiddleware =
@@ -115,6 +117,7 @@ describe("Integration::enter password", () => {
 
   afterAll(() => {
     vi.restoreAllMocks();
+    delete process.env.PASSKEYS;
     app = undefined;
   });
 
