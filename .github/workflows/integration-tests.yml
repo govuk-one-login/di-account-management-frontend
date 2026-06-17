@@ -93,9 +93,6 @@ jobs:
       - name: Run lint
         run: cd integration-tests && npm run lint
 
-      - name: Fix workspace permissions for Docker non-root user
-        run: sudo chown -R 1000:1000 $GITHUB_WORKSPACE
-
       - name: Run integration tests
         run: |
           cd integration-tests
