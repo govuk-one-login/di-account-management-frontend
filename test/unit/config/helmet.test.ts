@@ -29,6 +29,7 @@ describe("helmet config", () => {
         "imgSrc",
         "objectSrc",
         "scriptSrc",
+        "styleSrc",
       ]);
     });
 
@@ -103,9 +104,10 @@ describe("helmet config", () => {
       expect(directives?.formAction).toContain("https://*.account.gov.uk");
     });
 
-    it("should not have styleSrc directive", () => {
+    it("should have correct styleSrc directive", () => {
       const directives = helmetConfiguration.contentSecurityPolicy?.directives;
-      expect(directives?.styleSrc).toBeUndefined();
+      expect(directives?.styleSrc).toHaveLength(1);
+      expect(directives?.styleSrc).toContain("'self'");
     });
 
     it("should not have scriptSrcAttr directive", () => {
