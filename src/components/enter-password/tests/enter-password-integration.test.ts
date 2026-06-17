@@ -19,7 +19,7 @@ import {
 } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
-import { getBaseUrl, passkeysEnabled } from "../../../config.js";
+import * as config from "../../../config.js";
 
 describe("Integration::enter password", () => {
   let token: string | string[];
@@ -42,6 +42,9 @@ describe("Integration::enter password", () => {
 
   beforeAll(async () => {
     vi.resetModules();
+
+    vi.spyOn(config, "passkeysEnabled").mockReturnValue(true);
+
     const sessionMiddleware =
       await import("../../../middleware/requires-auth-middleware.js");
     vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
@@ -372,7 +375,7 @@ describe("Integration::enter password", () => {
     expect(res.headers.location).toBeDefined();
     expect(res.headers.location).toContain("/oidc/logout");
     expect(res.headers.location).toContain(
-      `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.LOGOUT_REDIRECT.url)}`
+      `post_logout_redirect_uri=${encodeURIComponent(config.getBaseUrl() + PATH_DATA.LOGOUT_REDIRECT.url)}`
     );
     await setTokenAndCookies();
     expect(res.headers.location).toContain(`state=blocked`);
@@ -400,7 +403,7 @@ describe("Integration::enter password", () => {
     expect(res.headers.location).toBeDefined();
     expect(res.headers.location).toContain("/oidc/logout");
     expect(res.headers.location).toContain(
-      `post_logout_redirect_uri=${encodeURIComponent(getBaseUrl() + PATH_DATA.LOGOUT_REDIRECT.url)}`
+      `post_logout_redirect_uri=${encodeURIComponent(config.getBaseUrl() + PATH_DATA.LOGOUT_REDIRECT.url)}`
     );
     await setTokenAndCookies();
     expect(res.headers.location).toContain(`state=suspended`);
