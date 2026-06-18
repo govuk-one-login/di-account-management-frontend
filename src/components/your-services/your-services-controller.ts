@@ -36,9 +36,7 @@ const deleteUserNotification = async (subjectId: string) => {
     const response = await dbService.deleteItem(commandParams);
     return response;
   } catch (err) {
-    logger.error(
-      `Failed to delete user notification for user with subject ID ${subjectId}: ${err}`
-    );
+    logger.error(`Failed to delete user notification with error: ${err}`);
     throw err;
   }
 };
