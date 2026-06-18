@@ -8,10 +8,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { configureNunjucks } from "./config/nunjucks.js";
 import { i18nextConfigurationOptions } from "./config/i18next.js";
-import {
-  helmetConfiguration,
-  webchatHelmetConfiguration,
-} from "./config/helmet.js";
+import { helmetConfiguration } from "./config/helmet.js";
 import { csrfSynchronisedProtection } from "./config/csrf.js";
 import helmet from "helmet";
 import session from "express-session";
@@ -23,7 +20,6 @@ import {
   getSessionExpiry,
   getSessionSecret,
   supportSearchableList,
-  supportWebchatContact,
   supportGlobalLogout,
   passkeysEnabled,
 } from "./config.js";
@@ -242,11 +238,7 @@ async function createApp(): Promise<express.Application> {
   app.use(i18nextMiddleware.handle(i18next));
   app.use(frontendUiMiddleware);
 
-  if (supportWebchatContact()) {
-    app.use(helmet(webchatHelmetConfiguration));
-  } else {
-    app.use(helmet(helmetConfiguration));
-  }
+  app.use(helmet(helmetConfiguration));
 
   app.use((req, res, next) => {
     const translate = req.t.bind(req);
