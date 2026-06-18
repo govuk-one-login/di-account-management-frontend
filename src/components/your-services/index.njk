@@ -31,9 +31,7 @@
 {% block pageContent %}
   {{ govukNotificationBanner({
     html: notificationBannerHtml,
-    type: "success",
-    role: "region",
-    disableAutoFocus: true
+    type: "success"
   }) if accountKeptNotification }}
 
   <h1 class="govuk-heading-xl landing-page__heading">{{ 'pages.yourServices.header' | translate }}</h1>
