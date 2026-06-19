@@ -190,6 +190,10 @@ export function getDynamoActivityLogStoreTableName(): string {
   return process.env.ACTIVITY_LOG_STORE_TABLE_NAME;
 }
 
+export function getUserNotificationsTableName(): string {
+  return process.env.USER_NOTIFICATIONS_TABLE_NAME;
+}
+
 export function getWebchatUrl(): string {
   return process.env.WEBCHAT_SOURCE_URL;
 }

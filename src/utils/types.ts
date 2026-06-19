@@ -1,4 +1,6 @@
 import {
+  DeleteItemCommand,
+  DeleteItemCommandOutput,
   GetItemCommand,
   QueryCommand,
   QueryCommandOutput,
@@ -86,6 +88,9 @@ export interface SqsService {
 export interface DynamoDBService {
   getItem: (getCommand: GetItemCommand) => Promise<GetCommandOutput>;
   queryItem: (queryCommand: QueryCommand) => Promise<QueryCommandOutput>;
+  deleteItem: (
+    deleteCommand: DeleteItemCommand
+  ) => Promise<DeleteItemCommandOutput>;
 }
 
 export interface AwsConfig {
@@ -133,3 +138,12 @@ export const allowedTxmaEvents: string[] = [
   "AUTH_AUTH_CODE_ISSUED",
   "AUTH_IPV_AUTHORISATION_REQUESTED",
 ];
+
+export interface UserNotification {
+  notificationType: string;
+  createdAt: string;
+}
+
+export interface AccountKeptNotification extends UserNotification {
+  notificationType: "AccountKept";
+}
