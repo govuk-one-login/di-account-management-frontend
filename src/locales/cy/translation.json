@@ -288,6 +288,12 @@
         "paragraph2": "Yn y dyfodol, byddwch yn gallu defnyddio GOV.UK One Login i gael mynediad i'r holl wasanaethau ar GOV.UK.",
         "paragraph3": "Gweler y <a class=\"govuk-link\" href=\"[serviceListLink]\">gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login</a>.",
         "link": "https://www.gov.uk/defnyddio-eich-gov-uk-one-login/gwasanaethau"
+      },
+      "accountKeptSuccess": {
+        "heading": "Rydych wedi mewngofnodi'n llwyddiannus i gadw eich GOV.UK One Login",
+        "paragraph1": "Ni fydd eich GOV.UK One Login yn cael ei ddileu mwyach.",
+        "paragraph2": "Os na fyddwch yn mewngofnodi am y 5 mlynedd nesaf, byddwn yn eich atgoffa eto.",
+        "paragraph3": "Gallwch fynd i Diogelwch i <a href='[manageLink]' class='govuk-link'>rheoli eich GOV.UK One Login</a>."
       }
     },
     "enterPassword": {
