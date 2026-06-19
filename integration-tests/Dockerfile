@@ -9,8 +9,13 @@ ENV AWS_PAGER=""
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 RUN npm ci && npm run install-browsers
 
 COPY . .
+
+HEALTHCHECK NONE
+
+USER node
 
 ENTRYPOINT [ "./run-tests.sh" ]
