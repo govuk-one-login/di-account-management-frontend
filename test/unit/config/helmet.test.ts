@@ -150,8 +150,10 @@ describe("helmet config", () => {
       expect(helmetConfiguration.referrerPolicy).toBe(false);
     });
 
-    it("should have permittedCrossDomainPolicies disabled", () => {
-      expect(helmetConfiguration.permittedCrossDomainPolicies).toBe(false);
+    it("should have permittedCrossDomainPolicies set to none", () => {
+      expect(helmetConfiguration.permittedCrossDomainPolicies).toStrictEqual({
+        permittedPolicies: "none",
+      });
     });
   });
 
@@ -364,10 +366,10 @@ describe("helmet config", () => {
       expect(webchatHelmetConfiguration.referrerPolicy).toBe(false);
     });
 
-    it("should have permittedCrossDomainPolicies disabled", () => {
-      expect(webchatHelmetConfiguration.permittedCrossDomainPolicies).toBe(
-        false
-      );
+    it("should have permittedCrossDomainPolicies set to none", () => {
+      expect(helmetConfiguration.permittedCrossDomainPolicies).toStrictEqual({
+        permittedPolicies: "none",
+      });
     });
   });
 });

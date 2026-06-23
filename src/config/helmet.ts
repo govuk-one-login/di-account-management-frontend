@@ -52,7 +52,9 @@ export const helmetConfiguration: HelmetOptions = {
     includeSubDomains: true,
   },
   referrerPolicy: false,
-  permittedCrossDomainPolicies: false,
+  permittedCrossDomainPolicies: {
+    permittedPolicies: "none",
+  },
 };
 
 const baseCspDirectives = (
