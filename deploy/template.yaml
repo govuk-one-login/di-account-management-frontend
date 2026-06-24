@@ -526,7 +526,7 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 60
+        Cooldown: 300
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
           - MetricIntervalLowerBound: -10 #20%
             MetricIntervalUpperBound: 0 #30%
@@ -567,16 +567,16 @@ Resources:
       ActionsEnabled: true
       AlarmActions:
         - !Ref ECSStepScaleInPolicy
-      AlarmDescription: "ECSClusterUnder40PercentCPU"
+      AlarmDescription: "ECSClusterUnder30PercentCPU"
       ComparisonOperator: "LessThanThreshold"
-      DatapointsToAlarm: "1"
+      DatapointsToAlarm: "5"
       Dimensions:
         - Name: ClusterName
           Value: !Ref ECSCluster
         - Name: ServiceName
           Value: !GetAtt ContainerService.Name
       Unit: "Percent"
-      EvaluationPeriods: "1"
+      EvaluationPeriods: "5"
       MetricName: "CPUUtilization"
       Namespace: "AWS/ECS"
       Statistic: "Average"
