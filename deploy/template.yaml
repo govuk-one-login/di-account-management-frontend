@@ -500,15 +500,16 @@ Resources:
       ServiceNamespace: ecs
       StepScalingPolicyConfiguration:
         AdjustmentType: PercentChangeInCapacity
-        Cooldown: 30
+        Cooldown: 60
+        MinAdjustmentMagnitude: 10
         StepAdjustments: # Bounds are calculated based on difference from alarm threshold
-          - MetricIntervalUpperBound: 10 #50%
-            ScalingAdjustment: 50
-          - MetricIntervalLowerBound: 10 #50%
-            MetricIntervalUpperBound: 30 #70%
-            ScalingAdjustment: 100
-          - MetricIntervalLowerBound: 30 #70%
-            ScalingAdjustment: 200
+          - MetricIntervalUpperBound: 10 #30-40% CPU
+            ScalingAdjustment: 300
+          - MetricIntervalLowerBound: 10 #40-60% CPU
+            MetricIntervalUpperBound: 30
+            ScalingAdjustment: 600
+          - MetricIntervalLowerBound: 30 #60%+ CPU
+            ScalingAdjustment: 1000
 
   ECSStepScaleInPolicy:
     DependsOn: ContainerAutoScalingTarget
@@ -543,8 +544,8 @@ Resources:
       ActionsEnabled: true
       AlarmActions:
         - !Ref ECSStepScaleOutPolicy
-      AlarmDescription: "ECSClusterOver40PercentCPU"
-      ComparisonOperator: "GreaterThanThreshold"
+      AlarmDescription: "ECSClusterOver30PercentCPU"
+      ComparisonOperator: "GreaterThanOrEqualToThreshold"
       DatapointsToAlarm: "1"
       Dimensions:
         - Name: ClusterName
@@ -557,7 +558,7 @@ Resources:
       Namespace: "AWS/ECS"
       Statistic: "Average"
       Period: "60"
-      Threshold: "40"
+      Threshold: "30"
 
   ECSStepScaleInAlarm:
     DependsOn: ContainerAutoScalingTarget
