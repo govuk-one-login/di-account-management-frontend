@@ -13,9 +13,8 @@ describe("applyOverloadProtection", () => {
       default: overloadProtectionStub,
     }));
 
-    const module = await import(
-      "../../../src/middleware/overload-protection-middleware.js"
-    );
+    const module =
+      await import("../../../src/middleware/overload-protection-middleware.js");
     applyOverloadProtection = module.applyOverloadProtection;
   });
 
@@ -43,7 +42,7 @@ function expectedOverloadProtectionConfig(isProduction: boolean) {
     production: isProduction,
     clientRetrySecs: 3,
     sampleInterval: 10,
-    maxEventLoopDelay: 500,
+    maxEventLoopDelay: 700,
     maxHeapUsedBytes: 0,
     maxRssBytes: 0,
     errorPropagationMode: false,
