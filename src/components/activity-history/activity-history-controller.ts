@@ -34,6 +34,7 @@ export async function activityHistoryGet(
   let pagination: any = {};
   let formattedActivityLog: FormattedActivityLog[] = [];
   let hasEnglishOnlyServices;
+  let changePasswordLink = `${PATH_DATA.ENTER_PASSWORD.url}?type=changePassword&from=activity-history`;
 
   try {
     if (user?.subjectId) {
@@ -65,6 +66,8 @@ export async function activityHistoryGet(
           pagination.currentPage,
           req.i18n?.language
         );
+
+        changePasswordLink += `&page=${pagination.currentPage}`;
       }
     } else {
       logger.error("Activity history controller: user_id missing from session");
@@ -81,9 +84,9 @@ export async function activityHistoryGet(
       data: formattedActivityLog,
       reportSuspiciousActivity: reportSuspiciousActivity(),
       env: env,
-      pagination: pagination,
+      pagination,
       backLink: PATH_DATA.SECURITY.url,
-      changePasswordLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changePassword`,
+      changePasswordLink,
       contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
       homeClientId: getOIDCClientId(),
       currentLngWelsh: req.i18n?.language === "cy",

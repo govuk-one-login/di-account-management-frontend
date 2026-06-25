@@ -72,7 +72,7 @@ describe("Activity history controller", () => {
           data: [],
           pagination: {},
           backLink: PATH_DATA.SECURITY.url,
-          changePasswordLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changePassword`,
+          changePasswordLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changePassword&from=activity-history`,
           contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
           homeClientId: "test-client-id",
           hasEnglishOnlyServices: false,
@@ -151,7 +151,7 @@ describe("Activity history controller", () => {
           ],
           pagination: {},
           backLink: PATH_DATA.SECURITY.url,
-          changePasswordLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changePassword`,
+          changePasswordLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changePassword&from=activity-history`,
           contactLink: EXTERNAL_URLS.AUTH_REPORTING_FORM,
           homeClientId: "test-client-id",
           hasEnglishOnlyServices: true,
@@ -249,6 +249,60 @@ describe("Activity history controller", () => {
         expect(res.render).toHaveBeenCalled();
         expect(res.render).toHaveBeenCalledWith("common/errors/500.njk");
       });
+    });
+
+    it("should render with correct change password link if paginated", async () => {
+      const mockActivities = Array.from({ length: 35 }, (_, index) => ({
+        event_type: "AUTH_AUTH_CODE_ISSUED",
+        session_id: "asdf",
+        user_id: "string",
+        timestamp: 1689210000 + index,
+        truncated: false,
+        client_id: "apprenticeshipsService",
+        event_id: `test-event-id-${index}`,
+      }));
+
+      vi.spyOn(
+        presentActivityHistoryModule,
+        "presentActivityHistory"
+      ).mockResolvedValue(mockActivities);
+
+      const clientId = "clientId";
+      vi.spyOn(
+        { getOIDCClientId: () => "" } as any,
+        "getOIDCClientId"
+      ).mockImplementation(() => clientId);
+
+      const req: any = {
+        app: {
+          locals: {
+            sessionStore: { destroy: vi.fn() },
+            subjectSessionIndexService: {
+              removeSession: vi.fn(),
+              getSessions: vi
+                .fn()
+                .mockResolvedValue(["session-1", "session-2"]),
+            },
+          },
+        },
+        body: {},
+        query: { page: "3" },
+        session: {
+          user: { subjectId: TEST_SUBJECT_ID },
+          destroy: vi.fn(),
+        },
+        log: { error: vi.fn(), info: vi.fn() },
+        t: (k: string) => k,
+      };
+
+      await activityHistoryGet(req as Request, res as Response);
+
+      expect(res.render).toHaveBeenCalledWith(
+        "activity-history/index.njk",
+        expect.objectContaining({
+          changePasswordLink: `${PATH_DATA.ENTER_PASSWORD.url}?type=changePassword&from=activity-history&page=3`,
+        })
+      );
     });
   });
 });

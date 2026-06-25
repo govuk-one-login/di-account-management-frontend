@@ -4,7 +4,7 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.activityHistory.title' | translate %}
 {% set rowContainerId = 'activity-history' %}
-{% set backLinkJS = true %}
+{% set backLinkText = 'pages.activityHistory.backLinkText' | translate %}
 {% set paginationItems = [] %}
 {% if pagination.items and pagination.currentPage %}
   {% set pageTitleName = [pageTitleName, " - ", 'pages.activityHistory.page' | translate | replace("[pageNumber]", pagination.currentPage)] | join %}
@@ -24,14 +24,15 @@
 
 {% block pageContent %}
   <h1 class="govuk-heading-l">{{ 'pages.activityHistory.header' | translate }}</h1>
-  {% if data.length %} 
+  {% if data.length %}
     <p class="govuk-body">{{ 'pages.activityHistory.explanation' | translate }}</p>
     {% if hasEnglishOnlyServices and currentLngWelsh %}<p class="govuk-body" data-test-id="no-welsh-notice">{{ 'pages.activityHistory.noWelshNotice' | translate }}</p>{% endif %}
 
     {%- if not reportSuspiciousActivity -%}
-      {{ govukDetails({ 
-        summaryText: 'pages.activityHistory.securityNoticeTitle' | translate, 
-        html: securityNoticeHtml
+      {{ govukDetails({
+        summaryText: 'pages.activityHistory.securityNoticeTitle' | translate,
+        html: securityNoticeHtml,
+        attributes: { "data-test-id": "activity-history-dropdown"}
       }) }}
     {% else %}
     <p class="govuk-body">{{ 'pages.activityHistory.notice' | translate | safe | replace("[changePassword]", changePasswordLink) }}</p>
@@ -46,7 +47,7 @@
   {% if data.length %}
     <ul class="activity-history__list">
       {%- for event in data -%}
-        <li class="activity-history__list-item">
+        <li class="activity-history__list-item" data-test-id="activity-history-list-item">
           {% include "common/activity-history/event.njk" %}
           {% if reportSuspiciousActivity %}
               {# if the activity has already been reported, display "Activity reported on [time]" link #}

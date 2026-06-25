@@ -38,10 +38,12 @@ describe("change password controller", () => {
       .withBody({})
       .withSessionUserState({ changePassword: {} })
       .withTranslate(vi.fn())
+      .withQuery(vi.fn())
       .withHeaders({
         "txma-audit-encoded": TXMA_AUDIT_ENCODED,
       })
       .build();
+    req.url = "https://test.com/change-password";
 
     res = new ResponseBuilder()
       .withRender(vi.fn())
@@ -66,7 +68,42 @@ describe("change password controller", () => {
     it("should render change password page", () => {
       changePasswordGet(req as Request, res as Response);
 
-      expect(res.render).toHaveBeenCalledWith("change-password/index.njk");
+      expect(res.render).toHaveBeenCalledWith("change-password/index.njk", {
+        formAction: "https://test.com/change-password",
+      });
+    });
+
+    it("should render change password with relevant locals when 'from' is 'activity-history'", () => {
+      req.url = "https://test.com/change-password?from=activity-history";
+      req.query = { ...req.query, from: "activity-history" };
+
+      changePasswordGet(req as Request, res as Response);
+
+      expect(res.render).toHaveBeenCalledWith("change-password/index.njk", {
+        from: "activity-history",
+        formAction: "https://test.com/change-password?from=activity-history",
+        fromDetails: {
+          translationKey: "general.cancelAndGoBackText",
+          url: "/activity-history",
+        },
+      });
+    });
+
+    it("should render change password with relevant locals when 'from' is 'activity-history' and 'page' is a number", () => {
+      req.url = "https://test.com/change-password?from=activity-history&page=5";
+      req.query = { ...req.query, from: "activity-history", page: "5" };
+      changePasswordGet(req as Request, res as Response);
+
+      expect(res.render).toHaveBeenCalledWith("change-password/index.njk", {
+        from: "activity-history",
+        formAction:
+          "https://test.com/change-password?from=activity-history&page=5",
+        fromDetails: {
+          translationKey: "general.cancelAndGoBackText",
+          url: "/activity-history?page=5",
+        },
+        page: 5,
+      });
     });
   });
 
