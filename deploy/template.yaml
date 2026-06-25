@@ -139,7 +139,7 @@ Mappings:
     build:
       CPU: 1024
       Memory: 2048
-      MinCapacity: 3
+      MinCapacity: 6
       MaxCapacity: 40
     staging:
       CPU: 1024
