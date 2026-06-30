@@ -1,8 +1,9 @@
 {
-  "$schema": "https://raw.githubusercontent.com/govuk-one-login/quality-gates/refs/tags/v0.11.0/schemas/schema.json",
+  "$schema": "https://raw.githubusercontent.com/govuk-one-login/quality-gates/refs/tags/v0.13.0/schemas/schema.json",
   "services": [
     {
-      "serviceTag": "home",
+      "product": "One-Login-Home",
+      "component": "di-account-management-frontend",
       "promotionType": "securePipelines",
       "checks": [
         {
