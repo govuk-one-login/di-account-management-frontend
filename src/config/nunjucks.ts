@@ -5,6 +5,7 @@ import i18next, { TFunction } from "i18next";
 import { EXTERNAL_URLS, LOCALE, PATH_DATA } from "../app.constants.js";
 import { addLanguageParam } from "@govuk-one-login/frontend-ui";
 import { safeTranslate } from "../utils/safeTranslate.js";
+import { isLocalEnv } from "../config.js";
 
 export function configureNunjucks(
   app: express.Application,
@@ -13,7 +14,7 @@ export function configureNunjucks(
   const nunjucksEnv: nunjucks.Environment = nunjucks.configure(viewsPath, {
     autoescape: true,
     express: app,
-    noCache: true,
+    noCache: isLocalEnv(),
   });
 
   nunjucksEnv.addFilter(
