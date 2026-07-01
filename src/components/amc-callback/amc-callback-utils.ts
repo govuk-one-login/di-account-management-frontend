@@ -41,7 +41,8 @@ interface JourneyOutcome {
   success: boolean;
   actions: {
     action: string;
-    timestamp: number;
+    startedAt: number;
+    completedAt: number;
     success: boolean;
     details: {
       aaguid?: string;
