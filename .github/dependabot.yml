@@ -173,3 +173,8 @@ updates:
     labels:
       - dependabot
       - dependencies
+    groups:
+      pip-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
