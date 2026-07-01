@@ -44,7 +44,7 @@ describe("authMiddleware", () => {
     expect(next).toHaveBeenCalledOnce();
   });
 
-  it("thows an OIDC discovery unavailable error metric", async () => {
+  it("records an OIDC discovery unavailable metric and passes the error on", async () => {
     const errorMessage = "OIDCDiscoveryUnavailable";
     vi.restoreAllMocks();
     vi.spyOn(oidcUtils, "getOIDCClient").mockRejectedValue(
@@ -61,5 +61,7 @@ describe("authMiddleware", () => {
       expect.any(String),
       1
     );
+    expect(next).toHaveBeenCalledOnce();
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
   });
 });
