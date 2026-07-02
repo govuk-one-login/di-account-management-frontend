@@ -97,7 +97,7 @@
       "cancelButton": "Cancel and go back"
     },
     "removePasskeyConfirmation": {
-      "title": "You’ve removed your paskey",
+      "title": "You’ve removed your passkey",
       "panelText": "You’ve removed your passkey",
       "summaryText": "Next time you sign in, you can use another passkey.",
       "summaryTextNoPasskeys": "Next time you sign in, you’ll need to enter your password and a security code."
