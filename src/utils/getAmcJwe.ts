@@ -54,6 +54,11 @@ export const getAmcJwe = async (
   const jwksUrl = new URL(getAmcJwksUrl());
   const jwksResponse = await fetch(jwksUrl);
   const jwks = await jwksResponse.json();
+
+  if (!jwks || !Array.isArray(jwks.keys)) {
+    throw new Error(`Invalid JWKS: ${JSON.stringify(jwks)}`);
+  }
+
   const encryptionJWK = jwks.keys.find((key: any) => key.use === "enc");
   const publicKey = await jose.importJWK(encryptionJWK, encryptionJWK.alg);
 

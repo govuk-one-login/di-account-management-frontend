@@ -7,20 +7,16 @@ Feature: Change phone number
         And I go to the "Sign in details" page
         Then the page title is prefixed with "Sign in details"
         Given I click the "Change phone number" link
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your password"
         Given I enter and submit my password "f4kePa55wo2d?!"
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your new UK mobile phone number"
         Given I enter and submit my new mobile phone number "07890123456"
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Check your phone"
         And I am shown a message confirming a code has been sent to my new phone number ending "3456"
         Given I enter and submit the code "123456" sent to my new mobile number ending "3456"
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "You’ve changed your phone number"
         And I am shown a message confirming that my phone number has been changed
@@ -33,15 +29,12 @@ Feature: Change phone number
         And I go to the "Sign in details" page
         Then the page title is prefixed with "Sign in details"
         Given I click the "Change phone number" link
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your password"
         Given I enter and submit my password "f4kePa55wo2d?!"
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your new UK mobile phone number"
         Given I enter and submit my new mobile phone number "33645453322"
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Error - Enter your new UK mobile phone number"
         And I am shown an error message saying "There is a problem"
@@ -54,15 +47,12 @@ Feature: Change phone number
         And I go to the "Sign in details" page
         Then the page title is prefixed with "Sign in details"
         Given I click the "Change phone number" link
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your password"
         Given I enter and submit my password "f4kePa55wo2d?!"
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your new UK mobile phone number"
         Given I click the "I do not have a UK mobile phone number" link
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "If you do not have a UK mobile phone number"
         And I am shown a message explaining what I can do
@@ -76,15 +66,12 @@ Feature: Change phone number
         And I go to the "Sign in details" page
         Then the page title is prefixed with "Sign in details"
         Given I click the "Change phone number" link
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your password"
         Given I enter and submit my password "f4kePa55wo2d?!"
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your new UK mobile phone number"
         Given I click the "I do not have a UK mobile phone number" link
-        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "If you do not have a UK mobile phone number"
         And I am shown a message explaining what I can do
