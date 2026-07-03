@@ -200,10 +200,10 @@ export async function handleJourneyOutcomeResponse(
 
   const isPasskeyCreateJourney = scope === Scope.passkeyCreate;
 
-  const userAbortedJourney = actions.find(
+  const userAbortedJourney = actions.some(
     (item) => item.details.error?.code === 1002
   );
-  const userSignedOut = actions.find(
+  const userSignedOut = actions.some(
     (item) => item.details.error?.code === 1001
   );
   const accountHasInterventions = actions.find(
@@ -264,25 +264,13 @@ export async function handleJourneyOutcomeResponse(
     );
     await handleLogout(req, res, LogoutState.AmcSignedOut);
   } else if (!success && accountHasInterventions) {
-    const blockedOrSuspended = accountHasInterventions.details
-      .accountInterventionsStatus?.state.blocked
-      ? "blocked"
-      : "suspended";
-    actionCompletedAuditEventParams.account_action_overall_success = false;
-    actionCompletedAuditEventParams.account_action_error = `Account has interventions - ${blockedOrSuspended}`;
-    sendJourneyOutcomeEvents(
+    await handleInterventionOutcome(
       req,
       res,
       auditEventsService,
       actionCompletedAuditEventParams,
-      homeAmcAuthorisationReceivedEventParams
-    );
-    await handleLogout(
-      req,
-      res,
-      blockedOrSuspended === "blocked"
-        ? LogoutState.Blocked
-        : LogoutState.Suspended
+      homeAmcAuthorisationReceivedEventParams,
+      accountHasInterventions
     );
   } else if (!success && userAbortedJourney) {
     actionCompletedAuditEventParams.account_action_overall_success = false;
@@ -315,6 +303,33 @@ export async function handleJourneyOutcomeResponse(
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
     res.render("common/errors/500.njk");
   }
+}
+
+async function handleInterventionOutcome(
+  req: Request,
+  res: Response,
+  service: EventServiceInterface,
+  actionCompletedParams: Extensions,
+  amcAuthReceivedParams: Extensions,
+  interventionAction: JourneyOutcome["actions"][number]
+): Promise<void> {
+  const blocked =
+    interventionAction.details.accountInterventionsStatus?.state.blocked;
+  const blockedOrSuspended = blocked ? "blocked" : "suspended";
+  actionCompletedParams.account_action_overall_success = false;
+  actionCompletedParams.account_action_error = `Account has interventions - ${blockedOrSuspended}`;
+  sendJourneyOutcomeEvents(
+    req,
+    res,
+    service,
+    actionCompletedParams,
+    amcAuthReceivedParams
+  );
+  await handleLogout(
+    req,
+    res,
+    blocked ? LogoutState.Blocked : LogoutState.Suspended
+  );
 }
 
 function sendJourneyOutcomeEvents(
