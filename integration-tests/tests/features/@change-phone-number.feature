@@ -35,6 +35,7 @@ Feature: Change phone number
         Then the page meets our accessibility standards
         And the page title is prefixed with "Enter your new UK mobile phone number"
         Given I enter and submit my new mobile phone number "33645453322"
+        And the page has finished loading
         Then the page meets our accessibility standards
         And the page title is prefixed with "Error - Enter your new UK mobile phone number"
         And I am shown an error message saying "There is a problem"

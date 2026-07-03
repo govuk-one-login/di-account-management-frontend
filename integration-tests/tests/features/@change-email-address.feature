@@ -28,5 +28,6 @@ Feature: Change email address
     Then I enter and submit my password "Pa55w0rd!"
     Then I enter and submit my new email address "fail.email.check@test.com"
     Then I enter and submit the code "123456" sent to my new email address "fail.email.check@test.com"
+    And the page has finished loading
     Then I am shown an error message explaining that this email address can't be used
     And the page looks as expected
