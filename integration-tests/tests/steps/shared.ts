@@ -68,8 +68,8 @@ Given(
 
 Then(
   "the page title is prefixed with {string}",
-  async ({ page }, pageTitle: string) => {
-    await expect(page).toHaveTitle(`${pageTitle} - GOV.UK One Login`);
+  async ({ page }, pageTitlePrefix: string) => {
+    await expect(page).toHaveTitle(`${pageTitlePrefix} - GOV.UK One Login`);
   }
 );
 

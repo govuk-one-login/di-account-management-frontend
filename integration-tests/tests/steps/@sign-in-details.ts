@@ -4,7 +4,7 @@ import { bdd } from "./fixtures";
 const { Then } = bdd;
 
 Then("the option to create a passkey is hidden", async ({ page }) => {
-  await expect(page.getByTestId("create-passkey-box")).not.toBeVisible();
+  await expect(page.getByTestId("create-passkey-box")).toBeHidden();
 });
 
 Then(
