@@ -3,7 +3,6 @@ Feature: "Services you can use with GOV.UK One Login" page
   @failMobile @failTarget-integration @failTarget-production
   Scenario: Visit the "Services you can use with GOV.UK One Login" page
     Given I go to the "Services you can use with GOV.UK One Login" page
-    And the page has finished loading
     And I accept cookies
     Then the page title is prefixed with "Services you can use with GOV.UK One Login"
     And the page meets our accessibility standards
