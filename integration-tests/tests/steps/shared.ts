@@ -68,13 +68,13 @@ Given(
 
 Then(
   "the page title is prefixed with {string}",
-  async ({ page }, pageTitle: string) => {
-    expect(await page.title()).toBe(`${pageTitle} - GOV.UK One Login`);
+  async ({ page }, pageTitlePrefix: string) => {
+    await expect(page).toHaveTitle(`${pageTitlePrefix} - GOV.UK One Login`);
   }
 );
 
 Then("the page title is {string}", async ({ page }, pageTitle: string) => {
-  expect(await page.title()).toBe(pageTitle);
+  await expect(page).toHaveTitle(pageTitle);
 });
 
 Then("I am on the sign in page", async ({ page }) => {
