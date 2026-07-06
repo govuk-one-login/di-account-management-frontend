@@ -8,10 +8,10 @@ jobs:
   checkov:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # pragma: allowlist secret
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # pragma: allowlist secret
 
       - name: Checkov GitHub Action
-        uses: bridgecrewio/checkov-action@dfb51aed1b783289b0d3f255028e7a88d5e8caa1 # pragma: allowlist secret
+        uses: bridgecrewio/checkov-action@fa9edf8f0a491c59a924ea6accd5bdcf07752cff # pragma: allowlist secret
         with:
           directory: deploy
           output_format: cli
