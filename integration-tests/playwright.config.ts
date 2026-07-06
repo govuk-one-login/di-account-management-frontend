@@ -12,7 +12,7 @@ const testDir = defineBddConfig({
 export default defineConfig({
   testDir,
   forbidOnly: !env.HUMAN_IN_THE_LOOP,
-  workers: "50%",
+  workers: env.PRE_OR_POST_DEPLOY === "pre" ? 1 : "50%",
   snapshotPathTemplate: `./${env.UPDATE_SNAPSHOTS ? "snapshots-updated" : "snapshots"}/{projectName}/{testFilePath}/{arg}{ext}`,
   reporter: env.TEST_REPORT_DIR
     ? [
