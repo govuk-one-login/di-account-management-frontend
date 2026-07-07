@@ -7,19 +7,15 @@ Feature: Change email address
     And I go to the "Sign in details" page
     Then the page title is prefixed with "Sign in details"
     Given I click the "Change email address" link
-    And the page has finished loading
     Then the page meets our accessibility standards
     And the page title is prefixed with "Enter your password"
     Given I enter and submit my password "Pa55w0rd!"
-    And the page has finished loading
     Then the page meets our accessibility standards
     And the page title is prefixed with "Enter your new email address"
     Given I enter and submit my new email address "new.email.address@test.com"
-    And the page has finished loading
     Then the page meets our accessibility standards
     And the page title is prefixed with "Check your email"
     Given I enter and submit the code "123456" sent to my new email address "new.email.address@test.com"
-    And the page has finished loading
     Then the page meets our accessibility standards
     And the page title is prefixed with "You’ve changed your email address"
     And I am shown a message confirming that my email address has been changed to "new.email.address@test.com"
