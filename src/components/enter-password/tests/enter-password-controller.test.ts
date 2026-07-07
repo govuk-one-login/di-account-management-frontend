@@ -16,8 +16,10 @@ import * as logout from "../../../utils/logout.js";
 import { UserJourney } from "../../../utils/state-machine.js";
 import * as oidcModule from "../../../utils/oidc.js";
 import { eventService } from "../../../services/event-service.js";
+import { createMfaClient, MfaClient } from "../../../utils/mfaClient/index.js";
 
 vi.mock("../../../services/event-service.js");
+vi.mock("../../../utils/mfaClient/index.js");
 
 describe("enter password controller", () => {
   let req: Partial<Request>;
@@ -112,7 +114,9 @@ describe("enter password controller", () => {
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
-        "AUTH_MFA_METHOD_ADD_STARTED"
+        "AUTH_MFA_METHOD_ADD_STARTED",
+        undefined,
+        undefined
       );
       expect(mockEventService.send).toHaveBeenCalledTimes(1);
       expect(res.render).toHaveBeenCalledWith(
@@ -144,7 +148,9 @@ describe("enter password controller", () => {
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
-        "AUTH_MFA_METHOD_SWITCH_STARTED"
+        "AUTH_MFA_METHOD_SWITCH_STARTED",
+        undefined,
+        undefined
       );
       expect(mockEventService.send).toHaveBeenCalledTimes(1);
       expect(res.render).toHaveBeenCalledWith(
@@ -176,7 +182,9 @@ describe("enter password controller", () => {
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
         req,
         res,
-        "AUTH_MFA_METHOD_DELETE_STARTED"
+        "AUTH_MFA_METHOD_DELETE_STARTED",
+        undefined,
+        undefined
       );
       expect(mockEventService.send).toHaveBeenCalledTimes(1);
       expect(res.render).toHaveBeenCalledWith(
@@ -239,6 +247,11 @@ describe("enter password controller", () => {
     it("should send HOME_ACTION_STARTED audit event for RemovePasskey journey", async () => {
       req.query.type = UserJourney.RemovePasskey;
 
+      const mfaClient: Partial<MfaClient> = {
+        getPasskeys: vi.fn().mockResolvedValue({ data: { passkeys: [] } }),
+      };
+      vi.mocked(createMfaClient).mockResolvedValue(mfaClient as MfaClient);
+
       await enterPasswordGet(req as Request, res as Response);
 
       expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
@@ -256,6 +269,32 @@ describe("enter password controller", () => {
         expect.objectContaining({
           requestType: "removePasskey",
         })
+      );
+    });
+
+    it("should send HOME_PASSKEY_DELETE_REQUESTED audit event for RemovePasskey journey", async () => {
+      req.query = { type: UserJourney.RemovePasskey, id: "cred-abc" };
+
+      const matchingPasskey = { id: "passkey-id-1", credential: "cred-abc" };
+      const mfaClient: Partial<MfaClient> = {
+        getPasskeys: vi.fn().mockResolvedValue({
+          data: { passkeys: [matchingPasskey] },
+        }),
+      };
+      vi.mocked(createMfaClient).mockResolvedValue(mfaClient as MfaClient);
+
+      await enterPasswordGet(req as Request, res as Response);
+
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_PASSKEY_DELETE_REQUESTED,
+        undefined,
+        { passkey: { passkey_credential_id: "passkey-id-1" } }
+      );
+      expect(mockEventService.send).toHaveBeenCalledWith(
+        { event: "test-event" },
+        "test-trace"
       );
     });
 

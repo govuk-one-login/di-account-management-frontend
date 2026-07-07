@@ -5,6 +5,7 @@ import {
   Event,
   CurrentTimeDescriptor,
   Extensions,
+  Restricted,
 } from "./types.js";
 import { SqsService } from "../utils/types.js";
 import { sqsService } from "../utils/sqs.js";
@@ -112,13 +113,19 @@ export function eventService(
     req: Request,
     res: Response,
     eventName: EventName,
-    extensions?: Extensions
+    extensions?: Extensions,
+    restricted?: Restricted
   ): AuditEvent => {
     const baseEvent = buildBaseAuditEvent(req, res, eventName);
 
     baseEvent.extensions = {
       ...baseEvent.extensions,
       ...extensions,
+    };
+
+    baseEvent.restricted = {
+      ...baseEvent.restricted,
+      ...restricted,
     };
 
     const { session } = req;
@@ -221,6 +228,7 @@ export function eventService(
       case EventName.HOME_AMC_AUTHORISATION_REQUESTED:
       case EventName.HOME_AMC_AUTHORISATION_RECEIVED:
       case EventName.HOME_AMC_AUTHORISATION_ERROR_RECEIVED:
+      case EventName.HOME_PASSKEY_DELETE_REQUESTED:
         baseEvent.extensions = {
           ...baseEvent.extensions,
           "journey-type": "ACCOUNT_MANAGEMENT",
