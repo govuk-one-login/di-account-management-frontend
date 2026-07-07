@@ -382,6 +382,68 @@ describe("AMC call back util tests", () => {
       );
     });
 
+    it("should call handleLogout with Blocked state when account has blocked intervention", async () => {
+      const outcome = {
+        success: false,
+        scope: "passkey-create",
+        actions: [
+          {
+            action: "passkey-create",
+            success: false,
+            details: {
+              error: { description: "AccountHasInterventions", code: 1004 },
+              accountInterventionsStatus: { state: { blocked: true, suspended: false } },
+            },
+          },
+        ],
+      };
+
+      await handleJourneyOutcomeResponse(req, res, outcome as any);
+
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_ACTION_COMPLETED,
+        {
+          account_action: JourneyAction.PASSKEY_CREATE,
+          account_action_overall_success: false,
+          account_action_error: "Account has interventions - blocked",
+        }
+      );
+      expect(handleLogout).toHaveBeenCalledWith(req, res, LogoutState.Blocked);
+    });
+
+    it("should call handleLogout with Suspended state when account has suspended intervention", async () => {
+      const outcome = {
+        success: false,
+        scope: "passkey-create",
+        actions: [
+          {
+            action: "passkey-create",
+            success: false,
+            details: {
+              error: { description: "AccountHasInterventions", code: 1004 },
+              accountInterventionsStatus: { state: { blocked: false, suspended: true } },
+            },
+          },
+        ],
+      };
+
+      await handleJourneyOutcomeResponse(req, res, outcome as any);
+
+      expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
+        req,
+        res,
+        EventName.HOME_ACTION_COMPLETED,
+        {
+          account_action: JourneyAction.PASSKEY_CREATE,
+          account_action_overall_success: false,
+          account_action_error: "Account has interventions - suspended",
+        }
+      );
+      expect(handleLogout).toHaveBeenCalledWith(req, res, LogoutState.Suspended);
+    });
+
     it("should redirect when passkey creation aborted and send failure audit event", async () => {
       const outcome = {
         success: false,
