@@ -150,11 +150,6 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   color: govuk-colour("white");
   @include govuk-link-style-inverse;
 
-  &:focus {
-    outline: none;
-    @include govuk-focused-text;
-  }
-
   &:not(:hover) {
     text-decoration: none;
   }
@@ -166,6 +161,11 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
     @if $govuk-link-underline-offset {
       text-underline-offset: $govuk-link-underline-offset;
     }
+  }
+
+  &:focus {
+    outline: none;
+    @include govuk-focused-text;
   }
 }
 
