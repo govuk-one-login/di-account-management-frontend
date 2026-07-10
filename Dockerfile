@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN apk add --no-cache git && npm run install-all && npm run build && npm run clean-modules && npm ci --production=true
+RUN apk add --no-cache git && npm run install-all && npm run build && npm run clean-modules && npm ci --production=true && npm run build-rp-registry
 
 # Despite what SonarQube says both the tag and sha digest are needed:
 # the digest pins the exact image for reproducibility,
