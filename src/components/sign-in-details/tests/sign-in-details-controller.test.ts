@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Request, Response } from "express";
-import { RequestBuilder, ResponseBuilder } from "../../../../test/utils/builders.js";
+import {
+  RequestBuilder,
+  ResponseBuilder,
+} from "../../../../test/utils/builders.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { UserJourney } from "../../../utils/state-machine.js";
 import { PATH_DATA } from "../../../app.constants.js";
@@ -48,16 +51,16 @@ describe("signInDetailsGet Controller", () => {
     req.metrics = mockMetrics;
     req.t = mockT;
 
-    res = new ResponseBuilder()
-      .withRender(mockRender)
-      .build();
+    res = new ResponseBuilder().withRender(mockRender).build();
   });
 
   it("should add metrics when called", async () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
+        getPasskeys: vi
+          .fn()
+          .mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -70,8 +73,9 @@ describe("signInDetailsGet Controller", () => {
       canChangePrimaryMethod: vi.fn().mockReturnValue(false),
     }));
 
-    const { signInDetailsGet } = await import("../sign-in-details-controller.js");
-    
+    const { signInDetailsGet } =
+      await import("../sign-in-details-controller.js");
+
     await signInDetailsGet(req as Request, res as Response);
 
     expect(mockMetrics.addMetric).toHaveBeenCalledWith(
@@ -85,7 +89,9 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
+        getPasskeys: vi
+          .fn()
+          .mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -98,8 +104,9 @@ describe("signInDetailsGet Controller", () => {
       canChangePrimaryMethod: vi.fn().mockReturnValue(false),
     }));
 
-    const { signInDetailsGet } = await import("../sign-in-details-controller.js");
-    
+    const { signInDetailsGet } =
+      await import("../sign-in-details-controller.js");
+
     await signInDetailsGet(req as Request, res as Response);
 
     expect(mockRender).toHaveBeenCalledWith(
@@ -119,7 +126,9 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
+        getPasskeys: vi
+          .fn()
+          .mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -132,24 +141,26 @@ describe("signInDetailsGet Controller", () => {
       canChangePrimaryMethod: vi.fn().mockReturnValue(false),
     }));
 
-    const { signInDetailsGet } = await import("../sign-in-details-controller.js");
-    
+    const { signInDetailsGet } =
+      await import("../sign-in-details-controller.js");
+
     await signInDetailsGet(req as Request, res as Response);
 
-    const baseUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=sign-in-details&edit=true`;
-    
+    const baseUrlForNavigationEvent = `${PATH_DATA.ENTER_PASSWORD.url}?from=sign-in-details`;
+    const baseUrlForFormChangeResponseEvent = `${baseUrlForNavigationEvent}&edit=true`;
+
     expect(mockRender).toHaveBeenCalledWith(
       "sign-in-details/index.njk",
       expect.objectContaining({
         enterPasswordUrls: expect.objectContaining({
-          changeEmail: `${baseUrl}&type=${UserJourney.ChangeEmail}`,
-          createPasskey: `${baseUrl}&type=${UserJourney.CreatePasskey}`,
-          removePasskey: `${baseUrl}&type=${UserJourney.RemovePasskey}`,
-          changePassword: `${baseUrl}&type=${UserJourney.ChangePassword}`,
-          changeDefaultMethod: `${baseUrl}&type=${UserJourney.ChangeDefaultMethod}`,
-          switchBackupMethod: `${baseUrl}&type=${UserJourney.SwitchBackupMethod}`,
-          removeBackupMethod: `${baseUrl}&type=${UserJourney.RemoveBackup}`,
-          addBackupMethod: `${baseUrl}&type=${UserJourney.addBackup}`,
+          changeEmail: `${baseUrlForFormChangeResponseEvent}&type=${UserJourney.ChangeEmail}`,
+          createPasskey: `${baseUrlForNavigationEvent}&type=${UserJourney.CreatePasskey}`,
+          removePasskey: `${baseUrlForNavigationEvent}&type=${UserJourney.RemovePasskey}`,
+          changePassword: `${baseUrlForFormChangeResponseEvent}&type=${UserJourney.ChangePassword}`,
+          changeDefaultMethod: `${baseUrlForFormChangeResponseEvent}&type=${UserJourney.ChangeDefaultMethod}`,
+          switchBackupMethod: `${baseUrlForNavigationEvent}&type=${UserJourney.SwitchBackupMethod}`,
+          removeBackupMethod: `${baseUrlForNavigationEvent}&type=${UserJourney.RemoveBackup}`,
+          addBackupMethod: `${baseUrlForNavigationEvent}&type=${UserJourney.addBackup}`,
         }),
       })
     );
@@ -161,7 +172,9 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
+        getPasskeys: vi
+          .fn()
+          .mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -174,8 +187,9 @@ describe("signInDetailsGet Controller", () => {
       canChangePrimaryMethod: vi.fn().mockReturnValue(false),
     }));
 
-    const { signInDetailsGet } = await import("../sign-in-details-controller.js");
-    
+    const { signInDetailsGet } =
+      await import("../sign-in-details-controller.js");
+
     await signInDetailsGet(req as Request, res as Response);
 
     // Should not throw error and continue execution
@@ -189,7 +203,9 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
+        getPasskeys: vi
+          .fn()
+          .mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -202,8 +218,9 @@ describe("signInDetailsGet Controller", () => {
       canChangePrimaryMethod: vi.fn().mockReturnValue(false),
     }));
 
-    const { signInDetailsGet } = await import("../sign-in-details-controller.js");
-    
+    const { signInDetailsGet } =
+      await import("../sign-in-details-controller.js");
+
     await signInDetailsGet(req as Request, res as Response);
 
     expect(mockRender).toHaveBeenCalledWith(
@@ -220,7 +237,9 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
+        getPasskeys: vi
+          .fn()
+          .mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -233,8 +252,9 @@ describe("signInDetailsGet Controller", () => {
       canChangePrimaryMethod: vi.fn().mockReturnValue(false),
     }));
 
-    const { signInDetailsGet } = await import("../sign-in-details-controller.js");
-    
+    const { signInDetailsGet } =
+      await import("../sign-in-details-controller.js");
+
     await signInDetailsGet(req as Request, res as Response);
 
     expect(mockRender).toHaveBeenCalledWith(
@@ -250,7 +270,9 @@ describe("signInDetailsGet Controller", () => {
     // Mock the dependencies
     vi.doMock("../../../utils/mfaClient/index.js", () => ({
       createMfaClient: vi.fn().mockResolvedValue({
-        getPasskeys: vi.fn().mockResolvedValue({ success: true, data: { passkeys: [] } }),
+        getPasskeys: vi
+          .fn()
+          .mockResolvedValue({ success: true, data: { passkeys: [] } }),
       }),
     }));
 
@@ -263,8 +285,9 @@ describe("signInDetailsGet Controller", () => {
       canChangePrimaryMethod: vi.fn().mockReturnValue(false),
     }));
 
-    const { signInDetailsGet } = await import("../sign-in-details-controller.js");
-    
+    const { signInDetailsGet } =
+      await import("../sign-in-details-controller.js");
+
     await signInDetailsGet(req as Request, res as Response);
 
     expect(mockRender).toHaveBeenCalledWith(

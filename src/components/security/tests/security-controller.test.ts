@@ -47,7 +47,9 @@ describe("security controller", () => {
         email: "test@test.com",
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
-        enterPasswordUrl: "/enter-password?from=security&edit=true",
+        enterPasswordUrlForNavigationEvent: "/enter-password?from=security",
+        enterPasswordUrlForFormChangeResponseEvent:
+          "/enter-password?from=security&edit=true",
         mfaMethods: [
           {
             text: "pages.security.mfaSection.defaultMethod.phoneNumber.title",
@@ -118,7 +120,9 @@ describe("security controller", () => {
         email: "test@test.com",
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
-        enterPasswordUrl: "/enter-password?from=security&edit=true",
+        enterPasswordUrlForNavigationEvent: "/enter-password?from=security",
+        enterPasswordUrlForFormChangeResponseEvent:
+          "/enter-password?from=security&edit=true",
         mfaMethods: [],
         canChangeTypeofPrimary: true,
       });
@@ -143,7 +147,9 @@ describe("security controller", () => {
         email: "test@test.com",
         supportGlobalLogout: false,
         activityLogUrl: "/activity-history",
-        enterPasswordUrl: "/enter-password?from=security&edit=true",
+        enterPasswordUrlForNavigationEvent: "/enter-password?from=security",
+        enterPasswordUrlForFormChangeResponseEvent:
+          "/enter-password?from=security&edit=true",
         mfaMethods: [
           {
             text: "pages.security.mfaSection.defaultMethod.app.title",
