@@ -6,7 +6,7 @@
   "license": "ISC",
   "type": "module",
   "scripts": {
-    "install-all": "npm ci && npm run install-submodules",
+    "install-all": "npm ci && npm run install-submodules && npm run build-rp-registry",
     "install-submodules": "git submodule update --init --recursive",
     "bubbleprof": "NODE_ENV=production clinic bubbleprof --autocannon [ -c 10 -d 10 /healthcheck ] -- node -r dotenv/config dist/server.js && echo '\n\nRemember to clean up files in .clinic and node_trace.*.log\n'",
     "build-ts": "tsc",
