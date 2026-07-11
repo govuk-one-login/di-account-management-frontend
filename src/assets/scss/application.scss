@@ -146,18 +146,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   background-color: transparent;
   padding: 0;
   margin: 0;
-
-  &:focus {
-    outline: none;
-    span {
-      @include govuk-focused-text;
-    }
-  }
-}
-
-/* Specific styles for .account-header-navigation__button */
-.account-header-navigation__button-content {
-  @include govuk-font($size: 16);
+  @include govuk-font($size: 16, $weight: bold);
   color: govuk-colour("white");
   @include govuk-link-style-inverse;
 
@@ -175,6 +164,7 @@ $nav-button-padding-bottom: $nav-link-padding + $nav-link-outline-thickness;
   }
 
   &:focus {
+    outline: none;
     @include govuk-focused-text;
   }
 }

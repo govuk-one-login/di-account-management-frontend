@@ -162,7 +162,7 @@ describe("eventService", () => {
       expect(result.extensions.app_session_id).toBe(
         MISSING_APP_SESSION_ID_SPECIAL_CASE
       );
-      expect(result.restricted).toBeUndefined();
+      expect(result.restricted).toEqual({});
     });
 
     it("should build a HOME_TRIAGE_PAGE_VISIT event correctly", () => {
@@ -451,6 +451,42 @@ describe("eventService", () => {
       });
     });
 
+    it("should build a HOME_PASSKEY_DELETE_REQUESTED event correctly", () => {
+      const service = eventService(sqs);
+      const mockReq: any = {
+        headers: { "user-agent": "test-user-agent" },
+        ip: "127.0.0.1",
+        session: {
+          user_id: "test-user-id",
+          user: { email: "test@example.com" },
+        },
+      };
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+        },
+      };
+      const restricted = {
+        passkey: { passkey_credential_id: "cred-abc-123" },
+      };
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_PASSKEY_DELETE_REQUESTED,
+        undefined,
+        restricted
+      );
+      expect(result.event_name).toBe("HOME_PASSKEY_DELETE_REQUESTED");
+      expect(result.component_id).toBe("HOME");
+      expect(result.extensions).toEqual({
+        "journey-type": "ACCOUNT_MANAGEMENT",
+      });
+      expect(result.restricted.passkey).toEqual({
+        passkey_credential_id: "cred-abc-123",
+      });
+    });
+
     it("should build a HOME_PASSKEY_DELETE_FAILED event correctly", () => {
       const service = eventService(sqs);
       const mockReq: any = {
@@ -669,6 +705,39 @@ describe("eventService", () => {
       expect(atob(result.restricted.device_information.encoded)).toBe(
         "test-txma-header"
       );
+    });
+
+    it("should merge custom restricted with base restricted", () => {
+      const service = eventService(sqs);
+      const mockReq: any = {
+        headers: {
+          "user-agent": "test-user-agent",
+          "txma-audit-encoded": btoa("test-txma-header"),
+        },
+        session: {
+          user_id: "test-user-id",
+          user: { email: "test@example.com" },
+        },
+      };
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+        },
+      };
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_PASSKEY_DELETE_REQUESTED,
+        undefined,
+        { passkey: { passkey_credential_id: "cred-xyz" } }
+      );
+      expect(atob(result.restricted.device_information.encoded)).toBe(
+        "test-txma-header"
+      );
+      expect(result.restricted.passkey).toEqual({
+        passkey_credential_id: "cred-xyz",
+      });
     });
 
     it("should merge custom extensions with event-specific extensions", () => {

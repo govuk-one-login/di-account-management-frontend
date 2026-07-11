@@ -37,6 +37,8 @@ import {
 } from "../../utils/mfaClient/types.js";
 import { eventService } from "../../services/event-service.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { Restricted } from "../../services/types.js";
+import { createMfaClient } from "../../utils/mfaClient/index.js";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -164,6 +166,7 @@ async function sendJourneyAuditEvent(
   requestType: UserJourney
 ): Promise<void> {
   let eventName: EventName;
+  let restricted: Restricted;
 
   switch (requestType) {
     case UserJourney.addBackup:
@@ -175,11 +178,31 @@ async function sendJourneyAuditEvent(
     case UserJourney.RemoveBackup:
       eventName = EventName.AUTH_MFA_METHOD_DELETE_STARTED;
       break;
+    case UserJourney.RemovePasskey: {
+      eventName = EventName.HOME_PASSKEY_DELETE_REQUESTED;
+
+      const mfaClient = await createMfaClient(req, res);
+      const passkeys = await mfaClient.getPasskeys();
+
+      restricted = {
+        passkey: {
+          passkey_credential_id: passkeys.data?.passkeys.find(
+            (p) => p.credential === req.query.id
+          )?.id,
+        },
+      };
+    }
   }
 
   if (eventName) {
     const service = eventService();
-    const auditEvent = service.buildAuditEvent(req, res, eventName);
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      eventName,
+      undefined,
+      restricted
+    );
     service.send(auditEvent, res.locals.trace);
   }
 }
