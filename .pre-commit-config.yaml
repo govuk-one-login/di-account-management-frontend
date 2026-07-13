@@ -37,6 +37,12 @@ repos:
         args: ["--baseline", ".secrets.baseline"]
         stages: [pre-commit]
 
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: e3eebf65325ccc992422292cb7a4baee967cf815 # pragma: allowlist secret
+    hooks:
+      - id: zizmor
+        stages: [pre-commit]
+
   - repo: local
     hooks:
       - id: npm-audit
