@@ -66,3 +66,12 @@ repos:
         language: system
         files: ^integration-tests/
         pass_filenames: false
+
+      - id: cfnlint
+        name: Lint CloudFormation
+        entry: cfn-lint deploy/template.yaml -r eu-west-2
+        language: system
+        exclude: .*
+        always_run: true
+        pass_filenames: false
+        stages: [pre-commit]
