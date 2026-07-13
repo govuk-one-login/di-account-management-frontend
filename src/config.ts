@@ -47,10 +47,6 @@ export function isProd(): boolean {
   return getAppEnv() === "production";
 }
 
-export function isIntegration(): boolean {
-  return getAppEnv() === "integration";
-}
-
 export function getGtmId(): string {
   return process.env.GTM_ID;
 }
@@ -285,8 +281,7 @@ export function getAmcClientId(): string {
 export function passkeysEnabled(req: Request): boolean {
   return (
     process.env.PASSKEYS === "1" &&
-    ((!isProd() && !isIntegration()) ||
-      req.cookies?.passkeys_live_proving === "1")
+    (!isProd() || req.cookies?.passkeys_live_proving === "1")
   );
 }
 
