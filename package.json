@@ -6,7 +6,7 @@
   "license": "ISC",
   "type": "module",
   "scripts": {
-    "install-all": "npm ci && npm run install-submodules",
+    "install-all": "npm ci && npm run install-submodules && npm run build-rp-registry",
     "install-submodules": "git submodule update --init --recursive",
     "bubbleprof": "NODE_ENV=production clinic bubbleprof --autocannon [ -c 10 -d 10 /healthcheck ] -- node -r dotenv/config dist/server.js && echo '\n\nRemember to clean up files in .clinic and node_trace.*.log\n'",
     "build-ts": "tsc",
@@ -95,7 +95,7 @@
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.19.0",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.20.0",
+    "@types/node": "^24.13.3",
     "@types/nunjucks": "^3.2.6",
     "@types/overload-protection": "^1.2.4",
     "@types/qrcode": "^1.5.6",

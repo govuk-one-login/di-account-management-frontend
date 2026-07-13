@@ -1,4 +1,7 @@
-FROM node:20.20.2-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+# Despite what SonarQube says both the tag and sha digest are needed:
+# the digest pins the exact image for reproducibility,
+# the tag allows Dependabot to evaluate version constraints
+FROM node:24.18.0-alpine@sha256:a0b9bf06e4e6193cf7a0f58816cc935ff8c2a908f81e6f1a95432d679c54fbfd
 
 ENV NODE_ENV "development"
 ENV PORT 6001
