@@ -765,6 +765,11 @@
                 "text": "Getting a security code"
               },
               {
+                "href": "https://www.gov.uk/guidance/using-a-passkey-to-sign-in-to-govuk-one-login",
+                "text": "Using a passkey",
+                "only_show_when_passkeys_are_enabled": true
+              },
+              {
                 "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login",
                 "text": "Changing your sign in details"
               },
