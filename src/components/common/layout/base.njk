@@ -100,21 +100,6 @@
       initAll()
     </script>
     <script type="text/javascript" src="/public/scripts/analytics.js?{{ staticHash }}" nonce='{{scriptNonce}}'></script>
-    <script type="text/javascript" nonce='{{scriptNonce}}'>
-      {% if backLinkJS %}
-        var backLink = document.querySelector('.js-back-link');
-        if (backLink) {
-          backLink.addEventListener('click', function(e) {
-            var referrer = new URL(document.referrer).hostname;
-
-            if (referrer === document.location.hostname && window.history.length > 2) {
-              event.preventDefault();
-              window.history.back();
-            }
-          });
-        }
-      {% endif %}
-    </script>
     <script type="text/javascript" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
     if (window.DI) {
       window.DI.appInit({

@@ -22,8 +22,37 @@ import {
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { getPasskeyConvenienceMetadataByAaguid } from "../../utils/passkeysConvenienceMetadata/index.js";
 import { createMfaClient } from "../../utils/mfaClient/index.js";
+import { AMJourneyValidBackRoutes } from "../../types.js";
+import { passkeysEnabled } from "../../config.js";
+import { convertPageQueryStringToNumber } from "../../utils/convertPageQueryStringToNumber.js";
+
+interface BackButton {
+  url: string;
+  text: string;
+}
+
+export function passkeyEnabledBackRoute(req: Request): string {
+  if (passkeysEnabled(req)) {
+    return AMJourneyValidBackRoutes["sign-in-details"].url;
+  } else {
+    return AMJourneyValidBackRoutes["security"].url;
+  }
+}
+
+export function passkeyEnabledBackButtonText(req: Request): string {
+  if (passkeysEnabled(req)) {
+    return req.t("general.backToSignInDetailsButtonText");
+  } else {
+    return req.t("general.backToSecurityButtonText");
+  }
+}
 
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
+
   req.metrics?.addMetric("updateEmailConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
@@ -41,6 +70,7 @@ export function updateEmailConfirmationGet(req: Request, res: Response): void {
     summaryText: req
       .t("pages.updateEmailConfirmation.summaryText")
       .replace("[email]", req.session.user.email),
+    backButton,
   });
 }
 
@@ -48,6 +78,29 @@ export function updatePasswordConfirmationGet(
   req: Request,
   res: Response
 ): void {
+  const fromActivityHistory = req.query?.from === "activity-history";
+  let backButton: BackButton;
+  let activityHistoryUrl = AMJourneyValidBackRoutes["activity-history"].url;
+
+  if (fromActivityHistory) {
+    if (
+      typeof req.query.page === "string" &&
+      convertPageQueryStringToNumber(req.query.page)
+    ) {
+      activityHistoryUrl += `?page=${req.query.page}`;
+    }
+
+    backButton = {
+      text: req.t("general.backActivityHistory"),
+      url: activityHistoryUrl,
+    };
+  } else {
+    backButton = {
+      text: passkeyEnabledBackButtonText(req),
+      url: passkeyEnabledBackRoute(req),
+    };
+  }
+
   req.metrics?.addMetric("updatePasswordConfirmationGet", MetricUnit.Count, 1);
   setOplSettings(
     {
@@ -70,6 +123,7 @@ export function updatePasswordConfirmationGet(
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.updatePasswordConfirmation.title"),
     panelText: req.t("pages.updatePasswordConfirmation.panelText"),
+    backButton,
   });
 }
 
@@ -89,6 +143,10 @@ export function updatePhoneNumberConfirmationGet(
     },
     res
   );
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
 
   delete req.session.user.state.changePhoneNumber;
 
@@ -98,6 +156,7 @@ export function updatePhoneNumberConfirmationGet(
     summaryText: req
       .t("pages.updatePhoneNumberConfirmation.summaryText")
       .replace("[mobile]", getLastNDigits(req.session.user.phoneNumber, 4)),
+    backButton,
   });
 }
 
@@ -105,6 +164,10 @@ export function updateAuthenticatorAppConfirmationGet(
   req: Request,
   res: Response
 ): void {
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
   req.metrics?.addMetric(
     "updateAuthenticatorAppConfirmationGet",
     MetricUnit.Count,
@@ -124,6 +187,7 @@ export function updateAuthenticatorAppConfirmationGet(
     pageTitle: req.t("pages.updateAuthenticatorAppConfirmation.title"),
     panelText: req.t("pages.updateAuthenticatorAppConfirmation.panelText"),
     summaryText: req.t("pages.updateAuthenticatorAppConfirmation.summaryText"),
+    backButton,
   });
 }
 
@@ -140,12 +204,17 @@ export function deleteAccountConfirmationGet(
     res
   );
 
+  const backButton: BackButton = {
+    text: req.t("general.backToGovUKButtonText"),
+    url: "https://www.gov.uk",
+  };
+
   res.render("update-confirmation/index.njk", {
     pageTitle: req.t("pages.deleteAccountConfirmation.title"),
     panelText: req.t("pages.deleteAccountConfirmation.panelText"),
     summaryText: req.t("pages.deleteAccountConfirmation.summaryText"),
-    showGovUKButton: true,
     hideAccountNavigation: true,
+    backButton,
   });
 }
 
@@ -161,6 +230,10 @@ export async function addMfaAppMethodConfirmationGet(
     },
     res
   );
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
 
   delete req.session.user.state.addBackup;
 
@@ -168,6 +241,7 @@ export async function addMfaAppMethodConfirmationGet(
     pageTitle: req.t("pages.confirmaddBackup.title"),
     panelText: req.t("pages.confirmaddBackup.heading"),
     summaryText: req.t("pages.confirmaddBackup.message"),
+    backButton,
   });
 }
 
@@ -183,6 +257,11 @@ export async function removeMfaMethodConfirmationGet(
     },
     res
   );
+
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
 
   let message: string;
   const removedMethod = req.session.removedMfaMethod;
@@ -209,6 +288,7 @@ export async function removeMfaMethodConfirmationGet(
     pageTitle: req.t("pages.removeBackupMethod.confirm.title"),
     panelText: req.t("pages.removeBackupMethod.confirm.heading"),
     summaryText: message,
+    backButton,
   });
 }
 
@@ -216,6 +296,11 @@ export async function changeDefaultMfaMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
+
   req.metrics?.addMetric(
     "changeDefaultMfaMethodConfirmationGet",
     MetricUnit.Count,
@@ -256,6 +341,7 @@ export async function changeDefaultMfaMethodConfirmationGet(
     pageTitle: req.t("pages.switchBackupMethod.confirm.title"),
     panelText: req.t("pages.switchBackupMethod.confirm.heading"),
     summaryText: message,
+    backButton,
   });
 }
 
@@ -274,6 +360,10 @@ export async function changeDefaultMethodConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
   req.metrics?.addMetric(
     "changeDefaultMethodConfirmationGet",
     MetricUnit.Count,
@@ -309,6 +399,7 @@ export async function changeDefaultMethodConfirmationGet(
     pageTitle: req.t("pages.changeDefaultMethod.confirmation.title"),
     panelText: req.t("pages.changeDefaultMethod.confirmation.heading"),
     summaryText: message,
+    backButton,
   });
 }
 
@@ -316,6 +407,10 @@ export async function createPasskeyConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
   req.metrics?.addMetric("createPasskeyConfirmationGet", MetricUnit.Count, 1);
 
   const mfaClient = await createMfaClient(req, res);
@@ -352,6 +447,7 @@ export async function createPasskeyConfirmationGet(
     pageTitle: req.t("pages.createPasskeyConfirmation.title"),
     panelText: req.t("pages.createPasskeyConfirmation.panelText"),
     summaryHtml: finalHtml,
+    backButton,
   });
 }
 
@@ -359,6 +455,10 @@ export async function removePasskeyConfirmationGet(
   req: Request,
   res: Response
 ): Promise<void> {
+  const backButton: BackButton = {
+    text: passkeyEnabledBackButtonText(req),
+    url: passkeyEnabledBackRoute(req),
+  };
   req.metrics?.addMetric("removePasskeyConfirmationGet", MetricUnit.Count, 1);
 
   const mfaClient = await createMfaClient(req, res);
@@ -384,5 +484,6 @@ export async function removePasskeyConfirmationGet(
     pageTitle: req.t("pages.removePasskeyConfirmation.title"),
     panelText: req.t("pages.removePasskeyConfirmation.panelText"),
     summaryText,
+    backButton,
   });
 }

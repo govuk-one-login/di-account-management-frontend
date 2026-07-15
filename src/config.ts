@@ -1,6 +1,7 @@
 import { filterClients } from "di-account-management-rp-registry";
 import { LOCALE } from "./app.constants.js";
 import { createTimedMemoize } from "./utils/createTimedMemoize.js";
+import { Request } from "express";
 
 export function getLogLevel(): string {
   return process.env.LOGS_LEVEL || "debug";
@@ -44,6 +45,10 @@ export function isLocalEnv(): boolean {
 
 export function isProd(): boolean {
   return getAppEnv() === "production";
+}
+
+export function isIntegration(): boolean {
+  return getAppEnv() === "integration";
 }
 
 export function getGtmId(): string {
@@ -189,6 +194,10 @@ export function getDynamoActivityLogStoreTableName(): string {
   return process.env.ACTIVITY_LOG_STORE_TABLE_NAME;
 }
 
+export function getUserNotificationsTableName(): string {
+  return process.env.USER_NOTIFICATIONS_TABLE_NAME;
+}
+
 export function getWebchatUrl(): string {
   return process.env.WEBCHAT_SOURCE_URL;
 }
@@ -273,8 +282,12 @@ export function getAmcClientId(): string {
   return process.env.AMC_CLIENT_ID;
 }
 
-export function passkeysEnabled(): boolean {
-  return process.env.PASSKEYS === "1";
+export function passkeysEnabled(req: Request): boolean {
+  return (
+    process.env.PASSKEYS === "1" &&
+    ((!isProd() && !isIntegration()) ||
+      req.cookies?.passkeys_live_proving === "1")
+  );
 }
 
 export const maxNumberOfPasskeys = 5;

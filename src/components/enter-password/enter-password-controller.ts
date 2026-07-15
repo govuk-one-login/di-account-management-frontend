@@ -19,6 +19,7 @@ import {
   UserJourney,
 } from "../../utils/state-machine.js";
 import { handleLogout } from "../../utils/logout.js";
+import { getPasswordJourneyRenderOptions } from "../../utils/getPasswordJourneyRenderOptions.js";
 import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
   EMPTY_OPL_SETTING_VALUE,
@@ -36,6 +37,8 @@ import {
 } from "../../utils/mfaClient/types.js";
 import { eventService } from "../../services/event-service.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { Restricted } from "../../services/types.js";
+import { createMfaClient } from "../../utils/mfaClient/index.js";
 
 const TEMPLATE = "enter-password/index.njk";
 
@@ -53,20 +56,6 @@ const REDIRECT_PATHS: Record<UserJourney, string> = {
   [UserJourney.GlobalLogout]: PATH_DATA.GLOBAL_LOGOUT_CONFIRM.url,
   [UserJourney.CreatePasskey]: PATH_DATA.CREATE_NEW_PASSKEY.url,
   [UserJourney.RemovePasskey]: PATH_DATA.REMOVE_PASSKEY.url,
-};
-
-const VALID_BACK_ROUTES: Record<
-  "security" | "sign-in-details",
-  { url: string; translationKey: string }
-> = {
-  security: {
-    url: PATH_DATA.SECURITY.url,
-    translationKey: "general.cancelAndGoBackText",
-  },
-  "sign-in-details": {
-    url: PATH_DATA.SIGN_IN_DETAILS.url,
-    translationKey: "general.cancelAndGoBackText",
-  },
 };
 
 const getOplValues = (): OplSettingsLookupObject => ({
@@ -131,19 +120,6 @@ const getOplValues = (): OplSettingsLookupObject => ({
   },
 });
 
-const getRenderOptions = (req: Request, requestType: UserJourney) => {
-  const from: keyof typeof VALID_BACK_ROUTES | undefined =
-    typeof req.query.from === "string" && req.query.from in VALID_BACK_ROUTES
-      ? (req.query.from as keyof typeof VALID_BACK_ROUTES)
-      : undefined;
-  return {
-    requestType,
-    formAction: req.url,
-    from,
-    fromDetails: VALID_BACK_ROUTES[from],
-  };
-};
-
 const setLocalOplSettings = (
   req: Request,
   res: Response,
@@ -180,7 +156,7 @@ function renderPasswordError(
     req,
     TEMPLATE,
     error,
-    getRenderOptions(req, requestType)
+    getPasswordJourneyRenderOptions(req, requestType)
   );
 }
 
@@ -190,6 +166,7 @@ async function sendJourneyAuditEvent(
   requestType: UserJourney
 ): Promise<void> {
   let eventName: EventName;
+  let restricted: Restricted;
 
   switch (requestType) {
     case UserJourney.addBackup:
@@ -201,11 +178,31 @@ async function sendJourneyAuditEvent(
     case UserJourney.RemoveBackup:
       eventName = EventName.AUTH_MFA_METHOD_DELETE_STARTED;
       break;
+    case UserJourney.RemovePasskey: {
+      eventName = EventName.HOME_PASSKEY_DELETE_REQUESTED;
+
+      const mfaClient = await createMfaClient(req, res);
+      const passkeys = await mfaClient.getPasskeys();
+
+      restricted = {
+        passkey: {
+          passkey_credential_id: passkeys.data?.passkeys.find(
+            (p) => p.credential === req.query.id
+          )?.id,
+        },
+      };
+    }
   }
 
   if (eventName) {
     const service = eventService();
-    const auditEvent = service.buildAuditEvent(req, res, eventName);
+    const auditEvent = service.buildAuditEvent(
+      req,
+      res,
+      eventName,
+      undefined,
+      restricted
+    );
     service.send(auditEvent, res.locals.trace);
   }
 }
@@ -238,6 +235,36 @@ function sendActionStartedAuditEvent(
   }
 }
 
+function buildSearchString(req: Request, requestType: UserJourney) {
+  const from = getPasswordJourneyRenderOptions(req, requestType).from;
+  const page = getPasswordJourneyRenderOptions(req, requestType).page;
+
+  const searchParams = new URLSearchParams();
+
+  if (from) {
+    searchParams.set("from", from);
+  }
+
+  if (page) {
+    searchParams.set("page", page.toString());
+  }
+
+  if (requestType === UserJourney.RemovePasskey) {
+    const raw = req.query.passkeyId;
+
+    if (typeof raw === "string") {
+      searchParams.set("id", raw);
+    } else if (Array.isArray(raw) && typeof raw[0] === "string") {
+      searchParams.set("id", raw[0]);
+    }
+  }
+
+  const searchString =
+    searchParams.size > 0 ? `?${searchParams.toString()}` : "";
+
+  return searchString;
+}
+
 export async function enterPasswordGet(
   req: Request,
   res: Response
@@ -252,10 +279,9 @@ export async function enterPasswordGet(
     return;
   }
   req.session.user.state[requestType] = getInitialState();
-
   await sendJourneyAuditEvent(req, res, requestType);
   sendActionStartedAuditEvent(req, res, requestType);
-  res.render(TEMPLATE, getRenderOptions(req, requestType));
+  res.render(TEMPLATE, getPasswordJourneyRenderOptions(req, requestType));
 }
 
 export function enterPasswordPost(
@@ -294,27 +320,8 @@ export function enterPasswordPost(
         req.session.user.state[requestType].value,
         EventType.Authenticated
       );
-      const from = getRenderOptions(req, requestType).from;
 
-      const searchParams = new URLSearchParams();
-
-      if (from) {
-        searchParams.set("from", from);
-      }
-
-      if (requestType === UserJourney.RemovePasskey) {
-        const raw = req.query.passkeyId;
-
-        if (typeof raw === "string") {
-          searchParams.set("id", raw);
-        } else if (Array.isArray(raw) && typeof raw[0] === "string") {
-          searchParams.set("id", raw[0]);
-        }
-      }
-
-      const searchString =
-        searchParams.size > 0 ? `?${searchParams.toString()}` : "";
-
+      const searchString = buildSearchString(req, requestType);
       res.redirect(`${REDIRECT_PATHS[requestType]}${searchString}`);
       return;
     }

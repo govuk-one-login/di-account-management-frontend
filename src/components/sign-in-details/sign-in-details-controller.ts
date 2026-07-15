@@ -22,20 +22,25 @@ export async function signInDetailsGet(
   const mfaClient = await createMfaClient(req, res);
   const passkeys = await mfaClient.getPasskeys();
   const { email } = req.session.user;
-  const enterPasswordUrl = `${PATH_DATA.ENTER_PASSWORD.url}?from=sign-in-details&edit=true`;
+  const enterPasswordUrlForNavigationEvent = `${PATH_DATA.ENTER_PASSWORD.url}?from=sign-in-details`;
+  const enterPasswordUrlForFormChangeResponseEvent = `${enterPasswordUrlForNavigationEvent}&edit=true`;
 
   const enterPasswordUrls = {
-    changeEmail: `${enterPasswordUrl}&type=${UserJourney.ChangeEmail}`,
-    createPasskey: `${enterPasswordUrl}&type=${UserJourney.CreatePasskey}`,
-    removePasskey: `${enterPasswordUrl}&type=${UserJourney.RemovePasskey}`,
-    changePassword: `${enterPasswordUrl}&type=${UserJourney.ChangePassword}`,
-    changeDefaultMethod: `${enterPasswordUrl}&type=${UserJourney.ChangeDefaultMethod}`,
-    switchBackupMethod: `${enterPasswordUrl}&type=${UserJourney.SwitchBackupMethod}`,
-    removeBackupMethod: `${enterPasswordUrl}&type=${UserJourney.RemoveBackup}`,
-    addBackupMethod: `${enterPasswordUrl}&type=${UserJourney.addBackup}`,
+    changeEmail: `${enterPasswordUrlForFormChangeResponseEvent}&type=${UserJourney.ChangeEmail}`,
+    createPasskey: `${enterPasswordUrlForNavigationEvent}&type=${UserJourney.CreatePasskey}`,
+    removePasskey: `${enterPasswordUrlForNavigationEvent}&type=${UserJourney.RemovePasskey}`,
+    changePassword: `${enterPasswordUrlForFormChangeResponseEvent}&type=${UserJourney.ChangePassword}`,
+    changeDefaultMethod: `${enterPasswordUrlForFormChangeResponseEvent}&type=${UserJourney.ChangeDefaultMethod}`,
+    switchBackupMethod: `${enterPasswordUrlForNavigationEvent}&type=${UserJourney.SwitchBackupMethod}`,
+    removeBackupMethod: `${enterPasswordUrlForNavigationEvent}&type=${UserJourney.RemoveBackup}`,
+    addBackupMethod: `${enterPasswordUrlForNavigationEvent}&type=${UserJourney.addBackup}`,
   };
   const mfaMethods = Array.isArray(req.session.mfaMethods)
-    ? mapMfaMethods(req.session.mfaMethods, enterPasswordUrl, req.t)
+    ? mapMfaMethods(
+        req.session.mfaMethods,
+        enterPasswordUrlForFormChangeResponseEvent,
+        req.t
+      )
     : [];
 
   const denyChangeTypeofPrimary = Array.isArray(req.session.mfaMethods)

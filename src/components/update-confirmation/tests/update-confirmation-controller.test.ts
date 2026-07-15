@@ -37,13 +37,15 @@ describe("update confirmation controller", () => {
   let res: any;
 
   beforeEach(() => {
+    process.env.PASSKEYS = "1";
     req = {
       body: {},
+      query: {},
       session: {
         user: { state: {}, email: "test@test.com", phoneNumber: "1234567890" },
         destroy: vi.fn(),
       } as any,
-      t: vi.fn().mockReturnValue("translated-string"),
+      t: vi.fn().mockImplementation((key: string) => key),
       metrics: { addMetric: vi.fn() },
     };
     res = {
@@ -55,7 +57,6 @@ describe("update confirmation controller", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.restoreAllMocks();
   });
 
   describe("updateEmailConfirmationGet", () => {
@@ -65,8 +66,13 @@ describe("update confirmation controller", () => {
       expect(res.render).toHaveBeenCalledWith(
         "update-confirmation/index.njk",
         expect.objectContaining({
-          pageTitle: "translated-string",
-          panelText: "translated-string",
+          pageTitle: "pages.updateEmailConfirmation.title",
+          panelText: "pages.updateEmailConfirmation.panelText",
+          summaryText: "pages.updateEmailConfirmation.summaryText",
+          backButton: {
+            text: "general.backToSignInDetailsButtonText",
+            url: "/sign-in-details",
+          },
         })
       );
     });
@@ -77,8 +83,40 @@ describe("update confirmation controller", () => {
       updatePasswordConfirmationGet(req as Request, res as Response);
       expect(req.session.destroy).toHaveBeenCalled();
       expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
-        pageTitle: "translated-string",
-        panelText: "translated-string",
+        pageTitle: "pages.updatePasswordConfirmation.title",
+        panelText: "pages.updatePasswordConfirmation.panelText",
+        backButton: {
+          text: "general.backToSignInDetailsButtonText",
+          url: "/sign-in-details",
+        },
+      });
+    });
+
+    it("should render update password confirmation page from activity history", async () => {
+      req.query.from = "activity-history";
+      updatePasswordConfirmationGet(req as Request, res as Response);
+      expect(req.session.destroy).toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
+        pageTitle: "pages.updatePasswordConfirmation.title",
+        panelText: "pages.updatePasswordConfirmation.panelText",
+        backButton: {
+          text: "general.backActivityHistory",
+          url: "/activity-history",
+        },
+      });
+    });
+
+    it("should render update password confirmation page with invalid from parameter", async () => {
+      req.query.from = "invalid";
+      updatePasswordConfirmationGet(req as Request, res as Response);
+      expect(req.session.destroy).toHaveBeenCalled();
+      expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
+        pageTitle: "pages.updatePasswordConfirmation.title",
+        panelText: "pages.updatePasswordConfirmation.panelText",
+        backButton: {
+          text: "general.backToSignInDetailsButtonText",
+          url: "/sign-in-details",
+        },
       });
     });
   });
@@ -90,8 +128,13 @@ describe("update confirmation controller", () => {
       expect(res.render).toHaveBeenCalledWith(
         "update-confirmation/index.njk",
         expect.objectContaining({
-          pageTitle: "translated-string",
-          panelText: "translated-string",
+          pageTitle: "pages.updatePhoneNumberConfirmation.title",
+          panelText: "pages.updatePhoneNumberConfirmation.panelText",
+          summaryText: "pages.updatePhoneNumberConfirmation.summaryText",
+          backButton: {
+            text: "general.backToSignInDetailsButtonText",
+            url: "/sign-in-details",
+          },
         })
       );
     });
@@ -102,9 +145,13 @@ describe("update confirmation controller", () => {
       updateAuthenticatorAppConfirmationGet(req as Request, res as Response);
 
       expect(res.render).toHaveBeenCalledWith("update-confirmation/index.njk", {
-        pageTitle: "translated-string",
-        panelText: "translated-string",
-        summaryText: "translated-string",
+        pageTitle: "pages.updateAuthenticatorAppConfirmation.title",
+        panelText: "pages.updateAuthenticatorAppConfirmation.panelText",
+        summaryText: "pages.updateAuthenticatorAppConfirmation.summaryText",
+        backButton: {
+          text: "general.backToSignInDetailsButtonText",
+          url: "/sign-in-details",
+        },
       });
     });
   });
@@ -131,6 +178,10 @@ describe("update confirmation controller", () => {
         pageTitle: req.t("pages.switchBackupMethod.confirm.title"),
         panelText: req.t("pages.switchBackupMethod.confirm.heading"),
         summaryText: req.t("pages.switchBackupMethod.confirm.messageApp"),
+        backButton: {
+          text: "general.backToSignInDetailsButtonText",
+          url: "/sign-in-details",
+        },
       });
     });
   });
@@ -142,8 +193,13 @@ describe("update confirmation controller", () => {
       expect(res.render).toHaveBeenCalledWith(
         "update-confirmation/index.njk",
         expect.objectContaining({
-          pageTitle: "translated-string",
-          panelText: "translated-string",
+          pageTitle: "pages.deleteAccountConfirmation.title",
+          panelText: "pages.deleteAccountConfirmation.panelText",
+          summaryText: "pages.deleteAccountConfirmation.summaryText",
+          backButton: {
+            text: "general.backToGovUKButtonText",
+            url: "https://www.gov.uk",
+          },
         })
       );
     });
@@ -175,6 +231,10 @@ describe("update confirmation controller", () => {
       pageTitle: "pages.removeBackupMethod.confirm.title",
       panelText: "pages.removeBackupMethod.confirm.heading",
       summaryText: "pages.removeBackupMethod.confirm.message_sms",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
     expect(res.redirect).not.toHaveBeenCalled();
   });
@@ -205,6 +265,10 @@ describe("update confirmation controller", () => {
       pageTitle: "pages.removeBackupMethod.confirm.title",
       panelText: "pages.removeBackupMethod.confirm.heading",
       summaryText: "pages.removeBackupMethod.confirm.message_app",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
     expect(res.redirect).not.toHaveBeenCalled();
   });
@@ -257,6 +321,10 @@ describe("addBackupAppConfirmationGet", () => {
       pageTitle: "pages.confirmaddBackup.title",
       panelText: "pages.confirmaddBackup.heading",
       summaryText: "pages.confirmaddBackup.message",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
   });
 
@@ -278,6 +346,10 @@ describe("addBackupAppConfirmationGet", () => {
       pageTitle: "pages.changeDefaultMethod.confirmation.title",
       panelText: "pages.changeDefaultMethod.confirmation.heading",
       summaryText: "pages.changeDefaultMethod.confirmation.app",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
   });
 
@@ -305,6 +377,10 @@ describe("addBackupAppConfirmationGet", () => {
       pageTitle: "pages.changeDefaultMethod.confirmation.title",
       panelText: "pages.changeDefaultMethod.confirmation.heading",
       summaryText: "pages.changeDefaultMethod.confirmation.sms 6789",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
   });
 
@@ -368,6 +444,10 @@ describe("createPasskeyConfirmationGet", () => {
       pageTitle: "pages.createPasskeyConfirmation.title",
       panelText: "pages.createPasskeyConfirmation.panelText",
       summaryHtml: "pages.createPasskeyConfirmation.summaryHtml2",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
   });
 
@@ -406,6 +486,10 @@ describe("createPasskeyConfirmationGet", () => {
       pageTitle: "pages.createPasskeyConfirmation.title",
       panelText: "pages.createPasskeyConfirmation.panelText",
       summaryHtml: "testPhonepages.createPasskeyConfirmation.summaryHtml2",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
   });
 
@@ -441,6 +525,10 @@ describe("createPasskeyConfirmationGet", () => {
       panelText: "pages.createPasskeyConfirmation.panelText",
       summaryHtml:
         "testPhonepages.createPasskeyConfirmation.summaryHtml2pages.createPasskeyConfirmation.firstPasskey",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
   });
 });
@@ -480,6 +568,10 @@ describe("removePasskeyConfirmationGet", () => {
       pageTitle: "pages.removePasskeyConfirmation.title",
       panelText: "pages.removePasskeyConfirmation.panelText",
       summaryText: "pages.removePasskeyConfirmation.summaryText",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
     expect(res.locals?.opl.contentId).toBe(
       "fe8c2df3-63b0-47d5-860b-b96a17e527f6"
@@ -510,6 +602,10 @@ describe("removePasskeyConfirmationGet", () => {
       pageTitle: "pages.removePasskeyConfirmation.title",
       panelText: "pages.removePasskeyConfirmation.panelText",
       summaryText: "pages.removePasskeyConfirmation.summaryTextNoPasskeys",
+      backButton: {
+        text: "general.backToSignInDetailsButtonText",
+        url: "/sign-in-details",
+      },
     });
     expect(res.locals?.opl.contentId).toBe(
       "af92dec6-5a8a-439f-9130-973ffc6eccf0"

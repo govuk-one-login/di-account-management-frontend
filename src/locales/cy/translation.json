@@ -17,6 +17,7 @@
     "cancelAndGoBackText": "Canslo a mynd yn ôl",
     "backSecurity": "Yn ôl i Diogelwch",
     "backSignInDetails": "Ewch yn ôl i fanylion mewngofnodi",
+    "backActivityHistory": "Yn ôl i hanes gweithgaredd",
     "backToGovUKButtonText": "Ewch i hafan GOV.UK",
     "noWelshNoticeInline": "This service is not available in Welsh.",
     "noWelshNoticeGlobal": "Os nad yw gwasanaeth rydych wedi cael mynediad iddo ar gael yn Gymraeg, bydd yn ymddangos yma yn Saesneg.",
@@ -203,6 +204,7 @@
     "activityHistory": {
       "title": "Hanes gweithgaredd",
       "header": "Hanes gweithgaredd",
+      "backLinkText": "Yn ôl i Diogelwch",
       "page": "Tudalen [pageNumber]",
       "explanation": "Gweld beth rydych chi wedi cael mynediad iddo gyda’ch GOV.UK One Login a phryd.",
       "empty": "Mae problem dangos hanes eich gweithgaredd ar hyn o bryd. Gallwch roi cynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[link]\">cysylltwch â'r tîm GOV.UK One Login </a>.",
@@ -288,6 +290,12 @@
         "paragraph2": "Yn y dyfodol, byddwch yn gallu defnyddio GOV.UK One Login i gael mynediad i'r holl wasanaethau ar GOV.UK.",
         "paragraph3": "Gweler y <a class=\"govuk-link\" href=\"[serviceListLink]\">gwasanaethau y gallwch eu defnyddio gyda GOV.UK One Login</a>.",
         "link": "https://www.gov.uk/defnyddio-eich-gov-uk-one-login/gwasanaethau"
+      },
+      "accountKeptSuccess": {
+        "heading": "Rydych wedi mewngofnodi'n llwyddiannus i gadw eich GOV.UK One Login",
+        "paragraph1": "Ni fydd eich GOV.UK One Login yn cael ei ddileu mwyach.",
+        "paragraph2": "Os na fyddwch yn mewngofnodi am y 5 mlynedd nesaf, byddwn yn eich atgoffa eto.",
+        "paragraph3": "Gallwch fynd i Diogelwch i <a href='[manageLink]' class='govuk-link'>rheoli eich GOV.UK One Login</a>."
       }
     },
     "enterPassword": {
@@ -569,6 +577,11 @@
               {
                 "href": "https://www.gov.uk/guidance/getting-a-security-code-for-govuk-one-login.cy",
                 "text": "Cael cod diogelwch ar gyfer GOV.UK One Login"
+              },
+              {
+                "href": "https://www.gov.uk/guidance/using-a-passkey-to-sign-in-to-govuk-one-login.cy",
+                "text": "Defnyddio allwedd mynediad",
+                "only_show_when_passkeys_are_enabled": true
               },
               {
                 "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login.cy",

@@ -41,10 +41,19 @@ interface JourneyOutcome {
   success: boolean;
   actions: {
     action: string;
-    timestamp: number;
+    startedAt: number;
+    completedAt: number;
     success: boolean;
     details: {
       aaguid?: string;
+      accountInterventionsStatus?: {
+        state: {
+          blocked: boolean;
+          suspended: boolean;
+          reproveIdentity?: boolean;
+          resetPassword?: boolean;
+        };
+      };
       error?: {
         code: number;
         description: string;
@@ -188,22 +197,23 @@ export async function handleJourneyOutcomeResponse(
   outcome: JourneyOutcome
 ): Promise<void> {
   const { scope, actions, outcome_id, success } = outcome;
-  const passkeyCreateAction = actions.find(
-    (item) => item.action === Action.passkeyCreate
-  );
+
   const isPasskeyCreateJourney = scope === Scope.passkeyCreate;
-  const passkeyCreateUserAbortedJourney =
-    passkeyCreateAction?.details?.error?.code === 1002;
-  const userSignedOut = actions.find(
+
+  const userAbortedJourney = actions.some(
+    (item) => item.details.error?.code === 1002
+  );
+  const userSignedOut = actions.some(
     (item) => item.details.error?.code === 1001
   );
+  const accountHasInterventions = actions.find(
+    (item) => item.details.error?.code === 1004
+  );
 
-  req.session.createdPasskeyAaguid = passkeyCreateAction?.details?.aaguid;
-
-  const service = eventService();
+  const auditEventsService = eventService();
 
   let journeyAction: JourneyAction | undefined = undefined;
-  const accountActionsFailed = actions.some((obj) => obj.success === false);
+  const anyActionsUnsuccessful = actions.some((obj) => obj.success === false);
 
   if (isPasskeyCreateJourney) {
     journeyAction = JourneyAction.PASSKEY_CREATE;
@@ -217,7 +227,7 @@ export async function handleJourneyOutcomeResponse(
     amc_scope: scope,
     account_action_overall_success: success,
     account_actions: actions.map((obj) => obj.action),
-    ...(accountActionsFailed && {
+    ...(anyActionsUnsuccessful && {
       account_actions_failed: actions
         .filter((obj) => obj.success === false)
         .map((obj) => obj.action),
@@ -228,11 +238,16 @@ export async function handleJourneyOutcomeResponse(
   };
 
   if (success && isPasskeyCreateJourney) {
+    const passkeyCreateAction = actions.find(
+      (item) => item.action === Action.passkeyCreate
+    );
+    req.session.createdPasskeyAaguid = passkeyCreateAction?.details?.aaguid;
+
     actionCompletedAuditEventParams.account_action_overall_success = true;
     sendJourneyOutcomeEvents(
       req,
       res,
-      service,
+      auditEventsService,
       actionCompletedAuditEventParams,
       homeAmcAuthorisationReceivedEventParams
     );
@@ -243,34 +258,43 @@ export async function handleJourneyOutcomeResponse(
     sendJourneyOutcomeEvents(
       req,
       res,
-      service,
+      auditEventsService,
       actionCompletedAuditEventParams,
       homeAmcAuthorisationReceivedEventParams
     );
     await handleLogout(req, res, LogoutState.AmcSignedOut);
-  } else if (
-    !success &&
-    isPasskeyCreateJourney &&
-    passkeyCreateUserAbortedJourney
-  ) {
+  } else if (!success && accountHasInterventions) {
+    await handleInterventionOutcome(
+      req,
+      res,
+      auditEventsService,
+      actionCompletedAuditEventParams,
+      homeAmcAuthorisationReceivedEventParams,
+      accountHasInterventions
+    );
+  } else if (!success && userAbortedJourney) {
     actionCompletedAuditEventParams.account_action_overall_success = false;
     actionCompletedAuditEventParams.account_action_error =
       "User aborted journey";
     sendJourneyOutcomeEvents(
       req,
       res,
-      service,
+      auditEventsService,
       actionCompletedAuditEventParams,
       homeAmcAuthorisationReceivedEventParams
     );
-    return res.redirect(PATH_DATA.SIGN_IN_DETAILS.url);
+    return res.redirect(
+      isPasskeyCreateJourney
+        ? PATH_DATA.SIGN_IN_DETAILS.url
+        : PATH_DATA.YOUR_SERVICES.url
+    );
   } else {
     actionCompletedAuditEventParams.account_action_overall_success = false;
     actionCompletedAuditEventParams.account_action_error = "Unknown error";
     sendJourneyOutcomeEvents(
       req,
       res,
-      service,
+      auditEventsService,
       actionCompletedAuditEventParams,
       homeAmcAuthorisationReceivedEventParams
     );
@@ -279,6 +303,33 @@ export async function handleJourneyOutcomeResponse(
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
     res.render("common/errors/500.njk");
   }
+}
+
+async function handleInterventionOutcome(
+  req: Request,
+  res: Response,
+  service: EventServiceInterface,
+  actionCompletedParams: Extensions,
+  amcAuthReceivedParams: Extensions,
+  interventionAction: JourneyOutcome["actions"][number]
+): Promise<void> {
+  const blocked =
+    interventionAction.details.accountInterventionsStatus?.state.blocked;
+  const blockedOrSuspended = blocked ? "blocked" : "suspended";
+  actionCompletedParams.account_action_overall_success = false;
+  actionCompletedParams.account_action_error = `Account has interventions - ${blockedOrSuspended}`;
+  sendJourneyOutcomeEvents(
+    req,
+    res,
+    service,
+    actionCompletedParams,
+    amcAuthReceivedParams
+  );
+  await handleLogout(
+    req,
+    res,
+    blocked ? LogoutState.Blocked : LogoutState.Suspended
+  );
 }
 
 function sendJourneyOutcomeEvents(

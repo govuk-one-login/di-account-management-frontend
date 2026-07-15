@@ -7,7 +7,8 @@ export interface EventServiceInterface {
     req: Request,
     res: Response,
     eventName: EventName,
-    extensions?: Extensions
+    extensions?: Extensions,
+    restricted?: Restricted
   ) => AuditEvent;
   send: (event: Event, trace: string) => void;
 }
@@ -29,6 +30,9 @@ export interface AuditEvent extends Event {
 
 export interface Restricted {
   device_information?: DeviceInformation;
+  passkey?: {
+    passkey_credential_id: string;
+  };
 }
 
 export interface DeviceInformation {

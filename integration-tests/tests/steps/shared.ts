@@ -8,6 +8,7 @@ const pageTitleToPath: Record<string, string> = {
   Healthcheck: "/healthcheck",
   Root: "/",
   Security: "/security",
+  "Activity history": "/activity-history",
   "Your services": "/your-services",
   "Contact GOV.UK One Login": "/contact-gov-uk-one-login",
   "Services you can use with GOV.UK One Login": "/services-using-one-login",
@@ -67,13 +68,13 @@ Given(
 
 Then(
   "the page title is prefixed with {string}",
-  async ({ page }, pageTitle: string) => {
-    expect(await page.title()).toBe(`${pageTitle} - GOV.UK One Login`);
+  async ({ page }, pageTitlePrefix: string) => {
+    await expect(page).toHaveTitle(`${pageTitlePrefix} - GOV.UK One Login`);
   }
 );
 
 Then("the page title is {string}", async ({ page }, pageTitle: string) => {
-  expect(await page.title()).toBe(pageTitle);
+  await expect(page).toHaveTitle(pageTitle);
 });
 
 Then("I am on the sign in page", async ({ page }) => {
@@ -103,4 +104,10 @@ Then("the page looks as expected", async ({ page }) => {
       mask: [page.locator(".contact-reference__code")],
     })
   ).toMatchSnapshot();
+});
+
+Then("the page has the {string} link", async ({ page }, content: string) => {
+  await expect(
+    page.getByRole("link", { name: content, exact: true })
+  ).toBeVisible();
 });

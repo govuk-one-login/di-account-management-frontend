@@ -4,10 +4,12 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set pageTitleName = 'pages.changePassword.title' | translate %}
 
+
 {% block pageContent %}
   <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ 'pages.changePassword.header' | translate }}</h1>
-  <form action="{{ 'CHANGE_PASSWORD' | getPath }}" method="post" novalidate>
+  <form action="{{ formAction }}" method="post" novalidate>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
     {{ govukInputWithShowPassword({
       label: 'pages.changePassword.password.label' | translate,
       id: "password",
@@ -40,5 +42,11 @@
         preventDoubleClick: true
     }) }}
   </form>
-  <a href='{{ cancelAMJourneyHref }}' class="govuk-link govuk-body" rel="noreferrer noopener">{{ "general.cancelAndGoBackText" | translate }}</a>
+  {% if fromDetails %}
+  <a href='{{ fromDetails.url }}'
+    class="govuk-link govuk-body"
+    rel="noreferrer noopener">
+    {{- fromDetails.translationKey | translate -}}
+  </a>
+  {% endif %}
 {% endblock %}

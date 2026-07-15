@@ -16,6 +16,7 @@
     "backToSignInDetailsButtonText": "Back to sign in details",
     "cancelAndGoBackText": "Cancel and go back",
     "backSecurity": "Go back to Security",
+    "backActivityHistory": "Back to activity history",
     "backSignInDetails": "Go back to sign in details",
     "backToGovUKButtonText": "Go to the GOV.UK homepage",
     "noWelshNoticeInline": "This service is not available in Welsh.",
@@ -96,7 +97,7 @@
       "cancelButton": "Cancel and go back"
     },
     "removePasskeyConfirmation": {
-      "title": "You’ve removed your paskey",
+      "title": "You’ve removed your passkey",
       "panelText": "You’ve removed your passkey",
       "summaryText": "Next time you sign in, you can use another passkey.",
       "summaryTextNoPasskeys": "Next time you sign in, you’ll need to enter your password and a security code."
@@ -351,6 +352,7 @@
       "title": "Activity history",
       "header": "Activity history",
       "page": "Page [pageNumber]",
+      "backLinkText": "Back to Security",
       "explanation": "See what you’ve accessed with your GOV.UK One Login and when.",
       "empty": "There is a problem showing your activity history at the moment. You can try again later or <a class=\"govuk-link\" href=\"[link]\">contact the GOV.UK One Login team</a>.",
       "notice": "If you see something you do not recognise, report it and <a class=\"govuk-link\" href=\"[changePassword]\"> change your password</a>.",
@@ -435,6 +437,12 @@
         "paragraph2": "In the future, you’ll be able to use GOV.UK One Login to access all services on GOV.UK.",
         "paragraph3": "See the <a class=\"govuk-link\" href=\"[serviceListLink]\">services you can use with GOV.UK One Login</a>.",
         "link": "https://www.gov.uk/using-your-gov-uk-one-login/services"
+      },
+      "accountKeptSuccess": {
+        "heading": "You’ve successfully signed in to keep your GOV.UK One Login",
+        "paragraph1": "Your GOV.UK One Login will no longer be deleted.",
+        "paragraph2": "If you do not sign in for the next 5 years, we’ll remind you again.",
+        "paragraph3": "You can go to Security to <a href='[manageLink]' class='govuk-link'>manage your GOV.UK One Login</a>."
       }
     },
     "enterPassword": {
@@ -755,6 +763,11 @@
               {
                 "href": "https://www.gov.uk/guidance/getting-a-security-code-for-govuk-one-login",
                 "text": "Getting a security code"
+              },
+              {
+                "href": "https://www.gov.uk/guidance/using-a-passkey-to-sign-in-to-govuk-one-login",
+                "text": "Using a passkey",
+                "only_show_when_passkeys_are_enabled": true
               },
               {
                 "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login",
