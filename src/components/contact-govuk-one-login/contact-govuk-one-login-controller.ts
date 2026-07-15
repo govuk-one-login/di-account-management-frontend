@@ -8,6 +8,7 @@ import {
   supportPhoneContact,
   supportWebchatContact,
   getAccessibilityStatementUrl,
+  passkeysEnabled,
 } from "../../config.js";
 import { setOplSettings } from "../../utils/opl.js";
 import { EventName, PATH_DATA } from "../../app.constants.js";
@@ -60,6 +61,7 @@ const render = (req: Request, res: Response): void => {
     baseUrl,
     language,
     nonce: res.locals.scriptNonce,
+    passkeysEnabled: passkeysEnabled(req),
   };
 
   setOplSettings(

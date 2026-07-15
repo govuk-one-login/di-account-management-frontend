@@ -6,6 +6,7 @@ import * as reference from "../../../utils/referenceCode.js";
 import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { AuditEvent } from "../../../services/types";
 import { MISSING_APP_SESSION_ID_SPECIAL_CASE } from "../../../app.constants";
+import * as config from "../../../config.js";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
@@ -19,6 +20,8 @@ describe("Contact GOV.UK One Login controller", () => {
   const baseUrl = "https://home.account.gov.uk";
 
   beforeEach(() => {
+    vi.spyOn(config, "passkeysEnabled").mockReturnValue(true);
+
     loggerSpy = vi.spyOn(logger, "info");
 
     req = {
@@ -102,6 +105,7 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
+        passkeysEnabled: true,
       });
     });
 
@@ -133,6 +137,7 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
+        passkeysEnabled: true,
       });
     });
 
@@ -167,6 +172,7 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
+        passkeysEnabled: true,
       });
       // query data should be saved into session
       expect(req.session.queryParameters.fromURL).toBe(fromURL);
@@ -206,6 +212,7 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
+        passkeysEnabled: true,
       });
       // invalid query data should not be saved into session
       expect(req.session.queryParameters.fromURL).toBe(validUrl);
@@ -237,6 +244,7 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
+        passkeysEnabled: true,
       });
       expect(loggerSpy).toHaveBeenCalledWith(
         {
@@ -273,6 +281,7 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
+        passkeysEnabled: true,
       });
     });
 
@@ -296,6 +305,7 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
+        passkeysEnabled: true,
       });
     });
 
@@ -320,6 +330,7 @@ describe("Contact GOV.UK One Login controller", () => {
         baseUrl,
         language: "en",
         nonce: MOCK_NONCE,
+        passkeysEnabled: true,
       });
     });
 

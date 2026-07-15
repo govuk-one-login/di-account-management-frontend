@@ -579,6 +579,11 @@
                 "text": "Cael cod diogelwch ar gyfer GOV.UK One Login"
               },
               {
+                "href": "https://www.gov.uk/guidance/using-a-passkey-to-sign-in-to-govuk-one-login.cy",
+                "text": "Defnyddio allwedd mynediad",
+                "only_show_when_passkeys_are_enabled": true
+              },
+              {
                 "href": "https://www.gov.uk/guidance/changing-the-sign-in-details-for-your-govuk-one-login.cy",
                 "text": "Newid y manylion mewngofnodi ar gyfer eich GOV.UK One Login"
               },
