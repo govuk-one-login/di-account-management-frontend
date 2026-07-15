@@ -66,7 +66,7 @@ jobs:
           aws-region: eu-west-2
 
       - name: Login to GDS Dev Dynatrace Container Registry
-        uses: docker/login-action@17f7c1809f7467d4244b4ff01b0dbe0b8b9e3d43
+        uses: docker/login-action@c66a8fcb2472d4283042d726b2a061b43b3f49ab
         with:
           registry: khw46367.live.dynatrace.com
           username: khw46367
