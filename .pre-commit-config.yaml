@@ -8,7 +8,7 @@ repos:
       - id: prettier
         stages: [pre-commit]
         additional_dependencies:
-          - prettier@3.8.4
+          - prettier@3.9.4
 
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
