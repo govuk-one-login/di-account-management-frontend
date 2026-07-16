@@ -96,7 +96,9 @@
     <ul class="govuk-list govuk-list--bullet">
       {% if subsection["links"].length %}
         {% for link in subsection["links"] %}
-          <li><a class="govuk-link" href="{{link["href"]}}">{{link["text"]}}</a></li>
+          {% if not link["only_show_when_passkeys_are_enabled"] or passkeysEnabled  %}
+            <li><a class="govuk-link" href="{{link["href"]}}">{{link["text"]}}</a></li>
+          {% endif %}
         {% endfor %}
       {% elseif subsection["paragraphs"].length %}
         {% for paragraph in subsection["paragraphs"] %}

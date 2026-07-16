@@ -8,7 +8,7 @@ repos:
       - id: prettier
         stages: [pre-commit]
         additional_dependencies:
-          - prettier@3.8.4
+          - prettier@3.9.4
 
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
@@ -30,11 +30,17 @@ repos:
       - id: no-commit-to-branch
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: 01886c8a910c64595c47f186ca1ffc0b77fa5458 # pragma: allowlist secret
+    rev: 5e141933554a0b74e7341841f318be21e895339c # pragma: allowlist secret
     hooks:
       - id: detect-secrets
         exclude: "package.json|package-lock.json|src/.*/.*.test.ts|locales/.*.json|.pre-commit-config.yaml$"
         args: ["--baseline", ".secrets.baseline"]
+        stages: [pre-commit]
+
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: e3eebf65325ccc992422292cb7a4baee967cf815 # pragma: allowlist secret
+    hooks:
+      - id: zizmor
         stages: [pre-commit]
 
   - repo: local
@@ -45,9 +51,27 @@ repos:
         entry: "npm run audit"
         language: system
 
+      - id: eslint
+        name: ESLint
+        entry: npm run lint
+        language: system
+        exclude: .*
+        always_run: true
+        pass_filenames: false
+        stages: [pre-commit]
+
       - id: integration-tests-check
         name: Integration tests check
         entry: npm --prefix integration-tests run validate
         language: system
         files: ^integration-tests/
         pass_filenames: false
+
+      - id: cfnlint
+        name: Lint CloudFormation
+        entry: cfn-lint deploy/template.yaml -r eu-west-2
+        language: system
+        exclude: .*
+        always_run: true
+        pass_filenames: false
+        stages: [pre-commit]
