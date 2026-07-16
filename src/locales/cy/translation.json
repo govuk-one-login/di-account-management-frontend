@@ -713,7 +713,9 @@
           },
           "paragraph2": "Gallwch ein ffonio o ddydd Llun i ddydd Gwener, 8am i 8pm amser y DU.",
           "callChargesLinkText": "Darganfyddwch fwy am gostau galwadau",
-          "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">cwblhewch y ffurflen gyswllt</a>."
+          "waitingTimeWarning": "Mae amseroedd aros hir ar y ffôn ar hyn o bryd. Os nad yw'ch galwad yn un brys, rhowch gynnig arall yn nes ymlaen neu <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">cwblhewch y ffurflen gyswllt</a>.",
+          "relayUKHeading": "Anhawster defnyddio'r ffôn",
+          "relayUKParagraph": "<a class='govuk-link' href='[relayUkLink]'>Gallwch ddefnyddio Relay UK i gael help</a> gyda GOV.UK One Login. Mae Relay UK yn wasanaeth cenedlaethol am ddim sy'n helpu pobl ag anawsterau clyw a lleferydd i gyfathrebu dros y ffôn."
         },
         "email": {
           "heading": "E-bost",

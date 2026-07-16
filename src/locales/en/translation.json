@@ -897,7 +897,9 @@
           },
           "paragraph2": "You can call us Monday to Friday, 8am to 8pm UK time.",
           "callChargesLinkText": "Find out about call charges",
-          "waitingTimeWarning": "There are currently long waiting times on the phone. If your call is not urgent, try again later or <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">fill in the contact form</a>."
+          "waitingTimeWarning": "There are currently long waiting times on the phone. If your call is not urgent, try again later or <a class=\"govuk-link\" href=\"[contactEmailServiceUrl]\" rel=\"nofollow\">fill in the contact form</a>.",
+          "relayUKHeading": "Difficulty using the phone",
+          "relayUKParagraph": "<a class='govuk-link' href='[relayUkLink]'>You can use Relay UK to get help</a> with GOV.UK One Login. Relay UK is a free national service that helps people with hearing and speech difficulties communicate over the phone."
         },
         "email": {
           "heading": "Email",
