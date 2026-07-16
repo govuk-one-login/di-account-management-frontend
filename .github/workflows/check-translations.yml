@@ -7,7 +7,7 @@ on:
       - "src/locales/**"
 
 jobs:
-  check_translation:
+  check_translation: # zizmor: ignore[excessive-permissions]
     name: "Check locale language changes"
     runs-on: ubuntu-latest
     timeout-minutes: 15

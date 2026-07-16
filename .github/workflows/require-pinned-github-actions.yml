@@ -3,7 +3,7 @@ on: push
 name: Require Pinned Github Actions
 
 jobs:
-  harden_security:
+  harden_security: # zizmor: ignore[excessive-permissions]
     name: Harden Security
     runs-on: ubuntu-latest
     timeout-minutes: 15

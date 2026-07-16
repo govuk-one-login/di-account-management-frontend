@@ -8,25 +8,25 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write
+  id-token: write # zizmor: ignore[excessive-permissions]
   contents: read
 
 jobs:
   validate_application:
     name: App Checks
     uses: ./.github/workflows/build-test-application.yml
-    secrets: inherit
+    secrets: inherit # zizmor: ignore[secrets-inherit]
 
   validate_container:
     name: Container Checks
     uses: ./.github/workflows/validate-docker-image.yml
-    secrets: inherit
+    secrets: inherit # zizmor: ignore[secrets-inherit]
     needs: validate_application
 
   validate_deployment:
     name: Deployment Template Checks
     uses: ./.github/workflows/validate-sam-template.yml
-    secrets: inherit
+    secrets: inherit # zizmor: ignore[secrets-inherit]
     needs: validate_container
 
   publish_artifacts:

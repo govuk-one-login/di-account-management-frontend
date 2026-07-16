@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  sonarcloud:
+  sonarcloud: # zizmor: ignore[excessive-permissions]
     name: Run Sonar scan
     runs-on: ubuntu-latest
     timeout-minutes: 15

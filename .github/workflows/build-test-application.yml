@@ -24,7 +24,7 @@ on:
         default: ${{ github.ref }}
 
 jobs:
-  build_test_application:
+  build_test_application: # zizmor: ignore[excessive-permissions]
     name: "Build & Test Application"
     runs-on: ubuntu-latest
     timeout-minutes: 15

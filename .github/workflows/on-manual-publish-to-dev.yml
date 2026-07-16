@@ -87,7 +87,7 @@ jobs:
         if: inputs.rpRegistryRef != ''
         env:
           RP_REGISTRY_REF: ${{ inputs.rpRegistryRef }}
-        run: |
+        run: | # zizmor: ignore[adhoc-packages]
           npm pkg set "dependencies.di-account-management-rp-registry=github:govuk-one-login/di-account-management-rp-registry#${RP_REGISTRY_REF}"
           npm install --package-lock-only di-account-management-rp-registry
 

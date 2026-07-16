@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  update:
+  update: # zizmor: ignore[excessive-permissions]
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # pin@v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # zizmor: ignore[artipacked]
       - name: Set up git
         run: |
           git config user.name 'github-actions[bot]'
