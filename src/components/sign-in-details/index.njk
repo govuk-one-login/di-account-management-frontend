@@ -49,7 +49,7 @@
             <p class="govuk-body govuk-!-margin-bottom-0">
               {{- 'pages.signInDetails.passkeys.lastUsed' | translate -}} {{ passkey.lastUsedAt }}
             </p>
-          {% endif %}          
+          {% endif %}
           <p class="govuk-body govuk-!-margin-bottom-0">
             {{ 'pages.signInDetails.passkeys.setUp' | translate }} {{ passkey.createdAt }}
           </p>
@@ -152,7 +152,7 @@
         const passkeysListBox = document.getElementById("passkeys-list-box");
         if (passkeysListBox) {
           passkeysListBox.classList.remove("no-bottom-border");
-        }        
+        }
       }
     </script>
 {% endblock %}

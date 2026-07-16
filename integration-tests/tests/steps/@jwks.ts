@@ -25,7 +25,7 @@ Then("the response should contain a {string} array", async ({}, key: string) => 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await lastResponse?.json();
   expect(json).toBeDefined();
-   
+
   expect(json).toHaveProperty(key);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   expect(Array.isArray(json[key])).toBe(true);
@@ -38,7 +38,7 @@ Then("each key should have a {string} field with value {string}", async ({}, fie
   const keys = json.keys;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   keys.forEach((key: Record<string, unknown>) => {
-     
+
     expect(key[field]).toBe(value);
   });
 });
@@ -51,7 +51,7 @@ Then("each key should have a {string} field", async ({}, field: string) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   keys.forEach((key: Record<string, unknown>) => {
     expect(key).toHaveProperty(field);
-     
+
     expect(typeof key[field]).toBe("string");
   });
 });

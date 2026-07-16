@@ -38,7 +38,7 @@ Scenario: add a passkey fails when account has interventions (blocked, no action
   Then I click the "Set up a passkey" link
   Then I enter and submit my password "qwerty"
   Then I click the "passkey-create account has interventions (blocked, no actions specified)" link
-  Then the page title is prefixed with "Your GOV.UK One Login has been permanently locked"  
+  Then the page title is prefixed with "Your GOV.UK One Login has been permanently locked"
 
 Scenario: add a passkey fails when account has interventions (suspended, no actions specified)
   Given I go to the "Root" page
@@ -58,7 +58,7 @@ Scenario: add a passkey fails when account has interventions (suspended, no acti
   Then I click the "Set up a passkey" link
   Then I enter and submit my password "qwerty"
   Then I click the "passkey-create account has interventions (suspended, no actions required)" link
-  Then the page contains the text "You cannot use your GOV.UK One Login at the moment"  
+  Then the page contains the text "You cannot use your GOV.UK One Login at the moment"
 
 Scenario: add a passkey fails when account has interventions (suspended, reset password required)
   Given I go to the "Root" page
@@ -68,7 +68,7 @@ Scenario: add a passkey fails when account has interventions (suspended, reset p
   Then I click the "Set up a passkey" link
   Then I enter and submit my password "qwerty"
   Then I click the "passkey-create account has interventions (suspended, reset password required)" link
-  Then the page contains the text "You cannot use your GOV.UK One Login at the moment"    
+  Then the page contains the text "You cannot use your GOV.UK One Login at the moment"
 
 Scenario: add a passkey fails when account has interventions (suspended, reprove identity required)
   Given I go to the "Root" page
@@ -78,7 +78,7 @@ Scenario: add a passkey fails when account has interventions (suspended, reprove
   Then I click the "Set up a passkey" link
   Then I enter and submit my password "qwerty"
   Then I click the "passkey-create account has interventions (suspended, reprove identity required)" link
-  Then the page contains the text "You cannot use your GOV.UK One Login at the moment"      
+  Then the page contains the text "You cannot use your GOV.UK One Login at the moment"
 
 Scenario: add a passkey fails when account has interventions (suspended, reset password and reprove identity required)
   Given I go to the "Root" page
@@ -88,7 +88,7 @@ Scenario: add a passkey fails when account has interventions (suspended, reset p
   Then I click the "Set up a passkey" link
   Then I enter and submit my password "qwerty"
   Then I click the "passkey-create account has interventions (suspended, reset password and reprove identity required)" link
-  Then the page contains the text "You cannot use your GOV.UK One Login at the moment"        
+  Then the page contains the text "You cannot use your GOV.UK One Login at the moment"
 
 Scenario: remove a passkey
   Given I go to the "Root" page
