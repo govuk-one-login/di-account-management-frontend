@@ -32,9 +32,8 @@ describe("Integration:: request phone code", () => {
 
   beforeAll(async () => {
     vi.resetModules();
-    const sessionMiddleware = await import(
-      "../../../middleware/requires-auth-middleware.js"
-    );
+    const sessionMiddleware =
+      await import("../../../middleware/requires-auth-middleware.js");
     vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
       function (req: any, res: any, next: any): void {
         req.session.user = {

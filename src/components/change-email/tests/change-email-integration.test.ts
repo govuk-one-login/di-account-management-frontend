@@ -32,9 +32,8 @@ describe("Integration:: change email", () => {
 
   beforeAll(async () => {
     vi.resetModules();
-    const sessionMiddleware = await import(
-      "../../../middleware/requires-auth-middleware.js"
-    );
+    const sessionMiddleware =
+      await import("../../../middleware/requires-auth-middleware.js");
     vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
       async function (req: any, res: any, next: any): Promise<void> {
         req.session.user = {

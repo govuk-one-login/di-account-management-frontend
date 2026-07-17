@@ -66,9 +66,8 @@ describe("Integration:: change authenticator app", () => {
   });
 
   const appWithMiddlewareSetup = async () => {
-    const sessionMiddleware = await import(
-      "../../../middleware/requires-auth-middleware.js"
-    );
+    const sessionMiddleware =
+      await import("../../../middleware/requires-auth-middleware.js");
     const mfaModule = await import("../../../utils/mfa/index.js");
     const oidc = await import("../../../utils/oidc.js");
     const mfa = await import("../../../utils/mfaClient/index.js");

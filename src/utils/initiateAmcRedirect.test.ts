@@ -145,7 +145,7 @@ describe("initiateAmcRedirect", () => {
     vi.mocked(getAmcJweModule.getAmcJwe).mockResolvedValue({
       jws: "test.jws.value",
       jwe: "test.jwe.value",
-      redirectUri: "https://custom.domain.com/callback?scope=openid"
+      redirectUri: "https://custom.domain.com/callback?scope=openid",
     });
 
     await initiateAmcRedirect("openid", req as Request, res as Response);

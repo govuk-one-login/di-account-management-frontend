@@ -169,7 +169,8 @@ describe("OIDC Functions", () => {
     beforeEach(() => {
       vi.spyOn(awsConfig, "getKMSConfig").mockReturnValue({
         awsConfig: { region: "eu-west-2" },
-        kmsKeyId: "arn:aws:kms:eu-west-2:123456789012:key/ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
+        kmsKeyId:
+          "arn:aws:kms:eu-west-2:123456789012:key/ff275b92-0def-4dfc-b0f6-87c96b26c6c7",
       });
       mockKmsService = {
         sign: vi.fn().mockResolvedValue({

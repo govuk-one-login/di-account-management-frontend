@@ -13,7 +13,9 @@ describe("kmsService", () => {
       SignCommand: vi.fn(),
       GetPublicKeyCommand: vi.fn(),
       MessageType: { RAW: "RAW" },
-      SigningAlgorithmSpec: { RSASSA_PKCS1_V1_5_SHA_512: "RSASSA_PKCS1_V1_5_SHA_512" },
+      SigningAlgorithmSpec: {
+        RSASSA_PKCS1_V1_5_SHA_512: "RSASSA_PKCS1_V1_5_SHA_512",
+      },
     }));
   });
 

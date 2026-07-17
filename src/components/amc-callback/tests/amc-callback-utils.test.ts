@@ -392,7 +392,9 @@ describe("AMC call back util tests", () => {
             success: false,
             details: {
               error: { description: "AccountHasInterventions", code: 1004 },
-              accountInterventionsStatus: { state: { blocked: true, suspended: false } },
+              accountInterventionsStatus: {
+                state: { blocked: true, suspended: false },
+              },
             },
           },
         ],
@@ -423,7 +425,9 @@ describe("AMC call back util tests", () => {
             success: false,
             details: {
               error: { description: "AccountHasInterventions", code: 1004 },
-              accountInterventionsStatus: { state: { blocked: false, suspended: true } },
+              accountInterventionsStatus: {
+                state: { blocked: false, suspended: true },
+              },
             },
           },
         ],
@@ -441,7 +445,11 @@ describe("AMC call back util tests", () => {
           account_action_error: "Account has interventions - suspended",
         }
       );
-      expect(handleLogout).toHaveBeenCalledWith(req, res, LogoutState.Suspended);
+      expect(handleLogout).toHaveBeenCalledWith(
+        req,
+        res,
+        LogoutState.Suspended
+      );
     });
 
     it("should redirect when passkey creation aborted and send failure audit event", async () => {

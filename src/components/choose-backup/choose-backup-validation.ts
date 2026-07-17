@@ -3,8 +3,7 @@ import { validateBodyMiddleware } from "../../middleware/form-validation-middlew
 import { Request, Response, NextFunction } from "express";
 
 export function validateChooseBackupRequest(): (
-  | ValidationChain
-  | ((req: Request, res: Response, next: NextFunction) => void)
+  ValidationChain | ((req: Request, res: Response, next: NextFunction) => void)
 )[] {
   const addBackupValidation: ValidationChain = body("addBackup")
     .notEmpty()

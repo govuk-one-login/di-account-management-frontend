@@ -188,9 +188,8 @@ describe("Activity History Util", () => {
     const trace = "trace";
 
     beforeEach(async () => {
-      const decryptDataModule = await import(
-        "../../../src/utils/decrypt-data.js"
-      );
+      const decryptDataModule =
+        await import("../../../src/utils/decrypt-data.js");
       decryptDataStub = vi.spyOn(decryptDataModule, "decryptData");
       decryptDataStub.mockImplementation((eventType: string) => {
         return eventType;

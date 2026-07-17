@@ -35,8 +35,7 @@ const passkeysConvenienceMetadataSchema = v.pipeAsync(
 );
 
 let convenienceMetadata:
-  | v.InferOutput<typeof passkeysConvenienceMetadataSchema>
-  | undefined;
+  v.InferOutput<typeof passkeysConvenienceMetadataSchema> | undefined;
 
 export const getAllPasskeyConvenienceMetadata = async () => {
   if (convenienceMetadata) {
