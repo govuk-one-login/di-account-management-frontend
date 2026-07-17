@@ -30,7 +30,7 @@
             "path": "jobs.detect-secrets",
             "name": "Detect secrets"
           }
-        },          
+        },
         {
           "check-types": ["integration", "accessibility", "regression"],
           "provider": "GitHub",

@@ -109,7 +109,7 @@ describe("resend phone code controller", () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
         sendPhoneVerificationNotification: vi.fn().mockResolvedValue({ success: true }),
       };
-      
+
       res.locals.sessionId = "123456-djdsa";
       req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "+33645453322";
@@ -131,7 +131,7 @@ describe("resend phone code controller", () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
         sendPhoneVerificationNotification: vi.fn().mockResolvedValue({ success: true }),
       };
-      
+
       res.locals.sessionId = "123456-djdsb";
       req.session.user.tokens = { accessToken: "token" } as any;
       req.body.phoneNumber = "+33645453322";

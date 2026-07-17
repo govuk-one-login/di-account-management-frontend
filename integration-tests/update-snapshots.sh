@@ -7,7 +7,7 @@
 # to `npm ci && bddgen && playwright test --update-snapshots --remove-obsolete-snapshots`
 # where --remove-obsolete-snapshots is a theortical flag used by Playwright to remove
 # obsolete snapshots. UPDATE_SNAPSHOTS can also be removed from env.ts and the initial directory
-# of snapshotPathTemplate in playwright.config.ts can be set to "snapshots". 
+# of snapshotPathTemplate in playwright.config.ts can be set to "snapshots".
 # /snapshots-updated can also be removed from .gitignore.
 
 npm ci

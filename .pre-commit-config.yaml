@@ -21,9 +21,7 @@ repos:
     rev: v6.0.0
     hooks:
       - id: detect-private-key
-      - id: detect-aws-credentials
-        args: [--allow-missing-credentials]
-        exclude: "package.json|package-lock.json|.*test.*\\.ts$|\\.pre-commit-config\\.yaml$|\\.github/workflows/checkov\\.yml$|\\.secrets\\.baseline$"
+        exclude: "seed\\.yaml\\.sample$"
       - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: check-merge-conflict

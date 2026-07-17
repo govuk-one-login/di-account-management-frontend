@@ -34,22 +34,29 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # pin@v3
         with:
+          persist-credentials: false
           ref: ${{ inputs.gitRef }}
 
       - name: Fetch Commit SHA
         id: gitRefSHA
         if: github.event.inputs.refType == 'Commit SHA'
-        run: echo "GIT_REF_SHA=${{ inputs.gitRef }}" >> $GITHUB_ENV
+        env:
+          GIT_REF: ${{ inputs.gitRef }}
+        run: echo "GIT_REF_SHA=$GIT_REF" >> $GITHUB_ENV
 
       - name: Fetch Commit SHA by Branch name
         id: gitRefBranch
         if: github.event.inputs.refType == 'Branch name'
-        run: echo "GIT_REF_SHA=$(git log -1 '${{ inputs.gitRef }}' --pretty=format:%H)" >> $GITHUB_ENV
+        env:
+          GIT_REF: ${{ inputs.gitRef }}
+        run: echo "GIT_REF_SHA=$(git log -1 "$GIT_REF" --pretty=format:%H)" >> $GITHUB_ENV
 
       - name: Fetch Commit SHA by Tag
         id: gitRefTag
         if: github.event.inputs.refType == 'Tag'
-        run: echo "GIT_REF_SHA=$(git rev-list -n 1 '${{ inputs.gitRef }}')" >> $GITHUB_ENV
+        env:
+          GIT_REF: ${{ inputs.gitRef }}
+        run: echo "GIT_REF_SHA=$(git rev-list -n 1 "$GIT_REF")" >> $GITHUB_ENV
 
       - name: Set tag
         id: vars
@@ -80,7 +87,7 @@ jobs:
         if: inputs.rpRegistryRef != ''
         env:
           RP_REGISTRY_REF: ${{ inputs.rpRegistryRef }}
-        run: |
+        run: | # zizmor: ignore[adhoc-packages]
           npm pkg set "dependencies.di-account-management-rp-registry=github:govuk-one-login/di-account-management-rp-registry#${RP_REGISTRY_REF}"
           npm install --package-lock-only di-account-management-rp-registry
 

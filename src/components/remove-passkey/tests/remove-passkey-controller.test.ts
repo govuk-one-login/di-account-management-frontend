@@ -173,7 +173,7 @@ describe("removePasskeyPost", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockEventService = {
       buildAuditEvent: vi.fn().mockReturnValue({ event_name: "test-event" }),
       send: vi.fn(),
@@ -210,14 +210,14 @@ describe("removePasskeyPost", () => {
     );
 
     expect(mfaClient.deletePasskey).toHaveBeenCalledWith("12345");
-    
+
     // Should send HOME_PASSKEY_DELETE_SUCCESSFUL event
     expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
       res,
       EventName.HOME_PASSKEY_DELETE_SUCCESSFUL
     );
-    
+
     // Should send HOME_ACTION_COMPLETED event with success details
     expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
@@ -228,7 +228,7 @@ describe("removePasskeyPost", () => {
         account_action_overall_success: true,
       }
     );
-    
+
     expect(mockEventService.send).toHaveBeenCalledTimes(2);
     expect(mockEventService.send).toHaveBeenCalledWith(
       { event_name: "test-event" },
@@ -272,14 +272,14 @@ describe("removePasskeyPost", () => {
     }).rejects.toThrow("Failed to delete passkey");
 
     expect(mfaClient.deletePasskey).toHaveBeenCalledWith("12345");
-    
+
     // Should send HOME_PASSKEY_DELETE_FAILED event
     expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
       res,
       EventName.HOME_PASSKEY_DELETE_FAILED
     );
-    
+
     // Should send HOME_ACTION_COMPLETED event with failure details
     expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
@@ -291,7 +291,7 @@ describe("removePasskeyPost", () => {
         account_action_error: "Failed to delete passkey",
       }
     );
-    
+
     expect(mockEventService.send).toHaveBeenCalledTimes(2);
     expect(mockEventService.send).toHaveBeenCalledWith(
       { event_name: "test-event" },
@@ -333,7 +333,7 @@ describe("removePasskeyPost", () => {
     }).rejects.toThrow("Error deleting passkey");
 
     expect(mfaClient.deletePasskey).toHaveBeenCalledWith("12345");
-    
+
     // Should send HOME_ACTION_COMPLETED event first
     expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
@@ -345,14 +345,14 @@ describe("removePasskeyPost", () => {
         account_action_error: "Failed delete passkey",
       }
     );
-    
+
     // Should send HOME_PASSKEY_DELETE_FAILED event second
     expect(mockEventService.buildAuditEvent).toHaveBeenCalledWith(
       req,
       res,
       EventName.HOME_PASSKEY_DELETE_FAILED
     );
-    
+
     expect(mockEventService.send).toHaveBeenCalledTimes(2);
     expect(mockEventService.send).toHaveBeenCalledWith(
       { event_name: "test-event" },
