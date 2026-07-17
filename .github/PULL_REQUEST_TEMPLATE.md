@@ -47,7 +47,9 @@
   <!-- Design updates should be signed off by a UCD person prior to the PR being open for dev review -->
   <!-- Delete if changes do NOT include any design updates -->
 - [ ] Design updates have been signed off by a member of the UCD team
+
 <!-- Delete if changes do NOT include any analytics updates -->
+
 - [ ] Analytics updates have been signed off by a PA
 
 ### Monitoring

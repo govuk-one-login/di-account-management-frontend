@@ -57,7 +57,7 @@ export async function initiateAmcRedirect(
     res,
     EventName.HOME_AMC_AUTHORISATION_REQUESTED,
     {
-      amc_scope: scope
+      amc_scope: scope,
     }
   );
 

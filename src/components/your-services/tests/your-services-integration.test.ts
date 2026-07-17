@@ -218,9 +218,8 @@ const appWithMiddlewareSetup = async (data?: {
   hasHMRC?: boolean;
   language?: string;
 }) => {
-  const sessionMiddleware = await import(
-    "../../../middleware/requires-auth-middleware.js"
-  );
+  const sessionMiddleware =
+    await import("../../../middleware/requires-auth-middleware.js");
   const yourServices = await import("../../../utils/yourServices.js");
   const oidc = await import("../../../utils/oidc.js");
   const params = data || {};

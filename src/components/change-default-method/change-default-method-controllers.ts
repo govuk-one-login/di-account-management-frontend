@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { getLastNDigits } from "../../utils/phone-number.js";
-import { handleMfaMethodPage, renderMfaMethodPage } from "../common/mfa/index.js";
+import {
+  handleMfaMethodPage,
+  renderMfaMethodPage,
+} from "../common/mfa/index.js";
 import { EventType, getNextState } from "../../utils/state-machine.js";
 import { ERROR_CODES, PATH_DATA } from "../../app.constants.js";
 import { ChangePhoneNumberServiceInterface } from "../change-phone-number/types.js";
@@ -11,7 +14,10 @@ import {
   renderBadRequest,
 } from "../../utils/validation.js";
 import { BadRequestError } from "../../utils/errors.js";
-import { createMfaClient, formatErrorMessage } from "../../utils/mfaClient/index.js";
+import {
+  createMfaClient,
+  formatErrorMessage,
+} from "../../utils/mfaClient/index.js";
 import { logger } from "../../utils/logger.js";
 import { validationResult } from "express-validator";
 import { validationErrorFormatter } from "../../middleware/form-validation-middleware.js";

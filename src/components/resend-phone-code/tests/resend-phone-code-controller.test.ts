@@ -107,7 +107,9 @@ describe("resend phone code controller", () => {
   describe("priorityIdentifier in resendPhoneCodePost", () => {
     it("should call sendPhoneVerificationNotification with BACKUP priority when intent is addBackup", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({ success: true }),
+        sendPhoneVerificationNotification: vi
+          .fn()
+          .mockResolvedValue({ success: true }),
       };
 
       res.locals.sessionId = "123456-djdsa";
@@ -119,7 +121,9 @@ describe("resend phone code controller", () => {
 
       await resendPhoneCodePost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.sendPhoneVerificationNotification).toHaveBeenCalledWith(
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).toHaveBeenCalledWith(
         "test@test.com",
         "+33645453322",
         "BACKUP",
@@ -129,7 +133,9 @@ describe("resend phone code controller", () => {
 
     it("should call sendPhoneVerificationNotification with DEFAULT priority when intent is changePhoneNumber", async () => {
       const fakeService: ChangePhoneNumberServiceInterface = {
-        sendPhoneVerificationNotification: vi.fn().mockResolvedValue({ success: true }),
+        sendPhoneVerificationNotification: vi
+          .fn()
+          .mockResolvedValue({ success: true }),
       };
 
       res.locals.sessionId = "123456-djdsb";
@@ -141,7 +147,9 @@ describe("resend phone code controller", () => {
 
       await resendPhoneCodePost(fakeService)(req as Request, res as Response);
 
-      expect(fakeService.sendPhoneVerificationNotification).toHaveBeenCalledWith(
+      expect(
+        fakeService.sendPhoneVerificationNotification
+      ).toHaveBeenCalledWith(
         "test@test.com",
         "+33645453322",
         "DEFAULT",

@@ -3,10 +3,7 @@ import { logger } from "./logger.js";
 import { LOCALE } from "../app.constants.js";
 
 export type translateResult =
-  | string
-  | TFunctionDetailedResult<string, any>
-  | object
-  | (string | object)[];
+  string | TFunctionDetailedResult<string, any> | object | (string | object)[];
 
 export const safeTranslate = (
   translate: TFunction<"translation", undefined>,

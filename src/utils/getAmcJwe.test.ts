@@ -71,7 +71,7 @@ describe("getAmcJwe", () => {
 
     // Mock getAmcRedirectUri to return a consistent value
     vi.mocked(mockGetAmcRedirectUri).mockImplementation((scope: string) => {
-      return `https://home.example.com/amc/callback?scope=${encodeURIComponent(scope).replace(/%20/g, '+')}`;
+      return `https://home.example.com/amc/callback?scope=${encodeURIComponent(scope).replace(/%20/g, "+")}`;
     });
 
     vi.mocked(kmsModule.kmsService.sign).mockResolvedValue({
@@ -243,7 +243,8 @@ describe("getAmcJwe", () => {
 
   it("should return redirect URI in result object", async () => {
     const scope = "openid email";
-    const expectedUri = "https://home.example.com/amc/callback?scope=openid+email";
+    const expectedUri =
+      "https://home.example.com/amc/callback?scope=openid+email";
     vi.mocked(mockGetAmcRedirectUri).mockReturnValue(expectedUri);
 
     const result = await getAmcJwe(scope, "state-123", mockUser);

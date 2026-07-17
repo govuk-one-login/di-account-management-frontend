@@ -18,8 +18,7 @@ export type ExpressRouteFunc = (
 ) => void | Promise<void>;
 
 export type ValidationChainFunc = (
-  | ValidationChain
-  | ((req: Request, res: Response, next: NextFunction) => any)
+  ValidationChain | ((req: Request, res: Response, next: NextFunction) => any)
 )[];
 
 interface UserTokens {
@@ -53,9 +52,7 @@ export interface DeviceIntelligence {
 }
 
 export type AMJourneyValidBackRouteKey =
-  | "security"
-  | "sign-in-details"
-  | "activity-history";
+  "security" | "sign-in-details" | "activity-history";
 
 interface AMJourneyBackRouteConfig {
   url: string;

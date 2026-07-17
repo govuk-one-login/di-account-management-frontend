@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-import { RequestBuilder, ResponseBuilder } from "../../../test/utils/builders.js";
+import {
+  RequestBuilder,
+  ResponseBuilder,
+} from "../../../test/utils/builders.js";
 import { UserJourney, EventType } from "../state-machine.js";
 import * as stateMachine from "../state-machine.js";
 import { SetState } from "../set-state.js";

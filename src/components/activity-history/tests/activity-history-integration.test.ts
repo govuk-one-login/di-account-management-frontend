@@ -243,12 +243,10 @@ const appWithMiddlewareSetup = async (data?: any, config?: any) => {
   vi.resetModules();
   const oidc = await import("../../../utils/oidc.js");
   const configFuncs = await import("../../../config.js");
-  const presentActivityHistory = await import(
-    "../../../utils/present-activity-history.js"
-  );
-  const sessionMiddleware = await import(
-    "../../../middleware/requires-auth-middleware.js"
-  );
+  const presentActivityHistory =
+    await import("../../../utils/present-activity-history.js");
+  const sessionMiddleware =
+    await import("../../../middleware/requires-auth-middleware.js");
   const reportSuspiciousActivity =
     !config?.reportSuspiciousActivityJourneyDisabled;
   const language = config?.language ?? "en";

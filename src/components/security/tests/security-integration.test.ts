@@ -134,9 +134,8 @@ describe("Integration:: security", () => {
 });
 
 const appWithMiddlewareSetup = async (config: any = {}) => {
-  const sessionMiddleware = await import(
-    "../../../middleware/requires-auth-middleware.js"
-  );
+  const sessionMiddleware =
+    await import("../../../middleware/requires-auth-middleware.js");
   const oidc = await import("../../../utils/oidc.js");
   const configFuncs = await import("../../../config.js");
   const mfa = await import("../../../utils/mfaClient/index.js");

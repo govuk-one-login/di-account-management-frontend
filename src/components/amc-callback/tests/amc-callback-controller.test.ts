@@ -60,7 +60,11 @@ describe("amcCallbackGet", () => {
   });
 
   it("should redirect if an error or error_description is present in query", async () => {
-    req.query = { scope: "openid", error: "access_denied", error_description: "User cancelled" };
+    req.query = {
+      scope: "openid",
+      error: "access_denied",
+      error_description: "User cancelled",
+    };
     vi.mocked(utils.validateQueryParams).mockReturnValue(undefined);
     await amcCallbackGet(req, res);
 

@@ -21,13 +21,12 @@ describe("conditionalMfaMethodMiddleware", () => {
 
   it("should call next directly when passkeys are enabled", async () => {
     vi.spyOn(config, "passkeysEnabled").mockReturnValue(true);
-    const mfaMethodMiddlewareSpy = vi.spyOn(mfaMiddleware, "mfaMethodMiddleware");
-
-    await conditionalMfaMethodMiddleware(
-      req as Request,
-      res as Response,
-      next
+    const mfaMethodMiddlewareSpy = vi.spyOn(
+      mfaMiddleware,
+      "mfaMethodMiddleware"
     );
+
+    await conditionalMfaMethodMiddleware(req as Request, res as Response, next);
 
     expect(config.passkeysEnabled).toHaveBeenCalledWith(req);
     expect(next).toHaveBeenCalledOnce();
@@ -36,13 +35,11 @@ describe("conditionalMfaMethodMiddleware", () => {
 
   it("should call mfaMethodMiddleware when passkeys are disabled", async () => {
     vi.spyOn(config, "passkeysEnabled").mockReturnValue(false);
-    const mfaMethodMiddlewareSpy = vi.spyOn(mfaMiddleware, "mfaMethodMiddleware").mockResolvedValue();
+    const mfaMethodMiddlewareSpy = vi
+      .spyOn(mfaMiddleware, "mfaMethodMiddleware")
+      .mockResolvedValue();
 
-    await conditionalMfaMethodMiddleware(
-      req as Request,
-      res as Response,
-      next
-    );
+    await conditionalMfaMethodMiddleware(req as Request, res as Response, next);
 
     expect(config.passkeysEnabled).toHaveBeenCalledWith(req);
     expect(mfaMethodMiddlewareSpy).toHaveBeenCalledWith(req, res, next);

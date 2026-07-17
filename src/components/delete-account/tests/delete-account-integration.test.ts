@@ -67,9 +67,8 @@ describe("Integration:: delete account", () => {
   beforeAll(async () => {
     vi.resetModules();
     vi.resetModules();
-    const sessionMiddleware = await import(
-      "../../../middleware/requires-auth-middleware.js"
-    );
+    const sessionMiddleware =
+      await import("../../../middleware/requires-auth-middleware.js");
     const yourServices = await import("../../../utils/yourServices.js");
     yourServicesStub = vi.spyOn(
       yourServices,

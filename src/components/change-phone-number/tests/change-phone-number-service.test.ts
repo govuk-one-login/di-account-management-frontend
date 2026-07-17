@@ -82,20 +82,21 @@ describe("changePhoneNumberService", () => {
       })
       .reply(HTTP_STATUS_CODES.NO_CONTENT);
 
-    const result = await changePhoneNumberService().sendPhoneVerificationNotification(
-      CURRENT_EMAIL,
-      phoneNumber,
-      "BACKUP",
-      {
-        token: TOKEN,
-        sourceIp: SOURCE_IP,
-        sessionId: SESSION_ID,
-        persistentSessionId: PERSISTENT_SESSION_ID,
-        userLanguage: ENGLISH,
-        clientSessionId: CLIENT_SESSION_ID,
-        txmaAuditEncoded: TXMA_AUDIT_ENCODED,
-      }
-    );
+    const result =
+      await changePhoneNumberService().sendPhoneVerificationNotification(
+        CURRENT_EMAIL,
+        phoneNumber,
+        "BACKUP",
+        {
+          token: TOKEN,
+          sourceIp: SOURCE_IP,
+          sessionId: SESSION_ID,
+          persistentSessionId: PERSISTENT_SESSION_ID,
+          userLanguage: ENGLISH,
+          clientSessionId: CLIENT_SESSION_ID,
+          txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+        }
+      );
 
     expect(result.success).toBe(true);
   });
