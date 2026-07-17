@@ -5,12 +5,7 @@
       "service-tag": "home",
       "quality-gates": [
         {
-          "check-types": [
-            "unit",
-            "new feature",
-            "regression",
-            "code style and linting"
-          ],
+          "check-types": ["unit", "new feature", "regression"],
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
@@ -21,14 +16,17 @@
         },
         {
           "check-types": [
-            "secret scanning"
+            "code style and linting",
+            "secret scanning",
+            "vulnerability detection",
+            "code quality"
           ],
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
-            "file": ".github/workflows/detect-secrets.yaml",
-            "path": "jobs.detect-secrets",
-            "name": "Detect secrets"
+            "file": ".github/workflows/check.yaml",
+            "path": "jobs.check",
+            "name": "Check"
           }
         },
         {
@@ -42,31 +40,6 @@
           }
         },
         {
-          "check-types": [
-            "unit",
-            "new feature",
-            "regression",
-            "code style and linting"
-          ],
-          "provider": "GitHub",
-          "phase": "build",
-          "config": {
-            "file": ".github/workflows/on-merge-to-main.yml",
-            "path": "jobs.validate_application",
-            "name": "Verify & Publish"
-          }
-        },
-        {
-          "check-types": ["code quality"],
-          "provider": "GitHub",
-          "phase": "pre-merge",
-          "config": {
-            "file": ".github/workflows/checkov.yml",
-            "path": "jobs.checkov",
-            "name": "Checkov"
-          }
-        },
-        {
           "check-types": ["code quality", "unit test coverage"],
           "provider": "GitHub",
           "phase": "pre-merge",
@@ -74,6 +47,16 @@
             "file": ".github/workflows/sonarcloud.yml",
             "path": "jobs.sonarcloud",
             "name": "SonarCloud"
+          }
+        },
+        {
+          "check-types": ["unit", "new feature", "regression"],
+          "provider": "GitHub",
+          "phase": "build",
+          "config": {
+            "file": ".github/workflows/on-merge-to-main.yml",
+            "path": "jobs.validate_application",
+            "name": "Verify & Publish"
           }
         }
       ]
