@@ -1,1 +1,3 @@
+cfn-lint==1.46.0
 detect-secrets==1.5.0
+pre-commit==4.2.0

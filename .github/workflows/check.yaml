@@ -1,0 +1,58 @@
+name: Check
+
+permissions: {}
+
+on:
+  pull_request:
+  merge_group:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version-file: .nvmrc
+
+      - name: Set up Python
+        uses: actions/setup-python@c8813ba1bc76ebf779b911ad8ffccbf2e449cb48
+        with:
+          python-version: "3.14"
+
+      - name: Install Python dependencies
+        run: "pip install --require-hashes --only-binary :all: -r .github/workflows/requirements.txt"
+
+      - name: Install Node dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install integration test dependencies
+        run: npm ci --ignore-scripts --prefix integration-tests
+
+      - name: Cache pre-commit environments
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: pre-commit-
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure
+
+      - name: Checkov
+        uses: bridgecrewio/checkov-action@d9d1e5cdc53e3a91f0c4c58db7bc19ee31cac7e5
+        with:
+          directory: deploy
+          output_format: cli
+          output_file_path: console
+          # TODO jira ticket OLH-4086: Temporary skip - CKV_AWS_124 requires CloudFormation stacks to send event notifications to an SNS topic.
+          # Remove once notification_arns has been added to all affected stacks.
+          skip_check: CKV_AWS_124
