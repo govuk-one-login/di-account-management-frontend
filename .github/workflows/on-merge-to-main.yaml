@@ -14,7 +14,7 @@ permissions:
 jobs:
   validate_application:
     name: App Checks
-    uses: ./.github/workflows/build-test-application.yaml
+    uses: ./.github/workflows/local-tests-unit.yaml
     secrets: inherit # zizmor: ignore[secrets-inherit]
 
   validate_container:

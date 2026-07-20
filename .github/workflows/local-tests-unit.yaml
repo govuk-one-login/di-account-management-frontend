@@ -2,26 +2,17 @@
 name: "Local tests (unit)"
 
 # Triggered when:
-#   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
+#   - a pull request is opened or updated.
 #   - invoked by another workflow.
 on:
-  push:
-    paths:
-      - "src/**"
-      - "test/**"
-      - "@types/**"
-      - "package.json"
-      - "package-lock.json"
-      - "tsconfig.json"
-      - ".github/workflows/local-tests-unit.yaml"
-    branches-ignore:
-      - main
   workflow_call:
     inputs:
       gitRef:
         required: false
         type: string
         default: ${{ github.ref }}
+  pull_request:
+  merge_group:
 
 jobs:
   local-tests-unit: # zizmor: ignore[excessive-permissions]
