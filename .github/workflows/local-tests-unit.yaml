@@ -16,7 +16,6 @@ on:
 
 jobs:
   local-tests-unit: # zizmor: ignore[excessive-permissions]
-    name: "Build & Test Application"
     runs-on: ubuntu-latest
     timeout-minutes: 15
     services:
