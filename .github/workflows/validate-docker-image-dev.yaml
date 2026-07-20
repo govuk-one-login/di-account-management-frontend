@@ -2,18 +2,11 @@
 name: "Build & Scan Docker Image against Dev Env"
 
 on:
-  push:
+  pull_request:
     paths:
       - "Dockerfile"
       - ".github/workflows/validate-docker-image-dev.yaml"
-    branches-ignore:
-      - main
-  workflow_call:
-    inputs:
-      gitRef:
-        required: false
-        type: string
-        default: ${{ github.ref }}
+  merge_group:
 
 permissions:
   id-token: write

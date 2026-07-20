@@ -2,19 +2,12 @@
 name: Validate SAM Template against Dev Env
 
 on:
-  push:
+  pull_request:
     paths:
       - "deploy/template.yaml"
       - "deploy/samconfig.toml"
       - ".github/workflows/validate-sam-template-dev.yaml"
-    branches-ignore:
-      - main
-  workflow_call:
-    inputs:
-      gitRef:
-        required: false
-        type: string
-        default: ${{ github.ref }}
+  merge_group:
 
 jobs:
   validate_sam_template:
