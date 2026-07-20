@@ -14,18 +14,18 @@ permissions:
 jobs:
   validate_application:
     name: App Checks
-    uses: ./.github/workflows/build-test-application.yml
+    uses: ./.github/workflows/build-test-application.yaml
     secrets: inherit # zizmor: ignore[secrets-inherit]
 
   validate_container:
     name: Container Checks
-    uses: ./.github/workflows/validate-docker-image.yml
+    uses: ./.github/workflows/validate-docker-image.yaml
     secrets: inherit # zizmor: ignore[secrets-inherit]
     needs: validate_application
 
   validate_deployment:
     name: Deployment Template Checks
-    uses: ./.github/workflows/validate-sam-template.yml
+    uses: ./.github/workflows/validate-sam-template.yaml
     secrets: inherit # zizmor: ignore[secrets-inherit]
     needs: validate_container
 

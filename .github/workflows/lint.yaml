@@ -1,4 +1,4 @@
-name: Check
+name: Lint
 
 permissions: {}
 
@@ -7,7 +7,7 @@ on:
   merge_group:
 
 jobs:
-  check:
+  lint:
     runs-on: ubuntu-latest
     permissions:
       contents: read

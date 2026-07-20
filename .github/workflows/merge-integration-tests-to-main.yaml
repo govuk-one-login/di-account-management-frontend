@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - "integration-tests/**"
-      - ".github/workflows/merge-integration-tests-to-main.yml"
+      - ".github/workflows/merge-integration-tests-to-main.yaml"
 
 permissions:
   id-token: write

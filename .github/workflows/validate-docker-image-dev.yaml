@@ -5,7 +5,7 @@ on:
   push:
     paths:
       - "Dockerfile"
-      - ".github/workflows/validate-docker-image-dev.yml"
+      - ".github/workflows/validate-docker-image-dev.yaml"
     branches-ignore:
       - main
   workflow_call:

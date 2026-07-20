@@ -1,5 +1,5 @@
 ---
-name: "Build & Test Application"
+name: "Local tests (unit)"
 
 # Triggered when:
 #   - a file, listed below, is pushed to any branch other than `main`, i.e. a feature branch.
@@ -13,7 +13,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
-      - ".github/workflows/build-test-application.yml"
+      - ".github/workflows/local-tests-unit.yaml"
     branches-ignore:
       - main
   workflow_call:
@@ -24,7 +24,7 @@ on:
         default: ${{ github.ref }}
 
 jobs:
-  build_test_application: # zizmor: ignore[excessive-permissions]
+  local-tests-unit: # zizmor: ignore[excessive-permissions]
     name: "Build & Test Application"
     runs-on: ubuntu-latest
     timeout-minutes: 15
