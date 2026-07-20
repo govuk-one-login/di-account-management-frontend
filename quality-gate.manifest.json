@@ -9,9 +9,9 @@
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
-            "file": ".github/workflows/build-test-application.yml",
-            "path": "jobs.build_test_application",
-            "name": "Build & Test Application"
+            "file": ".github/workflows/local-tests-unit.yaml",
+            "path": "jobs.local-tests-unit",
+            "name": "Local tests (unit)"
           }
         },
         {
@@ -24,9 +24,9 @@
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
-            "file": ".github/workflows/check.yaml",
-            "path": "jobs.check",
-            "name": "Check"
+            "file": ".github/workflows/lint.yaml",
+            "path": "jobs.lint",
+            "name": "Lint"
           }
         },
         {
@@ -34,9 +34,9 @@
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
-            "file": ".github/workflows/integration-tests.yml",
-            "path": "jobs.end_to_end_tests",
-            "name": "Integration tests"
+            "file": ".github/workflows/local-tests-integration.yaml",
+            "path": "jobs.local-tests-integration",
+            "name": "Local tests (integration)"
           }
         },
         {
@@ -44,7 +44,7 @@
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
-            "file": ".github/workflows/sonarcloud.yml",
+            "file": ".github/workflows/sonarcloud.yaml",
             "path": "jobs.sonarcloud",
             "name": "SonarCloud"
           }
@@ -54,7 +54,7 @@
           "provider": "GitHub",
           "phase": "build",
           "config": {
-            "file": ".github/workflows/on-merge-to-main.yml",
+            "file": ".github/workflows/on-merge-to-main.yaml",
             "path": "jobs.validate_application",
             "name": "Verify & Publish"
           }
