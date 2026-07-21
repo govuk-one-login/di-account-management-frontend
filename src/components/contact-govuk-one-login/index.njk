@@ -69,9 +69,11 @@
     }) }}
 
     <p class="govuk-body">{{'pages.contact.section3.phone.paragraph2' | translate }}</p>
-
     <p class="govuk-body"><a class="govuk-link" href="https://www.gov.uk/call-charges">{{'pages.contact.section3.phone.callChargesLinkText' | translate }}</a></p>
-  </section>
+
+    <h4 class="govuk-heading-s">{{'pages.contact.section3.phone.relayUKHeading' | translate }}</h4>
+    <p class="govuk-body">{{'pages.contact.section3.phone.relayUKParagraph' | translate | safe | replace("[relayUkLink]","https://www.relayuk.bt.com/")}}</p>
+    </section>
 {% endset %}
 
 
