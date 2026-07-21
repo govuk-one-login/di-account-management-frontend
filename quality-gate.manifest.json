@@ -5,21 +5,10 @@
       "service-tag": "home",
       "quality-gates": [
         {
-          "check-types": ["unit", "new feature", "regression"],
-          "provider": "GitHub",
-          "phase": "pre-merge",
-          "config": {
-            "file": ".github/workflows/local-tests-unit.yaml",
-            "path": "jobs.local-tests-unit",
-            "name": "Local tests (unit)"
-          }
-        },
-        {
           "check-types": [
+            "code quality",
             "code style and linting",
-            "secret scanning",
-            "vulnerability detection",
-            "code quality"
+            "secret scanning"
           ],
           "provider": "GitHub",
           "phase": "pre-merge",
@@ -30,33 +19,65 @@
           }
         },
         {
-          "check-types": ["integration", "accessibility", "regression"],
+          "check-types": ["vulnerability detection"],
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
-            "file": ".github/workflows/local-tests-integration.yaml",
-            "path": "jobs.local-tests-integration",
-            "name": "Local tests (integration)"
+            "file": ".github/workflows/dependency-review.yaml",
+            "path": "jobs.dependency-review",
+            "name": "Dependency Review"
           }
         },
         {
-          "check-types": ["code quality", "unit test coverage"],
+          "check-types": [
+            "code quality",
+            "unit test coverage",
+            "vulnerability detection"
+          ],
           "provider": "GitHub",
           "phase": "pre-merge",
           "config": {
             "file": ".github/workflows/sonarcloud.yaml",
             "path": "jobs.sonarcloud",
-            "name": "SonarCloud"
+            "name": "Run Sonar scan"
           }
         },
         {
-          "check-types": ["unit", "new feature", "regression"],
+          "check-types": ["integration", "new feature", "regression", "unit"],
           "provider": "GitHub",
-          "phase": "build",
+          "phase": "pre-merge",
+          "config": {
+            "file": ".github/workflows/local-tests-unit.yaml",
+            "path": "jobs.local-tests-unit",
+            "name": "Local tests (unit)"
+          }
+        },
+        {
+          "check-types": ["accessibility", "integration", "regression"],
+          "provider": "GitHub",
+          "phase": "pre-merge",
+          "config": {
+            "file": ".github/workflows/local-tests-integration.yaml",
+            "path": "jobs.local-tests-integration",
+            "name": "playwright-test-results"
+          }
+        },
+        {
+          "check-types": ["integration", "new feature", "regression", "unit"],
+          "provider": "GitHub",
+          "phase": "pre-upload",
           "config": {
             "file": ".github/workflows/on-merge-to-main.yaml",
             "path": "jobs.validate_application",
-            "name": "Verify & Publish"
+            "name": "App Checks"
+          }
+        },
+        {
+          "check-types": ["accessibility", "integration", "regression"],
+          "provider": "Stack Orchestrator",
+          "phase": "build",
+          "config": {
+            "file": "integration-tests/Dockerfile"
           }
         }
       ]

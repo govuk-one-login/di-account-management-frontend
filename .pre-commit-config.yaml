@@ -43,12 +43,6 @@ repos:
 
   - repo: local
     hooks:
-      - id: npm-audit
-        name: NPM Audit
-        pass_filenames: false
-        entry: "npm run audit"
-        language: system
-
       - id: eslint
         name: ESLint
         entry: npm run lint
