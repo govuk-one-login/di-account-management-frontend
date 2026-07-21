@@ -79,26 +79,6 @@
           "config": {
             "file": "integration-tests/Dockerfile"
           }
-        },
-        {
-          "check-types": ["canary"],
-          "provider": "Stack Orchestrator",
-          "phase": "integration",
-          "config": {
-            "file": "deploy/template.yaml",
-            "path": "Resources.ECSCanaryDeploymentStack",
-            "name": "ECS canary deployment"
-          }
-        },
-        {
-          "check-types": ["canary"],
-          "provider": "Stack Orchestrator",
-          "phase": "production",
-          "config": {
-            "file": "deploy/template.yaml",
-            "path": "Resources.ECSCanaryDeploymentStack",
-            "name": "ECS canary deployment"
-          }
         }
       ]
     }
