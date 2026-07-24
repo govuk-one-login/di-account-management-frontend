@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/govuk-one-login/quality-gates/refs/tags/v0.14.0/schemas/schema.json",
+  "$schema": "https://raw.githubusercontent.com/govuk-one-login/quality-gates/refs/tags/v0.15.0/schemas/schema.json",
   "services": [
     {
       "product": "One-Login-Home",
@@ -7,79 +7,109 @@
       "promotionType": "securePipelines",
       "automated": [
         {
-          "checkTypes": [
-            "unit",
-            "new feature",
-            "regression",
-            "code style and linting"
-          ],
           "phase": "pre-merge",
           "provider": "GitHub",
           "config": {
             "file": ".github/workflows/build-test-application.yml",
             "path": "$.jobs.build_test_application"
-          }
+          },
+          "checks": [
+            {
+              "name": "unit"
+            },
+            {
+              "name": "new feature"
+            },
+            {
+              "name": "regression"
+            },
+            {
+              "name": "code style and linting"
+            }
+          ]
         },
         {
-          "checkTypes": [
-            "secret scanning"
-          ],
           "phase": "pre-merge",
           "provider": "GitHub",
           "config": {
             "file": ".github/workflows/detect-secrets.yaml",
             "path": "$.jobs.detect-secrets"
-          }
+          },
+          "checks": [
+            {
+              "name": "secret scanning"
+            }
+          ]
         },
         {
-          "checkTypes": [
-            "integration",
-            "accessibility",
-            "regression"
-          ],
           "phase": "pre-merge",
           "provider": "GitHub",
           "config": {
             "file": ".github/workflows/integration-tests.yml",
             "path": "$.jobs.end_to_end_tests"
-          }
+          },
+          "checks": [
+            {
+              "name": "integration"
+            },
+            {
+              "name": "accessibility"
+            },
+            {
+              "name": "regression"
+            }
+          ]
         },
         {
-          "checkTypes": [
-            "unit",
-            "new feature",
-            "regression",
-            "code style and linting"
-          ],
           "phase": "build",
           "provider": "GitHub",
           "config": {
             "file": ".github/workflows/on-merge-to-main.yml",
             "path": "$.jobs.validate_application"
-          }
+          },
+          "checks": [
+            {
+              "name": "unit"
+            },
+            {
+              "name": "new feature"
+            },
+            {
+              "name": "regression"
+            },
+            {
+              "name": "code style and linting"
+            }
+          ]
         },
         {
-          "checkTypes": [
-            "code quality"
-          ],
           "phase": "pre-merge",
           "provider": "GitHub",
           "config": {
             "file": ".github/workflows/checkov.yml",
             "path": "$.jobs.checkov"
-          }
+          },
+          "checks": [
+            {
+              "name": "code quality"
+            }
+          ]
         },
         {
-          "checkTypes": [
-            "code quality",
-            "unit test coverage"
-          ],
           "phase": "pre-merge",
           "provider": "GitHub",
           "config": {
             "file": ".github/workflows/sonarcloud.yml",
             "path": "$.jobs.sonarcloud"
-          }
+          },
+          "checks": [
+            {
+              "name": "code quality"
+            },
+            {
+              "name": "unit test coverage"
+            }
+          ]
         }
       ]
     }
