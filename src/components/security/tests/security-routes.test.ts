@@ -1,47 +1,40 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { Request, Response, NextFunction } from "express";
-import { conditionalMfaMethodMiddleware } from "../security-routes.js";
-import * as config from "../../../config.js";
-import * as mfaMiddleware from "../../../middleware/mfa-method-middleware.js";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-describe("conditionalMfaMethodMiddleware", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  let next: NextFunction;
-
+describe("securityRouter", () => {
   beforeEach(() => {
-    req = {};
-    res = {};
-    next = vi.fn();
+    vi.resetModules();
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  async function getHandlers(passkeys: boolean) {
+    vi.doMock("../../../config.js", async (importOriginal) => {
+      const actual = await importOriginal<typeof import("../../../config.js")>();
+      return { ...actual, passkeysEnabled: () => passkeys };
+    });
+    const [{ securityRouter }, mfaMiddleware, requiresAuth, securityController] =
+      await Promise.all([
+        import("../security-routes.js"),
+        import("../../../middleware/mfa-method-middleware.js"),
+        import("../../../middleware/requires-auth-middleware.js"),
+        import("../security-controller.js"),
+      ]);
+    const routes = (securityRouter as any).stack as any[];
+    const handlers = routes.flatMap((layer: any) => layer.route?.stack.map((s: any) => s.handle) ?? []);
+    return { handlers, mfaMiddleware, requiresAuth, securityController };
+  }
+
+  it("should include mfaMethodMiddleware when passkeys are disabled", async () => {
+    const { handlers, mfaMiddleware, requiresAuth, securityController } = await getHandlers(false);
+
+    expect(handlers).toContain(mfaMiddleware.mfaMethodMiddleware);
+    expect(handlers).toContain(requiresAuth.requiresAuthMiddleware);
+    expect(handlers).toContain(securityController.securityGet);
   });
 
-  it("should call next directly when passkeys are enabled", async () => {
-    vi.spyOn(config, "passkeysEnabled").mockReturnValue(true);
-    const mfaMethodMiddlewareSpy = vi.spyOn(
-      mfaMiddleware,
-      "mfaMethodMiddleware"
-    );
+  it("should not include mfaMethodMiddleware when passkeys are enabled", async () => {
+    const { handlers, mfaMiddleware, requiresAuth, securityController } = await getHandlers(true);
 
-    await conditionalMfaMethodMiddleware(req as Request, res as Response, next);
-
-    expect(config.passkeysEnabled).toHaveBeenCalledWith(req);
-    expect(next).toHaveBeenCalledOnce();
-    expect(mfaMethodMiddlewareSpy).not.toHaveBeenCalled();
-  });
-
-  it("should call mfaMethodMiddleware when passkeys are disabled", async () => {
-    vi.spyOn(config, "passkeysEnabled").mockReturnValue(false);
-    const mfaMethodMiddlewareSpy = vi
-      .spyOn(mfaMiddleware, "mfaMethodMiddleware")
-      .mockResolvedValue();
-
-    await conditionalMfaMethodMiddleware(req as Request, res as Response, next);
-
-    expect(config.passkeysEnabled).toHaveBeenCalledWith(req);
-    expect(mfaMethodMiddlewareSpy).toHaveBeenCalledWith(req, res, next);
+    expect(handlers).not.toContain(mfaMiddleware.mfaMethodMiddleware);
+    expect(handlers).toContain(requiresAuth.requiresAuthMiddleware);
+    expect(handlers).toContain(securityController.securityGet);
   });
 });
