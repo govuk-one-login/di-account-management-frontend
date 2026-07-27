@@ -31,8 +31,8 @@ interface BackButton {
   text: string;
 }
 
-export function passkeyEnabledBackRoute(req: Request): string {
-  if (passkeysEnabled(req)) {
+export function passkeyEnabledBackRoute(): string {
+  if (passkeysEnabled()) {
     return AMJourneyValidBackRoutes["sign-in-details"].url;
   } else {
     return AMJourneyValidBackRoutes["security"].url;
@@ -40,7 +40,7 @@ export function passkeyEnabledBackRoute(req: Request): string {
 }
 
 export function passkeyEnabledBackButtonText(req: Request): string {
-  if (passkeysEnabled(req)) {
+  if (passkeysEnabled()) {
     return req.t("general.backToSignInDetailsButtonText");
   } else {
     return req.t("general.backToSecurityButtonText");
@@ -50,7 +50,7 @@ export function passkeyEnabledBackButtonText(req: Request): string {
 export function updateEmailConfirmationGet(req: Request, res: Response): void {
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
 
   req.metrics?.addMetric("updateEmailConfirmationGet", MetricUnit.Count, 1);
@@ -97,7 +97,7 @@ export function updatePasswordConfirmationGet(
   } else {
     backButton = {
       text: passkeyEnabledBackButtonText(req),
-      url: passkeyEnabledBackRoute(req),
+      url: passkeyEnabledBackRoute(),
     };
   }
 
@@ -145,7 +145,7 @@ export function updatePhoneNumberConfirmationGet(
   );
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
 
   delete req.session.user.state.changePhoneNumber;
@@ -166,7 +166,7 @@ export function updateAuthenticatorAppConfirmationGet(
 ): void {
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
   req.metrics?.addMetric(
     "updateAuthenticatorAppConfirmationGet",
@@ -232,7 +232,7 @@ export async function addMfaAppMethodConfirmationGet(
   );
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
 
   delete req.session.user.state.addBackup;
@@ -260,7 +260,7 @@ export async function removeMfaMethodConfirmationGet(
 
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
 
   let message: string;
@@ -298,7 +298,7 @@ export async function changeDefaultMfaMethodConfirmationGet(
 ): Promise<void> {
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
 
   req.metrics?.addMetric(
@@ -362,7 +362,7 @@ export async function changeDefaultMethodConfirmationGet(
 ): Promise<void> {
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
   req.metrics?.addMetric(
     "changeDefaultMethodConfirmationGet",
@@ -409,7 +409,7 @@ export async function createPasskeyConfirmationGet(
 ): Promise<void> {
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
   req.metrics?.addMetric("createPasskeyConfirmationGet", MetricUnit.Count, 1);
 
@@ -457,7 +457,7 @@ export async function removePasskeyConfirmationGet(
 ): Promise<void> {
   const backButton: BackButton = {
     text: passkeyEnabledBackButtonText(req),
-    url: passkeyEnabledBackRoute(req),
+    url: passkeyEnabledBackRoute(),
   };
   req.metrics?.addMetric("removePasskeyConfirmationGet", MetricUnit.Count, 1);
 
