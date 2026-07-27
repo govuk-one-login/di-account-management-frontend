@@ -46,10 +46,6 @@ export function isProd(): boolean {
   return getAppEnv() === "production";
 }
 
-export function isIntegration(): boolean {
-  return getAppEnv() === "integration";
-}
-
 export function getGtmId(): string {
   return process.env.GTM_ID;
 }

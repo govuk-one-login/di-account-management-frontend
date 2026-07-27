@@ -2,9 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   getListOfAccountClientIDs,
   getListOfServiceClientIDs,
-  isIntegration,
   passkeysEnabled,
 } from "../../src/config.js";
+import { Request } from "express";
+
 describe("config", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -32,32 +33,31 @@ describe("config", () => {
     });
   });
 
-  describe("Environment checks", () => {
-    it("should return true when APP_ENV is integration", () => {
-      vi.stubEnv("APP_ENV", "integration");
-      expect(isIntegration()).toBe(true);
-    });
-
-    it("should return false when APP_ENV is not integration", () => {
-      vi.stubEnv("APP_ENV", "production");
-      expect(isIntegration()).toBe(false);
-    });
-
-    it("should return false when APP_ENV is local", () => {
-      vi.stubEnv("APP_ENV", "local");
-      expect(isIntegration()).toBe(false);
-    });
-  });
-
   describe("passkeysEnabled", () => {
-    it("should return false when PASSKEYS env var is not set", () => {
-      vi.stubEnv("PASSKEYS", "");
-      expect(passkeysEnabled()).toBe(false);
+    let mockReq: Partial<Request>;
+
+    beforeEach(() => {
+      mockReq = {
+        cookies: {},
+      };
     });
 
-    it("should return true when PASSKEYS is enabled", () => {
+    it("should return false when PASSKEYS env var is not set", () => {
+      vi.stubEnv("PASSKEYS", undefined);
+      vi.stubEnv("APP_ENV", "local");
+      expect(passkeysEnabled(mockReq as Request)).toBe(false);
+    });
+
+    it("should return false when PASSKEYS env var is not '1'", () => {
+      vi.stubEnv("PASSKEYS", "0");
+      vi.stubEnv("APP_ENV", "local");
+      expect(passkeysEnabled(mockReq as Request)).toBe(false);
+    });
+
+    it("should return true when PASSKEYS env var is '1'", () => {
       vi.stubEnv("PASSKEYS", "1");
-      expect(passkeysEnabled()).toBe(true);
+      vi.stubEnv("APP_ENV", "local");
+      expect(passkeysEnabled(mockReq as Request)).toBe(true);
     });
   });
 });
