@@ -61,7 +61,7 @@ const render = (req: Request, res: Response): void => {
     baseUrl,
     language,
     nonce: res.locals.scriptNonce,
-    passkeysEnabled: passkeysEnabled(req),
+    passkeysEnabled: passkeysEnabled(),
   };
 
   setOplSettings(

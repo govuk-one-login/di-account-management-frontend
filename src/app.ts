@@ -191,15 +191,6 @@ async function createApp(): Promise<express.Application> {
       const engine = res.app.get("nunjucksEngine");
       engine.addGlobal("request", req);
       engine.addGlobal("response", res);
-
-      engine.addGlobal("passkeysEnabled", passkeysEnabled(req));
-      engine.addGlobal(
-        "cancelAMJourneyHref",
-        passkeysEnabled(req)
-          ? PATH_DATA.SIGN_IN_DETAILS.url
-          : PATH_DATA.SECURITY.url
-      );
-
       next();
     })();
   });
@@ -314,9 +305,11 @@ async function createApp(): Promise<express.Application> {
   app.use(trackAndRedirectRouter);
   app.use(amcCallbackRouter);
 
-  app.use(signInDetailsRouter);
-  app.use(createNewPasskeyRouter);
-  app.use(removePasskeyRouter);
+  if (passkeysEnabled()) {
+    app.use(signInDetailsRouter);
+    app.use(createNewPasskeyRouter);
+    app.use(removePasskeyRouter);
+  }
 
   // Router for all previously used URLs, that we want to redirect on
   // No URL left behind policy
