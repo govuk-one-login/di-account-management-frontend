@@ -201,7 +201,7 @@ export async function addMfaSmsMethodConfirmationGet(
       .replace("[mobile]", getLastNDigits(req.session.user.phoneNumber, 4)),
     backButton: {
       text: passkeyEnabledBackButtonText(req),
-      url: passkeyEnabledBackRoute(req),
+      url: passkeyEnabledBackRoute(),
     },
   });
 }
