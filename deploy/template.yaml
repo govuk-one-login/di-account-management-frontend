@@ -310,7 +310,7 @@ Mappings:
       AMCTOKENURL: "https://votf1tvl36.execute-api.eu-west-2.amazonaws.com/v1/token"
       AMCCLIENTID: "home"
       ENABLEPKCE: "1"
-      PASSKEYS: "1"
+      PASSKEYS: "0"
     production:
       NODEENV: "production"
       APIBASEURL: "https://oidc.account.gov.uk"
@@ -349,7 +349,7 @@ Mappings:
       AMCTOKENURL: "https://h06vqhfzgi.execute-api.eu-west-2.amazonaws.com/v1/token"
       AMCCLIENTID: "home"
       ENABLEPKCE: "1"
-      PASSKEYS: "1"
+      PASSKEYS: "0"
 
 Resources:
   #
