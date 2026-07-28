@@ -1,44 +1,38 @@
 import { Request } from "express";
-import {
-  DynamoDBClient,
-  QueryCommand,
-  ScalarAttributeType,
-} from "@aws-sdk/client-dynamodb";
+import { QueryCommand } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { getSessionStoreTableName } from "../config.js";
+import { getSessionExpiry, getSessionStoreTableName } from "../config.js";
 import { logger } from "./logger.js";
-import connect_dynamodb from "connect-dynamodb";
 import { Store } from "express-session";
 import { ERROR_MESSAGES } from "../app.constants.js";
-import { AwsConfig, getAWSConfig } from "../config/aws.js";
+import { dynamoClient } from "./dynamo.js";
+import { DynamoDBSessionStore } from "./dynamodb-session-store.js";
 
 // the value of the USER_IDENTIFIER_IDX_ATTRIBUTE must match the indexed attribute in SessionsDynamoDB table
 // defined in `../../deploy/template.yaml`.
 const USER_IDENTIFIER_IDX_ATTRIBUTE = "user_id";
-const awsConfig: AwsConfig = getAWSConfig();
-const dynamoDBCientSessionStore = new DynamoDBClient(awsConfig as any);
+const USERS_SESSIONS_INDEX = "users-sessions";
 
 const PREFIX = "sess:";
 
-interface SessionStore {
-  session: any;
-}
-
 let sessionStoreInstance: Store | null = null;
 
-export function getSessionStore({ session }: SessionStore): Store {
+export function getSessionStore(): Store {
   if (!sessionStoreInstance) {
-    const DynamoDBStore = connect_dynamodb(session);
-    const storeOptions = {
-      client: dynamoDBCientSessionStore,
-      table: getSessionStoreTableName(),
-      specialKeys: [
-        { name: USER_IDENTIFIER_IDX_ATTRIBUTE, type: ScalarAttributeType.S },
-      ],
-      skipThrowMissingSpecialKeys: true,
+    sessionStoreInstance = new DynamoDBSessionStore({
+      client: dynamoClient,
+      tableName: getSessionStoreTableName(),
       prefix: PREFIX,
-    };
-    sessionStoreInstance = new DynamoDBStore(storeOptions);
+      defaultTtlSeconds: Math.floor(getSessionExpiry() / 1000),
+      extraAttributes: (sess) =>
+        sess?.[USER_IDENTIFIER_IDX_ATTRIBUTE]
+          ? {
+              [USER_IDENTIFIER_IDX_ATTRIBUTE]: {
+                S: sess[USER_IDENTIFIER_IDX_ATTRIBUTE],
+              },
+            }
+          : {},
+    });
   }
 
   return sessionStoreInstance;
@@ -47,15 +41,13 @@ export function getSessionStore({ session }: SessionStore): Store {
 async function getSessions(subjectId: string): Promise<string[]> {
   const params = {
     TableName: getSessionStoreTableName(),
-    IndexName: "users-sessions",
+    IndexName: USERS_SESSIONS_INDEX,
     KeyConditionExpression: `${USER_IDENTIFIER_IDX_ATTRIBUTE} = :user_identifier`,
     ExpressionAttributeValues: { ":user_identifier": { S: subjectId } },
   };
 
   try {
-    const { Items } = await dynamoDBCientSessionStore.send(
-      new QueryCommand(params)
-    );
+    const { Items } = await dynamoClient.send(new QueryCommand(params));
     return (
       Items?.map((session) => {
         const id = unmarshall(session).id;

@@ -4,81 +4,52 @@ import { getSessionCookieOptions } from "../../../src/config/cookie.js";
 describe("cookie config", () => {
   describe("getSessionCookieOptions", () => {
     it("should return cookie options with secure true in production environment", () => {
-      const isProdEnv = true;
-      const expiry = 3600000;
-      const secret = "test-secret"; //pragma: allowlist secret
-
-      const result = getSessionCookieOptions(isProdEnv, expiry, secret);
+      const result = getSessionCookieOptions(true);
 
       expect(result).toEqual({
-        name: "ams",
-        secret: "test-secret", //pragma: allowlist secret
-        maxAge: 3600000,
         secure: true,
       });
     });
 
     it("should return cookie options with secure false in non-production environment", () => {
-      const isProdEnv = false;
-      const expiry = 3600000;
-      const secret = "test-secret"; //pragma: allowlist secret
-
-      const result = getSessionCookieOptions(isProdEnv, expiry, secret);
+      const result = getSessionCookieOptions(false);
 
       expect(result).toEqual({
-        name: "ams",
-        secret: "test-secret", //pragma: allowlist secret
-        maxAge: 3600000,
         secure: false,
       });
     });
 
-    it("should handle different expiry values", () => {
-      const isProdEnv = true;
-      const expiry = 7200000;
-      const secret = "test-secret"; //pragma: allowlist secret
+    it("should not set maxAge when no maxAge is provided, so the cookie is session-scoped", () => {
+      const result = getSessionCookieOptions(true);
 
-      const result = getSessionCookieOptions(isProdEnv, expiry, secret);
-
-      expect(result.maxAge).toBe(7200000);
+      expect(result.maxAge).toBeUndefined();
     });
 
-    it("should handle different secret values", () => {
-      const isProdEnv = true;
-      const expiry = 3600000;
-      const secret = "different-secret-value"; //pragma: allowlist secret
+    it("should not set expires when no maxAge is provided, so the cookie is session-scoped", () => {
+      const result = getSessionCookieOptions(false);
 
-      const result = getSessionCookieOptions(isProdEnv, expiry, secret);
-
-      expect(result.secret).toBe("different-secret-value");
+      expect(result.expires).toBeUndefined();
     });
 
-    it("should always set cookie name to ams", () => {
-      const result1 = getSessionCookieOptions(true, 3600000, "secret1");
-      const result2 = getSessionCookieOptions(false, 7200000, "secret2");
+    it("should set maxAge when an explicit maxAge is provided", () => {
+      const result = getSessionCookieOptions(true, 3600000);
 
-      expect(result1.name).toBe("ams");
-      expect(result2.name).toBe("ams");
+      expect(result).toEqual({
+        secure: true,
+        maxAge: 3600000,
+      });
     });
 
-    it("should handle zero expiry", () => {
-      const isProdEnv = true;
-      const expiry = 0;
-      const secret = "test-secret"; //pragma: allowlist secret
-
-      const result = getSessionCookieOptions(isProdEnv, expiry, secret);
+    it("should set maxAge to 0 when an explicit maxAge of 0 is provided", () => {
+      const result = getSessionCookieOptions(true, 0);
 
       expect(result.maxAge).toBe(0);
     });
 
-    it("should handle empty secret string", () => {
-      const isProdEnv = true;
-      const expiry = 3600000;
-      const secret = ""; //pragma: allowlist secret
+    it("should not set maxAge when explicitly passed undefined", () => {
+      const result = getSessionCookieOptions(true, undefined);
 
-      const result = getSessionCookieOptions(isProdEnv, expiry, secret);
-
-      expect(result.secret).toBe("");
+      expect(result.maxAge).toBeUndefined();
     });
   });
 });
