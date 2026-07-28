@@ -85,7 +85,7 @@
     "removePasskey": {
       "title": "Remove your passkey",
       "heading": "Remove your passkey",
-      "description": "The passkey saved to <strong>[passkeyName]</strong> will be removed from your GOV.UK Login.",
+      "description": "The passkey saved to <strong>[passkeyName]</strong> will be removed from your GOV.UK One Login.",
       "descriptionNoName": "This will remove the passkey from your GOV.UK One Login.",
       "alternativePasskey": "Next time you sign in, you can use another passkey.",
       "noPasskey": "Next time you sign in you’ll need to enter a password and security code instead.",
@@ -548,7 +548,7 @@
       "panelText": "You’ve set up a passkey",
       "summaryHtml1": "<p class='govuk-body'>Your passkey is saved to <strong>[passkeyName]</strong>.</p>",
       "summaryHtml2": "<p class='govuk-body'>Next time, you’ll sign in with your passkey, for example your face, fingerprint or device passcode.</p>",
-      "firstPasskey": "<p class='govuk-body'>This is instead of entering your GOV.UK Login password and security code.</p>"
+      "firstPasskey": "<p class='govuk-body'>This is instead of entering your GOV.UK One Login password and security code.</p>"
     },
     "changePassword": {
       "title": "Enter your new password",
