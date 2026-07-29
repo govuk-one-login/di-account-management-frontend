@@ -248,7 +248,9 @@ describe("Requires auth middleware", () => {
     expect(typeof callArgs.request).toBe("string");
 
     const [header] = callArgs.request.split(".");
-    const decodedHeader = JSON.parse(Buffer.from(header, "base64").toString());
+    const decodedHeader = JSON.parse(
+      Buffer.from(header, "base64url").toString()
+    );
     expect(decodedHeader).toMatchObject({
       alg: "RS512",
       typ: "JWT",
@@ -260,9 +262,7 @@ describe("Requires auth middleware", () => {
     );
 
     const claims = callArgs.request.split(".")[1];
-    const decodedClaims = JSON.parse(
-      Buffer.from(claims, "base64url").toString()
-    );
+    const decodedClaims = JSON.parse(Buffer.from(claims, "base64").toString());
 
     expect(decodedClaims.code_challenge).toBeDefined();
     expect(decodedClaims.code_challenge).toBeTypeOf("string");
