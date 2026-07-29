@@ -167,7 +167,7 @@ describe("Requires auth middleware", () => {
     expect(callArgs.request).toBeDefined();
     expect(typeof callArgs.request).toBe("string");
 
-    const [header] = callArgs.request.split(".");
+    const [header, payload] = callArgs.request.split(".");
     const decodedHeader = JSON.parse(
       Buffer.from(header, "base64url").toString()
     );
@@ -180,6 +180,16 @@ describe("Requires auth middleware", () => {
     expect(decodedHeader.kid).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     );
+
+    const decodedPayload = JSON.parse(
+      Buffer.from(payload, "base64url").toString()
+    );
+    expect(decodedPayload.jti).toBeDefined();
+    expect(decodedPayload.jti).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    );
+    expect(decodedPayload.exp).toBeDefined();
+    expect(decodedPayload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
 
     vi.restoreAllMocks();
   });
@@ -252,7 +262,7 @@ describe("Requires auth middleware", () => {
     );
 
     const claims = callArgs.request.split(".")[1];
-    const decodedClaims = JSON.parse(Buffer.from(claims, "base64").toString());
+    const decodedClaims = JSON.parse(Buffer.from(claims, "base64url").toString());
 
     expect(decodedClaims.code_challenge).toBeDefined();
     expect(decodedClaims.code_challenge).toBeTypeOf("string");
@@ -260,6 +270,13 @@ describe("Requires auth middleware", () => {
 
     expect(decodedClaims.code_challenge_method).toBeDefined();
     expect(decodedClaims.code_challenge_method).toEqual("S256");
+
+    expect(decodedClaims.jti).toBeDefined();
+    expect(decodedClaims.jti).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    );
+    expect(decodedClaims.exp).toBeDefined();
+    expect(decodedClaims.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
 
     delete process.env.ENABLE_PKCE;
     vi.restoreAllMocks();
