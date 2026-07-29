@@ -83,7 +83,7 @@ async function generateAuthUrl(req: Request): Promise<string> {
       : undefined,
     code_challenge: codeChallenge,
     jti: randomUUID(),
-    exp: Math.floor(Date.now() / 1000) + 60,
+    exp: Math.floor(Date.now() / 1000) + 120,
   };
   const encodedHeader = base64url.default.encode(JSON.stringify(headers));
   const encodedPayload = base64url.default.encode(JSON.stringify(claims));
