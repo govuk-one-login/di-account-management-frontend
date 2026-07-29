@@ -7,17 +7,17 @@ import {
 } from "../../utils/http.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
 import { ChangePasswordServiceInterface } from "./types.js";
-import { ApiResponse, ApiResponseResult } from "../../utils/types.js";
+import { ApiResponseResult } from "../../utils/types.js";
 
 export function changePasswordService(
-  axios: Http = http
+  fetchClient: Http = http
 ): ChangePasswordServiceInterface {
   const updatePassword = async function (
     email: string,
     newPassword: string,
     requestConfig: RequestConfig
   ): Promise<ApiResponseResult> {
-    const response = await axios.client.post<ApiResponse>(
+    const response = await fetchClient.post(
       API_ENDPOINTS.UPDATE_PASSWORD,
       {
         email,
@@ -31,7 +31,7 @@ export function changePasswordService(
         ],
       })
     );
-    return createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
+    return await createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
   };
 
   return {

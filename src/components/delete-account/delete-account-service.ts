@@ -12,14 +12,14 @@ import { getSNSDeleteTopic } from "../../config.js";
 import { DeleteAccountServiceInterface } from "./types.js";
 
 export function deleteAccountService(
-  axios: Http = http,
+  fetchClient: Http = http,
   sns: SnsService = snsService()
 ): DeleteAccountServiceInterface {
   const deleteAccount = async function (
     email: string,
     requestConfig: RequestConfig
   ): Promise<boolean> {
-    const { status } = await axios.client.post<void>(
+    const { status } = await fetchClient.post(
       API_ENDPOINTS.DELETE_ACCOUNT,
       {
         email: email,

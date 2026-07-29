@@ -1,21 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import nock from "nock";
 import { enterPasswordService } from "../enter-password-service.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config.js";
 import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-
-const baseUrl = getApiBaseUrl();
+import { http } from "../../../utils/http.js";
 
 describe("enterPasswordService", () => {
   beforeEach(() => {});
 
   afterEach(() => {
     vi.restoreAllMocks();
-    nock.cleanAll();
   });
 
   it("Check if Authenticated", async () => {
@@ -31,20 +27,10 @@ describe("enterPasswordService", () => {
       password: password,
     };
 
-    nock(baseUrl, {
-      reqheaders: {
-        authorization: `Bearer ${accessToken}`,
-        "x-forwarded-for": sourceIp,
-        "di-persistent-session-id": persistentSessionId,
-        "session-id": sessionId,
-        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-      },
-    })
-      .post(API_ENDPOINTS.AUTHENTICATE, {
-        email: email,
-        password: password,
-      })
-      .reply(HTTP_STATUS_CODES.NO_CONTENT);
+    const httpPostSpy = vi.spyOn(http, "post").mockResolvedValue({
+      status: HTTP_STATUS_CODES.NO_CONTENT,
+      ok: false,
+    } as unknown as Response);
 
     const response = await enterPasswordService().authenticated(
       user.email,
@@ -60,6 +46,11 @@ describe("enterPasswordService", () => {
     );
 
     expect(response.authenticated).toBe(true);
+    expect(httpPostSpy).toHaveBeenCalledWith(
+      API_ENDPOINTS.AUTHENTICATE,
+      { email: email, password: password },
+      expect.any(Object)
+    );
   });
 
   it("Check if intervention BLOCKED", async () => {
@@ -75,23 +66,20 @@ describe("enterPasswordService", () => {
       password: password,
     };
 
-    nock(baseUrl, {
-      reqheaders: {
-        authorization: `Bearer ${accessToken}`,
-        "x-forwarded-for": sourceIp,
-        "di-persistent-session-id": persistentSessionId,
-        "session-id": sessionId,
-        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-      },
-    })
-      .post(API_ENDPOINTS.AUTHENTICATE, {
-        email: email,
-        password: password,
-      })
-      .reply(HTTP_STATUS_CODES.FORBIDDEN, {
+    const httpPostSpy = vi.spyOn(http, "post").mockResolvedValue({
+      status: HTTP_STATUS_CODES.FORBIDDEN,
+      ok: false,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({
+          code: "1084",
+          message: "BLOCKED",
+        }),
+      }),
+      json: vi.fn().mockResolvedValue({
         code: "1084",
         message: "BLOCKED",
-      });
+      }),
+    } as unknown as Response);
 
     const response = await enterPasswordService().authenticated(
       user.email,
@@ -108,6 +96,12 @@ describe("enterPasswordService", () => {
 
     expect(response.authenticated).toBe(false);
     expect(response.intervention).toBe("BLOCKED");
+
+    expect(httpPostSpy).toHaveBeenCalledWith(
+      API_ENDPOINTS.AUTHENTICATE,
+      { email: email, password: password },
+      expect.any(Object)
+    );
   });
 
   it("Check if intervention SUSPENDED", async () => {
@@ -123,23 +117,20 @@ describe("enterPasswordService", () => {
       password: password,
     };
 
-    nock(baseUrl, {
-      reqheaders: {
-        authorization: `Bearer ${accessToken}`,
-        "x-forwarded-for": sourceIp,
-        "di-persistent-session-id": persistentSessionId,
-        "session-id": sessionId,
-        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-      },
-    })
-      .post(API_ENDPOINTS.AUTHENTICATE, {
-        email: email,
-        password: password,
-      })
-      .reply(HTTP_STATUS_CODES.FORBIDDEN, {
+    const httpPostSpy = vi.spyOn(http, "post").mockResolvedValue({
+      status: HTTP_STATUS_CODES.FORBIDDEN,
+      ok: false,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({
+          code: "1083",
+          message: "SUSPENDED",
+        }),
+      }),
+      json: vi.fn().mockResolvedValue({
         code: "1083",
         message: "SUSPENDED",
-      });
+      }),
+    } as unknown as Response);
 
     const response = await enterPasswordService().authenticated(
       user.email,
@@ -156,5 +147,11 @@ describe("enterPasswordService", () => {
 
     expect(response.authenticated).toBe(false);
     expect(response.intervention).toBe("SUSPENDED");
+
+    expect(httpPostSpy).toHaveBeenCalledWith(
+      API_ENDPOINTS.AUTHENTICATE,
+      { email: email, password: password },
+      expect.any(Object)
+    );
   });
 });

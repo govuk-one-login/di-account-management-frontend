@@ -1,30 +1,28 @@
-import request from "supertest";
 import {
   describe,
-  beforeAll,
-  afterAll,
   it,
   expect,
   vi,
   beforeEach,
+  afterAll,
+  beforeAll,
 } from "vitest";
-import nock = require("nock");
+import request from "supertest";
 import * as cheerio from "cheerio";
-import {
-  API_ENDPOINTS,
-  CLIENT_SESSION_ID_UNKNOWN,
-  PATH_DATA,
-} from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
+import { PATH_DATA, API_ENDPOINTS } from "../../../app.constants.js";
 
 describe("Integration:: check your email", () => {
   let token: string | string[];
   let cookies: string;
   let app: any;
-  let baseApi: string;
   let govUkPublishingBaseApi: string;
+
+  const fetchSpyTracker = vi.fn();
+
   const TEST_SUBJECT_ID = "jkduasd";
+  const CLIENT_SESSION_ID_UNKNOWN = "client-session-id-unknown";
 
   beforeAll(async () => {
     vi.resetModules();
@@ -37,6 +35,7 @@ describe("Integration:: check your email", () => {
           phoneNumber: "07839490040",
           isAuthenticated: true,
           subjectId: TEST_SUBJECT_ID,
+          publicSubjectId: TEST_SUBJECT_ID,
           state: {
             changeEmail: {
               value: "VERIFY_CODE",
@@ -69,8 +68,51 @@ describe("Integration:: check your email", () => {
     });
 
     app = await (await import("../../../app.js")).createApp();
-    baseApi = process.env.AM_API_BASE_URL;
-    govUkPublishingBaseApi = process.env.GOV_ACCOUNTS_PUBLISHING_API_URL;
+    govUkPublishingBaseApi =
+      process.env.GOV_ACCOUNTS_PUBLISHING_API_URL || "http://localhost:4444";
+  });
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    fetchSpyTracker.mockReset();
+
+    fetchSpyTracker.mockImplementation(async (url: string, options: any) => {
+      if (
+        options?.method === "POST" ||
+        url.includes(API_ENDPOINTS.UPDATE_EMAIL)
+      ) {
+        return {
+          status: 204,
+          ok: true,
+          headers: new Map([["content-length", "0"]]),
+          text: async () => "",
+          json: async () => ({}),
+        } as unknown as Response;
+      }
+
+      if (
+        options?.method === "PUT" ||
+        url.includes(API_ENDPOINTS.ALPHA_GOV_ACCOUNT)
+      ) {
+        return {
+          status: 200,
+          ok: true,
+          headers: new Map(),
+          text: async () => "{}",
+          json: async () => ({}),
+        } as unknown as Response;
+      }
+
+      return {
+        status: 200,
+        ok: true,
+        headers: new Map(),
+        text: async () => "{}",
+        json: async () => ({}),
+      } as unknown as Response;
+    });
+
+    vi.stubGlobal("fetch", fetchSpyTracker);
 
     await request(app)
       .get(PATH_DATA.CHECK_YOUR_EMAIL.url)
@@ -81,11 +123,8 @@ describe("Integration:: check your email", () => {
       });
   });
 
-  beforeEach(() => {
-    nock.cleanAll();
-  });
-
   afterAll(() => {
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
     app = undefined;
   });
@@ -178,19 +217,6 @@ describe("Integration:: check your email", () => {
   });
 
   it("should redirect to /email-updated-confirmation when valid code entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.UPDATE_EMAIL)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(204);
-    nock(govUkPublishingBaseApi)
-      .put(`${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(200);
-
-    // Act
     const res = await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")
@@ -201,18 +227,47 @@ describe("Integration:: check your email", () => {
       })
       .expect("Location", PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url)
       .expect(302);
+
     expect(res.statusCode).toBe(302);
+
+    expect(fetchSpyTracker).toHaveBeenCalledWith(
+      expect.stringContaining(API_ENDPOINTS.UPDATE_EMAIL),
+      expect.objectContaining({
+        method: "POST",
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
+
+    expect(fetchSpyTracker).toHaveBeenCalledWith(
+      `${govUkPublishingBaseApi}${API_ENDPOINTS.ALPHA_GOV_ACCOUNT}${TEST_SUBJECT_ID}`,
+      expect.objectContaining({
+        method: "PUT",
+        headers: expect.objectContaining({
+          Authorization: "Bearer token",
+          "Content-Type": "application/json; charset=utf-8",
+        }),
+      })
+    );
   });
 
   it("should return validation error when incorrect code entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.UPDATE_EMAIL)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(400, {});
+    fetchSpyTracker.mockImplementationOnce(async () => {
+      return {
+        status: 400,
+        ok: false,
+        headers: new Map([["content-length", "1"]]),
+        clone: vi.fn().mockImplementation(() => ({
+          headers: new Map([["content-length", "1"]]),
+          json: async () => ({ code: 1000 }),
+          text: async () => JSON.stringify({ code: 1000 }),
+        })),
+        json: async () => ({ code: 1000 }),
+        text: async () => JSON.stringify({ code: 1000 }),
+      } as unknown as Response;
+    });
 
-    // Act
     await request(app)
       .post(PATH_DATA.CHECK_YOUR_EMAIL.url)
       .type("form")

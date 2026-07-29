@@ -37,7 +37,7 @@ describe("amcCallbackGet", () => {
     );
 
     vi.mocked(requestConfigUtils.getRequestConfig).mockReturnValue({
-      axios: "config",
+      headers: { "Content-Type": "application/json" },
     } as any);
 
     vi.mocked(eventService).mockReturnValue({

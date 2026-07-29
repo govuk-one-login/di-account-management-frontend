@@ -63,7 +63,6 @@ export function changePasswordPost(
       newPassword,
       await getRequestConfigFromExpress(req, res)
     );
-
     if (response.success) {
       req.session.user.state.changePassword = getNextState(
         req.session.user.state.changePassword.value,

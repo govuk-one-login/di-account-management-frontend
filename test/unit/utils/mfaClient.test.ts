@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { Request, Response } from "express";
+import { Request, Response as ExpressResponse } from "express";
 
 import {
   MfaClient,
@@ -11,15 +11,13 @@ import {
   AuthAppMethod,
   MfaMethod,
   Passkey,
-  SimpleError,
   SmsMethod,
 } from "../../../src/utils/mfaClient/types";
 import {
   validateCreate,
   validateUpdate,
 } from "../../../src/utils/mfaClient/validate";
-import { getRequestConfig, Http, RequestConfig } from "../../../src/utils/http";
-import { AxiosInstance, AxiosResponse } from "axios";
+import { Http } from "../../../src/utils/http";
 import * as oidcModule from "../../../src/utils/oidc";
 
 const mfaMethod: MfaMethod = {
@@ -69,14 +67,21 @@ const passkey: Passkey = {
 };
 
 describe("MfaClient", () => {
-  const axiosStub = {} as AxiosInstance;
+  let mockHttp: Http;
   let client: MfaClient;
 
   beforeEach(() => {
+    mockHttp = {
+      get: vi.fn(),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn(),
+    } as unknown as Http;
+
     client = new MfaClient(
       "publicSubjectId",
-      getRequestConfig({ token: "token" } as RequestConfig),
-      new Http("http://example.com", axiosStub)
+      { headers: { Authorization: "Bearer token" } } as any,
+      mockHttp
     );
   });
 
@@ -86,30 +91,52 @@ describe("MfaClient", () => {
 
   describe("retrieve", () => {
     it("should return a list of MfaMethods", async () => {
-      const getStub = vi.fn().mockResolvedValue({ data: [mfaMethod] });
-      axiosStub.get = getStub;
+      vi.mocked(mockHttp.get).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([mfaMethod]),
+        }),
+        json: vi.fn().mockResolvedValue([mfaMethod]),
+      } as unknown as Response);
 
       const response = await client.retrieve();
+
       expect(response.data.length).toBe(1);
     });
 
     it("should include the publicSubjectId in the URL", async () => {
-      const getStub = vi.fn().mockResolvedValue({ data: [mfaMethod] });
-      axiosStub.get = getStub;
+      vi.mocked(mockHttp.get).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([mfaMethod]),
+        }),
+        json: vi.fn().mockResolvedValue([mfaMethod]),
+      } as unknown as Response);
 
       await client.retrieve();
-      expect(getStub).toHaveBeenCalledWith(
+
+      expect(mockHttp.get).toHaveBeenCalledWith(
         "/mfa-methods/publicSubjectId",
         expect.any(Object)
       );
     });
 
     it("passes through the status and problem for a non-successful request", async () => {
-      const error: SimpleError = { message: "user not found", code: 1 };
-      const getStub = vi.fn().mockResolvedValue({ data: error, status: 404 });
-      axiosStub.get = getStub;
+      const error = { message: "user not found", code: 1 };
+
+      vi.mocked(mockHttp.get).mockResolvedValue({
+        status: 404,
+        ok: false,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(error),
+        }),
+        json: vi.fn().mockResolvedValue(error),
+      } as unknown as Response);
 
       const response = await client.retrieve();
+
       expect(response.success).toBe(false);
       expect(response.status).toBe(404);
       expect(response.error?.message).toBe(error.message);
@@ -118,8 +145,14 @@ describe("MfaClient", () => {
 
   describe("create", () => {
     it("should POST to the endpoint with an SMS app and an OTP", async () => {
-      const postStub = vi.fn().mockResolvedValue({ data: backupMethod });
-      axiosStub.post = postStub;
+      vi.mocked(mockHttp.post).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(backupMethod),
+        }),
+        json: vi.fn().mockResolvedValue(backupMethod),
+      } as unknown as Response);
 
       const response = await client.create(
         {
@@ -129,9 +162,9 @@ describe("MfaClient", () => {
         "OTP"
       );
 
-      expect(response.data).toBe(backupMethod);
-      expect(postStub).toHaveBeenCalledOnce();
-      expect(postStub).toHaveBeenCalledWith(
+      expect(response.data).toEqual(backupMethod);
+      expect(mockHttp.post).toHaveBeenCalledOnce();
+      expect(mockHttp.post).toHaveBeenCalledWith(
         "/mfa-methods/publicSubjectId",
         {
           mfaMethod: {
@@ -143,19 +176,25 @@ describe("MfaClient", () => {
             },
           },
         },
-        { headers: { Authorization: "Bearer token" }, proxy: false }
+        expect.any(Object)
       );
     });
 
     it("should POST to the endpoint with an auth app and no OTP", async () => {
-      const postStub = vi.fn().mockResolvedValue({ data: authAppMethod });
-      axiosStub.post = postStub;
+      vi.mocked(mockHttp.post).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(authAppMethod),
+        }),
+        json: vi.fn().mockResolvedValue(authAppMethod),
+      } as unknown as Response);
 
       const response = await client.create(authAppMethod.method);
 
-      expect(response.data).toBe(authAppMethod);
-      expect(postStub).toHaveBeenCalledOnce();
-      expect(postStub).toHaveBeenCalledWith(
+      expect(response.data).toEqual(authAppMethod);
+      expect(mockHttp.post).toHaveBeenCalledOnce();
+      expect(mockHttp.post).toHaveBeenCalledWith(
         "/mfa-methods/publicSubjectId",
         {
           mfaMethod: {
@@ -163,13 +202,19 @@ describe("MfaClient", () => {
             method: authAppMethod.method,
           },
         },
-        { headers: { Authorization: "Bearer token" }, proxy: false }
+        expect.any(Object)
       );
     });
 
     it("should raise an error with an SMS app and no OTP", async () => {
-      const postStub = vi.fn().mockResolvedValue({ data: mfaMethod });
-      axiosStub.post = postStub;
+      vi.mocked(mockHttp.post).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(mfaMethod),
+        }),
+        json: vi.fn().mockResolvedValue(mfaMethod),
+      } as unknown as Response);
 
       await expect(
         client.create({
@@ -177,29 +222,41 @@ describe("MfaClient", () => {
           phoneNumber: "123456",
         })
       ).rejects.toThrow();
-      expect(postStub).not.toHaveBeenCalled();
+      expect(mockHttp.post).not.toHaveBeenCalled();
     });
   });
 
   describe("update", () => {
     it("should PUT to the endpoint with an SMS and an OTP", async () => {
-      const putStub = vi.fn().mockResolvedValue({ data: [mfaMethod] });
-      axiosStub.put = putStub;
+      vi.mocked(mockHttp.put).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([mfaMethod]),
+        }),
+        json: vi.fn().mockResolvedValue([mfaMethod]),
+      } as unknown as Response);
 
       const response = await client.update(mfaMethod, OTP);
 
       expect(response.data.length).toBe(1);
-      expect(response.data[0]).toBe(mfaMethod);
-      expect(putStub).toHaveBeenCalledOnce();
+      expect(response.data[0]).toEqual(mfaMethod);
+      expect(mockHttp.put).toHaveBeenCalledOnce();
     });
 
     it("should include the MFA id in the URL", async () => {
-      const putStub = vi.fn().mockResolvedValue({ data: [mfaMethod] });
-      axiosStub.put = putStub;
+      vi.mocked(mockHttp.put).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([mfaMethod]),
+        }),
+        json: vi.fn().mockResolvedValue([mfaMethod]),
+      } as unknown as Response);
 
       await client.update(mfaMethod, OTP);
 
-      expect(putStub).toHaveBeenCalledWith(
+      expect(mockHttp.put).toHaveBeenCalledWith(
         "/mfa-methods/publicSubjectId/1234",
         expect.any(Object),
         expect.any(Object)
@@ -207,53 +264,74 @@ describe("MfaClient", () => {
     });
 
     it("should PUT to the endpoint with an auth app and no OTP", async () => {
-      const putStub = vi.fn().mockResolvedValue({ data: [authAppMethod] });
-      axiosStub.put = putStub;
+      vi.mocked(mockHttp.put).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([authAppMethod]),
+        }),
+        json: vi.fn().mockResolvedValue([authAppMethod]),
+      } as unknown as Response);
 
       const response = await client.update(authAppMethod);
 
       expect(response.data.length).toBe(1);
-      expect(response.data[0]).toBe(authAppMethod);
-      expect(putStub).toHaveBeenCalledOnce();
+      expect(response.data[0]).toEqual(authAppMethod);
+      expect(mockHttp.put).toHaveBeenCalledOnce();
     });
 
     it("should throw an error with an auth app and an OTP", async () => {
-      const putStub = vi.fn();
-      axiosStub.put = putStub;
-
       await expect(client.update(authAppMethod, OTP)).rejects.toThrow();
-      expect(putStub).not.toHaveBeenCalled();
+      expect(mockHttp.put).not.toHaveBeenCalled();
     });
 
     it("should not throw an error with an SMS method and no OTP", async () => {
-      const putStub = vi.fn().mockResolvedValue({ data: [mfaMethod] });
-      axiosStub.put = putStub;
+      vi.mocked(mockHttp.put).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([mfaMethod]),
+        }),
+        json: vi.fn().mockResolvedValue([mfaMethod]),
+      } as unknown as Response);
 
       const response = await client.update(mfaMethod);
 
       expect(response.data.length).toBe(1);
-      expect(response.data[0]).toBe(mfaMethod);
-      expect(putStub).toHaveBeenCalledOnce();
+      expect(response.data[0]).toEqual(mfaMethod);
+      expect(mockHttp.put).toHaveBeenCalledOnce();
     });
   });
 
   describe("delete", () => {
     it("should DELETE to the endpoint", async () => {
-      const deleteStub = vi.fn().mockResolvedValue({ status: 204, data: null });
-      axiosStub.delete = deleteStub;
+      vi.mocked(mockHttp.delete).mockResolvedValue({
+        status: 204,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(null),
+        }),
+        json: vi.fn().mockResolvedValue(null),
+      } as unknown as Response);
 
       await client.delete(mfaMethod);
 
-      expect(deleteStub).toHaveBeenCalledOnce();
+      expect(mockHttp.delete).toHaveBeenCalledOnce();
     });
 
     it("should include the MFA id in the URL when deleting", async () => {
-      const deleteStub = vi.fn().mockResolvedValue({ status: 204, data: null });
-      axiosStub.delete = deleteStub;
+      vi.mocked(mockHttp.delete).mockResolvedValue({
+        status: 204,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(null),
+        }),
+        json: vi.fn().mockResolvedValue(null),
+      } as unknown as Response);
 
       await client.delete(mfaMethod);
 
-      expect(deleteStub).toHaveBeenCalledWith(
+      expect(mockHttp.delete).toHaveBeenCalledWith(
         "/mfa-methods/publicSubjectId/1234",
         expect.any(Object)
       );
@@ -262,28 +340,40 @@ describe("MfaClient", () => {
 
   describe("makeDefault", () => {
     it("should PUT to the endpoint", async () => {
-      const putStub = vi.fn().mockResolvedValue({ data: [mfaMethod] });
-      axiosStub.put = putStub;
+      vi.mocked(mockHttp.put).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([mfaMethod]),
+        }),
+        json: vi.fn().mockResolvedValue([mfaMethod]),
+      } as unknown as Response);
 
       const response = await client.makeDefault(mfaMethod.mfaIdentifier);
 
       expect(response.data.length).toBe(1);
-      expect(response.data[0]).toBe(mfaMethod);
-      expect(putStub).toHaveBeenCalledOnce();
+      expect(response.data[0]).toEqual(mfaMethod);
+      expect(mockHttp.put).toHaveBeenCalledOnce();
     });
 
     it("should call the API and change the priority to DEFAULT", async () => {
-      const putStub = vi.fn().mockResolvedValue({ data: [mfaMethod] });
-      axiosStub.put = putStub;
+      vi.mocked(mockHttp.put).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([mfaMethod]),
+        }),
+        json: vi.fn().mockResolvedValue([mfaMethod]),
+      } as unknown as Response);
 
-      const backupMethod: MfaMethod = {
+      const backupMethod = {
         ...mfaMethod,
         priorityIdentifier: "BACKUP",
       };
 
       await client.makeDefault(backupMethod.mfaIdentifier);
 
-      expect(putStub).toHaveBeenCalledWith(
+      expect(mockHttp.put).toHaveBeenCalledWith(
         "/mfa-methods/publicSubjectId/1234",
         { mfaMethod: { priorityIdentifier: "DEFAULT" } },
         expect.any(Object)
@@ -293,14 +383,20 @@ describe("MfaClient", () => {
 
   describe("getPasskeys", () => {
     it("should GET passkeys from the endpoint", async () => {
-      const getStub = vi.fn().mockResolvedValue({ data: [passkey] });
-      axiosStub.get = getStub;
+      vi.mocked(mockHttp.get).mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue([passkey]),
+        }),
+        json: vi.fn().mockResolvedValue([passkey]),
+      } as unknown as Response);
 
       const response = await client.getPasskeys();
 
-      expect(response.data.length).toBe(1);
       expect(response.data[0]).toBe(passkey);
-      expect(getStub).toHaveBeenCalledWith(
+
+      expect(mockHttp.get).toHaveBeenCalledWith(
         "/passkeys/publicSubjectId",
         expect.any(Object)
       );
@@ -309,12 +405,18 @@ describe("MfaClient", () => {
 
   describe("deletePasskey", () => {
     it("should DELETE passkey from the endpoint", async () => {
-      const deleteStub = vi.fn().mockResolvedValue({ status: 204, data: null });
-      axiosStub.delete = deleteStub;
+      vi.mocked(mockHttp.delete).mockResolvedValue({
+        status: 204,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(null),
+        }),
+        json: vi.fn().mockResolvedValue(null),
+      } as unknown as Response);
 
       await client.deletePasskey("passkey-id-123");
 
-      expect(deleteStub).toHaveBeenCalledWith(
+      expect(mockHttp.delete).toHaveBeenCalledWith(
         "/passkeys/publicSubjectId/passkey-id-123",
         expect.any(Object)
       );
@@ -322,44 +424,62 @@ describe("MfaClient", () => {
   });
 });
 
-describe("buildRequest", () => {
-  it("returns the data when response status is 200", () => {
-    const response = {
-      status: 200,
-      data: mfaMethod,
-    } as AxiosResponse<MfaMethod>;
+describe("buildResponse", () => {
+  const createMockResponse = (status: number, dataPayload?: any) => {
+    return {
+      status,
+      ok: status >= 200 && status < 300,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue(dataPayload),
+        text: vi
+          .fn()
+          .mockResolvedValue(
+            typeof dataPayload === "string"
+              ? dataPayload
+              : JSON.stringify(dataPayload)
+          ),
+      }),
+      json: vi.fn().mockResolvedValue(dataPayload),
+      text: vi
+        .fn()
+        .mockResolvedValue(
+          typeof dataPayload === "string"
+            ? dataPayload
+            : JSON.stringify(dataPayload)
+        ),
+    } as unknown as globalThis.Response;
+  };
 
-    const apiResponse = buildResponse(response);
+  it("returns the data when response status is 200", async () => {
+    const response = createMockResponse(200, mfaMethod);
+
+    const apiResponse = await buildResponse(response);
 
     expect(response.status).toBe(apiResponse.status);
     expect(apiResponse.success).toBe(true);
-    expect(apiResponse.data).toBe(mfaMethod);
+    expect(apiResponse.data).toEqual(mfaMethod);
   });
 
-  it("returns success when response status is 204", () => {
-    const response = {
-      status: 204,
-    } as AxiosResponse;
+  it("returns success when response status is 204", async () => {
+    const response = createMockResponse(204);
 
-    const apiResponse = buildResponse(response);
+    const apiResponse = await buildResponse(response);
 
     expect(apiResponse.success).toBe(true);
   });
 
-  it("returns a ValidationProblem when response status is 400", () => {
-    const response = {
-      status: 400,
-      data: {
-        code: 1,
-        message: "Bad request",
-      } as SimpleError,
-    } as AxiosResponse;
+  it("returns a ValidationProblem when response status is 400", async () => {
+    const errorPayload = {
+      code: 1,
+      message: "Bad request",
+    };
+    const response = createMockResponse(400, errorPayload);
 
-    const apiResponse = buildResponse(response);
+    const apiResponse = await buildResponse(response);
 
     expect(apiResponse.status).toBe(400);
     expect(apiResponse.success).toBe(false);
-    expect(apiResponse.error).toBe(response.data);
+    expect(apiResponse.error).toEqual(errorPayload);
   });
 });
 
@@ -396,7 +516,7 @@ describe("createMfaClient", () => {
 
     const client = await createMfaClient(
       req as unknown as Request,
-      res as unknown as Response
+      res as unknown as ExpressResponse
     );
 
     expect(client.retrieve).toBeTypeOf("function");

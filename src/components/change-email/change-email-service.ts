@@ -12,13 +12,13 @@ import {
 import { ChangeEmailServiceInterface } from "./types.js";
 
 export function changeEmailService(
-  axios: Http = http
+  fetchClient: Http = http
 ): ChangeEmailServiceInterface {
   const sendCodeVerificationNotification = async function (
     email: string,
     requestConfig: RequestConfig
   ): Promise<boolean> {
-    const { status } = await axios.client.post<void>(
+    const { status } = await fetchClient.post(
       API_ENDPOINTS.SEND_NOTIFICATION,
       {
         email: email,

@@ -1,9 +1,9 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { Request, Response } from "express";
+import { Request, Response as ExpressResponse } from "express";
 import {
   getRequestConfig,
   getRequestConfigFromExpress,
   Http,
+  FetchRequestConfig,
 } from "../http.js";
 import { getMfaServiceUrl } from "../../config.js";
 
@@ -23,12 +23,12 @@ import { validateCreate, validateUpdate } from "./validate.js";
 
 export class MfaClient implements MfaClientInterface {
   private readonly publicSubjectId: string;
-  private readonly requestConfig: AxiosRequestConfig;
+  private readonly requestConfig: FetchRequestConfig;
   private readonly http: Http;
 
   constructor(
     publicSubjectId: string,
-    requestConfig: AxiosRequestConfig,
+    requestConfig: FetchRequestConfig,
     http?: Http
   ) {
     this.requestConfig = requestConfig;
@@ -37,12 +37,12 @@ export class MfaClient implements MfaClientInterface {
   }
 
   async retrieve() {
-    const response = await this.http.client.get<MfaMethod[]>(
+    const response = await this.http.get(
       `/mfa-methods/${this.publicSubjectId}`,
       this.requestConfig
     );
 
-    return buildResponse(response);
+    return buildResponse<MfaMethod[]>(response);
   }
 
   async create(method: SmsMethod | AuthAppMethod, otp?: string) {
@@ -54,14 +54,16 @@ export class MfaClient implements MfaClientInterface {
     if (otp) {
       payload.method.otp = otp;
     }
-    const response = await this.http.client.post<MfaMethod>(
+
+    const response = await this.http.post(
       `/mfa-methods/${this.publicSubjectId}`,
       { mfaMethod: payload },
       this.requestConfig
     );
 
-    return buildResponse(response);
+    return buildResponse<MfaMethod>(response);
   }
+
   async update(method: MfaMethod, otp?: string) {
     validateUpdate(method, otp);
 
@@ -73,56 +75,74 @@ export class MfaClient implements MfaClientInterface {
       payload.method.otp = otp;
     }
 
-    const response = await this.http.client.put<MfaMethod[]>(
+    const response = await this.http.put(
       `/mfa-methods/${this.publicSubjectId}/${method.mfaIdentifier}`,
       { mfaMethod: method },
       this.requestConfig
     );
 
-    return buildResponse(response);
+    return buildResponse<MfaMethod[]>(response);
   }
 
   async delete(method: MfaMethod) {
-    const response = await this.http.client.delete(
+    const response = await this.http.delete(
       `/mfa-methods/${this.publicSubjectId}/${method.mfaIdentifier}`,
       this.requestConfig
     );
 
-    return buildResponse(response);
+    return buildResponse<void>(response);
   }
 
   async makeDefault(mfaIdentifier: string) {
-    const response = await this.http.client.put<MfaMethod[]>(
+    const response = await this.http.put(
       `/mfa-methods/${this.publicSubjectId}/${mfaIdentifier}`,
       { mfaMethod: { priorityIdentifier: "DEFAULT" } },
       this.requestConfig
     );
 
-    return buildResponse(response);
+    return buildResponse<MfaMethod[]>(response);
   }
 
   async getPasskeys() {
-    const response = await this.http.client.get<{
-      passkeys: Passkey[];
-    }>(`/passkeys/${this.publicSubjectId}`, this.requestConfig);
+    const response = await this.http.get(
+      `/passkeys/${this.publicSubjectId}`,
+      this.requestConfig
+    );
 
-    return buildResponse(response);
+    return buildResponse<{ passkeys: Passkey[] }>(response);
   }
 
   async deletePasskey(id: string) {
-    const response = await this.http.client.delete(
+    const response = await this.http.delete(
       `/passkeys/${this.publicSubjectId}/${id}`,
       this.requestConfig
     );
 
-    return buildResponse(response);
+    return buildResponse<void>(response);
   }
 }
 
-export function buildResponse<T>(response: AxiosResponse<T>): ApiResponse<T> {
-  const { status, data } = response;
+export async function buildResponse<T>(
+  response: Response
+): Promise<ApiResponse<T>> {
+  const { status } = response;
   const success =
-    status == HTTP_STATUS_CODES.OK || status == HTTP_STATUS_CODES.NO_CONTENT;
+    status === HTTP_STATUS_CODES.OK || status === HTTP_STATUS_CODES.NO_CONTENT;
+
+  let data: any = null;
+
+  if (status !== HTTP_STATUS_CODES.NO_CONTENT) {
+    try {
+      data = await response.json();
+    } catch {
+      try {
+        data = await response.text();
+      } catch {
+        data = null;
+      }
+    }
+  }
+
   const apiResponse: ApiResponse<T> = {
     success,
     status,
@@ -138,12 +158,14 @@ export function buildResponse<T>(response: AxiosResponse<T>): ApiResponse<T> {
 
 export async function createMfaClient(
   req: Request,
-  res: Response
+  res: ExpressResponse
 ): Promise<MfaClient> {
+  const expressConfig = await getRequestConfigFromExpress(req, res);
+
   return new MfaClient(
     req.session.user?.publicSubjectId,
     getRequestConfig({
-      ...(await getRequestConfigFromExpress(req, res)),
+      ...expressConfig,
       validationStatuses: [
         HTTP_STATUS_CODES.OK,
         HTTP_STATUS_CODES.NO_CONTENT,
@@ -161,5 +183,5 @@ export function formatErrorMessage<T>(
   prefix: string,
   response: ApiResponse<T>
 ) {
-  return `${prefix}. Status code: ${response.status}, API error code: ${response.error.code}, API error message: ${response.error.message}`;
+  return `${prefix}. Status code: ${response.status}, API error code: ${response.error?.code}, API error message: ${response.error?.message}`;
 }

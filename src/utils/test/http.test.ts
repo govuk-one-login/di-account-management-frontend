@@ -1,44 +1,80 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { Request, Response } from "express";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { RequestBuilder, ResponseBuilder } from "../../../test/utils/builders";
 import {
   createApiResponse,
+  Http,
   getRequestConfig,
   getRequestConfigFromExpress,
-  Http,
 } from "../http.js";
-import { HTTP_STATUS_CODES } from "../../app.constants.js";
 import { ApiError } from "../errors.js";
 import * as oidcModule from "../oidc.js";
 import * as txmaHeaderModule from "../txma-header.js";
+import { RequestBuilder, ResponseBuilder } from "../../../test/utils/builders";
+import { Request, Response as ExpressResponse } from "express";
+import { HTTP_STATUS_CODES } from "../../app.constants.js";
 
-vi.mock("axios");
-const mockedAxios = vi.mocked(axios);
+const { mockLoggerError } = vi.hoisted(() => ({
+  mockLoggerError: vi.fn(),
+}));
+
+vi.mock("../logger", () => ({
+  logger: {
+    error: (...args: any[]) => mockLoggerError(...args),
+  },
+}));
 
 describe("createApiResponse", () => {
-  it("returns success true when status is in default success statuses", () => {
-    const response = {
-      status: HTTP_STATUS_CODES.OK,
-      data: { code: 0, message: "Success" },
-    } as AxiosResponse;
+  const createMockResponse = (
+    status: number,
+    data: any,
+    contentLength = "1"
+  ) => {
+    const isString = typeof data === "string";
+    const textValue = isString ? data : JSON.stringify(data);
+    const mockJsonFn = vi
+      .fn()
+      .mockImplementation(() =>
+        textValue
+          ? Promise.resolve(JSON.parse(textValue))
+          : Promise.reject(new SyntaxError())
+      );
 
-    const result = createApiResponse(response);
+    return {
+      status,
+      statusText:
+        status === HTTP_STATUS_CODES.BAD_REQUEST ? "Bad Request" : "OK",
+      headers: {
+        get: vi.fn().mockReturnValue(contentLength),
+      },
+      clone: vi.fn().mockReturnValue({
+        headers: { get: vi.fn().mockReturnValue(contentLength) },
+        json: mockJsonFn,
+      }),
+      json: mockJsonFn,
+    } as unknown as globalThis.Response;
+  };
+
+  it("returns success true when status is in default success statuses", async () => {
+    const response = createMockResponse(HTTP_STATUS_CODES.OK, {
+      code: "100",
+      message: "Success",
+    });
+
+    const result = await createApiResponse(response);
 
     expect(result).toEqual({
       success: true,
-      code: 0,
+      code: 100,
       message: "Success",
     });
   });
 
-  it("returns success false when status is not in success statuses", () => {
-    const response = {
-      status: HTTP_STATUS_CODES.BAD_REQUEST,
-      data: { code: 1, message: "Error" },
-    } as AxiosResponse;
+  it("returns success false when status is not in success statuses", async () => {
+    const response = createMockResponse(HTTP_STATUS_CODES.BAD_REQUEST, {
+      code: "1",
+      message: "Error",
+    });
 
-    const result = createApiResponse(response);
+    const result = await createApiResponse(response);
 
     expect(result).toEqual({
       success: false,
@@ -47,19 +83,45 @@ describe("createApiResponse", () => {
     });
   });
 
-  it("uses custom status codes when provided", () => {
-    const response = {
-      status: HTTP_STATUS_CODES.BAD_REQUEST,
-      data: { code: 1, message: "Error" },
-    } as AxiosResponse;
+  it("uses custom status codes when provided", async () => {
+    const response = createMockResponse(HTTP_STATUS_CODES.BAD_REQUEST, {
+      code: "1",
+      message: "Error",
+    });
 
-    const result = createApiResponse(response, [HTTP_STATUS_CODES.BAD_REQUEST]);
+    const result = await createApiResponse(response, [
+      HTTP_STATUS_CODES.BAD_REQUEST,
+    ]);
 
     expect(result).toEqual({
       success: true,
       code: 1,
       message: "Error",
     });
+  });
+
+  it("logs parsing failure containing trace", async () => {
+    const brokenResponse = createMockResponse(
+      HTTP_STATUS_CODES.BAD_REQUEST,
+      "Invalid { JSON",
+      "1"
+    );
+    const testTraceId = "trace-response-parsing-123";
+
+    await createApiResponse(
+      brokenResponse,
+      [HTTP_STATUS_CODES.OK],
+      testTraceId
+    );
+
+    expect(mockLoggerError).toHaveBeenCalledWith(
+      expect.objectContaining({
+        trace: testTraceId,
+        status: HTTP_STATUS_CODES.BAD_REQUEST,
+        statusText: "Bad Request",
+      }),
+      expect.stringContaining("createApiResponse parsing failure")
+    );
   });
 });
 
@@ -75,7 +137,6 @@ describe("getRequestConfig", () => {
         Authorization: "Bearer test-token",
         "X-ADAPI-AccessToken": "api-token",
       },
-      proxy: false,
     });
   });
 
@@ -88,24 +149,26 @@ describe("getRequestConfig", () => {
       headers: {
         Authorization: "Bearer test-token",
       },
-      proxy: false,
     });
   });
 
   it("includes validation statuses when provided", () => {
-    const validationStatuses = [200, 400];
+    const validationStatuses = [
+      HTTP_STATUS_CODES.OK,
+      HTTP_STATUS_CODES.BAD_REQUEST,
+    ];
     const config = getRequestConfig({
       token: "test-token",
       validationStatuses,
     });
 
     expect(config.validateStatus).toBeDefined();
-    expect(config.validateStatus!(200)).toBe(true);
-    expect(config.validateStatus!(400)).toBe(true);
+    expect(config.validateStatus!(HTTP_STATUS_CODES.OK)).toBe(true);
+    expect(config.validateStatus!(HTTP_STATUS_CODES.BAD_REQUEST)).toBe(true);
     expect(config.validateStatus!(500)).toBe(false);
   });
 
-  it("includes optional headers when provided", () => {
+  it("includes optional headers and trace metadata parameters when provided", () => {
     const config = getRequestConfig({
       token: "test-token",
       accountDataApiAccessToken: "api-token",
@@ -115,6 +178,7 @@ describe("getRequestConfig", () => {
       userLanguage: "en",
       clientSessionId: "client-123",
       txmaAuditEncoded: "audit-data",
+      trace: "test-trace-id",
     });
 
     expect(config.headers).toEqual({
@@ -127,6 +191,8 @@ describe("getRequestConfig", () => {
       "Client-Session-Id": "client-123",
       "txma-audit-encoded": "audit-data",
     });
+
+    expect(config.trace).toBe("test-trace-id");
   });
 
   it("excludes X-ADAPI-AccessToken when accountDataApiAccessToken is not provided", () => {
@@ -155,11 +221,16 @@ describe("getRequestConfig", () => {
 
 describe("getRequestConfigFromExpress", () => {
   let req: Partial<Request>;
-  let res: Partial<Response>;
+  let res: Partial<ExpressResponse>;
 
   beforeEach(() => {
     req = new RequestBuilder().build();
     res = new ResponseBuilder().build();
+    res.locals = {
+      ...res.locals,
+      trace: "test-trace-id",
+    };
+
     vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
     vi.spyOn(txmaHeaderModule, "getTxmaHeader").mockReturnValue(
       "txma-audit-encoded"
@@ -170,7 +241,7 @@ describe("getRequestConfigFromExpress", () => {
     vi.restoreAllMocks();
   });
 
-  it("returns the expected request config", async () => {
+  it("returns the expected request config including tracking trace strings", async () => {
     (req.session as any).user.tokens = {
       accessToken: "token",
       accountDataApiAccessToken: "accountDataApiAccessToken",
@@ -178,7 +249,7 @@ describe("getRequestConfigFromExpress", () => {
 
     const requestConfig = await getRequestConfigFromExpress(
       req as Request,
-      res as Response
+      res as ExpressResponse
     );
 
     expect(requestConfig).toEqual({
@@ -190,6 +261,7 @@ describe("getRequestConfigFromExpress", () => {
       sourceIp: "sourceip",
       txmaAuditEncoded: "txma-audit-encoded",
       userLanguage: "en",
+      trace: "test-trace-id",
     });
   });
 
@@ -197,90 +269,148 @@ describe("getRequestConfigFromExpress", () => {
     (req.session as any).user.tokens = { accessToken: "token" } as any;
     const refreshTokenSpy = vi.spyOn(oidcModule, "refreshToken");
 
-    await getRequestConfigFromExpress(req as Request, res as Response);
+    await getRequestConfigFromExpress(req as Request, res as ExpressResponse);
 
     expect(refreshTokenSpy).toHaveBeenCalledWith(req);
   });
 });
 
 describe("Http", () => {
-  let http: Http;
-  const mockAxiosInstance = {
-    create: vi.fn(),
-    interceptors: {
-      response: {
-        use: vi.fn(),
-      },
-    },
-  };
+  const MOCK_TRACE = "mocktracefortesting123";
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockedAxios.create = vi.fn().mockReturnValue(mockAxiosInstance);
-  });
-
-  describe("constructor", () => {
-    it("creates Http instance with baseUrl", () => {
-      http = new Http("http://example.com");
-      expect(http).toBeInstanceOf(Http);
-    });
-
-    it("accepts optional axios instance", () => {
-      const customInstance = {} as any;
-      http = new Http("http://example.com", customInstance);
-      expect(http.client).toBe(customInstance);
-    });
-  });
-
-  describe("client getter", () => {
-    it("returns provided instance when available", () => {
-      const customInstance = {} as any;
-      http = new Http("http://example.com", customInstance);
-      expect(http.client).toBe(customInstance);
-    });
-
-    it("initializes new instance when none provided", () => {
-      http = new Http("http://example.com");
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const client = http.client; // Access the client to trigger initialization
-
-      expect(mockedAxios.create).toHaveBeenCalledWith({
-        baseURL: "http://example.com",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json; charset=utf-8",
-          "Access-Control-Allow-Credentials": "true",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        timeout: 10000,
-      });
-      expect(mockAxiosInstance.interceptors.response.use).toHaveBeenCalled();
-    });
+    mockLoggerError.mockClear();
+    vi.stubGlobal("fetch", vi.fn());
   });
 
   describe("handleError", () => {
-    it("creates ApiError with response data when available", async () => {
-      const axiosError = {
-        message: "Request failed",
-        response: {
-          status: 400,
-          data: "Error details",
+    const createMockErrorResponse = (status: number, textBody: string) => {
+      return {
+        status,
+        statusText: "Bad Request",
+        headers: {
+          entries: vi.fn().mockReturnValue([["x-test-header", "value"]]),
         },
-      } as AxiosError;
+        text: vi.fn().mockResolvedValue(textBody),
+      } as unknown as Response;
+    };
 
-      const result = (Http as any).handleError(axiosError);
+    it("creates ApiError extracting response data stream", async () => {
+      const payload = { code: 1044, message: "Error payload" };
+      const mockResponse = createMockErrorResponse(
+        HTTP_STATUS_CODES.BAD_REQUEST,
+        JSON.stringify(payload)
+      );
 
-      await expect(result).rejects.toBeInstanceOf(ApiError);
+      const errorPromise = (Http as any).handleError(
+        mockResponse,
+        "http://example.com",
+        "POST",
+        MOCK_TRACE
+      );
+
+      await expect(errorPromise).rejects.toBeInstanceOf(ApiError);
+
+      expect(mockLoggerError).toHaveBeenCalledWith(
+        {
+          trace: MOCK_TRACE,
+          url: "http://example.com",
+          method: "POST",
+          status: HTTP_STATUS_CODES.BAD_REQUEST,
+          statusText: "Bad Request",
+          responseData: payload,
+          headers: { "x-test-header": "value" },
+        },
+        "[POST] http://example.com failed with status 400"
+      );
     });
 
-    it("creates ApiError with just message when no response data", async () => {
-      const axiosError = {
-        message: "Network error",
-      } as AxiosError;
+    it("creates ApiError safely", async () => {
+      const mockResponse = {
+        status: 500,
+        statusText: "Internal Server Error",
+        headers: {
+          entries: vi.fn().mockReturnValue([]),
+        },
+        text: vi.fn().mockRejectedValue(new Error("Stream crashed")),
+      } as unknown as Response;
 
-      const result = (Http as any).handleError(axiosError);
+      const errorPromise = (Http as any).handleError(
+        mockResponse,
+        "http://example.com",
+        "GET",
+        MOCK_TRACE
+      );
 
-      await expect(result).rejects.toBeInstanceOf(ApiError);
+      await expect(errorPromise).rejects.toBeInstanceOf(ApiError);
+
+      expect(mockLoggerError).toHaveBeenCalledWith(
+        {
+          trace: MOCK_TRACE,
+          url: "http://example.com",
+          method: "GET",
+          status: 500,
+          statusText: "Internal Server Error",
+          responseData: "",
+          headers: {},
+        },
+        "[GET] http://example.com failed with status 500"
+      );
+    });
+  });
+
+  describe("handleNetworkError", () => {
+    it("handles AbortError", () => {
+      const abortError = {
+        name: "AbortError",
+        message: "The operation was aborted",
+      };
+
+      expect(() => {
+        (Http as any).handleNetworkError(
+          abortError,
+          "http://example.com",
+          "POST",
+          MOCK_TRACE
+        );
+      }).toThrow(ApiError);
+
+      expect(mockLoggerError).toHaveBeenCalledWith(
+        {
+          trace: MOCK_TRACE,
+          url: "http://example.com",
+          method: "POST",
+          timeout: 10000,
+          errorType: "TimeoutError",
+        },
+        "Timeout: [POST] http://example.com exceeded 10000ms"
+      );
+    });
+
+    it("handles generic exceptions", () => {
+      const genericError = new Error("Connection refused");
+
+      expect(() => {
+        (Http as any).handleNetworkError(
+          genericError,
+          "http://example.com",
+          "GET",
+          MOCK_TRACE
+        );
+      }).toThrow("Connection refused");
+
+      expect(mockLoggerError).toHaveBeenCalledWith(
+        {
+          trace: MOCK_TRACE,
+          url: "http://example.com",
+          method: "GET",
+          errorMessage: "Connection refused",
+          errorStack: genericError.stack,
+          errorType: "NetworkError",
+        },
+        "Error: [GET] http://example.com failed with message Connection refused"
+      );
     });
   });
 });

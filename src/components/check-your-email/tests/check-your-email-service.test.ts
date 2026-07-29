@@ -2,14 +2,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import nock from "nock";
 import { checkYourEmailService } from "../check-your-email-service.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import { getApiBaseUrl } from "../../../config.js";
 import { UpdateInformationInput } from "../../../utils/types";
 import {
   CLIENT_SESSION_ID,
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
-
-const baseUrl = getApiBaseUrl();
+import { http } from "../../../utils/http.js";
 
 describe("checkYourEmailService", () => {
   beforeEach(() => {});
@@ -29,22 +27,28 @@ describe("checkYourEmailService", () => {
     const persistentSessionId = "persistentsession123";
     const userLanguage = "en";
 
-    const updateEmailNock = nock(baseUrl, {
-      reqheaders: {
-        authorization: `Bearer ${token}`,
-        "x-forwarded-for": sourceIp,
-        "di-persistent-session-id": persistentSessionId,
-        "session-id": sessionId,
-        "user-language": userLanguage,
-        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-      },
-    }).post(API_ENDPOINTS.UPDATE_EMAIL, {
-      existingEmailAddress: existingEmailAddress,
-      replacementEmailAddress: replacementEmailAddress,
-      otp: otp,
-    });
-
-    updateEmailNock.reply(HTTP_STATUS_CODES.NO_CONTENT);
+    const httpPostSpy = vi
+      .spyOn(http, "post")
+      .mockResolvedValueOnce({
+        status: HTTP_STATUS_CODES.NO_CONTENT,
+        ok: true,
+        clone: vi.fn().mockReturnValue({ json: vi.fn().mockResolvedValue({}) }),
+        json: vi.fn().mockResolvedValue({}),
+      } as unknown as Response)
+      .mockResolvedValueOnce({
+        status: HTTP_STATUS_CODES.FORBIDDEN,
+        ok: false,
+        clone: vi
+          .fn()
+          .mockReturnValue({ json: vi.fn().mockResolvedValue({ code: 1089 }) }),
+        json: vi.fn().mockResolvedValue({ code: 1089 }),
+      } as unknown as Response)
+      .mockResolvedValueOnce({
+        status: HTTP_STATUS_CODES.BAD_REQUEST,
+        ok: false,
+        clone: vi.fn().mockReturnValue({ json: vi.fn().mockResolvedValue({}) }),
+        json: vi.fn().mockResolvedValue({}),
+      } as unknown as Response);
 
     const updateInput: UpdateInformationInput = {
       email: existingEmailAddress,
@@ -72,10 +76,6 @@ describe("checkYourEmailService", () => {
       error: undefined,
     });
 
-    updateEmailNock.reply(HTTP_STATUS_CODES.FORBIDDEN, {
-      code: 1089,
-    });
-
     emailUpdated = await checkYourEmailService().updateEmail(
       updateInput,
       requestConfig
@@ -86,8 +86,6 @@ describe("checkYourEmailService", () => {
       error: "EMAIL_ADDRESS_DENIED",
     });
 
-    updateEmailNock.reply(HTTP_STATUS_CODES.BAD_REQUEST);
-
     emailUpdated = await checkYourEmailService().updateEmail(
       updateInput,
       requestConfig
@@ -97,5 +95,46 @@ describe("checkYourEmailService", () => {
       success: false,
       error: undefined,
     });
+
+    expect(httpPostSpy).toHaveBeenCalledTimes(3);
+
+    const expectedRequestBody = {
+      existingEmailAddress: existingEmailAddress,
+      replacementEmailAddress: replacementEmailAddress,
+      otp: otp,
+    };
+
+    const expectedConfig = expect.objectContaining({
+      headers: expect.objectContaining({
+        Authorization: `Bearer ${token}`,
+        "X-Forwarded-For": sourceIp,
+        "di-persistent-session-id": persistentSessionId,
+        "Session-Id": sessionId,
+        "User-Language": userLanguage,
+        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
+        "Client-Session-Id": CLIENT_SESSION_ID,
+      }),
+    });
+
+    expect(httpPostSpy).toHaveBeenNthCalledWith(
+      1,
+      API_ENDPOINTS.UPDATE_EMAIL,
+      expectedRequestBody,
+      expectedConfig
+    );
+
+    expect(httpPostSpy).toHaveBeenNthCalledWith(
+      2,
+      API_ENDPOINTS.UPDATE_EMAIL,
+      expectedRequestBody,
+      expectedConfig
+    );
+
+    expect(httpPostSpy).toHaveBeenNthCalledWith(
+      3,
+      API_ENDPOINTS.UPDATE_EMAIL,
+      expectedRequestBody,
+      expectedConfig
+    );
   });
 });

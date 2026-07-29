@@ -13,17 +13,16 @@ import {
   CheckYourEmailServiceError,
   CheckYourEmailServiceInterface,
 } from "./types.js";
-import { AxiosResponse } from "axios";
 import { UpdateInformationInput } from "../../utils/types.js";
 
 export function checkYourEmailService(
-  axios: Http = http
+  fetchClient: Http = http
 ): CheckYourEmailServiceInterface {
   const updateEmail = async function (
     updateInput: UpdateInformationInput,
     requestConfig: RequestConfig
   ) {
-    const { status, data }: AxiosResponse = await axios.client.post(
+    const response = await fetchClient.post(
       API_ENDPOINTS.UPDATE_EMAIL,
       {
         existingEmailAddress: updateInput.email,
@@ -39,16 +38,20 @@ export function checkYourEmailService(
         ],
       })
     );
+    const responseData =
+      response.status !== HTTP_STATUS_CODES.NO_CONTENT
+        ? await response.json()
+        : {};
 
     let error: CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED | undefined =
       undefined;
 
-    if (data.code === ERROR_CODES.EMAIL_ADDRESS_DENIED) {
+    if (responseData.code === ERROR_CODES.EMAIL_ADDRESS_DENIED) {
       error = CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED;
     }
 
     return {
-      success: status === HTTP_STATUS_CODES.NO_CONTENT,
+      success: response.status === HTTP_STATUS_CODES.NO_CONTENT,
       error,
     };
   };

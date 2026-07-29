@@ -12,20 +12,27 @@ const interventionMap: Record<string, string> = {
   "1084": "BLOCKED",
 };
 
-function getInterventionFromError(response: any): string | undefined {
-  const code = response?.data?.code;
-  return code ? interventionMap[code] : undefined;
+async function getInterventionFromError(
+  response: any
+): Promise<string | undefined> {
+  try {
+    const clonedResponse = response.clone();
+    const data = await clonedResponse.json();
+    return interventionMap[data?.code];
+  } catch {
+    return undefined;
+  }
 }
 
 export function enterPasswordService(
-  axios: Http = http
+  fetchClient: Http = http
 ): EnterPasswordServiceInterface {
   const authenticated = async (
     email: string,
     password: string,
     requestConfig: RequestConfig
   ): Promise<{ authenticated: boolean; intervention?: string }> => {
-    const response = await axios.client.post(
+    const response = await fetchClient.post(
       API_ENDPOINTS.AUTHENTICATE,
       { email: email, password },
       getRequestConfig({
@@ -41,7 +48,7 @@ export function enterPasswordService(
     const { status } = response;
 
     if (status === HTTP_STATUS_CODES.FORBIDDEN) {
-      const intervention = getInterventionFromError(response);
+      const intervention = await getInterventionFromError(response);
       if (intervention) {
         return { authenticated: false, intervention };
       }

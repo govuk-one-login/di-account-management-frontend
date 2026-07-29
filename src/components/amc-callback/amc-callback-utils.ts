@@ -1,6 +1,5 @@
 import { kmsService } from "../../utils/kms.js";
 import { ParsedQs } from "qs";
-import { AxiosRequestConfig } from "axios";
 import {
   getAmcTokenUrl,
   getAmcJourneyOutcomeUrl,
@@ -15,7 +14,7 @@ import {
   EventName,
   JourneyAction,
 } from "../../app.constants.js";
-import { http } from "../../utils/http.js";
+import { http, FetchRequestConfig } from "../../utils/http.js";
 import { randomUUID } from "node:crypto";
 import * as jose from "jose";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
@@ -128,13 +127,13 @@ export function validateQueryParams(
 export async function exchangeCodeForToken(
   code: string,
   scope: string,
-  requestConfig: AxiosRequestConfig
+  requestConfig: FetchRequestConfig
 ): Promise<TokenResponse> {
   requestConfig.headers = {
     ...requestConfig.headers,
     "Content-Type": "application/x-www-form-urlencoded",
   };
-  delete requestConfig.headers["Authorization"];
+  delete (requestConfig.headers as Record<string, string>)["Authorization"];
   const tokenUrl = getAmcTokenUrl();
   const now = Math.floor(Date.now() / 1000);
 
@@ -166,29 +165,22 @@ export async function exchangeCodeForToken(
     client_assertion: clientAssertion,
   });
 
-  const response = await http.client.post(
-    tokenUrl,
-    body.toString(),
-    requestConfig
-  );
+  const response = await http.post(tokenUrl, body.toString(), requestConfig);
 
-  return response.data;
+  return await response.json();
 }
 
 export async function getJourneyOutcomeResponse(
   access_token: string,
-  requestConfig: AxiosRequestConfig
+  requestConfig: FetchRequestConfig
 ): Promise<JourneyOutcome> {
   requestConfig.headers = {
     ...requestConfig.headers,
     Authorization: `Bearer ${access_token}`,
   };
 
-  const response = await http.client.get(
-    getAmcJourneyOutcomeUrl(),
-    requestConfig
-  );
-  return response.data;
+  const response = await http.get(getAmcJourneyOutcomeUrl(), requestConfig);
+  return await response.json();
 }
 
 export async function handleJourneyOutcomeResponse(
