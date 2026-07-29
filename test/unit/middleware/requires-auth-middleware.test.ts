@@ -167,7 +167,7 @@ describe("Requires auth middleware", () => {
     expect(callArgs.request).toBeDefined();
     expect(typeof callArgs.request).toBe("string");
 
-    const [header] = callArgs.request.split(".");
+    const [header, payload] = callArgs.request.split(".");
     const decodedHeader = JSON.parse(
       Buffer.from(header, "base64url").toString()
     );
@@ -180,6 +180,16 @@ describe("Requires auth middleware", () => {
     expect(decodedHeader.kid).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     );
+
+    const decodedPayload = JSON.parse(
+      Buffer.from(payload, "base64url").toString()
+    );
+    expect(decodedPayload.jti).toBeDefined();
+    expect(decodedPayload.jti).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    );
+    expect(decodedPayload.exp).toBeDefined();
+    expect(decodedPayload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
 
     vi.restoreAllMocks();
   });

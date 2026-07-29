@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { generators } from "openid-client";
+import { randomUUID } from "node:crypto";
 import {
   PATH_DATA,
   VECTORS_OF_TRUST,
@@ -81,6 +82,8 @@ async function generateAuthUrl(req: Request): Promise<string> {
       ? CODE_CHALLENGE_VALUES.CODE_CHALLENGE_METHOD
       : undefined,
     code_challenge: codeChallenge,
+    jti: randomUUID(),
+    exp: Math.floor(Date.now() / 1000) + 120,
   };
   const encodedHeader = base64url.default.encode(JSON.stringify(headers));
   const encodedPayload = base64url.default.encode(JSON.stringify(claims));
