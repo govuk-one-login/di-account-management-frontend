@@ -25,9 +25,9 @@ certifi==2026.5.20 \
 cfgv==3.5.0 \
     --hash=sha256:a8dc6b26ad22ff227d2634a65cb388215ce6cc96bbcc5cfde7641ae87e8dacc0 \
     --hash=sha256:d5b1034354820651caa73ede66a6294d6e95c1b00acc5e9b098e917404669132
-cfn-lint==1.46.0 \
-    --hash=sha256:1dfca1993af3159411e4a4f79466617ccdca48eddaf424e216297167c500aa3b \
-    --hash=sha256:fa7cb76db683109133241baf1e1734b1d61b46d3900ba2a309db8f3d0e5d3994
+cfn-lint==1.53.2 \
+    --hash=sha256:4de8a820b8a098b9d8ed0fbe25c7f2dd925b9425b48856c07120481b09bdd1a6 \
+    --hash=sha256:f2f4a63bc0e6dce802cc429993e6c7b2a4dac4bc1f4b0e743709cb684fad345b
 charset-normalizer==3.4.7 \
     --hash=sha256:007d05ec7321d12a40227aae9e2bc6dca73f3cb21058999a1df9e193555a9dcc \
     --hash=sha256:03853ed82eeebbce3c2abfdbc98c96dc205f32a79627688ac9a27370ea61a49c \
@@ -200,9 +200,9 @@ nodeenv==1.10.0 \
 platformdirs==4.10.0 \
     --hash=sha256:31e761a6a0ca04faf7353ea759bdba55652be214725111e5aac52dfa29d4bef7 \
     --hash=sha256:fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a
-pre-commit==4.2.0 \
-    --hash=sha256:601283b9757afd87d40c4c4a9b2b5de9637a8ea02eaff7adc2d0fb4e04841146 \
-    --hash=sha256:a009ca7205f1eb497d10b845e52c838a98b6cdd2102a6c8e4540e94ee75c58bd
+pre-commit==4.6.1 \
+    --hash=sha256:03e809865c7d178b9979d06c761fcbfe6808fdaded8581a745bb110e52050421 \
+    --hash=sha256:0e3b2942510d1fb34eec167a3ec57331bf8442122f1153a9fb8b58f5c49b2717
 pydantic==2.13.4 \
     --hash=sha256:45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba \
     --hash=sha256:c40756b57adaa8b1efeeced5c196f3f3b7c435f90e84ea7f443901bec8099ef6
