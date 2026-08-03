@@ -153,7 +153,7 @@ async function createApp(): Promise<express.Application> {
   );
   app.use(cookieParser());
 
-  const sessionStore = getSessionStore({ session: session });
+  const sessionStore = getSessionStore();
   app.use(
     session({
       name: "am",
@@ -164,8 +164,7 @@ async function createApp(): Promise<express.Application> {
       unset: "destroy",
       cookie: getSessionCookieOptions(
         isDeployedEnvironment,
-        getSessionExpiry(),
-        getSessionSecret()
+        getSessionExpiry()
       ),
     })
   );
