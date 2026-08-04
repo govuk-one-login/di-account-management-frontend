@@ -9,10 +9,7 @@ import {
   mapMfaMethods,
   canChangePrimaryMethod,
 } from "../../utils/mfa/index.js";
-import {
-  PASSKEYS_COMMON_OPL_SETTINGS,
-  setOplSettings,
-} from "../../utils/opl.js";
+import { setOplSettings } from "../../utils/opl.js";
 
 export async function signInDetailsGet(
   req: Request,
@@ -55,7 +52,6 @@ export async function signInDetailsGet(
   setOplSettings(
     {
       contentId: "e675b9e8-2bfd-43d8-bf43-1f4868a93630",
-      ...PASSKEYS_COMMON_OPL_SETTINGS,
     },
     res
   );
