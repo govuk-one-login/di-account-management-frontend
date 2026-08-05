@@ -20,8 +20,10 @@ import { handleLogout } from "../../../utils/logout.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { eventService } from "../../../services/event-service.js";
 
+import { getAmcRedirectUri as mockGetAmcRedirectUri } from "../../../utils/getAmcRedirectUri.js";
+
 vi.mock("../../../utils/http.js", () => ({
-  http: { client: { post: vi.fn(), get: vi.fn() } },
+  http: { post: vi.fn(), get: vi.fn() },
   getRequestConfig: vi.fn(),
 }));
 
@@ -41,8 +43,6 @@ vi.mock("../../../services/event-service.js");
 vi.mock("../../../utils/getAmcRedirectUri.js", () => ({
   getAmcRedirectUri: vi.fn(),
 }));
-
-import { getAmcRedirectUri as mockGetAmcRedirectUri } from "../../../utils/getAmcRedirectUri.js";
 
 describe("AMC call back util tests", () => {
   vi.spyOn(config, "getAmcTokenUrl").mockReturnValue("https://test.com");
@@ -171,9 +171,15 @@ describe("AMC call back util tests", () => {
         token_type: "Bearer",
         expires_in: 60,
       };
-      vi.mocked(http.client.post).mockResolvedValue({
-        data: mockTokenResponse,
-      });
+
+      const httpPostSpy = vi.spyOn(http, "post").mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(mockTokenResponse),
+        }),
+        json: vi.fn().mockResolvedValue(mockTokenResponse),
+      } as unknown as Response);
 
       const result = await exchangeCodeForToken(
         "auth-code-123",
@@ -187,7 +193,7 @@ describe("AMC call back util tests", () => {
         expect.stringContaining(".")
       );
 
-      expect(http.client.post).toHaveBeenCalledWith(
+      expect(httpPostSpy).toHaveBeenCalledWith(
         "https://test.com",
         expect.stringContaining("grant_type=authorization_code"),
         expect.objectContaining({
@@ -197,13 +203,14 @@ describe("AMC call back util tests", () => {
         })
       );
 
-      const callArgs = vi.mocked(http.client.post).mock.calls[0];
-      const bodyParams = new URLSearchParams(callArgs[1] as string);
+      const callArgs = httpPostSpy.mock.calls[0];
+      const postBodyPayload = new URLSearchParams(callArgs[1] as string);
 
-      expect(bodyParams.get("code")).toBe("auth-code-123");
-      expect(bodyParams.get("client_assertion")).toBeDefined();
-      expect(bodyParams.get("client_assertion")).toContain(".");
-      expect(bodyParams.get("redirect_uri")).toBe(
+      expect(postBodyPayload.get("grant_type")).toBe("authorization_code");
+      expect(postBodyPayload.get("code")).toBe("auth-code-123");
+      expect(postBodyPayload.get("client_assertion")).toBeDefined();
+      expect(postBodyPayload.get("client_assertion")).toContain(".");
+      expect(postBodyPayload.get("redirect_uri")).toBe(
         "https://app.com/amc/callback?scope=openid"
       );
     });
@@ -213,7 +220,7 @@ describe("AMC call back util tests", () => {
       vi.mocked(kmsService.sign).mockResolvedValue({
         Signature: Buffer.from("sig"),
       } as unknown as SignCommandOutput);
-      vi.mocked(http.client.post).mockRejectedValue(new Error("Network Error"));
+      vi.mocked(http.post).mockRejectedValue(new Error("Network Error"));
 
       await expect(
         exchangeCodeForToken("code", "openid", mockExpressConfig)
@@ -230,12 +237,19 @@ describe("AMC call back util tests", () => {
     });
 
     it("should inject the bearer token and return response data", async () => {
-      vi.mocked(http.client.get).mockResolvedValue({ data: mockData });
+      const httpGetSpy = vi.spyOn(http, "get").mockResolvedValue({
+        status: 200,
+        ok: true,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue(mockData),
+        }),
+        json: vi.fn().mockResolvedValue(mockData),
+      } as unknown as Response);
 
       const config = { params: { id: "123" } };
       const result = await getJourneyOutcomeResponse(mockToken, config);
 
-      expect(http.client.get).toHaveBeenCalledWith(
+      expect(httpGetSpy).toHaveBeenCalledWith(
         "https://journey-outcome.co.uk",
         expect.objectContaining({
           headers: expect.objectContaining({
@@ -249,7 +263,7 @@ describe("AMC call back util tests", () => {
 
     it("should throw an error when the HTTP request fails", async () => {
       const mockError = new Error("Request failed with status code 500");
-      vi.mocked(http.client.get).mockRejectedValue(mockError);
+      vi.mocked(http.get).mockRejectedValue(mockError);
 
       const mockToken = "expired-token";
       const config = {};
@@ -258,7 +272,7 @@ describe("AMC call back util tests", () => {
         getJourneyOutcomeResponse(mockToken, config)
       ).rejects.toThrow("Request failed with status code 500");
 
-      expect(http.client.get).toHaveBeenCalledTimes(1);
+      expect(http.get).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -9,7 +9,6 @@ import {
   beforeEach,
 } from "vitest";
 import { testComponent } from "../../../../test/utils/helpers.js";
-import nock = require("nock");
 import * as cheerio from "cheerio";
 import {
   API_ENDPOINTS,
@@ -18,12 +17,27 @@ import {
 } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
+import { http } from "../../../utils/http.js";
+
+vi.mock("../../../utils/http.js", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("../../../utils/http.js")>();
+  return {
+    ...actual,
+    http: {
+      ...actual.http,
+      get: vi.fn(),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn(),
+    },
+  };
+});
 
 describe("Integration:: change phone number", () => {
   let token: string | string[];
   let cookies: string;
   let app: any;
-  let baseApi: string;
 
   beforeAll(async () => {
     vi.resetModules();
@@ -67,7 +81,6 @@ describe("Integration:: change phone number", () => {
     });
 
     app = await (await import("../../../app.js")).createApp();
-    baseApi = process.env.AM_API_BASE_URL || "http://localhost:8080";
 
     await request(app)
       .get(PATH_DATA.CHANGE_PHONE_NUMBER.url)
@@ -79,7 +92,7 @@ describe("Integration:: change phone number", () => {
   });
 
   beforeEach(() => {
-    nock.cleanAll();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -200,14 +213,15 @@ describe("Integration:: change phone number", () => {
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(204, {});
+    vi.mocked(http.post).mockResolvedValueOnce({
+      status: 204,
+      ok: false,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({}),
+      }),
+      json: vi.fn().mockResolvedValue({}),
+    } as unknown as Response);
 
-    // Act
     const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -219,17 +233,33 @@ describe("Integration:: change phone number", () => {
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
     expect(res.statusCode).toBe(302);
+
+    expect(http.post).toHaveBeenCalledWith(
+      API_ENDPOINTS.SEND_NOTIFICATION,
+      {
+        email: "test@test.com",
+        notificationType: "VERIFY_PHONE_NUMBER",
+        phoneNumber: "07738394991",
+        priorityIdentifier: "DEFAULT",
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +447 is entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(204, {});
+    vi.mocked(http.post).mockResolvedValueOnce({
+      status: 204,
+      ok: false,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({}),
+      }),
+      json: vi.fn().mockResolvedValue({}),
+    } as unknown as Response);
 
-    // Act
     const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -241,17 +271,33 @@ describe("Integration:: change phone number", () => {
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
     expect(res.statusCode).toBe(302);
+
+    expect(http.post).toHaveBeenCalledWith(
+      API_ENDPOINTS.SEND_NOTIFICATION,
+      {
+        email: "test@test.com",
+        notificationType: "VERIFY_PHONE_NUMBER",
+        phoneNumber: "+447738394991",
+        priorityIdentifier: "DEFAULT",
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with 447 is entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(204, {});
+    vi.mocked(http.post).mockResolvedValueOnce({
+      status: 204,
+      ok: false,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({}),
+      }),
+      json: vi.fn().mockResolvedValue({}),
+    } as unknown as Response);
 
-    // Act
     const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -263,17 +309,33 @@ describe("Integration:: change phone number", () => {
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
     expect(res.statusCode).toBe(302);
+
+    expect(http.post).toHaveBeenCalledWith(
+      API_ENDPOINTS.SEND_NOTIFICATION,
+      {
+        email: "test@test.com",
+        notificationType: "VERIFY_PHONE_NUMBER",
+        phoneNumber: "447738394991",
+        priorityIdentifier: "DEFAULT",
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with 440 is entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(204, {});
+    vi.mocked(http.post).mockResolvedValueOnce({
+      status: 204,
+      ok: false,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({}),
+      }),
+      json: vi.fn().mockResolvedValue({}),
+    } as unknown as Response);
 
-    // Act
     const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -285,17 +347,33 @@ describe("Integration:: change phone number", () => {
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
     expect(res.statusCode).toBe(302);
+
+    expect(http.post).toHaveBeenCalledWith(
+      API_ENDPOINTS.SEND_NOTIFICATION,
+      {
+        email: "test@test.com",
+        notificationType: "VERIFY_PHONE_NUMBER",
+        phoneNumber: "4407738394991",
+        priorityIdentifier: "DEFAULT",
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 
   it("should redirect to /check-your-phone page when valid UK phone number prefixed with +440 is entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(204, {});
+    vi.mocked(http.post).mockResolvedValueOnce({
+      status: 204,
+      ok: false,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({}),
+      }),
+      json: vi.fn().mockResolvedValue({}),
+    } as unknown as Response);
 
-    // Act
     const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -307,17 +385,36 @@ describe("Integration:: change phone number", () => {
       .expect("Location", "/check-your-phone?intent=changePhoneNumber")
       .expect(302);
     expect(res.statusCode).toBe(302);
+
+    expect(http.post).toHaveBeenCalledWith(
+      API_ENDPOINTS.SEND_NOTIFICATION,
+      {
+        email: "test@test.com",
+        notificationType: "VERIFY_PHONE_NUMBER",
+        phoneNumber: "+4407738394991",
+        priorityIdentifier: "DEFAULT",
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 
   it("should return validation error when new UK phone number is the same as curent phone number", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(400, { code: 1044 });
+    vi.mocked(http.post).mockResolvedValueOnce({
+      status: 400,
+      ok: false,
+      headers: {
+        get: vi.fn().mockReturnValue("1"),
+      },
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({ code: 1044 }),
+      }),
+      json: vi.fn().mockResolvedValue({ code: 1044 }),
+    } as unknown as Response);
 
-    // Act
     const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -334,6 +431,21 @@ describe("Integration:: change phone number", () => {
       })
       .expect(400);
     expect(res.statusCode).toBe(400);
+
+    expect(http.post).toHaveBeenCalledWith(
+      API_ENDPOINTS.SEND_NOTIFICATION,
+      {
+        email: "test@test.com",
+        notificationType: "VERIFY_PHONE_NUMBER",
+        phoneNumber: "07738394991",
+        priorityIdentifier: "DEFAULT",
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 
   it("should return No UK phone number page", async () => {
@@ -344,16 +456,20 @@ describe("Integration:: change phone number", () => {
   });
 
   it("should return internal server error if send-otp-notification API call fails", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(500, {
-        sessionState: "done",
-      });
+    const mockErrorPayload = { sessionState: "done" };
 
-    // Act
+    vi.mocked(http.post).mockResolvedValueOnce({
+      status: 500,
+      ok: false,
+      headers: {
+        get: vi.fn().mockReturnValue("1"),
+      },
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue(mockErrorPayload),
+      }),
+      json: vi.fn().mockResolvedValue(mockErrorPayload),
+    } as unknown as Response);
+
     const res = await request(app)
       .post(PATH_DATA.CHANGE_PHONE_NUMBER.url)
       .type("form")
@@ -364,5 +480,14 @@ describe("Integration:: change phone number", () => {
       })
       .expect(500);
     expect(res.statusCode).toBe(500);
+    expect(http.post).toHaveBeenCalledWith(
+      API_ENDPOINTS.SEND_NOTIFICATION,
+      expect.any(Object),
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 });

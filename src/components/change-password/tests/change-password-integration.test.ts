@@ -9,7 +9,6 @@ import {
   beforeEach,
 } from "vitest";
 import { testComponent } from "../../../../test/utils/helpers";
-import nock = require("nock");
 import { load } from "cheerio";
 import {
   API_ENDPOINTS,
@@ -23,10 +22,11 @@ describe("Integration:: change password", () => {
   let token: string | string[];
   let cookies: string;
   let app: any;
-  let baseApi: string;
+  let postSpy: any;
 
   beforeAll(async () => {
     vi.resetModules();
+
     const sessionMiddleware =
       await import("../../../middleware/requires-auth-middleware.js");
     vi.spyOn(sessionMiddleware, "requiresAuthMiddleware").mockImplementation(
@@ -58,16 +58,22 @@ describe("Integration:: change password", () => {
     );
 
     const oidc = await import("../../../utils/oidc.js");
-    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() => {
-      return Promise.resolve({});
-    });
-
-    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() => {
-      return Promise.resolve({});
-    });
+    vi.spyOn(oidc, "getOIDCClient").mockImplementation(() =>
+      Promise.resolve({})
+    );
+    vi.spyOn(oidc, "getCachedJWKS").mockImplementation(() =>
+      Promise.resolve({})
+    );
 
     app = await (await import("../../../app.js")).createApp();
-    baseApi = process.env.AM_API_BASE_URL;
+
+    const httpModule = await import("../../../utils/http.js");
+    postSpy = vi.spyOn(httpModule.http, "post");
+  });
+
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    postSpy.mockReset();
 
     await request(app)
       .get(PATH_DATA.CHANGE_PASSWORD.url)
@@ -76,10 +82,6 @@ describe("Integration:: change password", () => {
         cookies = res.headers["set-cookie"];
         token = $("[name=_csrf]").val();
       });
-  });
-
-  beforeEach(() => {
-    nock.cleanAll();
   });
 
   afterAll(() => {
@@ -184,14 +186,22 @@ describe("Integration:: change password", () => {
   });
 
   it("should return validation error when password is amongst most common passwords", async () => {
-    // Arrange
-    nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .post(API_ENDPOINTS.UPDATE_PASSWORD)
-      .once()
-      .reply(400, { code: 1040 });
+    postSpy.mockResolvedValueOnce({
+      status: 400,
+      ok: false,
+      headers: {
+        get: vi.fn().mockReturnValue("1"),
+      },
+      clone: vi.fn().mockReturnValue({
+        json: vi
+          .fn()
+          .mockResolvedValue({ code: 1040, message: "Password is too common" }),
+      }),
+      json: vi
+        .fn()
+        .mockResolvedValue({ code: 1040, message: "Password is too common" }),
+    } as unknown as Response);
 
-    // Act
     await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
@@ -208,13 +218,30 @@ describe("Integration:: change password", () => {
         );
       })
       .expect(400);
+
+    expect(postSpy).toHaveBeenCalledWith(
+      API_ENDPOINTS.UPDATE_PASSWORD,
+      {
+        email: "test@test.com",
+        newPassword: "password123",
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 
   it("should return validation error when password is all letters", async () => {
-    nock(baseApi)
-      .post(API_ENDPOINTS.UPDATE_PASSWORD)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .reply(204);
+    postSpy.mockResolvedValueOnce({
+      status: 204,
+      ok: false,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({}),
+      }),
+      json: vi.fn().mockResolvedValue({}),
+    } as unknown as Response);
 
     await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
@@ -235,14 +262,24 @@ describe("Integration:: change password", () => {
   });
 
   it("should return error when new password is the same as existing password", async () => {
-    // Arrange
-    nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .post(API_ENDPOINTS.UPDATE_PASSWORD)
-      .once()
-      .reply(400, { code: 1024 });
+    postSpy.mockResolvedValueOnce({
+      status: 400,
+      ok: false,
+      headers: {
+        get: vi.fn().mockReturnValue("1"),
+      },
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({
+          code: 1024,
+          message: "Password cannot be the same",
+        }),
+      }),
+      json: vi.fn().mockResolvedValue({
+        code: 1024,
+        message: "Password cannot be the same",
+      }),
+    } as unknown as Response);
 
-    // Act
     await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
@@ -262,14 +299,13 @@ describe("Integration:: change password", () => {
   });
 
   it("should throw error when 400 is returned from API", async () => {
-    // Arrange
-    nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .post(API_ENDPOINTS.UPDATE_PASSWORD)
-      .once()
-      .reply(400, { code: 1000 });
+    postSpy.mockRejectedValueOnce({
+      name: "ApiError",
+      message: "Bad Request",
+      status: 400,
+      data: { code: 1000 },
+    });
 
-    // Act
     await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
@@ -287,25 +323,42 @@ describe("Integration:: change password", () => {
   });
 
   it("should redirect to enter phone number when valid password entered", async () => {
-    // Arrange
-    nock(baseApi)
-      .post(API_ENDPOINTS.UPDATE_PASSWORD)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .once()
-      .reply(204);
+    const targetPassword = "password123";
 
-    // Act
+    postSpy.mockResolvedValueOnce({
+      status: 204,
+      ok: true,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({}),
+      }),
+      json: vi.fn().mockResolvedValue({}),
+    } as unknown as Response);
+
     const res = await request(app)
       .post(PATH_DATA.CHANGE_PASSWORD.url)
       .type("form")
       .set("Cookie", cookies)
       .send({
         _csrf: token,
-        password: "action-1",
-        "confirm-password": "action-1",
+        password: targetPassword,
+        "confirm-password": targetPassword,
       })
       .expect("Location", PATH_DATA.PASSWORD_UPDATED_CONFIRMATION.url)
       .expect(302);
+
     expect(res.statusCode).toBe(302);
+
+    expect(postSpy).toHaveBeenCalledWith(
+      API_ENDPOINTS.UPDATE_PASSWORD,
+      {
+        email: "test@test.com",
+        newPassword: targetPassword,
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 });

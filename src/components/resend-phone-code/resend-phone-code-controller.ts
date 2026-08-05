@@ -106,7 +106,6 @@ export function resendPhoneCodePost(
         : mfaPriorityIdentifiers.default,
       await getRequestConfigFromExpress(req, res)
     );
-
     if (response.success) {
       req.session.user.newPhoneNumber = newPhoneNumber;
 
@@ -114,6 +113,7 @@ export function resendPhoneCodePost(
         req.session.user.state.changePhoneNumber.value,
         EventType.VerifyCodeSent
       );
+
       return res.redirect(`${PATH_DATA.CHECK_YOUR_PHONE.url}?intent=${intent}`);
     }
 

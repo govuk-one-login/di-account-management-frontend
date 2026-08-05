@@ -8,7 +8,7 @@ import {
   afterAll,
 } from "vitest";
 import request from "supertest";
-import nock = require("nock");
+import { http } from "../../../utils/http.js";
 import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
@@ -22,11 +22,24 @@ import { INTENT_CHANGE_PHONE_NUMBER } from "../../check-your-email/types";
 
 const PHONE_NUMBER = "07839490040";
 
+vi.mock("../../../utils/http.js", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("../../../utils/http.js")>();
+  return {
+    ...actual,
+    http: {
+      ...actual.http,
+      get: vi.fn(),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn(),
+    },
+  };
+});
 describe("Integration:: request phone code", () => {
   let token: string | string[];
   let cookies: string;
   let app: any;
-  let baseApi: string;
 
   const TEST_SUBJECT_ID = "jkduasd";
 
@@ -73,7 +86,6 @@ describe("Integration:: request phone code", () => {
     });
 
     app = await (await import("../../../app.js")).createApp();
-    baseApi = process.env.AM_API_BASE_URL;
 
     await request(app)
       .get(PATH_DATA.RESEND_PHONE_CODE.url)
@@ -85,7 +97,7 @@ describe("Integration:: request phone code", () => {
   });
 
   beforeEach(() => {
-    nock.cleanAll();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -111,31 +123,15 @@ describe("Integration:: request phone code", () => {
   });
 
   it("should resend the phone code", async () => {
-    let phoneNumberRequestedToChangeTo: string;
-    // Arrange
-    nock(baseApi)
-      .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
-      .post(API_ENDPOINTS.SEND_NOTIFICATION, {
-        email: CURRENT_EMAIL,
-        phoneNumber: PHONE_NUMBER,
-        notificationType: "VERIFY_PHONE_NUMBER",
-        priorityIdentifier: "DEFAULT",
-      })
-      .reply(
-        204,
-        (
-          uri,
-          requestBody: {
-            email: string;
-            phoneNumber: string;
-            notificationType: "VERIFY_PHONE_NUMBER";
-          }
-        ) => {
-          phoneNumberRequestedToChangeTo = requestBody.phoneNumber;
-        }
-      );
+    vi.mocked(http.post).mockResolvedValue({
+      status: 204,
+      ok: true,
+      clone: vi.fn().mockReturnValue({
+        json: vi.fn().mockResolvedValue({}),
+      }),
+      json: vi.fn().mockResolvedValue({}),
+    } as unknown as Response);
 
-    // Act
     await request(app)
       .post(PATH_DATA.RESEND_PHONE_CODE.url)
       .type("form")
@@ -147,6 +143,19 @@ describe("Integration:: request phone code", () => {
       })
       .expect(302);
 
-    expect(phoneNumberRequestedToChangeTo).toBe(PHONE_NUMBER);
+    expect(http.post).toHaveBeenCalledWith(
+      API_ENDPOINTS.SEND_NOTIFICATION,
+      {
+        email: CURRENT_EMAIL,
+        phoneNumber: PHONE_NUMBER,
+        notificationType: "VERIFY_PHONE_NUMBER",
+        priorityIdentifier: "DEFAULT",
+      },
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "Client-Session-Id": CLIENT_SESSION_ID_UNKNOWN,
+        }),
+      })
+    );
   });
 });

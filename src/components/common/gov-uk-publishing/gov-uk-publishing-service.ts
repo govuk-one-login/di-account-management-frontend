@@ -10,12 +10,12 @@ import {
 } from "./types.js";
 
 export function govUkPublishingService(
-  axios: Http = new Http(getGovPublishingBaseAPIUrl())
+  fetchClient: Http = new Http(getGovPublishingBaseAPIUrl())
 ): GovUkPublishingServiceInterface {
   const notifyEmailChanged = async (
     request: GovUkNotificationRequest
   ): Promise<void> => {
-    await axios.client.put<void>(
+    await fetchClient.put(
       getRequestUrl(request.publicSubjectId),
       {
         email: request.newEmail,
@@ -38,7 +38,7 @@ export function govUkPublishingService(
       deleteUrl = deleteUrl + "?legacy_sub=" + request.legacySubjectId;
     }
 
-    await axios.client.delete<void>(
+    await fetchClient.delete(
       deleteUrl,
       getRequestConfig({
         token: getGovPublishingBaseAPIToken(),
