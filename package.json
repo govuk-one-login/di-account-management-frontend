@@ -44,11 +44,11 @@
   "dependencies": {
     "@aws-crypto/client-node": "^5.0.2",
     "@aws-lambda-powertools/metrics": "^2.34.0",
-    "@aws-sdk/client-dynamodb": "^3.1096.0",
-    "@aws-sdk/client-kms": "^3.1096.0",
-    "@aws-sdk/client-sns": "^3.1096.0",
-    "@aws-sdk/client-sqs": "^3.1096.0",
-    "@aws-sdk/lib-dynamodb": "^3.1096.0",
+    "@aws-sdk/client-dynamodb": "^3.1106.0",
+    "@aws-sdk/client-kms": "^3.1106.0",
+    "@aws-sdk/client-sns": "^3.1106.0",
+    "@aws-sdk/client-sqs": "^3.1106.0",
+    "@aws-sdk/lib-dynamodb": "^3.1106.0",
     "@aws-sdk/util-dynamodb": "^3.985.0",
     "@govuk-one-login/frontend-analytics": "^4.2.2",
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
@@ -68,11 +68,11 @@
     "govuk-frontend": "^5.14.0",
     "helmet": "8.3.0",
     "i18next": "^25.10.10",
-    "i18next-fs-backend": "^2.6.6",
-    "i18next-http-middleware": "^3.9.7",
+    "i18next-fs-backend": "^2.6.7",
+    "i18next-http-middleware": "^3.9.8",
     "jose": "^5.10.0",
     "jsdom": "^27.4.0",
-    "libphonenumber-js": "^1.13.9",
+    "libphonenumber-js": "^1.13.10",
     "nunjucks": "^3.2.4",
     "obscenity": "^0.4.6",
     "openid-client": "^5.7.1",
@@ -130,6 +130,6 @@
     "json5": "2.2.3"
   },
   "optionalDependencies": {
-    "@rollup/rollup-darwin-arm64": "^4.62.3"
+    "@rollup/rollup-darwin-arm64": "^4.62.4"
   }
 }
