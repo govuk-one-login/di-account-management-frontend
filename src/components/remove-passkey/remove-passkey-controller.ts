@@ -60,7 +60,11 @@ function sendDeleteFailedAuditEvents(
   errorMessage: string
 ): void {
   eventService.send(
-    eventService.buildAuditEvent(req, res, EventName.HOME_PASSKEY_DELETE_FAILED),
+    eventService.buildAuditEvent(
+      req,
+      res,
+      EventName.HOME_PASSKEY_DELETE_FAILED
+    ),
     res.locals.trace
   );
   eventService.send(
@@ -84,7 +88,8 @@ export async function removePasskeyPost(
   try {
     response = await mfaClient.deletePasskey(req.body.passkeyId);
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Error deleting passkey";
+    const errorMessage =
+      error instanceof Error ? error.message : "Error deleting passkey";
     req.log.error({ trace: res.locals.trace }, errorMessage);
     sendDeleteFailedAuditEvents(req, res, eventService, errorMessage);
     throw error;
@@ -92,7 +97,11 @@ export async function removePasskeyPost(
 
   if (response.success) {
     eventService.send(
-      eventService.buildAuditEvent(req, res, EventName.HOME_PASSKEY_DELETE_SUCCESSFUL),
+      eventService.buildAuditEvent(
+        req,
+        res,
+        EventName.HOME_PASSKEY_DELETE_SUCCESSFUL
+      ),
       res.locals.trace
     );
 
