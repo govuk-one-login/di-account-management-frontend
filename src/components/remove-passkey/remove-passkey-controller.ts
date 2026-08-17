@@ -53,21 +53,46 @@ export async function removePasskeyGet(
   });
 }
 
+function sendDeleteFailedAuditEvents(
+  req: Request,
+  res: Response,
+  eventService: ReturnType<typeof createEventService>,
+  errorMessage: string
+): void {
+  eventService.send(
+    eventService.buildAuditEvent(req, res, EventName.HOME_PASSKEY_DELETE_FAILED),
+    res.locals.trace
+  );
+  eventService.send(
+    eventService.buildAuditEvent(req, res, EventName.HOME_ACTION_COMPLETED, {
+      account_action: JourneyAction.PASSKEY_REMOVE,
+      account_action_overall_success: false,
+      account_action_error: errorMessage,
+    }),
+    res.locals.trace
+  );
+}
+
 export async function removePasskeyPost(
   req: Request,
   res: Response
 ): Promise<void> {
   const mfaClient = await createMfaClient(req, res);
-  const response = await mfaClient.deletePasskey(req.body.passkeyId);
   const eventService = createEventService();
+
+  let response;
+  try {
+    response = await mfaClient.deletePasskey(req.body.passkeyId);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Error deleting passkey";
+    req.log.error({ trace: res.locals.trace }, errorMessage);
+    sendDeleteFailedAuditEvents(req, res, eventService, errorMessage);
+    throw error;
+  }
 
   if (response.success) {
     eventService.send(
-      eventService.buildAuditEvent(
-        req,
-        res,
-        EventName.HOME_PASSKEY_DELETE_SUCCESSFUL
-      ),
+      eventService.buildAuditEvent(req, res, EventName.HOME_PASSKEY_DELETE_SUCCESSFUL),
       res.locals.trace
     );
 
@@ -76,71 +101,22 @@ export async function removePasskeyPost(
       EventType.RemovePasskey
     );
 
-    const auditEvent = eventService.buildAuditEvent(
-      req,
-      res,
-      EventName.HOME_ACTION_COMPLETED,
-      {
+    eventService.send(
+      eventService.buildAuditEvent(req, res, EventName.HOME_ACTION_COMPLETED, {
         account_action: JourneyAction.PASSKEY_REMOVE,
         account_action_overall_success: true,
-      }
-    );
-    eventService.send(auditEvent, res.locals.trace);
-
-    res.redirect(PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url);
-  } else if (response.error) {
-    eventService.send(
-      eventService.buildAuditEvent(
-        req,
-        res,
-        EventName.HOME_PASSKEY_DELETE_FAILED
-      ),
+      }),
       res.locals.trace
     );
 
+    res.redirect(PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url);
+  } else {
+    const errorMessage = response.error?.message || "Failed delete passkey";
     req.log.error(
       { trace: res.locals.trace },
       formatErrorMessage("Failed delete passkey", response)
     );
-
-    const auditEvent = eventService.buildAuditEvent(
-      req,
-      res,
-      EventName.HOME_ACTION_COMPLETED,
-      {
-        account_action: JourneyAction.PASSKEY_REMOVE,
-        account_action_overall_success: false,
-        account_action_error: response.error.message,
-      }
-    );
-    eventService.send(auditEvent, res.locals.trace);
-
-    throw new Error(response.error.message);
-  } else {
-    const errorMessage = "Failed delete passkey";
-    req.log.error({ trace: res.locals.trace }, errorMessage);
-
-    const auditEvent = eventService.buildAuditEvent(
-      req,
-      res,
-      EventName.HOME_ACTION_COMPLETED,
-      {
-        account_action: JourneyAction.PASSKEY_REMOVE,
-        account_action_overall_success: false,
-        account_action_error: errorMessage,
-      }
-    );
-    eventService.send(auditEvent, res.locals.trace);
-
-    eventService.send(
-      eventService.buildAuditEvent(
-        req,
-        res,
-        EventName.HOME_PASSKEY_DELETE_FAILED
-      ),
-      res.locals.trace
-    );
-
-    throw new Error("Error deleting passkey");
+    sendDeleteFailedAuditEvents(req, res, eventService, errorMessage);
+    throw new Error(errorMessage);
   }
 }
