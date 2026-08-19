@@ -120,7 +120,6 @@ export async function removePasskeyPost(
 
     res.redirect(PATH_DATA.PASSKEY_REMOVED_CONFIRMATION.url);
   } else {
-    
     const errorMessage = response.error?.message || "Failed delete passkey";
     req.log.error(
       { trace: res.locals.trace },
