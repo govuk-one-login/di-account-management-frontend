@@ -42,7 +42,6 @@ jobs:
           echo "GOV_ACCOUNTS_PUBLISHING_API_TOKEN=token" >> .env
           echo "ANALYTICS_COOKIE_DOMAIN=localhost" >> .env
           echo "GTM_ID=" >> .env
-          echo "DELETE_TOPIC_ARN=arn:aws:sns:eu-west-2:000000000000:DeleteAccountTopicArn" >> .env
           echo "SUSPICIOUS_ACTIVITY_TOPIC_ARN=arn:aws:sns:eu-west-2:000000000000:SuspiciousActivityTopicArn" >> .env
           echo "COOKIES_AND_FEEDBACK_URL=localhost" >> .env
           echo "BASE_URL=localhost:6001" >> .env

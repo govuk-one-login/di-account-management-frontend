@@ -152,7 +152,6 @@ describe("delete account controller", () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {
           deleteAccount: vi.fn().mockResolvedValue(true),
-          publishToDeleteTopic: vi.fn(),
         };
 
         req.session.user.email = "test@test.com";
@@ -168,7 +167,6 @@ describe("delete account controller", () => {
         await deleteAccountPost(fakeService)(req as Request, res as Response);
 
         expect(fakeService.deleteAccount).toHaveBeenCalledTimes(1);
-        expect(fakeService.publishToDeleteTopic).toHaveBeenCalledTimes(1);
         expect(req.oidc.endSessionUrl).toHaveBeenCalledTimes(1);
         expect(res.redirect).toHaveBeenCalledWith("logout-url");
         expect(sessionStoreModule.destroyUserSessions).toHaveBeenCalledWith(

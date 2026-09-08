@@ -3,7 +3,7 @@ import { ExpressRouteFunc } from "../../types.js";
 import { DeleteAccountServiceInterface } from "./types.js";
 import { deleteAccountService } from "./delete-account-service.js";
 import { EventType, getNextState } from "../../utils/state-machine.js";
-import { getAppEnv, getSNSDeleteTopic } from "../../config.js";
+import { getAppEnv } from "../../config.js";
 import { getYourServicesForAccountDeletion } from "../../utils/yourServices.js";
 import { handleLogout } from "../../utils/logout.js";
 import { LogoutState } from "../../app.constants.js";
@@ -72,30 +72,12 @@ export function deleteAccountPost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     req.metrics?.addMetric("deleteAccountPost", MetricUnit.Count, 1);
-    const { email, subjectId, publicSubjectId, legacySubjectId } =
-      req.session.user;
+    const { email } = req.session.user;
 
-    const deleteAccount = await service.deleteAccount(
+    await service.deleteAccount(
       email,
       await getRequestConfigFromExpress(req, res)
     );
-
-    const DeleteTopicARN = getSNSDeleteTopic();
-    if (deleteAccount) {
-      try {
-        await service.publishToDeleteTopic(
-          subjectId,
-          publicSubjectId,
-          legacySubjectId,
-          DeleteTopicARN
-        );
-      } catch (error) {
-        req.metrics?.addMetric("deleteAccountPostError", MetricUnit.Count, 1);
-        req.log.error(
-          `Unable to publish delete topic message for: ${subjectId} and ${publicSubjectId}and ARN ${DeleteTopicARN}. Error:${error}`
-        );
-      }
-    }
 
     req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,

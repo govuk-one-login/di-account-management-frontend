@@ -95,10 +95,6 @@ export function getKmsKeyId(): string {
   return process.env.KMS_KEY_ID;
 }
 
-export function getSNSDeleteTopic(): string {
-  return process.env.DELETE_TOPIC_ARN;
-}
-
 export function getSNSSuspicousActivityTopic(): string {
   return process.env.SUSPICIOUS_ACTIVITY_TOPIC_ARN;
 }

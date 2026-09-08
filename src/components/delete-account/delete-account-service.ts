@@ -5,15 +5,11 @@ import {
   RequestConfig,
 } from "../../utils/http.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
-import { snsService } from "../../utils/sns.js";
-import { SnsService } from "../../utils/types.js";
-import { getSNSDeleteTopic } from "../../config.js";
 
 import { DeleteAccountServiceInterface } from "./types.js";
 
 export function deleteAccountService(
-  fetchClient: Http = http,
-  sns: SnsService = snsService()
+  fetchClient: Http = http
 ): DeleteAccountServiceInterface {
   const deleteAccount = async function (
     email: string,
@@ -29,24 +25,7 @@ export function deleteAccountService(
     return status === HTTP_STATUS_CODES.NO_CONTENT;
   };
 
-  const publishToDeleteTopic = async function (
-    user_id: string,
-    public_subject_id: string,
-    legacy_subject_id: string | undefined,
-    topic_arn: string = getSNSDeleteTopic()
-  ): Promise<void> {
-    await sns.publish(
-      topic_arn,
-      JSON.stringify({
-        user_id: user_id,
-        public_subject_id: public_subject_id,
-        legacy_subject_id: legacy_subject_id,
-      })
-    );
-  };
-
   return {
     deleteAccount,
-    publishToDeleteTopic,
   };
 }
