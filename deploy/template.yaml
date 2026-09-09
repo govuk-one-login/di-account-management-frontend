@@ -745,8 +745,6 @@ Resources:
             - Name: "LOGS_LEVEL"
               Value:
                 !FindInMap [EnvironmentVariables, !Ref Environment, LOGSLEVEL]
-            - Name: "DELETE_TOPIC_ARN"
-              Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/DeleteTopic/ARN}}"
             - Name: "SUSPICIOUS_ACTIVITY_TOPIC_ARN"
               Value: !Sub "{{resolve:ssm:/${BackendStackName}/SNS/SuspiciousActivity/ARN}}"
             - Name: "SERVICE_STORE_TABLE_NAME"
@@ -1005,11 +1003,6 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - "sns:Publish"
-                Resource:
-                  - !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:UserAccountDeletion"
-              - Effect: Allow
-                Action:
                   - "kms:Decrypt"
                 Resource:
                   - Fn::ImportValue: !Sub "${BackendStackName}-GeneratorKey"
@@ -1023,7 +1016,6 @@ Resources:
                   - "ssm:GetParameters"
                 Resource:
                   - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/*"
-                  - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${BackendStackName}/SNS/DeleteTopic/ARN"
                   - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${StubsStackName}/Stub/AccountManagement/Endpoint"
               - Effect: Allow
                 Action:

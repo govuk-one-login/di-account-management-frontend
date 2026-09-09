@@ -1,51 +1,45 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { SnsService } from "../../../utils/types";
-import { http } from "../../../utils/http.js";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { Http } from "../../../utils/http.js";
+import { HTTP_STATUS_CODES } from "../../../app.constants.js";
+import { RequestConfig } from "../../../utils/http.js";
 
 import { deleteAccountService } from "../delete-account-service.js";
 
 describe("deleteAccountService", () => {
-  beforeEach(() => {
-    process.env.DELETE_TOPIC_ARN = "UserAccountDeletionEnv";
-  });
-
   afterEach(() => {
-    delete process.env.DELETE_TOPIC_ARN;
     vi.restoreAllMocks();
   });
 
-  describe("deleteServiceData", () => {
-    const expected_message = JSON.stringify({
-      user_id: "abc",
-      public_subject_id: "def",
+  describe("deleteAccount", () => {
+    it("returns true when the API responds with NO_CONTENT", async () => {
+      const fakeHttp = {
+        post: vi
+          .fn()
+          .mockResolvedValue({ status: HTTP_STATUS_CODES.NO_CONTENT }),
+      } as unknown as Http;
+
+      const result = await deleteAccountService(fakeHttp).deleteAccount(
+        "test@test.com",
+        {} as RequestConfig
+      );
+
+      expect(fakeHttp.post).toHaveBeenCalledOnce();
+      expect(result).toBe(true);
     });
 
-    it("fills the topic ARN from config if not provided", async () => {
-      const fakeSnsService: SnsService = { publish: vi.fn() };
-      await deleteAccountService(http, fakeSnsService).publishToDeleteTopic(
-        "abc",
-        "def"
-      );
-      expect(fakeSnsService.publish).toHaveBeenCalledOnce();
-      expect(fakeSnsService.publish).toHaveBeenCalledWith(
-        "UserAccountDeletionEnv",
-        expected_message
-      );
-    });
+    it("returns false when the API responds with a non-NO_CONTENT status", async () => {
+      const fakeHttp = {
+        post: vi
+          .fn()
+          .mockResolvedValue({ status: HTTP_STATUS_CODES.BAD_REQUEST }),
+      } as unknown as Http;
 
-    it("calls snsService.publish with a topic ARN and message JSON", async () => {
-      const fakeSnsService: SnsService = { publish: vi.fn() };
-      await deleteAccountService(http, fakeSnsService).publishToDeleteTopic(
-        "abc",
-        "def",
-        undefined,
-        "UserAccountDeletion"
+      const result = await deleteAccountService(fakeHttp).deleteAccount(
+        "test@test.com",
+        {} as RequestConfig
       );
-      expect(fakeSnsService.publish).toHaveBeenCalledOnce();
-      expect(fakeSnsService.publish).toHaveBeenCalledWith(
-        "UserAccountDeletion",
-        expected_message
-      );
+
+      expect(result).toBe(false);
     });
   });
 });

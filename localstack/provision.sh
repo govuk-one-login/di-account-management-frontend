@@ -544,14 +544,8 @@ create_sns_topics() {
   aws sns --endpoint-url $ENDPOINT_URL create-topic --name SuspiciousActivityTopicArn\
     --region "$REGION"
 
-  aws sns --endpoint-url $ENDPOINT_URL create-topic --name DeleteAccountTopicArn\
-    --region "$REGION"
-
   # SNS Topic used by CloudWatch Alarms when they are activated
   aws sns --endpoint-url $ENDPOINT_URL create-topic --name SlackAlarmTopic --region "$REGION"
-
-  aws sns --endpoint-url $ENDPOINT_URL create-topic --name DeleteAccountTopicArn\
-    --region $REGION
 }
 
 create_state_machine() {
