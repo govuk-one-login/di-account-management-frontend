@@ -120,7 +120,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.67.0",
     "uglify-js": "^3.19.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.11"
   },
   "overrides": {
     "uuid": "^14.0.0"
