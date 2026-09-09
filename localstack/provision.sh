@@ -26,7 +26,7 @@ setup_environment() {
   export REGION="${AWS_DEFAULT_REGION:-eu-west-2}"
   # either `export MY_ONE_LOGIN_USER_ID=xyz` otherwise the value defaults to `user_id`
   # or what ever the hardcoded replacement is
-  export BUILD_CLIENT_ID="${MY_ONE_LOGIN_USER_ID:-user_id}"
+  export BUILD_CLIENT_ID="urn:fdc:gov.uk:default"
   export USER_SERVICES_TABLE_NAME=user_services
   export ACTIVITY_LOG_TABLE_NAME=activity_log
   export USER_NOTIFICATIONS_TABLE_NAME=user_notifications
@@ -90,7 +90,7 @@ create_and_populate_user_services_table() {
                     "N": "4"
                   },
                   "client_id": {
-                    "S": "gov-uk"
+                    "S": "welshGovElectronicRegisterForCommonLand"
                   },
                   "last_accessed": {
                     "N": "1666169856"
