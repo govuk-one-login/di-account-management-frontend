@@ -39,7 +39,7 @@ jobs:
         uses: aws-actions/setup-sam@89ddb14d60e682855e3fea4be85b3c56485de310 # pin@v2
 
       - name: Set up AWS creds
-        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # pin@v1-node16
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # pin@v1-node16
         with:
           role-to-assume: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
           aws-region: eu-west-2
