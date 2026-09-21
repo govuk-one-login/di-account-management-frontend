@@ -43,12 +43,12 @@
   },
   "dependencies": {
     "@aws-crypto/client-node": "^5.0.2",
-    "@aws-lambda-powertools/metrics": "^2.34.0",
-    "@aws-sdk/client-dynamodb": "^3.1106.0",
-    "@aws-sdk/client-kms": "^3.1106.0",
-    "@aws-sdk/client-sns": "^3.1106.0",
-    "@aws-sdk/client-sqs": "^3.1106.0",
-    "@aws-sdk/lib-dynamodb": "^3.1106.0",
+    "@aws-lambda-powertools/metrics": "^2.35.0",
+    "@aws-sdk/client-dynamodb": "^3.1127.0",
+    "@aws-sdk/client-kms": "^3.1127.0",
+    "@aws-sdk/client-sns": "^3.1127.0",
+    "@aws-sdk/client-sqs": "^3.1127.0",
+    "@aws-sdk/lib-dynamodb": "^3.1127.0",
     "@aws-sdk/util-dynamodb": "^3.985.0",
     "@govuk-one-login/frontend-analytics": "^4.2.2",
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
@@ -60,7 +60,7 @@
     "cookie-parser": "^1.4.7",
     "csrf-sync": "^4.2.1",
     "di-account-management-rp-registry": "github:govuk-one-login/di-account-management-rp-registry#main",
-    "dompurify": "^3.4.13",
+    "dompurify": "^3.4.15",
     "express": "^5.2.1",
     "express-session": "1.19.0",
     "express-validator": "^7.3.2",
@@ -72,11 +72,11 @@
     "i18next-http-middleware": "^3.9.8",
     "jose": "^5.10.0",
     "jsdom": "^27.4.0",
-    "libphonenumber-js": "^1.13.10",
+    "libphonenumber-js": "^1.13.12",
     "nunjucks": "^3.2.4",
     "obscenity": "^0.4.6",
     "openid-client": "^5.7.1",
-    "otplib": "^13.4.1",
+    "otplib": "^13.5.0",
     "overload-protection": "^1.2.3",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
@@ -84,7 +84,7 @@
     "uuid": "^14.0.0",
     "valibot": "^1.4.2",
     "xss": "^1.0.15",
-    "xstate": "^5.32.5"
+    "xstate": "^5.32.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
@@ -130,6 +130,6 @@
     "json5": "2.2.3"
   },
   "optionalDependencies": {
-    "@rollup/rollup-darwin-arm64": "^4.62.4"
+    "@rollup/rollup-darwin-arm64": "^4.63.1"
   }
 }
