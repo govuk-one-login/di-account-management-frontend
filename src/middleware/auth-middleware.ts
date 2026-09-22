@@ -10,9 +10,13 @@ export function authMiddleware(config: OIDCConfig): ExpressRouteFunc {
       req.oidc = await getOIDCClient(config);
       next();
     } catch (error) {
-      if (error.message === OIDC_ERRORS.OIDC_DISCOVERY_UNAVAILABLE) {
+      if (
+        error instanceof Error &&
+        error.message === OIDC_ERRORS.OIDC_DISCOVERY_UNAVAILABLE
+      ) {
         req.metrics?.addMetric("OIDCDiscoveryUnavailable", MetricUnit.Count, 1);
       }
+      next(error);
     }
   };
 }
