@@ -67,7 +67,7 @@
       {{ frontendUiLanguageSelect({
           url: currentUrl,
           activeLanguage: htmlLang,
-          translations: 'FECTranslations.languageSelect' | translate
+          translations: 'FECTranslations.languageSelect' | translate({ returnObjects: true })
         })
       }}
       {% block backLinkBlock %}
