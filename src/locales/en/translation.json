@@ -789,6 +789,10 @@
               {
                 "href": "https://www.gov.uk/guidance/proving-your-identity-with-govuk-one-login-by-answering-security-questions",
                 "text": "Proving your identity by answering security questions"
+              },
+              {
+                "href": "https://www.gov.uk/guidance/proving-your-identity-at-a-post-office",
+                "text": "Proving your identity at a Post Office"
               }
             ]
           },
