@@ -51,3 +51,61 @@ variable "vpcLinkId" {
   type        = string
   description = "API Gateway VPC Link ID"
 }
+
+variable "pipelineAllowedAccounts" {
+  type    = string
+  default = null
+}
+
+variable "pipelineArtifactSourceBucketArn" {
+  type = string
+}
+
+variable "pipelineAWSOrganizationId" {
+  type = string
+}
+
+variable "pipelineContainerSignerKmsKeyArn" {
+  type = string
+}
+
+variable "pipelineCustomKmsKeyArns" {
+  type    = string
+  default = null
+}
+
+variable "pipelineECSCanaryDeployment" {
+  type = string
+}
+
+variable "pipelineGitHubRepositoryName" {
+  type = string
+}
+
+variable "pipelineIncludePromotion" {
+  type = string
+}
+
+variable "pipelineRunTestContainerInVPC" {
+  type = string
+}
+
+variable "pipelineSigningProfileArn" {
+  type = string
+}
+
+variable "pipelineSigningProfileVersionArn" {
+  type = string
+}
+
+variable "pipelineSlackNotificationType" {
+  type = string
+}
+
+variable "pipelineTestImageRepositoryUri" {
+  type = string
+}
+
+variable "pipelineTestReportFormat" {
+  type = string
+}
