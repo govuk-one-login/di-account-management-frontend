@@ -103,7 +103,8 @@ variable "pipelineSlackNotificationType" {
 }
 
 variable "pipelineTestImageRepositoryUri" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "pipelineTestReportFormat" {
