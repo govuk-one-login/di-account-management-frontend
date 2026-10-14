@@ -4,6 +4,7 @@ import * as awsConfig from "../config/aws.js";
 import * as config from "../config.js";
 import * as kmsModule from "./kms.js";
 import { getAmcRedirectUri as mockGetAmcRedirectUri } from "./getAmcRedirectUri.js";
+import { http } from "./http.js";
 
 vi.mock("../config/aws.js", () => ({
   getKMSConfig: vi.fn(() => ({
@@ -31,8 +32,11 @@ vi.mock("../app.constants.js", () => ({
 vi.mock("node:crypto", () => ({
   randomUUID: vi.fn(() => "test-uuid-1234"),
 }));
-
-global.fetch = vi.fn();
+vi.mock("./http.js", () => ({
+  http: {
+    get: vi.fn(),
+  },
+}));
 
 describe("getAmcJwe", () => {
   const mockUser = {
@@ -78,7 +82,7 @@ describe("getAmcJwe", () => {
       Signature: mockSignature,
     } as any);
 
-    vi.mocked(fetch).mockResolvedValue({
+    vi.mocked(http.get).mockResolvedValue({
       json: vi.fn().mockResolvedValue({ keys: [mockEncryptionJWK] }),
     } as any);
   });
@@ -282,9 +286,9 @@ describe("getAmcJwe", () => {
   it("should fetch JWKS from correct URL", async () => {
     await getAmcJwe("openid", "state-123", mockUser);
 
-    expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith(
-      new URL("https://amc.example.com/.well-known/jwks.json")
+    expect(http.get).toHaveBeenCalledTimes(1);
+    expect(http.get).toHaveBeenCalledWith(
+      "https://amc.example.com/.well-known/jwks.json"
     );
   });
 
@@ -297,7 +301,7 @@ describe("getAmcJwe", () => {
       ],
     };
 
-    vi.mocked(fetch).mockResolvedValue({
+    vi.mocked(http.get).mockResolvedValue({
       json: vi.fn().mockResolvedValue(mockJwks),
     } as any);
 
@@ -345,7 +349,7 @@ describe("getAmcJwe", () => {
   });
 
   it("should handle JWKS fetch errors", async () => {
-    vi.mocked(fetch).mockRejectedValue(new Error("Network error"));
+    vi.mocked(http.get).mockRejectedValue(new Error("Network error"));
 
     await expect(getAmcJwe("openid", "state-123", mockUser)).rejects.toThrow(
       "Network error"
@@ -353,7 +357,7 @@ describe("getAmcJwe", () => {
   });
 
   it("should handle JWKS JSON parsing errors", async () => {
-    vi.mocked(fetch).mockRejectedValue(new Error("Invalid JSON"));
+    vi.mocked(http.get).mockRejectedValue(new Error("Invalid JSON"));
 
     await expect(getAmcJwe("openid", "state-123", mockUser)).rejects.toThrow(
       "Invalid JSON"
