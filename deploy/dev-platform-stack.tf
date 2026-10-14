@@ -1,6 +1,6 @@
 resource "aws_cloudformation_stack" "account_mgmt_frontend_pipeline" {
   name         = "account-mgmt-frontend-pipeline"
-  template_url = "https://template-storage-templatebucket-1upzyw6v9cs42.s3.amazonaws.com/sam-deploy-pipeline/template-v2.105.1.yaml"
+  template_url = "https://template-storage-templatebucket-1upzyw6v9cs42.s3.amazonaws.com/sam-deploy-pipeline/template-v2.yaml"
 
   parameters = {
     AbortOnCheckovFailure                           = "CONTINUE"
