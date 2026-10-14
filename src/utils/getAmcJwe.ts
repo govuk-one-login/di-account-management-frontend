@@ -8,6 +8,7 @@ import {
 } from "../config.js";
 import * as jose from "jose";
 import { getAmcRedirectUri } from "./getAmcRedirectUri.js";
+import { http } from "./http.js";
 
 export const getAmcJwe = async (
   scope: string,
@@ -51,8 +52,8 @@ export const getAmcJwe = async (
   const encodedSignature = jose.base64url.encode(Signature);
   const jws = `${signingInput}.${encodedSignature}`;
 
-  const jwksUrl = new URL(getAmcJwksUrl());
-  const jwksResponse = await fetch(jwksUrl);
+  const jwksUrl = getAmcJwksUrl();
+  const jwksResponse = await http.get(jwksUrl);
   const jwks = await jwksResponse.json();
 
   if (!jwks || !Array.isArray(jwks.keys)) {

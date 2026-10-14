@@ -32,6 +32,7 @@ export default [
       "*.d.ts",
       "node_modules",
       "dist",
+      ".aws-sam",
       "functional-output",
       "coverage",
       "src/assets/javascript",
