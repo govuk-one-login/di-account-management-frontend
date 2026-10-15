@@ -43,12 +43,12 @@
   },
   "dependencies": {
     "@aws-crypto/client-node": "^5.0.2",
-    "@aws-lambda-powertools/metrics": "^2.35.0",
-    "@aws-sdk/client-dynamodb": "^3.1141.0",
-    "@aws-sdk/client-kms": "^3.1141.0",
-    "@aws-sdk/client-sns": "^3.1141.0",
-    "@aws-sdk/client-sqs": "^3.1141.0",
-    "@aws-sdk/lib-dynamodb": "^3.1141.0",
+    "@aws-lambda-powertools/metrics": "^2.36.0",
+    "@aws-sdk/client-dynamodb": "^3.1147.0",
+    "@aws-sdk/client-kms": "^3.1147.0",
+    "@aws-sdk/client-sns": "^3.1147.0",
+    "@aws-sdk/client-sqs": "^3.1147.0",
+    "@aws-sdk/lib-dynamodb": "^3.1147.0",
     "@aws-sdk/util-dynamodb": "^3.985.0",
     "@govuk-one-login/frontend-analytics": "^4.2.2",
     "@govuk-one-login/frontend-device-intelligence": "^1.2.0",
@@ -78,7 +78,7 @@
     "openid-client": "^5.7.1",
     "otplib": "^13.5.0",
     "overload-protection": "^1.2.3",
-    "pino": "^10.3.1",
+    "pino": "^10.4.0",
     "pino-http": "^11.0.0",
     "qrcode": "^1.5.4",
     "uuid": "^14.0.0",
@@ -130,6 +130,6 @@
     "json5": "2.2.3"
   },
   "optionalDependencies": {
-    "@rollup/rollup-darwin-arm64": "^4.63.5"
+    "@rollup/rollup-darwin-arm64": "^4.64.2"
   }
 }
