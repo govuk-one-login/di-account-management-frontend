@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants.js";
+import { PATH_DATA, ERROR_CODES } from "../../app.constants.js";
 import { ExpressRouteFunc } from "../../types.js";
 import { EventType, getNextState } from "../../utils/state-machine.js";
 import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation.js";
-import { ChangeEmailServiceInterface } from "./types.js";
+import {
+  ChangeEmailServiceInterface,
+  SendCodeVerificationNotificationOutcome,
+} from "./types.js";
 import { changeEmailService } from "./change-email-service.js";
 import { getRequestConfigFromExpress } from "../../utils/http.js";
 import {
@@ -14,6 +17,7 @@ import {
   setOplSettings,
 } from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { logger } from "../../utils/logger.js";
 
 const setLocalOplSettings = (res: Response) => {
   setOplSettings(
@@ -26,25 +30,73 @@ const setLocalOplSettings = (res: Response) => {
 };
 
 const TEMPLATE_NAME = "change-email/index.njk";
+
+export function handleChangeEmailResponseCodes(
+  req: Request,
+  res: Response,
+  outcome: SendCodeVerificationNotificationOutcome,
+  template: string,
+  setOplSettings: (res: Response) => void
+): void {
+  switch (outcome.responseCode) {
+    case ERROR_CODES.ACCT_WITH_EMAIL_EXISTS:
+      return badRequest(req, res, "alreadyInUse", template, setOplSettings);
+    case ERROR_CODES.INVALID_EMAIL_FORMAT:
+      logger.warn(
+        `Potential Frontend/API validation mismatch detected. API returned INVALID_EMAIL_FORMAT but this should have been validated on AMF: ${outcome.responseMessage}`
+      );
+      return badRequest(req, res, "email", template, setOplSettings);
+    case ERROR_CODES.EMAIL_ADDRESS_EMPTY:
+      logger.warn(
+        `Potential Frontend/API validation mismatch detected. API returned EMAIL_ADDRESS_EMPTY but this should have been validated on AMF: ${outcome.responseMessage}`
+      );
+      return badRequest(req, res, "required", template, setOplSettings);
+    case ERROR_CODES.REQUEST_MISSING_PARAMS:
+      throw new Error(
+        `Request missing params. Code: ${outcome.responseCode} message: ${outcome.responseMessage}`
+      );
+    case ERROR_CODES.INVALID_NOTIFICATION_TYPE:
+      throw new Error(
+        `Invalid notification type. Code: ${outcome.responseCode} message: ${outcome.responseMessage}`
+      );
+    default:
+      throw new Error(
+        `An error has occurred. Code: ${outcome.responseCode} message: ${outcome.responseMessage}`
+      );
+  }
+}
+
 export function changeEmailGet(req: Request, res: Response): void {
   req.metrics?.addMetric("changeEmailGet", MetricUnit.Count, 1);
 
   if (req.query.email_cant_be_used === "1") {
-    return badRequest(req, res, "emailCantBeUsed");
+    return badRequest(
+      req,
+      res,
+      "emailCantBeUsed",
+      TEMPLATE_NAME,
+      setLocalOplSettings
+    );
   }
 
   setLocalOplSettings(res);
   return res.render(TEMPLATE_NAME);
 }
 
-function badRequest(req: Request, res: Response, errorMessage: string) {
+export function badRequest(
+  req: Request,
+  res: Response,
+  errorMessage: string,
+  template: string,
+  setOplSettings: (res: Response) => void
+) {
   const error = formatValidationError(
     "email",
     req.t(`pages.changeEmail.email.validationError.${errorMessage}`)
   );
 
-  setLocalOplSettings(res);
-  return renderBadRequest(res, req, TEMPLATE_NAME, error);
+  setOplSettings(res);
+  return renderBadRequest(res, req, template, error);
 }
 
 export function changeEmailPost(
@@ -57,7 +109,13 @@ export function changeEmailPost(
     const newEmailAddress = req.body.email;
 
     if (email.toLowerCase() === newEmailAddress.toLowerCase()) {
-      return badRequest(req, res, "sameEmail");
+      return badRequest(
+        req,
+        res,
+        "sameEmail",
+        TEMPLATE_NAME,
+        setLocalOplSettings
+      );
     }
 
     const emailSent = await service.sendCodeVerificationNotification(
@@ -65,7 +123,7 @@ export function changeEmailPost(
       await getRequestConfigFromExpress(req, res)
     );
 
-    if (emailSent) {
+    if (emailSent.success) {
       req.session.user.newEmailAddress = newEmailAddress;
 
       req.session.user.state.changeEmail = getNextState(
@@ -74,8 +132,14 @@ export function changeEmailPost(
       );
 
       return res.redirect(PATH_DATA.CHECK_YOUR_EMAIL.url);
+    } else {
+      handleChangeEmailResponseCodes(
+        req,
+        res,
+        emailSent,
+        TEMPLATE_NAME,
+        setLocalOplSettings
+      );
     }
-
-    return badRequest(req, res, "alreadyInUse");
   };
 }
