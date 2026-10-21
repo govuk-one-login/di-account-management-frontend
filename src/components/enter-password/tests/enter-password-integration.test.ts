@@ -16,6 +16,7 @@ import {
   API_ENDPOINTS,
   CLIENT_SESSION_ID_UNKNOWN,
   PATH_DATA,
+  ERROR_CODES,
 } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
@@ -232,7 +233,10 @@ describe("Integration::enter password", () => {
       .post(API_ENDPOINTS.AUTHENTICATE)
       .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
-      .reply(401);
+      .reply(401, {
+        code: ERROR_CODES.INVALID_LOGIN_CREDS,
+        message: "Invalid login credentials",
+      });
 
     // Act
     await request(app)
@@ -359,7 +363,7 @@ describe("Integration::enter password", () => {
       .post(API_ENDPOINTS.AUTHENTICATE)
       .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
-      .reply(403, { code: "1084" });
+      .reply(403, { code: ERROR_CODES.ACCT_BLOCKED });
 
     const res = await request(app)
       .post(ENDPOINT)
@@ -387,7 +391,7 @@ describe("Integration::enter password", () => {
       .post(API_ENDPOINTS.AUTHENTICATE)
       .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
-      .reply(403, { code: "1083" });
+      .reply(403, { code: ERROR_CODES.ACCT_SUSPENDED });
 
     const res = await request(app)
       .post(ENDPOINT)
@@ -415,7 +419,10 @@ describe("Integration::enter password", () => {
       .post(API_ENDPOINTS.AUTHENTICATE)
       .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
-      .reply(403);
+      .reply(403, {
+        code: 9999,
+        message: "Status is correct but intervention error is unknown",
+      });
 
     await request(app)
       .post(ENDPOINT)
