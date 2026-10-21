@@ -1,15 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
-
-import { PATH_DATA } from "../../../app.constants";
+import { PATH_DATA, ERROR_CODES } from "../../../app.constants";
 import {
   checkYourEmailGet,
   checkYourEmailPost,
 } from "../check-your-email-controller.js";
-import {
-  CheckYourEmailServiceError,
-  CheckYourEmailServiceInterface,
-} from "../types";
+import { CheckYourEmailServiceInterface } from "../types";
 import { GovUkPublishingServiceInterface } from "../../common/gov-uk-publishing/types";
 import * as oidcModule from "../../../utils/oidc.js";
 
@@ -81,7 +77,8 @@ describe("check your email controller", () => {
       const fakeService: CheckYourEmailServiceInterface = {
         updateEmail: vi.fn().mockResolvedValue({
           success: false,
-          error: undefined,
+          responseCode: 1020,
+          responseMessage: "invalid otp alert",
         }),
       };
 
@@ -111,11 +108,37 @@ describe("check your email controller", () => {
       });
     });
 
-    it("should redirect email address is denied", async () => {
+    it("should throw error when an issue other than invalid code or denied email is returned", async () => {
       const fakeService: CheckYourEmailServiceInterface = {
         updateEmail: vi.fn().mockResolvedValue({
           success: false,
-          error: CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED,
+          responseCode: 9999,
+          responseMessage: "there has been another problem",
+        }),
+      };
+
+      req.session.user.tokens = { accessToken: "token" } as any;
+      req.session.user.email = "something@test.com";
+      req.session.user.newEmailAddress = "something-new@test.com";
+      req.body.code = "678988";
+      res.locals.sessionId = "123456-djjad";
+
+      await expect(
+        checkYourEmailPost(fakeService)(req as Request, res as Response)
+      ).rejects.toThrow(
+        "Unable to verify email OTP. Error code:9999 Error message: there has been another problem"
+      );
+
+      expect(fakeService.updateEmail).toHaveBeenCalledOnce();
+      expect(res.render).not.toHaveBeenCalled();
+    });
+
+    it("should redirect when email address is denied", async () => {
+      const fakeService: CheckYourEmailServiceInterface = {
+        updateEmail: vi.fn().mockResolvedValue({
+          success: false,
+          responseCode: ERROR_CODES.EMAIL_ADDRESS_DENIED,
+          responseMessage: "Email address denied",
         }),
       };
 

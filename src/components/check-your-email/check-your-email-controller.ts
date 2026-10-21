@@ -1,15 +1,12 @@
 import { Request, Response } from "express";
 import { ExpressRouteFunc } from "../../types.js";
-import { PATH_DATA } from "../../app.constants.js";
+import { PATH_DATA, ERROR_CODES } from "../../app.constants.js";
 import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation.js";
 import { checkYourEmailService } from "./check-your-email-service.js";
-import {
-  CheckYourEmailServiceError,
-  CheckYourEmailServiceInterface,
-} from "./types.js";
+import { CheckYourEmailServiceInterface } from "./types.js";
 import { EventType, getNextState } from "../../utils/state-machine.js";
 import { GovUkPublishingServiceInterface } from "../common/gov-uk-publishing/types.js";
 import { govUkPublishingService } from "../common/gov-uk-publishing/gov-uk-publishing-service.js";
@@ -85,20 +82,26 @@ export function checkYourEmailPost(
       return res.redirect(PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url);
     }
 
-    if (result.error === CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED) {
+    if (result.responseCode === ERROR_CODES.EMAIL_ADDRESS_DENIED) {
       req.metrics?.addMetric("changeEmailAddressDenied", MetricUnit.Count, 1);
       return res.redirect(`${PATH_DATA.CHANGE_EMAIL.url}?email_cant_be_used=1`);
     }
 
-    setLocalOplSettings(res);
-    renderBadRequest(
-      res,
-      req,
-      TEMPLATE_NAME,
-      formatValidationError(
-        "code",
-        req.t("pages.checkYourEmail.code.validationError.invalidCode")
-      )
+    if (result.responseCode === ERROR_CODES.INVALID_OTP) {
+      setLocalOplSettings(res);
+      return renderBadRequest(
+        res,
+        req,
+        TEMPLATE_NAME,
+        formatValidationError(
+          "code",
+          req.t("pages.checkYourEmail.code.validationError.invalidCode")
+        )
+      );
+    }
+
+    throw new Error(
+      `Unable to verify email OTP. Error code:${result.responseCode} Error message: ${result.responseMessage}`
     );
   };
 }
