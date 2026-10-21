@@ -4,15 +4,8 @@ import {
   http,
   RequestConfig,
 } from "../../utils/http.js";
-import {
-  API_ENDPOINTS,
-  ERROR_CODES,
-  HTTP_STATUS_CODES,
-} from "../../app.constants.js";
-import {
-  CheckYourEmailServiceError,
-  CheckYourEmailServiceInterface,
-} from "./types.js";
+import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
+import { CheckYourEmailServiceInterface } from "./types.js";
 import { UpdateInformationInput } from "../../utils/types.js";
 
 export function checkYourEmailService(
@@ -38,22 +31,18 @@ export function checkYourEmailService(
         ],
       })
     );
-    const responseData =
-      response.status !== HTTP_STATUS_CODES.NO_CONTENT
-        ? await response.json()
-        : {};
 
-    let error: CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED | undefined =
-      undefined;
+    if (response.status === HTTP_STATUS_CODES.NO_CONTENT) {
+      return { success: true };
+    } else {
+      const data = await response.json();
 
-    if (responseData.code === ERROR_CODES.EMAIL_ADDRESS_DENIED) {
-      error = CheckYourEmailServiceError.EMAIL_ADDRESS_DENIED;
+      return {
+        success: false,
+        responseCode: data.code,
+        responseMessage: data.message,
+      };
     }
-
-    return {
-      success: response.status === HTTP_STATUS_CODES.NO_CONTENT,
-      error,
-    };
   };
 
   return {

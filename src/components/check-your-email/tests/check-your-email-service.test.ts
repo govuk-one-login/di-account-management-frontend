@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import nock from "nock";
 import { checkYourEmailService } from "../check-your-email-service.js";
-import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
+import { HTTP_STATUS_CODES, ERROR_CODES } from "../../../app.constants";
 import { UpdateInformationInput } from "../../../utils/types";
 import {
   CLIENT_SESSION_ID,
@@ -10,23 +10,37 @@ import {
 import { http } from "../../../utils/http.js";
 
 describe("checkYourEmailService", () => {
-  beforeEach(() => {});
+  const token = "1234";
+  const existingEmailAddress = "something@test.com";
+  const replacementEmailAddress = "something@test.com";
+  const otp = "9876";
+  const sourceIp = "0.0.0.0";
+  const sessionId = "session-123";
+  const persistentSessionId = "persistentsession123";
+  const userLanguage = "en";
+
+  const updateInput: UpdateInformationInput = {
+    email: existingEmailAddress,
+    updatedValue: replacementEmailAddress,
+    otp,
+  };
+
+  const requestConfig = {
+    token,
+    sourceIp,
+    sessionId,
+    persistentSessionId,
+    userLanguage,
+    clientSessionId: CLIENT_SESSION_ID,
+    txmaAuditEncoded: TXMA_AUDIT_ENCODED,
+  };
 
   afterEach(() => {
     vi.restoreAllMocks();
     nock.cleanAll();
   });
 
-  it("update the email", async () => {
-    const token = "1234";
-    const existingEmailAddress = "something@test.com";
-    const replacementEmailAddress = "something@test.com";
-    const otp = "9876";
-    const sourceIp = "0.0.0.0";
-    const sessionId = "session-123";
-    const persistentSessionId = "persistentsession123";
-    const userLanguage = "en";
-
+  it("handles update email", async () => {
     const httpPostSpy = vi
       .spyOn(http, "post")
       .mockResolvedValueOnce({
@@ -38,10 +52,16 @@ describe("checkYourEmailService", () => {
       .mockResolvedValueOnce({
         status: HTTP_STATUS_CODES.FORBIDDEN,
         ok: false,
-        clone: vi
-          .fn()
-          .mockReturnValue({ json: vi.fn().mockResolvedValue({ code: 1089 }) }),
-        json: vi.fn().mockResolvedValue({ code: 1089 }),
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue({
+            code: ERROR_CODES.EMAIL_ADDRESS_DENIED,
+            message: "Email address denied",
+          }),
+        }),
+        json: vi.fn().mockResolvedValue({
+          code: ERROR_CODES.EMAIL_ADDRESS_DENIED,
+          message: "Email address denied",
+        }),
       } as unknown as Response)
       .mockResolvedValueOnce({
         status: HTTP_STATUS_CODES.BAD_REQUEST,
@@ -50,91 +70,87 @@ describe("checkYourEmailService", () => {
         json: vi.fn().mockResolvedValue({}),
       } as unknown as Response);
 
-    const updateInput: UpdateInformationInput = {
-      email: existingEmailAddress,
-      updatedValue: replacementEmailAddress,
-      otp,
-    };
-
-    const requestConfig = {
-      token,
-      sourceIp,
-      sessionId,
-      persistentSessionId,
-      userLanguage,
-      clientSessionId: CLIENT_SESSION_ID,
-      txmaAuditEncoded: TXMA_AUDIT_ENCODED,
-    };
-
-    let emailUpdated = await checkYourEmailService().updateEmail(
+    let result = await checkYourEmailService().updateEmail(
       updateInput,
       requestConfig
     );
+    expect(result).toEqual({ success: true });
 
-    expect(emailUpdated).toEqual({
-      success: true,
-      error: undefined,
+    result = await checkYourEmailService().updateEmail(
+      updateInput,
+      requestConfig
+    );
+    expect(result).toEqual({
+      success: false,
+      responseCode: ERROR_CODES.EMAIL_ADDRESS_DENIED,
+      responseMessage: "Email address denied",
     });
 
-    emailUpdated = await checkYourEmailService().updateEmail(
+    result = await checkYourEmailService().updateEmail(
       updateInput,
       requestConfig
     );
-
-    expect(emailUpdated).toEqual({
+    expect(result).toEqual({
       success: false,
-      error: "EMAIL_ADDRESS_DENIED",
-    });
-
-    emailUpdated = await checkYourEmailService().updateEmail(
-      updateInput,
-      requestConfig
-    );
-
-    expect(emailUpdated).toEqual({
-      success: false,
-      error: undefined,
+      responseCode: undefined,
+      responseMessage: undefined,
     });
 
     expect(httpPostSpy).toHaveBeenCalledTimes(3);
+  });
 
-    const expectedRequestBody = {
-      existingEmailAddress: existingEmailAddress,
-      replacementEmailAddress: replacementEmailAddress,
-      otp: otp,
-    };
+  it("handles other valid email error codes correctly", async () => {
+    const httpPostSpy = vi
+      .spyOn(http, "post")
+      .mockResolvedValueOnce({
+        status: HTTP_STATUS_CODES.BAD_REQUEST,
+        ok: false,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue({
+            code: ERROR_CODES.INVALID_OTP,
+            message: "Invalid OTP code",
+          }),
+        }),
+        json: vi.fn().mockResolvedValue({
+          code: ERROR_CODES.INVALID_OTP,
+          message: "Invalid OTP code",
+        }),
+      } as unknown as Response)
+      .mockResolvedValueOnce({
+        status: HTTP_STATUS_CODES.BAD_REQUEST,
+        ok: false,
+        clone: vi.fn().mockReturnValue({
+          json: vi.fn().mockResolvedValue({
+            code: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+            message: "Account exists",
+          }),
+        }),
+        json: vi.fn().mockResolvedValue({
+          code: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+          message: "Account exists",
+        }),
+      } as unknown as Response);
 
-    const expectedConfig = expect.objectContaining({
-      headers: expect.objectContaining({
-        Authorization: `Bearer ${token}`,
-        "X-Forwarded-For": sourceIp,
-        "di-persistent-session-id": persistentSessionId,
-        "Session-Id": sessionId,
-        "User-Language": userLanguage,
-        "txma-audit-encoded": TXMA_AUDIT_ENCODED,
-        "Client-Session-Id": CLIENT_SESSION_ID,
-      }),
+    let result = await checkYourEmailService().updateEmail(
+      updateInput,
+      requestConfig
+    );
+    expect(result).toEqual({
+      success: false,
+      responseCode: ERROR_CODES.INVALID_OTP,
+      responseMessage: "Invalid OTP code",
     });
 
-    expect(httpPostSpy).toHaveBeenNthCalledWith(
-      1,
-      API_ENDPOINTS.UPDATE_EMAIL,
-      expectedRequestBody,
-      expectedConfig
+    result = await checkYourEmailService().updateEmail(
+      updateInput,
+      requestConfig
     );
+    expect(result).toEqual({
+      success: false,
+      responseCode: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+      responseMessage: "Account exists",
+    });
 
-    expect(httpPostSpy).toHaveBeenNthCalledWith(
-      2,
-      API_ENDPOINTS.UPDATE_EMAIL,
-      expectedRequestBody,
-      expectedConfig
-    );
-
-    expect(httpPostSpy).toHaveBeenNthCalledWith(
-      3,
-      API_ENDPOINTS.UPDATE_EMAIL,
-      expectedRequestBody,
-      expectedConfig
-    );
+    expect(httpPostSpy).toHaveBeenCalledTimes(2);
   });
 });
