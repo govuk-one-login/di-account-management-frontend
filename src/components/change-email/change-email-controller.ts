@@ -19,38 +19,39 @@ import {
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { logger } from "../../utils/logger.js";
 
-const setLocalOplSettings = (res: Response) => {
+const TEMPLATE_NAME = "change-email/index.njk";
+const OPL_CONTENT_ID = "1f97b62b-a124-4d6a-ae51-8abd2611ec55";
+
+export const setLocalOplSettings = (res: Response, contentId: string) => {
   setOplSettings(
     {
       ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
-      contentId: "1f97b62b-a124-4d6a-ae51-8abd2611ec55",
+      contentId: contentId,
     },
     res
   );
 };
-
-const TEMPLATE_NAME = "change-email/index.njk";
 
 export function handleChangeEmailResponseCodes(
   req: Request,
   res: Response,
   outcome: SendCodeVerificationNotificationOutcome,
   template: string,
-  setOplSettings: (res: Response) => void
+  contentId: string
 ): void {
   switch (outcome.responseCode) {
     case ERROR_CODES.ACCT_WITH_EMAIL_EXISTS:
-      return badRequest(req, res, "alreadyInUse", template, setOplSettings);
+      return badRequest(req, res, "alreadyInUse", template, contentId);
     case ERROR_CODES.INVALID_EMAIL_FORMAT:
       logger.warn(
         `Potential Frontend/API validation mismatch detected. API returned INVALID_EMAIL_FORMAT but this should have been validated on AMF: ${outcome.responseMessage}`
       );
-      return badRequest(req, res, "email", template, setOplSettings);
+      return badRequest(req, res, "email", template, contentId);
     case ERROR_CODES.EMAIL_ADDRESS_EMPTY:
       logger.warn(
         `Potential Frontend/API validation mismatch detected. API returned EMAIL_ADDRESS_EMPTY but this should have been validated on AMF: ${outcome.responseMessage}`
       );
-      return badRequest(req, res, "required", template, setOplSettings);
+      return badRequest(req, res, "required", template, contentId);
     case ERROR_CODES.REQUEST_MISSING_PARAMS:
       throw new Error(
         `Request missing params. Code: ${outcome.responseCode} message: ${outcome.responseMessage}`
@@ -75,11 +76,11 @@ export function changeEmailGet(req: Request, res: Response): void {
       res,
       "emailCantBeUsed",
       TEMPLATE_NAME,
-      setLocalOplSettings
+      OPL_CONTENT_ID
     );
   }
 
-  setLocalOplSettings(res);
+  setLocalOplSettings(res, OPL_CONTENT_ID);
   return res.render(TEMPLATE_NAME);
 }
 
@@ -88,14 +89,14 @@ export function badRequest(
   res: Response,
   errorMessage: string,
   template: string,
-  setOplSettings: (res: Response) => void
+  contentId: string
 ) {
   const error = formatValidationError(
     "email",
     req.t(`pages.changeEmail.email.validationError.${errorMessage}`)
   );
 
-  setOplSettings(res);
+  setLocalOplSettings(res, contentId);
   return renderBadRequest(res, req, template, error);
 }
 
@@ -109,13 +110,7 @@ export function changeEmailPost(
     const newEmailAddress = req.body.email;
 
     if (email.toLowerCase() === newEmailAddress.toLowerCase()) {
-      return badRequest(
-        req,
-        res,
-        "sameEmail",
-        TEMPLATE_NAME,
-        setLocalOplSettings
-      );
+      return badRequest(req, res, "sameEmail", TEMPLATE_NAME, OPL_CONTENT_ID);
     }
 
     const emailSent = await service.sendCodeVerificationNotification(
@@ -138,7 +133,7 @@ export function changeEmailPost(
         res,
         emailSent,
         TEMPLATE_NAME,
-        setLocalOplSettings
+        OPL_CONTENT_ID
       );
     }
   };
