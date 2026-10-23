@@ -4,5 +4,7 @@ export interface DeleteAccountServiceInterface {
   deleteAccount: (
     email: string,
     requestConfig: RequestConfig
-  ) => Promise<boolean>;
+  ) => Promise<{
+    success: boolean;
+  }>;
 }
