@@ -74,10 +74,14 @@ export function deleteAccountPost(
     req.metrics?.addMetric("deleteAccountPost", MetricUnit.Count, 1);
     const { email } = req.session.user;
 
-    await service.deleteAccount(
+    const deletionOutcome = await service.deleteAccount(
       email,
       await getRequestConfigFromExpress(req, res)
     );
+
+    if (!deletionOutcome.success) {
+      throw new Error(`Account deletion failed. User will not be logged out.`);
+    }
 
     req.session.user.state.deleteAccount = getNextState(
       req.session.user.state.deleteAccount.value,
