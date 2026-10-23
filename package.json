@@ -100,7 +100,7 @@
     "@types/supertest": "^7.2.1",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
     "@typescript-eslint/parser": "^8.71.1",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.12",
     "cheerio": "^1.2.0",
     "concurrently": "^9.2.5",
     "copyfiles": "^2.4.1",
@@ -120,7 +120,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.71.1",
     "uglify-js": "^3.19.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "overrides": {
     "uuid": "^14.0.0"
