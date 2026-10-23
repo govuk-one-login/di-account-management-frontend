@@ -4,46 +4,23 @@ import { EventType, getNextState } from "../../utils/state-machine.js";
 import { PATH_DATA } from "../../app.constants.js";
 import { ChangeEmailServiceInterface } from "../change-email/types.js";
 import { changeEmailService } from "../change-email/change-email-service.js";
-import {
-  formatValidationError,
-  renderBadRequest,
-} from "../../utils/validation.js";
 import { getRequestConfigFromExpress } from "../../utils/http.js";
-import {
-  CHANGE_EMAIL_COMMON_OPL_SETTINGS,
-  setOplSettings,
-} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import {
+  handleChangeEmailResponseCodes,
+  badRequest,
+  setLocalOplSettings,
+} from "../change-email/change-email-controller.js";
 
 const TEMPLATE_NAME = "resend-email-code/index.njk";
-
-const setLocalOplSettings = (res: Response) => {
-  setOplSettings(
-    {
-      ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
-      contentId: "24ad9e0f-9d6f-43d2-8828-5d8f2003c6fe",
-    },
-    res
-  );
-};
+const OPL_CONTENT_ID = "24ad9e0f-9d6f-43d2-8828-5d8f2003c6fe";
 
 export function resendEmailCodeGet(req: Request, res: Response): void {
   req.metrics?.addMetric("resendEmailCodeGet", MetricUnit.Count, 1);
-  setLocalOplSettings(res);
+  setLocalOplSettings(res, OPL_CONTENT_ID);
   res.render(TEMPLATE_NAME, {
     emailAddress: req.session.user.newEmailAddress,
   });
-}
-
-function badRequest(req: Request, res: Response, errorMessage: string) {
-  const error = formatValidationError(
-    "email",
-    req.t(`pages.changeEmail.email.validationError.${errorMessage}`)
-  );
-
-  setLocalOplSettings(res);
-
-  return renderBadRequest(res, req, TEMPLATE_NAME, error);
 }
 
 export function resendEmailCodePost(
@@ -54,7 +31,7 @@ export function resendEmailCodePost(
     const { email, newEmailAddress } = req.session.user;
 
     if (email.toLowerCase() === newEmailAddress.toLowerCase()) {
-      return badRequest(req, res, "sameEmail");
+      return badRequest(req, res, "sameEmail", TEMPLATE_NAME, OPL_CONTENT_ID);
     }
 
     const emailSent = await service.sendCodeVerificationNotification(
@@ -62,7 +39,7 @@ export function resendEmailCodePost(
       await getRequestConfigFromExpress(req, res)
     );
 
-    if (emailSent) {
+    if (emailSent.success) {
       req.session.user.newEmailAddress = newEmailAddress;
 
       req.session.user.state.changeEmail = getNextState(
@@ -71,8 +48,14 @@ export function resendEmailCodePost(
       );
 
       return res.redirect(PATH_DATA.CHECK_YOUR_EMAIL.url);
+    } else {
+      handleChangeEmailResponseCodes(
+        req,
+        res,
+        emailSent,
+        TEMPLATE_NAME,
+        OPL_CONTENT_ID
+      );
     }
-
-    return badRequest(req, res, "alreadyInUse");
   };
 }

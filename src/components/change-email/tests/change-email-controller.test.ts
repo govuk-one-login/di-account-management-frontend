@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Request, Response } from "express";
 import { changeEmailGet, changeEmailPost } from "../change-email-controller.js";
 import { ChangeEmailServiceInterface } from "../types";
-import { HTTP_STATUS_CODES } from "../../../app.constants";
+import { HTTP_STATUS_CODES, ERROR_CODES } from "../../../app.constants";
 import {
   ACCOUNT_DATA_API_ACCESS_TOKEN,
   CLIENT_SESSION_ID,
@@ -18,6 +18,7 @@ import {
   TXMA_AUDIT_ENCODED,
 } from "../../../../test/utils/builders";
 import * as oidcModule from "../../../utils/oidc.js";
+import { logger } from "../../../utils/logger.js";
 
 describe("change email controller", () => {
   let req: Partial<Request>;
@@ -41,7 +42,7 @@ describe("change email controller", () => {
     fakeService = {
       sendCodeVerificationNotification: vi
         .fn()
-        .mockReturnValue(true as unknown as Promise<boolean>),
+        .mockResolvedValue({ success: true }),
     };
     vi.spyOn(oidcModule, "refreshToken").mockImplementation(async () => {});
   });
@@ -84,10 +85,8 @@ describe("change email controller", () => {
 
   describe("changeEmailPost", () => {
     it("should redirect to /check-your-email on submit", async () => {
-      // Act
       await changeEmailPost(fakeService)(req as Request, res as Response);
 
-      // Assert
       expect(
         fakeService.sendCodeVerificationNotification
       ).toHaveBeenCalledTimes(1);
@@ -114,8 +113,94 @@ describe("change email controller", () => {
       // Act
       await changeEmailPost(fakeService)(req as Request, res as Response);
 
-      // Assert
       expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+    });
+
+    it("should render alreadyInUse validation error when email already exists", async () => {
+      fakeService.sendCodeVerificationNotification = vi.fn().mockResolvedValue({
+        success: false,
+        responseCode: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+        responseMessage: "Account already exists with this email address",
+      });
+
+      await changeEmailPost(fakeService)(req as Request, res as Response);
+
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+      expect(res.render).toHaveBeenCalledWith(
+        "change-email/index.njk",
+        expect.objectContaining({
+          errors: expect.objectContaining({
+            email: expect.objectContaining({
+              text: "pages.changeEmail.email.validationError.alreadyInUse",
+            }),
+          }),
+        })
+      );
+    });
+
+    it("should throw a BadRequestError when critical parameters are missing", async () => {
+      const mockErrorMessage = "Required request parameters are missing";
+      fakeService.sendCodeVerificationNotification = vi.fn().mockResolvedValue({
+        success: false,
+        responseCode: ERROR_CODES.REQUEST_MISSING_PARAMS,
+        responseMessage: mockErrorMessage,
+      });
+
+      await expect(
+        changeEmailPost(fakeService)(req as Request, res as Response)
+      ).rejects.toThrow(mockErrorMessage);
+    });
+
+    it("should log a warning and render email validation error when INVALID_EMAIL_FORMAT is received", async () => {
+      fakeService.sendCodeVerificationNotification = vi.fn().mockResolvedValue({
+        success: false,
+        responseCode: ERROR_CODES.INVALID_EMAIL_FORMAT,
+        responseMessage: "Invalid email",
+      });
+      const logSpy = vi.spyOn(logger, "warn").mockImplementation(() => {});
+      await changeEmailPost(fakeService)(req as Request, res as Response);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        "Potential Frontend/API validation mismatch detected. API returned INVALID_EMAIL_FORMAT but this should have been validated on AMF: Invalid email"
+      );
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+      expect(res.render).toHaveBeenCalledWith(
+        "change-email/index.njk",
+        expect.objectContaining({
+          errors: expect.objectContaining({
+            email: expect.objectContaining({
+              text: "pages.changeEmail.email.validationError.email",
+            }),
+          }),
+        })
+      );
+    });
+
+    it("should log a warning and render validation error when EMAIL_ADDRESS_EMPTY is received", async () => {
+      const logSpy = vi.spyOn(logger, "warn").mockImplementation(() => {});
+
+      fakeService.sendCodeVerificationNotification = vi.fn().mockResolvedValue({
+        success: false,
+        responseCode: ERROR_CODES.EMAIL_ADDRESS_EMPTY,
+        responseMessage: "Email address cannot be empty",
+      });
+
+      await changeEmailPost(fakeService)(req as Request, res as Response);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        "Potential Frontend/API validation mismatch detected. API returned EMAIL_ADDRESS_EMPTY but this should have been validated on AMF: Email address cannot be empty"
+      );
+      expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
+      expect(res.render).toHaveBeenCalledWith(
+        "change-email/index.njk",
+        expect.objectContaining({
+          errors: expect.objectContaining({
+            email: expect.objectContaining({
+              text: "pages.changeEmail.email.validationError.required",
+            }),
+          }),
+        })
+      );
     });
   });
 });

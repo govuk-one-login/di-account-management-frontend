@@ -16,6 +16,7 @@ import {
   CLIENT_SESSION_ID_UNKNOWN,
   NOTIFICATION_TYPE,
   PATH_DATA,
+  ERROR_CODES,
 } from "../../../app.constants.js";
 import { UnsecuredJWT } from "jose";
 import { checkFailedCSRFValidationBehaviour } from "../../../../test/utils/behaviours.js";
@@ -190,7 +191,10 @@ describe("Integration:: change email", () => {
       .post(API_ENDPOINTS.SEND_NOTIFICATION)
       .matchHeader("Client-Session-Id", CLIENT_SESSION_ID_UNKNOWN)
       .once()
-      .reply(400, {});
+      .reply(400, {
+        code: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+        message: "An account with this email address already exists",
+      });
 
     // Act
     const res = await request(app)
