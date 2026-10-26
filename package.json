@@ -56,7 +56,7 @@
     "@govuk-one-login/frontend-vital-signs": "0.1.4",
     "@simplewebauthn/browser": "^13.3.0",
     "base64url": "3.0.1",
-    "body-parser": "^2.3.0",
+    "body-parser": "^2.4.0",
     "cookie-parser": "^1.4.7",
     "csrf-sync": "^4.2.1",
     "di-account-management-rp-registry": "github:govuk-one-login/di-account-management-rp-registry#main",
