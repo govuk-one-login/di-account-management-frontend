@@ -5,7 +5,6 @@ import {
   RequestConfig,
 } from "../../utils/http.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
-
 import { DeleteAccountServiceInterface } from "./types.js";
 
 export function deleteAccountService(
@@ -14,15 +13,21 @@ export function deleteAccountService(
   const deleteAccount = async function (
     email: string,
     requestConfig: RequestConfig
-  ): Promise<boolean> {
+  ): Promise<{ success: boolean; status?: number }> {
     const { status } = await fetchClient.post(
       API_ENDPOINTS.DELETE_ACCOUNT,
-      {
-        email: email,
-      },
-      getRequestConfig(requestConfig)
+      { email: email },
+      getRequestConfig({
+        ...requestConfig,
+        validationStatuses: [HTTP_STATUS_CODES.NO_CONTENT],
+      })
     );
-    return status === HTTP_STATUS_CODES.NO_CONTENT;
+
+    if (status === HTTP_STATUS_CODES.NO_CONTENT) {
+      return { success: true };
+    }
+
+    return { success: false };
   };
 
   return {

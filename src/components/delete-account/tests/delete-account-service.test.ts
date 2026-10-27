@@ -11,7 +11,7 @@ describe("deleteAccountService", () => {
   });
 
   describe("deleteAccount", () => {
-    it("returns true when the API responds with NO_CONTENT", async () => {
+    it("returns success true when the API responds with NO_CONTENT", async () => {
       const fakeHttp = {
         post: vi
           .fn()
@@ -24,10 +24,10 @@ describe("deleteAccountService", () => {
       );
 
       expect(fakeHttp.post).toHaveBeenCalledOnce();
-      expect(result).toBe(true);
+      expect(result).toEqual({ success: true });
     });
 
-    it("returns false when the API responds with a non-NO_CONTENT status", async () => {
+    it("returns success false when the API does not respond with NO_CONTENT status", async () => {
       const fakeHttp = {
         post: vi
           .fn()
@@ -39,7 +39,7 @@ describe("deleteAccountService", () => {
         {} as RequestConfig
       );
 
-      expect(result).toBe(false);
+      expect(result).toEqual({ success: false });
     });
   });
 });

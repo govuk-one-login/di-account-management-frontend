@@ -148,10 +148,10 @@ describe("delete account controller", () => {
 
   describe("deleteAccountPost", () => {
     describe("when supporting DELETE_SERVICE_STORE", () => {
-      it("should redirect to deletion confirmed page", async () => {
+      it("should redirect to deletion confirmed page when successful", async () => {
         req = validRequest();
         const fakeService: DeleteAccountServiceInterface = {
-          deleteAccount: vi.fn().mockResolvedValue(true),
+          deleteAccount: vi.fn().mockResolvedValue({ success: true }),
         };
 
         req.session.user.email = "test@test.com";
@@ -174,6 +174,36 @@ describe("delete account controller", () => {
           "public-subject-id",
           expect.anything()
         );
+      });
+
+      it("should throw an error and abort logout when deletion fails", async () => {
+        req = validRequest();
+
+        const fakeService: DeleteAccountServiceInterface = {
+          deleteAccount: vi
+            .fn()
+            .mockResolvedValue({ success: false, status: 400 }),
+        };
+
+        req.session.user.email = "test@test.com";
+        req.session.user.subjectId = "public-subject-id";
+        req.session.user.tokens = { accessToken: "token" } as any;
+        req.session.user.state.deleteAccount.value = "CHANGE_VALUE";
+        req.oidc = {
+          endSessionUrl: vi.fn().mockReturnValue("logout-url"),
+        } as any;
+
+        vi.spyOn(sessionStoreModule, "destroyUserSessions").mockResolvedValue();
+
+        await expect(
+          deleteAccountPost(fakeService)(req as Request, res as Response)
+        ).rejects.toThrow(
+          "Account deletion failed. User will not be logged out."
+        );
+
+        expect(req.oidc.endSessionUrl).not.toHaveBeenCalled();
+        expect(res.redirect).not.toHaveBeenCalled();
+        expect(sessionStoreModule.destroyUserSessions).not.toHaveBeenCalled();
       });
     });
   });
