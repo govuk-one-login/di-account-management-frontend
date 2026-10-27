@@ -2,22 +2,15 @@ import { RequestConfig } from "../../utils/http.js";
 import { UserJourney } from "../../utils/state-machine.js";
 import { UpdateInformationInput } from "../../utils/types.js";
 
-export enum CheckYourEmailServiceError {
-  EMAIL_ADDRESS_DENIED = "EMAIL_ADDRESS_DENIED",
-}
 export interface CheckYourEmailServiceInterface {
   updateEmail: (
     updateInput: UpdateInformationInput,
     requestConfig: RequestConfig
-  ) => Promise<
-    | {
-        success: true;
-      }
-    | {
-        success: false;
-        error: CheckYourEmailServiceError | undefined;
-      }
-  >;
+  ) => Promise<{
+    success: boolean;
+    responseCode?: number;
+    responseMessage?: string;
+  }>;
 }
 
 export const INTENT_CHANGE_PHONE_NUMBER = UserJourney.ChangePhoneNumber;

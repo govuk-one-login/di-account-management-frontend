@@ -260,11 +260,11 @@ describe("Integration:: check your email", () => {
         headers: new Map([["content-length", "1"]]),
         clone: vi.fn().mockImplementation(() => ({
           headers: new Map([["content-length", "1"]]),
-          json: async () => ({ code: 1000 }),
-          text: async () => JSON.stringify({ code: 1000 }),
+          json: async () => ({ code: 1020 }),
+          text: async () => JSON.stringify({ code: 1020 }),
         })),
-        json: async () => ({ code: 1000 }),
-        text: async () => JSON.stringify({ code: 1000 }),
+        json: async () => ({ code: 1020 }),
+        text: async () => JSON.stringify({ code: 1020 }),
       } as unknown as Response;
     });
 
