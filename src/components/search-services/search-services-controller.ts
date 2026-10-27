@@ -3,6 +3,7 @@ import { getAppEnv, getClientsToShowInSearch } from "../../config.js";
 import { LOCALE } from "../../app.constants.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { Worker, Index } from "flexsearch";
+import { Worker as ThreadWorker } from "node:worker_threads";
 import { getTranslations } from "di-account-management-rp-registry";
 import i18next, { TFunction } from "i18next";
 import { safeTranslate } from "../../utils/safeTranslate.js";
@@ -62,7 +63,11 @@ export const getAllServices = (translate: Request["t"], locale: LOCALE) => {
     });
 };
 
-const indexes: Record<string, Index<true, false, true>> = {};
+type WorkerIndex = Index<true, false, true> & {
+  worker?: ThreadWorker;
+};
+
+const indexes: Record<string, WorkerIndex> = {};
 
 export const createSearchIndex = async (
   locale: LOCALE,
@@ -96,6 +101,9 @@ export const createSearchIndex = async (
       })
     );
 
+    if (indexes[locale]) {
+      await indexes[locale].worker?.terminate();
+    }
     indexes[locale] = index;
   }
 };
