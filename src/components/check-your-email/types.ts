@@ -8,8 +8,8 @@ export interface CheckYourEmailServiceInterface {
     requestConfig: RequestConfig
   ) => Promise<{
     success: boolean;
-    responseCode?: number;
-    responseMessage?: string;
+    code?: number;
+    message?: string;
   }>;
 }
 

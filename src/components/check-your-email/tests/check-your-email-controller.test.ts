@@ -77,8 +77,8 @@ describe("check your email controller", () => {
       const fakeService: CheckYourEmailServiceInterface = {
         updateEmail: vi.fn().mockResolvedValue({
           success: false,
-          responseCode: 1020,
-          responseMessage: "invalid otp alert",
+          code: 1020,
+          message: "invalid otp alert",
         }),
       };
 
@@ -112,8 +112,8 @@ describe("check your email controller", () => {
       const fakeService: CheckYourEmailServiceInterface = {
         updateEmail: vi.fn().mockResolvedValue({
           success: false,
-          responseCode: 9999,
-          responseMessage: "there has been another problem",
+          code: 9999,
+          message: "there has been another problem",
         }),
       };
 
@@ -137,8 +137,8 @@ describe("check your email controller", () => {
       const fakeService: CheckYourEmailServiceInterface = {
         updateEmail: vi.fn().mockResolvedValue({
           success: false,
-          responseCode: ERROR_CODES.EMAIL_ADDRESS_DENIED,
-          responseMessage: "Email address denied",
+          code: ERROR_CODES.EMAIL_ADDRESS_DENIED,
+          message: "Email address denied",
         }),
       };
 
