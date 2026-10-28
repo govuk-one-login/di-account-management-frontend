@@ -119,8 +119,8 @@ describe("change email controller", () => {
     it("should render alreadyInUse validation error when email already exists", async () => {
       fakeService.sendCodeVerificationNotification = vi.fn().mockResolvedValue({
         success: false,
-        responseCode: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
-        responseMessage: "Account already exists with this email address",
+        code: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+        message: "Account already exists with this email address",
       });
 
       await changeEmailPost(fakeService)(req as Request, res as Response);
@@ -142,8 +142,8 @@ describe("change email controller", () => {
       const mockErrorMessage = "Required request parameters are missing";
       fakeService.sendCodeVerificationNotification = vi.fn().mockResolvedValue({
         success: false,
-        responseCode: ERROR_CODES.REQUEST_MISSING_PARAMS,
-        responseMessage: mockErrorMessage,
+        code: ERROR_CODES.REQUEST_MISSING_PARAMS,
+        message: mockErrorMessage,
       });
 
       await expect(
@@ -154,8 +154,8 @@ describe("change email controller", () => {
     it("should log a warning and render email validation error when INVALID_EMAIL_FORMAT is received", async () => {
       fakeService.sendCodeVerificationNotification = vi.fn().mockResolvedValue({
         success: false,
-        responseCode: ERROR_CODES.INVALID_EMAIL_FORMAT,
-        responseMessage: "Invalid email",
+        code: ERROR_CODES.INVALID_EMAIL_FORMAT,
+        message: "Invalid email",
       });
       const logSpy = vi.spyOn(logger, "warn").mockImplementation(() => {});
       await changeEmailPost(fakeService)(req as Request, res as Response);
@@ -181,8 +181,8 @@ describe("change email controller", () => {
 
       fakeService.sendCodeVerificationNotification = vi.fn().mockResolvedValue({
         success: false,
-        responseCode: ERROR_CODES.EMAIL_ADDRESS_EMPTY,
-        responseMessage: "Email address cannot be empty",
+        code: ERROR_CODES.EMAIL_ADDRESS_EMPTY,
+        message: "Email address cannot be empty",
       });
 
       await changeEmailPost(fakeService)(req as Request, res as Response);

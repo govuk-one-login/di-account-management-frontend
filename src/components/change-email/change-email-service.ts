@@ -8,11 +8,10 @@ import {
   Http,
   http,
   RequestConfig,
+  createApiResponse,
 } from "../../utils/http.js";
-import {
-  ChangeEmailServiceInterface,
-  SendCodeVerificationNotificationOutcome,
-} from "./types.js";
+import { ChangeEmailServiceInterface } from "./types.js";
+import { ApiResponseResult } from "../../utils/types.js";
 
 export function changeEmailService(
   fetchClient: Http = http
@@ -20,7 +19,7 @@ export function changeEmailService(
   const sendCodeVerificationNotification = async function (
     email: string,
     requestConfig: RequestConfig
-  ): Promise<SendCodeVerificationNotificationOutcome> {
+  ): Promise<ApiResponseResult> {
     const response = await fetchClient.post(
       API_ENDPOINTS.SEND_NOTIFICATION,
       {
@@ -39,12 +38,7 @@ export function changeEmailService(
     if (response.status === HTTP_STATUS_CODES.NO_CONTENT) {
       return { success: true };
     } else {
-      const data = await response.json();
-      return {
-        success: false,
-        responseCode: data.code,
-        responseMessage: data.message,
-      };
+      return await createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
     }
   };
 

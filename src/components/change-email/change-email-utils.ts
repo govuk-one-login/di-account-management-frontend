@@ -10,11 +10,9 @@ import {
   formatValidationError,
   renderBadRequest,
 } from "../../utils/validation.js";
-import {
-  ChangeEmailServiceInterface,
-  SendCodeVerificationNotificationOutcome,
-} from "./types.js";
+import { ChangeEmailServiceInterface } from "./types.js";
 import { logger } from "../../utils/logger.js";
+import { ApiResponseResult } from "../../utils/types.js";
 
 export const setLocalOplSettings = (res: Response, contentId: string) => {
   setOplSettings(
@@ -26,37 +24,37 @@ export const setLocalOplSettings = (res: Response, contentId: string) => {
   );
 };
 
-export function handleChangeEmailResponseCodes(
+export function handleChangeEmailcodes(
   req: Request,
   res: Response,
-  outcome: SendCodeVerificationNotificationOutcome,
+  outcome: ApiResponseResult,
   template: string,
   contentId: string
 ): void {
-  switch (outcome.responseCode) {
+  switch (outcome.code) {
     case ERROR_CODES.ACCT_WITH_EMAIL_EXISTS:
       return badRequest(req, res, "alreadyInUse", template, contentId);
     case ERROR_CODES.INVALID_EMAIL_FORMAT:
       logger.warn(
-        `Potential Frontend/API validation mismatch detected. API returned INVALID_EMAIL_FORMAT but this should have been validated on AMF: ${outcome.responseMessage}`
+        `Potential Frontend/API validation mismatch detected. API returned INVALID_EMAIL_FORMAT but this should have been validated on AMF: ${outcome.message}`
       );
       return badRequest(req, res, "email", template, contentId);
     case ERROR_CODES.EMAIL_ADDRESS_EMPTY:
       logger.warn(
-        `Potential Frontend/API validation mismatch detected. API returned EMAIL_ADDRESS_EMPTY but this should have been validated on AMF: ${outcome.responseMessage}`
+        `Potential Frontend/API validation mismatch detected. API returned EMAIL_ADDRESS_EMPTY but this should have been validated on AMF: ${outcome.message}`
       );
       return badRequest(req, res, "required", template, contentId);
     case ERROR_CODES.REQUEST_MISSING_PARAMS:
       throw new Error(
-        `Request missing params. Code: ${outcome.responseCode} message: ${outcome.responseMessage}`
+        `Request missing params. Code: ${outcome.code} message: ${outcome.message}`
       );
     case ERROR_CODES.INVALID_NOTIFICATION_TYPE:
       throw new Error(
-        `Invalid notification type. Code: ${outcome.responseCode} message: ${outcome.responseMessage}`
+        `Invalid notification type. Code: ${outcome.code} message: ${outcome.message}`
       );
     default:
       throw new Error(
-        `An error has occurred. Code: ${outcome.responseCode} message: ${outcome.responseMessage}`
+        `An error has occurred. Code: ${outcome.code} message: ${outcome.message}`
       );
   }
 }
@@ -110,12 +108,6 @@ export async function handleEmailVerificationSubmission({
     );
     return res.redirect(PATH_DATA.CHECK_YOUR_EMAIL.url);
   } else {
-    handleChangeEmailResponseCodes(
-      req,
-      res,
-      emailSent,
-      templateName,
-      oplContentId
-    );
+    handleChangeEmailcodes(req, res, emailSent, templateName, oplContentId);
   }
 }

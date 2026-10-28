@@ -84,8 +84,8 @@ describe("changeEmailService", () => {
 
     expect(result).toEqual({
       success: false,
-      responseCode: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
-      responseMessage: mockErrorMessage,
+      code: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+      message: mockErrorMessage,
     });
   });
 });

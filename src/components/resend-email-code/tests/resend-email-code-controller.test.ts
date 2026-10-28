@@ -79,8 +79,8 @@ describe("check your email controller", () => {
       const fakeService: ChangeEmailServiceInterface = {
         sendCodeVerificationNotification: vi.fn().mockResolvedValue({
           success: false,
-          responseCode: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
-          responseMessage: "Account already exists with this email address",
+          code: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+          message: "Account already exists with this email address",
         }),
       };
 
@@ -110,8 +110,8 @@ describe("check your email controller", () => {
       const fakeService: ChangeEmailServiceInterface = {
         sendCodeVerificationNotification: vi.fn().mockResolvedValue({
           success: false,
-          responseCode: ERROR_CODES.REQUEST_MISSING_PARAMS,
-          responseMessage: "Required request parameters are missing",
+          code: ERROR_CODES.REQUEST_MISSING_PARAMS,
+          message: "Required request parameters are missing",
         }),
       };
 
@@ -140,8 +140,8 @@ describe("check your email controller", () => {
       const fakeService: ChangeEmailServiceInterface = {
         sendCodeVerificationNotification: vi.fn().mockResolvedValue({
           success: false,
-          responseCode: ERROR_CODES.INVALID_EMAIL_FORMAT,
-          responseMessage: "invalid email format",
+          code: ERROR_CODES.INVALID_EMAIL_FORMAT,
+          message: "invalid email format",
         }),
       };
 
@@ -174,8 +174,8 @@ describe("check your email controller", () => {
       const fakeService: ChangeEmailServiceInterface = {
         sendCodeVerificationNotification: vi.fn().mockResolvedValue({
           success: false,
-          responseCode: ERROR_CODES.EMAIL_ADDRESS_EMPTY,
-          responseMessage: "Email cannot be blank",
+          code: ERROR_CODES.EMAIL_ADDRESS_EMPTY,
+          message: "Email cannot be blank",
         }),
       };
 

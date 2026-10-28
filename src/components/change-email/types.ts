@@ -1,18 +1,19 @@
 import { RequestConfig } from "../../utils/http.js";
 import { ERROR_CODES } from "../../app.constants.js";
+import { ApiResponseResult } from "../../utils/types.js";
 
 type ErrorCodeValues = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
 
 export interface SendCodeVerificationNotificationOutcomeSuccess {
-  success: true;
-  responseCode?: never;
-  responseMessage?: never;
+  success: boolean;
+  code?: never;
+  message?: never;
 }
 
 export interface SendCodeVerificationNotificationOutcomeFailure {
-  success: false;
-  responseCode: ErrorCodeValues;
-  responseMessage: string;
+  success: boolean;
+  code: ErrorCodeValues;
+  message: string;
 }
 
 export type SendCodeVerificationNotificationOutcome =
@@ -23,5 +24,5 @@ export interface ChangeEmailServiceInterface {
   sendCodeVerificationNotification: (
     email: string,
     requestConfig: RequestConfig
-  ) => Promise<SendCodeVerificationNotificationOutcome>;
+  ) => Promise<ApiResponseResult>;
 }
