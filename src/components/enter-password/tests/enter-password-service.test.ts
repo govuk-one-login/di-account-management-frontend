@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { enterPasswordService } from "../enter-password-service.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
 import { http } from "../../../utils/http.js";
@@ -27,8 +27,6 @@ describe("enterPasswordService", () => {
     clientSessionId: CLIENT_SESSION_ID,
     txmaAuditEncoded: TXMA_AUDIT_ENCODED,
   };
-
-  beforeEach(() => {});
 
   afterEach(() => {
     vi.restoreAllMocks();
