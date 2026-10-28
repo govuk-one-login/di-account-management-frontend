@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { enterPasswordService } from "../enter-password-service.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../../app.constants";
-import {
-  CLIENT_SESSION_ID,
-  TXMA_AUDIT_ENCODED,
-} from "../../../../test/utils/builders";
 import { http } from "../../../utils/http.js";
 
 describe("enterPasswordService", () => {
@@ -14,6 +10,8 @@ describe("enterPasswordService", () => {
   const sourceIp = "0.0.0.0";
   const sessionId = "session-123";
   const persistentSessionId = "persistentsession123";
+  const CLIENT_SESSION_ID = "client-session-id-123";
+  const TXMA_AUDIT_ENCODED = "txma-audit-encoded-string";
 
   const user = {
     token: accessToken,
@@ -40,6 +38,9 @@ describe("enterPasswordService", () => {
     const httpPostSpy = vi.spyOn(http, "post").mockResolvedValue({
       status: HTTP_STATUS_CODES.NO_CONTENT,
       ok: true,
+      headers: {
+        get: vi.fn().mockReturnValue(null),
+      },
     } as unknown as Response);
 
     const response = await enterPasswordService().authenticated(
@@ -48,7 +49,7 @@ describe("enterPasswordService", () => {
       requestConfig
     );
 
-    expect(response).toEqual({ authenticated: true });
+    expect(response).toEqual({ success: true });
     expect(httpPostSpy).toHaveBeenCalledWith(
       API_ENDPOINTS.AUTHENTICATE,
       { email: email, password: password },
@@ -79,9 +80,9 @@ describe("enterPasswordService", () => {
     );
 
     expect(response).toEqual({
-      authenticated: false,
+      success: false,
       hasIntervention: true,
-      responseCode: 1084,
+      code: 1084,
     });
 
     expect(httpPostSpy).toHaveBeenCalledWith(
@@ -114,9 +115,9 @@ describe("enterPasswordService", () => {
     );
 
     expect(response).toEqual({
-      authenticated: false,
+      success: false,
       hasIntervention: true,
-      responseCode: 1083,
+      code: 1083,
     });
 
     expect(httpPostSpy).toHaveBeenCalledWith(
@@ -149,9 +150,9 @@ describe("enterPasswordService", () => {
     );
 
     expect(response).toEqual({
-      authenticated: false,
+      success: false,
       hasIntervention: true,
-      responseCode: 9999,
+      code: 9999,
     });
 
     expect(httpPostSpy).toHaveBeenCalledWith(
@@ -161,10 +162,13 @@ describe("enterPasswordService", () => {
     );
   });
 
-  it("returns responseCode and responseMessage when status code UNAUTHORIZED", async () => {
+  it("returns code and message when status code UNAUTHORIZED", async () => {
     const httpPostSpy = vi.spyOn(http, "post").mockResolvedValue({
       status: HTTP_STATUS_CODES.UNAUTHORIZED,
       ok: false,
+      headers: {
+        get: vi.fn().mockReturnValue(null),
+      },
       json: vi.fn().mockResolvedValue({
         code: 1001,
         message: "Invalid login credentials",
@@ -178,9 +182,9 @@ describe("enterPasswordService", () => {
     );
 
     expect(response).toEqual({
-      authenticated: false,
-      responseCode: 1001,
-      responseMessage: "Invalid login credentials",
+      success: false,
+      code: 1001,
+      message: "Invalid login credentials",
     });
 
     expect(httpPostSpy).toHaveBeenCalledWith(

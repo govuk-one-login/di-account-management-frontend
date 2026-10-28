@@ -6,9 +6,9 @@ export interface EnterPasswordServiceInterface {
     password: string,
     requestConfig: RequestConfig
   ) => Promise<{
-    authenticated: boolean;
+    success: boolean;
     hasIntervention?: boolean;
-    responseCode?: number;
-    responseMessage?: string;
+    code?: number;
+    message?: string;
   }>;
 }

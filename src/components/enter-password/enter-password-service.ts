@@ -3,10 +3,10 @@ import {
   http,
   Http,
   RequestConfig,
+  createApiResponse,
 } from "../../utils/http.js";
 import { EnterPasswordServiceInterface } from "./types.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
-
 async function getInterventionCodeFromError(response: any): Promise<number> {
   const clonedResponse = response.clone();
   const data = await clonedResponse.json();
@@ -21,10 +21,10 @@ export function enterPasswordService(
     password: string,
     requestConfig: RequestConfig
   ): Promise<{
-    authenticated: boolean;
+    success: boolean;
     hasIntervention?: boolean;
-    responseCode?: number;
-    responseMessage?: string;
+    code?: number;
+    message?: string;
   }> => {
     const response = await fetchClient.post(
       API_ENDPOINTS.AUTHENTICATE,
@@ -41,25 +41,18 @@ export function enterPasswordService(
 
     const { status } = response;
     if (status === HTTP_STATUS_CODES.NO_CONTENT) {
-      return { authenticated: true };
+      return { success: true };
     }
 
     if (status === HTTP_STATUS_CODES.FORBIDDEN) {
       const interventionCode = await getInterventionCodeFromError(response);
       return {
-        authenticated: false,
+        success: false,
         hasIntervention: true,
-        responseCode: interventionCode,
+        code: interventionCode,
       };
     }
-
-    const data = await response.json();
-
-    return {
-      authenticated: false,
-      responseCode: data?.code,
-      responseMessage: data?.message,
-    };
+    return await createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
   };
 
   return { authenticated };

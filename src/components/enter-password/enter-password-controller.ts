@@ -316,7 +316,7 @@ export function enterPasswordPost(
       await getRequestConfigFromExpress(req, res)
     );
 
-    if (response.authenticated) {
+    if (response.success) {
       req.session.user.state[requestType] = getNextState(
         req.session.user.state[requestType].value,
         EventType.Authenticated
@@ -328,11 +328,11 @@ export function enterPasswordPost(
     }
 
     if (response.hasIntervention) {
-      await handleIntervention(response.responseCode, req, res, requestType);
+      await handleIntervention(response.code, req, res, requestType);
       return;
     }
 
-    if (response.responseCode == ERROR_CODES.INVALID_LOGIN_CREDS) {
+    if (response.code == ERROR_CODES.INVALID_LOGIN_CREDS) {
       renderPasswordError(
         req,
         res,
@@ -343,7 +343,7 @@ export function enterPasswordPost(
     }
 
     throw new Error(
-      `Enter password failed with code ${response.responseCode} and message ${response.responseMessage}`
+      `Enter password failed with code ${response.code} and message ${response.message}`
     );
   };
 }
