@@ -3,6 +3,7 @@ import {
   Http,
   http,
   RequestConfig,
+  createApiResponse,
 } from "../../utils/http.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
 import { CheckYourEmailServiceInterface } from "./types.js";
@@ -35,13 +36,7 @@ export function checkYourEmailService(
     if (response.status === HTTP_STATUS_CODES.NO_CONTENT) {
       return { success: true };
     } else {
-      const data = await response.json();
-
-      return {
-        success: false,
-        responseCode: data.code,
-        responseMessage: data.message,
-      };
+      return await createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
     }
   };
 

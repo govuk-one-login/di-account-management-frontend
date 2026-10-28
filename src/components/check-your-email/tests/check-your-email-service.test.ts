@@ -47,11 +47,13 @@ describe("checkYourEmailService", () => {
         status: HTTP_STATUS_CODES.NO_CONTENT,
         ok: true,
         clone: vi.fn().mockReturnValue({ json: vi.fn().mockResolvedValue({}) }),
+        headers: { get: vi.fn().mockReturnValue(null) },
         json: vi.fn().mockResolvedValue({}),
       } as unknown as Response)
       .mockResolvedValueOnce({
         status: HTTP_STATUS_CODES.FORBIDDEN,
         ok: false,
+        headers: { get: vi.fn().mockReturnValue(null) },
         clone: vi.fn().mockReturnValue({
           json: vi.fn().mockResolvedValue({
             code: ERROR_CODES.EMAIL_ADDRESS_DENIED,
@@ -65,6 +67,7 @@ describe("checkYourEmailService", () => {
       } as unknown as Response)
       .mockResolvedValueOnce({
         status: HTTP_STATUS_CODES.BAD_REQUEST,
+        headers: { get: vi.fn().mockReturnValue(null) },
         ok: false,
         clone: vi.fn().mockReturnValue({ json: vi.fn().mockResolvedValue({}) }),
         json: vi.fn().mockResolvedValue({}),
@@ -82,8 +85,8 @@ describe("checkYourEmailService", () => {
     );
     expect(result).toEqual({
       success: false,
-      responseCode: ERROR_CODES.EMAIL_ADDRESS_DENIED,
-      responseMessage: "Email address denied",
+      code: ERROR_CODES.EMAIL_ADDRESS_DENIED,
+      message: "Email address denied",
     });
 
     result = await checkYourEmailService().updateEmail(
@@ -92,8 +95,8 @@ describe("checkYourEmailService", () => {
     );
     expect(result).toEqual({
       success: false,
-      responseCode: undefined,
-      responseMessage: undefined,
+      code: HTTP_STATUS_CODES.BAD_REQUEST,
+      message: "",
     });
 
     expect(httpPostSpy).toHaveBeenCalledTimes(3);
@@ -105,6 +108,7 @@ describe("checkYourEmailService", () => {
       .mockResolvedValueOnce({
         status: HTTP_STATUS_CODES.BAD_REQUEST,
         ok: false,
+        headers: { get: vi.fn().mockReturnValue(null) },
         clone: vi.fn().mockReturnValue({
           json: vi.fn().mockResolvedValue({
             code: ERROR_CODES.INVALID_OTP,
@@ -118,6 +122,7 @@ describe("checkYourEmailService", () => {
       } as unknown as Response)
       .mockResolvedValueOnce({
         status: HTTP_STATUS_CODES.BAD_REQUEST,
+        headers: { get: vi.fn().mockReturnValue(null) },
         ok: false,
         clone: vi.fn().mockReturnValue({
           json: vi.fn().mockResolvedValue({
@@ -137,8 +142,8 @@ describe("checkYourEmailService", () => {
     );
     expect(result).toEqual({
       success: false,
-      responseCode: ERROR_CODES.INVALID_OTP,
-      responseMessage: "Invalid OTP code",
+      code: ERROR_CODES.INVALID_OTP,
+      message: "Invalid OTP code",
     });
 
     result = await checkYourEmailService().updateEmail(
@@ -147,8 +152,8 @@ describe("checkYourEmailService", () => {
     );
     expect(result).toEqual({
       success: false,
-      responseCode: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
-      responseMessage: "Account exists",
+      code: ERROR_CODES.ACCT_WITH_EMAIL_EXISTS,
+      message: "Account exists",
     });
 
     expect(httpPostSpy).toHaveBeenCalledTimes(2);

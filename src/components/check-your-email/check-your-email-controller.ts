@@ -82,12 +82,12 @@ export function checkYourEmailPost(
       return res.redirect(PATH_DATA.EMAIL_UPDATED_CONFIRMATION.url);
     }
 
-    if (result.responseCode === ERROR_CODES.EMAIL_ADDRESS_DENIED) {
+    if (result.code === ERROR_CODES.EMAIL_ADDRESS_DENIED) {
       req.metrics?.addMetric("changeEmailAddressDenied", MetricUnit.Count, 1);
       return res.redirect(`${PATH_DATA.CHANGE_EMAIL.url}?email_cant_be_used=1`);
     }
 
-    if (result.responseCode === ERROR_CODES.INVALID_OTP) {
+    if (result.code === ERROR_CODES.INVALID_OTP) {
       setLocalOplSettings(res);
       return renderBadRequest(
         res,
@@ -101,7 +101,7 @@ export function checkYourEmailPost(
     }
 
     throw new Error(
-      `Unable to verify email OTP. Error code:${result.responseCode} Error message: ${result.responseMessage}`
+      `Unable to verify email OTP. Error code:${result.code} Error message: ${result.message}`
     );
   };
 }
