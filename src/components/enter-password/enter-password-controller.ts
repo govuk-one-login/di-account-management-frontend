@@ -7,6 +7,7 @@ import {
   LogoutState,
   EventName,
   JourneyAction,
+  ERROR_CODES,
 } from "../../app.constants.js";
 import {
   formatValidationError,
@@ -315,7 +316,7 @@ export function enterPasswordPost(
       await getRequestConfigFromExpress(req, res)
     );
 
-    if (response.authenticated) {
+    if (response.success) {
       req.session.user.state[requestType] = getNextState(
         req.session.user.state[requestType].value,
         EventType.Authenticated
@@ -326,31 +327,38 @@ export function enterPasswordPost(
       return;
     }
 
-    if (response.intervention) {
-      await handleIntervention(response.intervention, req, res, requestType);
+    if (response.hasIntervention) {
+      await handleIntervention(response.code, req, res, requestType);
       return;
     }
 
-    renderPasswordError(
-      req,
-      res,
-      requestType,
-      "pages.enterPassword.password.validationError.incorrectPassword"
+    if (response.code == ERROR_CODES.INVALID_LOGIN_CREDS) {
+      renderPasswordError(
+        req,
+        res,
+        requestType,
+        "pages.enterPassword.password.validationError.incorrectPassword"
+      );
+      return;
+    }
+
+    throw new Error(
+      `Enter password failed with code ${response.code} and message ${response.message}`
     );
   };
 }
 
 async function handleIntervention(
-  intervention: string,
+  interventionCode: number | undefined,
   req: Request,
   res: Response,
   requestType: UserJourney
 ): Promise<void> {
-  switch (intervention) {
-    case "BLOCKED":
+  switch (interventionCode) {
+    case ERROR_CODES.ACCT_BLOCKED:
       await handleLogout(req, res, LogoutState.Blocked);
       break;
-    case "SUSPENDED":
+    case ERROR_CODES.ACCT_SUSPENDED:
       await handleLogout(req, res, LogoutState.Suspended);
       break;
     default:

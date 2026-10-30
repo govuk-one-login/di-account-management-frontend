@@ -7,6 +7,7 @@ import {
 import { EnterPasswordServiceInterface } from "../types";
 import {
   HTTP_STATUS_CODES,
+  ERROR_CODES,
   PATH_DATA,
   EventName,
   JourneyAction,
@@ -17,6 +18,7 @@ import { UserJourney } from "../../../utils/state-machine.js";
 import * as oidcModule from "../../../utils/oidc.js";
 import { eventService } from "../../../services/event-service.js";
 import { createMfaClient, MfaClient } from "../../../utils/mfaClient/index.js";
+import * as validationUtils from "../../../utils/validation.js";
 
 vi.mock("../../../services/event-service.js");
 vi.mock("../../../utils/mfaClient/index.js");
@@ -311,7 +313,7 @@ describe("enter password controller", () => {
   describe("enterPasswordPost", () => {
     it("should redirect to security when there is no 'type' query parameter in enter password post", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ success: true }),
       };
 
       req.body.password = "password";
@@ -324,7 +326,7 @@ describe("enter password controller", () => {
 
     it("should redirect to change-email with page parameter when the journey starts on activity history", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ success: true }),
       };
 
       req.session.user = {
@@ -348,7 +350,7 @@ describe("enter password controller", () => {
 
     it("should redirect to change-email when the password is correct", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ success: true }),
       };
 
       req.session.user = {
@@ -368,7 +370,7 @@ describe("enter password controller", () => {
 
     it("should bad request when user doesn't enter a password", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ success: true }),
       };
 
       req.body.password = "";
@@ -399,10 +401,20 @@ describe("enter password controller", () => {
       expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
-    it("should bad request when user credentials are incorrect", async () => {
+    it("should bad request with the appropriate error message when user credentials are incorrect", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: vi.fn().mockResolvedValue({ authenticated: false }),
+        authenticated: vi.fn().mockResolvedValue({
+          success: false,
+          code: ERROR_CODES.INVALID_LOGIN_CREDS,
+        }),
       };
+
+      vi.spyOn(validationUtils, "formatValidationError").mockReturnValue({
+        password: {
+          text: "Incorrect password string",
+          href: "#password",
+        },
+      } as any);
 
       req.session.user = {
         email: "test@test.com",
@@ -410,7 +422,7 @@ describe("enter password controller", () => {
         tokens: { accessToken: "token" },
       } as any;
 
-      req.body.password = "password";
+      req.body.password = "passssss";
       req.query.type = "changeEmail";
       req.query.edit = "true";
       req.url = "https://test.com/enter-password?edit=true&type=changeEmail";
@@ -422,17 +434,27 @@ describe("enter password controller", () => {
         requestType: "changeEmail",
         formAction:
           "https://test.com/enter-password?edit=true&type=changeEmail",
-        errors: { password: { text: undefined, href: "#password" } },
-        errorList: [{ text: undefined, href: "#password" }],
+        errors: {
+          password: {
+            text: "Incorrect password string",
+            href: "#password",
+          },
+        },
+        errorList: [
+          {
+            text: "Incorrect password string",
+            href: "#password",
+          },
+        ],
         language: "en",
-        password: "password",
+        password: "passssss",
       });
       expect(res.status).toHaveBeenCalledWith(HTTP_STATUS_CODES.BAD_REQUEST);
     });
 
     it("include `from` and `page` when rendering bad request", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ success: true }),
       };
 
       req.body.password = "";
@@ -464,8 +486,9 @@ describe("enter password controller", () => {
     it("should logout and redirect to permanently suspended when intervention is BLOCKED", async () => {
       const fakeService: EnterPasswordServiceInterface = {
         authenticated: vi.fn().mockResolvedValue({
-          authenticated: false,
-          intervention: "BLOCKED",
+          success: false,
+          hasIntervention: true,
+          code: ERROR_CODES.ACCT_BLOCKED,
         }),
       };
 
@@ -489,8 +512,9 @@ describe("enter password controller", () => {
     it("should logout and redirect to unavailable temporary when intervention is SUSPENDED", async () => {
       const fakeService: EnterPasswordServiceInterface = {
         authenticated: vi.fn().mockResolvedValue({
-          authenticated: false,
-          intervention: "SUSPENDED",
+          success: false,
+          hasIntervention: true,
+          code: ERROR_CODES.ACCT_SUSPENDED,
         }),
       };
 
@@ -513,7 +537,7 @@ describe("enter password controller", () => {
 
     it("should pass on parameters when redirecting after successful authentication", async () => {
       const fakeService: EnterPasswordServiceInterface = {
-        authenticated: vi.fn().mockResolvedValue({ authenticated: true }),
+        authenticated: vi.fn().mockResolvedValue({ success: true }),
       };
 
       req.session.user = {
@@ -532,6 +556,31 @@ describe("enter password controller", () => {
 
       expect(res.redirect).toHaveBeenCalledWith(
         "/remove-passkey?from=security&id=12345"
+      );
+    });
+
+    it("should throw Error when the error code is indicative of a non-user generated issue", async () => {
+      const fakeService: EnterPasswordServiceInterface = {
+        authenticated: vi.fn().mockResolvedValue({
+          success: false,
+          code: 9999,
+          message: "There has been an internal problem",
+        }),
+      };
+
+      req.session.user = {
+        email: "test@test.com",
+        state: { changeEmail: { value: "CHANGE_VALUE" } },
+        tokens: { accessToken: "token" },
+      } as any;
+
+      req.body.password = "password";
+      req.query.type = "changeEmail";
+
+      await expect(
+        enterPasswordPost(fakeService)(req as Request, res as Response)
+      ).rejects.toThrow(
+        "Enter password failed with code 9999 and message There has been an internal problem"
       );
     });
   });

@@ -3,25 +3,14 @@ import {
   http,
   Http,
   RequestConfig,
+  createApiResponse,
 } from "../../utils/http.js";
 import { EnterPasswordServiceInterface } from "./types.js";
 import { API_ENDPOINTS, HTTP_STATUS_CODES } from "../../app.constants.js";
-
-const interventionMap: Record<string, string> = {
-  "1083": "SUSPENDED",
-  "1084": "BLOCKED",
-};
-
-async function getInterventionFromError(
-  response: any
-): Promise<string | undefined> {
-  try {
-    const clonedResponse = response.clone();
-    const data = await clonedResponse.json();
-    return interventionMap[data?.code];
-  } catch {
-    return undefined;
-  }
+async function getInterventionCodeFromError(response: any): Promise<number> {
+  const clonedResponse = response.clone();
+  const data = await clonedResponse.json();
+  return data?.code;
 }
 
 export function enterPasswordService(
@@ -31,7 +20,12 @@ export function enterPasswordService(
     email: string,
     password: string,
     requestConfig: RequestConfig
-  ): Promise<{ authenticated: boolean; intervention?: string }> => {
+  ): Promise<{
+    success: boolean;
+    hasIntervention?: boolean;
+    code?: number;
+    message?: string;
+  }> => {
     const response = await fetchClient.post(
       API_ENDPOINTS.AUTHENTICATE,
       { email: email, password },
@@ -46,15 +40,19 @@ export function enterPasswordService(
     );
 
     const { status } = response;
-
-    if (status === HTTP_STATUS_CODES.FORBIDDEN) {
-      const intervention = await getInterventionFromError(response);
-      if (intervention) {
-        return { authenticated: false, intervention };
-      }
+    if (status === HTTP_STATUS_CODES.NO_CONTENT) {
+      return { success: true };
     }
 
-    return { authenticated: status === HTTP_STATUS_CODES.NO_CONTENT };
+    if (status === HTTP_STATUS_CODES.FORBIDDEN) {
+      const interventionCode = await getInterventionCodeFromError(response);
+      return {
+        success: false,
+        hasIntervention: true,
+        code: interventionCode,
+      };
+    }
+    return await createApiResponse(response, [HTTP_STATUS_CODES.NO_CONTENT]);
   };
 
   return { authenticated };
