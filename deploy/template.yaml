@@ -120,11 +120,6 @@ Conditions:
     - !Equals [!Ref Environment, build]
     - !Equals [!Ref Environment, dev]
 
-  ExportLogsToSplunk:
-    Fn::Or:
-      - !Equals [!Ref Environment, integration]
-      - !Equals [!Ref Environment, production]
-
 Mappings:
   ElasticLoadBalancerAccountIds:
     eu-west-2:
@@ -1714,14 +1709,6 @@ Resources:
               StringEquals:
                 "aws:SourceAccount": !Ref AWS::AccountId
 
-  ApiGatewayAccessLogGroupCSLSSubscription:
-    Condition: ExportLogsToSplunk
-    Type: AWS::Logs::SubscriptionFilter
-    Properties:
-      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
-      FilterPattern: ""
-      LogGroupName: !Ref ApiGatewayAccessLogGroup
-
   #
   # Fargate Task Extra
   #
@@ -1842,14 +1829,6 @@ Resources:
     Properties:
       AliasName: !Sub "alias/${AWS::StackName}/${Environment}/QueueKmsKey"
       TargetKeyId: !Ref QueueKmsKey
-
-  TaskLogGroupCSLSSubscription:
-    Condition: ExportLogsToSplunk
-    Type: AWS::Logs::SubscriptionFilter
-    Properties:
-      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
-      FilterPattern: "{$._aws.CloudWatchMetrics NOT EXISTS}"
-      LogGroupName: !Ref TaskLogGroup
 
   #
   # Logging
