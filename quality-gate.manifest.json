@@ -2,8 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/govuk-one-login/quality-gates/refs/tags/v0.19.0/schemas/schema.json",
   "services": [
     {
-      "product": "home",
-      "component": "home",
+      "product": "Home",
+      "component": "account-management-frontend",
       "promotionType": "securePipelines",
       "automated": [
         {
@@ -109,6 +109,11 @@
             }
           ],
           "file": "integration-tests/Dockerfile"
+        }
+      ],
+      "notApplicable": [
+        {
+          "checks": [{ "name": "contract", "details": ["Not a Phase 1 API"] }]
         }
       ]
     }
