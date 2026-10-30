@@ -1,50 +1,30 @@
 import { Request, Response } from "express";
-import { PATH_DATA } from "../../app.constants.js";
 import { ExpressRouteFunc } from "../../types.js";
-import { EventType, getNextState } from "../../utils/state-machine.js";
-import {
-  formatValidationError,
-  renderBadRequest,
-} from "../../utils/validation.js";
 import { ChangeEmailServiceInterface } from "./types.js";
 import { changeEmailService } from "./change-email-service.js";
-import { getRequestConfigFromExpress } from "../../utils/http.js";
-import {
-  CHANGE_EMAIL_COMMON_OPL_SETTINGS,
-  setOplSettings,
-} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
-
-const setLocalOplSettings = (res: Response) => {
-  setOplSettings(
-    {
-      ...CHANGE_EMAIL_COMMON_OPL_SETTINGS,
-      contentId: "1f97b62b-a124-4d6a-ae51-8abd2611ec55",
-    },
-    res
-  );
-};
+import {
+  badRequest,
+  setLocalOplSettings,
+  handleEmailVerificationSubmission,
+} from "./change-email-utils.js";
 
 const TEMPLATE_NAME = "change-email/index.njk";
+const OPL_CONTENT_ID = "1f97b62b-a124-4d6a-ae51-8abd2611ec55";
+
 export function changeEmailGet(req: Request, res: Response): void {
   req.metrics?.addMetric("changeEmailGet", MetricUnit.Count, 1);
-
   if (req.query.email_cant_be_used === "1") {
-    return badRequest(req, res, "emailCantBeUsed");
+    return badRequest(
+      req,
+      res,
+      "emailCantBeUsed",
+      TEMPLATE_NAME,
+      OPL_CONTENT_ID
+    );
   }
-
-  setLocalOplSettings(res);
+  setLocalOplSettings(res, OPL_CONTENT_ID);
   return res.render(TEMPLATE_NAME);
-}
-
-function badRequest(req: Request, res: Response, errorMessage: string) {
-  const error = formatValidationError(
-    "email",
-    req.t(`pages.changeEmail.email.validationError.${errorMessage}`)
-  );
-
-  setLocalOplSettings(res);
-  return renderBadRequest(res, req, TEMPLATE_NAME, error);
 }
 
 export function changeEmailPost(
@@ -52,30 +32,14 @@ export function changeEmailPost(
 ): ExpressRouteFunc {
   return async function (req: Request, res: Response) {
     req.metrics?.addMetric("changeEmailPost", MetricUnit.Count, 1);
-    const { email } = req.session.user;
 
-    const newEmailAddress = req.body.email;
-
-    if (email.toLowerCase() === newEmailAddress.toLowerCase()) {
-      return badRequest(req, res, "sameEmail");
-    }
-
-    const emailSent = await service.sendCodeVerificationNotification(
-      newEmailAddress,
-      await getRequestConfigFromExpress(req, res)
-    );
-
-    if (emailSent) {
-      req.session.user.newEmailAddress = newEmailAddress;
-
-      req.session.user.state.changeEmail = getNextState(
-        req.session.user.state.changeEmail.value,
-        EventType.VerifyCodeSent
-      );
-
-      return res.redirect(PATH_DATA.CHECK_YOUR_EMAIL.url);
-    }
-
-    return badRequest(req, res, "alreadyInUse");
+    return handleEmailVerificationSubmission({
+      req,
+      res,
+      service,
+      newEmailAddress: req.body.email,
+      templateName: TEMPLATE_NAME,
+      oplContentId: OPL_CONTENT_ID,
+    });
   };
 }
