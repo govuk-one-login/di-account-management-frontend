@@ -140,7 +140,7 @@ export async function exchangeCodeForToken(
   const header = {
     alg: "RS512",
     typ: "JWT",
-    kid: kmsService.getPublicKey(),
+    kid: (await kmsService.getPublicKey()).KeyId,
   };
 
   const payload = {

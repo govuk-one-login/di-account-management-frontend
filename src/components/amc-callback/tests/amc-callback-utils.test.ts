@@ -189,6 +189,15 @@ describe("AMC call back util tests", () => {
 
       expect(result).toEqual(mockTokenResponse);
 
+      expect(kmsService.getPublicKey).toHaveBeenCalledOnce();
+
+      const signCallArg = vi.mocked(kmsService.sign).mock.calls[0][0] as string;
+      const [encodedHeader] = signCallArg.split(".");
+      const decodedHeader = JSON.parse(
+        Buffer.from(encodedHeader, "base64url").toString()
+      );
+      expect(decodedHeader.kid).toBe(mockPublicKey.KeyId);
+
       expect(kmsService.sign).toHaveBeenCalledWith(
         expect.stringContaining(".")
       );
