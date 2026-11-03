@@ -21,6 +21,11 @@ import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { eventService } from "../../../services/event-service.js";
 
 import { getAmcRedirectUri as mockGetAmcRedirectUri } from "../../../utils/getAmcRedirectUri.js";
+import { logger } from "../../../utils/logger.js";
+
+vi.mock("../../../utils/logger.js", () => ({
+  logger: { info: vi.fn() },
+}));
 
 vi.mock("../../../utils/http.js", () => ({
   http: { post: vi.fn(), get: vi.fn() },
@@ -221,6 +226,11 @@ describe("AMC call back util tests", () => {
       expect(postBodyPayload.get("client_assertion")).toContain(".");
       expect(postBodyPayload.get("redirect_uri")).toBe(
         "https://app.com/amc/callback?scope=openid"
+      );
+
+      expect(logger.info).toHaveBeenCalledWith(
+        { clientAssertion: expect.stringContaining(".") },
+        "ClientAssertionJWT"
       );
     });
 
