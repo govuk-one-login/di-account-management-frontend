@@ -21,7 +21,7 @@ import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { eventService } from "../../services/event-service.js";
 import { getAmcRedirectUri } from "../../utils/getAmcRedirectUri.js";
 import { EventServiceInterface, Extensions } from "src/services/types.js";
-import { logger } from "src/utils/logger.js";
+import { logger } from "../../utils/logger.js";
 
 enum Scope {
   testingJourney = "testing-journey",
