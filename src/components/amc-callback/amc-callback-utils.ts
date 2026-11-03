@@ -21,7 +21,7 @@ import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { eventService } from "../../services/event-service.js";
 import { getAmcRedirectUri } from "../../utils/getAmcRedirectUri.js";
 import { EventServiceInterface, Extensions } from "src/services/types.js";
-import { logger } from "../../utils/logger.js";
+import { getKMSConfig } from "../../config/aws.js";
 
 enum Scope {
   testingJourney = "testing-journey",
@@ -138,10 +138,12 @@ export async function exchangeCodeForToken(
   const tokenUrl = getAmcTokenUrl();
   const now = Math.floor(Date.now() / 1000);
 
+  const keyId = getKMSConfig().kmsKeyId;
+
   const header = {
     alg: "RS512",
     typ: "JWT",
-    kid: (await kmsService.getPublicKey()).KeyId,
+    kid: keyId,
   };
 
   const payload = {
@@ -157,8 +159,6 @@ export async function exchangeCodeForToken(
   const { Signature } = await kmsService.sign(tokenParts);
   const base64Signature = jose.base64url.encode(Signature);
   const clientAssertion = `${tokenParts}.${base64Signature}`;
-
-  logger.info({ clientAssertion }, "ClientAssertionJWT");
 
   const body = new URLSearchParams({
     grant_type: "authorization_code",

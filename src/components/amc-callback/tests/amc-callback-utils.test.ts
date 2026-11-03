@@ -9,8 +9,8 @@ import {
 import { http } from "../../../utils/http.js";
 import { kmsService } from "../../../utils/kms.js";
 import { SignCommandOutput } from "@aws-sdk/client-kms";
-import { GetPublicKeyCommandOutput } from "@aws-sdk/client-kms";
 import * as config from "../../../config.js";
+import * as awsConfig from "../../../config/aws.js";
 import {
   LogoutState,
   EventName,
@@ -21,11 +21,6 @@ import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { eventService } from "../../../services/event-service.js";
 
 import { getAmcRedirectUri as mockGetAmcRedirectUri } from "../../../utils/getAmcRedirectUri.js";
-import { logger } from "../../../utils/logger.js";
-
-vi.mock("../../../utils/logger.js", () => ({
-  logger: { info: vi.fn() },
-}));
 
 vi.mock("../../../utils/http.js", () => ({
   http: { post: vi.fn(), get: vi.fn() },
@@ -34,7 +29,6 @@ vi.mock("../../../utils/http.js", () => ({
 
 vi.mock("../../../utils/kms.js", () => ({
   kmsService: {
-    getPublicKey: vi.fn(),
     sign: vi.fn(),
   },
 }));
@@ -63,11 +57,13 @@ describe("AMC call back util tests", () => {
     );
   });
 
-  const mockPublicKey: Partial<GetPublicKeyCommandOutput> = {
-    KeyId:
-      "arn:aws:kms:eu-west-2:123456789012:key/1234abcd-12ab-34cd-56ef-1234567890ab",
-    PublicKey: Buffer.from("test-public-key"),
-  };
+  const mockKeyId =
+    "arn:aws:kms:eu-west-2:123456789012:key/1234abcd-12ab-34cd-56ef-1234567890ab";
+
+  vi.spyOn(awsConfig, "getKMSConfig").mockReturnValue({
+    kmsKeyId: mockKeyId,
+  } as any);
+
   describe("isValidTokenResponse", () => {
     it("should return true for a valid response object", () => {
       const valid = {
@@ -163,7 +159,6 @@ describe("AMC call back util tests", () => {
     });
 
     it("should construct the JWT and POST the form-urlencoded body", async () => {
-      vi.mocked(kmsService.getPublicKey).mockResolvedValue(mockPublicKey);
       vi.mocked(kmsService.sign).mockResolvedValue({
         Signature: Buffer.from("simulated-signature"),
         KeyId: "",
@@ -194,14 +189,12 @@ describe("AMC call back util tests", () => {
 
       expect(result).toEqual(mockTokenResponse);
 
-      expect(kmsService.getPublicKey).toHaveBeenCalledOnce();
-
       const signCallArg = vi.mocked(kmsService.sign).mock.calls[0][0] as string;
       const [encodedHeader] = signCallArg.split(".");
       const decodedHeader = JSON.parse(
         Buffer.from(encodedHeader, "base64url").toString()
       );
-      expect(decodedHeader.kid).toBe(mockPublicKey.KeyId);
+      expect(decodedHeader.kid).toBe(mockKeyId);
 
       expect(kmsService.sign).toHaveBeenCalledWith(
         expect.stringContaining(".")
@@ -227,15 +220,9 @@ describe("AMC call back util tests", () => {
       expect(postBodyPayload.get("redirect_uri")).toBe(
         "https://app.com/amc/callback?scope=openid"
       );
-
-      expect(logger.info).toHaveBeenCalledWith(
-        { clientAssertion: expect.stringContaining(".") },
-        "ClientAssertionJWT"
-      );
     });
 
     it("should fail if the HTTP request fails", async () => {
-      vi.mocked(kmsService.getPublicKey).mockResolvedValue(mockPublicKey);
       vi.mocked(kmsService.sign).mockResolvedValue({
         Signature: Buffer.from("sig"),
       } as unknown as SignCommandOutput);
