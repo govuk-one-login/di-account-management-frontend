@@ -110,3 +110,15 @@ variable "pipelineTestImageRepositoryUri" {
 variable "pipelineTestReportFormat" {
   type = string
 }
+
+variable "tgwHubAccountId" {
+  type        = string
+  description = "AWS account ID of the Transit Gateway Hub for this environment (used by the tgw-cross-account-role stack). 'none' disables the spoke stacks for envs not yet migrated."
+  default     = "none"
+}
+
+variable "spokeVpcCidrBlock" {
+  type        = string
+  description = "Non-overlapping CIDR block for the spoke VPC (must not overlap the legacy vpc-enhanced 10.0.0.0/16)"
+  default     = "10.1.0.0/16"
+}

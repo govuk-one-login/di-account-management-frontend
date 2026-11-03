@@ -20,3 +20,5 @@ pipelineSigningProfileVersionArn                               = "arn:aws:signer
 pipelineSlackNotificationType                                  = "All"
 pipelineTestImageRepositoryUri                                 = "none"
 pipelineTestReportFormat                                       = "JUNITXML"
+tgwHubAccountId                                                = "796973488515"
+spokeVpcCidrBlock                                              = "10.1.0.0/16"
