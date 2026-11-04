@@ -94,6 +94,9 @@ Parameters:
     AllowedValues:
       - CodeDeployDefault.ECSLinear10PercentEvery3Minutes
       - CodeDeployDefault.ECSAllAtOnce
+  CSLSDestinationArn:
+    Type: "String"
+    Default: "arn:aws:logs:eu-west-2:885513274347:destination:csls_cw_logs_destination_prodpython"
 
 Conditions:
   UseCodeSigning:
@@ -1718,7 +1721,7 @@ Resources:
     Condition: ExportLogsToSplunk
     Type: AWS::Logs::SubscriptionFilter
     Properties:
-      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
+      DestinationArn: !Ref CSLSDestinationArn
       FilterPattern: ""
       LogGroupName: !Ref ApiGatewayAccessLogGroup
 
@@ -1847,7 +1850,7 @@ Resources:
     Condition: ExportLogsToSplunk
     Type: AWS::Logs::SubscriptionFilter
     Properties:
-      DestinationArn: !Sub "{{resolve:ssm:/${Environment}/Platform/Logs/Subscription/CSLS/ARN}}"
+      DestinationArn: !Ref CSLSDestinationArn
       FilterPattern: "{$._aws.CloudWatchMetrics NOT EXISTS}"
       LogGroupName: !Ref TaskLogGroup
 
