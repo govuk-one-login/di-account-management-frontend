@@ -78,6 +78,7 @@ graph TB
     subgraph Observability["Observability"]
         CloudWatch["CloudWatch<br/>Logs + Metrics + Alarms"]
         Dynatrace["Dynatrace<br/>OneAgent + RUM"]
+        CSLS["CSLS / Splunk<br/>Log Subscription"]
     end
 
     %% ===== NETWORKING =====
@@ -148,6 +149,7 @@ graph TB
     %% ===== OBSERVABILITY =====
     Container --> CloudWatch
     Container --> Dynatrace
+    CloudWatch --> CSLS
 ```
 
 ## Component Summary
@@ -232,6 +234,7 @@ graph TB
 | CloudWatch Alarms | 5xx/4xx rates, latency, traffic spikes, logger errors, OIDC discovery failures |
 | Anomaly Detection | Anomaly detectors on ELB 4xx/5xx counts                                        |
 | Dynatrace         | OneAgent sidecar + RUM JavaScript for APM                                      |
+| CSLS/Splunk       | Log subscription filters for integration and production environments           |
 
 ### CI/CD
 
