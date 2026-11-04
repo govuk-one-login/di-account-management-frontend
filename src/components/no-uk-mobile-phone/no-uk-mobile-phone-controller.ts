@@ -4,16 +4,38 @@ import {
   mfaMethodTypes,
   mfaPriorityIdentifiers,
 } from "../../utils/mfaClient/types.js";
-import { MFA_COMMON_OPL_SETTINGS, setOplSettings } from "../../utils/opl.js";
+import {
+  EMPTY_OPL_SETTING_VALUE,
+  MFA_COMMON_OPL_SETTINGS,
+  OplSettingsLookupObject,
+  setOplSettings,
+} from "../../utils/opl.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const NO_UK_PHONE_NUMBER_TEMPLATE = "no-uk-mobile-phone/index.njk";
 
+const getOplValues = (): OplSettingsLookupObject => ({
+  changePhoneNumber: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "6e807956-3e2c-4fcf-a11a-e6d19c98593d",
+  },
+  changeDefaultMethod: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "40b345e2-4b21-47b1-ab10-36cd9374eede",
+  },
+  unknownType: {
+    ...MFA_COMMON_OPL_SETTINGS,
+    contentId: "4f8fcc9d-d8c3-4746-9093-90cb05e89c79",
+  },
+});
+
 const setLocalOplSettings = (req: Request, res: Response) => {
+  const requestType = typeof req.query.type === "string" ? req.query.type : "";
+
   setOplSettings(
-    {
+    getOplValues()[requestType] ?? {
       ...MFA_COMMON_OPL_SETTINGS,
-      contentId: "a8d82f1b-c682-433b-8695-34343afb9666",
+      contentId: EMPTY_OPL_SETTING_VALUE,
     },
     res
   );

@@ -145,6 +145,44 @@ describe("NoUkMobilePhoneController", () => {
       });
     });
 
+    it.each([
+      ["changePhoneNumber", "6e807956-3e2c-4fcf-a11a-e6d19c98593d"],
+      ["changeDefaultMethod", "40b345e2-4b21-47b1-ab10-36cd9374eede"],
+      ["unknownType", "4f8fcc9d-d8c3-4746-9093-90cb05e89c79"],
+    ])("should set opl contentId for type %s", (type, expectedContentId) => {
+      // Arrange
+      req = new RequestBuilder()
+        .withBody({})
+        .withSessionUserState({ changePhoneNumber: {} })
+        .withTranslate(vi.fn())
+        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+        .withQuery({ type })
+        .build();
+
+      // Act
+      noUkPhoneNumberGet(req as Request, res as Response);
+
+      // Assert
+      expect(res.locals?.opl.contentId).toBe(expectedContentId);
+    });
+
+    it("should set opl contentId to undefined for an unrecognised type", () => {
+      // Arrange
+      req = new RequestBuilder()
+        .withBody({})
+        .withSessionUserState({ changePhoneNumber: {} })
+        .withTranslate(vi.fn())
+        .withHeaders({ "txma-audit-encoded": TXMA_AUDIT_ENCODED })
+        .withQuery({ type: "somethingElse" })
+        .build();
+
+      // Act
+      noUkPhoneNumberGet(req as Request, res as Response);
+
+      // Assert
+      expect(res.locals?.opl.contentId).toBe("undefined");
+    });
+
     it("should render no uk phone number page with hasAuthApp true when user has auth app as default", () => {
       // Arrange
       req = new RequestBuilder()
