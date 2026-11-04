@@ -119,6 +119,6 @@ variable "tgwHubAccountId" {
 
 variable "spokeVpcCidrBlock" {
   type        = string
-  description = "Non-overlapping CIDR block for the spoke VPC (must not overlap the legacy vpc-enhanced 10.0.0.0/16)"
-  default     = "10.1.0.0/16"
+  description = "Non-overlapping CIDR block for the spoke VPC. The mask selects the devplatform VPC size (per TGHM 'Spoke VPC CIDR Blocks', page 5269422165): /20 Medium, /19 Large, /18 Xlarge, /17 XXLarge. Must not overlap the legacy vpc-enhanced 10.0.0.0/16."
+  default     = "10.1.0.0/20"
 }

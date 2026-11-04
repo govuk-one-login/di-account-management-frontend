@@ -175,7 +175,9 @@ resource "aws_cloudformation_stack" "tgw_cross_account_role_stack" {
 # Spoke VPC: a new VPC that connects to the Transit Gateway Hub, deployed
 # alongside the legacy vpc-enhanced during dual-running. Mirrors the
 # vpc-enhanced settings (interface endpoints, AllowedDomains) with a
-# non-overlapping CIDR. See TGHM onboarding guide.
+# non-overlapping CIDR. The CidrBlock mask sets the devplatform VPC size
+# (/20 Medium per TGHM "Spoke VPC CIDR Blocks", page 5269422165). See TGHM
+# onboarding guide.
 resource "aws_cloudformation_stack" "vpc_spoke_stack" {
   count        = var.tgwHubAccountId == "none" ? 0 : 1
   name         = "vpc-spoke"
