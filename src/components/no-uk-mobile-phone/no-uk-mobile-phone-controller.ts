@@ -30,8 +30,7 @@ const getOplValues = (): OplSettingsLookupObject => ({
 });
 
 const setLocalOplSettings = (req: Request, res: Response) => {
-  const requestType =
-    typeof req.query.type === "string" ? req.query.type : "";
+  const requestType = typeof req.query.type === "string" ? req.query.type : "";
 
   setOplSettings(
     getOplValues()[requestType] ?? {
