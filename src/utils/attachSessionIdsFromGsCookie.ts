@@ -15,10 +15,6 @@ export function attachSessionIdsFromGsCookie(req: Request) {
   if (ids.length !== 2) {
     logger.error(LOG_MESSAGES.MALFORMED_GS_COOKIE(cookie));
   } else {
-    console.log("MHTEST", {
-      sessionId: ids[0],
-      clientSessionId: ids[1],
-    });
     req.session.authSessionIds = {
       sessionId: ids[0],
       clientSessionId: ids[1],

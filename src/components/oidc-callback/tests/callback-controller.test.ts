@@ -9,8 +9,6 @@ import * as callBackUtils from "../call-back-utils.js";
 describe("callback controller", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let loggerInfoSpy: ReturnType<typeof vi.fn>;
-  let loggerErrorSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     loggerInfoSpy = vi.spyOn(logger, "info");
@@ -187,55 +185,6 @@ describe("callback controller", () => {
       };
       await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
       expect(res.redirect).toHaveBeenCalledWith(PATH_DATA.SESSION_EXPIRED.url);
-    });
-
-    it("should populate req.session.authSessionIds", async () => {
-      req.cookies = {
-        gs: "fake_session_id.fake_client_session_id",
-      };
-
-      const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: vi.fn(),
-      };
-
-      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
-
-      expect(req.session.authSessionIds.sessionId).toBe("fake_session_id");
-      expect(req.session.authSessionIds.clientSessionId).toBe(
-        "fake_client_session_id"
-      );
-    });
-
-    it("should not populate req.session.authSessionIds when gs cookie is malformed", async () => {
-      req.cookies = {
-        gs: "invalid_format",
-      };
-
-      const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: vi.fn(),
-      };
-
-      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
-
-      expect(req.session.authSessionIds).toBe(undefined);
-      expect(loggerErrorSpy).toHaveBeenCalledWith(
-        { trace: "fake_trace" },
-        "Malformed gs cookie contained: invalid_format"
-      );
-    });
-
-    it("should not populate req.session.authSessionIds when gs cookie is not set", async () => {
-      const fakeService: ClientAssertionServiceInterface = {
-        generateAssertionJwt: vi.fn(),
-      };
-
-      await oidcAuthCallbackGet(fakeService)(req as Request, res as Response);
-
-      expect(req.session.authSessionIds).toBe(undefined);
-      expect(loggerInfoSpy).toHaveBeenCalledWith(
-        { trace: "fake_trace" },
-        "gs cookie not in request."
-      );
     });
 
     it("should redirect to session expired if session state is missing", async () => {

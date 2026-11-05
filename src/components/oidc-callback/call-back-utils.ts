@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
-import { LOG_MESSAGES, PATH_DATA } from "../../app.constants.js";
+import { PATH_DATA } from "../../app.constants.js";
 import { logger } from "../../utils/logger.js";
 import { deleteExpressSession } from "../../utils/session-store.js";
-import xss from "xss";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
