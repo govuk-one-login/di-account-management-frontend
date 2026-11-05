@@ -4,7 +4,6 @@ import {
   COOKIE_CONSENT,
   handleOidcCallbackError,
   populateSessionWithUserInfo,
-  attachSessionIdsFromGsCookie,
   generateTokenSet,
 } from "../call-back-utils.js";
 import { PATH_DATA } from "../../../app.constants.js";
@@ -265,68 +264,6 @@ describe("callback-utils", () => {
       expect(req.session.user.email).toBe("user@example.com");
       expect(req.session.user.tokens.accessToken).toBe("access.token");
       expect(req.session.user.legacySubjectId).toBe("legacy123");
-    });
-  });
-
-  describe("attachSessionIdsFromGsCookie", () => {
-    it("logs warning if gs cookie is malformed", () => {
-      const loggerInfo = vi.spyOn(logger, "info");
-      const loggerError = vi.spyOn(logger, "error");
-
-      const req: any = {
-        cookies: {
-          gs: "malformed-cookie",
-        },
-        session: {},
-      };
-
-      const res: any = {
-        locals: { trace: "abc123" },
-      };
-
-      attachSessionIdsFromGsCookie(req, res);
-
-      expect(loggerInfo).toHaveBeenCalled();
-      expect(loggerError).toHaveBeenCalledOnce();
-      expect(req.session.authSessionIds).toBeUndefined();
-    });
-
-    it("sets session.authSessionIds when cookie is valid", () => {
-      const loggerInfo = vi.spyOn(logger, "info");
-      const req: any = {
-        cookies: {
-          gs: "sess123.client456",
-        },
-        session: {},
-      };
-
-      const res: any = {
-        locals: { trace: "trace-xyz" },
-      };
-
-      attachSessionIdsFromGsCookie(req, res);
-
-      expect(loggerInfo).toHaveBeenCalledOnce();
-      expect(req.session.authSessionIds).toEqual({
-        sessionId: "sess123",
-        clientSessionId: "client456",
-      });
-    });
-
-    it("logs info if gs cookie is missing", () => {
-      const loggerInfo = vi.spyOn(logger, "info");
-
-      const req: any = {
-        cookies: {},
-        session: {},
-      };
-      const res: any = {
-        locals: { trace: "trace-abc" },
-      };
-
-      attachSessionIdsFromGsCookie(req, res);
-
-      expect(loggerInfo).toHaveBeenCalledOnce();
     });
   });
 });

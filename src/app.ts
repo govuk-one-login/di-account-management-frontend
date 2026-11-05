@@ -95,6 +95,7 @@ import { amcCallbackRouter } from "./components/amc-callback/amc-callback-routes
 import { signInDetailsRouter } from "./components/sign-in-details/sign-in-details-routes.js";
 import { createNewPasskeyRouter } from "./components/create-new-passkey/create-new-passkey-routes.js";
 import { removePasskeyRouter } from "./components/remove-passkey/remove-passkey-routes.js";
+import { attachSessionIdsFromGsCookie } from "./utils/attachSessionIdsFromGsCookie.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -171,6 +172,13 @@ async function createApp(): Promise<express.Application> {
   app.use(monkeyPatchRedirectToSaveSessionMiddleware);
 
   app.locals.sessionStore = sessionStore;
+
+  app.use((req, _res, next) => {
+    (() => {
+      attachSessionIdsFromGsCookie(req);
+      next();
+    })();
+  });
 
   app.use(setLocalVarsMiddleware);
   app.use(outboundContactUsLinksMiddleware);
