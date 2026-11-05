@@ -7,7 +7,6 @@ import { clientAssertionGenerator } from "../../utils/oidc.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { detectOidcError } from "../../utils/detect-oidc-error.js";
 import {
-  attachSessionIdsFromGsCookie,
   determineRedirectUri,
   generateTokenSet,
   handleOidcCallbackError,
@@ -65,8 +64,6 @@ export function oidcAuthCallbackGet(
       }
 
       populateSessionWithUserInfo(req, userInfoResponse, tokenSet);
-
-      attachSessionIdsFromGsCookie(req, res);
 
       // saved to session where `user_id` attribute is stored as a db item's root-level attribute that is used in indexing
       req.session.user_id = userInfoResponse.sub;
