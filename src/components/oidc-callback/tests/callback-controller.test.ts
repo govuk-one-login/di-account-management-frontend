@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { oidcAuthCallbackGet } from "../call-back-controller.js";
 import { PATH_DATA, VECTORS_OF_TRUST } from "../../../app.constants.js";
 import { ClientAssertionServiceInterface } from "../../../utils/types.js";
-import { logger } from "../../../utils/logger.js";
 import * as callBackUtils from "../call-back-utils.js";
 
 describe("callback controller", () => {
@@ -11,9 +10,6 @@ describe("callback controller", () => {
   let res: Partial<Response>;
 
   beforeEach(() => {
-    loggerInfoSpy = vi.spyOn(logger, "info");
-    loggerErrorSpy = vi.spyOn(logger, "error");
-
     req = {
       body: {},
       query: {},
