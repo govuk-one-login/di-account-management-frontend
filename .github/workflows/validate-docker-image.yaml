@@ -46,7 +46,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@03f1aad4c6c7ffd436567f42f9384779290529bd # pin@v1
 
       - name: Login to GDS Dev Dynatrace Container Registry
-        uses: docker/login-action@783ae9cac559640a24c9212dfa6cd9e998252f9a
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6
         with:
           registry: khw46367.live.dynatrace.com
           username: khw46367
