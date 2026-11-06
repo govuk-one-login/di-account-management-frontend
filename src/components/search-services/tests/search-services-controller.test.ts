@@ -346,6 +346,23 @@ describe("createSearchIndex", () => {
 
     expect(i18nextStub).not.toHaveBeenCalled();
   });
+
+  it("should terminate the old worker thread when recreating an index", async () => {
+    const mockTranslate = vi.fn((key: string) => key);
+    i18nextStub.mockReturnValue(mockTranslate as any);
+    safeTranslateStub.mockImplementation((translate, key) => translate(key));
+    vi.spyOn(config, "getClientsToShowInSearch").mockReturnValue([]);
+
+    await createSearchIndex(LOCALE.CY, true, false);
+
+    const { Worker: NodeWorker } = await import("worker_threads");
+    const terminateSpy = vi.spyOn(NodeWorker.prototype, "terminate");
+
+    await createSearchIndex(LOCALE.CY, false, true);
+
+    expect(terminateSpy).toHaveBeenCalled();
+    terminateSpy.mockRestore();
+  });
 });
 
 describe("searchServices", () => {
