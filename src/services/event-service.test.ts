@@ -740,6 +740,75 @@ describe("eventService", () => {
       });
     });
 
+    it("should apply userOverrides to user session_id and govuk_signin_journey_id", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: { "user-agent": "test-user-agent" },
+        session: {
+          user_id: "test-user-id",
+          user: { isAuthenticated: true, email: "test@example.com" },
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
+        },
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_ACTION_STARTED,
+        undefined,
+        undefined,
+        {
+          session_id: "override-session-id",
+          govuk_signin_journey_id: "override-journey-id",
+        }
+      );
+
+      expect(result.user.session_id).toBe("override-session-id");
+      expect(result.user.govuk_signin_journey_id).toBe("override-journey-id");
+    });
+
+    it("should use base values when userOverrides fields are undefined", () => {
+      const service = eventService(sqs);
+
+      const mockReq: any = {
+        headers: { "user-agent": "test-user-agent" },
+        session: {
+          user_id: "test-user-id",
+          user: { isAuthenticated: true, email: "test@example.com" },
+        },
+      };
+
+      const mockRes: any = {
+        locals: {
+          sessionId: "test-session-id",
+          persistentSessionId: "test-persistent-session-id",
+          clientSessionId: "test-client-session-id",
+        },
+      };
+
+      const result = service.buildAuditEvent(
+        mockReq,
+        mockRes,
+        EventName.HOME_ACTION_STARTED,
+        undefined,
+        undefined,
+        {}
+      );
+
+      expect(result.user.session_id).toBe("test-session-id");
+      expect(result.user.govuk_signin_journey_id).toBe(
+        "test-client-session-id"
+      );
+    });
+
     it("should merge custom extensions with event-specific extensions", () => {
       const service = eventService(sqs);
 

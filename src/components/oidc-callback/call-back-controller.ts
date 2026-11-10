@@ -13,6 +13,7 @@ import {
   populateSessionWithUserInfo,
   setPreferencesCookie,
 } from "./call-back-utils.js";
+import { attachSessionIdsFromGsCookie } from "../../utils/sessionIdsFromGsCookie.js";
 
 export function oidcAuthCallbackGet(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()
@@ -64,6 +65,8 @@ export function oidcAuthCallbackGet(
       }
 
       populateSessionWithUserInfo(req, userInfoResponse, tokenSet);
+
+      attachSessionIdsFromGsCookie(req, res);
 
       // saved to session where `user_id` attribute is stored as a db item's root-level attribute that is used in indexing
       req.session.user_id = userInfoResponse.sub;

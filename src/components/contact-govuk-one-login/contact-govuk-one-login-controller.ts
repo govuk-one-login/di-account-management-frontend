@@ -13,16 +13,25 @@ import {
 import { setOplSettings } from "../../utils/opl.js";
 import { EventName, PATH_DATA } from "../../app.constants.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
+import { getSessionIdsFromGsCookie } from "../../utils/sessionIdsFromGsCookie.js";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 
 export function contactGet(req: Request, res: Response): void {
+  const sessionIdsFromGsCookie = getSessionIdsFromGsCookie(req, res);
+
   req.metrics?.addMetric("contactGet", MetricUnit.Count, 1);
   const service = eventService();
   const audit_event = service.buildAuditEvent(
     req,
     res,
-    EventName.HOME_TRIAGE_PAGE_VISIT
+    EventName.HOME_TRIAGE_PAGE_VISIT,
+    undefined,
+    undefined,
+    {
+      session_id: sessionIdsFromGsCookie?.sessionId,
+      govuk_signin_journey_id: sessionIdsFromGsCookie?.clientSessionId,
+    }
   );
   logUserVisitsContactPage(audit_event, res.locals.trace);
   service.send(audit_event, res.locals.sessionId);
@@ -40,6 +49,7 @@ const logUserVisitsContactPage = (event: AuditEvent, trace: string) => {
       sessionId: event.user.session_id,
       persistentSessionId: event.user.persistent_session_id,
       userAgent: event.platform.user_agent,
+      clientSessionId: event.user.govuk_signin_journey_id,
     },
     "User visited triage page"
   );

@@ -6,6 +6,7 @@ import {
   CurrentTimeDescriptor,
   Extensions,
   Restricted,
+  UserOverrides,
 } from "./types.js";
 import { SqsService } from "../utils/types.js";
 import { sqsService } from "../utils/sqs.js";
@@ -114,7 +115,8 @@ export function eventService(
     res: Response,
     eventName: EventName,
     extensions?: Extensions,
-    restricted?: Restricted
+    restricted?: Restricted,
+    userOverrides?: UserOverrides
   ): AuditEvent => {
     const baseEvent = buildBaseAuditEvent(req, res, eventName);
 
@@ -127,6 +129,12 @@ export function eventService(
       ...baseEvent.restricted,
       ...restricted,
     };
+
+    baseEvent.user.session_id =
+      userOverrides?.session_id ?? baseEvent.user.session_id;
+    baseEvent.user.govuk_signin_journey_id =
+      userOverrides?.govuk_signin_journey_id ??
+      baseEvent.user.govuk_signin_journey_id;
 
     const { session } = req;
     const defaultMethod = session.mfaMethods?.find(
