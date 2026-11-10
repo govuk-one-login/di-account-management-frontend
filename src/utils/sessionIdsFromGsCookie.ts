@@ -1,5 +1,5 @@
 import { logger } from "./logger.js";
-import { Request } from "express";
+import { Request, Response } from "express";
 import { LOG_MESSAGES } from "../app.constants.js";
 import xss from "xss";
 
