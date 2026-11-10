@@ -7,6 +7,7 @@ import { SendMessageCommandOutput, SQSClient } from "@aws-sdk/client-sqs";
 import { AuditEvent } from "../../../services/types";
 import { MISSING_APP_SESSION_ID_SPECIAL_CASE } from "../../../app.constants";
 import * as config from "../../../config.js";
+import * as gsCookie from "../../../utils/sessionIdsFromGsCookie.js";
 
 const CONTACT_ONE_LOGIN_TEMPLATE = "contact-govuk-one-login/index.njk";
 const MOCK_REFERENCE_CODE = "123456";
@@ -21,6 +22,10 @@ describe("Contact GOV.UK One Login controller", () => {
 
   beforeEach(() => {
     vi.spyOn(config, "passkeysEnabled").mockReturnValue(true);
+    vi.spyOn(gsCookie, "getSessionIdsFromGsCookie").mockReturnValue({
+      sessionId: "gs-session-id",
+      clientSessionId: "gs-client-session-id",
+    });
 
     loggerSpy = vi.spyOn(logger, "info");
 
@@ -253,9 +258,10 @@ describe("Contact GOV.UK One Login controller", () => {
           referenceCode: "123456",
           appSessionId: MISSING_APP_SESSION_ID_SPECIAL_CASE,
           appErrorCode: undefined,
-          sessionId: "sessionId",
+          sessionId: "gs-session-id",
           persistentSessionId: "persistentSessionId",
           userAgent: "user-agent",
+          clientSessionId: "gs-client-session-id",
         },
         "User visited triage page"
       );
@@ -366,9 +372,10 @@ describe("Contact GOV.UK One Login controller", () => {
           referenceCode: MOCK_REFERENCE_CODE,
           appSessionId: appSessionId,
           appErrorCode: appErrorCode,
-          sessionId: sessionId,
+          sessionId: "gs-session-id",
           persistentSessionId: persistentSessionId,
           userAgent: "user-agent",
+          clientSessionId: "gs-client-session-id",
         },
         "User visited triage page"
       );
@@ -426,7 +433,10 @@ describe("Contact GOV.UK One Login controller", () => {
       expect(publishedEvent.event_name).toBe("HOME_TRIAGE_PAGE_VISIT");
       expect(typeof publishedEvent.timestamp).toBe("number");
       expect(publishedEvent.component_id).toBe("HOME");
-      expect(publishedEvent.user.session_id).toBe(expectedSessionId);
+      expect(publishedEvent.user.session_id).toBe("gs-session-id");
+      expect(publishedEvent.user.govuk_signin_journey_id).toBe(
+        "gs-client-session-id"
+      );
       expect(publishedEvent.user.persistent_session_id).toBe(
         expectedPersistentSessionId
       );
@@ -441,6 +451,33 @@ describe("Contact GOV.UK One Login controller", () => {
         expectedReferenceCode
       );
       expect(publishedEvent.extensions.from_url).toBe(expectedFromURL);
+    });
+    it("uses base session IDs when gs cookie is absent", () => {
+      vi.spyOn(gsCookie, "getSessionIdsFromGsCookie").mockReturnValue(
+        undefined
+      );
+
+      sqsClientStub = vi.spyOn(SQSClient.prototype, "send");
+      const sqsResponse: SendMessageCommandOutput = {
+        $metadata: undefined,
+        MessageId: "message-id",
+        MD5OfMessageBody: "md5-hash",
+      };
+      process.env.AUDIT_QUEUE_URL = "queue";
+      sqsClientStub.mockReturnValue(sqsResponse);
+
+      res.locals.sessionId = "base-session-id";
+      res.locals.clientSessionId = "base-client-session-id";
+
+      contactGet(req as Request, res as Response);
+
+      const publishedEvent = JSON.parse(
+        sqsClientStub.mock.calls[0][0].input.MessageBody
+      ) as AuditEvent;
+      expect(publishedEvent.user.session_id).toBe("base-session-id");
+      expect(publishedEvent.user.govuk_signin_journey_id).toBe(
+        "base-client-session-id"
+      );
     });
   });
 });

@@ -2,13 +2,19 @@ import { mfaMethodTypes } from "../utils/mfaClient/types.js";
 import { JourneyAction, EventName } from "../app.constants.js";
 import { Request, Response } from "express";
 
+export interface UserOverrides {
+  session_id?: string;
+  govuk_signin_journey_id?: string;
+}
+
 export interface EventServiceInterface {
   buildAuditEvent: (
     req: Request,
     res: Response,
     eventName: EventName,
     extensions?: Extensions,
-    restricted?: Restricted
+    restricted?: Restricted,
+    userOverrides?: UserOverrides
   ) => AuditEvent;
   send: (event: Event, trace: string) => void;
 }

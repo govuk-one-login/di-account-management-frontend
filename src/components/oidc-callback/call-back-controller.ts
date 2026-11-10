@@ -7,13 +7,13 @@ import { clientAssertionGenerator } from "../../utils/oidc.js";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 import { detectOidcError } from "../../utils/detect-oidc-error.js";
 import {
-  attachSessionIdsFromGsCookie,
   determineRedirectUri,
   generateTokenSet,
   handleOidcCallbackError,
   populateSessionWithUserInfo,
   setPreferencesCookie,
 } from "./call-back-utils.js";
+import { attachSessionIdsFromGsCookie } from "../../utils/sessionIdsFromGsCookie.js";
 
 export function oidcAuthCallbackGet(
   service: ClientAssertionServiceInterface = clientAssertionGenerator()

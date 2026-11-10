@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { CallbackParamsType, TokenSet, UserinfoResponse } from "openid-client";
-import { LOG_MESSAGES, PATH_DATA } from "../../app.constants.js";
+import { PATH_DATA } from "../../app.constants.js";
 import { logger } from "../../utils/logger.js";
 import { deleteExpressSession } from "../../utils/session-store.js";
-import xss from "xss";
 import { MetricUnit } from "@aws-lambda-powertools/metrics";
 
 const COOKIES_PREFERENCES_SET = "cookies_preferences_set";
@@ -140,29 +139,4 @@ export function populateSessionWithUserInfo(
     isAuthenticated: true,
     state: {},
   };
-}
-
-export function attachSessionIdsFromGsCookie(req: Request, res: Response) {
-  const cookie = req.cookies?.gs;
-  if (!cookie) {
-    logger.info(
-      { trace: res.locals.trace },
-      LOG_MESSAGES.GS_COOKIE_NOT_IN_REQUEST
-    );
-    return;
-  }
-
-  logger.info({ trace: res.locals.trace }, `gs cookie: ${cookie}`);
-  const ids = xss(cookie).split(".");
-  if (ids.length !== 2) {
-    logger.error(
-      { trace: res.locals.trace },
-      LOG_MESSAGES.MALFORMED_GS_COOKIE(cookie)
-    );
-  } else {
-    req.session.authSessionIds = {
-      sessionId: ids[0],
-      clientSessionId: ids[1],
-    };
-  }
 }
