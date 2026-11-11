@@ -41,6 +41,8 @@ export default [
       "eslint.config.mjs",
       "vitest.setup.ts",
       "vitest.config.ts",
+      "vitest.stryker.config.ts",
+      "stryker.config.mjs",
       "fix-errors.cjs",
       "fix-unused-imports.mjs",
       "fix-all-unused.mjs",

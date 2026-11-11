@@ -1,0 +1,170 @@
+---
+name: "Mutation tests"
+
+# Triggered when a pull request is opened or updated. Runs Stryker mutation
+# testing scoped to the files changed in the PR (--since) and posts the result
+# as a single, updated comment on the PR.
+on:
+  pull_request:
+
+permissions: {}
+
+jobs:
+  mutation-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pin@v3
+        with:
+          persist-credentials: false
+          # Full history so Stryker's --since can diff against the base branch.
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # pin@v3
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies defined in package.json as a clean install
+        run: npm run install-all
+
+      - name: Fetch base branch for diff
+        run: git fetch origin "${BASE_REF}:refs/remotes/origin/${BASE_REF}" --depth=1 || true
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+
+      - name: Run mutation tests (changed files only)
+        id: stryker
+        # Never fail the job on mutation results; we always want to post a comment.
+        continue-on-error: true
+        run: npm run test:mutation:since -- --since="origin/${BASE_REF}"
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+
+      - name: Post mutation report comment
+        if: always()
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # pin@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'reports/mutation/mutation.json';
+            const marker = '<!-- stryker-mutation-report -->';
+
+            let body;
+            if (!fs.existsSync(reportPath)) {
+              body = [
+                marker,
+                '## 🧬 Mutation testing report',
+                '',
+                'No mutation report was produced. Either no production source files changed in this PR, or the mutation run did not complete. Check the workflow logs for details.',
+              ].join('\n');
+            } else {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              const files = report.files || {};
+
+              const counts = {
+                Killed: 0,
+                Survived: 0,
+                NoCoverage: 0,
+                Timeout: 0,
+                CompileError: 0,
+                RuntimeError: 0,
+                Ignored: 0,
+              };
+              const survivors = [];
+
+              for (const [fileName, file] of Object.entries(files)) {
+                for (const m of file.mutants || []) {
+                  counts[m.status] = (counts[m.status] || 0) + 1;
+                  if (m.status === 'Survived' || m.status === 'NoCoverage') {
+                    survivors.push({
+                      fileName,
+                      line: m.location?.start?.line,
+                      mutatorName: m.mutatorName,
+                      status: m.status,
+                    });
+                  }
+                }
+              }
+
+              // Mutation score = killed / (detected + undetected), per Stryker's definition.
+              const detected = counts.Killed + counts.Timeout;
+              const undetected = counts.Survived + counts.NoCoverage;
+              const totalValid = detected + undetected;
+              const score = totalValid === 0 ? null : (detected / totalValid) * 100;
+
+              const thresholds = report.thresholds || { high: 80, low: 60 };
+              let emoji = '⚪';
+              if (score !== null) {
+                if (score >= thresholds.high) emoji = '🟢';
+                else if (score >= thresholds.low) emoji = '🟡';
+                else emoji = '🔴';
+              }
+
+              const lines = [];
+              lines.push(marker);
+              lines.push('## 🧬 Mutation testing report');
+              lines.push('');
+              if (totalValid === 0) {
+                lines.push('No mutants were generated for the changed files in this PR.');
+              } else {
+                lines.push(`**Mutation score (changed files): ${emoji} ${score.toFixed(2)}%**  _(thresholds: 🟢 ≥ ${thresholds.high}% · 🟡 ≥ ${thresholds.low}%)_`);
+                lines.push('');
+                lines.push('| Status | Count |');
+                lines.push('| --- | ---: |');
+                lines.push(`| ✅ Killed | ${counts.Killed} |`);
+                lines.push(`| ⏱️ Timeout | ${counts.Timeout} |`);
+                lines.push(`| ⚠️ Survived | ${counts.Survived} |`);
+                lines.push(`| 🚫 No coverage | ${counts.NoCoverage} |`);
+                lines.push(`| 🙈 Ignored | ${counts.Ignored} |`);
+                lines.push(`| 💥 Runtime errors | ${counts.RuntimeError} |`);
+                lines.push(`| 🧱 Compile errors | ${counts.CompileError} |`);
+
+                if (survivors.length > 0) {
+                  lines.push('');
+                  lines.push('<details>');
+                  lines.push(`<summary>Surviving / uncovered mutants (${survivors.length})</summary>`);
+                  lines.push('');
+                  lines.push('| File | Line | Mutator | Status |');
+                  lines.push('| --- | ---: | --- | --- |');
+                  for (const s of survivors.slice(0, 100)) {
+                    lines.push(`| \`${s.fileName}\` | ${s.line ?? ''} | ${s.mutatorName} | ${s.status} |`);
+                  }
+                  if (survivors.length > 100) {
+                    lines.push('');
+                    lines.push(`_…and ${survivors.length - 100} more. See the HTML report artifact for the full list._`);
+                  }
+                  lines.push('</details>');
+                }
+              }
+              lines.push('');
+              lines.push('_Scope: files changed in this PR (`stryker run --since`)._');
+              body = lines.join('\n');
+            }
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner, repo, issue_number, per_page: 100,
+            });
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }
+
+      - name: Upload HTML mutation report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # pin@v4
+        with:
+          name: mutation-html-report
+          path: reports/mutation
+          if-no-files-found: ignore

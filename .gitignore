@@ -137,6 +137,11 @@ volume/
 # Clinic
 .clinic
 
+# Stryker mutation testing
+.stryker-tmp
+reports/mutation
+stryker.log
+
 # Terraform
 deploy/.terraform
 deploy/.terraform.lock.hcl
