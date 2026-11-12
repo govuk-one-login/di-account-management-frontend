@@ -34,6 +34,8 @@
     "test:unit": "vitest run --config vitest.config.ts --exclude \"src/**/tests/*-integration.test.ts\"",
     "test": "vitest run --config vitest.config.ts",
     "test:coverage": "vitest run --config vitest.config.ts --exclude \"src/**/tests/*-integration.test.ts\" --coverage",
+    "test:mutation": "stryker run",
+    "test:mutation:since": "stryker run --since",
     "watch-node": "nodemon -r dotenv/config --inspect=0.0.0.0:9230 dist/server.js | pino-pretty",
     "watch-ts": "tsc -w",
     "watch-sass": "sass --load-path=node_modules/govuk-frontend/dist/govuk --watch src/assets/scss/application.scss dist/public/style.css",
@@ -88,6 +90,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@stryker-mutator/core": "^10.1.1",
+    "@stryker-mutator/vitest-runner": "^10.1.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/csurf": "^1.11.5",
     "@types/express": "^5.0.6",
