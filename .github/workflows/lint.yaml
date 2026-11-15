@@ -48,7 +48,7 @@ jobs:
         run: pre-commit run --all-files --show-diff-on-failure
 
       - name: Checkov
-        uses: bridgecrewio/checkov-action@c13aafd679d3814a25067d10fcaf98c4f7594931
+        uses: bridgecrewio/checkov-action@45edc9d8856b664db2ec251f5f8632361f0a67aa
         with:
           directory: deploy
           output_format: cli
