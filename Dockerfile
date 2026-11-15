@@ -1,7 +1,7 @@
 # Despite what SonarQube says both the tag and sha digest are needed:
 # the digest pins the exact image for reproducibility,
 # the tag allows Dependabot to evaluate version constraints
-FROM node:24.22.1-alpine@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec86c33918b53 AS builder
+FROM node:24.22.2-alpine@sha256:a34ab6d7f6f4813f4d0c5469d74685604b962fbdbf5793a7bc7b4998ecb867c8 AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN apk add --no-cache git && npm run install-all && npm run build && npm run cl
 # Despite what SonarQube says both the tag and sha digest are needed:
 # the digest pins the exact image for reproducibility,
 # the tag allows Dependabot to evaluate version constraints
-FROM node:24.22.1-alpine@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec86c33918b53 AS final
+FROM node:24.22.2-alpine@sha256:a34ab6d7f6f4813f4d0c5469d74685604b962fbdbf5793a7bc7b4998ecb867c8 AS final
 
 RUN ["apk", "add", "--no-cache", "tini"]
 RUN ["apk", "add", "--no-cache", "curl"]
