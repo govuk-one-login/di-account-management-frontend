@@ -92,7 +92,12 @@
         "SMS": "Byddwn yn anfon codau diogelwch trwy neges destun i'ch rhif ffôn sy'n gorffen gyda <strong>[phoneNumber]</strong>.",
         "APP": "Byddwch yn defnyddio'ch ap dilysydd i gael codau diogelwch."
       },
-      "button": "Tynnu allwedd mynediad",
+      "button": {
+        "text": "Tynnu allwedd mynediad",
+        "waitingText": "Aros",
+        "longWaitingText": "Parhau i aros",
+        "noJavascriptMessage": "Gall gymryd hyd at 10 eiliad i barhau i'r dudalen nesaf. Ar ôl i chi barhau, peidiwch ag ail-lwytho na chau'r dudalen hon."
+      },
       "cancelButton": "Canslo a mynd yn ôl"
     },
     "removePasskeyConfirmation": {

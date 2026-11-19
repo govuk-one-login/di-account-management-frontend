@@ -99,6 +99,10 @@
       import { initAll } from '/public/scripts/govuk-frontend.min.js'
       initAll()
     </script>
+    <script type="module" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
+      import { initialiseProgressButtons } from "/public/scripts/govuk-one-login-frontend-ui.js"
+      initialiseProgressButtons()
+    </script>
     <script type="text/javascript" src="/public/scripts/analytics.js?{{ staticHash }}" nonce='{{scriptNonce}}'></script>
     <script type="text/javascript" {% if scriptNonce %} nonce="{{ scriptNonce }}"{%  endif %}>
     if (window.DI) {

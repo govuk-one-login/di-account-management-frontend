@@ -29,6 +29,9 @@
 // language toggle component import
 @import "../../../node_modules/@govuk-one-login/frontend-ui/build/components/language-select";
 
+// progress button component import
+@import "../../../node_modules/@govuk-one-login/frontend-ui/build/components/progress-button";
+
 .information-box {
   margin-bottom: govuk-spacing(4);
   padding: govuk-spacing(3);

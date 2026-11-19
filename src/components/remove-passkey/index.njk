@@ -1,5 +1,5 @@
 {% extends "common/layout/base-page.njk" %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "frontend-ui/build/components/progress-button/macro.njk" import frontendUiProgressButton %}
 {% set pageTitleName = 'pages.removePasskey.title' | translate %}
 {% block pageContent %}
   <h1 class="govuk-heading-l">{{ 'pages.removePasskey.heading' | translate }}</h1>
@@ -20,8 +20,10 @@
   {% endif %}
   <form action="{{ 'REMOVE_PASSKEY' | getPath }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-    <input type="hidden" name="passkeyId" value="{{ passkey.id }}"/> {{ govukButton({
-      text: "pages.removePasskey.button" | translate,
+    <input type="hidden" name="passkeyId" value="{{ passkey.id }}"/>
+    {{ frontendUiProgressButton({
+      translations: "pages.removePasskey.button" | translate({ returnObjects: true }),
+      errorPage: ("ERROR" | getPath) + "?msg=RemovePasskeyProgressButtonTimeout",
       preventDoubleClick: true
     }) }}
   </form>
