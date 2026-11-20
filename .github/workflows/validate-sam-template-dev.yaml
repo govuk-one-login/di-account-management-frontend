@@ -28,9 +28,9 @@ jobs:
           ref: ${{ inputs.gitRef || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # pin@v4
+        uses: actions/setup-python@5043d30437de73e5e7500b5c41676e0c30aa54f2
         with:
-          python-version: "3.9"
+          python-version: "3.x"
 
       - name: Set up SAM cli
         uses: aws-actions/setup-sam@341eee193f458fa5aae5d52c94b0c5cf3a1c5a52 # pin@v2
