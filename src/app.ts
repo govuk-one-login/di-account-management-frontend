@@ -81,6 +81,7 @@ import { getTranslations } from "di-account-management-rp-registry";
 import { readFileSync } from "node:fs";
 import { metricsMiddleware } from "./middleware/metrics-middlware.js";
 import { globalLogoutRouter } from "./components/global-logout/global-logout-routes.js";
+import { errorRouter } from "./components/error/error-routes.js";
 import {
   setBaseTranslations,
   setFrontendUiTranslations,
@@ -278,6 +279,7 @@ async function createApp(): Promise<express.Application> {
   app.use(signedOutRouter);
   app.use(resendEmailCodeRouter);
   app.use(resendPhoneCodeRouter);
+  app.use(errorRouter);
 
   if (supportGlobalLogout()) {
     app.use(globalLogoutRouter);

@@ -93,7 +93,12 @@
         "SMS": "We’ll send security codes by text message to your phone number ending with <strong>[phoneNumber]</strong>.",
         "APP": "You’ll use your authenticator app to get security codes."
       },
-      "button": "Remove passkey",
+      "button": {
+        "text": "Remove passkey",
+        "waitingText": "Wait",
+        "longWaitingText": "Keep waiting",
+        "noJavascriptMessage": "It can take up to 10 seconds to continue to the next page. After you continue, do not reload or close this page."
+      },
       "cancelButton": "Cancel and go back"
     },
     "removePasskeyConfirmation": {
