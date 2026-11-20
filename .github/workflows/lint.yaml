@@ -24,9 +24,9 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Set up Python
-        uses: actions/setup-python@c8813ba1bc76ebf779b911ad8ffccbf2e449cb48
+        uses: actions/setup-python@5043d30437de73e5e7500b5c41676e0c30aa54f2
         with:
-          python-version: "3.14"
+          python-version: "3.12"
 
       - name: Install Python dependencies
         run: "pip install --require-hashes --only-binary :all: -r .github/workflows/requirements.txt"
