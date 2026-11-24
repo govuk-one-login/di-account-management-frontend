@@ -128,7 +128,8 @@
   },
   "overrides": {
     "uuid": "^14.0.0",
-    "minimatch": "^11.0.1"
+    "minimatch": "^11.0.1",
+    "qs": "^6.16.1"
   },
   "resolutions": {
     "minimist": "1.2.6",
