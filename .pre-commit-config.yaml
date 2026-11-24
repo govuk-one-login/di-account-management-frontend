@@ -9,7 +9,7 @@ repos:
         stages: [pre-commit]
         language_version: system
         additional_dependencies:
-          - prettier@3.9.9
+          - prettier@3.10.1
 
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
