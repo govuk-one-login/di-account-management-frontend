@@ -225,6 +225,9 @@ export const PATH_DATA: Record<
     event: EventType.RemovePasskey,
     type: UserJourney.RemovePasskey,
   },
+  ERROR: {
+    url: "/error",
+  },
 };
 
 export const EXTERNAL_URLS = {

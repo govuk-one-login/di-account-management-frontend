@@ -98,9 +98,29 @@ Scenario: remove a passkey
   Then I click the "Remove iCloud Keychain (Managed) passkey" link
   Then I enter and submit my password "qwerty"
   Then the page title is prefixed with "Remove your passkey"
+  And the page has finished loading
+  And the page contains the text "Remove passkey"
   And the page looks as expected
   Given I click the "Remove passkey" button
   Then the page title is prefixed with "You’ve removed your passkey"
+  And the page has finished loading
+  And the page looks as expected
+
+@noJs
+Scenario: remove a passkey with JavaScript disabled
+  Given I go to the "Root" page
+  And I sign in as the "fourPasskeys" user
+  And I go to the "Security" page
+  Then I click the "Manage your sign in details" link
+  Then I click the "Remove iCloud Keychain (Managed) passkey" link
+  Then I enter and submit my password "qwerty"
+  Then the page title is prefixed with "Remove your passkey"
+  And the page has finished loading
+  And the page contains the text "Remove passkey"
+  And the page looks as expected
+  Given I click the "Remove passkey" button
+  Then the page title is prefixed with "You’ve removed your passkey"
+  And the page has finished loading
   And the page looks as expected
 
 Scenario: remove a passkey without a name
@@ -111,9 +131,11 @@ Scenario: remove a passkey without a name
   And I click the "Remove passkey" link
   And I enter and submit my password "qwerty"
   Then the page title is prefixed with "Remove your passkey"
+  And the page has finished loading
   And the page looks as expected
   Then I click the "Remove passkey" button
   Then the page title is prefixed with "You’ve removed your passkey"
+  And the page has finished loading
   Then the page looks as expected
 
 Scenario: pressing back from remove passkey confirmation redirects to your services
