@@ -32,5 +32,10 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.73.0",
     "valibot": "^1.5.0"
+  },
+  "overrides": {
+    "nodemon": {
+      "minimatch": "^11.0.1"
+    }
   }
 }
